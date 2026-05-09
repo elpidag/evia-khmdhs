@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}{{ summary.names }} ({{ summary.vat_number }}){% endblock %}
+
+{% block content %}
+<p class="muted"><a href="{{ url_for('contractors_list') }}">← όλοι οι ανάδοχοι</a></p>
+
+<hgroup>
+  <h1>
+    {{ summary.names }}
+    {% if summary.names | is_natural_person %}<span class="badge-natural">φυσικό πρόσωπο</span>{% endif %}
+  </h1>
+  <p class="muted">ΑΦΜ {{ summary.vat_number }} · {{ summary.countries or '—' }}</p>
+</hgroup>
+
+<dl class="summary-card">
+  <div>
+    <dt>Συνολικά έσοδα</dt>
+    <dd>{{ summary.total_eur | eur }}</dd>
+  </div>
+  <div>
+    <dt>Χωρίς ΦΠΑ</dt>
+    <dd>{{ summary.total_eur_no_vat | eur }}</dd>
+  </div>
+  <div>
+    <dt>Συμβάσεις</dt>
+    <dd>{{ summary.n_contracts }}</dd>
+  </div>
+  <div>
+    <dt>Σε κοινοπραξία</dt>
+    <dd>{{ summary.n_consortium }}</dd>
+  </div>
+  <div>
+    <dt>% Απευθείας Ανάθεσης</dt>
+    <dd><span class="{{ summary.pct_direct | redflag_class }}">{{ summary.pct_direct | gr_number(1) }} %</span></dd>
+  </div>
+  <div>
+    <dt>Με 1 Προσφορά</dt>
+    <dd>{{ summary.n_single_bidder }} / {{ summary.n_contracts }}</dd>
+  </div>
+  <div>
+    <dt>Πρώτη Σύμβαση</dt>
+    <dd>{{ summary.first_signed or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Τελευταία Σύμβαση</dt>
+    <dd>{{ summary.last_signed or '—' }}</dd>
+  </div>
+</dl>
+
+<section class="section">
+  <h2>Συμβάσεις</h2>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>ΑΔΑΜ</th>
+        <th>Ημ. Υπογραφής</th>
+        <th>Τίτλος</th>
+        <th>Φορέας</th>
+        <th>Διαδικασία</th>
+        <th class="num">Προσφορές</th>
+        <th class="num">Αξία (με ΦΠΑ)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in contracts %}
+      <tr>
+        <td class="tabular">
+          <a href="{{ url_for('contract_detail', adam=c.reference_number) }}">{{ c.reference_number }}</a>
+          {% if c.cancelled %}<small class="redflag redflag-red">ματαιωμένη</small>{% endif %}
+          {% if c.n_partners and c.n_partners > 1 %}<small class="redflag redflag-neutral">κοινοπραξία ({{ c.n_partners }})</small>{% endif %}
+        </td>
+        <td class="tabular">{{ c.contract_signed_date or '—' }}</td>
+        <td>{{ c.title or '—' }}</td>
+        <td class="muted">{{ c.organization_name or '—' }}</td>
+        <td class="muted">{{ c.procedure_type or '—' }}</td>
+        <td class="num {% if c.bids_submitted == 1 %}tabular{% endif %}">
+          {% if c.bids_submitted == 1 %}<span class="redflag redflag-amber">1</span>{% else %}{{ c.bids_submitted or '—' }}{% endif %}
+        </td>
+        <td class="num">{{ c.total_cost_with_vat | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% if partners %}
+<section class="section">
+  <h2>Συνεταίροι σε Κοινοπραξία</h2>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>Όνομα</th>
+        <th>ΑΦΜ</th>
+        <th class="num">Κοινές Συμβάσεις</th>
+        <th class="num">Κοινή Αξία</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in partners %}
+      <tr>
+        <td><a href="{{ url_for('contractor_detail', vat=p.vat_number) }}">{{ p.name }}</a></td>
+        <td class="tabular">{{ p.vat_number }}</td>
+        <td class="num">{{ p.shared_contracts }}</td>
+        <td class="num">{{ p.shared_eur | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% if signers %}
+<section class="section">
+  <h2>Αποφαινόμενα Όργανα</h2>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>Υπογράφων</th>
+        <th class="num">Συμβάσεις</th>
+        <th class="num">Αξία</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in signers %}
+      <tr>
+        <td>{{ s.name }}</td>
+        <td class="num">{{ s.n_contracts }}</td>
+        <td class="num">{{ s.total_eur | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% endblock %}

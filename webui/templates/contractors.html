@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Ανάδοχοι{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>Ανάδοχοι</h1>
+  <p class="muted">{{ rows | length }} {% if q %}αποτέλεσμα/τα για «{{ q }}»{% else %}εγγραφές · ταξινόμηση: {{ sort }}{% endif %}</p>
+</hgroup>
+
+<form action="{{ url_for('contractors_list') }}" method="get" role="search" class="grid">
+  <input type="search" name="q" value="{{ q }}" placeholder="Αναζήτηση ΑΦΜ ή ονόματος…" aria-label="Search">
+  <select name="sort" aria-label="Sort">
+    <option value="total_eur"    {% if sort == 'total_eur' %}selected{% endif %}>Ταξινόμηση: Συνολική Αξία ↓</option>
+    <option value="n_contracts"  {% if sort == 'n_contracts' %}selected{% endif %}>Πλήθος Συμβάσεων ↓</option>
+    <option value="pct_direct"   {% if sort == 'pct_direct' %}selected{% endif %}>% Απευθείας Ανάθεσης ↓</option>
+    <option value="name"         {% if sort == 'name' %}selected{% endif %}>Όνομα Α–Ω</option>
+  </select>
+  <button type="submit">Αναζήτηση</button>
+</form>
+
+{% if rows %}
+<table class="compact striped">
+  <thead>
+    <tr>
+      <th>Όνομα</th>
+      <th>ΑΦΜ</th>
+      <th>Χώρα</th>
+      <th class="num">Συμβ.</th>
+      <th class="num">Συνολική Αξία</th>
+      <th class="center">% Απευθείας</th>
+      <th class="num">Με 1 Προσφορά</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>
+        <a href="{{ url_for('contractor_detail', vat=r.vat_number) }}">{{ r.name }}</a>
+        {% if r.name | is_natural_person %}<span class="badge-natural">φυσικό πρόσωπο</span>{% endif %}
+      </td>
+      <td class="tabular">{{ r.vat_number }}</td>
+      <td class="muted">{{ r.countries or '—' }}</td>
+      <td class="num">{{ r.n_contracts }}</td>
+      <td class="num">{{ r.total_eur | eur }}</td>
+      <td class="center"><span class="{{ r.pct_direct | redflag_class }}">{{ r.pct_direct | gr_number(1) }} %</span></td>
+      <td class="num">{{ r.n_single_bidder }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p class="muted">Δεν βρέθηκαν αποτελέσματα.</p>
+{% endif %}
+{% endblock %}

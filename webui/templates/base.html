@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}KHMDHS OSINT{% endblock %} · KHMDHS Explorer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="container site-header">
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('dashboard') }}" class="brand"><strong>KHMDHS</strong> Explorer</a></li>
+      </ul>
+      <ul>
+        <li><a href="{{ url_for('contractors_list') }}">Ανάδοχοι</a></li>
+        <li><a href="{{ url_for('authorities') }}">Φορείς</a></li>
+      </ul>
+      <ul>
+        <li>
+          <form action="{{ url_for('contractors_list') }}" method="get" role="search">
+            <input type="search" name="q" placeholder="Αναζήτηση ΑΦΜ ή ονόματος…" value="{{ request.args.get('q', '') }}" aria-label="Search">
+          </form>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="container site-footer">
+    <small>
+      Δεδομένα από το <a href="https://cerpp.eprocurement.gov.gr/khmdhs-opendata/help" target="_blank" rel="noopener">ΚΗΜΔΗΣ Open Data</a>.
+      Όταν μια σύμβαση είναι κοινοπραξία, η αξία της προσμετράται <em>πλήρως</em> σε κάθε εταίρο
+      (όψη μέγιστης έκθεσης — όχι ισομερής κατανομή).
+    </small>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

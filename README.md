@@ -13,7 +13,7 @@ Built for the **Anti-nero IV** programme but works with any KHMDHS export.
 
 ```
 19_KHDMHS/
-├── khmdhs/                       # Python package (the program)
+├── khmdhs/                       # ETL package (writes the DB)
 │   ├── __init__.py
 │   ├── __main__.py               # `python -m khmdhs`
 │   ├── config.py                 # paths + API constants
@@ -22,6 +22,22 @@ Built for the **Anti-nero IV** programme but works with any KHMDHS export.
 │   ├── db.py                     # SQLite schema + writes
 │   ├── excel_io.py               # read source xlsx + write enriched xlsx
 │   └── cli.py                    # argparse + main loop
+├── webui/                        # OSINT web UI (reads the DB read-only)
+│   ├── __init__.py
+│   ├── __main__.py               # `python -m webui`
+│   ├── app.py                    # Flask app + routes
+│   ├── queries.py                # all SQL lives here
+│   ├── filters.py                # Greek number/currency formatting
+│   ├── templates/                # Jinja templates
+│   │   ├── base.html
+│   │   ├── dashboard.html
+│   │   ├── contractors.html
+│   │   ├── contractor_detail.html
+│   │   ├── contract_detail.html
+│   │   ├── authorities.html
+│   │   └── 404.html
+│   └── static/
+│       └── style.css             # custom Pico overrides
 ├── data/
 │   ├── raw/
 │   │   └── contracts_search_results.xlsx           # input (untouched)
@@ -126,6 +142,40 @@ GROUP BY procedure_type ORDER BY 2 DESC;
 -- Failed fetches (if any)
 SELECT * FROM fetch_log WHERE status <> 'ok';
 ```
+
+## Web UI (OSINT explorer)
+
+A Flask app that reads the SQLite DB read-only and shows totals, contractor
+profiles and per-contract sheets. Built with Pico.css (semantic, mobile-first
+responsive, automatic light/dark) and one Chart.js bar chart on the dashboard.
+
+```powershell
+python -m pip install -r requirements.txt   # already installs flask
+python -m webui                              # http://127.0.0.1:5000
+python -m webui --port 5050 --debug          # custom port + auto-reload
+```
+
+Pages:
+
+| Path | What it shows |
+|------|----------------|
+| `/` | KPI cards (€1.54 B total, 226 contracts, 139 contractors, 89.4 % direct-assignment, 34 single-bidder), top-10 contractor bar chart (click a bar to drill in), top-5 authorities, top-5 signers |
+| `/contractors?q=&sort=` | Sortable table of all 139 contractors. `q` matches VAT or name substring. A 9-digit `q` redirects straight to the detail page. |
+| `/contractor/<vat>` | Header card (totals, % direct-assignment, single-bidder count, consortium count, first/last signed dates), list of all contracts, consortium partners, primary signers |
+| `/contract/<adam>` | Full contract sheet: every field from the API + objects + CPVs + NUTS + linked acts, plus an expandable raw-JSON pane |
+| `/authorities` | All 3 authorities + 12 unit operators + 15 signers, with totals |
+| `/api/contractors.json` | JSON feed of the contractors list (for jq, pandas, etc.) |
+
+Red-flag conventions:
+
+- **% direct-assignment** badge — neutral grey, amber if ≥ 80 %, red if 100 %.
+- **1 bid** rendered as an amber pill in tables.
+- **Cancelled** contracts get a red pill.
+- **Natural persons** (heuristic: name contains "ΤΟΥ" / "ΤΗΣ" and no Greek legal-form suffix) get a small "φυσικό πρόσωπο" badge.
+
+When a contract is a consortium, **the full contract value is attributed to
+each partner**. This is the "maximum exposure" view (best for OSINT) — not
+an equal split. The footer says so explicitly.
 
 ## API notes
 

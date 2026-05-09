@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}{{ c.reference_number }}{% endblock %}
+
+{% block content %}
+<p class="muted">
+  <a href="{{ url_for('contractors_list') }}">← ανάδοχοι</a>
+</p>
+
+<hgroup>
+  <h1>{{ c.title or c.reference_number }}</h1>
+  <p class="muted tabular">ΑΔΑΜ {{ c.reference_number }} · υπογραφή: {{ c.contract_signed_date or '—' }}</p>
+</hgroup>
+
+<dl class="summary-card">
+  <div>
+    <dt>Συνολική Αξία (με ΦΠΑ)</dt>
+    <dd>{{ c.total_cost_with_vat | eur }}</dd>
+  </div>
+  <div>
+    <dt>Χωρίς ΦΠΑ</dt>
+    <dd>{{ c.total_cost_without_vat | eur }}</dd>
+  </div>
+  <div>
+    <dt>Διαδικασία</dt>
+    <dd>{{ c.procedure_type or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Προσφορές</dt>
+    <dd>
+      {% if c.bids_submitted == 1 %}
+        <span class="redflag redflag-amber">1 προσφορά</span>
+      {% else %}
+        {{ c.bids_submitted or '—' }}
+      {% endif %}
+    </dd>
+  </div>
+  <div>
+    <dt>Διάρκεια</dt>
+    <dd>{% if c.contract_duration %}{{ c.contract_duration }} {{ c.contract_duration_unit or '' }}{% else %}—{% endif %}</dd>
+  </div>
+  <div>
+    <dt>Έναρξη</dt>
+    <dd>{{ c.start_date or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Φορέας</dt>
+    <dd>{{ c.organization_name or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Οργανική Μονάδα</dt>
+    <dd>{{ c.units_operator_name or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Αποφαινόμενο Όργανο</dt>
+    <dd>{{ c.signer_name or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Νομικό Πλαίσιο</dt>
+    <dd>{{ c.legal_context or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Είδος Σύμβασης</dt>
+    <dd>{{ c.contract_type or '—' }}</dd>
+  </div>
+  <div>
+    <dt>Γεωγραφική Περιοχή</dt>
+    <dd>{{ c.nuts_code or '' }} {% if c.nuts_region_name %}— {{ c.nuts_region_name }}{% endif %} {% if c.nuts_city %}· {{ c.nuts_city }}{% endif %} {% if c.nuts_postal_code %}({{ c.nuts_postal_code }}){% endif %}</dd>
+  </div>
+  {% if c.public_funding_ref %}
+  <div>
+    <dt>Φορέας Χρηματοδότησης</dt>
+    <dd>{{ c.public_funding_ref }}</dd>
+  </div>
+  {% endif %}
+  {% if c.public_funding_ref_num %}
+  <div>
+    <dt>Κωδ. Έργου ΣΑΕ/ΠΔΕ</dt>
+    <dd class="tabular">{{ c.public_funding_ref_num }}</dd>
+  </div>
+  {% endif %}
+  {% if c.cancelled %}
+  <div>
+    <dt>Κατάσταση</dt>
+    <dd><span class="redflag redflag-red">Ματαιωμένη</span></dd>
+  </div>
+  {% endif %}
+</dl>
+
+<section class="section">
+  <h2>Ανάδοχοι ({{ c.contractors | length }})</h2>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>Όνομα</th>
+        <th>ΑΦΜ</th>
+        <th>Χώρα</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ct in c.contractors %}
+      <tr>
+        <td>
+          <a href="{{ url_for('contractor_detail', vat=ct.vat_number) }}">{{ ct.name }}</a>
+          {% if ct.name | is_natural_person %}<span class="badge-natural">φυσικό πρόσωπο</span>{% endif %}
+        </td>
+        <td class="tabular">{{ ct.vat_number }}</td>
+        <td class="muted">{{ ct.country or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% if c.objects %}
+<section class="section">
+  <h2>Αντικείμενο Σύμβασης</h2>
+  {% for o in c.objects %}
+  <article>
+    <p><strong>Ποσότητα:</strong> {{ o.quantity | gr_number(2) }} {{ o.unit_type or '' }}
+    · <strong>Αξία χωρίς ΦΠΑ:</strong> {{ o.cost_without_vat | eur }}
+    · <strong>ΦΠΑ:</strong> {{ o.vat_percent or '—' }} %
+    · <strong>Νόμισμα:</strong> {{ o.currency or 'EUR' }}</p>
+    {% if o.short_description %}<p class="muted">{{ o.short_description }}</p>{% endif %}
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if c.cpvs %}
+<section class="section">
+  <h2>Κωδικοί CPV ({{ c.cpvs | length }})</h2>
+  <ul>
+    {% for cpv in c.cpvs %}
+    <li><span class="tabular">{{ cpv.cpv_code }}</span> — {{ cpv.cpv_description or '' }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if c.nuts %}
+<section class="section">
+  <h2>Περιοχές NUTS</h2>
+  <ul>
+    {% for n in c.nuts %}
+    <li><span class="tabular">{{ n.nuts_code }}</span> — {{ n.nuts_name or '' }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if c.notice_reference_number or c.prev_reference_no or c.next_reference_no %}
+<section class="section">
+  <h2>Συνδεδεμένες Πράξεις</h2>
+  <ul>
+    {% if c.notice_reference_number %}<li>Διακήρυξη / Πρόσκληση: <a class="tabular" href="{{ url_for('contract_detail', adam=c.notice_reference_number) }}">{{ c.notice_reference_number }}</a></li>{% endif %}
+    {% if c.prev_reference_no %}<li>Προηγούμενη έκδοση: <a class="tabular" href="{{ url_for('contract_detail', adam=c.prev_reference_no) }}">{{ c.prev_reference_no }}</a></li>{% endif %}
+    {% if c.next_reference_no %}<li>Επόμενη έκδοση: <a class="tabular" href="{{ url_for('contract_detail', adam=c.next_reference_no) }}">{{ c.next_reference_no }}</a></li>{% endif %}
+  </ul>
+</section>
+{% endif %}
+
+<details class="raw">
+  <summary>Πλήρες JSON από το ΚΗΜΔΗΣ API</summary>
+  <pre>{{ c.raw_pretty }}</pre>
+</details>
+{% endblock %}

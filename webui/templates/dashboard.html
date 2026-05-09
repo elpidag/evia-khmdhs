@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Πίνακας Ελέγχου{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>Πίνακας Ελέγχου</h1>
+  <p class="muted">Σύμβαση Anti-nero IV — δεδομένα από το ΚΗΜΔΗΣ Open Data API.</p>
+</hgroup>
+
+<section class="kpis">
+  <div class="kpi">
+    <span class="kpi-label">Συνολική Δαπάνη</span>
+    <span class="kpi-value">{{ kpis.total_eur | eur_short }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Συμβάσεις</span>
+    <span class="kpi-value">{{ kpis.n_contracts }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Ανάδοχοι (μοναδικοί)</span>
+    <span class="kpi-value">{{ kpis.n_contractors }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Φορείς</span>
+    <span class="kpi-value">{{ kpis.n_authorities }}</span>
+  </div>
+  <div class="kpi {% if kpis.pct_direct >= 80 %}kpi-warning{% endif %}">
+    <span class="kpi-label">Απευθείας Ανάθεση</span>
+    <span class="kpi-value">{{ kpis.pct_direct | gr_number(1) }} %</span>
+  </div>
+  <div class="kpi {% if kpis.n_single_bidder > 0 %}kpi-warning{% endif %}">
+    <span class="kpi-label">Συμβάσεις με 1 Προσφορά</span>
+    <span class="kpi-value">{{ kpis.n_single_bidder }}</span>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Top 10 Ανάδοχοι κατά Αξία</h2>
+  <div class="chart-wrap">
+    <canvas id="topContractorsChart"></canvas>
+  </div>
+
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>Ανάδοχος</th>
+        <th>ΑΦΜ</th>
+        <th class="num">Συμβάσεις</th>
+        <th class="num">Συνολική Αξία</th>
+        <th class="center">% Απευθείας</th>
+        <th class="num">Με 1 Προσφορά</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in top_contractors %}
+      <tr>
+        <td>
+          <a href="{{ url_for('contractor_detail', vat=r.vat_number) }}">{{ r.name }}</a>
+          {% if r.name | is_natural_person %}<span class="badge-natural">φυσικό πρόσωπο</span>{% endif %}
+        </td>
+        <td class="tabular">{{ r.vat_number }}</td>
+        <td class="num">{{ r.n_contracts }}</td>
+        <td class="num">{{ r.total_eur | eur }}</td>
+        <td class="center"><span class="{{ r.pct_direct | redflag_class }}">{{ r.pct_direct | gr_number(1) }} %</span></td>
+        <td class="num">{{ r.n_single_bidder }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<div class="grid">
+  <section class="section">
+    <h2>Top Φορείς</h2>
+    <table class="compact striped">
+      <thead>
+        <tr><th>Φορέας</th><th class="num">Συμβ.</th><th class="num">Αξία</th></tr>
+      </thead>
+      <tbody>
+        {% for r in top_authorities %}
+        <tr>
+          <td>{{ r.name }}</td>
+          <td class="num">{{ r.n_contracts }}</td>
+          <td class="num">{{ r.total_eur | eur_short }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>Top Αποφαινόμενα Όργανα</h2>
+    <table class="compact striped">
+      <thead>
+        <tr><th>Υπογράφων</th><th class="num">Συμβ.</th><th class="num">Αξία</th></tr>
+      </thead>
+      <tbody>
+        {% for r in top_signers %}
+        <tr>
+          <td>{{ r.name }}</td>
+          <td class="num">{{ r.n_contracts }}</td>
+          <td class="num">{{ r.total_eur | eur_short }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const data = {
+    labels: {{ top_contractors | map(attribute='name') | list | tojson }},
+    values: {{ top_contractors | map(attribute='total_eur') | list | tojson }},
+    vats:   {{ top_contractors | map(attribute='vat_number') | list | tojson }}
+  };
+
+  const css = getComputedStyle(document.documentElement);
+  const textColor = css.getPropertyValue('--pico-color').trim() || '#222';
+  const gridColor = css.getPropertyValue('--pico-muted-border-color').trim() || '#ccc';
+  const brand = css.getPropertyValue('--brand').trim() || '#1f6feb';
+
+  new Chart(document.getElementById('topContractorsChart'), {
+    type: 'bar',
+    data: {
+      labels: data.labels,
+      datasets: [{
+        label: 'Συνολική Αξία (€)',
+        data: data.values,
+        backgroundColor: brand,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => new Intl.NumberFormat('el-GR', { style: 'currency', currency: 'EUR' }).format(ctx.parsed.x)
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: textColor,
+            callback: v => new Intl.NumberFormat('el-GR', { notation: 'compact' }).format(v) + ' €'
+          },
+          grid: { color: gridColor }
+        },
+        y: {
+          ticks: { color: textColor, autoSkip: false }
+        }
+      },
+      onClick: (_evt, els) => {
+        if (!els.length) return;
+        window.location = '/contractor/' + data.vats[els[0].index];
+      }
+    }
+  });
+</script>
+{% endblock %}

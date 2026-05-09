@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Δεν βρέθηκε{% endblock %}
+{% block content %}
+<hgroup>
+  <h1>404 — Δεν βρέθηκε</h1>
+  <p class="muted">Η σελίδα που ζητήσατε δεν υπάρχει.</p>
+</hgroup>
+<p><a href="{{ url_for('dashboard') }}">← Επιστροφή στον πίνακα ελέγχου</a></p>
+{% endblock %}

@@ -1,0 +1,175 @@
+/* Custom overrides on top of Pico.css. Keep this file small. */
+
+:root {
+  --pico-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --brand: #1f6feb;
+  --brand-dim: #5a93ee;
+  --redflag-red: #d04545;
+  --redflag-amber: #c98724;
+  --redflag-neutral: #6b7280;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--pico-muted-border-color);
+  padding-block: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.site-header nav ul {
+  align-items: center;
+}
+
+.site-header form input[type="search"] {
+  min-width: 22ch;
+  margin: 0;
+}
+
+.brand {
+  text-decoration: none;
+  color: var(--pico-color);
+}
+
+.brand strong { color: var(--brand); }
+
+.site-footer {
+  margin-top: 3rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--pico-muted-border-color);
+  color: var(--pico-muted-color);
+}
+
+/* KPI grid */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.kpi {
+  padding: 1rem 1.25rem;
+  background: var(--pico-card-background-color);
+  border: 1px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+}
+
+.kpi-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--pico-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kpi-value {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: var(--pico-color);
+  line-height: 1.1;
+}
+
+.kpi.kpi-warning .kpi-value { color: var(--redflag-amber); }
+.kpi.kpi-danger  .kpi-value { color: var(--redflag-red); }
+
+/* Section spacing */
+.section { margin-block: 2rem; }
+.section > h2 { margin-bottom: 1rem; }
+
+/* Tables */
+table.compact td, table.compact th { padding-block: 0.5rem; }
+table.compact td.num, table.compact th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.compact td.center, table.compact th.center { text-align: center; }
+table a { text-decoration: none; }
+table a:hover { text-decoration: underline; }
+
+/* Red-flag badges */
+.redflag {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  background: rgba(107, 114, 128, 0.15);
+  color: var(--redflag-neutral);
+  white-space: nowrap;
+}
+.redflag-amber {
+  background: rgba(201, 135, 36, 0.15);
+  color: var(--redflag-amber);
+}
+.redflag-red {
+  background: rgba(208, 69, 69, 0.18);
+  color: var(--redflag-red);
+}
+
+.badge-natural {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(31, 111, 235, 0.12);
+  color: var(--brand);
+}
+
+.muted { color: var(--pico-muted-color); }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Contractor detail header card */
+.summary-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem 1.5rem;
+  padding: 1.25rem;
+  background: var(--pico-card-background-color);
+  border: 1px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  margin-bottom: 1.5rem;
+}
+.summary-card dt {
+  font-size: 0.78rem;
+  color: var(--pico-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
+}
+.summary-card dd {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chart container */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  /* enough room for 10 horizontal bars without scrolling on desktop */
+  height: clamp(320px, 44vw, 460px);
+  margin-bottom: 2rem;
+}
+
+/* Tighten Pico's default huge form spacing inside the header */
+.site-header form { margin: 0; }
+
+/* Drop margin under the last paragraph in cards */
+.summary-card > :last-child { margin-bottom: 0; }
+
+/* Raw JSON box on contract detail */
+details.raw {
+  margin-top: 1.5rem;
+  border: 1px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  padding: 0.5rem 1rem;
+}
+details.raw pre {
+  max-height: 60vh;
+  overflow: auto;
+  font-size: 0.78rem;
+}

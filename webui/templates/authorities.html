@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Φορείς & Υπογράφοντες{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>Φορείς & Υπογράφοντες</h1>
+  <p class="muted">Σύνοψη όλων των αναθετουσών αρχών, οργανικών μονάδων και αποφαινόμενων οργάνων.</p>
+</hgroup>
+
+<section class="section">
+  <h2>Αναθέτουσες Αρχές</h2>
+  <table class="compact striped">
+    <thead>
+      <tr><th>Φορέας</th><th>ΑΦΜ</th><th class="num">Συμβ.</th><th class="num">Συνολική Αξία</th></tr>
+    </thead>
+    <tbody>
+      {% for r in authorities %}
+      <tr>
+        <td>{{ r.name }}</td>
+        <td class="tabular">{{ r.vat or '—' }}</td>
+        <td class="num">{{ r.n_contracts }}</td>
+        <td class="num">{{ r.total_eur | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="section">
+  <h2>Οργανικές Μονάδες</h2>
+  <table class="compact striped">
+    <thead>
+      <tr><th>Μονάδα</th><th class="num">Συμβ.</th><th class="num">Συνολική Αξία</th></tr>
+    </thead>
+    <tbody>
+      {% for r in unit_operators %}
+      <tr>
+        <td>{{ r.name }}</td>
+        <td class="num">{{ r.n_contracts }}</td>
+        <td class="num">{{ r.total_eur | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="section">
+  <h2>Αποφαινόμενα Όργανα</h2>
+  <table class="compact striped">
+    <thead>
+      <tr><th>Υπογράφων</th><th class="num">Συμβ.</th><th class="num">Συνολική Αξία</th></tr>
+    </thead>
+    <tbody>
+      {% for r in signers %}
+      <tr>
+        <td>{{ r.name }}</td>
+        <td class="num">{{ r.n_contracts }}</td>
+        <td class="num">{{ r.total_eur | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
