@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="el">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,13 +14,16 @@
         <li><a href="{{ url_for('dashboard') }}" class="brand"><strong>KHMDHS</strong> Explorer</a></li>
       </ul>
       <ul>
-        <li><a href="{{ url_for('contractors_list') }}">Ανάδοχοι</a></li>
-        <li><a href="{{ url_for('authorities') }}">Φορείς</a></li>
+        <li><a href="{{ url_for('contracts_list') }}">Contracts</a></li>
+        <li><a href="{{ url_for('contractors_list') }}">Contractors</a></li>
+        <li><a href="{{ url_for('authorities') }}">Authorities</a></li>
+        <li><a href="{{ url_for('flow_map') }}">Map</a></li>
+        <li><a href="{{ url_for('origins') }}">Origins</a></li>
       </ul>
       <ul>
         <li>
           <form action="{{ url_for('contractors_list') }}" method="get" role="search">
-            <input type="search" name="q" placeholder="Αναζήτηση ΑΦΜ ή ονόματος…" value="{{ request.args.get('q', '') }}" aria-label="Search">
+            <input type="search" name="q" placeholder="Search VAT or name…" value="{{ request.args.get('q', '') }}" aria-label="Search">
           </form>
         </li>
       </ul>
@@ -33,9 +36,9 @@
 
   <footer class="container site-footer">
     <small>
-      Δεδομένα από το <a href="https://cerpp.eprocurement.gov.gr/khmdhs-opendata/help" target="_blank" rel="noopener">ΚΗΜΔΗΣ Open Data</a>.
-      Όταν μια σύμβαση είναι κοινοπραξία, η αξία της προσμετράται <em>πλήρως</em> σε κάθε εταίρο
-      (όψη μέγιστης έκθεσης — όχι ισομερής κατανομή).
+      Data from <a href="https://cerpp.eprocurement.gov.gr/khmdhs-opendata/help" target="_blank" rel="noopener">KHMDHS Open Data</a>.
+      When a contract is a consortium, its value is counted <em>in full</em> for each partner
+      (maximum-exposure view — not equal distribution).
     </small>
   </footer>
 

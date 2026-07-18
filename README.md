@@ -60,17 +60,49 @@ The split follows a few simple rules:
 ## Requirements
 
 - Python 3.11 or newer
-- Two libraries listed in `requirements.txt`: `requests` and `openpyxl`
+- Three libraries listed in `requirements.txt`: `requests`, `openpyxl`, `flask`
 
-## Install
+## Setup — from scratch in a virtualenv
+
+### Ubuntu / Debian
+
+```bash
+# Ubuntu ships venv/pip as separate packages — install them once
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip
+
+# Create & activate the project venv
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install project dependencies
+pip install -r requirements.txt
+```
+
+To leave the venv later: `deactivate`. To re-enter it in a new shell: `source .venv/bin/activate`.
+
+### Windows (PowerShell)
 
 ```powershell
+# Requires Python 3.11+ from https://www.python.org/downloads/ (tick "Add to PATH")
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 ```
 
-## Run
+If `Activate.ps1` is blocked by execution policy, run this once per user and reopen the shell:
 
 ```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+Or use `cmd.exe` instead: `.venv\Scripts\activate.bat`.
+
+## Run
+
+With the venv activated, the commands are the same on both platforms:
+
+```bash
 python -m khmdhs                  # full run on all ADAMs
 python -m khmdhs --limit 5        # smoke-test on 5 ADAMs
 python -m khmdhs --refetch        # re-fetch ADAMs already marked OK
@@ -84,6 +116,30 @@ or network blip continues from where it stopped.
 
 By default everything reads/writes inside the project tree (paths in
 `khmdhs/config.py`). Override any of them via CLI flags if you want.
+
+### Anti-nero supplement + scope classification
+
+The original xlsx export missed the Anti-nero I execution contracts (their
+titles never contain the word "ANTINERO" — they were found by scanning
+Diavgeia decisions and verified via the ΣΑΤΑ 075 funding code
+`2022ΤΑ07500000` of the 07.02.2022 ΥΠΕΝ↔ΤΑΙΠΕΔ framework), plus a handful
+of later-phase contracts. They are curated in
+`khmdhs/data/antinero_supplement.json` and loaded with:
+
+```bash
+python -m khmdhs.antinero_loader --dry-run   # fetch + verify, write nothing
+python -m khmdhs.antinero_loader             # load into SQLite
+python -m khmdhs.scope_loader                # (re)build the contract_scope table
+```
+
+`scope_loader` classifies **every** contract (khmdhs/scope.py) into
+`antinero_i…antinero_2026`, `antinero_umbrella` (ΤΑΙΠΕΔ/ΕΕΣΥΠ
+pass-throughs), `antinero_support`, or `non_antinero` (routine pre-programme
+forest-road maintenance etc.), and marks contract versions superseded by a
+later modification. The web UI aggregates only `in_scope = 1` rows; detail
+pages still resolve for everything and show the scope + exclusion reason.
+
+Re-run `python -m khmdhs.scope_loader` after any contract load.
 
 ## Output: enriched Excel file
 
@@ -149,8 +205,9 @@ A Flask app that reads the SQLite DB read-only and shows totals, contractor
 profiles and per-contract sheets. Built with Pico.css (semantic, mobile-first
 responsive, automatic light/dark) and one Chart.js bar chart on the dashboard.
 
-```powershell
-python -m pip install -r requirements.txt   # already installs flask
+With the venv activated (see [Setup](#setup--from-scratch-in-a-virtualenv) above):
+
+```bash
 python -m webui                              # http://127.0.0.1:5000
 python -m webui --port 5050 --debug          # custom port + auto-reload
 ```

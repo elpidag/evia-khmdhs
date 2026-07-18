@@ -45,6 +45,18 @@ def create_app(db_path: Path | None = None) -> Flask:
         rows = queries.list_contractors(g.conn, q=q or None, sort=sort)
         return render_template("contractors.html", rows=rows, q=q, sort=sort)
 
+    @app.route("/contracts")
+    def contracts_list():
+        q = (request.args.get("q") or "").strip()
+        # An exact ADAM (e.g. 22SYMV010473684) jumps straight to the detail page.
+        if len(q) >= 12 and q[:2].isdigit() and "SYMV" in q.upper():
+            d = queries.contract_detail(g.conn, q)
+            if d is not None:
+                return redirect(url_for("contract_detail", adam=q))
+        rows = queries.list_contracts(g.conn, q=q or None)
+        total_eur = sum(r["total_cost_with_vat"] or 0 for r in rows)
+        return render_template("contracts.html", rows=rows, q=q, total_eur=total_eur)
+
     @app.route("/contractor/<vat>")
     def contractor_detail(vat: str):
         summary = queries.contractor_summary(g.conn, vat)
@@ -56,6 +68,7 @@ def create_app(db_path: Path | None = None) -> Flask:
             contracts=queries.contractor_contracts(g.conn, vat),
             partners=queries.consortium_partners(g.conn, vat),
             signers=queries.contractor_signers(g.conn, vat),
+            location=queries.contractor_location(g.conn, vat),
         )
 
     @app.route("/contract/<adam>")
@@ -63,7 +76,11 @@ def create_app(db_path: Path | None = None) -> Flask:
         d = queries.contract_detail(g.conn, adam)
         if d is None:
             abort(404)
-        return render_template("contract_detail.html", c=d)
+        return render_template(
+            "contract_detail.html",
+            c=d,
+            regions=queries.contract_project_regions(g.conn, adam),
+        )
 
     @app.route("/authorities")
     def authorities():
@@ -79,6 +96,30 @@ def create_app(db_path: Path | None = None) -> Flask:
         q = (request.args.get("q") or "").strip()
         sort = request.args.get("sort", "total_eur")
         return jsonify(queries.list_contractors(g.conn, q=q or None, sort=sort))
+
+    @app.route("/map")
+    def flow_map():
+        target = (request.args.get("target") or "").strip() or None
+        return render_template(
+            "map.html",
+            coverage=queries.flow_coverage(g.conn),
+            target_filter=target,
+            target_options=queries.project_region_origins(g.conn),
+        )
+
+    @app.route("/api/flows.json")
+    def api_flows():
+        target = (request.args.get("target") or "").strip() or None
+        source = (request.args.get("source") or "").strip() or None
+        return jsonify(queries.region_flows(g.conn, target_pe=target, source_pe=source))
+
+    @app.route("/origins")
+    def origins():
+        return render_template(
+            "origins.html",
+            rows=queries.project_region_origins(g.conn),
+            coverage=queries.flow_coverage(g.conn),
+        )
 
     @app.errorhandler(404)
     def _not_found(_e):
