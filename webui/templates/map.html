@@ -1,0 +1,771 @@
+{% extends "base.html" %}
+{% block title %}Flow Map{% endblock %}
+
+{% block content %}
+<section class="ft-map-wrap">
+  <header class="ft-headline">
+    <h1>Where does the wildfire-recovery money come from?</h1>
+    <p class="ft-deck">
+      Each arrow shows where a contractor on the Greek <em>Anti-nero IV</em>
+      reforestation programme is registered, pointing to the regional unit (Π.Ε.)
+      where the work is carried out. Arrow thickness is proportional to total
+      contract value. Choropleth shades each region by the money landing there.
+    </p>
+  </header>
+
+  <article class="ft-coverage">
+    <strong>{{ coverage.n_contractors_resolved }} of {{ coverage.n_contractors_total }}</strong>
+    contractors located ·
+    <strong>{{ coverage.resolved_eur | eur_short }}</strong> of
+    {{ coverage.total_eur | eur_short }} mapped
+    ({{ (100 * coverage.resolved_eur / coverage.total_eur) | gr_number(0) }} %).
+    {% if coverage.n_contractors_total - coverage.n_contractors_resolved > 0 %}
+      The remaining {{ coverage.n_contractors_total - coverage.n_contractors_resolved }} could not be placed.
+    {% endif %}
+  </article>
+
+  <form class="ft-filter" method="get" action="{{ url_for('flow_map') }}">
+    <label for="target">Show flows landing in:</label>
+    <select id="target" name="target" onchange="this.form.submit()">
+      <option value="">All regions</option>
+      {% for opt in target_options %}
+      <option value="{{ opt.target_pe }}" {% if opt.target_pe == target_filter %}selected{% endif %}>
+        {{ opt.target_pe }} ({{ opt.total_eur | eur_short }})
+      </option>
+      {% endfor %}
+    </select>
+    {% if target_filter %}<a href="{{ url_for('flow_map') }}" class="ft-clear">Clear</a>{% endif %}
+  </form>
+
+  <div id="map" aria-label="Map of Greece with contractor flows"></div>
+
+  <aside class="ft-legend">
+    <div class="ft-legend-section">
+      <span class="ft-legend-title">Incoming € per region</span>
+      <div class="ft-choropleth-scale" id="choroScale"></div>
+      <div class="ft-choropleth-labels">
+        <span>€0</span>
+        <span class="ft-spacer"></span>
+        <span id="choroMax">max</span>
+      </div>
+    </div>
+    <div class="ft-legend-section">
+      <span class="ft-legend-title">Flow value</span>
+      <svg width="180" height="46" viewBox="0 0 180 46" class="ft-flow-scale">
+        <defs>
+          <marker id="legArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b33a1a"/></marker>
+        </defs>
+        <line x1="6" y1="14" x2="170" y2="14" stroke="#b33a1a" stroke-width="1.4" marker-end="url(#legArrow)"/>
+        <line x1="6" y1="28" x2="170" y2="28" stroke="#b33a1a" stroke-width="3.6" marker-end="url(#legArrow)"/>
+        <line x1="6" y1="42" x2="170" y2="42" stroke="#b33a1a" stroke-width="6.5" marker-end="url(#legArrow)"/>
+      </svg>
+      <div class="ft-flow-labels">
+        <span>€&lt;1M</span><span>€5M</span><span>€30M+</span>
+      </div>
+    </div>
+    <div class="ft-legend-section">
+      <span class="ft-legend-title">Local (same region)</span>
+      <div class="ft-local-swatch">
+        <svg width="46" height="32" viewBox="0 0 46 32" aria-hidden="true">
+          <defs>
+            <marker id="legLocalArrow" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L12 6 L0 12 L3 6 Z" fill="#1b8e54"/></marker>
+          </defs>
+          <path d="M 28 26 C 38 4 14 4 18 26" fill="none" stroke="#1b8e54" stroke-width="2" marker-end="url(#legLocalArrow)"/>
+          <circle cx="23" cy="27" r="2.4" fill="#fff" stroke="#1b8e54" stroke-width="1.4"/>
+        </svg>
+        &nbsp; contractor based in the project region
+      </div>
+    </div>
+  </aside>
+
+  <footer class="ft-source">
+    <small>
+      Data: KHMDHS Open Data (Greek public procurement). Geography: Eurostat NUTS&nbsp;2021 (1:1M).
+      Contractor locations resolved via VIES (EU VAT validation) and member-of-consortium inference.
+      State-vehicle pass-throughs (EESYP, TAIPED) excluded to avoid double-counting.
+      Each contract's value is credited <em>in full</em> to every (contractor RU × project RU) pair;
+      consortia count for each partner separately.
+    </small>
+  </footer>
+
+  <details class="ft-details">
+    <summary>All flows (table)</summary>
+    <table class="compact striped" id="flow-table">
+      <thead>
+        <tr><th>From (contractor HQ)</th><th>To (project region)</th><th class="num">Contracts</th><th class="num">Value (€)</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </details>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(async function () {
+  const TARGET = {{ (target_filter or "") | tojson }};
+  const [centroidsResp, geoResp, flowsResp] = await Promise.all([
+    fetch("{{ url_for('static', filename='nuts3_centroids.json') }}"),
+    fetch("{{ url_for('static', filename='greek_nuts3.geojson') }}"),
+    fetch("{{ url_for('api_flows') }}" + (TARGET ? "?target=" + encodeURIComponent(TARGET) : "")),
+  ]);
+  const centroids = await centroidsResp.json();
+  const geo       = await geoResp.json();
+  const flows     = await flowsResp.json();
+
+  // -- formatters & palette ----------------------------------------------
+  const fmtEur = n => new Intl.NumberFormat('el-GR', {style:'currency', currency:'EUR', maximumFractionDigits:0}).format(n);
+  const fmtEurShort = n => {
+    const v = Math.abs(n);
+    if (v >= 1e9) return (n/1e9).toFixed(2).replace('.', ',') + ' B €';
+    if (v >= 1e6) return (n/1e6).toFixed(2).replace('.', ',') + ' M €';
+    if (v >= 1e3) return (n/1e3).toFixed(1).replace('.', ',') + ' K €';
+    return Math.round(n) + ' €';
+  };
+  // YlOrBr-ish sequential, smoothed for choropleth
+  const CHORO = ['#fff7e6','#feecbd','#fed692','#feb84e','#ef8b1c','#cc5803','#992f00','#6c1a00'];
+  const ARROW_DARK  = '#7a2208';
+  const ARROW_LIGHT = '#e07b3c';
+  const ARROWHEAD   = '#9c2c0c';
+  const LOCAL_FILL  = '#1b8e54';
+  const SOURCE_FILL = '#fff';
+  const SOURCE_STROKE = '#7a2208';
+  const SEA = '#e2eaef';
+  const LAND_EMPTY = '#efe8d7';
+
+  // -- map base ----------------------------------------------------------
+  const map = L.map('map', {
+    zoomSnap: 0.25,
+    attributionControl: false,
+    zoomControl: true,
+  }).setView([38.7, 24.0], 6.4);
+
+  // No tile layer — clean white-paper backdrop is set via CSS on #map.
+  // Make sure custom panes exist so we control z-order.
+  map.createPane('regions');  map.getPane('regions').style.zIndex = 350;
+  map.createPane('flows');    map.getPane('flows').style.zIndex = 450;
+  map.createPane('sources');  map.getPane('sources').style.zIndex = 500;
+  map.createPane('labels');   map.getPane('labels').style.zIndex = 600;
+  map.getPane('labels').style.pointerEvents = 'none';
+
+  // -- compute totals ---------------------------------------------------
+  const targetTotals = new Map();
+  flows.forEach(f => targetTotals.set(f.target_nuts3, (targetTotals.get(f.target_nuts3)||0) + f.total_eur));
+  const maxTarget = Math.max(1, ...targetTotals.values());
+  document.getElementById('choroMax').textContent = fmtEurShort(maxTarget);
+
+  // Build choropleth scale legend strip
+  const scale = document.getElementById('choroScale');
+  scale.innerHTML = CHORO.map(c => `<span style="background:${c}"></span>`).join('');
+
+  function choroColor(v) {
+    if (!v) return LAND_EMPTY;
+    const t = Math.sqrt(v / maxTarget);  // sqrt makes mid-tier values readable
+    const i = Math.min(CHORO.length - 1, Math.max(0, Math.floor(t * CHORO.length)));
+    return CHORO[i];
+  }
+
+  // -- region polygons --------------------------------------------------
+  const regionLayer = L.geoJSON(geo, {
+    pane: 'regions',
+    style: feat => {
+      const v = targetTotals.get(feat.properties.NUTS_ID) || 0;
+      return {
+        weight: 0.5,
+        color: '#9b8e74',
+        fillColor: choroColor(v),
+        fillOpacity: 0.95,
+      };
+    },
+    onEachFeature: (feat, layer) => {
+      const v = targetTotals.get(feat.properties.NUTS_ID) || 0;
+      const lbl = feat.properties.NUTS_NAME || feat.properties.NAME_LATN || feat.properties.NUTS_ID;
+      layer.bindTooltip(
+        `<div class="ft-tooltip">
+           <strong>${lbl}</strong><br>
+           <span class="muted">${feat.properties.NUTS_ID}</span><br>
+           ${v > 0 ? fmtEur(v) + ' incoming' : 'no projects in view'}
+         </div>`,
+        {sticky: true, direction: 'top', className: 'ft-tt'}
+      );
+      layer.on({
+        mouseover: e => e.target.setStyle({weight: 1.4, color: '#3a3429'}),
+        mouseout:  e => regionLayer.resetStyle(e.target),
+      });
+    },
+  }).addTo(map);
+
+  if (!flows.length) {
+    document.getElementById('map').insertAdjacentHTML('beforebegin',
+      '<div class="ft-empty">No flows match the selected filter.</div>');
+    return;
+  }
+
+  // -- source totals + max flow -----------------------------------------
+  const sourceTotals = new Map();
+  flows.forEach(f => sourceTotals.set(f.source_nuts3, (sourceTotals.get(f.source_nuts3)||0) + f.total_eur));
+  const maxFlow = Math.max(...flows.map(f => f.total_eur));
+
+  // -- arrow rendering --------------------------------------------------
+  // Use the dedicated 'flows' pane's SVG container so arrows live above
+  // polygons but below labels/sources.
+  const flowsRenderer = L.svg({pane:'flows'}).addTo(map);
+  const flowsRoot = flowsRenderer._container;
+  const NS = 'http://www.w3.org/2000/svg';
+
+  // Inject reusable defs (gradient + arrowhead marker) once.
+  function ensureDefs() {
+    let defs = flowsRoot.querySelector('defs.ft-defs');
+    if (defs) return;
+    defs = document.createElementNS(NS, 'defs');
+    defs.setAttribute('class', 'ft-defs');
+    defs.innerHTML = `
+      <linearGradient id="ftGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"  stop-color="${ARROW_LIGHT}" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="${ARROW_DARK}"  stop-opacity="0.95"/>
+      </linearGradient>
+      <marker id="ftArrow" viewBox="0 0 12 12" refX="9" refY="6"
+              markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse">
+        <path d="M0 0 L12 6 L0 12 L3 6 Z" fill="${ARROWHEAD}"/>
+      </marker>
+      <marker id="ftArrowLight" viewBox="0 0 12 12" refX="9" refY="6"
+              markerWidth="3.4" markerHeight="3.4" orient="auto-start-reverse">
+        <path d="M0 0 L12 6 L0 12 L3 6 Z" fill="${ARROW_LIGHT}" fill-opacity="0.55"/>
+      </marker>
+      <marker id="ftArrowLocal" viewBox="0 0 12 12" refX="9" refY="6"
+              markerWidth="4.0" markerHeight="4.0" orient="auto-start-reverse">
+        <path d="M0 0 L12 6 L0 12 L3 6 Z" fill="${LOCAL_FILL}"/>
+      </marker>
+      <filter id="ftSoftShadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="0.8"/>
+      </filter>
+    `;
+    flowsRoot.insertBefore(defs, flowsRoot.firstChild);
+  }
+  ensureDefs();
+
+  // Top-flow labels live in the same SVG as the flows so they inherit
+  // Leaflet's transform. Re-created on every redraw.
+  function ensureLabelsGroup() {
+    let g = flowsRoot.querySelector('g.ft-labels-group');
+    if (!g) {
+      g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'ft-labels-group');
+      flowsRoot.appendChild(g);
+    } else {
+      while (g.firstChild) g.removeChild(g.firstChild);
+    }
+    return g;
+  }
+
+  // Project lat/lon → layer point
+  const project = ll => map.latLngToLayerPoint(L.latLng(ll[0], ll[1]));
+
+  // Build a curved path between two points with offset control point
+  function curveD(src, dst) {
+    const dx = dst.x - src.x, dy = dst.y - src.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const px = -dy / len, py = dx / len;
+    const bow = Math.min(120, len * 0.28);
+    const cx = (src.x + dst.x) / 2 + px * bow;
+    const cy = (src.y + dst.y) / 2 + py * bow;
+    return {d: `M ${src.x} ${src.y} Q ${cx} ${cy} ${dst.x} ${dst.y}`, cx, cy};
+  }
+
+  // Self-loop arrow: a teardrop that leaves the source pointing up-right and
+  // curves back into it from up-left. End point is slightly offset on the
+  // opposite side so the arrowhead has a defined tangent.
+  function selfLoopD(sp, r) {
+    const sx = sp.x, sy = sp.y;
+    const startX = sx + r * 0.45, startY = sy - 0.1;
+    const endX   = sx - r * 0.45, endY   = sy - 0.1;
+    const cp1X = sx + r * 1.6, cp1Y = sy - r * 2.5;
+    const cp2X = sx - r * 1.6, cp2Y = sy - r * 2.5;
+    // Top of the loop (approx where a callout would aim)
+    const apexX = sx, apexY = sy - r * 1.85;
+    return {
+      d: `M ${startX},${startY} C ${cp1X},${cp1Y} ${cp2X},${cp2Y} ${endX},${endY}`,
+      apexX, apexY,
+    };
+  }
+
+  function widthFor(eur, isTop, isLocal) {
+    // Local self-loops read clearly even at lower stroke widths thanks to
+    // the closed-curve shape — keep them noticeably thinner than the long
+    // cross-region arrows so they don't dominate the canvas.
+    if (isLocal) {
+      return 1.6 + 4.2 * Math.sqrt(eur / maxFlow);   // ~1.6–5.8 px
+    }
+    const base = isTop ? 2.2 : 1.0;
+    const span = isTop ? 7.0 : 3.2;
+    return base + span * Math.sqrt(eur / maxFlow);
+  }
+  function sourceR(eur) {
+    return 2.4 + 6.5 * Math.sqrt(eur / maxFlow);
+  }
+  function selfLoopR(eur) {
+    // Loop radius proportional to value — tighter than cross-region arrows
+    // so the biggest local loops (Θεσσαλονίκης, Ευβοίας) don't crowd out
+    // their neighbouring regions.
+    return 4.5 + 9.0 * Math.sqrt(eur / maxFlow);  // ~4.5–13.5 px
+  }
+
+  // Pick top N flows for annotation — include locals (self-loops can be biggest).
+  const topFlows = [...flows]
+    .sort((a, b) => b.total_eur - a.total_eur)
+    .slice(0, 6);
+  const topKey = new Set(topFlows.map(f => f.source_nuts3 + '->' + f.target_nuts3));
+
+  function redraw() {
+    [...flowsRoot.querySelectorAll('.ft-flow,.ft-flow-shadow,.ft-source-circle,.ft-local,.ft-local-loop,g.ft-labels-group')].forEach(n => n.remove());
+    const labelsLayer = ensureLabelsGroup();
+
+    // pass 1: glow underlines only for TOP flows (ribbon effect)
+    flows.forEach(f => {
+      if (!topKey.has(f.source_nuts3+'->'+f.target_nuts3)) return;
+      const s = centroids[f.source_nuts3], t = centroids[f.target_nuts3];
+      if (!s || !t) return;
+      const sp = project(s);
+      const isLocalUnderline = f.source_nuts3 === f.target_nuts3;
+      const w = widthFor(f.total_eur, true, isLocalUnderline);
+      let d;
+      if (isLocalUnderline) {
+        d = selfLoopD(sp, selfLoopR(f.total_eur)).d;
+      } else {
+        const tp = project(t);
+        d = curveD(sp, tp).d;
+      }
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', f.source_nuts3===f.target_nuts3 ? LOCAL_FILL : ARROW_LIGHT);
+      path.setAttribute('stroke-opacity', '0.30');
+      path.setAttribute('stroke-width', (w + 4.5).toFixed(2));
+      path.setAttribute('stroke-linecap', 'round');
+      path.classList.add('ft-flow-shadow');
+      flowsRoot.appendChild(path);
+    });
+
+    // pass 2: main arrow paths — sort so big flows render on top
+    const sortedFlows = [...flows].sort((a,b)=>a.total_eur-b.total_eur);
+    sortedFlows.forEach(f => {
+      const s = centroids[f.source_nuts3], t = centroids[f.target_nuts3];
+      if (!s || !t) return;
+      const sp = project(s);
+      const isTop = topKey.has(f.source_nuts3+'->'+f.target_nuts3);
+
+      if (f.source_nuts3 === f.target_nuts3) {
+        // Local self-loop: a teardrop curve starting and ending at the source.
+        const r = selfLoopR(f.total_eur);
+        const path = document.createElementNS(NS, 'path');
+        path.setAttribute('d', selfLoopD(sp, r).d);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', LOCAL_FILL);
+        path.setAttribute('stroke-opacity', isTop ? '0.92' : '0.55');
+        path.setAttribute('stroke-width', widthFor(f.total_eur, isTop, true).toFixed(2));
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('marker-end', 'url(#ftArrowLocal)');
+        path.classList.add('ft-local-loop');
+        if (isTop) path.classList.add('ft-flow-top');
+        path.dataset.tip = `<strong>${f.source_pe}</strong> (local)<br>${f.n_contracts} contract${f.n_contracts==1?'':'s'} · ${fmtEur(f.total_eur)}`;
+        flowsRoot.appendChild(path);
+        return;
+      }
+
+      const tp = project(t);
+      const path = document.createElementNS(NS, 'path');
+      const {d} = curveD(sp, tp);
+      path.setAttribute('d', d);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', isTop ? 'url(#ftGrad)' : ARROW_LIGHT);
+      path.setAttribute('stroke-opacity', isTop ? '0.95' : '0.34');
+      path.setAttribute('stroke-width', widthFor(f.total_eur, isTop).toFixed(2));
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('marker-end', isTop ? 'url(#ftArrow)' : 'url(#ftArrowLight)');
+      path.classList.add('ft-flow');
+      if (isTop) path.classList.add('ft-flow-top');
+      path.dataset.tip = `<strong>${f.source_pe}</strong> → <strong>${f.target_pe}</strong><br>${f.n_contracts} contract${f.n_contracts==1?'':'s'} · ${fmtEur(f.total_eur)}`;
+      flowsRoot.appendChild(path);
+    });
+
+    // pass 3: source circles (drawn on top of arrows so origins read clearly)
+    const drawn = new Set();
+    flows.forEach(f => {
+      if (drawn.has(f.source_nuts3)) return;
+      drawn.add(f.source_nuts3);
+      const s = centroids[f.source_nuts3];
+      if (!s) return;
+      const sp = project(s);
+      const r = sourceR(sourceTotals.get(f.source_nuts3) || 0);
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', sp.x); c.setAttribute('cy', sp.y);
+      c.setAttribute('r', r);
+      c.setAttribute('fill', SOURCE_FILL);
+      c.setAttribute('stroke', SOURCE_STROKE);
+      c.setAttribute('stroke-width', '1.6');
+      c.classList.add('ft-source-circle');
+      c.dataset.tip = `Origin: <strong>${f.source_pe}</strong><br>total outgoing: ${fmtEur(sourceTotals.get(f.source_nuts3)||0)}`;
+      flowsRoot.appendChild(c);
+    });
+
+    // pass 4: top-flow text annotations, anchored at the ORIGIN (source center)
+    // Re-append labels-group LAST so it paints above arrows and circles.
+    flowsRoot.appendChild(labelsLayer);
+
+    // Anti-collision with bounds awareness: callouts land slightly up-right
+    // of the source and stack DOWNWARD on collision. If pushing further down
+    // would land below the map's bottom edge (where the print area clips),
+    // flip to stacking UPWARD from the anchor instead.
+    const placed = [];
+    const mapH = map.getSize().y;
+    const labelHeight = 32;  // approximate label box height in px
+    topFlows.forEach(f => {
+      const s = centroids[f.source_nuts3];
+      if (!s) return;
+      const sp = project(s);
+      const r = sourceR(sourceTotals.get(f.source_nuts3) || 0);
+
+      const isLocal = f.source_nuts3 === f.target_nuts3;
+      let anchorX = sp.x, anchorY = sp.y;
+      if (isLocal) {
+        const loop = selfLoopD(sp, selfLoopR(f.total_eur));
+        anchorX = loop.apexX;
+        anchorY = loop.apexY;
+      }
+
+      // anchorY here is in layer-point coordinates; convert to container
+      // coordinates to compare against the map's visible bottom edge.
+      const anchorContainerY = map.layerPointToContainerPoint([anchorX, anchorY]).y;
+
+      let lblX = anchorX + (r + 10);
+      let lblY = anchorY - 4;
+      let stackingUp = false;
+
+      let attempts = 0;
+      while (attempts < 8) {
+        const collides = placed.some(p => Math.hypot(p.x - lblX, p.y - lblY) < 80);
+        if (!collides) break;
+        // Would the next downward push land below the visible map?
+        const nextContainerY = map.layerPointToContainerPoint([lblX, lblY + 30]).y;
+        if (!stackingUp && nextContainerY + labelHeight > mapH - 6) {
+          // Switch to upward stacking — reset to a slot above the anchor.
+          stackingUp = true;
+          lblY = anchorY - 26;
+          continue;
+        }
+        if (stackingUp) {
+          lblY -= 28;
+        } else {
+          // Downward stack: also drift WEST a little on each step so a
+          // third label in the same cluster sits to the left of the
+          // previous one rather than directly behind it.
+          lblY += 30;
+          lblX -= 14;
+        }
+        attempts++;
+      }
+      placed.push({x: lblX, y: lblY});
+
+      const g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'ft-callout');
+
+      // leader line from anchor to label (skipped if label sits right on top)
+      if (Math.hypot(lblX - anchorX, lblY - anchorY) > 14) {
+        const leader = document.createElementNS(NS, 'line');
+        leader.setAttribute('x1', anchorX); leader.setAttribute('y1', anchorY);
+        leader.setAttribute('x2', lblX - 2); leader.setAttribute('y2', lblY - 2);
+        leader.setAttribute('stroke', '#1f1f1f');
+        leader.setAttribute('stroke-width', '0.6');
+        leader.setAttribute('stroke-opacity', '0.7');
+        g.appendChild(leader);
+      }
+
+      // Label text: for locals, omit the redundant "→ destination"
+      const lblText = isLocal
+        ? f.source_pe.replace('Π.Ε. ', '') + ' (local)'
+        : f.source_pe.replace('Π.Ε. ', '') + ' → ' + f.target_pe.replace('Π.Ε. ', '');
+      const valText = fmtEurShort(f.total_eur);
+
+      const text = document.createElementNS(NS, 'text');
+      text.setAttribute('x', lblX); text.setAttribute('y', lblY);
+      text.setAttribute('class', 'ft-callout-label');
+      text.innerHTML = `<tspan x="${lblX}" dy="0">${lblText}</tspan><tspan x="${lblX}" dy="17" class="ft-callout-value">${valText}</tspan>`;
+      g.appendChild(text);
+
+      labelsLayer.appendChild(g);
+    });
+  }
+
+  redraw();
+  map.on('zoomend moveend resize', redraw);
+
+  // Backdoor for the print-export script: expose the Leaflet map and a flag
+  // saying the first redraw has run, so the exporter can setView() / wait.
+  window.__ftMap = map;
+  window.__ftMapReady = true;
+
+  // ---- shared tooltip ------------------------------------------------------
+  const tip = document.createElement('div');
+  tip.className = 'ft-floating-tip';
+  document.getElementById('map').appendChild(tip);
+  document.getElementById('map').addEventListener('mousemove', e => {
+    const t = e.target.closest('[data-tip]');
+    if (t) {
+      tip.style.display = 'block';
+      tip.innerHTML = t.dataset.tip;
+      const rect = e.currentTarget.getBoundingClientRect();
+      tip.style.left = (e.clientX - rect.left) + 'px';
+      tip.style.top  = (e.clientY - rect.top) + 'px';
+    } else { tip.style.display = 'none'; }
+  });
+  document.getElementById('map').addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+
+  // ---- table -----------------------------------------------------------
+  const tbody = document.querySelector('#flow-table tbody');
+  flows.forEach(f => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${f.source_pe}</td><td>${f.target_pe}</td>` +
+                   `<td class="num">${f.n_contracts}</td>` +
+                   `<td class="num">${fmtEur(f.total_eur)}</td>`;
+    if (f.source_nuts3 === f.target_nuts3) tr.classList.add('local-row');
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+
+<style>
+  /* ------------------------------------------------------------------
+     FT/NYT-style flow map — typography, palette, layout
+     ------------------------------------------------------------------ */
+  .ft-map-wrap {
+    --paper:#fbfaf7;
+    --paper-2:#f3eee0;
+    --ink:#1c1a16;
+    --ink-2:#5a544a;
+    --rule:#dcd4be;
+    --accent:#7a2208;
+    --accent-2:#e07b3c;
+    background: var(--paper);
+    padding: 1.25rem 1rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+  }
+  .ft-headline { margin: 0 0 0.5rem; }
+  .ft-headline h1 {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: clamp(1.4rem, 2vw + 0.6rem, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 0.25rem;
+  }
+  .ft-deck {
+    font-family: 'Georgia', serif;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 60rem;
+    margin: 0;
+  }
+  .ft-coverage {
+    margin: 0.9rem 0 0.5rem;
+    padding: 0.45rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: transparent;
+  }
+  .ft-coverage strong { color: var(--accent); font-weight: 700; }
+  .ft-filter {
+    display: flex; gap: 0.6rem; align-items: center;
+    margin: 0.5rem 0 0.4rem;
+    font-size: 0.9rem;
+  }
+  .ft-filter label { color: var(--ink-2); }
+  .ft-filter select { max-width: 26rem; margin: 0; padding: 0.25rem 0.5rem; }
+  .ft-clear { font-size: 0.85rem; color: var(--accent); margin-left: 0.3rem; }
+  #map {
+    height: 78vh; min-height: 640px;
+    margin: 0.4rem 0;
+    background: linear-gradient(180deg, #f3eee0 0%, #e5edf2 100%);
+    border-radius: 4px;
+    border: 1px solid var(--rule);
+  }
+  .leaflet-container { background: transparent !important; font: inherit; }
+  .leaflet-control-zoom a {
+    background: #fff; border:1px solid var(--rule);
+    color: var(--ink); width:28px; height:28px; line-height:26px;
+  }
+  .ft-empty {
+    text-align: center; padding: 1rem; color: var(--ink-2);
+    background: var(--paper-2); border-radius: 4px;
+  }
+  .ft-legend {
+    display: flex; flex-wrap: wrap; gap: 1.5rem;
+    margin: 0.6rem 0 0.5rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    align-items: flex-start;
+  }
+  .ft-legend-section { min-width: 140px; }
+  .ft-legend-title {
+    display:block;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-size: 0.72rem;
+    color: var(--ink-2);
+    margin-bottom: 0.35rem;
+  }
+  .ft-choropleth-scale {
+    display: grid; grid-template-columns: repeat(8, 1fr);
+    height: 12px; width: 180px;
+    border: 1px solid var(--rule);
+  }
+  .ft-choropleth-scale span { display:block; height:100%; }
+  .ft-choropleth-labels {
+    display: flex; justify-content: space-between;
+    width: 180px; font-size: 0.72rem; color: var(--ink-2);
+    margin-top: 2px; font-variant-numeric: tabular-nums;
+  }
+  .ft-flow-scale { display: block; }
+  .ft-flow-labels {
+    display: flex; justify-content: space-between;
+    width: 180px; font-size: 0.72rem; color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .ft-local-swatch {
+    display: flex; align-items: center; color: var(--ink-2);
+    margin-top: 0.15rem;
+  }
+  .ft-local-dot {
+    display: inline-block; width: 12px; height: 12px;
+    border-radius: 50%; background: #1b8e54;
+    border: 1.5px solid #fff;
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+  .ft-source {
+    margin-top: 0.6rem; padding-top: 0.5rem;
+    border-top: 1px solid var(--rule);
+    font-family: 'Georgia', serif;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .ft-details { margin-top: 0.7rem; }
+  .ft-details summary {
+    cursor: pointer; padding: 0.35rem 0;
+    font-size: 0.85rem; color: var(--ink-2);
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+
+  /* SVG interaction */
+  .ft-flow {
+    transition: stroke-opacity 0.15s, stroke-width 0.15s;
+    cursor: crosshair;
+  }
+  .ft-flow:hover { stroke-opacity: 1 !important; }
+  .ft-flow-top { stroke-opacity: 1; }
+  .ft-source-circle { transition: r 0.15s; cursor: crosshair; }
+  .ft-source-circle:hover { filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }
+  .ft-local { cursor: crosshair; }
+  .ft-callout-label {
+    font: 600 13.5px/1.25 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+    fill: #1c1a16;
+    paint-order: stroke fill;
+    stroke: #fff;
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+  .ft-callout-value {
+    font-weight: 700;
+    fill: #7a2208;
+    font-size: 15px;
+  }
+
+  /* shared floating HTML tooltip */
+  .ft-floating-tip {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(28,26,22,0.94);
+    color: #fdfaf3;
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-size: 0.83rem;
+    line-height: 1.35;
+    transform: translate(-50%, -130%);
+    display: none;
+    z-index: 1000;
+    max-width: 280px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    font-variant-numeric: tabular-nums;
+  }
+  .ft-floating-tip strong { color: #ffe7b8; font-weight: 600; }
+
+  .leaflet-tooltip.ft-tt {
+    background: rgba(28,26,22,0.94);
+    color: #fdfaf3;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 10px;
+    font-size: 0.83rem;
+    font-variant-numeric: tabular-nums;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  }
+  .leaflet-tooltip.ft-tt::before { display: none; }
+  .leaflet-tooltip .muted { color: #c9beae; }
+  .leaflet-tooltip strong { color: #ffe7b8; }
+
+  .local-row { background: rgba(27,142,84,0.07); }
+
+  @media (max-width: 700px) {
+    .ft-legend { gap: 0.9rem; }
+    .ft-choropleth-scale, .ft-choropleth-labels { width: 140px; }
+  }
+
+  /* -- Print: full-bleed map + chrome stripped -- */
+  @media print {
+    @page { size: A4 landscape; margin: 8mm; }
+    .site-header, .site-footer,
+    .ft-filter, .ft-details, footer { display: none !important; }
+    html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+    body > main, body > .container, main.container, main {
+      max-width: none !important;
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .ft-map-wrap {
+      padding: 0 !important; margin: 0 !important;
+      border: none !important;
+      max-width: none !important; width: 100% !important;
+    }
+    .ft-headline h1 { font-size: 13.5pt; margin: 0 0 1pt; line-height: 1.1; }
+    .ft-deck { font-size: 8pt; line-height: 1.25; margin: 0 0 2pt; }
+    .ft-coverage { font-size: 7.5pt; margin: 2pt 0; padding: 1.5pt 0; border-color: #c9c2b3; }
+    #map {
+      height: 138mm !important; min-height: 0 !important;
+      width: 100% !important; max-width: none !important;
+      border: 1px solid #c9c2b3 !important;
+      background: linear-gradient(180deg,#f3eee0,#e5edf2) !important;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .leaflet-control-container { display: none !important; }
+    .ft-legend { margin-top: 2pt; font-size: 7pt; gap: 0.7rem; padding: 2pt 5pt; }
+    .ft-legend-title { font-size: 6pt; }
+    .ft-legend-section { min-width: 100px; }
+    .ft-choropleth-scale, .ft-choropleth-labels { width: 130px !important; }
+    .ft-callout-label { font-size: 9pt; stroke-width: 3.2px; }
+    .ft-callout-value { font-size: 10pt; }
+    .ft-source { font-size: 7pt; margin-top: 2pt; padding-top: 1.5pt; line-height: 1.22; }
+    * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    /* Keep everything on a single A4 page */
+    .ft-map-wrap { page-break-inside: avoid; }
+  }
+</style>
+{% endblock %}

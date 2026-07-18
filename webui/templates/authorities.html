@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Φορείς & Υπογράφοντες{% endblock %}
+{% block title %}Authorities & Signers{% endblock %}
 
 {% block content %}
 <hgroup>
-  <h1>Φορείς & Υπογράφοντες</h1>
-  <p class="muted">Σύνοψη όλων των αναθετουσών αρχών, οργανικών μονάδων και αποφαινόμενων οργάνων.</p>
+  <h1>Authorities & Signers</h1>
+  <p class="muted">Overview of all contracting authorities, operating units and decision-making bodies.</p>
 </hgroup>
 
 <section class="section">
-  <h2>Αναθέτουσες Αρχές</h2>
+  <h2>Contracting Authorities</h2>
   <table class="compact striped">
     <thead>
-      <tr><th>Φορέας</th><th>ΑΦΜ</th><th class="num">Συμβ.</th><th class="num">Συνολική Αξία</th></tr>
+      <tr><th>Authority</th><th>VAT</th><th class="num">Contr.</th><th class="num">Total Value</th></tr>
     </thead>
     <tbody>
       {% for r in authorities %}
@@ -27,10 +27,10 @@
 </section>
 
 <section class="section">
-  <h2>Οργανικές Μονάδες</h2>
+  <h2>Operating Units</h2>
   <table class="compact striped">
     <thead>
-      <tr><th>Μονάδα</th><th class="num">Συμβ.</th><th class="num">Συνολική Αξία</th></tr>
+      <tr><th>Unit</th><th class="num">Contr.</th><th class="num">Total Value</th></tr>
     </thead>
     <tbody>
       {% for r in unit_operators %}
@@ -45,10 +45,10 @@
 </section>
 
 <section class="section">
-  <h2>Αποφαινόμενα Όργανα</h2>
+  <h2>Decision-Making Bodies</h2>
   <table class="compact striped">
     <thead>
-      <tr><th>Υπογράφων</th><th class="num">Συμβ.</th><th class="num">Συνολική Αξία</th></tr>
+      <tr><th>Signer</th><th class="num">Contr.</th><th class="num">Total Value</th></tr>
     </thead>
     <tbody>
       {% for r in signers %}

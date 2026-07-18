@@ -1,41 +1,41 @@
 {% extends "base.html" %}
-{% block title %}Πίνακας Ελέγχου{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <hgroup>
-  <h1>Πίνακας Ελέγχου</h1>
-  <p class="muted">Σύμβαση Anti-nero IV — δεδομένα από το ΚΗΜΔΗΣ Open Data API.</p>
+  <h1>Dashboard</h1>
+  <p class="muted">Anti-nero IV programme — data from the KHMDHS Open Data API. Pass-through contracts to EESYP and TAIPED are excluded to avoid double-counting.</p>
 </hgroup>
 
 <section class="kpis">
   <div class="kpi">
-    <span class="kpi-label">Συνολική Δαπάνη</span>
+    <span class="kpi-label">Total Spend</span>
     <span class="kpi-value">{{ kpis.total_eur | eur_short }}</span>
   </div>
   <div class="kpi">
-    <span class="kpi-label">Συμβάσεις</span>
+    <span class="kpi-label">Contracts</span>
     <span class="kpi-value">{{ kpis.n_contracts }}</span>
   </div>
   <div class="kpi">
-    <span class="kpi-label">Ανάδοχοι (μοναδικοί)</span>
+    <span class="kpi-label">Contractors (unique)</span>
     <span class="kpi-value">{{ kpis.n_contractors }}</span>
   </div>
   <div class="kpi">
-    <span class="kpi-label">Φορείς</span>
+    <span class="kpi-label">Authorities</span>
     <span class="kpi-value">{{ kpis.n_authorities }}</span>
   </div>
   <div class="kpi {% if kpis.pct_direct >= 80 %}kpi-warning{% endif %}">
-    <span class="kpi-label">Απευθείας Ανάθεση</span>
+    <span class="kpi-label">Direct Award</span>
     <span class="kpi-value">{{ kpis.pct_direct | gr_number(1) }} %</span>
   </div>
   <div class="kpi {% if kpis.n_single_bidder > 0 %}kpi-warning{% endif %}">
-    <span class="kpi-label">Συμβάσεις με 1 Προσφορά</span>
+    <span class="kpi-label">Single-Bidder Contracts</span>
     <span class="kpi-value">{{ kpis.n_single_bidder }}</span>
   </div>
 </section>
 
 <section class="section">
-  <h2>Top 10 Ανάδοχοι κατά Αξία</h2>
+  <h2>Top 10 Contractors by Value</h2>
   <div class="chart-wrap">
     <canvas id="topContractorsChart"></canvas>
   </div>
@@ -43,12 +43,12 @@
   <table class="compact striped">
     <thead>
       <tr>
-        <th>Ανάδοχος</th>
-        <th>ΑΦΜ</th>
-        <th class="num">Συμβάσεις</th>
-        <th class="num">Συνολική Αξία</th>
-        <th class="center">% Απευθείας</th>
-        <th class="num">Με 1 Προσφορά</th>
+        <th>Contractor</th>
+        <th>VAT</th>
+        <th class="num">Contracts</th>
+        <th class="num">Total Value</th>
+        <th class="center">% Direct</th>
+        <th class="num">Single-Bidder</th>
       </tr>
     </thead>
     <tbody>
@@ -56,7 +56,7 @@
       <tr>
         <td>
           <a href="{{ url_for('contractor_detail', vat=r.vat_number) }}">{{ r.name }}</a>
-          {% if r.name | is_natural_person %}<span class="badge-natural">φυσικό πρόσωπο</span>{% endif %}
+          {% if r.name | is_natural_person %}<span class="badge-natural">natural person</span>{% endif %}
         </td>
         <td class="tabular">{{ r.vat_number }}</td>
         <td class="num">{{ r.n_contracts }}</td>
@@ -71,10 +71,10 @@
 
 <div class="grid">
   <section class="section">
-    <h2>Top Φορείς</h2>
+    <h2>Top Authorities</h2>
     <table class="compact striped">
       <thead>
-        <tr><th>Φορέας</th><th class="num">Συμβ.</th><th class="num">Αξία</th></tr>
+        <tr><th>Authority</th><th class="num">Contr.</th><th class="num">Value</th></tr>
       </thead>
       <tbody>
         {% for r in top_authorities %}
@@ -89,10 +89,10 @@
   </section>
 
   <section class="section">
-    <h2>Top Αποφαινόμενα Όργανα</h2>
+    <h2>Top Decision-Making Bodies</h2>
     <table class="compact striped">
       <thead>
-        <tr><th>Υπογράφων</th><th class="num">Συμβ.</th><th class="num">Αξία</th></tr>
+        <tr><th>Signer</th><th class="num">Contr.</th><th class="num">Value</th></tr>
       </thead>
       <tbody>
         {% for r in top_signers %}
@@ -127,7 +127,7 @@
     data: {
       labels: data.labels,
       datasets: [{
-        label: 'Συνολική Αξία (€)',
+        label: 'Total Value (€)',
         data: data.values,
         backgroundColor: brand,
         borderRadius: 4

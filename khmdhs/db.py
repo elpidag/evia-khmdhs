@@ -117,6 +117,38 @@ CREATE TABLE IF NOT EXISTS fetch_log (
 CREATE INDEX IF NOT EXISTS idx_contractors_vat ON contractors(vat_number);
 CREATE INDEX IF NOT EXISTS idx_contractors_name ON contractors(name);
 CREATE INDEX IF NOT EXISTS idx_contracts_org_vat ON contracts(organization_vat);
+
+CREATE TABLE IF NOT EXISTS contract_project_regions (
+    reference_number TEXT NOT NULL,
+    seq              INTEGER NOT NULL,
+    region_pe        TEXT NOT NULL,
+    nuts3_code       TEXT,
+    note             TEXT,
+    source           TEXT NOT NULL DEFAULT 'manual',
+    curated_at       TEXT NOT NULL,
+    PRIMARY KEY (reference_number, seq),
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_cpr_region_pe ON contract_project_regions(region_pe);
+CREATE INDEX IF NOT EXISTS idx_cpr_nuts3 ON contract_project_regions(nuts3_code);
+
+CREATE TABLE IF NOT EXISTS contractor_locations (
+    vat_number   TEXT PRIMARY KEY,
+    legal_name   TEXT,
+    address      TEXT,
+    postal_code  TEXT,
+    city         TEXT,
+    region_pe    TEXT,
+    nuts3_code   TEXT,
+    source       TEXT NOT NULL,
+    source_url   TEXT,
+    notes        TEXT,
+    curated_at   TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_cl_region_pe ON contractor_locations(region_pe);
+CREATE INDEX IF NOT EXISTS idx_cl_nuts3 ON contractor_locations(nuts3_code);
 """
 
 

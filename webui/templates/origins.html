@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}Local vs Imported Contractors{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>Local vs Imported Contractors</h1>
+  <p class="muted">
+    For each regional unit where Anti-nero projects are carried out, what share of
+    the money goes to contractors from the same regional unit
+    (<span class="origin-tag origin-local">local</span>), to
+    contractors from another regional unit
+    (<span class="origin-tag origin-imported">imported</span>), and to contractors with no
+    known headquarters (<span class="origin-tag origin-unknown">unknown</span>).
+  </p>
+</hgroup>
+
+<aside class="origin-legend">
+  <span class="origin-tag origin-local"><span class="origin-swatch sw-local"></span>local</span>
+  <span class="origin-tag origin-imported"><span class="origin-swatch sw-imp"></span>imported</span>
+  <span class="origin-tag origin-unknown"><span class="origin-swatch sw-unk"></span>unknown</span>
+</aside>
+
+<article class="coverage-banner">
+  <strong>Coverage:</strong>
+  {{ coverage.n_contractors_resolved }} / {{ coverage.n_contractors_total }} contractors located ·
+  {{ coverage.resolved_eur | eur_short }} resolved out of {{ coverage.total_eur | eur_short }}
+  ({{ (100 * coverage.resolved_eur / coverage.total_eur) | gr_number(0) }} %).
+  «Unknown» is proportionally the amount going to unlocated contractors.
+</article>
+
+<section class="section">
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>Project Regional Unit</th>
+        <th class="num">Contracts</th>
+        <th class="num">Total</th>
+        <th>Origin Composition</th>
+        <th class="num">% Local</th>
+        <th class="num">% Imported</th>
+        <th class="num">% Unknown</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        {% set total = (r.local_eur or 0) + (r.imported_eur or 0) + (r.unknown_eur or 0) %}
+        {% set pct_local = 100.0 * (r.local_eur or 0) / total if total > 0 else 0 %}
+        {% set pct_imp = 100.0 * (r.imported_eur or 0) / total if total > 0 else 0 %}
+        {% set pct_unk = 100.0 * (r.unknown_eur or 0) / total if total > 0 else 0 %}
+        <tr>
+          <td>{{ r.target_pe }} <small class="muted">({{ r.target_nuts3 }})</small></td>
+          <td class="num">{{ r.n_contracts }}</td>
+          <td class="num">{{ r.total_eur | eur }}</td>
+          <td class="composition">
+            <span class="bar bar-local"    style="width: {{ pct_local }}%" title="Local: {{ r.local_eur | eur }}"></span>
+            <span class="bar bar-imported" style="width: {{ pct_imp   }}%" title="Imported: {{ r.imported_eur | eur }}"></span>
+            <span class="bar bar-unknown"  style="width: {{ pct_unk   }}%" title="Unknown: {{ r.unknown_eur | eur }}"></span>
+          </td>
+          <td class="num">{{ pct_local | gr_number(0) }} %</td>
+          <td class="num">{{ pct_imp   | gr_number(0) }} %</td>
+          <td class="num muted">{{ pct_unk | gr_number(0) }} %</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<p class="muted"><small>
+  Composition is computed per contract: the value is split equally between
+  contractors and classified as «local / imported / unknown» depending on each
+  contractor's headquarters relative to the project's regional unit. So a
+  consortium with one local and one unlocated member is recorded 50/50.
+</small></p>
+
+<style>
+.composition { min-width: 14rem; padding: 0; }
+.composition .bar { display: inline-block; height: 1rem; vertical-align: middle; }
+.bar-local    { background: #2f9e44; }
+.bar-imported { background: #c98724; }
+.bar-unknown  { background: #6b7280; }
+
+/* Colored inline tags used in the description and legend */
+.origin-tag { font-weight: 700; }
+.origin-tag.origin-local    { color: #2f9e44; }
+.origin-tag.origin-imported { color: #c98724; }
+.origin-tag.origin-unknown  { color: #6b7280; }
+
+.origin-legend {
+  display: flex; gap: 1.2rem; flex-wrap: wrap;
+  margin: 0.4rem 0 0.6rem; padding: 0.4rem 0.6rem;
+  border: 1px solid #dcd4be; border-radius: 4px;
+  background: #fbfaf7;
+  font-size: 0.9rem;
+  align-items: center;
+}
+.origin-legend .origin-tag {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.origin-swatch {
+  display: inline-block; width: 14px; height: 10px;
+  border-radius: 2px;
+}
+.sw-local { background: #2f9e44; }
+.sw-imp   { background: #c98724; }
+.sw-unk   { background: #6b7280; }
+
+/* ------- Print: compact 2-page A4 portrait layout ------- */
+@media print {
+  @page { size: A4 portrait; margin: 9mm 8mm; }
+  html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+  body > main, body > .container, main.container, main {
+    max-width: none !important; width: 100% !important;
+    padding: 0 !important; margin: 0 !important;
+  }
+  .site-header, .site-footer, footer { display: none !important; }
+
+  hgroup h1 { font-size: 11pt; margin: 0 0 1pt; line-height: 1.1; }
+  hgroup p, .ft-deck { font-size: 7pt; line-height: 1.2; margin: 0 0 2pt; }
+  .coverage-banner {
+    font-size: 7pt;
+    margin: 2pt 0 3pt;
+    padding: 1.5pt 4pt;
+    border: 1px solid #c9c2b3;
+    background: #fbfaf7 !important;
+    line-height: 1.25;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .section { margin: 0 !important; }
+  table.compact { font-size: 7.6pt; width: 100%; border-collapse: collapse; }
+  table.compact thead th {
+    font-size: 6.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 1.4pt 3pt;
+    border-bottom: 0.8pt solid #777;
+    background: #f3eee0 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  table.compact tbody td { padding: 1pt 3pt; line-height: 1.1; vertical-align: middle; }
+  table.striped tbody tr:nth-child(even) td {
+    background: #faf6ec !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  td.num { font-variant-numeric: tabular-nums; }
+  .muted { color: #555 !important; }
+
+  .composition { min-width: 18mm !important; width: 22mm; padding: 0 !important; }
+  .composition .bar { height: 7pt; }
+  .bar-local, .bar-imported, .bar-unknown {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  p.muted small {
+    font-size: 6.5pt;
+    color: #444 !important;
+    line-height: 1.2;
+  }
+  p.muted { margin: 3pt 0 0 !important; }
+
+  /* Color legend + inline colored words */
+  .origin-tag { font-weight: 700 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .origin-tag.origin-local    { color: #2f9e44 !important; }
+  .origin-tag.origin-imported { color: #c98724 !important; }
+  .origin-tag.origin-unknown  { color: #6b7280 !important; }
+  .origin-legend {
+    display: flex !important; gap: 8mm; flex-wrap: nowrap;
+    margin: 2pt 0 3pt !important;
+    padding: 2pt 4pt !important;
+    border: 0.7pt solid #dcd4be !important;
+    background: #fbfaf7 !important;
+    font-size: 7pt !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .origin-legend .origin-tag { display: inline-flex; align-items: center; gap: 4pt; }
+  .origin-swatch {
+    display: inline-block !important; width: 10pt; height: 7pt; border-radius: 1pt;
+    print-color-adjust: exact; -webkit-print-color-adjust: exact;
+  }
+  .sw-local { background: #2f9e44 !important; }
+  .sw-imp   { background: #c98724 !important; }
+  .sw-unk   { background: #6b7280 !important; }
+
+  /* Stop awkward orphans/widows mid-row */
+  tr { page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+</style>
+{% endblock %}

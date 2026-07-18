@@ -27,3 +27,6 @@ desktop.ini
 # Excel lock files
 ~$*.xlsx
 ~$*.xls
+
+# LibreOffice lock files
+.~lock.*#

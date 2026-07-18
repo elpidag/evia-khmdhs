@@ -1,34 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Ανάδοχοι{% endblock %}
+{% block title %}Contractors{% endblock %}
 
 {% block content %}
 <hgroup>
-  <h1>Ανάδοχοι</h1>
-  <p class="muted">{{ rows | length }} {% if q %}αποτέλεσμα/τα για «{{ q }}»{% else %}εγγραφές · ταξινόμηση: {{ sort }}{% endif %}</p>
+  <h1>Contractors</h1>
+  <p class="muted">{{ rows | length }} {% if q %}result(s) for «{{ q }}»{% else %}entries · sort: {{ sort }}{% endif %}</p>
 </hgroup>
 
 <form action="{{ url_for('contractors_list') }}" method="get" role="search" class="grid">
-  <input type="search" name="q" value="{{ q }}" placeholder="Αναζήτηση ΑΦΜ ή ονόματος…" aria-label="Search">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search VAT or name…" aria-label="Search">
   <select name="sort" aria-label="Sort">
-    <option value="total_eur"    {% if sort == 'total_eur' %}selected{% endif %}>Ταξινόμηση: Συνολική Αξία ↓</option>
-    <option value="n_contracts"  {% if sort == 'n_contracts' %}selected{% endif %}>Πλήθος Συμβάσεων ↓</option>
-    <option value="pct_direct"   {% if sort == 'pct_direct' %}selected{% endif %}>% Απευθείας Ανάθεσης ↓</option>
-    <option value="name"         {% if sort == 'name' %}selected{% endif %}>Όνομα Α–Ω</option>
+    <option value="total_eur"    {% if sort == 'total_eur' %}selected{% endif %}>Sort: Total Value ↓</option>
+    <option value="n_contracts"  {% if sort == 'n_contracts' %}selected{% endif %}>Number of Contracts ↓</option>
+    <option value="pct_direct"   {% if sort == 'pct_direct' %}selected{% endif %}>% Direct Award ↓</option>
+    <option value="name"         {% if sort == 'name' %}selected{% endif %}>Name A–Z</option>
   </select>
-  <button type="submit">Αναζήτηση</button>
+  <button type="submit">Search</button>
 </form>
 
 {% if rows %}
 <table class="compact striped">
   <thead>
     <tr>
-      <th>Όνομα</th>
-      <th>ΑΦΜ</th>
-      <th>Χώρα</th>
-      <th class="num">Συμβ.</th>
-      <th class="num">Συνολική Αξία</th>
-      <th class="center">% Απευθείας</th>
-      <th class="num">Με 1 Προσφορά</th>
+      <th>Name</th>
+      <th>VAT</th>
+      <th>Country</th>
+      <th class="num">Contr.</th>
+      <th class="num">Total Value</th>
+      <th class="center">% Direct</th>
+      <th class="num">Single-Bidder</th>
     </tr>
   </thead>
   <tbody>
@@ -36,7 +36,7 @@
     <tr>
       <td>
         <a href="{{ url_for('contractor_detail', vat=r.vat_number) }}">{{ r.name }}</a>
-        {% if r.name | is_natural_person %}<span class="badge-natural">φυσικό πρόσωπο</span>{% endif %}
+        {% if r.name | is_natural_person %}<span class="badge-natural">natural person</span>{% endif %}
       </td>
       <td class="tabular">{{ r.vat_number }}</td>
       <td class="muted">{{ r.countries or '—' }}</td>
@@ -49,6 +49,6 @@
   </tbody>
 </table>
 {% else %}
-  <p class="muted">Δεν βρέθηκαν αποτελέσματα.</p>
+  <p class="muted">No results found.</p>
 {% endif %}
 {% endblock %}
