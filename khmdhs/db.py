@@ -5,7 +5,7 @@ import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
-from khmdhs.extract import parent_row, child_rows
+from khmdhs.extract import parent_row, child_rows, payment_row
 
 SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS contracts (
@@ -133,6 +133,32 @@ CREATE TABLE IF NOT EXISTS contract_project_regions (
 CREATE INDEX IF NOT EXISTS idx_cpr_region_pe ON contract_project_regions(region_pe);
 CREATE INDEX IF NOT EXISTS idx_cpr_nuts3 ON contract_project_regions(nuts3_code);
 
+-- Payment orders (##PAY#########) linked to contracts. `contract_ref` is the
+-- contract whose API payload listed the payment in `paymentRefNo`;
+-- `attributed_ref` is the final contract of that contract's supersede chain
+-- (payments frequently stay attached to a superseded original after a
+-- modification replaces it, so aggregates must follow the chain).
+CREATE TABLE IF NOT EXISTS contract_payments (
+    payment_ref        TEXT PRIMARY KEY,
+    contract_ref       TEXT NOT NULL,
+    attributed_ref     TEXT NOT NULL,
+    api_contract_ref   TEXT,
+    title              TEXT,
+    signed_date        TEXT,
+    submission_date    TEXT,
+    cancelled          INTEGER,
+    credit             INTEGER,
+    amount_without_vat REAL,
+    amount_with_vat    REAL,
+    fund_ref_num       TEXT,
+    correction_note    TEXT,
+    raw_json           TEXT,
+    fetched_at         TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_cp_contract ON contract_payments(contract_ref);
+CREATE INDEX IF NOT EXISTS idx_cp_attributed ON contract_payments(attributed_ref);
+
 CREATE TABLE IF NOT EXISTS contractor_locations (
     vat_number   TEXT PRIMARY KEY,
     legal_name   TEXT,
@@ -207,6 +233,18 @@ def upsert_contract(conn: sqlite3.Connection, item: dict) -> None:
                    status='ok', http_status=200, error_message=NULL,
                    attempts=fetch_log.attempts+1, last_attempt_at=excluded.last_attempt_at""",
             (p["reference_number"], datetime.now(timezone.utc).isoformat(timespec="seconds")),
+        )
+
+
+def upsert_payment(
+    conn: sqlite3.Connection, contract_ref: str, attributed_ref: str, item: dict
+) -> None:
+    p = payment_row(contract_ref, attributed_ref, item)
+    cols = ", ".join(p.keys())
+    placeholders = ", ".join(f":{k}" for k in p)
+    with conn:
+        conn.execute(
+            f"INSERT OR REPLACE INTO contract_payments ({cols}) VALUES ({placeholders})", p
         )
 
 

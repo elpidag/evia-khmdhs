@@ -108,7 +108,8 @@ def real_conn():
 
 def test_real_db_known_classifications(real_conn):
     expected = {
-        "22SYMV010473684": ("antinero_i", 1),        # ΕΡΓΟΥ 3.Α, ΑΛΣΟΣ ΙΚΕ
+        "22SYMV010473684": ("antinero_i", 0),        # ΕΡΓΟΥ 3.Α — superseded by its amendment
+        "22SYMV010856526": ("antinero_i", 1),        # ΕΡΓΟΥ 3.Α amendment (chain_loader)
         "22SYMV010551364": ("antinero_i", 0),        # 3.Γ original, superseded
         "17SYMV002008790": ("non_antinero", 0),      # routine Chalkida 2017
         "24SYMV015978850": ("antinero_support", 0),  # legal support

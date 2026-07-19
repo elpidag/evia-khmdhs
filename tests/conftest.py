@@ -28,6 +28,17 @@ def add_contract(conn, ref, title=None, fund_num=None, prev=None, cancelled=0,
         )
 
 
+def add_payment(conn, pay_ref, contract_ref, eur, attributed_ref=None,
+                cancelled=0, credit=0, eur_no_vat=None):
+    conn.execute(
+        "INSERT INTO contract_payments (payment_ref, contract_ref, attributed_ref, "
+        "title, signed_date, cancelled, credit, amount_without_vat, amount_with_vat, fetched_at) "
+        "VALUES (?,?,?, 'ΕΝΤΟΛΗ ΠΛΗΡΩΜΗΣ', '2026-01-01', ?, ?, ?, ?, '2026-01-01T00:00:00')",
+        (pay_ref, contract_ref, attributed_ref or contract_ref, cancelled, credit,
+         eur_no_vat if eur_no_vat is not None else eur, eur),
+    )
+
+
 def set_scope(conn, ref, scope, in_scope, superseded_by=None, basis="test"):
     conn.execute(
         "INSERT OR REPLACE INTO contract_scope "

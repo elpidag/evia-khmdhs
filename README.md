@@ -141,6 +141,61 @@ pages still resolve for everything and show the scope + exclusion reason.
 
 Re-run `python -m khmdhs.scope_loader` after any contract load.
 
+### Amendment chains
+
+Contract versions link via `prevReferenceNo`/`nextRefNo` (an amendment is
+a full ##SYMV######### record). Members missing from the original sources
+are fetched to closure with:
+
+```bash
+python -m khmdhs.chain_loader --dry-run   # list missing chain members
+python -m khmdhs.chain_loader             # fetch them
+```
+
+`scope_loader` then marks superseded versions out of scope (one in-scope
+member per chain) and lets amendments without programme evidence of their
+own (titles like «1η ΤΡΟΠΟΠΟΙΗΣΗ …») inherit the phase of the version
+they modify. Project regions for amendments are inherited from the
+superseded version in `contract_regions.json`. Run order after a chain
+fetch: `scope_loader` → `region_loader` → `payment_loader` (which also
+re-attributes stored payments to the newest version of each chain).
+
+### Payment orders + effective contract values
+
+Every contract's API payload lists its payment orders (`paymentRefNo`,
+ADAMs shaped `##PAY#########`). The payment loader links them, fetches
+each one from `POST /khmdhs-opendata/payment` and stores it in the
+`contract_payments` table:
+
+```bash
+python -m khmdhs.payment_loader --dry-run    # list pending fetches
+python -m khmdhs.payment_loader              # fetch + store + apply corrections
+```
+
+Payments frequently stay attached to a superseded contract version after a
+modification replaces it, so each payment also records `attributed_ref` —
+the final contract of the supersede chain — which is what the UI
+aggregates on (run `scope_loader` first so the chains are current).
+
+The web UI then shows an **effective value** per contract: the sum of its
+non-cancelled payment orders when at least one exists (this absorbs
+post-signature amendments — and, for running contracts, reflects what has
+actually been disbursed so far), falling back to the stated contract value
+when no payments are recorded. Contract detail pages list every payment
+order with a per-order PDF link, plus a "Download contract PDF" button.
+
+PDFs are served through the app's `/pdf/<kind>/<ADAM>` route, which
+fetches the attachment from the registry once (public, no login) and then
+serves it from `data/processed/pdf_cache/`. The registry rate-limits
+bursts of attachment downloads with HTTP 429; on a cache miss during a
+throttle window the route returns an auto-retrying wait page instead of
+the registry's raw JSON error.
+
+Registry keying errors (e.g. `25PAY016487974`, entered as €992.4M for a
+€279k study contract; the signed PDF documents €239,940.00) are fixed via
+the curated `khmdhs/data/payment_corrections.json`, applied at the end of
+every loader run.
+
 ## Output: enriched Excel file
 
 Original columns A–H are preserved exactly. Eight new columns are appended

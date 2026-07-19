@@ -2915,5 +2915,263 @@
     ],
     "curated_at": "2026-07-18",
     "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010806317": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Νήσων",
+        "note": "Δασαρχείο Πόρου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010447496 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010806398": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Καβάλας",
+        "note": "Δασαρχείο Καβάλας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010488925 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856514": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Πειραιώς",
+        "note": "Δασαρχείο Πειραιά"
+      },
+      {
+        "pe": "Π.Ε. Δυτικής Αττικής",
+        "note": "Δασαρχείο Μεγάρων"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010447493 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856515": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ηλείας",
+        "note": "Δασαρχεία Ολυμπίας και Αμαλιάδας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010473680 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856516": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ιωαννίνων",
+        "note": "Δασαρχείο Ιωαννίνων"
+      },
+      {
+        "pe": "Π.Ε. Κεφαλληνίας",
+        "note": "Δ/νση Δασών Κεφαλληνίας"
+      },
+      {
+        "pe": "Π.Ε. Καστοριάς",
+        "note": "Δ/νση Δασών Καστοριάς"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010473683 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856517": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Σερρών",
+        "note": "Δασαρχεία Σερρών και Σιδηροκάστρου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010473685 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856518": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "Δασαρχείο Χαλκίδας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010584641 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856519": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "Δασαρχείο Λίμνης"
+      },
+      {
+        "pe": "Π.Ε. Φθιώτιδας",
+        "note": "Δασαρχεία Λαμίας, Σπερχειάδας και Αταλάντης"
+      },
+      {
+        "pe": "Π.Ε. Σποράδων",
+        "note": "Δασαρχείο Σκοπέλου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010584904 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856521": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Λάρισας",
+        "note": "Δασαρχείο Λάρισας"
+      },
+      {
+        "pe": "Π.Ε. Καρδίτσας",
+        "note": "Δασαρχείο Μουζακίου"
+      },
+      {
+        "pe": "Π.Ε. Σάμου",
+        "note": "Δ/νση Δασών Σάμου"
+      },
+      {
+        "pe": "Π.Ε. Πιερίας",
+        "note": "Δ/νση Δασών Πιερίας"
+      },
+      {
+        "pe": "Π.Ε. Λέσβου",
+        "note": "Δ/νση Δασών Λέσβου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010585198 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856524": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Έβρου",
+        "note": "Δασαρχεία Αλεξανδρούπολης, Διδυμοτείχου και Σουφλίου"
+      },
+      {
+        "pe": "Π.Ε. Δράμας",
+        "note": "Δασαρχείο Κ. Νευροκοπίου"
+      },
+      {
+        "pe": "Π.Ε. Ξάνθης",
+        "note": "Δασαρχείο Σταυρούπολης"
+      },
+      {
+        "pe": "Π.Ε. Ροδόπης",
+        "note": "Δ/νση Δασών Ροδόπης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010489083 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856525": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ανατολικής Αττικής",
+        "note": "Δασαρχεία Πεντέλης και Καπανδριτίου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010551306 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010856526": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Θεσσαλονίκης",
+        "note": "Δασαρχείο Θεσσαλονίκης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010473684 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV010864314": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ανατολικής Αττικής",
+        "note": "Όρος Υμηττός, ευθύνη Δασαρχείου Πεντέλης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010635347 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV011323950": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Πέλλας",
+        "note": "Δασαρχεία Έδεσσας και Αριδαίας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV010795585 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV011928850": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Χίου",
+        "note": "Δ/νση Δασών Χίου"
+      },
+      {
+        "pe": "Π.Ε. Χανίων",
+        "note": "Δ/νση Δασών Χανίων"
+      },
+      {
+        "pe": "Π.Ε. Ιωαννίνων",
+        "note": "Δασαρχείο Ιωαννίνων"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV011332276 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV011928864": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Κορινθίας",
+        "note": "Δασαρχεία Κορινθίας και Ξυλοκάστρου"
+      },
+      {
+        "pe": "Π.Ε. Αρκαδίας",
+        "note": "Δασαρχείο Κυνουρίας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV011332546 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "22SYMV011928919": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Λακωνίας",
+        "note": "Δασαρχείο Σπάρτης"
+      },
+      {
+        "pe": "Π.Ε. Τρικάλων",
+        "note": "Δασαρχεία Καλαμπάκας και Περτουλίου"
+      },
+      {
+        "pe": "Π.Ε. Θεσσαλονίκης",
+        "note": "Δασαρχείο Σταυρού"
+      },
+      {
+        "pe": "Π.Ε. Λάρισας",
+        "note": "Δασαρχείο Αγιάς"
+      },
+      {
+        "pe": "Π.Ε. Ξάνθης",
+        "note": "Δασαρχείο Ξάνθης"
+      },
+      {
+        "pe": "Π.Ε. Πειραιώς",
+        "note": "Δασαρχείο Πειραιά"
+      },
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "Δασαρχείο Χαλκίδας"
+      },
+      {
+        "pe": "Π.Ε. Αργολίδας",
+        "note": "Δ/νση Δασών Αργολίδας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "inherited from superseded version 22SYMV011512210 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
   }
 }

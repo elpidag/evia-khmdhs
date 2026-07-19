@@ -11,6 +11,12 @@
   <p class="muted tabular">ADAM {{ c.reference_number }} · signed: {{ c.contract_signed_date or '—' }}</p>
 </hgroup>
 
+<p>
+  <a role="button" href="{{ url_for('pdf_attachment', kind='contract', adam=c.reference_number) }}"
+     target="_blank" rel="noopener" class="outline">📄 View contract PDF</a>
+  <small class="muted">opens in a new tab — fetched from KHMDHS once, then served from the local cache</small>
+</p>
+
 {% if c.scope %}
   {% if not c.scope.in_scope %}
   <article class="coverage-banner" style="border-left: 4px solid #c98724;">
@@ -27,10 +33,25 @@
 {% endif %}
 
 <dl class="summary-card">
+  {% if c.paid_with_vat is not none %}
+  <div>
+    <dt>Actually Paid (incl. VAT)</dt>
+    <dd>{{ c.paid_with_vat | eur }}</dd>
+  </div>
+  <div>
+    <dt>Contracted Value (incl. VAT)</dt>
+    <dd>{{ c.total_cost_with_vat | eur }}
+      {% if (c.paid_with_vat - (c.total_cost_with_vat or 0)) | abs > 1 %}
+        <small class="muted">(diverges — payments include amendments and/or work still in progress)</small>
+      {% endif %}
+    </dd>
+  </div>
+  {% else %}
   <div>
     <dt>Total Value (incl. VAT)</dt>
-    <dd>{{ c.total_cost_with_vat | eur }}</dd>
+    <dd>{{ c.total_cost_with_vat | eur }} <small class="muted">(no payment orders recorded)</small></dd>
   </div>
+  {% endif %}
   <div>
     <dt>Excl. VAT</dt>
     <dd>{{ c.total_cost_without_vat | eur }}</dd>
@@ -135,6 +156,56 @@
     </tbody>
   </table>
 </section>
+
+{% if c.payments %}
+<section class="section">
+  <h2>Payment Orders ({{ c.payments | length }})</h2>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>ADAM</th>
+        <th>Date</th>
+        <th>Title</th>
+        <th class="num">Excl. VAT</th>
+        <th class="num">Incl. VAT</th>
+        <th>PDF</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in c.payments %}
+      <tr{% if p.cancelled %} style="opacity:.55"{% endif %}>
+        <td class="tabular">{{ p.payment_ref }}
+          {% if p.contract_ref != c.reference_number %}
+            <br><small class="muted">on <a href="{{ url_for('contract_detail', adam=p.contract_ref) }}">{{ p.contract_ref }}</a></small>
+          {% endif %}
+        </td>
+        <td class="tabular muted">{{ (p.signed_date or '')[:10] or '—' }}</td>
+        <td>{{ p.title or '—' }}
+          {% if p.credit %}<span class="pill-warn">credit</span>{% endif %}
+          {% if p.correction_note %}
+            <span class="pill-warn" title="{{ p.correction_note }}">{{ 'excluded — data error' if p.cancelled else 'amount corrected' }}</span>
+          {% endif %}
+          {% if p.cancelled and not p.correction_note %}<span class="pill-danger">cancelled</span>{% endif %}
+        </td>
+        <td class="num">{{ p.amount_without_vat | eur }}</td>
+        <td class="num">{{ p.amount_with_vat | eur }}</td>
+        <td><a href="{{ url_for('pdf_attachment', kind='payment', adam=p.payment_ref) }}" target="_blank" rel="noopener" title="View payment order PDF in a new tab">📄</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    {% if c.paid_with_vat is not none %}
+    <tfoot>
+      <tr>
+        <th colspan="3">Total paid (non-cancelled)</th>
+        <th class="num">{{ c.paid_without_vat | eur }}</th>
+        <th class="num">{{ c.paid_with_vat | eur }}</th>
+        <th></th>
+      </tr>
+    </tfoot>
+    {% endif %}
+  </table>
+</section>
+{% endif %}
 
 {% if c.objects %}
 <section class="section">

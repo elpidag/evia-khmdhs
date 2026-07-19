@@ -173,3 +173,11 @@ details.raw pre {
   overflow: auto;
   font-size: 0.78rem;
 }
+
+/* Status pills (single bid, cancelled, credit) — shared by contracts list + detail */
+.pill-warn, .pill-danger {
+  display: inline-block; padding: 0 0.4rem; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 600; margin-left: 0.3rem; white-space: nowrap;
+}
+.pill-warn   { background: #fef3c7; color: #92400e; }
+.pill-danger { background: #fde2e2; color: #991b1b; }

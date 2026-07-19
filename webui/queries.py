@@ -51,6 +51,33 @@ def scope_filter(conn: sqlite3.Connection, col: str = "reference_number") -> str
     return f"{col} NOT IN ({EXCLUDED_REFS_SUBQUERY})"
 
 
+def _has_payments_table(conn: sqlite3.Connection) -> bool:
+    return conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='contract_payments'"
+    ).fetchone() is not None
+
+
+def effective_cost(conn: sqlite3.Connection, alias: str, col: str = "total_cost_with_vat") -> str:
+    """SQL expression for a contract's effective value.
+
+    When at least one non-cancelled payment order is attributed to the
+    contract (payments of superseded versions follow the chain to the final
+    version), the effective value is the sum of those payments — that is
+    what was actually disbursed and it absorbs post-signature amendments.
+    Contracts with no payments keep their stated value. Falls back to the
+    stated value entirely when the payments table has not been built yet
+    (`python -m khmdhs.payment_loader`).
+    """
+    if not _has_payments_table(conn):
+        return f"{alias}.{col}"
+    paid_col = "amount_with_vat" if col == "total_cost_with_vat" else "amount_without_vat"
+    return (
+        f"COALESCE((SELECT SUM(p.{paid_col}) FROM contract_payments p"
+        f" WHERE p.attributed_ref = {alias}.reference_number AND p.cancelled = 0),"
+        f" {alias}.{col})"
+    )
+
+
 def open_ro(db_path: Path) -> sqlite3.Connection:
     """Open the database read-only via SQLite URI."""
     uri = f"file:{db_path.as_posix()}?mode=ro"
@@ -64,24 +91,25 @@ def open_ro(db_path: Path) -> sqlite3.Connection:
 # ---------------------------------------------------------------------------
 
 def kpis(conn: sqlite3.Connection) -> dict:
-    flt = scope_filter(conn)
+    flt = scope_filter(conn, "co.reference_number")
     row = conn.execute(f"""
         SELECT
             COUNT(*) AS n_contracts,
-            ROUND(SUM(total_cost_with_vat), 2) AS total_eur,
-            SUM(CASE WHEN procedure_type LIKE 'Απευθείας%' THEN 1 ELSE 0 END) AS n_direct,
-            SUM(CASE WHEN bids_submitted = 1 THEN 1 ELSE 0 END) AS n_single_bidder,
-            SUM(CASE WHEN cancelled = 1 THEN 1 ELSE 0 END) AS n_cancelled
-        FROM contracts
+            ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur,
+            SUM(CASE WHEN co.procedure_type LIKE 'Απευθείας%' THEN 1 ELSE 0 END) AS n_direct,
+            SUM(CASE WHEN co.bids_submitted = 1 THEN 1 ELSE 0 END) AS n_single_bidder,
+            SUM(CASE WHEN co.cancelled = 1 THEN 1 ELSE 0 END) AS n_cancelled
+        FROM contracts co
         WHERE {flt}
     """).fetchone()
+    flt_bare = scope_filter(conn)
     n_contractors = conn.execute(f"""
         SELECT COUNT(DISTINCT vat_number) FROM contractors
-        WHERE {flt}
+        WHERE {flt_bare}
     """).fetchone()[0]
     n_authorities = conn.execute(f"""
         SELECT COUNT(DISTINCT organization_name) FROM contracts
-        WHERE {flt}
+        WHERE {flt_bare}
     """).fetchone()[0]
     pct_direct = round(100.0 * row["n_direct"] / row["n_contracts"], 1) if row["n_contracts"] else 0
     return {
@@ -100,7 +128,7 @@ def top_contractors(conn: sqlite3.Connection, limit: int = 10) -> list[dict]:
         SELECT c.vat_number,
                MIN(c.name) AS name,
                COUNT(DISTINCT c.reference_number) AS n_contracts,
-               ROUND(SUM(co.total_cost_with_vat), 2) AS total_eur,
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur,
                ROUND(100.0 * SUM(CASE WHEN co.procedure_type LIKE 'Απευθείας%' THEN 1 ELSE 0 END)
                            / COUNT(*), 1) AS pct_direct,
                SUM(CASE WHEN co.bids_submitted = 1 THEN 1 ELSE 0 END) AS n_single_bidder
@@ -116,13 +144,13 @@ def top_contractors(conn: sqlite3.Connection, limit: int = 10) -> list[dict]:
 
 def top_authorities(conn: sqlite3.Connection, limit: int = 5) -> list[dict]:
     rows = conn.execute(f"""
-        SELECT organization_name AS name,
+        SELECT co.organization_name AS name,
                COUNT(*) AS n_contracts,
-               ROUND(SUM(total_cost_with_vat), 2) AS total_eur
-        FROM contracts
-        WHERE organization_name IS NOT NULL
-          AND {scope_filter(conn)}
-        GROUP BY organization_name
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
+        FROM contracts co
+        WHERE co.organization_name IS NOT NULL
+          AND {scope_filter(conn, 'co.reference_number')}
+        GROUP BY co.organization_name
         ORDER BY total_eur DESC
         LIMIT ?
     """, (limit,)).fetchall()
@@ -131,13 +159,13 @@ def top_authorities(conn: sqlite3.Connection, limit: int = 5) -> list[dict]:
 
 def top_signers(conn: sqlite3.Connection, limit: int = 5) -> list[dict]:
     rows = conn.execute(f"""
-        SELECT signer_name AS name,
+        SELECT co.signer_name AS name,
                COUNT(*) AS n_contracts,
-               ROUND(SUM(total_cost_with_vat), 2) AS total_eur
-        FROM contracts
-        WHERE signer_name IS NOT NULL
-          AND {scope_filter(conn)}
-        GROUP BY signer_name
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
+        FROM contracts co
+        WHERE co.signer_name IS NOT NULL
+          AND {scope_filter(conn, 'co.reference_number')}
+        GROUP BY co.signer_name
         ORDER BY total_eur DESC
         LIMIT ?
     """, (limit,)).fetchall()
@@ -171,7 +199,7 @@ def list_contractors(conn: sqlite3.Connection, q: str | None = None, sort: str =
                MIN(c.name) AS name,
                GROUP_CONCAT(DISTINCT c.country) AS countries,
                COUNT(DISTINCT c.reference_number) AS n_contracts,
-               ROUND(SUM(co.total_cost_with_vat), 2) AS total_eur,
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur,
                ROUND(100.0 * SUM(CASE WHEN co.procedure_type LIKE 'Απευθείας%' THEN 1 ELSE 0 END)
                            / COUNT(*), 1) AS pct_direct,
                SUM(CASE WHEN co.bids_submitted = 1 THEN 1 ELSE 0 END) AS n_single_bidder
@@ -208,7 +236,11 @@ def list_contracts(conn: sqlite3.Connection, q: str | None = None) -> list[dict]
         SELECT k.reference_number,
                k.title,
                k.contract_signed_date,
-               k.total_cost_with_vat,
+               {effective_cost(conn, 'k')} AS total_cost_with_vat,
+               k.total_cost_with_vat AS stated_cost_with_vat,
+               {("(SELECT COUNT(*) FROM contract_payments p"
+                 " WHERE p.attributed_ref = k.reference_number AND p.cancelled = 0)")
+                if _has_payments_table(conn) else "0"} AS n_payments,
                k.bids_submitted,
                k.cancelled,
                s.scope,
@@ -247,8 +279,8 @@ def contractor_summary(conn: sqlite3.Connection, vat: str) -> dict | None:
                GROUP_CONCAT(DISTINCT c.country) AS countries,
                MAX(c.greek_vat) AS greek_vat,
                COUNT(DISTINCT c.reference_number) AS n_contracts,
-               ROUND(SUM(co.total_cost_with_vat), 2) AS total_eur,
-               ROUND(SUM(co.total_cost_without_vat), 2) AS total_eur_no_vat,
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur,
+               ROUND(SUM({effective_cost(conn, 'co', 'total_cost_without_vat')}), 2) AS total_eur_no_vat,
                ROUND(100.0 * SUM(CASE WHEN co.procedure_type LIKE 'Απευθείας%' THEN 1 ELSE 0 END)
                            / COUNT(*), 1) AS pct_direct,
                SUM(CASE WHEN co.bids_submitted = 1 THEN 1 ELSE 0 END) AS n_single_bidder,
@@ -280,7 +312,8 @@ def contractor_contracts(conn: sqlite3.Connection, vat: str) -> list[dict]:
                co.title,
                co.contract_signed_date,
                co.start_date,
-               co.total_cost_with_vat,
+               {effective_cost(conn, 'co')} AS total_cost_with_vat,
+               co.total_cost_with_vat AS stated_cost_with_vat,
                co.procedure_type,
                co.bids_submitted,
                co.organization_name,
@@ -303,7 +336,7 @@ def consortium_partners(conn: sqlite3.Connection, vat: str) -> list[dict]:
         SELECT c2.vat_number,
                MIN(c2.name) AS name,
                COUNT(DISTINCT c2.reference_number) AS shared_contracts,
-               ROUND(SUM(co.total_cost_with_vat), 2) AS shared_eur
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS shared_eur
         FROM contractors c1
         JOIN contractors c2 USING (reference_number)
         JOIN contracts   co USING (reference_number)
@@ -319,7 +352,7 @@ def contractor_signers(conn: sqlite3.Connection, vat: str) -> list[dict]:
     rows = conn.execute(f"""
         SELECT co.signer_name AS name,
                COUNT(*) AS n_contracts,
-               ROUND(SUM(co.total_cost_with_vat), 2) AS total_eur
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
         FROM contracts co
         JOIN contractors c USING (reference_number)
         WHERE c.vat_number = ? AND co.signer_name IS NOT NULL
@@ -365,6 +398,28 @@ def contract_detail(conn: sqlite3.Connection, adam: str) -> dict | None:
             "SELECT * FROM contract_objects WHERE reference_number = ? ORDER BY seq", (adam,)
         ).fetchall()
     ]
+    d["payments"] = []
+    d["paid_with_vat"] = None
+    d["paid_without_vat"] = None
+    if _has_payments_table(conn):
+        d["payments"] = [
+            dict(r) for r in conn.execute(
+                """SELECT payment_ref, contract_ref, attributed_ref, title,
+                          signed_date, cancelled, credit, correction_note,
+                          amount_without_vat, amount_with_vat
+                     FROM contract_payments
+                    WHERE attributed_ref = ? OR contract_ref = ?
+                    ORDER BY COALESCE(signed_date, submission_date), payment_ref""",
+                (adam, adam),
+            ).fetchall()
+        ]
+        live = [p for p in d["payments"] if not p["cancelled"]]
+        if live:
+            d["paid_with_vat"] = round(sum(p["amount_with_vat"] or 0 for p in live), 2)
+            d["paid_without_vat"] = round(sum(p["amount_without_vat"] or 0 for p in live), 2)
+    d["effective_cost_with_vat"] = (
+        d["paid_with_vat"] if d["paid_with_vat"] is not None else d["total_cost_with_vat"]
+    )
     d["scope"] = None
     if _has_scope_table(conn):
         row = conn.execute(
@@ -382,14 +437,14 @@ def contract_detail(conn: sqlite3.Connection, adam: str) -> dict | None:
 
 def list_authorities(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(f"""
-        SELECT organization_name AS name,
-               organization_vat AS vat,
+        SELECT co.organization_name AS name,
+               co.organization_vat AS vat,
                COUNT(*) AS n_contracts,
-               ROUND(SUM(total_cost_with_vat), 2) AS total_eur
-        FROM contracts
-        WHERE organization_name IS NOT NULL
-          AND {scope_filter(conn)}
-        GROUP BY organization_name
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
+        FROM contracts co
+        WHERE co.organization_name IS NOT NULL
+          AND {scope_filter(conn, 'co.reference_number')}
+        GROUP BY co.organization_name
         ORDER BY total_eur DESC
     """).fetchall()
     return [dict(r) for r in rows]
@@ -397,13 +452,13 @@ def list_authorities(conn: sqlite3.Connection) -> list[dict]:
 
 def list_unit_operators(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(f"""
-        SELECT units_operator_name AS name,
+        SELECT co.units_operator_name AS name,
                COUNT(*) AS n_contracts,
-               ROUND(SUM(total_cost_with_vat), 2) AS total_eur
-        FROM contracts
-        WHERE units_operator_name IS NOT NULL
-          AND {scope_filter(conn)}
-        GROUP BY units_operator_name
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
+        FROM contracts co
+        WHERE co.units_operator_name IS NOT NULL
+          AND {scope_filter(conn, 'co.reference_number')}
+        GROUP BY co.units_operator_name
         ORDER BY total_eur DESC
     """).fetchall()
     return [dict(r) for r in rows]
@@ -411,13 +466,13 @@ def list_unit_operators(conn: sqlite3.Connection) -> list[dict]:
 
 def list_signers(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(f"""
-        SELECT signer_name AS name,
+        SELECT co.signer_name AS name,
                COUNT(*) AS n_contracts,
-               ROUND(SUM(total_cost_with_vat), 2) AS total_eur
-        FROM contracts
-        WHERE signer_name IS NOT NULL
-          AND {scope_filter(conn)}
-        GROUP BY signer_name
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
+        FROM contracts co
+        WHERE co.signer_name IS NOT NULL
+          AND {scope_filter(conn, 'co.reference_number')}
+        GROUP BY co.signer_name
         ORDER BY total_eur DESC
     """).fetchall()
     return [dict(r) for r in rows]
@@ -477,7 +532,7 @@ def region_flows(
                cpr.region_pe  AS target_pe,
                cpr.nuts3_code AS target_nuts3,
                COUNT(DISTINCT co.reference_number)   AS n_contracts,
-               ROUND(SUM(co.total_cost_with_vat), 2) AS total_eur
+               ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
         FROM contractors c
         JOIN contractor_locations cl      ON cl.vat_number = c.vat_number
         JOIN contracts co                 ON co.reference_number = c.reference_number
@@ -498,17 +553,17 @@ def flow_coverage(conn: sqlite3.Connection) -> dict:
         total_eur:       resolved + unresolved
         n_contractors_resolved / n_contractors_total
     """
-    flt = scope_filter(conn)
+    flt = scope_filter(conn, "co.reference_number")
     total_eur = conn.execute(f"""
-        SELECT ROUND(SUM(total_cost_with_vat), 2) FROM contracts
+        SELECT ROUND(SUM({effective_cost(conn, 'co')}), 2) FROM contracts co
         WHERE {flt}
     """).fetchone()[0] or 0
 
     resolved_eur = conn.execute(f"""
-        SELECT ROUND(SUM(total_cost_with_vat), 2)
-        FROM contracts
+        SELECT ROUND(SUM({effective_cost(conn, 'co')}), 2)
+        FROM contracts co
         WHERE {flt}
-          AND reference_number IN (
+          AND co.reference_number IN (
               SELECT DISTINCT c.reference_number
               FROM contractors c
               JOIN contractor_locations cl ON cl.vat_number = c.vat_number
@@ -552,7 +607,7 @@ def project_region_origins(conn: sqlite3.Connection) -> list[dict]:
                 cpr.region_pe                  AS target_pe,
                 cpr.nuts3_code                 AS target_nuts3,
                 co.reference_number,
-                co.total_cost_with_vat         AS contract_eur,
+                {effective_cost(conn, 'co')}   AS contract_eur,
                 COUNT(c.vat_number)            AS n_contractors,
                 SUM(CASE WHEN cl.region_pe = cpr.region_pe THEN 1 ELSE 0 END) AS n_local,
                 SUM(CASE WHEN cl.region_pe IS NOT NULL AND cl.region_pe <> cpr.region_pe THEN 1 ELSE 0 END) AS n_imported,

@@ -47,7 +47,10 @@ def parent_row(item: dict) -> dict:
     duration_unit = (item.get("contractDurationUnitOfMeasure") or {}).get("value")
 
     auction_refs = item.get("auctionRefNo") or []
-    next_refs = item.get("nextRefNo") or []
+    # nextRefNo comes back as a plain string; guard for a list just in case.
+    next_ref = item.get("nextRefNo")
+    if isinstance(next_ref, list):
+        next_ref = next_ref[0] if next_ref else None
 
     return {
         "reference_number": item.get("referenceNumber"),
@@ -99,7 +102,36 @@ def parent_row(item: dict) -> dict:
         "espa_fund_program_ref": funding.get("espaFundProgramRef"),
         "notice_reference_number": item.get("noticeReferenceNumber") or (auction_refs[0] if auction_refs else None),
         "prev_reference_no": item.get("prevReferenceNo"),
-        "next_reference_no": next_refs[0] if next_refs else None,
+        "next_reference_no": next_ref,
+        "raw_json": json.dumps(item, ensure_ascii=False),
+        "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    }
+
+
+def payment_row(contract_ref: str, attributed_ref: str, item: dict) -> dict:
+    """Flatten one API payment record into a `contract_payments` table row.
+
+    Amounts of credit items are already signed negative by the registry
+    (help page: «Τα ποσά των πιστωτικών αντικειμένων δηλώνονται με [-]»),
+    so `amount_*` can be summed as-is.
+    """
+    funding = item.get("fundingDetails") or {}
+    api_ref = item.get("contractRefNo")
+    if isinstance(api_ref, list):
+        api_ref = ",".join(str(r) for r in api_ref) or None
+    return {
+        "payment_ref": item.get("referenceNumber"),
+        "contract_ref": contract_ref,
+        "attributed_ref": attributed_ref,
+        "api_contract_ref": api_ref,
+        "title": item.get("title"),
+        "signed_date": item.get("signedDate"),
+        "submission_date": item.get("submissionDate"),
+        "cancelled": _bool_int(item.get("cancelled")),
+        "credit": _bool_int(item.get("credit")),
+        "amount_without_vat": item.get("totalCostWithoutVAT"),
+        "amount_with_vat": item.get("totalCostWithVAT"),
+        "fund_ref_num": funding.get("publicFundingRefNum"),
         "raw_json": json.dumps(item, ensure_ascii=False),
         "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }

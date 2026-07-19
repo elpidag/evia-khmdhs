@@ -6,15 +6,30 @@ import time
 
 import requests
 
-from khmdhs.config import API_URL, REQUEST_TIMEOUT, RETRY_BACKOFFS
+from khmdhs.config import API_URL, PAYMENT_API_URL, REQUEST_TIMEOUT, RETRY_BACKOFFS
 
 
 def fetch_contract(
     session: requests.Session, adam: str
 ) -> tuple[str, dict | None, int | None, str | None]:
-    """Fetch one contract by ADAM. Returns (status, item, http_status, error).
+    """Fetch one contract by ADAM (##SYMV#########)."""
+    return _fetch(session, API_URL, adam)
 
-    status is one of 'ok' | 'not_found' | 'http_error' | 'parse_error'.
+
+def fetch_payment(
+    session: requests.Session, adam: str
+) -> tuple[str, dict | None, int | None, str | None]:
+    """Fetch one payment order by ADAM (##PAY#########)."""
+    return _fetch(session, PAYMENT_API_URL, adam)
+
+
+def _fetch(
+    session: requests.Session, url: str, adam: str
+) -> tuple[str, dict | None, int | None, str | None]:
+    """POST {referenceNumber: adam} to a KHMDHS search endpoint.
+
+    Returns (status, item, http_status, error) where status is one of
+    'ok' | 'not_found' | 'http_error' | 'parse_error'.
     Retries on connection errors and HTTP 5xx; honours `Retry-After` on 429.
     """
     last_http: int | None = None
@@ -25,7 +40,7 @@ def fetch_contract(
             time.sleep(backoff)
         try:
             resp = session.post(
-                API_URL,
+                url,
                 json={"referenceNumber": adam},
                 headers={"Accept": "application/json", "Content-Type": "application/json"},
                 timeout=REQUEST_TIMEOUT,

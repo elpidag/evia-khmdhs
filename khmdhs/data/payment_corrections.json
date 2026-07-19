@@ -1,0 +1,8 @@
+{
+  "_comment": "Curated fixes for payment orders whose registry amounts are keying errors. Keyed by payment ADAM. Fields: 'exclude': true marks the payment as unusable (treated like cancelled in aggregates), or 'amount_with_vat'/'amount_without_vat' override the registry amounts when the true value is documented (cite the source in 'reason'). Applied by khmdhs.payment_loader after every run.",
+  "25PAY016487974": {
+    "amount_with_vat": 239940.0,
+    "amount_without_vat": 193500.0,
+    "reason": "Registry API returns €992,420,531.12 (net 800,339,138) for a €278,690.31 study contract (24SYMV014662322, ANTINERO III διαχειριστικές μελέτες Δασαρχείων Πύργου/Ολυμπίας). The signed payment-order PDF (payment/attachment/25PAY016487974, ΣΥΝΟΛΙΚΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ) documents the true amount: net €193,500.00 + VAT €46,440.00 = €239,940.00."
+  }
+}

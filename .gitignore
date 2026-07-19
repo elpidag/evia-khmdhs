@@ -30,3 +30,4 @@ desktop.ini
 
 # LibreOffice lock files
 .~lock.*#
+data/processed/pdf_cache/

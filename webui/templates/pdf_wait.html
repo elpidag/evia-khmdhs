@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}PDF {{ adam }}{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>PDF not available yet</h1>
+  <p class="muted tabular">{{ adam }}</p>
+</hgroup>
+
+<article>
+  <p>Could not fetch the document: {{ reason }}.</p>
+  {% if retry %}
+  <p>This page will retry automatically in <strong><span id="countdown">{{ retry }}</span> s</strong>
+     — once fetched, the PDF is cached locally and never hits the registry again.</p>
+  {% else %}
+  <p>Retrying is unlikely to help — this document probably has no PDF attached in KHMDHS.</p>
+  {% endif %}
+  <p><a href="javascript:location.reload()" role="button" class="outline">Retry now</a></p>
+</article>
+
+{% if retry %}
+<script>
+  let left = {{ retry }};
+  const el = document.getElementById("countdown");
+  setInterval(() => { if (--left > 0) el.textContent = left; }, 1000);
+  setTimeout(() => location.reload(), {{ retry }} * 1000);
+</script>
+{% endif %}
+{% endblock %}

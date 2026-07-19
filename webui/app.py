@@ -1,18 +1,29 @@
 """Flask app: routes + DB connection management."""
 from __future__ import annotations
 
+import re
 import sqlite3
 from pathlib import Path
 
-from flask import Flask, abort, g, jsonify, redirect, render_template, request, url_for
+import requests
+from flask import (
+    Flask, abort, g, jsonify, redirect, render_template, request, send_file, url_for,
+)
 
-from khmdhs.config import DEFAULT_DB
+from khmdhs.config import CONTRACT_PDF_URL, DEFAULT_DB, PAYMENT_PDF_URL, PDF_CACHE_DIR
 from webui import filters, queries
 
+# kind -> (ADAM infix, registry attachment URL template)
+_PDF_KINDS = {
+    "contract": ("SYMV", CONTRACT_PDF_URL),
+    "payment": ("PAY", PAYMENT_PDF_URL),
+}
 
-def create_app(db_path: Path | None = None) -> Flask:
+
+def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -> Flask:
     app = Flask(__name__, static_folder="static", template_folder="templates")
     app.config["DB_PATH"] = Path(db_path) if db_path else DEFAULT_DB
+    app.config["PDF_CACHE_DIR"] = Path(pdf_cache_dir) if pdf_cache_dir else PDF_CACHE_DIR
     filters.register(app)
 
     @app.before_request
@@ -119,6 +130,59 @@ def create_app(db_path: Path | None = None) -> Flask:
             "origins.html",
             rows=queries.project_region_origins(g.conn),
             coverage=queries.flow_coverage(g.conn),
+        )
+
+    @app.route("/pdf/<kind>/<adam>")
+    def pdf_attachment(kind: str, adam: str):
+        """Serve a KHMDHS attachment from the local cache, fetching it from
+        the registry on first request. The registry rate-limits bursts of
+        attachment downloads (HTTP 429), so cache-and-serve keeps every
+        repeat download instant and off the registry entirely; on a 429 the
+        user gets an auto-retrying wait page instead of raw JSON.
+        """
+        spec = _PDF_KINDS.get(kind)
+        if spec is None:
+            abort(404)
+        infix, url_template = spec
+        if not re.fullmatch(rf"\d{{2}}{infix}\d{{6,12}}", adam):
+            abort(404)
+
+        cache_dir = Path(app.config["PDF_CACHE_DIR"])
+        path = cache_dir / f"{adam}.pdf"
+        if not path.exists():
+            try:
+                resp = requests.get(url_template.format(adam=adam), timeout=60)
+            except requests.RequestException as e:
+                return render_template(
+                    "pdf_wait.html", adam=adam, retry=30,
+                    reason=f"network error reaching the registry ({type(e).__name__})",
+                ), 503
+            if resp.status_code == 429:
+                retry = max(5, int(resp.headers.get("Retry-After", "30") or 30))
+                return (
+                    render_template(
+                        "pdf_wait.html", adam=adam, retry=retry,
+                        reason="the KHMDHS registry is rate-limiting downloads right now",
+                    ),
+                    503,
+                    {"Retry-After": str(retry)},
+                )
+            if resp.status_code != 200 or not resp.content.startswith(b"%PDF"):
+                return render_template(
+                    "pdf_wait.html", adam=adam, retry=None,
+                    reason=f"the registry returned HTTP {resp.status_code} instead of a PDF "
+                           "(the document may have no attachment)",
+                ), 502
+            cache_dir.mkdir(parents=True, exist_ok=True)
+            tmp = cache_dir / f"{adam}.pdf.tmp"
+            tmp.write_bytes(resp.content)
+            tmp.replace(path)
+        # as_attachment=False → Content-Disposition: inline, so the browser
+        # renders the PDF in the tab; download_name still names the file if
+        # the user chooses to save it.
+        return send_file(
+            path, mimetype="application/pdf",
+            as_attachment=False, download_name=f"{adam}.pdf",
         )
 
     @app.errorhandler(404)

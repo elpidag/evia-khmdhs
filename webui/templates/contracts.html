@@ -27,7 +27,7 @@
       <th>Title</th>
       <th>Project Region(s)</th>
       <th>Phase</th>
-      <th class="num">Value (incl. VAT)</th>
+      <th class="num" title="Sum of payment orders when the contract has any; the contracted value otherwise">Value (incl. VAT)</th>
     </tr>
   </thead>
   <tbody>
@@ -42,7 +42,12 @@
       </td>
       <td class="muted"><small>{{ (r.regions or '—').replace('Π.Ε. ', '').replace(',', ' · ') }}</small></td>
       <td><span class="scope-tag scope-{{ (r.scope or 'unknown').replace('antinero_', '') }}">{{ (r.scope or '—').replace('antinero_', '').upper() }}</span></td>
-      <td class="num">{{ r.total_cost_with_vat | eur }}</td>
+      <td class="num">
+        {{ r.total_cost_with_vat | eur }}
+        {%- if r.n_payments and ((r.total_cost_with_vat or 0) - (r.stated_cost_with_vat or 0)) | abs > 1 %}
+          <span class="pill-warn" title="Sum of {{ r.n_payments }} payment order(s); contracted value was {{ r.stated_cost_with_vat | eur }}">paid</span>
+        {%- endif %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>
@@ -63,11 +68,5 @@
 .scope-iii  { background: #fef3c7; color: #92400e; }
 .scope-iv   { background: #fde2e2; color: #991b1b; }
 .scope-2026 { background: #ede9fe; color: #5b21b6; }
-.pill-warn, .pill-danger {
-  display: inline-block; padding: 0 0.4rem; border-radius: 999px;
-  font-size: 0.72rem; font-weight: 600; margin-left: 0.3rem; white-space: nowrap;
-}
-.pill-warn   { background: #fef3c7; color: #92400e; }
-.pill-danger { background: #fde2e2; color: #991b1b; }
 </style>
 {% endblock %}

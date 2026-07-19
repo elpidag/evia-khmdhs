@@ -62,6 +62,7 @@ def build_scopes(conn, overrides: dict[str, str]) -> tuple[dict[str, tuple[str, 
 
     scopes: dict[str, tuple[str, str]] = {}
     prev_of: dict[str, str] = {}   # older-ref -> newest successor ref
+    prev_map: dict[str, str] = {}  # ref -> its predecessor ref
     cancelled: set[str] = set()
     for r in rows:
         ref = r["reference_number"]
@@ -81,6 +82,23 @@ def build_scopes(conn, overrides: dict[str, str]) -> tuple[dict[str, tuple[str, 
         prev = (r["prev_reference_no"] or "").strip()
         if prev:
             prev_of[prev] = ref
+            prev_map[ref] = prev
+
+    # Amendments often carry no programme evidence of their own (titles like
+    # «1η ΤΡΟΠΟΠΟΙΗΣΗ ΣΥΜΒΑΣΗΣ …», no funding block): inherit the phase of
+    # the contract version they modify, iterating so amendment-of-amendment
+    # chains resolve too.
+    changed = True
+    while changed:
+        changed = False
+        for ref, prev in prev_map.items():
+            _, basis = scopes[ref]
+            if basis != "no_antinero_evidence" or prev not in scopes:
+                continue
+            prev_scope, _ = scopes[prev]
+            if prev_scope in IN_SCOPE:
+                scopes[ref] = (prev_scope, f"inherited_from_prev:{prev}")
+                changed = True
 
     # A contract is superseded when a non-cancelled successor exists in the DB.
     superseded: dict[str, str] = {}
