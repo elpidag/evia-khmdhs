@@ -153,24 +153,27 @@ def test_override_wins_over_rules():
     assert r.basis == "curated:antinero_supplement"
 
 
-def test_adjacent_subprogrammes_not_antinero():
-    from khmdhs.scope import classify
+def test_antinero_component_scopes():
+    """ΕΣΑ reforestation and αντιδιαβρωτικά/αντιπλημμυρικά works are named
+    components of the (Antinero II) project (their contract PDFs cite RRF
+    Action 16849 «…(«antiNERO»)…») — in scope, with distinct scope values."""
+    from khmdhs.scope import IN_SCOPE, classify
     base = {"reference_number": "X", "public_funding_ref": None, "contractor_vats": ()}
     # Reforestation / nurseries — accented lowercase real-world spellings
     r = classify({**base, "title": 'ΣΥΜΒΑΣΗ ΕΣΑ 1 "ΕΘΝΙΚΟ ΣΧΕΔΙΟ ΑΝΑΔΑΣΩΣΗΣ"',
                   "public_funding_ref_num": "2021ΤΑ075000025201358"})
-    assert r.scope == "esa_reforestation"
+    assert r.scope == "antinero_esa" and r.scope in IN_SCOPE
     r = classify({**base, "title": "Αναβάθμιση των Δασικών Φυτωρίων Αλιάρτου",
                   "public_funding_ref_num": "2021ΤΑ07500002"})
-    assert r.scope == "esa_reforestation"
-    # Post-fire works incl. abbreviated "αντιδιαβρ. αντιπλ."
+    assert r.scope == "antinero_esa"
+    # Restoration works incl. abbreviated "αντιδιαβρ. αντιπλ."
     r = classify({**base, "title": "Εργασίες ειδικών δασοτεχνικών έργων αντιδιαβρ. αντιπλ. Ζακύνθου",
                   "public_funding_ref_num": "2021ΤΑ07500002"})
-    assert r.scope == "post_fire_works"
+    assert r.scope == "antinero_restoration" and r.scope in IN_SCOPE
     r = classify({**base, "title": "Αντιπλημμυρικά έργα διευθέτησης ορεινών λεκανών απορροής",
                   "public_funding_ref_num": "2021ΤΑ07500002"})
-    assert r.scope == "post_fire_works"
-    # An ANTINERO-branded title is never bumped into the adjacent scopes
+    assert r.scope == "antinero_restoration"
+    # An ANTINERO-branded title keeps its phase label
     r = classify({**base, "title": "ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ANTINERO IV ΔΧ ΚΟΡΙΝΘΟΥ",
                   "public_funding_ref_num": "2023ΤΑ07500012"})
     assert r.scope == "antinero_iv"

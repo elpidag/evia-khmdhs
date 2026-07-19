@@ -226,12 +226,18 @@ non-Anti-nero ΥΠΕΝ business and were not imported.
 
 The earlier xlsx batch also surfaced 37 contracts the DB was missing. The 11 whose
 payment PDFs are titled «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III» were
-added to the Anti-nero supplement (in scope); the rest belong to sibling
-sub-programmes of the same Recovery-Fund ΠΔΕ project and get their own
-out-of-scope classes: `esa_reforestation` (Εθνικό Σχέδιο Αναδάσωσης,
-nurseries) and `post_fire_works` (αντιδιαβρωτικά/αντιπλημμυρικά).
-Supplementary contracts («1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ», adding money on top of the
-parent) do not supersede the version they extend — both stay countable.
+added to the Anti-nero supplement; the rest are named components of the
+same (Antinero II) project — verified by auditing every excluded
+contract's own PDF: they cite RRF Action 16849 «Εθνικό σχέδιο
+αναδάσωσης, πρόγραμμα αποκατάστασης και πρόληψης («antiNERO»),
+αντιδιαβρωτικά και αντιπλημμυρικά μέτρα» and the ΠΔΕ project
+«…(Antinero II) - ΑΝΤΙΔΙΑΒΡΩΤΙΚΑ & ΑΝΤΙΠΛΗΜΜΥΡΙΚΑ ΕΡΓΑ» (ΟΠΣ ΤΑ
+5201358). They are therefore IN scope under distinct component classes:
+`antinero_esa` (reforestation, nurseries) and `antinero_restoration`
+(αντιδιαβρωτικά/αντιπλημμυρικά). The 26 routine pre-programme contracts
+mention antiNERO nowhere and stay `non_antinero`. Supplementary contracts
+(«1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ», adding money on top of the parent) do not supersede
+the version they extend — both stay countable.
 
 ## Output: enriched Excel file
 

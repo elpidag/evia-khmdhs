@@ -10,15 +10,17 @@ Scope values:
   antinero_unknown_phase                 Anti-nero evidence, phase unclear
   antinero_umbrella                      ΥΠΕΝ↔ΤΑΙΠΕΔ/ΕΕΣΥΠ pass-through frameworks
   antinero_support                       programme admin (legal/consulting) services
-  esa_reforestation                      Εθνικό Σχέδιο Αναδάσωσης (reforestation, nurseries)
-  post_fire_works                        αντιδιαβρωτικά/αντιπλημμυρικά post-fire works
+  antinero_esa                           reforestation/nurseries component of (Antinero II)
+  antinero_restoration                   αντιδιαβρωτικά/αντιπλημμυρικά component of (Antinero II)
   non_antinero                           no Anti-nero evidence (routine works etc.)
 
-The reforestation and post-fire-works contracts are financed by the same
-Recovery-Fund ΠΔΕ project (its EPDE title literally reads «ΕΘΝΙΚΟ ΣΧΕΔΙΟ
-ΑΝΑΔΑΣΩΣΗΣ ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ (Antinero II)») but are distinct
-sub-programmes, not the ANTINERO firebreak-clearing works this project
-tracks — so they get their own scopes and stay out of the analytics.
+The reforestation and restoration contracts are IN scope: their own
+contract documents declare membership in the Antinero project — RRF
+Action 16849 «Εθνικό σχέδιο αναδάσωσης, πρόγραμμα αποκατάστασης και
+πρόληψης («antiNERO»), αντιδιαβρωτικά και αντιπλημμυρικά μέτρα», ΠΔΕ
+project «…ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ (Antinero II) - ΑΝΤΙΔΙΑΒΡΩΤΙΚΑ &
+ΑΝΤΙΠΛΗΜΜΥΡΙΚΑ ΕΡΓΑ» (ΟΠΣ ΤΑ 5201358). They keep distinct scope values
+so the firebreak phases stay separable in the analytics.
 
 Only the execution scopes (+ unknown_phase) count as "in scope" for the
 analytics UI. Umbrella and support rows stay in the DB for detail pages
@@ -47,12 +49,8 @@ NON_ANTINERO_FUND_REFS = ("584", "ΠΡΑΣΙΝΟ ΤΑΜΕΙΟ")
 IN_SCOPE = frozenset({
     "antinero_i", "antinero_ii", "antinero_iii", "antinero_iv",
     "antinero_2026", "antinero_unknown_phase",
+    "antinero_esa", "antinero_restoration",
 })
-
-# Sibling sub-programmes of the same Recovery-Fund ΠΔΕ project. Out of the
-# Anti-nero analytics, but amendments may inherit these scopes along
-# supersede chains just like the in-scope ones.
-ADJACENT_SCOPES = frozenset({"esa_reforestation", "post_fire_works"})
 
 # Greek capitals that are visually identical to Latin capitals. Applied
 # to uppercase titles before searching for "ANTINERO ..." tokens.
@@ -140,15 +138,17 @@ def classify(row: dict, overrides: dict[str, str] | None = None) -> ScopeResult:
                 return ScopeResult("antinero_iii", "title+fund:2023ΤΑ07500012")
         return ScopeResult(phase, "title:phase_label")
 
-    # Sibling sub-programmes under the same Recovery-Fund ΠΔΕ project.
-    # Checked before the fund rules: these share the Anti-nero fund codes
-    # but are reforestation / post-fire restoration, not firebreak works.
+    # Named components of the (Antinero II) project, checked before the
+    # fund rules so they keep distinct scope values. Their contract PDFs
+    # declare membership in RRF Action 16849 «…(«antiNERO»)…» / ΠΔΕ
+    # «…(Antinero II) - ΑΝΤΙΔΙΑΒΡΩΤΙΚΑ & ΑΝΤΙΠΛΗΜΜΥΡΙΚΑ ΕΡΓΑ».
     # Short stems on purpose — titles abbreviate ("αντιδιαβρ. αντιπλ.").
     plain = _strip_accents(raw_upper)
     if "ΑΝΑΔΑΣΩΣ" in plain or "ΦΥΤΩΡΙ" in plain:
-        return ScopeResult("esa_reforestation", "title:ΑΝΑΔΑΣΩΣΗ/ΦΥΤΩΡΙΑ")
+        return ScopeResult("antinero_esa", "title+project:(Antinero II) ΕΣΑ/φυτώρια")
     if "ΑΝΤΙΔΙΑΒΡ" in plain or "ΑΝΤΙΠΛΗΜ" in plain or "ΔΑΣΟΤΕΧΝΙΚ" in plain:
-        return ScopeResult("post_fire_works", "title:αντιδιαβρωτικά/αντιπλημμυρικά/δασοτεχνικά")
+        return ScopeResult("antinero_restoration",
+                           "title+project:(Antinero II) αντιδιαβρωτικά/αντιπλημμυρικά")
 
     if fund_num.startswith(FUND_ANTINERO_I):
         return ScopeResult("antinero_i", f"fund:{FUND_ANTINERO_I}")

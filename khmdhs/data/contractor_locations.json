@@ -74,7 +74,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#113411710",
     "notes": "Sibling-surname match: ΓΚΑΡΓΚΑΝΙΤΗΣ ΠΑΝΑΓΙΩΤΗΣ (VAT 113411710) is in Salamina. Confidence: medium (same surname family).",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "028816742": {
     "legal_name": "ΜΑΡΟΥΔΗΣ ΔΑΥΙΔ ΓΕΩΡΓΙΟΣ",
@@ -998,7 +998,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#998434068",
     "notes": "Same legal entity as VAT 998434068 (ΓΕΩΓΝΩΜΩΝ Ο.Ε. in Patra). The 8-digit form is a data-entry artifact. Confidence: very high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996496038": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ Κ ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ Ε Ε ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΧΑΡΑΛΑΜΠΟΥΣ",
@@ -1020,7 +1020,7 @@
     "source": "consortium_unresolved",
     "source_url": "",
     "notes": "ΓΚΑΡΑΝΑΤΣΙΟΥ surname not found in DB; ΠΑΠΑΔΟΠΟΥΛΟΣ ambiguous (1000s in Greece). Web search inconclusive. Project regions span Eurytania/Kozani/Larissa/Pieria/Trikala — multi-region operator.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996514405": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΝΤΙΝΟΠΟΥΛΟΣ ΑΠΟΣΤΟΛΟΣ ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ",
@@ -1064,7 +1064,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#800363439",
     "notes": "Same legal entity under VAT 800363439 in Athens N. (Maroussi). VAT 996550190 likely a JV-registered alternate. Confidence: high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996551148": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ - ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ",
@@ -1119,7 +1119,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#996605211",
     "notes": "Member ΛΙΤΣΑ ΕΥΔΟΚΙΑ also in resolved consortium 996605211 (Salamina). Confidence: high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996604620": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΔΗΜΟΠΟΥΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΔΑΜ",
@@ -1130,7 +1130,7 @@
     "source": "consortium_member_inferred",
     "source_url": "web:duckduckgo",
     "notes": "Web search (DuckDuckGo) suggested a ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ in Portocheli (Argolida). Confidence: low — surname is common. Project regions in Peloponnese (Achaia/Ilia/Messinia) make a Peloponnesian home plausible.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996605179": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΔΙΟΝΥΣΙΟΣ ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΤΟΥ ΖΑΦΕΙΡΗ-ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ",
@@ -1174,7 +1174,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#073533221",
     "notes": "Member ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ resolved as 073533221 in Korinthia. Confidence: high (unique surname-firstname pair).",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996681011": {
     "legal_name": "(ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ)ΚΟΙΝΟΠΡΑΞΙΑ ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ",
@@ -1207,7 +1207,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#996714083",
     "notes": "Both members (ΤΑΣΚΟΥΔΗΣ, ΓΚΑΤΖΙΟΣ) appear in 3 sibling consortia all resolved to Serres. Confidence: very high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996714741": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ ΜΟΝΟΠΡΟΣΩΠΗ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΙΑ Ι.Κ.Ε.-ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι. ΦΩΤ",
@@ -1229,7 +1229,7 @@
     "source": "consortium_member_inferred",
     "source_url": "web:acci_directory",
     "notes": "Web search: 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ Α.Ε. registered at ΑΓ. ΛΑΥΡΑΣ 86, Athens (Πατήσια). Confidence: medium.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996813233": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ «ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ»",
@@ -1240,7 +1240,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#031213597",
     "notes": "Member ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ resolved as 031213597 in Trikala. Confidence: high (unique surname-firstname pair).",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996813651": {
     "legal_name": "BIODASOS-ΤΕΧΝΗ",
@@ -1251,7 +1251,7 @@
     "source": "consortium_member_inferred",
     "source_url": "web:duckduckgo",
     "notes": "Web search (DuckDuckGo, Facebook listing): BIODASOS based in Trikala. Confidence: medium.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996815029": {
     "legal_name": "ΓΕΩΡΓΙΟΥ ΚΩΝ ΔΗΜΗΤΡΙΟΣ - ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
@@ -1273,7 +1273,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#050232986",
     "notes": "Member ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ resolved as 050232986 in Drama (same patronymic). Confidence: very high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "997080725": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΑΝΤΑΛΗ Π ΟΥΡΑΝΙΑ ΒΕΛΩΝΗΣ ΝΙΚ ΓΕΩΡΓΙΟΣ",
@@ -1592,7 +1592,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#036692199",
     "notes": "Lead member ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ resolved as 036692199 (N. Athens). Exact name+patronymic match. Confidence: very high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996679758": {
     "legal_name": "ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ  ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ",
@@ -1614,7 +1614,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#802865853",
     "notes": "Lead ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε.Ε.: sibling consortia 802865853 and 996593557 both VIES-resolved to S. Athens. Confidence: high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996830790": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ - ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ",
@@ -1625,7 +1625,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#033419558",
     "notes": "Lead member ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ resolved as 033419558 (W. Athens). Exact name+patronymic match. Confidence: very high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996870356": {
     "legal_name": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ",
@@ -1636,7 +1636,7 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#044739770",
     "notes": "Both members resolved to Kavala: ΜΠΟΜΠΟΤΗ Κ.-Β. (044739770) and ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ (102529416). Confidence: very high.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "996870694": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
@@ -1647,7 +1647,7 @@
     "source": "consortium_unresolved",
     "source_url": "",
     "notes": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ matches two different resolved people (Kavala 996551289 member; Kozani 117925460) with no patronymic to disambiguate. ΠΑΠΑΓΕΩΡΓΑΚΗΣ not in DB; web search inconclusive (a Papageorgaki Bros landscaping firm exists in Metamorfosi, Athens, unverified). No safe inference.",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-19"
   },
   "997080215": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ",
@@ -1900,6 +1900,83 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045351317",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
+    "curated_at": "2026-07-19"
+  },
+  "999640010": {
+    "legal_name": "ΠΙ ΕΝΤ ΣΙ ΝΤΙΒΕΛΟΠΜΕΝΤ ΤΕΧΝΙΚΗ -ΟΙΚΟΔΟΜΙΚΗ - ΕΜΠΟΡΙΚΗ - ΝΑΥΤΙΛΙΑΚΗ ΚΑΙ ΤΟΥΡΙΣΤΙΚΗ ΜΟΝΟΠΡΟΣΩΠΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+    "address": "ΒΑΣ ΣΟΦΙΑΣ 9",
+    "postal_code": "11528",
+    "city": "ΑΘΗΝΑ",
+    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+    "source": "vies",
+    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=999640010",
+    "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
+    "curated_at": "2026-07-19"
+  },
+  "996774829": {
+    "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) GREEN CONSTRUCTION ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ – ΣΤΑΥΡΟΣ ΤΣΙΦΤΣΟΓΛΟΥ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+    "address": null,
+    "postal_code": null,
+    "city": "Μαρκόπουλο Μεσογαίας",
+    "region_pe": "Π.Ε. Ανατολικής Αττικής",
+    "source": "consortium_member_inferred",
+    "source_url": "audit:contractor_locations#998256075",
+    "notes": "Members split regions: lead GREEN CONSTRUCTION ΑΤΕ (998256075) is in Markopoulo, Π.Ε. Ανατολικής Αττικής; ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ (035592572) is in Lagadas, Π.Ε. Θεσσαλονίκης. Attributed to the corporate lead member. Confidence: medium.",
+    "curated_at": "2026-07-19"
+  },
+  "996609013": {
+    "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ T ΚΑΙ T ΚΑΤΑΣΚΕΥΕΣ ΑΕ ΜΕΣΟΓΕΙΟΣ ΑΕ 2 ΑΝΑΔΑΣΩΣΕΙΣ",
+    "address": "ΛΕΩΦ ΚΗΦΙΣΙΑΣ 118Β",
+    "postal_code": "11526",
+    "city": "ΑΘΗΝΑ",
+    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+    "source": "vies",
+    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996609013",
+    "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
+    "curated_at": "2026-07-19"
+  },
+  "996550834": {
+    "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ - ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ",
+    "address": null,
+    "postal_code": null,
+    "city": "ΚΑΒΑΛΑ",
+    "region_pe": "Π.Ε. Καβάλας",
+    "source": "consortium_member_inferred",
+    "source_url": "audit:contractor_locations#044739770",
+    "notes": "Both members VIES-resolved to Kavala: ΜΠΟΜΠΟΤΗ Κ.-Β. (044739770) and ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ (045351317). Confidence: very high.",
+    "curated_at": "2026-07-19"
+  },
+  "094206769": {
+    "legal_name": "ΗΛΙΟΧΩΡΑ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ ΒΙΟΜΗΧΑΝΙΚΩΝ ΕΜΠΟΡΙΚΩΝ ΤΕΧΝΙΚΩΝ ΤΟΥΡΙΣΤΙΚΩΝ ΚΑΙ ΞΕΝΟΔΟΧΕΙΑΚΩΝ ΕΠΙΧΕΙΡΗΣΕΩΝ",
+    "address": "Λ ΜΕΣΟΓΕΙΩΝ 85",
+    "postal_code": "11526",
+    "city": "ΑΘΗΝΑ",
+    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+    "source": "vies",
+    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=094206769",
+    "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
+    "curated_at": "2026-07-19"
+  },
+  "998885119": {
+    "legal_name": "ΕΛΛΗΝΙΚΗ ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΡΓΟΛΗΠΤΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΕΡΓΩΝ ΥΠΟΔΟΜΗΣ ΕΤΑΙΡΕΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ",
+    "address": "ΛΕΩΦ  ΓΑΛΑΤΣΙΟΥ 45",
+    "postal_code": "11141",
+    "city": "ΑΘΗΝΑ",
+    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+    "source": "vies",
+    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998885119",
+    "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
+    "curated_at": "2026-07-19"
+  },
+  "802619365": {
+    "legal_name": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ   ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ ΕΤΕΡΡΟΡΥΘΜΗ ΕΤ ΚΟΙΝΟΠΡΑΞΙΑ",
+    "address": "ΜΠΟΥΜΠΟΥΛΙΝΑΣ 10Α",
+    "postal_code": "14123",
+    "city": "ΛΥΚΟΒΡΥΣΗ",
+    "region_pe": "Π.Ε. Βορείου Τομέα Αθηνών",
+    "source": "vies",
+    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802619365",
+    "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
     "curated_at": "2026-07-19"
   }
 }

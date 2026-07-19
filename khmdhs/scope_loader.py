@@ -25,7 +25,7 @@ from pathlib import Path
 
 from khmdhs.config import DEFAULT_DB
 from khmdhs.db import init_db
-from khmdhs.scope import ADJACENT_SCOPES, IN_SCOPE, _strip_accents, classify
+from khmdhs.scope import IN_SCOPE, _strip_accents, classify
 
 SUPPLEMENT_FILE = Path(__file__).parent / "data" / "antinero_supplement.json"
 
@@ -102,8 +102,7 @@ def build_scopes(conn, overrides: dict[str, str]) -> tuple[dict[str, tuple[str, 
             if not weak or prev not in scopes:
                 continue
             prev_scope, _ = scopes[prev]
-            inheritable = (prev_scope in IN_SCOPE or prev_scope in ADJACENT_SCOPES) \
-                and prev_scope != "antinero_unknown_phase"
+            inheritable = prev_scope in IN_SCOPE and prev_scope != "antinero_unknown_phase"
             if inheritable and prev_scope != scope:
                 scopes[ref] = (prev_scope, f"inherited_from_prev:{prev}")
                 changed = True

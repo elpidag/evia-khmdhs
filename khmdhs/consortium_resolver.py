@@ -167,6 +167,22 @@ INFERENCES: dict[str, dict] = {
         "source": "consortium_unresolved",
         "notes": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ matches two different resolved people (Kavala 996551289 member; Kozani 117925460) with no patronymic to disambiguate. ΠΑΠΑΓΕΩΡΓΑΚΗΣ not in DB; web search inconclusive (a Papageorgaki Bros landscaping firm exists in Metamorfosi, Athens, unverified). No safe inference.",
     },
+    # 18. Κ/Ξ ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ → both members in Π.Ε. Καβάλας
+    "996550834": {
+        "region_pe": "Π.Ε. Καβάλας",
+        "city": "ΚΑΒΑΛΑ",
+        "source": "consortium_member_inferred",
+        "notes": "Both members VIES-resolved to Kavala: ΜΠΟΜΠΟΤΗ Κ.-Β. (044739770) and ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ (045351317). Confidence: very high.",
+        "inferred_from": "044739770,045351317",
+    },
+    # 19. Κ/Ξ GREEN CONSTRUCTION ΑΤΕ – ΣΤΑΥΡΟΣ ΤΣΙΦΤΣΟΓΛΟΥ → lead member in Π.Ε. Ανατολικής Αττικής
+    "996774829": {
+        "region_pe": "Π.Ε. Ανατολικής Αττικής",
+        "city": "Μαρκόπουλο Μεσογαίας",
+        "source": "consortium_member_inferred",
+        "notes": "Members split regions: lead GREEN CONSTRUCTION ΑΤΕ (998256075) is in Markopoulo, Π.Ε. Ανατολικής Αττικής; ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ (035592572) is in Lagadas, Π.Ε. Θεσσαλονίκης. Attributed to the corporate lead member. Confidence: medium.",
+        "inferred_from": "998256075,035592572",
+    },
 }
 
 
