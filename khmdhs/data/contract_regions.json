@@ -3173,5 +3173,423 @@
     ],
     "curated_at": "2026-07-19",
     "source_note": "inherited from superseded version 22SYMV011512210 (amendment covers the same lot/sites); originally: from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV014662280": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Αρκαδίας",
+        "note": "Δασαρχείο Βυτίνας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV014916640": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "ΔΧ Χαλκίδας (Δήμοι Ερέτριας, Διρφύων–Μεσσαπίων), ΤΜΗΜΑ 3"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV014917317": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "ΔΧ Χαλκίδας, Λίμνης, Ιστιαίας, ΤΜΗΜΑ 4"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV015162689": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+        "note": "Περιφέρεια Αττικής (έργα αντιπυρικής προστασίας region-wide)"
+      },
+      {
+        "pe": "Π.Ε. Βορείου Τομέα Αθηνών",
+        "note": "Περιφέρεια Αττικής (έργα αντιπυρικής προστασίας region-wide)"
+      },
+      {
+        "pe": "Π.Ε. Δυτικού Τομέα Αθηνών",
+        "note": "Περιφέρεια Αττικής (έργα αντιπυρικής προστασίας region-wide)"
+      },
+      {
+        "pe": "Π.Ε. Νοτίου Τομέα Αθηνών",
+        "note": "Περιφέρεια Αττικής (έργα αντιπυρικής προστασίας region-wide)"
+      },
+      {
+        "pe": "Π.Ε. Ανατολικής Αττικής",
+        "note": "Περιφέρεια Αττικής (έργα αντιπυρικής προστασίας region-wide)"
+      },
+      {
+        "pe": "Π.Ε. Δυτικής Αττικής",
+        "note": "Περιφέρεια Αττικής (έργα αντιπυρικής προστασίας region-wide)"
+      },
+      {
+        "pe": "Π.Ε. Πειραιώς",
+        "note": "Περιφέρεια Αττικής (έργα αντιπυρικής προστασίας region-wide)"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "25SYMV016392306": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Δράμας",
+        "note": "ΔΧ Δράμας και Νευροκοπίου, ΤΜΗΜΑ 6 (1η συμπληρωματική — regions of parent 24SYMV014944866)"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018638816": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "Δασαρχεία Ιστιαίας και Λίμνης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018639407": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Τρικάλων",
+        "note": "Δασαρχεία Καλαμπάκας και Τρικάλων"
+      },
+      {
+        "pe": "Π.Ε. Καρδίτσας",
+        "note": "Δασαρχείο Μουζακίου"
+      },
+      {
+        "pe": "Π.Ε. Ευρυτανίας",
+        "note": "Δασαρχείο Καρπενησίου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018642772": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Έβρου",
+        "note": "Δασαρχείο Σουφλίου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018680228": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Σερρών",
+        "note": "Δασαρχεία Νιγρίτας, Σερρών, Σιδηροκάστρου"
+      },
+      {
+        "pe": "Π.Ε. Χαλκιδικής",
+        "note": "Δασαρχείο Πολυγύρου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018689005": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Κορινθίας",
+        "note": "Δασαρχείο Κορίνθου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV019250208": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Θεσσαλονίκης",
+        "note": "Περιαστικό Δάσος Θεσσαλονίκης, ΔΧ Θεσσαλονίκης (1η συμπληρωματική of 25SYMV017471484)"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV014944866": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Δράμας",
+        "note": "ΔΧ Δράμας και Νευροκοπίου, ΤΜΗΜΑ 6"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "25SYMV017471484": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Θεσσαλονίκης",
+        "note": "Περιαστικό Δάσος Θεσσαλονίκης, ΔΧ Θεσσαλονίκης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV015170080": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Φθιώτιδας",
+        "note": "Δασαρχείο Αταλάντης"
+      },
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "Δασαρχεία Χαλκίδας, Λίμνης, Ιστιαίας, Αλιβερίου"
+      },
+      {
+        "pe": "Π.Ε. Βοιωτίας",
+        "note": "Δασαρχείο Θηβών"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV015170089": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ανατολικής Αττικής",
+        "note": "Δασαρχεία Πεντέλης, Καπανδριτίου, Λαυρίου, Πάρνηθας"
+      },
+      {
+        "pe": "Π.Ε. Δυτικής Αττικής",
+        "note": "Δασαρχείο Μεγάρων"
+      },
+      {
+        "pe": "Π.Ε. Πειραιώς",
+        "note": "Δασαρχείο Πειραιώς"
+      },
+      {
+        "pe": "Π.Ε. Νήσων",
+        "note": "Δασαρχείο Πόρου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV015170098": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Έβρου",
+        "note": "Δασαρχείο Σουφλίου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV016017961": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Δυτικού Τομέα Αθηνών",
+        "note": "Δασαρχείο Αιγάλεω"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV016018102": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Μαγνησίας",
+        "note": "Δασαρχείο Αλμυρού"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "24SYMV016018183": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Κεφαλληνίας",
+        "note": "Διεύθυνση Δασών Κεφαλληνίας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018599431": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Δυτικού Τομέα Αθηνών",
+        "note": "Δασαρχείο Αιγάλεω"
+      },
+      {
+        "pe": "Π.Ε. Δυτικής Αττικής",
+        "note": "Δασαρχείο Μεγάρων"
+      },
+      {
+        "pe": "Π.Ε. Πειραιώς",
+        "note": "Δασαρχείο Πειραιά"
+      },
+      {
+        "pe": "Π.Ε. Ανατολικής Αττικής",
+        "note": "Δασαρχείο Πεντέλης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018599446": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ανατολικής Αττικής",
+        "note": "Δασαρχεία Καπανδριτίου, Πάρνηθας"
+      },
+      {
+        "pe": "Π.Ε. Νήσων",
+        "note": "Δασαρχείο Πόρου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018607958": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Ρόδου",
+        "note": "Διεύθυνση Δασών Δωδεκανήσου (έδρα Ρόδος)"
+      },
+      {
+        "pe": "Π.Ε. Λέσβου",
+        "note": "Διεύθυνση Δασών Λέσβου"
+      },
+      {
+        "pe": "Π.Ε. Σάμου",
+        "note": "Διεύθυνση Δασών Σάμου"
+      },
+      {
+        "pe": "Π.Ε. Χίου",
+        "note": "Διεύθυνση Δασών Χίου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018639041": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Φθιώτιδας",
+        "note": "Δασαρχεία Αταλάντης, Σπερχειάδας"
+      },
+      {
+        "pe": "Π.Ε. Βοιωτίας",
+        "note": "Δασαρχεία Θηβών, Λιβαδειάς"
+      },
+      {
+        "pe": "Π.Ε. Ευβοίας",
+        "note": "Δασαρχείο Χαλκίδας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018661963": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Μεσσηνίας",
+        "note": "Δασαρχείο Καλαμάτας"
+      },
+      {
+        "pe": "Π.Ε. Ηλείας",
+        "note": "Δασαρχείο Πύργου"
+      },
+      {
+        "pe": "Π.Ε. Λακωνίας",
+        "note": "Δασαρχείο Σπάρτης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018661994": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Καστοριάς",
+        "note": "Διεύθυνση Δασών Καστοριάς"
+      },
+      {
+        "pe": "Π.Ε. Φλώρινας",
+        "note": "Διεύθυνση Δασών Φλώρινας"
+      },
+      {
+        "pe": "Π.Ε. Πρέβεζας",
+        "note": "Διεύθυνση Δασών Πρέβεζας"
+      },
+      {
+        "pe": "Π.Ε. Θεσπρωτίας",
+        "note": "Διεύθυνση Δασών Θεσπρωτίας"
+      },
+      {
+        "pe": "Π.Ε. Ιωαννίνων",
+        "note": "Δασαρχεία Ιωαννίνων, Κόνιτσας, Μετσόβου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018670757": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Αχαΐας",
+        "note": "Δασαρχεία Αιγίου, Πατρών"
+      },
+      {
+        "pe": "Π.Ε. Αρκαδίας",
+        "note": "Δασαρχείο Βυτίνας"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018718889": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Θάσου",
+        "note": "Δασαρχείο Θάσου"
+      },
+      {
+        "pe": "Π.Ε. Δράμας",
+        "note": "Δασαρχεία Δράμας, Κ. Νευροκοπίου"
+      },
+      {
+        "pe": "Π.Ε. Ξάνθης",
+        "note": "Δασαρχείο Σταυρούπολης"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV019200696": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Έβρου",
+        "note": "Δασαρχεία Αλεξανδρούπολης, Διδυμοτείχου (1η συμπληρωματική of 26SYMV018682054)"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  },
+  "26SYMV018682054": {
+    "regions": [
+      {
+        "pe": "Π.Ε. Έβρου",
+        "note": "Δασαρχεία Αλεξανδρούπολης, Διδυμοτείχου"
+      }
+    ],
+    "curated_at": "2026-07-19",
+    "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
   }
 }

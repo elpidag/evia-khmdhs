@@ -10,7 +10,15 @@ Scope values:
   antinero_unknown_phase                 Anti-nero evidence, phase unclear
   antinero_umbrella                      ΥΠΕΝ↔ΤΑΙΠΕΔ/ΕΕΣΥΠ pass-through frameworks
   antinero_support                       programme admin (legal/consulting) services
+  esa_reforestation                      Εθνικό Σχέδιο Αναδάσωσης (reforestation, nurseries)
+  post_fire_works                        αντιδιαβρωτικά/αντιπλημμυρικά post-fire works
   non_antinero                           no Anti-nero evidence (routine works etc.)
+
+The reforestation and post-fire-works contracts are financed by the same
+Recovery-Fund ΠΔΕ project (its EPDE title literally reads «ΕΘΝΙΚΟ ΣΧΕΔΙΟ
+ΑΝΑΔΑΣΩΣΗΣ ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ (Antinero II)») but are distinct
+sub-programmes, not the ANTINERO firebreak-clearing works this project
+tracks — so they get their own scopes and stay out of the analytics.
 
 Only the execution scopes (+ unknown_phase) count as "in scope" for the
 analytics UI. Umbrella and support rows stay in the DB for detail pages
@@ -22,6 +30,7 @@ homoglyph-normalised uppercase copy of the title.
 """
 from __future__ import annotations
 
+import unicodedata
 from typing import NamedTuple
 
 # Contractors that are programme-management vehicles, not executors.
@@ -39,6 +48,11 @@ IN_SCOPE = frozenset({
     "antinero_i", "antinero_ii", "antinero_iii", "antinero_iv",
     "antinero_2026", "antinero_unknown_phase",
 })
+
+# Sibling sub-programmes of the same Recovery-Fund ΠΔΕ project. Out of the
+# Anti-nero analytics, but amendments may inherit these scopes along
+# supersede chains just like the in-scope ones.
+ADJACENT_SCOPES = frozenset({"esa_reforestation", "post_fire_works"})
 
 # Greek capitals that are visually identical to Latin capitals. Applied
 # to uppercase titles before searching for "ANTINERO ..." tokens.
@@ -59,6 +73,13 @@ def normalize_title(title: str | None) -> str:
     """
     upper = (title or "").upper().replace("ΑΝΤΙΝΕΡΟ", "ANTINERO")
     return upper.translate(_HOMOGLYPHS)
+
+
+def _strip_accents(s: str) -> str:
+    """Drop combining accents: Python uppercases 'ί' to accented 'Ί', which
+    breaks plain substring matching ('Φυτωρίων'.upper() != …ΦΥΤΩΡΙΩΝ…)."""
+    decomposed = unicodedata.normalize("NFD", s)
+    return "".join(ch for ch in decomposed if not unicodedata.combining(ch))
 
 
 def _phase_from_title(norm: str) -> str | None:
@@ -118,6 +139,16 @@ def classify(row: dict, overrides: dict[str, str] | None = None) -> ScopeResult:
             if fund_num.startswith("2023ΤΑ07500012"):
                 return ScopeResult("antinero_iii", "title+fund:2023ΤΑ07500012")
         return ScopeResult(phase, "title:phase_label")
+
+    # Sibling sub-programmes under the same Recovery-Fund ΠΔΕ project.
+    # Checked before the fund rules: these share the Anti-nero fund codes
+    # but are reforestation / post-fire restoration, not firebreak works.
+    # Short stems on purpose — titles abbreviate ("αντιδιαβρ. αντιπλ.").
+    plain = _strip_accents(raw_upper)
+    if "ΑΝΑΔΑΣΩΣ" in plain or "ΦΥΤΩΡΙ" in plain:
+        return ScopeResult("esa_reforestation", "title:ΑΝΑΔΑΣΩΣΗ/ΦΥΤΩΡΙΑ")
+    if "ΑΝΤΙΔΙΑΒΡ" in plain or "ΑΝΤΙΠΛΗΜ" in plain or "ΔΑΣΟΤΕΧΝΙΚ" in plain:
+        return ScopeResult("post_fire_works", "title:αντιδιαβρωτικά/αντιπλημμυρικά/δασοτεχνικά")
 
     if fund_num.startswith(FUND_ANTINERO_I):
         return ScopeResult("antinero_i", f"fund:{FUND_ANTINERO_I}")

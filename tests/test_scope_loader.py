@@ -76,3 +76,19 @@ def test_non_antinero_predecessor_does_not_infect_amendment(mem_conn):
                  prev="17SYMV000000001")
     scopes, _ = build_scopes(mem_conn, overrides={})
     assert scopes["17SYMV000000002"][0] == "non_antinero"
+
+
+def test_supplementary_contract_does_not_supersede(mem_conn):
+    # A «1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ» adding money on top of the parent keeps both
+    # versions countable; a same-value restatement still supersedes.
+    add_contract(mem_conn, "24SYMV000000001", title="ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ ΤΜΗΜΑΤΟΣ 6 ANTINERO III",
+                 fund_num="2023ΤΑ07500012", eur=4713581.17)
+    add_contract(mem_conn, "25SYMV000000002", title="ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ ΤΜΗΜΑΤΟΣ 6 ΕΡΓΟΥ 1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ",
+                 fund_num="2023ΤΑ07500012", prev="24SYMV000000001", eur=706739.26)
+    add_contract(mem_conn, "25SYMV000000003", title="ΔΕΞΑΜΕΝΕΣ ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ ANTINERO III",
+                 fund_num="2023ΤΑ07500012", eur=4143136.01)
+    add_contract(mem_conn, "26SYMV000000004", title="ΔΕΞΑΜΕΝΕΣ ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ 1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ",
+                 fund_num="2023ΤΑ07500012", prev="25SYMV000000003", eur=4143136.01)
+    _, superseded = build_scopes(mem_conn, overrides={})
+    assert "24SYMV000000001" not in superseded          # additive supplement
+    assert superseded["25SYMV000000003"] == "26SYMV000000004"  # same-value restatement

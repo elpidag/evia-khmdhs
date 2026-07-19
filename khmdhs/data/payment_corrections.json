@@ -1,5 +1,15 @@
 {
   "_comment": "Curated fixes for payment orders whose registry amounts are keying errors. Keyed by payment ADAM. Fields: 'exclude': true marks the payment as unusable (treated like cancelled in aggregates), or 'amount_with_vat'/'amount_without_vat' override the registry amounts when the true value is documented (cite the source in 'reason'). Applied by khmdhs.payment_loader after every run.",
+  "25PAY018145206": {
+    "amount_with_vat": 219104.12,
+    "amount_without_vat": 176696.87,
+    "reason": "KHMDHS records €21,910,411.88 — a ×100 keying error (missing decimal separator). The Diavgeia clearance decision 9ΚΔΧ4653Π8-Ρ9Η (ΣΥΝΟΛΙΚΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ / Σύνολο εντολής πληρωμής) documents €219,104.12 (net €176,696.87 + VAT €42,407.25)."
+  },
+  "24PAY015403292": {
+    "amount_with_vat": 383468.35,
+    "amount_without_vat": 309248.67,
+    "reason": "The Diavgeia clearance decision Ρ5Α34653Π8-ΜΝ6 covers two invoices (€146,349.23 + €237,119.12 = €383,468.35 incl. VAT; net €118,023.57 + €191,225.10) but the KHMDHS payment order records only the first invoice. No separate KHMDHS PAY exists for the second invoice on this contract's chain, so the order's amount is raised to the decision total to avoid undercounting."
+  },
   "25PAY016487974": {
     "amount_with_vat": 239940.0,
     "amount_without_vat": 193500.0,

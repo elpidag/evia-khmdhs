@@ -132,6 +132,8 @@ def payment_row(contract_ref: str, attributed_ref: str, item: dict) -> dict:
         "amount_without_vat": item.get("totalCostWithoutVAT"),
         "amount_with_vat": item.get("totalCostWithVAT"),
         "fund_ref_num": funding.get("publicFundingRefNum"),
+        "source": "khmdhs",
+        "ada": item.get("paymentRelatedAda"),
         "raw_json": json.dumps(item, ensure_ascii=False),
         "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }

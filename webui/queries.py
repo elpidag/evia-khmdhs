@@ -406,6 +406,7 @@ def contract_detail(conn: sqlite3.Connection, adam: str) -> dict | None:
             dict(r) for r in conn.execute(
                 """SELECT payment_ref, contract_ref, attributed_ref, title,
                           signed_date, cancelled, credit, correction_note,
+                          source, ada,
                           amount_without_vat, amount_with_vat
                      FROM contract_payments
                     WHERE attributed_ref = ? OR contract_ref = ?

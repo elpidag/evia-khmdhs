@@ -194,18 +194,37 @@ def test_apply_corrections(mem_conn, tmp_path):
 
 
 def test_real_db_no_uncorrected_outliers():
-    """No non-cancelled payment may exceed 150% of its contract's stated value
-    (except the ΥΠΕΝ↔ΤΑΙΠΕΔ umbrella whose framework grew via amendments)."""
+    """No non-cancelled payment may exceed 150% of its contract family's
+    total stated value — family = every version connected via prevReferenceNo
+    links (originals + modifications + supplementary contracts). Catches
+    registry keying errors (×100 amounts) without tripping on supplements.
+    The ΥΠΕΝ↔ΤΑΙΠΕΔ umbrella is exempt: its framework grew via amendments.
+    """
     if not REAL_DB.exists():
         pytest.skip("real DB not present")
     conn = queries.open_ro(REAL_DB)
     try:
         rows = conn.execute("""
+            WITH RECURSIVE fam(root, member) AS (
+                SELECT reference_number, reference_number FROM contracts
+                UNION
+                SELECT f.root, c.reference_number FROM fam f
+                JOIN contracts c ON c.prev_reference_no = f.member
+                UNION
+                SELECT f.root, c.prev_reference_no FROM fam f
+                JOIN contracts c ON c.reference_number = f.member
+                WHERE c.prev_reference_no IN (SELECT reference_number FROM contracts)
+            ),
+            fam_value(root, stated) AS (
+                SELECT f.root, SUM(k.total_cost_with_vat) FROM fam f
+                JOIN contracts k ON k.reference_number = f.member
+                GROUP BY f.root
+            )
             SELECT p.payment_ref FROM contract_payments p
-            JOIN contracts k ON k.reference_number = p.attributed_ref
+            JOIN fam_value fv ON fv.root = p.attributed_ref
             LEFT JOIN contract_scope s ON s.reference_number = p.attributed_ref
-            WHERE p.cancelled = 0 AND k.total_cost_with_vat > 0
-              AND p.amount_with_vat > 1.5 * k.total_cost_with_vat
+            WHERE p.cancelled = 0 AND fv.stated > 0
+              AND p.amount_with_vat > 1.5 * fv.stated
               AND COALESCE(s.scope, '') != 'antinero_umbrella'
         """).fetchall()
         assert [r["payment_ref"] for r in rows] == []

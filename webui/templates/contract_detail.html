@@ -182,6 +182,7 @@
         <td class="tabular muted">{{ (p.signed_date or '')[:10] or '—' }}</td>
         <td>{{ p.title or '—' }}
           {% if p.credit %}<span class="pill-warn">credit</span>{% endif %}
+          {% if p.source == 'diavgeia' %}<span class="pill-warn" title="Payment order published on Diavgeia but never registered in KHMDHS">Diavgeia only</span>{% endif %}
           {% if p.correction_note %}
             <span class="pill-warn" title="{{ p.correction_note }}">{{ 'excluded — data error' if p.cancelled else 'amount corrected' }}</span>
           {% endif %}
@@ -189,7 +190,13 @@
         </td>
         <td class="num">{{ p.amount_without_vat | eur }}</td>
         <td class="num">{{ p.amount_with_vat | eur }}</td>
-        <td><a href="{{ url_for('pdf_attachment', kind='payment', adam=p.payment_ref) }}" target="_blank" rel="noopener" title="View payment order PDF in a new tab">📄</a></td>
+        <td>
+          {% if p.source == 'diavgeia' %}
+            <a href="https://diavgeia.gov.gr/doc/{{ p.ada or p.payment_ref }}" target="_blank" rel="noopener" title="View the Diavgeia decision PDF in a new tab (this payment is not registered in KHMDHS)">📄</a>
+          {% else %}
+            <a href="{{ url_for('pdf_attachment', kind='payment', adam=p.payment_ref) }}" target="_blank" rel="noopener" title="View payment order PDF in a new tab">📄</a>
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

@@ -1,213 +1,333 @@
 {
-  "_comment": "Curated Anti-nero contracts missing from the original xlsx export. Discovered by scanning Diavgeia (luminapi search over ΥΠΕΝ decisions citing ΑΔΑΜ) and verified per-contract against the KHMDHS open-data API on 2026-07-18. Relevance basis per entry: fund = fundingDetails.publicFundingRefNum on the KHMDHS record; title = phase named in the contract title; diavgeia = ADA of the decision that ties the lot to the 07.02.2022 ΥΠΕΝ-ΤΑΙΠΕΔ framework. The loader (khmdhs.antinero_loader) re-verifies each basis at load time and refuses entries that fail.",
-  "22SYMV010447493": {
-    "phase": "antinero_i",
-    "lot": "1.Α",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Execution contract under the 07.02.2022 ΥΠΕΝ-ΤΑΙΠΕΔ framework (Υποέργο 1: Εθνικό Σχέδιο Αναδάσωσης - Σχέδιο Προστασίας Δασών). Signed 2022-04-13, Τ ΚΑΙ Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε."
-  },
-  "22SYMV010447496": {
-    "phase": "antinero_i",
-    "lot": "1.Β",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-04-13, Δ. ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ Ο.Ε."
-  },
-  "22SYMV010551306": {
-    "phase": "antinero_i",
-    "lot": "2.Α",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-05-06, Κ/Ξ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ."
-  },
-  "22SYMV010473680": {
-    "phase": "antinero_i",
-    "lot": "2.Β",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-04-29, ΖΙΤΑΚΑΤ Α.Τ.Ε.Β.Ε."
-  },
-  "22SYMV010473683": {
-    "phase": "antinero_i",
-    "lot": "2.Γ",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-04-29, ΝΑΤΟΥΡΑ Α.Ε."
-  },
-  "22SYMV010473684": {
-    "phase": "antinero_i",
-    "lot": "3.Α",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-04-29, ΑΛΣΟΣ ΙΚΕ."
-  },
-  "22SYMV010473685": {
-    "phase": "antinero_i",
-    "lot": "3.Β",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-04-29, ΤΑΣΚΟΥΔΗΣ-ΓΚΑΤΖΙΟΣ."
-  },
-  "22SYMV010551364": {
-    "phase": "antinero_i",
-    "lot": "3.Γ",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-05-06, Κ/Ξ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ. Superseded by modification 22SYMV010864301."
-  },
-  "22SYMV010864301": {
-    "phase": "antinero_i",
-    "lot": "3.Γ (τροποποίηση)",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Modification of 22SYMV010551364 (prevReferenceNo link)."
-  },
-  "22SYMV010584641": {
-    "phase": "antinero_i",
-    "lot": "4.Α",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-05-16, ΑΓΓΕΛΑΤΟΣ-ΜΑΝΑΡΙΤΣΑΣ."
-  },
-  "22SYMV010584904": {
-    "phase": "antinero_i",
-    "lot": "4.Β",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-05-16, ΑΓΓΕΛΑΤΟΣ-ΜΑΝΑΡΙΤΣΑΣ."
-  },
-  "22SYMV010585198": {
-    "phase": "antinero_i",
-    "lot": "4.Γ",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Titled ΥΠΟΕΡΓΟΥ 4.Γ. Signed 2022-05-16, ΑΓΓΕΛΑΤΟΣ-ΜΑΝΑΡΙΤΣΑΣ."
-  },
-  "22SYMV010785854": {
-    "phase": "antinero_i",
-    "lot": "5.Α",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-06-17, ΟΡΚΑ Α.Τ.Ε. Option-exercise decision ΡΗΧΚ4653Π8-3ΕΛ names lot 5.Α of the 17.06.2022 batch."
-  },
-  "22SYMV010785949": {
-    "phase": "antinero_i",
-    "lot": "5.Β",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-06-17, ΤΟΜΗ Α.Β.Ε.Τ.Ε."
-  },
-  "22SYMV010795577": {
-    "phase": "antinero_i",
-    "lot": "5.Γ",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-06-17, ΟΡΚΑ Α.Τ.Ε."
-  },
-  "22SYMV010795585": {
-    "phase": "antinero_i",
-    "lot": "5.Δ",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-06-17, Κ/Ξ ΦΙΛΑΝΤΑΡΑΣ."
-  },
-  "22SYMV010488925": {
-    "phase": "antinero_i",
-    "lot": "6.Α",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-04-29, ΜΠΟΜΠΟΤΗ."
-  },
-  "22SYMV010489083": {
-    "phase": "antinero_i",
-    "lot": "6.Β",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-04-29, ΕΡΓΑ ΠΡΑΣΙΝΟΥ Α.Τ.Ε."
-  },
-  "22SYMV010635347": {
-    "phase": "antinero_i",
-    "lot": "7",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-05-25, Κ/Ξ ΣΙΔΕΡΗΣ."
-  },
-  "22SYMV010795597": {
-    "phase": "antinero_i",
-    "lot": "8.Α",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-06-17, ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ & ΣΙΑ ΕΕ. ΑΔΑΜ recovered from option-decision PDF 6ΛΡΞ4653Π8-2ΝΛ."
-  },
-  "22SYMV010795606": {
-    "phase": "antinero_i",
-    "lot": "8.Β",
-    "basis": "fund:2022ΤΑ07500000",
-    "notes": "Signed 2022-06-17, Κ/Ξ ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ - ΓΕΩΓΝΩΜΩΝ. ΑΔΑΜ recovered from option-decision PDF 6Κ0Ν4653Π8-ΜΕΝ."
-  },
-  "22SYMV011332552": {
-    "phase": "antinero_ii",
-    "lot": "2Β ΤΟΥ ΙΙ",
-    "basis": "title:ΤΟΥ ΙΙ",
-    "notes": "Anti-nero II wave-1 execution contract, signed 2022-09-22; missing from the xlsx because the title lacks the literal word ANTINERO. Superseded by 22SYMV011512210."
-  },
-  "22SYMV011512210": {
-    "phase": "antinero_ii",
-    "lot": "2Β ΤΟΥ ΙΙ (τροποποίηση)",
-    "basis": "title:ΤΟΥ ΙΙ",
-    "notes": "Modification of 22SYMV011332552 (prevReferenceNo link)."
-  },
-  "22SYMV011332276": {
-    "phase": "antinero_ii",
-    "lot": "3Β ΤΟΥ ΙΙ",
-    "basis": "title:ΤΟΥ ΙΙ",
-    "notes": "Signed 2022-09-23, ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ."
-  },
-  "22SYMV011332546": {
-    "phase": "antinero_ii",
-    "lot": "5Α ΤΟΥ ΙΙ",
-    "basis": "title:ΤΟΥ ΙΙ",
-    "notes": "Signed 2022-09-23, Κ/Ξ ΠΑΠΑΓΕΩΡΓΑΚΗΣ."
-  },
-  "22SYMV011360183": {
-    "phase": "antinero_ii",
-    "lot": "3Α ΤΟΥ ΙΙ",
-    "basis": "title:ΤΟΥ ΙΙ",
-    "notes": "Signed 2022-09-26, ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ."
-  },
-  "22SYMV011470180": {
-    "phase": "antinero_ii",
-    "lot": "4Β ΤΟΥ ΙΙ",
-    "basis": "title:ΤΟΥ ΙΙ",
-    "notes": "Signed 2022-10-18, Κ/Ξ 3Κ ΤΕΧΝΙΚΗ. Original of the modification 23SYMV011953055 already in the DB."
-  },
-  "25SYMV017458228": {
-    "phase": "antinero_iv",
-    "lot": "ΠΕ ΕΥΒΟΙΑΣ ΤΜΗΜΑ 2",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "Signed 2025-08-28, ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ. Same fund code and window as the ANTINERO IV contracts in the DB."
-  },
-  "25SYMV017458229": {
-    "phase": "antinero_iv",
-    "lot": "ΠΕ ΕΥΒΟΙΑΣ ΤΜΗΜΑ 3",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "Signed 2025-08-28, Κ/Ξ ΜΑΝΑΡΙΤΣΑΣ-ΛΙΑΡΗ."
-  },
-  "26SYMV018988979": {
-    "phase": "antinero_iv",
-    "lot": "ΣΥΜΒΑΣΗ 38 ΥΛΟΤΟΜΙΕΣ (τροποποίηση)",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "ΥΛΟΤΟΜΙΕΣ ANTINERO IV ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ. Modification of 25SYMV017471411 already in the DB."
-  },
-  "26SYMV018725481": {
-    "phase": "antinero_2026",
-    "lot": "ΔΔ ΡΟΔΟΠΗΣ ΔΧ ΚΙΛΚΙΣ",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "ANTINERO 2026 phase (Diavgeia decisions call this cohort ΑΝΤΙΝΕΡΟ 2026). Signed 2026-03-26."
-  },
-  "26SYMV018739467": {
-    "phase": "antinero_2026",
-    "lot": "ΔΔ ΦΩΚΙΔΑΣ ΔΧ ΕΛΑΣΣΟΝΑΣ",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "Signed 2026-03-30."
-  },
-  "26SYMV018755812": {
-    "phase": "antinero_2026",
-    "lot": "ΔΔ ΗΡΑΚΛΕΙΟΥ ΛΑΣΙΘΙΟΥ ΡΕΘΥΜΝΟΥ ΧΑΝΙΩΝ",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "Signed 2026-03-31."
-  },
-  "26SYMV018756094": {
-    "phase": "antinero_2026",
-    "lot": "ΔΧ ΟΛΥΜΠΙΑΣ",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "Signed 2026-03-31."
-  },
-  "26SYMV018779399": {
-    "phase": "antinero_2026",
-    "lot": "ΔΧ ΑΡΙΔΑΙΑΣ ΑΡΝΑΙΑΣ ΔΔ ΠΙΕΡΙΑΣ",
-    "basis": "fund:2023ΤΑ07500012",
-    "notes": "Signed 2026-04-03."
-  }
+ "_comment": "Curated Anti-nero contracts missing from the original xlsx export. Discovered by scanning Diavgeia (luminapi search over ΥΠΕΝ decisions citing ΑΔΑΜ) and verified per-contract against the KHMDHS open-data API on 2026-07-18. Relevance basis per entry: fund = fundingDetails.publicFundingRefNum on the KHMDHS record; title = phase named in the contract title; diavgeia = ADA of the decision that ties the lot to the 07.02.2022 ΥΠΕΝ-ΤΑΙΠΕΔ framework. The loader (khmdhs.antinero_loader) re-verifies each basis at load time and refuses entries that fail.",
+ "22SYMV010447493": {
+  "phase": "antinero_i",
+  "lot": "1.Α",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Execution contract under the 07.02.2022 ΥΠΕΝ-ΤΑΙΠΕΔ framework (Υποέργο 1: Εθνικό Σχέδιο Αναδάσωσης - Σχέδιο Προστασίας Δασών). Signed 2022-04-13, Τ ΚΑΙ Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε."
+ },
+ "22SYMV010447496": {
+  "phase": "antinero_i",
+  "lot": "1.Β",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-04-13, Δ. ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ Ο.Ε."
+ },
+ "22SYMV010551306": {
+  "phase": "antinero_i",
+  "lot": "2.Α",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-05-06, Κ/Ξ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ."
+ },
+ "22SYMV010473680": {
+  "phase": "antinero_i",
+  "lot": "2.Β",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-04-29, ΖΙΤΑΚΑΤ Α.Τ.Ε.Β.Ε."
+ },
+ "22SYMV010473683": {
+  "phase": "antinero_i",
+  "lot": "2.Γ",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-04-29, ΝΑΤΟΥΡΑ Α.Ε."
+ },
+ "22SYMV010473684": {
+  "phase": "antinero_i",
+  "lot": "3.Α",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-04-29, ΑΛΣΟΣ ΙΚΕ."
+ },
+ "22SYMV010473685": {
+  "phase": "antinero_i",
+  "lot": "3.Β",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-04-29, ΤΑΣΚΟΥΔΗΣ-ΓΚΑΤΖΙΟΣ."
+ },
+ "22SYMV010551364": {
+  "phase": "antinero_i",
+  "lot": "3.Γ",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-05-06, Κ/Ξ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ. Superseded by modification 22SYMV010864301."
+ },
+ "22SYMV010864301": {
+  "phase": "antinero_i",
+  "lot": "3.Γ (τροποποίηση)",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Modification of 22SYMV010551364 (prevReferenceNo link)."
+ },
+ "22SYMV010584641": {
+  "phase": "antinero_i",
+  "lot": "4.Α",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-05-16, ΑΓΓΕΛΑΤΟΣ-ΜΑΝΑΡΙΤΣΑΣ."
+ },
+ "22SYMV010584904": {
+  "phase": "antinero_i",
+  "lot": "4.Β",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-05-16, ΑΓΓΕΛΑΤΟΣ-ΜΑΝΑΡΙΤΣΑΣ."
+ },
+ "22SYMV010585198": {
+  "phase": "antinero_i",
+  "lot": "4.Γ",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Titled ΥΠΟΕΡΓΟΥ 4.Γ. Signed 2022-05-16, ΑΓΓΕΛΑΤΟΣ-ΜΑΝΑΡΙΤΣΑΣ."
+ },
+ "22SYMV010785854": {
+  "phase": "antinero_i",
+  "lot": "5.Α",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-06-17, ΟΡΚΑ Α.Τ.Ε. Option-exercise decision ΡΗΧΚ4653Π8-3ΕΛ names lot 5.Α of the 17.06.2022 batch."
+ },
+ "22SYMV010785949": {
+  "phase": "antinero_i",
+  "lot": "5.Β",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-06-17, ΤΟΜΗ Α.Β.Ε.Τ.Ε."
+ },
+ "22SYMV010795577": {
+  "phase": "antinero_i",
+  "lot": "5.Γ",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-06-17, ΟΡΚΑ Α.Τ.Ε."
+ },
+ "22SYMV010795585": {
+  "phase": "antinero_i",
+  "lot": "5.Δ",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-06-17, Κ/Ξ ΦΙΛΑΝΤΑΡΑΣ."
+ },
+ "22SYMV010488925": {
+  "phase": "antinero_i",
+  "lot": "6.Α",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-04-29, ΜΠΟΜΠΟΤΗ."
+ },
+ "22SYMV010489083": {
+  "phase": "antinero_i",
+  "lot": "6.Β",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-04-29, ΕΡΓΑ ΠΡΑΣΙΝΟΥ Α.Τ.Ε."
+ },
+ "22SYMV010635347": {
+  "phase": "antinero_i",
+  "lot": "7",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-05-25, Κ/Ξ ΣΙΔΕΡΗΣ."
+ },
+ "22SYMV010795597": {
+  "phase": "antinero_i",
+  "lot": "8.Α",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-06-17, ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ & ΣΙΑ ΕΕ. ΑΔΑΜ recovered from option-decision PDF 6ΛΡΞ4653Π8-2ΝΛ."
+ },
+ "22SYMV010795606": {
+  "phase": "antinero_i",
+  "lot": "8.Β",
+  "basis": "fund:2022ΤΑ07500000",
+  "notes": "Signed 2022-06-17, Κ/Ξ ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ - ΓΕΩΓΝΩΜΩΝ. ΑΔΑΜ recovered from option-decision PDF 6Κ0Ν4653Π8-ΜΕΝ."
+ },
+ "22SYMV011332552": {
+  "phase": "antinero_ii",
+  "lot": "2Β ΤΟΥ ΙΙ",
+  "basis": "title:ΤΟΥ ΙΙ",
+  "notes": "Anti-nero II wave-1 execution contract, signed 2022-09-22; missing from the xlsx because the title lacks the literal word ANTINERO. Superseded by 22SYMV011512210."
+ },
+ "22SYMV011512210": {
+  "phase": "antinero_ii",
+  "lot": "2Β ΤΟΥ ΙΙ (τροποποίηση)",
+  "basis": "title:ΤΟΥ ΙΙ",
+  "notes": "Modification of 22SYMV011332552 (prevReferenceNo link)."
+ },
+ "22SYMV011332276": {
+  "phase": "antinero_ii",
+  "lot": "3Β ΤΟΥ ΙΙ",
+  "basis": "title:ΤΟΥ ΙΙ",
+  "notes": "Signed 2022-09-23, ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ."
+ },
+ "22SYMV011332546": {
+  "phase": "antinero_ii",
+  "lot": "5Α ΤΟΥ ΙΙ",
+  "basis": "title:ΤΟΥ ΙΙ",
+  "notes": "Signed 2022-09-23, Κ/Ξ ΠΑΠΑΓΕΩΡΓΑΚΗΣ."
+ },
+ "22SYMV011360183": {
+  "phase": "antinero_ii",
+  "lot": "3Α ΤΟΥ ΙΙ",
+  "basis": "title:ΤΟΥ ΙΙ",
+  "notes": "Signed 2022-09-26, ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ."
+ },
+ "22SYMV011470180": {
+  "phase": "antinero_ii",
+  "lot": "4Β ΤΟΥ ΙΙ",
+  "basis": "title:ΤΟΥ ΙΙ",
+  "notes": "Signed 2022-10-18, Κ/Ξ 3Κ ΤΕΧΝΙΚΗ. Original of the modification 23SYMV011953055 already in the DB."
+ },
+ "25SYMV017458228": {
+  "phase": "antinero_iv",
+  "lot": "ΠΕ ΕΥΒΟΙΑΣ ΤΜΗΜΑ 2",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Signed 2025-08-28, ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ. Same fund code and window as the ANTINERO IV contracts in the DB."
+ },
+ "25SYMV017458229": {
+  "phase": "antinero_iv",
+  "lot": "ΠΕ ΕΥΒΟΙΑΣ ΤΜΗΜΑ 3",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Signed 2025-08-28, Κ/Ξ ΜΑΝΑΡΙΤΣΑΣ-ΛΙΑΡΗ."
+ },
+ "26SYMV018988979": {
+  "phase": "antinero_iv",
+  "lot": "ΣΥΜΒΑΣΗ 38 ΥΛΟΤΟΜΙΕΣ (τροποποίηση)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "ΥΛΟΤΟΜΙΕΣ ANTINERO IV ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ. Modification of 25SYMV017471411 already in the DB."
+ },
+ "26SYMV018725481": {
+  "phase": "antinero_2026",
+  "lot": "ΔΔ ΡΟΔΟΠΗΣ ΔΧ ΚΙΛΚΙΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "ANTINERO 2026 phase (Diavgeia decisions call this cohort ΑΝΤΙΝΕΡΟ 2026). Signed 2026-03-26."
+ },
+ "26SYMV018739467": {
+  "phase": "antinero_2026",
+  "lot": "ΔΔ ΦΩΚΙΔΑΣ ΔΧ ΕΛΑΣΣΟΝΑΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Signed 2026-03-30."
+ },
+ "26SYMV018755812": {
+  "phase": "antinero_2026",
+  "lot": "ΔΔ ΗΡΑΚΛΕΙΟΥ ΛΑΣΙΘΙΟΥ ΡΕΘΥΜΝΟΥ ΧΑΝΙΩΝ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Signed 2026-03-31."
+ },
+ "26SYMV018756094": {
+  "phase": "antinero_2026",
+  "lot": "ΔΧ ΟΛΥΜΠΙΑΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Signed 2026-03-31."
+ },
+ "26SYMV018779399": {
+  "phase": "antinero_2026",
+  "lot": "ΔΧ ΑΡΙΔΑΙΑΣ ΑΡΝΑΙΑΣ ΔΔ ΠΙΕΡΙΑΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Signed 2026-04-03."
+ },
+ "24SYMV014662280": {
+  "phase": "antinero_iii",
+  "lot": "ΔΙΑΧΕΙΡΙΣΤΙΚΕΣ ΜΕΛΕΤΕΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». Management studies; sibling of 24SYMV014662322 (antinero_iii)."
+ },
+ "24SYMV014916640": {
+  "phase": "antinero_iii",
+  "lot": "ΤΜΗΜΑ 3",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΣΥΜΒΑΣΗ ΓΙΑ ΤΗΝ ΕΚΤΕΛΕΣΗ ΤΜΗΜΑΤΟΣ 3 ΕΡΓΟΥ."
+ },
+ "24SYMV014917317": {
+  "phase": "antinero_iii",
+  "lot": "ΤΜΗΜΑ 4",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ ΤΜΗΜΑΤΟΣ 4 ΕΡΓΟΥ."
+ },
+ "24SYMV014944866": {
+  "phase": "antinero_iii",
+  "lot": "ΤΜΗΜΑ 6",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ ΤΜΗΜΑΤΟΣ 6 ΕΡΓΟΥ."
+ },
+ "24SYMV015162689": {
+  "phase": "antinero_iii",
+  "lot": "ΑΤΤΙΚΗ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΠΕΡΙΦΕΡΕΙΑΣ ΑΤΤΙΚΗΣ."
+ },
+ "25SYMV017471484": {
+  "phase": "antinero_iii",
+  "lot": "ΔΕΞΑΜΕΝΕΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΔΕΞΑΜΕΝΕΣ & ΚΡΟΥΝΟΙ ΠΕΡΙΑΣΤΙΚΟΥ ΔΑΣΟΥΣ ΘΕΣΣΑΛΟΝΙΚΗΣ ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ."
+ },
+ "26SYMV018638816": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΙΣΤΙΑΙΑΣ-ΛΙΜΝΗΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΙΣΤΙΑΙΑΣ ΛΙΜΝΗΣ."
+ },
+ "26SYMV018639407": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΚΑΛΑΜΠΑΚΑΣ κ.ά.",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΚΑΛΑΜΠΑΚΑΣ ΜΟΥΖΑΚΙΟΥ ΤΡΙΚΑΛΩΝ ΚΑΡΠΕΝΗΣΙΟΥ."
+ },
+ "26SYMV018642772": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΣΟΥΦΛΙΟΥ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΣΟΥΦΛΙΟΥ."
+ },
+ "26SYMV018680228": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΝΙΓΡΙΤΑΣ κ.ά.",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΝΙΓΡΙΤΑΣ ΠΟΛΥΓΥΡΟΥ ΣΕΡΡΩΝ ΣΙΔΗΡΟΚΑΣΤΡΟΥ."
+ },
+ "26SYMV018689005": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΚΟΡΙΝΘΟΥ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΚΟΡΙΝΘΟΥ."
+ },
+ "26SYMV018599431": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΑΙΓΑΛΕΩ-ΜΕΓΑΡΩΝ-ΠΕΙΡΑΙΑ-ΠΕΝΤΕΛΗΣ (Σύμβαση 3/2026)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΙΓΑΛΕΩ-ΜΕΓΑΡΩΝ-ΠΕΙΡΑΙΑ-ΠΕΝΤΕΛΗΣ (Σύμβαση 3/2026)"
+ },
+ "26SYMV018599446": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΚΑΠΑΝΔΡΙΤΙΟΥ-ΠΑΡΝΗΘΑΣ-ΠΟΡΟΥ (Σύμβαση 4/2026)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΚΑΠΑΝΔΡΙΤΙΟΥ-ΠΑΡΝΗΘΑΣ-ΠΟΡΟΥ (Σύμβαση 4/2026)"
+ },
+ "26SYMV018607958": {
+  "phase": "antinero_iii",
+  "lot": "ΔΔ ΔΩΔΕΚΑΝΗΣΟΥ-ΛΕΣΒΟΥ-ΣΑΜΟΥ-ΧΙΟΥ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΔ ΔΩΔΕΚΑΝΗΣΟΥ-ΛΕΣΒΟΥ-ΣΑΜΟΥ-ΧΙΟΥ"
+ },
+ "26SYMV018639041": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΑΤΑΛΑΝΤΗΣ-ΘΗΒΩΝ-ΛΙΒΑΔΕΙΑΣ-ΣΠΕΡΧΕΙΑΔΑΣ (Σύμβαση 7/2026)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΤΑΛΑΝΤΗΣ-ΘΗΒΩΝ-ΛΙΒΑΔΕΙΑΣ-ΣΠΕΡΧΕΙΑΔΑΣ (Σύμβαση 7/2026)"
+ },
+ "26SYMV018661963": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΚΑΛΑΜΑΤΑΣ-ΠΥΡΓΟΥ-ΣΠΑΡΤΗΣ (Σύμβαση 10/2026)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΚΑΛΑΜΑΤΑΣ-ΠΥΡΓΟΥ-ΣΠΑΡΤΗΣ (Σύμβαση 10/2026)"
+ },
+ "26SYMV018661994": {
+  "phase": "antinero_iii",
+  "lot": "ΔΔ ΚΑΣΤΟΡΙΑΣ-ΦΛΩΡΙΝΑΣ-ΠΡΕΒΕΖΑΣ-ΘΕΣΠΡΩΤΙΑΣ",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΔ ΚΑΣΤΟΡΙΑΣ-ΦΛΩΡΙΝΑΣ-ΠΡΕΒΕΖΑΣ-ΘΕΣΠΡΩΤΙΑΣ"
+ },
+ "26SYMV018670757": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΑΙΓΙΟΥ-ΒΥΤΙΝΑΣ-ΠΑΤΡΩΝ (Σύμβαση 9/2026)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΙΓΙΟΥ-ΒΥΤΙΝΑΣ-ΠΑΤΡΩΝ (Σύμβαση 9/2026)"
+ },
+ "26SYMV018682054": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ-ΔΙΔΥΜΟΤΕΙΧΟΥ (Σύμβαση 12/2026)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ-ΔΙΔΥΜΟΤΕΙΧΟΥ (Σύμβαση 12/2026)"
+ },
+ "26SYMV018718889": {
+  "phase": "antinero_iii",
+  "lot": "ΔΧ ΘΑΣΟΥ-ΔΡΑΜΑΣ (Σύμβαση 13/2026)",
+  "basis": "fund:2023ΤΑ07500012",
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΘΑΣΟΥ-ΔΡΑΜΑΣ (Σύμβαση 13/2026)"
+ }
 }

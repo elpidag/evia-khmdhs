@@ -152,6 +152,8 @@ CREATE TABLE IF NOT EXISTS contract_payments (
     amount_with_vat    REAL,
     fund_ref_num       TEXT,
     correction_note    TEXT,
+    source             TEXT NOT NULL DEFAULT 'khmdhs',
+    ada                TEXT,
     raw_json           TEXT,
     fetched_at         TEXT NOT NULL
 );

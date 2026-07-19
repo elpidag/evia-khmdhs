@@ -196,6 +196,43 @@ Registry keying errors (e.g. `25PAY016487974`, entered as €992.4M for a
 the curated `khmdhs/data/payment_corrections.json`, applied at the end of
 every loader run.
 
+### Diavgeia cross-check (payments missing from KHMDHS links)
+
+Not every payment order reaches the DB through KHMDHS: some orders exist
+in KHMDHS but were never listed in any contract's `paymentRefNo`, and a
+few were never registered in KHMDHS at all. `khmdhs/diavgeia_loader.py`
+ingests a list of Diavgeia «Εκκαθάριση-εντολή πληρωμής» decisions
+(`data/raw/payments_not_in_db_155.xlsx`): it downloads each decision's
+metadata + signed PDF from diavgeia.gov.gr (cache:
+`data/processed/diavgeia_cache/`), reads the ΑΔΑΜ stamps in the PDF (the
+KHMDHS PAY number, the cited contract, and the authoritative «ΑΔΑΜ
+ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ» field), then fetches the canonical KHMDHS record where
+one exists or stores the payment with `source='diavgeia'` keyed by its
+ΑΔΑ. Duplicates are blocked by PAY-number, by ΑΔΑ, and by
+same-chain/same-amount guards.
+
+A full completeness sweep (2026-07-19) then verified the whole DB both
+ways: every stored contract was refetched from KHMDHS for fresh payment
+links, all 846 ΥΠΕΝ clearance decisions on Diavgeia that reference the
+three Anti-nero fund codes were harvested, and each one was traced to a
+stored payment (by ΑΔΑ, by the PAY ΑΔΑΜ stamped in its PDF, or by
+amount+chain twin-matching for pre-stamp-era decisions). A parallel
+ΑΔΑΜ-subject sweep over ~6,000 ΥΠΕΝ decisions surfaced 15 more Anti-nero
+contracts (6 fire-protection plans under the Anti-nero I framework fund
+and 9 «Σύμβαση N/2026» ANTINERO III works — ΥΠΕΝ's own decision on
+σύμβαση 10/2026 names the programme), which were fetched, classified,
+region-curated and payment-linked; ~342 other swept contracts classify as
+non-Anti-nero ΥΠΕΝ business and were not imported.
+
+The earlier xlsx batch also surfaced 37 contracts the DB was missing. The 11 whose
+payment PDFs are titled «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III» were
+added to the Anti-nero supplement (in scope); the rest belong to sibling
+sub-programmes of the same Recovery-Fund ΠΔΕ project and get their own
+out-of-scope classes: `esa_reforestation` (Εθνικό Σχέδιο Αναδάσωσης,
+nurseries) and `post_fire_works` (αντιδιαβρωτικά/αντιπλημμυρικά).
+Supplementary contracts («1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ», adding money on top of the
+parent) do not supersede the version they extend — both stay countable.
+
 ## Output: enriched Excel file
 
 Original columns A–H are preserved exactly. Eight new columns are appended
