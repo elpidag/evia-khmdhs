@@ -69,6 +69,29 @@
   </table>
 </section>
 
+<section class="section">
+  <h2>Cumulative Disbursement by Phase</h2>
+  <p class="muted"><small>Sum of non-cancelled payment orders per month, by programme scope
+    (order signature date; registry submission date when unsigned-dated).
+    {% if timeseries.undated %}{{ timeseries.undated }} undated payment(s)
+    totalling {{ timeseries.undated_eur | eur_short }} are not on the curve.{% endif %}</small></p>
+  <div class="chart-wrap">
+    <canvas id="timeseriesChart"></canvas>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Direct-Award Contract Values</h2>
+  <p class="muted"><small>{{ direct_awards.n }} in-scope direct-award contracts
+    ({{ direct_awards.total_eur | eur_short }} effective). Dashed lines mark the
+    ν.4782/2021 direct-award ceilings: 30&thinsp;k€ (supplies/services) and
+    60&thinsp;k€ (works) — values above them were awarded without competition
+    under negotiated exceptions.</small></p>
+  <div class="chart-wrap">
+    <canvas id="directAwardChart"></canvas>
+  </div>
+</section>
+
 <div class="grid">
   <section class="section">
     <h2>Top Authorities</h2>
@@ -162,6 +185,104 @@
         window.location = '/contractor/' + data.vats[els[0].index];
       }
     }
+  });
+
+  // --- Cumulative disbursement per phase -------------------------------
+  const ts = {{ timeseries | tojson }};
+  // Colors follow the scope badge palette used on the contracts list.
+  const scopeColors = {
+    antinero_i: '#1e40af', antinero_ii: '#166534', antinero_iii: '#92400e',
+    antinero_iv: '#991b1b', antinero_2026: '#5b21b6',
+    antinero_esa: '#065f46', antinero_restoration: '#075985',
+    antinero_unknown_phase: '#6b7280'
+  };
+  new Chart(document.getElementById('timeseriesChart'), {
+    type: 'line',
+    data: {
+      labels: ts.months,
+      datasets: Object.entries(ts.series).map(([scope, values]) => ({
+        label: scope.replace('antinero_', '').toUpperCase(),
+        data: values,
+        borderColor: scopeColors[scope] || '#888',
+        backgroundColor: (scopeColors[scope] || '#888') + '33',
+        fill: true,
+        pointRadius: 0,
+        borderWidth: 2,
+        tension: 0.2
+      }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: textColor } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': ' +
+              new Intl.NumberFormat('el-GR', { style: 'currency', currency: 'EUR',
+                                               maximumFractionDigits: 0 }).format(ctx.parsed.y)
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: textColor, maxTicksLimit: 16 }, grid: { color: gridColor }, stacked: true },
+        y: {
+          stacked: true,
+          ticks: {
+            color: textColor,
+            callback: v => new Intl.NumberFormat('el-GR', { notation: 'compact' }).format(v) + ' €'
+          },
+          grid: { color: gridColor }
+        }
+      }
+    }
+  });
+
+  // --- Direct-award value histogram + ν.4782/2021 threshold lines ------
+  const da = {{ direct_awards | tojson }};
+  const thresholdLines = {
+    id: 'thresholdLines',
+    afterDraw(chart) {
+      const x = chart.scales.x, y = chart.scales.y, ctx2 = chart.ctx;
+      da.thresholds.forEach(t => {
+        const idx = da.edges.indexOf(t);
+        if (idx < 0) return;
+        // The threshold sits on the boundary between bins idx-1 and idx.
+        const px = x.getPixelForValue(idx) - (x.getPixelForValue(1) - x.getPixelForValue(0)) / 2;
+        ctx2.save();
+        ctx2.strokeStyle = '#b91c1c';
+        ctx2.setLineDash([5, 4]);
+        ctx2.beginPath();
+        ctx2.moveTo(px, y.top); ctx2.lineTo(px, y.bottom);
+        ctx2.stroke();
+        ctx2.fillStyle = '#b91c1c';
+        ctx2.font = '11px sans-serif';
+        ctx2.textAlign = 'left';
+        ctx2.fillText((t / 1000) + 'k€ όριο', px + 4, y.top + 12);
+        ctx2.restore();
+      });
+    }
+  };
+  new Chart(document.getElementById('directAwardChart'), {
+    type: 'bar',
+    data: {
+      labels: da.labels,
+      datasets: [{ label: 'Contracts', data: da.counts,
+                   backgroundColor: brand, borderRadius: 3 }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: textColor, autoSkip: false, maxRotation: 60, minRotation: 45 },
+             grid: { display: false } },
+        y: { ticks: { color: textColor, precision: 0 }, grid: { color: gridColor },
+             title: { display: true, text: 'contracts', color: textColor } }
+      }
+    },
+    plugins: [thresholdLines]
   });
 </script>
 {% endblock %}

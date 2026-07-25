@@ -112,6 +112,16 @@
     </dd>
   </div>
   {% endif %}
+  {% if sites %}
+  <div>
+    <dt>Work Sites</dt>
+    <dd>
+      {% for s in sites %}
+        <span title="{{ s.excerpt or '' }}">{{ s.site_name }}{% if s.page %} <small class="muted">(PDF p.{{ s.page }})</small>{% endif %}</span>{% if not loop.last %} · {% endif %}
+      {% endfor %}
+    </dd>
+  </div>
+  {% endif %}
   {% if c.public_funding_ref %}
   <div>
     <dt>Funding Body</dt>

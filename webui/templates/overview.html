@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+{% block title %}Overview{% endblock %}
+
+{% block content %}
+<hgroup class="ov-head">
+  <h1>ANTINERO 2021–2026 — where the money went</h1>
+  <p class="muted">
+    {{ kpis.n_contracts }} contracts · {{ kpis.total_eur | eur_short }} effective value
+    (payment orders where they exist, contracted value otherwise) ·
+    state-vehicle pass-throughs excluded.
+  </p>
+</hgroup>
+
+<div class="ov-grid">
+
+  <!-- ======================= LEFT: the map ======================= -->
+  <section class="ov-map-panel">
+    <div class="ov-toggle" role="group" aria-label="Map view">
+      <button data-view="works"        type="button">Work sites</button>
+      <button data-view="contractors"  type="button">Contractor HQs</button>
+      <button data-view="money_works"  type="button">€ by work region</button>
+      <button data-view="money_home"   type="button">€ by HQ region</button>
+    </div>
+
+    <p class="ov-mode-deck muted" id="modeDeck"></p>
+
+    <div id="ovMap" class="gc-map" aria-label="Map of Greece"></div>
+
+    <div class="ov-legend" id="ovLegend"></div>
+
+    <p class="ov-footnote muted"><small id="ovFootnote"></small></p>
+  </section>
+
+  <!-- ======================= RIGHT: analytics ======================= -->
+  <div class="ov-col">
+
+    <section class="ov-card">
+      <h2>How big are the contracts?</h2>
+      <p class="muted"><small>{{ histogram.n }} in-scope contracts by effective value.
+        Median: {{ histogram.median | eur_short }}.</small></p>
+      <div class="ov-chart"><canvas id="histChart"></canvas></div>
+    </section>
+
+    <section class="ov-card">
+      <h2>Top 10 contractors</h2>
+      <p class="muted"><small>By effective € received. Click a bar for the
+        contractor's profile, contracts and map.</small></p>
+      <div class="ov-chart ov-chart-tall"><canvas id="topChart"></canvas></div>
+    </section>
+
+    <section class="ov-card">
+      <h2>Who awards the money?</h2>
+      <table class="compact striped">
+        <thead><tr><th>Authority</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
+        <tbody>
+          {% for a in top_authorities %}
+          <tr><td>{{ a.name }}</td><td class="num">{{ a.n_contracts }}</td>
+              <td class="num">{{ a.total_eur | eur_short }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <h3 class="ov-sub">Top signing officials</h3>
+      <table class="compact striped">
+        <thead><tr><th>Signer</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
+        <tbody>
+          {% for s in top_signers %}
+          <tr><td>{{ s.name }}</td><td class="num">{{ s.n_contracts }}</td>
+              <td class="num">{{ s.total_eur | eur_short }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ov-card">
+      <h2>How were they awarded?</h2>
+      <p class="muted"><small>Share of award procedures, by number of contracts
+        and by effective €. Direct awards under the Anti-nero programme rely on
+        the emergency provisions of ν.4412/2016 (αρ. 32) rather than open
+        competition.</small></p>
+      <div class="ov-chart ov-chart-mix"><canvas id="mixChart"></canvas></div>
+      <div class="ov-mix-legend" id="mixLegend"></div>
+    </section>
+
+  </div>
+</div>
+
+<style>
+.ov-head { margin-bottom: 0.8rem; }
+.ov-grid {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 1.25rem; align-items: start;
+}
+.ov-map-panel { position: sticky; top: 0.75rem; }
+#ovMap { height: min(78vh, 720px); }
+.ov-col { display: flex; flex-direction: column; gap: 1.1rem; min-width: 0; }
+.ov-card h2 { font-size: 1.05rem; margin-bottom: 0.2rem; }
+.ov-card .muted small { line-height: 1.3; }
+.ov-sub { font-size: 0.85rem; margin: 0.9rem 0 0.25rem; color: var(--pico-muted-color); }
+.ov-chart { position: relative; height: 230px; }
+.ov-chart-tall { height: 330px; }
+.ov-chart-mix { height: 130px; }
+
+/* segmented control */
+.ov-toggle {
+  display: flex; gap: 0; margin-bottom: 0.5rem;
+  border: 1px solid var(--pico-muted-border-color);
+  border-radius: 999px; overflow: hidden; width: fit-content; max-width: 100%;
+}
+.ov-toggle button,
+.ov-toggle button[type="button"] {
+  border: none; border-radius: 0; margin: 0; padding: 0.32rem 0.85rem;
+  background: transparent; color: #4a4636; box-shadow: none;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.ov-toggle button + button { border-left: 1px solid var(--pico-muted-border-color); }
+.ov-toggle button[aria-pressed="true"] { background: #2a2419; color: #ffe7b8; }
+.ov-toggle button:focus-visible { outline: 2px solid #2a78d6; outline-offset: -2px; }
+
+.ov-mode-deck { min-height: 2.1em; font-size: 0.83rem; margin: 0 0 0.35rem; }
+.ov-footnote { margin-top: 0.4rem; line-height: 1.3; }
+
+/* adaptive legend */
+.ov-legend { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;
+             min-height: 44px; flex-wrap: wrap; }
+.ov-legend .strip { display: flex; height: 10px; width: 180px; border-radius: 3px; overflow: hidden; }
+.ov-legend .strip span { flex: 1; }
+.ov-legend .lab { font-size: 0.72rem; color: var(--pico-muted-color); }
+.ov-legend .bubbles { display: flex; align-items: flex-end; gap: 0.55rem; }
+.ov-legend .bubbles i {
+  display: inline-block; border-radius: 50%; opacity: 0.85;
+  border: 1.5px solid rgba(0,0,0,0.35);
+}
+
+@media (max-width: 1024px) {
+  .ov-grid { grid-template-columns: 1fr; }
+  .ov-map-panel { position: static; }
+  #ovMap { height: 60vh; }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='geo_common.js') }}"></script>
+<script>
+(async function () {
+  const G = window.GeoCommon;
+  const INITIAL_VIEW = {{ view | tojson }};
+
+  // ---------------- data ----------------
+  const [geo, centroids, data] = await Promise.all([
+    fetch("{{ url_for('static', filename='greek_nuts3.geojson') }}").then(r => r.json()),
+    fetch("{{ url_for('static', filename='nuts3_centroids.json') }}").then(r => r.json()),
+    fetch("{{ url_for('api_overview') }}").then(r => r.json()),
+  ]);
+  const byNutsWork = new Map(data.work_regions.map(r => [r.nuts3, r]));
+  const byNutsHome = new Map(data.home_regions.map(r => [r.nuts3, r]));
+  const cov = data.coverage;
+
+  const MODES = {
+    works: {
+      deck: 'Where the contracted works are. Bubble area ∝ € attributed to the region (contracts spanning several regions are split evenly).',
+      kind: 'bubbles', src: byNutsWork,
+      fill: G.COLORS.bubbleWorks, stroke: G.COLORS.bubbleWorksStroke,
+      noun: r => `${G.fmtInt(r.n_contracts)} contract(s)`,
+      foot: 'Multi-region contracts are split evenly across their regions (the documents do not itemise per-region amounts); each tooltip also shows the region’s full exposure. Regions sum to the programme total.',
+    },
+    contractors: {
+      deck: 'Where the winning contractors are registered. Bubble area ∝ € won by contractors based in the region.',
+      kind: 'bubbles', src: byNutsHome,
+      fill: G.COLORS.bubbleHome, stroke: G.COLORS.bubbleHomeStroke,
+      noun: r => `${G.fmtInt(r.n_contractors)} contractor(s)`,
+      foot: `Consortium values split evenly across located partners. ${cov.n_contractors_resolved} of ${cov.n_contractors_total} contractors located — ${G.fmtEurShort(cov.unresolved_eur)} of contracts have no located contractor and are not on this view.`,
+    },
+    money_works: {
+      deck: 'How much money lands in each region through the works contracted there. Darker = more €.',
+      kind: 'choro', src: byNutsWork, ramp: G.RAMP_WORKS,
+      noun: r => `${G.fmtInt(r.n_contracts)} contract(s)`,
+      foot: 'Multi-region contracts are split evenly across their regions (the documents do not itemise per-region amounts); tooltips also show full exposure. Regions sum to the programme total.',
+    },
+    money_home: {
+      deck: 'How much money flows to each region through the contractors registered there. Darker = more €.',
+      kind: 'choro', src: byNutsHome, ramp: G.RAMP_HOME,
+      noun: r => `${G.fmtInt(r.n_contractors)} contractor(s)`,
+      foot: `Consortium values split evenly across located partners. ${cov.n_contractors_resolved} of ${cov.n_contractors_total} contractors located — ${G.fmtEurShort(cov.unresolved_eur)} not attributable to a region.`,
+    },
+  };
+
+  // ---------------- map ----------------
+  const map = G.initPaperMap('ovMap');
+  let regionLayer = null, bubbleLayer = null, framed = false;
+
+  function tipFor(mode, nuts3, fallbackName) {
+    const r = mode.src.get(nuts3);
+    if (!r) return G.regionTooltip(fallbackName || nuts3,
+                                   ['<span class="muted">no Anti-nero activity</span>']);
+    return G.regionTooltip(r.pes, [
+      mode.noun(r),
+      '<strong>' + G.fmtEur(r.split_eur) + '</strong> attributed',
+      '<span class="muted">touches ' + G.fmtEurShort(r.exposure_eur) +
+        ' across ' + G.fmtInt(r.n_contracts) + ' contract(s)</span>',
+    ]);
+  }
+
+  function legendChoro(ramp, maxV) {
+    document.getElementById('ovLegend').innerHTML =
+      '<div><div class="strip">' + ramp.map(c => `<span style="background:${c}"></span>`).join('') +
+      '</div><div class="lab">€0 → ' + G.fmtEurShort(maxV) + ' attributed (√ scale)</div></div>';
+  }
+  function legendBubbles(fill, maxV, radius) {
+    const samples = [maxV, maxV / 4, maxV / 16];
+    document.getElementById('ovLegend').innerHTML =
+      '<div class="bubbles">' + samples.map(v => {
+        const d = Math.round(radius(v) * 2);
+        return `<span style="text-align:center"><i style="width:${d}px;height:${d}px;background:${fill}"></i>` +
+               `<div class="lab">${G.fmtEurShort(v)}</div></span>`;
+      }).join('') + '</div><div class="lab">€ attributed to the region</div>';
+  }
+
+  function render(view) {
+    const mode = MODES[view];
+    const maxV = Math.max(1, ...[...mode.src.values()].map(r => r.split_eur));
+
+    if (regionLayer) regionLayer.remove();
+    if (bubbleLayer) { bubbleLayer.remove(); bubbleLayer = null; }
+
+    const colorOf = mode.kind === 'choro'
+      ? (n => G.makeChoro(mode.ramp, maxV)((mode.src.get(n) || {}).split_eur || 0))
+      : (() => G.COLORS.landEmpty);
+    regionLayer = G.addRegions(map, geo, colorOf,
+                               (n, name) => tipFor(mode, n, name));
+    if (!framed) {
+      framed = true;
+      map.fitBounds(regionLayer.getBounds(), { padding: [10, 10] });
+    }
+
+    if (mode.kind === 'bubbles') {
+      const radius = G.makeRadius(maxV, 32);
+      bubbleLayer = L.layerGroup([...mode.src.values()].map(r => {
+        const c = centroids[r.nuts3];
+        if (!c) return null;
+        return L.circleMarker(c, {
+          pane: 'bubbles', radius: radius(r.split_eur),
+          fillColor: mode.fill, fillOpacity: 0.82,
+          color: mode.stroke, weight: 1.2,
+        }).bindTooltip(tipFor(mode, r.nuts3), { sticky: true, direction: 'top', className: 'gc-tt' });
+      }).filter(Boolean)).addTo(map);
+      legendBubbles(mode.fill, maxV, radius);
+    } else {
+      legendChoro(mode.ramp, maxV);
+    }
+
+    document.getElementById('modeDeck').textContent = mode.deck;
+    document.getElementById('ovFootnote').textContent = mode.foot;
+    document.querySelectorAll('.ov-toggle button').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+    const url = new URL(window.location);
+    url.searchParams.set('view', view);
+    history.replaceState(null, '', url);
+  }
+
+  document.querySelectorAll('.ov-toggle button').forEach(b =>
+    b.addEventListener('click', () => render(b.dataset.view)));
+  render(MODES[INITIAL_VIEW] ? INITIAL_VIEW : 'money_works');
+
+  // ---------------- charts ----------------
+  const css = getComputedStyle(document.documentElement);
+  const textColor = css.getPropertyValue('--pico-color').trim() || '#222';
+  const mutedColor = css.getPropertyValue('--pico-muted-color').trim() || '#777';
+  const gridColor = css.getPropertyValue('--pico-muted-border-color').trim() || '#ddd';
+  const BLUE = '#2a78d6';
+  Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+
+  // 1) contract-value histogram + median marker
+  const hist = {{ histogram | tojson }};
+  const medianLine = {
+    id: 'medianLine',
+    afterDraw(chart) {
+      const { ctx, scales: { x, y } } = chart;
+      const edges = hist.edges;
+      let idx = edges.length - 1;
+      for (let i = 0; i < edges.length - 1; i++)
+        if (hist.median >= edges[i] && hist.median < edges[i + 1]) { idx = i; break; }
+      const half = edges.length > 1 ? (x.getPixelForValue(1) - x.getPixelForValue(0)) / 2 : 0;
+      const frac = idx < edges.length - 1
+        ? (hist.median - edges[idx]) / (edges[idx + 1] - edges[idx]) : 0.5;
+      const px = x.getPixelForValue(idx) - half + frac * half * 2;
+      ctx.save();
+      ctx.strokeStyle = mutedColor; ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.moveTo(px, y.top); ctx.lineTo(px, y.bottom); ctx.stroke();
+      ctx.fillStyle = mutedColor; ctx.font = '10px ' + Chart.defaults.font.family;
+      ctx.textAlign = 'left';
+      ctx.fillText('median', px + 4, y.top + 9);
+      ctx.restore();
+    }
+  };
+  new Chart(document.getElementById('histChart'), {
+    type: 'bar',
+    data: { labels: hist.labels,
+            datasets: [{ data: hist.counts, backgroundColor: BLUE,
+                         borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: 'bottom' }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: {
+          title: items => items[0].label + ' €',
+          label: ctx => ctx.parsed.y + ' contract(s)' } } },
+      scales: {
+        x: { ticks: { color: mutedColor, autoSkip: false, maxRotation: 60, minRotation: 45,
+                      font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { color: mutedColor, precision: 0 }, grid: { color: gridColor },
+             border: { display: false } }
+      }
+    },
+    plugins: [medianLine]
+  });
+
+  // 2) top-10 contractors — horizontal, clickable, value labels at bar end
+  const top = {
+    labels: {{ top_contractors | map(attribute='name') | list | tojson }},
+    values: {{ top_contractors | map(attribute='total_eur') | list | tojson }},
+    vats:   {{ top_contractors | map(attribute='vat_number') | list | tojson }},
+  };
+  const endLabels = {
+    id: 'endLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      ctx.save();
+      ctx.fillStyle = mutedColor;
+      ctx.font = '10px ' + Chart.defaults.font.family;
+      ctx.textBaseline = 'middle';
+      chart.getDatasetMeta(0).data.forEach((bar, i) => {
+        ctx.fillText(G.fmtEurShort(top.values[i]), bar.x + 5, bar.y);
+      });
+      ctx.restore();
+    }
+  };
+  new Chart(document.getElementById('topChart'), {
+    type: 'bar',
+    data: { labels: top.labels.map(l => l.length > 26 ? l.slice(0, 25) + '…' : l),
+            datasets: [{ data: top.values, backgroundColor: BLUE,
+                         borderRadius: { topRight: 4, bottomRight: 4 }, borderSkipped: 'left',
+                         barPercentage: 0.72 }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      layout: { padding: { right: 52 } },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: {
+          title: items => top.labels[items[0].dataIndex],
+          label: ctx => G.fmtEur(ctx.parsed.x) } } },
+      scales: {
+        x: { display: false },
+        y: { ticks: { color: textColor, autoSkip: false, font: { size: 10.5 } },
+             grid: { display: false }, border: { display: false } }
+      },
+      onHover: (e, els) => e.native.target.style.cursor = els.length ? 'pointer' : 'default',
+      onClick: (_e, els) => {
+        if (els.length) window.location = '/contractor/' + top.vats[els[0].index];
+      }
+    },
+    plugins: [endLabels]
+  });
+
+  // 3) procedure mix — two 100% stacked horizontal bars (+ HTML legend with
+  //    real numbers; the magenta slot's low contrast is relieved by the
+  //    direct labels, per the palette validation).
+  const procs = {{ procedures | tojson }};
+  const MIX_COLORS = ['#2a78d6', '#008300', '#e87ba4', '#eda100'];
+  const totN = procs.reduce((s, p) => s + p.n_contracts, 0) || 1;
+  const totE = procs.reduce((s, p) => s + p.eur, 0) || 1;
+  const pctLabels = {
+    id: 'pctLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      ctx.save();
+      ctx.font = 'bold 10px ' + Chart.defaults.font.family;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      chart.data.datasets.forEach((ds, di) => {
+        chart.getDatasetMeta(di).data.forEach((seg, ri) => {
+          const val = ds.data[ri];
+          if (val < 7) return;                       // only segments wide enough
+          ctx.fillStyle = di === 2 ? '#5d2038' : '#ffffff';
+          ctx.fillText(Math.round(val) + '%', (seg.base + seg.x) / 2, seg.y);
+        });
+      });
+      ctx.restore();
+    }
+  };
+  new Chart(document.getElementById('mixChart'), {
+    type: 'bar',
+    data: {
+      labels: ['by contracts', 'by €'],
+      datasets: procs.map((p, i) => ({
+        label: p.label,
+        data: [100 * p.n_contracts / totN, 100 * p.eur / totE],
+        backgroundColor: MIX_COLORS[i % MIX_COLORS.length],
+        borderColor: css.getPropertyValue('--pico-background-color').trim() || '#fff',
+        borderWidth: 1, barPercentage: 0.6,
+      }))
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: {
+          label: ctx => {
+            const p = procs[ctx.datasetIndex];
+            return ctx.dataIndex === 0
+              ? `${p.label}: ${p.n_contracts} contracts (${ctx.parsed.x.toFixed(1)}%)`
+              : `${p.label}: ${G.fmtEurShort(p.eur)} (${ctx.parsed.x.toFixed(1)}%)`;
+          } } } },
+      scales: {
+        x: { stacked: true, max: 100, display: false },
+        y: { stacked: true, ticks: { color: textColor, font: { size: 11 } },
+             grid: { display: false }, border: { display: false } }
+      }
+    },
+    plugins: [pctLabels]
+  });
+  document.getElementById('mixLegend').innerHTML = procs.map((p, i) =>
+    `<span class="item"><i style="background:${MIX_COLORS[i % MIX_COLORS.length]}"></i>` +
+    `${p.label} <small class="muted">(${p.n_contracts} · ${G.fmtEurShort(p.eur)})</small></span>`
+  ).join('');
+})();
+</script>
+<style>
+.ov-mix-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; margin-top: 0.4rem; font-size: 0.78rem; }
+.ov-mix-legend .item { display: inline-flex; align-items: center; gap: 0.35rem; }
+.ov-mix-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+</style>
+{% endblock %}

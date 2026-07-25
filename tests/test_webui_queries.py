@@ -177,3 +177,180 @@ def test_real_db_contracts_search_eyboia(real_conn):
     # the two new Anti-nero IV Evia contracts must be findable
     refs = {r["reference_number"] for r in rows}
     assert {"25SYMV017458228", "25SYMV017458229"} <= refs
+
+
+# ---------------------------------------------------------------------------
+# Greeklish search + dashboard analytics
+# ---------------------------------------------------------------------------
+
+def test_phonetic_fold_greeklish_pairs():
+    for greek, latin in (("Ευβοίας", "evias"), ("Χαλκίδας", "xalkidas"),
+                         ("Θεσσαλονίκης", "thessalonikis"), ("Ηλείας", "ilias")):
+        g = queries._phonetic_fold(queries._search_norm(greek))
+        l = queries._phonetic_fold(queries._search_norm(latin))
+        assert l in g, (greek, latin, g, l)
+
+
+def test_list_contracts_greeklish(scoped_conn):
+    scoped_conn.execute(
+        "INSERT INTO contract_project_regions "
+        "(reference_number, seq, region_pe, nuts3_code, source, curated_at) "
+        "VALUES ('IN1', 0, 'Π.Ε. Ευβοίας', 'EL642', 'manual', '2026-01-01')")
+    assert len(queries.list_contracts(scoped_conn, q="evias")) == 1
+    assert len(queries.list_contracts(scoped_conn, q="antinero iv")) == 1
+
+
+def test_payment_month_formats():
+    assert queries._payment_month("03/11/2023") == "2023-11"
+    assert queries._payment_month("2026-07-24T00:00:00") == "2026-07"
+    assert queries._payment_month(None) is None
+    assert queries._payment_month("garbage") is None
+
+
+def test_disbursement_timeseries(scoped_conn):
+    from tests.conftest import add_payment
+    add_payment(scoped_conn, "22PAY000000001", "IN1", 60.0,
+                signed_date="03/11/2023")
+    add_payment(scoped_conn, "22PAY000000002", "IN1", 40.0,
+                signed_date="2024-01-05T00:00:00")
+    add_payment(scoped_conn, "22PAY000000003", "IN1", 99.0,
+                signed_date=None)  # undated → footnote, not on curve
+    # unsigned but registered → submission_date fallback puts it on the curve
+    scoped_conn.execute(
+        "INSERT INTO contract_payments (payment_ref, contract_ref, attributed_ref, "
+        "signed_date, submission_date, cancelled, credit, amount_with_vat, fetched_at) "
+        "VALUES ('22PAY000000004', 'IN1', 'IN1', NULL, '2024-02-10T09:00:00', 0, 0, 5.0, 'x')")
+    ts = queries.disbursement_timeseries(scoped_conn)
+    assert ts["months"] == ["2023-11", "2024-01", "2024-02"]
+    assert ts["series"]["antinero_iv"] == [60.0, 100.0, 105.0]  # cumulative
+    assert ts["undated"] == 1 and ts["undated_eur"] == 99.0
+
+
+def test_direct_award_distribution(scoped_conn):
+    scoped_conn.execute(
+        "UPDATE contracts SET procedure_type = 'Απευθείας ανάθεση' "
+        "WHERE reference_number = 'IN1'")
+    da = queries.direct_award_distribution(scoped_conn)
+    assert da["n"] == 1
+    assert sum(da["counts"]) == 1
+    assert da["thresholds"] == [30_000, 60_000]
+    # IN1 costs €100 → first bin (0–10k)
+    assert da["counts"][0] == 1
+
+
+# ---------------------------------------------------------------------------
+# Overview page: even-split money geography + structure charts
+# ---------------------------------------------------------------------------
+
+def _add_region(conn, ref, pe, nuts3, seq=0):
+    conn.execute(
+        "INSERT INTO contract_project_regions "
+        "(reference_number, seq, region_pe, nuts3_code, source, curated_at) "
+        "VALUES (?, ?, ?, ?, 'manual', '2026-01-01')", (ref, seq, pe, nuts3))
+
+
+def test_money_by_project_region_split_invariant(scoped_conn):
+    # IN1 (€100) spans two regions → €50 each; totals sum back to €100.
+    _add_region(scoped_conn, "IN1", "Π.Ε. Ευβοίας", "EL642", 0)
+    _add_region(scoped_conn, "IN1", "Π.Ε. Βοιωτίας", "EL641", 1)
+    rows = queries.money_by_project_region(scoped_conn)
+    assert {r["nuts3"]: r["split_eur"] for r in rows} == {"EL642": 50.0, "EL641": 50.0}
+    for r in rows:
+        assert r["exposure_eur"] == 100.0 and r["n_contracts"] == 1
+    assert sum(r["split_eur"] for r in rows) == 100.0
+
+
+def test_money_by_project_region_same_nuts3_merges(scoped_conn):
+    # Άρτας + Πρέβεζας share EL541 → both halves land in one NUTS-3 row,
+    # exposure counted once.
+    _add_region(scoped_conn, "IN1", "Π.Ε. Άρτας", "EL541", 0)
+    _add_region(scoped_conn, "IN1", "Π.Ε. Πρέβεζας", "EL541", 1)
+    rows = queries.money_by_project_region(scoped_conn)
+    assert len(rows) == 1
+    r = rows[0]
+    assert r["split_eur"] == 100.0 and r["exposure_eur"] == 100.0
+    assert "Άρτας" in r["pes"] and "Πρέβεζας" in r["pes"]
+
+
+def test_money_by_contractor_region_consortium_split(mem_conn):
+    from tests.conftest import add_contract, set_scope
+    add_contract(mem_conn, "C1", title="ΕΡΓΟ ANTINERO IV", eur=100.0,
+                 vats=("111111111", "222222222"))
+    set_scope(mem_conn, "C1", "antinero_iv", 1)
+    for vat, pe, nuts in (("111111111", "Π.Ε. Ευβοίας", "EL642"),
+                          ("222222222", "Π.Ε. Αχαΐας", "EL632")):
+        mem_conn.execute(
+            "INSERT INTO contractor_locations (vat_number, region_pe, nuts3_code, source, curated_at) "
+            "VALUES (?, ?, ?, 'test', '2026-01-01')", (vat, pe, nuts))
+    rows = queries.money_by_contractor_region(mem_conn)
+    assert {r["nuts3"]: r["split_eur"] for r in rows} == {"EL642": 50.0, "EL632": 50.0}
+    for r in rows:
+        assert r["exposure_eur"] == 100.0 and r["n_contractors"] == 1
+
+
+def test_money_by_contractor_region_unlocated_partner(mem_conn):
+    from tests.conftest import add_contract, set_scope
+    # One located + one unlocated partner → located home carries the full value
+    # (the unlocated share is what flow_coverage reports as unresolved).
+    add_contract(mem_conn, "C1", title="ΕΡΓΟ ANTINERO IV", eur=100.0,
+                 vats=("111111111", "222222222"))
+    set_scope(mem_conn, "C1", "antinero_iv", 1)
+    mem_conn.execute(
+        "INSERT INTO contractor_locations (vat_number, region_pe, nuts3_code, source, curated_at) "
+        "VALUES ('111111111', 'Π.Ε. Ευβοίας', 'EL642', 'test', '2026-01-01')")
+    rows = queries.money_by_contractor_region(mem_conn)
+    assert len(rows) == 1 and rows[0]["split_eur"] == 100.0
+
+
+def test_procedure_mix_groups_variants(scoped_conn):
+    scoped_conn.execute("UPDATE contracts SET procedure_type = "
+                        "'Απευθείας ανάθεση (αρ.118/αρ. 328)' WHERE reference_number = 'IN1'")
+    mix = queries.procedure_mix(scoped_conn)
+    assert mix[0]["label"] == "Απευθείας ανάθεση"
+    assert mix[0]["n_contracts"] == 1 and mix[0]["eur"] == 100.0
+
+
+def test_bin_values_helper():
+    h = queries._bin_values([5, 15, 999], (0, 10, 100))
+    assert h["counts"] == [1, 1, 1]  # [0,10): 5 · [10,100): 15 · overflow: 999
+    assert h["n"] == 3
+
+
+def test_contractor_yearly_paid_and_stated(scoped_conn):
+    from tests.conftest import add_contract, add_payment, set_scope
+    add_payment(scoped_conn, "24PAY000000001", "IN1", 60.0, signed_date="03/11/2023")
+    add_payment(scoped_conn, "24PAY000000002", "IN1", 40.0, signed_date="2024-01-05T00:00:00")
+    # a second contract for the same VAT with no payments → stated in its year
+    add_contract(scoped_conn, "IN2", title="ΕΡΓΟ ANTINERO IV Β", eur=200.0,
+                 vats=("111111111",))
+    set_scope(scoped_conn, "IN2", "antinero_iv", 1)
+    scoped_conn.execute("UPDATE contracts SET contract_signed_date = '2025-06-01T00:00:00' "
+                        "WHERE reference_number = 'IN2'")
+    y = queries.contractor_yearly(scoped_conn, "111111111")
+    by_year = {b["year"]: b for b in y["years"]}
+    assert by_year["2023"]["paid_eur"] == 60.0
+    assert by_year["2024"]["paid_eur"] == 40.0
+    assert by_year["2025"]["stated_eur"] == 200.0 and by_year["2025"]["paid_eur"] == 0.0
+
+
+def test_contractor_map_data_split(scoped_conn):
+    _add_region(scoped_conn, "IN1", "Π.Ε. Ευβοίας", "EL642", 0)
+    _add_region(scoped_conn, "IN1", "Π.Ε. Βοιωτίας", "EL641", 1)
+    md = queries.contractor_map_data(scoped_conn, "111111111")
+    assert {r["nuts3"]: r["split_eur"] for r in md["regions"]} == {"EL642": 50.0, "EL641": 50.0}
+
+
+def test_gemi_pick_seat_hit_prefers_seat_over_branch():
+    from khmdhs.gemi import pick_seat_hit
+    hits = [
+        {"afm": "099124894", "gemiNumber": "44614807001",
+         "name": "ΖΙΤΑΚΑΤ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ (Υποκατάστημα)"},
+        {"afm": "099124894", "gemiNumber": "44614807000",
+         "name": "ΖΙΤΑΚΑΤ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ"},
+    ]
+    # Branch listed first (the real ΖΙΤΑΚΑΤ ordering) → seat still wins
+    assert pick_seat_hit(hits, "099124894")["gemiNumber"] == "44614807000"
+    # Only a branch exists → fall back to it rather than returning nothing
+    assert pick_seat_hit(hits[:1], "099124894")["gemiNumber"] == "44614807001"
+    # Wrong ΑΦΜ → no hit
+    assert pick_seat_hit(hits, "000000000") is None

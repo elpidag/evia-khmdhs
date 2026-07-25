@@ -78,6 +78,13 @@
       · {{ location.curated_at }}
     </small></dd>
   </div>
+  {% if location.gemi and location.gemi != '-1' %}
+  <div>
+    <dt>ΓΕΜΗ</dt>
+    <dd><small><a href="https://publicity.businessportal.gr/company/{{ location.gemi }}"
+        target="_blank" rel="noopener">{{ location.gemi }} — δημόσιο προφίλ</a></small></dd>
+  </div>
+  {% endif %}
   {% if location.notes %}
   <div>
     <dt>Note</dt>
@@ -85,6 +92,30 @@
   </div>
   {% endif %}
 </dl>
+{% endif %}
+
+{% if map_data.regions or yearly.years %}
+<section class="section cd-geo">
+  {% if map_data.regions %}
+  <div class="cd-geo-map">
+    <h2>Where this contractor works</h2>
+    <p class="muted"><small>
+      Bubbles: € attributed to each project region (multi-region contracts
+      split evenly){% if map_data.home %} · pin: registered seat
+      ({{ map_data.home.city or map_data.home.pe }}){% endif %}.
+    </small></p>
+    <div id="cdMap" class="gc-map" aria-label="Map of this contractor's project regions"></div>
+  </div>
+  {% endif %}
+  {% if yearly.years %}
+  <div class="cd-geo-chart">
+    <h2>Money per year</h2>
+    <p class="muted"><small>Payment orders per year; contracts without any
+      payment yet appear as contracted value in their signature year.</small></p>
+    <div class="cd-chart"><canvas id="yearChart"></canvas></div>
+  </div>
+  {% endif %}
+</section>
 {% endif %}
 
 <section class="section">
@@ -173,4 +204,116 @@
 </section>
 {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+{% if map_data.regions or yearly.years %}
+<style>
+.cd-geo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 1.25rem; align-items: start; }
+.cd-geo h2 { font-size: 1.05rem; margin-bottom: 0.15rem; }
+#cdMap { height: 340px; }
+.cd-chart { position: relative; height: 300px; }
+@media (max-width: 900px) { .cd-geo { grid-template-columns: 1fr; } }
+</style>
+{% if map_data.regions %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endif %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='geo_common.js') }}"></script>
+<script>
+(async function () {
+  const G = window.GeoCommon;
+  const MAPDATA = {{ map_data | tojson }};
+  const YEARLY = {{ yearly | tojson }};
+
+  // ---------- mini-map: home pin + project-region bubbles + connectors ---
+  if (MAPDATA.regions && MAPDATA.regions.length && document.getElementById('cdMap')) {
+    const [geo, centroids] = await Promise.all([
+      fetch("{{ url_for('static', filename='greek_nuts3.geojson') }}").then(r => r.json()),
+      fetch("{{ url_for('static', filename='nuts3_centroids.json') }}").then(r => r.json()),
+    ]);
+    const mine = new Set(MAPDATA.regions.map(r => r.nuts3));
+    const map = G.initPaperMap('cdMap', { zoomControl: false });
+    G.addRegions(map, geo,
+      n => mine.has(n) ? '#fbe9d4' : G.COLORS.landEmpty,
+      null);
+
+    const maxV = Math.max(1, ...MAPDATA.regions.map(r => r.split_eur));
+    const radius = G.makeRadius(maxV, 22);
+    const home = MAPDATA.home && MAPDATA.home.nuts3 ? centroids[MAPDATA.home.nuts3] : null;
+
+    MAPDATA.regions.forEach(r => {
+      const c = centroids[r.nuts3];
+      if (!c) return;
+      if (home && r.nuts3 !== MAPDATA.home.nuts3) {
+        L.polyline([home, c], { pane: 'links', color: G.COLORS.bubbleWorksStroke,
+                                weight: 1, opacity: 0.45, dashArray: '4 3' }).addTo(map);
+      }
+      L.circleMarker(c, {
+        pane: 'bubbles', radius: radius(r.split_eur),
+        fillColor: G.COLORS.bubbleWorks, fillOpacity: 0.82,
+        color: G.COLORS.bubbleWorksStroke, weight: 1.2,
+      }).bindTooltip(G.regionTooltip(r.pes, [
+          G.fmtInt(r.n_contracts) + ' contract(s)',
+          '<strong>' + G.fmtEur(r.split_eur) + '</strong> attributed',
+        ]), { sticky: true, direction: 'top', className: 'gc-tt' }).addTo(map);
+    });
+    if (home) {
+      L.circleMarker(home, { pane: 'pins', radius: 6, fillColor: G.COLORS.homePin,
+                             fillOpacity: 1, color: '#ffffff', weight: 2 })
+        .bindTooltip(G.regionTooltip('Registered seat', [
+            (MAPDATA.home.city || '') + (MAPDATA.home.pe ? ' · ' + MAPDATA.home.pe : ''),
+          ]), { sticky: true, direction: 'top', className: 'gc-tt' }).addTo(map);
+    }
+    const pts = MAPDATA.regions.map(r => centroids[r.nuts3]).filter(Boolean)
+                  .concat(home ? [home] : []);
+    if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.35));
+  }
+
+  // ---------- money per year: paid (solid) + contracted-not-paid (light) --
+  if (YEARLY.years && YEARLY.years.length && document.getElementById('yearChart')) {
+    const css = getComputedStyle(document.documentElement);
+    const mutedColor = css.getPropertyValue('--pico-muted-color').trim() || '#777';
+    const gridColor = css.getPropertyValue('--pico-muted-border-color').trim() || '#ddd';
+    const surface = css.getPropertyValue('--pico-background-color').trim() || '#fff';
+    const hasStated = YEARLY.years.some(y => y.stated_eur > 0);
+    const datasets = [{
+      label: 'Paid (payment orders)',
+      data: YEARLY.years.map(y => y.paid_eur),
+      backgroundColor: '#2a78d6',
+      borderColor: surface, borderWidth: 1,
+      borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: false,
+    }];
+    if (hasStated) datasets.push({
+      label: 'Contracted, no payments yet',
+      data: YEARLY.years.map(y => y.stated_eur),
+      backgroundColor: '#9ec5f4',
+      borderColor: surface, borderWidth: 1,
+      borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: false,
+    });
+    new Chart(document.getElementById('yearChart'), {
+      type: 'bar',
+      data: { labels: YEARLY.years.map(y => y.year), datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: hasStated, labels: { color: mutedColor, boxWidth: 10 } },
+          tooltip: { callbacks: { label: ctx =>
+            ctx.dataset.label + ': ' + G.fmtEur(ctx.parsed.y) } }
+        },
+        scales: {
+          x: { stacked: true, ticks: { color: mutedColor }, grid: { display: false } },
+          y: { stacked: true,
+               ticks: { color: mutedColor,
+                        callback: v => G.fmtEurShort(v) },
+               grid: { color: gridColor }, border: { display: false } }
+        }
+      }
+    });
+  }
+})();
+</script>
+{% endif %}
 {% endblock %}

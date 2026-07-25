@@ -226,6 +226,40 @@ def _search_norm(s: str | None) -> str:
     return normalize_title(stripped)
 
 
+# Ordered rewrite rules mapping both Greeklish queries and (homoglyph-
+# normalised) Greek text into one crude phonetic space, so "evias" finds
+# «Ευβοίας» and "thessalonikis" finds «Θεσσαλονίκης». Digraphs first.
+_PHONETIC_RULES = (
+    ("CH", "X"), ("TH", "8"), ("Θ", "8"),
+    ("EY", "EV"), ("AY", "AV"), ("OY", "U"), ("OU", "U"),
+    ("OI", "I"), ("EI", "I"), ("AI", "E"),
+    ("Γ", "G"), ("Δ", "D"), ("Λ", "L"), ("Ξ", "X"), ("Π", "P"),
+    ("Σ", "S"), ("Φ", "F"), ("Ψ", "PS"), ("Ω", "O"),
+    ("Y", "I"), ("H", "I"), ("B", "V"),
+)
+
+
+def _phonetic_fold(normed: str) -> str:
+    """Fold a _search_norm() output into the shared phonetic space and
+    collapse doubled letters ("EVVIAS" → "EVIAS")."""
+    s = normed
+    for a, b in _PHONETIC_RULES:
+        s = s.replace(a, b)
+    out = []
+    for ch in s:
+        if not out or out[-1] != ch or ch.isdigit():
+            out.append(ch)
+    return "".join(out)
+
+
+def _matches(needle_norm: str, needle_fold: str, *haystacks: str | None) -> bool:
+    for h in haystacks:
+        hn = _search_norm(h)
+        if needle_norm in hn or needle_fold in _phonetic_fold(hn):
+            return True
+    return False
+
+
 def list_contracts(conn: sqlite3.Connection, q: str | None = None) -> list[dict]:
     """All in-scope contracts, newest first, optionally filtered by a free-text
     query matched against the ADAM, the title, the project regions and the
@@ -258,12 +292,11 @@ def list_contracts(conn: sqlite3.Connection, q: str | None = None) -> list[dict]
     out = [dict(r) for r in rows]
     if q:
         needle = _search_norm(q)
+        fold = _phonetic_fold(needle)
         out = [
             r for r in out
-            if needle in _search_norm(r["reference_number"])
-            or needle in _search_norm(r["title"])
-            or needle in _search_norm(r["regions"])
-            or needle in _search_norm(r["contractor_names"])
+            if _matches(needle, fold, r["reference_number"], r["title"],
+                        r["regions"], r["contractor_names"])
         ]
     return out
 
@@ -495,6 +528,21 @@ def contract_project_regions(conn: sqlite3.Connection, adam: str) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def contract_sites(conn: sqlite3.Connection, adam: str) -> list[dict]:
+    """Curated sub-Π.Ε. work sites for one contract (with PDF page evidence)."""
+    has = conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='contract_sites'"
+    ).fetchone()
+    if not has:
+        return []
+    rows = conn.execute(
+        """SELECT site_name, region_pe, page, excerpt
+             FROM contract_sites WHERE reference_number = ? ORDER BY seq""",
+        (adam,),
+    ).fetchall()
+    return [dict(r) for r in rows]
+
+
 def region_flows(
     conn: sqlite3.Connection,
     target_pe: str | None = None,
@@ -650,3 +698,380 @@ def contractor_location(conn: sqlite3.Connection, vat: str) -> dict | None:
         if row is not None:
             return dict(row)
     return None
+
+
+# ---------------------------------------------------------------------------
+# Dashboard analytics: disbursement over time + direct-award distribution
+# ---------------------------------------------------------------------------
+
+def _payment_month(signed_date: str | None) -> str | None:
+    """Normalise the two date formats KHMDHS payments carry — '03/11/2023'
+    and '2026-07-24T00:00:00' — into 'YYYY-MM'. None when absent/unparsable."""
+    if not signed_date:
+        return None
+    s = signed_date.strip()
+    if len(s) >= 10 and s[2] == "/" and s[5] == "/":
+        return f"{s[6:10]}-{s[3:5]}"
+    if len(s) >= 7 and s[4] == "-":
+        return s[:7]
+    return None
+
+
+def disbursement_timeseries(conn: sqlite3.Connection) -> dict:
+    """Cumulative payment-order totals per month, split by programme scope.
+
+    Only non-cancelled payments attributed to in-scope contracts count —
+    the same population as every other aggregate. Undated payments are
+    excluded from the curve and reported in `undated` / `undated_eur`.
+    """
+    if not _has_payments_table(conn) or not _has_scope_table(conn):
+        return {"months": [], "series": {}, "undated": 0, "undated_eur": 0.0}
+    rows = conn.execute(f"""
+        SELECT p.signed_date, p.submission_date, s.scope, p.amount_with_vat
+        FROM contract_payments p
+        JOIN contract_scope s ON s.reference_number = p.attributed_ref
+        WHERE p.cancelled = 0 AND p.attributed_ref IN ({SCOPE_REFS_SUBQUERY})
+    """).fetchall()
+
+    monthly: dict[str, dict[str, float]] = {}
+    undated, undated_eur = 0, 0.0
+    scopes: set[str] = set()
+    for signed_date, submission_date, scope, amount in rows:
+        # signed date preferred; KHMDHS submission date as fallback (~20% of
+        # orders carry no signed date but were registered promptly).
+        month = _payment_month(signed_date) or _payment_month(submission_date)
+        if month is None:
+            undated += 1
+            undated_eur += amount or 0.0
+            continue
+        scopes.add(scope)
+        monthly.setdefault(month, {})
+        monthly[month][scope] = monthly[month].get(scope, 0.0) + (amount or 0.0)
+
+    months = sorted(monthly)
+    series: dict[str, list[float]] = {}
+    for scope in sorted(scopes):
+        total = 0.0
+        acc = []
+        for m in months:
+            total += monthly[m].get(scope, 0.0)
+            acc.append(round(total, 2))
+        series[scope] = acc
+    return {"months": months, "series": series,
+            "undated": undated, "undated_eur": round(undated_eur, 2)}
+
+
+# Bin edges (EUR incl. VAT) for the direct-award histogram. 30k and 60k are
+# deliberately edges: they are the ν.4782/2021 direct-award ceilings
+# (supplies/services and works respectively).
+DIRECT_AWARD_BIN_EDGES = (
+    0, 10_000, 20_000, 30_000, 40_000, 50_000, 60_000, 80_000, 100_000,
+    150_000, 200_000, 300_000, 500_000, 1_000_000, 2_000_000, 5_000_000,
+    10_000_000,
+)
+
+
+def direct_award_distribution(conn: sqlite3.Connection) -> dict:
+    """Histogram of in-scope direct-award contract values (effective)."""
+    rows = conn.execute(f"""
+        SELECT {effective_cost(conn, 'k')} AS v
+        FROM contracts k
+        WHERE {scope_filter(conn, 'k.reference_number')}
+          AND k.procedure_type LIKE 'Απευθείας%'
+    """).fetchall()
+    values = [r[0] or 0.0 for r in rows]
+
+    edges = DIRECT_AWARD_BIN_EDGES
+    counts = [0] * len(edges)          # last bucket = > edges[-1]
+    for v in values:
+        placed = False
+        for i in range(len(edges) - 1):
+            if edges[i] <= v < edges[i + 1]:
+                counts[i] += 1
+                placed = True
+                break
+        if not placed:
+            counts[-1] += 1
+    labels = [f"{edges[i] // 1000}–{edges[i + 1] // 1000}k"
+              for i in range(len(edges) - 1)] + [f">{edges[-1] // 1_000_000}M"]
+    return {"labels": labels, "counts": counts, "edges": list(edges),
+            "n": len(values), "total_eur": round(sum(values), 2),
+            "thresholds": [30_000, 60_000]}
+
+
+# ---------------------------------------------------------------------------
+# Overview page: money geography (even-split convention) + structure charts
+# ---------------------------------------------------------------------------
+# Split convention (user decision, DATA_DECISIONS.md 2026-07-25): a contract's
+# effective value is divided evenly across its N project regions (resp. its
+# located consortium partners) so regions sum to the programme total; each
+# region's full exposure (Σ of whole contracts touching it) is reported
+# alongside. Neither KHMDHS objects nor the contract PDFs itemise per-region
+# amounts, so the split is an explicit estimate.
+
+def money_by_project_region(conn: sqlite3.Connection) -> list[dict]:
+    """Per project NUTS-3 region: contracts, split €, exposure €.
+
+    Aggregated by NUTS-3 code (the map's polygon key) — Π.Ε. sharing a
+    NUTS-3 (e.g. Άρτας + Πρέβεζας = EL541) merge, with all names listed.
+    """
+    rows = conn.execute(f"""
+        SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff,
+               cpr.region_pe, cpr.nuts3_code
+        FROM contracts k
+        JOIN contract_project_regions cpr USING (reference_number)
+        WHERE {scope_filter(conn, 'k.reference_number')}
+    """).fetchall()
+
+    by_contract: dict[str, list] = {}
+    for r in rows:
+        by_contract.setdefault(r["reference_number"], []).append(r)
+
+    agg: dict[str, dict] = {}
+    for regions in by_contract.values():
+        eff = regions[0]["eff"] or 0.0
+        n = len(regions)
+        seen_nuts: set[str] = set()
+        for r in regions:
+            a = agg.setdefault(r["nuts3_code"], {
+                "nuts3": r["nuts3_code"], "pes": set(), "n_contracts": 0,
+                "split_eur": 0.0, "exposure_eur": 0.0,
+            })
+            a["pes"].add(r["region_pe"])
+            a["split_eur"] += eff / n
+            if r["nuts3_code"] not in seen_nuts:
+                seen_nuts.add(r["nuts3_code"])
+                a["n_contracts"] += 1
+                a["exposure_eur"] += eff
+    out = []
+    for a in agg.values():
+        a["pes"] = " · ".join(sorted(a["pes"]))
+        a["split_eur"] = round(a["split_eur"], 2)
+        a["exposure_eur"] = round(a["exposure_eur"], 2)
+        out.append(a)
+    return sorted(out, key=lambda a: -a["split_eur"])
+
+
+def money_by_contractor_region(conn: sqlite3.Connection) -> list[dict]:
+    """Per contractor-home NUTS-3 region: contractors, split €, exposure €.
+
+    Each contract's effective value splits evenly across its *located*
+    partners; the unlocated remainder is reported by flow_coverage().
+    """
+    rows = conn.execute(f"""
+        SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff,
+               c.vat_number, cl.region_pe, cl.nuts3_code
+        FROM contracts k
+        JOIN contractors c USING (reference_number)
+        JOIN contractor_locations cl ON cl.vat_number = c.vat_number
+        WHERE cl.region_pe IS NOT NULL
+          AND {scope_filter(conn, 'k.reference_number')}
+    """).fetchall()
+
+    by_contract: dict[str, list] = {}
+    for r in rows:
+        by_contract.setdefault(r["reference_number"], []).append(r)
+
+    agg: dict[str, dict] = {}
+    contractors_by_nuts: dict[str, set] = {}
+    for partners in by_contract.values():
+        eff = partners[0]["eff"] or 0.0
+        n_located = len({p["vat_number"] for p in partners})
+        seen_nuts: set[str] = set()
+        for p in partners:
+            a = agg.setdefault(p["nuts3_code"], {
+                "nuts3": p["nuts3_code"], "pes": set(), "n_contracts": 0,
+                "split_eur": 0.0, "exposure_eur": 0.0,
+            })
+            a["pes"].add(p["region_pe"])
+            a["split_eur"] += eff / n_located
+            contractors_by_nuts.setdefault(p["nuts3_code"], set()).add(p["vat_number"])
+            if p["nuts3_code"] not in seen_nuts:
+                seen_nuts.add(p["nuts3_code"])
+                a["n_contracts"] += 1
+                a["exposure_eur"] += eff
+    out = []
+    for nuts, a in agg.items():
+        a["pes"] = " · ".join(sorted(a["pes"]))
+        a["n_contractors"] = len(contractors_by_nuts[nuts])
+        a["split_eur"] = round(a["split_eur"], 2)
+        a["exposure_eur"] = round(a["exposure_eur"], 2)
+        out.append(a)
+    return sorted(out, key=lambda a: -a["split_eur"])
+
+
+def _bin_values(values: list[float], edges: tuple) -> dict:
+    """Histogram counts over half-open bins [e_i, e_{i+1}), overflow last."""
+    counts = [0] * len(edges)
+    for v in values:
+        placed = False
+        for i in range(len(edges) - 1):
+            if edges[i] <= v < edges[i + 1]:
+                counts[i] += 1
+                placed = True
+                break
+        if not placed:
+            counts[-1] += 1
+    return {"edges": list(edges), "counts": counts, "n": len(values),
+            "total_eur": round(sum(values), 2)}
+
+
+VALUE_BIN_EDGES = (
+    0, 50_000, 100_000, 200_000, 300_000, 500_000, 750_000, 1_000_000,
+    1_500_000, 2_000_000, 3_000_000, 5_000_000, 8_000_000, 12_000_000,
+)
+
+
+def contract_value_histogram(conn: sqlite3.Connection) -> dict:
+    """Histogram of every in-scope contract's effective value."""
+    values = [r[0] or 0.0 for r in conn.execute(f"""
+        SELECT {effective_cost(conn, 'k')} FROM contracts k
+        WHERE {scope_filter(conn, 'k.reference_number')}
+    """)]
+    h = _bin_values(values, VALUE_BIN_EDGES)
+    values.sort()
+    h["median"] = values[len(values) // 2] if values else 0
+    edges = VALUE_BIN_EDGES
+
+    def short(v):
+        if v >= 1_000_000:
+            m = v / 1_000_000
+            return f"{m:g}M".replace(".", ",")   # 1,5M not 1M
+        return f"{v // 1000}k"
+    h["labels"] = [f"{short(edges[i])}–{short(edges[i + 1])}"
+                   for i in range(len(edges) - 1)] + [f">{short(edges[-1])}"]
+    return h
+
+
+def procedure_mix(conn: sqlite3.Connection) -> list[dict]:
+    """Canonical procedure-type groups with contract counts and effective €.
+
+    KHMDHS stores variants with legal-article suffixes («Απευθείας ανάθεση
+    (αρ.118/αρ. 328)») — collapse them into stable groups.
+    """
+    rows = conn.execute(f"""
+        SELECT k.procedure_type, COUNT(*) AS n,
+               ROUND(SUM({effective_cost(conn, 'k')}), 2) AS eur
+        FROM contracts k
+        WHERE {scope_filter(conn, 'k.reference_number')}
+        GROUP BY k.procedure_type
+    """).fetchall()
+    groups: dict[str, dict] = {}
+    for r in rows:
+        raw = (r["procedure_type"] or "").strip()
+        if raw.startswith("Απευθείας"):
+            label = "Απευθείας ανάθεση"
+        elif "Διαπραγμάτευση" in raw:
+            label = "Διαπραγμάτευση χωρίς δημοσίευση"
+        elif raw.startswith("Ανοιχτή") or raw.startswith("Ανοικτή"):
+            label = "Ανοιχτή διαδικασία"
+        else:
+            label = raw or "Άγνωστη"
+        g = groups.setdefault(label, {"label": label, "n_contracts": 0, "eur": 0.0})
+        g["n_contracts"] += r["n"]
+        g["eur"] = round(g["eur"] + (r["eur"] or 0.0), 2)
+    return sorted(groups.values(), key=lambda g: -g["n_contracts"])
+
+
+# ---------------------------------------------------------------------------
+# Contractor drill-down: map data + money per year
+# ---------------------------------------------------------------------------
+
+def contractor_map_data(conn: sqlite3.Connection, vat: str) -> dict:
+    """Home location + per-project-region split € for one contractor."""
+    home = contractor_location(conn, vat)
+    rows = conn.execute(f"""
+        SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff,
+               cpr.region_pe, cpr.nuts3_code
+        FROM contractors c
+        JOIN contracts k USING (reference_number)
+        JOIN contract_project_regions cpr ON cpr.reference_number = k.reference_number
+        WHERE c.vat_number IN (?, ?)
+          AND {scope_filter(conn, 'k.reference_number')}
+    """, (vat, vat.strip())).fetchall()
+
+    by_contract: dict[str, list] = {}
+    for r in rows:
+        by_contract.setdefault(r["reference_number"], []).append(r)
+    agg: dict[str, dict] = {}
+    for regions in by_contract.values():
+        eff = regions[0]["eff"] or 0.0
+        n = len(regions)
+        seen: set[str] = set()
+        for r in regions:
+            a = agg.setdefault(r["nuts3_code"], {
+                "nuts3": r["nuts3_code"], "pes": set(), "n_contracts": 0,
+                "split_eur": 0.0,
+            })
+            a["pes"].add(r["region_pe"])
+            a["split_eur"] += eff / n
+            if r["nuts3_code"] not in seen:
+                seen.add(r["nuts3_code"])
+                a["n_contracts"] += 1
+    regions_out = []
+    for a in agg.values():
+        a["pes"] = " · ".join(sorted(a["pes"]))
+        a["split_eur"] = round(a["split_eur"], 2)
+        regions_out.append(a)
+    return {
+        "home": {
+            "pe": home.get("region_pe") if home else None,
+            "nuts3": home.get("nuts3_code") if home else None,
+            "city": home.get("city") if home else None,
+        } if home else None,
+        "regions": sorted(regions_out, key=lambda a: -a["split_eur"]),
+    }
+
+
+def _year_of(*dates: str | None) -> str | None:
+    for d in dates:
+        m = _payment_month(d)
+        if m:
+            return m[:4]
+    return None
+
+
+def contractor_yearly(conn: sqlite3.Connection, vat: str) -> dict:
+    """€ per year for one contractor: paid (payment orders) + stated value
+    of contracts that have no payments yet (keyed to their signature year)."""
+    contracts = conn.execute(f"""
+        SELECT k.reference_number, k.contract_signed_date, k.submission_date,
+               k.total_cost_with_vat AS stated,
+               (SELECT COUNT(*) FROM contract_payments p
+                 WHERE p.attributed_ref = k.reference_number AND p.cancelled = 0)
+                 AS n_payments
+        FROM contractors c JOIN contracts k USING (reference_number)
+        WHERE c.vat_number IN (?, ?)
+          AND {scope_filter(conn, 'k.reference_number')}
+    """, (vat, vat.strip())).fetchall() if _has_payments_table(conn) else []
+
+    years: dict[str, dict] = {}
+
+    def bucket(year):
+        return years.setdefault(year, {"year": year, "paid_eur": 0.0,
+                                       "stated_eur": 0.0, "n_payments": 0})
+
+    refs = [r["reference_number"] for r in contracts]
+    if refs:
+        placeholders = ",".join("?" * len(refs))
+        for p in conn.execute(f"""
+            SELECT signed_date, submission_date, amount_with_vat
+            FROM contract_payments
+            WHERE cancelled = 0 AND attributed_ref IN ({placeholders})
+        """, refs):
+            y = _year_of(p["signed_date"], p["submission_date"])
+            if y is None:
+                continue
+            b = bucket(y)
+            b["paid_eur"] += p["amount_with_vat"] or 0.0
+            b["n_payments"] += 1
+    for r in contracts:
+        if r["n_payments"] == 0:
+            y = _year_of(r["contract_signed_date"], r["submission_date"])
+            if y is not None:
+                bucket(y)["stated_eur"] += r["stated"] or 0.0
+    out = sorted(years.values(), key=lambda b: b["year"])
+    for b in out:
+        b["paid_eur"] = round(b["paid_eur"], 2)
+        b["stated_eur"] = round(b["stated_eur"], 2)
+    return {"years": out}

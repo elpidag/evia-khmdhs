@@ -44,7 +44,38 @@ def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -
             top_contractors=queries.top_contractors(g.conn, limit=10),
             top_authorities=queries.top_authorities(g.conn, limit=5),
             top_signers=queries.top_signers(g.conn, limit=5),
+            timeseries=queries.disbursement_timeseries(g.conn),
+            direct_awards=queries.direct_award_distribution(g.conn),
         )
+
+    @app.route("/api/timeseries.json")
+    def api_timeseries():
+        return jsonify(queries.disbursement_timeseries(g.conn))
+
+    @app.route("/overview")
+    def overview():
+        view = (request.args.get("view") or "money_works").strip()
+        if view not in ("works", "contractors", "money_works", "money_home"):
+            view = "money_works"
+        return render_template(
+            "overview.html",
+            view=view,
+            kpis=queries.kpis(g.conn),
+            histogram=queries.contract_value_histogram(g.conn),
+            top_contractors=queries.top_contractors(g.conn, limit=10),
+            top_authorities=queries.top_authorities(g.conn, limit=5),
+            top_signers=queries.top_signers(g.conn, limit=5),
+            procedures=queries.procedure_mix(g.conn),
+            coverage=queries.flow_coverage(g.conn),
+        )
+
+    @app.route("/api/overview.json")
+    def api_overview():
+        return jsonify({
+            "work_regions": queries.money_by_project_region(g.conn),
+            "home_regions": queries.money_by_contractor_region(g.conn),
+            "coverage": queries.flow_coverage(g.conn),
+        })
 
     @app.route("/contractors")
     def contractors_list():
@@ -80,6 +111,8 @@ def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -
             partners=queries.consortium_partners(g.conn, vat),
             signers=queries.contractor_signers(g.conn, vat),
             location=queries.contractor_location(g.conn, vat),
+            map_data=queries.contractor_map_data(g.conn, vat),
+            yearly=queries.contractor_yearly(g.conn, vat),
         )
 
     @app.route("/contract/<adam>")
@@ -91,6 +124,7 @@ def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -
             "contract_detail.html",
             c=d,
             regions=queries.contract_project_regions(g.conn, adam),
+            sites=queries.contract_sites(g.conn, adam),
         )
 
     @app.route("/authorities")

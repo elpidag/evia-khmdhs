@@ -29,12 +29,13 @@ def add_contract(conn, ref, title=None, fund_num=None, prev=None, cancelled=0,
 
 
 def add_payment(conn, pay_ref, contract_ref, eur, attributed_ref=None,
-                cancelled=0, credit=0, eur_no_vat=None):
+                cancelled=0, credit=0, eur_no_vat=None, signed_date="2026-01-01"):
     conn.execute(
         "INSERT INTO contract_payments (payment_ref, contract_ref, attributed_ref, "
         "title, signed_date, cancelled, credit, amount_without_vat, amount_with_vat, fetched_at) "
-        "VALUES (?,?,?, 'ΕΝΤΟΛΗ ΠΛΗΡΩΜΗΣ', '2026-01-01', ?, ?, ?, ?, '2026-01-01T00:00:00')",
-        (pay_ref, contract_ref, attributed_ref or contract_ref, cancelled, credit,
+        "VALUES (?,?,?, 'ΕΝΤΟΛΗ ΠΛΗΡΩΜΗΣ', ?, ?, ?, ?, ?, '2026-01-01T00:00:00')",
+        (pay_ref, contract_ref, attributed_ref or contract_ref, signed_date,
+         cancelled, credit,
          eur_no_vat if eur_no_vat is not None else eur, eur),
     )
 
