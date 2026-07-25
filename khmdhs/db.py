@@ -147,6 +147,35 @@ CREATE TABLE IF NOT EXISTS contract_sites (
     FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
 );
 
+-- Forest authorities (Διευθύνσεις Δασών / Δασαρχεία) from the curated
+-- registry khmdhs/data/forest_authorities.json; coordinates are the seat
+-- municipality's centroid (khmdhs/data/greek_municipalities.json, ΥΠΕΣ code).
+CREATE TABLE IF NOT EXISTS forest_authorities (
+    name              TEXT PRIMARY KEY,
+    kind              TEXT NOT NULL,        -- 'dd' | 'dx'
+    seat_city         TEXT,
+    municipality_code TEXT,
+    municipality_name TEXT,
+    lat               REAL,
+    lon               REAL,
+    region_pe         TEXT
+);
+
+-- Which authority(ies) each contract's works fall under, extracted by the
+-- whitelist matcher in forest_loader (source records how: title/objects/pdf/
+-- override/inherited:<ref>); excerpt keeps the matched evidence citable.
+CREATE TABLE IF NOT EXISTS contract_forest_authorities (
+    reference_number TEXT NOT NULL,
+    seq              INTEGER NOT NULL,
+    authority_name   TEXT NOT NULL,
+    source           TEXT NOT NULL,
+    excerpt          TEXT,
+    PRIMARY KEY (reference_number, seq),
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_cfa_authority ON contract_forest_authorities(authority_name);
+
 -- Payment orders (##PAY#########) linked to contracts. `contract_ref` is the
 -- contract whose API payload listed the payment in `paymentRefNo`;
 -- `attributed_ref` is the final contract of that contract's supersede chain
@@ -184,6 +213,9 @@ CREATE TABLE IF NOT EXISTS contractor_locations (
     region_pe    TEXT,
     nuts3_code   TEXT,
     gemi         TEXT,
+    lat          REAL,
+    lon          REAL,
+    geo_precision TEXT,   -- 'address' | 'municipality' (see geocode_loader)
     source       TEXT NOT NULL,
     source_url   TEXT,
     notes        TEXT,
@@ -202,7 +234,12 @@ def init_db(path: Path) -> sqlite3.Connection:
     conn.executescript(SCHEMA_SQL)
     # Columns added after a table already exists in deployed DBs
     # (CREATE TABLE IF NOT EXISTS won't alter them).
-    for table, column, decl in (("contractor_locations", "gemi", "TEXT"),):
+    for table, column, decl in (
+        ("contractor_locations", "gemi", "TEXT"),
+        ("contractor_locations", "lat", "REAL"),
+        ("contractor_locations", "lon", "REAL"),
+        ("contractor_locations", "geo_precision", "TEXT"),
+    ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
         except sqlite3.OperationalError:

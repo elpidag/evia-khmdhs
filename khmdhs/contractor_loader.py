@@ -65,11 +65,14 @@ def main(argv: list[str] | None = None) -> int:
             conn.execute(
                 """INSERT OR REPLACE INTO contractor_locations
                    (vat_number, legal_name, address, postal_code, city, region_pe,
-                    nuts3_code, gemi, source, source_url, notes, curated_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    nuts3_code, gemi, lat, lon, geo_precision,
+                    source, source_url, notes, curated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (vat, d.get("legal_name"), d.get("address"), d.get("postal_code"),
-                 d.get("city"), pe, nuts3, d.get("gemi"), d.get("source"),
-                 d.get("source_url"), d.get("notes"), d.get("curated_at")),
+                 d.get("city"), pe, nuts3, d.get("gemi"),
+                 d.get("lat"), d.get("lon"), d.get("geo_precision"),
+                 d.get("source"), d.get("source_url"), d.get("notes"),
+                 d.get("curated_at")),
             )
     logging.info("Done. Wrote %d contractor_locations rows.", n)
     conn.close()

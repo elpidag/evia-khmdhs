@@ -30,7 +30,7 @@ from pathlib import Path
 
 import requests
 
-from khmdhs import chain_loader, payment_loader, region_loader, scope_loader
+from khmdhs import chain_loader, forest_loader, payment_loader, region_loader, scope_loader
 from khmdhs.api import fetch_contract
 from khmdhs.config import DATA_PROCESSED, DEFAULT_DB, THROTTLE_SECONDS
 from khmdhs.db import init_db, upsert_contract
@@ -87,7 +87,40 @@ def curation_todos(conn: sqlite3.Connection, refs: list[str] | None = None) -> l
             todos.append(f"{ref}: in scope but no curated regions (contract_regions.json)")
         if scope in ("antinero_unknown_phase",) or basis == "no_antinero_evidence":
             todos.append(f"{ref}: scope needs review ({scope}; {basis})")
+        if in_scope and _has_forest_tables(conn):
+            n_auth = conn.execute(
+                "SELECT COUNT(*) FROM contract_forest_authorities WHERE reference_number = ?",
+                (ref,)).fetchone()[0]
+            if n_auth == 0 and not _forest_no_authority(conn, ref):
+                todos.append(f"{ref}: in scope but no forest authority "
+                             f"(forest_authorities.json aliases/overrides)")
     return todos
+
+
+def _has_forest_tables(conn: sqlite3.Connection) -> bool:
+    return conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND "
+                        "name='contract_forest_authorities'").fetchone() is not None
+
+
+def _forest_no_authority(conn: sqlite3.Connection, ref: str) -> bool:
+    """True when the registry documents the contract as genuinely
+    authority-less — directly or inherited through its prev-link chain."""
+    try:
+        registry, _ = forest_loader.load_registry()
+    except SystemExit:
+        return False
+    documented = set(registry.get("no_authority", {}))
+    seen: set[str] = set()
+    cur: str | None = ref
+    while cur and cur not in seen:
+        if cur in documented:
+            return True
+        seen.add(cur)
+        row = conn.execute(
+            "SELECT prev_reference_no FROM contracts WHERE reference_number = ?",
+            (cur,)).fetchone()
+        cur = row[0] if row else None
+    return False
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -150,6 +183,8 @@ def main(argv: list[str] | None = None) -> int:
         scope_loader.main(db_argv)
         print("\n-- region_loader -----------------------------------------------")
         region_loader.main(db_argv)
+        print("\n-- forest_loader -----------------------------------------------")
+        forest_loader.main(db_argv)
         print("\n-- payment_loader ----------------------------------------------")
         payment_loader.main(db_argv)
 

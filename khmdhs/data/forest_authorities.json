@@ -1,0 +1,1098 @@
+{
+  "_comment": "Hand-curated registry of the Διευθύνσεις Δασών (dd) / Δασαρχεία (dx) observed in Anti-nero contract texts. aliases = genitive forms as they appear after trigger words (incl. registry typos); municipality_code joins khmdhs/data/greek_municipalities.json (ΥΠΕΣ Kallikratis code) for the seat coordinates; region_pe = the Π.Ε. of the seat. contract_overrides pin authorities for contracts whose text names none; no_authority documents contracts that genuinely name no forest authority (region-scoped works) — never guessed.",
+  "authorities": {
+    "Διεύθυνση Δασών Αθηνών": {
+      "kind": "dd",
+      "aliases": [
+        "ΑΘΗΝΩΝ"
+      ],
+      "seat_city": "Αθήνα",
+      "municipality": "Αθηναίων",
+      "municipality_code": "9186",
+      "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών"
+    },
+    "Διεύθυνση Δασών Αργολίδας": {
+      "kind": "dd",
+      "aliases": [
+        "ΑΡΓΟΛΙΔΑΣ"
+      ],
+      "seat_city": "Ναύπλιο",
+      "municipality": "Ναυπλιέων",
+      "municipality_code": "9236",
+      "region_pe": "Π.Ε. Αργολίδας"
+    },
+    "Διεύθυνση Δασών Άρτας": {
+      "kind": "dd",
+      "aliases": [
+        "ΑΡΤΑΣ"
+      ],
+      "seat_city": "Άρτα",
+      "municipality": "Αρταίων",
+      "municipality_code": "9073",
+      "region_pe": "Π.Ε. Άρτας"
+    },
+    "Διεύθυνση Δασών Γρεβενών": {
+      "kind": "dd",
+      "aliases": [
+        "ΓΡΕΒΕΝΩΝ"
+      ],
+      "seat_city": "Γρεβενά",
+      "municipality": "Γρεβενών",
+      "municipality_code": "9061",
+      "region_pe": "Π.Ε. Γρεβενών"
+    },
+    "Διεύθυνση Δασών Δωδεκανήσου": {
+      "kind": "dd",
+      "aliases": [
+        "ΔΩΔΕΚΑΝΗΣΟΥ"
+      ],
+      "seat_city": "Ρόδος",
+      "municipality": "Ρόδου",
+      "municipality_code": "9296",
+      "region_pe": "Π.Ε. Ρόδου"
+    },
+    "Διεύθυνση Δασών Έβρου": {
+      "kind": "dd",
+      "aliases": [
+        "ΕΒΡΟΥ"
+      ],
+      "seat_city": "Αλεξανδρούπολη",
+      "municipality": "Αλεξανδρούπολης",
+      "municipality_code": "9006",
+      "region_pe": "Π.Ε. Έβρου"
+    },
+    "Διεύθυνση Δασών Ζακύνθου": {
+      "kind": "dd",
+      "aliases": [
+        "ΖΑΚΥΝΘΟΥ"
+      ],
+      "seat_city": "Ζάκυνθος",
+      "municipality": "Ζακύνθου",
+      "municipality_code": "9116",
+      "region_pe": "Π.Ε. Ζακύνθου"
+    },
+    "Διεύθυνση Δασών Ημαθίας": {
+      "kind": "dd",
+      "aliases": [
+        "ΗΜΑΘΙΑΣ"
+      ],
+      "seat_city": "Βέροια",
+      "municipality": "Βέροιας",
+      "municipality_code": "9024",
+      "region_pe": "Π.Ε. Ημαθίας"
+    },
+    "Διεύθυνση Δασών Ηρακλείου": {
+      "kind": "dd",
+      "aliases": [
+        "ΗΡΑΚΛΕΙΟΥ"
+      ],
+      "seat_city": "Ηράκλειο",
+      "municipality": "Ηρακλείου",
+      "municipality_code": "9170",
+      "region_pe": "Π.Ε. Ηρακλείου"
+    },
+    "Διεύθυνση Δασών Θεσπρωτίας": {
+      "kind": "dd",
+      "aliases": [
+        "ΘΕΣΠΡΩΤΙΑΣ"
+      ],
+      "seat_city": "Ηγουμενίτσα",
+      "municipality": "Ηγουμενίτσας",
+      "municipality_code": "9077",
+      "region_pe": "Π.Ε. Θεσπρωτίας"
+    },
+    "Διεύθυνση Δασών Καστοριάς": {
+      "kind": "dd",
+      "aliases": [
+        "ΚΑΣΤΟΡΙΑΣ"
+      ],
+      "seat_city": "Καστοριά",
+      "municipality": "Καστοριάς",
+      "municipality_code": "9063",
+      "region_pe": "Π.Ε. Καστοριάς"
+    },
+    "Διεύθυνση Δασών Κέρκυρας": {
+      "kind": "dd",
+      "aliases": [
+        "ΚΕΡΚΥΡΑΣ"
+      ],
+      "seat_city": "Κέρκυρα",
+      "municipality": "Κέρκυρας",
+      "municipality_code": "9118",
+      "region_pe": "Π.Ε. Κέρκυρας"
+    },
+    "Διεύθυνση Δασών Κεφαλληνίας": {
+      "kind": "dd",
+      "aliases": [
+        "ΚΕΦΑΛΛΗΝΙΑΣ"
+      ],
+      "seat_city": "Αργοστόλι",
+      "municipality": "Κεφαλονιάς",
+      "municipality_code": "9120",
+      "region_pe": "Π.Ε. Κεφαλληνίας"
+    },
+    "Διεύθυνση Δασών Λάρισας": {
+      "kind": "dd",
+      "aliases": [
+        "ΛΑΡΙΣΑΣ"
+      ],
+      "seat_city": "Λάρισα",
+      "municipality": "Λαρισαίων",
+      "municipality_code": "9100",
+      "region_pe": "Π.Ε. Λάρισας"
+    },
+    "Διεύθυνση Δασών Λασιθίου": {
+      "kind": "dd",
+      "aliases": [
+        "ΛΑΣΙΘΙΟΥ"
+      ],
+      "seat_city": "Άγιος Νικόλαος",
+      "municipality": "Αγίου Νικολάου",
+      "municipality_code": "9310",
+      "region_pe": "Π.Ε. Λασιθίου"
+    },
+    "Διεύθυνση Δασών Λέσβου": {
+      "kind": "dd",
+      "aliases": [
+        "ΛΕΣΒΟΥ"
+      ],
+      "seat_city": "Μυτιλήνη",
+      "municipality": "Λέσβου",
+      "municipality_code": "9261",
+      "region_pe": "Π.Ε. Λέσβου"
+    },
+    "Διεύθυνση Δασών Λευκάδας": {
+      "kind": "dd",
+      "aliases": [
+        "ΛΕΥΚΑΔΑΣ"
+      ],
+      "seat_city": "Λευκάδα",
+      "municipality": "Λευκάδας",
+      "municipality_code": "9121",
+      "region_pe": "Π.Ε. Λευκάδας"
+    },
+    "Διεύθυνση Δασών Πιερίας": {
+      "kind": "dd",
+      "aliases": [
+        "ΠΙΕΡΙΑΣ"
+      ],
+      "seat_city": "Κατερίνη",
+      "municipality": "Κατερίνης",
+      "municipality_code": "9047",
+      "region_pe": "Π.Ε. Πιερίας"
+    },
+    "Διεύθυνση Δασών Πρέβεζας": {
+      "kind": "dd",
+      "aliases": [
+        "ΠΡΕΒΕΖΑΣ"
+      ],
+      "seat_city": "Πρέβεζα",
+      "municipality": "Πρέβεζας",
+      "municipality_code": "9090",
+      "region_pe": "Π.Ε. Πρέβεζας"
+    },
+    "Διεύθυνση Δασών Ρεθύμνου": {
+      "kind": "dd",
+      "aliases": [
+        "ΡΕΘΥΜΝΟΥ"
+      ],
+      "seat_city": "Ρέθυμνο",
+      "municipality": "Ρεθύμνης",
+      "municipality_code": "9318",
+      "region_pe": "Π.Ε. Ρεθύμνου"
+    },
+    "Διεύθυνση Δασών Ροδόπης": {
+      "kind": "dd",
+      "aliases": [
+        "ΡΟΔΟΠΗΣ"
+      ],
+      "seat_city": "Κομοτηνή",
+      "municipality": "Κομοτηνής",
+      "municipality_code": "9021",
+      "region_pe": "Π.Ε. Ροδόπης"
+    },
+    "Διεύθυνση Δασών Σάμου": {
+      "kind": "dd",
+      "aliases": [
+        "ΣΑΜΟΥ"
+      ],
+      "seat_city": "Σάμος",
+      "municipality": "Σάμου",
+      "municipality_code": "9264",
+      "region_pe": "Π.Ε. Σάμου"
+    },
+    "Διεύθυνση Δασών Φλώρινας": {
+      "kind": "dd",
+      "aliases": [
+        "ΦΛΩΡΙΝΑΣ"
+      ],
+      "seat_city": "Φλώρινα",
+      "municipality": "Φλώρινας",
+      "municipality_code": "9072",
+      "region_pe": "Π.Ε. Φλώρινας"
+    },
+    "Διεύθυνση Δασών Φωκίδας": {
+      "kind": "dd",
+      "aliases": [
+        "ΦΩΚΙΔΑΣ"
+      ],
+      "seat_city": "Άμφισσα",
+      "municipality": "Δελφών",
+      "municipality_code": "9165",
+      "region_pe": "Π.Ε. Φωκίδας"
+    },
+    "Διεύθυνση Δασών Χανίων": {
+      "kind": "dd",
+      "aliases": [
+        "ΧΑΝΙΩΝ"
+      ],
+      "seat_city": "Χανιά",
+      "municipality": "Χανίων",
+      "municipality_code": "9325",
+      "region_pe": "Π.Ε. Χανίων"
+    },
+    "Διεύθυνση Δασών Χίου": {
+      "kind": "dd",
+      "aliases": [
+        "ΧΙΟΥ"
+      ],
+      "seat_city": "Χίος",
+      "municipality": "Χίου",
+      "municipality_code": "9266",
+      "region_pe": "Π.Ε. Χίου"
+    },
+    "Δασαρχείο Αγιάς": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΓΙΑΣ"
+      ],
+      "seat_city": "Αγιά",
+      "municipality": "Αγιάς",
+      "municipality_code": "9097",
+      "region_pe": "Π.Ε. Λάρισας"
+    },
+    "Δασαρχείο Αγρινίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΓΡΙΝΙΟΥ"
+      ],
+      "seat_city": "Αγρίνιο",
+      "municipality": "Αγρινίου",
+      "municipality_code": "9123",
+      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
+    },
+    "Δασαρχείο Αιγάλεω": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΙΓΑΛΕΩ"
+      ],
+      "seat_city": "Αιγάλεω",
+      "municipality": "Αιγάλεω",
+      "municipality_code": "9181",
+      "region_pe": "Π.Ε. Δυτικού Τομέα Αθηνών"
+    },
+    "Δασαρχείο Αιγίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΙΓΙΟΥ"
+      ],
+      "seat_city": "Αίγιο",
+      "municipality": "Αιγιαλείας",
+      "municipality_code": "9130",
+      "region_pe": "Π.Ε. Αχαΐας"
+    },
+    "Δασαρχείο Αλεξανδρούπολης": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+        "ΑΞΑΝΔΡΟΥΠΟΛΗΣ"
+      ],
+      "seat_city": "Αλεξανδρούπολη",
+      "municipality": "Αλεξανδρούπολης",
+      "municipality_code": "9006",
+      "region_pe": "Π.Ε. Έβρου"
+    },
+    "Δασαρχείο Αλιβερίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΛΙΒΕΡΙΟΥ"
+      ],
+      "seat_city": "Αλιβέρι",
+      "municipality": "Κύμης - Αλιβερίου",
+      "municipality_code": "9152",
+      "region_pe": "Π.Ε. Ευβοίας"
+    },
+    "Δασαρχείο Αλμυρού": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΛΜΥΡΟΥ"
+      ],
+      "seat_city": "Αλμυρός",
+      "municipality": "Αλμυρού",
+      "municipality_code": "9104",
+      "region_pe": "Π.Ε. Μαγνησίας"
+    },
+    "Δασαρχείο Αμαλιάδας": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΜΑΛΙΑΔΑΣ"
+      ],
+      "seat_city": "Αμαλιάδα",
+      "municipality": "Ήλιδας",
+      "municipality_code": "9139",
+      "region_pe": "Π.Ε. Ηλείας"
+    },
+    "Δασαρχείο Αμφιλοχίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΜΦΙΛΟΧΙΑΣ"
+      ],
+      "seat_city": "Αμφιλοχία",
+      "municipality": "Αμφιλοχίας",
+      "municipality_code": "9125",
+      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
+    },
+    "Δασαρχείο Άμφισσας": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΜΦΙΣΣΑΣ"
+      ],
+      "seat_city": "Άμφισσα",
+      "municipality": "Δελφών",
+      "municipality_code": "9165",
+      "region_pe": "Π.Ε. Φωκίδας"
+    },
+    "Δασαρχείο Αριδαίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΡΙΔΑΙΑΣ"
+      ],
+      "seat_city": "Αριδαία",
+      "municipality": "Αλμωπίας",
+      "municipality_code": "9042",
+      "region_pe": "Π.Ε. Πέλλας"
+    },
+    "Δασαρχείο Αρναίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΡΝΑΙΑΣ"
+      ],
+      "seat_city": "Αρναία",
+      "municipality": "Αριστοτέλη",
+      "municipality_code": "9056",
+      "region_pe": "Π.Ε. Χαλκιδικής"
+    },
+    "Δασαρχείο Αταλάντης": {
+      "kind": "dx",
+      "aliases": [
+        "ΑΤΑΛΑΝΤΗΣ"
+      ],
+      "seat_city": "Αταλάντη",
+      "municipality": "Λοκρών",
+      "municipality_code": "9161",
+      "region_pe": "Π.Ε. Φθιώτιδας"
+    },
+    "Δασαρχείο Βέροιας": {
+      "kind": "dx",
+      "aliases": [
+        "ΒΕΡΟΙΑΣ"
+      ],
+      "seat_city": "Βέροια",
+      "municipality": "Βέροιας",
+      "municipality_code": "9024",
+      "region_pe": "Π.Ε. Ημαθίας"
+    },
+    "Δασαρχείο Βόλου": {
+      "kind": "dx",
+      "aliases": [
+        "ΒΟΛΟΥ"
+      ],
+      "seat_city": "Βόλος",
+      "municipality": "Βόλου",
+      "municipality_code": "9105",
+      "region_pe": "Π.Ε. Μαγνησίας"
+    },
+    "Δασαρχείο Βυτίνας": {
+      "kind": "dx",
+      "aliases": [
+        "ΒΥΤΙΝΑΣ"
+      ],
+      "seat_city": "Βυτίνα",
+      "municipality": "Γορτυνίας",
+      "municipality_code": "9238",
+      "region_pe": "Π.Ε. Αρκαδίας"
+    },
+    "Δασαρχείο Γουμένισσας": {
+      "kind": "dx",
+      "aliases": [
+        "ΓΟΥΜΕΝΙΣΣΑΣ"
+      ],
+      "seat_city": "Γουμένισσα",
+      "municipality": "Παιονίας",
+      "municipality_code": "9041",
+      "region_pe": "Π.Ε. Κιλκίς"
+    },
+    "Δασαρχείο Διδυμοτείχου": {
+      "kind": "dx",
+      "aliases": [
+        "ΔΙΔΥΜΟΤΕΙΧΟΥ",
+        "ΔΙΔ ΤΕΙΧΟΥ"
+      ],
+      "seat_city": "Διδυμότειχο",
+      "municipality": "Διδυμοτείχου",
+      "municipality_code": "9007",
+      "region_pe": "Π.Ε. Έβρου"
+    },
+    "Δασαρχείο Δράμας": {
+      "kind": "dx",
+      "aliases": [
+        "ΔΡΑΜΑΣ"
+      ],
+      "seat_city": "Δράμα",
+      "municipality": "Δράμας",
+      "municipality_code": "9002",
+      "region_pe": "Π.Ε. Δράμας"
+    },
+    "Δασαρχείο Έδεσσας": {
+      "kind": "dx",
+      "aliases": [
+        "ΕΔΕΣΣΑΣ"
+      ],
+      "seat_city": "Έδεσσα",
+      "municipality": "Έδεσσας",
+      "municipality_code": "9043",
+      "region_pe": "Π.Ε. Πέλλας"
+    },
+    "Δασαρχείο Ελασσόνας": {
+      "kind": "dx",
+      "aliases": [
+        "ΕΛΑΣΣΟΝΑΣ"
+      ],
+      "seat_city": "Ελασσόνα",
+      "municipality": "Ελασσόνας",
+      "municipality_code": "9098",
+      "region_pe": "Π.Ε. Λάρισας"
+    },
+    "Δασαρχείο Θάσου": {
+      "kind": "dx",
+      "aliases": [
+        "ΘΑΣΟΥ"
+      ],
+      "seat_city": "Θάσος",
+      "municipality": "Θάσου",
+      "municipality_code": "9011",
+      "region_pe": "Π.Ε. Θάσου"
+    },
+    "Δασαρχείο Θεσσαλονίκης": {
+      "kind": "dx",
+      "aliases": [
+        "ΘΕΣΣΑΛΟΝΙΚΗΣ"
+      ],
+      "seat_city": "Θεσσαλονίκη",
+      "municipality": "Θεσσαλονίκης",
+      "municipality_code": "9031",
+      "region_pe": "Π.Ε. Θεσσαλονίκης"
+    },
+    "Δασαρχείο Θηβών": {
+      "kind": "dx",
+      "aliases": [
+        "ΘΗΒΩΝ",
+        "ΘΗΒΑΣ"
+      ],
+      "seat_city": "Θήβα",
+      "municipality": "Θηβαίων",
+      "municipality_code": "9144",
+      "region_pe": "Π.Ε. Βοιωτίας"
+    },
+    "Δασαρχείο Ιστιαίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΙΣΤΙΑΙΑΣ"
+      ],
+      "seat_city": "Ιστιαία",
+      "municipality": "Ιστιαίας - Αιδηψού",
+      "municipality_code": "9150",
+      "region_pe": "Π.Ε. Ευβοίας"
+    },
+    "Δασαρχείο Ιωαννίνων": {
+      "kind": "dx",
+      "aliases": [
+        "ΙΩΑΝΝΙΝΩΝ"
+      ],
+      "seat_city": "Ιωάννινα",
+      "municipality": "Ιωαννιτών",
+      "municipality_code": "9084",
+      "region_pe": "Π.Ε. Ιωαννίνων"
+    },
+    "Δασαρχείο Καβάλας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΑΒΑΛΑΣ"
+      ],
+      "seat_city": "Καβάλα",
+      "municipality": "Καβάλας",
+      "municipality_code": "9012",
+      "region_pe": "Π.Ε. Καβάλας"
+    },
+    "Δασαρχείο Καλαμάτας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΑΛΑΜΑΤΑΣ"
+      ],
+      "seat_city": "Καλαμάτα",
+      "municipality": "Καλαμάτας",
+      "municipality_code": "9254",
+      "region_pe": "Π.Ε. Μεσσηνίας"
+    },
+    "Δασαρχείο Καλαμπάκας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΑΛΑΜΠΑΚΑΣ"
+      ],
+      "seat_city": "Καλαμπάκα",
+      "municipality": "Καλαμπάκας",
+      "municipality_code": "9112",
+      "region_pe": "Π.Ε. Τρικάλων"
+    },
+    "Δασαρχείο Καπανδριτίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΑΠΑΝΔΡΙΤΙΟΥ"
+      ],
+      "seat_city": "Καπανδρίτι",
+      "municipality": "Ωρωπού",
+      "municipality_code": "9227",
+      "region_pe": "Π.Ε. Ανατολικής Αττικής"
+    },
+    "Δασαρχείο Καρδίτσας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΑΡΔΙΤΣΑΣ"
+      ],
+      "seat_city": "Καρδίτσα",
+      "municipality": "Καρδίτσας",
+      "municipality_code": "9092",
+      "region_pe": "Π.Ε. Καρδίτσας"
+    },
+    "Δασαρχείο Καρπενησίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΑΡΠΕΝΗΣΙΟΥ"
+      ],
+      "seat_city": "Καρπενήσι",
+      "municipality": "Καρπενησίου",
+      "municipality_code": "9157",
+      "region_pe": "Π.Ε. Ευρυτανίας"
+    },
+    "Δασαρχείο Κασσάνδρας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΑΣΣΑΝΔΡΑΣ"
+      ],
+      "seat_city": "Κασσάνδρεια",
+      "municipality": "Κασσάνδρας",
+      "municipality_code": "9057",
+      "region_pe": "Π.Ε. Χαλκιδικής"
+    },
+    "Δασαρχείο Κιλκίς": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΙΛΚΙΣ"
+      ],
+      "seat_city": "Κιλκίς",
+      "municipality": "Κιλκίς",
+      "municipality_code": "9040",
+      "region_pe": "Π.Ε. Κιλκίς"
+    },
+    "Δασαρχείο Κοζάνης": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΟΖΑΝΗΣ"
+      ],
+      "seat_city": "Κοζάνη",
+      "municipality": "Κοζάνης",
+      "municipality_code": "9068",
+      "region_pe": "Π.Ε. Κοζάνης"
+    },
+    "Δασαρχείο Κόνιτσας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΟΝΙΤΣΑΣ"
+      ],
+      "seat_city": "Κόνιτσα",
+      "municipality": "Κόνιτσας",
+      "municipality_code": "9085",
+      "region_pe": "Π.Ε. Ιωαννίνων"
+    },
+    "Δασαρχείο Κορίνθου": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΟΡΙΝΘΟΥ",
+        "ΚΟΡΙΝΘΙΑΣ"
+      ],
+      "seat_city": "Κόρινθος",
+      "municipality": "Κορινθίων",
+      "municipality_code": "9243",
+      "region_pe": "Π.Ε. Κορινθίας"
+    },
+    "Δασαρχείο Κυνουρίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΥΝΟΥΡΙΑΣ"
+      ],
+      "seat_city": "Άστρος",
+      "municipality": "Βόρειας Κυνουρίας",
+      "municipality_code": "9237",
+      "region_pe": "Π.Ε. Αρκαδίας"
+    },
+    "Δασαρχείο Κυπαρισσίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΚΥΠΑΡΙΣΣΙΑΣ"
+      ],
+      "seat_city": "Κυπαρισσία",
+      "municipality": "Τριφυλίας",
+      "municipality_code": "9258",
+      "region_pe": "Π.Ε. Μεσσηνίας"
+    },
+    "Δασαρχείο Λαγκαδά": {
+      "kind": "dx",
+      "aliases": [
+        "ΛΑΓΚΑΔΑ"
+      ],
+      "seat_city": "Λαγκαδάς",
+      "municipality": "Λαγκαδά",
+      "municipality_code": "9034",
+      "region_pe": "Π.Ε. Θεσσαλονίκης"
+    },
+    "Δασαρχείο Λαμίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΛΑΜΙΑΣ"
+      ],
+      "seat_city": "Λαμία",
+      "municipality": "Λαμιέων",
+      "municipality_code": "9160",
+      "region_pe": "Π.Ε. Φθιώτιδας"
+    },
+    "Δασαρχείο Λάρισας": {
+      "kind": "dx",
+      "aliases": [
+        "ΛΑΡΙΣΑΣ"
+      ],
+      "seat_city": "Λάρισα",
+      "municipality": "Λαρισαίων",
+      "municipality_code": "9100",
+      "region_pe": "Π.Ε. Λάρισας"
+    },
+    "Δασαρχείο Λαυρίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΛΑΥΡΙΟΥ"
+      ],
+      "seat_city": "Λαύριο",
+      "municipality": "Λαυρεωτικής",
+      "municipality_code": "9219",
+      "region_pe": "Π.Ε. Ανατολικής Αττικής"
+    },
+    "Δασαρχείο Λιβαδειάς": {
+      "kind": "dx",
+      "aliases": [
+        "ΛΙΒΑΔΕΙΑΣ",
+        "ΛΕΙΒΑΔΙΑΣ"
+      ],
+      "seat_city": "Λιβαδειά",
+      "municipality": "Λεβαδέων",
+      "municipality_code": "9145",
+      "region_pe": "Π.Ε. Βοιωτίας"
+    },
+    "Δασαρχείο Λιδωρικίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΛΙΔΩΡΙΚΙΟΥ"
+      ],
+      "seat_city": "Λιδωρίκι",
+      "municipality": "Δωρίδος",
+      "municipality_code": "9166",
+      "region_pe": "Π.Ε. Φωκίδας"
+    },
+    "Δασαρχείο Λίμνης": {
+      "kind": "dx",
+      "aliases": [
+        "ΛΙΜΝΗΣ"
+      ],
+      "seat_city": "Λίμνη",
+      "municipality": "Μαντουδίου - Λίμνης - Αγίας Άννας",
+      "municipality_code": "9153",
+      "region_pe": "Π.Ε. Ευβοίας"
+    },
+    "Δασαρχείο Μεγάρων": {
+      "kind": "dx",
+      "aliases": [
+        "ΜΕΓΑΡΩΝ"
+      ],
+      "seat_city": "Μέγαρα",
+      "municipality": "Μεγαρέων",
+      "municipality_code": "9231",
+      "region_pe": "Π.Ε. Δυτικής Αττικής"
+    },
+    "Δασαρχείο Μεσολογγίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΜΕΣΟΛΟΓΓΙΟΥ"
+      ],
+      "seat_city": "Μεσολόγγι",
+      "municipality": "Ιεράς Πόλης Μεσολογγίου",
+      "municipality_code": "9127",
+      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
+    },
+    "Δασαρχείο Μετσόβου": {
+      "kind": "dx",
+      "aliases": [
+        "ΜΕΤΣΟΒΟΥ"
+      ],
+      "seat_city": "Μέτσοβο",
+      "municipality": "Μετσόβου",
+      "municipality_code": "9086",
+      "region_pe": "Π.Ε. Ιωαννίνων"
+    },
+    "Δασαρχείο Μουζακίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΜΟΥΖΑΚΙΟΥ"
+      ],
+      "seat_city": "Μουζάκι",
+      "municipality": "Μουζακίου",
+      "municipality_code": "9094",
+      "region_pe": "Π.Ε. Καρδίτσας"
+    },
+    "Δασαρχείο Ναυπάκτου": {
+      "kind": "dx",
+      "aliases": [
+        "ΝΑΥΠΑΚΤΟΥ"
+      ],
+      "seat_city": "Ναύπακτος",
+      "municipality": "Ναυπακτίας",
+      "municipality_code": "9128",
+      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
+    },
+    "Δασαρχείο Νευροκοπίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΝΕΥΡΟΚΟΠΙΟΥ",
+        "Κ.ΝΕΥΡΟΚΟΠΙΟΥ",
+        "Κ. ΝΕΥΡΟΚΟΠΙΟΥ"
+      ],
+      "seat_city": "Κάτω Νευροκόπι",
+      "municipality": "Κάτω Νευροκοπίου",
+      "municipality_code": "9003",
+      "region_pe": "Π.Ε. Δράμας"
+    },
+    "Δασαρχείο Νιγρίτας": {
+      "kind": "dx",
+      "aliases": [
+        "ΝΙΓΡΙΤΑΣ"
+      ],
+      "seat_city": "Νιγρίτα",
+      "municipality": "Βισαλτίας",
+      "municipality_code": "9050",
+      "region_pe": "Π.Ε. Σερρών"
+    },
+    "Δασαρχείο Ξάνθης": {
+      "kind": "dx",
+      "aliases": [
+        "ΞΑΝΘΗΣ"
+      ],
+      "seat_city": "Ξάνθη",
+      "municipality": "Ξάνθης",
+      "municipality_code": "9017",
+      "region_pe": "Π.Ε. Ξάνθης"
+    },
+    "Δασαρχείο Ξυλοκάστρου": {
+      "kind": "dx",
+      "aliases": [
+        "ΞΥΛΟΚΑΣΤΡΟΥ"
+      ],
+      "seat_city": "Ξυλόκαστρο",
+      "municipality": "Ξυλοκάστρου - Ευρωστίνης",
+      "municipality_code": "9246",
+      "region_pe": "Π.Ε. Κορινθίας"
+    },
+    "Δασαρχείο Ολυμπίας": {
+      "kind": "dx",
+      "aliases": [
+        "ΟΛΥΜΠΙΑΣ"
+      ],
+      "seat_city": "Κρέστενα",
+      "municipality": "Ανδρίτσαινας - Κρεστένων",
+      "municipality_code": "9136",
+      "region_pe": "Π.Ε. Ηλείας"
+    },
+    "Δασαρχείο Πάρνηθας": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΑΡΝΗΘΑΣ"
+      ],
+      "seat_city": "Αχαρνές",
+      "municipality": "Αχαρνών",
+      "municipality_code": "9215",
+      "region_pe": "Π.Ε. Ανατολικής Αττικής"
+    },
+    "Δασαρχείο Πατρών": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΑΤΡΩΝ"
+      ],
+      "seat_city": "Πάτρα",
+      "municipality": "Πατρέων",
+      "municipality_code": "9134",
+      "region_pe": "Π.Ε. Αχαΐας"
+    },
+    "Δασαρχείο Πειραιά": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΕΙΡΑΙΑ",
+        "ΠΕΙΡΑΙΩΣ"
+      ],
+      "seat_city": "Πειραιάς",
+      "municipality": "Πειραιώς",
+      "municipality_code": "9205",
+      "region_pe": "Π.Ε. Πειραιώς"
+    },
+    "Δασαρχείο Πεντέλης": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΕΝΤΕΛΗΣ"
+      ],
+      "seat_city": "Πεντέλη",
+      "municipality": "Πεντέλης",
+      "municipality_code": "9176",
+      "region_pe": "Π.Ε. Βορείου Τομέα Αθηνών"
+    },
+    "Δασαρχείο Περτουλίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΕΡΤΟΥΛΙΟΥ"
+      ],
+      "seat_city": "Περτούλι",
+      "municipality": "Πύλης",
+      "municipality_code": "9113",
+      "region_pe": "Π.Ε. Τρικάλων"
+    },
+    "Δασαρχείο Πολυγύρου": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΟΛΥΓΥΡΟΥ"
+      ],
+      "seat_city": "Πολύγυρος",
+      "municipality": "Πολυγύρου",
+      "municipality_code": "9059",
+      "region_pe": "Π.Ε. Χαλκιδικής"
+    },
+    "Δασαρχείο Πόρου": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΟΡΟΥ"
+      ],
+      "seat_city": "Πόρος",
+      "municipality": "Πόρου",
+      "municipality_code": "9210",
+      "region_pe": "Π.Ε. Νήσων"
+    },
+    "Δασαρχείο Πύργου": {
+      "kind": "dx",
+      "aliases": [
+        "ΠΥΡΓΟΥ"
+      ],
+      "seat_city": "Πύργος",
+      "municipality": "Πύργου",
+      "municipality_code": "9141",
+      "region_pe": "Π.Ε. Ηλείας"
+    },
+    "Δασαρχείο Σερρών": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΕΡΡΩΝ"
+      ],
+      "seat_city": "Σέρρες",
+      "municipality": "Σερρών",
+      "municipality_code": "9054",
+      "region_pe": "Π.Ε. Σερρών"
+    },
+    "Δασαρχείο Σιδηροκάστρου": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΙΔΗΡΟΚΑΣΤΡΟΥ"
+      ],
+      "seat_city": "Σιδηρόκαστρο",
+      "municipality": "Σιντικής",
+      "municipality_code": "9055",
+      "region_pe": "Π.Ε. Σερρών"
+    },
+    "Δασαρχείο Σκοπέλου": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΚΟΠΕΛΟΥ"
+      ],
+      "seat_city": "Σκόπελος",
+      "municipality": "Σκοπέλου",
+      "municipality_code": "9111",
+      "region_pe": "Π.Ε. Σποράδων"
+    },
+    "Δασαρχείο Σουφλίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΟΥΦΛΙΟΥ"
+      ],
+      "seat_city": "Σουφλί",
+      "municipality": "Σουφλίου",
+      "municipality_code": "9010",
+      "region_pe": "Π.Ε. Έβρου"
+    },
+    "Δασαρχείο Σπάρτης": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΠΑΡΤΗΣ"
+      ],
+      "seat_city": "Σπάρτη",
+      "municipality": "Σπάρτης",
+      "municipality_code": "9252",
+      "region_pe": "Π.Ε. Λακωνίας"
+    },
+    "Δασαρχείο Σπερχειάδας": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΠΕΡΧΕΙΑΔΑΣ"
+      ],
+      "seat_city": "Σπερχειάδα",
+      "municipality": "Μακρακώμης",
+      "municipality_code": "9162",
+      "region_pe": "Π.Ε. Φθιώτιδας"
+    },
+    "Δασαρχείο Σταυρού": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΤΑΥΡΟΥ"
+      ],
+      "seat_city": "Σταυρός",
+      "municipality": "Βόλβης",
+      "municipality_code": "9027",
+      "region_pe": "Π.Ε. Θεσσαλονίκης"
+    },
+    "Δασαρχείο Σταυρούπολης": {
+      "kind": "dx",
+      "aliases": [
+        "ΣΤΑΥΡΟΥΠΟΛΗΣ"
+      ],
+      "seat_city": "Σταυρούπολη",
+      "municipality": "Ξάνθης",
+      "municipality_code": "9017",
+      "region_pe": "Π.Ε. Ξάνθης"
+    },
+    "Δασαρχείο Τρικάλων": {
+      "kind": "dx",
+      "aliases": [
+        "ΤΡΙΚΑΛΩΝ"
+      ],
+      "seat_city": "Τρίκαλα",
+      "municipality": "Τρικκαίων",
+      "municipality_code": "9114",
+      "region_pe": "Π.Ε. Τρικάλων"
+    },
+    "Δασαρχείο Τρίπολης": {
+      "kind": "dx",
+      "aliases": [
+        "ΤΡΙΠΟΛΗΣ"
+      ],
+      "seat_city": "Τρίπολη",
+      "municipality": "Τρίπολης",
+      "municipality_code": "9241",
+      "region_pe": "Π.Ε. Αρκαδίας"
+    },
+    "Δασαρχείο Τσοτυλίου": {
+      "kind": "dx",
+      "aliases": [
+        "ΤΣΟΤΥΛΙΟΥ"
+      ],
+      "seat_city": "Τσοτύλι",
+      "municipality": "Βοϊου",
+      "municipality_code": "9066",
+      "region_pe": "Π.Ε. Κοζάνης"
+    },
+    "Δασαρχείο Φουρνάς": {
+      "kind": "dx",
+      "aliases": [
+        "ΦΟΥΡΝΩΝ",
+        "ΦΟΥΡΝΑΣ"
+      ],
+      "seat_city": "Φουρνά",
+      "municipality": "Καρπενησίου",
+      "municipality_code": "9157",
+      "region_pe": "Π.Ε. Ευρυτανίας"
+    },
+    "Δασαρχείο Χαλκίδας": {
+      "kind": "dx",
+      "aliases": [
+        "ΧΑΛΚΙΔΑΣ"
+      ],
+      "seat_city": "Χαλκίδα",
+      "municipality": "Χαλκιδέων",
+      "municipality_code": "9155",
+      "region_pe": "Π.Ε. Ευβοίας"
+    }
+  },
+  "contract_overrides": {
+    "23SYMV013600200": {
+      "authorities": [
+        "Δασαρχείο Λιβαδειάς",
+        "Δασαρχείο Λαγκαδά",
+        "Διεύθυνση Δασών Ροδόπης"
+      ],
+      "evidence": "Nursery-upgrade contract «Δασικών Φυτωρίων Αλίαρτου Π.Ε. Βοιωτίας, Λαγκαδά Π.Ε. Θεσσαλονίκης, Αμβροσίας και Οργάνης Π.Ε. Ροδόπης». The supplementary's PDF names the ΔΧ Λιβαδειάς cost committee (ΑΔΑ 6ΩΗΘ4653Π8-2ΞΞ); Λαγκαδάς nursery → ΔΧ Λαγκαδά, Αμβροσία/Οργάνη → ΔΔ Ροδόπης (no δασαρχεία in Ροδόπη) per the locations the title itself names."
+    },
+    "25SYMV016491944": {
+      "authorities": [
+        "Διεύθυνση Δασών Δωδεκανήσου"
+      ],
+      "evidence": "Title says «ΔΔ ΛΕΣΒΟΥ» but the signed PDF (fetched 2026-07-25) repeatedly declares works «αρμοδιότητας Διεύθυνσης Δασών Δωδεκανήσου … εντός του Δήμου Ρόδου της Π.Ε. Ρόδου (NUTS EL421)» — the title is a registry keying error; matches the curated project region Π.Ε. Ρόδου."
+    },
+    "26SYMV018739467": {
+      "authorities": [
+        "Διεύθυνση Δασών Φωκίδας",
+        "Δασαρχείο Ελασσόνας"
+      ],
+      "evidence": "Per-lot contract of a multi-lot πρόσκληση: the items text repeats the whole invitation (5 authorities) on every lot; the title «ΔΔ ΦΩΚΙΔΑΣ ΔΧ ΕΛΑΣΣΟΝΑΣ» names THIS lot's authorities and matches the curated regions (Π.Ε. Φωκίδας + Π.Ε. Λάρισας)."
+    },
+    "26SYMV018756094": {
+      "authorities": [
+        "Δασαρχείο Ολυμπίας"
+      ],
+      "evidence": "Per-lot contract of the same multi-lot πρόσκληση as 26SYMV018739467; the title «ΔΧ ΟΛΥΜΠΙΑΣ» names this lot's authority and matches the curated region Π.Ε. Ηλείας."
+    },
+    "25SYMV016495437": {
+      "authorities": [
+        "Δασαρχείο Αλεξανδρούπολης",
+        "Δασαρχείο Σουφλίου",
+        "Δασαρχείο Ξάνθης",
+        "Δασαρχείο Σταυρούπολης",
+        "Διεύθυνση Δασών Ροδόπης"
+      ],
+      "evidence": "Items text names the five specific authorities; the title «ΔΔ ΕΒΡΟΥ ΚΑΙ ΡΟΔΟΠΗΣ» is shorthand (Ξάνθη is not in Έβρος). Matches curated regions Π.Ε. Έβρου/Ξάνθης/Ροδόπης."
+    },
+    "25SYMV016670155": {
+      "authorities": [
+        "Δασαρχείο Καλαμπάκας",
+        "Δασαρχείο Λάρισας",
+        "Δασαρχείο Μουζακίου",
+        "Δασαρχείο Τρικάλων",
+        "Δασαρχείο Σπερχειάδας"
+      ],
+      "evidence": "Items text names the five δασαρχεία; the title's «ΔΔ ΛΑΡΙΣΑΣ ΤΡΙΚΑΛΩΝ …» misspells them as Διευθύνσεις Δασών. Matches curated regions Τρικάλων/Λάρισας/Καρδίτσας/Φθιώτιδας."
+    }
+  },
+  "no_authority": {
+    "24SYMV015162689": "«Έργα αντιπυρικής προστασίας Περιφέρειας Αττικής» — region-scoped; no forest authority named in title/items.",
+    "25SYMV017328637": "ANTINERO IV ΠΕ Θεσσαλονίκης-Χαλκιδικής — the signed PDF references only «το αρμόδιο Δασαρχείο είτε η Διεύθυνση Δασών (κατά περίπτωση)», no specific authority.",
+    "25SYMV017345053": "ANTINERO IV Αττικής και όμορων ΠΕ — the signed PDF references only the generic «αρμόδιο Δασαρχείο/Διεύθυνση Δασών», no specific authority."
+  }
+}
