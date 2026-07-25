@@ -354,3 +354,80 @@ def test_gemi_pick_seat_hit_prefers_seat_over_branch():
     assert pick_seat_hit(hits[:1], "099124894")["gemiNumber"] == "44614807001"
     # Wrong ΑΦΜ → no hit
     assert pick_seat_hit(hits, "000000000") is None
+
+
+def _add_authority(conn, name="Δασαρχείο Πύργου", kind="dx",
+                   lat=37.7, lon=21.49, pe="Π.Ε. Ηλείας"):
+    conn.execute(
+        "INSERT OR REPLACE INTO forest_authorities "
+        "(name, kind, seat_city, municipality_code, municipality_name, lat, lon, region_pe) "
+        "VALUES (?,?,?,?,?,?,?,?)",
+        (name, kind, "Πύργος", "9141", "Πύργου", lat, lon, pe))
+
+
+def _link_authority(conn, ref, name="Δασαρχείο Πύργου", seq=0):
+    conn.execute(
+        "INSERT INTO contract_forest_authorities "
+        "(reference_number, seq, authority_name, source, excerpt) "
+        "VALUES (?,?,?, 'text', 'test')", (ref, seq, name))
+
+
+def test_contract_authority_points_scope_and_shape(scoped_conn):
+    _add_authority(scoped_conn)
+    _link_authority(scoped_conn, "IN1")
+    _link_authority(scoped_conn, "OUT1")   # out of scope — must not appear
+    pts = queries.contract_authority_points(scoped_conn)
+    assert [p["ref"] for p in pts] == ["IN1"]
+    p = pts[0]
+    assert p["authority"] == "Δασαρχείο Πύργου" and p["kind"] == "dx"
+    assert p["lat"] == 37.7 and p["pe"] == "Π.Ε. Ηλείας"
+    assert p["eff_eur"] == 100.0
+
+
+def test_contractor_points_coords_and_coverage(scoped_conn):
+    # located with coords
+    scoped_conn.execute(
+        "INSERT INTO contractor_locations (vat_number, legal_name, region_pe, "
+        "nuts3_code, lat, lon, geo_precision, source, curated_at) "
+        "VALUES ('111111111', 'ΕΡΓΟΛΑΒΟΣ ΑΕ', 'Π.Ε. Ευβοίας', 'EL642', "
+        "38.46, 23.6, 'address', 'vies', '2026-01-01')")
+    # a second in-scope contract whose contractor has NO coords
+    add_contract(scoped_conn, "IN2", title="ΕΡΓΟ ANTINERO IV", eur=70.0,
+                 vats=("333333333",))
+    set_scope(scoped_conn, "IN2", "antinero_iv", 1)
+    res = queries.contractor_points(scoped_conn)
+    assert [p["vat"] for p in res["points"]] == ["111111111"]
+    p = res["points"][0]
+    assert p["name"] == "ΕΡΓΟΛΑΒΟΣ ΑΕ" and p["precision"] == "address"
+    assert p["n_contracts"] == 1 and p["total_eur"] == 100.0
+    cov = res["coverage"]
+    assert cov["n_with_coords"] == 1 and cov["n_total"] == 2
+    assert cov["unmapped_eur"] == 70.0
+
+
+def test_overview_contracts_shape_and_splits(scoped_conn):
+    _add_authority(scoped_conn)
+    _link_authority(scoped_conn, "IN1")
+    _add_region(scoped_conn, "IN1", "Π.Ε. Ευβοίας", "EL642", 0)
+    _add_region(scoped_conn, "IN1", "Π.Ε. Βοιωτίας", "EL641", 1)
+    cs = queries.overview_contracts(scoped_conn)
+    assert [c["ref"] for c in cs] == ["IN1"]        # OUT1/OLD1 filtered
+    c = cs[0]
+    assert c["eff_eur"] == 100.0
+    assert c["authorities"] == ["Δασαρχείο Πύργου"]
+    assert [x["vat"] for x in c["contractors"]] == ["111111111"]
+    assert {r["nuts3"]: r["split_eur"] for r in c["regions"]} == {
+        "EL642": 50.0, "EL641": 50.0}
+    assert sum(r["split_eur"] for r in c["regions"]) == c["eff_eur"]
+
+
+def test_overview_contracts_name_falls_back_to_contractors_table(scoped_conn):
+    cs = queries.overview_contracts(scoped_conn)
+    assert cs[0]["contractors"][0]["name"] == "CONTRACTOR 111111111"
+
+
+def test_contract_authority_points_carry_nuts3(scoped_conn):
+    _add_authority(scoped_conn)   # region_pe Π.Ε. Ηλείας → EL633
+    _link_authority(scoped_conn, "IN1")
+    pts = queries.contract_authority_points(scoped_conn)
+    assert pts[0]["nuts3"] == queries.nuts3_for("Π.Ε. Ηλείας")

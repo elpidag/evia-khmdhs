@@ -11,132 +11,97 @@
   </p>
 </hgroup>
 
-<div class="ov-grid">
-
-  <!-- ======================= LEFT: the map ======================= -->
-  <section class="ov-map-panel">
-    <div class="ov-toggle" role="group" aria-label="Map view">
-      <button data-view="works"        type="button">Work sites</button>
-      <button data-view="contractors"  type="button">Contractor HQs</button>
-      <button data-view="money_works"  type="button">€ by work region</button>
-      <button data-view="money_home"   type="button">€ by HQ region</button>
-    </div>
-
-    <p class="ov-mode-deck muted" id="modeDeck"></p>
-
-    <div id="ovMap" class="gc-map" aria-label="Map of Greece"></div>
-
-    <div class="ov-legend" id="ovLegend"></div>
-
-    <p class="ov-footnote muted"><small id="ovFootnote"></small></p>
-  </section>
-
-  <!-- ======================= RIGHT: analytics ======================= -->
-  <div class="ov-col">
-
-    <section class="ov-card">
-      <h2>How big are the contracts?</h2>
-      <p class="muted"><small>{{ histogram.n }} in-scope contracts by effective value.
-        Median: {{ histogram.median | eur_short }}.</small></p>
-      <div class="ov-chart"><canvas id="histChart"></canvas></div>
-    </section>
-
-    <section class="ov-card">
-      <h2>Top 10 contractors</h2>
-      <p class="muted"><small>By effective € received. Click a bar for the
-        contractor's profile, contracts and map.</small></p>
-      <div class="ov-chart ov-chart-tall"><canvas id="topChart"></canvas></div>
-    </section>
-
-    <section class="ov-card">
-      <h2>Who awards the money?</h2>
-      <table class="compact striped">
-        <thead><tr><th>Authority</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
-        <tbody>
-          {% for a in top_authorities %}
-          <tr><td>{{ a.name }}</td><td class="num">{{ a.n_contracts }}</td>
-              <td class="num">{{ a.total_eur | eur_short }}</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <h3 class="ov-sub">Top signing officials</h3>
-      <table class="compact striped">
-        <thead><tr><th>Signer</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
-        <tbody>
-          {% for s in top_signers %}
-          <tr><td>{{ s.name }}</td><td class="num">{{ s.n_contracts }}</td>
-              <td class="num">{{ s.total_eur | eur_short }}</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </section>
-
-    <section class="ov-card">
-      <h2>How were they awarded?</h2>
-      <p class="muted"><small>Share of award procedures, by number of contracts
-        and by effective €. Direct awards under the Anti-nero programme rely on
-        the emergency provisions of ν.4412/2016 (αρ. 32) rather than open
-        competition.</small></p>
-      <div class="ov-chart ov-chart-mix"><canvas id="mixChart"></canvas></div>
-      <div class="ov-mix-legend" id="mixLegend"></div>
-    </section>
-
+<!-- ======================= maps ======================= -->
+<section class="ov-map-panel">
+  <div class="ov-toggle" role="group" aria-label="Map view">
+    <button data-view="points" type="button">Locations</button>
+    <button data-view="money"  type="button">Money by region</button>
   </div>
+
+  <p class="ov-mode-deck muted" id="modeDeck"></p>
+
+  <div class="ov-maps">
+    <div class="ov-map-half">
+      <h3 class="ov-map-cap" id="capL"></h3>
+      <div id="ovMapL" class="gc-map" aria-label="Map of Greece — works side"></div>
+      <button type="button" class="ov-reset" id="resetL" hidden>⤺ All of Greece</button>
+      <div class="ov-legend" id="legendL"></div>
+    </div>
+    <div class="ov-map-half">
+      <h3 class="ov-map-cap" id="capR"></h3>
+      <div id="ovMapR" class="gc-map" aria-label="Map of Greece — contractors side"></div>
+      <button type="button" class="ov-reset" id="resetR" hidden>⤺ All of Greece</button>
+      <div class="ov-legend" id="legendR"></div>
+    </div>
+  </div>
+
+  <p class="ov-footnote muted"><small id="ovFootnote"></small></p>
+</section>
+
+<!-- ======================= analytics ======================= -->
+<div class="ov-analytics" id="ovDrillCards" hidden>
+  <section class="ov-card">
+    <h2 id="drillLeftTitle"></h2>
+    <p class="muted"><small id="drillLeftNote"></small></p>
+    <div class="ov-drill-scroll" id="drillLeft"></div>
+  </section>
+  <section class="ov-card">
+    <h2 id="drillRightTitle"></h2>
+    <p class="muted"><small id="drillRightNote"></small></p>
+    <div class="ov-drill-scroll" id="drillRight"></div>
+  </section>
 </div>
 
-<style>
-.ov-head { margin-bottom: 0.8rem; }
-.ov-grid {
-  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: 1.25rem; align-items: start;
-}
-.ov-map-panel { position: sticky; top: 0.75rem; }
-#ovMap { height: min(78vh, 720px); }
-.ov-col { display: flex; flex-direction: column; gap: 1.1rem; min-width: 0; }
-.ov-card h2 { font-size: 1.05rem; margin-bottom: 0.2rem; }
-.ov-card .muted small { line-height: 1.3; }
-.ov-sub { font-size: 0.85rem; margin: 0.9rem 0 0.25rem; color: var(--pico-muted-color); }
-.ov-chart { position: relative; height: 230px; }
-.ov-chart-tall { height: 330px; }
-.ov-chart-mix { height: 130px; }
+<div class="ov-analytics" id="ovDefaultCards">
 
-/* segmented control */
-.ov-toggle {
-  display: flex; gap: 0; margin-bottom: 0.5rem;
-  border: 1px solid var(--pico-muted-border-color);
-  border-radius: 999px; overflow: hidden; width: fit-content; max-width: 100%;
-}
-.ov-toggle button,
-.ov-toggle button[type="button"] {
-  border: none; border-radius: 0; margin: 0; padding: 0.32rem 0.85rem;
-  background: transparent; color: #4a4636; box-shadow: none;
-  font-size: 0.82rem; font-weight: 600; cursor: pointer; white-space: nowrap;
-}
-.ov-toggle button + button { border-left: 1px solid var(--pico-muted-border-color); }
-.ov-toggle button[aria-pressed="true"] { background: #2a2419; color: #ffe7b8; }
-.ov-toggle button:focus-visible { outline: 2px solid #2a78d6; outline-offset: -2px; }
+  <section class="ov-card">
+    <h2>How big are the contracts?</h2>
+    <p class="muted"><small>{{ histogram.n }} in-scope contracts by effective value.
+      Median: {{ histogram.median | eur_short }}.</small></p>
+    <div class="ov-chart"><canvas id="histChart"></canvas></div>
+  </section>
 
-.ov-mode-deck { min-height: 2.1em; font-size: 0.83rem; margin: 0 0 0.35rem; }
-.ov-footnote { margin-top: 0.4rem; line-height: 1.3; }
+  <section class="ov-card">
+    <h2>Top 10 contractors</h2>
+    <p class="muted"><small>By effective € received. Click a bar for the
+      contractor's profile, contracts and map.</small></p>
+    <div class="ov-chart ov-chart-tall"><canvas id="topChart"></canvas></div>
+  </section>
 
-/* adaptive legend */
-.ov-legend { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;
-             min-height: 44px; flex-wrap: wrap; }
-.ov-legend .strip { display: flex; height: 10px; width: 180px; border-radius: 3px; overflow: hidden; }
-.ov-legend .strip span { flex: 1; }
-.ov-legend .lab { font-size: 0.72rem; color: var(--pico-muted-color); }
-.ov-legend .bubbles { display: flex; align-items: flex-end; gap: 0.55rem; }
-.ov-legend .bubbles i {
-  display: inline-block; border-radius: 50%; opacity: 0.85;
-  border: 1.5px solid rgba(0,0,0,0.35);
-}
+  <section class="ov-card">
+    <h2>Who awards the money?</h2>
+    <table class="compact striped">
+      <thead><tr><th>Authority</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        {% for a in top_authorities %}
+        <tr><td>{{ a.name }}</td><td class="num">{{ a.n_contracts }}</td>
+            <td class="num">{{ a.total_eur | eur_short }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h3 class="ov-sub">Top signing officials</h3>
+    <table class="compact striped">
+      <thead><tr><th>Signer</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        {% for s in top_signers %}
+        <tr><td>{{ s.name }}</td><td class="num">{{ s.n_contracts }}</td>
+            <td class="num">{{ s.total_eur | eur_short }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
 
-@media (max-width: 1024px) {
-  .ov-grid { grid-template-columns: 1fr; }
-  .ov-map-panel { position: static; }
-  #ovMap { height: 60vh; }
-}
-</style>
+  <section class="ov-card">
+    <h2>How were they awarded?</h2>
+    <p class="muted"><small>Share of award procedures, by number of contracts
+      and by effective €. Direct awards under the Anti-nero programme rely on
+      the emergency provisions of ν.4412/2016 (αρ. 32) rather than open
+      competition.</small></p>
+    <div class="ov-chart ov-chart-mix"><canvas id="mixChart"></canvas></div>
+    <div class="ov-mix-legend" id="mixLegend"></div>
+  </section>
+
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -150,120 +115,393 @@
   const INITIAL_VIEW = {{ view | tojson }};
 
   // ---------------- data ----------------
-  const [geo, centroids, data] = await Promise.all([
+  const [geo, data] = await Promise.all([
     fetch("{{ url_for('static', filename='greek_nuts3.geojson') }}").then(r => r.json()),
-    fetch("{{ url_for('static', filename='nuts3_centroids.json') }}").then(r => r.json()),
     fetch("{{ url_for('api_overview') }}").then(r => r.json()),
   ]);
   const byNutsWork = new Map(data.work_regions.map(r => [r.nuts3, r]));
   const byNutsHome = new Map(data.home_regions.map(r => [r.nuts3, r]));
   const cov = data.coverage;
+  const dotCov = data.contractor_points.coverage;
+  const byRef = new Map(data.contracts.map(c => [c.ref, c]));
+  const nNoAuthority = {{ kpis.n_contracts }} -
+    new Set(data.contract_points.map(p => p.ref)).size;
 
-  const MODES = {
-    works: {
-      deck: 'Where the contracted works are. Bubble area ∝ € attributed to the region (contracts spanning several regions are split evenly).',
-      kind: 'bubbles', src: byNutsWork,
-      fill: G.COLORS.bubbleWorks, stroke: G.COLORS.bubbleWorksStroke,
-      noun: r => `${G.fmtInt(r.n_contracts)} contract(s)`,
-      foot: 'Multi-region contracts are split evenly across their regions (the documents do not itemise per-region amounts); each tooltip also shows the region’s full exposure. Regions sum to the programme total.',
-    },
-    contractors: {
-      deck: 'Where the winning contractors are registered. Bubble area ∝ € won by contractors based in the region.',
-      kind: 'bubbles', src: byNutsHome,
-      fill: G.COLORS.bubbleHome, stroke: G.COLORS.bubbleHomeStroke,
-      noun: r => `${G.fmtInt(r.n_contractors)} contractor(s)`,
-      foot: `Consortium values split evenly across located partners. ${cov.n_contractors_resolved} of ${cov.n_contractors_total} contractors located — ${G.fmtEurShort(cov.unresolved_eur)} of contracts have no located contractor and are not on this view.`,
-    },
-    money_works: {
-      deck: 'How much money lands in each region through the works contracted there. Darker = more €.',
-      kind: 'choro', src: byNutsWork, ramp: G.RAMP_WORKS,
-      noun: r => `${G.fmtInt(r.n_contracts)} contract(s)`,
-      foot: 'Multi-region contracts are split evenly across their regions (the documents do not itemise per-region amounts); tooltips also show full exposure. Regions sum to the programme total.',
-    },
-    money_home: {
-      deck: 'How much money flows to each region through the contractors registered there. Darker = more €.',
-      kind: 'choro', src: byNutsHome, ramp: G.RAMP_HOME,
-      noun: r => `${G.fmtInt(r.n_contractors)} contractor(s)`,
-      foot: `Consortium values split evenly across located partners. ${cov.n_contractors_resolved} of ${cov.n_contractors_total} contractors located — ${G.fmtEurShort(cov.unresolved_eur)} not attributable to a region.`,
-    },
-  };
+  // Region polygon bounds + display names for the drill-down.
+  const boundsByNuts3 = {}, featureName = {};
+  geo.features.forEach(f => {
+    boundsByNuts3[f.properties.NUTS_ID] = L.geoJSON(f).getBounds();
+    featureName[f.properties.NUTS_ID] = f.properties.NUTS_NAME;
+  });
+  const nameOf = n =>
+    (byNutsWork.get(n) || byNutsHome.get(n) || {}).pes || featureName[n] || n;
 
-  // ---------------- map ----------------
-  const map = G.initPaperMap('ovMap');
-  let regionLayer = null, bubbleLayer = null, framed = false;
+  // ---------------- drill state ----------------
+  // {side: 'works'|'home', nuts3} — Locations view only. All map zoom is
+  // programmatic: the maps themselves are fully locked.
+  let drill = null;
+  const focusParam = new URL(window.location).searchParams.get('focus') || '';
+  const fm = focusParam.match(/^(works|home):(EL\d{3})$/);
+  if (fm && boundsByNuts3[fm[2]]) drill = { side: fm[1], nuts3: fm[2] };
 
-  function tipFor(mode, nuts3, fallbackName) {
-    const r = mode.src.get(nuts3);
-    if (!r) return G.regionTooltip(fallbackName || nuts3,
-                                   ['<span class="muted">no Anti-nero activity</span>']);
-    return G.regionTooltip(r.pes, [
-      mode.noun(r),
-      '<strong>' + G.fmtEur(r.split_eur) + '</strong> attributed',
-      '<span class="muted">touches ' + G.fmtEurShort(r.exposure_eur) +
-        ' across ' + G.fmtInt(r.n_contracts) + ' contract(s)</span>',
+  function computeSelection() {
+    if (!drill) return null;
+    let refs, vats;
+    if (drill.side === 'works') {
+      refs = new Set(data.contract_points
+        .filter(p => p.nuts3 === drill.nuts3).map(p => p.ref));
+      vats = new Set();
+      refs.forEach(ref => ((byRef.get(ref) || {}).contractors || [])
+        .forEach(c => vats.add(c.vat)));
+    } else {
+      vats = new Set(data.contractor_points.points
+        .filter(p => p.nuts3 === drill.nuts3).map(p => p.vat));
+      refs = new Set(data.contracts
+        .filter(c => c.contractors.some(x => vats.has(x.vat)))
+        .map(c => c.ref));
+    }
+    return { refs, vats };
+  }
+
+  // ---------------- two independent map panels -------------------------
+  function makePanel(mapId, legendId, capId, resetId) {
+    const map = G.initPaperMap(mapId, { locked: true });
+    return { map, legendEl: document.getElementById(legendId),
+             capEl: document.getElementById(capId),
+             resetEl: document.getElementById(resetId),
+             regionLayer: null, overlay: null, fullBounds: null };
+  }
+  const left = makePanel('ovMapL', 'legendL', 'capL', 'resetL');
+  const right = makePanel('ovMapR', 'legendR', 'capR', 'resetR');
+
+  function clearPanel(p) {
+    if (p.regionLayer) { p.regionLayer.remove(); p.regionLayer = null; }
+    if (p.overlay) { p.overlay.remove(); p.overlay = null; }
+  }
+  function frame(p, bounds) {
+    if (!p.fullBounds) p.fullBounds = p.regionLayer.getBounds();
+    p.map.fitBounds(bounds || p.fullBounds, { padding: [8, 8] });
+  }
+  function highlightRegion(p, nuts3) {
+    p.regionLayer.eachLayer(lyr => {
+      if (lyr.feature && lyr.feature.properties.NUTS_ID === nuts3) {
+        lyr.setStyle({ weight: 2.2, color: G.COLORS.regionStrokeHover });
+      }
+    });
+  }
+
+  function regionTip(src, noun) {
+    return (nuts3, fallbackName) => {
+      const r = src.get(nuts3);
+      if (!r) return G.regionTooltip(fallbackName || nuts3,
+                                     ['<span class="muted">no Anti-nero activity</span>']);
+      return G.regionTooltip(r.pes, [
+        noun(r),
+        '<strong>' + G.fmtEur(r.split_eur) + '</strong> attributed',
+        '<span class="muted">touches ' + G.fmtEurShort(r.exposure_eur) +
+          ' across ' + G.fmtInt(r.n_contracts) + ' contract(s)</span>',
+      ]);
+    };
+  }
+
+  function legendChoro(el, ramp, maxV) {
+    el.innerHTML =
+      '<div><div class="strip">' + ramp.map(c => `<span style="background:${c}"></span>`).join('') +
+      '</div><div class="lab">€0 → ' + G.fmtEurShort(maxV) +
+      ' attributed (√ scale, same on both maps)</div></div>';
+  }
+  function legendDots(el, fill, label) {
+    el.innerHTML =
+      `<div class="dotkey"><i style="background:${fill}"></i>` +
+      `<span class="lab">${label}</span></div>`;
+  }
+
+  // ---------------- the two views ----------------
+  function contractTip(p) {
+    return G.regionTooltip(p.authority, [
+      p.title.length > 68 ? p.title.slice(0, 67) + '…' : p.title,
+      '<strong>' + G.fmtEurShort(p.eff_eur) + '</strong> effective',
+      '<span class="muted">' + p.pe + ' — click for the contract</span>',
+    ]);
+  }
+  function contractorTip(p) {
+    return G.regionTooltip(p.name, [
+      G.fmtInt(p.n_contracts) + ' contract(s)',
+      '<strong>' + G.fmtEurShort(p.total_eur) + '</strong> full exposure',
+      '<span class="muted">' + (p.precision === 'address'
+        ? 'street-level location' : 'municipality-level location') +
+        ' — click for the contractor</span>',
     ]);
   }
 
-  function legendChoro(ramp, maxV) {
-    document.getElementById('ovLegend').innerHTML =
-      '<div><div class="strip">' + ramp.map(c => `<span style="background:${c}"></span>`).join('') +
-      '</div><div class="lab">€0 → ' + G.fmtEurShort(maxV) + ' attributed (√ scale)</div></div>';
-  }
-  function legendBubbles(fill, maxV, radius) {
-    const samples = [maxV, maxV / 4, maxV / 16];
-    document.getElementById('ovLegend').innerHTML =
-      '<div class="bubbles">' + samples.map(v => {
-        const d = Math.round(radius(v) * 2);
-        return `<span style="text-align:center"><i style="width:${d}px;height:${d}px;background:${fill}"></i>` +
-               `<div class="lab">${G.fmtEurShort(v)}</div></span>`;
-      }).join('') + '</div><div class="lab">€ attributed to the region</div>';
-  }
+  function renderPoints() {
+    const sel = computeSelection();
 
-  function render(view) {
-    const mode = MODES[view];
-    const maxV = Math.max(1, ...[...mode.src.values()].map(r => r.split_eur));
-
-    if (regionLayer) regionLayer.remove();
-    if (bubbleLayer) { bubbleLayer.remove(); bubbleLayer = null; }
-
-    const colorOf = mode.kind === 'choro'
-      ? (n => G.makeChoro(mode.ramp, maxV)((mode.src.get(n) || {}).split_eur || 0))
-      : (() => G.COLORS.landEmpty);
-    regionLayer = G.addRegions(map, geo, colorOf,
-                               (n, name) => tipFor(mode, n, name));
-    if (!framed) {
-      framed = true;
-      map.fitBounds(regionLayer.getBounds(), { padding: [10, 10] });
+    // --- which dots go on each map -------------------------------------
+    let leftPts = data.contract_points;
+    let rightPts = data.contractor_points.points;
+    if (sel && drill.side === 'works') {
+      leftPts = leftPts.filter(p => p.nuts3 === drill.nuts3);
+      rightPts = rightPts.filter(p => sel.vats.has(p.vat));
+    } else if (sel && drill.side === 'home') {
+      leftPts = leftPts.filter(p => sel.refs.has(p.ref));
+      rightPts = rightPts.filter(p => p.nuts3 === drill.nuts3);
     }
+    const leftDots = G.spreadOverlaps(leftPts, 0.034);
+    const rightDots = G.spreadOverlaps(rightPts, 0.02);
 
-    if (mode.kind === 'bubbles') {
-      const radius = G.makeRadius(maxV, 32);
-      bubbleLayer = L.layerGroup([...mode.src.values()].map(r => {
-        const c = centroids[r.nuts3];
-        if (!c) return null;
-        return L.circleMarker(c, {
-          pane: 'bubbles', radius: radius(r.split_eur),
-          fillColor: mode.fill, fillOpacity: 0.82,
-          color: mode.stroke, weight: 1.2,
-        }).bindTooltip(tipFor(mode, r.nuts3), { sticky: true, direction: 'top', className: 'gc-tt' });
-      }).filter(Boolean)).addTo(map);
-      legendBubbles(mode.fill, maxV, radius);
+    // --- left map ------------------------------------------------------
+    clearPanel(left);
+    left.regionLayer = G.addRegions(left.map, geo, () => G.COLORS.landEmpty,
+      null, (n, _name) => setDrill('works', n));
+    if (sel) highlightRegion(left, drill.nuts3);
+    frame(left, sel && drill.side === 'works'
+      ? boundsByNuts3[drill.nuts3].pad(0.15) : null);
+    left.overlay = G.addDots(left.map, leftDots, {
+      fill: G.COLORS.bubbleWorks, stroke: G.COLORS.bubbleWorksStroke, radius: 4.5,
+      tipOf: contractTip, hrefOf: p => '/contract/' + p.ref,
+    });
+    left.resetEl.hidden = !(sel && drill.side === 'works');
+
+    // --- right map -----------------------------------------------------
+    clearPanel(right);
+    right.regionLayer = G.addRegions(right.map, geo, () => G.COLORS.landEmpty,
+      null, (n, _name) => setDrill('home', n));
+    if (sel) highlightRegion(right, drill.nuts3);
+    frame(right, sel && drill.side === 'home'
+      ? boundsByNuts3[drill.nuts3].pad(0.15) : null);
+    right.overlay = G.addDots(right.map, rightDots, {
+      fill: G.COLORS.bubbleHome, stroke: G.COLORS.bubbleHomeStroke, radius: 4.5,
+      tipOf: contractorTip, hrefOf: p => '/contractor/' + p.vat,
+    });
+    right.resetEl.hidden = !(sel && drill.side === 'home');
+
+    // --- captions, legends, copy --------------------------------------
+    if (!sel) {
+      left.capEl.textContent = 'Works — by responsible Δασαρχείο / Δ/νση Δασών';
+      right.capEl.textContent = 'Contractors — registered addresses';
+      legendDots(left.legendEl, G.COLORS.bubbleWorks,
+        'one dot per contract × forest authority, at the authority’s seat ' +
+        'municipality (equal size; co-located dots are spread slightly). ' +
+        'Click a region to focus on it.');
+      legendDots(right.legendEl, G.COLORS.bubbleHome,
+        'one dot per contractor at the registered address (equal size). ' +
+        'Click a region to focus on its contractors.');
+      document.getElementById('modeDeck').textContent =
+        'Left: every contract placed at the seat of the Δασαρχείο or Διεύθυνση ' +
+        'Δασών responsible for its works. Right: every located contractor at ' +
+        'its registered address. Click any region on either map to focus on it.';
+      document.getElementById('ovFootnote').textContent =
+        `Forest authorities are extracted from the contract texts against a ` +
+        `curated registry and placed at their seat municipality's centroid ` +
+        `(geodata.gov.gr Kallikratis boundaries, CC-BY); ${nNoAuthority} ` +
+        `region-scoped contract(s) name no forest authority and are not on the ` +
+        `left map. Contractor pins: OSM Nominatim, validated against the ` +
+        `registered postal code — ${dotCov.n_with_coords} of ${dotCov.n_total} ` +
+        `contractors located, ${G.fmtEurShort(dotCov.unmapped_eur)} of ` +
+        `contracts have no mappable contractor.`;
     } else {
-      legendChoro(mode.ramp, maxV);
+      const rn = nameOf(drill.nuts3);
+      if (drill.side === 'works') {
+        left.capEl.textContent = `Works in focus — forest authorities seated in ${rn}`;
+        right.capEl.textContent = 'Contractors holding these contracts';
+        document.getElementById('modeDeck').textContent =
+          `Focused on ${rn}: the left map shows only the Δασαρχεία / Δ/νσεις ` +
+          `Δασών seated there and their contracts; the right map shows every ` +
+          `contractor holding one of those contracts. Click another region to ` +
+          `move the focus, or reset to all of Greece.`;
+      } else {
+        left.capEl.textContent = 'Where these contractors’ contracts are — by forest authority';
+        right.capEl.textContent = `Contractor HQs in focus — seated in ${rn}`;
+        document.getElementById('modeDeck').textContent =
+          `Focused on ${rn}: the right map shows the registered addresses of ` +
+          `the contractors seated there; the left map shows the forest ` +
+          `authorities whose contracts they won. Click another region to move ` +
+          `the focus, or reset to all of Greece.`;
+      }
+      legendDots(left.legendEl, G.COLORS.bubbleWorks,
+        `${leftPts.length} contract–authority dot(s) shown`);
+      legendDots(right.legendEl, G.COLORS.bubbleHome,
+        `${rightPts.length} contractor dot(s) shown`);
+      document.getElementById('ovFootnote').textContent =
+        'A forest authority "belongs" to the region of its registered seat ' +
+        '(e.g. Δασαρχείο Πεντέλης is seated in Βόρειο Τομέα Αθηνών); ' +
+        'contractors without validated coordinates appear in the tables ' +
+        'below but not as dots.';
     }
+    renderDrillTables(sel);
+  }
 
-    document.getElementById('modeDeck').textContent = mode.deck;
-    document.getElementById('ovFootnote').textContent = mode.foot;
-    document.querySelectorAll('.ov-toggle button').forEach(b =>
-      b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+  function renderMoney() {
+    left.capEl.textContent = '€ by work region';
+    right.capEl.textContent = '€ by contractor HQ region';
+    left.resetEl.hidden = right.resetEl.hidden = true;
+    // One shared scale so the two maps are directly comparable.
+    const maxV = Math.max(1,
+      ...[...byNutsWork.values()].map(r => r.split_eur),
+      ...[...byNutsHome.values()].map(r => r.split_eur));
+
+    clearPanel(left);
+    const colorL = n => G.makeChoro(G.RAMP_WORKS, maxV)((byNutsWork.get(n) || {}).split_eur || 0);
+    left.regionLayer = G.addRegions(left.map, geo, colorL,
+      regionTip(byNutsWork, r => `${G.fmtInt(r.n_contracts)} contract(s)`));
+    frame(left, null);
+    legendChoro(left.legendEl, G.RAMP_WORKS, maxV);
+
+    clearPanel(right);
+    const colorR = n => G.makeChoro(G.RAMP_WORKS, maxV)((byNutsHome.get(n) || {}).split_eur || 0);
+    right.regionLayer = G.addRegions(right.map, geo, colorR,
+      regionTip(byNutsHome, r => `${G.fmtInt(r.n_contractors)} contractor(s)`));
+    frame(right, null);
+    legendChoro(right.legendEl, G.RAMP_WORKS, maxV);
+
+    document.getElementById('modeDeck').textContent =
+      'Where the money lands through the works (left) versus where it flows ' +
+      'through the winning contractors’ registered seats (right). Same ' +
+      'colour scale on both maps — darker is more €.';
+    document.getElementById('ovFootnote').textContent =
+      `Multi-region contracts are split evenly across their regions and ` +
+      `consortium values across located partners (the documents do not ` +
+      `itemise finer splits); tooltips also show each region's full ` +
+      `exposure. ${cov.n_contractors_resolved} of ${cov.n_contractors_total} ` +
+      `contractors located — ${G.fmtEurShort(cov.unresolved_eur)} not ` +
+      `attributable to a home region.`;
+    renderDrillTables(null);
+  }
+
+  // ---------------- drill analytics ----------------
+  const esc = s => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  function contractsTable(refs) {
+    const rows = [...refs].map(r => byRef.get(r)).filter(Boolean)
+      .sort((a, b) => b.eff_eur - a.eff_eur);
+    const total = rows.reduce((s, c) => s + c.eff_eur, 0);
+    const body = rows.map(c => {
+      const t = c.title || '';
+      return `<tr><td><a href="/contract/${esc(c.ref)}">${esc(c.ref)}</a>` +
+        `<br><small class="muted">${esc(t.length > 90 ? t.slice(0, 89) + '…' : t)}</small></td>` +
+        `<td><small>${esc(c.authorities.join(', ') || '—')}</small></td>` +
+        `<td class="num">${G.fmtEurShort(c.eff_eur)}</td></tr>`;
+    }).join('');
+    return {
+      n: rows.length, total,
+      html: `<table class="compact striped"><thead><tr><th>Contract</th>` +
+        `<th>Forest authority</th><th class="num">Effective €</th></tr></thead>` +
+        `<tbody>${body}</tbody></table>`,
+    };
+  }
+
+  function renderDrillTables(sel) {
+    const drillEl = document.getElementById('ovDrillCards');
+    const defaultEl = document.getElementById('ovDefaultCards');
+    if (!sel) { drillEl.hidden = true; defaultEl.hidden = false; return; }
+    drillEl.hidden = false; defaultEl.hidden = true;
+    const rn = nameOf(drill.nuts3);
+
+    const ct = contractsTable(sel.refs);
+    document.getElementById('drillLeft').innerHTML = ct.html ||
+      '<p class="muted">No contracts.</p>';
+
+    if (drill.side === 'works') {
+      document.getElementById('drillLeftTitle').textContent =
+        `Contracts under ${rn}'s forest authorities`;
+      document.getElementById('drillLeftNote').textContent =
+        `${ct.n} contract(s), ${G.fmtEurShort(ct.total)} effective in total, ` +
+        `sorted by value.`;
+      // Per-contractor € over the SELECTED contracts only.
+      const agg = new Map();
+      sel.refs.forEach(ref => {
+        const c = byRef.get(ref);
+        if (!c) return;
+        c.contractors.forEach(x => {
+          const a = agg.get(x.vat) || { name: x.name, n: 0, eur: 0 };
+          a.n += 1; a.eur += c.eff_eur;
+          agg.set(x.vat, a);
+        });
+      });
+      const rows = [...agg.entries()].sort((a, b) => b[1].eur - a[1].eur);
+      document.getElementById('drillRightTitle').textContent =
+        'Who won this region’s contracts?';
+      document.getElementById('drillRightNote').textContent =
+        `€ counts only the ${ct.n} contract(s) above (consortium contracts ` +
+        `in full per partner — maximum exposure).`;
+      document.getElementById('drillRight').innerHTML =
+        `<table class="compact striped"><thead><tr><th>Contractor</th>` +
+        `<th class="num">Contracts</th><th class="num">€ from this region</th></tr></thead><tbody>` +
+        rows.map(([vat, a]) =>
+          `<tr><td><a href="/contractor/${esc(vat)}">${esc(a.name || vat)}</a></td>` +
+          `<td class="num">${a.n}</td>` +
+          `<td class="num">${G.fmtEurShort(a.eur)}</td></tr>`).join('') +
+        `</tbody></table>`;
+    } else {
+      document.getElementById('drillLeftTitle').textContent =
+        `Contracts won by ${rn}'s contractors`;
+      document.getElementById('drillLeftNote').textContent =
+        `${ct.n} contract(s), ${G.fmtEurShort(ct.total)} effective in total, ` +
+        `sorted by value.`;
+      // € per work region of the selected contracts (even-split shares).
+      const agg = new Map();
+      sel.refs.forEach(ref => {
+        const c = byRef.get(ref);
+        if (!c) return;
+        c.regions.forEach(r => {
+          const a = agg.get(r.nuts3) || { pes: r.pes, n: 0, eur: 0 };
+          a.n += 1; a.eur += r.split_eur;
+          agg.set(r.nuts3, a);
+        });
+      });
+      const rows = [...agg.entries()].sort((a, b) => b[1].eur - a[1].eur);
+      document.getElementById('drillRightTitle').textContent =
+        'Where did they do the work?';
+      document.getElementById('drillRightNote').textContent =
+        'Even-split shares of the contracts above across their project ' +
+        'regions (the money-map convention).';
+      document.getElementById('drillRight').innerHTML =
+        `<table class="compact striped"><thead><tr><th>Work region</th>` +
+        `<th class="num">Contracts</th><th class="num">€ attributed</th></tr></thead><tbody>` +
+        rows.map(([n3, a]) =>
+          `<tr><td>${esc(a.pes)}</td><td class="num">${a.n}</td>` +
+          `<td class="num">${G.fmtEurShort(a.eur)}</td></tr>`).join('') +
+        `</tbody></table>`;
+    }
+  }
+
+  // ---------------- render + URL plumbing ----------------
+  let currentView = INITIAL_VIEW === 'points' ? 'points' : 'money';
+
+  function syncUrl() {
     const url = new URL(window.location);
-    url.searchParams.set('view', view);
+    url.searchParams.set('view', currentView);
+    if (drill && currentView === 'points') {
+      url.searchParams.set('focus', drill.side + ':' + drill.nuts3);
+    } else {
+      url.searchParams.delete('focus');
+    }
     history.replaceState(null, '', url);
   }
 
+  function render(view) {
+    if (view !== currentView) drill = null;   // toggling views resets focus
+    currentView = view;
+    (view === 'points' ? renderPoints : renderMoney)();
+    document.querySelectorAll('.ov-toggle button').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+    syncUrl();
+  }
+
+  function setDrill(side, nuts3) {
+    drill = (drill && drill.side === side && drill.nuts3 === nuts3)
+      ? null : { side, nuts3 };               // clicking the same region again resets
+    render('points');
+  }
+
+  left.resetEl.addEventListener('click', () => { drill = null; render('points'); });
+  right.resetEl.addEventListener('click', () => { drill = null; render('points'); });
   document.querySelectorAll('.ov-toggle button').forEach(b =>
     b.addEventListener('click', () => render(b.dataset.view)));
-  render(MODES[INITIAL_VIEW] ? INITIAL_VIEW : 'money_works');
+  if (drill) currentView = 'points';
+  render(currentView);
 
   // ---------------- charts ----------------
   const css = getComputedStyle(document.documentElement);
@@ -424,9 +662,4 @@
   ).join('');
 })();
 </script>
-<style>
-.ov-mix-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; margin-top: 0.4rem; font-size: 0.78rem; }
-.ov-mix-legend .item { display: inline-flex; align-items: center; gap: 0.35rem; }
-.ov-mix-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
-</style>
 {% endblock %}

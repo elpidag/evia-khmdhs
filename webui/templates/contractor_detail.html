@@ -242,7 +242,11 @@
 
     const maxV = Math.max(1, ...MAPDATA.regions.map(r => r.split_eur));
     const radius = G.makeRadius(maxV, 22);
-    const home = MAPDATA.home && MAPDATA.home.nuts3 ? centroids[MAPDATA.home.nuts3] : null;
+    // Prefer the geocoded street address; fall back to the region centroid.
+    const home = MAPDATA.home
+      ? (MAPDATA.home.lat != null ? [MAPDATA.home.lat, MAPDATA.home.lon]
+                                  : (MAPDATA.home.nuts3 ? centroids[MAPDATA.home.nuts3] : null))
+      : null;
 
     MAPDATA.regions.forEach(r => {
       const c = centroids[r.nuts3];

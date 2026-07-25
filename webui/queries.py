@@ -6,6 +6,7 @@ import sqlite3
 import unicodedata
 from pathlib import Path
 
+from khmdhs.greek_regions import nuts3_for
 from khmdhs.scope import normalize_title
 
 # State-owned vehicles that manage the Anti-nero IV programme rather than
@@ -900,6 +901,136 @@ def money_by_contractor_region(conn: sqlite3.Connection) -> list[dict]:
     return sorted(out, key=lambda a: -a["split_eur"])
 
 
+def contract_authority_points(conn: sqlite3.Connection) -> list[dict]:
+    """One point per (in-scope contract × forest authority): the works dot
+    map. Coordinates are the authority's seat-municipality centroid."""
+    if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                        "AND name='contract_forest_authorities'").fetchone():
+        return []
+    rows = conn.execute(f"""
+        SELECT k.reference_number AS ref, k.title,
+               {effective_cost(conn, 'k')} AS eff_eur,
+               fa.name AS authority, fa.kind, fa.lat, fa.lon, fa.region_pe
+        FROM contracts k
+        JOIN contract_forest_authorities cfa
+             ON cfa.reference_number = k.reference_number
+        JOIN forest_authorities fa ON fa.name = cfa.authority_name
+        WHERE fa.lat IS NOT NULL
+          AND {scope_filter(conn, 'k.reference_number')}
+        ORDER BY fa.name, k.reference_number
+    """).fetchall()
+    return [{"ref": r["ref"], "title": r["title"], "authority": r["authority"],
+             "kind": r["kind"], "lat": r["lat"], "lon": r["lon"],
+             "pe": r["region_pe"], "nuts3": nuts3_for(r["region_pe"]),
+             "eff_eur": round(r["eff_eur"] or 0.0, 2)}
+            for r in rows]
+
+
+def overview_contracts(conn: sqlite3.Connection) -> list[dict]:
+    """Compact per-contract join payload for the /overview drill-down:
+    contractors, forest authorities and even-split region shares — small
+    enough (252 rows) to ship once and filter client-side."""
+    if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                        "AND name='contract_forest_authorities'").fetchone():
+        return []
+    base = conn.execute(f"""
+        SELECT k.reference_number AS ref, k.title,
+               {effective_cost(conn, 'k')} AS eff
+        FROM contracts k
+        WHERE {scope_filter(conn, 'k.reference_number')}
+    """).fetchall()
+    out: dict[str, dict] = {}
+    for r in base:
+        out[r["ref"]] = {"ref": r["ref"], "title": r["title"],
+                         "eff_eur": round(r["eff"] or 0.0, 2),
+                         "contractors": [], "authorities": [], "regions": []}
+    for r in conn.execute("""
+            SELECT c.reference_number AS ref, c.vat_number,
+                   COALESCE(cl.legal_name, c.name) AS name
+            FROM contractors c
+            LEFT JOIN contractor_locations cl ON cl.vat_number = c.vat_number
+            ORDER BY c.reference_number, c.seq"""):
+        if r["ref"] in out:
+            out[r["ref"]]["contractors"].append(
+                {"vat": r["vat_number"], "name": r["name"]})
+    for r in conn.execute("""
+            SELECT reference_number AS ref, authority_name
+            FROM contract_forest_authorities ORDER BY reference_number, seq"""):
+        if r["ref"] in out:
+            out[r["ref"]]["authorities"].append(r["authority_name"])
+    region_rows = conn.execute("""
+            SELECT reference_number AS ref, region_pe, nuts3_code
+            FROM contract_project_regions ORDER BY reference_number, seq
+    """).fetchall()
+    by_ref: dict[str, list] = {}
+    for r in region_rows:
+        if r["ref"] in out:
+            by_ref.setdefault(r["ref"], []).append(r)
+    for ref, regions in by_ref.items():
+        eff = out[ref]["eff_eur"]
+        n = len(regions)
+        merged: dict[str, dict] = {}
+        for r in regions:
+            m = merged.setdefault(r["nuts3_code"], {
+                "nuts3": r["nuts3_code"], "pes": set(), "split_eur": 0.0})
+            m["pes"].add(r["region_pe"])
+            m["split_eur"] += eff / n
+        out[ref]["regions"] = [
+            {"nuts3": m["nuts3"], "pes": " · ".join(sorted(m["pes"])),
+             "split_eur": round(m["split_eur"], 2)}
+            for m in merged.values()]
+    return sorted(out.values(), key=lambda c: -c["eff_eur"])
+
+
+def contractor_points(conn: sqlite3.Connection) -> dict:
+    """Geocoded contractor HQ dots + coverage. Totals are max-exposure
+    (full contract value per partner), consistent with /contractors."""
+    has_geo = bool(conn.execute(
+        "SELECT 1 FROM pragma_table_info('contractor_locations') "
+        "WHERE name = 'lat'").fetchone())
+    if not has_geo:
+        return {"points": [], "coverage": {"n_with_coords": 0,
+                                           "n_total": 0, "unmapped_eur": 0.0}}
+    rows = conn.execute(f"""
+        SELECT c.vat_number, MAX(COALESCE(cl.legal_name, c.name)) AS name,
+               cl.lat, cl.lon, cl.geo_precision, cl.nuts3_code,
+               COUNT(DISTINCT k.reference_number) AS n_contracts,
+               SUM(eff) AS total_eur
+        FROM (SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff
+              FROM contracts k
+              WHERE {scope_filter(conn, 'k.reference_number')}) k
+        JOIN contractors c USING (reference_number)
+        LEFT JOIN contractor_locations cl ON cl.vat_number = c.vat_number
+        GROUP BY c.vat_number
+    """).fetchall()
+    points, n_total, with_coords = [], 0, set()
+    for r in rows:
+        n_total += 1
+        if r["lat"] is not None:
+            with_coords.add(r["vat_number"])
+            points.append({"vat": r["vat_number"], "name": r["name"],
+                           "lat": r["lat"], "lon": r["lon"],
+                           "nuts3": r["nuts3_code"],
+                           "precision": r["geo_precision"],
+                           "n_contracts": r["n_contracts"],
+                           "total_eur": round(r["total_eur"] or 0.0, 2)})
+    unmapped = conn.execute(f"""
+        SELECT COALESCE(SUM(eff), 0) FROM
+          (SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff
+           FROM contracts k
+           WHERE {scope_filter(conn, 'k.reference_number')}
+             AND NOT EXISTS (SELECT 1 FROM contractors c
+                             JOIN contractor_locations cl
+                               ON cl.vat_number = c.vat_number
+                             WHERE c.reference_number = k.reference_number
+                               AND cl.lat IS NOT NULL))
+    """).fetchone()[0]
+    points.sort(key=lambda p: -p["total_eur"])
+    return {"points": points,
+            "coverage": {"n_with_coords": len(with_coords), "n_total": n_total,
+                         "unmapped_eur": round(unmapped or 0.0, 2)}}
+
+
 def _bin_values(values: list[float], edges: tuple) -> dict:
     """Histogram counts over half-open bins [e_i, e_{i+1}), overflow last."""
     counts = [0] * len(edges)
@@ -1018,6 +1149,9 @@ def contractor_map_data(conn: sqlite3.Connection, vat: str) -> dict:
             "pe": home.get("region_pe") if home else None,
             "nuts3": home.get("nuts3_code") if home else None,
             "city": home.get("city") if home else None,
+            "lat": home.get("lat") if home else None,
+            "lon": home.get("lon") if home else None,
+            "precision": home.get("geo_precision") if home else None,
         } if home else None,
         "regions": sorted(regions_out, key=lambda a: -a["split_eur"]),
     }

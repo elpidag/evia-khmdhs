@@ -39,18 +39,27 @@ window.GeoCommon = (function () {
 
   // -- map ---------------------------------------------------------------
   function initPaperMap(elId, opts) {
+    const o = opts || {};
+    // locked: no user zoom/pan at all — the view only moves
+    // programmatically (fitBounds on region drill-down).
+    const lockedOpts = o.locked ? {
+      zoomControl: false, dragging: false, doubleClickZoom: false,
+      touchZoom: false, boxZoom: false, keyboard: false,
+    } : {};
     const map = L.map(elId, Object.assign({
       zoomSnap: 0.25,
       attributionControl: false,
       zoomControl: true,
       scrollWheelZoom: false,   // page scroll stays usable; zoom via buttons
-    }, opts || {})).setView([38.6, 24.2], 6.25);
+    }, lockedOpts, o)).setView([38.6, 24.2], 6.25);
     map.createPane('regions'); map.getPane('regions').style.zIndex = 350;
     map.createPane('links');   map.getPane('links').style.zIndex = 420;
     map.createPane('bubbles'); map.getPane('bubbles').style.zIndex = 450;
     map.createPane('pins');    map.getPane('pins').style.zIndex = 500;
-    map.on('focus', () => map.scrollWheelZoom.enable());
-    map.on('blur', () => map.scrollWheelZoom.disable());
+    if (!o.locked) {
+      map.on('focus', () => map.scrollWheelZoom.enable());
+      map.on('blur', () => map.scrollWheelZoom.disable());
+    }
     return map;
   }
 
@@ -76,7 +85,8 @@ window.GeoCommon = (function () {
   }
 
   // Base polygon layer; `valueOf(nuts3) -> number|0` decides the fill.
-  function addRegions(map, geo, colorOf, tipOf) {
+  // Optional onClick(nuts3, nutsName) makes regions clickable (drill-down).
+  function addRegions(map, geo, colorOf, tipOf, onClick) {
     const layer = L.geoJSON(geo, {
       pane: 'regions',
       style: f => ({
@@ -89,15 +99,78 @@ window.GeoCommon = (function () {
         const tip = tipOf && tipOf(f.properties.NUTS_ID, f.properties.NUTS_NAME);
         if (tip) lyr.bindTooltip(tip, { sticky: true, direction: 'top', className: 'gc-tt' });
         lyr.on({
-          mouseover: e => e.target.setStyle({ weight: 1.6, color: COLORS.regionStrokeHover }),
-          mouseout:  e => layer.resetStyle(e.target),
+          mouseover: e => {
+            e.target.setStyle({ weight: 1.6, color: COLORS.regionStrokeHover });
+            if (onClick) map.getContainer().style.cursor = 'pointer';
+          },
+          mouseout: e => {
+            layer.resetStyle(e.target);
+            if (onClick) map.getContainer().style.cursor = '';
+          },
         });
+        if (onClick) lyr.on('click', () =>
+          onClick(f.properties.NUTS_ID, f.properties.NUTS_NAME));
       },
     }).addTo(map);
     return layer;
   }
 
+  // Deterministic de-overlap: points sharing (rounded) coordinates are laid
+  // out on a small sunflower spiral around the shared spot so every dot
+  // stays visible ("move them around a little"). No randomness — stable
+  // across renders. Returns new objects with adjusted lat/lon.
+  function spreadOverlaps(points, stepDeg) {
+    const step = stepDeg || 0.028;               // ~2.5 km at Greek latitudes
+    const groups = new Map();
+    points.forEach(p => {
+      const key = p.lat.toFixed(3) + ',' + p.lon.toFixed(3);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(p);
+    });
+    const out = [];
+    const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+    groups.forEach(members => {
+      if (members.length === 1) { out.push(members[0]); return; }
+      members.forEach((p, i) => {
+        if (i === 0) { out.push(p); return; }    // first stays put
+        const r = step * Math.sqrt(i);
+        const a = i * GOLDEN;
+        out.push(Object.assign({}, p, {
+          lat: p.lat + r * Math.sin(a),
+          lon: p.lon + r * Math.cos(a) / Math.cos(p.lat * Math.PI / 180),
+        }));
+      });
+    });
+    return out;
+  }
+
+  // Equal-size dot layer (presence, not magnitude). opts: {fill, stroke,
+  // radius, tipOf(p) -> html, hrefOf(p) -> url|null}.
+  function addDots(map, points, opts) {
+    const o = Object.assign({ radius: 5, fillOpacity: 0.78, weight: 1 }, opts || {});
+    const layer = L.layerGroup(points.map(p => {
+      const m = L.circleMarker([p.lat, p.lon], {
+        pane: 'bubbles', radius: o.radius,
+        fillColor: o.fill, fillOpacity: o.fillOpacity,
+        color: o.stroke, weight: o.weight,
+      });
+      if (o.tipOf) m.bindTooltip(o.tipOf(p),
+        { sticky: true, direction: 'top', className: 'gc-tt' });
+      if (o.hrefOf) {
+        const href = o.hrefOf(p);
+        if (href) {
+          m.on('click', () => { window.location = href; });
+          m.on('mouseover', () => { map.getContainer().style.cursor = 'pointer'; });
+          m.on('mouseout', () => { map.getContainer().style.cursor = ''; });
+        }
+      }
+      return m;
+    })).addTo(map);
+    return layer;
+  }
+
   return { fmtEur, fmtEurShort, fmtInt,
            RAMP_WORKS, RAMP_HOME, COLORS,
-           initPaperMap, makeChoro, makeRadius, regionTooltip, addRegions };
+           initPaperMap, makeChoro, makeRadius, regionTooltip, addRegions,
+           spreadOverlaps, addDots };
 })();

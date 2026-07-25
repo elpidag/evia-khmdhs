@@ -54,9 +54,13 @@ def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -
 
     @app.route("/overview")
     def overview():
-        view = (request.args.get("view") or "money_works").strip()
-        if view not in ("works", "contractors", "money_works", "money_home"):
-            view = "money_works"
+        view = (request.args.get("view") or "money").strip()
+        # Old 4-mode permalinks map onto the two twin-map views.
+        legacy = {"works": "points", "contractors": "points",
+                  "money_works": "money", "money_home": "money"}
+        view = legacy.get(view, view)
+        if view not in ("points", "money"):
+            view = "money"
         return render_template(
             "overview.html",
             view=view,
@@ -75,6 +79,9 @@ def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -
             "work_regions": queries.money_by_project_region(g.conn),
             "home_regions": queries.money_by_contractor_region(g.conn),
             "coverage": queries.flow_coverage(g.conn),
+            "contract_points": queries.contract_authority_points(g.conn),
+            "contractor_points": queries.contractor_points(g.conn),
+            "contracts": queries.overview_contracts(g.conn),
         })
 
     @app.route("/contractors")
