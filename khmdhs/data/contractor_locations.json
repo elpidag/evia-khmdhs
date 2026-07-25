@@ -8,7 +8,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045420075",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "142053604000"
   },
   " 099226444": {
     "legal_name": "HELLASOD Α.Ε.",
@@ -19,7 +20,8 @@
     "source": "company_website",
     "source_url": "https://www.hellasod.gr/",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "13415517000"
   },
   " 800948976": {
     "legal_name": "ΚΗΠΟΠΡΑΞΙΣ Ο.Ε.",
@@ -30,7 +32,8 @@
     "source": "fundamenta",
     "source_url": "https://www.fundamenta.gr/companies/145562101000",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "145562101000"
   },
   " 996681011": {
     "legal_name": "(ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ)ΚΟΙΝΟΠΡΑΞΙΑ ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ",
@@ -41,7 +44,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996681011",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "171439004000"
   },
   " 999826258": {
     "legal_name": "ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ ΚΑΙ ΣΙΑ ΕΕ",
@@ -52,7 +56,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=999826258",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "122438801000"
   },
   "023230385": {
     "legal_name": "ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -63,7 +68,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=023230385",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "140019101000"
   },
   "025751414": {
     "legal_name": "ΓΚΑΡΓΚΑΝΙΤΗΣ ΛΑΜΠΡΟΣ",
@@ -74,7 +80,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#113411710",
     "notes": "Sibling-surname match: ΓΚΑΡΓΚΑΝΙΤΗΣ ΠΑΝΑΓΙΩΤΗΣ (VAT 113411710) is in Salamina. Confidence: medium (same surname family).",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "56347909000"
   },
   "028816742": {
     "legal_name": "ΜΑΡΟΥΔΗΣ ΔΑΥΙΔ ΓΕΩΡΓΙΟΣ",
@@ -85,7 +92,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=028816742",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "45227322000"
   },
   "031014455": {
     "legal_name": "ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΓΕΣΘΗΜΑΝΗ ΘΕΟΦΙΛΟΣ",
@@ -96,7 +104,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=031014455",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "031213597": {
     "legal_name": "ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΓΕΩΡΓΙΟΣ",
@@ -107,7 +116,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=031213597",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "10522953000"
   },
   "032899263": {
     "legal_name": "ΤΣΑΛΙΚΗΣ ΜΙΧΑΗΛ ΜΙΧΑΗΛ",
@@ -118,7 +128,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=032899263",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "163757258000"
   },
   "033419558": {
     "legal_name": "ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΙΩΑΝΝΗΣ",
@@ -129,7 +140,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=033419558",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "1998201000"
   },
   "035592572": {
     "legal_name": "ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -140,7 +152,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=035592572",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "171938804000"
   },
   "035781463": {
     "legal_name": "ΠΑΤΣΙΚΑΣ ΝΙΚΟΛΑΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -151,7 +164,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=035781463",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "036298541": {
     "legal_name": "ΛΙΟΛΙΟΣ ΑΡΙΣΤΟΒΟΥΛΟΣ ΑΘΑΝΑΣΙΟΣ",
@@ -162,7 +176,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=036298541",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "4708701000"
   },
   "036692199": {
     "legal_name": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΔΗΜΗΤΡΙΟΣ",
@@ -173,29 +188,32 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=036692199",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "4678801000"
   },
   "036891000": {
     "legal_name": "ΑΛΑΦΟΓΙΑΝΝΗ ΑΙΚΑΤΕΡΙΝΗ ΙΩΑΝΝΗΣ",
-    "address": "ΛΕΩΦΟΡΟΣ ΚΗΦΙΣΙΑΣ 118Β",
-    "postal_code": "11526",
-    "city": "ΑΘΗΝΑ",
-    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
-    "source": "vies",
-    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=036891000",
-    "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "address": "ΚΥΔΩΝΙΩΝ 4",
+    "postal_code": "14234",
+    "city": "ΝΕΑ ΙΩΝΙΑ",
+    "region_pe": "Π.Ε. Βορείου Τομέα Αθηνών",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/146578103000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Κεντρικού Τομέα Αθηνών (source vies: ΛΕΩΦΟΡΟΣ ΚΗΦΙΣΙΑΣ 118Β, ΑΘΗΝΑ). corporate entity — not located on public web sources; needs manual research",
+    "curated_at": "2026-07-25",
+    "gemi": "146578103000"
   },
   "038377527": {
     "legal_name": "ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ ΓΕΩΡΓΙΟΣ",
-    "address": "ΚΑΛΛΙΘΕΑ",
+    "address": "ΔΙΑΛΕΧΤΟΥ 14",
     "postal_code": "42035",
-    "city": "ΚΟΝΙΣΚΟΣ",
-    "region_pe": "Π.Ε. Καρδίτσας",
-    "source": "vies",
-    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=038377527",
-    "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "city": "ΤΡΙΚΑΛΑ",
+    "region_pe": "Π.Ε. Τρικάλων",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/10583953000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Καρδίτσας (source vies: ΚΑΛΛΙΘΕΑ, ΚΟΝΙΣΚΟΣ). natural person — registered address not on public web; needs manual research",
+    "curated_at": "2026-07-25",
+    "gemi": "10583953000"
   },
   "040207632": {
     "legal_name": "ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ ΔΗΜΗΤΡΙΟΣ ΙΩΑΝΝΗΣ",
@@ -206,7 +224,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=040207632",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "45385622000"
   },
   "040847463": {
     "legal_name": "ΛΕΙΒΑΔΙΤΗΣ ΓΕΩΡΓΙΟΣ ΣΤΕΡΓΙΟΣ",
@@ -217,7 +236,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=040847463",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "042325306": {
     "legal_name": "ΛΙΑΠΟΠΟΥΛΟΥ ΑΡΙΣΤΕΑ ΑΝΔΡΟΝΙΚΟΣ",
@@ -228,7 +248,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=042325306",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "158982146000"
   },
   "043482580": {
     "legal_name": "ΑΛΤΑΝΗΣ ΣΠΥΡΙΔΩΝ ΣΩΚΡΑΤΗΣ",
@@ -239,7 +260,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=043482580",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "40188206000"
   },
   "043658123": {
     "legal_name": "ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ ΣΤΕΦΑΝΟΣ",
@@ -250,7 +272,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=043658123",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "163045840000"
   },
   "044098856": {
     "legal_name": "ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ ΒΑΣΙΛΕΙΟΣ ΙΩΑΝΝΗΣ",
@@ -261,7 +284,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=044098856",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "45536422000"
   },
   "044397125": {
     "legal_name": "ΦΑΚΙΡΗΣ ΤΑΞΙΑΡΧΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -272,7 +296,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=044397125",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "044397659": {
     "legal_name": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ ΛΟΥΚΑΣ",
@@ -283,7 +308,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=044397659",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "044739770": {
     "legal_name": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -294,7 +320,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=044739770",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "044850827": {
     "legal_name": "ΛΙΤΣΟΣ ΗΛΙΑΣ ΑΓΓΕΛΟΣ",
@@ -305,7 +332,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=044850827",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "166805009000"
   },
   "045100239": {
     "legal_name": "ΚΑΛΟΥΤΣΑΣ ΑΡΤΕΜΙΟΣ ΦΩΤΙΟΣ",
@@ -316,7 +344,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045100239",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "45584422000"
   },
   "045139263": {
     "legal_name": "ΛΟΓΟΘΕΤΗΣ ΓΕΩΡΓΙΟΣ ΠΑΝΑΓΙΩΤΗΣ",
@@ -327,7 +356,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045139263",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "045351317 ": {
     "legal_name": "ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΓΕΩΡΓΙΟΣ",
@@ -338,7 +368,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045351317",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "045351993": {
     "legal_name": "ΠΟΡΑΒΟΣ ΔΗΜΗΤΡΙΟΣ ΑΘΑΝΑΣΙΟΣ",
@@ -349,7 +380,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045351993",
     "notes": null,
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "045420075": {
     "legal_name": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΧΑΡΑΛΑΜΠΟΣ",
@@ -360,7 +392,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045420075",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "142053604000"
   },
   "050232986": {
     "legal_name": "ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΕΥΑΓΓΕΛΟΣ",
@@ -371,7 +404,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=050232986",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "154650319000"
   },
   "052362520": {
     "legal_name": "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΓΕΩΡΓΙΟΣ",
@@ -382,7 +416,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=052362520",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "175476603000"
   },
   "054537472": {
     "legal_name": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -393,7 +428,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=054537472",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "45825422000"
   },
   "062804310": {
     "legal_name": "ΧΑΜΑΡΙΑΣ ΗΛΙΑΣ ΣΩΚΡΑΤΗΣ",
@@ -404,7 +440,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=062804310",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "071851227 ": {
     "legal_name": "ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΓΕΩΡΓΙΟΣ",
@@ -415,7 +452,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=071851227",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "072740076": {
     "legal_name": "ΠΑΠΑΣΠΥΡΟΣ ΗΛΙΑΣ ΘΩΜΑΣ",
@@ -426,7 +464,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=072740076",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "10574153000"
   },
   "073533221": {
     "legal_name": "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΓΕΩΡΓΙΟΣ",
@@ -437,7 +476,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=073533221",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "075195407": {
     "legal_name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -448,7 +488,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=075195407",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "134546422000"
   },
   "077189760": {
     "legal_name": "ΑΝΔΡΙΤΣΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΙΩΑΝΝΗΣ",
@@ -459,7 +500,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=077189760",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "13313317000"
   },
   "093307430": {
     "legal_name": "ΒΙΟΛΙΑΠ Α.Τ.Ε.Β.Ε.",
@@ -470,7 +512,8 @@
     "source": "company_website",
     "source_url": "https://www.violiap.gr/",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "8836801000"
   },
   "093897751": {
     "legal_name": "ΟΡΚΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΚΑΙ ΕΜΠΟΡΙΚΗ ΕΤΑΙΡΕΙΑ",
@@ -481,7 +524,8 @@
     "source": "company_website",
     "source_url": "http://www.orkaconstructions.gr/",
     "notes": "Phone area code 2310 (Thessaloniki)",
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "122103004000"
   },
   "093940770": {
     "legal_name": "Φ ΦΑΣΟΥΛΑΣ Ν ΜΑΝΤΖΙΟΣ ΕΕ",
@@ -492,7 +536,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=093940770",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "42041006000"
   },
   "094297270": {
     "legal_name": "ΔΙΟΝ ΑΝΩΝΥΜΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ",
@@ -503,7 +548,8 @@
     "source": "vrisko",
     "source_url": "https://www.vrisko.gr/details/0_b44h517f036_bhcf77bfa51562af36",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "57553004000"
   },
   "094496848": {
     "legal_name": "ΤΟΜΗ ΑΝΩΝΥΜΗ ΒΙΟΜΗΧΑΝΙΚΗ - ΕΜΠΟΡΙΚΗ - ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ",
@@ -514,7 +560,8 @@
     "source": "findbiz",
     "source_url": "https://findbiz.gr/el/company/tomi-sa/",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "2491601000"
   },
   "099124894": {
     "legal_name": "ΖΙΤΑΚΑΤ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ - ΕΜΠΟΡΙΚΗ - ΒΙΟΜΗΧΑΝΙΚΗ",
@@ -525,7 +572,8 @@
     "source": "vrisko",
     "source_url": "https://www.vrisko.gr/details/5idgbb5526da0f6_4ga72_5f__1625c5",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "44614807000"
   },
   "099482396": {
     "legal_name": "ΟΙΚΟΔΑΣΟΣ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ ΚΑΙ ΥΠΗΡΕΣΙΩΝ ΕΤΑΙΡΕΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ",
@@ -536,7 +584,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=099482396",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "10520253000"
   },
   "099862798": {
     "legal_name": "ΕΡΓΑ ΠΡΑΣΙΝΟΥ ΑΤΕ",
@@ -547,7 +596,8 @@
     "source": "vrisko",
     "source_url": "https://www.vrisko.gr/details/0i121a6aac1j7b53a1_dcgbk067i2_0f",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "54450721000"
   },
   "099946299": {
     "legal_name": "ΙΩΑΝΝΗΣ ΚΑΡΑΚΩΣΤΑΣ ΚΑΙ ΣΙΑ ΟΕ",
@@ -558,7 +608,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=099946299",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "30745929000"
   },
   "099957333": {
     "legal_name": "ΟΜΙΚΡΟΝ ΣΥΜΒΟΥΛΟΙ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
@@ -569,7 +620,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=099957333",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "58464604000"
   },
   "102529416": {
     "legal_name": "ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΙΩΣΗΦ",
@@ -580,7 +632,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=102529416",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "110324970": {
     "legal_name": "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ — εργολήπτης δημοσίων έργων",
@@ -591,7 +644,8 @@
     "source": "company_website",
     "source_url": "https://www.filippakis.eu/",
     "notes": "Natural person (sole-proprietor), with company website",
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "139211906000"
   },
   "112528220": {
     "legal_name": "ΑΘΑΝΑΣΙΟΥ ΧΑΡΑΛΑΜΠΟΣ ΕΥΘΥΜΙΟΣ",
@@ -602,7 +656,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=112528220",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "141603615000"
   },
   "113411710": {
     "legal_name": "ΓΚΑΡΓΚΑΝΙΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΛΑΜΠΡΟΣ",
@@ -613,7 +668,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=113411710",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "95320109000"
   },
   "113864390": {
     "legal_name": "ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ ΔΗΜΟΣΘΕΝΗΣ",
@@ -624,7 +680,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=113864390",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "189663121000"
   },
   "117925460": {
     "legal_name": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -635,7 +692,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=117925460",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "122499275": {
     "legal_name": "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ ΑΘΑΝΑΣΙΟΣ",
@@ -646,7 +704,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=122499275",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "46364322000"
   },
   "139713737": {
     "legal_name": "ΚΑΡΑΘΑΝΑΣΗΣ ΝΙΚΟΛΑΟΣ ΔΙΑΜΑΝΤΗΣ",
@@ -657,7 +716,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=139713737",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "142452280": {
     "legal_name": "ΚΑΡΑΛΗ ΔΕΣΠΟΙΝΑ ΒΑΣΙΛΕΙΟΣ",
@@ -668,7 +728,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=142452280",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "148024200": {
     "legal_name": "ΤΣΑΝΤΑΛΗ ΟΥΡΑΝΙΑ ΠΑΝΑΓΙΩΤΗΣ",
@@ -679,7 +740,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=148024200",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "301568506": {
     "legal_name": "ΜΑΡΟΥΔΗΣ ΓΕΩΡΓΙΟΣ ΙΩΑΝΝΗΣ",
@@ -690,7 +752,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=301568506",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "46482622000"
   },
   "800339138": {
     "legal_name": "ENCODIA ΣΥΜΒΟΥΛΟΙ ΜΗΧΑΝΙΚΟΙ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΕΙΑ",
@@ -701,7 +764,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=800339138",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "117024503000"
   },
   "800363439": {
     "legal_name": "Γ.Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ",
@@ -712,7 +776,8 @@
     "source": "acompio",
     "source_url": "https://www.acompio.gr/%CE%93-%CE%99-%CE%9A%CE%91%CE%A1%CE%9D%CE%9F%CE%9C%CE%9F%CE%A5%CE%A1%CE%91%CE%9A%CE%97%CE%A3-%CE%91%CE%95-37821537.html",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "118413044000"
   },
   "800363439 ": {
     "legal_name": "Γ.Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ",
@@ -723,7 +788,8 @@
     "source": "acompio",
     "source_url": "https://www.acompio.gr/%CE%93-%CE%99-%CE%9A%CE%91%CE%A1%CE%9D%CE%9F%CE%9C%CE%9F%CE%A5%CE%A1%CE%91%CE%9A%CE%97%CE%A3-%CE%91%CE%95-37821537.html",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "118413044000"
   },
   "800844340": {
     "legal_name": "ΑΛΚΗ Ι Κ Ε",
@@ -734,7 +800,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=800844340",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "142778830000"
   },
   "800948976": {
     "legal_name": "ΚΗΠΟΠΡΑΞΙΣ Ο.Ε.",
@@ -745,7 +812,8 @@
     "source": "fundamenta",
     "source_url": "https://www.fundamenta.gr/companies/145562101000",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "145562101000"
   },
   "801045078": {
     "legal_name": "ΑΛΣΟΣ ΙΚΕ",
@@ -756,7 +824,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=801045078",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "147742306000"
   },
   "801294415": {
     "legal_name": "ΟΛΥΜΠΟΣ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ Ι Κ Ε",
@@ -767,7 +836,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=801294415",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "153738406000"
   },
   "801706520": {
     "legal_name": "BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
@@ -778,7 +848,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=801706520",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "161867853000"
   },
   "801729255": {
     "legal_name": "GREEN EDGE ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
@@ -789,7 +860,8 @@
     "source": "company_website",
     "source_url": "https://www.greenedge.gr/",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "162285901000"
   },
   "801838797": {
     "legal_name": "ΝΙΚΟΛΑΟΣ ΔΗΜΗΤΡΙΟΥ   ΣΙΑ Ε Ε",
@@ -800,7 +872,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=801838797",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "164301403000"
   },
   "802122302": {
     "legal_name": "ΔΑΣΟΤΕΧΝΙΚΑ ΕΡΓΑ ABIES Ε Ε",
@@ -811,7 +884,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802122302",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "170396853000"
   },
   "802174648": {
     "legal_name": "Κ  ΤΣΙΦΤΣΟΓΛΟΥ ΚΑΙ ΣΙΑ Ο Ε",
@@ -822,7 +896,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802174648",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "171470904000"
   },
   "802234256": {
     "legal_name": "ΠΟΛΟΣ Ε Ε",
@@ -833,7 +908,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802234256",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "172668404000"
   },
   "802604573": {
     "legal_name": "ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ  ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -844,7 +920,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802604573",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "179415145000"
   },
   "802647782": {
     "legal_name": "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑΕΕ   ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑΕΕ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -855,7 +932,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802647782",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "180187701000"
   },
   "802662066": {
     "legal_name": "ΜΑΝΑΡΙΤΣΑΣ ΑΓΓΕΛΑΤΟΣ Κ Ξ",
@@ -866,7 +944,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802662066",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "180446822000"
   },
   "802662122": {
     "legal_name": "ΑΓΓΕΛΑΤΟΣ ΜΑΝΑΡΙΤΣΑΣ Κ Ξ",
@@ -877,7 +956,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802662122",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "180448822000"
   },
   "802662240": {
     "legal_name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε Ε Κ Ξ",
@@ -888,7 +968,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802662240",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "180451622000"
   },
   "802669608": {
     "legal_name": "ΣΑΒΒΑΣ ΚΑΖΑΝΤΣΟΓΛΟΥ   ΒΕΛΩΝΗΣ ΝΙΚ  ΓΕΩΡΓΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -899,7 +980,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802669608",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "180590106000"
   },
   "802778407": {
     "legal_name": "ΚΑΡΑΛΗ ΖΩΗ Ε Ε    ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -910,18 +992,20 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802778407",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "182599740000"
   },
   "802794641": {
     "legal_name": "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΠΙΕΡΙΑΣ 2025 Κ Ξ",
     "address": "ΜΠΟΝΟΥ 7",
     "postal_code": "38445",
-    "city": "Ν ΙΩΝΙΑ ΒΟΛΟΥ",
-    "region_pe": "Π.Ε. Λάρισας",
-    "source": "vies",
-    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802794641",
-    "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "city": "ΝΕΑ ΙΩΝΙΑ ΒΟΛΟΥ",
+    "region_pe": "Π.Ε. Μαγνησίας",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/182901844000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Λάρισας (source vies: ΜΠΟΝΟΥ 7, Ν ΙΩΝΙΑ ΒΟΛΟΥ). consortium — see member entries; address not on public web",
+    "curated_at": "2026-07-25",
+    "gemi": "182901844000"
   },
   "802827387": {
     "legal_name": "Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -932,7 +1016,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802827387",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "183496802000"
   },
   "802828870": {
     "legal_name": "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ Ξ",
@@ -943,7 +1028,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802828870",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "183520344000"
   },
   "802838906": {
     "legal_name": "ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ   ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε Ε ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -954,7 +1040,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802838906",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "183707904000"
   },
   "802849435": {
     "legal_name": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -965,18 +1052,20 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802849435",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "183918954000"
   },
   "802850526": {
     "legal_name": "ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ Ξ",
     "address": "ΜΠΟΝΟΥ 7",
     "postal_code": "38445",
-    "city": "Ν ΙΩΝΙΑ ΒΟΛΟΥ",
-    "region_pe": "Π.Ε. Λάρισας",
-    "source": "vies",
-    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802850526",
-    "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "city": "ΝΕΑ ΙΩΝΙΑ ΒΟΛΟΥ",
+    "region_pe": "Π.Ε. Μαγνησίας",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/183936544000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Λάρισας (source vies: ΜΠΟΝΟΥ 7, Ν ΙΩΝΙΑ ΒΟΛΟΥ). consortium — see member entries; address not on public web",
+    "curated_at": "2026-07-25",
+    "gemi": "183936544000"
   },
   "802865853": {
     "legal_name": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε Ε  ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε Ε  ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -987,7 +1076,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802865853",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "184231301000"
   },
   "98434068": {
     "legal_name": "ΓΕΩΓΝΩΜΩΝ Ο.Ε.",
@@ -998,29 +1088,32 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#998434068",
     "notes": "Same legal entity as VAT 998434068 (ΓΕΩΓΝΩΜΩΝ Ο.Ε. in Patra). The 8-digit form is a data-entry artifact. Confidence: very high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "996496038": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ Κ ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ Ε Ε ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΧΑΡΑΛΑΜΠΟΥΣ",
     "address": "ΜΠΟΝΟΥ 7",
     "postal_code": "38445",
-    "city": "Ν ΙΩΝΙΑ ΒΟΛΟΥ",
-    "region_pe": "Π.Ε. Λάρισας",
-    "source": "vies",
-    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996496038",
-    "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "city": "ΝΕΑ ΙΩΝΙΑ ΒΟΛΟΥ",
+    "region_pe": "Π.Ε. Μαγνησίας",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/175437444000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Λάρισας (source vies: ΜΠΟΝΟΥ 7, Ν ΙΩΝΙΑ ΒΟΛΟΥ). consortium — see member entries; address not on public web",
+    "curated_at": "2026-07-25",
+    "gemi": "175437444000"
   },
   "996496315": {
-    "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΡΕΤΗ ΓΚΑΡΑΝΑΤΣΙΟΥ - ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ",
-    "address": null,
-    "postal_code": null,
-    "city": null,
-    "region_pe": null,
-    "source": "consortium_unresolved",
-    "source_url": "",
-    "notes": "ΓΚΑΡΑΝΑΤΣΙΟΥ surname not found in DB; ΠΑΠΑΔΟΠΟΥΛΟΣ ambiguous (1000s in Greece). Web search inconclusive. Project regions span Eurytania/Kozani/Larissa/Pieria/Trikala — multi-region operator.",
-    "curated_at": "2026-07-19"
+    "legal_name": "(ΔΙΑΓΡΑΦΗΚΕ) ΚΟΙΝΟΠΡΑΞΙΑ ΑΡΕΤΗ ΓΚΑΡΑΝΑΤΣΙΟΥ- ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ Κ/Ξ",
+    "address": "ΔΗΜΑΡΧΟΥ ΓΕΩΡΓΙΑΔΟΥ 278",
+    "postal_code": "38222",
+    "city": "ΒΟΛΟΥ",
+    "region_pe": "Π.Ε. Μαγνησίας",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/177161444000",
+    "notes": "GEMI publicity profile (Διαγραφή). GEMI publicity profile (Διαγραφή). ΓΚΑΡΑΝΑΤΣΙΟΥ surname not found in DB; ΠΑΠΑΔΟΠΟΥΛΟΣ ambiguous (1000s in Greece). Web search inconclusive. Project regions span Eurytania/Kozani/Larissa/Pieria/Trikala — multi-region operator.",
+    "curated_at": "2026-07-25",
+    "gemi": "177161444000"
   },
   "996514405": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΝΤΙΝΟΠΟΥΛΟΣ ΑΠΟΣΤΟΛΟΣ ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ",
@@ -1031,7 +1124,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996514405",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "176274553000"
   },
   "996514480": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ  ΓΕΩΡΓΙΟΥ Δ ΦΟΥΚΑΣ Ν Κ ΣΙΑ ΟΕ  ΤΕΧΝΗ",
@@ -1042,7 +1136,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996514480",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "177355553000"
   },
   "996514860": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ  Μ ΚΑΙ Κ  ΤΕΧΝΙΚΑ",
@@ -1053,7 +1148,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996514860",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "996550190": {
     "legal_name": "Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ ΥΠΟΕΡΓΟ Β",
@@ -1064,7 +1160,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#800363439",
     "notes": "Same legal entity under VAT 800363439 in Athens N. (Maroussi). VAT 996550190 likely a JV-registered alternate. Confidence: high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "996551148": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ - ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ",
@@ -1075,7 +1172,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996551148",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "996551289": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
@@ -1086,7 +1184,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996551289",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "-1"
   },
   "996553688": {
     "legal_name": "ΚΞ Γ Ι ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ ΑΛΚΗ ΙΚΕ  ΥΠΟΕΡΓΟ Δ",
@@ -1097,7 +1196,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996553688",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "171364401000"
   },
   "996593557": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ Κ Ξ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε Ε ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
@@ -1108,7 +1208,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996593557",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "171244201000"
   },
   "996604110": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ - ΕΔΡΑΙΟΣ ΑΤΕ",
@@ -1119,18 +1220,20 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#996605211",
     "notes": "Member ΛΙΤΣΑ ΕΥΔΟΚΙΑ also in resolved consortium 996605211 (Salamina). Confidence: high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "166890007000"
   },
   "996604620": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΔΗΜΟΠΟΥΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΔΑΜ",
-    "address": null,
-    "postal_code": null,
-    "city": "ΠΟΡΤΟΧΕΛΙ",
-    "region_pe": "Π.Ε. Αργολίδας",
-    "source": "consortium_member_inferred",
-    "source_url": "web:duckduckgo",
-    "notes": "Web search (DuckDuckGo) suggested a ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ in Portocheli (Argolida). Confidence: low — surname is common. Project regions in Peloponnese (Achaia/Ilia/Messinia) make a Peloponnesian home plausible.",
-    "curated_at": "2026-07-19"
+    "address": "ΠΑΠΑΝΙΚΟΛΑΟΥ 10",
+    "postal_code": "18900",
+    "city": "ΣΑΛΑΜΙΝΑ",
+    "region_pe": "Π.Ε. Νήσων",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/171248307000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Αργολίδας (source consortium_member_inferred: —, ΠΟΡΤΟΧΕΛΙ). Web search (DuckDuckGo) suggested a ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ in Portocheli (Argolida). Confidence: low — surname is common. Project regions in Peloponnese (Achaia/Ilia/Messinia) make a Peloponnesian home plausible.",
+    "curated_at": "2026-07-25",
+    "gemi": "171248307000"
   },
   "996605179": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΔΙΟΝΥΣΙΟΣ ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΤΟΥ ΖΑΦΕΙΡΗ-ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ",
@@ -1141,7 +1244,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996605179",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "174579607000"
   },
   "996605211": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ-ΚΥΡΙΑΖΑΤΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ ΕΕ",
@@ -1152,7 +1256,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996605211",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "175038907000"
   },
   "996608815": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ-ΜΠΟΥΡΑΣ ΗΛΙΑΣ ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ",
@@ -1163,7 +1268,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996608815",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "175896201000"
   },
   "996666474": {
     "legal_name": "Κ/ΞΙΑ ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ - ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ",
@@ -1174,7 +1280,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#073533221",
     "notes": "Member ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ resolved as 073533221 in Korinthia. Confidence: high (unique surname-firstname pair).",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "996681011": {
     "legal_name": "(ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ)ΚΟΙΝΟΠΡΑΞΙΑ ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ",
@@ -1185,7 +1292,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996681011",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "171439004000"
   },
   "996714083": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
@@ -1196,7 +1304,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996714083",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "175712152000"
   },
   "996714243": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ - ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
@@ -1207,7 +1316,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#996714083",
     "notes": "Both members (ΤΑΣΚΟΥΔΗΣ, ΓΚΑΤΖΙΟΣ) appear in 3 sibling consortia all resolved to Serres. Confidence: very high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "177167252000"
   },
   "996714741": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ ΜΟΝΟΠΡΟΣΩΠΗ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΙΑ Ι.Κ.Ε.-ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι. ΦΩΤ",
@@ -1218,18 +1328,20 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996714741",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "183023252000"
   },
   "996813189": {
     "legal_name": "ΚΟΙΝΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ - ΚΑΤΣΙΑΒΑΣ ΧΡ. - ΝΑΤΣΗΣ ΚΩΝ ΟΕ - ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ",
-    "address": null,
-    "postal_code": null,
-    "city": "ΑΘΗΝΑ",
-    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
-    "source": "consortium_member_inferred",
-    "source_url": "web:acci_directory",
-    "notes": "Web search: 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ Α.Ε. registered at ΑΓ. ΛΑΥΡΑΣ 86, Athens (Πατήσια). Confidence: medium.",
-    "curated_at": "2026-07-19"
+    "address": "ΑΝΝΗΣ ΚΟΜΝΗΝΗΣ 4",
+    "postal_code": "42131",
+    "city": "ΤΡΙΚΑΛΑ",
+    "region_pe": "Π.Ε. Τρικάλων",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/166547553000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Κεντρικού Τομέα Αθηνών (source consortium_member_inferred: —, ΑΘΗΝΑ). Web search: 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ Α.Ε. registered at ΑΓ. ΛΑΥΡΑΣ 86, Athens (Πατήσια). Confidence: medium.",
+    "curated_at": "2026-07-25",
+    "gemi": "166547553000"
   },
   "996813233": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ «ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ»",
@@ -1240,7 +1352,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#031213597",
     "notes": "Member ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ resolved as 031213597 in Trikala. Confidence: high (unique surname-firstname pair).",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "166857453000"
   },
   "996813651": {
     "legal_name": "BIODASOS-ΤΕΧΝΗ",
@@ -1251,7 +1364,8 @@
     "source": "consortium_member_inferred",
     "source_url": "web:duckduckgo",
     "notes": "Web search (DuckDuckGo, Facebook listing): BIODASOS based in Trikala. Confidence: medium.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "171026653000"
   },
   "996815029": {
     "legal_name": "ΓΕΩΡΓΙΟΥ ΚΩΝ ΔΗΜΗΤΡΙΟΣ - ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
@@ -1262,18 +1376,20 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996815029",
     "notes": "natural person — registered address not on public web; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "175965322000"
   },
   "996831933": {
     "legal_name": "Κ/ΞΙΑ ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ– ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ",
-    "address": null,
-    "postal_code": null,
-    "city": "ΔΡΑΜΑ",
-    "region_pe": "Π.Ε. Δράμας",
-    "source": "consortium_member_inferred",
-    "source_url": "audit:contractor_locations#050232986",
-    "notes": "Member ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ resolved as 050232986 in Drama (same patronymic). Confidence: very high.",
-    "curated_at": "2026-07-19"
+    "address": "ΚΩΣΤΗ ΠΑΛΑΜΑ 7",
+    "postal_code": "13451",
+    "city": "ΑΓΙΟΙ ΑΝΑΡΓΥΡΟΙ",
+    "region_pe": "Π.Ε. Δυτικού Τομέα Αθηνών",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/171279401000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Δράμας (source consortium_member_inferred: —, ΔΡΑΜΑ). Member ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ resolved as 050232986 in Drama (same patronymic). Confidence: very high.",
+    "curated_at": "2026-07-25",
+    "gemi": "171279401000"
   },
   "997080725": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΑΝΤΑΛΗ Π ΟΥΡΑΝΙΑ ΒΕΛΩΝΗΣ ΝΙΚ ΓΕΩΡΓΙΟΣ",
@@ -1284,7 +1400,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=997080725",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "176126104000"
   },
   "997227555": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΛΕΦΤΣΗΣ ΧΡΗΣΤΟΣ ΑΦΟΙ ΔΙΑΜΑΝΤΟΓΛΟΥ ΟΕ ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ",
@@ -1295,7 +1412,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=997227555",
     "notes": "consortium — see member entries; address not on public web",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "171288635000"
   },
   "997973588": {
     "legal_name": "ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ",
@@ -1306,7 +1424,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=997973588",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "121863526000"
   },
   "998068840": {
     "legal_name": "ΣΑΚΚΟΣ Χ ΚΑΙ ΣΙΑ ΕΕ",
@@ -1317,7 +1436,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998068840",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "126680004000"
   },
   "998126035": {
     "legal_name": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ ΕΕ",
@@ -1328,7 +1448,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998126035",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "8829401000"
   },
   "998152201": {
     "legal_name": "ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ",
@@ -1339,7 +1460,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998152201",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "69771403000"
   },
   "998255970": {
     "legal_name": "ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ  ΚΑΙ ΣΙΑ ΕΕ",
@@ -1350,7 +1472,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998255970",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "124272601000"
   },
   "998256075": {
     "legal_name": "GREEN CONSTRUCTION A.T.E.",
@@ -1361,7 +1484,8 @@
     "source": "company_website",
     "source_url": "https://greenconstruction.gr/",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "124149101000"
   },
   "998269962": {
     "legal_name": "ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ ΕΕ",
@@ -1372,7 +1496,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998269962",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "15245945000"
   },
   "998342580": {
     "legal_name": "ΒΙΟΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΙΑ",
@@ -1383,7 +1508,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998342580",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "20805730000"
   },
   "998434068": {
     "legal_name": "ΓΕΩΓΝΩΜΩΝ ΟΕ",
@@ -1394,7 +1520,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998434068",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "35248216000"
   },
   "998669700": {
     "legal_name": "ΗΡΑΚΛΗΣ ΧΡ ΤΣΟΚΟΣ ΚΑΙ ΙΩΑΝΝΗΣ ΧΡ ΤΣΟΚΟΣ ΟΕ",
@@ -1405,7 +1532,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998669700",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "46565422000"
   },
   "998731143": {
     "legal_name": "ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ",
@@ -1416,7 +1544,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998731143",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "128280101000"
   },
   "998746814": {
     "legal_name": "ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
@@ -1427,18 +1556,20 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998746814",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "114233252000"
   },
   "998807500": {
     "legal_name": "Τ & Τ ΚΑΤΑΣΚΕΥΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
-    "address": "Λεωφ. Κηφισίας 118Β",
-    "postal_code": null,
-    "city": "Αθήνα (Μαρούσι περιοχή)",
-    "region_pe": "Π.Ε. Βορείου Τομέα Αθηνών",
-    "source": "pollock.gr",
-    "source_url": "https://pollock.gr/company/%CF%84-%CF%84-%CE%BA%CE%B1%CF%84%CE%B1%CF%83%CE%BA%CE%B5%CF%85%CE%B5%CF%82-%CE%B1%CE%BD%CF%89%CE%BD%CF%85%CE%BC%CE%B7-%CE%B5%CF%84%CE%B1%CE%B9%CF%81%CE%B5%CE%B9%CE%B1-998807500",
-    "notes": null,
-    "curated_at": "2026-05-16"
+    "address": "ΛΕΩΦ. ΚΗΦΙΣΙΑΣ 118Β",
+    "postal_code": "11526",
+    "city": "ΑΘΗΝΑ",
+    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/7249601000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Βορείου Τομέα Αθηνών (source pollock.gr: Λεωφ. Κηφισίας 118Β, Αθήνα (Μαρούσι περιοχή)).",
+    "curated_at": "2026-07-25",
+    "gemi": "7249601000"
   },
   "999173415": {
     "legal_name": "Μ ΑΠΟΣΤΟΛΙΔΗΣ Κ ΣΙΑ ΕΕ ΚΑΤΑΣΚΕΥΩΝ",
@@ -1449,7 +1580,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=999173415",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "122641127000"
   },
   "999308989": {
     "legal_name": "ΓΕΩΡΥΘΜΙΚΗ ΑΤΕ",
@@ -1460,7 +1592,8 @@
     "source": "company_website",
     "source_url": "https://georythmiki.gr/",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "122185001000"
   },
   "999607559": {
     "legal_name": "ΛΙΑΧΤΙΔΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ",
@@ -1471,7 +1604,8 @@
     "source": "diavgeia",
     "source_url": "https://yperdiavgeia.gr/decisions/view/25665389",
     "notes": "ΔΟΥ ΦΑΕ Θεσσαλονίκης",
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "124366404000"
   },
   "999643896": {
     "legal_name": "ΝΑΤΟΥΡΑ ΑΕ",
@@ -1482,7 +1616,8 @@
     "source": "vrisko",
     "source_url": "https://www.vrisko.gr/details/_a0j140b4_0c7c020j6ka4ck_27e5f56",
     "notes": null,
-    "curated_at": "2026-05-16"
+    "curated_at": "2026-05-16",
+    "gemi": "5909001000"
   },
   "999814120": {
     "legal_name": "Η  ΑΠΟΣΤΟΛΙΔΗΣ   Ν  ΠΑΓΚΑΣ ΚΑΙ ΣΙΑ Ε Ε",
@@ -1493,7 +1628,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=999814120",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "68900603000"
   },
   "999826258": {
     "legal_name": "ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ ΚΑΙ ΣΙΑ ΕΕ",
@@ -1504,7 +1640,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=999826258",
     "notes": "corporate entity — not located on public web sources; needs manual research",
-    "curated_at": "2026-05-17"
+    "curated_at": "2026-05-17",
+    "gemi": "122438801000"
   },
   "043659132": {
     "legal_name": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΝΙΚΟΛΑΟΣ",
@@ -1515,7 +1652,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=043659132",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "-1"
   },
   "044622622": {
     "legal_name": "ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΝΙΚΟΛΑΟΣ",
@@ -1526,18 +1664,20 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=044622622",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "147318616000"
   },
   "044705095": {
     "legal_name": "ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ ΙΩΑΝΝΗΣ",
-    "address": "ΜΕΤΕΩΡΩΝ 45",
-    "postal_code": "43100",
-    "city": "ΚΑΡΔΙΤΣΑ",
-    "region_pe": "Π.Ε. Καρδίτσας",
-    "source": "vies",
-    "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=044705095",
-    "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "address": "ΑΛΚΜΗΝΗΣ 3",
+    "postal_code": "17237",
+    "city": "ΔΑΦΝΗ",
+    "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/136076601000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Καρδίτσας (source vies: ΜΕΤΕΩΡΩΝ 45, ΚΑΡΔΙΤΣΑ). new contractor from antinero_supplement load",
+    "curated_at": "2026-07-25",
+    "gemi": "136076601000"
   },
   "045958594": {
     "legal_name": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ ΓΕΩΡΓΙΟΣ",
@@ -1548,7 +1688,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045958594",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "40492306000"
   },
   "102486448": {
     "legal_name": "ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΝΕΟΦΥΤΟΣ",
@@ -1559,7 +1700,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=102486448",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "123154130000"
   },
   "802940220": {
     "legal_name": "ΜΑΝΑΡΙΤΣΑΣ ΛΙΑΡΗ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -1570,7 +1712,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802940220",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "185796222000"
   },
   "996664604": {
     "legal_name": "ΚΞΙΑ ΖΗΣΗΣ  ΑΓΓΕΛΑΤΟΣ ΕΥΑΓΓΕΛΟΣ  ΜΑΝΑΡΙΤΣΑΣ ΓΕΩΡΓΙΟΣ  ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
@@ -1581,7 +1724,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996664604",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "170518722000"
   },
   "996674333": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ-ΕΛ.ΤΕ. Ε.Π.Ε.",
@@ -1592,7 +1736,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#036692199",
     "notes": "Lead member ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ resolved as 036692199 (N. Athens). Exact name+patronymic match. Confidence: very high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "164272001000"
   },
   "996679758": {
     "legal_name": "ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ  ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ",
@@ -1603,18 +1748,20 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996679758",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "164016904000"
   },
   "996699548": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ ΕΕ - ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ",
-    "address": null,
-    "postal_code": null,
-    "city": null,
-    "region_pe": "Π.Ε. Νοτίου Τομέα Αθηνών",
-    "source": "consortium_member_inferred",
-    "source_url": "audit:contractor_locations#802865853",
-    "notes": "Lead ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε.Ε.: sibling consortia 802865853 and 996593557 both VIES-resolved to S. Athens. Confidence: high.",
-    "curated_at": "2026-07-19"
+    "address": "ΞΑΝΘΙΠΠΟΥ 61",
+    "postal_code": "15561",
+    "city": "ΠΑΠΑΓΟΥ-ΧΟΛΑΡΓΟΣ",
+    "region_pe": "Π.Ε. Βορείου Τομέα Αθηνών",
+    "source": "gemi",
+    "source_url": "https://publicity.businessportal.gr/company/164013301000",
+    "notes": "GEMI registered seat (verified 2026-07-25); previously Π.Ε. Νοτίου Τομέα Αθηνών (source consortium_member_inferred: —, —). Lead ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε.Ε.: sibling consortia 802865853 and 996593557 both VIES-resolved to S. Athens. Confidence: high.",
+    "curated_at": "2026-07-25",
+    "gemi": "164013301000"
   },
   "996830790": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ - ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ",
@@ -1625,7 +1772,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#033419558",
     "notes": "Lead member ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ resolved as 033419558 (W. Athens). Exact name+patronymic match. Confidence: very high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "164538201000"
   },
   "996870356": {
     "legal_name": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ",
@@ -1636,7 +1784,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#044739770",
     "notes": "Both members resolved to Kavala: ΜΠΟΜΠΟΤΗ Κ.-Β. (044739770) and ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ (102529416). Confidence: very high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "996870694": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
@@ -1646,8 +1795,9 @@
     "region_pe": null,
     "source": "consortium_unresolved",
     "source_url": "",
-    "notes": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ matches two different resolved people (Kavala 996551289 member; Kozani 117925460) with no patronymic to disambiguate. ΠΑΠΑΓΕΩΡΓΑΚΗΣ not in DB; web search inconclusive (a Papageorgaki Bros landscaping firm exists in Metamorfosi, Athens, unverified). No safe inference.",
-    "curated_at": "2026-07-19"
+    "notes": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ matches two different resolved people (Kavala 996551289 member; Kozani 117925460) with no patronymic to disambiguate. ΠΑΠΑΓΕΩΡΓΑΚΗΣ not in DB; web search inconclusive (a Papageorgaki Bros landscaping firm exists in Metamorfosi, Athens, unverified). No safe inference. | Not in GEMI publicity search.",
+    "curated_at": "2026-07-25",
+    "gemi": "-1"
   },
   "997080215": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ",
@@ -1658,7 +1808,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=997080215",
     "notes": "new contractor from antinero_supplement load",
-    "curated_at": "2026-07-18"
+    "curated_at": "2026-07-18",
+    "gemi": "165541904000"
   },
   "800710872": {
     "legal_name": "ΑΝΑΣΤΑΣΙΟΥ Γ ΜΠΑΛΤΟΓΙΑΝΝΗ Φ Ο Ε",
@@ -1669,7 +1820,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=800710872",
     "notes": "new contractor from Diavgeia payment batch 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "137806429000"
   },
   "801689474": {
     "legal_name": "ΑΓΓΕΛΑΤΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ Ο Ε",
@@ -1680,7 +1832,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=801689474",
     "notes": "new contractor from Diavgeia payment batch 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "161546022000"
   },
   "996666622": {
     "legal_name": "ΚΞ ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ",
@@ -1691,7 +1844,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996666622",
     "notes": "new contractor from Diavgeia payment batch 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "177632622000"
   },
   "803027799": {
     "legal_name": "FORESTVISION Ι Κ Ε",
@@ -1702,7 +1856,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=803027799",
     "notes": "new contractor from Diavgeia payment batch 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "187730853000"
   },
   "055481330": {
     "legal_name": "ΔΡΟΣΟΥ ΣΠΥΡΙΔΟΥΛΑ ΑΔΑΜΑΝΤΙΟΣ",
@@ -1713,7 +1868,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=055481330",
     "notes": "new contractor from Diavgeia payment batch 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "173340104000"
   },
   "801569138": {
     "legal_name": "ERGOMASS Ι Κ Ε",
@@ -1724,7 +1880,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=801569138",
     "notes": "new contractor from Diavgeia payment batch 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "159300101000"
   },
   "997424631": {
     "legal_name": "ΗΡΩΝ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΟΙΚΟΔΟΜΙΚΗ ΚΤΗΜΑΤΙΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΕΜΠΟΡΙΚΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ",
@@ -1735,7 +1892,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=997424631",
     "notes": "new contractor from Diavgeia payment batch 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "128469640000"
   },
   "071851227": {
     "legal_name": "ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΓΕΩΡΓΙΟΣ",
@@ -1746,7 +1904,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=071851227",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "099226444": {
     "legal_name": "HELLASOD  ΑΕ",
@@ -1757,7 +1916,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=099226444",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "13415517000"
   },
   "999970164": {
     "legal_name": "ΓΟΥΝΑΡΗΣ Ν ΚΟΝΤΟΣ Κ ΕΤΕΡΟΡΡΥΘΜΗ ΕΤΑΙΡΕΙΑ",
@@ -1768,7 +1928,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=999970164",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "43823206000"
   },
   "998643917": {
     "legal_name": "NERCO Ν ΧΛΥΚΑΣ ΚΑΙ ΣΥΝΕΡΓΑΤΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ",
@@ -1779,7 +1940,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998643917",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "7252001000"
   },
   "093897818": {
     "legal_name": "ΠΑΝΑΓΙΩΤΗΣ ΚΑΡΑΜΟΣΧΟΣ ΚΑΙ ΣΥΝΕΡΓΑΤΕΣ ΕΕ",
@@ -1790,7 +1952,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=093897818",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "122793205000"
   },
   "122076788": {
     "legal_name": "ΦΩΤΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ ΕΥΘΥΜΙΟΣ",
@@ -1801,7 +1964,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=122076788",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "998811782": {
     "legal_name": "NOVALIS ΑΝΑΠΤΥΞΙΑΚΕΣ, ΠΕΡΙΒΑΛΛΟΝΤΟΛΟΓΙΚΕΣ, ΔΑΣΙΚΕΣ, ΓΕΩΤΕΧΝΙΚΕΣ, ΑΛΙΕΥΤΙΚΕΣ ΜΕΛΕΤΕΣ ΚΑΙ ΜΕΛΕΤΕΣ ΧΑΡΤΟΓΡΑΦΙΑΣ - ΓΕΩΓΡΑΦΙΚ",
@@ -1812,7 +1976,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998811782",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "7984901000"
   },
   "045312261": {
     "legal_name": "ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΚΩΝΣΤΑΝΤΙΝΟΣ",
@@ -1823,7 +1988,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045312261",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "801423948": {
     "legal_name": "ONE AND ONLY PLAYGROUNDS ΜΟΝΟΠΡΟΣΩΠΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
@@ -1834,7 +2000,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=801423948",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "156504501000"
   },
   "046212303": {
     "legal_name": "ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΑΝΔΡΕΑΣ",
@@ -1845,7 +2012,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=046212303",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "045497240": {
     "legal_name": "ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΒΛΑΣΙΟΣ",
@@ -1856,7 +2024,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045497240",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "094118874": {
     "legal_name": "ΑΙΑΣ ΑΝΩΝΥΜΟΣ ΤΕΧΝΙΚΗ ΕΤΑΙΡΙΑ",
@@ -1867,7 +2036,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=094118874",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "26536240000"
   },
   "998353594": {
     "legal_name": "ΚΥΡΙΑΖΑΤΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ ΕΕ",
@@ -1878,7 +2048,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998353594",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "123134801000"
   },
   "043170596": {
     "legal_name": "ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΤΩΝΙΟΣ",
@@ -1889,7 +2060,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=043170596",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "53257348000"
   },
   "045351317": {
     "legal_name": "ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΓΕΩΡΓΙΟΣ",
@@ -1900,7 +2072,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=045351317",
     "notes": "new contractor from Diavgeia contract sweep 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "999640010": {
     "legal_name": "ΠΙ ΕΝΤ ΣΙ ΝΤΙΒΕΛΟΠΜΕΝΤ ΤΕΧΝΙΚΗ -ΟΙΚΟΔΟΜΙΚΗ - ΕΜΠΟΡΙΚΗ - ΝΑΥΤΙΛΙΑΚΗ ΚΑΙ ΤΟΥΡΙΣΤΙΚΗ ΜΟΝΟΠΡΟΣΩΠΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
@@ -1911,7 +2084,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=999640010",
     "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "4835601000"
   },
   "996774829": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) GREEN CONSTRUCTION ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ – ΣΤΑΥΡΟΣ ΤΣΙΦΤΣΟΓΛΟΥ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
@@ -1922,7 +2096,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#998256075",
     "notes": "Members split regions: lead GREEN CONSTRUCTION ΑΤΕ (998256075) is in Markopoulo, Π.Ε. Ανατολικής Αττικής; ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ (035592572) is in Lagadas, Π.Ε. Θεσσαλονίκης. Attributed to the corporate lead member. Confidence: medium.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "174552401000"
   },
   "996609013": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ T ΚΑΙ T ΚΑΤΑΣΚΕΥΕΣ ΑΕ ΜΕΣΟΓΕΙΟΣ ΑΕ 2 ΑΝΑΔΑΣΩΣΕΙΣ",
@@ -1933,7 +2108,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=996609013",
     "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "177173501000"
   },
   "996550834": {
     "legal_name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ - ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ",
@@ -1944,7 +2120,8 @@
     "source": "consortium_member_inferred",
     "source_url": "audit:contractor_locations#044739770",
     "notes": "Both members VIES-resolved to Kavala: ΜΠΟΜΠΟΤΗ Κ.-Β. (044739770) and ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ (045351317). Confidence: very high.",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "-1"
   },
   "094206769": {
     "legal_name": "ΗΛΙΟΧΩΡΑ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ ΒΙΟΜΗΧΑΝΙΚΩΝ ΕΜΠΟΡΙΚΩΝ ΤΕΧΝΙΚΩΝ ΤΟΥΡΙΣΤΙΚΩΝ ΚΑΙ ΞΕΝΟΔΟΧΕΙΑΚΩΝ ΕΠΙΧΕΙΡΗΣΕΩΝ",
@@ -1955,7 +2132,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=094206769",
     "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "83253102000"
   },
   "998885119": {
     "legal_name": "ΕΛΛΗΝΙΚΗ ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΡΓΟΛΗΠΤΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΕΡΓΩΝ ΥΠΟΔΟΜΗΣ ΕΤΑΙΡΕΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ",
@@ -1966,7 +2144,8 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=998885119",
     "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "6586501000"
   },
   "802619365": {
     "legal_name": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ   ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ ΕΤΕΡΡΟΡΥΘΜΗ ΕΤ ΚΟΙΝΟΠΡΑΞΙΑ",
@@ -1977,6 +2156,7 @@
     "source": "vies",
     "source_url": "https://ec.europa.eu/taxation_customs/vies/?ms=EL&iso=EL&vat=802619365",
     "notes": "contractor of reclassified (Antinero II) ΕΣΑ/restoration contracts, 2026-07-19",
-    "curated_at": "2026-07-19"
+    "curated_at": "2026-07-19",
+    "gemi": "179682501000"
   }
 }

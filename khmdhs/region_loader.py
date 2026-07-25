@@ -37,12 +37,16 @@ def main(argv: list[str] | None = None) -> int:
     with args.data.open(encoding="utf-8") as f:
         curation: dict = json.load(f)
 
-    # Validate every Π.Ε. name resolves to a NUTS-3 code before touching the DB
+    # Validate every Π.Ε. name resolves to a NUTS-3 code before touching the
+    # DB — both region rows and the optional per-contract work-site lists.
     unknown: set[str] = set()
     for entry in curation.values():
         for r in entry.get("regions", []):
             if nuts3_for(r["pe"]) is None:
                 unknown.add(r["pe"])
+        for s in entry.get("sites", []):
+            if s.get("pe") and nuts3_for(s["pe"]) is None:
+                unknown.add(s["pe"])
     if unknown:
         logging.error("Unknown Π.Ε. names in %s: %s", args.data, sorted(unknown))
         logging.error("Add them to khmdhs/greek_regions.REGIONAL_UNITS or fix the JSON.")
@@ -51,8 +55,9 @@ def main(argv: list[str] | None = None) -> int:
     n_contracts = len(curation)
     n_rows = sum(len(e.get("regions", [])) for e in curation.values())
     n_pan = sum(1 for e in curation.values() if not e.get("regions"))
-    logging.info("Loaded %d contracts from %s (%d region rows, %d pan-Greek)",
-                 n_contracts, args.data, n_rows, n_pan)
+    n_sites = sum(len(e.get("sites", [])) for e in curation.values())
+    logging.info("Loaded %d contracts from %s (%d region rows, %d pan-Greek, %d work sites)",
+                 n_contracts, args.data, n_rows, n_pan, n_sites)
 
     if args.dry_run:
         for adam, entry in list(curation.items())[:5]:
@@ -73,7 +78,17 @@ def main(argv: list[str] | None = None) -> int:
                     (adam, seq, r["pe"], nuts3_for(r["pe"]), r.get("note"),
                      entry.get("curated_at") or now),
                 )
-    logging.info("Done. Wrote project-region rows for %d contracts.", n_contracts)
+            conn.execute("DELETE FROM contract_sites WHERE reference_number = ?", (adam,))
+            for seq, s in enumerate(entry.get("sites", [])):
+                conn.execute(
+                    """INSERT INTO contract_sites
+                       (reference_number, seq, site_name, region_pe, page, excerpt, curated_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    (adam, seq, s["name"], s.get("pe"), s.get("page"),
+                     s.get("excerpt"), entry.get("curated_at") or now),
+                )
+    logging.info("Done. Wrote project-region rows for %d contracts (%d work sites).",
+                 n_contracts, n_sites)
     conn.close()
     return 0
 

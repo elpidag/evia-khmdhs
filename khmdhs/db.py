@@ -133,6 +133,20 @@ CREATE TABLE IF NOT EXISTS contract_project_regions (
 CREATE INDEX IF NOT EXISTS idx_cpr_region_pe ON contract_project_regions(region_pe);
 CREATE INDEX IF NOT EXISTS idx_cpr_nuts3 ON contract_project_regions(nuts3_code);
 
+-- Named work sites below Π.Ε. level (Δασαρχεία, τμήματα, θέσεις), curated
+-- from the contract PDFs; page + excerpt keep the evidence citable.
+CREATE TABLE IF NOT EXISTS contract_sites (
+    reference_number TEXT NOT NULL,
+    seq              INTEGER NOT NULL,
+    site_name        TEXT NOT NULL,
+    region_pe        TEXT,
+    page             INTEGER,
+    excerpt          TEXT,
+    curated_at       TEXT NOT NULL,
+    PRIMARY KEY (reference_number, seq),
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
 -- Payment orders (##PAY#########) linked to contracts. `contract_ref` is the
 -- contract whose API payload listed the payment in `paymentRefNo`;
 -- `attributed_ref` is the final contract of that contract's supersede chain
@@ -169,6 +183,7 @@ CREATE TABLE IF NOT EXISTS contractor_locations (
     city         TEXT,
     region_pe    TEXT,
     nuts3_code   TEXT,
+    gemi         TEXT,
     source       TEXT NOT NULL,
     source_url   TEXT,
     notes        TEXT,
@@ -185,6 +200,13 @@ def init_db(path: Path) -> sqlite3.Connection:
     conn = sqlite3.connect(path)
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA_SQL)
+    # Columns added after a table already exists in deployed DBs
+    # (CREATE TABLE IF NOT EXISTS won't alter them).
+    for table, column, decl in (("contractor_locations", "gemi", "TEXT"),):
+        try:
+            conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
+        except sqlite3.OperationalError:
+            pass  # already present
     conn.commit()
     return conn
 

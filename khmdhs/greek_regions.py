@@ -234,6 +234,35 @@ def _city_pe(city: str | None) -> str | None:
     return None
 
 
+_GENITIVE_TO_PE: dict[str, str] | None = None
+
+
+def pe_from_genitive(name: str | None) -> str | None:
+    """Resolve a genitive regional-unit / prefecture name ("ΘΕΣΣΑΛΟΝΙΚΗΣ",
+    "Ηλείας") to its canonical Π.Ε. key by exact accent-insensitive match.
+
+    GEMI addresses carry the Νομός in this form. Only unambiguous exact
+    matches resolve — e.g. "ΑΤΤΙΚΗΣ" has no single Π.Ε. and returns None.
+    """
+    global _GENITIVE_TO_PE
+    if _GENITIVE_TO_PE is None:
+        import unicodedata
+
+        def fold(s: str) -> str:
+            d = unicodedata.normalize("NFD", s.upper())
+            return "".join(ch for ch in d if not unicodedata.combining(ch))
+
+        _GENITIVE_TO_PE = {}
+        for key in REGIONAL_UNITS:
+            _GENITIVE_TO_PE[fold(key.removeprefix("Π.Ε. "))] = key
+    if not name:
+        return None
+    import unicodedata
+    d = unicodedata.normalize("NFD", name.strip().upper())
+    folded = "".join(ch for ch in d if not unicodedata.combining(ch))
+    return _GENITIVE_TO_PE.get(folded)
+
+
 def resolve_pe(city: str | None, postal_code: str | None) -> tuple[str | None, str]:
     """Best-effort city + postal → Π.Ε. resolution.
 
