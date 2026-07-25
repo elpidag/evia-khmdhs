@@ -7,7 +7,9 @@ Everything derived is regenerable; `data/raw/` is never written to.
 **Current state** (2026-07-25): 344 contracts (252 in scope, €616M effective),
 890 payment orders (€565.8M paid, 5 Diavgeia-only), all amendment chains
 closed, 179/180 map contractors located, 147 linked to GEMI profiles, 18
-curated work sites. Refreshable via `python -m khmdhs.refresh`.
+curated work sites, 252/252 in-scope contracts linked to their forest
+authority (103-entry ΔΔ/ΔΧ registry; 3 documented authority-less),
+contractor HQs geocoded via Nominatim. Refreshable via `python -m khmdhs.refresh`.
 
 ## Hard constraints (do not violate)
 
@@ -82,7 +84,7 @@ excluded from aggregates (`antinero_umbrella`) to avoid double counting.
 ## Pipeline (ETL modules in `khmdhs/`)
 
 **Run order after any contract change**:
-`chain_loader` → `scope_loader` → `region_loader` → `payment_loader`
+`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `payment_loader`
 (→ `diavgeia_loader` when ingesting new Diavgeia decisions, then `payment_loader` again).
 **`python -m khmdhs.refresh` runs the whole sequence for you** after
 refetching open contracts — prefer it for routine updates.
@@ -130,7 +132,27 @@ refetching open contracts — prefer it for routine updates.
   `data/contractor_locations.json`; `gemi_loader.py` resolves the VIES-rejected
   residue via the GEMI publicity API and backfills GEMI profile numbers
   (`"-1"` = not-found sentinel); `consortium_resolver.py` holds ~19 manually
-  reviewed inferences; `contractor_loader.py` pushes the JSON into the DB.
+  reviewed inferences; `geocode_loader.py` geocodes registered addresses
+  once via OSM Nominatim (tiers: structured street → freeform →
+  **Greek→Latin transliteration** — the public instance often misses
+  Greek-script queries — → city-level; a hit is accepted ONLY when its
+  postcode matches the stored one (3-digit prefix) or resolves to the
+  curated Π.Ε.; results land in the JSON as `lat/lon/geo_precision`
+  address|municipality|failed); `contractor_loader.py` pushes the JSON
+  into the DB.
+- `forest_loader.py` — links every contract to its **Διεύθυνση Δασών /
+  Δασαρχείο** by whitelist-matching the curated registry
+  (`data/forest_authorities.json`: 103 authorities, genitive aliases, seat
+  municipality → coords from `data/greek_municipalities.json` — the
+  geodata.gov.gr Kallikratis layer, ΥΠΕΣ codes, built by
+  `scripts/build_municipalities.py`) against title+items (union) with
+  cached-PDF fallback; amendments inherit (`inherited:<ref>`);
+  `contract_overrides` pin the 6 reviewed title/items conflicts (per-lot
+  bundles, keying errors) and `no_authority` documents the 3 region-scoped
+  contracts that genuinely name none. Warns on new title/items
+  disagreements; TODO-lists uncovered in-scope contracts. Matcher gotcha:
+  fold() maps Greek→Latin homoglyphs, so connector/stop tokens must be
+  folded too («ΚΑΙ» → Latin "KAI").
 - `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
   (end_date NULL or <90 days past), upserts only changed payloads (diff on
   lastUpdateDate/paymentRefNo/nextRefNo/cancelled), backs payloads up to
@@ -157,7 +179,9 @@ decisions land there FIRST, then get implemented.
 | `antinero_supplement.json` | 55 contracts missing from the xlsx; phase overrides that win over all rules |
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts; `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
-| `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) |
+| `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
+| `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts |
+| `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
 | `city_to_pe.json`, `postal_prefix_to_pe.json` | address → Π.Ε. lookup tables |
 
 ## Database (`data/processed/khmdhs.sqlite`, committed)
@@ -165,14 +189,18 @@ decisions land there FIRST, then get implemented.
 `contracts` (flat ~50 cols + `raw_json`) with child tables `contractors`,
 `contract_cpvs`, `contract_nuts`, `contract_objects` (FK **ON DELETE CASCADE**),
 plus `fetch_log`, `contract_scope`, `contract_project_regions`,
-`contract_sites`, `contract_payments`, `contractor_locations` (incl. `gemi`).
+`contract_sites`, `contract_payments`, `contractor_locations` (incl. `gemi`,
+`lat/lon/geo_precision`), `forest_authorities` (seat coords) and
+`contract_forest_authorities` (FK CASCADE; `source` =
+title/objects/pdf/override/inherited:<ref>).
 Post-hoc columns are added via the ALTER-TABLE guard loop in `db.py:init_db`
 (CREATE TABLE IF NOT EXISTS won't alter deployed DBs).
 
 **CASCADE gotcha**: `INSERT OR REPLACE INTO contracts` deletes + reinserts the
-row, which cascades away `contract_scope`, `contract_project_regions` and
-`contract_sites` rows. After ANY contract refetch, re-run `scope_loader` +
-`region_loader` (or just use `khmdhs.refresh`, which does).
+row, which cascades away `contract_scope`, `contract_project_regions`,
+`contract_sites` and `contract_forest_authorities` rows. After ANY contract
+refetch, re-run `scope_loader` + `region_loader` + `forest_loader` (or just
+use `khmdhs.refresh`, which does).
 
 **Effective value** (`webui/queries.py:effective_cost`): SUM of non-cancelled
 payments on `attributed_ref` when ≥1 exists, else stated `total_cost_with_vat`.
@@ -181,12 +209,26 @@ disbursement for running contracts.
 
 ## Web UI (`webui/`, read-only Flask)
 
-Routes: `/overview` (flagship "where the money went" page: 4-mode paper map —
-work-site bubbles / contractor-HQ bubbles / € choropleth by work region
-(YlOrBr) / € choropleth by HQ region (blues) — with **even-split €
-attribution** summing to the programme total + exposure in tooltips; right
-column: contract-value histogram, clickable top-10 contractors, authorities/
-signers, procedure-mix stacked bars), `/` dashboard (KPIs + top-10 chart +
+Routes: `/overview` (flagship "where the money went" page: **two side-by-side
+paper maps** under a 2-mode toggle — `?view=points`: one equal-size dot per
+contract×forest-authority at the authority's seat (jitter-spread via
+deterministic sunflower spiral, click→contract) beside one dot per geocoded
+contractor address (click→contractor); `?view=money` (default): € choropleths
+by work region and by HQ region on the **same YlOrBr ramp and shared max**
+for comparability — **even-split € attribution** summing to the programme
+total + exposure in tooltips; legacy 4-mode `?view=` values redirect. All
+maps are zoom-locked (no user zoom/pan); on the points view **clicking a
+region drills down** (client-side, `&focus=works:EL642`/`home:EL642`
+permalinks): left-map click zooms the left map to the region's forest
+authorities and filters the right map to the contractors holding those
+contracts; right-map click mirrors it; while drilled the analytics below are
+replaced by the region's contracts (sorted by value) and its contractors'
+€-from-region / work-region € tables, with an "All of Greece" reset pill.
+Data for the drill ships once via `/api/overview.json` `contracts` (compact
+per-contract contractors+authorities+region-splits). Default analytics below
+the maps: contract-value histogram, clickable top-10
+contractors, authorities/signers, procedure-mix stacked bars), `/` dashboard
+(KPIs + top-10 chart +
 cumulative disbursement per phase + direct-award histogram with ν.4782/2021
 threshold lines), `/contracts`, `/contract/<adam>` (payments, work sites,
 PDFs), `/contractors`, `/contractor/<vat>` (location + ΓΕΜΗ link + mini-map
@@ -208,7 +250,7 @@ auto-retrying `pdf_wait.html` (503 + Retry-After) during registry 429 windows.
 Consortium contracts attribute the **full** value to each partner (max-exposure
 view, stated in the footer).
 
-## Tests (`tests/`, 106 passing — `.venv/bin/python -m pytest`)
+## Tests (`tests/`, 142 passing — `.venv/bin/python -m pytest`)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,
@@ -261,3 +303,16 @@ prev links) — new registry keying errors surface here first, and
 14. **Refresh TODO blind spot**: chain_loader can fetch brand-new chain
     members that were never refresh candidates → `curation_todos` scans ALL
     in-scope contracts, not just the diffed ones.
+15. **Title vs items-text authority conflicts** — per-lot 2026 contracts
+    repeat the whole multi-lot πρόσκληση in `contract_objects` (title names
+    THE lot), while elsewhere the title is shorthand or plain wrong («ΔΔ
+    ΛΕΣΒΟΥ» on a PDF-verified Δωδεκανήσου contract). No side wins
+    universally → forest_loader takes the union, WARNs on disagreement, and
+    the 6 reviewed cases are pinned in `contract_overrides` with evidence.
+16. **Nominatim misses Greek-script queries** («ΚΟΡΝΑΡΟΥ 13, ΘΕΣΣΑΛΟΝΙΚΗ» →
+    0 hits; "Kornarou 13, Thessaloniki" → hit) → geocode_loader adds a
+    Greek→Latin transliteration tier; VIES's abbreviated prefixes («Λ
+    ΣΤΑΜΑΤΑΣ» = Λεωφόρος) get expansion variants; every hit must validate
+    against the stored postcode/Π.Ε. or it is discarded (a same-name street
+    across town was correctly rejected this way). `q` cannot be combined
+    with structured params (HTTP 400).

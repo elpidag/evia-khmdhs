@@ -193,6 +193,54 @@ conventions are labelled on their pages. *Affects:
 `money_by_project_region` / `money_by_contractor_region` and the
 /overview map; user decision.*
 
+## 2026-07-25 — Municipality gazetteer from the Kallikratis boundaries layer
+
+Sub-Π.Ε. geolocation (forest-authority seats, geocoding fallbacks) uses a
+committed gazetteer `khmdhs/data/greek_municipalities.json` — ΥΠΕΣ code
+(`KWD_YPES` 9001–9325) → official name + a representative centroid — derived
+from the geodata.gov.gr open dataset **«Όρια Δήμων Καλλικράτη»**
+(`oria_dhmwn_kallikraths`, CC-BY, EPSG:2100), the same source and join-key
+convention the FireWatch project uses. Only centroids are committed (our maps
+keep NUTS-3 polygons as the background; municipal boundaries are not drawn).
+Provenance note: geodata.gov.gr was unreachable at build time (2026-07-25),
+so `scripts/build_municipalities.py` derived the file from the FireWatch
+repo's in-tree copy of that exact shapefile — verified field-for-field
+(`NAME` + `KWD_YPES`, 326 records) identical to the portal download — and
+can re-derive from the portal when it is back. The code-less «Άθως» feature
+is dropped. *Affects: forest_authorities coordinates, geocode fallbacks.*
+
+## 2026-07-25 — Forest-authority (Δ/νση Δασών–Δασαρχείο) layer
+
+Every in-scope contract is linked to the Διεύθυνση Δασών (ΔΔ) / Δασαρχείο
+(ΔΧ) responsible for its works. Extraction is a **whitelist match** of a
+hand-curated registry (`khmdhs/data/forest_authorities.json`: canonical
+name, genitive aliases, seat municipality, Π.Ε.) against the contract title
+and KHMDHS items text, with cached contract-PDF text as fallback — free
+regex capture was rejected (noisy). Amendments with no mention of their own
+inherit the predecessor's authorities (same rule as scope/regions). The
+residual contracts whose authority appears nowhere machine-readable are
+hand-curated as overrides with PDF page/excerpt evidence. Each authority is
+geolocated at the **centroid of its seat municipality** (ΔΧ are named after
+their seat town; ΔΔ seat at the prefecture capital; oddballs curated —
+e.g. Δασαρχείο Πάρνηθας seats in Αχαρνές). Contracts with no resolvable
+authority stay honestly unlinked and are listed by the refresh TODO.
+*Affects: new tables `forest_authorities`, `contract_forest_authorities`;
+the /overview points map.*
+
+## 2026-07-25 — Contractor addresses geocoded via OSM Nominatim
+
+Contractor HQ pins use street-level coordinates for the registered address
+in `contractor_locations.json`, obtained once from the anonymous OSM
+Nominatim API (no key, ≥1.1 s between requests, custom UA). A hit is
+accepted only when its postcode agrees with the stored postal code (3-digit
+prefix) or its locality resolves to the entry's curated Π.Ε.
+(`geo_precision: "address"`); otherwise the entry falls back to its seat
+municipality's centroid (`"municipality"`), and entries that resolve
+neither way keep no coordinates at all — misses stay honest and are counted
+in the UI footnote. Coordinates are cached in the curated JSON, so the
+sweep runs once per new contractor. *User decision 2026-07-25. Affects:
+`contractor_locations.lat/lon/geo_precision`, the /overview points map.*
+
 ## 2026-07-25 — GEMI seat (έδρα) is canonical for contractor home regions
 
 Trigger: ΖΙΤΑΚΑΤ (ΑΦΜ 099124894) — the portal lists two GEMI records for

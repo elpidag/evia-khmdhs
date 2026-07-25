@@ -328,6 +328,7 @@ Pages:
 
 | Path | What it shows |
 |------|----------------|
+| `/overview` | Flagship "where the money went" page: two side-by-side Greece maps with a 2-mode toggle — contract dots at the responsible Δασαρχείο/Δ/νσης Δασών seat + contractor dots at geocoded registered addresses (`?view=points`), or twin € choropleths by work region / HQ region on a shared scale (`?view=money`) — with the value histogram, top-10 contractors, authorities and procedure mix below |
 | `/` | KPI cards (€1.54 B total, 226 contracts, 139 contractors, 89.4 % direct-assignment, 34 single-bidder), top-10 contractor bar chart (click a bar to drill in), top-5 authorities, top-5 signers |
 | `/contractors?q=&sort=` | Sortable table of all 139 contractors. `q` matches VAT or name substring. A 9-digit `q` redirects straight to the detail page. |
 | `/contractor/<vat>` | Header card (totals, % direct-assignment, single-bidder count, consortium count, first/last signed dates), list of all contracts, consortium partners, primary signers |
