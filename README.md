@@ -239,6 +239,20 @@ mention antiNERO nowhere and stay `non_antinero`. Supplementary contracts
 («1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ», adding money on top of the parent) do not supersede
 the version they extend — both stay countable.
 
+### Keeping the data current + data-quality tooling
+
+```bash
+python -m khmdhs.refresh                     # refetch open contracts, run loaders,
+                                             # print a manual-curation TODO list
+python -m khmdhs.payment_validator           # match stored amounts vs signed PDFs
+python -m khmdhs.gemi_loader                 # GEMI publicity lookups (anonymous)
+python -m scripts.extract_site_candidates    # work-site candidates for curation
+```
+
+Every deliberate cleaning/classification/correction decision is logged in
+[`DATA_DECISIONS.md`](DATA_DECISIONS.md) (append-only: date, decision,
+evidence, affected records).
+
 ## Output: enriched Excel file
 
 Original columns A–H are preserved exactly. Eight new columns are appended

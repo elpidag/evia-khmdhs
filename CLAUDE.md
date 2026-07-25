@@ -1,0 +1,263 @@
+# CLAUDE.md — Anti-nero contracts OSINT (evia-khmdhs)
+
+OSINT dataset + web UI for the Greek **Anti-nero** wildfire-prevention/restoration
+public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico.css.
+Everything derived is regenerable; `data/raw/` is never written to.
+
+**Current state** (2026-07-25): 344 contracts (252 in scope, €616M effective),
+890 payment orders (€565.8M paid, 5 Diavgeia-only), all amendment chains
+closed, 179/180 map contractors located, 147 linked to GEMI profiles, 18
+curated work sites. Refreshable via `python -m khmdhs.refresh`.
+
+## Hard constraints (do not violate)
+
+- **Never query AADE RgWsPublic2** — every query emails the AFM holder. Use
+  anonymous sources only; **VIES first** (`khmdhs/vies.py`: captcha-free, no auth,
+  ~90% coverage on Greek corporate VATs; rejects consortium/κοινοπραξία VATs).
+- **Prefer manual curation over fragile heuristics**: if a regex/rule would cover
+  <80% of cases, hand-curate into a committable JSON under `khmdhs/data/`.
+- **Never fabricate locations/regions** — leave rows honestly unresolved
+  (`source: "consortium_unresolved"` etc.).
+- **Check the contract PDF before excluding anything from scope.** Title keywords
+  lie: αντιδιαβρωτικά/αντιπλημμυρικά and ΕΣΑ-reforestation contracts looked like
+  sibling programmes but their PDFs declare RRF Action 16849 «…(«antiNERO»)…»
+  membership → reclassified in scope (`antinero_restoration` / `antinero_esa`).
+
+## Data sources & APIs
+
+### KHMDHS open-data (`https://cerpp.eprocurement.gov.gr/khmdhs-opendata`)
+- Public, no auth. Rate limit 350 req/min → throttle ~0.2s/req, honour
+  `Retry-After` on 429. Data lags reality ~24h.
+- `POST /contract?page=0` and `POST /payment?page=0`, body
+  `{"referenceNumber": "<ADAM>"}`; ADAM format is strict `##SYMV#########` /
+  `##PAY#########`. Response `content[0]` is the record; empty = not found.
+- `GET /{contract,payment}/attachment/<ADAM>` → signed PDF. **429s on bursts**
+  (retry ~45–60s); on throttle returns JSON, not PDF — always check `%PDF` magic.
+- `GET /adamChain/<ADAM>` — same payment list as the contract's `paymentRefNo`.
+- `dateFrom` search returns all of Greece (310k rows) — useless for filtering.
+- Payload quirks: `nextRefNo` is a plain **string** (an old bug indexed `[0]` and
+  stored `"2"`); `contractRefNo` on payments is mostly null; `paymentRelatedAda`
+  is filled on only ~7/730 payments; credit payment amounts come **already signed
+  negative** («δηλώνονται με [-]») so plain SUM is correct.
+
+### Diavgeia (`https://diavgeia.gov.gr`)
+- `GET /opendata/decisions/<ΑΔΑ>.json` → metadata (beneficiary AFM, amount).
+- `GET /doc/<ΑΔΑ>` → signed PDF (check `%PDF`).
+- Search: luminapi with `q=organizationUid:100015996 AND subject:"<phrase>"`
+  (ΥΠΕΝ; quoted phrases only, page size 100, retry on occasional 503).
+- **Decision PDFs are the join key** between Diavgeia, KHMDHS and contracts:
+  they stamp the KHMDHS PAY ΑΔΑΜ, cite contract SYMV ΑΔΑΜs in recitals, and the
+  «ΑΔΑΜ ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ» field is the *authoritative* contract link
+  (recitals may cite entire chains). Pre-2024 decisions carry **no** PAY stamp →
+  twin-match against stored payments by same chain + amount ±€1.
+- KHMDHS (gross order) vs Diavgeia (net clearance) amounts routinely differ
+  6–12% — keep KHMDHS as canonical.
+
+### Other anonymous lookups
+- VIES REST: `https://ec.europa.eu/taxation_customs/vies/rest-api/ms/EL/vat/<vat>`;
+  name format `OFFICIAL||TRADE`, address `"STREET N   #####  - CITY"`.
+  Rejects consortium/κοινοπραξία VATs.
+- **GEMI publicity JSON API works token-less** (`khmdhs/gemi.py`, verified
+  2026-07-25): POST `publicity.businessportal.gr/api/search` then
+  `/api/company/details` — but ONLY with the complete filter payload
+  (`token: null` + every dataToBeSent field); a minimal body 500s, and the
+  older `/api/searchCompany` route is captcha-gated. Resolves consortiums
+  VIES can't; returns address + prefecture + GEMI number
+  (profile: `/company/{gemi}`). 429s on back-to-back calls (sleep ≥1-2s).
+  GEMI OpenData REST needs an API key. vrisko.gr / ΣΑΤΕ for hand curation.
+
+## Programme structure (fund codes decide phases)
+
+| Fund (ΠΔΕ / ΣΑΤΑ 075) | Meaning |
+|---|---|
+| `2022ΤΑ07500000` | Anti-nero I (07.02.2022 ΥΠΕΝ↔ΤΑΙΠΕΔ framework, ΟΠΣ 5161079) — titles never say "ANTINERO" |
+| `2021ΤΑ07500002` | Anti-nero II + its named components (ΕΣΑ, αντιδιαβρωτικά; ΟΠΣ ΤΑ 5201358) |
+| `2023ΤΑ07500012` | Anti-nero III / IV / 2026 (ΟΠΣ 5222791) |
+
+Fund fields are sometimes concatenated with the ΟΠΣ code → match with
+`startswith`. ΤΑΙΠΕΔ (997471299) / ΕΕΣΥΠ (997104555) hold umbrella pass-through
+contracts whose euros reappear in downstream execution contracts — always
+excluded from aggregates (`antinero_umbrella`) to avoid double counting.
+
+## Pipeline (ETL modules in `khmdhs/`)
+
+**Run order after any contract change**:
+`chain_loader` → `scope_loader` → `region_loader` → `payment_loader`
+(→ `diavgeia_loader` when ingesting new Diavgeia decisions, then `payment_loader` again).
+**`python -m khmdhs.refresh` runs the whole sequence for you** after
+refetching open contracts — prefer it for routine updates.
+
+- `cli.py` (`python -m khmdhs`) — enrich the source xlsx ADAMs; resumable via
+  `fetch_log`. `api.py` = HTTP (retries, 429), `extract.py` = pure JSON→rows,
+  `db.py` = schema + upserts, `excel_io.py` = xlsx I/O.
+- `antinero_loader.py` — loads curated `data/antinero_supplement.json` (55 ADAMs
+  found via Diavgeia, missed by the xlsx export); **re-verifies each entry's
+  basis** (fund/title + ΥΠΕΝ authority VAT 090273987) against the live payload
+  and refuses failures.
+- `chain_loader.py` — repairs prev/next link columns from `raw_json`, then
+  fetches missing amendment-chain members to closure.
+- `scope_loader.py` — classifies every contract via `scope.py` into
+  `antinero_{i,ii,iii,iv,2026,unknown_phase,esa,restoration,umbrella,support}` /
+  `non_antinero`; IN_SCOPE = execution phases + esa + restoration + unknown.
+  Then: (1) amendments with weak evidence (no evidence, or unknown_phase)
+  inherit the predecessor's scope, iterating; (2) supersede pass — a
+  non-cancelled successor takes the old version out of scope **unless** it is a
+  «ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ» with value <0.9× parent (supplementary = additive, both
+  count; same-value ΑΠΕ restatements do supersede).
+- `scope.py` gotchas: Greek/Latin homoglyph soup in titles ("ANTINERO IΙ" with
+  Greek iota is real) → `normalize_title` translates; within {II, III} the
+  numeral glyphs are unreliable, the **fund code is authoritative**. Python
+  uppercases 'ί'→accented 'Ί' → `_strip_accents` (NFD) before keyword matching;
+  keyword stems are short on purpose ("ΑΝΤΙΔΙΑΒΡ") because titles abbreviate.
+- `payment_loader.py` — links payments from each contract's `paymentRefNo`,
+  fetches them, then **re-attributes every stored payment** to its chain tip
+  (`attributed_ref` via `contract_scope.superseded_by`; payments often stay on
+  the superseded original), then applies `data/payment_corrections.json`.
+- `diavgeia_loader.py` — ingests Diavgeia clearance decisions (xlsx or harvest
+  JSON): extracts ΑΔΑΜ stamps from the PDF text (`pdftotext -layout`, cached in
+  `data/processed/diavgeia_cache/`), prefers the «ΑΔΑΜ ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ»
+  stamp, resolves the contract (drops umbrella candidates when others exist,
+  requires a single chain tip), then: PAY already stored → backfill `ada`; PAY
+  stamped → fetch canonical KHMDHS record; no stamp → twin-match by
+  chain+amount±1, else insert `source='diavgeia'` keyed by ΑΔΑ. Foreign funds
+  (`2019ΣΕ*`, `2022ΤΑ07500030`) skipped.
+- Geographic layer: `region_loader.py` loads hand-curated per-contract project
+  regions AND sub-Π.Ε. work sites (`data/contract_regions.json` — optional
+  `"sites"` lists with PDF page+excerpt evidence → `contract_sites` table;
+  Π.Ε. names → NUTS-3 via `greek_regions.py`, which also holds centroids,
+  city/postal→Π.Ε. and genitive-prefecture→Π.Ε. resolution);
+  `vies_loader.py` sweeps unresolved contractor VATs through VIES into
+  `data/contractor_locations.json`; `gemi_loader.py` resolves the VIES-rejected
+  residue via the GEMI publicity API and backfills GEMI profile numbers
+  (`"-1"` = not-found sentinel); `consortium_resolver.py` holds ~19 manually
+  reviewed inferences; `contractor_loader.py` pushes the JSON into the DB.
+- `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
+  (end_date NULL or <90 days past), upserts only changed payloads (diff on
+  lastUpdateDate/paymentRefNo/nextRefNo/cancelled), backs payloads up to
+  refresh_backup_<date>.json first, then runs the full loader chain and prints
+  a manual-curation TODO list (new chain members needing regions/scope).
+- `payment_validator.py` — string-matches every stored payment amount against
+  its signed PDF (exact Greek format → digit-token → tolerant); ≤€0.02 diffs
+  are `near_match` noise; real mismatches are candidates for
+  payment_corrections.json (human reviews the PDF first). Resumable; aborts
+  after 3 consecutive 429s.
+- `scripts/extract_site_candidates.py` — scans cached contract PDFs for
+  site cues (ΔΑΣΑΡΧΕΙ, ΘΕΣΗ, Τ.Κ., …) into a review file; a human curates
+  real sites into contract_regions.json. `scripts/export_prints.py` —
+  Playwright A4 PDFs of /origins and /map (needs the dev server running).
+
+Decision log: **`DATA_DECISIONS.md`** at the project root is the append-only
+audit trail (date · decision · evidence · affected records). New data
+decisions land there FIRST, then get implemented.
+
+## Curated JSON files (committed sources of truth)
+
+| File | Purpose |
+|---|---|
+| `antinero_supplement.json` | 55 contracts missing from the xlsx; phase overrides that win over all rules |
+| `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts; `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
+| `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
+| `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) |
+| `city_to_pe.json`, `postal_prefix_to_pe.json` | address → Π.Ε. lookup tables |
+
+## Database (`data/processed/khmdhs.sqlite`, committed)
+
+`contracts` (flat ~50 cols + `raw_json`) with child tables `contractors`,
+`contract_cpvs`, `contract_nuts`, `contract_objects` (FK **ON DELETE CASCADE**),
+plus `fetch_log`, `contract_scope`, `contract_project_regions`,
+`contract_sites`, `contract_payments`, `contractor_locations` (incl. `gemi`).
+Post-hoc columns are added via the ALTER-TABLE guard loop in `db.py:init_db`
+(CREATE TABLE IF NOT EXISTS won't alter deployed DBs).
+
+**CASCADE gotcha**: `INSERT OR REPLACE INTO contracts` deletes + reinserts the
+row, which cascades away `contract_scope`, `contract_project_regions` and
+`contract_sites` rows. After ANY contract refetch, re-run `scope_loader` +
+`region_loader` (or just use `khmdhs.refresh`, which does).
+
+**Effective value** (`webui/queries.py:effective_cost`): SUM of non-cancelled
+payments on `attributed_ref` when ≥1 exists, else stated `total_cost_with_vat`.
+Applied to every aggregate. This absorbs amendments and shows actual
+disbursement for running contracts.
+
+## Web UI (`webui/`, read-only Flask)
+
+Routes: `/overview` (flagship "where the money went" page: 4-mode paper map —
+work-site bubbles / contractor-HQ bubbles / € choropleth by work region
+(YlOrBr) / € choropleth by HQ region (blues) — with **even-split €
+attribution** summing to the programme total + exposure in tooltips; right
+column: contract-value histogram, clickable top-10 contractors, authorities/
+signers, procedure-mix stacked bars), `/` dashboard (KPIs + top-10 chart +
+cumulative disbursement per phase + direct-award histogram with ν.4782/2021
+threshold lines), `/contracts`, `/contract/<adam>` (payments, work sites,
+PDFs), `/contractors`, `/contractor/<vat>` (location + ΓΕΜΗ link + mini-map
+of home + project regions + money-per-year paid/stated chart),
+`/authorities`, `/map` (Leaflet flow map, full-exposure convention),
+`/origins`, `/api/{contractors,flows,timeseries,overview}.json`,
+`/pdf/<kind>/<adam>`. Shared paper-map helpers in
+`webui/static/geo_common.js` (+ NUTS-3 polygons `greek_nuts3.geojson`,
+centroids). All SQL lives in `queries.py`; aggregates filter on
+`contract_scope.in_scope = 1` (fallback: exclude state-vehicle VATs). Search is accent-, homoglyph- AND
+Greeklish-tolerant (`_phonetic_fold`: "evias" finds «Ευβοίας»); all filter
+state is in GET params, so every view is a shareable permalink.
+
+`/pdf/...` is a caching proxy: validates the ADAM shape, fetches once into
+`data/processed/pdf_cache/` (gitignored), refuses non-`%PDF` bodies, serves
+inline (`as_attachment=False`) so PDFs open in the tab, and returns an
+auto-retrying `pdf_wait.html` (503 + Retry-After) during registry 429 windows.
+
+Consortium contracts attribute the **full** value to each partner (max-exposure
+view, stated in the footer).
+
+## Tests (`tests/`, 106 passing — `.venv/bin/python -m pytest`)
+
+Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
+invariants on the committed SQLite: chain completeness / no double counting,
+every in-scope contract has regions, every xlsx ΑΔΑ is stored, Diavgeia-only
+count, curated ΕΣΑ sites present, and a **guard test**
+(`test_real_db_no_uncorrected_outliers`) that fails when any non-cancelled
+payment exceeds 150% of its contract family's stated value (recursive CTE over
+prev links) — new registry keying errors surface here first, and
+`payment_validator` screens the sub-threshold ones against the PDFs.
+
+## Problems hit & their fixes (institutional memory)
+
+1. **429 storms on attachments** → cache-and-serve proxy + wait page; never link
+   registry URLs directly.
+2. **`nextRefNo` truncation bug** → `chain_loader.repair_link_columns` recomputes
+   from `raw_json`.
+3. **Payments stuck on superseded originals** → `attributed_ref` + full
+   re-attribution pass on every `payment_loader` run.
+4. **Registry keying errors** (€992M on a €279k contract; ×100 missing decimal;
+   only 1 of 2 invoices) → `payment_corrections.json`, verified against signed
+   PDFs; the family-level outlier test catches new ones.
+5. **Homoglyph & accent traps** in Greek titles → `normalize_title` +
+   `_strip_accents`; fund code beats title numerals for II vs III.
+6. **Supplementary contracts wrongly superseding** (a €706k ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ hid a
+   €4.7M parent) → additive rule (successor <0.9× parent doesn't supersede).
+7. **Wrong scope exclusions** — αντιδιαβρωτικά/ΕΣΑ contracts excluded on title
+   keywords, but their PDFs declare Antinero membership → audited all 92
+   excluded PDFs, reclassified 24 in scope. Always read the PDF.
+8. **CASCADE wipe** of scope/region rows on contract refetch → re-run loaders.
+9. **Chain-ambiguous Diavgeia decisions** → prefer «ΑΔΑΜ ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ»,
+   check for already-stored PAY before resolving, drop umbrella candidates.
+10. **Amendment scope gaps** (fund-only or no evidence) → inherit predecessor's
+    scope (`inherited_from_prev:<ref>`), regions inherited in the curation file.
+11. **GEMI publicity API 500s on minimal payloads** — `/api/search` accepts
+    `token: null` ONLY with the complete `dataToBeSent` filter object (every
+    field present); and it 429s on back-to-back calls → sleep between search
+    and details. The `/api/searchCompany` route is captcha-gated — different
+    endpoint, don't confuse them. **One ΑΦΜ can return several GEMI records
+    — branches «(Υποκατάστημα)» may be listed BEFORE the seat** (ΖΙΤΑΚΑΤ:
+    branch on Συγγρού listed first, seat in Σαλαμίνα) → `pick_seat_hit`
+    prefers non-branch hits / the …000 parent suffix, and
+    `gemi_loader --verify` cross-checks stored numbers + regions against
+    the seat (accent-folded Π.Ε. comparison).
+12. **Registry-vs-PDF cent noise**: KHMDHS amounts differ from the signed PDF
+    by €0.01–0.02 routinely (rounding) → validator classifies ≤€0.02 as
+    `near_match`, never a correction candidate.
+13. **Weak 2-digit postal fallback mis-region** (38xxx → Λάρισας when the
+    address is Βόλος) → GEMI's prefecture field overrides `postal2`/`none`
+    resolutions (`gemi_loader`), never the precise city/postal3 ones.
+14. **Refresh TODO blind spot**: chain_loader can fetch brand-new chain
+    members that were never refresh candidates → `curation_todos` scans ALL
+    in-scope contracts, not just the diffed ones.
