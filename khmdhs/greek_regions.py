@@ -125,9 +125,37 @@ def nuts3_for(region_pe: str) -> str | None:
     return REGIONAL_UNITS.get(region_pe)
 
 
+# Spelling aliases among REGIONAL_UNITS keys → the canonical genitive used
+# throughout the curated data. The maps aggregate on the canonical name
+# (one polygon per Π.Ε. — see DATA_DECISIONS.md 2026-07-26).
+CANONICAL_PE_ALIASES: dict[str, str] = {
+    "Π.Ε. Αχαίας": "Π.Ε. Αχαΐας",
+    "Π.Ε. Εύβοιας": "Π.Ε. Ευβοίας",
+    "Π.Ε. Κεφαλονιάς": "Π.Ε. Κεφαλληνίας",
+    "Π.Ε. Λαρίσης": "Π.Ε. Λάρισας",
+    "Π.Ε. Πρεβέζης": "Π.Ε. Πρέβεζας",
+    "Π.Ε. Ρεθύμνης": "Π.Ε. Ρεθύμνου",
+}
+
+CANONICAL_PES: frozenset[str] = frozenset(REGIONAL_UNITS) - frozenset(CANONICAL_PE_ALIASES)
+
+
+def canonical_pe(region_pe: str | None) -> str | None:
+    """Collapse spelling variants onto the canonical Π.Ε. name.
+
+    Returns None for unknown names — callers must keep unknowns honestly
+    unresolved rather than guessing.
+    """
+    if not region_pe:
+        return None
+    if region_pe in CANONICAL_PES:
+        return region_pe
+    return CANONICAL_PE_ALIASES.get(region_pe)
+
+
 # Area-weighted centroids (lat, lon) computed from the Eurostat
-# NUTS_RG_20M_2021 geometry. Used to position the source/target nodes on
-# the flow map.
+# NUTS_RG_20M_2021 geometry. Retired from the maps (they position on
+# PE_CENTROIDS now) but kept for reference/debugging of the NUTS-3 bridge.
 NUTS3_CENTROIDS: dict[str, tuple[float, float]] = {
     "EL301": (38.046, 23.8139),    "EL302": (38.015, 23.663),
     "EL303": (37.982, 23.7571),    "EL304": (37.9145, 23.7392),
@@ -163,10 +191,22 @@ NUTS3_CENTROIDS: dict[str, tuple[float, float]] = {
 }
 
 
+def _load_pe_centroids() -> dict[str, tuple[float, float]]:
+    path = Path(__file__).parent / "data" / "pe_centroids.json"
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    return {pe: (lat, lon) for pe, (lat, lon) in raw.items()}
+
+
+# Representative point per Π.Ε., from the dissolved Kallikratis polygons
+# (scripts/build_pe_geojson.py). One point per Π.Ε. — unlike the NUTS-3
+# centroids, merged groups (Άρτα/Πρέβεζα, …) resolve to distinct points.
+PE_CENTROIDS: dict[str, tuple[float, float]] = _load_pe_centroids()
+
+
 def centroid_for(region_pe: str) -> tuple[float, float] | None:
-    """Return the (lat, lon) centroid for a Π.Ε. name, via its NUTS-3 code."""
-    code = REGIONAL_UNITS.get(region_pe)
-    return NUTS3_CENTROIDS.get(code) if code else None
+    """Return the (lat, lon) representative point for a Π.Ε. name."""
+    pe = canonical_pe(region_pe)
+    return PE_CENTROIDS.get(pe) if pe else None
 
 
 # ---------------------------------------------------------------------------
