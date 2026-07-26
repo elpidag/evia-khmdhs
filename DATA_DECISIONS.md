@@ -260,3 +260,54 @@ addresses that differ from the registered seat — old values preserved in
 each entry's notes). Policy: where VIES/AADE tax address and GEMI seat
 disagree at Π.Ε. level, the registered seat wins for the flow map;
 mismatch reports are reviewed by hand, never auto-applied.
+
+## 2026-07-26 — Maps move from NUTS-3 to Π.Ε. polygons; municipality borders on drill
+
+Trigger: the Eurostat NUTS-3 layer merges several Π.Ε. into one polygon
+(EL651 = Αργολίδας+Αρκαδίας, EL541 = Άρτας+Πρέβεζας, EL653
+Λακωνίας+Μεσσηνίας, EL611 Καρδίτσας+Τρικάλων, EL531 Γρεβενών+Κοζάνης,
+EL613 Μαγνησίας+Σποράδων, EL515 Καβάλας+Θάσου, EL307 Πειραιώς+Νήσων and
+the island groups), so region counts/€ were displayed merged even though
+the database stores per-Π.Ε. regions throughout. Decision: (1) the display
+unit for ALL maps becomes the Kallikratis Περιφερειακή Ενότητα. Since no
+public Π.Ε. boundary file was found, the Π.Ε. polygons are **dissolved from
+the geodata.gov.gr «Όρια Δήμων Καλλικράτη» municipality layer** (CC-BY; the
+same FireWatch in-tree conversion already used for the municipality
+gazetteer — copy kept untouched at `data/raw/firewatch_municipalities.geojson`)
+via `scripts/build_pe_geojson.py`. (2) That requires a full
+**municipality→Π.Ε. assignment, which exists nowhere publicly**; it is
+hand-curated into `greek_municipalities.json` (`"pe"` field, 325 entries)
+and machine-validated four ways before any build: every value is a
+canonical `REGIONAL_UNITS` key; all 97 municipality→Π.Ε. anchor pairs
+implied by `forest_authorities.json` agree; ΥΠΕΣ codes stay contiguous per
+Π.Ε. (the 9001–9325 sequence is ordered Περιφέρεια→Π.Ε.→municipality);
+and every municipality centroid must fall inside the NUTS-3 polygon of its
+Π.Ε. (independent Eurostat cross-check). (3) Spelling aliases
+(Πρεβέζης/Πρέβεζας, Ρεθύμνης/Ρεθύμνου, …) are canonicalised by
+`greek_regions.canonical_pe`; aggregates key on the canonical name.
+(4) NUTS-3 is retired from display (polygons, centroids, permalinks,
+origin tables) but `nuts3_for` and the derived `nuts3_code` columns remain
+for geocode validation (NUTS-2 prefix = Περιφέρεια test in `resolve_pe`).
+(5) Even-split € attribution now splits at Π.Ε. granularity — a contract
+over Αργολίδα+Αρκαδία contributes half to each polygon (previously one
+merged share); programme totals are unchanged. (6) When the /overview
+drill zooms into a Π.Ε., the municipality polygons of that Π.Ε. are drawn
+as a border-only overlay (FireWatch-style local context). Found during
+validation: **ΔΔ Ηρακλείου was pinned to the wrong municipality** — the
+name-matched seat resolved to 9170 (Δήμος Ηρακλείου *Αττικής*) instead of
+9305 (Ηράκλειο Κρήτης), the only duplicate name in the layer; corrected in
+`forest_authorities.json` and the DB re-loaded (seat now 35.245, 25.093).
+Also: the per-feature-simplified FireWatch conversion doesn't tile exactly
+(micro-holes on dissolve, km-scale blockiness zoomed into small urban
+Π.Ε.), so the build reads the **full-resolution EPSG:2100 shapefile**
+(`data/raw/oria_dhmwn_kallikraths/`, same geodata.gov.gr layer) and
+simplifies it as a polygonal coverage (GEOS `coverage_simplify`, 10 cm
+grid snap; shared borders stay identical → no slivers), shipping two
+detail levels: 220 m coarse for the country view, 30 m fine (≈2 px at the
+deepest drill zoom) loaded lazily on drill, plus interior-only municipality
+border lines; interior rings are dropped after dissolve (no Π.Ε. has a
+legitimate hole). *User request
+2026-07-26. Affects: `greek_municipalities.json` (+pe),
+`webui/static/greek_pe.geojson`, `webui/static/greek_pe_hires.geojson`,
+`webui/static/greek_muni_borders.geojson`,
+`pe_centroids.json`, `webui/queries.py` aggregates, all map templates.*

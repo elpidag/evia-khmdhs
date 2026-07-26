@@ -254,22 +254,35 @@ def test_money_by_project_region_split_invariant(scoped_conn):
     _add_region(scoped_conn, "IN1", "Π.Ε. Ευβοίας", "EL642", 0)
     _add_region(scoped_conn, "IN1", "Π.Ε. Βοιωτίας", "EL641", 1)
     rows = queries.money_by_project_region(scoped_conn)
-    assert {r["nuts3"]: r["split_eur"] for r in rows} == {"EL642": 50.0, "EL641": 50.0}
+    assert {r["pe"]: r["split_eur"] for r in rows} == {
+        "Π.Ε. Ευβοίας": 50.0, "Π.Ε. Βοιωτίας": 50.0}
     for r in rows:
         assert r["exposure_eur"] == 100.0 and r["n_contracts"] == 1
     assert sum(r["split_eur"] for r in rows) == 100.0
 
 
-def test_money_by_project_region_same_nuts3_merges(scoped_conn):
-    # Άρτας + Πρέβεζας share EL541 → both halves land in one NUTS-3 row,
-    # exposure counted once.
+def test_money_by_project_region_distinct_pe_stay_separate(scoped_conn):
+    # Άρτας + Πρέβεζας share NUTS-3 EL541 but are distinct Π.Ε. — since the
+    # maps moved to Π.Ε. polygons they must NOT merge (DATA_DECISIONS
+    # 2026-07-26).
     _add_region(scoped_conn, "IN1", "Π.Ε. Άρτας", "EL541", 0)
     _add_region(scoped_conn, "IN1", "Π.Ε. Πρέβεζας", "EL541", 1)
     rows = queries.money_by_project_region(scoped_conn)
+    assert {r["pe"]: r["split_eur"] for r in rows} == {
+        "Π.Ε. Άρτας": 50.0, "Π.Ε. Πρέβεζας": 50.0}
+    for r in rows:
+        assert r["exposure_eur"] == 100.0 and r["n_contracts"] == 1
+
+
+def test_money_by_project_region_alias_spellings_merge(scoped_conn):
+    # Spelling variants of the SAME Π.Ε. collapse onto the canonical name.
+    _add_region(scoped_conn, "IN1", "Π.Ε. Πρέβεζας", "EL541", 0)
+    _add_region(scoped_conn, "IN1", "Π.Ε. Πρεβέζης", "EL541", 1)
+    rows = queries.money_by_project_region(scoped_conn)
     assert len(rows) == 1
     r = rows[0]
+    assert r["pe"] == "Π.Ε. Πρέβεζας"
     assert r["split_eur"] == 100.0 and r["exposure_eur"] == 100.0
-    assert "Άρτας" in r["pes"] and "Πρέβεζας" in r["pes"]
 
 
 def test_money_by_contractor_region_consortium_split(mem_conn):
@@ -283,7 +296,8 @@ def test_money_by_contractor_region_consortium_split(mem_conn):
             "INSERT INTO contractor_locations (vat_number, region_pe, nuts3_code, source, curated_at) "
             "VALUES (?, ?, ?, 'test', '2026-01-01')", (vat, pe, nuts))
     rows = queries.money_by_contractor_region(mem_conn)
-    assert {r["nuts3"]: r["split_eur"] for r in rows} == {"EL642": 50.0, "EL632": 50.0}
+    assert {r["pe"]: r["split_eur"] for r in rows} == {
+        "Π.Ε. Ευβοίας": 50.0, "Π.Ε. Αχαΐας": 50.0}
     for r in rows:
         assert r["exposure_eur"] == 100.0 and r["n_contractors"] == 1
 
@@ -337,7 +351,8 @@ def test_contractor_map_data_split(scoped_conn):
     _add_region(scoped_conn, "IN1", "Π.Ε. Ευβοίας", "EL642", 0)
     _add_region(scoped_conn, "IN1", "Π.Ε. Βοιωτίας", "EL641", 1)
     md = queries.contractor_map_data(scoped_conn, "111111111")
-    assert {r["nuts3"]: r["split_eur"] for r in md["regions"]} == {"EL642": 50.0, "EL641": 50.0}
+    assert {r["pe"]: r["split_eur"] for r in md["regions"]} == {
+        "Π.Ε. Ευβοίας": 50.0, "Π.Ε. Βοιωτίας": 50.0}
 
 
 def test_gemi_pick_seat_hit_prefers_seat_over_branch():
@@ -416,8 +431,8 @@ def test_overview_contracts_shape_and_splits(scoped_conn):
     assert c["eff_eur"] == 100.0
     assert c["authorities"] == ["Δασαρχείο Πύργου"]
     assert [x["vat"] for x in c["contractors"]] == ["111111111"]
-    assert {r["nuts3"]: r["split_eur"] for r in c["regions"]} == {
-        "EL642": 50.0, "EL641": 50.0}
+    assert {r["pe"]: r["split_eur"] for r in c["regions"]} == {
+        "Π.Ε. Ευβοίας": 50.0, "Π.Ε. Βοιωτίας": 50.0}
     assert sum(r["split_eur"] for r in c["regions"]) == c["eff_eur"]
 
 
@@ -426,8 +441,9 @@ def test_overview_contracts_name_falls_back_to_contractors_table(scoped_conn):
     assert cs[0]["contractors"][0]["name"] == "CONTRACTOR 111111111"
 
 
-def test_contract_authority_points_carry_nuts3(scoped_conn):
-    _add_authority(scoped_conn)   # region_pe Π.Ε. Ηλείας → EL633
+def test_contract_authority_points_canonicalize_pe(scoped_conn):
+    # An alias spelling in the registry still yields the canonical Π.Ε. key.
+    _add_authority(scoped_conn, pe="Π.Ε. Πρεβέζης")
     _link_authority(scoped_conn, "IN1")
     pts = queries.contract_authority_points(scoped_conn)
-    assert pts[0]["nuts3"] == queries.nuts3_for("Π.Ε. Ηλείας")
+    assert pts[0]["pe"] == "Π.Ε. Πρέβεζας"

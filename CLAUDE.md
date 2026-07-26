@@ -4,7 +4,7 @@ OSINT dataset + web UI for the Greek **Anti-nero** wildfire-prevention/restorati
 public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico.css.
 Everything derived is regenerable; `data/raw/` is never written to.
 
-**Current state** (2026-07-25): 344 contracts (252 in scope, €616M effective),
+**Current state** (2026-07-26): 344 contracts (252 in scope, €616M effective),
 890 payment orders (€565.8M paid, 5 Diavgeia-only), all amendment chains
 closed, 179/180 map contractors located, 147 linked to GEMI profiles, 18
 curated work sites, 252/252 in-scope contracts linked to their forest
@@ -126,8 +126,12 @@ refetching open contracts — prefer it for routine updates.
 - Geographic layer: `region_loader.py` loads hand-curated per-contract project
   regions AND sub-Π.Ε. work sites (`data/contract_regions.json` — optional
   `"sites"` lists with PDF page+excerpt evidence → `contract_sites` table;
-  Π.Ε. names → NUTS-3 via `greek_regions.py`, which also holds centroids,
-  city/postal→Π.Ε. and genitive-prefecture→Π.Ε. resolution);
+  `greek_regions.py` holds the Π.Ε. vocabulary: `canonical_pe()` collapses
+  spelling aliases (Πρεβέζης→Πρέβεζας, …) onto the 74 canonical Kallikratis
+  Π.Ε. — **the display/aggregation key on every map** — plus `PE_CENTROIDS`
+  (from `data/pe_centroids.json`), the legacy Π.Ε.→NUTS-3 bridge (`nuts3_for`,
+  still used for geocode validation only), city/postal→Π.Ε. and
+  genitive-prefecture→Π.Ε. resolution);
   `vies_loader.py` sweeps unresolved contractor VATs through VIES into
   `data/contractor_locations.json`; `gemi_loader.py` resolves the VIES-rejected
   residue via the GEMI publicity API and backfills GEMI profile numbers
@@ -181,7 +185,8 @@ decisions land there FIRST, then get implemented.
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts |
-| `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
+| `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid + **hand-curated `pe`** (the municipality's Π.Ε.; the ONLY complete municipality→Π.Ε. table — validated 4 ways by `scripts/build_pe_geojson.py`) (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
+| `pe_centroids.json` | 74 Π.Ε. → representative point (lat, lon), from the dissolved polygons; duplicated to `webui/static/` (`scripts/build_pe_geojson.py`) |
 | `city_to_pe.json`, `postal_prefix_to_pe.json` | address → Π.Ε. lookup tables |
 
 ## Database (`data/processed/khmdhs.sqlite`, committed)
@@ -210,17 +215,30 @@ disbursement for running contracts.
 ## Web UI (`webui/`, read-only Flask)
 
 Routes: `/overview` (flagship "where the money went" page: **two side-by-side
-paper maps** under a 2-mode toggle — `?view=points`: one equal-size dot per
-contract×forest-authority at the authority's seat (jitter-spread via
-deterministic sunflower spiral, click→contract) beside one dot per geocoded
+paper maps** under a 2-mode toggle — `?view=points`: a contract-count
+choropleth by forest-authority-seat region (drilling into a region swaps it
+for one equal-size dot per contract×authority, jitter-spread via a
+deterministic sunflower spiral, click→contract; single-authority contracts
+share one neutral colour, each multi-authority contract gets its own OKLCH
+hue so its dots group, and hovering such a dot draws dashed lines in that
+colour linking ALL the contract's authority seats — incl. off-region ones,
+so a line running off-frame means the contract spans further) beside one
+dot per geocoded
 contractor address (click→contractor); `?view=money` (default): € choropleths
 by work region and by HQ region on the **same YlOrBr ramp and shared max**
 for comparability — **even-split € attribution** summing to the programme
 total + exposure in tooltips; legacy 4-mode `?view=` values redirect. All
+map tooltips are pinned to the map's lower-left corner
+(`GeoCommon.pinnedTip`), never mouse-following. All
 maps are zoom-locked (no user zoom/pan); on the points view **clicking a
-region drills down** (client-side, `&focus=works:EL642`/`home:EL642`
-permalinks): left-map click zooms the left map to the region's forest
-authorities and filters the right map to the contractors holding those
+Π.Ε. drills down** (client-side, `&focus=works:Π.Ε. Ευβοίας`/`home:…`
+permalinks; legacy ELxxx focus values degrade to the country view):
+left-map click zooms the left map to the Π.Ε.'s forest authorities **and
+overlays its interior municipality borders** (lazy-loaded
+`greek_muni_borders.geojson`, dashed, non-interactive) **and swaps the
+coarse polygons for the in-view slice of the high-res layer**
+(`greek_pe_hires.geojson`, lazy) while filtering the
+right map to the contractors holding those
 contracts; right-map click mirrors it; while drilled the analytics below are
 replaced by the region's contracts (sorted by value) and its contractors'
 €-from-region / work-region € tables, with an "All of Greece" reset pill.
@@ -236,8 +254,20 @@ of home + project regions + money-per-year paid/stated chart),
 `/authorities`, `/map` (Leaflet flow map, full-exposure convention),
 `/origins`, `/api/{contractors,flows,timeseries,overview}.json`,
 `/pdf/<kind>/<adam>`. Shared paper-map helpers in
-`webui/static/geo_common.js` (+ NUTS-3 polygons `greek_nuts3.geojson`,
-centroids). All SQL lives in `queries.py`; aggregates filter on
+`webui/static/geo_common.js`. **All maps draw the 74 Π.Ε. polygons** in two
+detail levels built from the full-resolution EPSG:2100 Kallikratis
+shapefile (`data/raw/oria_dhmwn_kallikraths/`) via GEOS
+**`coverage_simplify`** (topology-preserving: shared borders identical on
+both sides, zero slivers): eager `greek_pe.geojson` (220 m, country view) +
+lazy drill-zoom `greek_pe_hires.geojson` (30 m ≈ 2 px at the deepest
+Πειραιώς zoom; the client renders only in-view features) and
+`greek_muni_borders.geojson` (interior municipality border lines per Π.Ε. —
+coastline excluded, it IS the Π.Ε. outline), + `pe_centroids.json`
+(`scripts/build_pe_geojson.py`, run with SYSTEM python3 for
+geopandas/shapely≥2.1; the retired Eurostat NUTS-3 polygons live on in
+`data/raw/greek_nuts3.geojson` as the build script's cross-check). All SQL
+lives in `queries.py`;
+region aggregates key on `canonical_pe(region_pe)`; aggregates filter on
 `contract_scope.in_scope = 1` (fallback: exclude state-vehicle VATs). Search is accent-, homoglyph- AND
 Greeklish-tolerant (`_phonetic_fold`: "evias" finds «Ευβοίας»); all filter
 state is in GET params, so every view is a shareable permalink.
@@ -250,7 +280,7 @@ auto-retrying `pdf_wait.html` (503 + Retry-After) during registry 429 windows.
 Consortium contracts attribute the **full** value to each partner (max-exposure
 view, stated in the footer).
 
-## Tests (`tests/`, 142 passing — `.venv/bin/python -m pytest`)
+## Tests (`tests/`, 155 passing — `.venv/bin/python -m pytest`)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,
@@ -316,3 +346,20 @@ prev links) — new registry keying errors surface here first, and
     against the stored postcode/Π.Ε. or it is discarded (a same-name street
     across town was correctly rejected this way). `q` cannot be combined
     with structured params (HTTP 400).
+17. **Duplicate municipality names resolve the wrong seat** — «Ηρακλείου»
+    exists twice in Kallikratis (9170 Αττικής, 9305 Κρήτης) and the folded
+    name-match had pinned ΔΔ Ηρακλείου (Crete) to Athens' Νέο Ηράκλειο.
+    Caught by the ΥΠΕΣ-code block-contiguity validation during the
+    municipality→Π.Ε. curation (codes are ordered Περιφέρεια→Π.Ε.→δήμος, so
+    a Crete Π.Ε. anchored inside the Attica block is impossible). It is the
+    only duplicate name in the layer; resolve seats by code, never by name.
+18. **Independently-simplified municipality polygons don't tile** — the
+    FireWatch conversion was simplified per-feature, so dissolving to Π.Ε.
+    left micro-holes/slivers (white speckles on choropleths) and km-scale
+    blockiness when drilled into small urban Π.Ε. Fix: rebuild from the
+    full-resolution shapefile with GEOS `coverage_simplify` (snapped to a
+    10 cm grid first) — a polygonal-coverage simplifier that keeps shared
+    edges identical on both sides; `drop_holes` still strips interior rings
+    after dissolve (no Π.Ε. contains a cross-Π.Ε. enclave). Two detail
+    levels ship because 30 m for all of Greece is ~7.6 MB — coarse eager,
+    fine lazy on drill with client-side viewport filtering.
