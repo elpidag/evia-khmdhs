@@ -111,18 +111,20 @@ class RateLimited(Exception):
 
 
 def ensure_pdf(session: requests.Session, cache_dir: Path, adam: str,
-               sleep: float, state: dict) -> Path | None:
-    """Download the payment PDF into the cache unless already there.
+               sleep: float, state: dict,
+               url_template: str = PAYMENT_PDF_URL) -> Path | None:
+    """Download a registry attachment PDF into the cache unless already there.
 
-    Returns the path, or None when the registry has no PDF for this ADAM.
-    Raises RateLimited after MAX_CONSECUTIVE_429 429s in a row (sweep-wide
-    counter lives in `state`).
+    `url_template` defaults to payment attachments; pass CONTRACT_PDF_URL
+    for contract attachments. Returns the path, or None when the registry
+    has no PDF for this ADAM. Raises RateLimited after MAX_CONSECUTIVE_429
+    429s in a row (sweep-wide counter lives in `state`).
     """
     path = cache_dir / f"{adam}.pdf"
     if path.exists():
         return path
     while True:
-        resp = session.get(PAYMENT_PDF_URL.format(adam=adam), timeout=60)
+        resp = session.get(url_template.format(adam=adam), timeout=60)
         if resp.status_code == 429:
             state["429s"] = state.get("429s", 0) + 1
             if state["429s"] >= MAX_CONSECUTIVE_429:

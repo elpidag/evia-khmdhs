@@ -311,3 +311,29 @@ legitimate hole). *User request
 `webui/static/greek_pe.geojson`, `webui/static/greek_pe_hires.geojson`,
 `webui/static/greek_muni_borders.geojson`,
 `pe_centroids.json`, `webui/queries.py` aggregates, all map templates.*
+
+## 2026-07-26 — Per-contract μελέτη (study/planning) cost extraction
+
+Every contract PDF is scanned for the money allocated to μελέτες (the
+planning work preceding the physical works). Method: (1) the corpus has
+exactly one canonical anchor for a priced study line — «Κόστος εκπόνησης
+μελετών (συμπεριλαμβανομένων των φακέλων ΣΑΥ-ΦΑΥ)» in the Άρθρο 4
+«Συμβατικό Τίμημα» breakdown, amounts **net of ΦΠΑ** — extracted with
+layout-aware rules (same-line → lone-amount next line, skipping page-break
+watermarks → lone-amount previous line → prose regex both directions,
+covering the ΑΠΕ recital form «…X€ το κόστος εκπόνησης των μελετών…»),
+validated against all cached occurrences; nearest-amount picking is wrong
+in ~40% of cases and is not used. (2) Insurance boilerplate naming the
+μελετητής, «εγκεκριμένες μελέτες» title text, and μελέτη-approval recitals
+are documented false-positive contexts and excluded. (3) Contracts that
+mention μελετ- without the anchor are audited by a small model over
+compact windows only; the ΕΣΑ design-build contracts genuinely itemise no
+study price ("μελέτη και κατασκευή" bundled) and are reported as such,
+never guessed. (4) Amounts attach to the contract PDF they appear in;
+aggregates attribute each in-scope chain tip its own value if present,
+else the nearest predecessor's (originals carry the breakdown, ΑΠΕ
+restatements may update it). (5) Verified amounts land in curated
+`khmdhs/data/study_costs.json` (page + excerpt evidence) → table
+`contract_study_costs`. Missing/scanned PDFs stay honestly unresolved.
+*User request 2026-07-26. Affects: pdf_cache (full SYMV sweep),
+study_costs.json, contract_study_costs, /overview.*

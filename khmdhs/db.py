@@ -147,6 +147,20 @@ CREATE TABLE IF NOT EXISTS contract_sites (
     FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
 );
 
+-- Per-contract μελέτη (study/planning) cost, net of ΦΠΑ, extracted from
+-- the signed PDF's «Κόστος εκπόνησης μελετών (ΣΑΥ-ΦΑΥ)» line and curated
+-- into khmdhs/data/study_costs.json with page+excerpt evidence
+-- (DATA_DECISIONS 2026-07-26). Aggregates attribute each in-scope chain
+-- tip its own row, else the nearest predecessor's.
+CREATE TABLE IF NOT EXISTS contract_study_costs (
+    reference_number TEXT PRIMARY KEY,
+    eur              REAL NOT NULL,      -- net of ΦΠΑ
+    page             INTEGER,
+    excerpt          TEXT,
+    curated_at       TEXT NOT NULL,
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
 -- Forest authorities (Διευθύνσεις Δασών / Δασαρχεία) from the curated
 -- registry khmdhs/data/forest_authorities.json; coordinates are the seat
 -- municipality's centroid (khmdhs/data/greek_municipalities.json, ΥΠΕΣ code).

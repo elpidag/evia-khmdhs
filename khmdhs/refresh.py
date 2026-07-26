@@ -30,7 +30,10 @@ from pathlib import Path
 
 import requests
 
-from khmdhs import chain_loader, forest_loader, payment_loader, region_loader, scope_loader
+from khmdhs import (
+    chain_loader, forest_loader, payment_loader, region_loader, scope_loader,
+    studies_loader,
+)
 from khmdhs.api import fetch_contract
 from khmdhs.config import DATA_PROCESSED, DEFAULT_DB, THROTTLE_SECONDS
 from khmdhs.db import init_db, upsert_contract
@@ -185,6 +188,8 @@ def main(argv: list[str] | None = None) -> int:
         region_loader.main(db_argv)
         print("\n-- forest_loader -----------------------------------------------")
         forest_loader.main(db_argv)
+        print("\n-- studies_loader ----------------------------------------------")
+        studies_loader.main(db_argv)
         print("\n-- payment_loader ----------------------------------------------")
         payment_loader.main(db_argv)
 
