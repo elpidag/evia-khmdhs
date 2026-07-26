@@ -56,8 +56,9 @@
 
   <section class="ov-card">
     <h2>How big are the contracts?</h2>
-    <p class="muted"><small>{{ histogram.n }} in-scope contracts by effective value.
-      Median: {{ histogram.median | eur_short }}.</small></p>
+    <p class="muted"><small>{{ histogram.n }} in-scope contracts by effective value,
+      on log-spaced bins — each bar spans a <em>doubling</em> of value, so bar
+      heights are directly comparable. Median: {{ histogram.median | eur_short }}.</small></p>
     <div class="ov-chart"><canvas id="histChart"></canvas></div>
   </section>
 
@@ -693,7 +694,9 @@
   const BLUE = '#2a78d6';
   Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
 
-  // 1) contract-value histogram + median marker
+  // 1) contract-value histogram: log-spaced doubling bins, so bar heights
+  //    are directly comparable (equal linear bins over a log-normal money
+  //    distribution overstate the wide right-hand bins).
   const hist = {{ histogram | tojson }};
   const medianLine = {
     id: 'medianLine',
@@ -704,15 +707,45 @@
       for (let i = 0; i < edges.length - 1; i++)
         if (hist.median >= edges[i] && hist.median < edges[i + 1]) { idx = i; break; }
       const half = edges.length > 1 ? (x.getPixelForValue(1) - x.getPixelForValue(0)) / 2 : 0;
-      const frac = idx < edges.length - 1
-        ? (hist.median - edges[idx]) / (edges[idx + 1] - edges[idx]) : 0.5;
+      // Position within the bin on the bin's own (log) scale, matching the
+      // log-spaced binning; the ≤ first and ≥ last bins fall back to linear.
+      let frac = 0.5;
+      if (idx < edges.length - 1) {
+        const lo = edges[idx], hi = edges[idx + 1];
+        frac = lo > 0 ? Math.log(hist.median / lo) / Math.log(hi / lo)
+                      : (hist.median - lo) / (hi - lo);
+      }
       const px = x.getPixelForValue(idx) - half + frac * half * 2;
       ctx.save();
-      ctx.strokeStyle = mutedColor; ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = textColor; ctx.setLineDash([4, 3]);
       ctx.beginPath(); ctx.moveTo(px, y.top); ctx.lineTo(px, y.bottom); ctx.stroke();
-      ctx.fillStyle = mutedColor; ctx.font = '10px ' + Chart.defaults.font.family;
-      ctx.textAlign = 'left';
-      ctx.fillText('median', px + 4, y.top + 9);
+      ctx.setLineDash([]);
+      ctx.fillStyle = textColor; ctx.font = '600 10px ' + Chart.defaults.font.family;
+      const label = 'median ' +
+        (hist.median / 1e6).toFixed(2).replace('.', ',') + ' M €';
+      const flip = px + 8 + ctx.measureText(label).width > x.right;
+      ctx.textAlign = flip ? 'right' : 'left';
+      // Sits in the top padding, a row above the per-bar count labels.
+      ctx.fillText(label, px + (flip ? -6 : 6), y.top - 16);
+      ctx.beginPath(); ctx.setLineDash([4, 3]);
+      ctx.moveTo(px, y.top - 12); ctx.lineTo(px, y.top); ctx.stroke();
+      ctx.restore();
+    }
+  };
+  // Count on top of each bar — 8 bars, so direct labels stay readable and
+  // the y-axis becomes a secondary aid.
+  const histCounts = {
+    id: 'histCounts',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      ctx.save();
+      ctx.fillStyle = mutedColor;
+      ctx.font = '10px ' + Chart.defaults.font.family;
+      ctx.textAlign = 'center';
+      chart.getDatasetMeta(0).data.forEach((bar, i) => {
+        const v = hist.counts[i];
+        if (v > 0) ctx.fillText(v, bar.x, bar.y - 4);
+      });
       ctx.restore();
     }
   };
@@ -720,21 +753,24 @@
     type: 'bar',
     data: { labels: hist.labels,
             datasets: [{ data: hist.counts, backgroundColor: BLUE,
-                         borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: 'bottom' }] },
+                         borderRadius: { topLeft: 4, topRight: 4 }, borderSkipped: 'bottom',
+                         barPercentage: 0.92, categoryPercentage: 0.92 }] },
     options: {
       responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 30 } },
       plugins: { legend: { display: false },
         tooltip: { callbacks: {
           title: items => items[0].label + ' €',
-          label: ctx => ctx.parsed.y + ' contract(s)' } } },
+          label: ctx => ctx.parsed.y + ' contract(s) — ' +
+            (100 * ctx.parsed.y / hist.n).toFixed(1).replace('.', ',') + '%' } } },
       scales: {
-        x: { ticks: { color: mutedColor, autoSkip: false, maxRotation: 60, minRotation: 45,
-                      font: { size: 10 } }, grid: { display: false } },
+        x: { ticks: { color: mutedColor, autoSkip: false, maxRotation: 0,
+                      font: { size: 10.5 } }, grid: { display: false } },
         y: { ticks: { color: mutedColor, precision: 0 }, grid: { color: gridColor },
              border: { display: false } }
       }
     },
-    plugins: [medianLine]
+    plugins: [medianLine, histCounts]
   });
 
   // 2) top-10 contractors — horizontal, clickable, value labels at bar end

@@ -1045,14 +1045,19 @@ def _bin_values(values: list[float], edges: tuple) -> dict:
             "total_eur": round(sum(values), 2)}
 
 
+# Log-spaced (doubling) bins: contract values are roughly log-normal, so
+# equal-width linear bins distort the picture (a €2M-wide bar collects twice
+# what a €1M-wide one does). With each bin spanning one doubling of value,
+# bar heights are directly comparable and the distribution reads honestly.
 VALUE_BIN_EDGES = (
-    0, 50_000, 100_000, 200_000, 300_000, 500_000, 750_000, 1_000_000,
-    1_500_000, 2_000_000, 3_000_000, 5_000_000, 8_000_000, 12_000_000,
+    0, 100_000, 200_000, 400_000, 800_000,
+    1_600_000, 3_200_000, 6_400_000,
 )
 
 
 def contract_value_histogram(conn: sqlite3.Connection) -> dict:
-    """Histogram of every in-scope contract's effective value."""
+    """Histogram of every in-scope contract's effective value, on
+    log-spaced doubling bins (the final bin is an open ≥ overflow)."""
     values = [r[0] or 0.0 for r in conn.execute(f"""
         SELECT {effective_cost(conn, 'k')} FROM contracts k
         WHERE {scope_filter(conn, 'k.reference_number')}
@@ -1065,10 +1070,12 @@ def contract_value_histogram(conn: sqlite3.Connection) -> dict:
     def short(v):
         if v >= 1_000_000:
             m = v / 1_000_000
-            return f"{m:g}M".replace(".", ",")   # 1,5M not 1M
+            return f"{m:g}M".replace(".", ",")   # 1,6M not 1M
         return f"{v // 1000}k"
-    h["labels"] = [f"{short(edges[i])}–{short(edges[i + 1])}"
-                   for i in range(len(edges) - 1)] + [f">{short(edges[-1])}"]
+    h["labels"] = ([f"≤{short(edges[1])}"] +
+                   [f"{short(edges[i])}–{short(edges[i + 1])}"
+                    for i in range(1, len(edges) - 1)] +
+                   [f"≥{short(edges[-1])}"])
     return h
 
 
