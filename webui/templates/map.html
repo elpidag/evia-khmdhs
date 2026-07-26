@@ -80,7 +80,8 @@
 
   <footer class="ft-source">
     <small>
-      Data: KHMDHS Open Data (Greek public procurement). Geography: Eurostat NUTS&nbsp;2021 (1:1M).
+      Data: KHMDHS Open Data (Greek public procurement). Geography: Π.Ε. boundaries
+      dissolved from the geodata.gov.gr Kallikratis municipality layer (CC-BY).
       Contractor locations resolved via VIES (EU VAT validation) and member-of-consortium inference.
       State-vehicle pass-throughs (EESYP, TAIPED) excluded to avoid double-counting.
       Each contract's value is credited <em>in full</em> to every (contractor RU × project RU) pair;
@@ -107,8 +108,8 @@
 (async function () {
   const TARGET = {{ (target_filter or "") | tojson }};
   const [centroidsResp, geoResp, flowsResp] = await Promise.all([
-    fetch("{{ url_for('static', filename='nuts3_centroids.json') }}"),
-    fetch("{{ url_for('static', filename='greek_nuts3.geojson') }}"),
+    fetch("{{ url_for('static', filename='pe_centroids.json') }}"),
+    fetch("{{ url_for('static', filename='greek_pe.geojson') }}"),
     fetch("{{ url_for('api_flows') }}" + (TARGET ? "?target=" + encodeURIComponent(TARGET) : "")),
   ]);
   const centroids = await centroidsResp.json();
@@ -152,7 +153,7 @@
 
   // -- compute totals ---------------------------------------------------
   const targetTotals = new Map();
-  flows.forEach(f => targetTotals.set(f.target_nuts3, (targetTotals.get(f.target_nuts3)||0) + f.total_eur));
+  flows.forEach(f => targetTotals.set(f.target_pe, (targetTotals.get(f.target_pe)||0) + f.total_eur));
   const maxTarget = Math.max(1, ...targetTotals.values());
   document.getElementById('choroMax').textContent = fmtEurShort(maxTarget);
 
@@ -171,7 +172,7 @@
   const regionLayer = L.geoJSON(geo, {
     pane: 'regions',
     style: feat => {
-      const v = targetTotals.get(feat.properties.NUTS_ID) || 0;
+      const v = targetTotals.get(feat.properties.pe) || 0;
       return {
         weight: 0.5,
         color: '#9b8e74',
@@ -180,12 +181,10 @@
       };
     },
     onEachFeature: (feat, layer) => {
-      const v = targetTotals.get(feat.properties.NUTS_ID) || 0;
-      const lbl = feat.properties.NUTS_NAME || feat.properties.NAME_LATN || feat.properties.NUTS_ID;
+      const v = targetTotals.get(feat.properties.pe) || 0;
       layer.bindTooltip(
         `<div class="ft-tooltip">
-           <strong>${lbl}</strong><br>
-           <span class="muted">${feat.properties.NUTS_ID}</span><br>
+           <strong>${feat.properties.pe}</strong><br>
            ${v > 0 ? fmtEur(v) + ' incoming' : 'no projects in view'}
          </div>`,
         {sticky: true, direction: 'top', className: 'ft-tt'}
@@ -205,7 +204,7 @@
 
   // -- source totals + max flow -----------------------------------------
   const sourceTotals = new Map();
-  flows.forEach(f => sourceTotals.set(f.source_nuts3, (sourceTotals.get(f.source_nuts3)||0) + f.total_eur));
+  flows.forEach(f => sourceTotals.set(f.source_pe, (sourceTotals.get(f.source_pe)||0) + f.total_eur));
   const maxFlow = Math.max(...flows.map(f => f.total_eur));
 
   // -- arrow rendering --------------------------------------------------
@@ -316,7 +315,7 @@
   const topFlows = [...flows]
     .sort((a, b) => b.total_eur - a.total_eur)
     .slice(0, 6);
-  const topKey = new Set(topFlows.map(f => f.source_nuts3 + '->' + f.target_nuts3));
+  const topKey = new Set(topFlows.map(f => f.source_pe + '->' + f.target_pe));
 
   function redraw() {
     [...flowsRoot.querySelectorAll('.ft-flow,.ft-flow-shadow,.ft-source-circle,.ft-local,.ft-local-loop,g.ft-labels-group')].forEach(n => n.remove());
@@ -324,11 +323,11 @@
 
     // pass 1: glow underlines only for TOP flows (ribbon effect)
     flows.forEach(f => {
-      if (!topKey.has(f.source_nuts3+'->'+f.target_nuts3)) return;
-      const s = centroids[f.source_nuts3], t = centroids[f.target_nuts3];
+      if (!topKey.has(f.source_pe+'->'+f.target_pe)) return;
+      const s = centroids[f.source_pe], t = centroids[f.target_pe];
       if (!s || !t) return;
       const sp = project(s);
-      const isLocalUnderline = f.source_nuts3 === f.target_nuts3;
+      const isLocalUnderline = f.source_pe === f.target_pe;
       const w = widthFor(f.total_eur, true, isLocalUnderline);
       let d;
       if (isLocalUnderline) {
@@ -340,7 +339,7 @@
       const path = document.createElementNS(NS, 'path');
       path.setAttribute('d', d);
       path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', f.source_nuts3===f.target_nuts3 ? LOCAL_FILL : ARROW_LIGHT);
+      path.setAttribute('stroke', f.source_pe===f.target_pe ? LOCAL_FILL : ARROW_LIGHT);
       path.setAttribute('stroke-opacity', '0.30');
       path.setAttribute('stroke-width', (w + 4.5).toFixed(2));
       path.setAttribute('stroke-linecap', 'round');
@@ -351,12 +350,12 @@
     // pass 2: main arrow paths — sort so big flows render on top
     const sortedFlows = [...flows].sort((a,b)=>a.total_eur-b.total_eur);
     sortedFlows.forEach(f => {
-      const s = centroids[f.source_nuts3], t = centroids[f.target_nuts3];
+      const s = centroids[f.source_pe], t = centroids[f.target_pe];
       if (!s || !t) return;
       const sp = project(s);
-      const isTop = topKey.has(f.source_nuts3+'->'+f.target_nuts3);
+      const isTop = topKey.has(f.source_pe+'->'+f.target_pe);
 
-      if (f.source_nuts3 === f.target_nuts3) {
+      if (f.source_pe === f.target_pe) {
         // Local self-loop: a teardrop curve starting and ending at the source.
         const r = selfLoopR(f.total_eur);
         const path = document.createElementNS(NS, 'path');
@@ -393,12 +392,12 @@
     // pass 3: source circles (drawn on top of arrows so origins read clearly)
     const drawn = new Set();
     flows.forEach(f => {
-      if (drawn.has(f.source_nuts3)) return;
-      drawn.add(f.source_nuts3);
-      const s = centroids[f.source_nuts3];
+      if (drawn.has(f.source_pe)) return;
+      drawn.add(f.source_pe);
+      const s = centroids[f.source_pe];
       if (!s) return;
       const sp = project(s);
-      const r = sourceR(sourceTotals.get(f.source_nuts3) || 0);
+      const r = sourceR(sourceTotals.get(f.source_pe) || 0);
       const c = document.createElementNS(NS, 'circle');
       c.setAttribute('cx', sp.x); c.setAttribute('cy', sp.y);
       c.setAttribute('r', r);
@@ -406,7 +405,7 @@
       c.setAttribute('stroke', SOURCE_STROKE);
       c.setAttribute('stroke-width', '1.6');
       c.classList.add('ft-source-circle');
-      c.dataset.tip = `Origin: <strong>${f.source_pe}</strong><br>total outgoing: ${fmtEur(sourceTotals.get(f.source_nuts3)||0)}`;
+      c.dataset.tip = `Origin: <strong>${f.source_pe}</strong><br>total outgoing: ${fmtEur(sourceTotals.get(f.source_pe)||0)}`;
       flowsRoot.appendChild(c);
     });
 
@@ -422,12 +421,12 @@
     const mapH = map.getSize().y;
     const labelHeight = 32;  // approximate label box height in px
     topFlows.forEach(f => {
-      const s = centroids[f.source_nuts3];
+      const s = centroids[f.source_pe];
       if (!s) return;
       const sp = project(s);
-      const r = sourceR(sourceTotals.get(f.source_nuts3) || 0);
+      const r = sourceR(sourceTotals.get(f.source_pe) || 0);
 
-      const isLocal = f.source_nuts3 === f.target_nuts3;
+      const isLocal = f.source_pe === f.target_pe;
       let anchorX = sp.x, anchorY = sp.y;
       if (isLocal) {
         const loop = selfLoopD(sp, selfLoopR(f.total_eur));
@@ -529,7 +528,7 @@
     tr.innerHTML = `<td>${f.source_pe}</td><td>${f.target_pe}</td>` +
                    `<td class="num">${f.n_contracts}</td>` +
                    `<td class="num">${fmtEur(f.total_eur)}</td>`;
-    if (f.source_nuts3 === f.target_nuts3) tr.classList.add('local-row');
+    if (f.source_pe === f.target_pe) tr.classList.add('local-row');
     tbody.appendChild(tr);
   });
 })();

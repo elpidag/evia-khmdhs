@@ -65,7 +65,6 @@
     <dd>
       {% if location.region_pe %}
         {{ location.region_pe }}
-        {% if location.nuts3_code %}<small class="muted">({{ location.nuts3_code }})</small>{% endif %}
       {% else %}
         <span class="muted">—</span>
       {% endif %}
@@ -231,27 +230,27 @@
   // ---------- mini-map: home pin + project-region bubbles + connectors ---
   if (MAPDATA.regions && MAPDATA.regions.length && document.getElementById('cdMap')) {
     const [geo, centroids] = await Promise.all([
-      fetch("{{ url_for('static', filename='greek_nuts3.geojson') }}").then(r => r.json()),
-      fetch("{{ url_for('static', filename='nuts3_centroids.json') }}").then(r => r.json()),
+      fetch("{{ url_for('static', filename='greek_pe.geojson') }}").then(r => r.json()),
+      fetch("{{ url_for('static', filename='pe_centroids.json') }}").then(r => r.json()),
     ]);
-    const mine = new Set(MAPDATA.regions.map(r => r.nuts3));
+    const mine = new Set(MAPDATA.regions.map(r => r.pe));
     const map = G.initPaperMap('cdMap', { zoomControl: false });
     G.addRegions(map, geo,
-      n => mine.has(n) ? '#fbe9d4' : G.COLORS.landEmpty,
+      pe => mine.has(pe) ? '#fbe9d4' : G.COLORS.landEmpty,
       null);
 
     const maxV = Math.max(1, ...MAPDATA.regions.map(r => r.split_eur));
     const radius = G.makeRadius(maxV, 22);
-    // Prefer the geocoded street address; fall back to the region centroid.
+    // Prefer the geocoded street address; fall back to the Π.Ε. centroid.
     const home = MAPDATA.home
       ? (MAPDATA.home.lat != null ? [MAPDATA.home.lat, MAPDATA.home.lon]
-                                  : (MAPDATA.home.nuts3 ? centroids[MAPDATA.home.nuts3] : null))
+                                  : (MAPDATA.home.pe ? centroids[MAPDATA.home.pe] : null))
       : null;
 
     MAPDATA.regions.forEach(r => {
-      const c = centroids[r.nuts3];
+      const c = centroids[r.pe];
       if (!c) return;
-      if (home && r.nuts3 !== MAPDATA.home.nuts3) {
+      if (home && r.pe !== (MAPDATA.home && MAPDATA.home.pe)) {
         L.polyline([home, c], { pane: 'links', color: G.COLORS.bubbleWorksStroke,
                                 weight: 1, opacity: 0.45, dashArray: '4 3' }).addTo(map);
       }
@@ -259,7 +258,7 @@
         pane: 'bubbles', radius: radius(r.split_eur),
         fillColor: G.COLORS.bubbleWorks, fillOpacity: 0.82,
         color: G.COLORS.bubbleWorksStroke, weight: 1.2,
-      }).bindTooltip(G.regionTooltip(r.pes, [
+      }).bindTooltip(G.regionTooltip(r.pe, [
           G.fmtInt(r.n_contracts) + ' contract(s)',
           '<strong>' + G.fmtEur(r.split_eur) + '</strong> attributed',
         ]), { sticky: true, direction: 'top', className: 'gc-tt' }).addTo(map);
@@ -271,7 +270,7 @@
             (MAPDATA.home.city || '') + (MAPDATA.home.pe ? ' · ' + MAPDATA.home.pe : ''),
           ]), { sticky: true, direction: 'top', className: 'gc-tt' }).addTo(map);
     }
-    const pts = MAPDATA.regions.map(r => centroids[r.nuts3]).filter(Boolean)
+    const pts = MAPDATA.regions.map(r => centroids[r.pe]).filter(Boolean)
                   .concat(home ? [home] : []);
     if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.35));
   }

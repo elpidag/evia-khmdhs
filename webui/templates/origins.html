@@ -48,7 +48,7 @@
         {% set pct_imp = 100.0 * (r.imported_eur or 0) / total if total > 0 else 0 %}
         {% set pct_unk = 100.0 * (r.unknown_eur or 0) / total if total > 0 else 0 %}
         <tr>
-          <td>{{ r.target_pe }} <small class="muted">({{ r.target_nuts3 }})</small></td>
+          <td>{{ r.target_pe }}</td>
           <td class="num">{{ r.n_contracts }}</td>
           <td class="num">{{ r.total_eur | eur }}</td>
           <td class="composition">

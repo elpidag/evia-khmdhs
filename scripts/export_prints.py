@@ -39,15 +39,15 @@ def evia_bounds() -> dict:
     """Compute bounds covering Evia + every source region with a flow into it.
 
     Pulls the live /api/flows.json?target=Π.Ε. Ευβοίας and the static
-    nuts3 centroids, then unions all involved points and adds padding.
+    Π.Ε. centroids, then unions all involved points and adds padding.
     """
     target = urllib.parse.quote("Π.Ε. Ευβοίας")
     with urllib.request.urlopen(f"{BASE}/api/flows.json?target={target}") as f:
         flows = json.load(f)
-    with urllib.request.urlopen(f"{BASE}/static/nuts3_centroids.json") as f:
+    with urllib.request.urlopen(f"{BASE}/static/pe_centroids.json") as f:
         centroids = json.load(f)
-    nuts = {f["source_nuts3"] for f in flows} | {f["target_nuts3"] for f in flows}
-    pts = [centroids[n] for n in nuts if n in centroids]
+    pes = {f["source_pe"] for f in flows} | {f["target_pe"] for f in flows}
+    pts = [centroids[p] for p in pes if p in centroids]
     if not pts:
         return GREECE_BOUNDS
     lats = [p[0] for p in pts]

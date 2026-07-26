@@ -107,7 +107,7 @@
     <dt>Project Region</dt>
     <dd>
       {% for r in regions %}
-        <span title="{{ r.note or '' }}">{{ r.region_pe }}{% if r.nuts3_code %} <small class="muted">({{ r.nuts3_code }})</small>{% endif %}</span>{% if not loop.last %} · {% endif %}
+        <span title="{{ r.note or '' }}">{{ r.region_pe }}</span>{% if not loop.last %} · {% endif %}
       {% endfor %}
     </dd>
   </div>

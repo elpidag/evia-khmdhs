@@ -63,6 +63,19 @@ window.GeoCommon = (function () {
     return map;
   }
 
+  // Fixed info box pinned to the map's lower-left corner — an alternative to
+  // mouse-following tooltips. Returns {show(html), hide()}.
+  function pinnedTip(map) {
+    const el = document.createElement('div');
+    el.className = 'gc-pin-tt';
+    el.hidden = true;
+    map.getContainer().appendChild(el);
+    return {
+      show(html) { el.innerHTML = html; el.hidden = false; },
+      hide() { el.hidden = true; el.innerHTML = ''; },
+    };
+  }
+
   // sqrt-normalised index into a ramp; zero → neutral paper.
   function makeChoro(ramp, maxV) {
     return v => {
@@ -84,32 +97,42 @@ window.GeoCommon = (function () {
       lines.map(l => '<br>' + l).join('') + '</div>';
   }
 
-  // Base polygon layer; `valueOf(nuts3) -> number|0` decides the fill.
-  // Optional onClick(nuts3, nutsName) makes regions clickable (drill-down).
-  function addRegions(map, geo, colorOf, tipOf, onClick) {
+  // Region id + display name off a polygon feature. The Π.Ε. layer uses
+  // {pe, name}; the retired NUTS-3 layer used {NUTS_ID, NUTS_NAME}.
+  const regionId = f => f.properties.pe ?? f.properties.NUTS_ID;
+  const regionName = f => f.properties.name ?? f.properties.NUTS_NAME;
+
+  // Base polygon layer; `colorOf(regionId) -> css color` decides the fill.
+  // Optional onClick(regionId, regionName) makes regions clickable
+  // (drill-down). Optional tipSink (a pinnedTip) shows the tooltip in the
+  // map corner instead of a mouse-following one.
+  function addRegions(map, geo, colorOf, tipOf, onClick, tipSink) {
     const layer = L.geoJSON(geo, {
       pane: 'regions',
       style: f => ({
         weight: 0.6,
         color: COLORS.regionStroke,
-        fillColor: colorOf(f.properties.NUTS_ID),
+        fillColor: colorOf(regionId(f)),
         fillOpacity: 0.95,
       }),
       onEachFeature: (f, lyr) => {
-        const tip = tipOf && tipOf(f.properties.NUTS_ID, f.properties.NUTS_NAME);
-        if (tip) lyr.bindTooltip(tip, { sticky: true, direction: 'top', className: 'gc-tt' });
+        const tip = tipOf && tipOf(regionId(f), regionName(f));
+        if (tip && !tipSink)
+          lyr.bindTooltip(tip, { sticky: true, direction: 'top', className: 'gc-tt' });
         lyr.on({
           mouseover: e => {
             e.target.setStyle({ weight: 1.6, color: COLORS.regionStrokeHover });
             if (onClick) map.getContainer().style.cursor = 'pointer';
+            if (tip && tipSink) tipSink.show(tip);
           },
           mouseout: e => {
             layer.resetStyle(e.target);
             if (onClick) map.getContainer().style.cursor = '';
+            if (tipSink) tipSink.hide();
           },
         });
         if (onClick) lyr.on('click', () =>
-          onClick(f.properties.NUTS_ID, f.properties.NUTS_NAME));
+          onClick(regionId(f), regionName(f)));
       },
     }).addTo(map);
     return layer;
@@ -145,17 +168,26 @@ window.GeoCommon = (function () {
   }
 
   // Equal-size dot layer (presence, not magnitude). opts: {fill, stroke,
-  // radius, tipOf(p) -> html, hrefOf(p) -> url|null}.
+  // radius, tipOf(p) -> html, hrefOf(p) -> url|null, fillOf(p) -> css color
+  // (per-dot override of fill), tipSink (corner box instead of tooltip),
+  // onOver(p)/onOut(p) (extra hover hooks, e.g. sibling-link lines)}.
   function addDots(map, points, opts) {
     const o = Object.assign({ radius: 5, fillOpacity: 0.78, weight: 1 }, opts || {});
     const layer = L.layerGroup(points.map(p => {
       const m = L.circleMarker([p.lat, p.lon], {
         pane: 'bubbles', radius: o.radius,
-        fillColor: o.fill, fillOpacity: o.fillOpacity,
+        fillColor: o.fillOf ? o.fillOf(p) : o.fill, fillOpacity: o.fillOpacity,
         color: o.stroke, weight: o.weight,
       });
-      if (o.tipOf) m.bindTooltip(o.tipOf(p),
-        { sticky: true, direction: 'top', className: 'gc-tt' });
+      if (o.onOver) m.on('mouseover', () => o.onOver(p));
+      if (o.onOut) m.on('mouseout', () => o.onOut(p));
+      if (o.tipOf && o.tipSink) {
+        m.on('mouseover', () => o.tipSink.show(o.tipOf(p)));
+        m.on('mouseout', () => o.tipSink.hide());
+      } else if (o.tipOf) {
+        m.bindTooltip(o.tipOf(p),
+          { sticky: true, direction: 'top', className: 'gc-tt' });
+      }
       if (o.hrefOf) {
         const href = o.hrefOf(p);
         if (href) {
@@ -172,5 +204,5 @@ window.GeoCommon = (function () {
   return { fmtEur, fmtEurShort, fmtInt,
            RAMP_WORKS, RAMP_HOME, COLORS,
            initPaperMap, makeChoro, makeRadius, regionTooltip, addRegions,
-           spreadOverlaps, addDots };
+           spreadOverlaps, addDots, pinnedTip, regionId, regionName };
 })();

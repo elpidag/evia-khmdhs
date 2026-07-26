@@ -116,46 +116,99 @@
 
   // ---------------- data ----------------
   const [geo, data] = await Promise.all([
-    fetch("{{ url_for('static', filename='greek_nuts3.geojson') }}").then(r => r.json()),
+    fetch("{{ url_for('static', filename='greek_pe.geojson') }}").then(r => r.json()),
     fetch("{{ url_for('api_overview') }}").then(r => r.json()),
   ]);
-  const byNutsWork = new Map(data.work_regions.map(r => [r.nuts3, r]));
-  const byNutsHome = new Map(data.home_regions.map(r => [r.nuts3, r]));
+  const byPeWork = new Map(data.work_regions.map(r => [r.pe, r]));
+  const byPeHome = new Map(data.home_regions.map(r => [r.pe, r]));
   const cov = data.coverage;
   const dotCov = data.contractor_points.coverage;
   const byRef = new Map(data.contracts.map(c => [c.ref, c]));
   const nNoAuthority = {{ kpis.n_contracts }} -
     new Set(data.contract_points.map(p => p.ref)).size;
 
-  // Region polygon bounds + display names for the drill-down.
-  const boundsByNuts3 = {}, featureName = {};
-  geo.features.forEach(f => {
-    boundsByNuts3[f.properties.NUTS_ID] = L.geoJSON(f).getBounds();
-    featureName[f.properties.NUTS_ID] = f.properties.NUTS_NAME;
+  // Drill-zoom detail loads lazily on first drill: interior municipality
+  // borders per Π.Ε., and the high-resolution Π.Ε. polygons (the eager
+  // country-view layer is coarse — fine at national scale, blocky when a
+  // small Π.Ε. like Πειραιώς fills the frame).
+  let muniPromise = null;
+  const muniGeo = () => muniPromise ??=
+    fetch("{{ url_for('static', filename='greek_muni_borders.geojson') }}")
+      .then(r => r.json());
+  let hiresPromise = null;
+  const hiresGeo = () => hiresPromise ??=
+    fetch("{{ url_for('static', filename='greek_pe_hires.geojson') }}")
+      .then(r => r.json())
+      .then(g => {
+        // Cache per-feature bounds once — the drill renders only the
+        // features that intersect the zoomed viewport.
+        g.features.forEach(f => { f._bounds = L.geoJSON(f).getBounds(); });
+        return g;
+      });
+
+  // Distinct contracts per Π.Ε. (a multi-authority contract counts in every
+  // Π.Ε. where one of its authorities is seated) + dots-per-contract.
+  const refsByPe = new Map();
+  const authCount = new Map();
+  data.contract_points.forEach(p => {
+    if (!refsByPe.has(p.pe)) refsByPe.set(p.pe, new Set());
+    refsByPe.get(p.pe).add(p.ref);
+    authCount.set(p.ref, (authCount.get(p.ref) || 0) + 1);
   });
-  const nameOf = n =>
-    (byNutsWork.get(n) || byNutsHome.get(n) || {}).pes || featureName[n] || n;
+  const maxRegionCount = Math.max(1,
+    ...[...refsByPe.values()].map(s => s.size));
+
+  // Drill-level dot colours: single-authority contracts share one neutral;
+  // each multi-authority contract gets its own colour (same colour = same
+  // contract). Hues are spaced evenly over the actual count with alternating
+  // lightness/chroma tiers so hue-neighbours also differ in lightness —
+  // exact identity comes from the corner tooltip, colour does the grouping.
+  const SINGLE_FILL = '#6e6353';
+  const DRILL_STROKE = '#3a3429';
+  function contractColors(refs) {
+    const multi = [...new Set(refs)]
+      .filter(r => (authCount.get(r) || 0) > 1).sort();
+    const n = Math.max(1, multi.length);
+    const colors = new Map();
+    multi.forEach((ref, i) => {
+      const hue = (20 + 360 * i / n) % 360;
+      colors.set(ref, i % 2
+        ? `oklch(0.70 0.13 ${hue.toFixed(1)})`
+        : `oklch(0.55 0.16 ${hue.toFixed(1)})`);
+    });
+    return colors;
+  }
+
+  // Region polygon bounds for the drill-down (keyed by Π.Ε. name).
+  const boundsByPe = {};
+  geo.features.forEach(f => {
+    boundsByPe[f.properties.pe] = L.geoJSON(f).getBounds();
+  });
 
   // ---------------- drill state ----------------
-  // {side: 'works'|'home', nuts3} — Locations view only. All map zoom is
+  // {side: 'works'|'home', pe} — Locations view only. All map zoom is
   // programmatic: the maps themselves are fully locked.
   let drill = null;
   const focusParam = new URL(window.location).searchParams.get('focus') || '';
-  const fm = focusParam.match(/^(works|home):(EL\d{3})$/);
-  if (fm && boundsByNuts3[fm[2]]) drill = { side: fm[1], nuts3: fm[2] };
+  const fm = focusParam.match(/^(works|home):(.+)$/);
+  if (fm) {
+    const pe = decodeURIComponent(fm[2]);
+    // Legacy NUTS-3 permalinks (works:EL642) simply don't match a Π.Ε.
+    if (boundsByPe[pe]) drill = { side: fm[1], pe };
+  }
 
   function computeSelection() {
     if (!drill) return null;
     let refs, vats;
     if (drill.side === 'works') {
       refs = new Set(data.contract_points
-        .filter(p => p.nuts3 === drill.nuts3).map(p => p.ref));
+        .filter(p => p.pe === drill.pe).map(p => p.ref));
       vats = new Set();
       refs.forEach(ref => ((byRef.get(ref) || {}).contractors || [])
         .forEach(c => vats.add(c.vat)));
     } else {
       vats = new Set(data.contractor_points.points
-        .filter(p => p.nuts3 === drill.nuts3).map(p => p.vat));
+        .filter(p => p.pe === drill.pe).map(p => p.vat));
       refs = new Set(data.contracts
         .filter(c => c.contractors.some(x => vats.has(x.vat)))
         .map(c => c.ref));
@@ -166,7 +219,8 @@
   // ---------------- two independent map panels -------------------------
   function makePanel(mapId, legendId, capId, resetId) {
     const map = G.initPaperMap(mapId, { locked: true });
-    return { map, legendEl: document.getElementById(legendId),
+    return { map, tip: G.pinnedTip(map),
+             legendEl: document.getElementById(legendId),
              capEl: document.getElementById(capId),
              resetEl: document.getElementById(resetId),
              regionLayer: null, overlay: null, fullBounds: null };
@@ -177,25 +231,64 @@
   function clearPanel(p) {
     if (p.regionLayer) { p.regionLayer.remove(); p.regionLayer = null; }
     if (p.overlay) { p.overlay.remove(); p.overlay = null; }
+    if (p.muniLayer) { p.muniLayer.remove(); p.muniLayer = null; }
+    if (p.hoverLines) { p.hoverLines.remove(); p.hoverLines = null; }
+    p.gen = (p.gen || 0) + 1;   // invalidate in-flight lazy-layer adds
+    p.tip.hide();   // layers are gone, so no mouseout will ever fire
   }
   function frame(p, bounds) {
     if (!p.fullBounds) p.fullBounds = p.regionLayer.getBounds();
     p.map.fitBounds(bounds || p.fullBounds, { padding: [8, 8] });
   }
-  function highlightRegion(p, nuts3) {
+  function highlightRegion(p, pe) {
     p.regionLayer.eachLayer(lyr => {
-      if (lyr.feature && lyr.feature.properties.NUTS_ID === nuts3) {
+      if (lyr.feature && lyr.feature.properties.pe === pe) {
         lyr.setStyle({ weight: 2.2, color: G.COLORS.regionStrokeHover });
       }
     });
   }
 
+  // Municipality borders inside the drilled Π.Ε. — interior border lines
+  // only (the coastline IS the Π.Ε. outline), never interactive, drawn
+  // under the dots (FireWatch-style local context).
+  function addMuniBorders(p, pe) {
+    const gen = p.gen;
+    muniGeo().then(g => {
+      if (p.gen !== gen) return;   // drill changed while loading
+      p.muniLayer = L.geoJSON(
+        { type: 'FeatureCollection',
+          features: g.features.filter(f => f.properties.pe === pe) },
+        { pane: 'links', interactive: false,
+          style: { weight: 0.8, color: G.COLORS.regionStroke,
+                   fill: false, dashArray: '3 2' } },
+      ).addTo(p.map);
+    });
+  }
+
+  // Swap the coarse country polygons for the high-resolution ones around
+  // the drilled Π.Ε. Only features intersecting the zoomed viewport are
+  // rendered — the rest of Greece is off-screen anyway.
+  function swapHiresRegions(p, pe, side) {
+    const gen = p.gen;
+    hiresGeo().then(g => {
+      if (p.gen !== gen) return;   // drill changed while loading
+      const view = boundsByPe[pe].pad(0.6);
+      const feats = g.features.filter(f => f._bounds.intersects(view));
+      if (p.regionLayer) p.regionLayer.remove();
+      p.regionLayer = G.addRegions(p.map,
+        { type: 'FeatureCollection', features: feats },
+        () => G.COLORS.landEmpty, null,
+        (pe2, _name) => setDrill(side, pe2), p.tip);
+      highlightRegion(p, pe);
+    });
+  }
+
   function regionTip(src, noun) {
-    return (nuts3, fallbackName) => {
-      const r = src.get(nuts3);
-      if (!r) return G.regionTooltip(fallbackName || nuts3,
+    return (pe, _name) => {
+      const r = src.get(pe);
+      if (!r) return G.regionTooltip(pe,
                                      ['<span class="muted">no Anti-nero activity</span>']);
-      return G.regionTooltip(r.pes, [
+      return G.regionTooltip(r.pe, [
         noun(r),
         '<strong>' + G.fmtEur(r.split_eur) + '</strong> attributed',
         '<span class="muted">touches ' + G.fmtEurShort(r.exposure_eur) +
@@ -218,10 +311,21 @@
 
   // ---------------- the two views ----------------
   function contractTip(p) {
-    return G.regionTooltip(p.authority, [
+    return G.regionTooltip(p.ref, [
+      p.authority,
       p.title.length > 68 ? p.title.slice(0, 67) + '…' : p.title,
       '<strong>' + G.fmtEurShort(p.eff_eur) + '</strong> effective',
       '<span class="muted">' + p.pe + ' — click for the contract</span>',
+    ]);
+  }
+  function countTip(pe, _name) {
+    const cnt = (refsByPe.get(pe) || { size: 0 }).size;
+    if (!cnt) return G.regionTooltip(pe,
+      ['<span class="muted">no contracts under authorities seated here</span>']);
+    return G.regionTooltip(pe, [
+      '<strong>' + G.fmtInt(cnt) + '</strong> contract(s) under forest ' +
+        'authorities seated here',
+      '<span class="muted">click to see the individual works</span>',
     ]);
   }
   function contractorTip(p) {
@@ -236,72 +340,133 @@
 
   function renderPoints() {
     const sel = computeSelection();
+    const worksDrill = !!(sel && drill.side === 'works');
+    const homeDrill = !!(sel && drill.side === 'home');
 
     // --- which dots go on each map -------------------------------------
     let leftPts = data.contract_points;
     let rightPts = data.contractor_points.points;
-    if (sel && drill.side === 'works') {
-      leftPts = leftPts.filter(p => p.nuts3 === drill.nuts3);
+    if (worksDrill) {
+      leftPts = leftPts.filter(p => p.pe === drill.pe);
       rightPts = rightPts.filter(p => sel.vats.has(p.vat));
-    } else if (sel && drill.side === 'home') {
+    } else if (homeDrill) {
       leftPts = leftPts.filter(p => sel.refs.has(p.ref));
-      rightPts = rightPts.filter(p => p.nuts3 === drill.nuts3);
+      rightPts = rightPts.filter(p => p.pe === drill.pe);
     }
-    const leftDots = G.spreadOverlaps(leftPts, 0.034);
-    const rightDots = G.spreadOverlaps(rightPts, 0.02);
+    // The zoomed map needs far less de-overlap spread than country level.
+    const leftDots = G.spreadOverlaps(leftPts, worksDrill ? 0.012 : 0.034);
+    const rightDots = G.spreadOverlaps(rightPts, homeDrill ? 0.010 : 0.02);
+    const drillColors = worksDrill
+      ? contractColors(leftPts.map(p => p.ref)) : null;
 
     // --- left map ------------------------------------------------------
     clearPanel(left);
-    left.regionLayer = G.addRegions(left.map, geo, () => G.COLORS.landEmpty,
-      null, (n, _name) => setDrill('works', n));
-    if (sel) highlightRegion(left, drill.nuts3);
-    frame(left, sel && drill.side === 'works'
-      ? boundsByNuts3[drill.nuts3].pad(0.15) : null);
-    left.overlay = G.addDots(left.map, leftDots, {
-      fill: G.COLORS.bubbleWorks, stroke: G.COLORS.bubbleWorksStroke, radius: 4.5,
-      tipOf: contractTip, hrefOf: p => '/contract/' + p.ref,
-    });
-    left.resetEl.hidden = !(sel && drill.side === 'works');
+    if (!sel) {
+      // country level: contract-count choropleth, no dots
+      const colorOf = pe => G.makeChoro(G.RAMP_WORKS, maxRegionCount)(
+        (refsByPe.get(pe) || { size: 0 }).size);
+      left.regionLayer = G.addRegions(left.map, geo, colorOf, countTip,
+        (pe, _name) => setDrill('works', pe), left.tip);
+      frame(left, null);
+    } else {
+      left.regionLayer = G.addRegions(left.map, geo, () => G.COLORS.landEmpty,
+        null, (pe, _name) => setDrill('works', pe), left.tip);
+      highlightRegion(left, drill.pe);
+      frame(left, worksDrill ? boundsByPe[drill.pe].pad(0.15) : null);
+      if (worksDrill) {
+        addMuniBorders(left, drill.pe);
+        swapHiresRegions(left, drill.pe, 'works');
+      }
+      // Hovering a multi-authority contract's dot links all its authority
+      // dots with thin lines in the contract's colour — in-region dots at
+      // their jittered spots, off-region seats at their true spots (a line
+      // running off-frame says the contract extends beyond this Π.Ε.).
+      let lineAnchors = null;
+      if (worksDrill) {
+        lineAnchors = new Map();
+        leftDots.forEach(p => {
+          if (!lineAnchors.has(p.ref)) lineAnchors.set(p.ref, []);
+          lineAnchors.get(p.ref).push([p.lat, p.lon]);
+        });
+        data.contract_points.forEach(p => {
+          if (lineAnchors.has(p.ref) && p.pe !== drill.pe)
+            lineAnchors.get(p.ref).push([p.lat, p.lon]);
+        });
+      }
+      left.overlay = G.addDots(left.map, leftDots, {
+        fill: G.COLORS.bubbleWorks,
+        stroke: worksDrill ? DRILL_STROKE : G.COLORS.bubbleWorksStroke,
+        radius: worksDrill ? 6 : 4.5,
+        fillOf: worksDrill ? (p => drillColors.get(p.ref) || SINGLE_FILL) : null,
+        tipOf: contractTip, hrefOf: p => '/contract/' + p.ref,
+        tipSink: left.tip,
+        onOver: worksDrill ? (p => {
+          const pts = lineAnchors.get(p.ref) || [];
+          if (pts.length < 2) return;
+          const segs = [];
+          for (let i = 0; i < pts.length; i++)
+            for (let j = i + 1; j < pts.length; j++) segs.push([pts[i], pts[j]]);
+          if (left.hoverLines) left.hoverLines.remove();
+          left.hoverLines = L.layerGroup(segs.map(s => L.polyline(s, {
+            pane: 'links', interactive: false,
+            color: drillColors.get(p.ref) || SINGLE_FILL,
+            weight: 1.4, opacity: 0.85, dashArray: '5 4',
+          }))).addTo(left.map);
+        }) : null,
+        onOut: worksDrill ? (() => {
+          if (left.hoverLines) { left.hoverLines.remove(); left.hoverLines = null; }
+        }) : null,
+      });
+    }
+    left.resetEl.hidden = !worksDrill;
 
     // --- right map -----------------------------------------------------
     clearPanel(right);
     right.regionLayer = G.addRegions(right.map, geo, () => G.COLORS.landEmpty,
-      null, (n, _name) => setDrill('home', n));
-    if (sel) highlightRegion(right, drill.nuts3);
-    frame(right, sel && drill.side === 'home'
-      ? boundsByNuts3[drill.nuts3].pad(0.15) : null);
+      null, (pe, _name) => setDrill('home', pe), right.tip);
+    if (sel) highlightRegion(right, drill.pe);
+    frame(right, homeDrill ? boundsByPe[drill.pe].pad(0.15) : null);
+    if (homeDrill) {
+      addMuniBorders(right, drill.pe);
+      swapHiresRegions(right, drill.pe, 'home');
+    }
     right.overlay = G.addDots(right.map, rightDots, {
-      fill: G.COLORS.bubbleHome, stroke: G.COLORS.bubbleHomeStroke, radius: 4.5,
+      fill: G.COLORS.bubbleHome, stroke: G.COLORS.bubbleHomeStroke,
+      radius: homeDrill ? 6 : 4.5,
       tipOf: contractorTip, hrefOf: p => '/contractor/' + p.vat,
+      tipSink: right.tip,
     });
-    right.resetEl.hidden = !(sel && drill.side === 'home');
+    right.resetEl.hidden = !homeDrill;
 
     // --- captions, legends, copy --------------------------------------
     if (!sel) {
-      left.capEl.textContent = 'Works — by responsible Δασαρχείο / Δ/νση Δασών';
+      left.capEl.textContent = 'Works — contracts per region (by seat of responsible Δασαρχείο / Δ/νση Δασών)';
       right.capEl.textContent = 'Contractors — registered addresses';
-      legendDots(left.legendEl, G.COLORS.bubbleWorks,
-        'one dot per contract × forest authority, at the authority’s seat ' +
-        'municipality (equal size; co-located dots are spread slightly). ' +
-        'Click a region to focus on it.');
+      left.legendEl.innerHTML =
+        '<div><div class="strip">' +
+        G.RAMP_WORKS.map(c => `<span style="background:${c}"></span>`).join('') +
+        '</div><div class="lab">0 → ' + G.fmtInt(maxRegionCount) +
+        ' contracts (√ scale). Click a region to see its individual works.</div></div>';
       legendDots(right.legendEl, G.COLORS.bubbleHome,
         'one dot per contractor at the registered address (equal size). ' +
         'Click a region to focus on its contractors.');
       document.getElementById('modeDeck').textContent =
-        'Left: every contract placed at the seat of the Δασαρχείο or Διεύθυνση ' +
-        'Δασών responsible for its works. Right: every located contractor at ' +
+        'Left: how many contracts each region carries, counted at the seat of ' +
+        'the responsible Δασαρχείο or Διεύθυνση Δασών — click a region to zoom ' +
+        'into its individual contracts. Right: every located contractor at ' +
         'its registered address. Click any region on either map to focus on it.';
       document.getElementById('ovFootnote').textContent =
         `Forest authorities are extracted from the contract texts against a ` +
-        `curated registry and placed at their seat municipality's centroid ` +
-        `(geodata.gov.gr Kallikratis boundaries, CC-BY); ${nNoAuthority} ` +
+        `curated registry and counted in the region of their seat municipality ` +
+        `(geodata.gov.gr Kallikratis boundaries, CC-BY); contracts spanning ` +
+        `several regions count once in each. ${nNoAuthority} ` +
         `region-scoped contract(s) name no forest authority and are not on the ` +
         `left map. Contractor pins: OSM Nominatim, validated against the ` +
         `registered postal code — ${dotCov.n_with_coords} of ${dotCov.n_total} ` +
         `contractors located, ${G.fmtEurShort(dotCov.unmapped_eur)} of ` +
         `contracts have no mappable contractor.`;
     } else {
-      const rn = nameOf(drill.nuts3);
+      const rn = drill.pe;
       if (drill.side === 'works') {
         left.capEl.textContent = `Works in focus — forest authorities seated in ${rn}`;
         right.capEl.textContent = 'Contractors holding these contracts';
@@ -319,8 +484,23 @@
           `authorities whose contracts they won. Click another region to move ` +
           `the focus, or reset to all of Greece.`;
       }
-      legendDots(left.legendEl, G.COLORS.bubbleWorks,
-        `${leftPts.length} contract–authority dot(s) shown`);
+      if (worksDrill) {
+        const nMulti = drillColors.size;
+        const nSingle = new Set(leftPts.map(p => p.ref)).size - nMulti;
+        left.legendEl.innerHTML =
+          `<div class="dotkey"><i style="background:${SINGLE_FILL}"></i>` +
+          `<span class="lab">single-authority contract (${nSingle})</span></div>` +
+          (nMulti
+            ? `<div class="dotkey"><span class="strip" style="width:${Math.min(140, nMulti * 14)}px">` +
+              [...drillColors.values()].map(c => `<span style="background:${c}"></span>`).join('') +
+              `</span><span class="lab">multi-authority contracts (${nMulti}): ` +
+              `one colour per contract — same colour, same contract; ` +
+              `hover a dot to link its authorities</span></div>`
+            : '');
+      } else {
+        legendDots(left.legendEl, G.COLORS.bubbleWorks,
+          `${leftPts.length} contract–authority dot(s) shown`);
+      }
       legendDots(right.legendEl, G.COLORS.bubbleHome,
         `${rightPts.length} contractor dot(s) shown`);
       document.getElementById('ovFootnote').textContent =
@@ -338,20 +518,22 @@
     left.resetEl.hidden = right.resetEl.hidden = true;
     // One shared scale so the two maps are directly comparable.
     const maxV = Math.max(1,
-      ...[...byNutsWork.values()].map(r => r.split_eur),
-      ...[...byNutsHome.values()].map(r => r.split_eur));
+      ...[...byPeWork.values()].map(r => r.split_eur),
+      ...[...byPeHome.values()].map(r => r.split_eur));
 
     clearPanel(left);
-    const colorL = n => G.makeChoro(G.RAMP_WORKS, maxV)((byNutsWork.get(n) || {}).split_eur || 0);
+    const colorL = pe => G.makeChoro(G.RAMP_WORKS, maxV)((byPeWork.get(pe) || {}).split_eur || 0);
     left.regionLayer = G.addRegions(left.map, geo, colorL,
-      regionTip(byNutsWork, r => `${G.fmtInt(r.n_contracts)} contract(s)`));
+      regionTip(byPeWork, r => `${G.fmtInt(r.n_contracts)} contract(s)`),
+      null, left.tip);
     frame(left, null);
     legendChoro(left.legendEl, G.RAMP_WORKS, maxV);
 
     clearPanel(right);
-    const colorR = n => G.makeChoro(G.RAMP_WORKS, maxV)((byNutsHome.get(n) || {}).split_eur || 0);
+    const colorR = pe => G.makeChoro(G.RAMP_WORKS, maxV)((byPeHome.get(pe) || {}).split_eur || 0);
     right.regionLayer = G.addRegions(right.map, geo, colorR,
-      regionTip(byNutsHome, r => `${G.fmtInt(r.n_contractors)} contractor(s)`));
+      regionTip(byPeHome, r => `${G.fmtInt(r.n_contractors)} contractor(s)`),
+      null, right.tip);
     frame(right, null);
     legendChoro(right.legendEl, G.RAMP_WORKS, maxV);
 
@@ -397,7 +579,7 @@
     const defaultEl = document.getElementById('ovDefaultCards');
     if (!sel) { drillEl.hidden = true; defaultEl.hidden = false; return; }
     drillEl.hidden = false; defaultEl.hidden = true;
-    const rn = nameOf(drill.nuts3);
+    const rn = drill.pe;
 
     const ct = contractsTable(sel.refs);
     document.getElementById('drillLeft').innerHTML = ct.html ||
@@ -446,9 +628,9 @@
         const c = byRef.get(ref);
         if (!c) return;
         c.regions.forEach(r => {
-          const a = agg.get(r.nuts3) || { pes: r.pes, n: 0, eur: 0 };
+          const a = agg.get(r.pe) || { pe: r.pe, n: 0, eur: 0 };
           a.n += 1; a.eur += r.split_eur;
-          agg.set(r.nuts3, a);
+          agg.set(r.pe, a);
         });
       });
       const rows = [...agg.entries()].sort((a, b) => b[1].eur - a[1].eur);
@@ -460,8 +642,8 @@
       document.getElementById('drillRight').innerHTML =
         `<table class="compact striped"><thead><tr><th>Work region</th>` +
         `<th class="num">Contracts</th><th class="num">€ attributed</th></tr></thead><tbody>` +
-        rows.map(([n3, a]) =>
-          `<tr><td>${esc(a.pes)}</td><td class="num">${a.n}</td>` +
+        rows.map(([pe, a]) =>
+          `<tr><td>${esc(pe)}</td><td class="num">${a.n}</td>` +
           `<td class="num">${G.fmtEurShort(a.eur)}</td></tr>`).join('') +
         `</tbody></table>`;
     }
@@ -474,7 +656,7 @@
     const url = new URL(window.location);
     url.searchParams.set('view', currentView);
     if (drill && currentView === 'points') {
-      url.searchParams.set('focus', drill.side + ':' + drill.nuts3);
+      url.searchParams.set('focus', drill.side + ':' + drill.pe);
     } else {
       url.searchParams.delete('focus');
     }
@@ -490,9 +672,9 @@
     syncUrl();
   }
 
-  function setDrill(side, nuts3) {
-    drill = (drill && drill.side === side && drill.nuts3 === nuts3)
-      ? null : { side, nuts3 };               // clicking the same region again resets
+  function setDrill(side, pe) {
+    drill = (drill && drill.side === side && drill.pe === pe)
+      ? null : { side, pe };                  // clicking the same region again resets
     render('points');
   }
 

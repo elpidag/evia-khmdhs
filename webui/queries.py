@@ -6,7 +6,7 @@ import sqlite3
 import unicodedata
 from pathlib import Path
 
-from khmdhs.greek_regions import nuts3_for
+from khmdhs.greek_regions import canonical_pe
 from khmdhs.scope import normalize_title
 
 # State-owned vehicles that manage the Anti-nero IV programme rather than
@@ -578,9 +578,7 @@ def region_flows(
         params.append(source_pe)
     sql = f"""
         SELECT cl.region_pe   AS source_pe,
-               cl.nuts3_code  AS source_nuts3,
                cpr.region_pe  AS target_pe,
-               cpr.nuts3_code AS target_nuts3,
                COUNT(DISTINCT co.reference_number)   AS n_contracts,
                ROUND(SUM({effective_cost(conn, 'co')}), 2) AS total_eur
         FROM contractors c
@@ -591,7 +589,13 @@ def region_flows(
         GROUP BY cl.region_pe, cpr.region_pe
         ORDER BY total_eur DESC
     """
-    return [dict(r) for r in conn.execute(sql, params).fetchall()]
+    out = []
+    for r in conn.execute(sql, params).fetchall():
+        d = dict(r)
+        d["source_pe"] = canonical_pe(d["source_pe"]) or d["source_pe"]
+        d["target_pe"] = canonical_pe(d["target_pe"]) or d["target_pe"]
+        out.append(d)
+    return out
 
 
 def flow_coverage(conn: sqlite3.Connection) -> dict:
@@ -655,7 +659,6 @@ def project_region_origins(conn: sqlite3.Connection) -> list[dict]:
         WITH per_contract_pair AS (
             SELECT
                 cpr.region_pe                  AS target_pe,
-                cpr.nuts3_code                 AS target_nuts3,
                 co.reference_number,
                 {effective_cost(conn, 'co')}   AS contract_eur,
                 COUNT(c.vat_number)            AS n_contractors,
@@ -671,7 +674,6 @@ def project_region_origins(conn: sqlite3.Connection) -> list[dict]:
             GROUP BY cpr.region_pe, co.reference_number
         )
         SELECT target_pe,
-               target_nuts3,
                COUNT(DISTINCT reference_number) AS n_contracts,
                ROUND(SUM(contract_eur), 2)                                   AS total_eur,
                ROUND(SUM(contract_eur * n_local    * 1.0 / n_contractors), 2) AS local_eur,
@@ -811,14 +813,14 @@ def direct_award_distribution(conn: sqlite3.Connection) -> dict:
 # amounts, so the split is an explicit estimate.
 
 def money_by_project_region(conn: sqlite3.Connection) -> list[dict]:
-    """Per project NUTS-3 region: contracts, split €, exposure €.
+    """Per project Π.Ε.: contracts, split €, exposure €.
 
-    Aggregated by NUTS-3 code (the map's polygon key) — Π.Ε. sharing a
-    NUTS-3 (e.g. Άρτας + Πρέβεζας = EL541) merge, with all names listed.
+    Aggregated by the canonical Π.Ε. name (the map's polygon key) — spelling
+    variants (Πρεβέζης/Πρέβεζας) collapse; distinct Π.Ε. never merge.
     """
     rows = conn.execute(f"""
         SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff,
-               cpr.region_pe, cpr.nuts3_code
+               cpr.region_pe
         FROM contracts k
         JOIN contract_project_regions cpr USING (reference_number)
         WHERE {scope_filter(conn, 'k.reference_number')}
@@ -832,21 +834,20 @@ def money_by_project_region(conn: sqlite3.Connection) -> list[dict]:
     for regions in by_contract.values():
         eff = regions[0]["eff"] or 0.0
         n = len(regions)
-        seen_nuts: set[str] = set()
+        seen_pe: set[str] = set()
         for r in regions:
-            a = agg.setdefault(r["nuts3_code"], {
-                "nuts3": r["nuts3_code"], "pes": set(), "n_contracts": 0,
+            pe = canonical_pe(r["region_pe"]) or r["region_pe"]
+            a = agg.setdefault(pe, {
+                "pe": pe, "n_contracts": 0,
                 "split_eur": 0.0, "exposure_eur": 0.0,
             })
-            a["pes"].add(r["region_pe"])
             a["split_eur"] += eff / n
-            if r["nuts3_code"] not in seen_nuts:
-                seen_nuts.add(r["nuts3_code"])
+            if pe not in seen_pe:
+                seen_pe.add(pe)
                 a["n_contracts"] += 1
                 a["exposure_eur"] += eff
     out = []
     for a in agg.values():
-        a["pes"] = " · ".join(sorted(a["pes"]))
         a["split_eur"] = round(a["split_eur"], 2)
         a["exposure_eur"] = round(a["exposure_eur"], 2)
         out.append(a)
@@ -854,14 +855,14 @@ def money_by_project_region(conn: sqlite3.Connection) -> list[dict]:
 
 
 def money_by_contractor_region(conn: sqlite3.Connection) -> list[dict]:
-    """Per contractor-home NUTS-3 region: contractors, split €, exposure €.
+    """Per contractor-home Π.Ε.: contractors, split €, exposure €.
 
     Each contract's effective value splits evenly across its *located*
     partners; the unlocated remainder is reported by flow_coverage().
     """
     rows = conn.execute(f"""
         SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff,
-               c.vat_number, cl.region_pe, cl.nuts3_code
+               c.vat_number, cl.region_pe
         FROM contracts k
         JOIN contractors c USING (reference_number)
         JOIN contractor_locations cl ON cl.vat_number = c.vat_number
@@ -874,27 +875,26 @@ def money_by_contractor_region(conn: sqlite3.Connection) -> list[dict]:
         by_contract.setdefault(r["reference_number"], []).append(r)
 
     agg: dict[str, dict] = {}
-    contractors_by_nuts: dict[str, set] = {}
+    contractors_by_pe: dict[str, set] = {}
     for partners in by_contract.values():
         eff = partners[0]["eff"] or 0.0
         n_located = len({p["vat_number"] for p in partners})
-        seen_nuts: set[str] = set()
+        seen_pe: set[str] = set()
         for p in partners:
-            a = agg.setdefault(p["nuts3_code"], {
-                "nuts3": p["nuts3_code"], "pes": set(), "n_contracts": 0,
+            pe = canonical_pe(p["region_pe"]) or p["region_pe"]
+            a = agg.setdefault(pe, {
+                "pe": pe, "n_contracts": 0,
                 "split_eur": 0.0, "exposure_eur": 0.0,
             })
-            a["pes"].add(p["region_pe"])
             a["split_eur"] += eff / n_located
-            contractors_by_nuts.setdefault(p["nuts3_code"], set()).add(p["vat_number"])
-            if p["nuts3_code"] not in seen_nuts:
-                seen_nuts.add(p["nuts3_code"])
+            contractors_by_pe.setdefault(pe, set()).add(p["vat_number"])
+            if pe not in seen_pe:
+                seen_pe.add(pe)
                 a["n_contracts"] += 1
                 a["exposure_eur"] += eff
     out = []
-    for nuts, a in agg.items():
-        a["pes"] = " · ".join(sorted(a["pes"]))
-        a["n_contractors"] = len(contractors_by_nuts[nuts])
+    for pe, a in agg.items():
+        a["n_contractors"] = len(contractors_by_pe[pe])
         a["split_eur"] = round(a["split_eur"], 2)
         a["exposure_eur"] = round(a["exposure_eur"], 2)
         out.append(a)
@@ -921,7 +921,7 @@ def contract_authority_points(conn: sqlite3.Connection) -> list[dict]:
     """).fetchall()
     return [{"ref": r["ref"], "title": r["title"], "authority": r["authority"],
              "kind": r["kind"], "lat": r["lat"], "lon": r["lon"],
-             "pe": r["region_pe"], "nuts3": nuts3_for(r["region_pe"]),
+             "pe": canonical_pe(r["region_pe"]) or r["region_pe"],
              "eff_eur": round(r["eff_eur"] or 0.0, 2)}
             for r in rows]
 
@@ -959,7 +959,7 @@ def overview_contracts(conn: sqlite3.Connection) -> list[dict]:
         if r["ref"] in out:
             out[r["ref"]]["authorities"].append(r["authority_name"])
     region_rows = conn.execute("""
-            SELECT reference_number AS ref, region_pe, nuts3_code
+            SELECT reference_number AS ref, region_pe
             FROM contract_project_regions ORDER BY reference_number, seq
     """).fetchall()
     by_ref: dict[str, list] = {}
@@ -971,13 +971,11 @@ def overview_contracts(conn: sqlite3.Connection) -> list[dict]:
         n = len(regions)
         merged: dict[str, dict] = {}
         for r in regions:
-            m = merged.setdefault(r["nuts3_code"], {
-                "nuts3": r["nuts3_code"], "pes": set(), "split_eur": 0.0})
-            m["pes"].add(r["region_pe"])
+            pe = canonical_pe(r["region_pe"]) or r["region_pe"]
+            m = merged.setdefault(pe, {"pe": pe, "split_eur": 0.0})
             m["split_eur"] += eff / n
         out[ref]["regions"] = [
-            {"nuts3": m["nuts3"], "pes": " · ".join(sorted(m["pes"])),
-             "split_eur": round(m["split_eur"], 2)}
+            {"pe": m["pe"], "split_eur": round(m["split_eur"], 2)}
             for m in merged.values()]
     return sorted(out.values(), key=lambda c: -c["eff_eur"])
 
@@ -993,7 +991,7 @@ def contractor_points(conn: sqlite3.Connection) -> dict:
                                            "n_total": 0, "unmapped_eur": 0.0}}
     rows = conn.execute(f"""
         SELECT c.vat_number, MAX(COALESCE(cl.legal_name, c.name)) AS name,
-               cl.lat, cl.lon, cl.geo_precision, cl.nuts3_code,
+               cl.lat, cl.lon, cl.geo_precision, cl.region_pe,
                COUNT(DISTINCT k.reference_number) AS n_contracts,
                SUM(eff) AS total_eur
         FROM (SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff
@@ -1010,7 +1008,7 @@ def contractor_points(conn: sqlite3.Connection) -> dict:
             with_coords.add(r["vat_number"])
             points.append({"vat": r["vat_number"], "name": r["name"],
                            "lat": r["lat"], "lon": r["lon"],
-                           "nuts3": r["nuts3_code"],
+                           "pe": canonical_pe(r["region_pe"]) or r["region_pe"],
                            "precision": r["geo_precision"],
                            "n_contracts": r["n_contracts"],
                            "total_eur": round(r["total_eur"] or 0.0, 2)})
@@ -1113,7 +1111,7 @@ def contractor_map_data(conn: sqlite3.Connection, vat: str) -> dict:
     home = contractor_location(conn, vat)
     rows = conn.execute(f"""
         SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff,
-               cpr.region_pe, cpr.nuts3_code
+               cpr.region_pe
         FROM contractors c
         JOIN contracts k USING (reference_number)
         JOIN contract_project_regions cpr ON cpr.reference_number = k.reference_number
@@ -1130,28 +1128,25 @@ def contractor_map_data(conn: sqlite3.Connection, vat: str) -> dict:
         n = len(regions)
         seen: set[str] = set()
         for r in regions:
-            a = agg.setdefault(r["nuts3_code"], {
-                "nuts3": r["nuts3_code"], "pes": set(), "n_contracts": 0,
-                "split_eur": 0.0,
+            pe = canonical_pe(r["region_pe"]) or r["region_pe"]
+            a = agg.setdefault(pe, {
+                "pe": pe, "n_contracts": 0, "split_eur": 0.0,
             })
-            a["pes"].add(r["region_pe"])
             a["split_eur"] += eff / n
-            if r["nuts3_code"] not in seen:
-                seen.add(r["nuts3_code"])
+            if pe not in seen:
+                seen.add(pe)
                 a["n_contracts"] += 1
     regions_out = []
     for a in agg.values():
-        a["pes"] = " · ".join(sorted(a["pes"]))
         a["split_eur"] = round(a["split_eur"], 2)
         regions_out.append(a)
     return {
         "home": {
-            "pe": home.get("region_pe") if home else None,
-            "nuts3": home.get("nuts3_code") if home else None,
-            "city": home.get("city") if home else None,
-            "lat": home.get("lat") if home else None,
-            "lon": home.get("lon") if home else None,
-            "precision": home.get("geo_precision") if home else None,
+            "pe": canonical_pe(home.get("region_pe")) or home.get("region_pe"),
+            "city": home.get("city"),
+            "lat": home.get("lat"),
+            "lon": home.get("lon"),
+            "precision": home.get("geo_precision"),
         } if home else None,
         "regions": sorted(regions_out, key=lambda a: -a["split_eur"]),
     }
