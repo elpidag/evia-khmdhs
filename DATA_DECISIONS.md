@@ -337,3 +337,37 @@ restatements may update it). (5) Verified amounts land in curated
 `contract_study_costs`. Missing/scanned PDFs stay honestly unresolved.
 *User request 2026-07-26. Affects: pdf_cache (full SYMV sweep),
 study_costs.json, contract_study_costs, /overview.*
+
+## 2026-07-26 — Separate ΔΑΣΕ (forest-cooperative) contracts dataset
+
+A standalone database (`data/processed/dase.sqlite`) of every Greek
+public contract since 2021-09-01 whose **contractor is a forest labour
+cooperative** (ΔΑ.Σ.Ε. ν.4423/2016, incl. ΑΔΣΕ αναγκαστικοί and the
+older «δασεργατικός συνεταιρισμός» naming) — e.g. 26SYMV019413118.
+Decisions: (1) **The universe is contractor-led, not CPV-led** — the
+reference contract's only CPV is 77312000-0 (εκκαθάριση από αγριόχορτα,
+outside the 772 δασοκομία family), so a CPV-first sweep provably
+misses; forest CPVs serve as a recall check instead. (2) Source is
+KHMDHS OpenData search (OpenAPI-documented body fields `contractorName`
+— substring, case/accent-sensitive — `vatNumber` (contractor side) and
+`cpvItems`; the server clamps every query to a 6-month submissionDate
+window ending at dateTo, so the harvest sweeps explicit ≤5-month
+windows; 404 = zero matches; totalElements unreliable on cpvItems —
+page to last and dedupe by referenceNumber). Three passes: name
+variants × windows → forest-CPV × windows recall check → per-VAT
+closure (one coop appears under multiple spellings; ΔΑΣΕ ΣΚΑΛΩΤΗΣ VAT
+998638016 observed under two), then amendment-chain completion.
+(3) Contractor classification is a reviewed whitelist: a name regex
+proposes (word-bounded ΔΑ.Σ.Ε token — «ΚΕΝΤΡΟ ΔΙΑΣΚΕΔΑΣΕΩΣ» and
+«ΛΕΙΒΑΔΑΣΕ» are observed false positives — ΔΑΣΙΚ+ΣΥΝΕΤΑΙΡ, ΔΑΣΕΡΓΑΤΙΚ,
+ΑΔΣΕ), and every distinct VAT is human-reviewed into curated
+`khmdhs/data/dase_contractors.json` before its contracts enter the
+final set. (4) **Diavgeia is not harvested**: its search cannot filter
+by contractor ΑΦΜ/ΑΔΑΜ (only the paying authority's ΑΦΜ is in
+metadata), so recall would require reading every decision PDF, while
+ν.4412/2016 makes KHMDHS registration constitutive of contract validity
+— KHMDHS is the authoritative universe. (5) Fully isolated from the
+Anti-nero dataset: separate sqlite, separate PDF/text cache
+(`data/processed/dase_pdf_cache/`, gitignored), no shared loaders, no
+UI changes. *User request 2026-07-26. Affects: new dase.sqlite,
+dase_contractors.json, harvest scripts only.*

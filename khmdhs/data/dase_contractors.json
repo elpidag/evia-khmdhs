@@ -1,0 +1,1838 @@
+{
+ " 096136410": {
+  "name": "ΔΑΣΕ ΕΠΤΑΧΩΡΙΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; whitespace variant of 096136410"
+ },
+ "031000379": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; cleaned from keying-noise entry '0310003799'"
+ },
+ "0310003799": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "043022759": {
+  "name": "ΓΙΟΛΔΑΣΕΑΣ ΗΛΙΑΣ ΠΕΤΡΟΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "043785580": {
+  "name": "ΠΑΛΗΓΙΑΝΝΗΣ ΓΕΩΡΓΙΟΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "044289372": {
+  "name": "ΚΑΤΣΙΑΝΤΩΝΗΣ ΧΡΗΣΤΟΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "062745470": {
+  "name": "Κοινωνική Συνεταιριστική Επιχείρηση Συλλογικής και Κοινωνικής Ωφέλειας «Οικονόμειος»",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "090023568": {
+  "name": "ΔΑ.Σ.Ε. Πηλίου",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "090273987": {
+  "name": "ΔΑΣΕ Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "094311510": {
+  "name": "ΧΑΤΖΗΓΑΚΗΣ ΤΕΧΝΙΚΗ ΑΕ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "095626995": {
+  "name": "ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΛΑΙΟΧΡΩΜ ΜΟΝ. ΕΠΕΑΤΙΣΤΩΝ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "096000173": {
+  "name": "Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096033500": {
+  "name": "ΔΑΣΕ ΦΩΤΕΙΝΩΝ ΠΙΕΡΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096033548": {
+  "name": "ΔΑΣΕ ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ ΠΙΕΡΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096033689": {
+  "name": "ΔΑΣΕ ΣΟΥΦΛΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096033690": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΕΓΑΛΟΥ ΔΕΡΕΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096033733": {
+  "name": "ΔΑΣΕ ΣΙΔΗΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096033929": {
+  "name": "ΔΑΣΕ: \"ΩΡΑΙΟΥ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096033966": {
+  "name": "ΔΑΣΕ: ΒΟΡΕΙΟΣ¨\"ΗΠΕΙΡΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034164": {
+  "name": "ΔΑ.Σ.Ε. ΚΑΡΙΤΣΑΣ ΚΑΡΔΙΤΣΑΣ-ΜΟΥΧΑΣ-ΚΑΣΤΑΝΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034348": {
+  "name": "ΔΑ.ΣΕ. ΑΝΑΒΡΥΤΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034373": {
+  "name": "ΔΑΣΕ ΚΑΣΤΑΝΟΧΩΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034397": {
+  "name": "ΔΑΣΕ ΛΑΓΚΑΔΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034625": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΛΙΘΟΤΟΠΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034649": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΟΛΥΓΥΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034729": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΙΣΥΜΗΣ Α",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034730": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΙΣΥΜΗΣ Β",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034791": {
+  "name": "ΔΑ.Σ.Ε. Γοματίου",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034895": {
+  "name": "ΔΑ.Σ.Ε Αρναίας Χαλκιδικής ‘Ο ΑΡΙΣΤΟΤΕΛΗΣ’",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034902": {
+  "name": "ΔΑΣΕ Στρατονίκης",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034987": {
+  "name": "ΔΑΣΕ ΚΡΥΟΝΕΡΙΟΥ ΛΑΓΚΑΔΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096034999": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ (ΔΑ.Σ.Ε.) Η ΕΝΩΣΗ ΣΤΑΥΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096035007": {
+  "name": "ΔΑ.Σ.Ε. Στεφανινών Θεσσαλονίκης",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096035019": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΣΟΧΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096035032": {
+  "name": "ΔΑ.Σ.Ε. Άνω Σταυρού Θεσ/νίκης ΄΄ΠΡΟΟΔΟΣ΄΄",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096035695": {
+  "name": "ΔΑ.Σ.Ε. Αθαμανίας Τρικάλων",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096035738": {
+  "name": "ΔΑ.Σ.Ε. Στουρναρέικων Τρικάλων",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096035900": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΓΡΑΜΜΑΤΙΚΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096036194": {
+  "name": "ΔΑ.Σ.Ε. ΝΕΟΥ ΠΕΤΡΙΤΣΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096038648": {
+  "name": "ΔΑ.Σ.Ε. Τσαπουρνιάς",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096040320": {
+  "name": "ΔΑΣΕ ΧΡΥΣΔΟΥΠΟΛΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096040750": {
+  "name": "ΔΑΣΕ ΒΡΑΧΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096040994": {
+  "name": "ΔΑΣΕ ΔΑΔΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096047960": {
+  "name": "ΔΑΣΕ ΠΕΡΤΟΥΛΙΟΥ ''ΤΟ ΠΕΡΤΟΥΛΙ''",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096053559": {
+  "name": "ΔΑΣΕ ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ ΠΕΛΛΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096053584": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΟΛΙΑΝΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096053688": {
+  "name": "ΔΑ.Σ.Ε. ΦΕΛΛΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096061560": {
+  "name": "ΔΑ.ΣΕ. ΚΑΡΙΤΣΑΣ ΕΛΑΦΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096064168": {
+  "name": "ΔΑΣΕ ΠΕΥΚΟΦΥΤΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096064297": {
+  "name": "ΔΑ.Σ.Ε. ΒΑΘΗΣ1026,48",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096064304": {
+  "name": "ΔΑ.Σ.Ε. ΕΛΛΗΝΙΚΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096064365": {
+  "name": "ΔΑ.Σ.Ε. ΠΟΝΤΟΚΕΡΑΣΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096064734": {
+  "name": "ΔΑΣΕ ΠΕΝΤΑΛΟΦΟΥ ΖΩΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096064863": {
+  "name": "ΔΑ.Σ.Ε. ΑΓΙΩΝ ΘΕΟΔΩΡΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096065800": {
+  "name": "ΔΑΣΕ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096066346": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΒΑΡΒΑΡΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096066790": {
+  "name": "ΔΑΣΕ ΜΙΚΡΟΚΛΕΙΣΟΥΡΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096067226": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΧΩΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096067380": {
+  "name": "ΔΑΣΕ ΛΕΚΑΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096067681": {
+  "name": "ΔΑΣΕ:ΡΕΥΜΑΤΟΣ\"ΩΡΑΙΟΥ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096068432": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΕΡΚΙΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096070520": {
+  "name": "ΠΡΟΜΗΘΕΥΤΙΚΟΣ ΚΑΤΑΝΑΛΩΤΙΚΟΣ-ΒΙΟΤΕΧΝΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΠΙΠΛΟΞΥΛΟΥΡΓΩΝ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "096071203": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΡΕΙΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096071288": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΕΙΜΑΡΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096073988": {
+  "name": "ΔΑΣΕ ΜΕΤΣΟΒΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096077490": {
+  "name": "ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096077521": {
+  "name": "ΔΑ.Σ.Ε. Μεγάλη Παναγία Χαλκιδικής",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096081510": {
+  "name": "ΔΑΣΕ ΛΙΒΑΔΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096081522": {
+  "name": "ΔΑΣΕ ΒΕΡΔΙΚΟΥΣΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096085810": {
+  "name": "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Ο 10ος ΔΑΣΙΚΟΣ ΑΛΜΩΠΙΑΣ Ν. ΠΕΛΛΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096085834": {
+  "name": "ΔΑΣΕ ΠΡΟΜΑΧΩΝ 9ος",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096085846": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΡΟΜΑΧΩΝ 7ο",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096085871": {
+  "name": "ΔΑΣΕ ΝΟΤΙΑΣ Η ΤΖΕΝΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096085902": {
+  "name": "ΔΑΣΕ ΠΡΟΜΑΧΩΝ 12ος",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096085938": {
+  "name": "ΔΑΣΕ ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ  Ν ΠΕΛΛΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096086019": {
+  "name": "ΔΑΣΕ ΔΕΥΤΕΡΟΣ ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096086093": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ ΝΕΑ ΓΕΝΙΑ ΑΛΜΩΠΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096086216": {
+  "name": "ΔΑΣΕ ΟΡΜΑΣ \" Μέγας Αλέξανδρος\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096086230": {
+  "name": "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Ο 4ος",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096086321": {
+  "name": "ΔΑΣΕ ΑΡΙΔΑΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096088013": {
+  "name": "ΔΑΣΕ ΚΑΤΑΛΩΝΙΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096092708": {
+  "name": "ΠΡΟΜΗΘΕΥΤΙΚΟΣ ΜΕΤΑΠΟΙΗΤΙΚΟΣ ΚΑΙ ΚΑΤΑΝΑΛΩΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΟΛΑΒΩΝ ΟΙΚΟΔΟΜΩΝ Ν ΧΑΝΙΩΝ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "096093508": {
+  "name": "ΔΑΣΕ ΠΡΟΦΗΤΗ ΗΛΙΑ ΣΥΝ.ΠΕ.",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096095618": {
+  "name": "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ \"Η ΕΛΑΤΙΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096095620": {
+  "name": "ΔΑ.Σ.Ε. ΝΙΚΗΦΟΡΟΥ \"Η ΠΡΟΟΔΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096095643": {
+  "name": "ΔΑ.Σ.Ε. ΠΛΑΤΑΝΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096098227": {
+  "name": "Δασικός Συνεταιρισμός Εργασίας Αγίας Κυριακής –Παλαιογρατσάνου-Ελάτης",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096098822": {
+  "name": "ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; cleaned from keying-noise entry '0960988227'"
+ },
+ "0960988227": {
+  "name": "ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096099390": {
+  "name": "ΔΑ.Σ.Ε. Κυπαρισσίου-Σήμιας",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096099678": {
+  "name": "ΔΑΣΕ ΠΕΝΤΑΛΟΦΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096115609": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΡΟΒΙΩΝ ΕΥΒΟΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096115714": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096115923": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΘΗΡΟΥ ΚΑΡΟΠΛΕΣΙΟΥ ΚΑΡΔΙΤΣΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096121014": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΤΡΟΛΟΦΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096133603": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΙΔΗΡΟΝΕΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096133615": {
+  "name": "ΔΑ.Σ.Ε. ΛΙΒΑΔΕΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096133640": {
+  "name": "ΔΑ.Σ.Ε. ΘΟΛΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096133664": {
+  "name": "ΔΑ.Σ.Ε. ΔΡΑΜΑΣ \"Η ΕΛΑΤΙΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096133793": {
+  "name": "ΔΑ.Σ.Ε. ΜΑΥΡΟΒΑΤΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096134114": {
+  "name": "ΔΑΣΕ ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ \" Η ΜΑΚΕΔΟΝΙΑ\"",
+  "is_dase": true,
+  "form": "daseragikos",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096134114 ": {
+  "name": "ΔΑΣΕ ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ \" Η ΜΑΚΕΔΟΝΙΑ\"",
+  "is_dase": true,
+  "form": "daseragikos",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; whitespace variant of 096134114"
+ },
+ "096134126": {
+  "name": "ΔΑΣΙΚΟΣ ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΑΜΟΥΡΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135196": {
+  "name": "ΔΑΣΕ ΑΓ. ΝΙΚΟΛΑΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135290": {
+  "name": "ΔΑΣΕ ΕΠΙΝΙΑΝΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135319": {
+  "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ  ΕΡΓΑΣΙΑΣ ΚΑΡΠΕΝΗΣΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135356": {
+  "name": "ΔΑΣΕ ΚΛΕΙΤΣΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135368": {
+  "name": "ΔΑΣΕ ΚΟΡΥΣΧΑΔΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135556": {
+  "name": "ΔΑΣΕ ΑΜΠΛΙΑΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; cleaned from keying-noise entry '0961355565'"
+ },
+ "0961355565": {
+  "name": "ΔΑΣΕ ΑΜΠΛΙΑΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135565": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΜΠΛΙΑΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135610": {
+  "name": "ΔΑΣΕ ΦΟΥΡΝΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096135633": {
+  "name": "ΔΑΣΕ ΧΡΥΣΩΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096136410": {
+  "name": "ΔΑΣΕ ΕΠΤΑΧΩΡΙΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096136421": {
+  "name": "ΔΑ.Σ.Ε. ΟΞΥΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096136598": {
+  "name": "ΔΑΣΕ ΖΟΥΖΟΥΛΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096136598 ": {
+  "name": "ΔΑΣΕ ΖΟΥΖΟΥΛΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; whitespace variant of 096136598"
+ },
+ "096136863": {
+  "name": "ΔΑΣΕ ΛΕΥΚΟΓΕΙΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096136918": {
+  "name": "ΔΑΣΕ ΑΧΛΑΔΙΑΣ \"Ο ΠΛΟΥΤΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096139122": {
+  "name": "ΔΑΣΕ ΣΚΡΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096139226": {
+  "name": "ΔΑΣΕ ΚΑΡΠΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096139238": {
+  "name": "ΔΑΣΕ ΓΡΙΒΑΣ ΠΑΙΟΝΙΑΣ & ΠΕΡΙΧΩΡΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096139275": {
+  "name": "ΔΑΣΕ ΠΗΓΗΣ ΦΑΝΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096147195": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΥΟΦΥΤΟΥ «ΞΥΛΟΚΟΠΟΣ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096156917": {
+  "name": "ΔΑ.Σ.Ε.Σιδηρόνερου Δράμας η “Ροδόπη”",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096157650": {
+  "name": "ΔΑ.Σ.Ε. ΙΣΩΜΑΤΟΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096157662": {
+  "name": "ΔΑ.Σ.Ε. ΑΓΙΟΥ ΑΝΤΩΝΙΟΥ168",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096160377": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΒΕΡΤΙΣΚΟΥ - ΟΣΣΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096178412": {
+  "name": "ΑΦΜ ΔΑΣΕ ΚΕΧΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096178448": {
+  "name": "ΔΑΣΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΕΡΓΑΣΙΑΣ ΧΑΡΑΔΡΑΣ ΚΕΧΡΟΥ ΠΕ ΡΟΔΟΠΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096194018": {
+  "name": "ΔΑ.Σ.Ε. \"ΟΙ ΛΕΟΝΤΕΣ ΤΟΥ ΜΠΕΛΛΕΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096203333": {
+  "name": "ΔΑΣΕ ΚΑΡΔΑΜΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "096240840": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΚΟΤΙΝΑΣ (ΔΑΣΕ)",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099207976": {
+  "name": "ΔΑ.Σ.Ε. ¨Η ΕΡΥΘΡΟΕΛΑΤΗ¨ ΒΥΡΩΝΕΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099240506": {
+  "name": "ΔΑΣΕ ΠΟΤΑΜΩΝ \"ΔΡΥΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099240543": {
+  "name": "ΔΑΣΕ ΠΟΤΑΜΩΝ \"Ο ΑΕΤΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099240635": {
+  "name": "2.\tΔΑ.Σ.Ε Κ.ΝΕΥΡΟΚΟΠΙΟΥ ΔΡΑΜΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099243730": {
+  "name": "ΔΑΣΕ ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ \"ΚΑΤΟΥΝΙΤΣΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099244241": {
+  "name": "ΔΑΣΕ ΛΟΥΤΡΑΚΙΟΥ ΠΡΩΤΟΣ ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099244449": {
+  "name": "1 ΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099422688": {
+  "name": "ΑΓΡΟΤΙΚΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΛΑΡΙΣΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099694608": {
+  "name": "ΔΑ.Σ.Ε. ΒΙΤΣΙΟΥ - ΚΛΕΙΣΟΥΡΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099714593": {
+  "name": "Α.ΔΑ.Σ.Ε.ΚΑΣΤΑΝΙΑΣ & ΑΜΠΕΛΙΩΝ ΚΛΕΙΝΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099714998": {
+  "name": "Ορεινού ΔΑ.Σ.Ε. Χρυσομηλιάς Καλαμπάκας",
+  "is_dase": true,
+  "form": "edase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099715160": {
+  "name": "5ος  ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ",
+  "is_dase": true,
+  "form": "edase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099715610": {
+  "name": "ΟΔΑΣΕ ΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ",
+  "is_dase": true,
+  "form": "edase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099718353": {
+  "name": "ΔΑΣΕ ΕΛΑΦΟΥ \"Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; cleaned from keying-noise entry '0997183530'"
+ },
+ "0997183530": {
+  "name": "ΔΑΣΕ ΕΛΑΦΟΥ \"Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "099742870": {
+  "name": "Νέος ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ Εργασίας Σκαλωτής ‘’Η Πρόοδος’’",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "0997436470": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ  ΩΦΕΛΕΙΑΣ ΔΙΑΧΕΙΡΙΣΗΣ ΠΡΑΣΙΝΟΥ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "099922148": {
+  "name": "ΔΑΣΕ ΦΛΕΓΚΑ ΠΕΡΙΒΟΛΙΟΥ ΓΡΕΒΕΝΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "112243030": {
+  "name": "ΚΟΝΤΟΣ ΙΩΑΝΝΗΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "112249870": {
+  "name": "ΚΩΤΟΥΛΑΣ ΑΠΟΣΤΟΛΟΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "112362287": {
+  "name": "ΚΟΝΤΑΡΑΚΗΣ Σ. ΕΜΜΑΝΟΥΗΛ – ΚΕΝΤΡΟ ΔΙΑΣΚΕΔΑΣΕΩΣ – ΒΡΥΣΕΣ ΑΠΟΚΟΡΩΝΟΥ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "129346925": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΜΟΥΧΑΣ \"Ο ΑΓΙΟΣ ΤΡΥΦΩΝ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "135096137": {
+  "name": "ΕΥΑΓΓΕΛΟΣ ΛΕΙΒΑΔΑΣΕ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "136720378": {
+  "name": "ΣΑΚΚΑΣ ΑΘΑΝΑΣΙΟΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "800255232": {
+  "name": "ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ <<ΖΩΟΔΟΧΟΥ ΠΗΓΗΣ>>>>",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "800255256": {
+  "name": "ΔΑΣΕ ΧΡΥΣΗ ΓΡΑΜΜΟΣ ΣΥΝ/ΣΜΟΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "800255650": {
+  "name": "ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ <<Ο ΠΥΡΓΟΣ>>",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "800282129": {
+  "name": "Β' ΔΑΣΕ Κερασιάς",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "800282142": {
+  "name": "ΔΑΣΕ ΚΑΜΠΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "800999349": {
+  "name": "Κοινωνική Συνεταιριστική Επιχείρηση Συλλογικής και Κοινωνικής Ωφέλειας «Οικονόμειος»",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "801284110": {
+  "name": "Αγροδασική Συνεργασία Ο.Ε.",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "801814820": {
+  "name": "ΚΑΛΛΙΝΤΕΡΗΣ ΟΕ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "802331173": {
+  "name": "ΤΑΣΟΥΛΑΣ ΧΩΜΑΤΟΥΡΓΙΚΗ ΕΕ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "802433792": {
+  "name": "ΚΩΝ ΘΩΜΑΣ ΚΑΙ ΣΙΑ ΟΕ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "996509733": {
+  "name": "ΔΑΣΕ ΣΤΟΜΙΟΥ ΛΑΡΙΣΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996511267": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΆΤΛΑΣ ΑΛΕΞ/ΠΟΛΗΣ ΕΒΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996514048": {
+  "name": "ΔΑΣΕ ΠΟΛΥΘΕΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996514050": {
+  "name": "ΔΑΣΕ ΚΑΛΟΓΡΙΑΝΗΣ ΚΑΛΑΜΠΑΚΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996535228": {
+  "name": "Δασικός Συνεταιρισμός «Βρύας Ρητίνης»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996622521": {
+  "name": "ΔΑΣΕ ΗΛΙΟΧΩΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996631923": {
+  "name": "ΔΑ.Σ.Ε. ΒΟΪΟΥ ΚΟΖΑΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996631935": {
+  "name": "ΔΑΣΕ ΑΝΩ ΒΟΙΟΥ Η ΑΓ. ΠΑΡΑΣΚΕΥΗ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996632249": {
+  "name": "ΔΑΣΕ ΝΕΑΠΟΛΗΣ ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996700503": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΩΡΙΝΑΣ -ΝΕΟΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996700700": {
+  "name": "Δ.Α.Σ.Ε. ΤΟΠΙΚΩΝ ΚΟΙΝΟΤΗΤΩΝ ΑΝΩ ΥΔΡΟΥΣΑΣ, ΑΤΡΑΠΟΥ, ΠΟΛΥΠΟΤΑΜΟΥ ΚΑΙ ΣΥΝΟΙΚΙΣΜΟΥ ΣΙΜΟΥ ΙΩΑΝΝΙΔΗ, ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ Π.Ε. ΦΛΩΡΙΝΑΣ «Η ΕΝΟΤΗΤΑ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996700890": {
+  "name": "Δ.Α.Σ.Ε.  ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΠΟΛΥΠΟΤΑΜΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ  «ΟΙ ΥΛΟΤΟΜΟΙ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996712631": {
+  "name": "ΔΑ.Σ.Ε. ΚΑΛΟΧΩΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996713431": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΙ ΑΚΡΙΤΕΣ ΒΥΡΩΝΕΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996713836": {
+  "name": "ΔΑΣΕ ΑΚΡΙΤΟΧΩΡΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ ΠΕΡΤΟΥΛΙ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996730685": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΔΗΜΟΥ ΝΟΤΙΟΥ ΠΗΛΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996775144": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΩΤΗΡΙΤΣΑΣ ΛΑΡΙΣΑΣ \"Ο ΚΙΣΑΒΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996775654": {
+  "name": "Κοινωνική Συνεταιριστική Επιχείρηση Συλλογικής και Κοινωνικής Ωφέλειας «Οικονόμειος»",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "996777703": {
+  "name": "Δασικός Συνεταιρισμός «Αγιόκαμπου Λαρίσης",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996811473": {
+  "name": "ΕΔΑΣΕ ΓΑΡΔΙΚΙΟΥ ΤΡΙΚΑΛΩΝ",
+  "is_dase": true,
+  "form": "edase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996811504": {
+  "name": "ΕΔΑΣΕ ΦΛΑΜΠΟΥΡΕΣΙΟΥ ΤΥΜΦΑΙΩΝ ΚΑΛΑΜΠΑΚΑΣ",
+  "is_dase": true,
+  "form": "edase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996811553": {
+  "name": "Ορεινός ΔΑ.Σ.Ε. Αμαράντου και Κλείνου Καλαμπάκας",
+  "is_dase": true,
+  "form": "edase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996830727": {
+  "name": "ΠΕΡΙΒΑΛΛΟΝΤΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΦΥΛΗΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "996838737": {
+  "name": "ΔΑΣΕ ΦΛΑΜΠΟΥΡΑΡΙΟΥ ΖΑΓΟΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996838749": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΒΟΥΣΑΣ Ο ΑΩΟΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996838774": {
+  "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΙΣΤΡΑΤΟΥ Ο ΣΜΟΛΙΚΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996838829": {
+  "name": "ΔΑΣΕ ΑΝΗΛΙΟΥ ¨Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ¨",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996838842": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΒΟΥΣΑΣ ΤΟ ΑΡΚΟΥΔΟΡΕΜΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996838878": {
+  "name": "ΔΑΣΕ ΠΩΓΩΝΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996838891": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΥΜΦΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996840038": {
+  "name": "ΔΑ.Σ.Ε ΦΛΑΜΠΟΥΡΑΡΙΟΥ ΤΣΟΥΚΑ ΡΟΣΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996840296": {
+  "name": "ΔΑΣΕ ΜΕΤΣΟΒΟΥ ¨Ο ΠΕΛΕΚΥΣ¨",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996848036": {
+  "name": "ΔΑ.Σ.Ε Ελεύθερου Δασικού Συνεταιρισμού Εργασίας Αγριδίου",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996851495": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΟΛΟΧΑΣ ΚΑΡΔΙΤΣΑΣ «Ο ΠΡΟΦΗΤΗΣ ΗΛΙΑΣ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996852850": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΦΡΟΝΤΙΔΑ ΣΤΟ ΠΡΑΣΙΝΟ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "996853532": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΓΑΡΕΦΕΙΟΥ-ΑΝΑΓΕΝΝΗΣΗ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996853998": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΘΕΟΔΩΡΑΚΕΙΟΥ - ΚΙΝΗΜΑ ΑΛΛΑΓΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996854290": {
+  "name": "ΔΑΣΕ ΠΡΟΜΑΧΩΝ \" Ο ΕΛΛΗΝ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996854516": {
+  "name": "«ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΡΕΙΝΟΥ ΑΛΜΩΠΙΑΣ «ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996875014": {
+  "name": "ΔΑΣΕ ΚΥΡΙΑΚΟΧΩΡΙΟΥ ΚΑΙ ΔΥΤΙΚΗΣ ΦΘΙΩΤΙΔΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996875099": {
+  "name": "ΔΑΣΕ ΠΥΡΓΟΥ - ΣΠΕΡΧΕΙΟΥ ΝΟΜΟΥ ΦΘΙΩΤΙΔΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996879302": {
+  "name": "ΔΑ.Σ.Ε. ΚΑΜΒΟΥΝΙΩΝ ΛΙΒΑΔΕΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996889971": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΑΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996893093": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΕΝΤΑΞΗΣ ΕΙΔΙΚΩΝ ΟΜΑΔΩΝ (ΠΡΑΣΙΝΟΤΕΧΝΙΚΗ ΧΑΛΑΝΔΡΙΟΥ)",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "996895246": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "99689971": {
+  "name": "ΔΑ.Σ.Ε. «ΑΚΡΙΤΑΣ» ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996957671": {
+  "name": "ΚΟΙΝΩΝΙΚΗ - ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗ ΩΦΕΛΕΙΑΣ ΕΝΟΤΗΤΑ ΑΓΙΑΣ ΚΟΙΝΣΕΠ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "996957935": {
+  "name": "ΔΑΣΕ ΑΝΑΤΟΛΙΚΟΥ ΟΛΥΜΠΟΥ-ΚΑΡΥΑΣ-ΚΟΚΚΙΝΟΠΗΛΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996963038": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ ΣΠΑΝΗ ΠΕΤΡΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996963284": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΤΡΥΜΩΝΑ ΣΕΡΡΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996972477": {
+  "name": "ΔΑΣΕ ΑΧΛΑΔΙΑΣ \"Η ΠΡΟΟΔΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "996972533": {
+  "name": "ΔΑΣΕ ΠΑΡΑΝΕΣΤΙΟΥ ΔΡΑΜΑΣ ΤΟ ΦΡΑΚΤΟ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997044136": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ & ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΟΙΚΟΣΟΦΙΑ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997055384": {
+  "name": "ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΖΟΜΕΝΩΝ ΙΣΑΡΗ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997087056": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ Κ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΚΑΣΙΟΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997105908": {
+  "name": "ΔΑΣΕ ΝΕΣΤΩΡ ΝΕΣΤΟΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997106512": {
+  "name": "ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ <<ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ>>",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997106512 ": {
+  "name": "ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ <<ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ>>",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; whitespace variant of 997106512"
+ },
+ "997106512 ΚΑΙ 997841856": {
+  "name": "ΔΑΣΕ ΚΥΨΕΛΗΣ <<ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ>>",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997106524": {
+  "name": "ΔΑ.Σ.Ε. ΕΠΤΑΧΩΡΙΟΥ \"ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997106813": {
+  "name": "ΔΑ.Σ.Ε ΝΕΟΥ ΟΙΚΙΣΜΟΥ ΚΟΡΕΣΤΕΙΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997106874": {
+  "name": "ΔΑΣΕ Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997106930": {
+  "name": "ΔΑΣΕ ΟΙΚΙΣΜΟΥ ΚΥΨΕΛΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997107232": {
+  "name": "ΔΑΣΕ ΝΕΣΤΟΡΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997107397": {
+  "name": "ΔΑΣΕ ΚΑΣΤΟΡΙΑΣ ΑΓΙΟΣ ΠΑΝΤΕΛΕΗΜΟΝΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997129709": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝ/ΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΡΤΟΥΛΙΟΥ - ΤΖΙΑΤΖΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997146480": {
+  "name": "ΚΟΙΝΩΝΙΚΗΣ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗΣ ΕΠΙΧΕΙΡΗΣΗΣ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΠΕΜΠΤΟΥΣΙΑ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997171856": {
+  "name": "Δασικός Συνεταιρισμός ΔΑΣΕ ΜΟΔΙΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997172910": {
+  "name": "ΔΑΣΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΚΡΥΟΝΕΡΙΟΥ-ΕΝΩΣΗ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997175401": {
+  "name": "ΔΑ.ΣΕ. ΚΑΡΙΤΣΑΣ \"Ο ΣΤΑΥΡΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997175425": {
+  "name": "ΔΑ.Σ.Ε. Καλλιπεύκης ΄΄Η ΠΑΤΩΜΕΝΗ΄΄",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997183530": {
+  "name": "ΔΑ.ΣΕ. ΕΛΑΦΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ \"Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997200660": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΓΕΝΙΚΗ ΑΝΑΚΥΚΛΩΣΗΣ ΣΠΕΤΣΩΝ ΚΟΣΜΑΣ ΜΠΑΡΜΠΑΤΣΗΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997208737": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΣΤΑΝΙΑΣ ΚΑΡΔΙΤΣΑΣ ''ΤΟ ΦΡΑΓΜΑ''",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997218061": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΚΑΙ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ “Μονοπάτια της Ελλάδας”",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997225027": {
+  "name": "ΔΑ.Σ.Ε. ΕΠΤΑΛΟΦΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997225390": {
+  "name": "ΔΑΣΕ ΠΕΝΤΑΛΟΦΟ - ΟΜΑΛΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997225617": {
+  "name": "ΔΑ.Σ.Ε. ΚΙΛΚΙΣ \"ΟΙ ΜΑΚΕΔΟΝΕΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997225666": {
+  "name": "ΔΑ.Σ.Ε. ΚΡΟΥΣΣΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997309155": {
+  "name": "ΔΑ.Σ.Ε. ΑΥΓΕΡΙΝΟΥ -ΝΕΑΠΟΛΗΣ \"Η ΦΛΟΓΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997309339": {
+  "name": "ΔΑ.Σ.Ε. ΠΟΛΥΚΑΣΤΑΝΟΥ ΑΥΓΕΡΙΝΟΥ \"Ο ΚΛΕΨΙΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997342256": {
+  "name": "ΑΣΤΙΚΟ ΚΟΙΝΩΝΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΠΡΟΣΤΑΣΙΑΣ ΚΑΙ ΔΙΑΧΕΙΡΙΣΗΣ ΦΥΣΙΚΟΥ ΚΑΙ ΑΣΤΙΚΟΥ ΠΕΡΙΒΑΛΛΟΝΤΟΣ με τον διακριτικό τίτλο «ΑΣΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΝΑΠΝΟΗ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997342256 ": {
+  "name": "ΑΣΤΙΚΟ ΚΟΙΝΩΝΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΠΡΟΣΤΑΣΙΑΣ ΚΑΙ ΔΙΑΧΕΙΡΙΣΗΣ ΦΥΣΙΚΟΥ ΚΑΙ ΑΣΤΙΚΟΥ ΠΕΡΙΒΑΛΛΟΝΤΟΣ με τον διακριτικό τίτλο «ΑΣΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΝΑΠΝΟΗ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders); whitespace variant of 997342256"
+ },
+ "997357780": {
+  "name": "ΔΑ.ΣΕ ΚΑΤΩ ΣΩΤΗΡΙΤΤΣΑΣ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997359957": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΟΥ ΣΚΟΠΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997374125": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΙΣΙΔΑ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997426949": {
+  "name": "ΚΟΙΝΣΕΠ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ – ΒΕΛΟΥΧΙ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997436470": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ ΔΙΑΧΕΙΡΙΣΗΣ ΠΡΑΣΙΝΟΥ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997443971": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗΣ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΗΣ ΩΦΕΛΕΙΑΣ 5ΕΝΤΕ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "997454162": {
+  "name": "ΔΑΣΕ ΓΑΡΕΦΕΙΟΥ \" ΤΑ ΤΣΕΚΟΥΡΙΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997455552": {
+  "name": "ΔΑΣΕ ΠΕΡΙΚΛΕΙΑΣ ΟΙ ΜΑΧΗΤΕΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997456026": {
+  "name": "Δ.Α.Σ.Ε. ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΒΡΟΝΤΕΡΟΥ ΔΗΜΟΥ ΠΡΕΣΠΩΝ «Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997456155": {
+  "name": "ΔΑ.Σ.Ε. Τοπικής Κοινότητας Αγίου Γερμανού Δήμου Πρεσπών «Ο Κότσιφας»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997456769": {
+  "name": "Δ.Α.Σ.Ε. ΤΟΠΙΚΩΝ ΚΟΙΝΟΤΗΤΩΝ  ΑΚΡΙΤΑ, ΑΛΩΝΩΝ, ΦΛΑΜΠΟΥΡΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997458622": {
+  "name": "Δ.Α.Σ.Ε. ΞΙΝΟΥ ΝΕΡΟΥ ΔΗΜΟΥ ΑΜΥΝΤΑΙΟΥ  «ΤΟ ΡΑΝΤΟΣΙ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997600354": {
+  "name": "ΔΑΣΕ ΑΡΧΑΓΓΕΛΟΥ \" Αγία Παρασκευή\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997600378": {
+  "name": "ΔΑΣΕ ΑΡΧΑΓΓΕΛΟΥ \" ΤΟ ΠΑΪΚΟ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997600446": {
+  "name": "ΔΑΣΕ ΣΩΣΑΝΔΡΑΣ \" ΤΑ ΕΛΑΤΗΡΙΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997604027": {
+  "name": "Ελληνικός Γεωργικός Οργανισμός Δήμητρα – Ινστιτούτο Μεσογειακών και Δασικών Οικοσυστημάτων",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "997604027 ": {
+  "name": "Ελληνικός Γεωργικός Οργανισμός Δήμητρα – Ινστιτούτο Μεσογειακών και Δασικών Οικοσυστημάτων",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26; whitespace variant of 997604027"
+ },
+ "997650702": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΡΑΙΔΑΣ ΚΑΡΔΙΤΣΑΣ ''Ο ΜΕΓΔΟΒΑΣ''",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997829228": {
+  "name": "ΤΣΙΟΥΤΣΙΟΥΒΑΛΑΣ ΑΓΓΕΛΟΣ ΚΑΙ ΣΙΑ ΕΕ",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "997841856": {
+  "name": "«Δ.Α.Σ.Ε.ΚΥΨΕΛΗΣ  ‘’Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ  »",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997922367": {
+  "name": "ΔΑ.Σ.Ε. ΓΟΡΓΙΑΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997922945": {
+  "name": "ΔΑ.Σ.Ε. ΔΕΣΚΑΤΗΣ Η ΒΟΥΝΑΣΙΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997961590": {
+  "name": "ΔΑ.Σ.Ε. ΔΙΒΟΥΝΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "997962709": {
+  "name": "ΔΑ.Σ.Ε. ΠΑΙΚΟΥ ΠΑΙΟΝΙΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998121076": {
+  "name": "ΔΑΣΕ ΚΑΡΟΠΛΕΣΙΟΥ ΚΑΡΔΙΤΣΑΣ ''ΔΟΛΟΠΕΣ - ΣΑΙΚΑ''",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998155971": {
+  "name": "ΔΑ.Σ.Ε. ΒΩΛΑΚΑ \"ΑΓ. ΠΑΥΛΟΣ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998494225": {
+  "name": "ΔΑ.Σ.Ε. Προμάχων Αλμωπίας «Νέα Δύναμη»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998494796": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΡΟΜΑΧΩΝ ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΑΛΥΣΟΠΡΙΟΝΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998495117": {
+  "name": "ΔΑΣΕ ΠΡΟΜΑΧΩΝ ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΤΣΕΚΟΥΡΙΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998638016": {
+  "name": "ΔΑΣΕ ΣΚΑΛΩΤΗΣ ΑΓΙΟΣ ΙΩΑΝΝΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998736267": {
+  "name": "ΔΑΣΕ: ΡΕΥΜΑΤΟΣ\"Η ΧΑΪΝΤΟΥ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998743209": {
+  "name": "ΔΑΣΕ ΑΓΙΑΣ ΒΑΡΒΑΡΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998752347": {
+  "name": "ΣΤ ΄ΕΔΑΣΕ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΙ ΠΑΛΑΙΟΧΩΡΙΟΥ",
+  "is_dase": true,
+  "form": "edase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998752716": {
+  "name": "ΠΡΟΤΥΠΟΣ ΔΑ.Σ.Ε. Χρυσομηλιάς Καλαμπάκας",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "998811782": {
+  "name": "«NOVALIS M.E.Π.Ε.» Αναπτυξιακές, Περιβαλλοντικές, Δασικές, Γεωτεχνικές,  Αλιευτικές Μελέτες & Μελέτες Χαρτογραφίας, Γεωγραφικών Συστημάτων  Πληροφοριών",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "998842250": {
+  "name": "ΚΟΙΝΩΝΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ ΔΥΤΙΚΟΥ ΤΟΜΕΑ ΨΥΧΙΚΗΣ ΥΓΕΙΑΣ ΝΟΜΑΡΧΙΑΚΗΣ ΑΥΤΟΔΙΟΙΚΗΣΗΣ ΘΕΣΣΑΛΟΝΙΚΗΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "998926886": {
+  "name": "ΚΟΙΝΩΝΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ ΤΟΜΕΑ ΨΥΧΙΚΗΣ ΥΓΕΙΑΣ ΝΟΜΟΥ ΑΤΤΙΚΗΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "998977284": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΒΡΟΝΤΟΥΣ ΑΓΙΟΣ ΔΗΜΗΤΡΙΟΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999021038": {
+  "name": "ΚΟΙΝΩΝΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ ΤΟΜΕΑ ΨΥΧΙΚΗΣ ΥΓΕΙΑΣ ΝΟΜΟΥ ΑΧΑΙΑΣ «ΦΑΡΟΣ»",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "999030521": {
+  "name": "Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε",
+  "is_dase": false,
+  "form": null,
+  "basis": "no ΔΑΣΕ signal; reviewed 2026-07-26"
+ },
+ "999156732": {
+  "name": "ΔΑ.Σ.Ε. ΚΡΑΝΙΑΣ ΓΡΕΒΕΝΩΝ \"Η ΤΟΥΡΓΙΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999418712": {
+  "name": "ΔΑ.Σ.Ε. ΑΝΩ ΠΟΡΟΙΩΝ «ΠΕΛΕΚΑΝΟΣ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999419942": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΟΧΩΡΙΟΥ Η ΟΣΤΡΙΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999420351": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΚΙΣΤΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999425788": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΕΛΑΤΟΧΩΡΙΟΥ Η ΟΞΙΑ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999520915": {
+  "name": "ΔΑ.Σ.Ε. ΤΑΞΙΑΡΧΩΝ \"Η ΟΜΟΝΟΙΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999522306": {
+  "name": "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ \"Η ΕΝΟΤΗΤΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999669304": {
+  "name": "Δ.Α.Σ.Ε. ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΠΟΛΥΠΟΤΑΜΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ  «ΟΙ ΞΥΛΟΚΟΠΟΙ»",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999729317": {
+  "name": "Β' ΔΑΣΕ ΚΑΡΔΑΜΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999745016": {
+  "name": "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Ο ΝΕΟΣ ΔΑΣΙΚΟΣ ΑΛΜΩΠΙΑΣ Ν. ΠΕΛΛΑΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999748006": {
+  "name": "ΔΑΣΕ ΚΟΡΥΦΗΣ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999760124": {
+  "name": "ΚΟΙΝΩΝΙΚΗ ΣΥΝΕΤΑΙΡΙΣΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΣΥΛΛΟΓΙΚΗΣ ΚΑΙ ΚΟΙΝΩΝΙΚΙΗΣ ΩΦΕΛΕΙΑΣ ΟΙΚΟΝΟΜΕΙΟΣ",
+  "is_dase": false,
+  "form": null,
+  "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
+ },
+ "999886267": {
+  "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΙΠΟΤΑΜΩΝ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999886519": {
+  "name": "ΔΑ.Σ.Ε. ΣΙΛΛΗΣ \"Η ΠΡΑΣΙΝΑΔΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "999888341": {
+  "name": "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ \"Η ΟΜΟΝΟΙΑ\"",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "΄096035032": {
+  "name": "ΔΑΣΕ \"Η ΠΡΟΟΔΟΣ \" ΑΝΩ ΣΤΑΥΡΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ }
+}

@@ -295,7 +295,33 @@ auto-retrying `pdf_wait.html` (503 + Retry-After) during registry 429 windows.
 Consortium contracts attribute the **full** value to each partner (max-exposure
 view, stated in the footer).
 
-## Tests (`tests/`, 165 passing — `.venv/bin/python -m pytest`)
+## ΔΑΣΕ dataset (`data/processed/dase.sqlite` — SEPARATE from Anti-nero)
+
+Standalone DB of every contract 2021-09→today whose contractor is a
+forest labour cooperative (ΔΑ.Σ.Ε./ΑΔΣΕ/ΕΔΑΣΕ, ν.4423/2016 — example
+26SYMV019413118): 2,164 contracts, €47.0M gross, ~252 co-ops.
+**Contractor-led harvest, NOT CPV-led** (the example's only CPV is
+77312000-0, outside the 772 δασοκομία family — CPV-first provably
+misses). `scripts/harvest_dase.py` (resumable: collect → close → load)
+sweeps KHMDHS search (`api.search_page`; body fields `contractorName`
+substring case/accent-sensitive, contractor-side `vatNumber`,
+`cpvItems`; the server clamps every query to a 6-month submissionDate
+window ending at dateTo → explicit ≤5-month windows; 404 = zero matches;
+totalElements unreliable on cpvItems — page to `last`, dedupe by ref) in
+3 passes: name variants → forest-CPV recall check → per-VAT closure +
+chain completion. `khmdhs/dase.py:classify_name` proposes (word-bounded
+ΔΑ.Σ.Ε/ΑΔΣΕ/ΕΔΑΣΕ tokens — «ΔΙΑΣΚΕΔΑΣΕΩΣ»/«ΛΕΙΒΑΔΑΣΕ» are real false
+positives), every distinct VAT is human-reviewed into curated
+`khmdhs/data/dase_contractors.json` (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban co-ops
+excluded; registry keying noise: two ΑΦΜ glued with «ΚΑΙ», stray accent
+prefixes, whitespace-variant VAT keys). Uses the shared khmdhs schema
+(scope tables stay empty); nothing touches khmdhs.sqlite or the webui.
+PDFs not yet fetched — `scripts/fetch_contract_pdfs.py --db
+data/processed/dase.sqlite --cache data/processed/dase_pdf_cache` when
+wanted. CPV quirk: 386 rows carry miskeyed 66519300-4 «ασφαλιστικές
+υπηρεσίες» on υλοτομικά contracts.
+
+## Tests (`tests/`, 186 passing — `.venv/bin/python -m pytest`)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,
