@@ -980,6 +980,70 @@ def overview_contracts(conn: sqlite3.Connection) -> list[dict]:
     return sorted(out.values(), key=lambda c: -c["eff_eur"])
 
 
+def study_costs(conn: sqlite3.Connection) -> dict:
+    """Per-contract μελέτη (study/planning) cost, net of ΦΠΑ, attributed to
+    in-scope chain tips: a tip uses its own extracted row when present,
+    else the nearest predecessor's (the signed original carries the Άρθρο 4
+    breakdown; ΑΠΕ restatements may update it). Shares are computed against
+    the contract's stated NET total — same ΦΠΑ basis on both sides."""
+    if not conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' "
+                        "AND name='contract_study_costs'").fetchone():
+        return {"rows": [], "summary": {"n_with": 0, "n_in_scope": 0,
+                                        "total_eur": 0.0, "median_share": None}}
+    study = {r["reference_number"]: dict(r) for r in conn.execute(
+        "SELECT reference_number, eur, page FROM contract_study_costs")}
+    prev = {r[0]: r[1] for r in conn.execute(
+        "SELECT reference_number, prev_reference_no FROM contracts")}
+    net_of = {r[0]: r[1] for r in conn.execute(
+        "SELECT reference_number, total_cost_without_vat FROM contracts")}
+
+    def family_net(ref: str) -> float | None:
+        # Supplementary/ΑΠΕ tips state only their own (small) value — the
+        # honest share denominator is the largest net value in the chain.
+        best, hops = None, 0
+        while ref is not None and hops < 12:
+            v = net_of.get(ref)
+            if v and (best is None or v > best):
+                best = v
+            ref = prev.get(ref)
+            hops += 1
+        return best
+    tips = conn.execute(f"""
+        SELECT k.reference_number AS ref, k.title,
+               k.total_cost_without_vat AS net_stated,
+               {effective_cost(conn, 'k')} AS eff
+        FROM contracts k
+        WHERE {scope_filter(conn, 'k.reference_number')}
+    """).fetchall()
+
+    rows, shares = [], []
+    for t in tips:
+        ref, hops = t["ref"], 0
+        while ref is not None and ref not in study and hops < 12:
+            ref = prev.get(ref)
+            hops += 1
+        if ref is None or ref not in study:
+            continue
+        s = study[ref]
+        denom = family_net(t["ref"])
+        share = s["eur"] / denom if denom else None
+        if share is not None:
+            shares.append(share)
+        rows.append({"ref": t["ref"], "title": t["title"],
+                     "eur": round(s["eur"], 2), "src_ref": ref,
+                     "eff_eur": round(t["eff"] or 0.0, 2),
+                     "share": round(share, 4) if share is not None else None})
+    rows.sort(key=lambda r: -r["eur"])
+    shares.sort()
+    return {"rows": rows, "summary": {
+        "n_with": len(rows), "n_in_scope": len(tips),
+        "total_eur": round(sum(r["eur"] for r in rows), 2),
+        "net_stated_total": round(
+            sum(t["net_stated"] or 0.0 for t in tips), 2),
+        "median_share": round(shares[len(shares) // 2], 4) if shares else None,
+    }}
+
+
 def contractor_points(conn: sqlite3.Connection) -> dict:
     """Geocoded contractor HQ dots + coverage. Totals are max-exposure
     (full contract value per partner), consistent with /contractors."""

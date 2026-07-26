@@ -84,7 +84,7 @@ excluded from aggregates (`antinero_umbrella`) to avoid double counting.
 ## Pipeline (ETL modules in `khmdhs/`)
 
 **Run order after any contract change**:
-`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `payment_loader`
+`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `payment_loader`
 (→ `diavgeia_loader` when ingesting new Diavgeia decisions, then `payment_loader` again).
 **`python -m khmdhs.refresh` runs the whole sequence for you** after
 refetching open contracts — prefer it for routine updates.
@@ -157,6 +157,20 @@ refetching open contracts — prefer it for routine updates.
   disagreements; TODO-lists uncovered in-scope contracts. Matcher gotcha:
   fold() maps Greek→Latin homoglyphs, so connector/stop tokens must be
   folded too («ΚΑΙ» → Latin "KAI").
+- Study-cost layer: `scripts/fetch_contract_pdfs.py` sweeps ALL contract
+  PDFs into pdf_cache (throttled, resumable; the cache previously only
+  filled incidentally via the web proxy); `khmdhs/study_costs.py` extracts
+  the per-contract μελέτη cost (net of ΦΠΑ) from the canonical «Κόστος
+  εκπόνησης μελετών (ΣΑΥ-ΦΑΥ)» anchor with layout-aware rules
+  (after_label / after_label_wrapped incl. page-break watermarks /
+  before_prose gated on the article construction — bare «€, » gaps belong
+  to the previous running-sum component / prev_line; nearest-amount is
+  wrong ~40% of the time). `scripts/extract_study_costs.py` emits the
+  review file; verified amounts live in curated `data/study_costs.json` →
+  `studies_loader.py` → `contract_study_costs` (in refresh chain).
+  Contracts stating the figure twice: the contracted αμοιβή breakdown
+  wins over the προϋπολογισμός δημοπράτησης estimate. ΕΣΑ design-build
+  contracts itemise no study price (bundled) — honestly absent.
 - `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
   (end_date NULL or <90 days past), upserts only changed payloads (diff on
   lastUpdateDate/paymentRefNo/nextRefNo/cancelled), backs payloads up to
@@ -187,6 +201,7 @@ decisions land there FIRST, then get implemented.
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts |
 | `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid + **hand-curated `pe`** (the municipality's Π.Ε.; the ONLY complete municipality→Π.Ε. table — validated 4 ways by `scripts/build_pe_geojson.py`) (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
 | `pe_centroids.json` | 74 Π.Ε. → representative point (lat, lon), from the dissolved polygons; duplicated to `webui/static/` (`scripts/build_pe_geojson.py`) |
+| `study_costs.json` | 116 contracts → μελέτη cost net of ΦΠΑ (page + excerpt evidence) from the «Κόστος εκπόνησης μελετών» PDF anchor; loaded by `studies_loader` into `contract_study_costs`; tips inherit from predecessors in `queries.study_costs` |
 | `city_to_pe.json`, `postal_prefix_to_pe.json` | address → Π.Ε. lookup tables |
 
 ## Database (`data/processed/khmdhs.sqlite`, committed)
@@ -244,8 +259,8 @@ replaced by the region's contracts (sorted by value) and its contractors'
 €-from-region / work-region € tables, with an "All of Greece" reset pill.
 Data for the drill ships once via `/api/overview.json` `contracts` (compact
 per-contract contractors+authorities+region-splits). Default analytics below
-the maps: contract-value histogram, clickable top-10
-contractors, authorities/signers, procedure-mix stacked bars), `/` dashboard
+the maps: contract-value histogram (log-spaced doubling bins), clickable
+top-10 contractors, top-10 μελέτη costs (study_costs, chain-inherited), authorities/signers, procedure-mix stacked bars), `/` dashboard
 (KPIs + top-10 chart +
 cumulative disbursement per phase + direct-award histogram with ν.4782/2021
 threshold lines), `/contracts`, `/contract/<adam>` (payments, work sites,
@@ -280,7 +295,7 @@ auto-retrying `pdf_wait.html` (503 + Retry-After) during registry 429 windows.
 Consortium contracts attribute the **full** value to each partner (max-exposure
 view, stated in the footer).
 
-## Tests (`tests/`, 155 passing — `.venv/bin/python -m pytest`)
+## Tests (`tests/`, 165 passing — `.venv/bin/python -m pytest`)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

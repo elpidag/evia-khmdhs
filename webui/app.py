@@ -71,6 +71,7 @@ def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -
             top_signers=queries.top_signers(g.conn, limit=5),
             procedures=queries.procedure_mix(g.conn),
             coverage=queries.flow_coverage(g.conn),
+            studies=queries.study_costs(g.conn),
         )
 
     @app.route("/api/overview.json")

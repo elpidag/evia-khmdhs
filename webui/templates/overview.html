@@ -70,6 +70,37 @@
   </section>
 
   <section class="ov-card">
+    <h2>How much goes to planning (μελέτες)?</h2>
+    <p class="muted"><small>
+      {% if studies.summary.n_with %}
+      {{ studies.summary.n_with }} of {{ studies.summary.n_in_scope }} in-scope
+      contracts itemise a study cost («κόστος εκπόνησης μελετών», net of ΦΠΑ) —
+      {{ studies.summary.total_eur | eur_short }} of the programme's
+      {{ studies.summary.net_stated_total | eur_short }} net contracted value,
+      median {{ (100 * studies.summary.median_share) | gr_number(1) }}% per
+      contract. The ΕΣΑ design-build contracts bundle the study unpriced.
+      {% else %}No study costs extracted yet.{% endif %}</small></p>
+    <div class="ov-chart" style="height: 54px;"><canvas id="studyCountBar"></canvas></div>
+    <div class="ov-chart" style="height: 54px;"><canvas id="studyMoneyBar"></canvas></div>
+    {% if studies.rows %}
+    <h3 class="ov-sub">Top 5 study costs — click for the contract</h3>
+    <div class="study-rows">
+      {% set maxeur = studies.rows[0].eur %}
+      {% for r in studies.rows[:5] %}
+      <a class="study-row" href="/contract/{{ r.ref }}">
+        <span class="study-title">{{ r.title }}</span>
+        <span class="study-bar-track">
+          <span class="study-bar" style="width: {{ '%.1f' | format(70 * r.eur / maxeur) }}%"></span>
+          <span class="study-val">{{ r.eur | eur_short }}{% if r.share is not none %}
+            <small class="muted">· {{ (100 * r.share) | gr_number(1) }}% of the contract</small>{% endif %}</span>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </section>
+
+  <section class="ov-card">
     <h2>Who awards the money?</h2>
     <table class="compact striped">
       <thead><tr><th>Authority</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
@@ -441,7 +472,7 @@
 
     // --- captions, legends, copy --------------------------------------
     if (!sel) {
-      left.capEl.textContent = 'Works — contracts per region (by seat of responsible Δασαρχείο / Δ/νση Δασών)';
+      left.capEl.textContent = 'Works — contracts per region (by forest-authority seat)';
       right.capEl.textContent = 'Contractors — registered addresses';
       left.legendEl.innerHTML =
         '<div><div class="strip">' +
@@ -818,6 +849,67 @@
     },
     plugins: [endLabels]
   });
+
+  // 2b) μελέτη (study/planning) costs — part-of-whole bars (the top-5
+  //     list is server-rendered HTML so the full titles stay readable)
+  const studySum = {{ studies.summary | tojson }};
+
+  // A single horizontal bar showing the whole (light) with the studies
+  // part inside it (blue) — one for contract counts, one for €.
+  function partWholeBar(canvasId, part, total, partLabel, totalLabel) {
+    const el = document.getElementById(canvasId);
+    if (!el || !total) return;
+    const lbl = {
+      id: canvasId + 'Lbl',
+      afterDatasetsDraw(chart) {
+        const { ctx, scales: { x, y } } = chart;
+        const yC = y.getPixelForValue(0);
+        ctx.save();
+        ctx.font = '600 11px ' + Chart.defaults.font.family;
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'right';
+        ctx.fillStyle = mutedColor;
+        ctx.fillText(totalLabel, x.right - 8, yC);
+        const totalW = ctx.measureText(totalLabel).width;
+        ctx.textAlign = 'left';
+        const px = x.getPixelForValue(part) + 8;
+        const maxX = x.right - totalW - 24 - ctx.measureText(partLabel).width;
+        const lx = Math.max(x.left + 8, Math.min(px, maxX));
+        // white when the label has to sit on the blue part itself
+        ctx.fillStyle = lx < px ? '#ffffff' : textColor;
+        ctx.fillText(partLabel, lx, yC);
+        ctx.restore();
+      }
+    };
+    new Chart(el, {
+      type: 'bar',
+      data: { labels: [''], datasets: [
+        { data: [part], backgroundColor: BLUE, stack: 's',
+          borderRadius: { topLeft: 4, bottomLeft: 4 }, borderSkipped: false },
+        { data: [total - part], backgroundColor: '#dbe3ec', stack: 's',
+          borderRadius: { topRight: 4, bottomRight: 4 }, borderSkipped: false },
+      ] },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: { x: { stacked: true, max: total, display: false },
+                  y: { stacked: true, display: false } }
+      },
+      plugins: [lbl]
+    });
+  }
+  if (studySum.n_with) {
+    const pctN = (100 * studySum.n_with / studySum.n_in_scope)
+      .toFixed(0);
+    partWholeBar('studyCountBar', studySum.n_with, studySum.n_in_scope,
+      `${studySum.n_with} with a study cost (${pctN}%)`,
+      `${studySum.n_in_scope} contracts`);
+    const pctE = (100 * studySum.total_eur / studySum.net_stated_total)
+      .toFixed(1).replace('.', ',');
+    partWholeBar('studyMoneyBar', studySum.total_eur, studySum.net_stated_total,
+      `${G.fmtEurShort(studySum.total_eur)} for μελέτες (${pctE}%)`,
+      `${G.fmtEurShort(studySum.net_stated_total)} net`);
+  }
 
   // 3) procedure mix — two 100% stacked horizontal bars (+ HTML legend with
   //    real numbers; the magenta slot's low contrast is relieved by the
