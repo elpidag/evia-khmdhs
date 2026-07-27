@@ -371,3 +371,51 @@ Anti-nero dataset: separate sqlite, separate PDF/text cache
 (`data/processed/dase_pdf_cache/`, gitignored), no shared loaders, no
 UI changes. *User request 2026-07-26. Affects: new dase.sqlite,
 dase_contractors.json, harvest scripts only.*
+
+## 2026-07-27 — ΔΑΣΕ web analytics: stated values, deduplicated
+
+The new `/dase` web section aggregates `dase.sqlite` on **stated**
+`total_cost_with_vat` (no payment orders harvested yet), after excluding
+(a) `cancelled = 1` rows (82 rows, €2,346,980.77) and (b) non-cancelled
+rows whose `next_reference_no` resolves to a row present in the DB
+(64 rows, €3,235,299.60) — a stored successor restates the contract, so
+counting both double-counts; rows whose successor was never harvested
+stay in as the best available value. Verified 2026-07-27: every
+`next_reference_no` column value matches the payload's `nextRefNo`
+exactly and no contract has multiple successors, so the column is safe
+to dedup on (no `contract_scope` machinery exists in this DB). Live
+population: **2,018 rows, €41,418,963.96** (vs 2,164 / €47,001,244.33
+gross). The `/compare` page pairs this against Anti-nero's *effective*
+values (paid-else-stated, scope-filtered) — an asymmetry stated on the
+page itself. *Affects: every /dase and /compare aggregate.*
+
+## 2026-07-27 — ΔΑΣΕ entity keying: co-ops by canonical VAT, awarders by name
+
+Co-op aggregation keys on the canonical VAT (first 8–9-digit run of
+`vat_number`, zero-padded to 9) because the registry stores the same
+co-op under whitespace/spelling variants (VAT 096034999 appears under
+3+ names totalling ≈€2.9M); display names come from the curated
+`dase_contractors` table. Awarding-organization VATs are mis-keyed in
+both directions (090273987 carries both ΥΠΕΝ and ΑΠΔ Θεσσαλίας–Στ.
+Ελλάδας rows; ΑΠΔ ΘΣΕ also appears under 998019451/0998019451), while
+`organization_name` is clean (49 distinct after whitespace/dash
+normalisation) → org aggregates group by normalised name, never VAT.
+*Affects: top/list co-ops, co-op detail pages, awarding-org tables.*
+
+## 2026-07-27 — ΔΑΣΕ contract Π.Ε. derived from the awarding unit
+
+`units_operator_name` (the awarding Δασαρχείο/Δ. Δασών/municipal unit;
+100% filled, 102 distinct values) is the region signal for ΔΑΣΕ
+contracts: folded, trigger-prefix-stripped, exact-matched against the
+curated `forest_authorities.json` aliases → Π.Ε. (48 units,
+1,982/2,164 contracts, 91.6%). The remaining (organization, unit)
+pairs are hand-curated into new `khmdhs/data/dase_units.json` (nested
+org→unit keys because generic unit names like «ΓΡΑΦΕΙΟ ΔΗΜΑΡΧΟΥ» recur
+across municipalities); one genuine registry gap (ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ →
+Π.Ε. Ευρυτανίας) lives there too — NOT in `forest_authorities.json`,
+which feeds the Anti-nero matcher. `nuts_code` is a cross-check only
+(~20% coarse EL/EL5/…; EL611/EL531 span two Π.Ε.). Unmatched, uncurated
+contracts get **no region row** and surface as an explicit
+«unresolved» bucket. Loaded into `dase_contract_regions` by
+`khmdhs/dase_region_loader.py`. *Affects: /dase choropleth, /compare
+per-Π.Ε. split.*

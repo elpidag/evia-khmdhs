@@ -268,7 +268,9 @@ PDFs), `/contractors`, `/contractor/<vat>` (location + ΓΕΜΗ link + mini-map
 of home + project regions + money-per-year paid/stated chart),
 `/authorities`, `/map` (Leaflet flow map, full-exposure convention),
 `/origins`, `/api/{contractors,flows,timeseries,overview}.json`,
-`/pdf/<kind>/<adam>`. Shared paper-map helpers in
+`/pdf/<kind>/<adam>`, plus the ΔΑΣΕ section (`/dase*`, `/compare` — own
+module `dase_queries.py`, second lazy read-only connection; see the
+ΔΑΣΕ dataset section below). Shared paper-map helpers in
 `webui/static/geo_common.js`. **All maps draw the 74 Π.Ε. polygons** in two
 detail levels built from the full-resolution EPSG:2100 Kallikratis
 shapefile (`data/raw/oria_dhmwn_kallikraths/`) via GEOS
@@ -315,13 +317,50 @@ positives), every distinct VAT is human-reviewed into curated
 `khmdhs/data/dase_contractors.json` (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban co-ops
 excluded; registry keying noise: two ΑΦΜ glued with «ΚΑΙ», stray accent
 prefixes, whitespace-variant VAT keys). Uses the shared khmdhs schema
-(scope tables stay empty); nothing touches khmdhs.sqlite or the webui.
+(scope tables stay empty); nothing touches khmdhs.sqlite.
 PDFs not yet fetched — `scripts/fetch_contract_pdfs.py --db
 data/processed/dase.sqlite --cache data/processed/dase_pdf_cache` when
 wanted. CPV quirk: 386 rows carry miskeyed 66519300-4 «ασφαλιστικές
 υπηρεσίες» on υλοτομικά contracts.
 
-## Tests (`tests/`, 186 passing — `.venv/bin/python -m pytest`)
+**Analytics conventions** (DATA_DECISIONS 2026-07-27): aggregates use
+**stated values, deduplicated** — exclude `cancelled=1` (82 rows,
+€2.35M) and non-cancelled rows whose `next_reference_no` resolves
+in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo, no
+multi-successor) → live population **2,018 rows / €41,418,963.96**
+(`dase_queries.live_filter`, the scope_filter analogue). Co-ops key on
+the **canonical VAT** (first 8-9-digit run zfill(9) — same co-op under
+3+ spellings; 096034999 ≈ €1.9M across 12 name variants); awarding
+orgs group by normalised `organization_name`, never VAT (090273987
+carries both ΥΠΕΝ and ΑΠΔ ΘΣΕ rows). **Π.Ε. layer**:
+`khmdhs/dase_region_loader.py` derives each contract's Π.Ε. from
+`units_operator_name` — folded trigger-stripped exact match against
+forest_authorities.json aliases (1,982 contracts) + curated
+`khmdhs/data/dase_units.json` (org→unit keys, exact strings incl.
+Latin-homoglyph «TMHMA»/«OIKONOMIKO»; per-contract `contract_overrides`
+for supra-regional awarders ΟΣΕ/ΓΕΑ/ΑΠΘ/ΕΠΙΘΕΩΡΗΣΗ Μ-Θ, evidence note
+required) → `dase_contract_regions` (2,160/2,164 = 99.8%; the 4 ΑΔΜΗΕ
+power-line contracts span multiple Π.Ε. — honestly unresolved).
+ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ lives in dase_units.json, NOT forest_authorities.json
+(that registry feeds the Anti-nero matcher). `nuts_code` is cross-check
+only (~20% coarse; EL611/EL531 span two Π.Ε.).
+
+**Web UI**: `/dase` (dashboard: KPIs, per-year, size histogram with
+log-interpolated median line, Π.Ε. choropleth via GeoCommon, top-10
+co-ops, orgs/units/procedure/type/CPV tables), `/dase/contracts`,
+`/dase/contractor/<vat>` (canonical-VAT merged), `/dase/contract/<adam>`
+(via the self-guarding `queries.contract_detail`; PDF proxy works for
+ΔΑΣΕ ADAMs unchanged) and `/compare` (Anti-nero vs ΔΑΣΕ: KPI pair with
+basis labels, absolute + %-of-own-total yearly bars, shared-log2-bin
+size-distribution overlay with median markers, per-Π.Ε. paired bars,
+methodology footnotes — Anti-nero €616M effective vs ΔΑΣΕ €41.4M stated
+≈ 14.9×). All SQL in `webui/dase_queries.py` (imports search/bin
+helpers from queries.py; `queries.antinero_yearly` is the one
+khmdhs-side addition). Second sqlite is opened by a **lazy
+`g.dase_conn` accessor** — khmdhs-only routes never touch dase.sqlite
+(tested: khmdhs JSON endpoints byte-identical with the ΔΑΣΕ DB absent).
+
+## Tests (`tests/`, 225 passing — `.venv/bin/python -m pytest`)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

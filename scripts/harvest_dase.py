@@ -39,13 +39,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import requests
 
 from khmdhs import api, db
+from khmdhs.config import DASE_DB
 from khmdhs.dase import classify_name
 
 RAW = Path("data/processed/dase_harvest_raw.json")
 STATE = Path("data/processed/dase_state.json")
 REVIEW = Path("data/processed/dase_review.json")
 CURATED = Path("khmdhs/data/dase_contractors.json")
-DB_PATH = Path("data/processed/dase.sqlite")
+DB_PATH = DASE_DB
 
 START = date(2021, 9, 1)
 WINDOW_DAYS = 150   # ≤5 months — safely under the server's 6-month clamp

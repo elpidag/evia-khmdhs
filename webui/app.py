@@ -10,8 +10,10 @@ from flask import (
     Flask, abort, g, jsonify, redirect, render_template, request, send_file, url_for,
 )
 
-from khmdhs.config import CONTRACT_PDF_URL, DEFAULT_DB, PAYMENT_PDF_URL, PDF_CACHE_DIR
-from webui import filters, queries
+from khmdhs.config import (
+    CONTRACT_PDF_URL, DASE_DB, DEFAULT_DB, PAYMENT_PDF_URL, PDF_CACHE_DIR,
+)
+from webui import dase_queries, filters, queries
 
 # kind -> (ADAM infix, registry attachment URL template)
 _PDF_KINDS = {
@@ -20,21 +22,34 @@ _PDF_KINDS = {
 }
 
 
-def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -> Flask:
+def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None,
+               dase_db_path: Path | None = None) -> Flask:
     app = Flask(__name__, static_folder="static", template_folder="templates")
     app.config["DB_PATH"] = Path(db_path) if db_path else DEFAULT_DB
     app.config["PDF_CACHE_DIR"] = Path(pdf_cache_dir) if pdf_cache_dir else PDF_CACHE_DIR
+    app.config["DASE_DB_PATH"] = Path(dase_db_path) if dase_db_path else DASE_DB
     filters.register(app)
 
     @app.before_request
     def _open_db() -> None:
         g.conn = queries.open_ro(app.config["DB_PATH"])
 
+    def _dase_conn():
+        """Lazy second connection (ΔΑΣΕ dataset). Opened only when a
+        /dase or /compare route asks for it — khmdhs-only routes never
+        touch dase.sqlite."""
+        if "dase_conn" not in g:
+            g.dase_conn = queries.open_ro(app.config["DASE_DB_PATH"])
+        return g.dase_conn
+
     @app.teardown_request
     def _close_db(exc) -> None:
         conn = g.pop("conn", None)
         if conn is not None:
             conn.close()
+        dconn = g.pop("dase_conn", None)
+        if dconn is not None:
+            dconn.close()
 
     @app.route("/")
     def dashboard():
@@ -172,6 +187,68 @@ def create_app(db_path: Path | None = None, pdf_cache_dir: Path | None = None) -
             "origins.html",
             rows=queries.project_region_origins(g.conn),
             coverage=queries.flow_coverage(g.conn),
+        )
+
+    # --- ΔΑΣΕ section (second read-only DB: data/processed/dase.sqlite) ---
+    # Forest-cooperative contracts, stated values deduplicated — entirely
+    # separate dataset; nothing here touches the Anti-nero connection.
+
+    @app.route("/dase")
+    def dase_dashboard():
+        conn = _dase_conn()
+        return render_template(
+            "dase_dashboard.html",
+            kpis=dase_queries.kpis(conn),
+            yearly=dase_queries.yearly_totals(conn),
+            top_coops=dase_queries.top_coops(conn, limit=10),
+            top_orgs=dase_queries.top_orgs(conn, limit=8),
+            top_units=dase_queries.top_units(conn, limit=8),
+            procedures=dase_queries.procedure_mix(conn),
+            types=dase_queries.type_mix(conn),
+            cpvs=dase_queries.cpv_mix(conn, limit=10),
+            histogram=dase_queries.value_histogram(conn),
+            by_pe=dase_queries.money_by_pe(conn),
+        )
+
+    @app.route("/dase/contracts")
+    def dase_contracts_list():
+        conn = _dase_conn()
+        q = (request.args.get("q") or "").strip()
+        if len(q) >= 12 and q[:2].isdigit() and "SYMV" in q.upper():
+            if queries.contract_detail(conn, q) is not None:
+                return redirect(url_for("dase_contract_detail", adam=q))
+        rows = dase_queries.list_contracts(conn, q=q or None)
+        total_eur = sum(r["total_cost_with_vat"] or 0 for r in rows)
+        return render_template("dase_contracts.html", rows=rows, q=q,
+                               total_eur=total_eur)
+
+    @app.route("/dase/contractor/<vat>")
+    def dase_contractor_detail(vat: str):
+        conn = _dase_conn()
+        summary = dase_queries.coop_summary(conn, vat)
+        if summary is None:
+            abort(404)
+        return render_template(
+            "dase_contractor.html",
+            summary=summary,
+            contracts=dase_queries.coop_contracts(conn, vat),
+            yearly=dase_queries.coop_yearly(conn, vat),
+            units=dase_queries.coop_units(conn, vat),
+        )
+
+    @app.route("/dase/contract/<adam>")
+    def dase_contract_detail(adam: str):
+        conn = _dase_conn()
+        d = queries.contract_detail(conn, adam)
+        if d is None:
+            abort(404)
+        return render_template("dase_contract.html", c=d)
+
+    @app.route("/compare")
+    def compare():
+        return render_template(
+            "compare.html",
+            cmp=dase_queries.compare_payload(g.conn, _dase_conn()),
         )
 
     @app.route("/pdf/<kind>/<adam>")

@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+{% block title %}ΔΑΣΕ{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>ΔΑΣΕ — Forest Labour Cooperatives</h1>
+  <p class="muted">Every public contract since 09/2021 whose contractor is a forest
+    labour cooperative (ΔΑ.Σ.Ε./ΑΔΣΕ, ν.4423/2016) — a separate dataset from the
+    Anti-nero programme. Stated contract values.</p>
+</hgroup>
+
+<section class="kpis">
+  <div class="kpi">
+    <span class="kpi-label">Total (stated)</span>
+    <span class="kpi-value">{{ kpis.total_eur | eur_short }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Contracts</span>
+    <span class="kpi-value">{{ kpis.n_contracts }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Cooperatives</span>
+    <span class="kpi-value">{{ kpis.n_coops }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Awarding Units</span>
+    <span class="kpi-value">{{ kpis.n_units }}</span>
+  </div>
+  <div class="kpi {% if kpis.pct_direct >= 80 %}kpi-warning{% endif %}">
+    <span class="kpi-label">Direct Award</span>
+    <span class="kpi-value">{{ kpis.pct_direct | gr_number(1) }} %</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Median Contract</span>
+    <span class="kpi-value">{{ kpis.median_eur | eur_short }}</span>
+  </div>
+</section>
+
+<div class="grid">
+  <section class="section">
+    <h2>€ per Year</h2>
+    <p class="muted"><small>Stated value by contract signature year.</small></p>
+    <div class="chart-wrap">
+      <canvas id="daseYearChart"></canvas>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Contract Sizes</h2>
+    <p class="muted"><small>{{ histogram.n }} contracts on doubling (log-2) bins ·
+      median {{ histogram.median | eur }}.</small></p>
+    <div class="chart-wrap">
+      <canvas id="daseHistChart"></canvas>
+    </div>
+  </section>
+</div>
+
+<section class="section">
+  <h2>Where the Work Is</h2>
+  <p class="muted"><small>Stated € per Π.Ε., derived from the awarding
+    Δασαρχείο / Δ/νση Δασών / municipal unit of each contract.
+    {% if by_pe.unresolved.n %}{{ by_pe.unresolved.n }} contract(s)
+    ({{ by_pe.unresolved.eur | eur_short }}) span multiple Π.Ε. (power-line
+    corridors) and are honestly unmapped.{% endif %}</small></p>
+  <div id="daseMap" class="gc-map" style="height: 480px;"></div>
+</section>
+
+<section class="section">
+  <h2>Top 10 Cooperatives by Value</h2>
+  <div class="chart-wrap">
+    <canvas id="daseCoopChart"></canvas>
+  </div>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>Cooperative</th>
+        <th>VAT</th>
+        <th class="num">Contracts</th>
+        <th class="num">Units</th>
+        <th class="num">Total (stated)</th>
+        <th class="center">% Direct</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in top_coops %}
+      <tr>
+        <td><a href="{{ url_for('dase_contractor_detail', vat=r.vat) }}">{{ r.name }}</a></td>
+        <td class="tabular">{{ r.vat }}</td>
+        <td class="num">{{ r.n_contracts }}</td>
+        <td class="num">{{ r.n_units }}</td>
+        <td class="num">{{ r.total_eur | eur }}</td>
+        <td class="center"><span class="{{ r.pct_direct | redflag_class }}">{{ r.pct_direct | gr_number(1) }} %</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<div class="grid">
+  <section class="section">
+    <h2>Who Awards the Money</h2>
+    <p class="muted"><small>Grouped by organization name — registry VATs are
+      mis-keyed across bodies.</small></p>
+    <table class="compact striped">
+      <thead>
+        <tr><th>Organization</th><th class="num">Contr.</th><th class="num">Value</th></tr>
+      </thead>
+      <tbody>
+        {% for r in top_orgs %}
+        <tr>
+          <td>{{ r.name }}</td>
+          <td class="num">{{ r.n_contracts }}</td>
+          <td class="num">{{ r.total_eur | eur_short }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>Busiest Awarding Units</h2>
+    <table class="compact striped">
+      <thead>
+        <tr><th>Unit</th><th class="num">Contr.</th><th class="num">Value</th></tr>
+      </thead>
+      <tbody>
+        {% for r in top_units %}
+        <tr>
+          <td>{{ r.name }}</td>
+          <td class="num">{{ r.n_contracts }}</td>
+          <td class="num">{{ r.total_eur | eur_short }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<div class="grid">
+  <section class="section">
+    <h2>How They Were Awarded</h2>
+    <table class="compact striped">
+      <thead>
+        <tr><th>Procedure</th><th class="num">Contr.</th><th class="num">Value</th></tr>
+      </thead>
+      <tbody>
+        {% for r in procedures %}
+        <tr>
+          <td>{{ r.label }}</td>
+          <td class="num">{{ r.n_contracts }}</td>
+          <td class="num">{{ r.eur | eur_short }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h2>What Kind of Contracts</h2>
+    <table class="compact striped">
+      <thead>
+        <tr><th>Type</th><th class="num">Contr.</th><th class="num">Value</th></tr>
+      </thead>
+      <tbody>
+        {% for r in types %}
+        <tr>
+          <td>{{ r.label }}</td>
+          <td class="num">{{ r.n_contracts }}</td>
+          <td class="num">{{ r.eur | eur_short }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2>What the Work Is (CPV)</h2>
+    <p class="muted"><small>Υλοτομία/καυσόξυλα dominate by count; αντιδιαβρωτικά /
+      αντιπλημμυρικά έργα carry the big euros.</small></p>
+    <table class="compact striped">
+      <thead>
+        <tr><th>CPV</th><th>Description</th><th class="num">Contr.</th></tr>
+      </thead>
+      <tbody>
+        {% for r in cpvs %}
+        <tr>
+          <td class="tabular">{{ r.cpv }}</td>
+          <td>{{ r.label or '—' }}
+            {% if r.noise %}<span class="pill-warn"
+              title="386 υλοτομικά contracts carry this insurance CPV — a registry keying error, not insurance services">καταχώριση-θόρυβος</span>{% endif %}
+          </td>
+          <td class="num">{{ r.n_contracts }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='geo_common.js') }}"></script>
+<script>
+  const css = getComputedStyle(document.documentElement);
+  const textColor = css.getPropertyValue('--pico-color').trim() || '#222';
+  const gridColor = css.getPropertyValue('--pico-muted-border-color').trim() || '#ccc';
+  const brand = css.getPropertyValue('--brand').trim() || '#1f6feb';
+  const green = '#1b8e54';
+
+  const fmtEur = n => new Intl.NumberFormat('el-GR',
+    { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+
+  // --- € per year --------------------------------------------------------
+  const yearly = {{ yearly | tojson }};
+  new Chart(document.getElementById('daseYearChart'), {
+    type: 'bar',
+    data: {
+      labels: yearly.map(b => b.year),
+      datasets: [{ label: 'Stated € (signed that year)',
+                   data: yearly.map(b => b.eur),
+                   backgroundColor: green, borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+                 tooltip: { callbacks: {
+                   label: ctx => fmtEur(ctx.parsed.y) + ' · ' +
+                                 yearly[ctx.dataIndex].n + ' contracts' } } },
+      scales: {
+        x: { ticks: { color: textColor }, grid: { display: false } },
+        y: { ticks: { color: textColor,
+                      callback: v => new Intl.NumberFormat('el-GR',
+                        { notation: 'compact' }).format(v) + ' €' },
+             grid: { color: gridColor } }
+      }
+    }
+  });
+
+  // --- size histogram (log-2 bins, median marker) -------------------------
+  const hist = {{ histogram | tojson }};
+  const medianLine = {
+    id: 'medianLine',
+    afterDraw(chart) {
+      const x = chart.scales.x, y = chart.scales.y, c = chart.ctx;
+      const e = hist.edges, m = hist.median;
+      let i = e.length - 1;
+      for (let k = 0; k < e.length - 1; k++)
+        if (m >= e[k] && m < e[k + 1]) { i = k; break; }
+      const lo = Math.max(1, e[i]), hi = e[i + 1] || e[i] * 2;
+      const frac = Math.min(1, Math.max(0,
+        Math.log(Math.max(m, 1) / lo) / Math.log(hi / lo)));
+      const bw = x.getPixelForValue(1) - x.getPixelForValue(0);
+      const px = x.getPixelForValue(i) + (frac - 0.5) * bw;
+      c.save();
+      c.strokeStyle = textColor; c.setLineDash([5, 4]);
+      c.beginPath(); c.moveTo(px, y.top); c.lineTo(px, y.bottom); c.stroke();
+      c.fillStyle = textColor; c.font = '11px sans-serif'; c.textAlign = 'left';
+      c.fillText('median', px + 4, y.top + 12);
+      c.restore();
+    }
+  };
+  new Chart(document.getElementById('daseHistChart'), {
+    type: 'bar',
+    data: { labels: hist.labels,
+            datasets: [{ label: 'Contracts', data: hist.counts,
+                         backgroundColor: brand, borderRadius: 3 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: textColor, autoSkip: false,
+                      maxRotation: 60, minRotation: 45 },
+             grid: { display: false } },
+        y: { ticks: { color: textColor, precision: 0 }, grid: { color: gridColor },
+             title: { display: true, text: 'contracts', color: textColor } }
+      }
+    },
+    plugins: [medianLine]
+  });
+
+  // --- top-10 co-ops ------------------------------------------------------
+  const coops = {{ top_coops | tojson }};
+  new Chart(document.getElementById('daseCoopChart'), {
+    type: 'bar',
+    data: { labels: coops.map(c => c.name),
+            datasets: [{ label: 'Stated € ', data: coops.map(c => c.total_eur),
+                         backgroundColor: green, borderRadius: 4 }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+                 tooltip: { callbacks: { label: ctx => fmtEur(ctx.parsed.x) } } },
+      scales: {
+        x: { ticks: { color: textColor,
+                      callback: v => new Intl.NumberFormat('el-GR',
+                        { notation: 'compact' }).format(v) + ' €' },
+             grid: { color: gridColor } },
+        y: { ticks: { color: textColor, autoSkip: false } }
+      },
+      onClick: (_evt, els) => {
+        if (!els.length) return;
+        window.location = '/dase/contractor/' + coops[els[0].index].vat;
+      }
+    }
+  });
+
+  // --- Π.Ε. choropleth ----------------------------------------------------
+  (async function () {
+    const byPe = {{ by_pe | tojson }};
+    const geo = await (await fetch(
+      "{{ url_for('static', filename='greek_pe.geojson') }}")).json();
+    const G = GeoCommon;
+    const map = G.initPaperMap('daseMap', { locked: true });
+    const tip = G.pinnedTip(map);
+    const vals = new Map(byPe.regions.map(r => [r.pe, r]));
+    const maxV = Math.max(1, ...byPe.regions.map(r => r.eur));
+    const choro = G.makeChoro(G.RAMP_WORKS, maxV);
+    G.addRegions(map, geo,
+      pe => choro((vals.get(pe) || {}).eur || 0),
+      (pe, name) => {
+        const r = vals.get(pe);
+        return G.regionTooltip(pe, r
+          ? [G.fmtEurShort(r.eur) + ' stated', G.fmtInt(r.n_contracts) + ' contracts']
+          : ['no ΔΑΣΕ contracts']);
+      },
+      null, tip);
+  })();
+</script>
+{% endblock %}

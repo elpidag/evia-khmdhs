@@ -10,6 +10,9 @@ DEFAULT_INPUT = DATA_RAW / "contracts_search_results.xlsx"
 DEFAULT_OUTPUT = DATA_PROCESSED / "contracts_search_results_enriched.xlsx"
 DEFAULT_DB = DATA_PROCESSED / "khmdhs.sqlite"
 PDF_CACHE_DIR = DATA_PROCESSED / "pdf_cache"
+# Standalone ΔΑΣΕ (forest-cooperative contracts) dataset — never mixed
+# with the Anti-nero DB above.
+DASE_DB = DATA_PROCESSED / "dase.sqlite"
 DEFAULT_LOG = LOGS_DIR / "enrich_contracts.log"
 
 API_BASE = "https://cerpp.eprocurement.gov.gr/khmdhs-opendata"

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}{{ summary.name }}{% endblock %}
+
+{% block content %}
+<p class="muted">
+  <a href="{{ url_for('dase_dashboard') }}">← ΔΑΣΕ dashboard</a>
+</p>
+
+<hgroup>
+  <h1>{{ summary.name }}</h1>
+  <p class="muted tabular">VAT {{ summary.vat }}
+    {% if summary.form %} · form: {{ {'dase': 'ΔΑ.Σ.Ε.', 'adse': 'ΑΔΣΕ (αναγκαστικός)',
+        'edase': 'ΕΔΑΣΕ', 'daseragikos': 'δασεργατικός συνεταιρισμός'}.get(summary.form, summary.form) }}{% endif %}
+    · forest labour cooperative</p>
+</hgroup>
+
+<dl class="summary-card">
+  <div>
+    <dt>Total (stated, live versions)</dt>
+    <dd>{{ summary.total_eur | eur }}</dd>
+  </div>
+  <div>
+    <dt>Contracts</dt>
+    <dd>{{ summary.n_live }}</dd>
+  </div>
+  <div>
+    <dt>Active</dt>
+    <dd>{{ (summary.first_date or '—')[:10] }} → {{ (summary.last_date or '—')[:10] }}</dd>
+  </div>
+  {% if summary.name_variants | length > 1 %}
+  <div>
+    <dt>Registry spellings ({{ summary.name_variants | length }})</dt>
+    <dd><small class="muted">{{ summary.name_variants | join(' · ') }}</small></dd>
+  </div>
+  {% endif %}
+</dl>
+
+{% if yearly %}
+<section class="section">
+  <h2>Stated € per Year</h2>
+  <div class="cd-chart">
+    <canvas id="yearChart"></canvas>
+  </div>
+</section>
+{% endif %}
+
+{% if units %}
+<section class="section">
+  <h2>Awarding Units</h2>
+  <table class="compact striped">
+    <thead>
+      <tr><th>Unit</th><th>Organization</th><th class="num">Contracts</th><th class="num">Value</th></tr>
+    </thead>
+    <tbody>
+      {% for u in units %}
+      <tr>
+        <td>{{ u.unit or '—' }}</td>
+        <td class="muted"><small>{{ u.org or '—' }}</small></td>
+        <td class="num">{{ u.n_contracts }}</td>
+        <td class="num">{{ u.total_eur | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+<section class="section">
+  <h2>Contracts ({{ contracts | length }})</h2>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>ADAM</th>
+        <th>Signed</th>
+        <th>Title</th>
+        <th>Awarding Unit</th>
+        <th class="num">Value (incl. VAT)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in contracts %}
+      <tr>
+        <td class="tabular"><a href="{{ url_for('dase_contract_detail', adam=r.reference_number) }}">{{ r.reference_number }}</a></td>
+        <td class="tabular muted">{{ r.contract_signed_date or '—' }}</td>
+        <td>{{ r.title or '(untitled)' }}</td>
+        <td class="muted"><small>{{ r.units_operator_name or '—' }}</small></td>
+        <td class="num">{{ r.total_cost_with_vat | eur }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% if yearly %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const css = getComputedStyle(document.documentElement);
+  const textColor = css.getPropertyValue('--pico-color').trim() || '#222';
+  const gridColor = css.getPropertyValue('--pico-muted-border-color').trim() || '#ccc';
+  const yearly = {{ yearly | tojson }};
+  new Chart(document.getElementById('yearChart'), {
+    type: 'bar',
+    data: {
+      labels: yearly.map(b => b.year),
+      datasets: [{ label: 'Stated €', data: yearly.map(b => b.eur),
+                   backgroundColor: '#1b8e54', borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+                 tooltip: { callbacks: {
+                   label: ctx => new Intl.NumberFormat('el-GR',
+                     { style: 'currency', currency: 'EUR',
+                       maximumFractionDigits: 0 }).format(ctx.parsed.y) +
+                     ' · ' + yearly[ctx.dataIndex].n + ' contracts' } } },
+      scales: {
+        x: { ticks: { color: textColor }, grid: { display: false } },
+        y: { ticks: { color: textColor,
+                      callback: v => new Intl.NumberFormat('el-GR',
+                        { notation: 'compact' }).format(v) + ' €' },
+             grid: { color: gridColor } }
+      }
+    }
+  });
+</script>
+{% endif %}
+{% endblock %}

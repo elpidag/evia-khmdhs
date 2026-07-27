@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+{% block title %}Anti-nero vs ΔΑΣΕ{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>Anti-nero vs ΔΑΣΕ — Who Gets the Forest Money?</h1>
+  <p class="muted">The RRF-funded Anti-nero programme (large contractors, ΤΑΙΠΕΔ
+    fast-track) side by side with every contract won by Greece's forest labour
+    cooperatives (ΔΑ.Σ.Ε.) since 09/2021 — the traditional Δασαρχείο-to-co-op
+    channel for the same kind of forest work.</p>
+</hgroup>
+
+<div class="grid">
+  <section class="section cmp-card cmp-antinero">
+    <h2>Anti-nero</h2>
+    <p class="cmp-big">{{ cmp.antinero.total_eur | eur_short }}</p>
+    <p class="muted"><small>effective € (payments where they exist, stated value
+      otherwise) · in-scope contracts only</small></p>
+    <ul class="cmp-facts">
+      <li><strong>{{ cmp.antinero.n_contracts }}</strong> contracts</li>
+      <li><strong>{{ cmp.antinero.n_contractors }}</strong> contractors — mostly large construction groups</li>
+      <li>mean contract <strong>{{ cmp.antinero.mean_eur | eur_short }}</strong></li>
+      <li>median contract <strong>{{ cmp.antinero.median_eur | eur_short }}</strong></li>
+      <li>direct award <strong>{{ cmp.antinero.pct_direct | gr_number(1) }} %</strong></li>
+    </ul>
+  </section>
+
+  <section class="section cmp-card cmp-dase">
+    <h2>ΔΑΣΕ (forest co-ops)</h2>
+    <p class="cmp-big">{{ cmp.dase.total_eur | eur_short }}</p>
+    <p class="muted"><small>stated € · no payment data harvested</small></p>
+    <ul class="cmp-facts">
+      <li><strong>{{ cmp.dase.n_contracts }}</strong> contracts</li>
+      <li><strong>{{ cmp.dase.n_coops }}</strong> cooperatives across {{ cmp.dase.n_units }} awarding units</li>
+      <li>mean contract <strong>{{ cmp.dase.mean_eur | eur_short }}</strong></li>
+      <li>median contract <strong>{{ cmp.dase.median_eur | eur_short }}</strong></li>
+      <li>direct award <strong>{{ cmp.dase.pct_direct | gr_number(1) }} %</strong></li>
+    </ul>
+  </section>
+</div>
+
+{% set money_pct = (100.0 * cmp.dase.total_eur / cmp.antinero.total_eur)
+                   if cmp.antinero.total_eur else 0 %}
+{% set median_pct = (100.0 * cmp.dase.median_eur / cmp.antinero.median_eur)
+                    if cmp.antinero.median_eur else 0 %}
+<section class="section gap-visual">
+  <h2>The Gap, to Scale</h2>
+  <div class="gap-row">
+    <span class="gap-label">Total money</span>
+    <div class="gap-track">
+      <div class="gap-bar gap-anti" style="width: 100%">
+        <span>Anti-nero {{ cmp.antinero.total_eur | eur_short }}</span>
+      </div>
+      <div class="gap-bar gap-dase" style="width: {{ '%.2f' | format(money_pct) }}%"></div>
+      <span class="gap-note">ΔΑΣΕ {{ cmp.dase.total_eur | eur_short }} —
+        ≈{{ cmp.ratio | gr_number(1) }}× less</span>
+    </div>
+  </div>
+  <div class="gap-row">
+    <span class="gap-label">Median contract</span>
+    <div class="gap-track">
+      <div class="gap-bar gap-anti" style="width: 100%">
+        <span>Anti-nero {{ cmp.antinero.median_eur | eur_short }}</span>
+      </div>
+      <div class="gap-bar gap-dase" style="width: {{ '%.2f' | format(median_pct) }}%"></div>
+      <span class="gap-note">ΔΑΣΕ {{ cmp.dase.median_eur | eur_short }} —
+        ≈{{ ((cmp.antinero.median_eur / cmp.dase.median_eur) if cmp.dase.median_eur else 0) | gr_number(0) }}× less</span>
+    </div>
+  </div>
+  <p class="muted"><small>Both green bars are drawn to true scale against the
+    orange ones — the entire forest-cooperative sector, all public buyers
+    combined, next to one programme.</small></p>
+</section>
+
+<section class="section">
+  <h2>€ per Year, Side by Side</h2>
+  <p class="muted"><small>Anti-nero: payments per payment year, plus the stated
+    value of not-yet-paid contracts on their signature year. ΔΑΣΕ: stated value
+    on the signature year. Left chart: absolute € (the gap). Right chart: each
+    dataset as % of its own total (the shape — co-op work is steady, Anti-nero
+    ramps up with the RRF).</small></p>
+  <div class="grid">
+    <div class="chart-wrap"><canvas id="cmpYearAbs"></canvas></div>
+    <div class="chart-wrap"><canvas id="cmpYearShare"></canvas></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Contract Sizes — Two Different Worlds</h2>
+  <p class="muted"><small>Share of each dataset's contracts per size bin
+    (doubling/log-2 bins, shared axis). {{ cmp.hist.antinero_n }} Anti-nero vs
+    {{ cmp.hist.dase_n }} ΔΑΣΕ contracts; dashed lines mark each median
+    ({{ cmp.hist.antinero_median | eur_short }} vs
+    {{ cmp.hist.dase_median | eur_short }}). The distributions barely overlap:
+    co-ops live below ~€65k, Anti-nero lots start where co-op contracts end.</small></p>
+  <div class="chart-wrap">
+    <canvas id="cmpHist"></canvas>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Same Regions, Different Channels</h2>
+  <p class="muted"><small>Top regions by combined money — Anti-nero € (effective,
+    split evenly across a contract's project regions) next to ΔΑΣΕ € (stated, by
+    the awarding unit's region).</small></p>
+  <div class="chart-wrap" style="min-height: 460px;">
+    <canvas id="cmpPeChart"></canvas>
+  </div>
+  <details class="ft-details">
+    <summary>All regions (table)</summary>
+    <table class="compact striped">
+      <thead>
+        <tr>
+          <th>Π.Ε.</th>
+          <th class="num">Anti-nero €</th>
+          <th class="num">Anti-nero contracts</th>
+          <th class="num">ΔΑΣΕ €</th>
+          <th class="num">ΔΑΣΕ contracts</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in cmp.by_pe %}
+        <tr>
+          <td>{{ r.pe }}</td>
+          <td class="num">{{ r.antinero_eur | eur_short }}</td>
+          <td class="num">{{ r.antinero_n }}</td>
+          <td class="num">{{ r.dase_eur | eur_short }}</td>
+          <td class="num">{{ r.dase_n }}</td>
+        </tr>
+        {% endfor %}
+        {% if cmp.dase_unresolved.n %}
+        <tr>
+          <td class="muted"><em>unresolved (multi-Π.Ε. power-line works)</em></td>
+          <td class="num">—</td><td class="num">—</td>
+          <td class="num">{{ cmp.dase_unresolved.eur | eur_short }}</td>
+          <td class="num">{{ cmp.dase_unresolved.n }}</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </details>
+</section>
+
+<section class="section">
+  <h2>Methodology &amp; Caveats</h2>
+  <small class="muted">
+    <ul>
+      <li><strong>Valuation asymmetry:</strong> Anti-nero figures are <em>effective</em>
+        (sum of non-cancelled payment orders where any exist, stated value otherwise);
+        ΔΑΣΕ figures are <em>stated</em> contract values only — payment orders have not
+        been harvested for that dataset yet. Effective values can run below stated for
+        works still in progress.</li>
+      <li><strong>Different universes:</strong> Anti-nero is one programme (ΥΠΕΝ, RRF
+        Action 16849, umbrella pass-throughs excluded); the ΔΑΣΕ dataset is
+        contractor-defined — every public contract of every buyer whose contractor is a
+        curated forest labour cooperative, 09/2021 → today.</li>
+      <li><strong>Deduplication:</strong> ΔΑΣΕ aggregates exclude cancelled rows and rows
+        superseded by a stored amendment; Anti-nero uses its scope/supersede curation.</li>
+      <li><strong>Regions:</strong> Anti-nero project regions are hand-curated from
+        titles/PDFs and split evenly across multi-region contracts; ΔΑΣΕ regions come
+        from the awarding unit (Δασαρχείο/Δ. Δασών/municipality), {{ cmp.dase_unresolved.n }}
+        multi-region contracts honestly unresolved.</li>
+      <li><strong>Consortiums:</strong> where a contract has several partners its value
+        counts in full for each (max-exposure convention, same as the rest of the site).</li>
+    </ul>
+  </small>
+</section>
+
+<style>
+.cmp-card h2 { margin-bottom: 0.2rem; }
+.cmp-big { font-size: 2.2rem; font-weight: 700; margin: 0.1rem 0 0.2rem; }
+.cmp-antinero { border-top: 4px solid #cc5803; }
+.cmp-antinero .cmp-big { color: #cc5803; }
+.cmp-dase { border-top: 4px solid #1b8e54; }
+.cmp-dase .cmp-big { color: #1b8e54; }
+.cmp-facts { margin: 0.4rem 0 0; padding-left: 1.1rem; }
+.cmp-facts li { margin-bottom: 0.15rem; }
+.gap-row { display: flex; align-items: flex-start; gap: 0.8rem; margin: 0.9rem 0; }
+.gap-label { flex: 0 0 9rem; font-weight: 600; padding-top: 0.15rem; }
+.gap-track { flex: 1; min-width: 0; }
+.gap-bar { border-radius: 4px; height: 1.7rem; margin-bottom: 0.25rem;
+           display: flex; align-items: center; white-space: nowrap; }
+.gap-bar span { color: #fff; font-size: 0.8rem; font-weight: 600; padding-left: 0.6rem; }
+.gap-anti { background: #cc5803; }
+.gap-dase { background: #1b8e54; min-width: 3px; height: 1.1rem; display: inline-block; vertical-align: middle; }
+.gap-note { font-size: 0.8rem; font-weight: 600; color: #1b8e54;
+            margin-left: 0.5rem; vertical-align: middle; }
+@media (max-width: 640px) { .gap-row { flex-direction: column; gap: 0.2rem; } }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const cmp = {{ cmp | tojson }};
+  const css = getComputedStyle(document.documentElement);
+  const textColor = css.getPropertyValue('--pico-color').trim() || '#222';
+  const gridColor = css.getPropertyValue('--pico-muted-border-color').trim() || '#ccc';
+  const C_ANTI = '#cc5803', C_DASE = '#1b8e54';
+  const fmtCompact = v => new Intl.NumberFormat('el-GR', { notation: 'compact' }).format(v) + ' €';
+  const fmtEur = n => new Intl.NumberFormat('el-GR',
+    { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+
+  const commonOpts = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: textColor } } },
+  };
+
+  // --- yearly absolute ---------------------------------------------------
+  new Chart(document.getElementById('cmpYearAbs'), {
+    type: 'bar',
+    data: {
+      labels: cmp.years,
+      datasets: [
+        { label: 'Anti-nero (effective)', data: cmp.yearly.antinero,
+          backgroundColor: C_ANTI, borderRadius: 3 },
+        { label: 'ΔΑΣΕ (stated)', data: cmp.yearly.dase,
+          backgroundColor: C_DASE, borderRadius: 3 },
+      ]
+    },
+    options: Object.assign({}, commonOpts, {
+      plugins: Object.assign({}, commonOpts.plugins, {
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtEur(ctx.parsed.y) } },
+        title: { display: true, text: 'Absolute €', color: textColor },
+      }),
+      scales: {
+        x: { ticks: { color: textColor }, grid: { display: false } },
+        y: { ticks: { color: textColor, callback: fmtCompact }, grid: { color: gridColor } }
+      }
+    })
+  });
+
+  // --- yearly share-of-own-total ------------------------------------------
+  const sumA = cmp.yearly.antinero.reduce((a, b) => a + b, 0) || 1;
+  const sumD = cmp.yearly.dase.reduce((a, b) => a + b, 0) || 1;
+  new Chart(document.getElementById('cmpYearShare'), {
+    type: 'bar',
+    data: {
+      labels: cmp.years,
+      datasets: [
+        { label: 'Anti-nero', data: cmp.yearly.antinero.map(v => 100 * v / sumA),
+          backgroundColor: C_ANTI, borderRadius: 3 },
+        { label: 'ΔΑΣΕ', data: cmp.yearly.dase.map(v => 100 * v / sumD),
+          backgroundColor: C_DASE, borderRadius: 3 },
+      ]
+    },
+    options: Object.assign({}, commonOpts, {
+      plugins: Object.assign({}, commonOpts.plugins, {
+        tooltip: { callbacks: { label: ctx =>
+          ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1).replace('.', ',') + ' % of its own total' } },
+        title: { display: true, text: '% of each dataset’s own total', color: textColor },
+      }),
+      scales: {
+        x: { ticks: { color: textColor }, grid: { display: false } },
+        y: { ticks: { color: textColor, callback: v => v + ' %' }, grid: { color: gridColor } }
+      }
+    })
+  });
+
+  // --- size distribution overlay + median markers --------------------------
+  const H = cmp.hist;
+  const edges = H.edges;
+  function medianX(scaleX, m) {
+    let i = edges.length - 1;
+    for (let k = 0; k < edges.length - 1; k++)
+      if (m >= edges[k] && m < edges[k + 1]) { i = k; break; }
+    const lo = Math.max(1, edges[i]), hi = edges[i + 1] || edges[i] * 2;
+    const frac = Math.min(1, Math.max(0, Math.log(Math.max(m, 1) / lo) / Math.log(hi / lo)));
+    const bw = scaleX.getPixelForValue(1) - scaleX.getPixelForValue(0);
+    return scaleX.getPixelForValue(i) + (frac - 0.5) * bw;
+  }
+  const medianLines = {
+    id: 'medianLines',
+    afterDraw(chart) {
+      const x = chart.scales.x, y = chart.scales.y, c = chart.ctx;
+      [[H.dase_median, C_DASE, 'ΔΑΣΕ median'],
+       [H.antinero_median, C_ANTI, 'Anti-nero median']].forEach(([m, col, lab]) => {
+        const px = medianX(x, m);
+        c.save();
+        c.strokeStyle = col; c.setLineDash([5, 4]); c.lineWidth = 1.5;
+        c.beginPath(); c.moveTo(px, y.top); c.lineTo(px, y.bottom); c.stroke();
+        c.fillStyle = col; c.font = '11px sans-serif'; c.textAlign = 'left';
+        c.fillText(lab, px + 4, y.top + 12);
+        c.restore();
+      });
+    }
+  };
+  new Chart(document.getElementById('cmpHist'), {
+    type: 'bar',
+    data: {
+      labels: H.labels,
+      datasets: [
+        { label: 'ΔΑΣΕ (% of its contracts)', data: H.dase_pct,
+          backgroundColor: C_DASE + 'cc', borderRadius: 3 },
+        { label: 'Anti-nero (% of its contracts)', data: H.antinero_pct,
+          backgroundColor: C_ANTI + 'cc', borderRadius: 3 },
+      ]
+    },
+    options: Object.assign({}, commonOpts, {
+      plugins: Object.assign({}, commonOpts.plugins, {
+        tooltip: { callbacks: { label: ctx =>
+          ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1).replace('.', ',') + ' %' } },
+      }),
+      scales: {
+        x: { ticks: { color: textColor, autoSkip: false, maxRotation: 60, minRotation: 45 },
+             grid: { display: false } },
+        y: { ticks: { color: textColor, callback: v => v + ' %' }, grid: { color: gridColor },
+             title: { display: true, text: '% of dataset’s contracts', color: textColor } }
+      }
+    }),
+    plugins: [medianLines]
+  });
+
+  // --- per-Π.Ε. paired bars -------------------------------------------------
+  const TOP_N = 15;
+  const pe = cmp.by_pe.slice(0, TOP_N);
+  new Chart(document.getElementById('cmpPeChart'), {
+    type: 'bar',
+    data: {
+      labels: pe.map(r => r.pe.replace('Π.Ε. ', '')),
+      datasets: [
+        { label: 'Anti-nero € (split)', data: pe.map(r => r.antinero_eur),
+          backgroundColor: C_ANTI, borderRadius: 3 },
+        { label: 'ΔΑΣΕ € (stated)', data: pe.map(r => r.dase_eur),
+          backgroundColor: C_DASE, borderRadius: 3 },
+      ]
+    },
+    options: Object.assign({}, commonOpts, {
+      indexAxis: 'y',
+      plugins: Object.assign({}, commonOpts.plugins, {
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtEur(ctx.parsed.x) } },
+      }),
+      scales: {
+        x: { ticks: { color: textColor, callback: fmtCompact }, grid: { color: gridColor } },
+        y: { ticks: { color: textColor, autoSkip: false } }
+      }
+    })
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}ΔΑΣΕ Contracts{% endblock %}
+
+{% block content %}
+<hgroup>
+  <h1>ΔΑΣΕ Contracts</h1>
+  <p class="muted">
+    {{ rows | length }} contract(s){% if q %} for «{{ q }}»{% endif %} ·
+    {{ total_eur | eur_short }} stated ·
+    forest-cooperative dataset — separate from Anti-nero
+  </p>
+</hgroup>
+
+<form action="{{ url_for('dase_contracts_list') }}" method="get" role="search" class="grid">
+  <input type="search" name="q" value="{{ q }}"
+         placeholder="Search ADAM, title, co-op, Δασαρχείο or organization… (e.g. Νευροκοπίου, ΔΑΣΕ ΣΤΑΥΡΟΥ, 26SYMV0194…)"
+         aria-label="Search ΔΑΣΕ contracts">
+  <button type="submit">Search</button>
+</form>
+
+{% if rows %}
+<table class="compact striped">
+  <thead>
+    <tr>
+      <th>ADAM</th>
+      <th>Signed</th>
+      <th>Title</th>
+      <th>Cooperative</th>
+      <th>Awarding Unit</th>
+      <th class="num">Value (incl. VAT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td class="tabular"><a href="{{ url_for('dase_contract_detail', adam=r.reference_number) }}">{{ r.reference_number }}</a></td>
+      <td class="tabular muted">{{ r.contract_signed_date or '—' }}</td>
+      <td>
+        <a href="{{ url_for('dase_contract_detail', adam=r.reference_number) }}">{{ r.title or '(untitled)' }}</a>
+      </td>
+      <td class="muted"><small>{{ r.contractor_names or '—' }}</small></td>
+      <td class="muted"><small>{{ r.units_operator_name or '—' }}</small></td>
+      <td class="num">{{ r.total_cost_with_vat | eur }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p class="muted">No ΔΑΣΕ contracts match «{{ q }}». The search covers ADAM numbers,
+  titles, cooperative names, awarding units and organizations, ignoring case and accents.</p>
+{% endif %}
+{% endblock %}

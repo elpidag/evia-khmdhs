@@ -1,0 +1,151 @@
+{
+  "_comment": "Curated Π.Ε. for ΔΑΣΕ awarding units that the forest_authorities.json registry does not cover (DATA_DECISIONS 2026-07-27). Keys are whitespace-collapsed organization_name → units_operator_name exactly as stored in dase.sqlite (incl. Latin homoglyphs like 'TMHMA'/'OIKONOMIKO' and the en-dash in 'ΜΑΚΕΔΟΝΙΑΣ – ΘΡΑΚΗΣ'). Municipal/regional units pin to their municipality's Π.Ε.; ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ is a genuine registry gap kept HERE (adding it to forest_authorities.json would feed the Anti-nero matcher). contract_overrides carry per-contract evidence for supra-regional awarders. ΑΔΜΗΕ's 4 transmission-line contracts stay unresolved on purpose: the works span multiple Π.Ε. (Γ.Μ. Λαμία–Πτολεμαΐδα, Θεσσαλονίκη–Αμύνταιο).",
+  "units": {
+    "ΠΕΡΙΦΕΡΕΙΑ ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΔΙΟΙΚΗΤΙΚΟΥ-ΟΙΚΟΝΟΜΙΚΟΥ ΠΕ ΕΥΒΟΙΑΣ": {"region_pe": "Π.Ε. Ευβοίας", "note": "unit names the Π.Ε.; nuts EL642"}
+    },
+    "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΗΛΕΙΑΣ": {"region_pe": "Π.Ε. Ηλείας", "note": "ΔΔ not in the Anti-nero registry; nuts EL633"},
+      "ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ": {"region_pe": "Π.Ε. Ευρυτανίας", "note": "registry gap — Φουρνά, Ευρυτανία; nuts EL643"},
+      "ΤΜΗΜΑ ΕΚΤΕΛΕΣΗΣ ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΔΙΕΥΘΥΝΣΗΣ ΔΑΣΩΝ ΠΙΕΡΙΑΣ": {"region_pe": "Π.Ε. Πιερίας", "note": "unit names ΔΔ Πιερίας"},
+      "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΧΑΛΚΙΔΙΚΗΣ": {"region_pe": "Π.Ε. Χαλκιδικής", "note": "ΔΔ not in the Anti-nero registry; nuts EL527"}
+    },
+    "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΜΑΚΕΔΟΝΙΑΣ – ΘΡΑΚΗΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Ν. ΠΙΕΡΙΑΣ": {"region_pe": "Π.Ε. Πιερίας", "note": "«Ν. ΠΙΕΡΙΑΣ» prefix defeats the alias tail match; nuts EL525"}
+    },
+    "ΔΗΜΟΣ ΘΕΡΜΗΣ": {
+      "ΔΗΜΟΤΙΚΗ ΕΠΙΤΡΟΠΗ": {"region_pe": "Π.Ε. Θεσσαλονίκης", "note": "municipality of Θέρμη; nuts EL522"}
+    },
+    "ΔΗΜΟΣ ΑΛΜΩΠΙΑΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ, ΤΟΠΙΚΗΣ ΑΝΑΠΤΥΞΗΣ, ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ & ΠΟΛΙΤΙΣΤΙΚΗΣ ΑΝΑΠΤΥΞΗΣ": {"region_pe": "Π.Ε. Πέλλας", "note": "municipality of Αλμωπία; nuts EL524"},
+      "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ,ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΠΟΛΕΟΔΟΜΙΑΣ": {"region_pe": "Π.Ε. Πέλλας", "note": "municipality of Αλμωπία; nuts EL524"}
+    },
+    "ΠΕΡΙΦΕΡΕΙΑ ΘΕΣΣΑΛΙΑΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΠΕΡΙΦΕΡΕΙΑΚΗΣ ΕΝΟΤΗΤΑΣ ΤΡΙΚΑΛΩΝ": {"region_pe": "Π.Ε. Τρικάλων", "note": "unit names the Π.Ε."}
+    },
+    "ΔΗΜΟΣ ΖΑΓΟΡΙΟΥ": {
+      "ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ ΚΑΙ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Ιωαννίνων", "note": "municipality of Ζαγόρι (header nuts is coarse EL)"}
+    },
+    "ΔΗΜΟΣ ΛΑΡΙΣΑΙΩΝ": {
+      "ΔΙΕΥΘΥΝΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Λάρισας", "note": "municipality of Λαρισαίων; nuts EL612"}
+    },
+    "ΔΗΜΟΣ ΔΡΑΜΑΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΠΕΡΙΒΑΛΛΟΝΤΟΣ & ΠΡΑΣΙΝΟΥ": {"region_pe": "Π.Ε. Δράμας", "note": "municipality of Δράμα; nuts EL514"}
+    },
+    "ΔΗΜΟΣ ΔΟΜΟΚΟΥ": {
+      "ΓΡΑΦΕΙΟ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ,ΛΟΓΙΣΤΗΡΙΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {"region_pe": "Π.Ε. Φθιώτιδας", "note": "municipality of Δομοκός; nuts EL644"}
+    },
+    "ΔΗΜΟΣ ΕΔΕΣΣΑΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΠΕΡΙΒΑΛΛΟΝΤΟΣ, ΠΡΑΣΙΝΟΥ ΚΑΙ ΚΑΘΑΡΙΟΤΗΤΑΣ": {"region_pe": "Π.Ε. Πέλλας", "note": "municipality of Έδεσσα"},
+      "ΔΗΜΑΡΧΟΣ": {"region_pe": "Π.Ε. Πέλλας", "note": "municipality of Έδεσσα"}
+    },
+    "ΕΝΙΑΙΕΣ ΣΧΟΛΙΚΕΣ ΕΠΙΤΡΟΠΕΣ ΠΡΩΤΟΒΑΘΜΙΑΣ ΚΑΙ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ ΕΚΠΑΙΔΕΥΣΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ.": {
+      "ΓΡΑΦΕΙΟ ΠΡΩΤΟΒΑΘΜΙΑΣ ΣΧΟΛΙΚΗΣ ΕΠΙΤΡΟΠΗΣ": {"region_pe": "Π.Ε. Πέλλας", "note": "municipality of Αλμωπία; nuts EL524"}
+    },
+    "ΔΗΜΟΣ ΣΑΜΟΘΡΑΚΗΣ": {
+      "ΑΥΤΟΤΕΛΕΣ ΤΜΗΜΑ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΠΟΙΟΤΗΤΑΣ ΖΩΗΣ": {"region_pe": "Π.Ε. Έβρου", "note": "Σαμοθράκη belongs to Π.Ε. Έβρου; nuts EL511"}
+    },
+    "ΔΗΜΟΣ ΠΥΛΑΙΑΣ - ΧΟΡΤΙΑΤΗ": {
+      "ΤΜΗΜΑ ΠΡΟΜΗΘΕΙΩΝ": {"region_pe": "Π.Ε. Θεσσαλονίκης", "note": "municipality of Πυλαία-Χορτιάτης; nuts EL522"},
+      "ΔΗΜΑΡΧΟΣ": {"region_pe": "Π.Ε. Θεσσαλονίκης", "note": "municipality of Πυλαία-Χορτιάτης; nuts EL522"},
+      "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Θεσσαλονίκης", "note": "municipality of Πυλαία-Χορτιάτης; nuts EL522"}
+    },
+    "ΥΠΟΥΡΓΕΙΟ ΠΟΛΙΤΙΣΜΟΥ": {
+      "ΕΦΟΡΕΙΑ ΑΡΧΑΙΟΤΗΤΩΝ ΧΑΛΚΙΔΙΚΗΣ ΚΑΙ ΑΓΙΟΥ ΟΡΟΥΣ": {"region_pe": "Π.Ε. Χαλκιδικής", "note": "eforate seat Πολύγυρος; nuts EL527"},
+      "ΕΦΟΡΕΙΑ ΑΡΧΑΙΟΤΗΤΩΝ ΠΙΕΡΙΑΣ": {"region_pe": "Π.Ε. Πιερίας", "note": "unit names the Π.Ε.; nuts EL525"}
+    },
+    "ΥΠΟΥΡΓΕΙΟ ΠΟΛΙΤΙΣΜΟΥ ΚΑΙ ΑΘΛΗΤΙΣΜΟΥ": {
+      "ΕΦΟΡΕΙΑ ΑΡΧΑΙΟΤΗΤΩΝ ΠΙΕΡΙΑΣ": {"region_pe": "Π.Ε. Πιερίας", "note": "unit names the Π.Ε.; nuts EL525"}
+    },
+    "ΔΗΜΟΣ ΔΟΞΑΤΟΥ": {
+      "ΔΙΕΥΘΥΝΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Δράμας", "note": "municipality of Δοξάτο; nuts EL514"}
+    },
+    "ΔΗΜΟΣ ΔΙΡΦΥΩΝ - ΜΕΣΣΑΠΙΩΝ": {
+      "ΔΙΕΥΘΥΝΣΗ ΔΙΟΙΚΗΤΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Ευβοίας", "note": "municipality of Διρφύων-Μεσσαπίων; nuts EL642"},
+      "ΑΥΤΟΤΕΛΕΣ ΤΜΗΜΑ ΠΟΙΟΤΗΤΑΣ ΖΩΗΣ ΚΑΙ ΑΝΑΚΥΚΛΩΣΗΣ": {"region_pe": "Π.Ε. Ευβοίας", "note": "municipality of Διρφύων-Μεσσαπίων; nuts EL642"}
+    },
+    "ΔΗΜΟΣ ΚΑΣΤΟΡΙΑΣ": {
+      "ΤΕΧΝΙΚΗ ΥΠΗΡΕΣΙΑ": {"region_pe": "Π.Ε. Καστοριάς", "note": "municipality of Καστοριά; nuts EL532"},
+      "ΟΙΚΟΝΟΜΙΚΗ ΥΠΗΡΕΣΙΑ": {"region_pe": "Π.Ε. Καστοριάς", "note": "municipality of Καστοριά; nuts EL532"}
+    },
+    "ΔΗΜΟΣ ΜΑΝΤΟΥΔΙΟΥ - ΛΙΜΝΗΣ - ΑΓΙΑΣ ΑΝΝΑΣ": {
+      "ΤΜΗΜΑ ΠΡΟΜΗΘΕΙΩΝ ΚΑΙ ΑΠΟΘΗΚΗΣ": {"region_pe": "Π.Ε. Ευβοίας", "note": "municipality in north Evia; nuts EL642"},
+      "ΔΗΜΟΤΙΚΗ ΕΠΙΤΡΟΠΗ": {"region_pe": "Π.Ε. Ευβοίας", "note": "municipality in north Evia; nuts EL642"}
+    },
+    "ΔΗΜΟΣ ΒΕΛΒΕΝΤΟΥ": {
+      "ΔΙΕΥΘΥΝΣΗ ΔΙΟΙΚΗΤΙΚΩΝ ΚΑΙ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Κοζάνης", "note": "Βελβεντό is in Π.Ε. Κοζάνης (EL531 spans Γρεβενά+Κοζάνη — municipality disambiguates)"}
+    },
+    "ΔΗΜΟΣ ΞΑΝΘΗΣ": {
+      "ΔΙΕΥΘΥΝΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Ξάνθης", "note": "municipality of Ξάνθη; nuts EL512"}
+    },
+    "ΔΗΜΟΣ ΚΑΡΠΕΝΗΣΙΟΥ": {
+      "TMHMA ΑΠΟΘΗΚΗΣ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {"region_pe": "Π.Ε. Ευρυτανίας", "note": "municipality of Καρπενήσι (key starts with Latin 'TMHMA' as stored); nuts EL643"}
+    },
+    "ΔΗΜΟΣ ΜΕΤΕΩΡΩΝ": {
+      "ΤΟΜΕΑΣ ΔΙΟΙΚΗΣΗΣ & ΟΙΚΟΝΟΜΙΚΩΝ -ΤΜΗΜΑ ΠΡΟΜΗΘΕΙΩΝ": {"region_pe": "Π.Ε. Τρικάλων", "note": "municipality of Μετέωρα (Καλαμπάκα); nuts EL611 spans Καρδίτσα+Τρίκαλα — municipality disambiguates"}
+    },
+    "ΟΡΓΑΝΙΣΜΟΣ ΛΙΜΕΝΟΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ Α.Ε": {
+      "ΔΙΕΥΘΥΝΩΝ ΣΥΜΒΟΥΛΟΣ": {"region_pe": "Π.Ε. Έβρου", "note": "port of Αλεξανδρούπολη; nuts EL511"}
+    },
+    "ΔΗΜΟΣ ΤΥΡΝΑΒΟΥ": {
+      "ΔΙΕΥΘΥΝΣΗ ΠΕΡΙΒΑΛΛΟΝΤΟΣ": {"region_pe": "Π.Ε. Λάρισας", "note": "municipality of Τύρναβος; nuts EL612"}
+    },
+    "ΔΗΜΟΣ ΝΕΣΤΟΡΙΟΥ": {
+      "ΔΗΜΟΣ ΝΕΣΤΟΡΙΟΥ": {"region_pe": "Π.Ε. Καστοριάς", "note": "municipality of Νεστόριο; nuts EL532"}
+    },
+    "ΔΗΜΟΣ ΠΑΡΓΑΣ": {
+      "ΤΜΗΜΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ, ΛΟΓΙΣΤΗΡΙΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {"region_pe": "Π.Ε. Πρέβεζας", "note": "Πάργα belongs to Π.Ε. Πρέβεζας; nuts EL541 (Άρτα+Πρέβεζα)"}
+    },
+    "ΔΗΜΟΣ ΑΜΥΝΤΑΙΟΥ": {
+      "ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Φλώρινας", "note": "municipality of Αμύνταιο; nuts EL533"}
+    },
+    "ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ": {
+      "ΓΡΑΦΕΙΟ ΛΟΓΙΣΤΗΡΙΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {"region_pe": "Π.Ε. Καστοριάς", "note": "municipality of Άργος Ορεστικό (org name keyed without final ς); nuts EL532"}
+    },
+    "ΛΟΥΤΡΑ ΛΟΥΤΡΑΚΙΟΥ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ Α.Ε": {
+      "ΑΥΤΟΤΕΛΕΣ ΓΡΑΦΕΙΟ ΑΙΡΕΤΩΝ ΟΡΓΑΝΩΝ": {"region_pe": "Π.Ε. Πέλλας", "note": "Λουτράκι Αριδαίας, municipality of Αλμωπία"}
+    },
+    "ΔΗΜΟΣ ΚΙΛΕΛΕΡ": {
+      "ΓΡΑΦΕΙΟ ΔΗΜΑΡΧΟΥ": {"region_pe": "Π.Ε. Λάρισας", "note": "municipality of Κιλελέρ (header nuts coarse EL61)"}
+    },
+    "ΚΕΝΤΡΟ ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ-ΑΛΛΗΛΕΓΓΥΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ": {
+      "ΚΕΝΤΡΟ ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ-ΑΛΛΗΛΕΓΓΥΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ": {"region_pe": "Π.Ε. Πέλλας", "note": "municipality of Αλμωπία; nuts EL524"}
+    },
+    "Δ.Ε.Υ.Α ΛΑΓΚΑΔΑ": {
+      "ΓΡΑΦΕΙΟ ΠΡΟΕΔΡΟΥ": {"region_pe": "Π.Ε. Θεσσαλονίκης", "note": "Λαγκαδάς, Π.Ε. Θεσσαλονίκης; nuts EL522"}
+    },
+    "ΔΗΜΟΣ ΝΕΑΣ ΠΡΟΠΟΝΤΙΔΑΣ": {
+      "ΤΜΗΜΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {"region_pe": "Π.Ε. Χαλκιδικής", "note": "municipality of Νέα Προποντίδα; nuts EL527"}
+    },
+    "ΔΗΜΟΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΥΔΡΕΥΣΗΣ ΚΑΙ ΑΠΟΧΕΥΤΕΣΗΣ ΔΟΞΑΤΟΥ": {
+      "ΔΙΟΙΚΗΤΙΚΟ ΣΥΜΒΟΥΛΙΟ": {"region_pe": "Π.Ε. Δράμας", "note": "ΔΕΥΑ of Δοξάτο; nuts EL514"}
+    },
+    "ΤΑΜΕΙΟ ΔΙΟΙΚΗΣΗΣ ΔΙΑΧΕΙΡΗΣΗΣ ΠΑΝΕΠΙΣΤΗΜΙΑΚΩΝ ΔΑΣΩΝ": {
+      "ΔΙΟΙΚΗΣΗ ΠΑΝΕΠΙΣΤΗΜΙΑΚΟΥ ΔΑΣΟΥΣ ΠΕΡΤΟΥΛΙΟΥ (Α.Π.Θ.)": {"region_pe": "Π.Ε. Τρικάλων", "note": "Περτούλι university forest is in Π.Ε. Τρικάλων (org HQ nuts EL522 is misleading)"}
+    },
+    "ΔΗΜΟΣ ΝΟΤΙΟΥ ΠΗΛΙΟΥ": {
+      "ΤΜΗΜΑ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {"region_pe": "Π.Ε. Μαγνησίας", "note": "municipality of Νότιο Πήλιο; nuts EL613"}
+    },
+    "ΔΗΜΟΣ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ": {
+      "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΔΟΜΗΣΗΣ": {"region_pe": "Π.Ε. Δράμας", "note": "municipality of Κάτω Νευροκόπι; nuts EL514"}
+    },
+    "ΔΗΜΟΣ ΑΡΙΣΤΟΤΕΛΗ": {
+      "ΓΡΑΦΕΙΟ ΔΗΜΑΡΧΟΥ": {"region_pe": "Π.Ε. Χαλκιδικής", "note": "municipality of Αριστοτέλης; nuts EL527"}
+    },
+    "ΓΕΝΙΚΟ ΝΟΣΟΚΟΜΕΙΟ ΚΟΖΑΝΗΣ ΜΑΜΑΤΣΕΙΟ": {
+      "OIKONOMIKO": {"region_pe": "Π.Ε. Κοζάνης", "note": "hospital of Κοζάνη (key is Latin 'OIKONOMIKO' as stored); nuts EL531 spans Γρεβενά+Κοζάνη — the hospital seat disambiguates"}
+    },
+    "ΔΗΜΟΣ ΠΑΓΓΑΙΟΥ": {
+      "ΓΡΑΦΕΙΟ ΔΗΜΑΡΧΟΥ": {"region_pe": "Π.Ε. Καβάλας", "note": "municipality of Παγγαίο (header nuts coarse EL5)"}
+    }
+  },
+  "contract_overrides": {
+    "22SYMV011800093": {"region_pe": "Π.Ε. Πέλλας", "note": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ Μ-Θ is supra-regional; this contract's own nutsCode is NUTS3-precise EL524 (Πέλλα), title truncated at «στο Δ.Δ.», contractor ΔΑΣΕ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ"},
+    "23SYMV013572093": {"region_pe": "Π.Ε. Έβρου", "note": "ΕΠΙΘΕΩΡΗΣΗ Μ-Θ supra-regional; title: «υλοτομικών εργασιών … του Δασαρχείου Διδυμοτείχου»"},
+    "24SYMV015765258": {"region_pe": "Π.Ε. Ροδόπης", "note": "ΠΕΡΙΦΕΡΕΙΑ ΑΜΘ Κ.Υ. (seat Κομοτηνή); nutsCode EL513, contractor name states «ΠΕ ΡΟΔΟΠΗΣ»"},
+    "24SYMV014123913": {"region_pe": "Π.Ε. Έβρου", "note": "ΟΣΕ line maintenance is supra-regional; title: «Σ.Σ. Κίρκης, γραμμής Θ-Α» (Κίρκη, Έβρος), contractor ΔΣΕ ΑΚΡΙΤΑΣ Αλεξανδρούπολης"},
+    "24SYMV015128478": {"region_pe": "Π.Ε. Έβρου", "note": "ΟΣΕ ΥΓΜΘ; contractor ΔΣΕ ΑΚΡΙΤΑΣ (Αλεξανδρούπολη), same crew as 24SYMV014123913"},
+    "23SYMV014022755": {"region_pe": "Π.Ε. Θεσσαλονίκης", "note": "ΓΕΑ/350ΠΚΒ (Σέδες); title: «ΒΚ Τριαδίου» — Τριάδι Θέρμης, Π.Ε. Θεσσαλονίκης; contractor ΔΑΣΕ ΜΟΔΙΟΥ (Λαγκαδάς)"},
+    "24SYMV015582417": {"region_pe": "Π.Ε. Τρικάλων", "note": "ΑΠΘ university-forest experimental plots; contractor ΔΑΣΕ «ΤΟ ΠΕΡΤΟΥΛΙ» — Περτούλι forest, Π.Ε. Τρικάλων (org HQ nuts EL522 misleading)"}
+  }
+}

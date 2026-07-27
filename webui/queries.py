@@ -267,6 +267,7 @@ def list_contracts(conn: sqlite3.Connection, q: str | None = None) -> list[dict]
     contractor names. Matching happens in Python because SQLite's LIKE is
     ASCII-only-case-insensitive and the data mixes Greek and Latin homoglyphs.
     """
+    has_scope = _has_scope_table(conn)
     rows = conn.execute(f"""
         SELECT k.reference_number,
                k.title,
@@ -278,7 +279,7 @@ def list_contracts(conn: sqlite3.Connection, q: str | None = None) -> list[dict]
                 if _has_payments_table(conn) else "0"} AS n_payments,
                k.bids_submitted,
                k.cancelled,
-               s.scope,
+               {"s.scope" if has_scope else "NULL AS scope"},
                (SELECT GROUP_CONCAT(DISTINCT cpr.region_pe)
                   FROM contract_project_regions cpr
                  WHERE cpr.reference_number = k.reference_number) AS regions,
@@ -286,7 +287,7 @@ def list_contracts(conn: sqlite3.Connection, q: str | None = None) -> list[dict]
                   FROM contractors c
                  WHERE c.reference_number = k.reference_number) AS contractor_names
         FROM contracts k
-        LEFT JOIN contract_scope s USING (reference_number)
+        {"LEFT JOIN contract_scope s USING (reference_number)" if has_scope else ""}
         WHERE {scope_filter(conn, 'k.reference_number')}
         ORDER BY k.contract_signed_date DESC, k.reference_number DESC
     """).fetchall()
@@ -1275,3 +1276,49 @@ def contractor_yearly(conn: sqlite3.Connection, vat: str) -> dict:
         b["paid_eur"] = round(b["paid_eur"], 2)
         b["stated_eur"] = round(b["stated_eur"], 2)
     return {"years": out}
+
+
+def antinero_yearly(conn: sqlite3.Connection) -> list[dict]:
+    """Programme-wide € per year: non-cancelled payments (by payment year)
+    plus the stated value of in-scope contracts with no payments yet (by
+    signature year) — the yearly decomposition of the effective total.
+    Used by the Anti-nero-vs-ΔΑΣΕ comparison page."""
+    flt = scope_filter(conn, "k.reference_number")
+    has_pay = _has_payments_table(conn)
+    contracts = conn.execute(f"""
+        SELECT k.reference_number, k.contract_signed_date, k.submission_date,
+               k.total_cost_with_vat AS stated,
+               {("(SELECT COUNT(*) FROM contract_payments p"
+                 " WHERE p.attributed_ref = k.reference_number"
+                 " AND p.cancelled = 0)") if has_pay else "0"} AS n_payments
+        FROM contracts k
+        WHERE {flt}
+    """).fetchall()
+
+    years: dict[str, dict] = {}
+
+    def bucket(year):
+        return years.setdefault(year, {"year": year, "paid_eur": 0.0,
+                                       "stated_eur": 0.0})
+
+    if has_pay:
+        for p in conn.execute(f"""
+            SELECT p.signed_date, p.submission_date, p.amount_with_vat
+            FROM contract_payments p
+            WHERE p.cancelled = 0 AND p.attributed_ref IN (
+                SELECT k.reference_number FROM contracts k WHERE {flt})
+        """):
+            y = _year_of(p["signed_date"], p["submission_date"])
+            if y is not None:
+                bucket(y)["paid_eur"] += p["amount_with_vat"] or 0.0
+    for r in contracts:
+        if r["n_payments"] == 0:
+            y = _year_of(r["contract_signed_date"], r["submission_date"])
+            if y is not None:
+                bucket(y)["stated_eur"] += r["stated"] or 0.0
+    out = sorted(years.values(), key=lambda b: b["year"])
+    for b in out:
+        b["paid_eur"] = round(b["paid_eur"], 2)
+        b["stated_eur"] = round(b["stated_eur"], 2)
+        b["total_eur"] = round(b["paid_eur"] + b["stated_eur"], 2)
+    return out
