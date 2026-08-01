@@ -1,0 +1,158 @@
+/* Atlas base styles — minimal reset + typography on the token system. */
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-ui);
+	font-size: var(--fs-16);
+	line-height: 1.55;
+	font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-serif);
+	font-weight: 600;
+	line-height: 1.15;
+	margin: 0 0 var(--sp-3);
+	text-wrap: balance;
+}
+
+h1 {
+	font-size: var(--fs-34);
+}
+
+h2 {
+	font-size: var(--fs-24);
+}
+
+h3 {
+	font-size: var(--fs-18);
+}
+
+p {
+	margin: 0 0 var(--sp-3);
+}
+
+a {
+	color: inherit;
+	text-decoration-color: var(--line-strong);
+	text-underline-offset: 2px;
+}
+
+a:hover {
+	text-decoration-color: var(--accent);
+}
+
+small,
+.muted {
+	color: var(--ink-soft);
+	font-size: var(--fs-13);
+}
+
+.faint {
+	color: var(--ink-faint);
+}
+
+.tabular {
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.01em;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+	font-size: var(--fs-14);
+}
+
+th {
+	text-align: left;
+	font-weight: 600;
+	color: var(--ink-soft);
+	border-bottom: 1px solid var(--line-strong);
+	padding: var(--sp-1) var(--sp-2);
+}
+
+td {
+	border-bottom: 1px solid var(--line);
+	padding: var(--sp-1) var(--sp-2);
+	vertical-align: top;
+}
+
+td.num,
+th.num {
+	text-align: right;
+}
+
+svg text {
+	font-family: var(--font-ui);
+}
+
+::selection {
+	background: var(--ramp-works-2);
+}
+
+/* status/scope chips shared across pages */
+.chip {
+	display: inline-block;
+	font-size: var(--fs-12);
+	line-height: 1.4;
+	padding: 0 var(--sp-2);
+	border-radius: 999px;
+	border: 1px solid var(--line-strong);
+	color: var(--ink-soft);
+	white-space: nowrap;
+}
+
+.chip.warn {
+	border-color: var(--c-flag-amber);
+	color: var(--c-flag-amber);
+}
+
+.chip.bad {
+	border-color: var(--c-flag-red);
+	color: var(--c-flag-red);
+}
+
+/* placeholder for charts whose data loads client-side */
+.skeleton {
+	border: 1px dashed var(--line);
+	border-radius: var(--radius);
+	background:
+		linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%)
+		var(--paper-2);
+	background-size: 200% 100%;
+	animation: shimmer 1.4s infinite;
+	margin-bottom: var(--sp-12);
+}
+
+@keyframes shimmer {
+	to {
+		background-position-x: -200%;
+	}
+}
+
+.btn-more {
+	font: inherit;
+	font-size: var(--fs-13);
+	color: var(--ink-soft);
+	background: none;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius);
+	padding: var(--sp-1) var(--sp-3);
+	cursor: pointer;
+	margin-top: var(--sp-2);
+}

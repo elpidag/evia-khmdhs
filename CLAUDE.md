@@ -360,7 +360,79 @@ khmdhs-side addition). Second sqlite is opened by a **lazy
 `g.dase_conn` accessor** — khmdhs-only routes never touch dase.sqlite
 (tested: khmdhs JSON endpoints byte-identical with the ΔΑΣΕ DB absent).
 
-## Tests (`tests/`, 225 passing — `.venv/bin/python -m pytest`)
+## Atlas (second web UI: `atlas/` SvelteKit + `atlas_api/` Flask JSON API)
+
+A separate, publication-grade site over the same two DBs — **`webui/` is
+frozen**: `atlas_api` imports `webui.queries` / `webui.dase_queries` /
+`webui.filters` read-only and never edits them; ALL new SQL goes in
+`atlas_api/queries_extra.py`. The `/pdf/<kind>/<adam>` caching proxy is a
+verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
+`pdf_wait.html`) sharing the same `data/processed/pdf_cache/`.
+
+- **Two processes**: `. .venv/bin/activate; python -m atlas_api` (Flask JSON,
+  127.0.0.1:5050) + `cd atlas && npm run dev` (Vite, :5173 — binds ::1, use
+  `localhost` not 127.0.0.1). webui stays on :5000, all three can run at once.
+- **Fetch plumbing**: browser `/api` + `/pdf` requests go through the Vite
+  `server.proxy`; SSR fetches are rewritten by `src/hooks.server.ts`
+  `handleFetch` to `ATLAS_API_ORIGIN` (default `http://127.0.0.1:5050`).
+  Production: `npm run build && npm run serve` — `atlas/server.mjs` wraps the
+  adapter-node handler AND proxies `/api`+`/pdf` to Flask itself (single
+  origin, no external reverse proxy, no CORS anywhere).
+- **Performance conventions** (violating any re-introduces 1s page navs):
+  atlas_api memoises every GET /api response in-process (DB-mtime-validated,
+  pre-gzipped; list titles trimmed to 140 chars); big client payloads
+  (map/payments/swarm/…) are NOT loaded in `+page.ts` — SSR serialises load
+  data into the HTML (was 900KB) — they're fetched post-hydration via
+  `apiGetCached` (module-memoised across navs) into **`$state.raw`** holders
+  (deep `$state` proxies on FeatureCollections made d3-geo read every
+  coordinate through a getter: ~700ms/nav); below-fold charts mount via
+  `ui/Defer.svelte` (IntersectionObserver); PaperMap caches fitSize/path-d/
+  bounds per (feature, size) at module level, quantises zoom k for overlays
+  (quarter steps) and view filtering (40px steps), wheel-zoom arms only
+  after a click, and has +/−/reset buttons. Drill smoothness: PaperMap
+  idle-prefetches hires+muni topo and pre-generates their path strings in
+  requestIdleCallback chunks, and swaps hi-res in only after the zoom
+  transition settles (first drill was a 470ms long task mid-animation;
+  now 0). `.region:focus { outline: none }` — the UA focus ring drew a
+  rectangle around clicked polygons. The `/` points view mirrors webui
+  exactly: country level = contract-count choropleth left + HQ dots right;
+  works-drill = per-contract dots (OKLCH hues for multi-authority
+  contracts, dashed all-pairs seat-links on hover incl. off-region seats);
+  home-drill = the co-ops' contracts' dots at country frame.
+- **/connections flow design** (no default arc spaghetti): default map =
+  LINEAR %-of-works-won-by-out-of-region-firms choropleth (title
+  auto-computes "only N% stays local" — 13%); click a region → FlowArcs
+  draws only ITS flows, direction-coded with arrowheads (red = firms
+  elsewhere reaching in, blue = its firms reaching out, green dot =
+  stays-local €); plus hub-catchment small multiples — top-6 home regions
+  by exported € (Κεντρ. Τομέας €139M, Θεσσαλονίκη €119M, **Τρίκαλα €87M**,
+  Β. Τομέας €82M, Καβάλα €67M, Ν. Τομέας €57M), one mini-map each on a
+  shared scale, click→traces that hub. One-arrow-per-region "shift arrows"
+  were REJECTED: only 19/56 import-majority regions have a ≥50% dominant
+  origin. `region_flows` € are FULL-EXPOSURE (a multi-region contract
+  counts per region pair, Σ≈€1.1B) — show shares, never sum as programme €.
+- **Stack**: Svelte 5 (runes) + TS + adapter-node (config lives inside
+  `vite.config.ts`, no svelte.config file); plain CSS custom properties
+  (`src/lib/styles/tokens.css` — newsprint palette + the geo_common.js
+  ramps ported verbatim), NO Tailwind/Chart.js/Leaflet — d3-* + topojson
+  only. Self-hosted Sofia Sans + Literata (greek+latin woff2 subsets in
+  `atlas/static/fonts/`, ~260KB total). Components capped ~300 lines.
+- **Design doctrine** (Tse/ProPublica): chart titles are findings, not
+  topics; annotations printed on the chart; tooltips never carry
+  load-bearing info; every chart has a caveat line anchored to
+  `/methodology`; pair every change view with a level view; small multiples
+  over filterable charts. SVG ≤1k marks, canvas above (2,018 ΔΑΣΕ dots).
+- **API endpoints** under `/api/{meta,antinero/*,dase/*,compare,connections,
+  authorities,authority/<slug>}` — JSON gets `Cache-Control: max-age=300`,
+  `app.json.ensure_ascii = False`. `/api/meta` degrades honestly (no `dase`
+  key) when dase.sqlite is absent; `/api/antinero/*` never opens it
+  (isolation tests mirror webui's).
+- **Tests**: `tests/test_atlas_api.py` (+ `_queries_extra`, `_real_db` as
+  they land) with pytest; frontend `cd atlas && npm run check && npm test`
+  (vitest transform units incl. `format.ts` goldens that must equal
+  `webui/filters.py` output).
+
+## Tests (`tests/`, 267 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 9 frontend transform units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

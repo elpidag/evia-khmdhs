@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF {{ adam }}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 4rem auto;
+           padding: 0 1rem; color: #2a2118; background: #f6f1e4; }
+    h1 { font-size: 1.4rem; margin-bottom: .25rem; }
+    .adam { color: #6b6152; font-variant-numeric: tabular-nums; }
+    a[role=button] { display: inline-block; padding: .4rem .9rem; border: 1px solid #9b8e74;
+                     border-radius: 4px; color: inherit; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>PDF not available yet</h1>
+  <p class="adam">{{ adam }}</p>
+  <p>Could not fetch the document: {{ reason }}.</p>
+  {% if retry %}
+  <p>This page will retry automatically in <strong><span id="countdown">{{ retry }}</span> s</strong>
+     — once fetched, the PDF is cached locally and never hits the registry again.</p>
+  {% else %}
+  <p>Retrying is unlikely to help — this document probably has no PDF attached in KHMDHS.</p>
+  {% endif %}
+  <p><a href="javascript:location.reload()" role="button">Retry now</a></p>
+  {% if retry %}
+  <script>
+    let left = {{ retry }};
+    const el = document.getElementById("countdown");
+    setInterval(() => { if (--left > 0) el.textContent = left; }, 1000);
+    setTimeout(() => location.reload(), {{ retry }} * 1000);
+  </script>
+  {% endif %}
+</body>
+</html>
