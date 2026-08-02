@@ -8,6 +8,36 @@
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.c);
 	const live = $derived(c.payments.filter((p) => !p.cancelled));
+
+	const TIMELINE_KIND: Record<string, string> = {
+		request: 'Πρωτογενές αίτημα',
+		approved_request: 'Ανάληψη υποχρέωσης',
+		notice: 'Διακήρυξη / πρόσκληση',
+		auction: 'Κατακύρωση / ανάθεση',
+		contract: 'Σύμβαση'
+	};
+	const TIMELINE_ORDER: Record<string, number> = {
+		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4
+	};
+	const timeline = $derived.by(() => {
+		if (!c.timeline.length) return [];
+		const rows = c.timeline.map((t) => ({ ...t, self: false }));
+		rows.push({
+			adam: c.reference_number,
+			kind: 'contract' as const,
+			title: c.title,
+			d: (c.contract_signed_date ?? '').slice(0, 10) || null,
+			cancelled: c.cancelled ?? 0,
+			in_db: true,
+			self: true
+		});
+		rows.sort((a, b) =>
+			`${a.d ?? '9999'}${TIMELINE_ORDER[a.kind]}`.localeCompare(
+				`${b.d ?? '9999'}${TIMELINE_ORDER[b.kind]}`
+			)
+		);
+		return rows;
+	});
 </script>
 
 <svelte:head>
@@ -160,6 +190,65 @@
 	{/if}
 </section>
 
+<section>
+	{#if timeline.length}
+		<h2>Procurement timeline ({timeline.length} acts)</h2>
+		<p class="muted">
+			The contract's full ΚΗΜΔΗΣ family — αίτημα → πρόσκληση → κατακύρωση → συμβάσεις,
+			chronological. Payment orders are listed above.
+		</p>
+		<table class="listing">
+			<thead>
+				<tr><th>Date</th><th>Act</th><th>Title</th><th>PDF</th></tr>
+			</thead>
+			<tbody>
+				{#each timeline as t (t.adam)}
+					<tr class:cancelled={t.cancelled === 1} class:self={t.self}>
+						<td class="tabular muted">{t.d ?? '—'}</td>
+						<td>
+							<span class="chip" class:hl={t.kind === 'auction' || t.self}
+								>{TIMELINE_KIND[t.kind] ?? t.kind}</span
+							>
+							<br /><small class="tabular muted">{t.adam}</small>
+						</td>
+						<td>
+							<small>
+								{#if t.self}
+									<strong>this contract</strong>
+								{:else if t.kind === 'contract' && t.in_db}
+									<a href={`/antinero/contract/${t.adam}`}>{t.title ?? t.adam}</a>
+								{:else}
+									{t.title ?? '—'}
+									{#if t.kind === 'contract'}<span class="muted">(εκτός dataset)</span>{/if}
+								{/if}
+								{#if t.cancelled === 1}<span class="chip bad">cancelled</span>{/if}
+							</small>
+						</td>
+						<td class="nowrap">
+							{#if t.kind !== 'contract'}
+								<a
+									href={`/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`}
+									target="_blank"
+									rel="noopener">📄 PDF</a
+								>
+							{:else if t.in_db}
+								<a href={`/pdf/contract/${t.adam}`} target="_blank" rel="noopener">📄 PDF</a>
+							{/if}
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	{:else}
+		<h2>Procurement timeline</h2>
+		<p class="muted">
+			ΚΗΜΔΗΣ links no upstream acts (αίτημα, διακήρυξη, κατακύρωση) to this contract — the
+			registry's chain returns none, a linkage gap common across the programme's direct
+			awards.
+		</p>
+	{/if}
+</section>
+
 {#if c.prev_reference_no || c.next_reference_no || c.scope?.superseded_by || c.notice_reference_number}
 	<section>
 		<h2>Amendment chain</h2>
@@ -225,5 +314,19 @@
 	}
 	td a:hover {
 		text-decoration: underline;
+	}
+	.chip.hl {
+		background: var(--c-antinero);
+		color: #fff;
+		border-color: var(--c-antinero);
+	}
+	tr.self {
+		background: color-mix(in srgb, var(--c-antinero) 7%, transparent);
+	}
+	tr.cancelled {
+		opacity: 0.55;
+	}
+	.nowrap {
+		white-space: nowrap;
 	}
 </style>

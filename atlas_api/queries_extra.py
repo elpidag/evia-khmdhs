@@ -786,6 +786,16 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                         " WHERE region_pe IS NOT NULL"):
         hq_map[r["vat_number"]] = canonical_pe(r["region_pe"]) or r["region_pe"]
 
+    # contracts with a linked διακήρυξη/πρόσκληση (PROC) — None (unknown)
+    # when the linked-acts layer has not been harvested yet
+    notice_refs: set[str] | None
+    try:
+        notice_refs = {r[0] for r in kh.execute(
+            "SELECT DISTINCT reference_number FROM contract_linked_acts "
+            "WHERE kind = 'notice'")}
+    except sqlite3.OperationalError:
+        notice_refs = None
+
     eff = q.effective_cost(kh, "c")
     for r in kh.execute(f"""
         SELECT c.reference_number AS ref, c.title,
@@ -820,6 +830,8 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "proc": _proc_kind(r["procedure_type"]),
             "st": "cancelled" if r["cancelled"] else None,
             "b1": 1 if r["bids_submitted"] == 1 else 0,
+            "pr": None if notice_refs is None
+                 else (1 if r["ref"] in notice_refs else 0),
         })
 
     if dase is not None:
@@ -849,7 +861,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                      else None,
                 "pe": pes, "hq": [],
                 "proc": _proc_kind(r["procedure_type"]),
-                "st": None, "b1": 0,
+                "st": None, "b1": 0, "pr": None,
             })
 
     if ana is not None:
@@ -865,7 +877,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 "vn": None,     # sponsor acts state one figure, mixed VAT basis
                 "pe": [r["pe"]] if r["pe"] else [], "hq": [],
                 "proc": "sponsor",
-                "st": r["status"], "b1": 0,
+                "st": r["status"], "b1": 0, "pr": None,
             })
 
     counts: dict[str, int] = {}
@@ -1015,4 +1027,52 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
           JOIN decisions d ON d.ada = pd.ada
          WHERE pd.root_ada = ?
          ORDER BY d.issue_date, d.ada""", (ada,))]
+    return out
+
+
+# ------------------------------------------------ procurement timeline
+
+_TIMELINE_ORDER = {"request": 0, "approved_request": 1, "notice": 2,
+                   "auction": 3, "contract": 4}
+
+
+def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
+    """The contract's full procurement family (αίτημα → πρόσκληση →
+    κατακύρωση → συμβάσεις), chronological. Sibling contracts resolve to
+    their stored record when they belong to the dataset; payments are not
+    included — the detail page lists them separately."""
+    try:
+        rows = kh.execute("""
+            SELECT cla.adam, cla.kind, la.title, la.submission_date,
+                   la.signed_date, la.cancelled
+              FROM contract_linked_acts cla
+              LEFT JOIN linked_acts la USING (adam)
+             WHERE cla.reference_number = ?""", (ref,)).fetchall()
+    except sqlite3.OperationalError:        # tables not built yet
+        return []
+    out = []
+    for r in rows:
+        entry = {
+            "adam": r["adam"], "kind": r["kind"],
+            "title": (r["title"] or "")[:160] or None,
+            "d": _full_date(r["signed_date"]) or _full_date(r["submission_date"]),
+            "cancelled": r["cancelled"] or 0,
+            "in_db": False,
+        }
+        if r["kind"] == "contract":
+            c = kh.execute(
+                "SELECT title, contract_signed_date, submission_date, "
+                "cancelled FROM contracts WHERE reference_number = ?",
+                (r["adam"],)).fetchone()
+            if c is not None:
+                entry.update({
+                    "title": (c["title"] or "")[:160] or None,
+                    "d": _full_date(c["contract_signed_date"])
+                         or _full_date(c["submission_date"]),
+                    "cancelled": c["cancelled"] or 0,
+                    "in_db": True,
+                })
+        out.append(entry)
+    out.sort(key=lambda e: (e["d"] or "9999",
+                            _TIMELINE_ORDER.get(e["kind"], 9)))
     return out

@@ -35,7 +35,11 @@ contractor HQs geocoded via Nominatim. Refreshable via `python -m khmdhs.refresh
   `##PAY#########`. Response `content[0]` is the record; empty = not found.
 - `GET /{contract,payment}/attachment/<ADAM>` → signed PDF. **429s on bursts**
   (retry ~45–60s); on throttle returns JSON, not PDF — always check `%PDF` magic.
-- `GET /adamChain/<ADAM>` — same payment list as the contract's `paymentRefNo`.
+- `GET /adamChain/<ADAM>` — the FULL procurement family: requests,
+  approvedRequests, notices, auctions, contracts (siblings incl. self,
+  marked `*`), payments (== `paymentRefNo`). Upstream lists are empty
+  unless the ΣΥΜΒ payload declared the links. Record endpoints: `POST
+  /{request,notice,auction}` + `/{kind}/attachment/<ADAM>` PDFs.
 - `dateFrom` search returns all of Greece (310k rows) — useless for filtering.
 - Payload quirks: `nextRefNo` is a plain **string** (an old bug indexed `[0]` and
   stored `"2"`); `contractRefNo` on payments is mostly null; `paymentRelatedAda`
@@ -84,7 +88,7 @@ excluded from aggregates (`antinero_umbrella`) to avoid double counting.
 ## Pipeline (ETL modules in `khmdhs/`)
 
 **Run order after any contract change**:
-`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `payment_loader`
+`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `payment_loader` → `linked_acts_loader`
 (→ `diavgeia_loader` when ingesting new Diavgeia decisions, then `payment_loader` again).
 **`python -m khmdhs.refresh` runs the whole sequence for you** after
 refetching open contracts — prefer it for routine updates.
@@ -171,6 +175,18 @@ refetching open contracts — prefer it for routine updates.
   Contracts stating the figure twice: the contracted αμοιβή breakdown
   wins over the προϋπολογισμός δημοπράτησης estimate. ΕΣΑ design-build
   contracts itemise no study price (bundled) — honestly absent.
+- `linked_acts_loader.py` — full procurement family per contract:
+  `GET /adamChain/<ΑΔΑΜ>` returns requests/approvedRequests/notices/
+  auctions/contracts/payments (NOT just payments as previously noted);
+  upstream acts stored in `linked_acts` (records via `POST
+  /request|/notice|/auction`, PDFs via `/{kind}/attachment/`), mapping in
+  `contract_linked_acts` (FK CASCADE → re-run after refetch; in the
+  refresh chain). **Registry-linkage reality**: the chain only knows what
+  the ΣΥΜΒ payload declared — 70/344 contracts have any upstream act,
+  41/252 in-scope have a linked κατακύρωση; most direct awards were
+  posted with none (the Atlas timeline says so honestly). 147 upstream
+  acts stored. Atlas: `queries_extra.contract_timeline` +
+  `/pdf/{request,notice,auction}/<ΑΔΑΜ>` proxy kinds.
 - `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
   (end_date NULL or <90 days past), upserts only changed payloads (diff on
   lastUpdateDate/paymentRefNo/nextRefNo/cancelled), backs payloads up to
@@ -495,7 +511,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 315 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
+## Tests (`tests/`, 322 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

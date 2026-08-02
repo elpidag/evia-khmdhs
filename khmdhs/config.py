@@ -24,6 +24,10 @@ PAYMENT_API_URL = f"{API_BASE}/payment?page=0"
 # Public, unauthenticated PDF attachments (signed contract / payment order).
 CONTRACT_PDF_URL = API_BASE + "/contract/attachment/{adam}"
 PAYMENT_PDF_URL = API_BASE + "/payment/attachment/{adam}"
+# Upstream procurement acts (αιτήματα, διακηρύξεις, κατακυρώσεις).
+REQUEST_PDF_URL = API_BASE + "/request/attachment/{adam}"
+NOTICE_PDF_URL = API_BASE + "/notice/attachment/{adam}"
+AUCTION_PDF_URL = API_BASE + "/auction/attachment/{adam}"
 REQUEST_TIMEOUT = 30
 THROTTLE_SECONDS = 0.2          # ~5 req/s; the API allows 350/min
 RETRY_BACKOFFS = (1, 3, 8)      # extra retries beyond the first attempt

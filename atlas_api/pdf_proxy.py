@@ -15,12 +15,16 @@ from pathlib import Path
 import requests
 from flask import Blueprint, abort, current_app, render_template, send_file
 
-from khmdhs.config import CONTRACT_PDF_URL, PAYMENT_PDF_URL
+from khmdhs.config import (AUCTION_PDF_URL, CONTRACT_PDF_URL, NOTICE_PDF_URL,
+                           PAYMENT_PDF_URL, REQUEST_PDF_URL)
 
 # kind -> (ADAM infix, registry attachment URL template)
 _PDF_KINDS = {
     "contract": ("SYMV", CONTRACT_PDF_URL),
     "payment": ("PAY", PAYMENT_PDF_URL),
+    "request": ("REQ", REQUEST_PDF_URL),
+    "notice": ("PROC", NOTICE_PDF_URL),
+    "auction": ("AWRD", AUCTION_PDF_URL),
 }
 
 bp = Blueprint("pdf", __name__, template_folder="templates")

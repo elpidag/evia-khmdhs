@@ -185,8 +185,11 @@
 		procurement procedure exists. The «Excl. VAT» column is the registry's stated net value
 		(for Anti-nero it sits beside the <em>effective</em> incl-VAT figure, so the two are
 		different bases); sponsor acts state a single figure with mixed VAT treatment, so their
-		net column stays blank. Filtering runs entirely in the browser; every filter state is a
-		shareable URL.
+		net column stays blank. The «Διακήρυξη» filter uses the ΚΗΜΔΗΣ chain links: only 41 of
+		252 in-scope Anti-nero contracts have a linked διακήρυξη/πρόσκληση — the registry's
+		chain knows only what each σύμβαση declared when posted, so «without» means <em>no
+		linked notice in the registry</em>, not proof that none was ever published. Filtering
+		runs entirely in the browser; every filter state is a shareable URL.
 	</p>
 
 	<h2 id="pdf-provenance">Documents</h2>

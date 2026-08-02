@@ -194,6 +194,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d.pop("raw_pretty", None)
         d["regions"] = queries.contract_project_regions(g.conn, adam)
         d["sites"] = queries.contract_sites(g.conn, adam)
+        d["timeline"] = queries_extra.contract_timeline(g.conn, adam)
         return jsonify(d)
 
     @app.route("/api/antinero/contractors")

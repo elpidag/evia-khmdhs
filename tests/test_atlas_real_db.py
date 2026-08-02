@@ -126,6 +126,10 @@ def test_explore_pins(client):
             assert r["vn"] is None
         else:
             assert r["vn"] is not None
+    # PROC-notice flag: 41 in-scope contracts have a linked διακήρυξη
+    kh_pr = [r["pr"] for r in e["rows"] if r["ds"] == "antinero"]
+    assert kh_pr.count(1) == 41 and kh_pr.count(0) == 211
+    assert all(r["pr"] is None for r in e["rows"] if r["ds"] != "antinero")
 
 
 def test_anadohoi_overview_pins(client):

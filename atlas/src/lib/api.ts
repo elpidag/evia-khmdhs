@@ -327,6 +327,8 @@ export interface ExploreRow {
 	proc: 'direct' | 'open' | 'nego' | 'other' | 'sponsor';
 	st: string | null;
 	b1: number;
+	/** linked διακήρυξη/πρόσκληση: 1/0 for Anti-nero, null elsewhere */
+	pr: number | null;
 }
 
 export interface ExplorePayload {

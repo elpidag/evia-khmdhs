@@ -587,3 +587,31 @@ text also corrected three budgets against the acts: 6Ι4Σ 404.000 →
 200.000, ΡΕΧΥ 150.000 → 310.000 (the act budgets both Δασαρχεία, Λίμνης
 + Ιστιαίας). *Affects: projects.deadline_text, deadline_initial ×9,
 budget_eur ×3, anadohoi_projects.json, /anadohoi pages.*
+
+## 2026-08-02 — Anti-nero: full procurement family (REQ/PROC/AWRD) per contract
+
+The registry's `GET /adamChain/<ΑΔΑΜ>` returns the complete procurement
+family of any act — `requests` (πρωτογενή αιτήματα), `approvedRequests`
+(αναλήψεις υποχρέωσης), `notices` (διακηρύξεις/προσκλήσεις), `auctions`
+(αποφάσεις ανάθεσης/κατακύρωσης), `contracts` (all sibling ΣΥΜΒ, beyond
+the prev/next amendment chain) and `payments` — and each type has its own
+public record + attachment endpoint (`/request`, `/notice`, `/auction`).
+Decision: a new loader (`khmdhs/linked_acts_loader.py`) calls adamChain
+once per stored contract and stores the upstream acts in `linked_acts`
+(one row per ΑΔΑΜ, full raw_json) with the per-contract mapping in
+`contract_linked_acts` (kinds: request | approved_request | notice |
+auction | contract-sibling). Payments are NOT duplicated there — the
+payment layer already owns them (the chain list equals `paymentRefNo`).
+Harvest result (2026-08-02, all 344 stored contracts): the chain graph
+only knows the links the ΣΥΜΒ payloads themselves declared — 70/344
+contracts have ANY upstream act, and exactly the 41 in-scope contracts
+with an `auctionRefNo` have a linked κατακύρωση (verified live: the
+registry returns empty upstream lists for the rest). **Most Anti-nero
+direct awards were posted with no linked ανάθεση/αίτημα** — an honest
+registry-linkage gap the timeline states rather than hides. 147 upstream
+acts stored (37 requests, 37 αναλήψεις, 34 notices, 39 awards). Sibling
+contracts outside our dataset are stored as mapping rows only.
+The Atlas contract page gains the full timeline (αίτημα → πρόσκληση →
+κατακύρωση → σύμβαση → πληρωμές) with per-act PDFs through the caching
+proxy. *Affects: new tables linked_acts, contract_linked_acts; refresh
+chain; Atlas /antinero/contract pages.*

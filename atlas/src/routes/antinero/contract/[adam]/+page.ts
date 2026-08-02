@@ -51,6 +51,14 @@ export interface ContractDetail {
 	}[];
 	regions: { region_pe: string; source: string | null; note: string | null }[];
 	sites: { site_name: string; region_pe: string; page: number | null; excerpt: string | null }[];
+	timeline: {
+		adam: string;
+		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract';
+		title: string | null;
+		d: string | null;
+		cancelled: number;
+		in_db: boolean;
+	}[];
 }
 
 export const load: PageLoad = async ({ fetch, params }) => {

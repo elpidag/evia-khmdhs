@@ -44,7 +44,7 @@
 	let indexed: Indexed[] = $state.raw([]);
 	$effect(() => {
 		// ?v= busts HTTP + module caches when the payload shape changes
-		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=2').then((p) => {
+		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=4').then((p) => {
 			payload = p;
 			indexed = p.rows.map((r) => {
 				const hn = searchNorm(
@@ -64,6 +64,7 @@
 	const from = $derived(params.get('from') ?? '');
 	const to = $derived(params.get('to') ?? '');
 	const vmin = $derived(params.get('vmin') ?? '');
+	const prf = $derived(params.get('prf') ?? '');
 	const q = $derived(params.get('q') ?? '');
 	const sort = $derived(params.get('sort') ?? 'd_desc');
 
@@ -96,6 +97,8 @@
 			if (from && (!r.d || r.d < from)) continue;
 			if (to && (!r.d || r.d > to)) continue;
 			if (min !== null && (r.v === null || r.v < min)) continue;
+			if (prf === 'yes' && r.pr !== 1) continue;
+			if (prf === 'no' && r.pr !== 0) continue;
 			if (qNorm && !(hn.includes(qNorm) || hf.includes(qFold))) continue;
 			out.push(r);
 		}
@@ -139,10 +142,19 @@
 			for (const p of r.hq) counts.set(p, (counts.get(p) ?? 0) + 1);
 		return [...counts.entries()].sort((a, b) => b[1] - a[1]);
 	});
+	const prCounts = $derived.by(() => {
+		let yes = 0;
+		let no = 0;
+		for (const { r } of indexed) {
+			if (r.pr === 1) yes++;
+			else if (r.pr === 0) no++;
+		}
+		return { yes, no };
+	});
 
 	let limit = $state(300);
 	const filterKey = $derived(
-		[ds, pe, hq, proc, st, from, to, vmin, q, sort].join('§')
+		[ds, pe, hq, proc, st, from, to, vmin, prf, q, sort].join('§')
 	);
 	$effect(() => {
 		void filterKey;
@@ -152,7 +164,7 @@
 
 	const anyFilter = $derived(
 		ds !== 'all' || !!pe || !!hq || proc !== 'all' || !!st || !!from ||
-		!!to || !!vmin || !!q
+		!!to || !!vmin || !!prf || !!q
 	);
 	function resetAll() {
 		const url = new URL(page.url);
@@ -230,6 +242,15 @@
 			{#each VMIN_OPTIONS as o (o.value)}
 				<option value={o.value}>{o.label}</option>
 			{/each}
+		</select>
+		<select
+			value={prf}
+			onchange={(e) => setParam('prf', e.currentTarget.value || null)}
+			title="Whether ΚΗΜΔΗΣ links a διακήρυξη/πρόσκληση (PROC) to the contract — Anti-nero only"
+		>
+			<option value="">Διακήρυξη: any</option>
+			<option value="yes">With διακήρυξη (PROC) ({grInt(prCounts.yes)})</option>
+			<option value="no">Without διακήρυξη ({grInt(prCounts.no)})</option>
 		</select>
 	</div>
 	<div class="filter-row">
