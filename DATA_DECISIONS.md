@@ -419,3 +419,63 @@ contracts get **no region row** and surface as an explicit
 «unresolved» bucket. Loaded into `dase_contract_regions` by
 `khmdhs/dase_region_loader.py`. *Affects: /dase choropleth, /compare
 per-Π.Ε. split.*
+
+## 2026-08-02 — Atlas money graphics reconcile to programme totals (even-split)
+
+The Atlas site (second web UI, `atlas/` + `atlas_api/`) extends the
+2026-07-25 even-split convention to every new money graphic so each one
+sums back to the programme total of **€615,950,156.78** (±€1,
+unit-tested in `tests/test_atlas_real_db.py`): the sankey (ΥΠΕΝ → phase →
+top-10 contractors + "others" node, effective €, consortium value split
+across located partners), the per-Π.Ε. yearly series (payment-year
+based, signature-year fallback, plus an explicit `unresolved_eur`
+bucket), and the /connections contractor↔Π.Ε. edge weights. The payment
+strip-timeline plots all **863** non-cancelled orders — 180 dated via
+the submission-timestamp fallback (2026-07-25 policy), 0 left undated.
+*Affects: Atlas `/`, `/connections`; no stored data changed.*
+
+## 2026-08-02 — Cross-dataset pipelines: zero contractor overlap is the finding
+
+/compare's headline visual states that **no company appears in both
+datasets**: the 169 Anti-nero contractor VATs and the 250 ΔΑΣΕ co-ops
+share not a single entity, even under the *strictest* test — both sides
+reduced to canonical VATs (first 8–9-digit run, zfill(9)) before
+intersecting, so spelling/whitespace registry variants cannot hide a
+match. Each side keeps its own € basis, labelled on the page: Anti-nero
+even-split *effective* € (Σ = €615,950,156.78 over raw VATs), ΔΑΣΕ
+even-split *stated* deduplicated € (Σ = €41,418,963.96 over canonical
+VATs). Shared awarding authorities are matched by normalised
+`organization_name` only (per the 2026-07-27 VAT-collision decision);
+the sole in-scope shared awarder is ΥΠΕΝ. *Evidence:
+`test_pipelines_pins` (`vat_overlap == []`). Affects: /compare.*
+
+## 2026-08-02 — /connections flows are full-exposure shares; dominant-origin arrows rejected
+
+The home-region→work-region flow matrix (281 pairs from
+`q.region_flows`) attributes each multi-region contract's full value to
+*every* region pair it touches, so the matrix sums to ≈€1.1B — far above
+the €616M programme. Decision: these € are only ever shown as **shares
+or per-pair magnitudes, never summed as programme money** (caveat
+printed on the page). Default map is a linear choropleth of the % of
+each region's work-€ won by firms based elsewhere — programme-wide only
+**13% stays local** — with directed in/out arcs drawn only for a clicked
+region, plus small multiples of the top-6 contractor home hubs by
+exported € (Κεντρικός Τομέας Αθηνών €139.2M, Θεσσαλονίκη €119.4M,
+Τρίκαλα €87.0M, Βόρειος Τομέας €81.5M, Καβάλα €66.8M, Νότιος Τομέας
+€56.9M). An election-style "one dominant-origin arrow per region" map
+was evaluated and **rejected**: only 19 of the 56 import-majority
+regions have a ≥50% dominant origin, so a single arrow would
+misrepresent the mixed origins of the rest. *Affects: /connections.*
+
+## 2026-08-02 — Forest authorities as cross-dataset entities, matched by folded name
+
+Atlas gives each of the 103 registry authorities a profile page showing
+both of its roles: **Anti-nero works executor** (rows from
+`contract_forest_authorities`) and **ΔΑΣΕ awarding unit**
+(`units_operator_name` matched via the same folded, trigger-stripped
+alias matching the 2026-07-27 ΔΑΣΕ region decision uses — no new
+matching logic, one registry). 48 of 103 authorities are active in both
+datasets. URL slugs are derived by pure folding of the canonical name;
+bijectivity over the registry (103 distinct slugs) is asserted in tests
+so a future registry addition that collides fails loudly. *Affects:
+Atlas /authorities, /authority/<slug>.*

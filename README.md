@@ -38,6 +38,9 @@ Built for the **Anti-nero IV** programme but works with any KHMDHS export.
 │   │   └── 404.html
 │   └── static/
 │       └── style.css             # custom Pico overrides
+├── atlas_api/                    # Atlas JSON API (Flask, 127.0.0.1:5050) —
+│                                 #   reuses webui queries read-only; new SQL in queries_extra.py
+├── atlas/                        # Atlas frontend (SvelteKit + d3; dev :5173, prod :3300)
 ├── data/
 │   ├── raw/
 │   │   └── contracts_search_results.xlsx           # input (untouched)
@@ -346,6 +349,63 @@ Red-flag conventions:
 When a contract is a consortium, **the full contract value is attributed to
 each partner**. This is the "maximum exposure" view (best for OSINT) — not
 an equal split. The footer says so explicitly.
+
+## Atlas — second web UI (publication-grade)
+
+A separate, publication-oriented site over the same two databases
+(Anti-nero: 252 in-scope contracts / €615.95M effective; ΔΑΣΕ: 2,018 live
+contracts / €41.4M stated). The original `webui/` stays frozen and keeps
+working unchanged — Atlas adds two new packages:
+
+- **`atlas_api/`** — a Flask JSON API (`python -m atlas_api`,
+  127.0.0.1:5050) that imports `webui/queries.py` / `webui/dase_queries.py`
+  read-only; all new SQL lives in `atlas_api/queries_extra.py`. Responses
+  are memoised in-process (invalidated on DB mtime change) and pre-gzipped.
+  The `/pdf/<kind>/<adam>` caching proxy is a verbatim copy sharing
+  `data/processed/pdf_cache/`.
+- **`atlas/`** — a SvelteKit app (Svelte 5 + TypeScript, adapter-node).
+  Charts and maps are hand-built with d3 + TopoJSON — no Chart.js, no
+  Leaflet, no CSS framework; self-hosted Greek+Latin font subsets. Design
+  follows the NYT/ProPublica school: chart titles state findings,
+  annotations are printed on the chart, tooltips never carry load-bearing
+  information, and every chart has a caveat line anchored to
+  `/methodology`.
+
+### Run
+
+```bash
+# dev: two processes (webui on :5000 can run at the same time)
+source .venv/bin/activate && python -m atlas_api          # JSON API on :5050
+cd atlas && npm install && npm run dev                    # http://localhost:5173
+
+# production build: single node process that also proxies /api + /pdf to Flask
+cd atlas && npm run build && PORT=3300 npm run serve
+
+# regenerate the committed TopoJSON from webui/static geojson
+cd atlas && npm run geo
+```
+
+(Vite binds `::1` — open `localhost:5173`, not `127.0.0.1:5173`.)
+
+### Pages
+
+| Path | What it shows |
+|------|----------------|
+| `/` | Anti-nero overview: twin interactive paper maps (money choropleths / points, Π.Ε. drill-down with high-res boundary swap), payment strip-timeline of all 863 orders, contract beeswarm with ν.4782/2021 threshold rules, money sankey (ΥΠΕΝ → phases → contractors, reconciles to €615.95M), per-Π.Ε. yearly small multiples, study-cost top-10 |
+| `/antinero/contracts`, `/antinero/contract/[adam]` | Searchable contract list + full contract sheets (payments, sites, PDF deep links) |
+| `/antinero/contractors`, `/antinero/contractor/[vat]` | Contractor browser + profiles (home/work mini-map, yearly money) |
+| `/dase`, `/dase/contracts`, `/dase/coops`, … | ΔΑΣΕ dashboard (Π.Ε. choropleth, 2,018-dot canvas beeswarm), lists and detail pages |
+| `/compare` | Anti-nero vs ΔΑΣΕ: **zero shared contractor VATs** ("two parallel pipelines"), shared-bin size distributions, per-Π.Ε. scatter — with per-side basis labels |
+| `/connections` | Where the money crosses regions: "only 13% of work-money stays local" choropleth, click a region for directed in/out flow arcs, top-6 contractor-hub small multiples (Athens, Thessaloniki, Trikala, …) |
+| `/authorities`, `/authority/[slug]` | 103 forest authorities as cross-dataset entities — Anti-nero works executor and ΔΑΣΕ awarding unit side by side (48 active in both) |
+| `/methodology` | Every caveat's anchor: effective value, even-split vs max-exposure, dedup rules, canonical VAT, geocode precision, licences |
+
+### Tests
+
+```bash
+.venv/bin/python -m pytest            # includes tests/test_atlas_{api,queries_extra,real_db}.py
+cd atlas && npm run check && npm test # svelte-check + vitest transform units
+```
 
 ## API notes
 
