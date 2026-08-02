@@ -350,6 +350,29 @@ When a contract is a consortium, **the full contract value is attributed to
 each partner**. This is the "maximum exposure" view (best for OSINT) — not
 an equal split. The footer says so explicitly.
 
+## Ανάδοχοι αναδάσωσης/αποκατάστασης — third dataset
+
+A standalone database (`data/processed/anadohoi.sqlite`) of the ν.998/1979
+άρθρο 42 §3 sponsor scheme: private companies (ΔΕΗ, EREN, Coca-Cola 3Ε,
+Lidl, Christian Dior, banks, ΤΙΤΑΝ, WWF, …) finance and execute
+reforestation/restoration of burnt public forest land at their own expense,
+appointed by ΥΠΕΝ administrative act on Diavgeia (no procurement — nothing
+in KHMDHS). 322 harvested decisions assemble into **69 projects** with
+company, funder, area (στρέμματα), location + Π.Ε., stated budget where the
+act declares one, initial and amended deadlines, revocations and completion
+acts — every value backed by a verbatim PDF excerpt in the curated
+`khmdhs/data/anadohoi_projects.json`.
+
+```bash
+python -m scripts.harvest_anadohoi     # Diavgeia harvest (sweep + citation crawl)
+python -m khmdhs.anadohoi_loader       # rebuild anadohoi.sqlite from cache + curation
+```
+
+Status is derived honestly: a completion act must exist for `completed`;
+projects past their deadline with nothing posted are `no_completion_recorded`
+— never guessed as abandoned. See DATA_DECISIONS.md (2026-08-02) for the
+full methodology.
+
 ## Atlas — second web UI (publication-grade)
 
 A separate, publication-oriented site over the same two databases

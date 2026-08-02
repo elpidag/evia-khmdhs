@@ -41,6 +41,7 @@ data/processed/dase_pdf_cache/
 data/processed/dase_state.json
 data/processed/dase_harvest_raw.json
 data/processed/dase_review.json
+data/processed/anadohoi_cache/
 
 # Atlas frontend build artefacts (atlas/package-lock.json IS committed)
 atlas/node_modules/

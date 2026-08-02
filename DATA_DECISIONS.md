@@ -479,3 +479,74 @@ datasets. URL slugs are derived by pure folding of the canonical name;
 bijectivity over the registry (103 distinct slugs) is asserted in tests
 so a future registry addition that collides fails loudly. *Affects:
 Atlas /authorities, /authority/<slug>.*
+
+## 2026-08-02 — Third dataset: «Ανάδοχοι αναδάσωσης/αποκατάστασης» sponsor acts
+
+A standalone database (`data/processed/anadohoi.sqlite`) of the ν.998/1979
+άρθρο 42 §3 sponsor scheme (added by the 13.08.2021 ΠΝΠ Α΄143; implementing
+ΥΑ ΥΠΕΝ/ΔΔΕΥ/81777/2996/03.09.2021, Β΄4080): private companies finance and
+execute restoration/reforestation of burnt public forest land at their own
+expense, appointed by administrative act — **no procurement occurs, so
+KHMDHS holds nothing** (verified: no ΑΔΑΜ stamps in any inspected act) and
+the universe is Diavgeia-only. Decisions: (1) **The unit of record is the
+project**, rooted at its initial «Πράξη Ορισμού Αναδόχου» ΑΔΑ; amendments,
+revocations and completion acts attach to the root. (2) **Universe** =
+two user-supplied Diavgeia search exports (`data/raw/list_anadaswsis.json`,
+`list_apokatastasis.json`) ∪ a luminapi subject-phrase sweep across ALL
+organizations (the 2021–22 Β. Εύβοια lifecycle acts were issued by
+Αποκεντρωμένη Διοίκηση Θεσσαλίας–Στ. Ελλάδας before forest services moved
+to ΥΠΕΝ — an ΥΠΕΝ-only search provably misses 6+ acts) ∪ a crawl of every
+ΑΔΑ cited in the recitals of relevant PDFs, iterated to closure.
+(3) **Diavgeia metadata is not a source of substance** for these acts
+(type 2.4.7.1, empty `extraFieldValues`, empty `relatedDecisions` even on
+amendments — verified on ΡΝΕΦ4653Π8-ΙΩ5): company, funder, area, location,
+budget, deadlines and parent-act links are extracted from the signed PDF
+text only, and every curated field carries its ΑΔΑ + verbatim excerpt as
+evidence. Classification is likewise PDF-based, never subject-based —
+«ΔΩΡΕΑ ΓΙΑ ΑΝΑΔΑΣΩΣΗ…» (Ω2ΕΞ4653Π8-6ΟΟ) is in fact a πράξη ορισμού.
+(4) Machine extraction (incl. small-model proposals) is proposal-only:
+a deterministic verifier requires each excerpt to be a substring of the
+cached PDF text and each value to appear inside its excerpt, and every
+assembled project is human-audited before entering the curated
+`khmdhs/data/anadohoi_projects.json`, the committed source of truth.
+(5) **The universe is the instrument, not the fire**: the same άρθρο 42§3
+πράξη is also used for plane-tree-disease sanitation (ALFA WOOD, ΑΚΡΙΤΑΣ
+— Ceratocystis platani), salvage logging of burnt timber (ΑΛΦΑ WOOD
+Τατόι), and δωρεά-funded works (ΣΤΑΝΤΑ Α.Ε. Ευκαρπία) — all included
+with explanatory notes rather than silently excluded. (6) Project Π.Ε.
+is curated from the explicit place names each act states (Δήμος, Δ.Ε.,
+Δασαρχείο αρμοδιότητας); the two genuinely supra-Π.Ε. projects (ALFA
+WOOD Ήπειρος; ΔΕΔΔΗΕ five-region μελέτες) stay honestly NULL. *Affects:
+new anadohoi.sqlite, anadohoi_projects.json, harvest/loader scripts
+only; nothing shared with khmdhs.sqlite or dase.sqlite.*
+
+## 2026-08-02 — Ανάδοχοι: budget honesty and project-status semantics
+
+(1) `budget_eur` is filled ONLY when an act itself states a figure
+(e.g. «προϋπολογισμού ύψους 395.200,40€», ΔΕΗ act ΩΞΕΦ4653Π8-Μ0Π); many
+πράξεις state none (the sponsor merely commits to «συνολική χρηματοδότηση
+του κόστους που θα προκύψει») and stay honestly NULL — press-reported
+figures are never imported. Amounts are stored as written; the VAT basis
+is mixed (some acts say «άνευ ΦΠΑ», Lidl's ΨΧΟ2 states both — the με-ΦΠΑ
+figure kept, noted) and recorded in notes/evidence. `budget_current`
+absorbs amendments (the ΣΤΑΝΤΑ δωρεά grows €3M→€4M). Any aggregate must
+be labelled "stated budgets only, N of M projects". (2) Status is
+derived, never asserted: `completed` requires a found «Διαπιστωτική
+Πράξη ολοκλήρωσης/περάτωσης» (the latest of several lot-completions
+wins, all are linked); `revoked` requires a found ανάκληση; `superseded`
+marks a πράξη restated by a later one for the same works (Coca-Cola
+Τατόι Α: 6ΗΥΗ €1M → ΨΟΕ8 €800k, the successor counts); a project whose
+current deadline (latest amendment wins) has passed with no completion
+act found is `no_completion_recorded` — explicitly NOT "abandoned",
+since absence of a posted act is not proof; otherwise `active`.
+(3) When an amendment's recitals cite several of a company's acts (ΡΝΕΦ
+cites both Ω2ΕΞ and ΩΖ2Ο), the parent is the act named in the operative
+«Τροποποιούμε την …» sentence, not the recitals — same lesson as the
+Anti-nero «ΑΔΑΜ ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ» rule. (4) Two documented clerical
+slips corrected with notes (deadlines written «2021» in acts issued
+after those dates: ΨΟΨΝ, 6597 — both a year short); and one act exists
+only as a citation: the Coca-Cola Πηγές Καρακαντά restatement
+(ΥΠΕΝ/ΔΔΕΥ/118978/4886/29.10.2025) was never found on Diavgeia — its
+revocation Ε01Π is attached to the published root 63ΡΧ with the
+chronology in notes. *Affects: projects.status, budget columns, chain
+assembly.*

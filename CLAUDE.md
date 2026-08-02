@@ -360,6 +360,49 @@ khmdhs-side addition). Second sqlite is opened by a **lazy
 `g.dase_conn` accessor** — khmdhs-only routes never touch dase.sqlite
 (tested: khmdhs JSON endpoints byte-identical with the ΔΑΣΕ DB absent).
 
+## Ανάδοχοι αναδάσωσης/αποκατάστασης dataset (`data/processed/anadohoi.sqlite`)
+
+Third dataset: the ν.998/1979 **άρθρο 42 §3** sponsor scheme (13.08.2021 ΠΝΠ;
+ΥΑ Β΄4080) — private companies finance/execute restoration of burnt public
+forest land, appointed by administrative act. **Diavgeia-only universe** (no
+procurement → no KHMDHS; act metadata is empty of substance — type 2.4.7.1,
+no relatedDecisions even on amendments → the signed PDFs are the source).
+State (2026-08-02): **322 decisions → 69 projects** (51 companies: ΔΕΗ,
+EREN, Coca-Cola 3Ε, Lidl, Dior, Πειραιώς/Εθνική/Eurobank, ΤΙΤΑΝ, WWF …),
+41 stated budgets Σ€37.2M (€41.2M after δωρεά amendments), 147.5k στρέμματα;
+status: 14 completed / 34 active / **19 no_completion_recorded** / 1 revoked
+(Coca-Cola withdrew by letter) / 1 superseded.
+
+- `scripts/harvest_anadohoi.py` — resumable: seeds (2 raw list exports) +
+  luminapi subject sweep across ALL orgs (pre-2022 acts live under ΑΠΔ Θ-ΣΕ)
+  + **ΑΔΑ-citation crawl to closure** (recitals cite parents/μελέτες);
+  classifier proposals via `khmdhs/anadohoi.py:classify` are never final —
+  titles lie both ways («ΔΩΡΕΑ…» is an orismos, «ΠΡΩΤΟΚΟΛΛΟ ΕΓΚΑΤΑΣΤΑΣΗΣ…»
+  quotes one). Cache `data/processed/anadohoi_cache/` (gitignored).
+- Extraction: deterministic regex (amounts/στρέμματα/dates/ΑΔΑ citations;
+  «Αποφασίζουμε» can be letter-spaced → `operative_window` folds) + haiku
+  batch proposals gated by a verbatim-excerpt verifier (excerpt ⊂ PDF text,
+  value ⊂ excerpt; ~10% of fields failed and were hand-extracted — incl. two
+  hallucinated deadlines/funders the verifier caught). Everything lands in
+  curated **`khmdhs/data/anadohoi_projects.json`** (per-field evidence,
+  decision_overrides with reasons) — the committed source of truth.
+- `khmdhs/anadohoi_loader.py` → tables `decisions` / `projects` /
+  `project_decisions` / `meta`. Status derived as of load date
+  (meta.status_as_of): completed (latest of multiple lot-completions) /
+  revoked / superseded (restatements: 6ΗΥΗ→ΨΟΕ8) / no_completion_recorded
+  (deadline passed, no act found — NOT "abandoned") / active.
+  `deadline_current`/`budget_current` absorb amendments. Gotchas: parent =
+  the operative «Τροποποιούμε…» sentence (recitals cite whole histories);
+  ΑΔΑs suffer 1↔Ι homoglyphs and line-breaks in PDFs; two in-act year typos
+  corrected with notes; the revoked Coca-Cola restatement was never
+  published — revocation attached to the published root 63ΡΧ.
+- Non-fire same-instrument acts are IN (plane-disease sanitation ALFA
+  WOOD/ΑΚΡΙΤΑΣ, salvage logging, δωρεά-funded ΣΤΑΝΤΑ) with notes; 2 projects
+  honestly pe-NULL (supra-Π.Ε.). ΔΑΣΕ cross-link: sponsors execute via
+  forest co-ops (NOVA Ζώνη 4 → ΔΑΣΕ Αγ. Δημητρίου Πιερίας; ΤΙΤΑΝ → ΔΑΣΕ
+  Γαρδικίου Τρικάλων). Tests in `tests/test_anadohoi.py` (units + real-DB
+  pins incl. status counts and Σ budgets).
+
 ## Atlas (second web UI: `atlas/` SvelteKit + `atlas_api/` Flask JSON API)
 
 A separate, publication-grade site over the same two DBs — **`webui/` is
