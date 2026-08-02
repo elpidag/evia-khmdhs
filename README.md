@@ -394,7 +394,7 @@ working unchanged — Atlas adds two new packages:
   information, and every chart has a caveat line anchored to
   `/methodology`.
 
-### Run
+### Run (Linux / macOS)
 
 ```bash
 # dev: two processes (webui on :5000 can run at the same time)
@@ -409,6 +409,45 @@ cd atlas && npm run geo
 ```
 
 (Vite binds `::1` — open `localhost:5173`, not `127.0.0.1:5173`.)
+
+### Run (Windows)
+
+Prerequisites: Python 3.11+ with the project venv already set up (see
+[Setup](#setup--from-scratch-in-a-virtualenv) above) and **Node.js 20+ LTS**
+from [nodejs.org](https://nodejs.org/) (tick "Add to PATH"; verify with
+`node --version` in a new terminal).
+
+Open **two PowerShell windows** in the repo root:
+
+```powershell
+# ── window 1: the JSON API (Flask, http://127.0.0.1:5050) ──
+.venv\Scripts\Activate.ps1
+python -m atlas_api
+```
+
+```powershell
+# ── window 2: the web UI (SvelteKit dev server) ──
+cd atlas
+npm install          # first time only
+npm run dev
+```
+
+Then open **http://localhost:5173** in your browser (use `localhost`, not
+`127.0.0.1` — the dev server binds IPv6 `::1`). Keep both windows running;
+Ctrl+C stops each. If `Activate.ps1` is blocked, run
+`Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` once
+and reopen the shell, or use `cmd.exe` with `.venv\Scripts\activate.bat`.
+
+Production build (optional — one Node process on http://localhost:3300 that
+also proxies `/api` + `/pdf` to Flask, which must still be running):
+
+```powershell
+cd atlas
+npm run build
+$env:PORT = "3300"
+$env:ATLAS_API_ORIGIN = "http://127.0.0.1:5050"
+npm run serve
+```
 
 ### Pages
 
