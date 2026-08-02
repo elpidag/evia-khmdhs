@@ -14,6 +14,8 @@
 		start: string | null;
 		deadline0: string | null;
 		deadline: string | null;
+		/** duration-based deadline wording when the act sets no date */
+		dtext?: string | null;
 		completed: string | null;
 		revoked: string | null;
 		status: string;
@@ -84,6 +86,12 @@
 	const years = ['2022', '2023', '2024', '2025', '2026', '2027', '2028'];
 	const todayX = $derived(x(today) ?? LABEL_W);
 
+	/** minimal per-row deadline label: "12.2027" */
+	function dl(d: string | null): string {
+		if (!d) return '';
+		return `${d.slice(5, 7)}.${d.slice(0, 4)}`;
+	}
+
 	function tip(p: GanttProject): string {
 		const bits = [
 			p.company,
@@ -122,6 +130,11 @@
 		{@const xc = x(p.completed)}
 		{@const xr = x(p.revoked)}
 		{@const c = COLOR[p.status]}
+		{@const right = Math.max(xd ?? 0, xc ?? 0, xr ?? 0, xs ?? 0)}
+		{@const markNearTick =
+			(xc !== null && xd !== null && xc > xd - 4 && xc < xd + 40) ||
+			(xr !== null && xd !== null && xr > xd - 4 && xr < xd + 40)}
+		{@const labelX = xd === null || !p.deadline ? null : markNearTick ? right + 12 : xd + 5}
 		<g class="row">
 			<title>{tip(p)}</title>
 			<a href={`/anadohoi/project/${p.ada}`}>
@@ -135,15 +148,24 @@
 			{#if xd0 !== null && xd !== null && xd > xd0}
 				<rect x={xd0} y={y + 2} width={xd - xd0} height="7" fill={c} opacity="0.35" rx="1" />
 			{/if}
+			{#if xd !== null}
+				<line x1={xd} y1={y + 1} x2={xd} y2={y + 10} stroke={c} stroke-width="1.3" />
+			{/if}
 			{#if xc !== null}
 				<text x={xc + 2} y={y + 10} class="mark ok">✓</text>
 			{/if}
 			{#if xr !== null}
 				<text x={xr + 2} y={y + 10} class="mark bad">✕</text>
 			{/if}
+			{#if labelX !== null}
+				<text x={labelX} y={y + 9.5} class="ddate">{dl(p.deadline)}</text>
+			{:else if p.dtext && p.status === 'active'}
+				<!-- duration-based deadline (no date in the act); noise once delivered -->
+				<text x={right + 5} y={y + 9.5} class="ddate dur">{p.dtext}</text>
+			{/if}
 			{#if annotations[p.ada]}
-				{@const ax = Math.max(xd ?? 0, xc ?? 0, xr ?? 0, xs ?? 0) + 14}
-				<text x={ax} y={y + 10} class="anno">← {annotations[p.ada]}</text>
+				{@const annoX = Math.max(right + 14, (labelX ?? 0) + 34)}
+				<text x={annoX} y={y + 10} class="anno">← {annotations[p.ada]}</text>
 			{/if}
 		</g>
 	{/each}
@@ -201,6 +223,17 @@
 	.anno {
 		font-size: 10px;
 		fill: var(--ink);
+		font-style: italic;
+	}
+	.ddate {
+		font-size: 8.5px;
+		fill: var(--ink-faint);
+		font-variant-numeric: tabular-nums;
+		paint-order: stroke;
+		stroke: var(--paper);
+		stroke-width: 2.5px;
+	}
+	.ddate.dur {
 		font-style: italic;
 	}
 </style>

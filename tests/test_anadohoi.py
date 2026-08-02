@@ -182,16 +182,22 @@ def test_real_db_pins(conn):
     assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 69
     statuses = dict(conn.execute(
         "SELECT status, COUNT(*) FROM projects GROUP BY status"))
-    assert statuses == {"completed": 14, "active": 34, "revoked": 1,
-                        "no_completion_recorded": 19, "superseded": 1}
-    # stated budgets (41 of 68 live projects), and after δωρεά amendments
+    assert statuses == {"completed": 14, "active": 32, "revoked": 1,
+                        "no_completion_recorded": 21, "superseded": 1}
+    # stated budgets (42 of 68 live projects), and after δωρεά amendments
     stated, n = conn.execute(
         "SELECT ROUND(SUM(budget_eur),2), COUNT(budget_eur) FROM projects "
         "WHERE status != 'superseded'").fetchone()
-    assert (stated, n) == (37183092.05, 41)
+    assert (stated, n) == (37842320.85, 42)
     assert conn.execute(
         "SELECT ROUND(SUM(budget_current),2) FROM projects "
-        "WHERE status != 'superseded'").fetchone()[0] == 41183092.05
+        "WHERE status != 'superseded'").fetchone()[0] == 41842320.85
+    # duration-based deadlines carried as text, never fabricated dates
+    assert conn.execute(
+        "SELECT COUNT(deadline_text) FROM projects").fetchone()[0] == 36
+    assert conn.execute(
+        "SELECT deadline_initial FROM projects WHERE root_ada = "
+        "'ΨΓΦΔ4653Π8-777'").fetchone()[0] is None
     # Π.Ε. resolved for all but the 2 genuinely supra-Π.Ε. projects
     assert conn.execute(
         "SELECT COUNT(pe), COUNT(*) FROM projects").fetchone() == (67, 69)

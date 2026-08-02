@@ -182,8 +182,11 @@
 		three different value bases side by side, labelled and never summed into one headline.
 		«HQ region» is available only for Anti-nero contractors, whose registered seats are
 		curated; procedure for sponsor projects is shown as «Πράξη αναδόχου (χορηγία)» because no
-		procurement procedure exists. Filtering runs entirely in the browser; every filter state
-		is a shareable URL.
+		procurement procedure exists. The «Excl. VAT» column is the registry's stated net value
+		(for Anti-nero it sits beside the <em>effective</em> incl-VAT figure, so the two are
+		different bases); sponsor acts state a single figure with mixed VAT treatment, so their
+		net column stays blank. Filtering runs entirely in the browser; every filter state is a
+		shareable URL.
 	</p>
 
 	<h2 id="pdf-provenance">Documents</h2>

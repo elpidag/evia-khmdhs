@@ -116,16 +116,22 @@ def test_explore_pins(client):
     assert kh_sum == pytest.approx(615_950_156.78, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
     assert dase_sum == pytest.approx(41_418_963.96, abs=1.0)
-    # sponsor rows expose status; the 19 stalled ones are findable
+    # sponsor rows expose status; the 21 stalled ones are findable
     stalled = [r for r in e["rows"]
                if r["ds"] == "anadohoi" and r["st"] == "no_completion_recorded"]
-    assert len(stalled) == 19
+    assert len(stalled) == 21
+    # net values: full registry coverage, honestly absent for sponsors
+    for r in e["rows"]:
+        if r["ds"] == "anadohoi":
+            assert r["vn"] is None
+        else:
+            assert r["vn"] is not None
 
 
 def test_anadohoi_overview_pins(client):
     o = client.get("/api/anadohoi/overview").get_json()
     assert o["kpis"]["n_projects"] == 68
-    assert o["kpis"]["stated_eur"] == pytest.approx(41_183_092.05)
+    assert o["kpis"]["stated_eur"] == pytest.approx(41_842_320.85)
     assert o["kpis"]["statuses"]["completed"] == 14
     assert len(o["projects"]) == 69
     fires = {f["fire"]: f for f in o["fires"]}
@@ -138,4 +144,4 @@ def test_anadohoi_overview_pins(client):
 
 def test_meta_anadohoi_pin(client):
     m = client.get("/api/meta").get_json()
-    assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_183_092.05}
+    assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_842_320.85}

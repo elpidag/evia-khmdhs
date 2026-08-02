@@ -28,6 +28,7 @@ export interface AnadohoiProject {
 	start_date: string | null;
 	deadline_initial: string | null;
 	deadline_current: string | null;
+	deadline_text: string | null;
 	superseded_by: string | null;
 	revoked_ada: string | null;
 	revoked_date: string | null;

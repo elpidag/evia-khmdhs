@@ -43,7 +43,8 @@
 	let payload: ExplorePayload | null = $state.raw(null);
 	let indexed: Indexed[] = $state.raw([]);
 	$effect(() => {
-		apiGetCached<ExplorePayload>(fetch, '/api/explore').then((p) => {
+		// ?v= busts HTTP + module caches when the payload shape changes
+		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=2').then((p) => {
 			payload = p;
 			indexed = p.rows.map((r) => {
 				const hn = searchNorm(
@@ -99,12 +100,15 @@
 			out.push(r);
 		}
 		const dir = sort.endsWith('_asc') ? 1 : -1;
-		if (sort.startsWith('v')) {
+		if (sort.startsWith('v') || sort.startsWith('n')) {
+			const key: 'v' | 'vn' = sort.startsWith('n') ? 'vn' : 'v';
 			out.sort((a, b) => {
-				if (a.v === null && b.v === null) return 0;
-				if (a.v === null) return 1;
-				if (b.v === null) return -1;
-				return dir * (a.v - b.v);
+				const av = a[key];
+				const bv = b[key];
+				if (av === null && bv === null) return 0;
+				if (av === null) return 1;
+				if (bv === null) return -1;
+				return dir * (av - bv);
 			});
 		} else {
 			out.sort((a, b) => {
@@ -162,7 +166,7 @@
 		if (r.ds === 'dase') return `/dase/contract/${r.ref}`;
 		return `/anadohoi/project/${r.ref}`;
 	}
-	function toggleSort(kind: 'd' | 'v') {
+	function toggleSort(kind: 'd' | 'v' | 'n') {
 		const next =
 			sort === `${kind}_desc` ? `${kind}_asc` : `${kind}_desc`;
 		setParam('sort', next === 'd_desc' ? null : next);
@@ -284,6 +288,11 @@
 				<th>Company</th>
 				<th>Regions</th>
 				<th class="num"
+					><button class="sort" onclick={() => toggleSort('n')}
+						>Stated excl. VAT {sort === 'n_desc' ? '↓' : sort === 'n_asc' ? '↑' : ''}</button
+					></th
+				>
+				<th class="num"
 					><button class="sort" onclick={() => toggleSort('v')}
 						>Value {sort === 'v_desc' ? '↓' : sort === 'v_asc' ? '↑' : ''}</button
 					></th
@@ -306,6 +315,7 @@
 					</td>
 					<td class="muted"><small>{r.co || '—'}</small></td>
 					<td class="muted"><small>{r.pe.join(', ') || '—'}</small></td>
+					<td class="num muted"><small>{r.vn === null ? '—' : eur(r.vn)}</small></td>
 					<td class="num">{r.v === null ? '—' : eur(r.v)}</td>
 				</tr>
 			{/each}

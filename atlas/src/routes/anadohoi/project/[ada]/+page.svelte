@@ -104,6 +104,7 @@
 		compare={p.deadline_initial && p.deadline_initial !== p.deadline_current
 			? `initially ${p.deadline_initial}`
 			: ''}
+		basis={p.deadline_text ?? (p.deadline_current ? '' : 'the act sets no deadline')}
 	/>
 	<StatPair
 		value={p.completed_date ?? p.revoked_date ?? '—'}

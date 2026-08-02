@@ -254,11 +254,11 @@ def _build_ana_db(path):
          "test", None))
     conn.execute(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         ("ΤΕΣΤ4653Π8-ΑΑΑ", "ΕΤΑΙΡΕΙΑ ΤΕΣΤ Α.Ε.", None, "Οδός 1",
          "apokatastasi", 100.0, "τεστ περιοχή", None, "Π.Ε. Ευβοίας",
          "Β. Εύβοια, Αύγ. 2021", 50_000.0, 50_000.0, "2023-01-01",
-         "2024-12-31", "2024-12-31", None, None, None, None, None,
+         "2024-12-31", "2024-12-31", None, None, None, None, None, None,
          "no_completion_recorded", "{}", None))
     conn.execute("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                  ("ΤΕΣΤ4653Π8-ΑΑΑ", "ΤΕΣΤ4653Π8-ΑΑΑ", "initial", None, None))
@@ -297,9 +297,10 @@ def test_explore_all_three_datasets(full_client):
     assert by_ds["anadohoi"]["st"] == "no_completion_recorded"
     assert by_ds["anadohoi"]["pe"] == ["Π.Ε. Ευβοίας"]
     for r in e["rows"]:
-        for key in ("ds", "ref", "d", "t", "co", "v", "pe", "hq", "proc",
-                    "st", "b1"):
+        for key in ("ds", "ref", "d", "t", "co", "v", "vn", "pe", "hq",
+                    "proc", "st", "b1"):
             assert key in r
+    assert by_ds["anadohoi"]["vn"] is None   # mixed VAT basis, stays blank
 
 
 def test_explore_degrades_without_optional_dbs(tmp_path):

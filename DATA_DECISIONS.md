@@ -565,3 +565,25 @@ respond to no fire (plane-disease sanitation, the ΣΤΑΝΤΑ αναβάθμι�
 generic multi-region μελέτες) get «εκτός πυρκαγιάς»; never inferred
 from press coverage. *Affects: projects.fire_event, the Atlas /anadohoi
 fire small-multiples.*
+
+## 2026-08-02 — Ανάδοχοι: duration-based deadlines stored as text, never as dates
+
+Trigger: ΨΓΦΔ4653Π8-777 (ΤΙΤΑΝ, Δερβενοχώρια) sets no calendar deadline —
+«τριάντα (30) ημέρες από την ημερομηνία επιλογής μελετητή» for the study
+and «τέσσερις (4) μήνες μετά την έναρξη των εργασιών … δεν δύναται να
+υπερβεί το διάστημα των έξι (6) μηνών» for the works. Many acts follow
+this pattern. Decision: (1) durations anchored on events OUTSIDE the
+record (επιλογή μελετητή, έναρξη εργασιών) are stored as a compact
+`deadline_text` (verbatim excerpt as evidence) and are **never converted
+to dates** — any date would be fabricated; such projects cannot be
+declared past-deadline and stay `active` unless completed/revoked.
+(2) Durations anchored **on the act itself** («από την υπογραφή/έκδοση
+της παρούσας») ARE convertible — the anchor date is the act's own date —
+and 9 deadlines were computed this way (derivation recorded in notes,
+e.g. ΨΤΑΤ: 08.02.2023 + 5 έτη → 08.02.2028; 9ΑΖΛ: 17.12.2021 + 15
+ημέρες → 01.01.2022). (3) The accompanying full re-audit of every act's
+text also corrected three budgets against the acts: 6Ι4Σ 404.000 →
+703.228,80 (the αναδοχή totals two μελέτες, χωρίς ΦΠΑ), 6Χ7Ι null →
+200.000, ΡΕΧΥ 150.000 → 310.000 (the act budgets both Δασαρχεία, Λίμνης
++ Ιστιαίας). *Affects: projects.deadline_text, deadline_initial ×9,
+budget_eur ×3, anadohoi_projects.json, /anadohoi pages.*

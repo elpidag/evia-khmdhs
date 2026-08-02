@@ -13,6 +13,7 @@ export interface AnadohoiOverviewProject {
 	start: string | null;
 	deadline0: string | null;
 	deadline: string | null;
+	dtext: string | null;
 	completed: string | null;
 	revoked: string | null;
 	status: string;

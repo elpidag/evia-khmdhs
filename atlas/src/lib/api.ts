@@ -321,6 +321,7 @@ export interface ExploreRow {
 	t: string;
 	co: string;
 	v: number | null;
+	vn: number | null;
 	pe: string[];
 	hq: string[];
 	proc: 'direct' | 'open' | 'nego' | 'other' | 'sponsor';
