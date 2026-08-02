@@ -329,6 +329,9 @@ export interface ExploreRow {
 	b1: number;
 	/** linked διακήρυξη/πρόσκληση: 1/0 for Anti-nero, null elsewhere */
 	pr: number | null;
+	/** project end date on record: 1/0 (Anti-nero completion act /
+	 *  anadohoi completed status), null for ΔΑΣΕ (never harvested) */
+	fin: number | null;
 }
 
 export interface ExplorePayload {

@@ -188,7 +188,11 @@
 		net column stays blank. The «Διακήρυξη» filter uses the ΚΗΜΔΗΣ chain links: only 41 of
 		252 in-scope Anti-nero contracts have a linked διακήρυξη/πρόσκληση — the registry's
 		chain knows only what each σύμβαση declared when posted, so «without» means <em>no
-		linked notice in the registry</em>, not proof that none was ever published. Filtering
+		linked notice in the registry</em>, not proof that none was ever published. The «End
+		date» filter marks rows with a recorded project ending: an Anti-nero completion act
+		found on Διαύγεια (οριστική παραλαβή / περαίωση — 155 of 252 contracts) or a completed
+		sponsor project; «without» means no such act was found, and ΔΑΣΕ rows are excluded from
+		the filter because their endings were never harvested. Filtering
 		runs entirely in the browser; every filter state is a shareable URL.
 	</p>
 

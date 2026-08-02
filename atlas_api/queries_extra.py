@@ -796,6 +796,14 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
     except sqlite3.OperationalError:
         notice_refs = None
 
+    # contracts with a Diavgeia completion act (project end date)
+    done_refs: set[str] | None
+    try:
+        done_refs = {r[0] for r in kh.execute(
+            "SELECT DISTINCT attributed_ref FROM contract_completion_acts")}
+    except sqlite3.OperationalError:
+        done_refs = None
+
     eff = q.effective_cost(kh, "c")
     for r in kh.execute(f"""
         SELECT c.reference_number AS ref, c.title,
@@ -832,6 +840,8 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "b1": 1 if r["bids_submitted"] == 1 else 0,
             "pr": None if notice_refs is None
                  else (1 if r["ref"] in notice_refs else 0),
+            "fin": None if done_refs is None
+                  else (1 if r["ref"] in done_refs else 0),
         })
 
     if dase is not None:
@@ -861,7 +871,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                      else None,
                 "pe": pes, "hq": [],
                 "proc": _proc_kind(r["procedure_type"]),
-                "st": None, "b1": 0, "pr": None,
+                "st": None, "b1": 0, "pr": None, "fin": None,
             })
 
     if ana is not None:
@@ -878,6 +888,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 "pe": [r["pe"]] if r["pe"] else [], "hq": [],
                 "proc": "sponsor",
                 "st": r["status"], "b1": 0, "pr": None,
+                "fin": 1 if r["status"] == "completed" else 0,
             })
 
     counts: dict[str, int] = {}
@@ -1033,7 +1044,7 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
 # ------------------------------------------------ procurement timeline
 
 _TIMELINE_ORDER = {"request": 0, "approved_request": 1, "notice": 2,
-                   "auction": 3, "contract": 4}
+                   "auction": 3, "contract": 4, "completion": 5}
 
 
 def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
@@ -1049,7 +1060,7 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
               LEFT JOIN linked_acts la USING (adam)
              WHERE cla.reference_number = ?""", (ref,)).fetchall()
     except sqlite3.OperationalError:        # tables not built yet
-        return []
+        rows = []
     out = []
     for r in rows:
         entry = {
@@ -1073,6 +1084,24 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
                     "in_db": True,
                 })
         out.append(entry)
+    # Diavgeia completion acts (οριστική παραλαβή / περαίωση / ολοκλήρωση)
+    try:
+        for r in kh.execute("""
+            SELECT ada, act_kind, subject, issue_date, end_date, end_basis,
+                   end_excerpt
+              FROM contract_completion_acts
+             WHERE cited_ref = ? OR attributed_ref = ?""", (ref, ref)):
+            out.append({
+                "adam": r["ada"], "kind": "completion",
+                "ckind": r["act_kind"],
+                "title": (r["subject"] or "")[:160] or None,
+                "d": r["end_date"] or r["issue_date"],
+                "end_basis": r["end_basis"],
+                "end_excerpt": r["end_excerpt"],
+                "cancelled": 0, "in_db": False,
+            })
+    except sqlite3.OperationalError:
+        pass
     out.sort(key=lambda e: (e["d"] or "9999",
                             _TIMELINE_ORDER.get(e["kind"], 9)))
     return out

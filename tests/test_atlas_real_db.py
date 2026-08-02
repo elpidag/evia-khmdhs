@@ -130,6 +130,13 @@ def test_explore_pins(client):
     kh_pr = [r["pr"] for r in e["rows"] if r["ds"] == "antinero"]
     assert kh_pr.count(1) == 41 and kh_pr.count(0) == 211
     assert all(r["pr"] is None for r in e["rows"] if r["ds"] != "antinero")
+    # end-date flag: 155 Anti-nero contracts have a completion act,
+    # 14 sponsor projects are completed; ΔΑΣΕ endings were never harvested
+    kh_fin = [r["fin"] for r in e["rows"] if r["ds"] == "antinero"]
+    assert kh_fin.count(1) == 155 and kh_fin.count(0) == 97
+    an_fin = [r["fin"] for r in e["rows"] if r["ds"] == "anadohoi"]
+    assert an_fin.count(1) == 14
+    assert all(r["fin"] is None for r in e["rows"] if r["ds"] == "dase")
 
 
 def test_anadohoi_overview_pins(client):

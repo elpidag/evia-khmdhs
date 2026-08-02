@@ -615,3 +615,29 @@ The Atlas contract page gains the full timeline (αίτημα → πρόσκλη
 κατακύρωση → σύμβαση → πληρωμές) with per-act PDFs through the caching
 proxy. *Affects: new tables linked_acts, contract_linked_acts; refresh
 chain; Atlas /antinero/contract pages.*
+
+## 2026-08-02 — Anti-nero: project-completion acts harvested from Diavgeia
+
+ΚΗΜΔΗΣ has no record type for a contract's ending, but ΥΠΕΝ posts the
+closing acts on Diavgeia — «Έγκριση Πρωτοκόλλου Οριστικής Παραλαβής
+εργασιών του έργου της Σύμβασης με ΑΔΑΜ: …» (the subject cites the
+contract ΑΔΑΜ; trigger example 6Ι7Τ4653Π8-ΝΡΓ for 22SYMV011470180).
+Decision: `khmdhs/completion_acts_loader.py` searches Diavgeia per stored
+contract (`subject:"<ΑΔΑΜ>"`, all orgs) plus a phrase sweep fallback, and
+keeps ONLY acts that certify the ending — οριστική παραλαβή (incl.
+προσωρινής-και-οριστικής and «επέχει θέση οριστικής»), περαίωση,
+διαπιστωτική ολοκλήρωσης. Explicitly rejected: committee formations
+(συγκρότηση/ορισμός επιτροπής), παρατάσεις, τροποποιήσεις, τμηματικές
+and provisional-only παραλαβές, επιμετρήσεις/ΑΠΕ and anything else the
+search returns. Subjects that say only «Πρωτοκόλλου Παραλαβής» (early
+acts omit «οριστικής» — e.g. 6Λ674653Π8-ΒΤ3, whose body approves the
+«πρωτόκολλο οριστικής ποιοτικής και ποσοτικής παραλαβής») are resolved
+from the PDF text: οριστική when the body says so, plain `paralavi` for
+a final protocol without the word, rejected when the body reveals a
+τμηματική/προσωρινή. The
+**project end date** is extracted from the signed PDF (the πρωτοκόλλου
+date in «το από DD.MM.YYYY πρωτόκολλο …», with excerpt evidence;
+`end_basis='protocol_date'`), falling back to the act's own issue date
+(`'act_date'`). Acts attribute to the supersede-chain tip like payments.
+*Affects: new table contract_completion_acts; refresh chain; the Atlas
+contract timeline.*

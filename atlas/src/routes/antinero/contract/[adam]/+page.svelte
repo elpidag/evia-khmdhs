@@ -14,10 +14,16 @@
 		approved_request: 'Ανάληψη υποχρέωσης',
 		notice: 'Διακήρυξη / πρόσκληση',
 		auction: 'Κατακύρωση / ανάθεση',
-		contract: 'Σύμβαση'
+		contract: 'Σύμβαση',
+		completion: 'Ολοκλήρωση'
+	};
+	const CKIND_LABEL: Record<string, string> = {
+		oristiki_paralavi: 'Οριστική παραλαβή',
+		peraiosi: 'Βεβαίωση περαίωσης',
+		oloklirosi: 'Διαπιστωτική ολοκλήρωσης'
 	};
 	const TIMELINE_ORDER: Record<string, number> = {
-		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4
+		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4, completion: 5
 	};
 	const timeline = $derived.by(() => {
 		if (!c.timeline.length) return [];
@@ -206,8 +212,13 @@
 					<tr class:cancelled={t.cancelled === 1} class:self={t.self}>
 						<td class="tabular muted">{t.d ?? '—'}</td>
 						<td>
-							<span class="chip" class:hl={t.kind === 'auction' || t.self}
-								>{TIMELINE_KIND[t.kind] ?? t.kind}</span
+							<span
+								class="chip"
+								class:hl={t.kind === 'auction' || t.self}
+								class:ok={t.kind === 'completion'}
+								>{t.kind === 'completion'
+									? (CKIND_LABEL[t.ckind ?? ''] ?? TIMELINE_KIND.completion)
+									: (TIMELINE_KIND[t.kind] ?? t.kind)}</span
 							>
 							<br /><small class="tabular muted">{t.adam}</small>
 						</td>
@@ -222,10 +233,23 @@
 									{#if t.kind === 'contract'}<span class="muted">(εκτός dataset)</span>{/if}
 								{/if}
 								{#if t.cancelled === 1}<span class="chip bad">cancelled</span>{/if}
+								{#if t.kind === 'completion' && t.end_excerpt}
+									<blockquote class="excerpt">«{t.end_excerpt}»</blockquote>
+								{:else if t.kind === 'completion' && t.end_basis === 'act_date'}
+									<br /><span class="muted">(ημερομηνία πράξης — το πρωτόκολλο δεν χρονολογείται στο κείμενο)</span>
+								{/if}
 							</small>
 						</td>
 						<td class="nowrap">
-							{#if t.kind !== 'contract'}
+							{#if t.kind === 'completion'}
+								<a href={`/pdf/diavgeia/${t.adam}`} target="_blank" rel="noopener">📄 PDF</a>
+								<br /><a
+									class="ext"
+									href={`https://diavgeia.gov.gr/decision/view/${t.adam}`}
+									target="_blank"
+									rel="noopener"><small>Diavgeia ↗</small></a
+								>
+							{:else if t.kind !== 'contract'}
 								<a
 									href={`/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`}
 									target="_blank"
@@ -319,6 +343,18 @@
 		background: var(--c-antinero);
 		color: #fff;
 		border-color: var(--c-antinero);
+	}
+	.chip.ok {
+		background: var(--c-anadohoi);
+		color: #fff;
+		border-color: var(--c-anadohoi);
+	}
+	.excerpt {
+		margin: var(--sp-1) 0 0;
+		padding-left: var(--sp-2);
+		border-left: 2px solid var(--line-strong);
+		color: var(--ink-soft);
+		font-style: italic;
 	}
 	tr.self {
 		background: color-mix(in srgb, var(--c-antinero) 7%, transparent);

@@ -31,8 +31,8 @@ from pathlib import Path
 import requests
 
 from khmdhs import (
-    chain_loader, forest_loader, linked_acts_loader, payment_loader,
-    region_loader, scope_loader, studies_loader,
+    chain_loader, completion_acts_loader, forest_loader, linked_acts_loader,
+    payment_loader, region_loader, scope_loader, studies_loader,
 )
 from khmdhs.api import fetch_contract
 from khmdhs.config import DATA_PROCESSED, DEFAULT_DB, THROTTLE_SECONDS
@@ -196,6 +196,8 @@ def main(argv: list[str] | None = None) -> int:
         # refetched contracts lose their contract_linked_acts rows (CASCADE);
         # the loader refills only those, so this is cheap on routine runs.
         linked_acts_loader.main(db_argv)
+        print("\n-- completion_acts_loader --------------------------------------")
+        completion_acts_loader.main(db_argv)
 
     conn = sqlite3.connect(args.db)
     todos = curation_todos(conn) if changed else []

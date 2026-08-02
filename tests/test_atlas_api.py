@@ -298,7 +298,7 @@ def test_explore_all_three_datasets(full_client):
     assert by_ds["anadohoi"]["pe"] == ["Π.Ε. Ευβοίας"]
     for r in e["rows"]:
         for key in ("ds", "ref", "d", "t", "co", "v", "vn", "pe", "hq",
-                    "proc", "st", "b1", "pr"):
+                    "proc", "st", "b1", "pr", "fin"):
             assert key in r
     assert by_ds["anadohoi"]["vn"] is None   # mixed VAT basis, stays blank
     # linked-acts layer absent in the synthetic DB → notice flag unknown

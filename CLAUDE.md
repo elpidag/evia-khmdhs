@@ -187,6 +187,20 @@ refetching open contracts — prefer it for routine updates.
   posted with none (the Atlas timeline says so honestly). 147 upstream
   acts stored. Atlas: `queries_extra.contract_timeline` +
   `/pdf/{request,notice,auction}/<ΑΔΑΜ>` proxy kinds.
+- `completion_acts_loader.py` — project-ENDING acts from Diavgeia:
+  ΚΗΜΔΗΣ has no completion record type, but ΥΠΕΝ posts «Έγκριση
+  Πρωτοκόλλου Οριστικής Παραλαβής … της Σύμβασης με ΑΔΑΜ: <SYMV>» acts
+  whose SUBJECT cites the contract ΑΔΑΜ → one luminapi
+  `subject:"<ΑΔΑΜ>"` search per stored contract, STRICT completion
+  classification (οριστική παραλαβή / περαίωση / διαπιστωτική
+  ολοκλήρωσης; committee formations, παρατάσεις, ΑΠΕ, επιμετρήσεις,
+  τμηματικές/προσωρινές παραλαβές rejected). Subjects saying only
+  «Πρωτοκόλλου Παραλαβής» resolve from the PDF body (early acts omit
+  «οριστικής»). End date = the protocol date in «το από DD.MM.YYYY
+  πρωτόκολλο…» (excerpt stored, `end_basis=protocol_date`), else the
+  act date. Table `contract_completion_acts` (chain-tip `attributed_ref`
+  like payments; FK CASCADE; in the refresh chain). Atlas timeline shows
+  them as the closing act with `/pdf/diavgeia/<ΑΔΑ>` links.
 - `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
   (end_date NULL or <90 days past), upserts only changed payloads (diff on
   lastUpdateDate/paymentRefNo/nextRefNo/cancelled), backs payloads up to

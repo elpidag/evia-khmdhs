@@ -44,7 +44,7 @@
 	let indexed: Indexed[] = $state.raw([]);
 	$effect(() => {
 		// ?v= busts HTTP + module caches when the payload shape changes
-		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=4').then((p) => {
+		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=5').then((p) => {
 			payload = p;
 			indexed = p.rows.map((r) => {
 				const hn = searchNorm(
@@ -65,6 +65,7 @@
 	const to = $derived(params.get('to') ?? '');
 	const vmin = $derived(params.get('vmin') ?? '');
 	const prf = $derived(params.get('prf') ?? '');
+	const fin = $derived(params.get('fin') ?? '');
 	const q = $derived(params.get('q') ?? '');
 	const sort = $derived(params.get('sort') ?? 'd_desc');
 
@@ -85,21 +86,29 @@
 	const qNorm = $derived(searchNorm(q));
 	const qFold = $derived(phoneticFold(qNorm));
 
+	/** every active filter except `skip` — the facet counts exclude their
+	 *  own dimension so the numbers update with the rest of the filters */
+	function passes(r: ExploreRow, hn: string, hf: string, skip = ''): boolean {
+		if (skip !== 'ds' && ds !== 'all' && r.ds !== ds) return false;
+		if (skip !== 'pe' && pe && !r.pe.includes(pe)) return false;
+		if (skip !== 'hq' && hq && !r.hq.includes(hq)) return false;
+		if (skip !== 'proc' && proc !== 'all' && r.proc !== proc) return false;
+		if (skip !== 'st' && st && r.st !== st) return false;
+		if (skip !== 'from' && from && (!r.d || r.d < from)) return false;
+		if (skip !== 'to' && to && (!r.d || r.d > to)) return false;
+		if (skip !== 'vmin' && vmin && (r.v === null || r.v < Number(vmin))) return false;
+		if (skip !== 'prf' && prf === 'yes' && r.pr !== 1) return false;
+		if (skip !== 'prf' && prf === 'no' && r.pr !== 0) return false;
+		if (skip !== 'fin' && fin === 'yes' && r.fin !== 1) return false;
+		if (skip !== 'fin' && fin === 'no' && r.fin !== 0) return false;
+		if (skip !== 'q' && qNorm && !(hn.includes(qNorm) || hf.includes(qFold))) return false;
+		return true;
+	}
+
 	const filtered = $derived.by(() => {
-		const min = vmin ? Number(vmin) : null;
 		const out: ExploreRow[] = [];
 		for (const { r, hn, hf } of indexed) {
-			if (ds !== 'all' && r.ds !== ds) continue;
-			if (pe && !r.pe.includes(pe)) continue;
-			if (hq && !r.hq.includes(hq)) continue;
-			if (proc !== 'all' && r.proc !== proc) continue;
-			if (st && r.st !== st) continue;
-			if (from && (!r.d || r.d < from)) continue;
-			if (to && (!r.d || r.d > to)) continue;
-			if (min !== null && (r.v === null || r.v < min)) continue;
-			if (prf === 'yes' && r.pr !== 1) continue;
-			if (prf === 'no' && r.pr !== 0) continue;
-			if (qNorm && !(hn.includes(qNorm) || hf.includes(qFold))) continue;
+			if (!passes(r, hn, hf)) continue;
 			out.push(r);
 		}
 		const dir = sort.endsWith('_asc') ? 1 : -1;
@@ -145,16 +154,27 @@
 	const prCounts = $derived.by(() => {
 		let yes = 0;
 		let no = 0;
-		for (const { r } of indexed) {
+		for (const { r, hn, hf } of indexed) {
+			if (!passes(r, hn, hf, 'prf')) continue;
 			if (r.pr === 1) yes++;
 			else if (r.pr === 0) no++;
+		}
+		return { yes, no };
+	});
+	const finCounts = $derived.by(() => {
+		let yes = 0;
+		let no = 0;
+		for (const { r, hn, hf } of indexed) {
+			if (!passes(r, hn, hf, 'fin')) continue;
+			if (r.fin === 1) yes++;
+			else if (r.fin === 0) no++;
 		}
 		return { yes, no };
 	});
 
 	let limit = $state(300);
 	const filterKey = $derived(
-		[ds, pe, hq, proc, st, from, to, vmin, prf, q, sort].join('§')
+		[ds, pe, hq, proc, st, from, to, vmin, prf, fin, q, sort].join('§')
 	);
 	$effect(() => {
 		void filterKey;
@@ -164,7 +184,7 @@
 
 	const anyFilter = $derived(
 		ds !== 'all' || !!pe || !!hq || proc !== 'all' || !!st || !!from ||
-		!!to || !!vmin || !!prf || !!q
+		!!to || !!vmin || !!prf || !!fin || !!q
 	);
 	function resetAll() {
 		const url = new URL(page.url);
@@ -251,6 +271,15 @@
 			<option value="">Διακήρυξη: any</option>
 			<option value="yes">With διακήρυξη (PROC) ({grInt(prCounts.yes)})</option>
 			<option value="no">Without διακήρυξη ({grInt(prCounts.no)})</option>
+		</select>
+		<select
+			value={fin}
+			onchange={(e) => setParam('fin', e.currentTarget.value || null)}
+			title="Whether a project end date is on record — an Anti-nero completion act on Diavgeia or a completed sponsor project; ΔΑΣΕ endings were never harvested"
+		>
+			<option value="">End date: any</option>
+			<option value="yes">With end date ({grInt(finCounts.yes)})</option>
+			<option value="no">Without end date ({grInt(finCounts.no)})</option>
 		</select>
 	</div>
 	<div class="filter-row">

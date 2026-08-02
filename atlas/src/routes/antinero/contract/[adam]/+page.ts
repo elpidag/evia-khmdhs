@@ -53,11 +53,15 @@ export interface ContractDetail {
 	sites: { site_name: string; region_pe: string; page: number | null; excerpt: string | null }[];
 	timeline: {
 		adam: string;
-		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract';
+		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract' | 'completion';
 		title: string | null;
 		d: string | null;
 		cancelled: number;
 		in_db: boolean;
+		/** completion acts only (Diavgeia) */
+		ckind?: 'oristiki_paralavi' | 'peraiosi' | 'oloklirosi';
+		end_basis?: 'protocol_date' | 'act_date';
+		end_excerpt?: string | null;
 	}[];
 }
 
