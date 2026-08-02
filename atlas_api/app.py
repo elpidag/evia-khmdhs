@@ -11,19 +11,28 @@ from pathlib import Path
 
 from flask import Flask, Response, abort, g, jsonify, request
 
-from khmdhs.config import DASE_DB, DEFAULT_DB, PDF_CACHE_DIR
+from khmdhs.config import (ANADOHOI_DB, ANADOHOI_PDF_CACHE, DASE_DB,
+                           DEFAULT_DB, PDF_CACHE_DIR)
 from webui import dase_queries, queries
 
 from atlas_api import pdf_proxy, queries_extra
 
 
 def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
-               pdf_cache_dir: Path | None = None) -> Flask:
+               pdf_cache_dir: Path | None = None,
+               anadohoi_db_path: Path | None = None,
+               anadohoi_pdf_cache: Path | None = None) -> Flask:
     app = Flask(__name__, template_folder="templates", static_folder=None)
     app.config["DB_PATH"] = Path(db_path) if db_path else DEFAULT_DB
     app.config["DASE_DB_PATH"] = Path(dase_db_path) if dase_db_path else DASE_DB
+    app.config["ANADOHOI_DB_PATH"] = (
+        Path(anadohoi_db_path) if anadohoi_db_path else ANADOHOI_DB
+    )
     app.config["PDF_CACHE_DIR"] = (
         Path(pdf_cache_dir) if pdf_cache_dir else PDF_CACHE_DIR
+    )
+    app.config["ANADOHOI_PDF_CACHE"] = (
+        Path(anadohoi_pdf_cache) if anadohoi_pdf_cache else ANADOHOI_PDF_CACHE
     )
     app.json.ensure_ascii = False
     app.register_blueprint(pdf_proxy.bp)
@@ -36,7 +45,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
 
     def _db_stamp() -> tuple:
         out = []
-        for key in ("DB_PATH", "DASE_DB_PATH"):
+        for key in ("DB_PATH", "DASE_DB_PATH", "ANADOHOI_DB_PATH"):
             p = app.config[key]
             try:
                 out.append(p.stat().st_mtime_ns)
@@ -73,14 +82,21 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             g.dase_conn = queries.open_ro(app.config["DASE_DB_PATH"])
         return g.dase_conn
 
+    def _anadohoi_conn():
+        """Lazy third connection (Ανάδοχοι sponsor-acts dataset)."""
+        if "anadohoi_conn" not in g:
+            g.anadohoi_conn = queries.open_ro(app.config["ANADOHOI_DB_PATH"])
+        return g.anadohoi_conn
+
     @app.teardown_request
     def _close_db(exc) -> None:
         conn = g.pop("conn", None)
         if conn is not None:
             conn.close()
-        dconn = g.pop("dase_conn", None)
-        if dconn is not None:
-            dconn.close()
+        for key in ("dase_conn", "anadohoi_conn"):
+            extra = g.pop(key, None)
+            if extra is not None:
+                extra.close()
 
     @app.after_request
     def _cache_headers(resp):
@@ -112,7 +128,11 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             dase = _dase_conn()
         except Exception:
             dase = None
-        return jsonify(queries_extra.meta(g.conn, dase))
+        try:
+            ana = _anadohoi_conn()
+        except Exception:
+            ana = None
+        return jsonify(queries_extra.meta(g.conn, dase, ana))
 
     # -------------------------------------------------------- Anti-nero
 
@@ -241,6 +261,33 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             "yearly": dase_queries.coop_yearly(conn, vat),
             "units": dase_queries.coop_units(conn, vat),
         })
+
+    # ---------------------------------------------------------- anadohoi
+
+    @app.route("/api/anadohoi/overview")
+    def api_anadohoi_overview():
+        return jsonify(queries_extra.anadohoi_overview(_anadohoi_conn()))
+
+    @app.route("/api/anadohoi/project/<ada>")
+    def api_anadohoi_project(ada: str):
+        p = queries_extra.anadohoi_project(_anadohoi_conn(), ada)
+        if p is None:
+            abort(404)
+        return jsonify(p)
+
+    # ----------------------------------------------------------- explore
+
+    @app.route("/api/explore")
+    def api_explore():
+        try:
+            dase = _dase_conn()
+        except Exception:
+            dase = None
+        try:
+            ana = _anadohoi_conn()
+        except Exception:
+            ana = None
+        return jsonify(queries_extra.explore_rows(g.conn, dase, ana))
 
     # ------------------------------------------------------ cross-dataset
 

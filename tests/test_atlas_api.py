@@ -239,3 +239,156 @@ def test_pdf_non_pdf_body_is_not_cached(pdf_client):
     r = c.get("/pdf/contract/22SYMV010447493")
     assert r.status_code == 502
     assert not (cache / "22SYMV010447493.pdf").exists()
+
+
+# ------------------------------------------------------ anadohoi + explore
+
+def _build_ana_db(path):
+    from khmdhs.anadohoi_loader import SCHEMA as ANA_SCHEMA
+    conn = sqlite3.connect(path)
+    conn.executescript(ANA_SCHEMA)
+    conn.execute(
+        "INSERT INTO decisions VALUES (?,?,?,?,?,?,?,?,?,?)",
+        ("ΤΕΣΤ4653Π8-ΑΑΑ", "ΥΠΕΝ/1/1", "2023-01-01", "ΥΠΕΝ", "100015996",
+         "ΠΡΑΞΗ ΟΡΙΣΜΟΥ ΑΝΑΔΟΧΟΥ ΑΠΟΚΑΤΑΣΤΑΣΗΣ", "orismos", "proposal",
+         "test", None))
+    conn.execute(
+        "INSERT INTO projects VALUES "
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        ("ΤΕΣΤ4653Π8-ΑΑΑ", "ΕΤΑΙΡΕΙΑ ΤΕΣΤ Α.Ε.", None, "Οδός 1",
+         "apokatastasi", 100.0, "τεστ περιοχή", None, "Π.Ε. Ευβοίας",
+         "Β. Εύβοια, Αύγ. 2021", 50_000.0, 50_000.0, "2023-01-01",
+         "2024-12-31", "2024-12-31", None, None, None, None, None,
+         "no_completion_recorded", "{}", None))
+    conn.execute("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
+                 ("ΤΕΣΤ4653Π8-ΑΑΑ", "ΤΕΣΤ4653Π8-ΑΑΑ", "initial", None, None))
+    conn.execute("INSERT INTO meta VALUES ('status_as_of', '2026-08-02')")
+    conn.commit()
+    conn.close()
+
+
+@pytest.fixture
+def full_client(tmp_path):
+    kh, da, an = (tmp_path / n for n in ("kh.sqlite", "dase.sqlite",
+                                         "ana.sqlite"))
+    _build_kh_db(kh)
+    _build_dase_db(da)
+    _build_ana_db(an)
+    app = app_module.create_app(db_path=kh, dase_db_path=da,
+                                anadohoi_db_path=an,
+                                pdf_cache_dir=tmp_path / "cache",
+                                anadohoi_pdf_cache=tmp_path / "ana_cache")
+    app.testing = True
+    return app.test_client()
+
+
+def test_meta_includes_anadohoi(full_client):
+    m = full_client.get("/api/meta").get_json()
+    assert m["anadohoi"] == {"n_projects": 1, "stated_eur": 50_000.0}
+
+
+def test_explore_all_three_datasets(full_client):
+    e = full_client.get("/api/explore").get_json()
+    assert e["counts"] == {"antinero": 1, "dase": 1, "anadohoi": 1}
+    by_ds = {r["ds"]: r for r in e["rows"]}
+    assert by_ds["antinero"]["v"] == pytest.approx(400_000.0)  # effective
+    assert by_ds["dase"]["v"] == pytest.approx(5_000.0)
+    assert by_ds["anadohoi"]["proc"] == "sponsor"
+    assert by_ds["anadohoi"]["st"] == "no_completion_recorded"
+    assert by_ds["anadohoi"]["pe"] == ["Π.Ε. Ευβοίας"]
+    for r in e["rows"]:
+        for key in ("ds", "ref", "d", "t", "co", "v", "pe", "hq", "proc",
+                    "st", "b1"):
+            assert key in r
+
+
+def test_explore_degrades_without_optional_dbs(tmp_path):
+    kh = tmp_path / "kh.sqlite"
+    _build_kh_db(kh)
+    app = app_module.create_app(db_path=kh,
+                                dase_db_path=tmp_path / "missing_dase.sqlite",
+                                anadohoi_db_path=tmp_path / "missing_ana.sqlite",
+                                pdf_cache_dir=tmp_path / "cache")
+    app.testing = True
+    e = app.test_client().get("/api/explore").get_json()
+    assert e["counts"] == {"antinero": 1}
+
+
+def test_anadohoi_overview_and_project(full_client):
+    o = full_client.get("/api/anadohoi/overview").get_json()
+    assert o["kpis"]["n_projects"] == 1
+    assert o["kpis"]["statuses"] == {"no_completion_recorded": 1}
+    assert o["fires"][0]["fire"] == "Β. Εύβοια, Αύγ. 2021"
+    assert o["sponsors"][0]["budget"] == pytest.approx(50_000.0)
+    p = full_client.get("/api/anadohoi/project/ΤΕΣΤ4653Π8-ΑΑΑ").get_json()
+    assert p["company"] == "ΕΤΑΙΡΕΙΑ ΤΕΣΤ Α.Ε."
+    assert p["decisions"][0]["relation"] == "initial"
+    assert full_client.get(
+        "/api/anadohoi/project/ΧΧΧΧ4653Π8-ΧΧΧ").status_code == 404
+
+
+def test_khmdhs_endpoints_identical_with_and_without_anadohoi_db(tmp_path):
+    kh = tmp_path / "kh.sqlite"
+    da = tmp_path / "dase.sqlite"
+    _build_kh_db(kh)
+    _build_dase_db(da)
+    bodies = []
+    for ana in (tmp_path / "ana.sqlite", tmp_path / "absent.sqlite"):
+        if ana.name == "ana.sqlite":
+            _build_ana_db(ana)
+        app = app_module.create_app(db_path=kh, dase_db_path=da,
+                                    anadohoi_db_path=ana,
+                                    pdf_cache_dir=tmp_path / "cache")
+        app.testing = True
+        c = app.test_client()
+        bodies.append([c.get(p).get_data() for p in (
+            "/api/antinero/overview", "/api/antinero/contracts",
+            "/api/dase/overview")])
+    assert bodies[0] == bodies[1]
+
+
+# ----------------------------------------------------- diavgeia PDF proxy
+
+def test_diavgeia_pdf_rejects_malformed_ada(pdf_client):
+    client, _cache, _mp = pdf_client
+    assert client.get("/pdf/diavgeia/notanada").status_code == 404
+    assert client.get("/pdf/diavgeia/22SYMV000000001").status_code == 404
+
+
+def test_diavgeia_pdf_serves_from_cache_without_network(tmp_path, monkeypatch):
+    db = tmp_path / "empty.sqlite"
+    sqlite3.connect(db).close()
+    cache = tmp_path / "ana_cache"
+    cache.mkdir()
+    (cache / "ΤΕΣΤ4653Π8-ΑΑΑ.pdf").write_bytes(b"%PDF-1.4 cached")
+    app = app_module.create_app(db_path=db, dase_db_path=db,
+                                pdf_cache_dir=tmp_path / "cache",
+                                anadohoi_pdf_cache=cache)
+    app.testing = True
+    monkeypatch.setattr(
+        pdf_module.requests, "get",
+        lambda *a, **k: (_ for _ in ()).throw(
+            AssertionError("unexpected network call")))
+    r = app.test_client().get("/pdf/diavgeia/ΤΕΣΤ4653Π8-ΑΑΑ")
+    assert r.status_code == 200
+    assert r.data.startswith(b"%PDF")
+
+
+def test_diavgeia_pdf_non_pdf_body_not_cached(tmp_path, monkeypatch):
+    db = tmp_path / "empty.sqlite"
+    sqlite3.connect(db).close()
+    cache = tmp_path / "ana_cache"
+    app = app_module.create_app(db_path=db, dase_db_path=db,
+                                pdf_cache_dir=tmp_path / "cache",
+                                anadohoi_pdf_cache=cache)
+    app.testing = True
+
+    class FakeResp:
+        status_code = 200
+        headers = {}
+        content = b"<html>not a pdf</html>"
+
+    monkeypatch.setattr(pdf_module.requests, "get", lambda *a, **k: FakeResp())
+    r = app.test_client().get("/pdf/diavgeia/ΤΕΣΤ4653Π8-ΑΑΑ")
+    assert r.status_code == 502
+    assert not (cache / "ΤΕΣΤ4653Π8-ΑΑΑ.pdf").exists()

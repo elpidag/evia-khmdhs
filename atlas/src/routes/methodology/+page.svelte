@@ -159,11 +159,39 @@
 		programme, the other is a whole sector of the co-operative economy.
 	</p>
 
+	<h2 id="anadohoi">Ανάδοχοι αναδάσωσης / αποκατάστασης</h2>
+	<p>
+		The sponsor dataset covers the ν.998/1979 άρθρο 42§3 scheme: private companies appointed
+		by ministerial act to fund and execute forest restoration at their own expense. No
+		procurement takes place, so nothing exists in ΚΗΜΔΗΣ — the universe is Διαύγεια acts
+		(seed lists + a subject sweep across all issuing organisations + a crawl of every ΑΔΑ
+		cited in the acts' recitals). Diavgeia metadata for these acts is empty of substance, so
+		every value — company, funder, area, budget, deadlines, the fire each act responds to —
+		is extracted from the signed PDF and backed by a verbatim excerpt shown on the project
+		page. Statuses are derived, never asserted: <em>completed</em> requires a posted
+		completion act; <em>no completion recorded</em> means the deadline passed and nothing
+		was filed — which is not proof of abandonment, but the act is the legal proof of
+		delivery. Budgets are stored only when an act states one; many sponsors commit to
+		«whatever it costs» with no figure, and those stay honestly blank.
+	</p>
+
+	<h2 id="explore">The Explore table</h2>
+	<p>
+		The combined table lists every Anti-nero contract (effective €), every live ΔΑΣΕ contract
+		(stated €) and every sponsor project (stated budget after amendments, often absent) —
+		three different value bases side by side, labelled and never summed into one headline.
+		«HQ region» is available only for Anti-nero contractors, whose registered seats are
+		curated; procedure for sponsor projects is shown as «Πράξη αναδόχου (χορηγία)» because no
+		procurement procedure exists. Filtering runs entirely in the browser; every filter state
+		is a shareable URL.
+	</p>
+
 	<h2 id="pdf-provenance">Documents</h2>
 	<p>
 		Every PDF link serves the signed document fetched once from ΚΗΜΔΗΣ and cached locally — the
 		registry rate-limits bursts, so links never point at it directly. Payment pages link the
-		Διαύγεια decision where one is matched.
+		Διαύγεια decision where one is matched, and sponsor-project pages serve the Διαύγεια
+		decision PDFs through the same caching proxy.
 	</p>
 
 	<h2 id="freshness">Freshness &amp; reproducibility</h2>

@@ -550,3 +550,18 @@ only as a citation: the Coca-Cola Πηγές Καρακαντά restatement
 revocation Ε01Π is attached to the published root 63ΡΧ with the
 chronology in notes. *Affects: projects.status, budget columns, chain
 assembly.*
+
+## 2026-08-02 — Ανάδοχοι: fire_event grouping curated from the act itself
+
+Each sponsor project is tagged with the disaster that triggered it
+(`fire_event`), curated ONLY from what the πράξη itself states — the acts
+name their fires explicitly («…πυρκαγιά της 19ης Αυγούστου 2023 στην
+περιοχή του Έβρου», «…του Ιουλίου/Αυγούστου 2021…») and the location/
+evidence excerpts already in `anadohoi_projects.json` carry those
+phrases. Labels are event-level (e.g. «Β. Εύβοια, Αύγ. 2021»,
+«Τατόι–Βαρυμπόμπη, Αύγ. 2021», «Ρόδος, Ιούλ. 2023», «Έβρος, Αύγ. 2023»,
+«ΒΑ Αττική, Αύγ. 2024», «Κρυονέρι–Δροσοπηγή, Ιούλ. 2025»). Acts that
+respond to no fire (plane-disease sanitation, the ΣΤΑΝΤΑ αναβάθμιση,
+generic multi-region μελέτες) get «εκτός πυρκαγιάς»; never inferred
+from press coverage. *Affects: projects.fire_event, the Atlas /anadohoi
+fire small-multiples.*

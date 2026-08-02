@@ -7,6 +7,7 @@ the atlas test suite so a future webui refactor fails loudly here.
 """
 from __future__ import annotations
 
+import json
 import sqlite3
 import unicodedata
 
@@ -37,8 +38,9 @@ def _full_date(s: str | None) -> str | None:
 
 # ---------------------------------------------------------------- meta
 
-def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None) -> dict:
-    """Footer/OG numbers for both datasets + data freshness."""
+def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
+         ana: sqlite3.Connection | None = None) -> dict:
+    """Footer/OG numbers for all datasets + data freshness."""
     k = q.kpis(kh)
     out = {
         "antinero": {
@@ -56,6 +58,11 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None) -> dict:
         dk = dq.kpis(dase)
         out["dase"] = {"n_contracts": dk["n_contracts"],
                        "total_eur": dk["total_eur"]}
+    if ana is not None:
+        n, tot = ana.execute(
+            "SELECT COUNT(*), ROUND(SUM(budget_current), 2) FROM projects "
+            "WHERE status != 'superseded'").fetchone()
+        out["anadohoi"] = {"n_projects": n, "stated_eur": tot}
     return out
 
 
@@ -760,3 +767,245 @@ def money_by_pe_yearly(kh: sqlite3.Connection) -> dict:
     pes.sort(key=lambda p: -p["total_eur"])
     return {"pes": pes, "years": sorted(years),
             "unresolved_eur": round(unresolved, 2)}
+
+
+# ------------------------------------------------- explore (all 3 datasets)
+
+def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
+                 ana: sqlite3.Connection | None) -> dict:
+    """One compact row per contract/project across the three datasets, for
+    the client-side /explore finder. Value bases differ by dataset and are
+    labelled on the page: Anti-nero = effective €, ΔΑΣΕ = stated € (live
+    population), Ανάδοχοι = stated budget after amendments (nullable —
+    sponsors often commit without a figure). Missing DBs degrade honestly
+    (their rows are simply absent)."""
+    rows: list[dict] = []
+
+    hq_map: dict[str, str] = {}
+    for r in kh.execute("SELECT vat_number, region_pe FROM contractor_locations"
+                        " WHERE region_pe IS NOT NULL"):
+        hq_map[r["vat_number"]] = canonical_pe(r["region_pe"]) or r["region_pe"]
+
+    eff = q.effective_cost(kh, "c")
+    for r in kh.execute(f"""
+        SELECT c.reference_number AS ref, c.title,
+               c.contract_signed_date, c.submission_date,
+               c.procedure_type, c.bids_submitted, c.cancelled,
+               {eff} AS value,
+               (SELECT GROUP_CONCAT(r.region_pe, '|')
+                  FROM contract_project_regions r
+                 WHERE r.reference_number = c.reference_number) AS pes,
+               (SELECT GROUP_CONCAT(ct.name, ' | ')
+                  FROM contractors ct
+                 WHERE ct.reference_number = c.reference_number) AS names,
+               (SELECT GROUP_CONCAT(ct.vat_number, '|')
+                  FROM contractors ct
+                 WHERE ct.reference_number = c.reference_number) AS vats
+          FROM contracts c
+         WHERE {q.scope_filter(kh, 'c.reference_number')}"""):
+        pes = sorted({canonical_pe(p) or p
+                      for p in (r["pes"] or "").split("|") if p})
+        hqs = sorted({hq_map[v] for v in (r["vats"] or "").split("|")
+                      if v in hq_map})
+        rows.append({
+            "ds": "antinero", "ref": r["ref"],
+            "d": _full_date(r["contract_signed_date"])
+                 or _full_date(r["submission_date"]),
+            "t": (r["title"] or "")[:120],
+            "co": (r["names"] or "")[:110],
+            "v": round(r["value"], 2) if r["value"] is not None else None,
+            "pe": pes, "hq": hqs,
+            "proc": _proc_kind(r["procedure_type"]),
+            "st": "cancelled" if r["cancelled"] else None,
+            "b1": 1 if r["bids_submitted"] == 1 else 0,
+        })
+
+    if dase is not None:
+        for r in dase.execute(f"""
+            SELECT co.reference_number AS ref, co.title,
+                   co.contract_signed_date, co.submission_date,
+                   co.procedure_type, co.total_cost_with_vat AS value,
+                   (SELECT GROUP_CONCAT(r.region_pe, '|')
+                      FROM dase_contract_regions r
+                     WHERE r.reference_number = co.reference_number) AS pes,
+                   (SELECT GROUP_CONCAT(ct.name, ' | ')
+                      FROM contractors ct
+                     WHERE ct.reference_number = co.reference_number) AS names
+              FROM contracts co
+             WHERE {dq.live_filter()}"""):
+            pes = sorted({canonical_pe(p) or p
+                          for p in (r["pes"] or "").split("|") if p})
+            rows.append({
+                "ds": "dase", "ref": r["ref"],
+                "d": _full_date(r["contract_signed_date"])
+                     or _full_date(r["submission_date"]),
+                "t": (r["title"] or "")[:120],
+                "co": (r["names"] or "")[:110],
+                "v": round(r["value"], 2) if r["value"] is not None else None,
+                "pe": pes, "hq": [],
+                "proc": _proc_kind(r["procedure_type"]),
+                "st": None, "b1": 0,
+            })
+
+    if ana is not None:
+        for r in ana.execute("""
+            SELECT root_ada, company, works_kind, location_text, pe,
+                   budget_current, start_date, status FROM projects"""):
+            rows.append({
+                "ds": "anadohoi", "ref": r["root_ada"],
+                "d": r["start_date"],
+                "t": (r["location_text"] or "")[:120],
+                "co": (r["company"] or "")[:110],
+                "v": r["budget_current"],
+                "pe": [r["pe"]] if r["pe"] else [], "hq": [],
+                "proc": "sponsor",
+                "st": r["status"], "b1": 0,
+            })
+
+    counts: dict[str, int] = {}
+    for row in rows:
+        counts[row["ds"]] = counts.get(row["ds"], 0) + 1
+    return {"rows": rows, "counts": counts}
+
+
+# ------------------------------------------------------- anadohoi dataset
+
+# Presentation-only grouping of a sponsor's registry spellings across acts
+# («ΔΕΗ» / «ΔΕΗ Α.Ε.», «Ελληνικά Πετρέλαια» / «HELLENIQ ENERGY» after the
+# 2022 rename, «ΕRΕΝ ΕΛΛΑΣ» / «Εren Groupe»). The per-project rows keep the
+# exact name from each act; only the sponsor ranking merges.
+_SPONSOR_GROUPS = (
+    (("DEH", "ΔΕΗ"), "ΔΕΗ"),
+    (("HELLENIQ", "ΕΛΛΗΝΙΚΑ ΠΕΤΡΕΛΑΙΑ"), "Ελληνικά Πετρέλαια / HELLENiQ ENERGY"),
+    (("EREN",), "EREN Ελλάς / Eren Groupe"),
+    (("COCA COLA",), "Coca-Cola 3Ε Ελλάδος"),
+    (("NOVA",), "NOVA Telecommunications & Media"),
+    (("ALFA WOOD", "ALPHA WOOD"), "ALFA WOOD GROUP"),
+    (("ΤΣΙΜΕΝΤΩΝ ΤΙΤΑΝ", "TΣΙΜΕΝΤΩΝ ΤΙΤΑΝ"), "Α.Ε. Τσιμέντων ΤΙΤΑΝ"),
+    (("ΣΥΜΠΡΑΞ", "SYMPRAXIS"), "Ομάδα Σύμπραξις (Παπαστράτος)"),
+    (("ΔΕΔΔΗΕ", "ΔΙΑΧΕΙΡΙΣΤΗ ΕΛΛΗΝΙΚΟΥ ΔΙΚΤΥΟΥ", "DEDDHE"), "ΔΕΔΔΗΕ"),
+    (("ΑΝΕΞΑΡΤΗΤΟΣ ΔΙΑΧΕΙΡΙΣΤΗΣ ΜΕΤΑΦΟΡΑΣ",
+      "ΑΝΕΞΑΡΤΗΤΟΣ ΔΙΑΧΕΙΡΙΣΤΗΣ", "ΑΔΜΗΕ"), "ΑΔΜΗΕ"),
+    (("NORDIA",), "Nordia A.E."),
+)
+
+# Greek capitals → visually identical Latin, so mixed-script registry
+# spellings («ΕRΕΝ», «ΝΟVA») land in one space before stem matching. Both
+# the haystack AND the stems go through the same fold.
+_HOMOGLYPHS = str.maketrans("ΑΒΕΖΗΙΚΜΝΟΡΤΥΧ", "ABEZHIKMNOPTYX")
+
+
+def _sponsor_fold(s: str) -> str:
+    return _fold_upper(s or "").translate(_HOMOGLYPHS)
+
+
+def _sponsor_group(company: str) -> str:
+    f = _sponsor_fold(company)
+    for stems, label in _SPONSOR_GROUPS:
+        if any(_sponsor_fold(stem) in f for stem in stems):
+            return label
+    return company
+
+
+def anadohoi_overview(ana: sqlite3.Connection) -> dict:
+    """Everything the /anadohoi analysis page needs (69 projects — small
+    enough to ship whole)."""
+    projects = []
+    for r in ana.execute("""
+        SELECT p.*,
+               (SELECT GROUP_CONCAT(d.issue_date || '~' || pd.ada, '|')
+                  FROM project_decisions pd
+                  JOIN decisions d ON d.ada = pd.ada
+                 WHERE pd.root_ada = p.root_ada AND pd.relation = 'amendment'
+                 ORDER BY d.issue_date) AS amendment_dates
+          FROM projects p ORDER BY p.start_date"""):
+        amendments = []
+        for tok in (r["amendment_dates"] or "").split("|"):
+            if "~" in tok:
+                dte, ada = tok.split("~", 1)
+                amendments.append({"ada": ada, "date": dte or None})
+        projects.append({
+            "ada": r["root_ada"], "company": r["company"],
+            "funder": r["funder"], "works_kind": r["works_kind"],
+            "area": r["area_stremmata"], "pe": r["pe"],
+            "fire": r["fire_event"], "budget": r["budget_current"],
+            "budget_stated": r["budget_eur"],
+            "start": r["start_date"],
+            "deadline0": r["deadline_initial"],
+            "deadline": r["deadline_current"],
+            "completed": r["completed_date"], "revoked": r["revoked_date"],
+            "status": r["status"], "amendments": amendments,
+            "superseded_by": r["superseded_by"],
+            "location": r["location_text"],
+        })
+
+    live = [p for p in projects if p["status"] != "superseded"]
+    statuses: dict[str, int] = {}
+    for p in projects:
+        statuses[p["status"]] = statuses.get(p["status"], 0) + 1
+    monthly: dict[str, int] = {}
+    for p in live:
+        if p["start"]:
+            m = p["start"][:7]
+            monthly[m] = monthly.get(m, 0) + 1
+
+    fires: dict[str, dict] = {}
+    for p in live:
+        f = fires.setdefault(p["fire"] or "—", {
+            "fire": p["fire"] or "—", "n": 0, "completed": 0,
+            "budget": 0.0, "first_start": p["start"]})
+        f["n"] += 1
+        f["completed"] += p["status"] == "completed"
+        f["budget"] += p["budget"] or 0
+        if p["start"] and (f["first_start"] or "9") > p["start"]:
+            f["first_start"] = p["start"]
+
+    sponsors: dict[str, dict] = {}
+    for p in live:
+        key = _sponsor_group(p["company"])
+        s = sponsors.setdefault(key, {
+            "company": key, "n": 0, "budget": 0.0, "unstated": 0})
+        s["n"] += 1
+        if p["budget"] is None:
+            s["unstated"] += 1
+        else:
+            s["budget"] += p["budget"]
+
+    status_as_of = ana.execute(
+        "SELECT value FROM meta WHERE key = 'status_as_of'").fetchone()
+    return {
+        "kpis": {
+            "n_projects": len(live),
+            "n_companies": len({p["company"] for p in live}),
+            "stated_eur": round(sum(p["budget"] or 0 for p in live), 2),
+            "n_stated": sum(1 for p in live if p["budget"] is not None),
+            "area_stremmata": round(sum(p["area"] or 0 for p in live), 1),
+            "statuses": statuses,
+            "status_as_of": status_as_of[0] if status_as_of else None,
+        },
+        "projects": projects,
+        "fires": sorted(fires.values(), key=lambda f: f["first_start"] or ""),
+        "sponsors": sorted(sponsors.values(), key=lambda s: -s["budget"]),
+        "monthly": [{"m": m, "n": n} for m, n in sorted(monthly.items())],
+    }
+
+
+def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
+    """Full detail for one sponsor project, or None."""
+    r = ana.execute("SELECT * FROM projects WHERE root_ada = ?",
+                    (ada,)).fetchone()
+    if r is None:
+        return None
+    out = dict(r)
+    try:
+        out["evidence"] = json.loads(out.pop("evidence_json") or "{}")
+    except ValueError:
+        out["evidence"] = {}
+    out["decisions"] = [dict(d) for d in ana.execute("""
+        SELECT pd.relation, pd.detail, pd.excerpt,
+               d.ada, d.kind, d.issue_date, d.subject, d.org, d.protocol
+          FROM project_decisions pd
+          JOIN decisions d ON d.ada = pd.ada
+         WHERE pd.root_ada = ?
+         ORDER BY d.issue_date, d.ada""", (ada,))]
+    return out

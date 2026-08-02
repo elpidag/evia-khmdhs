@@ -38,6 +38,7 @@ export function apiGetCached<T>(fetch: Fetch, path: string): Promise<T> {
 export interface Meta {
 	antinero: { n_contracts: number; total_eur: number; n_payments: number };
 	dase?: { n_contracts: number; total_eur: number };
+	anadohoi?: { n_projects: number; stated_eur: number };
 	generated: string | null;
 }
 
@@ -311,4 +312,23 @@ export interface AntineroOverview {
 	top_authorities: Record<string, unknown>[];
 	top_signers: Record<string, unknown>[];
 	coverage: Record<string, number>;
+}
+
+export interface ExploreRow {
+	ds: 'antinero' | 'dase' | 'anadohoi';
+	ref: string;
+	d: string | null;
+	t: string;
+	co: string;
+	v: number | null;
+	pe: string[];
+	hq: string[];
+	proc: 'direct' | 'open' | 'nego' | 'other' | 'sponsor';
+	st: string | null;
+	b1: number;
+}
+
+export interface ExplorePayload {
+	rows: ExploreRow[];
+	counts: Record<string, number>;
 }

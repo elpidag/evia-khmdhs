@@ -10,6 +10,8 @@
 	const NAV = [
 		{ href: '/', label: 'Anti-nero' },
 		{ href: '/dase', label: 'ΔΑΣΕ' },
+		{ href: '/anadohoi', label: 'Ανάδοχοι' },
+		{ href: '/explore', label: 'Explore' },
 		{ href: '/compare', label: 'Compare' },
 		{ href: '/connections', label: 'Connections' },
 		{ href: '/authorities', label: 'Authorities' },
@@ -59,6 +61,9 @@
 					Anti-nero: {data.meta.antinero.n_contracts} contracts · {eurShort(
 						data.meta.antinero.total_eur
 					)} effective
+					{#if data.meta.anadohoi}
+						&nbsp;·&nbsp; Ανάδοχοι: {data.meta.anadohoi.n_projects} projects
+					{/if}
 					{#if data.meta.dase}
 						&nbsp;·&nbsp; ΔΑΣΕ: {data.meta.dase.n_contracts} contracts · {eurShort(
 							data.meta.dase.total_eur

@@ -28,12 +28,12 @@ import logging
 import sqlite3
 from pathlib import Path
 
-from khmdhs.config import DATA_PROCESSED, PROJECT_ROOT
+from khmdhs.config import ANADOHOI_DB, DATA_PROCESSED, PROJECT_ROOT
 from khmdhs.greek_regions import canonical_pe
 
 HARVEST_JSON = DATA_PROCESSED / "anadohoi_cache" / "harvest.json"
 CURATED_JSON = PROJECT_ROOT / "khmdhs" / "data" / "anadohoi_projects.json"
-DEFAULT_DB = DATA_PROCESSED / "anadohoi.sqlite"
+DEFAULT_DB = ANADOHOI_DB
 
 SCHEMA = """
 CREATE TABLE decisions (
@@ -58,6 +58,7 @@ CREATE TABLE projects (
     location_text   TEXT,
     municipality    TEXT,
     pe              TEXT,               -- canonical Π.Ε. or NULL (honest)
+    fire_event      TEXT,               -- the disaster the act responds to
     budget_eur      REAL,               -- ONLY when an act states it
     budget_current  REAL,               -- after amendments (δωρεά raises)
     start_date      TEXT,
@@ -186,6 +187,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
             root, p["company"], p.get("funder"), p.get("company_address"),
             p.get("works_kind"), p.get("area_stremmata"),
             p.get("location_text"), p.get("municipality"), pe,
+            p.get("fire_event"),
             p.get("budget_eur"), budget_current, start,
             p.get("deadline_initial"), deadline_current,
             p.get("superseded_by"),
@@ -215,7 +217,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
         "status": {},
     }
     for r in project_rows:
-        summary["status"][r[19]] = summary["status"].get(r[19], 0) + 1
+        summary["status"][r[20]] = summary["status"].get(r[20], 0) + 1
     if dry_run:
         logging.info("dry-run: %s", json.dumps(summary, ensure_ascii=False))
         return summary
@@ -227,7 +229,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                      decision_rows)
     conn.executemany(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         project_rows)
     conn.executemany("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                      sorted(link_rows))

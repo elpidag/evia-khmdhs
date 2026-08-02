@@ -105,3 +105,37 @@ def test_pipelines_pins(client):
     assert [s["name"] for s in p["shared_awarders"]] == [
         "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ"
     ]
+
+
+def test_explore_pins(client):
+    e = client.get("/api/explore").get_json()
+    assert e["counts"] == {"antinero": 252, "dase": 2018, "anadohoi": 69}
+    assert len(e["rows"]) == 2339
+    # value bases per dataset reconcile with their own conventions
+    kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
+    assert kh_sum == pytest.approx(615_950_156.78, abs=1.0)
+    dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
+    assert dase_sum == pytest.approx(41_418_963.96, abs=1.0)
+    # sponsor rows expose status; the 19 stalled ones are findable
+    stalled = [r for r in e["rows"]
+               if r["ds"] == "anadohoi" and r["st"] == "no_completion_recorded"]
+    assert len(stalled) == 19
+
+
+def test_anadohoi_overview_pins(client):
+    o = client.get("/api/anadohoi/overview").get_json()
+    assert o["kpis"]["n_projects"] == 68
+    assert o["kpis"]["stated_eur"] == pytest.approx(41_183_092.05)
+    assert o["kpis"]["statuses"]["completed"] == 14
+    assert len(o["projects"]) == 69
+    fires = {f["fire"]: f for f in o["fires"]}
+    assert fires["Β. Εύβοια, Αύγ. 2021"]["n"] == 10
+    assert fires["Τατόι–Βαρυμπόμπη–Αφίδνες, Αύγ. 2021"]["completed"] == 0
+    # sponsor grouping merges registry spellings (ΔΕΗ + ΔΕΗ Α.Ε. etc.)
+    top = o["sponsors"][0]
+    assert top["company"] == "ΔΕΗ" and top["n"] == 6
+
+
+def test_meta_anadohoi_pin(client):
+    m = client.get("/api/meta").get_json()
+    assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_183_092.05}

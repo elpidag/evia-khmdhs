@@ -465,17 +465,37 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   load-bearing info; every chart has a caveat line anchored to
   `/methodology`; pair every change view with a level view; small multiples
   over filterable charts. SVG ≤1k marks, canvas above (2,018 ΔΑΣΕ dots).
-- **API endpoints** under `/api/{meta,antinero/*,dase/*,compare,connections,
-  authorities,authority/<slug>}` — JSON gets `Cache-Control: max-age=300`,
-  `app.json.ensure_ascii = False`. `/api/meta` degrades honestly (no `dase`
-  key) when dase.sqlite is absent; `/api/antinero/*` never opens it
-  (isolation tests mirror webui's).
+- **API endpoints** under `/api/{meta,antinero/*,dase/*,anadohoi/*,explore,
+  compare,connections,authorities,authority/<slug>}` — JSON gets
+  `Cache-Control: max-age=300`, `app.json.ensure_ascii = False`. `/api/meta`
+  degrades honestly (no `dase`/`anadohoi` key) when a DB is absent;
+  `/api/antinero/*` never opens the other two (isolation tests mirror
+  webui's). The anadohoi DB is a third **lazy** connection
+  (`_anadohoi_conn`); `/pdf/diavgeia/<ΑΔΑ>` is a sibling caching proxy
+  into `data/processed/anadohoi_cache/`.
+- **/explore** (all three datasets, one table): `/api/explore` ships ~2.3k
+  compact rows once (gzipped by the response cache); ALL filtering/sorting
+  is client-side for instant response — dataset/Π.Ε./HQ/procedure/status/
+  dates/value/q as URL params (shareable). Greeklish search is a TS port
+  (`transforms/search.ts`) pinned by goldens generated from
+  `webui/queries.py` (`search.golden.json`); known shared limitation:
+  Greek ρ folds to visual P. Value bases differ per dataset and are
+  labelled, never summed as one headline (methodology#explore).
+- **/anadohoi** (sponsor dataset analysis): status waffle headline,
+  PromiseGantt (appointment→deadline bars grouped by outcome, extension
+  segments, ✓/✕ marks, today rule, annotated standouts), fire-event small
+  multiples (curated `fire_event`), sponsor ranking (registry spellings
+  merged presentationally via `_sponsor_group` — ΔΕΗ/ΔΕΗ Α.Ε., ΕΛΠΕ/
+  HELLENiQ, mixed-script «ΕRΕΝ» homoglyphs), status-coloured Π.Ε. dot map,
+  monthly appointment strip with fire markers, deadline-slip slope.
+  `/anadohoi/project/[ada]` = decision trail with per-act Diavgeia PDFs +
+  the verbatim-excerpt evidence block.
 - **Tests**: `tests/test_atlas_api.py` (+ `_queries_extra`, `_real_db` as
   they land) with pytest; frontend `cd atlas && npm run check && npm test`
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 267 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 9 frontend transform units)
+## Tests (`tests/`, 315 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

@@ -1,0 +1,137 @@
+[
+ {
+  "in": "Π.Ε. Ευβοίας",
+  "norm": "Π.E. EYBOIAΣ",
+  "fold": "P.E. EVIAS"
+ },
+ {
+  "in": "evias",
+  "norm": "EVIAS",
+  "fold": "EVIAS"
+ },
+ {
+  "in": "ευβοιας",
+  "norm": "EYBOIAΣ",
+  "fold": "EVIAS"
+ },
+ {
+  "in": "ΑΝΤΙΝΕΡΟ ΙΙΙ",
+  "norm": "ANTINERO III",
+  "fold": "ANTINERO I"
+ },
+ {
+  "in": "antinero",
+  "norm": "ANTINERO",
+  "fold": "ANTINERO"
+ },
+ {
+  "in": "Θεσσαλονίκης",
+  "norm": "ΘEΣΣAΛONIKHΣ",
+  "fold": "8ESALONIKIS"
+ },
+ {
+  "in": "thessalonikis",
+  "norm": "THESSALONIKIS",
+  "fold": "8ESALONIKIS"
+ },
+ {
+  "in": "ΔΑΣΕ Γαρδικίου Τρικάλων",
+  "norm": "ΔAΣE ΓAPΔIKIOY TPIKAΛΩN",
+  "fold": "DASE GAPDIKIU TPIKALON"
+ },
+ {
+  "in": "Coca Cola 3Ε Ελλάδος Α.Β.Ε.Ε.",
+  "norm": "COCA COLA 3E EΛΛAΔOΣ A.B.E.E.",
+  "fold": "COCA COLA 3E ELADOS A.V.E.E."
+ },
+ {
+  "in": "ΔΕΗ",
+  "norm": "ΔEH",
+  "fold": "DEI"
+ },
+ {
+  "in": "dei",
+  "norm": "DEI",
+  "fold": "DI"
+ },
+ {
+  "in": "Δασαρχείο Πάρνηθας",
+  "norm": "ΔAΣAPXEIO ΠAPNHΘAΣ",
+  "fold": "DASAPXIO PAPNI8AS"
+ },
+ {
+  "in": "parnithas",
+  "norm": "PARNITHAS",
+  "fold": "PARNI8AS"
+ },
+ {
+  "in": "Βαρυμπόμπη – Τατόι",
+  "norm": "BAPYMΠOMΠH – TATOI",
+  "fold": "VAPIMPOMPI – TATI"
+ },
+ {
+  "in": "varybobi",
+  "norm": "VARYBOBI",
+  "fold": "VARIVOVI"
+ },
+ {
+  "in": "ΤΡΙΚΑΛΩΝ",
+  "norm": "TPIKAΛΩN",
+  "fold": "TPIKALON"
+ },
+ {
+  "in": "αποκατάσταση",
+  "norm": "AΠOKATAΣTAΣH",
+  "fold": "APOKATASTASI"
+ },
+ {
+  "in": "apokatastasi",
+  "norm": "APOKATASTASI",
+  "fold": "APOKATASTASI"
+ },
+ {
+  "in": "ΧΑΛΚΙΔΙΚΗΣ",
+  "norm": "XAΛKIΔIKHΣ",
+  "fold": "XALKIDIKIS"
+ },
+ {
+  "in": "xalkidikis",
+  "norm": "XALKIDIKIS",
+  "fold": "XALKIDIKIS"
+ },
+ {
+  "in": "Ίδρυμα Παύλου και Αλεξάνδρας Κανελλοπούλου",
+  "norm": "IΔPYMA ΠAYΛOY KAI AΛEΞANΔPAΣ KANEΛΛOΠOYΛOY",
+  "fold": "IDPIMA PAVLU KE ALEXANDPAS KANELOPULU"
+ },
+ {
+  "in": "ΟΡΚΑ Α.Τ.Ε.Ε.",
+  "norm": "OPKA A.T.E.E.",
+  "fold": "OPKA A.T.E.E."
+ },
+ {
+  "in": "πυρκαγιά της 19ης Αυγούστου 2023",
+  "norm": "ΠYPKAΓIA THΣ 19HΣ AYΓOYΣTOY 2023",
+  "fold": "PIPKAGIA 8S 19IS AVGUSTU 2023"
+ },
+ {
+  "in": "ΛΙΝΤΛ ΕΛΛΑΣ & ΣΙΑ.Ο.Ε",
+  "norm": "ΛINTΛ EΛΛAΣ & ΣIA.O.E",
+  "fold": "LINTL ELAS & SIA.O.E"
+ },
+ {
+  "in": "lidl",
+  "norm": "LIDL",
+  "fold": "LIDL"
+ },
+ {
+  "in": "",
+  "norm": "",
+  "fold": ""
+ },
+ {
+  "in": "  mixed Ελλάς 123 ",
+  "norm": "  MIXED EΛΛAΣ 123 ",
+  "fold": " MIXED ELAS 123 "
+ }
+]

@@ -13,6 +13,9 @@ PDF_CACHE_DIR = DATA_PROCESSED / "pdf_cache"
 # Standalone ΔΑΣΕ (forest-cooperative contracts) dataset — never mixed
 # with the Anti-nero DB above.
 DASE_DB = DATA_PROCESSED / "dase.sqlite"
+# Standalone «Ανάδοχοι αναδάσωσης/αποκατάστασης» sponsor-acts dataset.
+ANADOHOI_DB = DATA_PROCESSED / "anadohoi.sqlite"
+ANADOHOI_PDF_CACHE = DATA_PROCESSED / "anadohoi_cache"
 DEFAULT_LOG = LOGS_DIR / "enrich_contracts.log"
 
 API_BASE = "https://cerpp.eprocurement.gov.gr/khmdhs-opendata"

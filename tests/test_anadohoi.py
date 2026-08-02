@@ -198,6 +198,11 @@ def test_real_db_pins(conn):
     for (root,) in conn.execute(
             "SELECT root_ada FROM projects WHERE pe IS NULL"):
         assert root in ("6Φ454653Π8-Ξ1Ζ", "9ΕΘΠ4653Π8-ΠΡ4")
+    # fire_event curated for every project; 5 are honestly non-fire
+    n_fire, n_nonfire = conn.execute(
+        "SELECT COUNT(fire_event), SUM(fire_event = 'εκτός πυρκαγιάς') "
+        "FROM projects").fetchone()
+    assert (n_fire, n_nonfire) == (69, 5)
     # the restatement chain and the revocation are pinned
     assert conn.execute(
         "SELECT superseded_by FROM projects WHERE root_ada = "
