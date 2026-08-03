@@ -11,6 +11,7 @@
 		{ href: '/anadohoi', label: 'Ανάδοχοι' },
 		{ href: '/', label: 'Anti-nero' },
 		{ href: '/dase', label: 'ΔΑΣΕ' },
+		{ href: '/arogi', label: 'Αρωγή' },
 		{ href: '/explore', label: 'Explore' },
 		{ href: '/compare', label: 'Compare' },
 		{ href: '/connections', label: 'Connections' },

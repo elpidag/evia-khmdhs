@@ -1,0 +1,125 @@
+{
+ "_comment": "ΕΛΓΑ fire-related compensation per year, hand-collected from the annual «Δραστηριότητες ΕΛ.Γ.Α.» reports (page = printed page). Per-year granularity only — its own coarser layer.",
+ "entries": [
+  {
+   "year": 2021,
+   "eur": 1156707.14,
+   "scope": "KOE fire-programme payments made during 2021: programme PYRKAGIES 2017 (2017 fires)",
+   "report": "https://elga.gr/wp-content/uploads/2024/01/DRASTHRIOTHTES_ELGA_2021.pdf",
+   "page": 33,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 2017 1.156.707,14"
+  },
+  {
+   "year": 2021,
+   "eur": 109944.51,
+   "scope": "KOE fire-programme payments made during 2021: programme PYRKAGIES 2018",
+   "report": "https://elga.gr/wp-content/uploads/2024/01/DRASTHRIOTHTES_ELGA_2021.pdf",
+   "page": 33,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 2018 109.944,51"
+  },
+  {
+   "year": 2022,
+   "eur": 33672802.8,
+   "scope": "advances (prokatavoles) paid by ELGA during 2022 to farmers hit by the summer-2021 fires, under n.4797/2021 state-aid framework",
+   "report": "https://elga.gr/wp-content/uploads/2024/01/DRASTHRIOTHTES_ELGA_2022.pdf",
+   "page": 32,
+   "quote": "Καταβλήθηκαν ενισχύσεις με τη μορφή προκαταβολής στους πυρόπληκτους από τις πυρκαγιές θέρους 2021, σε εκτέλεση των με αριθμ. 54381 ΕΞ 2022/19 -4-2022 (ΦΕΚ 1963/Β΄/19 -4-2022), 187216 ΕΞ 2022/20 -12 -2022 (ΦΕΚ 6606/Β΄/21 -12 -2022) και 187244 ΕΞ 2022/20 -12 -2022 (Φ ΕΚ 6606/Β΄/21 -12 -2022) Κοινών Υπουργικών Αποφάσεων των Υπουργών Οικονομικών και Αγροτικής Ανάπτυξης και Τροφίμων και του Υφυπουργού Οικονομικών. Συνολικό ύ ψος καταβληθεισών προκαταβολών: 33.672.802,80€ ."
+  },
+  {
+   "year": 2022,
+   "eur": 563899.3,
+   "scope": "KOE fire-programme payments made during 2022: programme PYRKAGIES 2018",
+   "report": "https://elga.gr/wp-content/uploads/2024/01/DRASTHRIOTHTES_ELGA_2022.pdf",
+   "page": 32,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 2018 563.899,3 0"
+  },
+  {
+   "year": 2022,
+   "eur": 4064.78,
+   "scope": "KOE fire-programme payments made during 2022: programme PYRKAGIES 2019",
+   "report": "https://elga.gr/wp-content/uploads/2024/01/DRASTHRIOTHTES_ELGA_2022.pdf",
+   "page": 32,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 2019 4.064,78"
+  },
+  {
+   "year": 2022,
+   "eur": 418264.0,
+   "scope": "livestock insurance payouts during 2022, cause: fire (PYRKAGIA)",
+   "report": "https://elga.gr/wp-content/uploads/2024/01/DRASTHRIOTHTES_ELGA_2022.pdf",
+   "page": null,
+   "quote": "ΠΥΡΚΑΓΙΑ 418.264 €"
+  },
+  {
+   "year": 2023,
+   "eur": 8756269.03,
+   "scope": "advances paid by ELGA during 2023 to farmers hit by the 2021 fires (n.4797/2021)",
+   "report": "https://elga.gr/wp-content/uploads/%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%95%CE%A3-%CE%95%CE%9B%CE%93%CE%91-2023.pdf",
+   "page": 36,
+   "quote": "Kαταβλήθηκαν ενισχύσεις με τη μορφή προκαταβολής στους πυρόπληκτους από τις πυρκαγιές έτους 2021, σε εκτέλεση των με αριθμ. 67730 ΕΞ 2023/02 -05 -2023 (ΦΕΚ 2936/Β΄/03 -05 -2023), 67737 ΕΞ 2023/02 -05 -2023 (ΦΕΚ 2937/Β΄/03 -05 -2023), 32862/16 -11 -2023 (ΦΕΚ 6563/Β΄/ 17 -11 -2023) και Κοινών Υπουργικών Αποφάσεων των Υπουργών Οικονομικών και Αγροτικής Ανάπτυξης και Τροφίμων και του Υφυπουργού Οικονομικών. Συνολικό ύψος καταβληθεισών προκαταβολών: 8.756.269,03 €"
+  },
+  {
+   "year": 2023,
+   "eur": 4264555.75,
+   "scope": "advances paid by ELGA during 2023 to farmers hit by the 2022 fires (n.4797/2021)",
+   "report": "https://elga.gr/wp-content/uploads/%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%95%CE%A3-%CE%95%CE%9B%CE%93%CE%91-2023.pdf",
+   "page": 36,
+   "quote": "Kαταβλήθηκαν ενισχύσεις με τη μορφή προκαταβολής στους πυρόπληκτους από τις πυρκαγιές έτους 2022, σε εκτέλεση των με αριθμ. 68208 ΕΞ 2023/03 -05 -2023 και 68306 ΕΞ 2023/03 -05 -2023 (ΦΕΚ 2985/Β΄/06 -05 -2023), Κοινών Υπουργικών Αποφάσεων των Υπουργών Οικονομικώ ν και Αγροτικής Ανάπτυξης και Τροφίμων και του Υφυπουργού Οικονομικών. Συνολικό ύψος καταβληθεισών προκαταβολών: 4.264.555,75 €"
+  },
+  {
+   "year": 2023,
+   "eur": 204737.54,
+   "scope": "KOE fire-programme payments made during 2023: programme PYRKAGIES 2019",
+   "report": "https://elga.gr/wp-content/uploads/%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%95%CE%A3-%CE%95%CE%9B%CE%93%CE%91-2023.pdf",
+   "page": 36,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 2019 204.737,54"
+  },
+  {
+   "year": 2023,
+   "eur": 118232.45,
+   "scope": "KOE fire-programme payments made during 2023: programme PYRKAGIES 2020",
+   "report": "https://elga.gr/wp-content/uploads/%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%95%CE%A3-%CE%95%CE%9B%CE%93%CE%91-2023.pdf",
+   "page": 36,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 20 20 118.232,45"
+  },
+  {
+   "year": 2023,
+   "eur": 349540.0,
+   "scope": "livestock insurance payouts during 2023, cause: fire (PYRKAGIA)",
+   "report": "https://elga.gr/wp-content/uploads/%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%95%CE%A3-%CE%95%CE%9B%CE%93%CE%91-2023.pdf",
+   "page": null,
+   "quote": "ΠΥΡΚΑΓΙΑ 349.540 €"
+  },
+  {
+   "year": 2024,
+   "eur": 15665072.5,
+   "scope": "advances paid by ELGA during 2024 to farmers hit by the 2023 fires (n.4797/2021)",
+   "report": "https://elga.gr/wp-content/uploads/%CE%91%CE%A0%CE%9F%CE%9B%CE%9F%CE%93%CE%99%CE%A3%CE%A4%CE%99%CE%9A%CE%97-%CE%95%CE%9A%CE%98%CE%95%CE%A3%CE%97-%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%A9%CE%9D-%CE%95%CE%9B%CE%93%CE%91-%CE%95%CE%A4%CE%9F%CE%A5%CE%A3-2024.pdf",
+   "page": 34,
+   "quote": "Kαταβλήθηκαν ενισχύσεις με τη μορφή προκαταβολής στους πυρόπληκτους από τις πυρκαγιές έτους 202 3, σε εκτέλεση της με αριθμ. 23205/22 -03 -2024 (ΦΕΚ 1891/Β΄/26 -03 - 2024) Κοινής Υπουργικ ής Απ όφασης των Υπουργών Εθνικής Οικονομίας και Οικονομικών , Αγροτικής Ανάπτυξης και Τροφίμων κα ι Κλιματικής Κρίσης και Πολιτικής Προστασίας . Συνολικό ύψος καταβληθεισών προκαταβολών: 15.665.072,5 €"
+  },
+  {
+   "year": 2024,
+   "eur": 833001.17,
+   "scope": "KOE fire-programme payments made during 2024: programme PYRKAGIES 2020",
+   "report": "https://elga.gr/wp-content/uploads/%CE%91%CE%A0%CE%9F%CE%9B%CE%9F%CE%93%CE%99%CE%A3%CE%A4%CE%99%CE%9A%CE%97-%CE%95%CE%9A%CE%98%CE%95%CE%A3%CE%97-%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%A9%CE%9D-%CE%95%CE%9B%CE%93%CE%91-%CE%95%CE%A4%CE%9F%CE%A5%CE%A3-2024.pdf",
+   "page": 34,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 20 20 833 .001,17"
+  },
+  {
+   "year": 2024,
+   "eur": 51461.95,
+   "scope": "KOE fire-programme payments made during 2024: programme PYRKAGIES 2021 (2021 fires)",
+   "report": "https://elga.gr/wp-content/uploads/%CE%91%CE%A0%CE%9F%CE%9B%CE%9F%CE%93%CE%99%CE%A3%CE%A4%CE%99%CE%9A%CE%97-%CE%95%CE%9A%CE%98%CE%95%CE%A3%CE%97-%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%A9%CE%9D-%CE%95%CE%9B%CE%93%CE%91-%CE%95%CE%A4%CE%9F%CE%A5%CE%A3-2024.pdf",
+   "page": 34,
+   "quote": "ΠΥΡΚΑΓΙΕΣ 20 21 51 .461,95"
+  },
+  {
+   "year": 2024,
+   "eur": 1188766.0,
+   "scope": "livestock insurance payouts during 2024, cause: fire force-majeure (PYRKAGIA ANOTERAS VIAS)",
+   "report": "https://elga.gr/wp-content/uploads/%CE%91%CE%A0%CE%9F%CE%9B%CE%9F%CE%93%CE%99%CE%A3%CE%A4%CE%99%CE%9A%CE%97-%CE%95%CE%9A%CE%98%CE%95%CE%A3%CE%97-%CE%94%CE%A1%CE%91%CE%A3%CE%A4%CE%97%CE%A1%CE%99%CE%9F%CE%A4%CE%97%CE%A4%CE%A9%CE%9D-%CE%95%CE%9B%CE%93%CE%91-%CE%95%CE%A4%CE%9F%CE%A5%CE%A3-2024.pdf",
+   "page": null,
+   "quote": "ΠΥΡΚΑΓΙΑ ΑΝΩΤΕΡΑΣ ΒΙΑΣ 1.188.766 €"
+  }
+ ]
+}

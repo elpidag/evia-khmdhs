@@ -16,6 +16,9 @@ DASE_DB = DATA_PROCESSED / "dase.sqlite"
 # Standalone «Ανάδοχοι αναδάσωσης/αποκατάστασης» sponsor-acts dataset.
 ANADOHOI_DB = DATA_PROCESSED / "anadohoi.sqlite"
 ANADOHOI_PDF_CACHE = DATA_PROCESSED / "anadohoi_cache"
+# Standalone «Αρωγή πυροπλήκτων» state-aid dataset (fires ≥2021).
+AROGI_DB = DATA_PROCESSED / "arogi.sqlite"
+AROGI_CACHE = DATA_PROCESSED / "arogi_cache"
 DEFAULT_LOG = LOGS_DIR / "enrich_contracts.log"
 
 API_BASE = "https://cerpp.eprocurement.gov.gr/khmdhs-opendata"

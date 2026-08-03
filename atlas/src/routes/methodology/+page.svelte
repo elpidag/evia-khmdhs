@@ -234,6 +234,24 @@
 		runs entirely in the browser; every filter state is a shareable URL.
 	</p>
 
+	<h2 id="arogi">Αρωγή πυροπλήκτων (state aid to fire victims)</h2>
+	<p>
+		The fourth dataset covers state aid for wildfires from 2021 onwards, on two independent
+		sources. The Διαύγεια side is the ΓΔΑΕΦΚ per-building trail (repair permits, δόσεις,
+		περαιώσεις): every act attributes to a fire by the fire <em>cited in its recitals</em>,
+		never by its issue date — recent acts still serving pre-2021 fires are excluded and
+		counted. Amounts come from the acts' own hash-delimited Σ.Σ. tables, accepted only when
+		the total reconciles with the δωρεάν-αρωγή + δάνειο split. Rows group into cases only
+		where follow-up acts cite the permit number; the rest stay honest single-act rows.
+		<strong>Privacy: owners' names are never stored or displayed</strong> — the signed PDF on
+		Διαύγεια remains the public record. The official side is the state's own payment
+		announcements (stored as verbatim quotes with source URLs — Wayback snapshots where the
+		original pages are gone) and the ΕΛΓΑ annual reports. The bases differ — Σ.Σ.
+		<em>approved</em>, πρώτη αρωγή <em>paid</em>, ΠΔΕ <em>budgeted</em>, ΕΛΓΑ
+		<em>compensation</em> — so the summary compares like with like and highlights gaps
+		instead of merging them.
+	</p>
+
 	<h2 id="pdf-provenance">Documents</h2>
 	<p>
 		Every PDF link serves the signed document fetched once from ΚΗΜΔΗΣ and cached locally — the

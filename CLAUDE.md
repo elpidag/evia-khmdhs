@@ -480,6 +480,32 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   Γαρδικίου Τρικάλων). Tests in `tests/test_anadohoi.py` (units + real-DB
   pins incl. status counts and Σ budgets).
 
+## Αρωγή πυροπλήκτων dataset (`data/processed/arogi.sqlite` — 4th DB)
+
+State aid to wildfire victims, fires ≥2021 (DATA_DECISIONS 2026-08-03),
+dual-sourced. **Diavgeia side**: `scripts/harvest_arogi.py` (staged,
+resumable: fires/acts/pdfs/extract/audit; cache `arogi_cache/` gitignored)
+sweeps the ΓΔΑΕΦΚ act families → 4,063 acts, 1,797 issued ≥2021 with PDFs;
+`khmdhs/arogi.py` extracts deterministically — fire citations (acts
+attribute by the fire cited in RECITALS, never issue date; 620 acts
+serving pre-2021 fires excluded), Σ.Σ. amounts from the hash-delimited
+table row (arithmetic-checked total=ΔΚΑ+δάνειο; all-dots decimals
+'65.982.92'=65,982.92; the ΔΩΡΕΑΝ-ΚΡΑΤΙΚΗ-ΑΡΩΓΗ row preferred over
+ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ hash-runs), permit-number case keys (follow-ups cite them
+only 13% → rows are FLAT acts with 57 genuine multi-act groups).
+`khmdhs/arogi_loader.py` + curated `khmdhs/data/arogi_fires.json` (10
+in-scope fire units; Jul/Aug 2021 is ONE unit like its οριοθέτηση; Μάτι
+2018 kept in_scope=0) → 1,077 cases, 911 fire-matched, Σ approved
+€30,291,740.26. **Official side**: `arogi_press_totals.json` (26
+announcements, VERBATIM quotes + URLs/Wayback; the 2021 series ends
+€41,400,301.97/8,872 — findings: 2024 ΒΑ Αττική trail stops at
+€731,409/162 with no final total; NO totals for any 2025 fire) +
+`elga_fire_compensation.json` (per-year, report-page evidence).
+**Privacy hard rule: owner names are NEVER stored or displayed.**
+Atlas: `/arogi` (case table), `/arogi/case/[key]` (act trail + PDFs via
+/pdf/diavgeia, arogi_cache fallback), `/arogi/summary` (bases side by
+side, mismatches highlighted, never merged).
+
 ## Atlas (second web UI: `atlas/` SvelteKit + `atlas_api/` Flask JSON API)
 
 A separate, publication-grade site over the same two DBs — **`webui/` is

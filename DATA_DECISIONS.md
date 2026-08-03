@@ -779,3 +779,41 @@ signature year. /explore collapses to a single «Stated value (net)»
 column (the effective column is gone; Ανάδοχοι keep committed-net-where-
 stated). *User decision 2026-08-03. Affects: every Atlas value graphic;
 tests re-pinned; no stored data changes.*
+
+## 2026-08-03 — Fourth dataset: «Αρωγή πυροπλήκτων» (state aid to fire victims, fires ≥2021)
+
+A standalone database (`data/processed/arogi.sqlite`) of state aid to
+people affected by wildfires from 2021 onwards, dual-sourced and
+cross-checked. Universe & rules: (1) **The fire universe is the
+οριοθέτηση ΚΥΑ registry** (43 fire-delimitation acts found on Diavgeia,
+curated into `khmdhs/data/arogi_fires.json` with fire dates, ΦΕΚ and
+delimited municipalities → Π.Ε.); an act belongs to a fire by the
+οριοθέτηση/fire date **cited in its recitals, never by its own issue
+date** — ΓΔΑΕΦΚ still issues acts today for the 2018 Μάτι fire, and
+those are excluded (fire date ≥ 2021-01-01; exclusions counted).
+(2) **Privacy: owner names are never stored or displayed.** The
+per-building acts print full names of private individuals; the dataset
+keeps only ΑΔΑ, act kind, amounts, municipality/Π.Ε., fire, dates and a
+case key — the Diavgeia PDF remains the public record. (3) **Rows are
+aid CASES**: follow-up acts (βεβαιώσεις προόδου/περαίωσης, δόσεις) cite
+the originating repair permit's protocol/ΑΔΑ → deterministic grouping
+into per-building cases; unmatched acts stay honest single-act rows
+(if <70% of follow-ups match, the layer falls back to flat acts).
+(4) **Bases are never merged**: στεγαστική συνδρομή *approved* (the
+«ΣΥΝΟΛΙΚΟ ΠΟΣΟ ΣΤΕΓΑΣΤΙΚΗΣ ΣΥΝΔΡΟΜΗΣ (ΔΩΡΕΑΝ ΚΡΑΤΙΚΗ ΑΡΩΓΗ) #…€#»
+anchor), doses *paid* (ΔΚΑ vs άτοκο δάνειο split), πρώτη αρωγή
+*budgeted* (ΥΠΟΙΚ ΠΔΕ Πράξεις), official *paid running totals*
+(civilprotection/minfin press announcements — stored as verbatim quotes
+with URLs in `khmdhs/data/arogi_press_totals.json`), and ΕΛΓΑ
+*agricultural compensation* (per-year figures hand-transcribed from the
+annual activity reports into `khmdhs/data/elga_fire_compensation.json`
+with page evidence) are distinct measures; the /arogi/summary
+cross-check compares like-for-like and **highlights mismatches instead
+of averaging them**. (5) Per-person πρώτη-αρωγή payments (ΑΑΔΕ bank
+credits) are not public anywhere — the dataset's granularity is
+per-building (Σ.Σ.) and per-batch (πρώτη αρωγή), stated on the page.
+No open dataset exists for any of this (data.gov.gr CKAN verified
+empty; the arogi portals are application-only) — Diavgeia acts and
+official announcements are the only public sources. *User request
+2026-08-03. Affects: new arogi.sqlite, khmdhs/data/arogi_*.json,
+elga_fire_compensation.json, Atlas /arogi + /arogi/summary.*

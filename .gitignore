@@ -50,3 +50,4 @@ atlas/build/
 atlas/vite.config.ts.timestamp-*
 atlas/test-results/
 data/processed/dase_diavgeia_cache/
+data/processed/arogi_cache/

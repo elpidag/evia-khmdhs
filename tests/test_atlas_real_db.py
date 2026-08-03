@@ -166,3 +166,20 @@ def test_anadohoi_overview_pins(client):
 def test_meta_anadohoi_pin(client):
     m = client.get("/api/meta").get_json()
     assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_784_256.85}
+
+
+def test_arogi_pins(client):
+    m = client.get("/api/meta").get_json()
+    assert m["arogi"]["n_cases"] == 956 and m["arogi"]["n_fires"] == 10
+    assert m["arogi"]["approved_eur"] == pytest.approx(20_059_683.94)
+    e = client.get("/api/arogi/explore").get_json()
+    assert len(e["rows"]) == 956
+    s = client.get("/api/arogi/summary").get_json()
+    active = [f for f in s["fires"] if f["n_cases"]]
+    assert sum(f["approved_eur"] for f in active) > 0
+    top = max(active, key=lambda f: f["approved_eur"])
+    assert top["fire_id"] == "fires-2021-0708"
+    # a case detail resolves with its act trail
+    row = next(r for r in e["rows"] if r["n"] > 1)
+    c = client.get(f"/api/arogi/case/{row['id']}").get_json()
+    assert c["acts"] and all("ada" in a for a in c["acts"])

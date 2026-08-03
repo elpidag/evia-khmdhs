@@ -123,7 +123,8 @@ def _full_date(s: str | None) -> str | None:
 
 def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
          ana: sqlite3.Connection | None = None,
-         pay: sqlite3.Connection | None = None) -> dict:
+         pay: sqlite3.Connection | None = None,
+         ar: sqlite3.Connection | None = None) -> dict:
     """Footer/OG numbers for all datasets + data freshness. `kh` is the
     stated-basis connection (total = Σ stated net); `pay` sees real
     payments for the n_payments count."""
@@ -153,6 +154,13 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "budget_current)), 2) FROM projects "
             "WHERE status != 'superseded'").fetchone()
         out["anadohoi"] = {"n_projects": n, "stated_eur": tot}
+
+    if ar is not None:
+        n_fires, n_cases, appr = ar.execute(
+            "SELECT (SELECT COUNT(*) FROM fires WHERE in_scope = 1),"
+            " COUNT(*), ROUND(SUM(approved_eur), 2) FROM cases").fetchone()
+        out["arogi"] = {"n_fires": n_fires, "n_cases": n_cases,
+                        "approved_eur": appr}
 
     # dataset-state counts the prose pages (methodology) cite — computed,
     # never hardcoded, so a refresh cannot leave stale numbers in copy
@@ -1354,3 +1362,132 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
     out.sort(key=lambda e: (e["d"] or "9999",
                             _TIMELINE_ORDER.get(e["kind"], 9)))
     return out
+
+
+# ------------------------------------------------- arogi (state fire aid)
+
+def arogi_explore(ar: sqlite3.Connection) -> dict:
+    """Compact rows for the /arogi client-filtered table: aid CASES plus
+    πρώτη-αρωγή budget batches. Owner names are never present anywhere in
+    the DB (DATA_DECISIONS 2026-08-03 privacy rule)."""
+    fires = {r["fire_id"]: dict(r) for r in ar.execute(
+        "SELECT fire_id, label, year FROM fires")}
+    rows = []
+    for r in ar.execute("""
+        SELECT case_key, fire_id, pe, n_acts, first_date, last_date,
+               approved_eur, dka_eur, loan_eur, status FROM cases"""):
+        rows.append({
+            "id": r["case_key"], "kind": "case",
+            "d": r["first_date"], "d2": r["last_date"],
+            "fire": fires.get(r["fire_id"], {}).get("label"),
+            "fire_id": r["fire_id"], "pe": r["pe"],
+            "n": r["n_acts"], "v": r["approved_eur"],
+            "dka": r["dka_eur"], "loan": r["loan_eur"],
+            "st": r["status"],
+        })
+    for r in ar.execute("""
+        SELECT ada, label, fire_id, issue_date, budget_eur FROM batches"""):
+        rows.append({
+            "id": r["ada"], "kind": "batch",
+            "d": r["issue_date"], "d2": None,
+            "fire": fires.get(r["fire_id"], {}).get("label"),
+            "fire_id": r["fire_id"], "pe": None,
+            "n": 1, "v": r["budget_eur"], "dka": None, "loan": None,
+            "st": "budget",
+        })
+    counts = {"cases": sum(1 for r in rows if r["kind"] == "case"),
+              "batches": sum(1 for r in rows if r["kind"] == "batch")}
+    return {"rows": rows, "counts": counts,
+            "fires": sorted(fires.values(), key=lambda f: f["label"])}
+
+
+def arogi_case(ar: sqlite3.Connection, key: str) -> dict | None:
+    """One aid case with its full act trail (or a batch act)."""
+    c = ar.execute("SELECT * FROM cases WHERE case_key = ?", (key,)).fetchone()
+    if c is None:
+        b = ar.execute("SELECT * FROM batches WHERE ada = ?", (key,)).fetchone()
+        if b is None:
+            return None
+        out = dict(b)
+        out["kind"] = "batch"
+        f = ar.execute("SELECT label FROM fires WHERE fire_id = ?",
+                       (b["fire_id"],)).fetchone()
+        out["fire_label"] = f["label"] if f else None
+        return out
+    out = dict(c)
+    out["kind"] = "case"
+    f = ar.execute("SELECT label, year FROM fires WHERE fire_id = ?",
+                   (c["fire_id"],)).fetchone()
+    out["fire_label"] = f["label"] if f else None
+    out["acts"] = [dict(a) for a in ar.execute("""
+        SELECT ada, kind, issue_date, org, subject, ss_total_eur,
+               ss_excerpt, dka_eur, loan_eur, fire_excerpt
+        FROM acts WHERE case_key = ?
+           OR (? LIKE 'ACT:%' AND ada = substr(?, 5))
+        ORDER BY issue_date, ada""", (key, key, key))]
+    return out
+
+
+def arogi_summary(ar: sqlite3.Connection) -> dict:
+    """Per-fire aggregates on every basis + the dual-source cross-check.
+
+    Bases are never merged: Diavgeia-derived Σ.Σ. approvals / doses,
+    πρώτη-αρωγή budget Πράξεις, official press running totals and ΕΛΓΑ
+    yearly compensation are reported side by side; `press` carries the
+    latest cumulative figure per (fire, stream)."""
+    fires = [dict(r) for r in ar.execute(
+        "SELECT * FROM fires WHERE in_scope = 1 ORDER BY year, fire_id")]
+    per_fire = {f["fire_id"]: {
+        "fire_id": f["fire_id"], "label": f["label"], "year": f["year"],
+        "pes": json.loads(f["pes"] or "[]"),
+        "n_cases": 0, "n_acts": 0, "approved_eur": 0.0, "dka_eur": 0.0,
+        "completed": 0, "batch_budget_eur": 0.0, "press": [],
+    } for f in fires}
+    unattributed = {"n_cases": 0, "approved_eur": 0.0}
+    for r in ar.execute("""
+        SELECT fire_id, COUNT(*) AS n, SUM(n_acts) AS na,
+               SUM(approved_eur) AS ap, SUM(dka_eur) AS dk,
+               SUM(status = 'completed') AS done
+        FROM cases GROUP BY fire_id"""):
+        t = per_fire.get(r["fire_id"])
+        if t is None:
+            unattributed["n_cases"] += r["n"]
+            unattributed["approved_eur"] += r["ap"] or 0.0
+            continue
+        t["n_cases"] = r["n"]
+        t["n_acts"] = r["na"]
+        t["approved_eur"] = round(r["ap"] or 0.0, 2)
+        t["dka_eur"] = round(r["dk"] or 0.0, 2)
+        t["completed"] = r["done"]
+    for r in ar.execute("""
+        SELECT fire_id, SUM(budget_eur) AS b FROM batches GROUP BY fire_id"""):
+        if r["fire_id"] in per_fire:
+            per_fire[r["fire_id"]]["batch_budget_eur"] = round(r["b"] or 0, 2)
+    # latest CUMULATIVE announcement per (fire, stream); fires whose
+    # announcements are batch-only fall back to their latest batch entry,
+    # flagged so the page can label it (a missing running total is itself
+    # a finding, never papered over)
+    best: dict[tuple, dict] = {}
+    for r in ar.execute("SELECT * FROM press_totals ORDER BY date"):
+        if r["fire_id"] not in per_fire:
+            continue
+        key = (r["fire_id"], r["stream"])
+        cur = best.get(key)
+        if cur is None or r["cumulative"] >= cur["cumulative"]:
+            best[key] = dict(r)
+    for r in best.values():
+        per_fire[r["fire_id"]]["press"].append(
+            {k: r[k] for k in ("stream", "date", "eur", "beneficiaries",
+                               "cumulative", "url", "quote")})
+    elga = [dict(r) for r in ar.execute(
+        "SELECT * FROM elga_yearly ORDER BY year")]
+    stats = ar.execute("SELECT value FROM meta WHERE key='stats'").fetchone()
+    return {
+        "fires": list(per_fire.values()),
+        "unattributed": unattributed,
+        "elga": elga,
+        "stats": json.loads(stats["value"]) if stats else {},
+        "as_of": (ar.execute(
+            "SELECT value FROM meta WHERE key='loaded_as_of'").fetchone()
+            or [None])[0],
+    }

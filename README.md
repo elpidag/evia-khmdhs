@@ -381,7 +381,10 @@ contract value** — payments are a separate, explicitly-labelled layer
 (Anti-nero: 252 in-scope contracts, €667.5M stated net, €440.0M paid net;
 ΔΑΣΕ: 2,018 live contracts, €34.09M stated net, €21.3M paid net on the
 891 contracts whose payments the registry posts; Ανάδοχοι: €41.78M
-committed, net where each act states it). The original `webui/` stays frozen and keeps working
+committed, net where each act states it; Αρωγή πυροπλήκτων: 1,077 aid
+cases across 10 fire units, €30.3M στεγαστική συνδρομή approved,
+cross-checked against the state's own payment announcements). The
+original `webui/` stays frozen and keeps working
 unchanged on its historical incl-VAT basis — Atlas adds two new packages:
 
 - **`atlas_api/`** — a Flask JSON API (`python -m atlas_api`,
