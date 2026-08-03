@@ -49,3 +49,4 @@ atlas/.svelte-kit/
 atlas/build/
 atlas/vite.config.ts.timestamp-*
 atlas/test-results/
+data/processed/dase_diavgeia_cache/

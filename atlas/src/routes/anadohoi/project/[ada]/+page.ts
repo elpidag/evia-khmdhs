@@ -25,6 +25,8 @@ export interface AnadohoiProject {
 	fire_event: string | null;
 	budget_eur: number | null;
 	budget_current: number | null;
+	budget_vat_basis: 'net' | 'gross' | 'unstated' | null;
+	budget_net_eur: number | null;
 	start_date: string | null;
 	deadline_initial: string | null;
 	deadline_current: string | null;

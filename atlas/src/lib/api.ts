@@ -44,7 +44,15 @@ export interface Meta {
 
 export interface Kpis {
 	n_contracts: number;
+	/** effective € (payments where present, else stated) — excl. VAT */
 	total_eur: number;
+	/** Σ stated values excl. VAT */
+	stated_eur: number;
+	/** Σ non-cancelled payment orders excl. VAT */
+	paid_eur: number;
+	n_payments: number;
+	/** median stated value excl. VAT */
+	median_eur: number;
 	n_contractors: number;
 	n_authorities: number;
 	pct_direct: number;
@@ -172,7 +180,12 @@ export interface Histogram {
 
 export interface DaseKpis {
 	n_contracts: number;
+	/** Σ stated values excl. VAT (live population) */
 	total_eur: number;
+	/** Σ non-cancelled payment orders excl. VAT (partial coverage) */
+	paid_eur: number;
+	n_paid_contracts: number;
+	n_payments: number;
 	n_coops: number;
 	n_orgs: number;
 	n_units: number;

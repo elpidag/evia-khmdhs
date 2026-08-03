@@ -8,9 +8,9 @@
 	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 
 	const NAV = [
+		{ href: '/anadohoi', label: 'Ανάδοχοι' },
 		{ href: '/', label: 'Anti-nero' },
 		{ href: '/dase', label: 'ΔΑΣΕ' },
-		{ href: '/anadohoi', label: 'Ανάδοχοι' },
 		{ href: '/explore', label: 'Explore' },
 		{ href: '/compare', label: 'Compare' },
 		{ href: '/connections', label: 'Connections' },
@@ -58,12 +58,12 @@
 		<div class="inner">
 			{#if data.meta}
 				<p>
+					{#if data.meta.anadohoi}
+						Ανάδοχοι: {data.meta.anadohoi.n_projects} projects &nbsp;·&nbsp;
+					{/if}
 					Anti-nero: {data.meta.antinero.n_contracts} contracts · {eurShort(
 						data.meta.antinero.total_eur
 					)} effective
-					{#if data.meta.anadohoi}
-						&nbsp;·&nbsp; Ανάδοχοι: {data.meta.anadohoi.n_projects} projects
-					{/if}
 					{#if data.meta.dase}
 						&nbsp;·&nbsp; ΔΑΣΕ: {data.meta.dase.n_contracts} contracts · {eurShort(
 							data.meta.dase.total_eur
@@ -72,8 +72,8 @@
 				</p>
 				<p class="fine">
 					Source: ΚΗΜΔΗΣ (KHMDHS) open data + Διαύγεια · data as of
-					{(data.meta.generated ?? '').slice(0, 10)} · consortium contract values are counted in
-					full for each partner · <a href="/methodology">methodology</a>
+					{(data.meta.generated ?? '').slice(0, 10)} · all € net of ΦΠΑ · consortium contract
+					values are counted in full for each partner · <a href="/methodology">methodology</a>
 				</p>
 			{:else}
 				<p class="fine">API unavailable — start it with <code>python -m atlas_api</code>.</p>

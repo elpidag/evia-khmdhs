@@ -44,11 +44,18 @@ export interface ContractDetail {
 		signed_date: string | null;
 		title: string | null;
 		amount_with_vat: number | null;
+		amount_without_vat: number | null;
 		cancelled: number;
 		credit: number;
 		ada: string | null;
 		correction_note: string | null;
 	}[];
+	/** the registry's incl-VAT figures (the site's primary basis is net) */
+	gross?: {
+		stated_gross: number | null;
+		paid_gross?: number | null;
+		payments?: Record<string, number | null>;
+	};
 	regions: { region_pe: string; source: string | null; note: string | null }[];
 	sites: { site_name: string; region_pe: string; page: number | null; excerpt: string | null }[];
 	timeline: {
@@ -59,7 +66,7 @@ export interface ContractDetail {
 		cancelled: number;
 		in_db: boolean;
 		/** completion acts only (Diavgeia) */
-		ckind?: 'oristiki_paralavi' | 'peraiosi' | 'oloklirosi';
+		ckind?: 'oristiki_paralavi' | 'paralavi' | 'peraiosi' | 'oloklirosi';
 		end_basis?: 'protocol_date' | 'act_date';
 		end_excerpt?: string | null;
 	}[];

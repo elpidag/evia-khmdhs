@@ -87,7 +87,7 @@
 		name="description"
 		content="Interactive audit of Greece's Anti-nero wildfire-prevention programme: {grInt(
 			o.kpis.n_contracts
-		)} contracts, {eurShort(o.kpis.total_eur)} effective."
+		)} contracts, {eurShort(o.kpis.total_eur)} effective (excl. VAT)."
 	/>
 </svelte:head>
 
@@ -102,16 +102,29 @@
 
 <KpiRow>
 	<StatPair
-		value={eurShort(o.kpis.total_eur)}
-		label="effectively disbursed or committed"
-		compare="{grInt(o.kpis.n_contracts)} in-scope contracts"
-		basis="payments where present, else stated value"
+		value={eurShort(o.kpis.stated_eur)}
+		label="total stated value of contracts"
+		compare="excl. VAT"
+		basis="Σ contracted values as registered"
 		color="var(--c-antinero)"
 	/>
 	<StatPair
-		value={pct(o.kpis.pct_direct)}
-		label="of contracts were direct awards"
-		compare="{eurShort(directEur)} — the bulk of the money too"
+		value={eurShort(o.kpis.paid_eur)}
+		label="actually paid so far"
+		compare="excl. VAT · {grInt(o.kpis.n_payments)} payment orders"
+		basis="Σ non-cancelled payment orders"
+		color="var(--c-antinero)"
+	/>
+	<StatPair
+		value={eurShort(o.kpis.median_eur)}
+		label="median contract"
+		compare="excl. VAT"
+		basis="stated value, in-scope population"
+	/>
+	<StatPair
+		value={grInt(o.kpis.n_contracts)}
+		label="in-scope contracts"
+		compare="{grInt(o.kpis.n_single_bidder)} drew exactly one bid"
 	/>
 	<StatPair
 		value={grInt(o.kpis.n_contractors)}
@@ -119,9 +132,9 @@
 		compare="under a single awarding ministry (ΥΠΕΝ)"
 	/>
 	<StatPair
-		value={grInt(o.kpis.n_single_bidder)}
-		label="contracts drew exactly one bid"
-		compare="{grInt(o.kpis.n_cancelled)} cancelled"
+		value={pct(o.kpis.pct_direct)}
+		label="of contracts were direct awards"
+		compare="{eurShort(directEur)} — the bulk of the money too"
 	/>
 </KpiRow>
 
@@ -161,7 +174,7 @@
 	<ChartFrame
 		title="Disbursement has been climbing every year since 2022"
 		subtitle="Cumulative € of payment orders — stacked by phase, or same-point-in-year comparison."
-		caveat="Payment orders attributed to a contract's final version; gross registry amounts (Diavgeia net clearances differ 6–12%)."
+		caveat="Payment orders attributed to a contract's final version; registry net-of-ΦΠΑ amounts."
 		anchor="disbursement"
 		methodology="effective-value"
 	>
@@ -177,8 +190,8 @@
 {#if swarm}
 	<ChartFrame
 		title="252 contracts, and almost all of them sit far above the direct-award ceilings"
-		subtitle="Every in-scope contract as one dot on a log scale (effective €). Ringed dots drew a single bid."
-		caveat="Direct-award ceilings apply per procurement, not per contract value — the rules allow direct awards above the ceilings under RRF emergency provisions; the lines are printed for scale."
+		subtitle="Every in-scope contract as one dot on a log scale (effective €, excl. VAT). Ringed dots drew a single bid."
+		caveat="The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis as these dots. RRF emergency provisions allowed direct awards above them; the lines are printed for scale."
 		anchor="swarm"
 		methodology="effective-value"
 	>
@@ -213,8 +226,8 @@
 <div class="pair">
 	<ChartFrame
 		title="Direct awards pile up between €1M and €5M — far beyond the ν.4782/2021 ceilings"
-		subtitle="{grInt(o.direct_awards.n as number)} direct-award contracts by effective value."
-		caveat="RRF emergency provisions allowed direct awards above the standard ceilings."
+		subtitle="{grInt(o.direct_awards.n as number)} direct-award contracts by effective value (excl. VAT)."
+		caveat="The statutory ceilings and these values are both excl. VAT; RRF emergency provisions allowed direct awards above the ceilings."
 		anchor="direct-awards"
 		methodology="procedures"
 	>

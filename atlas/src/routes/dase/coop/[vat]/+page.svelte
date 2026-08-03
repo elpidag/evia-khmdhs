@@ -20,7 +20,7 @@
 	<meta property="og:title" content={b.summary.name} />
 	<meta
 		property="og:description"
-		content="{grInt(b.summary.n_live)} live contracts, {eurShort(b.summary.total_eur)} stated"
+		content="{grInt(b.summary.n_live)} live contracts, {eurShort(b.summary.total_eur)} stated (excl. VAT)"
 	/>
 </svelte:head>
 
@@ -39,7 +39,7 @@
 	<StatPair
 		value={eurShort(b.summary.total_eur)}
 		label="across {grInt(b.summary.n_live)} live contracts"
-		basis="stated € incl. VAT"
+		basis="stated € excl. VAT"
 		color="var(--c-dase)"
 	/>
 	<StatPair

@@ -24,8 +24,8 @@
 <div class="chart">
 	<div class="cols-head">
 		<span></span>
-		<span class="antinero">Anti-nero — % of its €616M</span>
-		<span class="dase">ΔΑΣΕ — % of its €41.4M</span>
+		<span class="antinero">Anti-nero — % of its total</span>
+		<span class="dase">ΔΑΣΕ — % of its total</span>
 	</div>
 	{#each shown as r (r.pe)}
 		{@const pa = r.antinero_eur / antineroTotal}

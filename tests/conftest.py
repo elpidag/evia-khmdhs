@@ -8,16 +8,21 @@ from khmdhs.scope_loader import SCHEMA as SCOPE_SCHEMA
 
 CONTRACT_COLS = (
     "reference_number, title, public_funding_ref, public_funding_ref_num, "
-    "prev_reference_no, cancelled, total_cost_with_vat, organization_name, "
+    "prev_reference_no, cancelled, total_cost_with_vat, total_cost_without_vat, "
+    "organization_name, "
     "signer_name, units_operator_name, procedure_type, bids_submitted, fetched_at"
 )
 
 
 def add_contract(conn, ref, title=None, fund_num=None, prev=None, cancelled=0,
-                 eur=1000.0, org="ΥΠΕΝ", vats=("111111111",), fund_ref=None):
+                 eur=1000.0, org="ΥΠΕΝ", vats=("111111111",), fund_ref=None,
+                 eur_net=None):
+    # net defaults to the gross figure so synthetic expectations hold on
+    # either presentation basis (the atlas net views swap the columns)
     conn.execute(
-        f"INSERT INTO contracts ({CONTRACT_COLS}) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
-        (ref, title, fund_ref, fund_num, prev, cancelled, eur, org,
+        f"INSERT INTO contracts ({CONTRACT_COLS}) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        (ref, title, fund_ref, fund_num, prev, cancelled, eur,
+         eur_net if eur_net is not None else eur, org,
          "SIGNER", "UNIT", "Απευθείας ανάθεση", 1, "2026-01-01T00:00:00"),
     )
     for seq, vat in enumerate(vats):

@@ -1,11 +1,49 @@
 <script lang="ts">
 	import KpiRow from '$lib/ui/KpiRow.svelte';
 	import StatPair from '$lib/ui/StatPair.svelte';
-	import { eurShort } from '$lib/transforms/format';
+	import { eur, eurShort } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.c);
+	const live = $derived(c.payments.filter((p) => !p.cancelled));
+
+	const TIMELINE_KIND: Record<string, string> = {
+		request: 'Πρωτογενές αίτημα',
+		approved_request: 'Ανάληψη υποχρέωσης',
+		notice: 'Διακήρυξη / πρόσκληση',
+		auction: 'Κατακύρωση / ανάθεση',
+		contract: 'Σύμβαση',
+		completion: 'Ολοκλήρωση'
+	};
+	const CKIND_LABEL: Record<string, string> = {
+		oristiki_paralavi: 'Οριστική παραλαβή',
+		paralavi: 'Πρωτόκολλο παραλαβής',
+		peraiosi: 'Βεβαίωση περαίωσης',
+		oloklirosi: 'Διαπιστωτική ολοκλήρωσης'
+	};
+	const TIMELINE_ORDER: Record<string, number> = {
+		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4, completion: 5
+	};
+	const timeline = $derived.by(() => {
+		if (!c.timeline?.length) return [];
+		const rows = c.timeline.map((t) => ({ ...t, self: false }));
+		rows.push({
+			adam: c.reference_number,
+			kind: 'contract' as const,
+			title: c.title,
+			d: (c.contract_signed_date ?? '').slice(0, 10) || null,
+			cancelled: c.cancelled ?? 0,
+			in_db: true,
+			self: true
+		});
+		rows.sort((a, b) =>
+			`${a.d ?? '9999'}${TIMELINE_ORDER[a.kind]}`.localeCompare(
+				`${b.d ?? '9999'}${TIMELINE_ORDER[b.kind]}`
+			)
+		);
+		return rows;
+	});
 </script>
 
 <svelte:head>
@@ -13,7 +51,9 @@
 	<meta property="og:title" content={c.title ?? c.reference_number} />
 	<meta
 		property="og:description"
-		content="ΔΑΣΕ contract {c.reference_number}: {eurShort(c.total_cost_with_vat ?? 0)} stated"
+		content="ΔΑΣΕ contract {c.reference_number}: {eurShort(
+			c.total_cost_without_vat ?? 0
+		)} stated (excl. VAT)"
 	/>
 </svelte:head>
 
@@ -38,11 +78,17 @@
 
 <KpiRow>
 	<StatPair
-		value={eurShort(c.total_cost_with_vat ?? 0)}
-		label="stated value (incl. VAT)"
-		compare={c.total_cost_without_vat ? `${eurShort(c.total_cost_without_vat)} net` : ''}
-		basis="no payment orders harvested for this dataset"
+		value={eurShort(c.total_cost_without_vat ?? 0)}
+		label="stated value (excl. VAT)"
+		compare={c.gross?.stated_gross ? `${eurShort(c.gross.stated_gross)} incl. ΦΠΑ` : ''}
 		color="var(--c-dase)"
+	/>
+	<StatPair
+		value={live.length ? String(live.length) : '—'}
+		label="payment orders"
+		compare={c.paid_without_vat !== null
+			? `${eurShort(c.paid_without_vat)} paid net`
+			: 'none in the registry chain'}
 	/>
 	<StatPair
 		value={c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'}
@@ -51,6 +97,44 @@
 	/>
 	<StatPair value={c.procedure_type ?? '—'} label="procedure" />
 </KpiRow>
+
+{#if live.length}
+	<section>
+		<h2>Payment orders</h2>
+		<table>
+			<thead>
+				<tr
+					><th>Date</th><th>Order</th><th class="num">Amount (net)</th><th class="num"
+						>incl. ΦΠΑ</th
+					><th></th></tr
+				>
+			</thead>
+			<tbody>
+				{#each c.payments as p (p.payment_ref)}
+					<tr class:dead={p.cancelled === 1}>
+						<td class="tabular muted">{(p.signed_date ?? '—').slice(0, 10)}</td>
+						<td>
+							<span class="tabular">{p.payment_ref}</span>
+							{#if p.credit}<span class="chip">credit</span>{/if}
+							{#if p.cancelled}<span class="chip bad">cancelled</span>{/if}
+						</td>
+						<td class="num">{eur(p.amount_without_vat ?? p.amount_with_vat)}</td>
+						<td class="num muted"
+							><small
+								>{c.gross?.payments?.[p.payment_ref] != null
+									? eur(c.gross.payments[p.payment_ref])
+									: '—'}</small
+							></td
+						>
+						<td>
+							<a href={`/pdf/payment/${p.payment_ref}`} target="_blank" rel="noopener">PDF</a>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</section>
+{/if}
 
 <section>
 	<h2>Contractors ({c.contractors.length})</h2>
@@ -100,6 +184,74 @@
 				</li>
 			{/each}
 		</ul>
+	{/if}
+</section>
+
+<section>
+	{#if timeline.length}
+		<h2>Procurement timeline ({timeline.length} acts)</h2>
+		<p class="muted">
+			The contract's full ΚΗΜΔΗΣ family — αίτημα → πρόσκληση → κατακύρωση → συμβάσεις,
+			chronological. Payment orders are listed above.
+		</p>
+		<table class="listing">
+			<thead>
+				<tr><th>Date</th><th>Act</th><th>Title</th><th>PDF</th></tr>
+			</thead>
+			<tbody>
+				{#each timeline as t (t.adam)}
+					<tr class:cancelled={t.cancelled === 1} class:self={t.self}>
+						<td class="tabular muted">{t.d ?? '—'}</td>
+						<td>
+							<span
+								class="chip"
+								class:hl={t.kind === 'auction' || t.self}
+								class:ok={t.kind === 'completion'}
+								>{t.kind === 'completion'
+									? (CKIND_LABEL[t.ckind ?? ''] ?? TIMELINE_KIND.completion)
+									: (TIMELINE_KIND[t.kind] ?? t.kind)}</span
+							>
+							<br /><small class="tabular muted">{t.adam}</small>
+						</td>
+						<td>
+							<small>
+								{#if t.self}
+									<strong>this contract</strong>
+								{:else if t.kind === 'contract' && t.in_db}
+									<a href={`/dase/contract/${t.adam}`}>{t.title ?? t.adam}</a>
+								{:else}
+									{t.title ?? '—'}
+									{#if t.kind === 'contract'}<span class="muted">(εκτός dataset)</span>{/if}
+								{/if}
+								{#if t.cancelled === 1}<span class="chip bad">cancelled</span>{/if}
+								{#if t.kind === 'completion' && t.end_excerpt}
+									<blockquote class="excerpt">«{t.end_excerpt}»</blockquote>
+								{/if}
+							</small>
+						</td>
+						<td class="nowrap">
+							{#if t.kind === 'completion'}
+								<a href={`/pdf/diavgeia/${t.adam}`} target="_blank" rel="noopener">📄 PDF</a>
+							{:else if t.kind !== 'contract'}
+								<a
+									href={`/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`}
+									target="_blank"
+									rel="noopener">📄 PDF</a
+								>
+							{:else if t.in_db}
+								<a href={`/pdf/contract/${t.adam}`} target="_blank" rel="noopener">📄 PDF</a>
+							{/if}
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	{:else}
+		<h2>Procurement timeline</h2>
+		<p class="muted">
+			ΚΗΜΔΗΣ links no upstream acts (αίτημα, διακήρυξη, κατακύρωση) to this contract — the
+			registry's chain returns none.
+		</p>
 	{/if}
 </section>
 
@@ -159,5 +311,34 @@
 	}
 	td a:hover {
 		text-decoration: underline;
+	}
+	tr.dead {
+		opacity: 0.55;
+	}
+	.chip.hl {
+		background: var(--c-dase);
+		color: #fff;
+		border-color: var(--c-dase);
+	}
+	.chip.ok {
+		background: var(--c-anadohoi);
+		color: #fff;
+		border-color: var(--c-anadohoi);
+	}
+	.excerpt {
+		margin: var(--sp-1) 0 0;
+		padding-left: var(--sp-2);
+		border-left: 2px solid var(--line-strong);
+		color: var(--ink-soft);
+		font-style: italic;
+	}
+	tr.self {
+		background: color-mix(in srgb, var(--c-dase) 7%, transparent);
+	}
+	tr.cancelled {
+		opacity: 0.55;
+	}
+	.nowrap {
+		white-space: nowrap;
 	}
 </style>

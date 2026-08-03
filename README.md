@@ -375,10 +375,13 @@ full methodology.
 
 ## Atlas — second web UI (publication-grade)
 
-A separate, publication-oriented site over the same two databases
-(Anti-nero: 252 in-scope contracts / €615.95M effective; ΔΑΣΕ: 2,018 live
-contracts / €41.4M stated). The original `webui/` stays frozen and keeps
-working unchanged — Atlas adds two new packages:
+A separate, publication-oriented site over the same databases, presenting
+**every € net of ΦΠΑ** (Anti-nero: 252 in-scope contracts, €667.5M stated
+net / €496.9M effective net / €440.0M paid net; ΔΑΣΕ: 2,018 live
+contracts, €34.09M stated net, €21.3M paid net on the 891 contracts whose
+payments the registry posts; Ανάδοχοι: €41.78M committed, net where each
+act states it). The original `webui/` stays frozen and keeps working
+unchanged on its historical incl-VAT basis — Atlas adds two new packages:
 
 - **`atlas_api/`** — a Flask JSON API (`python -m atlas_api`,
   127.0.0.1:5050) that imports `webui/queries.py` / `webui/dase_queries.py`

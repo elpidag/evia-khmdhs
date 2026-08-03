@@ -4,8 +4,10 @@ OSINT dataset + web UI for the Greek **Anti-nero** wildfire-prevention/restorati
 public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico.css.
 Everything derived is regenerable; `data/raw/` is never written to.
 
-**Current state** (2026-07-26): 344 contracts (252 in scope, €616M effective),
-890 payment orders (€565.8M paid, 5 Diavgeia-only), all amendment chains
+**Current state** (2026-08-03): 344 contracts (252 in scope, €616M effective
+gross = **€496.9M effective net** — the Atlas presents net of ΦΠΑ everywhere,
+stated net €667.5M / paid net €440.0M), 890 payment orders (€565.8M paid
+gross, 5 Diavgeia-only with PDF-curated net amounts), all amendment chains
 closed, 179/180 map contractors located, 147 linked to GEMI profiles, 18
 curated work sites, 252/252 in-scope contracts linked to their forest
 authority (103-entry ΔΔ/ΔΧ registry; 3 documented authority-less),
@@ -225,7 +227,7 @@ decisions land there FIRST, then get implemented.
 | File | Purpose |
 |---|---|
 | `antinero_supplement.json` | 55 contracts missing from the xlsx; phase overrides that win over all rules |
-| `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts; `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
+| `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts |
@@ -353,12 +355,38 @@ data/processed/dase.sqlite --cache data/processed/dase_pdf_cache` when
 wanted. CPV quirk: 386 rows carry miskeyed 66519300-4 «ασφαλιστικές
 υπηρεσίες» on υλοτομικά contracts.
 
-**Analytics conventions** (DATA_DECISIONS 2026-07-27): aggregates use
-**stated values, deduplicated** — exclude `cancelled=1` (82 rows,
-€2.35M) and non-cancelled rows whose `next_reference_no` resolves
-in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo, no
-multi-successor) → live population **2,018 rows / €41,418,963.96**
-(`dase_queries.live_filter`, the scope_filter analogue). Co-ops key on
+**Parity harvest** (2026-08-03, DATA_DECISIONS): `linked_acts_loader --db
+dase.sqlite --with-payments` swept all 2,164 adamChains (0 missing; 1,668
+upstream acts — 1,550 auctions, 164 notices, 1,218+1,219 requests; family
+payment ΑΔΑΜs recorded as kind='payment' mapping rows). Then
+`payment_loader --db dase.sqlite --refs-from-linked-acts --corrections
+<nonexistent>` fetched **1,033 payments (41 cancelled), Σ paid net
+€21,298,411.32 on 891 live contracts** — with **strict family
+verification**: a chain-derived payment whose payload `contractRefNo`
+names a non-stored contract is REFUSED (`foreign_family` in fetch_log; 72
+of 73 chain-only payments paid non-ΔΑΣΕ sibling lots of multi-lot
+procurements — without the check they'd inflate the co-op paid figure),
+and one naming a different STORED contract re-links to it. adamChain
+returns the whole family's payments, so pending pairs are deduped by
+payment ΑΔΑΜ (5,297 pairs ≈ 1,105 distinct). Attribution is identity (no
+contract_scope in this DB). Completion acts: **negative
+finding** (DATA_DECISIONS 2026-08-03) — 75 probed contracts → 1 hit, 0
+completions; δήμοι never cite the ΑΔΑΜ and bundle παραλαβές in plural
+municipal approvals, so ΔΑΣΕ endings stay honestly unharvested
+(/explore `fin` = NULL; `completion_search_log` records the probes; the
+loader's `--query-mode bare`/`--cache`/`--resume` flags remain for any
+future attempt).
+
+**Analytics conventions** (DATA_DECISIONS 2026-07-27, basis 2026-08-03):
+aggregates use **stated values, deduplicated** — exclude `cancelled=1`
+(82 rows, €2.35M) and non-cancelled rows whose `next_reference_no`
+resolves in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo,
+no multi-successor) → live population **2,018 rows / €41,418,963.96
+gross = €34,085,266.14 net** (`dase_queries.live_filter`, the
+scope_filter analogue; the Atlas presents net). Charts/rankings STAY on
+stated values — payment coverage is structurally partial (891/2,018
+contracts, 2022–23 near-blank as registry practice) — the paid-net Σ
+appears only as a KPI with its coverage caveat. Co-ops key on
 the **canonical VAT** (first 8-9-digit run zfill(9) — same co-op under
 3+ spellings; 096034999 ≈ €1.9M across 12 name variants); awarding
 orgs group by normalised `organization_name`, never VAT (090273987
@@ -397,11 +425,17 @@ Third dataset: the ν.998/1979 **άρθρο 42 §3** sponsor scheme (13.08.2021 
 forest land, appointed by administrative act. **Diavgeia-only universe** (no
 procurement → no KHMDHS; act metadata is empty of substance — type 2.4.7.1,
 no relatedDecisions even on amendments → the signed PDFs are the source).
-State (2026-08-02): **322 decisions → 69 projects** (51 companies: ΔΕΗ,
-EREN, Coca-Cola 3Ε, Lidl, Dior, Πειραιώς/Εθνική/Eurobank, ΤΙΤΑΝ, WWF …),
-41 stated budgets Σ€37.2M (€41.2M after δωρεά amendments), 147.5k στρέμματα;
-status: 14 completed / 34 active / **19 no_completion_recorded** / 1 revoked
-(Coca-Cola withdrew by letter) / 1 superseded.
+State (2026-08-03): **322 decisions → 69 projects** (51 registry spellings /
+37 sponsor groups: ΔΕΗ, EREN, Coca-Cola 3Ε, Lidl, Dior,
+Πειραιώς/Εθνική/Eurobank, ΤΙΤΑΝ, WWF …), 43 stated budgets, headline
+committed **€41.78M net-where-stated** (`COALESCE(budget_net_eur,
+budget_current)`; VAT basis curated per act: 15 explicitly net / 2 gross —
+Lidl ΨΧΟ2 states both so its net €241,936 is used, ΔΕΠΑ ΨΒ8Λ's €35k equals
+its cited study's incl-ΦΠΑ cost / 27 unstated, never converted), 147.5k
+στρέμματα; status: 14 completed / 32 active / **21
+no_completion_recorded** / 1 revoked (Coca-Cola withdrew by letter) / 1
+superseded. `projects` columns `budget_vat_basis` + `budget_net_eur`,
+evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
 
 - `scripts/harvest_anadohoi.py` — resumable: seeds (2 raw list exports) +
   luminapi subject sweep across ALL orgs (pre-2022 acts live under ΑΠΔ Θ-ΣΕ)
@@ -441,6 +475,28 @@ frozen**: `atlas_api` imports `webui.queries` / `webui.dase_queries` /
 `atlas_api/queries_extra.py`. The `/pdf/<kind>/<adam>` caching proxy is a
 verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
 `pdf_wait.html`) sharing the same `data/processed/pdf_cache/`.
+
+- **Net-of-ΦΠΑ basis** (DATA_DECISIONS 2026-08-03): the Atlas presents every
+  € excl. VAT. Mechanism: `queries_extra.apply_net_basis(conn)` installs
+  TEMP views on the kh + dase connections that shadow `contracts` /
+  `contract_payments` with the net column exposed under the gross column's
+  NAME (SQLite resolves unqualified names temp-first) — so the frozen webui
+  SQL computes net with zero call-site changes. **Gotcha: JSON field names
+  keep their historical `*_with_vat` names but carry net values on Atlas
+  endpoints**; the true gross is exposed as `total_cost_gross` /
+  `amount_gross` on the views, via `main.contracts`, and as the `gross`
+  supplement on contract-detail endpoints (`queries_extra.contract_gross`).
+  webui (:5000) opens its own connections without the shim and keeps its
+  historical incl-VAT presentation. Never apply the views to the anadohoi
+  DB (no VAT columns; its net preference is explicit
+  `COALESCE(budget_net_eur, budget_current)`). Statutory footnote: the
+  ν.4412 εκτιμώμενη αξία (and the €30k/€60k άρθρο 118 ceilings) is defined
+  χωρίς ΦΠΑ, so the net basis FIXED the direct-award chart's old
+  gross-vs-net mismatch. Synthetic test fixtures default net = gross so
+  expectations hold on either basis. Nav order: Ανάδοχοι · Anti-nero ·
+  ΔΑΣΕ · Explore · Compare · Connections · Authorities · Methodology; the
+  three dataset pages open with harmonised KPI rows (stated net / paid net
+  / median net / counts / % direct).
 
 - **Two processes**: `. .venv/bin/activate; python -m atlas_api` (Flask JSON,
   127.0.0.1:5050) + `cd atlas && npm run dev` (Vite, :5173 — binds ::1, use
@@ -525,7 +581,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 322 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
+## Tests (`tests/`, 342 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

@@ -14,5 +14,25 @@
     "amount_with_vat": 239940.0,
     "amount_without_vat": 193500.0,
     "reason": "Registry API returns €992,420,531.12 (net 800,339,138) for a €278,690.31 study contract (24SYMV014662322, ANTINERO III διαχειριστικές μελέτες Δασαρχείων Πύργου/Ολυμπίας). The signed payment-order PDF (payment/attachment/25PAY016487974, ΣΥΝΟΛΙΚΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ) documents the true amount: net €193,500.00 + VAT €46,440.00 = €239,940.00."
+  },
+  "Ψ8Ρ14653Π8-ΥΙΜ": {
+    "amount_without_vat": 208344.15,
+    "reason": "Diavgeia-only clearance (no KHMDHS PAY record → no net amount stored). The signed PDF states «ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 208.344,15» + «ΑΞΙΑ ΦΠΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 50.002,60» = the stored gross €258,346.75 (Σύνολο εντολής πληρωμής)."
+  },
+  "ΨΦ974653Π8-Θ2Ζ": {
+    "amount_without_vat": 1174324.68,
+    "reason": "Diavgeia-only clearance. The signed PDF states «ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 1.174.324,68» + «ΑΞΙΑ ΦΠΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 281.837,92» = the stored gross €1,456,162.60 (Σύνολο εντολής πληρωμής)."
+  },
+  "6ΦΡΚ4653Π8-ΡΙΜ": {
+    "amount_without_vat": 1233005.08,
+    "reason": "Diavgeia-only clearance. The signed PDF states «ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 1.233.005,08» + «ΑΞΙΑ ΦΠΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 295.921,22» = the stored gross €1,528,926.30 (Σύνολο εντολής πληρωμής)."
+  },
+  "6ΣΟΒ4653Π8-ΧΞ0": {
+    "amount_without_vat": 178109.81,
+    "reason": "Diavgeia-only clearance. The signed PDF states «ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 178.109,81» + «ΑΞΙΑ ΦΠΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 42.746,35» = the stored gross €220,856.16 (Σύνολο εντολής πληρωμής)."
+  },
+  "6ΗΔ34653Π8-ΙΞΓ": {
+    "amount_without_vat": 80645.16,
+    "reason": "Diavgeia-only clearance (out-of-scope contract 22SYMV010643071). The signed PDF states «ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 80.645,16» + «ΑΞΙΑ ΦΠΑ ΠΑΡΑΣΤΑΤΙΚΟΥ 19.354,84» = the stored gross €100,000.00 (Σύνολο εντολής πληρωμής)."
   }
 }

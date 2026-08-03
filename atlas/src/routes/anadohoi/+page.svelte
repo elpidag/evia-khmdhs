@@ -126,25 +126,29 @@
 
 <KpiRow>
 	<StatPair
-		value={String(k.n_projects)}
-		label="sponsor projects"
-		compare={`${grInt(k.n_companies)} companies & foundations`}
+		value={eurShort(k.stated_eur)}
+		label="total committed where stated"
+		compare="net of ΦΠΑ where the act states it"
+		basis={`only ${k.n_stated} of ${k.n_projects} acts state a figure; ${
+			k.vat_counts?.net ?? 0
+		} explicitly net, ${k.vat_counts?.unstated ?? 0} with no VAT basis written`}
 		color="var(--c-anadohoi)"
 	/>
 	<StatPair
-		value={eurShort(k.stated_eur)}
-		label="committed where stated"
-		basis={`only ${k.n_stated} of ${k.n_projects} acts state a figure`}
+		value={eurShort(k.median_eur)}
+		label="median stated commitment"
+		basis="over the acts that state a figure"
 	/>
 	<StatPair
-		value={`${grInt(k.area_stremmata)} στρ.`}
-		label="area covered by the acts"
+		value={String(k.n_projects)}
+		label="sponsor projects"
+		compare={`${grInt(k.area_stremmata)} στρ. covered by the acts`}
+		color="var(--c-anadohoi)"
 	/>
 	<StatPair
-		value={String(nCompleted)}
-		label="completion acts on record"
-		compare={`${nNoAct} past deadline with nothing filed`}
-		color={nCompleted < nNoAct ? 'var(--c-antinero)' : 'var(--c-anadohoi)'}
+		value={grInt(k.n_companies)}
+		label="companies & foundations"
+		compare={`${nCompleted} completion acts on record · ${nNoAct} past deadline with nothing filed`}
 	/>
 </KpiRow>
 

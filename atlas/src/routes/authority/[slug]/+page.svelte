@@ -39,14 +39,14 @@
 		compare="{grInt(a.antinero.contracts.length)} contracts · full exposure {eurShort(
 			a.antinero.exposure_eur
 		)}"
-		basis="effective €, even-split across each contract's authorities"
+		basis="effective € excl. VAT, even-split across each contract's authorities"
 		color="var(--c-antinero)"
 	/>
 	<StatPair
 		value={eurShort(a.dase.total_eur)}
 		label="awarded to forest co-ops"
 		compare="{grInt(a.dase.contracts.length)} ΔΑΣΕ contracts"
-		basis="stated €"
+		basis="stated € excl. VAT"
 		color="var(--c-dase)"
 	/>
 </KpiRow>

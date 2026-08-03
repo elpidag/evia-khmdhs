@@ -30,13 +30,26 @@
 		source that notifies the data subject is ever queried.
 	</p>
 
+	<h2 id="net-basis">Everything is net of ΦΠΑ</h2>
+	<p>
+		Every € on this site — KPIs, charts, maps, tables — is <strong>excl. VAT (net)</strong>,
+		read directly from the registry's net columns (ΚΗΜΔΗΣ stores both bases for contracts and
+		for payment orders; nothing is divided by a VAT rate — 654 ΔΑΣΕ contracts blend 0%/13%/24%
+		line items, so a flat conversion would be wrong). This is also the basis the law uses: the
+		ν.4412/2016 εκτιμώμενη αξία — and therefore the €30k/€60k direct-award ceilings — is
+		defined χωρίς ΦΠΑ, so net values compare against those thresholds correctly. Contract
+		detail pages keep a secondary «incl. ΦΠΑ» line with the registry's gross figures. Five
+		Diavgeia-only clearance payments carried no net amount in any registry; their net figures
+		were extracted from the signed PDFs («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») and recorded as curated
+		corrections with excerpt evidence.
+	</p>
+
 	<h2 id="effective-value">Effective value (Anti-nero)</h2>
 	<p>
 		A contract's <strong>effective value</strong> is the sum of its non-cancelled payment orders
-		when at least one exists, else its stated value. Payments attributed to a superseded
-		contract version follow the amendment chain to the final version. This absorbs amendments
-		and shows actual disbursement for running contracts. Registry amounts are gross; Διαύγεια
-		net clearances routinely differ by 6–12%, and the registry is kept canonical.
+		when at least one exists, else its stated value — all net of ΦΠΑ. Payments attributed to a
+		superseded contract version follow the amendment chain to the final version. This absorbs
+		amendments and shows actual disbursement for running contracts.
 	</p>
 
 	<h2 id="payment-dates">Payment dates</h2>
@@ -67,6 +80,7 @@
 	<p>
 		Direct-award shares are computed from the registry's procedure field. The ν.4782/2021
 		ceilings (€30k supplies/services, €60k works) are printed on value distributions for scale —
+		both the ceilings and the plotted values are excl. VAT, the basis the law defines them on.
 		RRF emergency provisions allowed direct awards far above them, which is precisely the
 		finding, not a claim of illegality.
 	</p>
@@ -109,9 +123,12 @@
 	<p>
 		The ΔΑΣΕ dataset holds every public contract since September 2021 whose contractor is a
 		forest labour co-operative (ν.4423/2016), harvested contractor-first (CPV-first provably
-		misses). Aggregates use <strong>stated values, deduplicated</strong>: cancelled rows and
-		superseded versions are excluded, leaving 2,018 live contracts. No payment orders were
-		harvested for this dataset — its € are commitments, not disbursements.
+		misses). Aggregates use <strong>stated values excl. VAT, deduplicated</strong>: cancelled
+		rows and superseded versions are excluded, leaving 2,018 live contracts. Payment orders
+		and the full procurement family (αίτημα → διακήρυξη → κατακύρωση) have been harvested from
+		the registry's chain, but the registry posts payments for only part of the population
+		(2022–23 are near-blank as registry practice) — so charts and rankings stay on stated
+		values, and the «actually paid» figure appears only as a KPI with its coverage printed.
 	</p>
 
 	<h2 id="canonical-vat">Canonical ΑΦΜ (ΔΑΣΕ)</h2>
@@ -154,9 +171,9 @@
 	<h2 id="compare-bases">Comparing the two datasets</h2>
 	<p>
 		Anti-nero figures are effective € (payments where they exist); ΔΑΣΕ figures are stated,
-		deduplicated €. The headline ratio compares the best available basis on each side and both
-		bases are printed under every paired figure. The populations also differ: one is a single
-		programme, the other is a whole sector of the co-operative economy.
+		deduplicated € — both excl. VAT. The headline ratio compares the best available basis on
+		each side and both bases are printed under every paired figure. The populations also
+		differ: one is a single programme, the other is a whole sector of the co-operative economy.
 	</p>
 
 	<h2 id="anadohoi">Ανάδοχοι αναδάσωσης / αποκατάστασης</h2>
@@ -172,27 +189,36 @@
 		completion act; <em>no completion recorded</em> means the deadline passed and nothing
 		was filed — which is not proof of abandonment, but the act is the legal proof of
 		delivery. Budgets are stored only when an act states one; many sponsors commit to
-		«whatever it costs» with no figure, and those stay honestly blank.
+		«whatever it costs» with no figure, and those stay honestly blank. The VAT basis of each
+		stated budget is curated from the act's own text: 15 acts say «άνευ/χωρίς ΦΠΑ», two state
+		a gross figure, and the rest write a bare number — the committed total prefers the net
+		figure <em>where the act itself states one</em> (Lidl's act states both, so its net
+		€241,936 is used) and never converts the silent ones.
 	</p>
 
 	<h2 id="explore">The Explore table</h2>
 	<p>
 		The combined table lists every Anti-nero contract (effective €), every live ΔΑΣΕ contract
-		(stated €) and every sponsor project (stated budget after amendments, often absent) —
-		three different value bases side by side, labelled and never summed into one headline.
-		«HQ region» is available only for Anti-nero contractors, whose registered seats are
-		curated; procedure for sponsor projects is shown as «Πράξη αναδόχου (χορηγία)» because no
-		procurement procedure exists. The «Excl. VAT» column is the registry's stated net value
-		(for Anti-nero it sits beside the <em>effective</em> incl-VAT figure, so the two are
-		different bases); sponsor acts state a single figure with mixed VAT treatment, so their
-		net column stays blank. The «Διακήρυξη» filter uses the ΚΗΜΔΗΣ chain links: only 41 of
-		252 in-scope Anti-nero contracts have a linked διακήρυξη/πρόσκληση — the registry's
+		(stated €) and every sponsor project (stated budget after amendments, often absent) — all
+		excl. VAT, but three different value bases side by side, labelled and never summed into
+		one headline. «HQ region» is available only for Anti-nero contractors, whose registered
+		seats are curated; procedure for sponsor projects is shown as «Πράξη αναδόχου (χορηγία)»
+		because no procurement procedure exists. The «Stated (net)» column is the registry's
+		stated net value (for Anti-nero it sits beside the <em>effective</em> net figure, so the
+		two differ where payments exist); sponsor acts state a single figure with mixed VAT
+		treatment, so their stated-net column stays blank and their value is the committed figure,
+		net where the act says so. The «Διακήρυξη» filter uses the ΚΗΜΔΗΣ chain links: only 41 of
+		252 in-scope Anti-nero contracts and 144 of 2,018 live ΔΑΣΕ contracts have a linked
+		διακήρυξη/πρόσκληση — the registry's
 		chain knows only what each σύμβαση declared when posted, so «without» means <em>no
 		linked notice in the registry</em>, not proof that none was ever published. The «End
 		date» filter marks rows with a recorded project ending: an Anti-nero completion act
 		found on Διαύγεια (οριστική παραλαβή / περαίωση — 155 of 252 contracts) or a completed
-		sponsor project; «without» means no such act was found, and ΔΑΣΕ rows are excluded from
-		the filter because their endings were never harvested. Filtering
+		sponsor project; «without» means no such act was found. ΔΑΣΕ rows stay outside this
+		filter by an evidenced negative finding: probing 75 contracts found that ΔΑΣΕ awarders
+		never cite the ΑΔΑΜ in Διαύγεια act subjects, and their παραλαβές are bundled municipal
+		approvals that cannot be joined to individual contracts — so no ΔΑΣΕ ending is claimed
+		rather than guessed. Filtering
 		runs entirely in the browser; every filter state is a shareable URL.
 	</p>
 

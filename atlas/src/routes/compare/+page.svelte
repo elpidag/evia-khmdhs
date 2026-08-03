@@ -20,7 +20,7 @@
 	<title>Anti-nero vs ΔΑΣΕ — two money pipelines for the same forests</title>
 	<meta
 		name="description"
-		content="Comparing Greece's €616M Anti-nero contractor programme with the €41.4M that reached forest labour co-operatives."
+		content="Comparing Greece's Anti-nero contractor programme with the money that reached forest labour co-operatives — all € excl. VAT."
 	/>
 </svelte:head>
 
@@ -38,17 +38,21 @@
 		value={eurShort(c.antinero.total_eur)}
 		label="Anti-nero, {grInt(c.antinero.n_contracts)} contracts"
 		compare="median contract {eurShort(c.antinero.median_eur)}"
-		basis="effective € — payments where present, else stated"
+		basis="effective € excl. VAT — payments where present, else stated"
 		color="var(--c-antinero)"
 	/>
 	<StatPair
 		value={eurShort(c.dase.total_eur)}
 		label="ΔΑΣΕ co-ops, {grInt(c.dase.n_contracts)} contracts"
 		compare="median contract {eur(c.dase.median_eur)}"
-		basis="stated € · no payment data harvested"
+		basis="stated € excl. VAT · payments cover only part of the population"
 		color="var(--c-dase)"
 	/>
-	<StatPair value="{c.ratio}×" label="the size of the gap" compare="≈306× at the median" />
+	<StatPair
+		value="{c.ratio}×"
+		label="the size of the gap"
+		compare="≈{Math.round(c.antinero.median_eur / c.dase.median_eur)}× at the median"
+	/>
 	<StatPair
 		value={grInt(c.pipelines.vat_overlap.length)}
 		label="companies in both datasets"
@@ -73,7 +77,7 @@
 		c.hist.dase_median
 	)}"
 	subtitle="Contract-size distribution on shared log₂ bins, as % of each programme's own contracts."
-	caveat="Anti-nero uses effective values, ΔΑΣΕ stated — the asymmetry is documented in the methodology."
+	caveat="Anti-nero uses effective values, ΔΑΣΕ stated — both excl. VAT; the asymmetry is documented in the methodology."
 	anchor="distributions"
 	methodology="compare-bases"
 >
@@ -113,7 +117,7 @@
 >
 	<div class="years">
 		<div>
-			<h3 class="antinero">Anti-nero (effective €)</h3>
+			<h3 class="antinero">Anti-nero (effective €, net)</h3>
 			{#each c.years as y, i (y)}
 				<div class="yrow">
 					<span class="ylabel">{y}</span>
@@ -123,7 +127,7 @@
 			{/each}
 		</div>
 		<div>
-			<h3 class="dase">ΔΑΣΕ (stated €)</h3>
+			<h3 class="dase">ΔΑΣΕ (stated €, net)</h3>
 			{#each c.years as y, i (y)}
 				<div class="yrow">
 					<span class="ylabel">{y}</span>
@@ -140,8 +144,9 @@
 	<ul>
 		<li>
 			<strong>Different value bases.</strong> Anti-nero shows effective € (payment orders where
-			they exist); ΔΑΣΕ shows stated contract values, deduplicated — its payments were not
-			harvested. The {c.ratio}× headline compares the best available basis on each side.
+			they exist); ΔΑΣΕ shows stated contract values, deduplicated — its payment coverage is
+			too thin to aggregate on. Everything is excl. VAT. The {c.ratio}× headline compares the
+			best available basis on each side.
 		</li>
 		<li>
 			<strong>Different populations.</strong> Anti-nero is one programme; the ΔΑΣΕ dataset is

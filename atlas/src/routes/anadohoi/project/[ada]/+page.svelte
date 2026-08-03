@@ -41,7 +41,13 @@
 		location: 'Τοποθεσία',
 		area: 'Έκταση',
 		budget: 'Προϋπολογισμός',
+		budget_vat: 'Βάση ΦΠΑ',
 		deadline: 'Προθεσμία'
+	};
+	const VAT_BASIS: Record<string, string> = {
+		net: 'άνευ ΦΠΑ (ρητά στην πράξη)',
+		gross: 'με ΦΠΑ (ρητά στην πράξη)',
+		unstated: 'η πράξη δεν προσδιορίζει ΦΠΑ'
 	};
 	const badStatus = $derived(
 		p.status === 'revoked' || p.status === 'no_completion_recorded'
@@ -84,8 +90,17 @@
 
 <KpiRow>
 	<StatPair
-		value={p.budget_current === null ? '—' : eurShort(p.budget_current)}
-		label="stated budget"
+		value={p.budget_net_eur !== null
+			? eurShort(p.budget_net_eur)
+			: p.budget_current === null
+				? '—'
+				: eurShort(p.budget_current)}
+		label={p.budget_net_eur !== null || p.budget_vat_basis === 'net'
+			? 'stated budget (excl. ΦΠΑ)'
+			: 'stated budget'}
+		compare={p.budget_net_eur !== null && p.budget_current !== null
+			? `${eurShort(p.budget_current)} incl. ΦΠΑ`
+			: (VAT_BASIS[p.budget_vat_basis ?? ''] ?? '')}
 		basis={p.budget_current === null
 			? 'the act states no figure — the sponsor pays whatever it costs'
 			: p.budget_current !== p.budget_eur

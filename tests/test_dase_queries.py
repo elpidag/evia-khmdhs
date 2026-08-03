@@ -38,13 +38,16 @@ def add(conn, ref, eur=1000.0, cancelled=0, nxt=None, vats=("096000001",),
         signed="2023-05-01T00:00:00", title="ΥΛΟΤΟΜΙΑ", org="ΥΠΕΝ",
         unit="ΔΑΣΑΡΧΕΙΟ ΔΡΑΜΑΣ", procedure="Απευθείας ανάθεση (αρ.118)",
         ctype="Υπηρεσίες", names=None):
+    # net defaults to gross so expectations hold on either basis (atlas views)
     conn.execute(
         "INSERT INTO contracts (reference_number, title, cancelled,"
-        " next_reference_no, total_cost_with_vat, contract_signed_date,"
+        " next_reference_no, total_cost_with_vat, total_cost_without_vat,"
+        " contract_signed_date,"
         " organization_name, units_operator_name, procedure_type,"
         " contract_type, fetched_at)"
-        " VALUES (?,?,?,?,?,?,?,?,?,?, '2026-01-01T00:00:00')",
-        (ref, title, cancelled, nxt, eur, signed, org, unit, procedure, ctype))
+        " VALUES (?,?,?,?,?,?,?,?,?,?,?, '2026-01-01T00:00:00')",
+        (ref, title, cancelled, nxt, eur, eur, signed, org, unit, procedure,
+         ctype))
     for seq, vat in enumerate(vats):
         name = (names or {}).get(vat, f"ΔΑΣΕ {vat}")
         conn.execute(

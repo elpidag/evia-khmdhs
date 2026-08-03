@@ -61,6 +61,10 @@ CREATE TABLE projects (
     fire_event      TEXT,               -- the disaster the act responds to
     budget_eur      REAL,               -- ONLY when an act states it
     budget_current  REAL,               -- after amendments (δωρεά raises)
+    budget_vat_basis TEXT,              -- net | gross | unstated (curated,
+                                        -- evidence in evidence_json.budget_vat)
+    budget_net_eur  REAL,               -- ONLY when the act itself states the
+                                        -- net figure (e.g. Lidl ΨΧΟ2)
     start_date      TEXT,
     deadline_initial TEXT,
     deadline_current TEXT,
@@ -191,7 +195,8 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
             p.get("works_kind"), p.get("area_stremmata"),
             p.get("location_text"), p.get("municipality"), pe,
             p.get("fire_event"),
-            p.get("budget_eur"), budget_current, start,
+            p.get("budget_eur"), budget_current,
+            p.get("budget_vat_basis"), p.get("budget_net_eur"), start,
             p.get("deadline_initial"), deadline_current,
             p.get("deadline_text"),
             p.get("superseded_by"),
@@ -221,7 +226,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
         "status": {},
     }
     for r in project_rows:
-        summary["status"][r[21]] = summary["status"].get(r[21], 0) + 1
+        summary["status"][r[23]] = summary["status"].get(r[23], 0) + 1
     if dry_run:
         logging.info("dry-run: %s", json.dumps(summary, ensure_ascii=False))
         return summary
@@ -233,7 +238,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                      decision_rows)
     conn.executemany(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         project_rows)
     conn.executemany("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                      sorted(link_rows))

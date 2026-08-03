@@ -34,14 +34,33 @@ from khmdhs.db import init_db, record_failure, upsert_payment
 CORRECTIONS_FILE = Path(__file__).parent / "data" / "payment_corrections.json"
 
 
-def payment_links(conn: sqlite3.Connection) -> list[tuple[str, str]]:
-    """(contract_ref, payment_ref) pairs from every stored contract payload."""
+def payment_links(conn: sqlite3.Connection,
+                  from_linked_acts: bool = False) -> list[tuple[str, str]]:
+    """(contract_ref, payment_ref) pairs from every stored contract payload.
+
+    With from_linked_acts, unions in the payment ΑΔΑΜs recorded by
+    `linked_acts_loader --with-payments` (kind='payment' mapping rows) —
+    the live adamChain is fresher than the stored raw_json snapshot.
+    """
     links: list[tuple[str, str]] = []
     for ref, raw in conn.execute(
         "SELECT reference_number, raw_json FROM contracts WHERE raw_json IS NOT NULL"
     ):
         for pay in json.loads(raw).get("paymentRefNo") or []:
             links.append((ref, pay))
+    if from_linked_acts:
+        has = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='contract_linked_acts'"
+        ).fetchone()
+        if has:
+            seen = set(links)
+            for ref, pay in conn.execute(
+                "SELECT reference_number, adam FROM contract_linked_acts "
+                "WHERE kind = 'payment'"
+            ):
+                if (ref, pay) not in seen:
+                    links.append((ref, pay))
+                    seen.add((ref, pay))
     return links
 
 
@@ -130,18 +149,31 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--refetch", action="store_true", help="refetch already-stored payments")
     parser.add_argument("--sleep", type=float, default=THROTTLE_SECONDS)
     parser.add_argument("--corrections", type=Path, default=CORRECTIONS_FILE)
+    parser.add_argument("--refs-from-linked-acts", action="store_true",
+                        help="union payment refs recorded by "
+                             "linked_acts_loader --with-payments")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
     conn = init_db(args.db)
     conn.row_factory = sqlite3.Row
 
-    links = payment_links(conn)
+    links = payment_links(conn, from_linked_acts=args.refs_from_linked_acts)
+    # Pairs the contract's own payload declared. Chain-derived extras are
+    # family-wide (adamChain returns every sibling's payments, including
+    # non-dataset lots), so they get strict payload verification below.
+    raw_pairs = set(payment_links(conn)) if args.refs_from_linked_acts else set()
     successors = supersede_map(conn)
     done: set[str] = set()
     if not args.refetch:
         done = {r[0] for r in conn.execute("SELECT payment_ref FROM contract_payments")}
-    pending = [(c, p) for c, p in links if p not in done]
+    # one fetch per payment ΑΔΑΜ — chain-derived links repeat the same
+    # payment under every family sibling (5,297 pairs ≈ 1,105 payments)
+    pending, queued = [], set()
+    for c, p in links:
+        if p not in done and p not in queued:
+            pending.append((c, p))
+            queued.add(p)
     if args.limit is not None:
         pending = pending[: args.limit]
 
@@ -156,6 +188,27 @@ def main(argv: list[str] | None = None) -> int:
     n_ok = n_fail = 0
     for i, (contract_ref, pay_ref) in enumerate(pending, start=1):
         status, item, http, err = fetch_payment(session, pay_ref)
+        if status == "ok" and item is not None \
+                and args.refs_from_linked_acts \
+                and (contract_ref, pay_ref) not in raw_pairs:
+            api_ref = item.get("contractRefNo")
+            if isinstance(api_ref, list):
+                api_ref = api_ref[0] if api_ref else None
+            if api_ref and api_ref != contract_ref:
+                stored = conn.execute(
+                    "SELECT 1 FROM contracts WHERE reference_number = ?",
+                    (api_ref,)).fetchone()
+                if stored:
+                    contract_ref = api_ref     # payload's own contract wins
+                else:
+                    record_failure(conn, pay_ref, "foreign_family", http,
+                                   f"chain payment belongs to non-dataset "
+                                   f"sibling {api_ref}")
+                    logging.warning("SKIPPED %s: pays %s (not in dataset)",
+                                    pay_ref, api_ref)
+                    n_fail += 1
+                    time.sleep(args.sleep)
+                    continue
         if status == "ok" and item is not None:
             reason = verify_payment(pay_ref, contract_ref, item)
             if reason is None:

@@ -22,6 +22,68 @@ def _fold_upper(s: str) -> str:
     return "".join(ch for ch in nfd if not unicodedata.combining(ch))
 
 
+# ------------------------------------------------------- net-of-ΦΠΑ basis
+
+def apply_net_basis(conn: sqlite3.Connection) -> sqlite3.Connection:
+    """Install the Atlas net-of-ΦΠΑ presentation basis on THIS connection.
+
+    SQLite resolves unqualified table names through the temp schema first,
+    so the TEMP views below shadow `contracts` and `contract_payments` with
+    the registry's NET column exposed under the gross column's name. Every
+    downstream query — including the frozen webui modules — therefore
+    computes excl-VAT € without a single call-site change (DATA_DECISIONS
+    2026-08-03: the ν.4412 εκτιμώμενη αξία is defined χωρίς ΦΠΑ). The true
+    gross stays reachable as `total_cost_gross` / `amount_gross` on the
+    views, or by qualifying `main.contracts` (see `contract_gross`).
+
+    webui's own app opens its connections without this shim and keeps its
+    historical incl-VAT basis; only atlas_api connections pass through here.
+    """
+    def cols(table: str) -> list[str]:
+        return [r[1] for r in conn.execute(f"PRAGMA main.table_info({table})")]
+
+    c = cols("contracts")
+    if c and "total_cost_without_vat" in c:
+        sel = ["total_cost_without_vat AS total_cost_with_vat"
+               if x == "total_cost_with_vat" else x for x in c]
+        sel.append("total_cost_with_vat AS total_cost_gross")
+        conn.execute("CREATE TEMP VIEW IF NOT EXISTS contracts AS SELECT "
+                     + ", ".join(sel) + " FROM main.contracts")
+    p = cols("contract_payments")
+    if p and "amount_without_vat" in p:
+        sel = ["amount_without_vat AS amount_with_vat"
+               if x == "amount_with_vat" else x for x in p]
+        sel.append("amount_with_vat AS amount_gross")
+        conn.execute("CREATE TEMP VIEW IF NOT EXISTS contract_payments AS "
+                     "SELECT " + ", ".join(sel) + " FROM main.contract_payments")
+    return conn
+
+
+def contract_gross(conn: sqlite3.Connection, ref: str) -> dict:
+    """The registry's incl-VAT figures for one contract — the secondary
+    line on detail pages (the net-basis views hide them elsewhere)."""
+    row = conn.execute(
+        "SELECT total_cost_with_vat AS stated, total_cost_without_vat AS net"
+        " FROM main.contracts WHERE reference_number = ?", (ref,)).fetchone()
+    if row is None:
+        return {}
+    out = {"stated_gross": row["stated"]}
+    try:
+        paid = conn.execute(
+            "SELECT ROUND(SUM(amount_with_vat), 2), COUNT(*) "
+            "FROM main.contract_payments "
+            "WHERE attributed_ref = ? AND cancelled = 0", (ref,)).fetchone()
+        out["paid_gross"] = paid[0]
+        pays = {r[0]: r[1] for r in conn.execute(
+            "SELECT payment_ref, amount_with_vat FROM main.contract_payments "
+            "WHERE contract_ref = ? OR attributed_ref = ?", (ref, ref))}
+        if pays:
+            out["payments"] = pays
+    except sqlite3.OperationalError:
+        pass
+    return out
+
+
 def _full_date(s: str | None) -> str | None:
     """Normalise the payment date formats ('03/11/2023', '2026-07-24T00:00:00')
     to 'YYYY-MM-DD'. None when absent/unparsable — mirrors q._payment_month
@@ -59,8 +121,11 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
         out["dase"] = {"n_contracts": dk["n_contracts"],
                        "total_eur": dk["total_eur"]}
     if ana is not None:
+        # committed € prefer the act's own net figure where one is stated
+        # (budget_vat_basis curation); silent acts stay as written.
         n, tot = ana.execute(
-            "SELECT COUNT(*), ROUND(SUM(budget_current), 2) FROM projects "
+            "SELECT COUNT(*), ROUND(SUM(COALESCE(budget_net_eur, "
+            "budget_current)), 2) FROM projects "
             "WHERE status != 'superseded'").fetchone()
         out["anadohoi"] = {"n_projects": n, "stated_eur": tot}
     return out
@@ -68,13 +133,36 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
 
 # ---------------------------------------------------------------- overview
 
+def antinero_kpis(kh: sqlite3.Connection) -> dict:
+    """q.kpis (effective basis) + the harmonised KPI-row extras: stated
+    total, actually-paid total and median stated value — all excl-VAT via
+    the net-basis views."""
+    k = q.kpis(kh)
+    stated = sorted(r[0] or 0.0 for r in kh.execute(f"""
+        SELECT c.total_cost_with_vat FROM contracts c
+        WHERE {q.scope_filter(kh, 'c.reference_number')}"""))
+    k["stated_eur"] = round(sum(stated), 2)
+    k["median_eur"] = dq._percentile(stated, 0.5)
+    k["paid_eur"] = 0.0
+    k["n_payments"] = 0
+    if q._has_payments_table(kh) and q._has_scope_table(kh):
+        paid = kh.execute("""
+            SELECT ROUND(SUM(p.amount_with_vat), 2), COUNT(*)
+            FROM contract_payments p
+            JOIN contract_scope s ON s.reference_number = p.attributed_ref
+            WHERE p.cancelled = 0 AND s.in_scope = 1""").fetchone()
+        k["paid_eur"] = paid[0] or 0.0
+        k["n_payments"] = paid[1]
+    return k
+
+
 def antinero_overview(kh: sqlite3.Connection) -> dict:
     """Everything the Anti-nero overview page needs except the map/detail
     payloads (those ship separately — they are heavier and lazier)."""
     studies = q.study_costs(kh)
     top_studies = sorted(studies["rows"], key=lambda r: r["eur"], reverse=True)[:10]
     return {
-        "kpis": q.kpis(kh),
+        "kpis": antinero_kpis(kh),
         "procedures": q.procedure_mix(kh),
         "histogram": q.contract_value_histogram(kh),
         "direct_awards": q.direct_award_distribution(kh),
@@ -280,10 +368,32 @@ def contract_swarm(kh: sqlite3.Connection) -> list[dict]:
 
 # ------------------------------------------------------------------- ΔΑΣΕ
 
+def dase_kpis(dase: sqlite3.Connection) -> dict:
+    """dq.kpis (stated basis, net via the views) + the paid-KPI extras:
+    Σ net payment orders and their contract coverage — payments exist for
+    only part of the population (registry practice), so aggregates stay
+    stated and the paid figure is a KPI with its caveat."""
+    k = dq.kpis(dase)
+    k["paid_eur"] = 0.0
+    k["n_paid_contracts"] = 0
+    k["n_payments"] = 0
+    try:
+        paid = dase.execute("""
+            SELECT ROUND(SUM(amount_with_vat), 2), COUNT(*),
+                   COUNT(DISTINCT attributed_ref)
+            FROM contract_payments WHERE cancelled = 0""").fetchone()
+        k["paid_eur"] = paid[0] or 0.0
+        k["n_payments"] = paid[1]
+        k["n_paid_contracts"] = paid[2]
+    except sqlite3.OperationalError:
+        pass
+    return k
+
+
 def dase_overview(dase: sqlite3.Connection) -> dict:
     """Everything the ΔΑΣΕ overview page needs (webui /dase context)."""
     return {
-        "kpis": dq.kpis(dase),
+        "kpis": dase_kpis(dase),
         "yearly": dq.yearly_totals(dase),
         "top_coops": dq.top_coops(dase, limit=10),
         "top_orgs": dq.top_orgs(dase, limit=10),
@@ -845,6 +955,15 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
         })
 
     if dase is not None:
+        # ΔΑΣΕ διακήρυξη flag: the adamChain harvest covered the whole
+        # population, so 0 honestly means "no linked notice in the registry"
+        dase_notice_refs: set[str] | None
+        try:
+            dase_notice_refs = {r[0] for r in dase.execute(
+                "SELECT DISTINCT reference_number FROM contract_linked_acts "
+                "WHERE kind = 'notice'")}
+        except sqlite3.OperationalError:
+            dase_notice_refs = None
         for r in dase.execute(f"""
             SELECT co.reference_number AS ref, co.title,
                    co.contract_signed_date, co.submission_date,
@@ -871,19 +990,23 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                      else None,
                 "pe": pes, "hq": [],
                 "proc": _proc_kind(r["procedure_type"]),
-                "st": None, "b1": 0, "pr": None, "fin": None,
+                "st": None, "b1": 0,
+                "pr": None if dase_notice_refs is None
+                     else (1 if r["ref"] in dase_notice_refs else 0),
+                "fin": None,
             })
 
     if ana is not None:
         for r in ana.execute("""
             SELECT root_ada, company, works_kind, location_text, pe,
-                   budget_current, start_date, status FROM projects"""):
+                   COALESCE(budget_net_eur, budget_current) AS budget,
+                   start_date, status FROM projects"""):
             rows.append({
                 "ds": "anadohoi", "ref": r["root_ada"],
                 "d": r["start_date"],
                 "t": (r["location_text"] or "")[:120],
                 "co": (r["company"] or "")[:110],
-                "v": r["budget_current"],
+                "v": r["budget"],   # net where the act states it (curated)
                 "vn": None,     # sponsor acts state one figure, mixed VAT basis
                 "pe": [r["pe"]] if r["pe"] else [], "hq": [],
                 "proc": "sponsor",
@@ -953,12 +1076,15 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             if "~" in tok:
                 dte, ada = tok.split("~", 1)
                 amendments.append({"ada": ada, "date": dte or None})
+        budget = (r["budget_net_eur"] if r["budget_net_eur"] is not None
+                  else r["budget_current"])
         projects.append({
             "ada": r["root_ada"], "company": r["company"],
             "funder": r["funder"], "works_kind": r["works_kind"],
             "area": r["area_stremmata"], "pe": r["pe"],
-            "fire": r["fire_event"], "budget": r["budget_current"],
+            "fire": r["fire_event"], "budget": budget,
             "budget_stated": r["budget_eur"],
+            "vat_basis": r["budget_vat_basis"],
             "start": r["start_date"],
             "deadline0": r["deadline_initial"],
             "deadline": r["deadline_current"],
@@ -1003,12 +1129,19 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
 
     status_as_of = ana.execute(
         "SELECT value FROM meta WHERE key = 'status_as_of'").fetchone()
+    budgets = sorted(p["budget"] for p in live if p["budget"] is not None)
+    vat_counts: dict[str, int] = {}
+    for p in live:
+        if p["vat_basis"]:
+            vat_counts[p["vat_basis"]] = vat_counts.get(p["vat_basis"], 0) + 1
     return {
         "kpis": {
             "n_projects": len(live),
-            "n_companies": len({p["company"] for p in live}),
-            "stated_eur": round(sum(p["budget"] or 0 for p in live), 2),
-            "n_stated": sum(1 for p in live if p["budget"] is not None),
+            "n_companies": len({_sponsor_group(p["company"]) for p in live}),
+            "stated_eur": round(sum(budgets), 2),
+            "median_eur": dq._percentile(budgets, 0.5),
+            "n_stated": len(budgets),
+            "vat_counts": vat_counts,
             "area_stremmata": round(sum(p["area"] or 0 for p in live), 1),
             "statuses": statuses,
             "status_as_of": status_as_of[0] if status_as_of else None,
@@ -1058,7 +1191,8 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
                    la.signed_date, la.cancelled
               FROM contract_linked_acts cla
               LEFT JOIN linked_acts la USING (adam)
-             WHERE cla.reference_number = ?""", (ref,)).fetchall()
+             WHERE cla.reference_number = ? AND cla.kind != 'payment'
+             """, (ref,)).fetchall()
     except sqlite3.OperationalError:        # tables not built yet
         rows = []
     out = []

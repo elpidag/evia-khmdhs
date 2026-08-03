@@ -76,7 +76,7 @@
 		name="description"
 		content="Every Greek public contract won by a forest labour co-operative since Sept 2021: {grInt(
 			o.kpis.n_contracts
-		)} contracts, {eurShort(o.kpis.total_eur)} stated."
+		)} contracts, {eurShort(o.kpis.total_eur)} stated (excl. VAT)."
 	/>
 </svelte:head>
 
@@ -92,17 +92,27 @@
 <KpiRow>
 	<StatPair
 		value={eurShort(o.kpis.total_eur)}
-		label="in {grInt(o.kpis.n_contracts)} live contracts"
-		compare="{grInt(o.kpis.gross_n)} gross − {o.kpis.n_cancelled} cancelled − {o.kpis
-			.n_superseded} superseded"
-		basis="stated values — no payment data harvested"
+		label="total stated value of contracts"
+		compare="excl. VAT · {grInt(o.kpis.n_cancelled)} cancelled + {o.kpis.n_superseded} superseded excluded"
+		basis="Σ stated values, live population"
+		color="var(--c-dase)"
+	/>
+	<StatPair
+		value={eurShort(o.kpis.paid_eur)}
+		label="actually paid so far"
+		compare="excl. VAT · {grInt(o.kpis.n_payments)} payment orders"
+		basis="payments posted for {grInt(o.kpis.n_paid_contracts)} of {grInt(
+			o.kpis.n_contracts
+		)} contracts — registry practice, not delivery"
 		color="var(--c-dase)"
 	/>
 	<StatPair
 		value={eur(o.kpis.median_eur)}
 		label="median contract"
-		compare="≈305× smaller than Anti-nero's €2.18M median"
+		compare="excl. VAT"
+		basis="stated value, live population"
 	/>
+	<StatPair value={grInt(o.kpis.n_contracts)} label="live contracts" compare="since Sept 2021" />
 	<StatPair
 		value={grInt(o.kpis.n_coops)}
 		label="co-operatives (canonical ΑΦΜ)"
@@ -136,9 +146,9 @@
 <Defer height={400}>
 {#if swarm}
 	<ChartFrame
-		title="2,018 small contracts: most sit between €2k and €30k"
+		title="2,018 small contracts: most sit between €2k and €25k"
 		subtitle="Every live contract as one dot on a log scale, coloured by year. Hover to inspect, click through."
-		caveat="Stated values incl. VAT, deduplicated (cancelled and superseded versions excluded)."
+		caveat="Stated values excl. VAT, deduplicated (cancelled and superseded versions excluded)."
 		anchor="dase-swarm"
 		methodology="dase-dedup"
 	>

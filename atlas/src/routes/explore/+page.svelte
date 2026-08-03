@@ -44,7 +44,7 @@
 	let indexed: Indexed[] = $state.raw([]);
 	$effect(() => {
 		// ?v= busts HTTP + module caches when the payload shape changes
-		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=5').then((p) => {
+		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=7').then((p) => {
 			payload = p;
 			indexed = p.rows.map((r) => {
 				const hn = searchNorm(
@@ -320,8 +320,9 @@
 		<strong>{grInt(filtered.length)}</strong> of {grInt(payload.rows.length)} rows match
 		· shown value Σ {eur(totalShown)}
 		<small
-			>(value bases differ: Anti-nero = effective €, ΔΑΣΕ = stated €, Ανάδοχοι = stated
-			budget where the act declares one — <a href="/methodology#explore">methodology</a>)</small
+			>(all € excl. VAT; bases differ: Anti-nero = effective €, ΔΑΣΕ = stated €, Ανάδοχοι =
+			stated budget where the act declares one, net where it says so —
+			<a href="/methodology#explore">methodology</a>)</small
 		>
 	</p>
 
@@ -339,12 +340,12 @@
 				<th>Regions</th>
 				<th class="num"
 					><button class="sort" onclick={() => toggleSort('n')}
-						>Stated excl. VAT {sort === 'n_desc' ? '↓' : sort === 'n_asc' ? '↑' : ''}</button
+						>Stated (net) {sort === 'n_desc' ? '↓' : sort === 'n_asc' ? '↑' : ''}</button
 					></th
 				>
 				<th class="num"
 					><button class="sort" onclick={() => toggleSort('v')}
-						>Value {sort === 'v_desc' ? '↓' : sort === 'v_asc' ? '↑' : ''}</button
+						>Value (net) {sort === 'v_desc' ? '↓' : sort === 'v_asc' ? '↑' : ''}</button
 					></th
 				>
 			</tr>

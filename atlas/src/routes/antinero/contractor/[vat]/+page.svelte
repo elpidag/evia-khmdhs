@@ -54,7 +54,7 @@
 	<StatPair
 		value={eurShort(b.summary.total_eur)}
 		label="across {grInt(b.summary.n_contracts)} contracts"
-		basis="effective €, consortium values in full (max-exposure)"
+		basis="effective € excl. VAT, consortium values in full (max-exposure)"
 		color="var(--c-antinero)"
 	/>
 	<StatPair
@@ -162,7 +162,7 @@
 				<th>Signed</th>
 				<th>Contract</th>
 				<th>Unit</th>
-				<th class="num">Effective €</th>
+				<th class="num">Effective € (net)</th>
 			</tr>
 		</thead>
 		<tbody>

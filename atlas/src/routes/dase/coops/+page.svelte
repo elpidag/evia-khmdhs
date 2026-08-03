@@ -14,7 +14,7 @@
 	<h1>Forest labour co-operatives</h1>
 	<p class="muted">
 		{grInt(data.rows.length)} entities{data.q ? ` for «${data.q}»` : ''} · merged across registry
-		spellings by canonical ΑΦΜ · stated €
+		spellings by canonical ΑΦΜ · stated € excl. VAT
 	</p>
 </hgroup>
 
@@ -28,7 +28,7 @@
 			<th class="num">Contracts</th>
 			<th class="num">Units</th>
 			<th class="num">Direct %</th>
-			<th class="num">Total (stated)</th>
+			<th class="num">Total (stated, net)</th>
 		</tr>
 	</thead>
 	<tbody>

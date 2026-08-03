@@ -19,6 +19,7 @@
 	};
 	const CKIND_LABEL: Record<string, string> = {
 		oristiki_paralavi: 'Οριστική παραλαβή',
+		paralavi: 'Πρωτόκολλο παραλαβής',
 		peraiosi: 'Βεβαίωση περαίωσης',
 		oloklirosi: 'Διαπιστωτική ολοκλήρωσης'
 	};
@@ -53,7 +54,7 @@
 		property="og:description"
 		content="Anti-nero contract {c.reference_number}: {eurShort(
 			c.effective_cost_with_vat ?? c.total_cost_with_vat ?? 0
-		)} effective · {c.contractors.map((x) => x.name).join(', ')}"
+		)} effective (excl. VAT) · {c.contractors.map((x) => x.name).join(', ')}"
 	/>
 </svelte:head>
 
@@ -81,16 +82,24 @@
 <KpiRow>
 	<StatPair
 		value={eurShort(c.effective_cost_with_vat ?? 0)}
-		label="effective value"
-		basis={c.paid_with_vat !== null ? 'sum of payment orders' : 'stated (no payments yet)'}
+		label="effective value (excl. VAT)"
+		basis={c.paid_without_vat !== null ? 'sum of payment orders, net' : 'stated net (no payments yet)'}
 		color="var(--c-antinero)"
 	/>
 	<StatPair
-		value={eurShort(c.total_cost_with_vat ?? 0)}
-		label="stated value (incl. VAT)"
-		compare={c.total_cost_without_vat ? `${eurShort(c.total_cost_without_vat)} net` : ''}
+		value={eurShort(c.total_cost_without_vat ?? 0)}
+		label="stated value (excl. VAT)"
+		compare={c.gross?.stated_gross ? `${eurShort(c.gross.stated_gross)} incl. ΦΠΑ` : ''}
 	/>
-	<StatPair value={String(live.length)} label="payment orders" compare={c.paid_with_vat !== null ? `${eurShort(c.paid_with_vat)} paid` : 'none recorded'} />
+	<StatPair
+		value={String(live.length)}
+		label="payment orders"
+		compare={c.paid_without_vat !== null
+			? `${eurShort(c.paid_without_vat)} paid net${
+					c.gross?.paid_gross ? ` · ${eurShort(c.gross.paid_gross)} incl. ΦΠΑ` : ''
+				}`
+			: 'none recorded'}
+	/>
 	<StatPair
 		value={c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'}
 		label="duration"
@@ -121,7 +130,11 @@
 		<h2>Payment orders</h2>
 		<table>
 			<thead>
-				<tr><th>Date</th><th>Order</th><th class="num">Amount</th><th></th></tr>
+				<tr
+					><th>Date</th><th>Order</th><th class="num">Amount (net)</th><th class="num"
+						>incl. ΦΠΑ</th
+					><th></th></tr
+				>
 			</thead>
 			<tbody>
 				{#each c.payments as p (p.payment_ref)}
@@ -133,7 +146,14 @@
 							{#if p.cancelled}<span class="chip bad">cancelled</span>{/if}
 							{#if p.correction_note}<span class="chip warn" title={p.correction_note}>corrected</span>{/if}
 						</td>
-						<td class="num">{eur(p.amount_with_vat)}</td>
+						<td class="num">{eur(p.amount_without_vat ?? p.amount_with_vat)}</td>
+						<td class="num muted"
+							><small
+								>{c.gross?.payments?.[p.payment_ref] != null
+									? eur(c.gross.payments[p.payment_ref])
+									: '—'}</small
+							></td
+						>
 						<td>
 							<a href={`/pdf/payment/${p.payment_ref}`} target="_blank" rel="noopener">PDF</a>
 							{#if p.ada}

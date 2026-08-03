@@ -17,7 +17,7 @@
 	<h1>Anti-nero contracts</h1>
 	<p class="muted">
 		{grInt(data.rows.length)} contracts{data.q ? ` for «${data.q}»` : ''} ·
-		{eurShort(data.total_eur)} stated · search is accent-, homoglyph- and Greeklish-tolerant
+		{eurShort(data.total_eur)} effective (excl. VAT) · search is accent-, homoglyph- and Greeklish-tolerant
 		(“evias” finds Ευβοίας)
 	</p>
 </hgroup>
@@ -32,7 +32,7 @@
 			<th>Contractors</th>
 			<th>Regions</th>
 			<th>Phase</th>
-			<th class="num">Value (incl. VAT)</th>
+			<th class="num">Value (excl. VAT)</th>
 		</tr>
 	</thead>
 	<tbody>

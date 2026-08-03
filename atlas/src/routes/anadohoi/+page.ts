@@ -8,8 +8,10 @@ export interface AnadohoiOverviewProject {
 	area: number | null;
 	pe: string | null;
 	fire: string | null;
+	/** net where the act states it (curated VAT basis), else as written */
 	budget: number | null;
 	budget_stated: number | null;
+	vat_basis: 'net' | 'gross' | 'unstated' | null;
 	start: string | null;
 	deadline0: string | null;
 	deadline: string | null;
@@ -26,8 +28,11 @@ export interface AnadohoiOverview {
 	kpis: {
 		n_projects: number;
 		n_companies: number;
+		/** Σ committed, net where the act states it */
 		stated_eur: number;
+		median_eur: number;
 		n_stated: number;
+		vat_counts: Record<'net' | 'gross' | 'unstated', number>;
 		area_stremmata: number;
 		statuses: Record<string, number>;
 		status_as_of: string | null;

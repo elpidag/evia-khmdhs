@@ -20,7 +20,18 @@ extracted from the signed PDF: the πρωτοκόλλου date in «το από 
 to the act's own issue date (`'act_date'`). Acts attribute to the
 supersede-chain tip like payments.
 
+Query modes: the default `subject` mode searches `subject:"<ΑΔΑΜ>"` (the
+ΥΠΕΝ/Anti-nero convention). `--query-mode bare` searches the quoted ΑΔΑΜ
+across all indexed fields — ΔΑΣΕ awarders (δήμοι, αποκεντρωμένες) cite the
+ΑΔΑΜ outside the subject line, where subject-search returns nothing — and
+accepts a classify()-passing act whose subject lacks the ΑΔΑΜ only when
+the ΑΔΑΜ appears in the signed PDF's text. Every searched contract is
+recorded in `completion_search_log`; `--resume` skips already-searched
+contracts so multi-hour runs survive interruption (the default — used by
+`khmdhs.refresh` — always re-searches, so newly posted acts are found).
+
 Usage: python -m khmdhs.completion_acts_loader [--limit N] [--refetch]
+           [--query-mode bare|subject] [--cache DIR] [--resume]
 """
 from __future__ import annotations
 
@@ -58,6 +69,12 @@ CREATE TABLE IF NOT EXISTS contract_completion_acts (
     raw_json       TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_cca_ref ON contract_completion_acts(attributed_ref);
+CREATE TABLE IF NOT EXISTS completion_search_log (
+    reference_number TEXT PRIMARY KEY,
+    searched_at      TEXT NOT NULL,
+    n_hits           INTEGER NOT NULL,
+    query_mode       TEXT NOT NULL
+);
 """
 
 
@@ -126,12 +143,14 @@ def extract_end_date(text: str) -> tuple[str, str] | None:
     return None
 
 
-def _search_subject(session: requests.Session, phrase: str) -> list[dict]:
+def _search_subject(session: requests.Session, phrase: str,
+                    query_mode: str = "subject") -> list[dict]:
+    q = f'"{phrase}"' if query_mode == "bare" else f'subject:"{phrase}"'
     for backoff in (2, 5, 10, None):
         try:
             resp = session.get(SEARCH_URL, params={
-                "q": f'subject:"{phrase}"', "page": 0, "size": 100},
-                timeout=30)
+                "q": q, "page": 0, "size": 100},
+                timeout=60)
             if resp.status_code < 500:
                 break
         except requests.RequestException:
@@ -147,7 +166,9 @@ def _search_subject(session: requests.Session, phrase: str) -> list[dict]:
 
 
 def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
-         refetch: bool = False, verbose: bool = False) -> dict:
+         refetch: bool = False, verbose: bool = False,
+         query_mode: str = "subject", cache: Path = DEFAULT_CACHE,
+         resume: bool = False) -> dict:
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
@@ -156,6 +177,10 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
 
     refs = [r[0] for r in conn.execute(
         "SELECT reference_number FROM contracts ORDER BY reference_number")]
+    if resume:
+        searched = {r[0] for r in conn.execute(
+            "SELECT reference_number FROM completion_search_log")}
+        refs = [r for r in refs if r not in searched]
     if limit:
         refs = refs[:limit]
     stored = {r[0] for r in conn.execute(
@@ -167,10 +192,12 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
              "end_from_protocol": 0}
     for i, ref in enumerate(refs, 1):
         stats["contracts"] += 1
-        for hit in _search_subject(session, ref):
+        hits = _search_subject(session, ref, query_mode)
+        for hit in hits:
             subject = hit.get("subject") or ""
-            if ref not in subject:          # tokeniser false positive
-                continue
+            in_subject = ref in subject
+            if not in_subject and query_mode == "subject":
+                continue                    # tokeniser false positive
             stats["hits"] += 1
             kind = classify(subject)
             if kind is None:
@@ -182,7 +209,14 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
             if ada in stored and not refetch:
                 stats["accepted"] += 1
                 continue
-            meta, text = fetch_decision(session, DEFAULT_CACHE, ada)
+            meta, text = fetch_decision(session, cache, ada)
+            if not in_subject and ref not in (text or ""):
+                # bare-mode hit whose act never actually cites the ΑΔΑΜ
+                stats["rejected"] += 1
+                if verbose:
+                    logging.info("reject-no-adam-in-pdf %s: %s", ada,
+                                 subject[:90])
+                continue
             if kind == "paralavi_check":
                 kind = resolve_paralavi(text)
                 if kind is None:
@@ -215,6 +249,10 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
             conn.commit()
             stored.add(ada)
             stats["accepted"] += 1
+        conn.execute(
+            "INSERT OR REPLACE INTO completion_search_log VALUES (?,?,?,?)",
+            (ref, time.strftime("%Y-%m-%dT%H:%M:%S"), len(hits), query_mode))
+        conn.commit()
         if i % 50 == 0:
             logging.info("… %d/%d contracts searched", i, len(refs))
     conn.close()
@@ -228,10 +266,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int)
     ap.add_argument("--refetch", action="store_true")
     ap.add_argument("--verbose", action="store_true")
+    ap.add_argument("--query-mode", choices=("subject", "bare"),
+                    default="subject")
+    ap.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
+    ap.add_argument("--resume", action="store_true",
+                    help="skip contracts already in completion_search_log")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     load(args.db, limit=args.limit, refetch=args.refetch,
-         verbose=args.verbose)
+         verbose=args.verbose, query_mode=args.query_mode, cache=args.cache,
+         resume=args.resume)
     return 0
 
 

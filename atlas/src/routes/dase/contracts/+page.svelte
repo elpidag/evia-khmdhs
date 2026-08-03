@@ -16,7 +16,7 @@
 	<h1>ΔΑΣΕ contracts</h1>
 	<p class="muted">
 		{grInt(data.rows.length)} live contracts{data.q ? ` for «${data.q}»` : ''} ·
-		{eurShort(data.total_eur)} stated · forest-cooperative dataset, separate from Anti-nero
+		{eurShort(data.total_eur)} stated (excl. VAT) · forest-cooperative dataset, separate from Anti-nero
 	</p>
 </hgroup>
 
@@ -29,7 +29,7 @@
 			<th>Contract</th>
 			<th>Co-operative</th>
 			<th>Awarding unit</th>
-			<th class="num">Value (incl. VAT)</th>
+			<th class="num">Value (excl. VAT)</th>
 		</tr>
 	</thead>
 	<tbody>

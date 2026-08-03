@@ -25,9 +25,9 @@ def client():
 def test_meta_pins(client):
     m = client.get("/api/meta").get_json()
     assert m["antinero"]["n_contracts"] == 252
-    assert m["antinero"]["total_eur"] == pytest.approx(615_950_156.78)
+    assert m["antinero"]["total_eur"] == pytest.approx(496_905_727.47)
     assert m["dase"]["n_contracts"] == 2018
-    assert m["dase"]["total_eur"] == pytest.approx(41_418_963.96)
+    assert m["dase"]["total_eur"] == pytest.approx(34_085_266.14)
 
 
 def test_payments_pins(client):
@@ -35,15 +35,15 @@ def test_payments_pins(client):
     assert len(p["events"]) == 863
     assert p["undated"]["n"] == 0          # submission-date fallback covers all
     assert p["fallback"] == 180
-    assert sum(e["eur"] for e in p["events"]) == pytest.approx(545_410_749.14)
+    assert sum(e["eur"] for e in p["events"]) == pytest.approx(440_019_108.41)
 
 
 def test_sankey_reconciles(client):
     s = client.get("/api/antinero/sankey").get_json()
     ministry_out = sum(l["eur"] for l in s["links"] if l["s"] == "ministry")
     contractor_in = sum(l["eur"] for l in s["links"] if l["s"] != "ministry")
-    assert ministry_out == pytest.approx(615_950_156.78, abs=1.0)
-    assert contractor_in == pytest.approx(615_950_156.78, abs=1.0)
+    assert ministry_out == pytest.approx(496_905_727.47, abs=1.0)
+    assert contractor_in == pytest.approx(496_905_727.47, abs=1.0)
 
 
 def test_swarm_pins(client):
@@ -56,13 +56,18 @@ def test_pe_yearly_reconciles(client):
     py = client.get("/api/antinero/pe-yearly").get_json()
     assert len(py["pes"]) == 59
     total = sum(p["total_eur"] for p in py["pes"]) + py["unresolved_eur"]
-    assert total == pytest.approx(615_950_156.78, abs=1.0)
+    assert total == pytest.approx(496_905_727.47, abs=1.0)
 
 
 def test_dase_pins(client):
     d = client.get("/api/dase/overview").get_json()
     assert d["kpis"]["n_contracts"] == 2018
     assert d["kpis"]["n_coops"] == 250
+    # 2026-08-03 payment harvest: net paid KPI with partial coverage
+    # (payments posted for 891 of 2,018 live contracts; charts stay stated)
+    assert d["kpis"]["paid_eur"] == pytest.approx(21_298_411.32)
+    assert d["kpis"]["n_paid_contracts"] == 891
+    assert d["kpis"]["n_payments"] == 992
     assert len(d["by_pe"]["regions"]) == 27
     assert d["by_pe"]["unresolved"]["n"] == 4
     sw = client.get("/api/dase/swarm").get_json()
@@ -80,7 +85,7 @@ def test_connections_pins(client):
     assert len(n["authorities"]) == 103
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
-        615_950_156.78, abs=1.0)
+        496_905_727.47, abs=1.0)
 
 
 def test_authorities_pins(client):
@@ -99,8 +104,8 @@ def test_pipelines_pins(client):
     p = client.get("/api/compare").get_json()["pipelines"]
     assert p["vat_overlap"] == []          # the zero-overlap headline fact
     assert p["antinero"]["n_vats"] == 169
-    assert p["antinero"]["total_eur"] == pytest.approx(615_950_156.78)
-    assert p["dase"]["total_eur"] == pytest.approx(41_418_963.96)
+    assert p["antinero"]["total_eur"] == pytest.approx(496_905_727.47)
+    assert p["dase"]["total_eur"] == pytest.approx(34_085_266.14)
     assert p["dase_n_coops"] == 250
     assert [s["name"] for s in p["shared_awarders"]] == [
         "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ"
@@ -113,9 +118,9 @@ def test_explore_pins(client):
     assert len(e["rows"]) == 2339
     # value bases per dataset reconcile with their own conventions
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
-    assert kh_sum == pytest.approx(615_950_156.78, abs=1.0)
+    assert kh_sum == pytest.approx(496_905_727.47, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
-    assert dase_sum == pytest.approx(41_418_963.96, abs=1.0)
+    assert dase_sum == pytest.approx(34_085_266.14, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
     stalled = [r for r in e["rows"]
                if r["ds"] == "anadohoi" and r["st"] == "no_completion_recorded"]
@@ -126,10 +131,14 @@ def test_explore_pins(client):
             assert r["vn"] is None
         else:
             assert r["vn"] is not None
-    # PROC-notice flag: 41 in-scope contracts have a linked διακήρυξη
+    # PROC-notice flag: 41 in-scope Anti-nero contracts have a linked
+    # διακήρυξη; the ΔΑΣΕ chain harvest (2026-08-03) covered all 2,164
+    # contracts, so its flag is populated too
     kh_pr = [r["pr"] for r in e["rows"] if r["ds"] == "antinero"]
     assert kh_pr.count(1) == 41 and kh_pr.count(0) == 211
-    assert all(r["pr"] is None for r in e["rows"] if r["ds"] != "antinero")
+    dase_pr = [r["pr"] for r in e["rows"] if r["ds"] == "dase"]
+    assert dase_pr.count(1) == 144 and dase_pr.count(0) == 1874
+    assert all(r["pr"] is None for r in e["rows"] if r["ds"] == "anadohoi")
     # end-date flag: 155 Anti-nero contracts have a completion act,
     # 14 sponsor projects are completed; ΔΑΣΕ endings were never harvested
     kh_fin = [r["fin"] for r in e["rows"] if r["ds"] == "antinero"]
@@ -142,7 +151,11 @@ def test_explore_pins(client):
 def test_anadohoi_overview_pins(client):
     o = client.get("/api/anadohoi/overview").get_json()
     assert o["kpis"]["n_projects"] == 68
-    assert o["kpis"]["stated_eur"] == pytest.approx(41_842_320.85)
+    assert o["kpis"]["stated_eur"] == pytest.approx(41_784_256.85)
+    # committed € prefer the act's net figure where stated (VAT curation);
+    # the 15th net project is the superseded Coca-Cola original
+    assert o["kpis"]["vat_counts"] == {"net": 14, "gross": 2, "unstated": 27}
+    assert o["kpis"]["median_eur"] == pytest.approx(600_000.0)
     assert o["kpis"]["statuses"]["completed"] == 14
     assert len(o["projects"]) == 69
     fires = {f["fire"]: f for f in o["fires"]}
@@ -155,4 +168,4 @@ def test_anadohoi_overview_pins(client):
 
 def test_meta_anadohoi_pin(client):
     m = client.get("/api/meta").get_json()
-    assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_842_320.85}
+    assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_784_256.85}

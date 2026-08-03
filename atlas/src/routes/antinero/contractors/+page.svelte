@@ -40,7 +40,7 @@
 			<th class="num">Contracts</th>
 			<th class="num">Single-bid</th>
 			<th class="num">Direct %</th>
-			<th class="num">Total (max-exposure)</th>
+			<th class="num">Total (net, max-exposure)</th>
 		</tr>
 	</thead>
 	<tbody>

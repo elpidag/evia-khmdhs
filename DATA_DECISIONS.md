@@ -641,3 +641,116 @@ date in «το από DD.MM.YYYY πρωτόκολλο …», with excerpt eviden
 (`'act_date'`). Acts attribute to the supersede-chain tip like payments.
 *Affects: new table contract_completion_acts; refresh chain; the Atlas
 contract timeline.*
+
+## 2026-08-03 — Atlas presentation basis switches to net of ΦΠΑ (excl-VAT)
+
+Every money figure on the Atlas site (KPIs, charts, maps, tables,
+footer) switches from incl-VAT to **net of ΦΠΑ**. Basis per dataset:
+Anti-nero uses `total_cost_without_vat` (stated) and
+`amount_without_vat` (paid) — both natively stored by the registry and
+100% populated for the 252 in-scope contracts (stated net
+€667,496,652.26; effective net = paid-else-stated per the existing
+convention, `effective_cost(conn, alias, 'total_cost_without_vat')`);
+ΔΑΣΕ uses stated `total_cost_without_vat` over the live population
+(€34,085,266.14). **No flat ÷1.24 anywhere**: 654 of 2,018 live ΔΑΣΕ
+contracts blend 0%/13%/24% line items (aggregate ratio 1.2152), so only
+the stored net columns are trusted. Statutory context: the ν.4412/2016
+άρθρο 6 εκτιμώμενη αξία — and therefore the €30k/€60k άρθρο 118
+direct-award ceilings printed on the distributions — is defined **χωρίς
+ΦΠΑ**, so the net switch *fixes* the previous mismatch of plotting
+incl-VAT values against excl-VAT thresholds (the old
+`DIRECT_AWARD_BIN_EDGES` "incl. VAT" comment was wrong in law).
+Incl-VAT figures remain visible only as secondary lines on contract /
+contractor detail pages (the registry states both). The frozen-webui
+rule holds: all net SQL lands in `atlas_api/queries_extra.py`; webui/
+pages keep their historical gross basis untouched. *User request
+2026-08-03. Affects: every Atlas endpoint and page; tests re-pinned.*
+
+## 2026-08-03 — The 5 Diavgeia-only payments: net amounts curated from the signed PDFs
+
+The five payments that exist only as Diavgeia clearance decisions
+(Ψ8Ρ14653Π8-ΥΙΜ, ΨΦ974653Π8-Θ2Ζ, 6ΦΡΚ4653Π8-ΡΙΜ on 23SYMV013201961;
+6ΣΟΒ4653Π8-ΧΞ0 on 23SYMV012972202; 6ΗΔ34653Π8-ΙΞΓ on 22SYMV010643071 —
+€3,564,291.81 gross) carry no `amount_without_vat`, which would
+silently understate every net paid aggregate. Decision: extract the
+net-of-ΦΠΑ figure from each signed PDF (cached in
+`diavgeia_cache/`) and record it via `payment_corrections.json` (new
+optional `amount_without_vat` key, excerpt evidence per entry,
+applied by `payment_loader.apply_corrections`). A payment whose PDF
+states no net figure keeps NULL and the gap is footnoted on
+/methodology — never imputed. *Affects: contract_payments net sums,
+Atlas paid-net KPI.*
+
+## 2026-08-03 — ΔΑΣΕ parity harvest: linked acts + payments from ΚΗΜΔΗΣ, completion acts from Diavgeia
+
+The ΔΑΣΕ dataset gains the same registry-family layers as Anti-nero,
+via the existing `--db`-parametrised loaders (no forks): (1)
+`linked_acts_loader` sweeps `GET /adamChain/<ΑΔΑΜ>` for all 2,164
+stored contracts — new additive `--with-payments` flag also records the
+chain's payment ΑΔΑΜs as mapping rows (kind `payment`) so payment
+discovery is chain-fresh rather than bound to the 2026-07-26 raw_json
+snapshot; (2) `payment_loader` (new `--refs-from-linked-acts` flag
+unioning those refs with raw_json `paymentRefNo`) fetches the ~1,032+
+payment orders; with no `contract_scope` table attribution degrades to
+identity, which is correct — all 891 ref-carrying contracts are live.
+(3) Completion acts: the 2026-07-26 "Diavgeia is not harvested"
+decision is *narrowly revised* for project endings only. A live probe
+showed the subject-scoped query is the wrong tool for ΔΑΣΕ (0 hits) but
+a **bare quoted-phrase query** (`q="<ΑΔΑΜ>"`) matches citations beyond
+the subject line (control 22SYMV011470180: 7 vs 2 hits; ΔΑΣΕ
+24SYMV015692405: 9 hits) — so `completion_acts_loader` gains
+`--query-mode bare` (default `subject` unchanged for Anti-nero), a
+`--cache` dir flag (ΔΑΣΕ PDFs go to gitignored `dase_diavgeia_cache/`),
+and a `completion_search_log` table for resumability; in bare mode a
+classify()-passing act whose subject lacks the ΑΔΑΜ is accepted only if
+the ΑΔΑΜ appears in the PDF text. Rollout is gated: a 50-contract probe
+first; the full ~2,018-search run (~15–30 s/query server latency) only
+if the probe yields real completion acts, else the `contractRelatedADA`
+org-crawl (present on 1,500 live rows, resolves 9/10) is proposed
+instead. **Analytics conventions unchanged**: ΔΑΣΕ aggregates stay
+stated (now net), deduplicated; the paid figure appears only as a KPI
+with its coverage caveat (payments declared for 891/2,018 live
+contracts ≈ 72.6% of stated €; 2022–23 near-blank is registry practice,
+not reality). *Affects: dase.sqlite gains linked_acts,
+contract_linked_acts, contract_payments rows, contract_completion_acts,
+completion_search_log; Atlas /dase pages.*
+
+## 2026-08-03 — Ανάδοχοι budgets: net preferred where the act states it (revises the Lidl gross choice)
+
+Sponsor-act budgets are VAT-mixed: of the 43 stated budgets, 15 say
+«άνευ/χωρίς ΦΠΑ», one (Lidl ΨΧΟ24653Π8-82Χ) states both bases, 27 give
+a bare figure. Decision: (a) every budgeted project gets a curated
+`budget_vat_basis` (`net` | `gross` | `unstated`) with verbatim excerpt
+evidence, re-reading the full cached PDF texts of the 27 silent acts
+for VAT language anywhere in the act; (b) where a net figure is stated
+or derivable from the act itself, it is stored as `budget_net_eur` —
+this **reverses the 2026-08-02 choice** of keeping Lidl's με-ΦΠΑ
+€300,000 (now the act's own €241,936 net is preferred); (c) the
+headline "total committed" prefers `budget_net_eur` where present and
+is labelled «net where the act states it — N of 43 documented»;
+projects whose acts stay silent are **never converted** — the figure
+remains as written, flagged `unstated`. *User decision 2026-08-03.
+Affects: anadohoi_projects.json, anadohoi.sqlite schema (budget_vat_basis,
+budget_net_eur), /anadohoi KPIs, /explore, /methodology.*
+
+## 2026-08-03 — ΔΑΣΕ project endings are NOT recoverable from Diavgeia (negative finding)
+
+Probed before any full sweep: 75 live contracts searched with the bare
+quoted-ΑΔΑΜ query (50 sequential 2021 + 25 stratified across 2022–2026)
+→ **1 raw hit, 0 completion-classified acts**. The rare hit-bearing
+contracts (e.g. 24SYMV015692405, 9 citations) carry only επιμετρήσεις,
+εκκαθαρίσεις πληρωμής and ορισμούς επιβλεπόντων — all correctly rejected
+by the strict completion classifier. The `contractRelatedADA` fallback
+(resolves the awarding org's Diavgeia id, 9/10 sample) was feasibility-
+tested on 3 δήμοι: each org holds 135–302 generic «οριστικής παραλαβής»
+acts spanning ALL its municipal projects, subjects name the έργο title
+never the ΑΔΑΜ, and small υπηρεσίες are bundled into plural
+δημοτικό-συμβούλιο approvals that name no project at all — so no
+reliable act→contract join exists short of reading every PDF of every
+municipality (confirming the 2026-07-26 "Diavgeia is not harvested"
+rationale). Decision: **ΔΑΣΕ endings stay unharvested and honestly
+absent** — /explore keeps `fin = NULL` for ΔΑΣΕ rows and the methodology
+states the finding; the paid-vs-stated ratio (payments now harvested) is
+the available delivery signal. The 54 searched contracts are logged in
+`completion_search_log` (dase.sqlite). *Affects: /explore end-date
+filter, /methodology; no stored rows.*

@@ -71,15 +71,21 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
                                      "Vary": "Accept-Encoding"})
         return Response(raw, mimetype="application/json")
 
+    # Atlas presents every € net of ΦΠΑ: both registry connections pass
+    # through queries_extra.apply_net_basis, whose TEMP views expose the
+    # net columns under the gross names for the frozen webui SQL (the
+    # anadohoi DB has no VAT columns — its net preference is explicit).
     @app.before_request
     def _open_db() -> None:
-        g.conn = queries.open_ro(app.config["DB_PATH"])
+        g.conn = queries_extra.apply_net_basis(
+            queries.open_ro(app.config["DB_PATH"]))
 
     def _dase_conn():
         """Lazy second connection (ΔΑΣΕ dataset) — khmdhs-only endpoints
         never touch dase.sqlite."""
         if "dase_conn" not in g:
-            g.dase_conn = queries.open_ro(app.config["DASE_DB_PATH"])
+            g.dase_conn = queries_extra.apply_net_basis(
+                queries.open_ro(app.config["DASE_DB_PATH"]))
         return g.dase_conn
 
     def _anadohoi_conn():
@@ -195,6 +201,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["regions"] = queries.contract_project_regions(g.conn, adam)
         d["sites"] = queries.contract_sites(g.conn, adam)
         d["timeline"] = queries_extra.contract_timeline(g.conn, adam)
+        d["gross"] = queries_extra.contract_gross(g.conn, adam)
         return jsonify(d)
 
     @app.route("/api/antinero/contractors")
@@ -238,11 +245,14 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
 
     @app.route("/api/dase/contract/<adam>")
     def api_dase_contract(adam: str):
-        d = queries.contract_detail(_dase_conn(), adam)
+        conn = _dase_conn()
+        d = queries.contract_detail(conn, adam)
         if d is None:
             abort(404)
         d.pop("raw_json", None)
         d.pop("raw_pretty", None)
+        d["timeline"] = queries_extra.contract_timeline(conn, adam)
+        d["gross"] = queries_extra.contract_gross(conn, adam)
         return jsonify(d)
 
     @app.route("/api/dase/coops")

@@ -13,7 +13,11 @@ payments. This loader calls it once per stored contract and:
     sibling contracts as mapping-only rows (kind='contract'; their records
     live in `contracts` when they belong to the dataset);
   - skips payments — the payment layer already owns them (the chain list
-    equals the contract's paymentRefNo).
+    equals the contract's paymentRefNo). With --with-payments the chain's
+    payment ΑΔΑΜs are additionally recorded as mapping-only rows
+    (kind='payment', no linked_acts record) so payment discovery can use
+    the live chain instead of the stored raw_json snapshot
+    (payment_loader --refs-from-linked-acts).
 
 Resumable: contracts that already have mapping rows are skipped unless
 --refetch; act records already stored are never refetched. Re-run after
@@ -125,7 +129,8 @@ def upsert_act(conn: sqlite3.Connection, adam: str, kind: str,
 
 
 def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
-         refetch: bool = False, dry_run: bool = False) -> dict:
+         refetch: bool = False, dry_run: bool = False,
+         with_payments: bool = False) -> dict:
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
@@ -168,6 +173,11 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
             adam = adam.rstrip("*").strip()
             if adam and adam != ref:
                 links.append((ref, adam, "contract"))
+        if with_payments:
+            for adam in chain.get("payments") or []:
+                adam = adam.rstrip("*").strip()
+                if adam:
+                    links.append((ref, adam, "payment"))
         conn.executemany(
             "INSERT OR REPLACE INTO contract_linked_acts VALUES (?,?,?)",
             links)
@@ -187,9 +197,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int)
     ap.add_argument("--refetch", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--with-payments", action="store_true",
+                    help="also record chain payment ΑΔΑΜs as mapping rows")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
-    load(args.db, limit=args.limit, refetch=args.refetch, dry_run=args.dry_run)
+    load(args.db, limit=args.limit, refetch=args.refetch, dry_run=args.dry_run,
+         with_payments=args.with_payments)
     return 0
 
 
