@@ -53,8 +53,8 @@
 	<meta
 		property="og:description"
 		content="Anti-nero contract {c.reference_number}: {eurShort(
-			c.effective_cost_with_vat ?? c.total_cost_with_vat ?? 0
-		)} effective (excl. VAT) · {c.contractors.map((x) => x.name).join(', ')}"
+			c.total_cost_without_vat ?? 0
+		)} stated (excl. VAT) · {c.contractors.map((x) => x.name).join(', ')}"
 	/>
 </svelte:head>
 
@@ -81,15 +81,11 @@
 
 <KpiRow>
 	<StatPair
-		value={eurShort(c.effective_cost_with_vat ?? 0)}
-		label="effective value (excl. VAT)"
-		basis={c.paid_without_vat !== null ? 'sum of payment orders, net' : 'stated net (no payments yet)'}
-		color="var(--c-antinero)"
-	/>
-	<StatPair
 		value={eurShort(c.total_cost_without_vat ?? 0)}
 		label="stated value (excl. VAT)"
 		compare={c.gross?.stated_gross ? `${eurShort(c.gross.stated_gross)} incl. ΦΠΑ` : ''}
+		basis="the analytic basis across the site"
+		color="var(--c-antinero)"
 	/>
 	<StatPair
 		value={String(live.length)}

@@ -39,12 +39,14 @@ export interface Meta {
 	antinero: { n_contracts: number; total_eur: number; n_payments: number };
 	dase?: { n_contracts: number; total_eur: number };
 	anadohoi?: { n_projects: number; stated_eur: number };
+	/** dataset-state counts cited in prose — computed, never hardcoded */
+	facts?: Record<string, number>;
 	generated: string | null;
 }
 
 export interface Kpis {
 	n_contracts: number;
-	/** effective € (payments where present, else stated) — excl. VAT */
+	/** Σ stated values excl. VAT (stated analytics basis) */
 	total_eur: number;
 	/** Σ stated values excl. VAT */
 	stated_eur: number;
@@ -186,6 +188,10 @@ export interface DaseKpis {
 	paid_eur: number;
 	n_paid_contracts: number;
 	n_payments: number;
+	/** live contracts with >1 contractor */
+	n_consortium: number;
+	/** worst-case registry spellings of one co-op (canonical ΑΦΜ) */
+	max_name_variants: number;
 	n_coops: number;
 	n_orgs: number;
 	n_units: number;
@@ -333,8 +339,8 @@ export interface ExploreRow {
 	d: string | null;
 	t: string;
 	co: string;
+	/** stated value net of ΦΠΑ (anadohoi: committed, net where stated) */
 	v: number | null;
-	vn: number | null;
 	pe: string[];
 	hq: string[];
 	proc: 'direct' | 'open' | 'nego' | 'other' | 'sponsor';

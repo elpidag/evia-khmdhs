@@ -71,14 +71,26 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
                                      "Vary": "Accept-Encoding"})
         return Response(raw, mimetype="application/json")
 
-    # Atlas presents every € net of ΦΠΑ: both registry connections pass
-    # through queries_extra.apply_net_basis, whose TEMP views expose the
-    # net columns under the gross names for the frozen webui SQL (the
-    # anadohoi DB has no VAT columns — its net preference is explicit).
+    # Atlas presents every € net of ΦΠΑ, and contract-value analytics use
+    # STATED values (DATA_DECISIONS 2026-08-03): g.conn passes through
+    # apply_stated_basis (net views + an empty contract_payments view, so
+    # every frozen effective_cost() collapses to the stated column). The
+    # payments layer (strip timeline, disbursement, paid KPIs, per-contract
+    # payment lists) reads through the lazy _pay_conn(), which sees the
+    # real payment rows (net). The anadohoi DB has no VAT columns — its
+    # net preference is explicit.
     @app.before_request
     def _open_db() -> None:
-        g.conn = queries_extra.apply_net_basis(
+        g.conn = queries_extra.apply_stated_basis(
             queries.open_ro(app.config["DB_PATH"]))
+
+    def _pay_conn():
+        """Lazy khmdhs connection WITH payments (net basis) — the
+        payments layer only; analytics stay on the stated-basis g.conn."""
+        if "pay_conn" not in g:
+            g.pay_conn = queries_extra.apply_net_basis(
+                queries.open_ro(app.config["DB_PATH"]))
+        return g.pay_conn
 
     def _dase_conn():
         """Lazy second connection (ΔΑΣΕ dataset) — khmdhs-only endpoints
@@ -99,7 +111,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         conn = g.pop("conn", None)
         if conn is not None:
             conn.close()
-        for key in ("dase_conn", "anadohoi_conn"):
+        for key in ("pay_conn", "dase_conn", "anadohoi_conn"):
             extra = g.pop(key, None)
             if extra is not None:
                 extra.close()
@@ -138,17 +150,17 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             ana = _anadohoi_conn()
         except Exception:
             ana = None
-        return jsonify(queries_extra.meta(g.conn, dase, ana))
+        return jsonify(queries_extra.meta(g.conn, dase, ana, _pay_conn()))
 
     # -------------------------------------------------------- Anti-nero
 
     @app.route("/api/antinero/overview")
     def api_antinero_overview():
-        return jsonify(queries_extra.antinero_overview(g.conn))
+        return jsonify(queries_extra.antinero_overview(g.conn, _pay_conn()))
 
     @app.route("/api/antinero/payments")
     def api_antinero_payments():
-        return jsonify(queries_extra.payment_events(g.conn))
+        return jsonify(queries_extra.payment_events(_pay_conn()))
 
     @app.route("/api/antinero/sankey")
     def api_antinero_sankey():
@@ -193,7 +205,9 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
 
     @app.route("/api/antinero/contract/<adam>")
     def api_antinero_contract(adam: str):
-        d = queries.contract_detail(g.conn, adam)
+        # the detail page shows the payments layer → needs the pay conn
+        pay = _pay_conn()
+        d = queries.contract_detail(pay, adam)
         if d is None:
             abort(404)
         d.pop("raw_json", None)
@@ -201,7 +215,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["regions"] = queries.contract_project_regions(g.conn, adam)
         d["sites"] = queries.contract_sites(g.conn, adam)
         d["timeline"] = queries_extra.contract_timeline(g.conn, adam)
-        d["gross"] = queries_extra.contract_gross(g.conn, adam)
+        d["gross"] = queries_extra.contract_gross(pay, adam)
         return jsonify(d)
 
     @app.route("/api/antinero/contractors")
@@ -222,7 +236,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             "signers": queries.contractor_signers(g.conn, vat),
             "location": queries.contractor_location(g.conn, vat),
             "map_data": queries.contractor_map_data(g.conn, vat),
-            "yearly": queries.contractor_yearly(g.conn, vat),
+            "yearly": queries.contractor_yearly(_pay_conn(), vat),
         })
 
     # ------------------------------------------------------------- ΔΑΣΕ

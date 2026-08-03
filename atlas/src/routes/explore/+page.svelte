@@ -44,7 +44,7 @@
 	let indexed: Indexed[] = $state.raw([]);
 	$effect(() => {
 		// ?v= busts HTTP + module caches when the payload shape changes
-		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=7').then((p) => {
+		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=8').then((p) => {
 			payload = p;
 			indexed = p.rows.map((r) => {
 				const hn = searchNorm(
@@ -113,10 +113,10 @@
 		}
 		const dir = sort.endsWith('_asc') ? 1 : -1;
 		if (sort.startsWith('v') || sort.startsWith('n')) {
-			const key: 'v' | 'vn' = sort.startsWith('n') ? 'vn' : 'v';
+			// legacy n_* (stated-column) sort params degrade to the value sort
 			out.sort((a, b) => {
-				const av = a[key];
-				const bv = b[key];
+				const av = a.v;
+				const bv = b.v;
 				if (av === null && bv === null) return 0;
 				if (av === null) return 1;
 				if (bv === null) return -1;
@@ -198,7 +198,7 @@
 		if (r.ds === 'dase') return `/dase/contract/${r.ref}`;
 		return `/anadohoi/project/${r.ref}`;
 	}
-	function toggleSort(kind: 'd' | 'v' | 'n') {
+	function toggleSort(kind: 'd' | 'v') {
 		const next =
 			sort === `${kind}_desc` ? `${kind}_asc` : `${kind}_desc`;
 		setParam('sort', next === 'd_desc' ? null : next);
@@ -320,9 +320,8 @@
 		<strong>{grInt(filtered.length)}</strong> of {grInt(payload.rows.length)} rows match
 		· shown value Σ {eur(totalShown)}
 		<small
-			>(all € excl. VAT; bases differ: Anti-nero = effective €, ΔΑΣΕ = stated €, Ανάδοχοι =
-			stated budget where the act declares one, net where it says so —
-			<a href="/methodology#explore">methodology</a>)</small
+			>(all € stated, excl. VAT; Ανάδοχοι = committed budget where the act declares one, net
+			where it says so — <a href="/methodology#explore">methodology</a>)</small
 		>
 	</p>
 
@@ -339,13 +338,12 @@
 				<th>Company</th>
 				<th>Regions</th>
 				<th class="num"
-					><button class="sort" onclick={() => toggleSort('n')}
-						>Stated (net) {sort === 'n_desc' ? '↓' : sort === 'n_asc' ? '↑' : ''}</button
-					></th
-				>
-				<th class="num"
 					><button class="sort" onclick={() => toggleSort('v')}
-						>Value (net) {sort === 'v_desc' ? '↓' : sort === 'v_asc' ? '↑' : ''}</button
+						>Stated value (net) {sort === 'v_desc' || sort === 'n_desc'
+							? '↓'
+							: sort === 'v_asc' || sort === 'n_asc'
+								? '↑'
+								: ''}</button
 					></th
 				>
 			</tr>
@@ -366,7 +364,6 @@
 					</td>
 					<td class="muted"><small>{r.co || '—'}</small></td>
 					<td class="muted"><small>{r.pe.join(', ') || '—'}</small></td>
-					<td class="num muted"><small>{r.vn === null ? '—' : eur(r.vn)}</small></td>
 					<td class="num">{r.v === null ? '—' : eur(r.v)}</td>
 				</tr>
 			{/each}

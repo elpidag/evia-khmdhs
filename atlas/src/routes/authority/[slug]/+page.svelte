@@ -39,7 +39,7 @@
 		compare="{grInt(a.antinero.contracts.length)} contracts · full exposure {eurShort(
 			a.antinero.exposure_eur
 		)}"
-		basis="effective € excl. VAT, even-split across each contract's authorities"
+		basis="stated € excl. VAT, even-split across each contract's authorities"
 		color="var(--c-antinero)"
 	/>
 	<StatPair

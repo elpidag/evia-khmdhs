@@ -4,9 +4,10 @@ OSINT dataset + web UI for the Greek **Anti-nero** wildfire-prevention/restorati
 public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico.css.
 Everything derived is regenerable; `data/raw/` is never written to.
 
-**Current state** (2026-08-03): 344 contracts (252 in scope, €616M effective
-gross = **€496.9M effective net** — the Atlas presents net of ΦΠΑ everywhere,
-stated net €667.5M / paid net €440.0M), 890 payment orders (€565.8M paid
+**Current state** (2026-08-03): 344 contracts (252 in scope; the Atlas
+analytics basis is **stated net €667,496,652.26** — effective retired
+2026-08-03, payments are their own layer: paid net €440.0M; webui keeps its
+historical effective-gross €616M), 890 payment orders (€565.8M paid
 gross, 5 Diavgeia-only with PDF-curated net amounts), all amendment chains
 closed, 179/180 map contractors located, 147 linked to GEMI profiles, 18
 curated work sites, 252/252 in-scope contracts linked to their forest
@@ -26,6 +27,18 @@ contractor HQs geocoded via Nominatim. Refreshable via `python -m khmdhs.refresh
   lie: αντιδιαβρωτικά/αντιπλημμυρικά and ΕΣΑ-reforestation contracts looked like
   sibling programmes but their PDFs declare RRF Action 16849 «…(«antiNERO»)…»
   membership → reclassified in scope (`antinero_restoration` / `antinero_esa`).
+- **Never hardcode a data-derived number, never write a number from memory.**
+  Every count, sum, share, median, ranking or entity name that appears in UI
+  copy, chart titles, captions, KPI notes or methodology prose MUST be
+  computed from the databases (API payload fields, `/api/meta` `facts`, or a
+  new computed field added for the purpose) and double-checked against a
+  direct SQL query before it ships; tests pin the load-bearing ones. Literal
+  text is allowed ONLY for law references (ν.4412/ν.4782), identifiers (CPV
+  codes, ΑΦΜ, ΑΔΑ/ΑΔΑΜ), definitional scheme dates, and audit-record facts
+  quoting a documented DATA_DECISIONS event. This rule exists because a
+  2026-08-03 sweep found five stale hardcoded claims on the site, including
+  a top-region title that was factually wrong («Δράμα above all» — the data
+  says Εύβοια leads 3.7×): hardcoded numbers rot silently on every refresh.
 
 ## Data sources & APIs
 
@@ -497,6 +510,18 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   ΔΑΣΕ · Explore · Compare · Connections · Authorities · Methodology; the
   three dataset pages open with harmonised KPI rows (stated net / paid net
   / median net / counts / % direct).
+- **Stated analytics basis** (DATA_DECISIONS 2026-08-03, second entry):
+  contract-value analytics use STATED values — `g.conn` passes through
+  `queries_extra.apply_stated_basis` (net views + an EMPTY
+  `contract_payments` TEMP view, so every frozen `effective_cost()`
+  COALESCEs to the stated column); the payments layer (strip timeline,
+  disbursement curves, paid KPIs, per-contract payment lists, contractor
+  paid-per-year) reads through the lazy `_pay_conn()` which sees real
+  payment rows. Everything value-based reconciles to €667,496,652.26
+  (pinned); /compare is symmetric stated-vs-stated (≈19.6×); /explore has
+  a single «Stated value (net)» column (`?v=8`). Gotcha: an endpoint that
+  needs payments MUST take `_pay_conn()` — on `g.conn` the payments table
+  is empty by design.
 
 - **Two processes**: `. .venv/bin/activate; python -m atlas_api` (Flask JSON,
   127.0.0.1:5050) + `cd atlas && npm run dev` (Vite, :5173 — binds ::1, use

@@ -75,10 +75,28 @@
 		return { m: best[0], eur: best[1] };
 	});
 
-	const thresholds = [
-		{ v: 30_000, label: '€30k ceiling (supplies/services, ν.4782/2021)' },
-		{ v: 60_000, label: '€60k ceiling (works)' }
-	];
+	// statutory ν.4782/2021 ceilings come from the API payload, never inline
+	const thresholds = $derived(
+		(o.direct_awards.thresholds as number[]).map((v, i) => ({
+			v,
+			label: `€${Math.round(v / 1000)}k ceiling (${i === 0 ? 'supplies/services, ν.4782/2021' : 'works'})`
+		}))
+	);
+	const miniThresholds = $derived(
+		(o.direct_awards.thresholds as number[]).map((v) => ({
+			v,
+			label: `€${Math.round(v / 1000)}k`
+		}))
+	);
+	// the modal direct-award bin, for the finding title
+	const daModal = $derived.by(() => {
+		const counts = o.direct_awards.counts as number[];
+		const labels = o.direct_awards.labels as string[];
+		let best = 0;
+		for (let i = 1; i < counts.length; i++) if (counts[i] > counts[best]) best = i;
+		return labels[best] ?? '';
+	});
+	const firstPayYear = $derived((o.timeseries.months[0] ?? '').slice(0, 4));
 </script>
 
 <svelte:head>
@@ -87,7 +105,7 @@
 		name="description"
 		content="Interactive audit of Greece's Anti-nero wildfire-prevention programme: {grInt(
 			o.kpis.n_contracts
-		)} contracts, {eurShort(o.kpis.total_eur)} effective (excl. VAT)."
+		)} contracts, {eurShort(o.kpis.total_eur)} stated (excl. VAT)."
 	/>
 </svelte:head>
 
@@ -95,8 +113,8 @@
 	<h1>Where the Anti-nero money went</h1>
 	<p class="standfirst">
 		Greece's flagship wildfire-prevention programme (ΥΠΕΝ, RRF Action 16849) has signed
-		{grInt(o.kpis.n_contracts)} contracts since 2022. This is what actually got paid, to whom, and
-		where.
+		{grInt(o.kpis.n_contracts)} contracts since {o.yearly[0]?.year ?? '2022'}. This is what
+		actually got paid, to whom, and where.
 	</p>
 </hgroup>
 
@@ -172,11 +190,11 @@
 	</ChartFrame>
 
 	<ChartFrame
-		title="Disbursement has been climbing every year since 2022"
+		title="Disbursement has been climbing every year since {firstPayYear}"
 		subtitle="Cumulative € of payment orders — stacked by phase, or same-point-in-year comparison."
 		caveat="Payment orders attributed to a contract's final version; registry net-of-ΦΠΑ amounts."
 		anchor="disbursement"
-		methodology="effective-value"
+		methodology="stated-basis"
 	>
 		<DisbursementCurves timeseries={o.timeseries} {payments} />
 	</ChartFrame>
@@ -189,11 +207,11 @@
 <Defer height={340}>
 {#if swarm}
 	<ChartFrame
-		title="252 contracts, and almost all of them sit far above the direct-award ceilings"
-		subtitle="Every in-scope contract as one dot on a log scale (effective €, excl. VAT). Ringed dots drew a single bid."
+		title="{grInt(o.kpis.n_contracts)} contracts, and almost all of them sit far above the direct-award ceilings"
+		subtitle="Every in-scope contract as one dot on a log scale (stated €, excl. VAT). Ringed dots drew a single bid."
 		caveat="The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis as these dots. RRF emergency provisions allowed direct awards above them; the lines are printed for scale."
 		anchor="swarm"
-		methodology="effective-value"
+		methodology="stated-basis"
 	>
 		<Beeswarm rows={swarm} {thresholds} />
 	</ChartFrame>
@@ -205,13 +223,15 @@
 <Defer height={620}>
 {#if sankey}
 	{@const sk = sankey}
+	{@const nPhases = sk.nodes.filter((n) => n.kind === 'phase').length}
+	{@const nTop = sk.nodes.filter((n) => n.kind === 'contractor').length}
 	<ChartFrame
-		title="Nine phases, ten companies: {eurShort(
+		title="{grInt(nPhases)} phases, {grInt(nTop)} companies: {eurShort(
 			sk.links
 				.filter((l) => sk.nodes.find((n) => n.id === l.t)?.kind === 'contractor')
 				.reduce((s, l) => s + l.eur, 0)
-		)} of the {eurShort(o.kpis.total_eur)} ends at ten contractors"
-		subtitle="ΥΠΕΝ → programme phase → contractor (top 10 by effective €, everyone else aggregated)."
+		)} of the {eurShort(o.kpis.total_eur)} ends at {grInt(nTop)} contractors"
+		subtitle="ΥΠΕΝ → programme phase → contractor (top {nTop} by stated €, everyone else aggregated)."
 		caveat="Consortium values split evenly between partners here, so every column sums to the programme total."
 		anchor="sankey"
 		methodology="even-split"
@@ -225,8 +245,8 @@
 
 <div class="pair">
 	<ChartFrame
-		title="Direct awards pile up between €1M and €5M — far beyond the ν.4782/2021 ceilings"
-		subtitle="{grInt(o.direct_awards.n as number)} direct-award contracts by effective value (excl. VAT)."
+		title="Direct awards pile up around €{daModal} — far beyond the ν.4782/2021 ceilings"
+		subtitle="{grInt(o.direct_awards.n as number)} direct-award contracts by stated value (excl. VAT)."
 		caveat="The statutory ceilings and these values are both excl. VAT; RRF emergency provisions allowed direct awards above the ceilings."
 		anchor="direct-awards"
 		methodology="procedures"
@@ -235,16 +255,13 @@
 			labels={o.direct_awards.labels as string[]}
 			counts={o.direct_awards.counts as number[]}
 			edges={o.direct_awards.edges as number[]}
-			thresholds={[
-				{ v: 30_000, label: '€30k' },
-				{ v: 60_000, label: '€60k' }
-			]}
+			thresholds={miniThresholds}
 		/>
 	</ChartFrame>
 
 	<ChartFrame
 		title="Open procedures are the exception, not the rule"
-		subtitle="Effective € by award procedure."
+		subtitle="Stated € by award procedure."
 		anchor="procedures"
 	>
 		<BarH rows={procRows} highlight={(r) => r.label.includes('Απευθείας')} />
@@ -254,9 +271,9 @@
 <Defer height={400}>
 {#if peYearly}
 	<ChartFrame
-		title="Twenty regions absorb most of the money — each on the same scale"
-		subtitle="Yearly effective € per regional unit (top 20). Click a facet to drill into it on the map."
-		caveat="Even-split attribution; payment-year based, signature year for unpaid contracts."
+		title="{grInt(Math.min(20, peYearly.pes.length))} regions absorb most of the money — each on the same scale"
+		subtitle="Yearly stated € per regional unit (top {Math.min(20, peYearly.pes.length)}). Click a facet to drill into it on the map."
+		caveat="Even-split attribution; stated € at signature year."
 		anchor="pe-yearly"
 		methodology="even-split"
 	>
@@ -268,11 +285,11 @@
 </Defer>
 
 <ChartFrame
-	title="Ten contractors hold the largest shares of the {eurShort(o.kpis.total_eur)}"
-	subtitle="Top 10 contractors by effective value (payments where present, else stated)"
+	title="{grInt(topRows.length)} contractors hold the largest shares of the {eurShort(o.kpis.total_eur)}"
+	subtitle="Top {topRows.length} contractors by stated contract value"
 	caveat="Consortium contract values are counted in full for each partner (maximum-exposure view)."
 	anchor="top-contractors"
-	methodology="effective-value"
+	methodology="stated-basis"
 >
 	<BarH rows={topRows} />
 </ChartFrame>

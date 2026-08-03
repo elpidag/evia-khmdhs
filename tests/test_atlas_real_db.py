@@ -25,7 +25,7 @@ def client():
 def test_meta_pins(client):
     m = client.get("/api/meta").get_json()
     assert m["antinero"]["n_contracts"] == 252
-    assert m["antinero"]["total_eur"] == pytest.approx(496_905_727.47)
+    assert m["antinero"]["total_eur"] == pytest.approx(667_496_652.26)
     assert m["dase"]["n_contracts"] == 2018
     assert m["dase"]["total_eur"] == pytest.approx(34_085_266.14)
 
@@ -42,8 +42,8 @@ def test_sankey_reconciles(client):
     s = client.get("/api/antinero/sankey").get_json()
     ministry_out = sum(l["eur"] for l in s["links"] if l["s"] == "ministry")
     contractor_in = sum(l["eur"] for l in s["links"] if l["s"] != "ministry")
-    assert ministry_out == pytest.approx(496_905_727.47, abs=1.0)
-    assert contractor_in == pytest.approx(496_905_727.47, abs=1.0)
+    assert ministry_out == pytest.approx(667_496_652.26, abs=1.0)
+    assert contractor_in == pytest.approx(667_496_652.26, abs=1.0)
 
 
 def test_swarm_pins(client):
@@ -56,7 +56,7 @@ def test_pe_yearly_reconciles(client):
     py = client.get("/api/antinero/pe-yearly").get_json()
     assert len(py["pes"]) == 59
     total = sum(p["total_eur"] for p in py["pes"]) + py["unresolved_eur"]
-    assert total == pytest.approx(496_905_727.47, abs=1.0)
+    assert total == pytest.approx(667_496_652.26, abs=1.0)
 
 
 def test_dase_pins(client):
@@ -85,7 +85,7 @@ def test_connections_pins(client):
     assert len(n["authorities"]) == 103
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
-        496_905_727.47, abs=1.0)
+        667_496_652.26, abs=1.0)
 
 
 def test_authorities_pins(client):
@@ -95,8 +95,11 @@ def test_authorities_pins(client):
     assert len(both) == 48          # authorities active in BOTH datasets
     slugs = {r["slug"] for r in a}
     assert len(slugs) == 103        # bijective slugs
-    p = client.get(f"/api/authority/{a[0]['slug']}").get_json()
-    assert p["name"] == a[0]["name"]
+    # profile check on an authority active in BOTH datasets (the overall
+    # top by stated € has no ΔΑΣΕ presence)
+    pick = both[0]
+    p = client.get(f"/api/authority/{pick['slug']}").get_json()
+    assert p["name"] == pick["name"]
     assert p["antinero"]["contracts"] and p["dase"]["contracts"]
 
 
@@ -104,7 +107,7 @@ def test_pipelines_pins(client):
     p = client.get("/api/compare").get_json()["pipelines"]
     assert p["vat_overlap"] == []          # the zero-overlap headline fact
     assert p["antinero"]["n_vats"] == 169
-    assert p["antinero"]["total_eur"] == pytest.approx(496_905_727.47)
+    assert p["antinero"]["total_eur"] == pytest.approx(667_496_652.26)
     assert p["dase"]["total_eur"] == pytest.approx(34_085_266.14)
     assert p["dase_n_coops"] == 250
     assert [s["name"] for s in p["shared_awarders"]] == [
@@ -118,19 +121,13 @@ def test_explore_pins(client):
     assert len(e["rows"]) == 2339
     # value bases per dataset reconcile with their own conventions
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
-    assert kh_sum == pytest.approx(496_905_727.47, abs=1.0)
+    assert kh_sum == pytest.approx(667_496_652.26, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
     assert dase_sum == pytest.approx(34_085_266.14, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
     stalled = [r for r in e["rows"]
                if r["ds"] == "anadohoi" and r["st"] == "no_completion_recorded"]
     assert len(stalled) == 21
-    # net values: full registry coverage, honestly absent for sponsors
-    for r in e["rows"]:
-        if r["ds"] == "anadohoi":
-            assert r["vn"] is None
-        else:
-            assert r["vn"] is not None
     # PROC-notice flag: 41 in-scope Anti-nero contracts have a linked
     # διακήρυξη; the ΔΑΣΕ chain harvest (2026-08-03) covered all 2,164
     # contracts, so its flag is populated too

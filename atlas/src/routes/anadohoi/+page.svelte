@@ -50,6 +50,35 @@
 	);
 	const nUnstated = $derived(k.n_projects - k.n_stated);
 
+	// finding-title inputs — computed from the payload, never hardcoded
+	const bestFire = $derived.by(() => {
+		let best = null as null | { fire: string; share: number; n: number };
+		for (const f of fireCards) {
+			if (f.fire === 'εκτός πυρκαγιάς' || f.n < 2) continue;
+			const share = f.completed / f.n;
+			if (!best || share > best.share) best = { fire: f.fire, share, n: f.n };
+		}
+		return best;
+	});
+	const worstFire = $derived.by(() => {
+		let worst = null as null | { fire: string; n: number };
+		for (const f of fireCards) {
+			if (f.fire === 'εκτός πυρκαγιάς' || f.completed > 0) continue;
+			if (!worst || f.n > worst.n) worst = { fire: f.fire, n: f.n };
+		}
+		return worst;
+	});
+	// the commitment an amendment raised the most (e.g. a δωρεά increase)
+	const topRaise = $derived.by(() => {
+		let best = null as null | (typeof live)[number];
+		for (const p of live) {
+			if (p.budget === null || p.budget_stated === null) continue;
+			if (p.budget <= p.budget_stated) continue;
+			if (!best || p.budget > (best.budget ?? 0)) best = p;
+		}
+		return best;
+	});
+
 	// slope rows: every project whose deadline moved
 	const slopeRows = $derived(
 		live
@@ -177,7 +206,7 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Β. Εύβοια was certified within months — the 2021 Attica cluster never was"
+	title="{bestFire?.fire ?? '—'} was certified — {worstFire?.fire ?? '—'} never was"
 	subtitle="projects grouped by the fire that triggered them · fill = share with a completion act"
 	caveat="The fire is the one each act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
 	anchor="fires"
@@ -205,14 +234,17 @@
 <Defer height={520}>
 	<ChartFrame
 		title={`${grInt(k.n_companies)} sponsors — banks and energy companies carry the money, ${nUnstated} acts state no figure at all`}
-		subtitle="stated commitment per sponsor (after amendments), top 12"
+		subtitle="stated commitment per sponsor (after amendments), top {sponsorRows.length}"
 		caveat="Sums are commitments written in the acts, not verified spending; sponsors often promise «συνολική χρηματοδότηση του κόστους που θα προκύψει» with no number."
 		anchor="sponsors"
 		methodology="anadohoi"
 	>
 		<BarH rows={sponsorRows} />
 		<p class="muted note-inline">
-			The ΣΤΑΝΤΑ Α.Ε. δωρεά grew €3M → €4M by amendment — the largest single commitment.
+			{#if topRaise}
+				The {topRaise.company} commitment grew {eurShort(topRaise.budget_stated ?? 0)} →
+				{eurShort(topRaise.budget ?? 0)} by amendment — the largest single raise.
+			{/if}
 			Works are often executed by forest co-ops from the ΔΑΣΕ dataset: NOVA's Rhodes zone
 			was built by <a href="/dase">ΔΑΣΕ Αγίου Δημητρίου Πιερίας</a>, the ΤΙΤΑΝ/Κανελλοπούλου
 			works by ΔΑΣΕ Γαρδικίου Τρικάλων.

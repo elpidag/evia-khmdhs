@@ -25,7 +25,7 @@
 	<title>Forest authorities — both money pipelines meet here</title>
 	<meta
 		name="description"
-		content="All 103 Greek forest authorities (Διευθύνσεις Δασών, Δασαρχεία) with their Anti-nero works and ΔΑΣΕ co-op contracts."
+		content="All {rows.length} Greek forest authorities (Διευθύνσεις Δασών, Δασαρχεία) with their Anti-nero works and ΔΑΣΕ co-op contracts."
 	/>
 </svelte:head>
 
@@ -39,7 +39,9 @@
 </hgroup>
 
 <KpiRow>
-	<StatPair value={grInt(rows.length)} label="forest authorities" compare="77 Δασαρχεία + 26 Διευθύνσεις Δασών" />
+	<StatPair value={grInt(rows.length)} label="forest authorities" compare="{grInt(rows.filter((r) => r.kind === 'dx').length)} Δασαρχεία + {grInt(
+			rows.filter((r) => r.kind === 'dd').length
+		)} Διευθύνσεις Δασών" />
 	<StatPair
 		value={grInt(rows.filter((r) => r.antinero_n).length)}
 		label="host Anti-nero works"

@@ -121,6 +121,17 @@
 	});
 
 	// consortium cliques: group the 12 pairs into connected components
+	// finding-title inputs — computed, never hardcoded
+	const maxReach = $derived.by(() => {
+		const perVat = new Map<string, number>();
+		for (const e of net.contractor_pe) perVat.set(e.vat, (perVat.get(e.vat) ?? 0) + 1);
+		let vat = '';
+		let n = 0;
+		for (const [v, k] of perVat) if (k > n) [vat, n] = [v, k];
+		return { name: net.contractors[vat]?.name ?? vat, n };
+	});
+	const nRecurring = $derived(net.pairs.filter((pr) => pr.refs.length > 1).length);
+
 	const cliques = $derived.by(() => {
 		const parent = new Map<string, string>();
 		const find = (x: string): string => {
@@ -235,7 +246,7 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Six company hubs bank most of the travelling money — Τρίκαλα is the surprise"
+	title="{grInt(hubs.length)} company hubs bank most of the travelling money"
 	subtitle="Where each hub's firms won their Anti-nero works (one map per hub, shared colour scale). Click a map to trace that hub's flows above."
 	caveat="Top six home regions by € won outside their base; the shading includes money won at home."
 	anchor="hubs"
@@ -265,7 +276,7 @@
 
 <ChartFrame
 	title="In the biggest destinations, local firms take a small slice"
-	subtitle="€ of works in the top-12 destination regions, split by whether the winning firm is based in that region."
+	subtitle="€ of works in the top-{originRows.length} destination regions, split by whether the winning firm is based in that region."
 	anchor="origins"
 	methodology="even-split"
 >
@@ -294,7 +305,7 @@
 	title="A handful of companies reach into many regions"
 	subtitle="Contractor ↔ work-region links ({grInt(net.contractor_pe.length)} edges across {grInt(
 		Object.keys(net.contractors).length
-	)} contractors). ΒΙΟΣ Α.Ε. alone works in 14 Π.Ε."
+	)} contractors). {maxReach.name} alone works in {maxReach.n} Π.Ε."
 	caveat="Edge € even-split across a contract's partners and regions — the layer sums to the programme total."
 	anchor="bipartite"
 	methodology="even-split"
@@ -303,7 +314,7 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Three signatures moved {eurShort(net.coverage.total_eur)}"
+	title="{grInt(signers.length)} signatures moved {eurShort(net.coverage.total_eur)}"
 	subtitle="Top counterparties of each signing official (even-split €)."
 	anchor="signers"
 >
@@ -319,7 +330,7 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Consortiums are the exception: 12 partnerships, two recurring trios"
+	title="Consortiums are the exception: {grInt(net.pairs.length)} partnerships, {grInt(nRecurring)} recurring"
 	subtitle="Every contractor–contractor relationship in the dataset."
 	caveat="Pair € = full value of the shared contracts (both partners are fully exposed)."
 	anchor="cliques"

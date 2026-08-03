@@ -59,6 +59,27 @@ def apply_net_basis(conn: sqlite3.Connection) -> sqlite3.Connection:
     return conn
 
 
+def apply_stated_basis(conn: sqlite3.Connection) -> sqlite3.Connection:
+    """Net views + an EMPTY `contract_payments` TEMP view: every frozen
+    `effective_cost()` call site COALESCEs to the stated column, so all
+    contract-value analytics compute STATED € (net) with zero call-site
+    changes (DATA_DECISIONS 2026-08-03 stated-basis decision). Endpoints
+    that present the payments layer (strip timeline, disbursement curves,
+    paid KPIs, per-contract payment lists) must use a connection that went
+    through `apply_net_basis` only — see `_pay_conn` in app.py."""
+    apply_net_basis(conn)
+    cols = [r[1] for r in conn.execute(
+        "PRAGMA main.table_info(contract_payments)")]
+    if cols and "amount_without_vat" in cols:
+        conn.execute("DROP VIEW IF EXISTS temp.contract_payments")
+        sel = ["amount_without_vat AS amount_with_vat"
+               if x == "amount_with_vat" else x for x in cols]
+        sel.append("amount_with_vat AS amount_gross")
+        conn.execute("CREATE TEMP VIEW contract_payments AS SELECT "
+                     + ", ".join(sel) + " FROM main.contract_payments WHERE 0")
+    return conn
+
+
 def contract_gross(conn: sqlite3.Connection, ref: str) -> dict:
     """The registry's incl-VAT figures for one contract — the secondary
     line on detail pages (the net-basis views hide them elsewhere)."""
@@ -101,16 +122,20 @@ def _full_date(s: str | None) -> str | None:
 # ---------------------------------------------------------------- meta
 
 def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
-         ana: sqlite3.Connection | None = None) -> dict:
-    """Footer/OG numbers for all datasets + data freshness."""
+         ana: sqlite3.Connection | None = None,
+         pay: sqlite3.Connection | None = None) -> dict:
+    """Footer/OG numbers for all datasets + data freshness. `kh` is the
+    stated-basis connection (total = Σ stated net); `pay` sees real
+    payments for the n_payments count."""
     k = q.kpis(kh)
+    pconn = pay if pay is not None else kh
     out = {
         "antinero": {
             "n_contracts": k["n_contracts"],
             "total_eur": k["total_eur"],
-            "n_payments": kh.execute(
+            "n_payments": pconn.execute(
                 "SELECT COUNT(*) FROM contract_payments WHERE cancelled = 0"
-            ).fetchone()[0] if q._has_payments_table(kh) else 0,
+            ).fetchone()[0] if q._has_payments_table(pconn) else 0,
         },
         "generated": kh.execute(
             "SELECT MAX(fetched_at) FROM contracts"
@@ -128,15 +153,89 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "budget_current)), 2) FROM projects "
             "WHERE status != 'superseded'").fetchone()
         out["anadohoi"] = {"n_projects": n, "stated_eur": tot}
+
+    # dataset-state counts the prose pages (methodology) cite — computed,
+    # never hardcoded, so a refresh cannot leave stale numbers in copy
+    facts: dict[str, int] = {}
+    try:
+        facts["kh_done"] = kh.execute(f"""
+            SELECT COUNT(DISTINCT a.attributed_ref)
+            FROM contract_completion_acts a
+            JOIN contract_scope s ON s.reference_number = a.attributed_ref
+            WHERE s.in_scope = 1""").fetchone()[0]
+    except sqlite3.OperationalError:
+        pass
+    try:
+        facts["kh_notice"] = kh.execute(f"""
+            SELECT COUNT(DISTINCT cla.reference_number)
+            FROM contract_linked_acts cla
+            JOIN contract_scope s ON s.reference_number = cla.reference_number
+            WHERE cla.kind = 'notice' AND s.in_scope = 1""").fetchone()[0]
+    except sqlite3.OperationalError:
+        pass
+    if dase is not None:
+        try:
+            facts["dase_notice"] = dase.execute(f"""
+                SELECT COUNT(DISTINCT cla.reference_number)
+                FROM contract_linked_acts cla
+                JOIN contracts co ON co.reference_number = cla.reference_number
+                WHERE cla.kind = 'notice' AND {dq.live_filter('co')}
+            """).fetchone()[0]
+        except sqlite3.OperationalError:
+            pass
+        try:
+            facts["dase_cpv_noise"] = dase.execute(f"""
+                SELECT COUNT(DISTINCT c.reference_number)
+                FROM contract_cpvs c
+                JOIN contracts co ON co.reference_number = c.reference_number
+                WHERE c.cpv_code = '66519300-4' AND {dq.live_filter('co')}
+            """).fetchone()[0]
+        except sqlite3.OperationalError:
+            pass
+    try:
+        facts["n_authorities"] = kh.execute(
+            "SELECT COUNT(*) FROM forest_authorities").fetchone()[0]
+    except sqlite3.OperationalError:
+        pass
+    if dase is not None:
+        try:
+            facts["dase_mixed_vat"] = dase.execute(f"""
+                SELECT COUNT(*) FROM contracts co
+                WHERE {dq.live_filter('co')}
+                  AND EXISTS (SELECT 1 FROM contract_objects o
+                              WHERE o.reference_number = co.reference_number
+                                AND o.vat_percent = '0')
+                  AND EXISTS (SELECT 1 FROM contract_objects o
+                              WHERE o.reference_number = co.reference_number
+                                AND o.vat_percent != '0')""").fetchone()[0]
+        except sqlite3.OperationalError:
+            pass
+        variants: dict[str, set] = {}
+        for vat, name in dase.execute(f"""
+            SELECT c.vat_number, c.name FROM contractors c
+            JOIN contracts co ON co.reference_number = c.reference_number
+            WHERE {dq.live_filter('co')}"""):
+            canon = dq.canonical_vat(vat)
+            if canon:
+                variants.setdefault(canon, set()).add((name or "").strip())
+        facts["dase_max_variants"] = max(
+            (len(v) for v in variants.values()), default=0)
+    if ana is not None:
+        for basis, cnt in ana.execute(
+            "SELECT budget_vat_basis, COUNT(*) FROM projects "
+            "WHERE budget_vat_basis IS NOT NULL GROUP BY budget_vat_basis"):
+            facts[f"ana_vat_{basis}"] = cnt
+    out["facts"] = facts
     return out
 
 
 # ---------------------------------------------------------------- overview
 
-def antinero_kpis(kh: sqlite3.Connection) -> dict:
-    """q.kpis (effective basis) + the harmonised KPI-row extras: stated
-    total, actually-paid total and median stated value — all excl-VAT via
-    the net-basis views."""
+def antinero_kpis(kh: sqlite3.Connection,
+                  pay: sqlite3.Connection | None = None) -> dict:
+    """q.kpis on the stated-basis connection (total == Σ stated net) + the
+    harmonised KPI-row extras: median stated value, and the actually-paid
+    totals read from `pay` (the connection that sees real payments)."""
     k = q.kpis(kh)
     stated = sorted(r[0] or 0.0 for r in kh.execute(f"""
         SELECT c.total_cost_with_vat FROM contracts c
@@ -145,8 +244,9 @@ def antinero_kpis(kh: sqlite3.Connection) -> dict:
     k["median_eur"] = dq._percentile(stated, 0.5)
     k["paid_eur"] = 0.0
     k["n_payments"] = 0
-    if q._has_payments_table(kh) and q._has_scope_table(kh):
-        paid = kh.execute("""
+    pconn = pay if pay is not None else kh
+    if q._has_payments_table(pconn) and q._has_scope_table(pconn):
+        paid = pconn.execute("""
             SELECT ROUND(SUM(p.amount_with_vat), 2), COUNT(*)
             FROM contract_payments p
             JOIN contract_scope s ON s.reference_number = p.attributed_ref
@@ -156,18 +256,22 @@ def antinero_kpis(kh: sqlite3.Connection) -> dict:
     return k
 
 
-def antinero_overview(kh: sqlite3.Connection) -> dict:
+def antinero_overview(kh: sqlite3.Connection,
+                      pay: sqlite3.Connection | None = None) -> dict:
     """Everything the Anti-nero overview page needs except the map/detail
-    payloads (those ship separately — they are heavier and lazier)."""
+    payloads. `kh` = stated-basis connection (all value analytics);
+    `pay` = payments layer (disbursement timeseries, per-year paid,
+    paid KPI)."""
+    pconn = pay if pay is not None else kh
     studies = q.study_costs(kh)
     top_studies = sorted(studies["rows"], key=lambda r: r["eur"], reverse=True)[:10]
     return {
-        "kpis": antinero_kpis(kh),
+        "kpis": antinero_kpis(kh, pconn),
         "procedures": q.procedure_mix(kh),
         "histogram": q.contract_value_histogram(kh),
         "direct_awards": q.direct_award_distribution(kh),
-        "timeseries": q.disbursement_timeseries(kh),
-        "yearly": q.antinero_yearly(kh),
+        "timeseries": q.disbursement_timeseries(pconn),
+        "yearly": q.antinero_yearly(pconn),
         "studies": {"summary": studies["summary"], "top": top_studies},
         "top_contractors": q.top_contractors(kh, limit=10),
         "top_authorities": q.top_authorities(kh, limit=5),
@@ -374,6 +478,23 @@ def dase_kpis(dase: sqlite3.Connection) -> dict:
     only part of the population (registry practice), so aggregates stay
     stated and the paid figure is a KPI with its caveat."""
     k = dq.kpis(dase)
+    # consortium rows + worst-case registry spelling variance — cited in
+    # page copy, computed so a refresh can't leave stale numbers
+    k["n_consortium"] = dase.execute(f"""
+        SELECT COUNT(*) FROM contracts co
+        WHERE {dq.live_filter('co')} AND
+          (SELECT COUNT(*) FROM contractors c
+           WHERE c.reference_number = co.reference_number) > 1""").fetchone()[0]
+    variants: dict[str, set] = {}
+    for vat, name in dase.execute(f"""
+        SELECT c.vat_number, c.name FROM contractors c
+        JOIN contracts co ON co.reference_number = c.reference_number
+        WHERE {dq.live_filter('co')}"""):
+        canon = dq.canonical_vat(vat)
+        if canon:
+            variants.setdefault(canon, set()).add((name or "").strip())
+    k["max_name_variants"] = max((len(v) for v in variants.values()),
+                                 default=0)
     k["paid_eur"] = 0.0
     k["n_paid_contracts"] = 0
     k["n_payments"] = 0
@@ -884,11 +1005,11 @@ def money_by_pe_yearly(kh: sqlite3.Connection) -> dict:
 def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                  ana: sqlite3.Connection | None) -> dict:
     """One compact row per contract/project across the three datasets, for
-    the client-side /explore finder. Value bases differ by dataset and are
-    labelled on the page: Anti-nero = effective €, ΔΑΣΕ = stated € (live
-    population), Ανάδοχοι = stated budget after amendments (nullable —
-    sponsors often commit without a figure). Missing DBs degrade honestly
-    (their rows are simply absent)."""
+    the client-side /explore finder. One stated-basis value per row (net):
+    Anti-nero + ΔΑΣΕ = stated contract value, Ανάδοχοι = committed budget
+    after amendments, net where the act states it (nullable — sponsors
+    often commit without a figure). Missing DBs degrade honestly (their
+    rows are simply absent)."""
     rows: list[dict] = []
 
     hq_map: dict[str, str] = {}
@@ -919,7 +1040,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
         SELECT c.reference_number AS ref, c.title,
                c.contract_signed_date, c.submission_date,
                c.procedure_type, c.bids_submitted, c.cancelled,
-               {eff} AS value, c.total_cost_without_vat AS value_net,
+               {eff} AS value,
                (SELECT GROUP_CONCAT(r.region_pe, '|')
                   FROM contract_project_regions r
                  WHERE r.reference_number = c.reference_number) AS pes,
@@ -942,8 +1063,6 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "t": (r["title"] or "")[:120],
             "co": (r["names"] or "")[:110],
             "v": round(r["value"], 2) if r["value"] is not None else None,
-            "vn": round(r["value_net"], 2) if r["value_net"] is not None
-                 else None,
             "pe": pes, "hq": hqs,
             "proc": _proc_kind(r["procedure_type"]),
             "st": "cancelled" if r["cancelled"] else None,
@@ -968,7 +1087,6 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             SELECT co.reference_number AS ref, co.title,
                    co.contract_signed_date, co.submission_date,
                    co.procedure_type, co.total_cost_with_vat AS value,
-                   co.total_cost_without_vat AS value_net,
                    (SELECT GROUP_CONCAT(r.region_pe, '|')
                       FROM dase_contract_regions r
                      WHERE r.reference_number = co.reference_number) AS pes,
@@ -986,8 +1104,6 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 "t": (r["title"] or "")[:120],
                 "co": (r["names"] or "")[:110],
                 "v": round(r["value"], 2) if r["value"] is not None else None,
-                "vn": round(r["value_net"], 2) if r["value_net"] is not None
-                     else None,
                 "pe": pes, "hq": [],
                 "proc": _proc_kind(r["procedure_type"]),
                 "st": None, "b1": 0,
@@ -1007,7 +1123,6 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 "t": (r["location_text"] or "")[:120],
                 "co": (r["company"] or "")[:110],
                 "v": r["budget"],   # net where the act states it (curated)
-                "vn": None,     # sponsor acts state one figure, mixed VAT basis
                 "pe": [r["pe"]] if r["pe"] else [], "hq": [],
                 "proc": "sponsor",
                 "st": r["status"], "b1": 0, "pr": None,

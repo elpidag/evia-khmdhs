@@ -63,7 +63,8 @@ def test_meta(client):
     assert r.status_code == 200
     body = r.get_json()
     assert body["antinero"]["n_contracts"] == 1
-    assert body["antinero"]["total_eur"] == pytest.approx(400_000.0)
+    # stated analytics basis: the 1M stated value, not the 400k paid
+    assert body["antinero"]["total_eur"] == pytest.approx(1_000_000.0)
     assert body["antinero"]["n_payments"] == 1
     assert body["dase"]["n_contracts"] == 1
     assert body["dase"]["total_eur"] == pytest.approx(5_000.0)
@@ -100,7 +101,7 @@ def test_antinero_list_and_detail(client):
     body = client.get("/api/antinero/contracts").get_json()
     assert len(body["rows"]) == 1
     # list rows carry the EFFECTIVE value (the €400k payment), not stated
-    assert body["total_eur"] == pytest.approx(400_000.0)
+    assert body["total_eur"] == pytest.approx(1_000_000.0)  # stated
     d = client.get("/api/antinero/contract/22SYMV000000001").get_json()
     assert d["reference_number"] == "22SYMV000000001"
     assert "raw_json" not in d and "raw_pretty" not in d
@@ -292,16 +293,15 @@ def test_explore_all_three_datasets(full_client):
     e = full_client.get("/api/explore").get_json()
     assert e["counts"] == {"antinero": 1, "dase": 1, "anadohoi": 1}
     by_ds = {r["ds"]: r for r in e["rows"]}
-    assert by_ds["antinero"]["v"] == pytest.approx(400_000.0)  # effective
+    assert by_ds["antinero"]["v"] == pytest.approx(1_000_000.0)  # stated
     assert by_ds["dase"]["v"] == pytest.approx(5_000.0)
     assert by_ds["anadohoi"]["proc"] == "sponsor"
     assert by_ds["anadohoi"]["st"] == "no_completion_recorded"
     assert by_ds["anadohoi"]["pe"] == ["Π.Ε. Ευβοίας"]
     for r in e["rows"]:
-        for key in ("ds", "ref", "d", "t", "co", "v", "vn", "pe", "hq",
+        for key in ("ds", "ref", "d", "t", "co", "v", "pe", "hq",
                     "proc", "st", "b1", "pr", "fin"):
             assert key in r
-    assert by_ds["anadohoi"]["vn"] is None   # mixed VAT basis, stays blank
     # linked-acts layer absent in the synthetic DB → notice flag unknown
     assert by_ds["antinero"]["pr"] is None
 

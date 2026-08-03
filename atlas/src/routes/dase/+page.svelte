@@ -63,6 +63,16 @@
 		}))
 	);
 
+	// finding-title inputs — computed from the payload, never hardcoded
+	const topPe = $derived(
+		[...o.by_pe.regions].sort((a, b) => b.eur - a.eur)[0]?.pe?.replace('Π.Ε. ', '') ?? ''
+	);
+	const topYear = $derived([...o.yearly].sort((a, b) => b.eur - a.eur)[0]?.year ?? '');
+	const topOrgShare = $derived(
+		o.top_orgs.length ? (100 * o.top_orgs[0].n_contracts) / o.kpis.n_contracts : 0
+	);
+	const cpvNoiseN = $derived(o.cpvs.find((c) => c.noise)?.n_contracts ?? 0);
+
 	function peTip(pe: string): string {
 		const r = peRows.get(pe);
 		if (!r) return `<strong>${pe}</strong><br>no ΔΑΣΕ contracts recorded`;
@@ -85,7 +95,7 @@
 	<p class="standfirst">
 		Every public contract won by a forest labour co-operative (ΔΑ.Σ.Ε., ν.4423/2016) since
 		September 2021 — logging, clearing and tending work in the same forests the Anti-nero
-		millions target, at a thousandth of the contract size.
+		millions target, at a fraction of the contract size.
 	</p>
 </hgroup>
 
@@ -116,7 +126,7 @@
 	<StatPair
 		value={grInt(o.kpis.n_coops)}
 		label="co-operatives (canonical ΑΦΜ)"
-		compare="the same co-op appears under up to 12 registry spellings"
+		compare="the same co-op appears under up to {o.kpis.max_name_variants} registry spellings"
 	/>
 	<StatPair
 		value={pct(o.kpis.pct_direct)}
@@ -126,7 +136,7 @@
 </KpiRow>
 
 <ChartFrame
-	title="Co-op work concentrates in the north and centre — Δράμα above all"
+	title="Co-op work concentrates in a handful of forest districts — {topPe} far above all"
 	subtitle="Stated € per regional unit, derived from the awarding forest unit."
 	caveat="{grInt(o.by_pe.unresolved.n)} ΑΔΜΗΕ power-line contracts span multiple Π.Ε. and stay honestly unresolved ({eurShort(
 		o.by_pe.unresolved.eur
@@ -146,7 +156,7 @@
 <Defer height={400}>
 {#if swarm}
 	<ChartFrame
-		title="2,018 small contracts: most sit between €2k and €25k"
+		title="{grInt(o.kpis.n_contracts)} small contracts: half sit below {eur(o.kpis.median_eur)}"
 		subtitle="Every live contract as one dot on a log scale, coloured by year. Hover to inspect, click through."
 		caveat="Stated values excl. VAT, deduplicated (cancelled and superseded versions excluded)."
 		anchor="dase-swarm"
@@ -161,7 +171,7 @@
 
 <div class="pair">
 	<ChartFrame
-		title="2021–22 carried the big υλοτομία money; volumes stay high since"
+		title="{topYear} carried the biggest υλοτομία money; volumes stay high since"
 		subtitle="Stated € and contract counts per signature year."
 		anchor="dase-yearly"
 	>
@@ -184,11 +194,11 @@
 </div>
 
 <ChartFrame
-	title="Ten co-ops collect {eurShort(coopRows.reduce((s, r) => s + r.value, 0))} of the {eurShort(
+	title="{grInt(coopRows.length)} co-ops collect {eurShort(coopRows.reduce((s, r) => s + r.value, 0))} of the {eurShort(
 		o.kpis.total_eur
 	)}"
-	subtitle="Top 10 co-operatives by stated €, merged across registry spellings by canonical ΑΦΜ."
-	caveat="Consortium values counted in full for each partner (rare here: 20 of 2,018 contracts)."
+	subtitle="Top {coopRows.length} co-operatives by stated €, merged across registry spellings by canonical ΑΦΜ."
+	caveat="Consortium values counted in full for each partner (rare here: {grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)} contracts)."
 	anchor="top-coops"
 	methodology="canonical-vat"
 >
@@ -197,7 +207,7 @@
 
 <div class="pair">
 	<ChartFrame
-		title="ΥΠΕΝ awards three-quarters of the contracts, the decentralised administrations the rest"
+		title="{o.top_orgs[0]?.name ?? 'ΥΠΕΝ'} awards {pct(topOrgShare)} of the contracts; other bodies share the rest"
 		subtitle="Top awarding organisations (grouped by name — registry VATs collide)."
 		anchor="dase-orgs"
 		methodology="org-names"
@@ -217,7 +227,7 @@
 <ChartFrame
 	title="Υλοτομία dominates the CPV mix"
 	subtitle="Top CPV codes by contract count."
-	caveat="386 υλοτομικά rows carry a miskeyed insurance CPV (66519300-4) — flagged, never counted as insurance."
+	caveat="{grInt(cpvNoiseN)} υλοτομικά rows carry a miskeyed insurance CPV (66519300-4) — flagged, never counted as insurance."
 	anchor="dase-cpvs"
 	methodology="dase-cpv-noise"
 >

@@ -63,7 +63,7 @@
 					{/if}
 					Anti-nero: {data.meta.antinero.n_contracts} contracts · {eurShort(
 						data.meta.antinero.total_eur
-					)} effective
+					)} stated
 					{#if data.meta.dase}
 						&nbsp;·&nbsp; ΔΑΣΕ: {data.meta.dase.n_contracts} contracts · {eurShort(
 							data.meta.dase.total_eur

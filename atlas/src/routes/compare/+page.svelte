@@ -12,6 +12,22 @@
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.cmp);
 
+	// finding-title inputs — computed, never hardcoded
+	const topShared = $derived.by(() => {
+		let best = null as null | { pe: string; v: number };
+		for (const r of c.by_pe) {
+			const v = Math.min(r.antinero_eur, r.dase_eur);
+			if (!best || v > best.v) best = { pe: r.pe, v };
+		}
+		return best?.pe.replace('Π.Ε. ', '') ?? '';
+	});
+	const topDase = $derived.by(() => {
+		let best = null as null | { pe: string; v: number };
+		for (const r of c.by_pe)
+			if (!best || r.dase_eur > best.v) best = { pe: r.pe, v: r.dase_eur };
+		return best?.pe.replace('Π.Ε. ', '') ?? '';
+	});
+
 	const yearMax = $derived(Math.max(...c.yearly.antinero, ...c.yearly.dase.map(() => 0), 1));
 	const daseYearMax = $derived(Math.max(...c.yearly.dase, 1));
 </script>
@@ -38,7 +54,7 @@
 		value={eurShort(c.antinero.total_eur)}
 		label="Anti-nero, {grInt(c.antinero.n_contracts)} contracts"
 		compare="median contract {eurShort(c.antinero.median_eur)}"
-		basis="effective € excl. VAT — payments where present, else stated"
+		basis="stated € excl. VAT"
 		color="var(--c-antinero)"
 	/>
 	<StatPair
@@ -77,7 +93,7 @@
 		c.hist.dase_median
 	)}"
 	subtitle="Contract-size distribution on shared log₂ bins, as % of each programme's own contracts."
-	caveat="Anti-nero uses effective values, ΔΑΣΕ stated — both excl. VAT; the asymmetry is documented in the methodology."
+	caveat="Both programmes on the same basis: stated contract values, excl. VAT."
 	anchor="distributions"
 	methodology="compare-bases"
 >
@@ -85,7 +101,7 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Where both flows land: Εύβοια gets millions from each — Δράμα is co-op country"
+	title="Where both flows land: {topShared} gets millions from each — {topDase} is co-op country"
 	subtitle="Each regional unit by its € from both programmes (log–log). Colour-coded gutters hold the one-sided Π.Ε."
 	anchor="pe-scatter"
 	methodology="even-split"
@@ -95,7 +111,7 @@
 
 <ChartFrame
 	title="Region by region, the programmes weight differently"
-	subtitle="Top 15 regional units — each programme's own share of its total, absolute € printed."
+	subtitle="Top {Math.min(15, c.by_pe.length)} regional units — each programme's own share of its total, absolute € printed."
 	caveat="ΔΑΣΕ side omits {grInt(c.dase_unresolved.n)} multi-Π.Ε. contracts ({eurShort(
 		c.dase_unresolved.eur
 	)}, honestly unresolved)."
@@ -117,7 +133,7 @@
 >
 	<div class="years">
 		<div>
-			<h3 class="antinero">Anti-nero (effective €, net)</h3>
+			<h3 class="antinero">Anti-nero (stated €, net)</h3>
 			{#each c.years as y, i (y)}
 				<div class="yrow">
 					<span class="ylabel">{y}</span>
@@ -143,10 +159,9 @@
 	<h2>Reading this page honestly</h2>
 	<ul>
 		<li>
-			<strong>Different value bases.</strong> Anti-nero shows effective € (payment orders where
-			they exist); ΔΑΣΕ shows stated contract values, deduplicated — its payment coverage is
-			too thin to aggregate on. Everything is excl. VAT. The {c.ratio}× headline compares the
-			best available basis on each side.
+			<strong>Same value basis.</strong> Both sides show stated contract values, excl. VAT
+			(ΔΑΣΕ deduplicated across amendment versions). Payments are a separate layer on each
+			dataset's own pages. The {c.ratio}× headline is stated-vs-stated.
 		</li>
 		<li>
 			<strong>Different populations.</strong> Anti-nero is one programme; the ΔΑΣΕ dataset is

@@ -754,3 +754,28 @@ states the finding; the paid-vs-stated ratio (payments now harvested) is
 the available delivery signal. The 54 searched contracts are logged in
 `completion_search_log` (dase.sqlite). *Affects: /explore end-date
 filter, /methodology; no stored rows.*
+
+## 2026-08-03 — Atlas analytics basis: STATED values; payments become their own layer
+
+The Atlas retires the *effective* value (payments-sum-else-stated) from
+every chart and aggregate: contract-value analytics — maps, sankey,
+beeswarm, histograms, rankings, per-Π.Ε. series, contractor pages, lists,
+/connections, /authorities, /compare, /explore — now use the **stated
+contract value (net of ΦΠΑ)** even when payment orders exist. The Anti-nero
+analytic total is **€667,496,652.26** and every money graphic reconciles
+to it (pinned). Payment data is NOT hidden: the payments strip timeline,
+the cumulative disbursement curves, the «actually paid» KPI tiles, the
+per-contract payment lists and the contractor paid-per-year bars remain as
+an explicitly-labelled payments layer (Σ paid net €440,019,108.41 in
+scope). /compare becomes symmetric — stated vs stated on both sides
+(≈19.6× at the totals) — retiring the old basis-asymmetry footnotes.
+Mechanism (same doctrine as the 2026-08-03 net views, webui still frozen):
+the analytics connection passes through `apply_stated_basis`, whose TEMP
+`contract_payments` view presents zero rows, so every frozen
+`effective_cost()` call site COALESCEs to the stated column with no code
+copies; a second per-request connection with real payments serves the
+payments layer. Per-year attribution in stated basis = stated € at
+signature year. /explore collapses to a single «Stated value (net)»
+column (the effective column is gone; Ανάδοχοι keep committed-net-where-
+stated). *User decision 2026-08-03. Affects: every Atlas value graphic;
+tests re-pinned; no stored data changes.*
