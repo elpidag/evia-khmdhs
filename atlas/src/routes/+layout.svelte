@@ -28,6 +28,9 @@
 	let menuEl = $state<HTMLElement | null>(null);
 	const menuActive = $derived(MENU.some((m) => isActive(m.href)));
 
+	// sticky header compacts to a single slim row once the page is scrolled
+	let scrolled = $state(false);
+
 	const embed = $derived(page.url.searchParams.get('embed') === '1');
 	function isActive(href: string): boolean {
 		if (href === '/') return page.url.pathname === '/' || page.url.pathname.startsWith('/antinero');
@@ -42,6 +45,7 @@
 	onkeydown={(e) => {
 		if (e.key === 'Escape') menuOpen = false;
 	}}
+	onscroll={() => (scrolled = window.scrollY > 60)}
 />
 
 <svelte:head>
@@ -53,7 +57,7 @@
 </svelte:head>
 
 {#if !embed}
-	<header>
+	<header class:scrolled>
 		<div class="inner">
 			<a class="brand" href="/">
 				<span class="brand-title">FORESTRY WORKS TRACKER</span>
@@ -133,7 +137,21 @@
 
 <style>
 	header {
+		/* option B: pinned while scrolling, compacts past 60px (see onscroll) */
+		position: sticky;
+		top: 0;
+		z-index: 100;
 		background: var(--paper);
+		transition: box-shadow 0.2s ease;
+	}
+	header.scrolled {
+		box-shadow:
+			0 1px 0 var(--line),
+			0 8px 24px rgba(0, 0, 0, 0.06);
+	}
+	header.scrolled .inner {
+		padding-top: var(--sp-2);
+		padding-bottom: var(--sp-2);
 	}
 	.inner {
 		max-width: var(--content-w);
@@ -146,6 +164,7 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: var(--sp-2) var(--sp-6);
+		transition: padding 0.2s ease;
 	}
 	.brand {
 		text-decoration: none;
@@ -160,6 +179,7 @@
 		font-weight: 900;
 		font-size: var(--fs-28);
 		letter-spacing: 0.01em;
+		transition: font-size 0.2s ease;
 	}
 	nav {
 		display: flex;
