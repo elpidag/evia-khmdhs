@@ -91,7 +91,6 @@
 </svelte:head>
 
 <hgroup class="lede">
-	<h1>The other forest workforce: ΔΑΣΕ co-operatives</h1>
 	<p class="standfirst">
 		Every public contract won by a forest labour co-operative (ΔΑ.Σ.Ε., ν.4423/2016) since
 		September 2021 — logging, clearing and tending work in the same forests the Anti-nero

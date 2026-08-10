@@ -110,7 +110,6 @@
 </svelte:head>
 
 <hgroup class="lede">
-	<h1>Where the Anti-nero money went</h1>
 	<p class="standfirst">
 		Greece's flagship wildfire-prevention programme (ΥΠΕΝ, RRF Action 16849) has signed
 		{grInt(o.kpis.n_contracts)} contracts since {o.yearly[0]?.year ?? '2022'}. This is what

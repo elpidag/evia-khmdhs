@@ -9,24 +9,24 @@
  */
 :root {
 	/* paper & ink */
-	--paper: #f6f1e4;
-	--paper-2: #efe8d7;
-	--paper-3: #e7ddc8;
+	--paper: #ffffff;
+	--paper-2: #f5f4f0;
+	--paper-3: #eceae4;
 	--ink: #2a2118;
 	--ink-soft: #5c5245;
 	--ink-faint: #8a7f6e;
 	--line: #d5cab4;
-	--line-strong: #9b8e74;
+	--line-strong: #9e9e9e;
 
 	/* the one loud accent (Anti-nero / works side) */
 	--accent: #b33a1a;
 	--accent-deep: #6c1a00;
 
 	/* dataset hues */
-	--c-antinero: #b33a1a;
-	--c-dase: #1b6e8e;
+	--c-antinero: #000000;
+	--c-dase: #52b788;
 	--c-dase-deep: #0d366b;
-	--c-anadohoi: #3d7a4a;
+	--c-anadohoi: #2d6a4f;
 
 	/* semantic */
 	--c-direct-award: #b33a1a;
@@ -54,9 +54,13 @@
 	--ramp-home-7: #0d366b;
 	--land-empty: #efe8d7;
 
-	/* type */
-	--font-ui: 'Sofia Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-	--font-serif: 'Literata', Georgia, 'Times New Roman', serif;
+	/* type (Adobe Fonts kit drh1gfl):
+	   body/UI = Futura 100 Greek Book (the light text cut; Regular/Bold
+	   family as fallback), headings + display = Obviously. Sofia Sans
+	   (self-hosted) stays as the offline/glyph fallback. */
+	--font-ui: 'futura-100-greek-book', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
+	--font-serif: 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
+	--font-display: 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
 	--fs-12: 0.75rem;
 	--fs-13: 0.8125rem;
 	--fs-14: 0.875rem;

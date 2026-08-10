@@ -7,17 +7,26 @@
 
 	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 
-	const NAV = [
-		{ href: '/anadohoi', label: 'Ανάδοχοι' },
-		{ href: '/', label: 'Anti-nero' },
-		{ href: '/dase', label: 'ΔΑΣΕ' },
-		{ href: '/arogi', label: 'Αρωγή' },
-		{ href: '/explore', label: 'Explore' },
-		{ href: '/compare', label: 'Compare' },
-		{ href: '/connections', label: 'Connections' },
-		{ href: '/authorities', label: 'Authorities' },
-		{ href: '/methodology', label: 'Methodology' }
+	// `color`: the dataset hue the tab turns into when active (replaces the
+	// underline); tabs without one keep the accent underline.
+	const NAV: { href: string; label: string; color?: string }[] = [
+		{ href: '/anadohoi', label: 'SPONSORED WORKS', color: 'var(--c-anadohoi)' },
+		{ href: '/', label: 'ANTINERO WORKS', color: 'var(--c-antinero)' },
+		{ href: '/dase', label: 'FOREST CO-OP WORKS', color: 'var(--c-dase)' },
+		{ href: '/explore', label: 'EXPLORE', color: 'var(--c-antinero)' }
 	];
+	// secondary pages under the MENU dropdown (ΑΡΩΓΗ kept reachable here)
+	const MENU = [
+		{ href: '/arogi', label: 'ΑΡΩΓΗ' },
+		{ href: '/compare', label: 'COMPARE' },
+		{ href: '/connections', label: 'CONNECTIONS' },
+		{ href: '/authorities', label: 'AUTHORITIES' },
+		{ href: '/methodology', label: 'METHODOLOGY' }
+	];
+
+	let menuOpen = $state(false);
+	let menuEl = $state<HTMLElement | null>(null);
+	const menuActive = $derived(MENU.some((m) => isActive(m.href)));
 
 	const embed = $derived(page.url.searchParams.get('embed') === '1');
 	function isActive(href: string): boolean {
@@ -26,10 +35,19 @@
 	}
 </script>
 
+<svelte:window
+	onclick={(e) => {
+		if (menuOpen && menuEl && !menuEl.contains(e.target as Node)) menuOpen = false;
+	}}
+	onkeydown={(e) => {
+		if (e.key === 'Escape') menuOpen = false;
+	}}
+/>
+
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<link rel="stylesheet" href="/fonts/fonts.css" />
-	<meta property="og:site_name" content="Atlas — Greek wildfire-prevention money" />
+	<meta property="og:site_name" content="FORESTRY TRACKER" />
 	<meta property="og:type" content="website" />
 	<meta name="twitter:card" content="summary" />
 </svelte:head>
@@ -38,13 +56,43 @@
 	<header>
 		<div class="inner">
 			<a class="brand" href="/">
-				<span class="brand-title">Atlas</span>
-				<span class="brand-sub">Greek wildfire-prevention money</span>
+				<span class="brand-title">FORESTRY WORKS TRACKER</span>
 			</a>
 			<nav>
 				{#each NAV as item (item.href)}
-					<a href={item.href} class:active={isActive(item.href)}>{item.label}</a>
+					<a
+						href={item.href}
+						class:active={isActive(item.href)}
+						class:tinted={!!item.color}
+						style:color={isActive(item.href) && item.color ? item.color : null}
+					>
+						{item.label}
+					</a>
 				{/each}
+				<div class="menu" bind:this={menuEl}>
+					<button
+						class="menu-btn"
+						class:active={menuActive}
+						aria-haspopup="true"
+						aria-expanded={menuOpen}
+						onclick={() => (menuOpen = !menuOpen)}
+					>
+						MENU ▾
+					</button>
+					{#if menuOpen}
+						<div class="dropdown">
+							{#each MENU as item (item.href)}
+								<a
+									href={item.href}
+									class:active={isActive(item.href)}
+									onclick={() => (menuOpen = false)}
+								>
+									{item.label}
+								</a>
+							{/each}
+						</div>
+					{/if}
+				</div>
 			</nav>
 		</div>
 	</header>
@@ -85,7 +133,6 @@
 
 <style>
 	header {
-		border-bottom: 2px solid var(--ink);
 		background: var(--paper);
 	}
 	.inner {
@@ -107,29 +154,61 @@
 		gap: var(--sp-2);
 	}
 	.brand-title {
-		font-family: var(--font-serif);
-		font-weight: 700;
-		font-size: var(--fs-20);
-	}
-	.brand-sub {
-		color: var(--ink-faint);
-		font-size: var(--fs-13);
+		font-family: var(--font-display);
+		/* Obviously Black; the kit serves Bold (700) until the Black cut
+		   is added to the Adobe web project, then this picks it up */
+		font-weight: 900;
+		font-size: var(--fs-28);
+		letter-spacing: 0.01em;
 	}
 	nav {
 		display: flex;
+		/* tabs align on their vertical centre: the enlarged selected tab
+		   grows equally upwards and downwards */
+		align-items: center;
 		gap: var(--sp-4);
 		flex-wrap: wrap;
 	}
-	nav a {
+	nav a,
+	.menu-btn {
 		text-decoration: none;
-		font-size: var(--fs-14);
-		color: var(--ink-soft);
-		padding-bottom: 2px;
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-15);
+		letter-spacing: 0.02em;
+		color: #9e9e9e; /* dimmed inactive tabs */
 	}
-	nav a.active {
-		color: var(--ink);
-		font-weight: 600;
-		border-bottom: 2px solid var(--accent);
+	/* selected tab: its assigned colour (inline style on the dataset tabs,
+	   black otherwise) and 1.3× lettering */
+	nav a.active,
+	.menu-btn.active {
+		color: var(--c-antinero);
+		font-size: calc(var(--fs-15) * 1.3);
+	}
+	.menu {
+		position: relative;
+	}
+	.menu-btn {
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		line-height: inherit;
+	}
+	.dropdown {
+		position: absolute;
+		top: calc(100% + 6px);
+		right: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-2);
+		background: var(--paper);
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow-paper);
+		padding: var(--sp-3) var(--sp-4);
+		min-width: max-content;
+		z-index: 60;
 	}
 	main {
 		max-width: var(--content-w);

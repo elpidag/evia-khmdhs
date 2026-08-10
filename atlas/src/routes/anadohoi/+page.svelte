@@ -143,7 +143,6 @@
 </svelte:head>
 
 <hgroup>
-	<h1>The corporate sponsors of burnt forests</h1>
 	<p class="muted">
 		Under ν.998/1979 άρθρο 42§3, companies volunteer to fund and execute the restoration of
 		burnt public forest land — appointed by ministerial act, spending their own money. This

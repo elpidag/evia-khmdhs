@@ -214,7 +214,6 @@
 </svelte:head>
 
 <hgroup>
-	<h1>Explore the three datasets</h1>
 	<p class="muted">
 		{#if payload}
 			{grInt(payload.counts['antinero'] ?? 0)} Anti-nero contracts ·
