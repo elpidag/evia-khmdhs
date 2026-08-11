@@ -37,12 +37,18 @@
 		['revoked', 'Revoked'],
 		['superseded', 'Restated (not counted)']
 	];
+	// same palette as the status waffle (see StatusWaffle ORDER)
 	const COLOR: Record<string, string> = {
 		completed: 'var(--c-anadohoi)',
-		active: '#9a8c74',
-		no_completion_recorded: 'var(--c-antinero)',
-		revoked: '#7a1f1f',
-		superseded: '#b8b0a2'
+		active: '#52b788',
+		no_completion_recorded: '#8F8F8F',
+		revoked: '#000000',
+		superseded: '#CFCFCF'
+	};
+	// statuses with their own extension fill (others reuse the row colour
+	// at low opacity)
+	const EXT_COLOR: Record<string, string> = {
+		active: '#b7e4c7'
 	};
 
 	const T0 = new Date('2021-07-01').getTime();
@@ -105,6 +111,18 @@
 	}
 </script>
 
+<ul class="glegend">
+	{#each GROUPS as [status, label] (status)}
+		{#if projects.some((p) => p.status === status)}
+			<li>
+				<i style:background={COLOR[status]}></i>
+				{#if EXT_COLOR[status]}<i style:background={EXT_COLOR[status]}></i>{/if}
+				{label}{#if EXT_COLOR[status]}&nbsp;· pale = extension after amendments{/if}
+			</li>
+		{/if}
+	{/each}
+</ul>
+
 <svg viewBox="0 0 {W} {layout.height}" role="img" aria-label="Timeline of every sponsor project">
 	<!-- year grid -->
 	{#each years as yr (yr)}
@@ -146,7 +164,16 @@
 				<rect x={xs} y={y + 2} width="3" height="7" fill={c} opacity="0.85" />
 			{/if}
 			{#if xd0 !== null && xd !== null && xd > xd0}
-				<rect x={xd0} y={y + 2} width={xd - xd0} height="7" fill={c} opacity="0.35" rx="1" />
+				{@const ext = EXT_COLOR[p.status]}
+				<rect
+					x={xd0}
+					y={y + 2}
+					width={xd - xd0}
+					height="7"
+					fill={ext ?? c}
+					opacity={ext ? 0.9 : 0.35}
+					rx="1"
+				/>
 			{/if}
 			{#if xd !== null}
 				<line x1={xd} y1={y + 1} x2={xd} y2={y + 10} stroke={c} stroke-width="1.3" />
@@ -172,6 +199,24 @@
 </svg>
 
 <style>
+	.glegend {
+		list-style: none;
+		margin: 0 0 var(--sp-3);
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-2) var(--sp-5, 1.25rem);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+	}
+	.glegend i {
+		display: inline-block;
+		width: 12px;
+		height: 12px;
+		border-radius: 2px;
+		margin-right: 6px;
+		vertical-align: -1px;
+	}
 	svg {
 		width: 100%;
 		height: auto;
@@ -218,7 +263,7 @@
 		fill: var(--c-anadohoi);
 	}
 	.mark.bad {
-		fill: #7a1f1f;
+		fill: #000000;
 	}
 	.anno {
 		font-size: 10px;

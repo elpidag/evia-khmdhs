@@ -1,7 +1,5 @@
 <script lang="ts">
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
-	import KpiRow from '$lib/ui/KpiRow.svelte';
-	import StatPair from '$lib/ui/StatPair.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
 	import BarH from '$lib/charts/BarH.svelte';
 	import PromiseGantt from '$lib/charts/PromiseGantt.svelte';
@@ -27,11 +25,12 @@
 		'ΩΖ2Ο4653Π8-ΓΕΞ': 'Παπαστράτος planting — extended to 2027'
 	};
 
+	// same palette as the status waffle (see StatusWaffle ORDER)
 	const STATUS_COLOR: Record<string, string> = {
 		completed: 'var(--c-anadohoi)',
-		active: '#9a8c74',
-		no_completion_recorded: 'var(--c-antinero)',
-		revoked: '#7a1f1f'
+		active: '#52b788',
+		no_completion_recorded: '#8F8F8F',
+		revoked: '#000000'
 	};
 
 	// fires, chronological, «εκτός πυρκαγιάς» last
@@ -91,6 +90,47 @@
 			}))
 	);
 
+	// the CURRENT STATUS OF PROJECTS heading fits itself to the exact width
+	// of the green hero cards (measured; re-fits on resize)
+	let cardsEl = $state<HTMLElement | null>(null);
+	let statusSpan = $state<HTMLElement | null>(null);
+	$effect(() => {
+		const span = statusSpan;
+		const cards = cardsEl;
+		if (!span || !cards) return;
+		const fit = () => {
+			span.style.fontSize = '100px';
+			const w = span.getBoundingClientRect().width;
+			if (w > 0) span.style.fontSize = `${(100 * cards.clientWidth) / w}px`;
+		};
+		fit();
+		document.fonts?.ready.then(fit); // re-fit once the webfont metrics are in
+		const ro = new ResizeObserver(fit);
+		ro.observe(cards);
+		return () => ro.disconnect();
+	});
+
+	// prose blocks keep the right edge the user approved: where the OLD Gantt
+	// title's last word («…deadline») used to end. The visible title is now
+	// TIMELINE, so a hidden ruler with the reference text preserves the line.
+	let rulerEl = $state<HTMLElement | null>(null);
+	let proseCut = $state(0);
+	$effect(() => {
+		const el = rulerEl;
+		if (!el) return;
+		const measure = () => {
+			const parentW = el.parentElement?.clientWidth ?? 0;
+			const w = el.getBoundingClientRect().width;
+			// when the ruler would wrap (narrow screens) the cut collapses to 0
+			proseCut = w > 0 && parentW > w ? Math.round(parentW - w) : 0;
+		};
+		measure();
+		document.fonts?.ready.then(measure);
+		const ro = new ResizeObserver(measure);
+		if (el.parentElement) ro.observe(el.parentElement);
+		return () => ro.disconnect();
+	});
+
 	// map dots (client-side: needs centroids)
 	let centroids: Record<string, [number, number]> | null = $state.raw(null);
 	$effect(() => {
@@ -142,56 +182,68 @@
 	/>
 </svelte:head>
 
-<hgroup>
-	<p class="muted">
-		Under ν.998/1979 άρθρο 42§3, companies volunteer to fund and execute the restoration of
-		burnt public forest land — appointed by ministerial act, spending their own money. This
-		page follows all {grInt(k.n_projects)} projects from appointment to (sometimes)
-		completion. Every value links back to the signed PDF —
-		<a href="/methodology#anadohoi">methodology</a>.
-	</p>
-</hgroup>
-
-<KpiRow>
-	<StatPair
-		value={eurShort(k.stated_eur)}
-		label="total committed where stated"
-		compare="net of ΦΠΑ where the act states it"
-		basis={`only ${k.n_stated} of ${k.n_projects} acts state a figure; ${
-			k.vat_counts?.net ?? 0
-		} explicitly net, ${k.vat_counts?.unstated ?? 0} with no VAT basis written`}
-		color="var(--c-anadohoi)"
-	/>
-	<StatPair
-		value={eurShort(k.median_eur)}
-		label="median stated commitment"
-		basis="over the acts that state a figure"
-	/>
-	<StatPair
-		value={String(k.n_projects)}
-		label="sponsor projects"
-		compare={`${grInt(k.area_stremmata)} στρ. covered by the acts`}
-		color="var(--c-anadohoi)"
-	/>
-	<StatPair
-		value={grInt(k.n_companies)}
-		label="companies & foundations"
-		compare={`${nCompleted} completion acts on record · ${nNoAct} past deadline with nothing filed`}
-	/>
-</KpiRow>
-
-<ChartFrame
-	title={`Only ${nCompleted} of ${k.n_projects} sponsor projects have a completion act on record`}
-	subtitle="one square per project · status as recorded on Diavgeia"
-	caveat={`Absence of a posted completion act is not proof a project was abandoned — but the act IS the legal proof of delivery. Status as of ${k.status_as_of}.`}
-	anchor="waffle"
-	methodology="anadohoi"
+<span class="ruler" bind:this={rulerEl} aria-hidden="true"
+	>The promise vs. the delivery: every project from appointment to deadline</span
 >
-	<StatusWaffle statuses={k.statuses} />
+
+<section class="hero">
+	<div class="cards" bind:this={cardsEl}>
+		<div class="card">
+			<div class="num">{grInt(k.n_projects)}</div>
+			<div class="lbl">announced projects<br />assignment acts</div>
+		</div>
+		<div class="card">
+			<div class="num">{grInt(k.n_companies)}</div>
+			<div class="lbl">private companies defined as restoration / reforestation contractors</div>
+		</div>
+		<div class="card">
+			<div class="num">{eurShort(k.stated_eur).toLowerCase()}</div>
+			<div class="lbl">
+				value of projects (only {grInt(k.n_stated)} of {grInt(k.n_projects)} acts state a
+				figure)
+			</div>
+		</div>
+	</div>
+	<div class="about" style:margin-right={proseCut ? `${proseCut}px` : null}>
+		<div class="kicker">THE SCHEME</div>
+		<p>
+			Under ν.998/1979 άρθρο 42§3, companies volunteer to fund and execute the restoration of
+			burnt public forest land — appointed by ministerial act, spending their own money. This
+			page follows all {grInt(k.n_projects)} projects from appointment to (sometimes)
+			completion. Every value links back to the signed PDF —
+			<a href="/methodology#anadohoi">methodology</a>.
+		</p>
+	</div>
+</section>
+
+<h2 class="status-title">
+	<span bind:this={statusSpan}>CURRENT STATUS OF PROJECTS</span>
+</h2>
+<ChartFrame anchor="waffle" methodology="anadohoi">
+	<StatusWaffle statuses={k.statuses}>
+		{#snippet explanation()}
+			<div style:margin-right={proseCut ? `${proseCut}px` : null}>
+			<p>
+				Each square is one sponsor project — {grInt(k.n_projects)} in all, with its colour
+				showing where the project stands on Διαύγεια, the state's transparency register.
+				Green means a completion act is on record: the official confirmation that the
+				promised restoration was delivered and accepted. Only {grInt(nCompleted)} of
+				{grInt(k.n_projects)} projects have one.
+			</p>
+			<p>
+				Light grey projects are still inside their deadline. Darker grey ones are past it
+				with nothing filed — which is not proof they were abandoned, but the act is the
+				legal proof of delivery, so until one is posted the promise remains just a promise.
+				Status as of {k.status_as_of} — <a href="/methodology#anadohoi">methodology</a>.
+			</p>
+			</div>
+		{/snippet}
+	</StatusWaffle>
 </ChartFrame>
 
 <ChartFrame
-	title="The promise vs. the delivery: every project from appointment to deadline"
+	title="TIMELINE"
+	titleColor="#2e6a50"
 	subtitle="bar = appointment → initial deadline · pale extension = amendments · ✓ completion act · ✕ revocation"
 	caveat="Rows are grouped by outcome and sorted by appointment date; click a company to open its decision trail."
 	anchor="gantt"
@@ -331,6 +383,76 @@
 </Defer>
 
 <style>
+	/* hero: three solid dataset-green KPI cards beside the scheme prose */
+	.hero {
+		display: grid;
+		grid-template-columns: minmax(240px, 4fr) 8fr;
+		gap: var(--sp-6) var(--sp-12);
+		margin: var(--sp-6) 0 var(--sp-12);
+	}
+	.cards {
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-4);
+	}
+	.card {
+		background: var(--c-anadohoi);
+		color: #fff;
+		padding: var(--sp-4);
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-4);
+	}
+	.card .num {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: clamp(34px, 4vw, 50px);
+		line-height: 0.95;
+	}
+	.card .lbl {
+		font-family: var(--font-display);
+		font-weight: 400; /* Obviously Regular */
+		font-size: var(--fs-14);
+		line-height: 1.2;
+	}
+	.about .kicker {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		margin-bottom: var(--sp-3);
+	}
+	.about p {
+		margin: 0;
+	}
+	.status-title {
+		/* ~one waffle square of air between the title and the graph */
+		margin: 0 0 var(--sp-6);
+		line-height: 1;
+		color: #2e6a50;
+	}
+	/* invisible width reference for the prose right-edge alignment */
+	.ruler {
+		position: absolute;
+		visibility: hidden;
+		white-space: nowrap;
+		font-family: var(--font-serif);
+		font-weight: 600;
+		font-size: var(--fs-24);
+	}
+	.status-title span {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-weight: 900;
+		white-space: nowrap;
+		font-size: var(--fs-24); /* pre-measure fallback; the effect fits it */
+	}
+	@media (max-width: 900px) {
+		.hero {
+			grid-template-columns: 1fr;
+		}
+	}
 	.fire-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));

@@ -2,8 +2,9 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		/** the FINDING, written as a sentence — not the topic */
-		title: string;
+		/** the FINDING, written as a sentence — not the topic.
+		 *  Empty string = the caller renders its own heading above the frame. */
+		title?: string;
 		/** the topic/units line under the title */
 		subtitle?: string;
 		/** per-chart caveat, always rendered when provided */
@@ -15,17 +16,21 @@
 		children: Snippet;
 		/** optional extra footer content (sources, downloads) */
 		footer?: Snippet;
+		/** optional title colour (defaults to the heading ink) */
+		titleColor?: string;
 	}
-	let { title, subtitle = '', caveat = '', anchor = '', methodology = '', children, footer }: Props = $props();
+	let { title = '', subtitle = '', caveat = '', anchor = '', methodology = '', children, footer, titleColor = '' }: Props = $props();
 	const methodHref = $derived(`/methodology#${methodology || anchor}`);
 </script>
 
 <figure class="frame" id={anchor || undefined}>
 	<figcaption>
-		<h2 class="finding">
-			{title}
-			{#if anchor}<a class="hash" href={`#${anchor}`} aria-label="Link to this chart">#</a>{/if}
-		</h2>
+		{#if title}
+			<h2 class="finding" style:color={titleColor || null}>
+				{title}
+				{#if anchor}<a class="hash" href={`#${anchor}`} aria-label="Link to this chart">#</a>{/if}
+			</h2>
+		{/if}
 		{#if subtitle}<p class="topic">{subtitle}</p>{/if}
 	</figcaption>
 

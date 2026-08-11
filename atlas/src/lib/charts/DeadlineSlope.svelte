@@ -83,15 +83,15 @@
 		stroke: var(--line-strong);
 	}
 	.wire {
-		stroke: var(--ink-faint);
+		stroke: #9e9e9e;
 		stroke-width: 1;
 	}
 	.wire.big {
-		stroke: var(--c-antinero);
+		stroke: #000000;
 		stroke-width: 1.6;
 	}
 	circle {
-		fill: var(--ink-soft);
+		fill: #8f8f8f;
 	}
 	.lab {
 		font-size: 9.5px;
