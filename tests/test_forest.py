@@ -35,7 +35,7 @@ def test_registry_validates(registry):
 
 
 def test_registry_every_authority_has_coords(registry):
-    gaz = json.loads(GAZETTEER_FILE.read_text())
+    gaz = json.loads(GAZETTEER_FILE.read_text(encoding="utf-8"))
     for name, a in registry["authorities"].items():
         muni = gaz[a["municipality_code"]]
         assert -90 < muni["lat"] < 90 and -180 < muni["lon"] < 180, name
@@ -43,7 +43,7 @@ def test_registry_every_authority_has_coords(registry):
 
 
 def test_gazetteer_shape():
-    gaz = json.loads(GAZETTEER_FILE.read_text())
+    gaz = json.loads(GAZETTEER_FILE.read_text(encoding="utf-8"))
     assert len(gaz) == 325            # Kallikratis municipalities, Άθως dropped
     assert all(code.isdigit() for code in gaz)
 
@@ -103,7 +103,7 @@ def test_matcher_no_false_positives(matcher):
 def _run_loader(conn, registry):
     from khmdhs.forest_loader import Matcher as M
     result, resolved_empty = resolve_contracts(conn, registry, M(registry))
-    gaz = json.loads(GAZETTEER_FILE.read_text())
+    gaz = json.loads(GAZETTEER_FILE.read_text(encoding="utf-8"))
     write_db(conn, registry, gaz, result)
     return result, resolved_empty
 
