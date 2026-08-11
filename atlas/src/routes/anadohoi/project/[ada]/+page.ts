@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 import { apiGet } from '$lib/api';
 
 export interface AnadohoiDecision {
@@ -10,6 +11,14 @@ export interface AnadohoiDecision {
 	subject: string | null;
 	org: string | null;
 	protocol: string | null;
+}
+
+/** the other act of a restatement pair (supersede linkage) */
+export interface RestateRef {
+	root_ada: string;
+	company: string;
+	start_date: string | null;
+	budget_eur: number | null;
 }
 
 export interface AnadohoiProject {
@@ -40,8 +49,18 @@ export interface AnadohoiProject {
 	notes: string | null;
 	evidence: Record<string, string>;
 	decisions: AnadohoiDecision[];
+	/** set on a successor: the act this one re-issued (not counted) */
+	restates?: RestateRef;
+	/** set on a superseded act: the successor that counts instead */
+	restated_as?: RestateRef;
 }
 
-export const load = async ({ fetch, params }) => ({
-	p: await apiGet<AnadohoiProject>(fetch, `/api/anadohoi/project/${params.ada}`)
-});
+export const load = async ({ fetch, params }) => {
+	const p = await apiGet<AnadohoiProject>(fetch, `/api/anadohoi/project/${params.ada}`);
+	// a restated act has ONE canonical page — its successor's, which shows
+	// the whole trail; old links and /explore rows land there automatically
+	// (encode: a Location header cannot carry raw Greek ΑΔΑ characters)
+	if (p.superseded_by)
+		redirect(308, `/anadohoi/project/${encodeURIComponent(p.superseded_by)}`);
+	return { p };
+};

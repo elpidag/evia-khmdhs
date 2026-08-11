@@ -1,7 +1,7 @@
 <script lang="ts">
 	import KpiRow from '$lib/ui/KpiRow.svelte';
 	import StatPair from '$lib/ui/StatPair.svelte';
-	import { eurShort, grInt } from '$lib/transforms/format';
+	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -21,6 +21,7 @@
 	};
 	const RELATION: Record<string, string> = {
 		initial: 'Πράξη ορισμού',
+		superseded_initial: 'Αρχική πράξη ορισμού (αντικαταστάθηκε)',
 		amendment: 'Τροποποίηση',
 		revocation: 'Ανάκληση',
 		completion: 'Ολοκλήρωση',
@@ -70,7 +71,10 @@
 <hgroup>
 	<h1>{p.company}</h1>
 	<p class="muted tabular">
-		ΑΔΑ {p.root_ada} · appointed {p.start_date ?? '—'}
+		ΑΔΑ {p.root_ada} · designation act
+		{p.restates
+			? `${dmy(p.restates.start_date) || '—'} · restated ${dmy(p.start_date) || '—'}`
+			: dmy(p.start_date) || '—'}
 		{#if p.fire_event}· <span class="chip">{p.fire_event}</span>{/if}
 		<span class="chip" class:bad={badStatus} class:warn={p.status === 'superseded'}>
 			{STATUS[p.status] ?? p.status}
@@ -81,12 +85,7 @@
 {#if p.notes}
 	<p class="note">ℹ️ {p.notes}</p>
 {/if}
-{#if p.superseded_by}
-	<p class="note">
-		Restated by <a href={`/anadohoi/project/${p.superseded_by}`}>{p.superseded_by}</a> — the
-		successor counts in aggregates.
-	</p>
-{/if}
+
 
 <KpiRow>
 	<StatPair
@@ -114,15 +113,15 @@
 		compare={WORKS[p.works_kind ?? ''] ?? '—'}
 	/>
 	<StatPair
-		value={p.deadline_current ?? '—'}
+		value={dmy(p.deadline_current) || '—'}
 		label="current deadline"
 		compare={p.deadline_initial && p.deadline_initial !== p.deadline_current
-			? `initially ${p.deadline_initial}`
+			? `initially ${dmy(p.deadline_initial)}`
 			: ''}
 		basis={p.deadline_text ?? (p.deadline_current ? '' : 'the act sets no deadline')}
 	/>
 	<StatPair
-		value={p.completed_date ?? p.revoked_date ?? '—'}
+		value={dmy(p.completed_date) || dmy(p.revoked_date) || '—'}
 		label={p.completed_date
 			? 'completion certified'
 			: p.revoked_date
@@ -172,18 +171,33 @@
 		</thead>
 		<tbody>
 			{#each p.decisions as d (d.ada)}
-				<tr>
-					<td class="tabular muted">{d.issue_date ?? '—'}</td>
+				<tr class:dead={d.relation === 'superseded_initial'}>
+					<td class="tabular muted">{dmy(d.issue_date) || '—'}</td>
 					<td>
 						<span
 							class="chip"
 							class:bad={d.relation === 'revocation'}
+							class:warn={d.relation === 'superseded_initial'}
 							class:ok={d.relation === 'completion'}>{RELATION[d.relation] ?? d.relation}</span
 						>
 						<br /><small class="tabular muted">{d.ada}</small>
 					</td>
 					<td>
 						<small>{d.subject ?? '—'}</small>
+						{#if d.relation === 'superseded_initial' && p.restates}
+							<span class="story">
+								{#if p.restates.budget_eur !== null}Committed
+									<b>{eurShort(p.restates.budget_eur)}</b> as «{p.restates.company}»
+									—{:else}As «{p.restates.company}» —{/if}
+								replaced by the re-issued act below; not counted in aggregates.
+							</span>
+						{:else if d.relation === 'initial' && p.restates}
+							<span class="story">
+								Re-issued appointment{#if p.budget_eur !== null}&nbsp;at
+									<b>{eurShort(p.budget_eur)}</b>{/if} under «{p.company}»{#if p.restates.budget_eur !== null}
+									(previously {eurShort(p.restates.budget_eur)}){/if} — this version counts.
+							</span>
+						{/if}
 						{#if d.excerpt}
 							<blockquote class="excerpt">«{d.excerpt}»</blockquote>
 						{/if}
@@ -229,6 +243,19 @@
 		padding: var(--sp-1) var(--sp-3);
 		background: var(--paper-soft, rgba(0, 0, 0, 0.03));
 		font-size: var(--fs-14);
+	}
+	/* supersede story told inline in the decision trail */
+	.dead td {
+		background: color-mix(in srgb, var(--ink) 4%, var(--paper));
+	}
+	.story {
+		display: block;
+		margin-top: 2px;
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+	}
+	.story b {
+		color: var(--c-anadohoi);
 	}
 	section {
 		margin-top: var(--sp-6);

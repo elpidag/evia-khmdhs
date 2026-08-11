@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { COLOR, NODATE_COLOR } from './ganttTheme';
 
-	/** One square per project, coloured by outcome — the headline visual. */
+	/** One square per project, coloured by outcome — the headline visual.
+	 *  Categories, colours and wording follow the TIMELINE (ganttTheme +
+	 *  GanttLegend): actives split into dated / no-implementation-dates. */
 	interface Props {
 		statuses: Record<string, number>;
 		/** prose block rendered to the right of the colour legend */
@@ -10,10 +13,11 @@
 	let { statuses, explanation }: Props = $props();
 
 	const ORDER: [string, string, string][] = [
-		['completed', 'completion act on record', 'var(--c-anadohoi)'],
-		['active', 'still inside deadline', '#52b788'],
-		['no_completion_recorded', 'deadline passed, nothing filed', '#8F8F8F'],
-		['revoked', 'revoked', '#000000']
+		['completed', 'with identified completion act', COLOR.completed],
+		['active', 'within deadline — no completion act identified', COLOR.active],
+		['nodate', 'without specific dates for implementation', NODATE_COLOR],
+		['no_completion_recorded', 'past deadline — no completion act identified', COLOR.no_completion_recorded],
+		['revoked', 'revoked', COLOR.revoked]
 	];
 	const cells = $derived(
 		ORDER.flatMap(([k, label, color]) =>

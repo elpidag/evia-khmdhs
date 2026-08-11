@@ -3,6 +3,8 @@ import { apiGet } from '$lib/api';
 export interface AnadohoiOverviewProject {
 	ada: string;
 	company: string;
+	/** merged sponsor-group display name (rename/script variants unified) */
+	group?: string;
 	funder: string | null;
 	works_kind: string | null;
 	area: number | null;

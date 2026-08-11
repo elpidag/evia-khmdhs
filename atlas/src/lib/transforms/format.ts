@@ -36,3 +36,10 @@ export function pct(n: number | null | undefined, decimals = 1): string {
 	if (n === null || n === undefined || Number.isNaN(n)) return '';
 	return `${grNumber(n, decimals)}%`;
 }
+
+/** ISO date (YYYY-MM-DD…) → DD.MM.YYYY; '' for empty, passthrough otherwise */
+export function dmy(d: string | null | undefined): string {
+	if (!d) return '';
+	const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d);
+	return m ? `${m[3]}.${m[2]}.${m[1]}` : d;
+}

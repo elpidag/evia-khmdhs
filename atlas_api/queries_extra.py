@@ -1153,7 +1153,22 @@ _SPONSOR_GROUPS = (
     (("DEH", "ΔΕΗ"), "ΔΕΗ"),
     (("HELLENIQ", "ΕΛΛΗΝΙΚΑ ΠΕΤΡΕΛΑΙΑ"), "Ελληνικά Πετρέλαια / HELLENiQ ENERGY"),
     (("EREN",), "EREN Ελλάς / Eren Groupe"),
-    (("COCA COLA",), "Coca-Cola 3Ε Ελλάδος"),
+    # ΨΟΕ8 names «COCA COLA Hellas» (Κηφισίας 26 & Παραδείσου 2) — a distinct
+    # legal entity from the 3Ε bottler the other acts name; one brand system,
+    # so one group, but the label states both (DATA_DECISIONS 2026-08-11)
+    (("COCA COLA",), "Coca-Cola (3Ε / Hellas)"),
+    # same entity in two scripts: ΨΧΟ2 «ΛΙΝΤΛ ΕΛΛΑΣ & ΣΙΑ.Ο.Ε» vs 6768
+    # «Lidl Hellas & Σια Ο.Ε.» (Σίνδος 57022 HQ printed in the act)
+    (("LIDL", "ΛΙΝΤΛ"), "Lidl Ελλάς"),
+    # the act's text layer renders the name in Greek/Latin homoglyph soup
+    # («ΣTANTA A.E. ETAIPEIA ΔIAXEIPIΣHΣ AKINHTΩN») — clean display name
+    (("ΣΤΑΝΤΑ",), "ΣΤΑΝΤΑ Α.Ε."),
+    # compact display labels for names too long for one timeline line;
+    # the full legal names stay on the project pages
+    (("ΚΑΝΕΛΛΟΠΟΥΛΟΥ",), "Ίδρυμα Π. & Α. Κανελλοπούλου"),
+    (("ΛΑΣΚΑΡΙΔ",), "Ίδρυμα Α.Κ. Λασκαρίδης"),
+    (("ΒΙΟΠΟΙΚΙΛΟΤΗΤ",), "Εταιρεία Προστ. Βιοποικιλότητας Θράκης"),
+    (("TATOI CLUB",), "TATOΪ Club & ΕΛΙΑ Κατασκευαστική"),
     (("NOVA",), "NOVA Telecommunications & Media"),
     (("ALFA WOOD", "ALPHA WOOD"), "ALFA WOOD GROUP"),
     (("ΤΣΙΜΕΝΤΩΝ ΤΙΤΑΝ", "TΣΙΜΕΝΤΩΝ ΤΙΤΑΝ"), "Α.Ε. Τσιμέντων ΤΙΤΑΝ"),
@@ -1203,6 +1218,9 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
                   else r["budget_current"])
         projects.append({
             "ada": r["root_ada"], "company": r["company"],
+            # the sponsor-group display name (rename/script variants merged);
+            # per-act verbatim names stay on the project pages
+            "group": _sponsor_group(r["company"]),
             "funder": r["funder"], "works_kind": r["works_kind"],
             "area": r["area_stremmata"], "pe": r["pe"],
             "fire": r["fire_event"], "budget": budget,
@@ -1287,13 +1305,39 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
         out["evidence"] = json.loads(out.pop("evidence_json") or "{}")
     except ValueError:
         out["evidence"] = {}
-    out["decisions"] = [dict(d) for d in ana.execute("""
+    # supersede linkage, both directions, so each page can tell the whole
+    # restatement story (predecessor: "not counted"; successor: "restates X")
+    pred = ana.execute(
+        "SELECT root_ada, company, start_date, budget_eur FROM projects "
+        "WHERE superseded_by = ?", (ada,)).fetchone()
+    if pred is not None:
+        out["restates"] = dict(pred)
+    if out.get("superseded_by"):
+        succ = ana.execute(
+            "SELECT root_ada, company, start_date, budget_eur FROM projects "
+            "WHERE root_ada = ?", (out["superseded_by"],)).fetchone()
+        if succ is not None:
+            out["restated_as"] = dict(succ)
+    _DECISIONS_SQL = """
         SELECT pd.relation, pd.detail, pd.excerpt,
                d.ada, d.kind, d.issue_date, d.subject, d.org, d.protocol
           FROM project_decisions pd
           JOIN decisions d ON d.ada = pd.ada
          WHERE pd.root_ada = ?
-         ORDER BY d.issue_date, d.ada""", (ada,))]
+         ORDER BY d.issue_date, d.ada"""
+    out["decisions"] = [dict(d) for d in ana.execute(_DECISIONS_SQL, (ada,))]
+    # a successor's page is the pair's ONE canonical page: fold the restated
+    # predecessor's acts into the trail (its πράξη labelled as the replaced
+    # original) so the full paper history reads in a single list
+    if pred is not None:
+        pred_rows = [dict(d) for d in ana.execute(_DECISIONS_SQL,
+                                                  (pred["root_ada"],))]
+        for d in pred_rows:
+            if d["relation"] == "initial":
+                d["relation"] = "superseded_initial"
+        out["decisions"] = sorted(out["decisions"] + pred_rows,
+                                  key=lambda d: (d["issue_date"] or "",
+                                                 d["ada"]))
     return out
 
 

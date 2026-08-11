@@ -817,3 +817,25 @@ empty; the arogi portals are application-only) — Diavgeia acts and
 official announcements are the only public sources. *User request
 2026-08-03. Affects: new arogi.sqlite, khmdhs/data/arogi_*.json,
 elga_fire_compensation.json, Atlas /arogi + /arogi/summary.*
+
+## 2026-08-11 — Ανάδοχοι sponsor grouping: Lidl merged across scripts; Coca-Cola label names both entities
+
+Two presentational-grouping fixes in the Atlas sponsor ranking
+(`_SPONSOR_GROUPS`, atlas_api/queries_extra.py); project rows keep each
+act's verbatim company name, and no stored data changes. (1) **Lidl** was
+the one multi-spelling sponsor missing from the merge list, so the
+ranking counted it twice: ΨΧΟ24653Π8-82Χ (Β. Εύβοια) writes «ΛΙΝΤΛ ΕΛΛΑΣ
+& ΣΙΑ.Ο.Ε» in Greek script while 67684653Π8-9Ω3 (Τατόι) writes «Lidl
+Hellas & Σια Ο.Ε.» — the same Ο.Ε., whose Σίνδος HQ (Ο.Τ. 31, ΔΑ 13,
+Τ.Θ. 1032, Τ.Κ. 57 022) the Τατόι act itself prints. Merged as «Lidl
+Ελλάς» (stems LIDL/ΛΙΝΤΛ); the sponsor count drops 37 → 36. (2) The
+Coca-Cola group label «Coca-Cola 3Ε Ελλάδος» silently attributed
+ΨΟΕ84653Π8-ΩΤΡ to the bottler, but that restatement names «COCA COLA
+Hellas» at Λ. Κηφισίας 26 & Παραδείσου 2 — a distinct legal entity from
+COCA COLA 3Ε Ελλάδος Α.Β.Ε.Ε. (the superseded 6ΗΥΗ names 3Ε at a
+different Μαρούσι address; the Nov 2021 restatement switched entity and
+cut the budget €1M → €800k). The two companies act as one brand system,
+so the group stays merged with the label restated honestly as
+**«Coca-Cola (3Ε / Hellas)»**. *Evidence: signed act PDFs (addresses as
+above), anadohoi_projects.json excerpts. Affects: /anadohoi sponsor
+ranking + n_companies KPI; no rows.*

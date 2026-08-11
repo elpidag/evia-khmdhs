@@ -1,62 +1,117 @@
 <script lang="ts">
 	/**
 	 * Promise-vs-delivery Gantt: one row per sponsor project — bar from
-	 * appointment to the initial deadline, a lighter segment for amendment
-	 * extensions, ✓ where a completion act exists, ✕ where revoked, and a
-	 * "today" rule. Grouped by outcome so the finding is visible at a glance.
+	 * designation act to the initial deadline, a lighter segment for
+	 * amendment extensions, ✓ where a completion act exists, ✕ where
+	 * revoked, and a "today" rule. One flat chronology ordered by the
+	 * first designation act; the legend lives in GanttLegend.
 	 */
-	import { grInt } from '$lib/transforms/format';
-
-	export interface GanttProject {
-		ada: string;
-		company: string;
-		fire: string | null;
-		start: string | null;
-		deadline0: string | null;
-		deadline: string | null;
-		/** duration-based deadline wording when the act sets no date */
-		dtext?: string | null;
-		completed: string | null;
-		revoked: string | null;
-		status: string;
-	}
+	import { dmy, eurShort } from '$lib/transforms/format';
+	import { COLOR, EXT_COLOR, NODATE_COLOR, noDate, type GanttProject } from './ganttTheme';
+	import GanttLegend from './GanttLegend.svelte';
 
 	interface Props {
 		projects: GanttProject[];
-		/** status_as_of from the DB — the "today" rule */
+		/** current date (ISO) — the dashed "today" rule */
 		today: string;
-		/** ada → short annotation printed beside the row */
-		annotations?: Record<string, string>;
+		/** legend style: compact chip line (default) or the bordered panel
+		 *  with the "how to read a row" schematic */
+		legend?: 'compact' | 'panel';
 	}
-	let { projects, today, annotations = {} }: Props = $props();
-
-	const GROUPS: [string, string][] = [
-		['completed', 'Completion act on record'],
-		['active', 'Still inside their deadline'],
-		['no_completion_recorded', 'Deadline passed — no completion act found'],
-		['revoked', 'Revoked'],
-		['superseded', 'Restated (not counted)']
-	];
-	// same palette as the status waffle (see StatusWaffle ORDER)
-	const COLOR: Record<string, string> = {
-		completed: 'var(--c-anadohoi)',
-		active: '#52b788',
-		no_completion_recorded: '#8F8F8F',
-		revoked: '#000000',
-		superseded: '#CFCFCF'
-	};
-	// statuses with their own extension fill (others reuse the row colour
-	// at low opacity)
-	const EXT_COLOR: Record<string, string> = {
-		active: '#b7e4c7'
-	};
+	let { projects, today, legend = 'compact' }: Props = $props();
 
 	const T0 = new Date('2021-07-01').getTime();
-	const T1 = new Date('2029-03-01').getTime();
+	/** axis end = the latest date anywhere in the data (or today) plus a
+	 *  5-day margin — computed, so no deadline can run off the chart edge */
+	const T1 = $derived.by(() => {
+		let m = new Date(today).getTime();
+		for (const p of projects)
+			for (const d of [p.start, p.start0, p.deadline0, p.deadline, p.completed, p.revoked])
+				if (d) {
+					const t = new Date(d).getTime();
+					if (!Number.isNaN(t)) m = Math.max(m, t);
+				}
+		return m + 5 * 86_400_000;
+	});
 	const W = 920;
-	const LABEL_W = 190;
-	const ROW_H = 13;
-	const HEAD_H = 22;
+	const LABEL_W = 210;
+	const ROW_H = 20;
+	/** top band: year labels + the today label live above the rows */
+	const TOP_H = 30;
+	/** bars sit on a shared baseline; height encodes the row's own € */
+	const BASE = 16; // baseline offset inside the row
+	const BAR_MAX = 10; // tallest bar (the row's largest stated €)
+	const BAR_MIN = 4;
+	const LINE_H = 3; // acts with no stated budget render as a thick line
+
+	/** English renderings of the duration-based deadlines (shown on hover;
+	 *  the act's own Greek wording stays printed on the row) */
+	const DTEXT_EN: Record<string, string> = {
+		'15 ημέρες από την έκδοση': '15 days from issue of the act',
+		'2 έτη από την υπογραφή': '2 years from signing',
+		'3 έτη από την υπογραφή': '3 years from signing',
+		'4 μήνες από την έκδοση': '4 months from issue of the act',
+		'4 μήνες από την έναρξη εργασιών (μέγ. 6)': '4 months from start of works (max 6)',
+		'5 έτη από την έκδοση': '5 years from issue of the act',
+		'5 μήνες από την έναρξη εργασιών': '5 months from start of works',
+		'μελέτες: 30 ημέρες από επιλογή μελετητή · έργο: 4 μήνες από έναρξη (μέγ. 6)':
+			'studies: 30 days from selecting the engineer · works: 4 months from start (max 6)',
+		'μελέτη: 2 μήνες · έργο: 12 μήνες από την έναρξη':
+			'study: 2 months · works: 12 months from start'
+	};
+
+	let rowTip = $state<{
+		x: number;
+		y: number;
+		name: string;
+		color: string;
+		/** text colour — dark ink on the pale no-date background */
+		ink: string;
+		lines: string[];
+	} | null>(null);
+
+	/** the row's hover card: fixed width, height per content; its RIGHT
+	 *  edge midpoint sits on the LEFT edge midpoint of the highlighted
+	 *  row's outline, so it hangs in the page margin beside the row. */
+	function showRow(e: MouseEvent, p: GanttProject) {
+		const b1 = p.budget_stated ?? null;
+		const b0 = p.start0 ? (p.budget0 ?? null) : null;
+		const lines: string[] = [];
+		lines.push(
+			`designation act: ${dmy(p.start0 ?? p.start) || '—'}${p.start0 ? ` (restated ${dmy(p.start) || '—'})` : ''}`
+		);
+		lines.push(
+			b0 !== null && b1 !== null
+				? `budget announced: ${eurShort(b0)} → ${eurShort(b1)}`
+				: b1 !== null
+					? `budget announced: ${eurShort(b1)}`
+					: 'budget announced: none stated'
+		);
+		if (p.deadline) {
+			lines.push(
+				p.deadline0 && p.deadline0 !== p.deadline
+					? `deadline: ${dmy(p.deadline0)} → ${dmy(p.deadline)}`
+					: `deadline: ${dmy(p.deadline)}`
+			);
+		} else if (p.dtext) {
+			lines.push(`deadline: ${DTEXT_EN[p.dtext] ?? p.dtext}`);
+		} else {
+			lines.push('deadline: —');
+		}
+		const box = (e.currentTarget as SVGGElement)
+			.querySelector('.rowbox')
+			?.getBoundingClientRect();
+		if (!box) return;
+		rowTip = {
+			// clamped so the card can never leave the viewport on the left
+			x: Math.max(290, box.left),
+			y: box.top + box.height / 2,
+			name: displayName(p.company),
+			color: noDate(p) ? NODATE_COLOR : (COLOR[p.status] ?? 'var(--ink)'),
+			ink: noDate(p) ? 'var(--ink)' : '#fff',
+			lines
+		};
+	}
 
 	function x(d: string | null): number | null {
 		if (!d) return null;
@@ -69,153 +124,233 @@
 		p: GanttProject;
 		y: number;
 	}
+	/** row ordering, user-switchable: "time" = one flat chronology by the
+	 *  FIRST designation act (the restated pair sorts by start0);
+	 *  "category" = grouped in the legend's category order, chronological
+	 *  within each group */
+	let order = $state<'time' | 'category'>('time');
+	const CAT_ORDER: Record<string, number> = {
+		completed: 0,
+		active: 1,
+		no_completion_recorded: 3,
+		revoked: 4
+	};
+	function catRank(p: GanttProject): number {
+		if (noDate(p)) return 2;
+		return CAT_ORDER[p.status] ?? 5;
+	}
 	const layout = $derived.by(() => {
-		const rows: Row[] = [];
-		const heads: { y: number; label: string; n: number }[] = [];
-		let y = 0;
-		for (const [status, label] of GROUPS) {
-			const members = projects
-				.filter((p) => p.status === status)
-				.sort((a, b) => (a.start ?? '').localeCompare(b.start ?? ''));
-			if (!members.length) continue;
-			heads.push({ y, label, n: members.length });
-			y += HEAD_H;
-			for (const p of members) {
-				rows.push({ p, y });
-				y += ROW_H;
-			}
-			y += 10;
-		}
-		return { rows, heads, height: y + 24 };
+		const sorted = [...projects].sort((a, b) =>
+			(a.start0 ?? a.start ?? '').localeCompare(b.start0 ?? b.start ?? '')
+		);
+		// stable sort → chronological order survives inside each category
+		if (order === 'category') sorted.sort((a, b) => catRank(a) - catRank(b));
+		const rows: Row[] = sorted.map((p, i) => ({ p, y: TOP_H + i * ROW_H }));
+		return { rows, height: TOP_H + rows.length * ROW_H + 8 };
 	});
 
-	const years = ['2022', '2023', '2024', '2025', '2026', '2027', '2028'];
+	// every full year inside the axis range, skipping a label that would
+	// clip at the right edge
+	const years = $derived.by(() => {
+		const out: string[] = [];
+		for (let yr = new Date(T0).getFullYear() + 1; yr <= new Date(T1).getFullYear(); yr++) {
+			const gx = x(`${yr}-01-01`);
+			if (gx !== null && gx <= W - 18) out.push(String(yr));
+		}
+		return out;
+	});
 	const todayX = $derived(x(today) ?? LABEL_W);
 
-	/** minimal per-row deadline label: "12.2027" */
-	function dl(d: string | null): string {
-		if (!d) return '';
-		return `${d.slice(5, 7)}.${d.slice(0, 4)}`;
+
+	/** display form of a company name: uppercase per the Greek all-caps
+	 *  convention — the τόνος is dropped but the dialytika is KEPT (ϊ → Ϊ,
+	 *  so TATOΪ stays TATOΪ, not TATOI) */
+	function displayName(name: string): string {
+		return name
+			.toUpperCase()
+			.normalize('NFD')
+			.replace(/[\u0300-\u0307\u0309-\u036f]/g, '')
+			.normalize('NFC');
 	}
 
-	function tip(p: GanttProject): string {
-		const bits = [
-			p.company,
-			p.fire ?? '',
-			`appointed ${p.start ?? '—'}`,
-			`deadline ${p.deadline ?? '—'}${p.deadline0 && p.deadline0 !== p.deadline ? ` (initially ${p.deadline0})` : ''}`,
-			p.completed ? `completed ${p.completed}` : '',
-			p.revoked ? `revoked ${p.revoked}` : ''
-		];
-		return bits.filter(Boolean).join(' · ');
+	/** full company name over at most two lines (the doubled rows fit two);
+	 *  breaks at a word boundary, never silently truncates short of ~76 chars */
+	function nameLines(name: string): string[] {
+		const MAX = 38;
+		if (name.length <= MAX) return [name];
+		let cut = name.lastIndexOf(' ', MAX);
+		if (cut < MAX - 16) cut = MAX; // no usable space — hard break
+		const l1 = name.slice(0, cut).trimEnd();
+		let l2 = name.slice(cut).trimStart();
+		if (l2.length > MAX) l2 = l2.slice(0, MAX - 1) + '…';
+		return [l1, l2];
 	}
+
 </script>
 
-<ul class="glegend">
-	{#each GROUPS as [status, label] (status)}
-		{#if projects.some((p) => p.status === status)}
-			<li>
-				<i style:background={COLOR[status]}></i>
-				{#if EXT_COLOR[status]}<i style:background={EXT_COLOR[status]}></i>{/if}
-				{label}{#if EXT_COLOR[status]}&nbsp;· pale = extension after amendments{/if}
-			</li>
-		{/if}
-	{/each}
-</ul>
+<GanttLegend {projects} variant={legend} />
 
+<div class="gwrap">
+<!-- ordering control, sitting on the years band left of the first label -->
+<div class="orderctl">
+	<select bind:value={order} aria-label="Row ordering">
+		<option value="time">by time</option>
+		<option value="category">by category</option>
+	</select>
+</div>
+{#if rowTip}
+	<div
+		class="row-tip"
+		style:left={`${rowTip.x}px`}
+		style:top={`${rowTip.y}px`}
+		style:background={rowTip.color}
+		style:color={rowTip.ink}
+	>
+		<div class="tip-name">{rowTip.name}</div>
+		{#each rowTip.lines as ln, i (i)}
+			<div>{ln}</div>
+		{/each}
+	</div>
+{/if}
 <svg viewBox="0 0 {W} {layout.height}" role="img" aria-label="Timeline of every sponsor project">
-	<!-- year grid -->
+	<!-- year grid: labels on TOP, right under the legend -->
 	{#each years as yr (yr)}
 		{@const gx = x(`${yr}-01-01`)}
 		{#if gx}
-			<line x1={gx} y1="0" x2={gx} y2={layout.height - 16} class="grid" />
-			<text x={gx} y={layout.height - 4} class="axis">{yr}</text>
+			<text x={gx} y="12" class="axis">{yr}</text>
+			<line x1={gx} y1="16" x2={gx} y2={layout.height - 4} class="grid" />
 		{/if}
 	{/each}
 
 	<!-- today rule -->
-	<line x1={todayX} y1="0" x2={todayX} y2={layout.height - 16} class="today" />
-	<text x={todayX + 4} y="10" class="today-label">today ({today})</text>
-
-	{#each layout.heads as h (h.label)}
-		<text x="0" y={h.y + 14} class="ghead">{h.label} — {grInt(h.n)}</text>
-	{/each}
+	<line x1={todayX} y1="16" x2={todayX} y2={layout.height - 4} class="today" />
+	<text x={todayX + 4} y="26" class="today-label">today ({dmy(today)})</text>
 
 	{#each layout.rows as { p, y } (p.ada)}
 		{@const xs = x(p.start)}
+		{@const xs0 = x(p.start0 ?? null)}
 		{@const xd0 = x(p.deadline0 ?? p.deadline)}
 		{@const xd = x(p.deadline)}
 		{@const xc = x(p.completed)}
 		{@const xr = x(p.revoked)}
-		{@const c = COLOR[p.status]}
-		{@const right = Math.max(xd ?? 0, xc ?? 0, xr ?? 0, xs ?? 0)}
-		{@const markNearTick =
-			(xc !== null && xd !== null && xc > xd - 4 && xc < xd + 40) ||
-			(xr !== null && xd !== null && xr > xd - 4 && xr < xd + 40)}
-		{@const labelX = xd === null || !p.deadline ? null : markNearTick ? right + 12 : xd + 5}
-		<g class="row">
-			<title>{tip(p)}</title>
+		{@const c = noDate(p) ? NODATE_COLOR : COLOR[p.status]}
+		{@const b1 = p.budget_stated ?? null}
+		{@const b0 = p.start0 ? (p.budget0 ?? null) : null}
+		{@const maxB = Math.max(b0 ?? 0, b1 ?? 0)}
+		{@const isLine = maxB <= 0}
+		{@const h1 = isLine
+			? LINE_H
+			: Math.max(BAR_MIN, (BAR_MAX * (b1 ?? maxB)) / maxB)}
+		{@const h0 = b0 !== null && maxB > 0 ? Math.max(BAR_MIN, (BAR_MAX * b0) / maxB) : null}
+		{@const lines = nameLines(displayName(p.company))}
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<g
+			class="row"
+			onmouseenter={(e) => showRow(e, p)}
+			onmouseleave={() => (rowTip = null)}
+		>
+			<!-- hover highlight: discreet rounded outline around the whole
+			     line (transparent fill also makes the full row hoverable) -->
+			<rect
+				class="rowbox"
+				x="0.5"
+				y={y + 0.5}
+				width={W - 1}
+				height={ROW_H - 1}
+				rx="4"
+			/>
 			<a href={`/anadohoi/project/${p.ada}`}>
-				<text x={LABEL_W - 6} y={y + 9} class="label">{p.company.slice(0, 26)}</text>
+				{#each lines as ln, li (li)}
+					<text x={LABEL_W - 6} y={y + (lines.length === 1 ? 13 : 8.5 + li * 9)} class="label">
+						{ln}
+					</text>
+				{/each}
 			</a>
+			<!-- restated predecessor: its money at its own height until the
+			     restatement date (the step IS the story: €1M → €800k) -->
+			{#if xs0 !== null && xs !== null && h0 !== null && xs > xs0}
+				<rect
+					x={xs0}
+					y={y + BASE - h0}
+					width={xs - xs0}
+					height={h0}
+					fill={c}
+					opacity="0.55"
+					rx="1"
+				/>
+				<text x={xs + 2} y={y + BASE - Math.max(h0, h1) - 2} class="step">
+					{eurShort(b0 ?? 0)} → {eurShort(b1 ?? 0)}
+				</text>
+			{/if}
 			{#if xs !== null && xd0 !== null && xd0 > xs}
-				<rect x={xs} y={y + 2} width={xd0 - xs} height="7" fill={c} opacity="0.85" rx="1" />
+				<rect x={xs} y={y + BASE - h1} width={xd0 - xs} height={h1} fill={c} opacity="0.85" rx="1" />
 			{:else if xs !== null}
-				<rect x={xs} y={y + 2} width="3" height="7" fill={c} opacity="0.85" />
+				<!-- no deadline to draw to — a short stub wide enough to read -->
+				<rect x={xs} y={y + BASE - h1} width="7" height={h1} fill={c} opacity="0.85" />
 			{/if}
 			{#if xd0 !== null && xd !== null && xd > xd0}
 				{@const ext = EXT_COLOR[p.status]}
 				<rect
 					x={xd0}
-					y={y + 2}
+					y={y + BASE - h1}
 					width={xd - xd0}
-					height="7"
+					height={h1}
 					fill={ext ?? c}
 					opacity={ext ? 0.9 : 0.35}
 					rx="1"
 				/>
 			{/if}
 			{#if xd !== null}
-				<line x1={xd} y1={y + 1} x2={xd} y2={y + 10} stroke={c} stroke-width="1.3" />
+				<line x1={xd} y1={y + 2} x2={xd} y2={y + BASE + 2} stroke={c} stroke-width="1.3" />
 			{/if}
 			{#if xc !== null}
-				<text x={xc + 2} y={y + 10} class="mark ok">✓</text>
+				<text x={xc + 2} y={y + BASE - 1} class="mark ok">✔</text>
 			{/if}
 			{#if xr !== null}
-				<text x={xr + 2} y={y + 10} class="mark bad">✕</text>
-			{/if}
-			{#if labelX !== null}
-				<text x={labelX} y={y + 9.5} class="ddate">{dl(p.deadline)}</text>
-			{:else if p.dtext && p.status === 'active'}
-				<!-- duration-based deadline (no date in the act); noise once delivered -->
-				<text x={right + 5} y={y + 9.5} class="ddate dur">{p.dtext}</text>
-			{/if}
-			{#if annotations[p.ada]}
-				{@const annoX = Math.max(right + 14, (labelX ?? 0) + 34)}
-				<text x={annoX} y={y + 10} class="anno">← {annotations[p.ada]}</text>
+				<text x={xr + 2} y={y + BASE - 1} class="mark bad">✖</text>
 			{/if}
 		</g>
 	{/each}
 </svg>
+</div>
 
 <style>
-	.glegend {
-		list-style: none;
-		margin: 0 0 var(--sp-3);
-		padding: 0;
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--sp-2) var(--sp-5, 1.25rem);
-		font-size: var(--fs-13);
-		color: var(--ink-soft);
+	.gwrap {
+		position: relative;
 	}
-	.glegend i {
-		display: inline-block;
-		width: 12px;
-		height: 12px;
-		border-radius: 2px;
-		margin-right: 6px;
-		vertical-align: -1px;
+	.orderctl {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 10;
+	}
+	.orderctl select {
+		font-family: var(--font-ui);
+		font-size: var(--fs-13);
+		color: var(--ink);
+		background: var(--paper);
+		border: 1px solid var(--line);
+		border-radius: 4px;
+		padding: 1px 4px;
+	}
+	.row-tip {
+		/* fixed width, content-driven height; right-edge midpoint anchored
+		   on the highlighted row's left-edge midpoint */
+		position: fixed;
+		transform: translate(-100%, -50%);
+		width: 270px;
+		color: #fff;
+		font-size: 12px;
+		line-height: 1.5;
+		padding: 8px 12px;
+		border-radius: 5px;
+		pointer-events: none;
+		z-index: 120;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+	}
+	.tip-name {
+		font-weight: 700;
+		margin-bottom: 2px;
 	}
 	svg {
 		width: 100%;
@@ -241,23 +376,26 @@
 		fill: var(--ink);
 		font-weight: 600;
 	}
-	.ghead {
-		font-size: 12px;
-		font-weight: 700;
-		fill: var(--ink);
-	}
 	.label {
 		font-size: 9.5px;
 		fill: var(--ink-soft);
 		text-anchor: end;
 	}
-	.row a:hover .label {
+	.rowbox {
+		fill: transparent;
+		stroke: #000;
+		stroke-width: 1;
+		opacity: 0;
+	}
+	.row:hover .rowbox {
+		opacity: 1;
+	}
+	.row:hover .label {
 		fill: var(--ink);
-		text-decoration: underline;
 	}
 	.mark {
 		font-size: 10px;
-		font-weight: 700;
+		font-weight: 900;
 	}
 	.mark.ok {
 		fill: var(--c-anadohoi);
@@ -265,20 +403,12 @@
 	.mark.bad {
 		fill: #000000;
 	}
-	.anno {
-		font-size: 10px;
-		fill: var(--ink);
-		font-style: italic;
-	}
-	.ddate {
+	.step {
 		font-size: 8.5px;
-		fill: var(--ink-faint);
-		font-variant-numeric: tabular-nums;
+		font-weight: 700;
+		fill: var(--ink);
 		paint-order: stroke;
 		stroke: var(--paper);
 		stroke-width: 2.5px;
-	}
-	.ddate.dur {
-		font-style: italic;
 	}
 </style>

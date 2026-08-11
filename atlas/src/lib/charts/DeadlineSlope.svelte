@@ -1,6 +1,7 @@
 <script lang="ts">
 	/** Slope chart: initial deadline → current deadline for every amended
 	 *  project (the change view that pairs with the Gantt's level view). */
+	import { dmy } from '$lib/transforms/format';
 	interface SlopeRow {
 		ada: string;
 		company: string;
@@ -55,14 +56,14 @@
 	<line x1={XR} y1={PAD} x2={XR} y2={H - PAD} class="axis" />
 	{#each placed as { r, y0, ly0, y1, ly1 } (r.ada)}
 		<g class="slope">
-			<title>{r.company}: {r.d0} → {r.d1}</title>
+			<title>{r.company}: {dmy(r.d0)} → {dmy(r.d1)}</title>
 			<line x1={XL} y1={y0} x2={XR} y2={y1} class="wire" class:big={y1 - y0 > 40} />
 			<circle cx={XL} cy={y0} r="2.5" />
 			<circle cx={XR} cy={y1} r="2.5" />
 			<a href={`/anadohoi/project/${r.ada}`}>
-				<text x={XL - 8} y={ly0 + 3} class="lab left">{r.company.slice(0, 24)} · {r.d0.slice(0, 7)}</text>
+				<text x={XL - 8} y={ly0 + 3} class="lab left">{r.company.slice(0, 24)} · {dmy(r.d0)}</text>
 			</a>
-			<text x={XR + 8} y={ly1 + 3} class="lab right">{r.d1.slice(0, 7)}</text>
+			<text x={XR + 8} y={ly1 + 3} class="lab right">{dmy(r.d1)}</text>
 		</g>
 	{/each}
 </svg>

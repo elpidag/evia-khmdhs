@@ -8,22 +8,21 @@
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import { loadCentroids, spreadOverlaps } from '$lib/maps/useGeo';
-	import { eurShort, grInt } from '$lib/transforms/format';
+	import { dmy, eurShort, grInt } from '$lib/transforms/format';
+	import { noDate } from '$lib/charts/ganttTheme';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.o);
 	const k = $derived(o.kpis);
+
+	// the TIMELINE's dashed rule marks the ACTUAL current day (local clock);
+	// the statuses themselves are as of the data's status_as_of date, which
+	// the chart caveat states
+	const todayIso = new Date().toLocaleDateString('en-CA');
 	const live = $derived(o.projects.filter((p) => p.status !== 'superseded'));
 	const nCompleted = $derived(k.statuses['completed'] ?? 0);
 	const nNoAct = $derived(k.statuses['no_completion_recorded'] ?? 0);
-
-	const GANTT_ANNOTATIONS: Record<string, string> = {
-		'63ΡΧ4653Π8-6Ε2': 'Coca-Cola withdrew by letter — revoked Jan 2026',
-		'ΨΖΟΟ4653Π8-Ψ1Θ': 'extended to Dec 2028',
-		'ΩΞΕΦ4653Π8-Μ0Π': 'ΔΕΗ: certified within weeks',
-		'ΩΖ2Ο4653Π8-ΓΕΞ': 'Παπαστράτος planting — extended to 2027'
-	};
 
 	// same palette as the status waffle (see StatusWaffle ORDER)
 	const STATUS_COLOR: Record<string, string> = {
@@ -76,6 +75,37 @@
 			if (!best || p.budget > (best.budget ?? 0)) best = p;
 		}
 		return best;
+	});
+
+	// TIMELINE rows: fold each restated (superseded) act into its successor —
+	// one commitment, one row; the predecessor contributes the bar's origin
+	// (start0) and its initial money (budget0), drawn as a height step at the
+	// restatement date. Only one such pair exists in the data (6ΗΥΗ → ΨΟΕ8).
+	const ganttProjects = $derived.by(() => {
+		const out = [];
+		for (const p of o.projects) {
+			if (p.status === 'superseded') continue;
+			const pred = o.projects.find((q) => q.superseded_by === p.ada);
+			out.push({
+				...p,
+				// one sponsor, one name: the ranking's merged group label —
+				// the verbatim act names stay on the project pages
+				company: p.group ?? p.company,
+				...(pred ? { start0: pred.start, budget0: pred.budget_stated } : {})
+			});
+		}
+		return out;
+	});
+
+	// waffle categories = the TIMELINE's, from the same fold: actives split
+	// into dated ("active") and no-implementation-dates ("nodate")
+	const waffleStatuses = $derived.by(() => {
+		const s: Record<string, number> = {};
+		for (const p of ganttProjects) {
+			const key = noDate(p) ? 'nodate' : p.status;
+			s[key] = (s[key] ?? 0) + 1;
+		}
+		return s;
 	});
 
 	// slope rows: every project whose deadline moved
@@ -208,8 +238,8 @@
 		<div class="kicker">THE SCHEME</div>
 		<p>
 			Under ν.998/1979 άρθρο 42§3, companies volunteer to fund and execute the restoration of
-			burnt public forest land — appointed by ministerial act, spending their own money. This
-			page follows all {grInt(k.n_projects)} projects from appointment to (sometimes)
+			burnt public forest land — designated by ministerial act, spending their own money. This
+			page follows all {grInt(k.n_projects)} projects from designation act to (sometimes)
 			completion. Every value links back to the signed PDF —
 			<a href="/methodology#anadohoi">methodology</a>.
 		</p>
@@ -220,7 +250,7 @@
 	<span bind:this={statusSpan}>CURRENT STATUS OF PROJECTS</span>
 </h2>
 <ChartFrame anchor="waffle" methodology="anadohoi">
-	<StatusWaffle statuses={k.statuses}>
+	<StatusWaffle statuses={waffleStatuses}>
 		{#snippet explanation()}
 			<div style:margin-right={proseCut ? `${proseCut}px` : null}>
 			<p>
@@ -231,10 +261,11 @@
 				{grInt(k.n_projects)} projects have one.
 			</p>
 			<p>
-				Light grey projects are still inside their deadline. Darker grey ones are past it
-				with nothing filed — which is not proof they were abandoned, but the act is the
-				legal proof of delivery, so until one is posted the promise remains just a promise.
-				Status as of {k.status_as_of} — <a href="/methodology#anadohoi">methodology</a>.
+				Mid-green projects are still inside their deadline; the palest green ones have no
+				implementation dates set in their acts. Grey ones are past their deadline with
+				nothing filed — which is not proof they were abandoned, but the act is the legal
+				proof of delivery, so until one is posted the promise remains just a promise.
+				Status as of {dmy(k.status_as_of)} — <a href="/methodology#anadohoi">methodology</a>.
 			</p>
 			</div>
 		{/snippet}
@@ -244,16 +275,11 @@
 <ChartFrame
 	title="TIMELINE"
 	titleColor="#2e6a50"
-	subtitle="bar = appointment → initial deadline · pale extension = amendments · ✓ completion act · ✕ revocation"
-	caveat="Rows are grouped by outcome and sorted by appointment date; click a company to open its decision trail."
+	caveat={`Rows are ordered by the date of each project's first designation act — the control at the top left switches to grouping by category. Click a company to open its decision trail. Statuses as recorded on Διαύγεια — data last checked ${dmy(k.status_as_of)}.`}
 	anchor="gantt"
 	methodology="anadohoi"
 >
-	<PromiseGantt
-		projects={o.projects}
-		today={k.status_as_of ?? '2026-08-02'}
-		annotations={GANTT_ANNOTATIONS}
-	/>
+	<PromiseGantt projects={ganttProjects} today={todayIso} legend="panel" />
 </ChartFrame>
 
 <ChartFrame
@@ -334,7 +360,7 @@
 <Defer height={300}>
 	<ChartFrame
 		title="Each big fire triggers a wave of corporate sponsorship within weeks"
-		subtitle="appointments per month since the scheme began (Aug 2021) · ▲ = first appointment after each fire"
+		subtitle="designation acts per month since the scheme began (Aug 2021) · ▲ = first designation after each fire"
 		anchor="pulse"
 		methodology="anadohoi"
 	>
@@ -363,7 +389,7 @@
 					y="160"
 					class="fire-mark"
 				>
-					▲<title>{f.fire}: first appointment {f.first_start}</title>
+					▲<title>{f.fire}: first designation act {dmy(f.first_start)}</title>
 				</text>
 			{/each}
 		</svg>
