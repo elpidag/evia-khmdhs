@@ -638,7 +638,10 @@
    "notes": null,
    "fire_event": "Β. Εύβοια, Αύγ. 2021",
    "budget_vat_basis": "unstated",
-   "deliverables": "works"
+   "deliverables": "works",
+   "works_zones": [
+    "istiaia_iii"
+   ]
   },
   {
    "root_ada": "6ΡΤΣ4653Π8-6ΦΒ",
@@ -685,7 +688,10 @@
    "notes": null,
    "fire_event": "Β. Εύβοια, Αύγ. 2021",
    "budget_vat_basis": "unstated",
-   "deliverables": "works"
+   "deliverables": "works",
+   "works_zones": [
+    "limni_i"
+   ]
   },
   {
    "root_ada": "6Φ454653Π8-Ξ1Ζ",
@@ -1420,7 +1426,10 @@
    "notes": null,
    "fire_event": "Β. Εύβοια, Αύγ. 2021",
    "budget_vat_basis": "unstated",
-   "deliverables": "works"
+   "deliverables": "works",
+   "works_zones": [
+    "limni_ii"
+   ]
   },
   {
    "root_ada": "9ΚΛ24653Π8-ΑΗΨ",
@@ -1721,7 +1730,14 @@
    "notes": "budget corrected 150.000→310.000 (άνευ ΦΠΑ): the act budgets both Δασαρχεία (Λίμνης 150.000 + Ιστιαίας 160.000)",
    "fire_event": "Β. Εύβοια, Αύγ. 2021",
    "budget_vat_basis": "net",
-   "deliverables": "study"
+   "deliverables": "study",
+   "works_zones": [
+    "limni_i",
+    "limni_ii",
+    "limni_iii",
+    "limni_iv",
+    "limni_v"
+   ]
   },
   {
    "root_ada": "ΡΚ804653Π8-22Ω",
@@ -2520,7 +2536,10 @@
    "notes": "the act (issued 17.12.2021) writes «05η Φεβρουαρίου 2021» — evident clerical slip for 2022",
    "fire_event": "Β. Εύβοια, Αύγ. 2021",
    "budget_vat_basis": "unstated",
-   "deliverables": "works"
+   "deliverables": "works",
+   "works_zones": [
+    "istiaia_i"
+   ]
   },
   {
    "root_ada": "ΨΤΑΤ4653Π8-2Γ7",
@@ -3020,7 +3039,10 @@
    "notes": null,
    "fire_event": "Β. Εύβοια, Αύγ. 2021",
    "budget_vat_basis": "unstated",
-   "deliverables": "works"
+   "deliverables": "works",
+   "works_zones": [
+    "limni_v"
+   ]
   }
  ]
 }

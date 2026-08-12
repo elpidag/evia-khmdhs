@@ -1234,6 +1234,10 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             "status": r["status"], "amendments": amendments,
             "superseded_by": r["superseded_by"],
             "location": r["location_text"],
+            # digitised works-zone ids (evia_works_zones.geojson), curated
+            # from the act's basin citation
+            "works_zones": (json.loads(r["works_zones"])
+                            if r["works_zones"] else None),
         })
 
     live = [p for p in projects if p["status"] != "superseded"]
@@ -1301,6 +1305,8 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
     if r is None:
         return None
     out = dict(r)
+    out["works_zones"] = (json.loads(out["works_zones"])
+                          if out.get("works_zones") else None)
     try:
         out["evidence"] = json.loads(out.pop("evidence_json") or "{}")
     except ValueError:

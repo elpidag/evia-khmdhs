@@ -986,3 +986,21 @@ the drawn zone is the sheet's largest and the digitisation confirms
 ΔΕΔΔΗΕ μελέτες ΡΕΧΥ. Tests pin the 9 zones, area bands and geometry
 bounds (tests/test_evia_zones.py). *Affects: new curated file + build
 script + processed geojson; site representation to follow.*
+
+## 2026-08-12 — Ανάδοχοι: works_zones field + οι ζώνες στο site
+
+The six Εύβοια sponsor projects now carry their digitised works zone(s)
+as curated data (`works_zones` in anadohoi_projects.json, basis: each
+act's basin/zone citation — the excerpts already in evidence.location):
+6ΡΤΣ→limni_i, 9Κ9Τ→limni_ii, ΩΞΕΦ→limni_v, ΨΟΨΝ→istiaia_i,
+6ΠΔΕ→istiaia_iii, ΡΕΧΥ→limni_i..v (the ΔΕΔΔΗΕ studies covered all five
+Λίμνη basins). Loader schema + committed DB migrated (28th column);
+the API ships the parsed list on the overview and project endpoints.
+Site: project pages show a ZoneMap (the project's zone highlighted on
+the Εύβοια outline, other zones as faint context, caption with the
+digitised στρέμματα and source note); the /anadohoi Π.Ε. map draws all
+nine zones as a quiet polygon layer under the dots, and zone-mapped
+projects' dots sit at their zone centroid instead of the Π.Ε. centroid
+spread. build_evia_zones.py now also emits per-zone centroids and
+duplicates the geojson into atlas/static/geo/. Tests pin the 6-project
+mapping. *Affects: 6 rows (new column), atlas frontend, no aggregates.*

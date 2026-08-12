@@ -40,6 +40,32 @@ export const loadMuniBorders = (fetch: Fetch) =>
 		'muni'
 	);
 
+export interface ZoneProps {
+	zone: string;
+	name: string;
+	basin: string;
+	table_stremmata: number;
+	extracted_stremmata: number;
+	centroid: [number, number];
+}
+
+/** the 9 digitised Β. Εύβοια works zones (plain GeoJSON, module-cached) */
+export const loadEviaZones = (
+	fetch: Fetch
+): Promise<FeatureCollection<MultiPolygon, ZoneProps>> => {
+	const url = '/geo/evia_works_zones.geojson';
+	if (!cache.has(url)) {
+		cache.set(
+			url,
+			fetch(url).then((r) => {
+				if (!r.ok) throw new Error(`${url}: ${r.status}`);
+				return r.json();
+			})
+		);
+	}
+	return cache.get(url) as Promise<FeatureCollection<MultiPolygon, ZoneProps>>;
+};
+
 export const loadCentroids = (fetch: Fetch): Promise<Record<string, [number, number]>> => {
 	const url = '/geo/pe_centroids.json';
 	if (!cache.has(url)) {

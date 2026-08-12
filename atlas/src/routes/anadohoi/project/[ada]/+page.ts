@@ -29,6 +29,8 @@ export interface AnadohoiProject {
 	works_kind: string | null;
 	/** works | study_and_works | study — curated from the act's σκοπός */
 	deliverables?: string | null;
+	/** digitised works-zone ids (evia_works_zones.geojson) */
+	works_zones?: string[] | null;
 	area_stremmata: number | null;
 	location_text: string | null;
 	municipality: string | null;

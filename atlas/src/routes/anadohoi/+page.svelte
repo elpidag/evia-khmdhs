@@ -7,7 +7,8 @@
 	import DeadlineSlope from '$lib/charts/DeadlineSlope.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
-	import { loadCentroids, spreadOverlaps } from '$lib/maps/useGeo';
+	import ZonesLayer from '$lib/maps/ZonesLayer.svelte';
+	import { loadCentroids, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import { noDate } from '$lib/charts/ganttTheme';
 	import type { PageData } from './$types';
@@ -161,20 +162,38 @@
 		return () => ro.disconnect();
 	});
 
-	// map dots (client-side: needs centroids)
+	// map dots (client-side: needs centroids + the digitised works zones)
 	let centroids: Record<string, [number, number]> | null = $state.raw(null);
+	let zonesFc: Awaited<ReturnType<typeof loadEviaZones>> | null = $state.raw(null);
 	$effect(() => {
 		loadCentroids(fetch).then((c) => (centroids = c));
+		loadEviaZones(fetch)
+			.then((z) => (zonesFc = z))
+			.catch(() => (zonesFc = null));
 	});
 	const mapDots = $derived.by(() => {
 		if (!centroids) return [];
+		const zc = new Map(
+			(zonesFc?.features ?? []).map((f) => [f.properties.zone, f.properties.centroid])
+		);
 		const pts = live
 			.filter((p) => p.pe && centroids![p.pe])
-			.map((p) => ({
-				lat: centroids![p.pe as string][0],
-				lon: centroids![p.pe as string][1],
-				...p
-			}));
+			.map((p) => {
+				// zone-mapped projects sit at their digitised works area, not
+				// the Π.Ε. centroid
+				const wz = Array.isArray(p.works_zones) ? p.works_zones : [];
+				const zs = wz.map((z) => zc.get(z)).filter(Boolean) as [number, number][];
+				if (zs.length) {
+					const lon = zs.reduce((s, c) => s + c[0], 0) / zs.length;
+					const lat = zs.reduce((s, c) => s + c[1], 0) / zs.length;
+					return { lat, lon, ...p };
+				}
+				return {
+					lat: centroids![p.pe as string][0],
+					lon: centroids![p.pe as string][1],
+					...p
+				};
+			});
 		return spreadOverlaps(pts, 0.09);
 	});
 	const unplaced = $derived(live.filter((p) => !p.pe));
@@ -342,6 +361,15 @@
 		<div class="map-wrap">
 			<PaperMap interactive={false} width={640} height={620}>
 				{#snippet overlay(ctx)}
+					{#if zonesFc}
+						<ZonesLayer
+							{ctx}
+							features={zonesFc.features}
+							tipOf={(f) =>
+								`<strong>${f.properties.name}</strong><br>${f.properties.basin}<br>` +
+								`${grInt(f.properties.extracted_stremmata)} στρ. (ψηφιοποιημένη ζώνη έργων)`}
+						/>
+					{/if}
 					<DotLayer
 						{ctx}
 						points={mapDots}

@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
+	import LocationCurator from '$lib/dev/LocationCurator.svelte';
+	import ZoneMap from '$lib/maps/ZoneMap.svelte';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
@@ -50,6 +53,14 @@
 		deadline: 'Προθεσμία'
 	};
 	const budgetShown = $derived(p.budget_net_eur ?? p.budget_current);
+	// tolerate a pre-restart API that ships works_zones unparsed
+	const worksZones = $derived(Array.isArray(p.works_zones) ? p.works_zones : null);
+	// pre-filled Google Maps search for the dev-only location curator
+	const locQuery = $derived(
+		[p.location_text, p.municipality ? `Δήμος ${p.municipality}` : '', p.pe]
+			.filter(Boolean)
+			.join(' ')
+	);
 </script>
 
 <svelte:head>
@@ -66,6 +77,7 @@
 <div class="pp">
 <p class="crumb"><a href="/anadohoi">← Sponsored works</a></p>
 
+<div class="headgrid">
 <dl class="facts head">
 	<dt>Company</dt>
 	<dd class="co">{p.company}</dd>
@@ -128,6 +140,14 @@
 		{/if}
 	</dd>
 </dl>
+{#if dev}
+	<LocationCurator ada={p.root_ada} query={locQuery} />
+{/if}
+</div>
+
+{#if worksZones?.length}
+	<ZoneMap zones={worksZones} />
+{/if}
 
 {#if p.notes}
 	<p class="note">ℹ️ {p.notes}</p>
@@ -220,8 +240,22 @@
 	.pp h2 {
 		font-family: var(--font-ui);
 	}
-	.head {
+	/* fact list left, dev-only curation box right (column collapses when
+	   the box is absent, i.e. in production builds) */
+	.headgrid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: var(--sp-2) var(--sp-8, 3rem);
+		align-items: start;
 		margin: var(--sp-4) 0 var(--sp-2);
+	}
+	@media (max-width: 900px) {
+		.headgrid {
+			grid-template-columns: 1fr;
+		}
+	}
+	.head {
+		margin: 0;
 	}
 	/* labels: bold 16px — TRUE bold, because the labels are English and the
 	   futura-100-greek family (Latin subset) ships a real 700; answers:

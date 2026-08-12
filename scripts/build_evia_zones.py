@@ -26,6 +26,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CURATED = ROOT / "khmdhs/data/evia_works_zones_digitised.json"
 PE_HIRES = ROOT / "webui/static/greek_pe_hires.geojson"
 OUT = ROOT / "data/processed/evia_works_zones.geojson"
+# duplicated into the Atlas static assets, like the Π.Ε. layers
+OUT_ATLAS = ROOT / "atlas/static/geo/evia_works_zones.geojson"
 
 
 def main() -> None:
@@ -74,6 +76,7 @@ def main() -> None:
                 return MultiPolygon([to_wgs(gg) for gg in g.geoms])
 
             wgs = to_wgs(geom).simplify(0.00015, preserve_topology=True)
+            rep = wgs.representative_point()
             m = meta[zone]
             features.append({
                 "type": "Feature",
@@ -84,6 +87,7 @@ def main() -> None:
                     "sheet": cur["source_sheets"][sheet_tag],
                     "table_stremmata": m["table_stremmata"],
                     "extracted_stremmata": round(area_str),
+                    "centroid": [round(rep.x, 5), round(rep.y, 5)],
                     "digitised": cur["digitised"],
                 },
                 "geometry": mapping(wgs),
@@ -92,9 +96,12 @@ def main() -> None:
                   f"(table {m['table_stremmata']:9.0f}, "
                   f"{area_str / m['table_stremmata'] * 100:5.1f}%)")
 
-    OUT.write_text(json.dumps({"type": "FeatureCollection", "features": features},
-                              ensure_ascii=False), encoding="utf-8")
-    print(f"→ {OUT.relative_to(ROOT)} ({len(features)} zones)")
+    payload = json.dumps({"type": "FeatureCollection", "features": features},
+                         ensure_ascii=False)
+    OUT.write_text(payload, encoding="utf-8")
+    OUT_ATLAS.write_text(payload, encoding="utf-8")
+    print(f"→ {OUT.relative_to(ROOT)} + {OUT_ATLAS.relative_to(ROOT)} "
+          f"({len(features)} zones)")
 
 
 if __name__ == "__main__":

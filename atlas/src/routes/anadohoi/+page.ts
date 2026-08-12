@@ -5,6 +5,8 @@ export interface AnadohoiOverviewProject {
 	company: string;
 	/** merged sponsor-group display name (rename/script variants unified) */
 	group?: string;
+	/** digitised works-zone ids (evia_works_zones.geojson) */
+	works_zones?: string[] | null;
 	funder: string | null;
 	works_kind: string | null;
 	area: number | null;

@@ -177,6 +177,20 @@ def test_real_db_budget_only_with_evidence(conn):
         assert "budget" in json.loads(ev), f"{root}: budget without evidence"
 
 
+def test_real_db_works_zones_mapping(conn):
+    """The 6 Εύβοια projects carry their digitised works-zone ids
+    (DATA_DECISIONS 2026-08-12); ids must exist in the digitised set."""
+    zone_ids = {"limni_i", "limni_ii", "limni_iii", "limni_iv", "limni_v",
+                "istiaia_i", "istiaia_ii", "istiaia_iii", "istiaia_iv"}
+    rows = conn.execute(
+        "SELECT root_ada, works_zones FROM projects "
+        "WHERE works_zones IS NOT NULL").fetchall()
+    assert len(rows) == 6
+    for ada, zs in rows:
+        zs = json.loads(zs)
+        assert zs and set(zs) <= zone_ids, ada
+
+
 def test_real_db_deliverables_curated_for_all(conn):
     """Every project carries the works/study scope, each with its verbatim
     σκοπός excerpt (DATA_DECISIONS 2026-08-11)."""
