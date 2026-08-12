@@ -1,6 +1,4 @@
 <script lang="ts">
-	import KpiRow from '$lib/ui/KpiRow.svelte';
-	import StatPair from '$lib/ui/StatPair.svelte';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
@@ -11,6 +9,11 @@
 		anadasosi: 'Αναδάσωση',
 		apokatastasi: 'Αποκατάσταση',
 		both: 'Αποκατάσταση & Αναδάσωση'
+	};
+	const DELIVERABLES: Record<string, string> = {
+		works: 'εκτέλεση του έργου',
+		study_and_works: 'εκπόνηση μελέτης και υλοποίηση έργου',
+		study: 'εκπόνηση μελέτης'
 	};
 	const STATUS: Record<string, string> = {
 		completed: 'completed',
@@ -39,20 +42,14 @@
 		funder: 'Χρηματοδότης',
 		address: 'Διεύθυνση',
 		works_kind: 'Είδος έργου',
+		deliverables: 'Αντικείμενο ορισμού',
 		location: 'Τοποθεσία',
 		area: 'Έκταση',
 		budget: 'Προϋπολογισμός',
 		budget_vat: 'Βάση ΦΠΑ',
 		deadline: 'Προθεσμία'
 	};
-	const VAT_BASIS: Record<string, string> = {
-		net: 'άνευ ΦΠΑ (ρητά στην πράξη)',
-		gross: 'με ΦΠΑ (ρητά στην πράξη)',
-		unstated: 'η πράξη δεν προσδιορίζει ΦΠΑ'
-	};
-	const badStatus = $derived(
-		p.status === 'revoked' || p.status === 'no_completion_recorded'
-	);
+	const budgetShown = $derived(p.budget_net_eur ?? p.budget_current);
 </script>
 
 <svelte:head>
@@ -66,96 +63,78 @@
 	/>
 </svelte:head>
 
-<p class="crumb"><a href="/anadohoi">← Ανάδοχοι αναδάσωσης / αποκατάστασης</a></p>
+<div class="pp">
+<p class="crumb"><a href="/anadohoi">← Sponsored works</a></p>
 
-<hgroup>
-	<h1>{p.company}</h1>
-	<p class="muted tabular">
-		ΑΔΑ {p.root_ada} · designation act
-		{p.restates
-			? `${dmy(p.restates.start_date) || '—'} · restated ${dmy(p.start_date) || '—'}`
-			: dmy(p.start_date) || '—'}
-		{#if p.fire_event}· <span class="chip">{p.fire_event}</span>{/if}
-		<span class="chip" class:bad={badStatus} class:warn={p.status === 'superseded'}>
+<dl class="facts head">
+	<dt>Company</dt>
+	<dd class="co">{p.company}</dd>
+	<dt>Budget</dt>
+	<dd>
+		{#if budgetShown === null}
+			none stated
+		{:else}
+			{eurShort(budgetShown)}
+			{#if p.budget_net_eur !== null || p.budget_vat_basis === 'net'}
+				<small class="muted">excl. ΦΠΑ</small>
+			{:else if p.budget_vat_basis === 'gross'}
+				<small class="muted">incl. ΦΠΑ</small>
+			{/if}
+			{#if p.budget_current !== null && p.budget_current !== p.budget_eur}
+				<small class="muted"
+					>— initially {p.budget_eur === null ? 'unstated' : eurShort(p.budget_eur)}, raised by
+					amendment</small
+				>
+			{/if}
+		{/if}
+	</dd>
+	<dt>Area of intervention</dt>
+	<dd>{p.area_stremmata === null ? '—' : `${grInt(p.area_stremmata)} στρέμματα`}</dd>
+	<dt>Type of intervention</dt>
+	<dd>{WORKS[p.works_kind ?? ''] ?? '—'}</dd>
+	<dt>Scope of appointment</dt>
+	<dd>{DELIVERABLES[p.deliverables ?? ''] ?? '—'}</dd>
+	<dt>Location</dt>
+	<dd>
+		{p.location_text ?? '—'}
+		{#if p.pe}<br /><small class="muted"
+				>{p.pe}{p.municipality ? ` · Δήμος ${p.municipality}` : ''}</small
+			>{/if}
+	</dd>
+	<dt>Connected to fire event</dt>
+	<dd>{p.fire_event ?? '—'}</dd>
+	<dt>Status</dt>
+	<dd>
+		<span
+			class="chip"
+			class:ok={p.status === 'completed'}
+			class:bad={p.status === 'revoked' || p.status === 'no_completion_recorded'}
+			class:warn={p.status === 'superseded'}
+		>
 			{STATUS[p.status] ?? p.status}
 		</span>
-	</p>
-</hgroup>
+	</dd>
+	<dt>Current deadline</dt>
+	<dd>
+		{#if p.deadline_current}
+			{dmy(p.deadline_current)}
+			{#if p.deadline_initial && p.deadline_initial !== p.deadline_current}
+				<small class="muted">— initially {dmy(p.deadline_initial)}, extended by amendment</small>
+			{/if}
+		{:else if p.deadline_text}
+			{p.deadline_text}
+		{:else}
+			—
+		{/if}
+	</dd>
+</dl>
 
 {#if p.notes}
 	<p class="note">ℹ️ {p.notes}</p>
 {/if}
 
-
-<KpiRow>
-	<StatPair
-		value={p.budget_net_eur !== null
-			? eurShort(p.budget_net_eur)
-			: p.budget_current === null
-				? '—'
-				: eurShort(p.budget_current)}
-		label={p.budget_net_eur !== null || p.budget_vat_basis === 'net'
-			? 'stated budget (excl. ΦΠΑ)'
-			: 'stated budget'}
-		compare={p.budget_net_eur !== null && p.budget_current !== null
-			? `${eurShort(p.budget_current)} incl. ΦΠΑ`
-			: (VAT_BASIS[p.budget_vat_basis ?? ''] ?? '')}
-		basis={p.budget_current === null
-			? 'the act states no figure — the sponsor pays whatever it costs'
-			: p.budget_current !== p.budget_eur
-				? `initially ${p.budget_eur === null ? 'unstated' : eurShort(p.budget_eur)}, raised by amendment`
-				: 'as stated in the act'}
-		color="var(--c-anadohoi)"
-	/>
-	<StatPair
-		value={p.area_stremmata === null ? '—' : `${grInt(p.area_stremmata)} στρ.`}
-		label="area"
-		compare={WORKS[p.works_kind ?? ''] ?? '—'}
-	/>
-	<StatPair
-		value={dmy(p.deadline_current) || '—'}
-		label="current deadline"
-		compare={p.deadline_initial && p.deadline_initial !== p.deadline_current
-			? `initially ${dmy(p.deadline_initial)}`
-			: ''}
-		basis={p.deadline_text ?? (p.deadline_current ? '' : 'the act sets no deadline')}
-	/>
-	<StatPair
-		value={dmy(p.completed_date) || dmy(p.revoked_date) || '—'}
-		label={p.completed_date
-			? 'completion certified'
-			: p.revoked_date
-				? 'revoked on'
-				: 'no completion act found'}
-		basis={p.completed_date || p.revoked_date
-			? ''
-			: 'absence of a posted act is not proof of abandonment'}
-	/>
-</KpiRow>
-
 <section>
-	<h2>The project</h2>
-	<dl class="facts">
-		<dt>Ανάδοχος</dt>
-		<dd>{p.company}{p.company_address ? ` — ${p.company_address}` : ''}</dd>
-		{#if p.funder}
-			<dt>Χρηματοδότης</dt>
-			<dd>{p.funder}</dd>
-		{/if}
-		<dt>Τοποθεσία</dt>
-		<dd>
-			{p.location_text ?? '—'}
-			{#if p.pe}<br /><small class="muted">{p.pe}{p.municipality ? ` · Δήμος ${p.municipality}` : ''}</small>{/if}
-		</dd>
-		{#if p.fire_event}
-			<dt>Πυρκαγιά</dt>
-			<dd>{p.fire_event}</dd>
-		{/if}
-	</dl>
-</section>
-
-<section>
-	<h2>Decision trail ({grInt(p.decisions.length)})</h2>
+	<h2 class="ttl">Decision trail ({grInt(p.decisions.length)})</h2>
 	<p class="muted">
 		Every act linked to this project, oldest first. PDFs are fetched from Diavgeia once and
 		then served from the local cache.
@@ -232,8 +211,39 @@
 		</dl>
 	</section>
 {/if}
+</div>
 
 <style>
+	/* Futura 100 Greek throughout — this page's content mixes Greek and
+	   Latin in every line, and only the Book family carries both scripts */
+	.pp,
+	.pp h2 {
+		font-family: var(--font-ui);
+	}
+	.head {
+		margin: var(--sp-4) 0 var(--sp-2);
+	}
+	/* labels: bold 16px — TRUE bold, because the labels are English and the
+	   futura-100-greek family (Latin subset) ships a real 700; answers:
+	   14px plain Book. .facts.head beats the generic .facts dt rule. */
+	.facts.head dt {
+		align-self: baseline;
+		font-size: var(--fs-16);
+		font-weight: 700;
+		font-family: 'futura-100-greek', 'futura-100-greek-book', 'Sofia Sans', system-ui, sans-serif;
+		color: #000;
+	}
+	.facts.head dd {
+		margin: 0;
+		font-size: var(--fs-14);
+	}
+	/* section title matched to the list labels: true-bold 16px, black */
+	.pp .ttl {
+		font-size: var(--fs-16);
+		font-weight: 700;
+		font-family: 'futura-100-greek', 'futura-100-greek-book', 'Sofia Sans', system-ui, sans-serif;
+		color: #000;
+	}
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);

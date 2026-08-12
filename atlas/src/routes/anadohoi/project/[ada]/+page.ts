@@ -27,6 +27,8 @@ export interface AnadohoiProject {
 	funder: string | null;
 	company_address: string | null;
 	works_kind: string | null;
+	/** works | study_and_works | study — curated from the act's σκοπός */
+	deliverables?: string | null;
 	area_stremmata: number | null;
 	location_text: string | null;
 	municipality: string | null;

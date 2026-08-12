@@ -177,6 +177,19 @@ def test_real_db_budget_only_with_evidence(conn):
         assert "budget" in json.loads(ev), f"{root}: budget without evidence"
 
 
+def test_real_db_deliverables_curated_for_all(conn):
+    """Every project carries the works/study scope, each with its verbatim
+    σκοπός excerpt (DATA_DECISIONS 2026-08-11)."""
+    counts = dict(conn.execute(
+        "SELECT deliverables, COUNT(*) FROM projects GROUP BY deliverables"))
+    assert counts == {"works": 42, "study_and_works": 17, "study": 10}
+    missing_ev = conn.execute(
+        "SELECT root_ada, evidence_json FROM projects").fetchall()
+    for root, ev in missing_ev:
+        assert "deliverables" in json.loads(ev), \
+            f"{root}: deliverables without evidence"
+
+
 def test_real_db_pins(conn):
     assert conn.execute("SELECT COUNT(*) FROM decisions").fetchone()[0] == 322
     assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 69

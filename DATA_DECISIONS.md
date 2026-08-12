@@ -839,3 +839,121 @@ so the group stays merged with the label restated honestly as
 **«Coca-Cola (3Ε / Hellas)»**. *Evidence: signed act PDFs (addresses as
 above), anadohoi_projects.json excerpts. Affects: /anadohoi sponsor
 ranking + n_companies KPI; no rows.*
+
+## 2026-08-11 — Ανάδοχοι: curated `deliverables` (works / study_and_works / study) from each root act's operative σκοπός
+
+Every sponsor project now carries what the appointment actually covers —
+εκτέλεση έργου only (42), εκπόνηση μελέτης και υλοποίηση έργου (20), or
+εκπόνηση μελέτης only (7) — as a curated field with a verbatim σκοπός
+excerpt in `evidence.deliverables` (whitespace-collapsed containment
+verified against the act's pdftotext text; all 69 root-act PDFs fetched
+into anadohoi_cache in the process). Classification basis: the operative
+«Ορίζουμε … με σκοπό …» sentence; the «Οι όροι …» clause corroborates.
+Regex only proposed — a first naive pass mislabeled 22 acts because Greek
+inflection breaks adjacency («εκπόνησης μελέτης», «εκπόνηση των
+απαιτούμενων μελετών») — and every verdict is human. Judgement calls
+worth recording: (1) ΔΟΞΙΑΔΗΣ 9ΙΡΜ is study-only BY ITS OWN TEXT («Για
+την ανάληψη της υλοποίησης … θα πρέπει να εκδοθεί νέα Απόφαση ορισμού»);
+(2) ΑΔΜΗΕ 6ΦΤΩ and the Ρόδος zone executors (Eurobank 971Χ, NOVA 6ΩΜ0)
+are works-only despite όροι boilerplate naming μελέτη — each act states
+«Η εκτέλεση των εργασιών θα γίνει σύμφωνα με τα οριζόμενα στην ανωτέρω
+(9) σχετική μελέτη που εγκρίθηκε αρμοδίως» (the studies were done by
+others — the ΕΝΩΣΗ ΞΕΝΟΔΟΧΩΝ ΡΟΔΟΥ act ΨΥΒ0 is the Rhodes studies-only
+appointment); (3) Βιοποικιλότητας Θράκης ΡΔ0Λ executes per the approved
+WWF-commissioned μελέτη (ΨΠΤΚ4653Π8-ΛΞΛ) → works; (4) the «υλοποίηση
+της Μελέτης» pair (WWF Κερατέα ΡΛ16, Εren Groupe pilot 9Φ9Ρ) and ΣΤΑΝΤΑ
+ΨΤΑΤ classify study_and_works — their σκοπός is ambiguous but the όροι
+sentence binds both «εκπόνησης … των μελετών» and «εκτέλεσης …
+των έργων» and each requires notifying the επιβλέποντα των εργασιών
+(evidence excerpt = the όροι sentence for these three); (5) the
+plane-disease sanitation acts split honestly: ΨΞΒΠ (Tatoi salvage, no
+μελέτη clause) = works; 6Φ45/ΡΟΘΕ/ΨΖ3Ψ (σύνταξη Τεχνικής Μελέτης-Έκθεσης
++ απομάκρυνση) = study_and_works. Side finding: Lidl's two projects are
+the μελέτη act (ΨΧΟ2, €241,936 net) and the works act (6768) of the same
+restoration. The committed sqlite was migrated in place (ALTER TABLE +
+UPDATE) because harvest.json lives only on the build machine; the loader
+schema gained the column for future rebuilds. *Evidence:
+anadohoi_projects.json `deliverables` + evidence excerpts; act PDFs.
+Affects: projects table (new column), /anadohoi/project/[ada] «Scope of
+appointment» row + Evidence block, tests (42/20/7 pin).*
+
+## 2026-08-12 — Ανάδοχοι review correction: Ψ6Ι24653Π8-71Γ works_kind → both
+
+User PDF review of the new deliverables sheet caught a works_kind slip:
+the HELLENIQ Πεντέλη act (Ψ6Ι24653Π8-71Γ) was curated `anadasosi` off the
+appointment TITLE («Ανάδοχο Αναδάσωσης»), but its operative έργο is
+«υλοποίηση έργου αποκατάστασης και αναδάσωσης … 170 στρεμμάτων» — and the
+identically-worded same-template NORDIA act (ΨΖΩ14653Π8-Θ6Σ) was already
+curated `both` with exactly that phrase as evidence. Fixed to `both`,
+evidence.works_kind now the έργο phrase («αποκατάστασης και αναδάσωσης»),
+aligning the two. A systematic re-scan of all 69 operative sentences
+(excluding the framework-ΥΑ title boilerplate that recites «Αναδόχους
+αποκατάστασης και αναδάσωσης δημοσίων εκτάσεων» in every act) found NO
+other single-kind project with a both-kind έργο. *Evidence: signed act
+PDF Ψ6Ι24653Π8-71Γ; anadohoi_projects.json. Affects: 1 row (works_kind +
+evidence_json), /anadohoi/project page «Type of intervention».*
+
+## 2026-08-12 — Ανάδοχοι review correction: ΡΛ164653Π8-ΠΞΝ deliverables → works
+
+User PDF review verdict on the WWF Κερατέα act (ΡΛ16): «ανάληψη
+χρηματοδότησης και υλοποίησης της Μελέτης Αναδάσωσης … 138.678,07€»
+means funding and IMPLEMENTING the reforestation the μελέτη prescribes —
+works only, not study_and_works as first curated (the όροι boilerplate
+had tipped the initial call). Evidence excerpt switched to the σκοπός
+sentence. Deliverables split now 43 works / 19 study_and_works / 7
+study (test pin updated). The same-template Εren Groupe pilot (9Φ9Ρ,
+«υλοποίησης της πιλοτικής μελέτης») stays study_and_works pending the
+same review. *Evidence: signed act PDF ΡΛ164653Π8-ΠΞΝ. Affects: 1 row.*
+
+## 2026-08-12 — Ανάδοχοι review correction (final): ΡΛ164653Π8-ΠΞΝ deliverables → study; «υλοποίηση μελέτης» counts as εκπόνηση μελέτης
+
+Supersedes today's earlier works verdict for ΡΛ16 (WWF Κερατέα): on
+re-reading the PDF the user rules «ανάληψη χρηματοδότησης και υλοποίησης
+της Μελέτης Αναδάσωσης» means delivering the μελέτη itself — counted as
+εκπόνηση μελέτης (deliverables = study). Convention recorded: a σκοπός
+phrased «υλοποίηση μελέτης» classifies as study. Evidence excerpt stays
+the σκοπός sentence. Split now 42 works / 19 study_and_works / 8 study
+(test pin updated). Same-construction acts pending the user's per-PDF
+verdict under this convention: 9Φ9Ρ (Εren pilot, «υλοποίησης της
+πιλοτικής μελέτης», currently study_and_works) and ΨΤΑΤ (ΣΤΑΝΤΑ,
+«υλοποίηση μελέτης αποκατάστασης–αναδάσωσης», currently study_and_works
+— its act also names εργολήπτη/επιβλέποντα εργασιών and a 5-year έργο).
+*Evidence: signed act PDF ΡΛ164653Π8-ΠΞΝ. Affects: 1 row.*
+
+## 2026-08-12 — Ανάδοχοι review correction: 9Φ9Ρ4653Π8-ΞΕΦ deliverables → study
+
+User PDF verdict on the Εren Groupe pilot (Λίμνη Ευβοίας, 51 στρ.,
+48.650,90 €): «υλοποίησης της πιλοτικής μελέτης αναδάσωσης» is the
+delivery of the μελέτη itself — study, per the «υλοποίηση μελέτης» =
+εκπόνηση μελέτης convention set with ΡΛ16 today. Evidence excerpt
+switched from the όροι sentence to the σκοπός sentence. Split now
+42 works / 18 study_and_works / 9 study (test pin updated). Of the
+same-construction acts only ΨΤΑΤ (ΣΤΑΝΤΑ) remains study_and_works,
+pending the user's verdict against its εργολήπτη/επιβλέπων-εργασιών and
+5-year-έργο clauses. *Evidence: signed act PDF 9Φ9Ρ4653Π8-ΞΕΦ.
+Affects: 1 row.*
+
+## 2026-08-12 — Ανάδοχοι review correction: ΨΤΑΤ4653Π8-2Γ7 deliverables → study
+
+User PDF verdict on the ΣΤΑΝΤΑ Ευκαρπία act: «ανάληψη χρηματοδότησης και
+την υλοποίηση μελέτης αποκατάστασης – αναδάσωσης … 3.309 στρεμμάτων» is
+study, per the «υλοποίηση μελέτης» = εκπόνηση μελέτης convention — the
+εργολήπτη/επιβλέπων-εργασιών and 5-year clauses read as framework terms
+for what follows the μελέτη, not as part of this appointment's
+deliverable. Evidence excerpt switched to the σκοπός sentence, sliced to
+start at «ως Ανάδοχο …» so the principal's personal name is not stored.
+All three «υλοποίηση μελέτης» acts (ΡΛ16, 9Φ9Ρ, ΨΤΑΤ) now classify
+study; split 42 works / 17 study_and_works / 10 study (test pin
+updated). *Evidence: signed act PDF ΨΤΑΤ4653Π8-2Γ7. Affects: 1 row.*
+
+## 2026-08-12 — Ανάδοχοι deliverables: full 69/69 PDF review completed
+
+The user reviewed every one of the 69 root-act PDFs against the curated
+`deliverables` field on the review sheet and confirmed completion
+(verified list cross-checked exactly against the projects table — no
+project missing, none unknown). The pass produced four corrections, each
+logged above as it landed: Ψ6Ι2 works_kind → both, and ΡΛ16 / 9Φ9Ρ /
+ΨΤΑΤ deliverables → study under the «υλοποίηση μελέτης» = εκπόνηση
+μελέτης convention. Final verified split: 42 εκτέλεση έργου / 17 μελέτη
+και έργο / 10 μελέτη. The field is now fully human-verified against the
+signed acts. *Affects: no rows (closure record).*
