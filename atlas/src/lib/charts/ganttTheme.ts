@@ -43,3 +43,4 @@ export const EXT_COLOR: Record<string, string> = {
 export const NODATE_COLOR = '#b7e4c7';
 
 export const noDate = (p: GanttProject): boolean => p.status === 'active' && !p.deadline;
+

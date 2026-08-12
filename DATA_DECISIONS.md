@@ -957,3 +957,32 @@ logged above as it landed: Ψ6Ι2 works_kind → both, and ΡΛ16 / 9Φ9Ρ /
 μελέτης convention. Final verified split: 42 εκτέλεση έργου / 17 μελέτη
 και έργο / 10 μελέτη. The field is now fully human-verified against the
 signed acts. *Affects: no rows (closure record).*
+
+## 2026-08-12 — Β. Εύβοια: ψηφιοποίηση των 9 ζωνών αντιπλημμυρικών έργων (Master Plan, φύλλα 4.1/4.2)
+
+The two Master-Plan works maps the user supplied (data/raw/
+XARTHS_ERGON_DAS_LIMNHS_4.1.pdf, XARTHS_ERGON_DAS_ISTIAIAS_4.2.pdf —
+«ΧΑΡΤΗΣ ΑΝΤΙΠΛΗΜΜΥΡΙΚΩΝ ΕΡΓΩΝ», ΥΛΗ, Νοέμβριος 2021, 1:30.000) define
+the ΛΙΜΝΗ Ι–V and ΙΣΤΙΑΙΑ Ι–ΙV works zones the Εύβοια sponsor acts cite.
+Digitised as follows: the sheets are single JPEG rasters (4872×3681) —
+georeferenced via their printed ΕΓΣΑ87 grid (721.75 px per 5 km, ±1 px on
+both sheets; anchors in the curated file); machine pre-extraction
+(watershed over the drawn black boundary lines) produced first-pass
+polygons, and the user then hand-corrected/redrew ALL NINE zones in a
+purpose-built editor over the original sheets. The user's pixel-space
+vertices are the committed source of truth
+(khmdhs/data/evia_works_zones_digitised.json);
+scripts/build_evia_zones.py georeferences them, clips to the Kallikratis
+high-res coastline and writes data/processed/evia_works_zones.geojson
+(WGS84). Validation: digitised vs the sheets' own area tables — Λίμνη Ι
+96.9% / ΙΙ 99.3% / ΙΙΙ 99.6% / ΙV 91.1% / V 97.8%, Ιστιαία Ι 99.8% / ΙΙ
+77.7% / ΙΙΙ 70.3% / ΙV 100.0% (the deltas on Ιστιαία ΙΙ/ΙΙΙ are the
+as-drawn extents; the tables tabulate basin areas, not always the drawn
+zone). Finding: sheet 4.1's table misprints Λίμνη ΙV as «20.6827,401» —
+the drawn zone is the sheet's largest and the digitisation confirms
+~206.8k στρ. Zone↔project mapping (by the acts' basin citations): Λίμνη Ι
+→ EREN 6ΡΤΣ, Λίμνη ΙΙ → ΔΕΗ 9Κ9Τ, Λίμνη V → ΔΕΗ ΩΞΕΦ, Ιστιαία Ι → ΔΕΗ
+ΨΟΨΝ (Δάσος Βουτά), Ιστιαία ΙΙΙ → ΔΕΗ 6ΠΔΕ (Δάσος Αβγαρίας), Λίμνη Ι–V →
+ΔΕΔΔΗΕ μελέτες ΡΕΧΥ. Tests pin the 9 zones, area bands and geometry
+bounds (tests/test_evia_zones.py). *Affects: new curated file + build
+script + processed geojson; site representation to follow.*
