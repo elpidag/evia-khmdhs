@@ -36,10 +36,11 @@
 		}
 		const padx = (x1 - x0) * 0.65 + 0.01;
 		const pady = (y1 - y0) * 0.65 + 0.01;
+		// ring wound CLOCKWISE — d3-geo spherical polygons invert otherwise
 		const frame = {
 			type: 'Polygon' as const,
-			coordinates: [[[x0 - padx, y0 - pady], [x1 + padx, y0 - pady],
-				[x1 + padx, y1 + pady], [x0 - padx, y1 + pady],
+			coordinates: [[[x0 - padx, y0 - pady], [x0 - padx, y1 + pady],
+				[x1 + padx, y1 + pady], [x1 + padx, y0 - pady],
 				[x0 - padx, y0 - pady]]]
 		};
 		const proj = geoMercator();

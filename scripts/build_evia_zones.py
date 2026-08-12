@@ -19,6 +19,7 @@ from pathlib import Path
 import numpy as np
 from pyproj import Transformer
 from shapely.geometry import MultiPolygon, Polygon, mapping, shape
+from shapely.geometry.polygon import orient
 from shapely.ops import transform as shp_transform
 from shapely.ops import unary_union
 
@@ -76,6 +77,12 @@ def main() -> None:
                 return MultiPolygon([to_wgs(gg) for gg in g.geoms])
 
             wgs = to_wgs(geom).simplify(0.00015, preserve_topology=True)
+            # d3-geo treats polygons as spherical: exterior rings must wind
+            # CLOCKWISE (sign=-1) or the fill inverts to world-minus-zone
+            if isinstance(wgs, Polygon):
+                wgs = orient(wgs, sign=-1.0)
+            else:
+                wgs = MultiPolygon([orient(g, sign=-1.0) for g in wgs.geoms])
             rep = wgs.representative_point()
             m = meta[zone]
             features.append({
