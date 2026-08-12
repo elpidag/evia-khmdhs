@@ -5,13 +5,16 @@
 	import PromiseGantt from '$lib/charts/PromiseGantt.svelte';
 	import StatusWaffle from '$lib/charts/StatusWaffle.svelte';
 	import Waffle from '$lib/charts/Waffle.svelte';
-	import DeadlineSlope from '$lib/charts/DeadlineSlope.svelte';
+	import AreaYears from '$lib/charts/AreaYears.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import ZonesLayer from '$lib/maps/ZonesLayer.svelte';
 	import { loadCentroids, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
-	import { noDate } from '$lib/charts/ganttTheme';
+	import { COLOR, NODATE_COLOR, noDate, type GanttProject } from '$lib/charts/ganttTheme';
+	import ProjectCard from '$lib/charts/ProjectCard.svelte';
+	import { cardFor } from '$lib/charts/projectCard';
+	import { dev } from '$app/environment';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -22,6 +25,66 @@
 	// the statuses themselves are as of the data's status_as_of date, which
 	// the chart caveat states
 	const todayIso = new Date().toLocaleDateString('en-CA');
+	// map ↔ METRICS hover link: one shared highlighted project. The
+	// TIMELINE card docks at the map's outer LEFT middle; hovering the
+	// METRICS also docks the black category note at its outer RIGHT middle.
+	let hoveredAda = $state<string | null>(null);
+	let hoverCard = $state<{ x: number; y: number; anchor: 'left' | 'right'; ada: string } | null>(
+		null
+	);
+	let catTip = $state<{ x: number; y: number; maxW: number; text: string } | null>(null);
+	let mapEl = $state<HTMLElement | null>(null);
+	let waffleEl = $state<HTMLElement | null>(null);
+	const CAT_LABEL: Record<string, string> = {
+		completed: 'projects with identified completion act',
+		active: 'projects within deadline — no completion act identified',
+		nodate: 'projects without specific dates for implementation',
+		no_completion_recorded: 'projects past deadline — no completion act identified',
+		revoked: 'revoked'
+	};
+	// dev-only map frame picker: pan/zoom once, copy the view, bake it in
+	let pickFrame = $state(false);
+	let pickedView = $state<{ center: [number, number]; k: number } | null>(null);
+	// the page's FIXED frame — paste the picker's output here to change it
+	const MAP_VIEW: { center: [number, number]; k: number } | null = {
+		center: [23.8305, 38.3566],
+		k: 1.08
+	};
+
+	function showHover(ada: string | null, source: 'map' | 'metrics') {
+		hoveredAda = ada;
+		if (!ada) {
+			hoverCard = null;
+			catTip = null;
+			return;
+		}
+		const mr = mapEl?.getBoundingClientRect();
+		hoverCard = mr
+			? {
+					// hangs in the margin left of the map, clamped on-screen
+					x: Math.max(282, mr.left - 12),
+					y: mr.top + mr.height / 2,
+					anchor: 'left',
+					ada
+				}
+			: null;
+		if (source === 'metrics') {
+			const wr = waffleEl?.querySelector('.waffle')?.getBoundingClientRect();
+			const hp = ganttProjects.find((q) => q.ada === ada);
+			const k = hp ? (noDate(hp) ? 'nodate' : hp.status) : '';
+			catTip =
+				wr && k
+					? {
+							x: wr.right + 12,
+							y: wr.top + wr.height / 2,
+							maxW: Math.max(140, window.innerWidth - (wr.right + 12) - 16),
+							text: `${grInt(waffleStatuses[k] ?? 0)} ${CAT_LABEL[k] ?? k}`
+						}
+					: null;
+		} else {
+			catTip = null;
+		}
+	}
 	const live = $derived(o.projects.filter((p) => p.status !== 'superseded'));
 	const nCompleted = $derived(k.statuses['completed'] ?? 0);
 	const nNoAct = $derived(k.statuses['no_completion_recorded'] ?? 0);
@@ -162,17 +225,25 @@
 		return KIND_META.map(([key, label, color]) => ({ key, label, color, count: s[key] ?? 0 }));
 	});
 
-	// slope rows: every project whose deadline moved
-	const slopeRows = $derived(
-		live
-			.filter((p) => p.deadline0 && p.deadline && p.deadline !== p.deadline0)
-			.map((p) => ({
-				ada: p.ada,
-				company: p.company,
-				d0: p.deadline0 as string,
-				d1: p.deadline as string
-			}))
-	);
+	// yearly counts (designations vs completions) for the area chart —
+	// folded population; a restated pair counts once, at its FIRST act
+	const areaYears = $derived.by(() => {
+		const now = new Date().getFullYear();
+		const app: Record<number, number> = {};
+		const comp: Record<number, number> = {};
+		for (const p of ganttProjects) {
+			const ds = p.start0 ?? p.start;
+			if (ds) app[+ds.slice(0, 4)] = (app[+ds.slice(0, 4)] ?? 0) + 1;
+			if (p.completed) comp[+p.completed.slice(0, 4)] = (comp[+p.completed.slice(0, 4)] ?? 0) + 1;
+		}
+		const y0 = Math.min(...Object.keys(app).map(Number), now);
+		const years = Array.from({ length: now - y0 + 1 }, (_, i) => y0 + i);
+		return {
+			years,
+			designations: years.map((yr) => app[yr] ?? 0),
+			completions: years.map((yr) => comp[yr] ?? 0)
+		};
+	});
 
 	// prose blocks keep the right edge the user approved: where the OLD Gantt
 	// title's last word («…deadline») used to end. The visible title is now
@@ -299,65 +370,141 @@
 	</div>
 </section>
 
-<h2 class="status-title">CURRENT STATUS OF PROJECTS</h2>
-<ChartFrame anchor="waffle" methodology="anadohoi">
-	<StatusWaffle statuses={waffleStatuses}>
-		{#snippet explanation()}
-			<div style:margin-right={proseCut ? `${proseCut}px` : null}>
-			<p>
-				Each square is one sponsor project — {grInt(k.n_projects)} in all, with its colour
-				showing where the project stands on Διαύγεια, the state's transparency register.
-				Green means a completion act is on record: the official confirmation that the
-				promised restoration was delivered and accepted. Only {grInt(nCompleted)} of
-				{grInt(k.n_projects)} projects have one.
-			</p>
-			<p>
-				Mid-green projects are still inside their deadline; the palest green ones have no
-				implementation dates set in their acts. Grey ones are past their deadline with
-				nothing filed — which is not proof they were abandoned, but the act is the legal
-				proof of delivery, so until one is posted the promise remains just a promise.
-				Status as of {dmy(k.status_as_of)} — <a href="/methodology#anadohoi">methodology</a>.
-			</p>
-			</div>
-		{/snippet}
-	</StatusWaffle>
-</ChartFrame>
-
-<Defer height={560}>
-	<ChartFrame
-		title="MAP"
-		caveat={unplaced.length
-			? `${unplaced.length} projects span multiple regions and are not placed: ${unplaced.map((p) => p.company).join(', ')}.`
-			: ''}
-		anchor="map"
-		methodology="anadohoi"
+{#if hoverCard}
+	{@const hp = ganttProjects.find((p) => p.ada === hoverCard?.ada)}
+	{#if hp}
+		<ProjectCard
+			x={hoverCard.x}
+			y={hoverCard.y}
+			anchor={hoverCard.anchor}
+			card={cardFor(hp as unknown as GanttProject)}
+		/>
+	{/if}
+{/if}
+{#if catTip}
+	<div
+		class="cat-tip"
+		style:left={`${catTip.x}px`}
+		style:top={`${catTip.y}px`}
+		style:max-width={`${catTip.maxW}px`}
 	>
-		<div class="map-wrap">
-			<PaperMap interactive={false} width={640} height={620}>
-				{#snippet overlay(ctx)}
-					{#if zonesFc}
-						<ZonesLayer
-							{ctx}
-							features={zonesFc.features}
-							tipOf={(f) =>
-								`<strong>${f.properties.name}</strong><br>${f.properties.basin}<br>` +
-								`${grInt(f.properties.extracted_stremmata)} στρ. (ψηφιοποιημένη ζώνη έργων)`}
+		{catTip.text}
+	</div>
+{/if}
+
+<h2 class="status-title">CURRENT STATUS OF PROJECTS</h2>
+<ChartFrame
+	anchor="waffle"
+	methodology="anadohoi"
+	caveat={`${
+		unplaced.length
+			? `${unplaced.length} projects span multiple regions and are not placed on the map: ${unplaced.map((p) => p.company).join(', ')}. `
+			: ''
+	}Designations count each project once, at its first act; completions are the acts identified on Διαύγεια — absence of one is not proof a project was abandoned. Status as of ${dmy(k.status_as_of)}.`}
+>
+	<!-- ONE legend for the waffle AND the map — wording matches the
+	     timeline legend, placed like it: a tinted strip under the title -->
+	<ul class="stkey">
+		<li><i style:background={COLOR.completed}></i>projects with identified completion act</li>
+		<li>
+			<i style:background={COLOR.active}></i>projects within deadline — no completion act
+			identified
+		</li>
+		<li>
+			<i style:background={NODATE_COLOR}></i>projects without specific dates for implementation
+		</li>
+		<li>
+			<i style:background={COLOR.no_completion_recorded}></i>projects past deadline — no
+			completion act identified
+		</li>
+		<li><i style:background={COLOR.revoked}></i>revoked</li>
+	</ul>
+
+	<div class="statusgrid">
+		<div class="mcol">
+			<div class="maplabel">MAP</div>
+			{#if dev}
+				<div class="framepick">
+					<label>
+						<input type="checkbox" bind:checked={pickFrame} />
+						adjust map frame (dev)
+					</label>
+					{#if pickFrame}
+						<input
+							class="viewout"
+							readonly
+							value={pickedView
+								? `view: { center: [${pickedView.center[0]}, ${pickedView.center[1]}], k: ${pickedView.k} }`
+								: 'drag / wheel-after-click to frame, then copy this'}
+							onfocus={(e) => (e.currentTarget as HTMLInputElement).select()}
 						/>
 					{/if}
-					<DotLayer
-						{ctx}
-						points={mapDots}
-						r={5}
-						fillOf={(p) => STATUS_COLOR[p.status as string] ?? '#999'}
-						tipOf={(p) =>
-							`<strong>${p.company}</strong><br>${p.fire ?? ''} · ${p.status}`}
-						hrefOf={(p) => `/anadohoi/project/${p.ada}`}
-					/>
-				{/snippet}
-			</PaperMap>
+				</div>
+			{/if}
+			<Defer height={560}>
+				<div class="map-wrap" bind:this={mapEl}>
+					<PaperMap
+						interactive={pickFrame}
+						width={640}
+						height={620}
+						view={pickFrame ? null : MAP_VIEW}
+						onViewChange={(v) => (pickedView = v)}
+					>
+						{#snippet overlay(ctx)}
+							{#if zonesFc}
+								<ZonesLayer
+									{ctx}
+									features={zonesFc.features}
+									tipOf={(f) =>
+										`<strong>${f.properties.name}</strong><br>${f.properties.basin}<br>` +
+										`${grInt(f.properties.extracted_stremmata)} στρ. (ψηφιοποιημένη ζώνη έργων)`}
+								/>
+							{/if}
+							<DotLayer
+								{ctx}
+								points={mapDots}
+								r={5}
+								fillOf={(p) =>
+									noDate(p as never)
+										? NODATE_COLOR
+										: (STATUS_COLOR[p.status as string] ?? '#999')}
+								hrefOf={(p) => `/anadohoi/project/${p.ada}`}
+								onOver={(p) => showHover(p.ada as string, 'map')}
+								onOut={() => showHover(null, 'map')}
+								hotOf={(p) => p.ada === hoveredAda}
+							/>
+						{/snippet}
+					</PaperMap>
+				</div>
+			</Defer>
 		</div>
-	</ChartFrame>
-</Defer>
+		<div class="wcol" bind:this={waffleEl}>
+			<div class="maplabel">METRICS</div>
+			<StatusWaffle
+				statuses={waffleStatuses}
+				bare
+				projects={ganttProjects as unknown as GanttProject[]}
+				hotAda={hoveredAda}
+				onCellHover={(ada) => showHover(ada, 'metrics')}
+			/>
+			<div class="maplabel peryear" id="peryear">DESIGNATIONS / COMPLETIONS PER YEAR</div>
+			<AreaYears
+				years={areaYears.years}
+				width={440}
+				height={230}
+				series={[
+					{
+						label: 'designation acts',
+						color: '#52b788',
+						values: areaYears.designations,
+						kind: 'line'
+					},
+					{ label: 'completion acts', color: 'var(--c-anadohoi)', values: areaYears.completions }
+				]}
+			/>
+		</div>
+	</div>
+</ChartFrame>
 
 <ChartFrame
 	title="TIMELINE"
@@ -505,17 +652,6 @@
 	</ChartFrame>
 </Defer>
 
-<Defer height={440}>
-	<ChartFrame
-		title={`${slopeRows.length} projects had their deadline moved — some by years`}
-		subtitle="initial deadline → deadline after amendments"
-		caveat="Red wires moved by more than roughly a year. Extensions are granted by τροποποίηση of the appointing act, usually citing weather or workload."
-		anchor="slope"
-		methodology="anadohoi"
-	>
-		<DeadlineSlope rows={slopeRows} />
-	</ChartFrame>
-</Defer>
 </div>
 
 <style>
@@ -684,14 +820,112 @@
 			grid-template-columns: 1fr;
 		}
 	}
+	/* one legend for waffle + map, in the timeline legend's dress: the
+	   tinted strip right under the section title */
+	.stkey {
+		list-style: none;
+		margin: 0 0 var(--sp-3);
+		padding: var(--sp-2) var(--sp-3);
+		background: #f2f2f2;
+		border-radius: 6px;
+		/* three aligned columns (2 rows) so entries line up, not rag */
+		display: grid;
+		grid-template-columns: repeat(3, auto);
+		justify-content: start;
+		gap: 6px var(--sp-7, 2rem);
+		font-size: var(--fs-14);
+		color: var(--ink-soft);
+	}
+	@media (max-width: 900px) {
+		.stkey {
+			grid-template-columns: 1fr;
+		}
+	}
+	.stkey li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.stkey i {
+		width: 12px;
+		height: 12px;
+		border-radius: 2px;
+		flex: none;
+	}
+	/* map left, METRICS waffle + prose right (per mockup) */
+	.statusgrid {
+		display: grid;
+		grid-template-columns: 7fr minmax(300px, 5fr);
+		gap: var(--sp-2) var(--sp-8, 3rem);
+		align-items: start;
+	}
+	.statusgrid :global(.waffle) {
+		max-width: 420px;
+	}
+	.cat-tip {
+		position: fixed;
+		transform: translate(0, -50%);
+		background: var(--ink);
+		color: #fff;
+		font-size: var(--fs-12);
+		line-height: 1.3;
+		padding: 4px 10px;
+		border-radius: 4px;
+		pointer-events: none;
+		z-index: 120;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+	}
+	.framepick {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+		margin-bottom: var(--sp-2);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+	}
+	.framepick .viewout {
+		flex: 1;
+		font-family: var(--font-mono, monospace);
+		font-size: var(--fs-12);
+		border: 1px dashed var(--line);
+		background: var(--paper);
+		padding: 2px 8px;
+		border-radius: 4px;
+		color: var(--ink);
+	}
+	.maplabel.peryear {
+		margin-top: var(--sp-10, 2.5rem);
+	}
+	.wcol :global(.ay figcaption) {
+		background: #f2f2f2;
+	}
+	.maplabel {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		color: var(--c-anadohoi);
+		margin-bottom: var(--sp-2);
+	}
+	@media (max-width: 900px) {
+		.statusgrid {
+			grid-template-columns: 1fr;
+		}
+	}
 	.map-wrap {
-		/* left-aligned, sized so title + map fit one screen */
+		/* left-aligned; the card docks in the margin on its left */
 		max-width: 600px;
 		margin: 0;
 	}
-	/* the map's paper background matches the timeline legend strip */
+	/* the map: light-grey ground, white regions, grey hairline borders */
 	.map-wrap :global(.map) {
-		background: var(--paper-2);
+		background: #f2f2f2;
+		border: none;
+		box-shadow: none;
+	}
+	.map-wrap :global(.region) {
+		fill: #fff;
+		stroke: #8f8f8f;
 	}
 	.strip {
 		width: 100%;

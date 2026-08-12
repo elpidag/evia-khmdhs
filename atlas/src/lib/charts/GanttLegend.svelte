@@ -205,7 +205,7 @@
 		grid-template-columns: auto minmax(0, 1fr) max-content;
 		gap: var(--sp-1) var(--sp-5, 1.25rem);
 		align-items: center;
-		background: var(--paper-2);
+		background: #f2f2f2;
 		border-radius: 6px;
 		padding: var(--sp-2) var(--sp-3);
 		margin: 0 0 var(--sp-3);

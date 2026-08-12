@@ -53,6 +53,17 @@
 		/** viewBox aspect (Greece is portrait-ish) */
 		width?: number;
 		height?: number;
+		/** initial framing: zoom to fit these lon/lat points (e.g. the data
+		 *  dots) with `fitPad` margin — an editorial crop of the country */
+		fitPoints?: [number, number][] | null;
+		/** margin around fitted points as a fraction of the frame (default 0.12) */
+		fitPad?: number;
+		/** initial framing, hand-tuned: centre lon/lat + zoom factor
+		 *  (k=1 is the whole country); wins over fitPoints */
+		view?: { center: [number, number]; k: number } | null;
+		/** fires with the current {center,k} as the user pans/zooms —
+		 *  powers the dev-only frame picker */
+		onViewChange?: (v: { center: [number, number]; k: number }) => void;
 		/** overlay layers (dots, arcs) drawn in map coordinates */
 		overlay?: Snippet<[MapCtx]>;
 		/** legend block, absolutely positioned over the Ionian whitespace */
@@ -67,6 +78,10 @@
 		interactive = true,
 		width = 600,
 		height = 620,
+		fitPoints = null,
+		fitPad = 0.12,
+		view = null,
+		onViewChange,
 		overlay,
 		legend
 	}: Props = $props();
@@ -186,6 +201,41 @@
 		}
 	});
 
+	// initial editorial framing (view / fitPoints), applied once per input
+	let appliedViewKey = $state('');
+	$effect(() => {
+		if (!projection || !path || focusPe) return;
+		const key = JSON.stringify(view ?? fitPoints ?? null);
+		if (!key || key === 'null' || key === appliedViewKey) return;
+		if (view) {
+			const px = projection(view.center);
+			if (!px) return;
+			applyTransform(
+				{ k: view.k, x: width / 2 - view.k * px[0], y: height / 2 - view.k * px[1] },
+				false
+			);
+			appliedViewKey = key;
+		} else if (fitPoints && fitPoints.length) {
+			let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+			for (const c of fitPoints) {
+				const q = projection(c);
+				if (!q) continue;
+				x0 = Math.min(x0, q[0]); y0 = Math.min(y0, q[1]);
+				x1 = Math.max(x1, q[0]); y1 = Math.max(y1, q[1]);
+			}
+			if (x1 <= x0 || y1 <= y0) return;
+			const k = Math.max(
+				1,
+				Math.min(8, (1 - fitPad) * Math.min(width / (x1 - x0), height / (y1 - y0)))
+			);
+			applyTransform(
+				{ k, x: width / 2 - (k * (x0 + x1)) / 2, y: height / 2 - (k * (y0 + y1)) / 2 },
+				false
+			);
+			appliedViewKey = key;
+		}
+	});
+
 	function applyTransform(t: { x: number; y: number; k: number }, animate = true) {
 		if (!svgEl) return;
 		const zt = zoomIdentity.translate(t.x, t.y).scale(t.k);
@@ -225,6 +275,7 @@
 		if (!svgEl || !interactive || narrow) return;
 		zoomBehavior = d3zoom<SVGSVGElement, unknown>()
 			.scaleExtent([1, 14])
+			.wheelDelta((ev) => (-ev.deltaY * (ev.deltaMode === 1 ? 0.05 : ev.deltaMode ? 1 : 0.002)) * 0.18)
 			.translateExtent([
 				[-width * 0.25, -height * 0.25],
 				[width * 1.25, height * 1.25]
@@ -236,6 +287,14 @@
 			.on('start', () => (zooming = true))
 			.on('zoom', (ev: D3ZoomEvent<SVGSVGElement, unknown>) => {
 				transform = { x: ev.transform.x, y: ev.transform.y, k: ev.transform.k };
+				if (onViewChange && projection) {
+					const t = ev.transform;
+					const c = projection.invert?.([
+						(width / 2 - t.x) / t.k,
+						(height / 2 - t.y) / t.k
+					]);
+					if (c) onViewChange({ center: [+c[0].toFixed(4), +c[1].toFixed(4)], k: +t.k.toFixed(3) });
+				}
 			})
 			.on('end', () => (zooming = false));
 		const sel = select(svgEl);
@@ -352,8 +411,8 @@
 
 	{#if interactive && !narrow}
 		<div class="zoomctl">
-			<button onclick={() => zoomBy(1.6)} title="Zoom in" aria-label="Zoom in">+</button>
-			<button onclick={() => zoomBy(1 / 1.6)} title="Zoom out" aria-label="Zoom out">−</button>
+			<button onclick={() => zoomBy(1.08)} title="Zoom in" aria-label="Zoom in">+</button>
+			<button onclick={() => zoomBy(1 / 1.08)} title="Zoom out" aria-label="Zoom out">−</button>
 			<button onclick={resetZoom} title="Reset view" aria-label="Reset view">⌂</button>
 		</div>
 	{/if}

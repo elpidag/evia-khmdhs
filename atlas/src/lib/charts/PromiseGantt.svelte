@@ -9,6 +9,8 @@
 	import { dmy, eurShort } from '$lib/transforms/format';
 	import { COLOR, EXT_COLOR, NODATE_COLOR, noDate, type GanttProject } from './ganttTheme';
 	import GanttLegend from './GanttLegend.svelte';
+	import ProjectCard from './ProjectCard.svelte';
+	import { cardFor, displayName, type CardData } from './projectCard';
 
 	interface Props {
 		projects: GanttProject[];
@@ -44,60 +46,13 @@
 	const BAR_MIN = 4;
 	const LINE_H = 3; // acts with no stated budget render as a thick line
 
-	/** English renderings of the duration-based deadlines (shown on hover;
-	 *  the act's own Greek wording stays printed on the row) */
-	const DTEXT_EN: Record<string, string> = {
-		'15 ημέρες από την έκδοση': '15 days from issue of the act',
-		'2 έτη από την υπογραφή': '2 years from signing',
-		'3 έτη από την υπογραφή': '3 years from signing',
-		'4 μήνες από την έκδοση': '4 months from issue of the act',
-		'4 μήνες από την έναρξη εργασιών (μέγ. 6)': '4 months from start of works (max 6)',
-		'5 έτη από την έκδοση': '5 years from issue of the act',
-		'5 μήνες από την έναρξη εργασιών': '5 months from start of works',
-		'μελέτες: 30 ημέρες από επιλογή μελετητή · έργο: 4 μήνες από έναρξη (μέγ. 6)':
-			'studies: 30 days from selecting the engineer · works: 4 months from start (max 6)',
-		'μελέτη: 2 μήνες · έργο: 12 μήνες από την έναρξη':
-			'study: 2 months · works: 12 months from start'
-	};
 
-	let rowTip = $state<{
-		x: number;
-		y: number;
-		name: string;
-		color: string;
-		/** text colour — dark ink on the pale no-date background */
-		ink: string;
-		lines: string[];
-	} | null>(null);
+	let rowTip = $state<{ x: number; y: number; card: CardData } | null>(null);
 
 	/** the row's hover card: fixed width, height per content; its RIGHT
 	 *  edge midpoint sits on the LEFT edge midpoint of the highlighted
 	 *  row's outline, so it hangs in the page margin beside the row. */
 	function showRow(e: MouseEvent, p: GanttProject) {
-		const b1 = p.budget_stated ?? null;
-		const b0 = p.start0 ? (p.budget0 ?? null) : null;
-		const lines: string[] = [];
-		lines.push(
-			`designation act: ${dmy(p.start0 ?? p.start) || '—'}${p.start0 ? ` (restated ${dmy(p.start) || '—'})` : ''}`
-		);
-		lines.push(
-			b0 !== null && b1 !== null
-				? `budget announced: ${eurShort(b0)} → ${eurShort(b1)}`
-				: b1 !== null
-					? `budget announced: ${eurShort(b1)}`
-					: 'budget announced: none stated'
-		);
-		if (p.deadline) {
-			lines.push(
-				p.deadline0 && p.deadline0 !== p.deadline
-					? `deadline: ${dmy(p.deadline0)} → ${dmy(p.deadline)}`
-					: `deadline: ${dmy(p.deadline)}`
-			);
-		} else if (p.dtext) {
-			lines.push(`deadline: ${DTEXT_EN[p.dtext] ?? p.dtext}`);
-		} else {
-			lines.push('deadline: —');
-		}
 		const box = (e.currentTarget as SVGGElement)
 			.querySelector('.rowbox')
 			?.getBoundingClientRect();
@@ -106,10 +61,7 @@
 			// clamped so the card can never leave the viewport on the left
 			x: Math.max(290, box.left),
 			y: box.top + box.height / 2,
-			name: displayName(p.company),
-			color: noDate(p) ? NODATE_COLOR : (COLOR[p.status] ?? 'var(--ink)'),
-			ink: noDate(p) ? 'var(--ink)' : '#fff',
-			lines
+			card: cardFor(p)
 		};
 	}
 
@@ -162,16 +114,7 @@
 	const todayX = $derived(x(today) ?? LABEL_W);
 
 
-	/** display form of a company name: uppercase per the Greek all-caps
-	 *  convention — the τόνος is dropped but the dialytika is KEPT (ϊ → Ϊ,
-	 *  so TATOΪ stays TATOΪ, not TATOI) */
-	function displayName(name: string): string {
-		return name
-			.toUpperCase()
-			.normalize('NFD')
-			.replace(/[\u0300-\u0307\u0309-\u036f]/g, '')
-			.normalize('NFC');
-	}
+
 
 	/** full company name over at most two lines (the doubled rows fit two);
 	 *  breaks at a word boundary, never silently truncates short of ~76 chars */
@@ -199,18 +142,7 @@
 	</select>
 </div>
 {#if rowTip}
-	<div
-		class="row-tip"
-		style:left={`${rowTip.x}px`}
-		style:top={`${rowTip.y}px`}
-		style:background={rowTip.color}
-		style:color={rowTip.ink}
-	>
-		<div class="tip-name">{rowTip.name}</div>
-		{#each rowTip.lines as ln, i (i)}
-			<div>{ln}</div>
-		{/each}
-	</div>
+	<ProjectCard x={rowTip.x} y={rowTip.y} anchor="left" card={rowTip.card} />
 {/if}
 <svg viewBox="0 0 {W} {layout.height}" role="img" aria-label="Timeline of every sponsor project">
 	<!-- year grid: labels on TOP, right under the legend -->
@@ -332,25 +264,6 @@
 		border: 1px solid var(--line);
 		border-radius: 4px;
 		padding: 1px 4px;
-	}
-	.row-tip {
-		/* fixed width, content-driven height; right-edge midpoint anchored
-		   on the highlighted row's left-edge midpoint */
-		position: fixed;
-		transform: translate(-100%, -50%);
-		width: 270px;
-		color: #fff;
-		font-size: 12px;
-		line-height: 1.5;
-		padding: 8px 12px;
-		border-radius: 5px;
-		pointer-events: none;
-		z-index: 120;
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-	}
-	.tip-name {
-		font-weight: 700;
-		margin-bottom: 2px;
 	}
 	svg {
 		width: 100%;

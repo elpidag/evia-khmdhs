@@ -16,8 +16,10 @@
 		tipOf?: (p: DotPoint) => string;
 		hrefOf?: (p: DotPoint) => string | null;
 		opacity?: number;
-		onOver?: (p: DotPoint) => void;
+		onOver?: (p: DotPoint, e?: MouseEvent) => void;
 		onOut?: (p: DotPoint) => void;
+		/** externally-driven highlight (e.g. hovering the paired chart) */
+		hotOf?: (p: DotPoint) => boolean;
 	}
 
 	let {
@@ -30,12 +32,13 @@
 		hrefOf,
 		opacity = 0.85,
 		onOver,
-		onOut
+		onOut,
+		hotOf
 	}: Props = $props();
 
-	function enter(p: DotPoint) {
+	function enter(p: DotPoint, e?: MouseEvent) {
 		if (tipOf) ctx.showTip(tipOf(p));
-		onOver?.(p);
+		onOver?.(p, e);
 	}
 	function leave(p: DotPoint) {
 		if (tipOf) ctx.hideTip();
@@ -61,18 +64,19 @@
 
 {#each placed as { p, x, y }, i (i)}
 	{@const href = hrefOf?.(p) ?? null}
+	{@const hot = hotOf?.(p) ?? false}
 	{#if href}
 		<a {href} aria-label={String(p.name ?? p.title ?? p.ref ?? href)}>
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<circle
 				cx={x}
 				cy={y}
-				r={radius(p)}
+				r={radius(p) * (hot ? 1.5 : 1)}
 				fill={fillOf(p)}
-				{stroke}
-				stroke-width={0.8 / ctx.k}
-				{opacity}
-				onmouseenter={() => enter(p)}
+				stroke={hot ? 'var(--ink)' : stroke}
+				stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
+				opacity={hot ? 1 : opacity}
+				onmouseenter={(e) => enter(p, e)}
 				onmouseleave={() => leave(p)}
 			/>
 		</a>
@@ -81,12 +85,12 @@
 		<circle
 			cx={x}
 			cy={y}
-			r={radius(p)}
+			r={radius(p) * (hot ? 1.5 : 1)}
 			fill={fillOf(p)}
-			{stroke}
-			stroke-width={0.8 / ctx.k}
-			{opacity}
-			onmouseenter={() => enter(p)}
+			stroke={hot ? 'var(--ink)' : stroke}
+			stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
+			opacity={hot ? 1 : opacity}
+			onmouseenter={(e) => enter(p, e)}
 			onmouseleave={() => leave(p)}
 		/>
 	{/if}

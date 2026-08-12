@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { COLOR, NODATE_COLOR } from './ganttTheme';
+	import { COLOR, NODATE_COLOR, noDate, type GanttProject } from './ganttTheme';
 
 	/** One square per project, coloured by outcome — the headline visual.
 	 *  Categories, colours and wording follow the TIMELINE (ganttTheme +
@@ -9,8 +9,24 @@
 		statuses: Record<string, number>;
 		/** prose block rendered to the right of the colour legend */
 		explanation?: Snippet;
+		/** just the squares — the caller provides legend and prose */
+		bare?: boolean;
+		/** bare mode: one NAMED square per project (category-ordered,
+		 *  chronological inside each category) — enables the hover link */
+		projects?: GanttProject[];
+		/** externally-driven highlight (e.g. hovering the map dot) */
+		hotAda?: string | null;
+		/** square hover events out (ada + mouse position), null on leave */
+		onCellHover?: (ada: string | null, e?: MouseEvent) => void;
 	}
-	let { statuses, explanation }: Props = $props();
+	let {
+		statuses,
+		explanation,
+		bare = false,
+		projects,
+		hotAda = null,
+		onCellHover
+	}: Props = $props();
 
 	const ORDER: [string, string, string][] = [
 		['completed', 'with identified completion act', COLOR.completed],
@@ -19,6 +35,22 @@
 		['no_completion_recorded', 'past deadline — no completion act identified', COLOR.no_completion_recorded],
 		['revoked', 'revoked', COLOR.revoked]
 	];
+	const CAT_COLOR: Record<string, string> = Object.fromEntries(
+		ORDER.map(([k, , c]) => [k, c])
+	);
+	const RANK: Record<string, number> = Object.fromEntries(ORDER.map(([k], i) => [k, i]));
+	const keyOf = (p: GanttProject) => (noDate(p) ? 'nodate' : p.status);
+	/** per-project cells, in the categories' legend order */
+	const pcells = $derived.by(() => {
+		if (!projects) return null;
+		return [...projects]
+			.sort(
+				(a, b) =>
+					(RANK[keyOf(a)] ?? 9) - (RANK[keyOf(b)] ?? 9) ||
+					(a.start0 ?? a.start ?? '').localeCompare(b.start0 ?? b.start ?? '')
+			)
+			.map((p) => ({ ada: p.ada, name: p.company, color: CAT_COLOR[keyOf(p)] ?? '#999' }));
+	});
 	const cells = $derived(
 		ORDER.flatMap(([k, label, color]) =>
 			Array.from({ length: statuses[k] ?? 0 }, () => ({
@@ -30,6 +62,29 @@
 	);
 </script>
 
+{#if bare}
+	{#if pcells}
+		<div class="waffle" role="img" aria-label="One square per project, coloured by outcome">
+			{#each pcells as c (c.ada)}
+				<a
+					class="cell"
+					class:hot={c.ada === hotAda}
+					style:background={c.color}
+					href={`/anadohoi/project/${c.ada}`}
+					aria-label={c.name}
+					onmouseenter={(e) => onCellHover?.(c.ada, e)}
+					onmouseleave={() => onCellHover?.(null)}
+				></a>
+			{/each}
+		</div>
+	{:else}
+		<div class="waffle" role="img" aria-label="Project outcomes as one square each">
+			{#each cells as c, i (i)}
+				<span class="cell" style:background={c.color} data-tip={c.tip}></span>
+			{/each}
+		</div>
+	{/if}
+{:else}
 <div class="wrap">
 	<div class="waffle" role="img" aria-label="Project outcomes as one square each">
 		{#each cells as c, i (i)}
@@ -49,6 +104,7 @@
 		{/if}
 	</div>
 </div>
+{/if}
 
 <style>
 	.wrap {
@@ -67,13 +123,15 @@
 		aspect-ratio: 1;
 		border-radius: 2px;
 		position: relative;
+		display: block;
 	}
-	.cell:hover {
+	.cell:hover,
+	.cell.hot {
 		outline: 2px solid var(--ink);
 		outline-offset: 1px;
 	}
 	/* instant tooltip (native title needs a ~1s still hover) */
-	.cell:hover::after {
+	.cell[data-tip]:hover::after {
 		content: attr(data-tip);
 		position: absolute;
 		bottom: calc(100% + 6px);
