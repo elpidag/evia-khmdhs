@@ -1222,6 +1222,7 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             # per-act verbatim names stay on the project pages
             "group": _sponsor_group(r["company"]),
             "funder": r["funder"], "works_kind": r["works_kind"],
+            "deliverables": r["deliverables"],
             "area": r["area_stremmata"], "pe": r["pe"],
             "fire": r["fire_event"], "budget": budget,
             "budget_stated": r["budget_eur"],
@@ -1238,6 +1239,9 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             # from the act's basin citation
             "works_zones": (json.loads(r["works_zones"])
                             if r["works_zones"] else None),
+            # executing forest co-ops named in the act trail (curated)
+            "executors": (json.loads(r["executors"])
+                          if r["executors"] else None),
         })
 
     live = [p for p in projects if p["status"] != "superseded"]
@@ -1307,6 +1311,8 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
     out = dict(r)
     out["works_zones"] = (json.loads(out["works_zones"])
                           if out.get("works_zones") else None)
+    out["executors"] = (json.loads(out["executors"])
+                        if out.get("executors") else None)
     try:
         out["evidence"] = json.loads(out.pop("evidence_json") or "{}")
     except ValueError:

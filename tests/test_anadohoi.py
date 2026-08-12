@@ -204,6 +204,30 @@ def test_real_db_deliverables_curated_for_all(conn):
             f"{root}: deliverables without evidence"
 
 
+def test_real_db_executors_curated(conn):
+    """13 projects name their executing forest co-op(s) in the act trail
+    (full 322-act PDF sweep, DATA_DECISIONS 2026-08-12); every entry is a
+    verbatim excerpt with its source act, and dase_vat is set only where the
+    act's wording pins a single ΔΑΣΕ-registry entry."""
+    rows = conn.execute(
+        "SELECT root_ada, executors FROM projects"
+        " WHERE executors IS NOT NULL").fetchall()
+    assert len(rows) == 13
+    n_rows = 0
+    linked = set()
+    for root, blob in rows:
+        for e in json.loads(blob):
+            n_rows += 1
+            assert e["name"] and e["ada"] and e["excerpt"], root
+            if e["dase_vat"]:
+                linked.add(e["dase_vat"])
+            else:
+                assert e.get("note"), f"{root}: unlinked executor without note"
+    assert n_rows == 23
+    # 14 distinct co-op VATs resolve into the ΔΑΣΕ dataset
+    assert len(linked) == 14
+
+
 def test_real_db_pins(conn):
     assert conn.execute("SELECT COUNT(*) FROM decisions").fetchone()[0] == 322
     assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 69

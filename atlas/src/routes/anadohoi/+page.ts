@@ -7,6 +7,10 @@ export interface AnadohoiOverviewProject {
 	group?: string;
 	/** digitised works-zone ids (evia_works_zones.geojson) */
 	works_zones?: string[] | null;
+	/** executing forest co-ops named in the act trail (curated) */
+	executors?:
+		| { name: string; dase_vat: string | null; ada: string; excerpt: string; note?: string }[]
+		| null;
 	funder: string | null;
 	works_kind: string | null;
 	area: number | null;

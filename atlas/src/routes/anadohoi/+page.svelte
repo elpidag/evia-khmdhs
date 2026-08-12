@@ -4,6 +4,7 @@
 	import BarH from '$lib/charts/BarH.svelte';
 	import PromiseGantt from '$lib/charts/PromiseGantt.svelte';
 	import StatusWaffle from '$lib/charts/StatusWaffle.svelte';
+	import Waffle from '$lib/charts/Waffle.svelte';
 	import DeadlineSlope from '$lib/charts/DeadlineSlope.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
@@ -47,7 +48,6 @@
 			.slice(0, 12)
 			.map((s) => ({ label: s.company, value: s.budget }))
 	);
-	const nUnstated = $derived(k.n_projects - k.n_stated);
 
 	// finding-title inputs — computed from the payload, never hardcoded
 	const bestFire = $derived.by(() => {
@@ -109,6 +109,59 @@
 		return s;
 	});
 
+	// deliverables / works-kind waffles: same folded population as the
+	// status waffle (superseded acts folded into their successors)
+	const DELIV_META: [string, string, string][] = [
+		['works', 'εκτέλεση έργου — works only', '#2d6a4f'],
+		['study_and_works', 'εκπόνηση μελέτης και υλοποίηση έργου — study & works', '#52b788'],
+		['study', 'εκπόνηση μελέτης — study only', '#b7e4c7']
+	];
+	const KIND_META: [string, string, string][] = [
+		['apokatastasi', 'αποκατάσταση — restoration', '#2d6a4f'],
+		['both', 'αποκατάσταση & αναδάσωση — both', '#52b788'],
+		['anadasosi', 'αναδάσωση — reforestation', '#b7e4c7'],
+		['', 'not stated in the act', '#CFCFCF']
+	];
+	const countBy = (field: 'deliverables' | 'works_kind') => {
+		const s: Record<string, number> = {};
+		for (const p of ganttProjects) {
+			const key = (p as Record<string, unknown>)[field] ?? '';
+			s[key as string] = (s[key as string] ?? 0) + 1;
+		}
+		return s;
+	};
+	const delivGroups = $derived.by(() => {
+		const s = countBy('deliverables');
+		return DELIV_META.map(([key, label, color]) => ({ key, label, color, count: s[key] ?? 0 }));
+	});
+
+	// sponsor → executing forest co-op links, curated from the act trails
+	interface Executor {
+		name: string;
+		dase_vat: string | null;
+		ada: string;
+		excerpt: string;
+		note?: string;
+	}
+	const execRows = $derived(
+		ganttProjects
+			.filter((p) => Array.isArray(p.executors) && p.executors.length)
+			.map((p) => ({
+				ada: p.ada,
+				company: p.company,
+				where: p.pe ?? p.fire ?? '',
+				executors: p.executors as Executor[]
+			}))
+			.sort((a, b) => a.company.localeCompare(b.company, 'el'))
+	);
+	const nExecCoops = $derived(
+		new Set(execRows.flatMap((r) => r.executors.map((e) => e.dase_vat ?? e.name))).size
+	);
+	const kindGroups = $derived.by(() => {
+		const s = countBy('works_kind');
+		return KIND_META.map(([key, label, color]) => ({ key, label, color, count: s[key] ?? 0 }));
+	});
+
 	// slope rows: every project whose deadline moved
 	const slopeRows = $derived(
 		live
@@ -120,26 +173,6 @@
 				d1: p.deadline as string
 			}))
 	);
-
-	// the CURRENT STATUS OF PROJECTS heading fits itself to the exact width
-	// of the green hero cards (measured; re-fits on resize)
-	let cardsEl = $state<HTMLElement | null>(null);
-	let statusSpan = $state<HTMLElement | null>(null);
-	$effect(() => {
-		const span = statusSpan;
-		const cards = cardsEl;
-		if (!span || !cards) return;
-		const fit = () => {
-			span.style.fontSize = '100px';
-			const w = span.getBoundingClientRect().width;
-			if (w > 0) span.style.fontSize = `${(100 * cards.clientWidth) / w}px`;
-		};
-		fit();
-		document.fonts?.ready.then(fit); // re-fit once the webfont metrics are in
-		const ro = new ResizeObserver(fit);
-		ro.observe(cards);
-		return () => ro.disconnect();
-	});
 
 	// prose blocks keep the right edge the user approved: where the OLD Gantt
 	// title's last word («…deadline») used to end. The visible title is now
@@ -235,8 +268,9 @@
 	>The promise vs. the delivery: every project from appointment to deadline</span
 >
 
+<div class="anap">
 <section class="hero">
-	<div class="cards" bind:this={cardsEl}>
+	<div class="cards">
 		<div class="card">
 			<div class="num">{grInt(k.n_projects)}</div>
 			<div class="lbl">announced projects<br />assignment acts</div>
@@ -265,9 +299,7 @@
 	</div>
 </section>
 
-<h2 class="status-title">
-	<span bind:this={statusSpan}>CURRENT STATUS OF PROJECTS</span>
-</h2>
+<h2 class="status-title">CURRENT STATUS OF PROJECTS</h2>
 <ChartFrame anchor="waffle" methodology="anadohoi">
 	<StatusWaffle statuses={waffleStatuses}>
 		{#snippet explanation()}
@@ -291,67 +323,9 @@
 	</StatusWaffle>
 </ChartFrame>
 
-<ChartFrame
-	title="TIMELINE"
-	titleColor="#2e6a50"
-	caveat={`Rows are ordered by the date of each project's first designation act — the control at the top left switches to grouping by category. Click a company to open its decision trail. Statuses as recorded on Διαύγεια — data last checked ${dmy(k.status_as_of)}.`}
-	anchor="gantt"
-	methodology="anadohoi"
->
-	<PromiseGantt projects={ganttProjects} today={todayIso} legend="panel" />
-</ChartFrame>
-
-<ChartFrame
-	title="{bestFire?.fire ?? '—'} was certified — {worstFire?.fire ?? '—'} never was"
-	subtitle="projects grouped by the fire that triggered them · fill = share with a completion act"
-	caveat="The fire is the one each act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
-	anchor="fires"
-	methodology="anadohoi"
->
-	<div class="fire-grid">
-		{#each fireCards as f (f.fire)}
-			<div class="fire-card">
-				<div class="fire-name">{f.fire}</div>
-				<div class="fire-bar">
-					<div
-						class="fire-fill"
-						style:width={`${(100 * f.completed) / f.n}%`}
-					></div>
-				</div>
-				<div class="fire-stats">
-					{f.completed}/{f.n} completed
-					{#if f.budget > 0}· {eurShort(f.budget)}{/if}
-				</div>
-			</div>
-		{/each}
-	</div>
-</ChartFrame>
-
-<Defer height={520}>
+<Defer height={560}>
 	<ChartFrame
-		title={`${grInt(k.n_companies)} sponsors — banks and energy companies carry the money, ${nUnstated} acts state no figure at all`}
-		subtitle="stated commitment per sponsor (after amendments), top {sponsorRows.length}"
-		caveat="Sums are commitments written in the acts, not verified spending; sponsors often promise «συνολική χρηματοδότηση του κόστους που θα προκύψει» with no number."
-		anchor="sponsors"
-		methodology="anadohoi"
-	>
-		<BarH rows={sponsorRows} />
-		<p class="muted note-inline">
-			{#if topRaise}
-				The {topRaise.company} commitment grew {eurShort(topRaise.budget_stated ?? 0)} →
-				{eurShort(topRaise.budget ?? 0)} by amendment — the largest single raise.
-			{/if}
-			Works are often executed by forest co-ops from the ΔΑΣΕ dataset: NOVA's Rhodes zone
-			was built by <a href="/dase">ΔΑΣΕ Αγίου Δημητρίου Πιερίας</a>, the ΤΙΤΑΝ/Κανελλοπούλου
-			works by ΔΑΣΕ Γαρδικίου Τρικάλων.
-		</p>
-	</ChartFrame>
-</Defer>
-
-<Defer height={640}>
-	<ChartFrame
-		title="Where the sponsors work: Αττική dominates, the islands got one project each"
-		subtitle="one dot per project at its Π.Ε. · colour = status"
+		title="MAP"
 		caveat={unplaced.length
 			? `${unplaced.length} projects span multiple regions and are not placed: ${unplaced.map((p) => p.company).join(', ')}.`
 			: ''}
@@ -384,6 +358,113 @@
 		</div>
 	</ChartFrame>
 </Defer>
+
+<ChartFrame
+	title="TIMELINE"
+	caveat={`Rows are ordered by the date of each project's first designation act — the control at the top left switches to grouping by category. Click a company to open its decision trail. Statuses as recorded on Διαύγεια — data last checked ${dmy(k.status_as_of)}.`}
+	anchor="gantt"
+	methodology="anadohoi"
+>
+	<PromiseGantt projects={ganttProjects} today={todayIso} legend="panel" />
+</ChartFrame>
+
+<div class="waffle-pair">
+	<ChartFrame
+		title="SCOPE OF APPOINTMENT"
+		subtitle="what each act appoints the sponsor for — from its operative σκοπός"
+		caveat="Curated from each root designation act's operative sentence, with the verbatim excerpt on the project page."
+		anchor="deliverables"
+		methodology="anadohoi"
+	>
+		<Waffle groups={delivGroups} stacked ariaLabel="Projects by scope of appointment" />
+	</ChartFrame>
+
+	<ChartFrame
+		title="TYPE OF INTERVENTION"
+		subtitle="αναδάσωση, αποκατάσταση, or both — as each act states it"
+		caveat="The act's own wording decides; one project's act states neither."
+		anchor="works-kind"
+		methodology="anadohoi"
+	>
+		<Waffle groups={kindGroups} stacked ariaLabel="Projects by type of intervention" />
+	</ChartFrame>
+</div>
+
+<ChartFrame
+	title="{bestFire?.fire ?? '—'} was certified — {worstFire?.fire ?? '—'} never was"
+	subtitle="projects grouped by the fire that triggered them · fill = share with a completion act"
+	caveat="The fire is the one each act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
+	anchor="fires"
+	methodology="anadohoi"
+>
+	<div class="fire-grid">
+		{#each fireCards as f (f.fire)}
+			<div class="fire-card">
+				<div class="fire-name">{f.fire}</div>
+				<div class="fire-bar">
+					<div
+						class="fire-fill"
+						style:width={`${(100 * f.completed) / f.n}%`}
+					></div>
+				</div>
+				<div class="fire-stats">
+					{f.completed}/{f.n} completed
+					{#if f.budget > 0}· {eurShort(f.budget)}{/if}
+				</div>
+			</div>
+		{/each}
+	</div>
+</ChartFrame>
+
+<Defer height={520}>
+	<ChartFrame
+		title="RANKING OF COMPANIES"
+		subtitle="according to sums offered via the projects"
+		caveat="Sums are commitments written in the acts, not verified spending; sponsors often promise «συνολική χρηματοδότηση του κόστους που θα προκύψει» with no number."
+		anchor="sponsors"
+		methodology="anadohoi"
+	>
+		<BarH rows={sponsorRows} color="#52b788" inside barHeight={22} />
+		{#if topRaise}
+			<p class="muted note-inline">
+				The {topRaise.company} commitment grew {eurShort(topRaise.budget_stated ?? 0)} →
+				{eurShort(topRaise.budget ?? 0)} by amendment — the largest single raise.
+			</p>
+		{/if}
+	</ChartFrame>
+</Defer>
+
+{#if execRows.length}
+	<ChartFrame
+		title={`The sponsors sign, forest co-ops dig: ${grInt(execRows.length)} of ${grInt(k.n_projects)} act trails name their executing crew`}
+		subtitle="{grInt(nExecCoops)} distinct co-ops (ΔΑ.Σ.Ε., ν.4423/2016) named as φορείς υλοποίησης or works contractors"
+		caveat="Only what the acts themselves record — most trails never name who held the chainsaw. Green co-ops link to their public-contracts profile in the ΔΑΣΕ dataset; the rest never won a public contract in its harvest window, or the act's wording doesn't pin one registry entry."
+		anchor="executors"
+		methodology="anadohoi"
+	>
+		<div class="exectable">
+			{#each execRows as r (r.ada)}
+				<div class="execitem">
+					<div class="execproj">
+						<a href={`/anadohoi/project/${r.ada}`}>{r.company}</a>
+						{#if r.where}<small class="muted">{r.where}</small>{/if}
+					</div>
+					<div class="execcoops">
+						{#each r.executors as e (e.name)}
+							{#if e.dase_vat}
+								<a class="coop linked" href={`/dase/contractor/${e.dase_vat}`} title={e.excerpt}
+									>{e.name}</a
+								>
+							{:else}
+								<span class="coop" title={e.note ?? e.excerpt}>{e.name}</span>
+							{/if}
+						{/each}
+					</div>
+				</div>
+			{/each}
+		</div>
+	</ChartFrame>
+{/if}
 
 <Defer height={300}>
 	<ChartFrame
@@ -435,6 +516,7 @@
 		<DeadlineSlope rows={slopeRows} />
 	</ChartFrame>
 </Defer>
+</div>
 
 <style>
 	/* hero: three solid dataset-green KPI cards beside the scheme prose */
@@ -476,15 +558,24 @@
 		font-size: var(--fs-14);
 		letter-spacing: 0.08em;
 		margin-bottom: var(--sp-3);
+		color: var(--c-anadohoi);
 	}
 	.about p {
 		margin: 0;
 	}
+	/* every subsection title on this page follows THE SCHEME kicker:
+	   display-black 14px, letterspaced, dataset green */
+	.status-title,
+	.anap :global(.frame .finding) {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		line-height: 1.3;
+		color: var(--c-anadohoi);
+	}
 	.status-title {
-		/* ~one waffle square of air between the title and the graph */
-		margin: 0 0 var(--sp-6);
-		line-height: 1;
-		color: #2e6a50;
+		margin: 0 0 var(--sp-3);
 	}
 	/* invisible width reference for the prose right-edge alignment */
 	.ruler {
@@ -494,13 +585,6 @@
 		font-family: var(--font-serif);
 		font-weight: 600;
 		font-size: var(--fs-24);
-	}
-	.status-title span {
-		display: inline-block;
-		font-family: var(--font-display);
-		font-weight: 900;
-		white-space: nowrap;
-		font-size: var(--fs-24); /* pre-measure fallback; the effect fits it */
 	}
 	@media (max-width: 900px) {
 		.hero {
@@ -539,9 +623,75 @@
 		font-size: var(--fs-13);
 		margin-top: var(--sp-2);
 	}
+	/* sponsor → executing co-op linkage list */
+	.exectable {
+		display: grid;
+		gap: var(--sp-2);
+	}
+	.execitem {
+		display: grid;
+		grid-template-columns: minmax(220px, 3fr) 9fr;
+		gap: var(--sp-1) var(--sp-6);
+		align-items: baseline;
+		border-top: 1px solid var(--line);
+		padding-top: var(--sp-2);
+	}
+	.execproj a {
+		text-decoration: none;
+		font-weight: 600;
+	}
+	.execproj a:hover {
+		text-decoration: underline;
+	}
+	.execproj small {
+		display: block;
+	}
+	.execcoops {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-1) var(--sp-2);
+	}
+	.coop {
+		font-size: var(--fs-13);
+		border: 1px solid var(--line-strong);
+		border-radius: 999px;
+		padding: 1px 10px;
+		white-space: nowrap;
+		color: var(--ink-soft);
+	}
+	.coop.linked {
+		color: var(--c-dase);
+		border-color: var(--c-dase);
+		text-decoration: none;
+	}
+	.coop.linked:hover {
+		background: color-mix(in srgb, var(--c-dase) 10%, transparent);
+	}
+	@media (max-width: 900px) {
+		.execitem {
+			grid-template-columns: 1fr;
+		}
+	}
+	/* the two category waffles run side by side */
+	.waffle-pair {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0 var(--sp-8, 3rem);
+		align-items: start;
+	}
+	@media (max-width: 900px) {
+		.waffle-pair {
+			grid-template-columns: 1fr;
+		}
+	}
 	.map-wrap {
-		max-width: 660px;
-		margin: 0 auto;
+		/* left-aligned, sized so title + map fit one screen */
+		max-width: 600px;
+		margin: 0;
+	}
+	/* the map's paper background matches the timeline legend strip */
+	.map-wrap :global(.map) {
+		background: var(--paper-2);
 	}
 	.strip {
 		width: 100%;

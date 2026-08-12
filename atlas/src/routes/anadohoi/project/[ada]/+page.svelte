@@ -55,6 +55,20 @@
 	const budgetShown = $derived(p.budget_net_eur ?? p.budget_current);
 	// tolerate a pre-restart API that ships works_zones unparsed
 	const worksZones = $derived(Array.isArray(p.works_zones) ? p.works_zones : null);
+	interface Executor {
+		name: string;
+		dase_vat: string | null;
+		ada: string;
+		excerpt: string;
+		note?: string;
+	}
+	const executors = $derived(
+		Array.isArray(p.executors) ? (p.executors as Executor[]) : null
+	);
+	// evidence excerpts, deduplicated (several co-ops share one act sentence)
+	const executorExcerpts = $derived(
+		executors ? [...new Set(executors.map((e) => e.excerpt))] : []
+	);
 	// pre-filled Google Maps search for the dev-only location curator
 	const locQuery = $derived(
 		[p.location_text, p.municipality ? `Δήμος ${p.municipality}` : '', p.pe]
@@ -106,6 +120,24 @@
 	<dd>{WORKS[p.works_kind ?? ''] ?? '—'}</dd>
 	<dt>Scope of appointment</dt>
 	<dd>{DELIVERABLES[p.deliverables ?? ''] ?? '—'}</dd>
+	{#if executors?.length}
+		<dt>Works executed by</dt>
+		<dd>
+			{#each executors as e (e.name + e.ada)}
+				<div class="execrow">
+					{#if e.dase_vat}
+						<a href={`/dase/contractor/${e.dase_vat}`}>{e.name}</a>
+					{:else}
+						{e.name}
+					{/if}
+					<a class="actl" href={`/pdf/diavgeia/${e.ada}`} target="_blank" rel="noopener"
+						>πράξη 📄</a
+					>
+					{#if e.note}<small class="muted">— {e.note}</small>{/if}
+				</div>
+			{/each}
+		</dd>
+	{/if}
 	<dt>Location</dt>
 	<dd>
 		{p.location_text ?? '—'}
@@ -216,7 +248,7 @@
 	</table>
 </section>
 
-{#if Object.keys(p.evidence).length}
+{#if Object.keys(p.evidence).length || executorExcerpts.length}
 	<section>
 		<h2>Evidence</h2>
 		<p class="muted">
@@ -227,6 +259,10 @@
 			{#each Object.entries(p.evidence) as [k, v] (k)}
 				<dt>{EVIDENCE_LABEL[k] ?? k}</dt>
 				<dd><blockquote class="excerpt">«{v}»</blockquote></dd>
+			{/each}
+			{#each executorExcerpts as ex (ex)}
+				<dt>Εκτέλεση εργασιών</dt>
+				<dd><blockquote class="excerpt">«{ex}»</blockquote></dd>
 			{/each}
 		</dl>
 	</section>
@@ -281,6 +317,21 @@
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);
+	}
+	.execrow {
+		margin-bottom: 2px;
+	}
+	.execrow a:first-child {
+		color: var(--c-dase);
+	}
+	.actl {
+		font-size: var(--fs-12);
+		color: var(--ink-faint);
+		text-decoration: none;
+		margin-left: var(--sp-1);
+	}
+	.actl:hover {
+		text-decoration: underline;
 	}
 	.note {
 		border-left: 3px solid var(--c-anadohoi);

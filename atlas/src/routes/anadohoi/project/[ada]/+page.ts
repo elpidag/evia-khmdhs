@@ -31,6 +31,10 @@ export interface AnadohoiProject {
 	deliverables?: string | null;
 	/** digitised works-zone ids (evia_works_zones.geojson) */
 	works_zones?: string[] | null;
+	/** executing forest co-ops named in the act trail (curated) */
+	executors?:
+		| { name: string; dase_vat: string | null; ada: string; excerpt: string; note?: string }[]
+		| null;
 	area_stremmata: number | null;
 	location_text: string | null;
 	municipality: string | null;

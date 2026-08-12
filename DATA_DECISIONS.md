@@ -1004,3 +1004,56 @@ projects' dots sit at their zone centroid instead of the Π.Ε. centroid
 spread. build_evia_zones.py now also emits per-zone centroids and
 duplicates the geojson into atlas/static/geo/. Tests pin the 6-project
 mapping. *Affects: 6 rows (new column), atlas frontend, no aggregates.*
+
+## 2026-08-12 — Ανάδοχοι: the sponsor-ranking co-op note is act-backed (audit)
+
+The /anadohoi ranking footnote naming executing forest co-ops was
+audited to its sources and tightened («often» → «some», specific works
+named, act PDFs linked). Basis: (1) NOVA Ρόδος Ζώνη 4 (root
+6ΩΜ04653Π8-31Ι) — stored handover act 66584653Π8-9Φ3 «ΠΡΩΤΟΚΟΛΛΟ
+ΕΓΚΑΤΑΣΤΑΣΗΣ Δασικού Συνεταιρισμού “Αγίου Δημητρίου Πιερίας” κατόπιν
+της … Πράξης Ορισμού Αναδόχου Αποκατάστασης της εταιρείας “Nova …”».
+(2) ΤΙΤΑΝ/Κανελλοπούλου Κρυονέρι–Δροσοπηγή (roots ΨΒΟΣ4653Π8-9ΣΨ,
+9Β164653Π8-ΚΚΩ) — the stored completion acts Ρ6Θ14653Π8-77Ρ and
+ΡΜΖΩ4653Π8-1ΤΟ state in their PDF body: «υλοποιήθηκε από το Δασικό
+Συνεταιρισμό ΔΑΣΕ Γαρδικίου Τρικάλων και την ατομική επιχείρηση
+“Σιδέρη Μαρία του Δημητρίου”, η οποία εγκατέστησε το Δασικό
+Συνεταιρισμό Μίστρου “Άγιος Κυπριανός”» — i.e. Γαρδικίου was one of
+two executors there, and the ΤΙΤΑΝ link is to the 2025 Κρυονέρι works,
+NOT the 2023 Δερβενοχώρια project (no executor evidence stored for
+that one). Both PDFs fetched into anadohoi_cache (with 973Ι/Ψ1ΒΥ/ΨΞΥ8,
+which name no executor). *Evidence: the two act PDFs. Affects: UI copy
+only, no rows.*
+
+## 2026-08-12 — Ανάδοχοι: curated `executors` — the sponsor→ΔΑΣΕ link is systemic (13 projects, 23 rows)
+
+Following up the same-day note audit: ALL 322 decision PDFs were fetched
+(243 new into anadohoi_cache; 34 fetch failures — timeouts plus a few
+homoglyph-corrupt ΑΔΑs stored from PDF extraction) and swept for
+Συνεταιρισμ/ΔΑ.Σ.Ε. mentions (116 windows, 45 acts). After dropping
+boilerplate (taxisnet/ΓΕΜΗ/law citations, the ΔΑΣΕ ΑΤΤΙΚΗΣ «ΠΑΡΝΗΘΑ»
+salvage lease 6ΑΦ5), **13 of 69 projects name executing forest co-ops**
+in their act trails → new curated per-project `executors` array
+(name, dase_vat, source act ΑΔΑ, verbatim excerpt — mechanically
+verified ⊂ act text): NOVA Έβρος→Ορεινός Χρυσομηλιάς; Coca-Cola
+Αχαΐα→Μακεδονικά Αλυσοπρίονα + Παντουρέ; ΔΕΠΑ Παλαγία→Σιδηροχωρίου and
+Άβαντας→Ακρίτα Αλεξανδρούπολης; NOVA Ρόδος Ζ4 + Eurobank Ζ5→Αγ.
+Δημητρίου Πιερίας; Εθνική Χίος→Αγιοκάμπου/Περτουλίου/Φωτεινών/Προμάχων
+«Νέα Γενιά»; ΤΙΤΑΝ+Κανελλοπούλου Κρυονέρι→Γαρδικίου + Μίστρου «Άγιος
+Κυπριανός» (via the contractor «Σιδέρη Μαρία»); ΔΕΗ Ιστιαία Ι→
+Σιδηρονερίου Δράμας, Ιστιαία ΙΙΙ→«ΜΙΣΤΡΟΣ» Μίστρου, Λίμνη ΙΙ→Μίστρου/
+Ροδόπη/Ένωση Σταυρού/Πωγωνίου/Παπάδων, Λίμνη V→Λιβαδίου. **Identity
+policy**: `dase_vat` set ONLY where the act's wording pins a single
+ΔΑΣΕ-registry entry (14 distinct VATs); ambiguous or absent ones stay
+honestly unlinked with a note (Παντουρέ + Παπάδων not in the registry;
+«Σιδηρονερίου» Δράμας ≈ 5 candidates; «Περτουλίου» ≈ 2; plain «Μίστρου»
+/ «ΜΙΣΤΡΟΣ» never merged onto «Άγιος Κυπριανός» 996895246). The
+Eurobank Ζώνη-5 evidence acts (6ΔΤ1 etc.) are stored decisions with NO
+project_decisions links — TODO: link that lifecycle. sqlite migrated in
+place (ALTER TABLE, 13 rows); loader schema now 29 cols. The ranking
+chart's anecdotal footnote was REMOVED — replaced by a dedicated
+«executors» section on /anadohoi (chips → /dase/contractor/<vat>) and a
+«Works executed by» row + evidence excerpts on project pages. *Evidence:
+anadohoi_projects.json `executors`; the 13 source-act PDFs in
+anadohoi_cache. Affects: projects table (new column), /anadohoi,
+project pages, tests (13/23/14 pins).*

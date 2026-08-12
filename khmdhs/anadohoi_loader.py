@@ -83,9 +83,12 @@ CREATE TABLE projects (
     deliverables    TEXT,               -- works | study_and_works | study
                                         -- (curated from the act's operative
                                         -- σκοπός; evidence_json.deliverables)
-    works_zones     TEXT                -- JSON array of digitised works-zone
+    works_zones     TEXT,               -- JSON array of digitised works-zone
                                         -- ids (evia_works_zones.geojson),
                                         -- from the act's basin citation
+    executors       TEXT                -- JSON array of executing forest
+                                        -- co-ops named in the act trail
+                                        -- ({name, dase_vat, ada, excerpt})
 );
 CREATE TABLE project_decisions (
     root_ada TEXT NOT NULL REFERENCES projects(root_ada) ON DELETE CASCADE,
@@ -210,7 +213,9 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
             completion and completion["ada"], completion and completion.get("date"),
             status, json.dumps(p.get("evidence") or {}, ensure_ascii=False),
             p.get("notes"), p.get("deliverables"),
-            json.dumps(p["works_zones"]) if p.get("works_zones") else None))
+            json.dumps(p["works_zones"]) if p.get("works_zones") else None,
+            json.dumps(p["executors"], ensure_ascii=False)
+            if p.get("executors") else None))
         link_rows.append((root, root, "initial", None, None))
         for a in amendments:
             link_rows.append((root, a["ada"], "amendment",
@@ -245,7 +250,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                      decision_rows)
     conn.executemany(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         project_rows)
     conn.executemany("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                      sorted(link_rows))
