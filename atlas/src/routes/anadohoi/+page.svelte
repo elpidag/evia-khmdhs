@@ -502,7 +502,8 @@
 				</div>
 			{/if}
 			<Defer height={560}>
-				<div class="map-wrap" bind:this={mapEl}>
+				<div class="mapscale">
+					<div class="map-wrap" bind:this={mapEl}>
 					<PaperMap
 						interactive
 						width={640}
@@ -512,6 +513,16 @@
 					>
 						{#snippet overlay(ctx)}
 							{@const dots = ctx.k >= 2 ? spreadOverlaps(mapDots, SPREAD_BASE / ctx.k) : mapDots}
+							<!-- the fires that triggered the projects, exactly as on
+							     the fires map below: EFFIS scars coloured by year -->
+							{#if firesFc}
+								<FiresLayer
+									{ctx}
+									features={firesShown}
+									tipOf={(f) =>
+										`<strong>${f.properties.yr}</strong> · ${grInt(f.properties.ha)} ha${f.properties.name ? ` · ${f.properties.name}` : ''}`}
+								/>
+							{/if}
 							{#if zonesFc}
 								<ZonesLayer
 									{ctx}
@@ -578,6 +589,14 @@
 							/>
 						{/snippet}
 					</PaperMap>
+					</div>
+					{#if fireYears}
+						<div class="yearscale" aria-hidden="true">
+							<span>{fireYears.lo}</span>
+							<i></i>
+							<span>{fireYears.hi}</span>
+						</div>
+					{/if}
 				</div>
 			</Defer>
 		</div>
@@ -925,6 +944,11 @@
 		display: flex;
 		gap: var(--sp-3);
 		align-items: flex-start;
+	}
+	/* the status map fills its column; only the year scale is extra */
+	.statusgrid .mapscale .map-wrap {
+		flex: 1 1 auto;
+		min-width: 0;
 	}
 	.firesgrid .map-wrap {
 		max-width: 700px;

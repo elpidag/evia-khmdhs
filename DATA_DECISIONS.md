@@ -1568,3 +1568,15 @@ runner now prints BAKE EXIT and a function smoke-test precedes long
 bakes. Budget test covers all four assets (196 KB–1.28 MB). *Evidence:
 previews + live toggles in the session log. Affects: new
 relief_hypso*.avif, fires-map UI, look only.*
+
+## 2026-08-13 — /anadohoi status map: EFFIS scars overlaid όπως στον fires map
+
+User request: the «CURRENT STATUS OF PROJECTS» map now draws the same
+EFFIS burnt-area layer as the fires map — identical FiresLayer (year
+gradient into #6b2d35, 2018+ display window, same tooltip) rendered
+UNDER the zones/dots so the project dots stay the loudest layer, plus
+the same vertical year scale beside the map (shared fireYears
+derived). One layout addition: `.statusgrid .mapscale .map-wrap`
+flex:1 so the map keeps its full column width next to the scale.
+The EFFIS attribution already prints in the section caveats. *Affects:
+anadohoi page markup/CSS only.*
