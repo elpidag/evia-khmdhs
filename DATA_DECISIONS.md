@@ -1290,3 +1290,27 @@ stays active (interim παραλαβές only). sqlite migrated in place.
 *Evidence: act txts 9Ε47ΟΡ10-ΛΧΞ, Ε228, Ψ4ΟΥ, Ψ0ΓΕ, 9ΣΙΜ, ΡΚΘ4
 (anadohoi_cache). Affects: 4 project_decisions rows, 1 deliverables
 value, tests (42/18/9 pin).*
+
+## 2026-08-13 — Ανάδοχοι: `effis_scars` — κάθε project συνδέεται με το αποτύπωμα EFFIS της πυρκαγιάς του
+
+Linkage semantics (derived mechanically, review-gated before landing):
+a project links the EFFIS scar feature(s) of its fire-event YEAR that
+CONTAIN or lie ≤2 χλμ from any of its anchors — the coordinated
+work_sites, plus the digitised zone centroids for the Εύβοια zone
+projects. Anchor-less regional projects link by scar admin-name + year
+from a hand-reviewed table (Χίος 2025, Ρόδος 2023, Β. Εύβοια 2021,
+Έβρος 2023). «Εκτός πυρκαγιάς» (plane-disease/sanitation) projects link
+nothing; two-year labels («Αττική 2021–2022») try both years; a project
+with no matching scar stays honestly empty (EFFIS historically maps
+≥~30 ha — small fires are absent). Each link stores {id (the EFFIS
+feature id, now emitted into the display layer by
+build_effis_layer.py), yr, ha, name, basis contains|near|region-year,
+km}. Multi-scar links are expected (multi-front projects). Display: the
+project page's SiteMap/ZoneMap draw the linked scar under the
+pins/zones with the mandatory attribution «© European Union, Copernicus
+Emergency Management Service — EFFIS» and the estimates-not-οριοθετήσεις
+caveat; scar-only maps appear for regional projects that had no map.
+Loader schema 31 cols; committed sqlite migrated in place (harvest.json
+on the build machine). *Evidence: scripts/link_effis_scars.py report;
+per-link basis/km in anadohoi_projects.json. Affects: new column,
+project pages, tests.*

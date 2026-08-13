@@ -265,6 +265,36 @@ def test_real_db_work_sites_curated(conn):
     assert per_root["6Ξ1Γ4653Π8-Ε2Η"] == 6      # Κύθηρα basins + Σαροαμάρι
 
 
+def test_real_db_effis_scars_linked(conn):
+    """63 projects link the EFFIS scar(s) of their fire (DATA_DECISIONS
+    2026-08-13): ids resolve in the display layer, years agree with the
+    fire_event label, basis vocabulary is closed, plane-disease projects
+    link nothing (the one honest no-match is the Λίμνη pilot, ~12 km
+    from the 2021 scar)."""
+    import re
+    from pathlib import Path
+    display = Path(__file__).resolve().parents[1] / \
+        "data/processed/effis_fires.geojson"
+    layer_ids = {f["properties"]["id"]
+                 for f in json.loads(display.read_text(encoding="utf-8"))["features"]}
+    rows = conn.execute(
+        "SELECT root_ada, fire_event, effis_scars FROM projects").fetchall()
+    n_linked = 0
+    for root, fire, blob in rows:
+        if "εκτός" in (fire or ""):
+            assert blob is None, f"{root}: plane-disease project links a scar"
+            continue
+        if blob is None:
+            continue
+        n_linked += 1
+        years = {int(y) for y in re.findall(r"20\d\d", fire or "")}
+        for sc in json.loads(blob):
+            assert sc["id"] in layer_ids, (root, sc["id"])
+            assert sc["yr"] in years, (root, sc["yr"], fire)
+            assert sc["basis"] in ("contains", "near", "region-year"), root
+    assert n_linked == 63
+
+
 def test_real_db_pins(conn):
     assert conn.execute("SELECT COUNT(*) FROM decisions").fetchone()[0] == 322
     assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 69

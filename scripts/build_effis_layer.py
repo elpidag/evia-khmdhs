@@ -60,6 +60,9 @@ def main() -> None:
         feats.append({
             "type": "Feature",
             "properties": {
+                # stable EFFIS feature id — the anadohoi effis_scars
+                # links resolve against it
+                "id": int(props["id"]),
                 "yr": year,
                 "ha": round(float(props.get("area_ha") or 0)),
                 # admin name, NBSP noise stripped

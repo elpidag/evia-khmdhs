@@ -1,10 +1,14 @@
 <script lang="ts">
 	/** Compact map for a sponsor project's curated work site(s): the
 	 *  containing Π.Ε. outline(s) with one dot per site, labelled.
-	 *  Approximate sites (municipality-centre pins) render dashed. */
+	 *  Approximate sites (municipality-centre pins) render dashed.
+	 *  Optionally draws the project's linked EFFIS burn scar(s) under the
+	 *  pins (satellite estimates — attribution printed in the caption);
+	 *  renders scar-only when the project has scars but no pinned sites. */
 	import { geoMercator, geoPath } from 'd3-geo';
-	import { loadPe, type PeProps } from './useGeo';
-	import type { FeatureCollection, MultiPolygon } from 'geojson';
+	import { grInt } from '$lib/transforms/format';
+	import { loadPe, type FireProps, type PeProps } from './useGeo';
+	import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 
 	export interface SitePin {
 		name: string;
@@ -15,8 +19,10 @@
 	}
 	interface Props {
 		sites: SitePin[];
+		/** linked EFFIS burn-scar features (already filtered by id) */
+		scars?: Feature<Polygon | MultiPolygon, FireProps>[];
 	}
-	let { sites }: Props = $props();
+	let { sites, scars = [] }: Props = $props();
 
 	const W = 460;
 	const H = 340;
@@ -28,7 +34,7 @@
 	});
 
 	const view = $derived.by(() => {
-		if (!pe || !sites.length) return null;
+		if (!pe || (!sites.length && !scars.length)) return null;
 		let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
 		for (const s of sites) {
 			x0 = Math.min(x0, s.lon);
@@ -36,9 +42,18 @@
 			x1 = Math.max(x1, s.lon);
 			y1 = Math.max(y1, s.lat);
 		}
-		// pad generously; single-site maps get a fixed ~14 km half-window
-		const padx = Math.max((x1 - x0) * 0.6, 0.13);
-		const pady = Math.max((y1 - y0) * 0.6, 0.1);
+		// linked burn scars extend the frame (lon/lat planar bounds)
+		const path0 = geoPath();
+		for (const f of scars) {
+			const b = path0.bounds(f);
+			x0 = Math.min(x0, b[0][0]);
+			y0 = Math.min(y0, b[0][1]);
+			x1 = Math.max(x1, b[1][0]);
+			y1 = Math.max(y1, b[1][1]);
+		}
+		// pad proportionally; single-site maps get a fixed ~14 km half-window
+		const padx = Math.max((x1 - x0) * 0.18, 0.13);
+		const pady = Math.max((y1 - y0) * 0.18, 0.1);
 		// ring wound CLOCKWISE — d3-geo spherical polygons invert otherwise
 		const frame = {
 			type: 'Polygon' as const,
@@ -79,6 +94,9 @@
 					<path d={view.path(f) ?? ''} class="land" />
 				{/each}
 			{/if}
+			{#each scars as f (f.properties.id)}
+				<path d={view.path(f) ?? ''} class="scar" />
+			{/each}
 			{#if view.pins.length > 1}
 				{#each view.pins as a, i (i)}
 					{#each view.pins.slice(i + 1) as b, j (j)}
@@ -99,10 +117,24 @@
 						: ''}{APPROX.has(s.geo_precision ?? '') ? ' (κέντρο δήμου, κατά προσέγγιση)' : ''}</span
 				>
 			{/each}
-			<span class="src"
-				>Θέσεις όπως τις ονομάζουν οι πράξεις· ο γεωεντοπισμός τεκμηριώνεται ανά θέση
-				(methodology).</span
-			>
+			{#each scars as f (f.properties.id)}
+				<span class="fl"
+					><i></i>Αποτύπωμα πυρκαγιάς EFFIS {f.properties.yr} — {grInt(f.properties.ha)} εκτάρια
+					({f.properties.name})</span
+				>
+			{/each}
+			{#if sites.length}
+				<span class="src"
+					>Θέσεις όπως τις ονομάζουν οι πράξεις· ο γεωεντοπισμός τεκμηριώνεται ανά θέση
+					(methodology).</span
+				>
+			{/if}
+			{#if scars.length}
+				<span class="src"
+					>Περίμετροι πυρκαγιών: δορυφορικές εκτιμήσεις, όχι οριοθετήσεις — © European Union,
+					Copernicus Emergency Management Service — EFFIS.</span
+				>
+			{/if}
 		</figcaption>
 	</figure>
 {/if}
@@ -124,6 +156,13 @@
 		fill: var(--paper-2);
 		stroke: var(--line-strong);
 		stroke-width: 0.7;
+	}
+	.scar {
+		fill: #6b2d35;
+		fill-opacity: 0.14;
+		stroke: #6b2d35;
+		stroke-opacity: 0.55;
+		stroke-width: 0.8;
 	}
 	.link {
 		stroke: var(--ink);
@@ -171,6 +210,16 @@
 	.sl i.approx {
 		opacity: 0.4;
 		outline: 1px dashed var(--c-anadohoi);
+	}
+	.fl i {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 2px;
+		background: #6b2d35;
+		opacity: 0.35;
+		border: 1px solid #6b2d35;
+		margin-right: 6px;
 	}
 	.src {
 		color: var(--ink-faint);

@@ -52,6 +52,17 @@ export interface AnadohoiProject {
 				note?: string | null;
 		  }[]
 		| null;
+	/** linked EFFIS burn scar(s) of the project's fire (curated pipeline) */
+	effis_scars?:
+		| {
+				id: number;
+				yr: number;
+				ha: number;
+				name: string;
+				basis: 'contains' | 'near' | 'region-year';
+				km: number | null;
+		  }[]
+		| null;
 	area_stremmata: number | null;
 	location_text: string | null;
 	municipality: string | null;

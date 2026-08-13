@@ -89,11 +89,15 @@ CREATE TABLE projects (
     executors       TEXT,               -- JSON array of executing forest
                                         -- co-ops named in the act trail
                                         -- ({name, dase_vat, ada, excerpt})
-    work_sites      TEXT                -- JSON array of curated θέση-level
+    work_sites      TEXT,               -- JSON array of curated θέση-level
                                         -- work locations ({name, kind,
                                         -- municipality, pe, stremmata,
                                         -- source_ada, excerpt, lat, lon,
                                         -- geo_precision, geo_source, note})
+    effis_scars     TEXT                -- JSON array of linked EFFIS burn
+                                        -- scars ({id, yr, ha, name,
+                                        -- basis contains|near|region-year,
+                                        -- km}; scripts/link_effis_scars.py)
 );
 CREATE TABLE project_decisions (
     root_ada TEXT NOT NULL REFERENCES projects(root_ada) ON DELETE CASCADE,
@@ -199,6 +203,10 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                 raise SystemExit(f"{root}: work_site {s['name']!r} lat/lon "
                                  f"must be present iff geo_precision is "
                                  f"site/locality/municipality (got {prec!r})")
+        for sc in p.get("effis_scars") or []:
+            if not (sc.get("id") and sc.get("yr")
+                    and sc.get("basis") in ("contains", "near", "region-year")):
+                raise SystemExit(f"{root}: effis_scar needs id/yr/basis: {sc!r}")
         # amendments are ordered by their issue date so "latest wins" holds
         amendments = sorted(p.get("amendments") or [],
                             key=lambda a: harvest[a["ada"]].get("issue_date") or "")
@@ -234,7 +242,9 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
             json.dumps(p["executors"], ensure_ascii=False)
             if p.get("executors") else None,
             json.dumps(p["work_sites"], ensure_ascii=False)
-            if p.get("work_sites") else None))
+            if p.get("work_sites") else None,
+            json.dumps(p["effis_scars"], ensure_ascii=False)
+            if p.get("effis_scars") else None))
         link_rows.append((root, root, "initial", None, None))
         for a in amendments:
             link_rows.append((root, a["ada"], "amendment",
@@ -269,7 +279,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                      decision_rows)
     conn.executemany(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         project_rows)
     conn.executemany("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                      sorted(link_rows))

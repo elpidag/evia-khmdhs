@@ -535,6 +535,16 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   view), hover links a project's dots with dashed lines, approximate
   dots render dashed+lighter; project pages get `SiteMap.svelte`;
   `LocationCurator` is per-site (TAB-separated export).
+- **Linked `effis_scars`** (2026-08-13): 63 projects carry the EFFIS burn
+  scar(s) of their fire — `scripts/link_effis_scars.py` matches by fire
+  year + anchors (coordinated work_sites; zone centroids), basis
+  contains/near(≤2 km)/region-year (≥500 ha for the region fallback);
+  plane-disease projects and the far-from-scar Λίμνη pilot honestly link
+  none. Ids resolve against the display layer (build_effis_layer.py now
+  emits the EFFIS feature `id` — rebuild BOTH copies together). Loader is
+  **31 cols**. Project pages draw the scar under SiteMap pins / ZoneMap
+  zones (scar-only maps for regional projects) with the mandatory
+  «© European Union, Copernicus EMS — EFFIS» + estimates caveat.
 - **Β. Εύβοια works zones** (2026-08-12): the 9 Master-Plan flood-works
   zones (ΛΙΜΝΗ Ι–V, ΙΣΤΙΑΙΑ Ι–ΙV; sheets 4.1/4.2 in `data/raw/XARTHS_*`,
   ΥΛΗ 11.2021, 1:30.000) digitised: user-corrected pixel vertices in

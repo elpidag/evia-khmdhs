@@ -1322,6 +1322,8 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
                         if out.get("executors") else None)
     out["work_sites"] = (json.loads(out["work_sites"])
                          if out.get("work_sites") else None)
+    out["effis_scars"] = (json.loads(out["effis_scars"])
+                          if out.get("effis_scars") else None)
     try:
         out["evidence"] = json.loads(out.pop("evidence_json") or "{}")
     except ValueError:

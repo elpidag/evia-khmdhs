@@ -3,6 +3,8 @@
 	import LocationCurator from '$lib/dev/LocationCurator.svelte';
 	import ZoneMap from '$lib/maps/ZoneMap.svelte';
 	import SiteMap, { type SitePin } from '$lib/maps/SiteMap.svelte';
+	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
+	import type { Feature, Polygon, MultiPolygon } from 'geojson';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
@@ -96,6 +98,21 @@
 	const sitePins = $derived(
 		(workSites ?? []).filter((s): s is WorkSite & SitePin => s.lat != null && s.lon != null)
 	);
+	// linked EFFIS burn scar(s): geometry fetched once from the shared
+	// static layer (module-cached), filtered by the project's linked ids
+	const scarIds = $derived(
+		new Set((Array.isArray(p.effis_scars) ? p.effis_scars : []).map((s) => s.id))
+	);
+	let scarFeats = $state.raw<Feature<Polygon | MultiPolygon, FireProps>[]>([]);
+	$effect(() => {
+		if (!scarIds.size) {
+			scarFeats = [];
+			return;
+		}
+		loadEffisFires(fetch)
+			.then((fc) => (scarFeats = fc.features.filter((f) => scarIds.has(f.properties.id))))
+			.catch(() => (scarFeats = []));
+	});
 </script>
 
 <svelte:head>
@@ -202,11 +219,11 @@
 {/if}
 </div>
 
-{#if sitePins.length}
-	<SiteMap sites={sitePins} />
+{#if sitePins.length || (scarFeats.length && !worksZones?.length)}
+	<SiteMap sites={sitePins} scars={scarFeats} />
 {/if}
 {#if worksZones?.length}
-	<ZoneMap zones={worksZones} />
+	<ZoneMap zones={worksZones} scars={scarFeats} />
 {/if}
 
 {#if p.notes}

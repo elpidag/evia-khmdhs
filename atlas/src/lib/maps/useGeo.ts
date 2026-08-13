@@ -67,6 +67,8 @@ export const loadEviaZones = (
 };
 
 export interface FireProps {
+	/** stable EFFIS feature id — anadohoi effis_scars links resolve on it */
+	id: number;
 	/** fire year (from the EFFIS initialdat) */
 	yr: number;
 	ha: number;
