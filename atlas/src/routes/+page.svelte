@@ -414,8 +414,7 @@
 	.dabar .track,
 	.bidbar .track {
 		height: 100%;
-		background: #fff;
-		border: 1.5px solid var(--ink);
+		background: #e0e0e0;
 		border-radius: 10px;
 		overflow: hidden;
 	}
@@ -423,7 +422,6 @@
 		height: 100%;
 		background: var(--c-antinero);
 		color: #fff;
-		border-radius: 8px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -451,7 +449,6 @@
 		min-width: 40px;
 		background: var(--c-antinero);
 		color: #fff;
-		border-radius: 8px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -470,12 +467,12 @@
 	.bidbar .btext strong {
 		font-weight: 900;
 	}
-	/* paid vs stated: black fill rises to the paid share of the stated € */
+	/* paid vs stated: black fill rises to the paid share of the stated €;
+	   the unfilled remainder reads as light grey, no outer border */
 	.paidcard {
 		grid-row: 3;
 		position: relative;
-		background: #fff;
-		border: 1.5px solid var(--ink);
+		background: #e0e0e0;
 		border-radius: 10px;
 		overflow: hidden;
 	}
@@ -486,7 +483,6 @@
 		bottom: 0;
 		background: var(--c-antinero);
 		color: #fff;
-		border-radius: 8px;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
