@@ -30,8 +30,10 @@ desktop.ini
 
 # LibreOffice lock files
 .~lock.*#
-data/processed/pdf_cache/
-data/processed/diavgeia_cache/
+data/processed/pdf_cache/*
+!data/processed/pdf_cache/*.txt
+data/processed/diavgeia_cache/*
+!data/processed/diavgeia_cache/*.txt
 data/processed/payment_validation_report.json
 data/processed/refresh_backup_*.json
 data/processed/refresh_state.json
@@ -41,7 +43,8 @@ data/processed/dase_pdf_cache/
 data/processed/dase_state.json
 data/processed/dase_harvest_raw.json
 data/processed/dase_review.json
-data/processed/anadohoi_cache/
+data/processed/anadohoi_cache/*
+!data/processed/anadohoi_cache/*.txt
 
 # Atlas frontend build artefacts (atlas/package-lock.json IS committed)
 atlas/node_modules/

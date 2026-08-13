@@ -335,7 +335,10 @@ Greeklish-tolerant (`_phonetic_fold`: "evias" finds «Ευβοίας»); all fil
 state is in GET params, so every view is a shareable permalink.
 
 `/pdf/...` is a caching proxy: validates the ADAM shape, fetches once into
-`data/processed/pdf_cache/` (gitignored), refuses non-`%PDF` bodies, serves
+`data/processed/pdf_cache/` (PDFs gitignored; the pdftotext `.txt`
+sidecars in pdf_cache/diavgeia_cache/anadohoi_cache ARE tracked since
+2026-08-13 — arogi_cache stays fully ignored: its act texts carry
+victims' names), refuses non-`%PDF` bodies, serves
 inline (`as_attachment=False`) so PDFs open in the tab, and returns an
 auto-retrying `pdf_wait.html` (503 + Retry-After) during registry 429 windows.
 
@@ -458,7 +461,8 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   + **ΑΔΑ-citation crawl to closure** (recitals cite parents/μελέτες);
   classifier proposals via `khmdhs/anadohoi.py:classify` are never final —
   titles lie both ways («ΔΩΡΕΑ…» is an orismos, «ΠΡΩΤΟΚΟΛΛΟ ΕΓΚΑΤΑΣΤΑΣΗΣ…»
-  quotes one). Cache `data/processed/anadohoi_cache/` (gitignored).
+  quotes one). Cache `data/processed/anadohoi_cache/` (json/pdf
+  gitignored, `.txt` tracked).
 - Extraction: deterministic regex (amounts/στρέμματα/dates/ΑΔΑ citations;
   «Αποφασίζουμε» can be letter-spaced → `operative_window` folds) + haiku
   batch proposals gated by a verbatim-excerpt verifier (excerpt ⊂ PDF text,
