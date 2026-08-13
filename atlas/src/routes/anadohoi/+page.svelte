@@ -663,7 +663,7 @@
 <ChartFrame
 	title="PROJECTS AND FIRES THAT TRIGGERED THEM"
 	titleColor="#000"
-	caveat="Burnt-area perimeters: © European Union, Copernicus Emergency Management Service — EFFIS (satellite rapid-mapping estimates, not official οριοθετήσεις). The fire each project answers to is the one its act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
+	caveat="Burnt-area perimeters: © European Union, Copernicus Emergency Management Service — EFFIS (satellite rapid-mapping estimates, not official οριοθετήσεις). Relief: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. The fire each project answers to is the one its act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
 	anchor="fires"
 	methodology="anadohoi"
 >
@@ -679,6 +679,7 @@
 							view={MAP_VIEW}
 							focusPe={firePe}
 							onRegionClick={(pe) => (firePe = firePe === pe ? null : pe)}
+							relief={{ lo: '/geo/relief.avif', hi: '/geo/relief_hi.avif' }}
 						>
 							{#snippet overlay(ctx)}
 								{#if firesFc}
@@ -1121,13 +1122,24 @@
 		margin: 0;
 	}
 	/* the map: light-grey ground, white regions, grey hairline borders */
-	.map-wrap :global(.map) {
+	/* white-land styling for the DATA maps only — a relief map (.plate)
+	   must keep its transparent fills and plate-gradient surround, or the
+	   page CSS paints the polygons white OVER the relief (CSS beats the
+	   fill attribute) */
+	.map-wrap :global(.map:not(.plate)) {
 		background: #f2f2f2;
 		border: none;
 		box-shadow: none;
 	}
-	.map-wrap :global(.region) {
+	.map-wrap :global(.map.plate) {
+		border: none;
+		box-shadow: none;
+	}
+	.map-wrap :global(.map:not(.plate) .region) {
 		fill: #fff;
+		stroke: #8f8f8f;
+	}
+	.map-wrap :global(.map.plate .region) {
 		stroke: #8f8f8f;
 	}
 	.strip {

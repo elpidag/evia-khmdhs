@@ -1362,3 +1362,184 @@ phase I therefore rests on the Δράση-title identity across (A) and
 their PDFs are textless scans; OCR is the closure path. *Evidence: the
 two ΑΔΑs (permanently citable on Diavgeia) + pdf_cache texts. Affects:
 no rows.*
+
+## 2026-08-13 — Fires map: baked shaded-relief base (Copernicus GLO-30, Python shade pipeline)
+
+Decision to give the /anadohoi fires map a shaded-relief base as a
+BAKED static image, not a runtime renderer. Research basis: every
+newsroom precedent pre-renders (the Berkeley journalism Blender
+pipeline; Stamen's survey names "pre-rendering shadows for limited
+areas as overlay images" as the working practice; Lavergne's Corsica
+reference is itself Blender+Photoshop offline); runtime three.js
+(~155 KB gz) / maplibre-gl (~290 KB gz, replaces PaperMap) / deck.gl
+were evaluated and rejected on bundle, doctrine (d3-only, self-hosted)
+and look ceiling. Shading engine: pure-Python first — the controlled
+study «That's a Relief» (Cartographic Perspectives) found
+multidirectional relief statistically indistinguishable from ray-traced
+Blender on beauty/realism and BETTER on landform clarity, and Huffman's
+«Towards Less Blender-y Relief» prescribes suppressing exactly the
+Blender drama when relief sits under heavy vector overlay (our maroon
+scars at 0.85 opacity). The shade step is pluggable; a headless-Blender
+upgrade replaces one function if ever wanted. Pipeline
+(scripts/build_relief.py, system python3): Copernicus GLO-30 COGs read
+keyless over /vsicurl at overview level → mosaic (cache gitignored) →
+warp to EPSG:3857 grids EXACTLY matching the d3 frame (d3 geoMercator ≡
+EPSG:3857 up to an affine — frame.json emitted by build-topo.mjs from
+the same fitSize call, so alignment is arithmetic, zero warp) →
+Patterson resolution-bumping (~85% smoothed / 15% original) → vendored
+RVT multidirectional hillshade + sky-view-factor AO term + texture
+shading → Huffman composite (shadows Linear-Burn / highlights Screen)
+→ newsprint tint (#f9f6ec→#f3ecdb) with contrast capped ≈0.55 so the
+scars stay dominant → AVIF ×2 (relief.avif 1280×1240 always-loaded +
+relief_hi.avif 2560×2480 on the existing k≥2 hires trigger, never on
+narrow; ≤8 MP per image — iOS Safari decode caps). Mandatory
+attribution printed with the map: «Relief: produced using Copernicus
+WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH
+2014-2018 provided under COPERNICUS by the European Union and ESA; all
+rights reserved»; vendored rvt_vis keeps its Apache-2.0 notice; the
+raw DEM is NEVER committed (fetched at build time, cache gitignored).
+*Evidence: the research report (links in the plan file); measured AVIF
+sizes. Affects: new derived artifacts atlas/static/geo/relief*.avif,
+PaperMap relief prop, fires map only.*
+
+## 2026-08-13 — Fires-map relief: aesthetic pivot to the reference look (cast shadows, blue sea)
+
+User review of the first newsprint-calm bake: «doesn't look 3d enough,
+no shadows, a bit blurry» against the Lavergne Corsica reference. The
+calmer-under-overlay doctrine of the previous entry is OVERRIDDEN for
+this map by the user's aesthetic ruling. The bake gained the three
+missing ingredients, still pure-Python (no Blender needed): (1) TRUE
+CAST SHADOWS — a horizon-scan along the light ray (rotate grid so light
+comes from the left, per-row descending ray-height sweep) averaged over
+five sun altitudes (20–36°) for a soft penumbra; sea is elevation 0 so
+mountain shadows spill across the water like a physical model — the
+reference's key 3D cue; (2) crisper detail — generalization reduced
+(σ 1.1, 40% original detail), VE 3.2, stronger directional weighting
+(von-Mises 2.4 around WNW 300°), AVIF q68; (3) the reference duotone —
+sculpted white land with cool blue-grey shadows (#7b8696) on soft blue
+water (#bbcfdb), replacing the earlier «sea bakes white» rule; under
+the multiply mount the blue sea now tints the map's sea area (the
+maroon scars stay the loudest layer above). Assets: relief.avif 225 KB
+/ relief_hi.avif 798 KB — inside the test budgets. Blender remains the
+documented upgrade path but was not needed. *Evidence: the reference
+image; iteration previews in relief_cache. Affects:
+atlas/static/geo/relief*.avif, look only.*
+
+## 2026-08-13 — Fires-map relief: σκιές βαθύτερες + ανάλογες του υψομέτρου (user ruling)
+
+Second look ruling: shadows darker and PROPORTIONAL to the caster's
+elevation. Implemented: the horizon sweep now tracks WHICH peak owns
+the shadow ray and weights its shadow by that peak's height
+(CAST_H_FLOOR 0.30 → a sea-level caster shades at 30% weight, the
+p97-elevation caster at 100%). Two chain bugs surfaced by the
+diagnostic: (1) the slope remap HARD-clipped ~5% of land at the dark
+floor, flattening every deep shadow into one tone — replaced with soft
+compression into [floor, 1]; (2) the cast shadows were geometrically
+honest and therefore near-invisible at ~900 m/px (max intensity 0.18,
+p99 0.001 — at 20° the ray decays 325 m per pixel, Όλυμπος shadows a
+dozen pixels) — the reference look REQUIRES exaggeration, now explicit:
+CAST_VE 5.0, sun altitudes 10–26°, depth saturating at 400 m. After:
+cast max 1.0 / p99 0.80, final deep-shadow luminance ~0.11. Assets
+209/726 KB, inside budget. *Evidence: the diagnostic percentiles above;
+previews in relief_cache. Affects: relief*.avif, look only.*
+
+## 2026-08-13 — Fires-map relief: τελικός γύρος — κοντύτερες, πιο σκούρες σκιές, ουδέτερη θάλασσα
+
+Third look ruling: shadows too elongated (Πίνδος), wants them shorter
+AND darker, and the blue water replaced by the paper grey of the other
+maps. Applied: sun altitudes 16–36° + CAST_VE 3.8 (shorter throws);
+sea bakes pure white again — the paper shows through the multiply
+mount, cast shadows still grey the water they cross; darkness came in
+two steps because the first (SHADOW_STRENGTH 3.6, CAST_DARK 0.85,
+DARK_FLOOR 0.18) barely moved the histogram — the REAL ceiling was the
+tint ramp's anchor colour: no shadow can be darker than SHADOW_RGB.
+Anchor deepened to charcoal #42444a → darkest pixels 116→73/255.
+Asset sizes 312 KB / 1.07 MB (richer gradients carry more entropy);
+test budgets raised to 400 KB / 1.2 MB — the hi level only loads on
+desktop past the k≥2 zoom. *Evidence: preview histograms in the
+session log; relief_cache previews. Affects: relief*.avif, test
+budget, look only.*
+
+## 2026-08-13 — Fires-map relief: geoblender-velvet τόνος + καθαρές ακτογραμμές
+
+Fourth look ruling (reference: the geoblender tutorial render): smoother
+grey-to-shadow gradation, NO pure white on land, and the coastline
+artifacts debugged. Tonal: land luminance capped at HIGH_CAP 0.90 with
+a gamma-1.4 roll-off (midtones melt into the shadows), slope strength
+eased to 2.4, final 0.5 px soften — the sea stays baked white
+(paper-neutral under the multiply mount, per the earlier ruling).
+Coastline debug — two artifact classes found in the 1:1 crops:
+isolated grey specks in open sea (Lanczos ringing + sub-pixel islets
+resampled into fake micro-islands) and a stippled fringe hugging every
+coast (sub-metre partial-land pixels shaded by AO). Fixes: bilinear
+warp (no overshoot) + negatives clamped, sea threshold at 1 m, land
+components < 8 px dropped (≈1.6 km² at the hi grid — no real inhabited
+islet lost), texture shading neutralized over sea (the land/sea step
+rings in the FFT). Verified on the same Κυκλάδες crop: specks and
+fringe gone. Assets 180/646 KB — back well inside budget. *Evidence:
+before/after crops in relief_cache. Affects: relief*.avif, look only.*
+
+## 2026-08-13 — Fires-map relief: ενιαία γκρίζα πλάκα + φωτιστική κλίση ήλιου (3D-render πλάκα)
+
+Fifth look ruling (geoblender reference, second pass): flats brought TO
+the background grey, no hard whites anywhere, and the user's idea —
+light the whole plate directionally like a render — implemented as an
+analytic sun gradient (±4.5% along the SUN_AZ axis, NW corner
+brightest), applied to land AND sea. The sea is no longer paper-white:
+it IS the background plate at BG_BASE 0.885 through the same
+charcoal→white ramp (this supersedes the paper-neutral ruling — the
+fires map sea now reads as a lit grey plate under the multiply mount,
+deliberately different from the other maps). Land flats cap at
+HIGH_CAP 0.88, just under the plate. A soft contact shadow
+(CONTACT_AMP 6%, 5 px falloff) hugs every coastline so the landmass
+reads as a physical plate on the water. Cast shadows continue to grey
+the sea they cross. *Evidence: previews in relief_cache vs the
+geoblender reference. Affects: relief*.avif, look only.*
+
+## 2026-08-13 — Fires-map relief: το κενό/ραφή στη δυτική άκρη διορθώθηκε (plate mount αντί multiply)
+
+User screenshot: a vertical strip of a DIFFERENT grey west of the
+relief — the hand-tuned fires frame (k=1.08, centred east) exposes
+~19 px of the map's warm paper background beyond the image's west
+edge. Root cause: the multiply mount made the surround (paper) and the
+covered sea (paper × plate) mathematically different tones, so no
+background colour could match both. Fix is structural: the relief now
+renders with NORMAL blending UNDER the Π.Ε. polygons (their fills turn
+`transparent` when relief is on — hit-testing and the stroke-based
+hover/focus highlights are unaffected), and the map surround switches
+to the SAME plate gradient the bake applies (css linear-gradient
+#f1f1f1→#e2e2e3 at 110°, computed from the bake's SHADOW_RGB/BG_BASE/
+GRAD_AMP/SUN_AZ — the css comment pins the coupling). Image edge and
+surround now continue each other within ~1/255. *Affects:
+PaperMap.svelte relief mount only; other maps (no relief prop)
+unchanged.*
+
+## 2026-08-13 — Fires-map relief: root cause του λευκού καλύμματος — page-level CSS override
+
+Addendum to the plate-mount entry: after the structural fix the
+polygons STILL painted white over the relief and the strip persisted.
+Playwright screenshot + computed-style inspection of the live page
+found the culprit outside PaperMap: the /anadohoi redesign's own
+`.map-wrap :global(.region) { fill: #fff }` and
+`.map-wrap :global(.map) { background: #f2f2f2 }` — page CSS beats the
+`fill` presentation attribute, so the component-level `transparent`
+never applied. Fixed by scoping the page overrides to
+`.map:not(.plate)` (the white-land design stays on the status map) and
+letting `.map.plate` keep transparent fills + the plate gradient.
+Verified live: computed region fill rgba(0,0,0,0), background the
+plate gradient, screenshot clean. Also: a stray atlas/DATA_DECISIONS.md
+created by a wrong-cwd append was merged back here and removed.
+*Affects: anadohoi page CSS only.*
+
+## 2026-08-13 — Fires-map relief: υφή αποστράγγισης στα πεδινά + film grain
+
+Sixth look round (user request, from my own suggestion list): (1) the
+texture shading now applies with a FLATNESS-weighted strength — base
+0.28 plus up to 0.22 extra where the multidirectional shade sits near
+its flat-ground value — so the drainage etching the geoblender
+reference shows in its lowlands appears exactly there (Θεσσαλία crop
+verified; flats read as toned, textured ground instead of dead grey);
+(2) deterministic film grain (σ 0.011, seed 16849) over the whole
+plate — the render-sensor noise of the reference, reproducible bake.
+Assets 198 KB / 1.28 MB — inside budget. *Evidence: crop_thessaly2 in
+relief_cache. Affects: relief*.avif, look only.*

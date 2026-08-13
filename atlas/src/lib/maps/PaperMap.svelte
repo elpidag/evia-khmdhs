@@ -68,6 +68,9 @@
 		overlay?: Snippet<[MapCtx]>;
 		/** legend block, absolutely positioned over the Ionian whitespace */
 		legend?: Snippet;
+		/** baked shaded-relief underlay (frame-aligned AVIF, multiply-blended
+		 *  over the region fills; `hi` swaps in past k≥2, never on narrow) */
+		relief?: { lo: string; hi?: string } | null;
 	}
 
 	let {
@@ -83,7 +86,8 @@
 		view = null,
 		onViewChange,
 		overlay,
-		legend
+		legend,
+		relief = null
 	}: Props = $props();
 
 	type PeFeature = Feature<MultiPolygon, PeProps>;
@@ -365,7 +369,7 @@
 	});
 </script>
 
-<div class="map" role="img" aria-label="Map of Greece by regional unit">
+<div class="map" class:plate={!!relief} role="img" aria-label="Map of Greece by regional unit">
 	<svg
 		bind:this={svgEl}
 		viewBox="0 0 {width} {height}"
@@ -374,6 +378,26 @@
 	>
 		{#if path}
 			<g transform="translate({transform.x},{transform.y}) scale({transform.k})">
+				{#if relief}
+					<!-- baked relief plate, drawn UNDER the (transparent-filled)
+					     polygons; the .map.plate background carries the same plate
+					     gradient so the surround beyond the image edge is seamless
+					     (the fires frame k=1.08 exposes ~19px west of the image).
+					     Aligned by construction: warped to this exact frame
+					     (frame.json contract, build_relief.py). -->
+					<image
+						href={relief.hi && !narrow && transform.k >= 2 && !zooming
+							? relief.hi
+							: relief.lo}
+						x="0"
+						y="0"
+						{width}
+						{height}
+						preserveAspectRatio="none"
+						pointer-events="none"
+						class="relief"
+					/>
+				{/if}
 				{#each drawnFeatures as f (f.properties.pe)}
 					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 					<path
@@ -382,7 +406,7 @@
 						class:clickable={!!onRegionClick}
 						data-pe={f.properties.pe}
 						d={dOf(f)}
-						fill={colorOf(f.properties.pe)}
+						fill={relief ? 'transparent' : colorOf(f.properties.pe)}
 						role={onRegionClick ? 'button' : undefined}
 						onmouseenter={tipOf ? () => (tipHtml = tipOf(f.properties.pe)) : undefined}
 						onmouseleave={tipOf ? () => (tipHtml = '') : undefined}
@@ -473,6 +497,13 @@
 		stroke-dasharray: 2 2;
 		vector-effect: non-scaling-stroke;
 		pointer-events: none;
+	}
+	/* the surround beyond the relief image continues the plate: the same
+	   gradient the bake applies (MUST match build_relief.py SHADOW_RGB /
+	   BG_BASE 0.885 / GRAD_AMP 0.045 / SUN_AZ 300 — bright toward the
+	   WNW sun, dim ESE) */
+	.map.plate {
+		background: linear-gradient(110deg, #f1f1f1, #e2e2e3);
 	}
 	.legend {
 		position: absolute;

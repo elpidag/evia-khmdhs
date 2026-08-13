@@ -11,8 +11,9 @@
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { geoArea } from 'd3-geo';
+import { geoArea, geoMercator } from 'd3-geo';
 import { topology } from 'topojson-server';
+import { feature } from 'topojson-client';
 
 /**
  * d3-geo treats polygons as SPHERICAL: a ring wound the "wrong" way encloses
@@ -67,3 +68,29 @@ build('greek_pe_hires.geojson', 'pe', 1e5, 'pe_hires.topo.json');
 build('greek_muni_borders.geojson', 'muni', 1e5, 'muni_borders.topo.json');
 copyFileSync(join(src, 'pe_centroids.json'), join(out, 'pe_centroids.json'));
 console.log('pe_centroids.json copied');
+
+// The map frame contract for the baked relief underlay: replicate
+// PaperMap's EXACT projection fit (geoMercator().fitSize on the
+// quantized coarse layer — the same FeatureCollection the client
+// derives from pe.topo.json) and export it so the Python relief bake
+// (scripts/build_relief.py) aligns by arithmetic, never by reimplementing
+// fitSize. Frame = the 640×620 country view every PaperMap uses.
+{
+	const W = 640;
+	const H = 620;
+	const topo = JSON.parse(readFileSync(join(out, 'pe.topo.json'), 'utf8'));
+	const coarse = feature(topo, topo.objects.pe);
+	const p = geoMercator().fitSize([W, H], coarse);
+	const frame = {
+		w: W,
+		h: H,
+		scale: p.scale(),
+		translate: p.translate(),
+		nw: p.invert([0, 0]),
+		se: p.invert([W, H])
+	};
+	writeFileSync(join(out, 'frame.json'), JSON.stringify(frame));
+	console.log(
+		`frame.json: nw=[${frame.nw.map((v) => v.toFixed(5))}] se=[${frame.se.map((v) => v.toFixed(5))}]`
+	);
+}

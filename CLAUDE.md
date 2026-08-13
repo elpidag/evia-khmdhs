@@ -708,6 +708,31 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   Typekit kit (see the rebrand bullet); the self-hosted Sofia Sans woff2
   subsets in `atlas/static/fonts/` remain as fallback. Components capped
   ~300 lines.
+- **Baked shaded relief** (2026-08-13, fires map only): `scripts/
+  build_relief.py` (SYSTEM python3) bakes Copernicus GLO-30 (keyless
+  /vsicurl COGs, raw DEM never committed, cache gitignored) into
+  `atlas/static/geo/relief.avif` (1280×1240, always) + `relief_hi.avif`
+  (2560×2480, k≥2 trigger, never narrow; keep every image ≤8 MP — iOS
+  decode caps). Alignment contract: `frame.json` (emitted by
+  build-topo.mjs from the SAME fitSize call PaperMap uses; d3 geoMercator
+  ≡ EPSG:3857 up to an affine → the AVIF registers as one axis-aligned
+  `<image>`; vitest `frame.test.ts` pins it — after ANY change to the
+  coarse layer or frame size re-run `npm run geo` + the bake). Shade =
+  vendored RVT (Apache-2.0, `scripts/vendor/rvt_vis.py` — pad the DEM 1px,
+  RVT trims a border) multidirectional + SVF + fractional-Laplacian
+  texture shading + TRUE CAST SHADOWS (horizon-scan, height-weighted —
+  taller casters shade darker — with a 5-altitude penumbra; shadows
+  spill across the sea) + geoblender-velvet tone (land capped at 0.88,
+  gamma roll-off, flats == the BG_BASE 0.885 plate) + an analytic sun
+  gradient over the whole plate + coastal contact shadows. Mount: the
+  image renders with NORMAL blending UNDER the Π.Ε. polygons (fills go
+  `transparent` when `relief` is set — stroke highlights/hit-testing
+  unaffected) and `.map.plate` carries the SAME plate gradient
+  (#f1f1f1→#e2e2e3 @110° — must track the bake knobs) so the surround
+  beyond the image edge is seamless; scars stay the loudest layer. MANDATORY attribution in the hosting
+  frame's caveat: «Relief: produced using Copernicus WorldDEM-30 © DLR
+  e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided
+  under COPERNICUS by the European Union and ESA; all rights reserved».
 - **Design doctrine** (Tse/ProPublica): chart titles are findings, not
   topics; annotations printed on the chart; tooltips never carry
   load-bearing info; every chart has a caveat line anchored to
