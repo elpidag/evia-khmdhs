@@ -207,6 +207,14 @@
 		figure <em>where the act itself states one</em> (Lidl's act states both, so its net
 		€241,936 is used) and never converts the silent ones.
 	</p>
+	<p>
+		<strong>PROJECT SCOPE / PROJECT TYPE charts:</strong> the scope of each appointment
+		(works only / study &amp; works / study only) is curated from each root designation
+		act's operative sentence, with the verbatim excerpt on the project page; the charts
+		count the live projects — a superseded restatement's act is reviewed but not shown
+		there. The intervention type (restoration / reforestation / both) follows the act's
+		own wording; one project's act states neither.
+	</p>
 
 	<h2 id="explore">The Explore table</h2>
 	<p>

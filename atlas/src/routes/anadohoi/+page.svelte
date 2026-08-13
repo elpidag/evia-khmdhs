@@ -4,7 +4,7 @@
 	import BarH from '$lib/charts/BarH.svelte';
 	import PromiseGantt from '$lib/charts/PromiseGantt.svelte';
 	import StatusWaffle from '$lib/charts/StatusWaffle.svelte';
-	import Waffle from '$lib/charts/Waffle.svelte';
+	import StackedShareBar from '$lib/charts/StackedShareBar.svelte';
 	import AreaYears from '$lib/charts/AreaYears.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
@@ -174,16 +174,17 @@
 
 	// deliverables / works-kind waffles: same folded population as the
 	// status waffle (superseded acts folded into their successors)
+	// greyscale ramp per the approved mock; light → dark, small first
 	const DELIV_META: [string, string, string][] = [
-		['works', 'εκτέλεση έργου — works only', '#2d6a4f'],
-		['study_and_works', 'εκπόνηση μελέτης και υλοποίηση έργου — study & works', '#52b788'],
-		['study', 'εκπόνηση μελέτης — study only', '#b7e4c7']
+		['study', 'study only', '#b5b5b5'],
+		['study_and_works', 'study & works', '#6c6c6c'],
+		['works', 'works only', '#3d3d3d']
 	];
 	const KIND_META: [string, string, string][] = [
-		['apokatastasi', 'αποκατάσταση — restoration', '#2d6a4f'],
-		['both', 'αποκατάσταση & αναδάσωση — both', '#52b788'],
-		['anadasosi', 'αναδάσωση — reforestation', '#b7e4c7'],
-		['', 'not stated in the act', '#CFCFCF']
+		['anadasosi', 'reforestation', '#b5b5b5'],
+		['both', 'restoration & reforestation', '#6c6c6c'],
+		['apokatastasi', 'restoration', '#3d3d3d'],
+		['', 'not stated', '#d8d8d8']
 	];
 	const countBy = (field: 'deliverables' | 'works_kind') => {
 		const s: Record<string, number> = {};
@@ -515,26 +516,53 @@
 	<PromiseGantt projects={ganttProjects} today={todayIso} legend="panel" />
 </ChartFrame>
 
-<div class="waffle-pair">
+<Defer height={520}>
 	<ChartFrame
-		title="SCOPE OF APPOINTMENT"
-		subtitle="what each act appoints the sponsor for — from its operative σκοπός"
-		caveat={`Curated from each root designation act's operative sentence, with the verbatim excerpt on the project page. Counts the ${grInt(ganttProjects.length)} live projects — a superseded restatement's act is reviewed but not shown here.`}
-		anchor="deliverables"
+		title="RANKING OF COMPANIES"
+		subtitle="according to sums offered via the projects"
+		caveat="Sums are commitments written in the acts, not verified spending; sponsors often promise «συνολική χρηματοδότηση του κόστους που θα προκύψει» with no number."
+		anchor="sponsors"
 		methodology="anadohoi"
 	>
-		<Waffle groups={delivGroups} stacked ariaLabel="Projects by scope of appointment" />
+		<div class="rankw">
+			<BarH rows={sponsorRows} color="#52b788" inside barHeight={30} />
+		</div>
+		{#if topRaise}
+			<p class="muted note-inline">
+				The {topRaise.company} commitment grew {eurShort(topRaise.budget_stated ?? 0)} →
+				{eurShort(topRaise.budget ?? 0)} by amendment — the largest single raise.
+			</p>
+		{/if}
 	</ChartFrame>
+</Defer>
 
-	<ChartFrame
-		title="TYPE OF INTERVENTION"
-		subtitle="αναδάσωση, αποκατάσταση, or both — as each act states it"
-		caveat="The act's own wording decides; one project's act states neither."
-		anchor="works-kind"
-		methodology="anadohoi"
-	>
-		<Waffle groups={kindGroups} stacked ariaLabel="Projects by type of intervention" />
-	</ChartFrame>
+<div class="scopetype">
+<ChartFrame title="PROJECT SCOPE" titleColor="#000" anchor="deliverables" methodology="anadohoi">
+	<StackedShareBar
+		segments={delivGroups.map((g) => ({
+			label: g.label,
+			value: g.count,
+			color: g.color,
+			badge: g.key === 'study' ? ('outleft' as const) : ('above' as const)
+		}))}
+	/>
+</ChartFrame>
+
+<ChartFrame title="PROJECT TYPE" titleColor="#000" anchor="works-kind" methodology="anadohoi">
+	<StackedShareBar
+		segments={kindGroups.map((g) => ({
+			label: g.label,
+			value: g.count,
+			color: g.color,
+			badge:
+				g.key === 'anadasosi'
+					? ('outleft' as const)
+					: g.key === ''
+						? ('outright' as const)
+						: ('above' as const)
+		}))}
+	/>
+</ChartFrame>
 </div>
 
 <ChartFrame
@@ -562,24 +590,6 @@
 		{/each}
 	</div>
 </ChartFrame>
-
-<Defer height={520}>
-	<ChartFrame
-		title="RANKING OF COMPANIES"
-		subtitle="according to sums offered via the projects"
-		caveat="Sums are commitments written in the acts, not verified spending; sponsors often promise «συνολική χρηματοδότηση του κόστους που θα προκύψει» with no number."
-		anchor="sponsors"
-		methodology="anadohoi"
-	>
-		<BarH rows={sponsorRows} color="#52b788" inside barHeight={22} />
-		{#if topRaise}
-			<p class="muted note-inline">
-				The {topRaise.company} commitment grew {eurShort(topRaise.budget_stated ?? 0)} →
-				{eurShort(topRaise.budget ?? 0)} by amendment — the largest single raise.
-			</p>
-		{/if}
-	</ChartFrame>
-</Defer>
 
 {#if execRows.length}
 	<ChartFrame
@@ -762,6 +772,33 @@
 		font-size: var(--fs-13);
 		margin-top: var(--sp-2);
 	}
+	/* the companies graph runs at 3/4 of the content width */
+	.rankw {
+		max-width: 75%;
+	}
+	@media (max-width: 900px) {
+		.rankw {
+			max-width: none;
+		}
+	}
+	/* the two share bars sit close together */
+	.scopetype :global(.frame:first-child) {
+		margin-bottom: var(--sp-8, 2rem);
+	}
+	/* the bars match the ranking's 3/4 width — text room on the right */
+	.scopetype :global(.ssbwrap) {
+		flex: 0 0 75%;
+		/* titles hug their bars; hover badges may overflow upward */
+		padding-top: 2px;
+	}
+	.scopetype :global(.frame .finding) {
+		margin-bottom: 2px;
+	}
+	@media (max-width: 900px) {
+		.scopetype :global(.ssbwrap) {
+			flex: 1 1 auto;
+		}
+	}
 	/* sponsor → executing co-op linkage list */
 	.exectable {
 		display: grid;
@@ -808,18 +845,6 @@
 	}
 	@media (max-width: 900px) {
 		.execitem {
-			grid-template-columns: 1fr;
-		}
-	}
-	/* the two category waffles run side by side */
-	.waffle-pair {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 0 var(--sp-8, 3rem);
-		align-items: start;
-	}
-	@media (max-width: 900px) {
-		.waffle-pair {
 			grid-template-columns: 1fr;
 		}
 	}
