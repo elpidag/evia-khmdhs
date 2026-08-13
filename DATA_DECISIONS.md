@@ -1224,3 +1224,38 @@ The /anadohoi fires map now filters the EFFIS display layer to
 keeps the full 2008–2025 range for future use). The year gradient and
 its 2018→2025 scale derive from the filtered set. *Affects: display
 only.*
+
+## 2026-08-13 — Ανάδοχοι review: το 9Ο0Λ ανήκει στην ΑΔΜΗΕ (6ΦΤΩ → completed)· το ΔΕΔΔΗΕ 9ΕΘΠ ολοκληρώθηκε με τις εγκρίσεις μελετών
+
+Investigation of the 9ΕΘΠ4653Π8-ΠΡ4 trail (user review). The 2026
+παραλαβή act 9Ο0Λ4653Π8-ΡΒΒ had been linked to BOTH 9ΕΘΠ (ΔΕΔΔΗΕ
+μελέτες) and 6ΦΤΩ (ΑΔΜΗΕ works) by the citation crawl — its recitals
+cite 641Ξ (the μελέτη ΔΕΔΔΗΕ funded) but the act itself approves the
+οριστική παραλαβή of the WORKS financed by the ΑΔΜΗΕ Πράξη (recital 18
+names 6ΦΤΩ; σύμβαση ΔΕΑ-42369-2024 ΦΙΛΑΝΤΑΡΑΚΗ + 3Κ ΤΕΧΝΙΚΗ; ΑΔΜΗΕ's
+παραλαβή committee). It never cites 9ΕΘΠ. User ruling: (1) REMOVE 9Ο0Λ
+from 9ΕΘΠ's trail — chain contamination through the shared μελέτη act;
+the relay is ΔΕΔΔΗΕ funds the μελέτη (9ΕΘΠ) → ΑΔΜΗΕ funds the works
+per that μελέτη (6ΦΤΩ) → 9Ο0Λ closes ΑΔΜΗΕ's works. (2) 6ΦΤΩ becomes
+**completed** with 9Ο0Λ as its completion act, end date = the protocol
+date 2025-10-07 («το από 7-10-2025 πρωτόκολλο οριστικής παραλαβής» —
+the Anti-nero protocol-date convention), not the act date 30-03-2026.
+(3) 9ΕΘΠ is **completed** too: its deliverable is the μελέτες
+(deliverables=study) and they were delivered — the three approvals
+641Ξ/6ΛΡΨ/ΡΨΗΡ; the LAST approval (ΡΨΗΡ, 2024-07-03) becomes the
+completion act, the earlier two stay as study_approval trail entries
+(641Ξ/6ΛΡΨ relations tidied other→study_approval). Recorded caveat:
+the root act's σκοπός names five fronts and approvals were found for
+three μελέτες (two Δυτ. Αττικής + Διακοπτό) — the user rules the work
+done as delivered. Budget note from the same investigation: the €500k
+is the μελέτες-funding envelope; the €1.53M/€1.10M/€1.40M inside the
+approval PDFs are the designed WORKS' estimated cost — never amendments
+(budget_current stays 500,000). Side findings recorded for future
+ingestion: the Διακοπτό works run as a PUBLIC ν.4412 δασοτεχνικό έργο
+(Σύμβαση Κατασκευής 76921/26-2-2025 — outside the sponsor universe, so
+correctly absent); Πράξη Ε3ΣΨ4653Π8-2ΣΚ (Τρ. Πειραιώς, Δασαρχείο
+Αιγάλεω, 06-08-2026) postdates the harvest and awaits ingestion.
+sqlite migrated in place (same reason as before). *Evidence: act PDFs
+9ΕΘΠ/641Ξ/6ΛΡΨ/ΡΨΗΡ/9Ο0Λ (anadohoi_cache), ΛΛΒ14653Π8-ΑΦΑ (Diavgeia).
+Affects: 2 rows (status/completed_*), project_decisions relations,
+status counts 14→16 completed, tests.*

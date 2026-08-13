@@ -268,7 +268,7 @@ def test_real_db_pins(conn):
     assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 69
     statuses = dict(conn.execute(
         "SELECT status, COUNT(*) FROM projects GROUP BY status"))
-    assert statuses == {"completed": 14, "active": 32, "revoked": 1,
+    assert statuses == {"completed": 16, "active": 30, "revoked": 1,
                         "no_completion_recorded": 21, "superseded": 1}
     # stated budgets (42 of 68 live projects), and after δωρεά amendments
     stated, n = conn.execute(

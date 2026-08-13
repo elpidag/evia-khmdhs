@@ -137,11 +137,13 @@ def test_explore_pins(client):
     assert dase_pr.count(1) == 144 and dase_pr.count(0) == 1874
     assert all(r["pr"] is None for r in e["rows"] if r["ds"] == "anadohoi")
     # end-date flag: 155 Anti-nero contracts have a completion act,
-    # 14 sponsor projects are completed; ΔΑΣΕ endings were never harvested
+    # 16 sponsor projects are completed (incl. the 2026-08-13 review:
+    # ΑΔΜΗΕ via the 9Ο0Λ παραλαβή, ΔΕΔΔΗΕ via its last μελέτη approval);
+    # ΔΑΣΕ endings were never harvested
     kh_fin = [r["fin"] for r in e["rows"] if r["ds"] == "antinero"]
     assert kh_fin.count(1) == 155 and kh_fin.count(0) == 97
     an_fin = [r["fin"] for r in e["rows"] if r["ds"] == "anadohoi"]
-    assert an_fin.count(1) == 14
+    assert an_fin.count(1) == 16
     assert all(r["fin"] is None for r in e["rows"] if r["ds"] == "dase")
 
 
@@ -153,7 +155,7 @@ def test_anadohoi_overview_pins(client):
     # the 15th net project is the superseded Coca-Cola original
     assert o["kpis"]["vat_counts"] == {"net": 14, "gross": 2, "unstated": 27}
     assert o["kpis"]["median_eur"] == pytest.approx(600_000.0)
-    assert o["kpis"]["statuses"]["completed"] == 14
+    assert o["kpis"]["statuses"]["completed"] == 16
     assert len(o["projects"]) == 69
     fires = {f["fire"]: f for f in o["fires"]}
     assert fires["Β. Εύβοια, Αύγ. 2021"]["n"] == 10
