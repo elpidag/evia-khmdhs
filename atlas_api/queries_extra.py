@@ -164,7 +164,16 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
 
     # dataset-state counts the prose pages (methodology) cite — computed,
     # never hardcoded, so a refresh cannot leave stale numbers in copy
-    facts: dict[str, int] = {}
+    facts: dict[str, int | float] = {}
+    try:
+        facts["kh_probable_n"], facts["kh_probable_eur"] = kh.execute("""
+            SELECT COUNT(*), ROUND(SUM(k.total_cost_with_vat), 2)
+            FROM contracts k
+            JOIN contract_scope s ON s.reference_number = k.reference_number
+            WHERE s.scope = 'antinero_probable'
+              AND s.superseded_by IS NULL""").fetchone()
+    except sqlite3.OperationalError:
+        pass
     try:
         facts["kh_done"] = kh.execute(f"""
             SELECT COUNT(DISTINCT a.attributed_ref)
@@ -285,7 +294,31 @@ def antinero_overview(kh: sqlite3.Connection,
         "top_authorities": q.top_authorities(kh, limit=5),
         "top_signers": q.top_signers(kh, limit=5),
         "coverage": q.flow_coverage(kh),
+        "probable": probable_related(kh),
     }
+
+
+def probable_related(kh: sqlite3.Connection) -> dict:
+    """Chains kept in the dataset but excluded from every calculation:
+    probably Anti-nero, RRF-16849 membership unproven from the primary
+    documents (curated khmdhs/data/probable_related.json, DATA_DECISIONS
+    2026-08-13). Counted on chain tips so each chain appears once; on the
+    Atlas stated-basis connection `total_cost_with_vat` carries the net."""
+    if not q._has_scope_table(kh):
+        return {"n": 0, "total_eur": 0.0, "rows": []}
+    rows = kh.execute("""
+        SELECT k.reference_number AS ref, k.title AS title,
+               k.contract_signed_date AS d, k.total_cost_with_vat AS eur
+        FROM contracts k
+        JOIN contract_scope s ON s.reference_number = k.reference_number
+        WHERE s.scope = 'antinero_probable' AND s.superseded_by IS NULL
+        ORDER BY k.contract_signed_date
+    """).fetchall()
+    out = [{"ref": r["ref"], "title": (r["title"] or "").strip()[:140],
+            "d": r["d"], "eur": r["eur"]} for r in rows]
+    return {"n": len(out),
+            "total_eur": round(sum(r["eur"] or 0.0 for r in out), 2),
+            "rows": out}
 
 
 # ---------------------------------------------------------------- payments

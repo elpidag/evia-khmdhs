@@ -147,6 +147,29 @@
 			)} contracts drew exactly one bid. This page follows what actually got paid, to whom,
 			and where — <a href="/methodology#antinero">methodology</a>.
 		</p>
+		{#if o.probable && o.probable.n > 0}
+			<details class="probable">
+				<summary>
+					+ {grInt(o.probable.n)} additional contracts found ({eurShort(
+						o.probable.total_eur
+					).toLowerCase()} excl. VAT), probably related to the Antinero programme, but not
+					included in the calculations
+				</summary>
+				<p class="pnote">
+					Their signed documents carry no provable RRF-16849 financing evidence — no fund
+					code, no Ταμείο Ανάκαμψης clause (<a href="/methodology#antinero">methodology</a>).
+				</p>
+				<ul>
+					{#each o.probable.rows as r (r.ref)}
+						<li>
+							<a href={`/antinero/contract/${r.ref}`}>{r.ref}</a>
+							{#if r.d}<span class="pd">{r.d}</span>{/if}
+							<span class="pt">{r.title}</span>
+						</li>
+					{/each}
+				</ul>
+			</details>
+		{/if}
 	</div>
 </section>
 
@@ -426,6 +449,32 @@
 	.about p {
 		margin: 0;
 		max-width: var(--prose-w);
+	}
+	.probable {
+		margin-top: var(--sp-4);
+		max-width: var(--prose-w);
+		font-size: var(--fs-13);
+		color: var(--ink-faint);
+	}
+	.probable summary {
+		cursor: pointer;
+	}
+	.probable .pnote {
+		margin: var(--sp-2) 0 0;
+		font-size: var(--fs-13);
+	}
+	.probable ul {
+		margin: var(--sp-2) 0 0;
+		padding-left: 1.2em;
+	}
+	.probable li {
+		margin-bottom: 2px;
+	}
+	.probable .pd {
+		margin-left: 0.5em;
+	}
+	.probable .pt {
+		margin-left: 0.5em;
 	}
 	@media (max-width: 900px) {
 		.hero {

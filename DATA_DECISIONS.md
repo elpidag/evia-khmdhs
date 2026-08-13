@@ -1362,3 +1362,66 @@ phase I therefore rests on the Δράση-title identity across (A) and
 their PDFs are textless scans; OCR is the closure path. *Evidence: the
 two ΑΔΑs (permanently citable on Diavgeia) + pdf_cache texts. Affects:
 no rows.*
+## 2026-08-13 — Correction: the 7 title-only ANTINERO II contracts are NOT textless scans
+
+The same-day 16849 audit mischaracterised the 7 evidence-thin 2022
+ANTINERO II rows as «textless scans» — that was an inference from the
+absence of funding MARKERS, never verified against the texts. Wrong:
+all 7 cached .txt files carry full text (the two originals ~130k chars
+each incl. annexes; the five amendments 5–7k). What is true: their
+BODIES contain zero programme finance language — no Ταμείο Ανάκαμψης,
+no Δράση/16849, no ΠΔΕ/ΟΠΣ code, and no «ANTINERO» either (the word
+lives only in the registry title metadata). The originals are
+ΤΑΙΠΕΔ-run procurements (02.08.2022 Πρόσκληση, ΤΑΙΠΕΔ Επιτροπή
+Αξιολόγησης/κατακύρωση) funded via the ΥΠΕΝ budget line ΚΑΕ 2910601001
+(ΥΠΟΙΚ απόφαση 06.05.2022); their ΑΑΥ recital names the project
+«Σχέδιο Δασικής Προστασίας — Μελετοκατασκευή 2η», echoing the Δράση
+16849 / Υποέργο-1 titling («Σχέδιο/Πρόγραμμα Προστασίας Δασών») at
+name level. The five amendments are winter work-suspension deeds
+(αναστολή εκτέλεσης εργασιών, Dec 2022–Jan 2023) with no funding
+language at all. *Evidence: the 7 pdf_cache .txt files. Affects: no
+rows; corrects the audit entry above.*
+
+## 2026-08-13 — The 7 unproven ANTINERO II chains leave the analytics basis (`antinero_probable`)
+
+User decision after manually reviewing the 7 evidence-thin contracts and
+the full-text comparison above: since RRF-16849 membership cannot be
+proven from primary documents, they must NOT be counted in calculations
+or visualisations — they stay in the dataset presented as «additional
+contracts found, probably related to the Antinero programme, but not
+included in the calculations».
+
+The exclusion applies to the whole chains — 7 chain tips
+(22SYMV011360183, 22SYMV011593395, 22SYMV011928850, 22SYMV011928864,
+22SYMV011928896, 22SYMV011928919, 23SYMV011953055) plus their 6
+superseded members (22SYMV011332276, 22SYMV011332546, 22SYMV011332552,
+22SYMV011512210, 22SYMV011632177, 22SYMV011470180 — the ΕΡΓΟ 2Β chain
+is original + 1η + 2η τροποποίηση) — 13 stored
+contracts, every one with EMPTY fund metadata and bodies free of any
+programme-finance language (see the two entries above). 16 completion
+acts on these chains prove the works were executed and delivered under
+ΥΠΕΝ — but execution is not financing evidence.
+
+Mechanism: new curated file `khmdhs/data/probable_related.json` (13
+ADAMs, reason + evidence per chain) → `scope_loader` demote pass (runs
+AFTER rule classification and amendment inheritance): scope becomes
+`antinero_probable`, basis `curated:probable_related`. The value is NOT
+in `scope.IN_SCOPE`, so every aggregate (webui and Atlas both filter
+`in_scope = 1`) drops the chains automatically; detail pages stay
+reachable, regions/forest links stay stored. The supplement file keeps
+its `antinero_ii` phase claims for the members it lists — the phase
+claim (registry title) and the analytics-basis decision are different
+statements.
+
+Effect on the basis: in-scope 252 → 245 contracts; stated net
+€667,496,652.26 → €658,297,730.65 (−€9,198,921.61); the frozen webui's
+historical effective-gross headline recomputes on the same flags to
+€604,543,493.99. No payments are
+affected — zero payment orders exist anywhere on these 7 chains (checked
+2026-08-13), which also means the paid-net figures do not move. 5
+contract_study_costs rows and the 16 completion acts leave the
+aggregates together with their contracts (both layers attribute to
+in-scope tips). The Atlas front page carries a computed note with the
+user's wording + the 7 tips listed; /methodology documents the tier.
+*Evidence: pdf_cache texts of all 13 + the audit entries above.
+Affected: 13 contract_scope rows, every headline aggregate.*

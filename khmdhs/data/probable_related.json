@@ -1,0 +1,16 @@
+{
+  "_comment": "Contracts kept in the dataset but excluded from every calculation (scope antinero_probable, in_scope 0). User decision, DATA_DECISIONS 2026-08-13: the 7 chains below (12 stored contracts — tips + superseded originals) carry no provable RRF-16849 financing evidence. Every member has EMPTY fund metadata (public_funding_ref/_num), and the full contract texts (pdf_cache .txt) contain zero programme-finance language: no Ταμείο Ανάκαμψης, no Δράση/16849, no ΠΔΕ/ΟΠΣ code, not even the word ANTINERO in the body (it lives only in the registry title). The 2022 originals are ΤΑΙΠΕΔ-run procurements (02.08.2022 Πρόσκληση) funded via ΥΠΕΝ budget line ΚΑΕ 2910601001 (ΥΠΟΙΚ απόφαση 06.05.2022); their ΑΑΥ names the project «Σχέδιο Δασικής Προστασίας — Μελετοκατασκευή 2η». Membership in Anti-nero II rests on registry-title branding and the ΤΑΙΠΕΔ mechanism only — probable, not proven. Presented on the site as: additional contracts found, probably related to the Antinero programme, but not included in the calculations.",
+  "22SYMV011360183": { "chain": "ΕΡΓΟ 3Α", "role": "original, chain tip" },
+  "22SYMV011593395": { "chain": "ΕΡΓΟ 2Α", "role": "original, chain tip" },
+  "22SYMV011928850": { "chain": "ΕΡΓΟ 3Β", "role": "1η τροποποίηση (winter suspension), chain tip" },
+  "22SYMV011332276": { "chain": "ΕΡΓΟ 3Β", "role": "original, superseded" },
+  "22SYMV011928864": { "chain": "ΕΡΓΟ 5Α", "role": "1η τροποποίηση (winter suspension), chain tip" },
+  "22SYMV011332546": { "chain": "ΕΡΓΟ 5Α", "role": "original, superseded" },
+  "22SYMV011928896": { "chain": "ΕΡΓΟ 5Β", "role": "1η τροποποίηση (winter suspension), chain tip" },
+  "22SYMV011632177": { "chain": "ΕΡΓΟ 5Β", "role": "original, superseded" },
+  "22SYMV011928919": { "chain": "ΕΡΓΟ 2Β", "role": "2η τροποποίηση (winter suspension), chain tip" },
+  "22SYMV011512210": { "chain": "ΕΡΓΟ 2Β", "role": "1η τροποποίηση, superseded" },
+  "22SYMV011332552": { "chain": "ΕΡΓΟ 2Β", "role": "original, superseded" },
+  "23SYMV011953055": { "chain": "ΕΡΓΟ 4Β", "role": "1η τροποποίηση (winter suspension), chain tip" },
+  "22SYMV011470180": { "chain": "ΕΡΓΟ 4Β", "role": "original, superseded" }
+}

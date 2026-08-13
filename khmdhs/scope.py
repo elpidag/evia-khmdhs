@@ -12,6 +12,10 @@ Scope values:
   antinero_support                       programme admin (legal/consulting) services
   antinero_esa                           reforestation/nurseries component of (Antinero II)
   antinero_restoration                   αντιδιαβρωτικά/αντιπλημμυρικά component of (Antinero II)
+  antinero_probable                      probably Anti-nero, RRF membership unproven — kept in
+                                         the dataset, excluded from every calculation (curated
+                                         khmdhs/data/probable_related.json, DATA_DECISIONS
+                                         2026-08-13; applied by scope_loader, never by classify)
   non_antinero                           no Anti-nero evidence (routine works etc.)
 
 The reforestation and restoration contracts are IN scope: their own

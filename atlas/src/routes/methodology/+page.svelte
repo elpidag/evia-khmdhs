@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { grInt } from '$lib/transforms/format';
+	import { eurShort, grInt } from '$lib/transforms/format';
 	const meta = $derived(page.data.meta);
 	// dataset-state counts are computed by the API (meta.facts) so this
 	// prose can never go stale against the data; '—' when a layer is absent
@@ -61,6 +61,30 @@
 		to a superseded contract's final version along the amendment chain. Where a payment
 		history diverges from the stated value (partial delivery, price revisions), both numbers
 		are visible side by side on the contract page.
+	</p>
+
+	<h2 id="antinero">What counts as Anti-nero</h2>
+	<p>
+		A contract enters the Anti-nero analytics only with positive evidence of programme
+		membership: an ANTINERO phase named in its registry title, one of the programme's ΠΔΕ
+		fund codes in its funding metadata, or its signed PDF declaring membership in RRF Action
+		16849 — amendments inherit the evidence of the contract they modify. Programme-management
+		umbrella contracts (ΤΑΙΠΕΔ/ΕΕΣΥΠ pass-throughs) and support services are stored but never
+		aggregated, so no euro is counted twice. Superseded contract versions along an amendment
+		chain count once, at the chain's final version.
+	</p>
+	<p>
+		One tier is deliberately excluded from every calculation: {show(f['kh_probable_n'])}
+		contract chains ({f['kh_probable_eur'] !== undefined ? eurShort(f['kh_probable_eur']) : '—'}
+		stated, excl. VAT) whose registry titles
+		brand them ANTINERO II but whose signed documents carry <strong>no provable RRF-16849
+		financing evidence</strong> — no fund code in the registry metadata, and full contract
+		texts with no Ταμείο Ανάκαμψης, no Δράση ID, not even the word ANTINERO in the body.
+		These early-2022 deeds were procured through ΤΑΙΠΕΔ and funded via an ΥΠΕΝ budget line
+		(ΚΑΕ 2910601001), so they are <em>probably</em> part of the programme — but probability
+		is not proof, so they are presented as additional contracts found, probably related to
+		the Antinero programme, and not included in the calculations. They remain in the dataset
+		with reachable detail pages, listed on the <a href="/">front page</a>.
 	</p>
 
 	<h2 id="payment-dates">Payment dates</h2>

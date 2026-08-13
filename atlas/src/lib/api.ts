@@ -331,6 +331,13 @@ export interface AntineroOverview {
 	top_authorities: Record<string, unknown>[];
 	top_signers: Record<string, unknown>[];
 	coverage: Record<string, number>;
+	/** chains kept in the dataset but excluded from every calculation:
+	 *  probably Anti-nero, RRF-16849 membership unproven (chain tips) */
+	probable: {
+		n: number;
+		total_eur: number;
+		rows: { ref: string; title: string; d: string | null; eur: number | null }[];
+	};
 }
 
 export interface ExploreRow {
