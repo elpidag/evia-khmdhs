@@ -1123,3 +1123,77 @@ committed convention is pinned by `test_exterior_rings_wind_clockwise`
 copies stay byte-identical. *Evidence: build_evia_zones.py orient()
 call; tests/test_evia_zones.py. Affects: no rows; documentation of an
 existing artifact property.*
+
+## 2026-08-13 — Ανάδοχοι: curated `work_sites` — exact work locations from the act texts (branch anadohoi-work-sites)
+
+Design decision for θέση-level geolocation of the 69 sponsor projects.
+**Universe**: every cached act txt per project — the ROOT act first, then
+linked acts/amendments, which routinely carry finer or additional sites
+than the root (ΨΜΙ6, amending ΨΖΟΟ, adds a second site «Κοκορέμι-
+Μπρεκατσούλι» Δ. Ασπροπύργου in ANOTHER Π.Ε. — cross-Π.Ε. sites are
+allowed with a note). Each site row: name, municipality, pe, stremmata
+(where the act states one), `source_ada`, verbatim `excerpt`
+(whitespace-collapsed containment mechanically verified against the
+cached txt — the deliverables/executors discipline), lat/lon,
+`geo_precision`, `geo_source`, optional note. **Precision vocabulary**:
+site (named θέση/ρέμα/landmark pinned to a point) | locality
+(οικισμός/Τ.Κ. centre) | municipality (δήμος centroid,
+greek_municipalities.json) | zone (digitised Εύβοια works-zone centroid)
+| pe (no coordinates stored; client falls back to the Π.Ε. centroid).
+**Geocoding tiers**: Nominatim (Greek then transliterated query,
+site-level) → manual web research for the residue (each pin carries
+`geo_source: "web:<url>"`) → municipality centroid (offline) → none.
+**Validation gates** — a pin ships only if it passes: stated-Π.Ε.
+agreement (the geocode_loader `_acceptable` doctrine), ≤~15 km from the
+stated municipality centroid when one exists, and for fire projects an
+EFFIS burn-scar cross-check (inside or ≤~2 km of the matching-year scar
+polygon; report-only for non-fire/plane-disease/regional projects —
+first consumer of the 2026-08-13 EFFIS raw layer). Rather show nothing
+than a wrong pin — unresolved θέσεις stay at municipality precision.
+**Τμήμα/«Επιφάνεια N»/Υπολεκάνη names are recorded as names, not
+polygons**: the acts themselves state the boundary «θα προσδιοριστεί
+λεπτομερώς στο έδαφος» — a representative point inside the named area
+with precision `site` is the honest maximum. Map presentation: one dot
+per site (multi-site projects highlight together on hover), true
+positions at country zoom, deterministic de-overlap spreading only past
+the zoom threshold, approximate (municipality/pe) dots drawn in a
+distinct dashed style. *Evidence: act txts in anadohoi_cache (tracked);
+survey of all 69 root operative paragraphs 2026-08-13. Affects: new
+`work_sites` column (30th), anadohoi_projects.json, /anadohoi map,
+project pages.*
+
+## 2026-08-13 — Ανάδοχοι work_sites: γεωεντοπισμός ολοκληρώθηκε — 100/105 θέσεις, EFFIS-ελεγμένες
+
+Outcome of the same-day design entry. Extraction: 3 parallel readers over
+all 69 act families proposed 112 sites; the mechanical gate (verbatim
+excerpt ⊂ cached txt, canonical Π.Ε.) plus review dropped 7 (the 5
+pe-null coarse «fronts» of ΡΕΧΥ-sibling 9ΕΘΠ — its 12 μελέτη-derived
+sites cover them; «Καντήλι Βλυχάδα» which the act cites only as
+fire-spread; the ΨΖΟΟ root-name duplicate — one θέση renamed by its
+amendment, latest act adopted) → **58 projects / 105 curated sites**.
+Geocoding: Nominatim tiers resolved 54 (with retries — the Greek-script
+weakness and WRONG-NAMESAKE traps recurred: «Κτήμα Τατοΐου» hit a wedding
+venue on οδό Τατοΐου, «Pentelikon» the Κηφισιά hotel, «Μονή Πεντέλης»
+the Νταού monastery, «Πλατανάκι» the Ωρωπός stream 11.5 χλμ from the
+2023 scar — ALL caught by the gates and repinned); web research with
+per-pin source URLs resolved the toponym residue: Νέζης «Τοπωνυμικά της
+Αττικής» (Μπύρζα = κορυφή Πύρεζα 897 μ. ΦΕΚ 35Δ/2010; the Πάρνηθα
+ρέματα incl. the correct S-Parnitha Πλατανάκι), the Attica flood Master
+Plan's own ΕΓΣΑ87 point for λεκάνη Κατσιμηδίου (= χ. Αγ. Αικατερίνης
+Μάνδρας, distinct from the Parnitha peak), Diavgeia acts locating Αγ.
+Παντελεήμονα Κρανιδίου via the sponsor's resort, OSM/Overpass for
+landmarks, geonames/wiki for villages. Final: **58 site / 32 locality /
+10 municipality-centroid pins**; the EFFIS burn-scar gate validates
+82/92 fire-project pins inside-or-≤2 χλμ of the matching-year scar and
+each of the 10 FAR has a recorded explanation (municipality centroids;
+ΡΔΒΨ «Βίγλα» is a pre-existing αναδασωτέα the act itself says was NOT
+burned in 2024; big-basin representatives; a 2021/2022 fire-label
+artifact). **5 honestly unresolved** (no public coordinates exist):
+Δαδιά «Ρέμα Λυγαριά/Χαμηλό», «Κακομάνδρι», «Καζάνι ρέμα» (confirmed
+real via the Δασαρχείο Σουφλίου μελέτες and the WWF monitoring plan)
+and Μάνδρα «Υπολεκάνες 2/8» (numbered only collectively). The committed
+sqlite migrated in place (30th column). *Evidence: per-site `excerpt` +
+`geo_source` in anadohoi_projects.json; scripts/geocode_work_sites.py
+report. Affects: 58 rows, /anadohoi map (one dot per site, zoom-gated
+spread, dashed approximate style), project-page SiteMap, tests
+(58/105 pins).*

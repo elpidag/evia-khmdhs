@@ -20,6 +20,10 @@
 		onOut?: (p: DotPoint) => void;
 		/** externally-driven highlight (e.g. hovering the paired chart) */
 		hotOf?: (p: DotPoint) => boolean;
+		/** per-dot stroke-dasharray (e.g. approximate-location dots) */
+		dashOf?: (p: DotPoint) => string | undefined;
+		/** per-dot fill opacity override (approximate dots render lighter) */
+		fillOpacityOf?: (p: DotPoint) => number | undefined;
 	}
 
 	let {
@@ -33,7 +37,9 @@
 		opacity = 0.85,
 		onOver,
 		onOut,
-		hotOf
+		hotOf,
+		dashOf,
+		fillOpacityOf
 	}: Props = $props();
 
 	function enter(p: DotPoint, e?: MouseEvent) {
@@ -73,8 +79,10 @@
 				cy={y}
 				r={radius(p) * (hot ? 1.5 : 1)}
 				fill={fillOf(p)}
+				fill-opacity={fillOpacityOf?.(p)}
 				stroke={hot ? 'var(--ink)' : stroke}
 				stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
+				stroke-dasharray={dashOf?.(p)}
 				opacity={hot ? 1 : opacity}
 				onmouseenter={(e) => enter(p, e)}
 				onmouseleave={() => leave(p)}
@@ -87,8 +95,10 @@
 			cy={y}
 			r={radius(p) * (hot ? 1.5 : 1)}
 			fill={fillOf(p)}
+			fill-opacity={fillOpacityOf?.(p)}
 			stroke={hot ? 'var(--ink)' : stroke}
 			stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
+			stroke-dasharray={dashOf?.(p)}
 			opacity={hot ? 1 : opacity}
 			onmouseenter={(e) => enter(p, e)}
 			onmouseleave={() => leave(p)}

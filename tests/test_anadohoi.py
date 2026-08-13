@@ -228,6 +228,41 @@ def test_real_db_executors_curated(conn):
     assert len(linked) == 14
 
 
+def test_real_db_work_sites_curated(conn):
+    """58 projects carry curated θέση-level work sites (105 rows, root +
+    linked acts, DATA_DECISIONS 2026-08-13): every site has a verbatim
+    excerpt + its source act; pe is canonical; lat/lon are present iff the
+    precision claims a point; coordinates stay inside Greece."""
+    from khmdhs.greek_regions import canonical_pe
+    rows = conn.execute(
+        "SELECT root_ada, work_sites FROM projects"
+        " WHERE work_sites IS NOT NULL").fetchall()
+    assert len(rows) == 58
+    n_sites = 0
+    per_root = {}
+    for root, blob in rows:
+        sites = json.loads(blob)
+        per_root[root] = len(sites)
+        for s in sites:
+            n_sites += 1
+            assert s["name"] and s["excerpt"] and s["source_ada"], root
+            assert s["kind"] in ("site", "locality", "municipality"), root
+            assert canonical_pe(s["pe"]) == s["pe"], (root, s["pe"])
+            has_geo = s.get("lat") is not None and s.get("lon") is not None
+            assert has_geo == (s.get("geo_precision") in
+                               ("site", "locality", "municipality")), \
+                (root, s["name"], s.get("geo_precision"))
+            if has_geo:
+                assert 34 < s["lat"] < 42 and 19 < s["lon"] < 30, \
+                    (root, s["name"])
+    assert n_sites == 105
+    # the known multi-site projects
+    assert per_root["ΡΔΒΨ4653Π8-ΙΘΠ"] == 2      # Μπύρζα + Βίγλα
+    assert per_root["62ΠΩ4653Π8-327"] == 7      # the Δαδιά bullet list
+    assert per_root["9ΕΘΠ4653Π8-ΠΡ4"] == 12     # ΔΕΔΔΗΕ μελέτες, 3 fronts
+    assert per_root["6Ξ1Γ4653Π8-Ε2Η"] == 6      # Κύθηρα basins + Σαροαμάρι
+
+
 def test_real_db_pins(conn):
     assert conn.execute("SELECT COUNT(*) FROM decisions").fetchone()[0] == 322
     assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 69

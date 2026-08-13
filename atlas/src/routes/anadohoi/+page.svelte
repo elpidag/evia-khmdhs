@@ -275,32 +275,79 @@
 			.then((z) => (zonesFc = z))
 			.catch(() => (zonesFc = null));
 	});
+	// One dot per curated work SITE with coordinates; projects without any
+	// fall back to one dot (works-zone centroid mean → Π.Ε. centroid).
+	// Dots carry their TRUE position — the de-overlap spread is applied
+	// inside the overlay snippet, only past the zoom threshold, so the
+	// country view never displaces a dot from its real location.
 	const mapDots = $derived.by(() => {
 		if (!centroids) return [];
 		const zc = new Map(
 			(zonesFc?.features ?? []).map((f) => [f.properties.zone, f.properties.centroid])
 		);
-		const pts = live
-			.filter((p) => p.pe && centroids![p.pe])
-			.map((p) => {
-				// zone-mapped projects sit at their digitised works area, not
-				// the Π.Ε. centroid
-				const wz = Array.isArray(p.works_zones) ? p.works_zones : [];
-				const zs = wz.map((z) => zc.get(z)).filter(Boolean) as [number, number][];
-				if (zs.length) {
-					const lon = zs.reduce((s, c) => s + c[0], 0) / zs.length;
-					const lat = zs.reduce((s, c) => s + c[1], 0) / zs.length;
-					return { lat, lon, ...p };
-				}
-				return {
-					lat: centroids![p.pe as string][0],
-					lon: centroids![p.pe as string][1],
-					...p
-				};
-			});
-		return spreadOverlaps(pts, 0.09);
+		type MapDot = (typeof live)[number] & {
+			lat: number;
+			lon: number;
+			siteName?: string;
+			prec: string;
+			[key: string]: unknown;
+		};
+		const pts: MapDot[] = [];
+		for (const p of live) {
+			const ws = (Array.isArray(p.work_sites) ? p.work_sites : []).filter(
+				(s) => s.lat != null && s.lon != null
+			);
+			if (ws.length) {
+				for (const s of ws)
+					pts.push({ ...p, lat: s.lat!, lon: s.lon!, siteName: s.name, prec: s.prec ?? 'site' });
+				continue;
+			}
+			const wz = Array.isArray(p.works_zones) ? p.works_zones : [];
+			const zs = wz.map((z) => zc.get(z)).filter(Boolean) as [number, number][];
+			if (zs.length) {
+				const lon = zs.reduce((s, c) => s + c[0], 0) / zs.length;
+				const lat = zs.reduce((s, c) => s + c[1], 0) / zs.length;
+				pts.push({ ...p, lat, lon, prec: 'zone' });
+				continue;
+			}
+			if (p.pe && centroids[p.pe])
+				pts.push({ ...p, lat: centroids[p.pe][0], lon: centroids[p.pe][1], prec: 'pe' });
+		}
+		return pts;
 	});
-	const unplaced = $derived(live.filter((p) => !p.pe));
+	// approximate dots (municipality/Π.Ε. centre) render dashed + lighter.
+	// Counts are computed from the payload (not mapDots) so the caveat is
+	// correct in the server-rendered HTML too — mapDots needs the
+	// client-side centroid fetch.
+	const APPROX = new Set(['municipality', 'pe']);
+	const dotStats = $derived.by(() => {
+		let exact = 0;
+		let approx = 0;
+		for (const p of live) {
+			const ws = (Array.isArray(p.work_sites) ? p.work_sites : []).filter(
+				(s) => s.lat != null && s.lon != null
+			);
+			if (ws.length) {
+				for (const s of ws) if (APPROX.has(s.prec ?? '')) approx++; else exact++;
+				continue;
+			}
+			if (Array.isArray(p.works_zones) && p.works_zones.length) exact++;
+			else if (p.pe) approx++;
+		}
+		return { exact, approx };
+	});
+	// spread base sized to keep ~8 screen px between co-located dots once
+	// the k≥2 threshold arms (screen offset = SPREAD_BASE / degPerPx, k-free)
+	const SPREAD_BASE = 0.09;
+	const unplaced = $derived(
+		live.filter(
+			(p) =>
+				!p.pe &&
+				!(Array.isArray(p.work_sites) ? p.work_sites : []).some(
+					(s) => s.lat != null && s.lon != null
+				)
+		)
+	);
 
 	// timeline strip: months 2021-08 … status_as_of, with fire markers
 	const strip = $derived.by(() => {
@@ -400,7 +447,7 @@
 		unplaced.length
 			? `${unplaced.length} projects span multiple regions and are not placed on the map: ${unplaced.map((p) => p.company).join(', ')}. `
 			: ''
-	}Designations count each project once, at its first act; completions are the acts identified on Διαύγεια — absence of one is not proof a project was abandoned. Status as of ${dmy(k.status_as_of)}.`}
+	}${grInt(dotStats.exact)} dots sit at the work location the acts name (a project may have several — hovering links them); ${grInt(dotStats.approx)} dashed dots mark projects whose acts give only a municipality or region, drawn at its centre. Zoom in (click, then wheel or +) to separate co-located dots — at country view every dot keeps its true position. Designations count each project once, at its first act; completions are the acts identified on Διαύγεια — absence of one is not proof a project was abandoned. Status as of ${dmy(k.status_as_of)}.`}
 >
 	<!-- ONE legend for the waffle AND the map — wording matches the
 	     timeline legend, placed like it: a tinted strip under the title -->
@@ -444,13 +491,14 @@
 			<Defer height={560}>
 				<div class="map-wrap" bind:this={mapEl}>
 					<PaperMap
-						interactive={pickFrame}
+						interactive
 						width={640}
 						height={620}
 						view={pickFrame ? null : MAP_VIEW}
 						onViewChange={(v) => (pickedView = v)}
 					>
 						{#snippet overlay(ctx)}
+							{@const dots = ctx.k >= 2 ? spreadOverlaps(mapDots, SPREAD_BASE / ctx.k) : mapDots}
 							{#if zonesFc}
 								<ZonesLayer
 									{ctx}
@@ -460,14 +508,56 @@
 										`${grInt(f.properties.extracted_stremmata)} στρ. (ψηφιοποιημένη ζώνη έργων)`}
 								/>
 							{/if}
+							<!-- hovering a multi-site project links all its dots with
+							     dashed lines — «this work spans here AND here» -->
+							{#if hoveredAda}
+								{@const hot = dots.filter((d) => d.ada === hoveredAda)}
+								{#each hot as a, i (i)}
+									{#each hot.slice(i + 1) as b, j (j)}
+										{@const pa = ctx.projection([
+											(a as never as { lon2?: number }).lon2 ?? a.lon,
+											(a as never as { lat2?: number }).lat2 ?? a.lat
+										])}
+										{@const pb = ctx.projection([
+											(b as never as { lon2?: number }).lon2 ?? b.lon,
+											(b as never as { lat2?: number }).lat2 ?? b.lat
+										])}
+										{#if pa && pb}
+											<line
+												x1={pa[0]}
+												y1={pa[1]}
+												x2={pb[0]}
+												y2={pb[1]}
+												stroke="var(--ink)"
+												stroke-width={1.4 / ctx.k}
+												stroke-dasharray="5 4"
+												opacity="0.75"
+												pointer-events="none"
+											/>
+										{/if}
+									{/each}
+								{/each}
+							{/if}
 							<DotLayer
 								{ctx}
-								points={mapDots}
+								points={dots}
 								r={5}
 								fillOf={(p) =>
 									noDate(p as never)
 										? NODATE_COLOR
 										: (STATUS_COLOR[p.status as string] ?? '#999')}
+								fillOpacityOf={(p) => (APPROX.has(p.prec as string) ? 0.45 : undefined)}
+								dashOf={(p) =>
+									APPROX.has(p.prec as string) ? `${2.4 / ctx.k} ${1.8 / ctx.k}` : undefined}
+								tipOf={(p) =>
+									`<strong>${p.company}</strong><br>` +
+									(p.siteName
+										? `${p.siteName}`
+										: p.prec === 'zone'
+											? 'ψηφιοποιημένη ζώνη έργων'
+											: p.prec === 'municipality'
+												? 'κέντρο δήμου (κατά προσέγγιση)'
+												: 'κέντρο Π.Ε. (κατά προσέγγιση)')}
 								hrefOf={(p) => `/anadohoi/project/${p.ada}`}
 								onOver={(p) => showHover(p.ada as string, 'map')}
 								onOut={() => showHover(null, 'map')}

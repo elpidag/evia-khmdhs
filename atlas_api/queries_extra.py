@@ -1242,6 +1242,13 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             # executing forest co-ops named in the act trail (curated)
             "executors": (json.loads(r["executors"])
                           if r["executors"] else None),
+            # curated θέση-level work locations, compact for the map
+            # (full records incl. excerpts ship on the project endpoint)
+            "work_sites": ([{"name": s["name"], "lat": s.get("lat"),
+                             "lon": s.get("lon"),
+                             "prec": s.get("geo_precision")}
+                            for s in json.loads(r["work_sites"])]
+                           if r["work_sites"] else None),
         })
 
     live = [p for p in projects if p["status"] != "superseded"]
@@ -1313,6 +1320,8 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
                           if out.get("works_zones") else None)
     out["executors"] = (json.loads(out["executors"])
                         if out.get("executors") else None)
+    out["work_sites"] = (json.loads(out["work_sites"])
+                         if out.get("work_sites") else None)
     try:
         out["evidence"] = json.loads(out.pop("evidence_json") or "{}")
     except ValueError:

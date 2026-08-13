@@ -2,6 +2,7 @@
 	import { dev } from '$app/environment';
 	import LocationCurator from '$lib/dev/LocationCurator.svelte';
 	import ZoneMap from '$lib/maps/ZoneMap.svelte';
+	import SiteMap, { type SitePin } from '$lib/maps/SiteMap.svelte';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
@@ -74,6 +75,26 @@
 		[p.location_text, p.municipality ? `Δήμος ${p.municipality}` : '', p.pe]
 			.filter(Boolean)
 			.join(' ')
+	);
+	interface WorkSite {
+		name: string;
+		kind?: string;
+		municipality?: string | null;
+		pe?: string | null;
+		stremmata?: number | null;
+		source_ada: string;
+		excerpt: string;
+		lat?: number | null;
+		lon?: number | null;
+		geo_precision?: string | null;
+		geo_source?: string | null;
+		note?: string | null;
+	}
+	const workSites = $derived(
+		Array.isArray(p.work_sites) ? (p.work_sites as WorkSite[]) : null
+	);
+	const sitePins = $derived(
+		(workSites ?? []).filter((s): s is WorkSite & SitePin => s.lat != null && s.lon != null)
 	);
 </script>
 
@@ -173,10 +194,17 @@
 	</dd>
 </dl>
 {#if dev}
-	<LocationCurator ada={p.root_ada} query={locQuery} />
+	<LocationCurator
+		ada={p.root_ada}
+		query={locQuery}
+		sites={(workSites ?? []).map((s) => s.name)}
+	/>
 {/if}
 </div>
 
+{#if sitePins.length}
+	<SiteMap sites={sitePins} />
+{/if}
 {#if worksZones?.length}
 	<ZoneMap zones={worksZones} />
 {/if}

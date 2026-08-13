@@ -512,6 +512,26 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   (deliverables/works_zones/executors); the committed sqlite was migrated
   IN PLACE for these fields (ALTER+UPDATE) because harvest.json lives only
   on the Windows build machine — a plain loader re-run here can't rebuild.
+- **Curated `work_sites`** (2026-08-13, branch anadohoi-work-sites): exact
+  θέση-level work locations — **58 projects / 105 sites** extracted from
+  root AND linked acts (amendments carry finer sites; cross-Π.Ε. allowed
+  with note), each with verbatim excerpt + `source_ada` (mechanically
+  verified ⊂ cached txt). Geocoded 100/105: Nominatim tiers + web research
+  with per-pin `geo_source` URLs (Νέζης toponym dictionary, the Attica
+  flood Master Plan, Diavgeia, OSM/Overpass) + municipality centroids;
+  `geo_precision` ∈ site(58)/locality(32)/municipality(10); 5 honestly
+  unresolved (Δαδιά deep-forest toponyms, unnumbered υπολεκάνες).
+  Validation gates: Π.Ε. agreement, ≤15 km municipality distance, EFFIS
+  burn-scar cross-check (82/92 inside-or-≤2 km; FARs documented — beware
+  wrong-namesake hits: Τατοΐου-street venues, the Pentelikon hotel, the
+  Ωρωπός «Πλατανάκι»). Loader is now **30 cols** (validates evidence +
+  the lat/lon-iff-precision rule); `scripts/geocode_work_sites.py`
+  re-geocodes entries missing coords. Atlas: /anadohoi map draws one dot
+  per site (fallback zone-centroid → Π.Ε.-centroid), zoom ENABLED in
+  prod, de-overlap spread arms only at k≥2 (true positions at country
+  view), hover links a project's dots with dashed lines, approximate
+  dots render dashed+lighter; project pages get `SiteMap.svelte`;
+  `LocationCurator` is per-site (TAB-separated export).
 - **Β. Εύβοια works zones** (2026-08-12): the 9 Master-Plan flood-works
   zones (ΛΙΜΝΗ Ι–V, ΙΣΤΙΑΙΑ Ι–ΙV; sheets 4.1/4.2 in `data/raw/XARTHS_*`,
   ΥΛΗ 11.2021, 1:30.000) digitised: user-corrected pixel vertices in

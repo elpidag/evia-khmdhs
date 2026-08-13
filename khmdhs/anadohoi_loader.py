@@ -86,9 +86,14 @@ CREATE TABLE projects (
     works_zones     TEXT,               -- JSON array of digitised works-zone
                                         -- ids (evia_works_zones.geojson),
                                         -- from the act's basin citation
-    executors       TEXT                -- JSON array of executing forest
+    executors       TEXT,               -- JSON array of executing forest
                                         -- co-ops named in the act trail
                                         -- ({name, dase_vat, ada, excerpt})
+    work_sites      TEXT                -- JSON array of curated θέση-level
+                                        -- work locations ({name, kind,
+                                        -- municipality, pe, stremmata,
+                                        -- source_ada, excerpt, lat, lon,
+                                        -- geo_precision, geo_source, note})
 );
 CREATE TABLE project_decisions (
     root_ada TEXT NOT NULL REFERENCES projects(root_ada) ON DELETE CASCADE,
@@ -182,6 +187,18 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
             if not canon:
                 raise SystemExit(f"{root}: pe {pe!r} not a canonical Π.Ε.")
             pe = canon
+        for s in p.get("work_sites") or []:
+            if not (s.get("name") and s.get("excerpt") and s.get("source_ada")):
+                raise SystemExit(f"{root}: work_site missing name/excerpt/"
+                                 f"source_ada: {s.get('name')!r}")
+            if s.get("pe") and not canonical_pe(s["pe"]):
+                raise SystemExit(f"{root}: work_site pe {s['pe']!r} not canonical")
+            has_geo = s.get("lat") is not None and s.get("lon") is not None
+            prec = s.get("geo_precision")
+            if has_geo != (prec in ("site", "locality", "municipality")):
+                raise SystemExit(f"{root}: work_site {s['name']!r} lat/lon "
+                                 f"must be present iff geo_precision is "
+                                 f"site/locality/municipality (got {prec!r})")
         # amendments are ordered by their issue date so "latest wins" holds
         amendments = sorted(p.get("amendments") or [],
                             key=lambda a: harvest[a["ada"]].get("issue_date") or "")
@@ -215,7 +232,9 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
             p.get("notes"), p.get("deliverables"),
             json.dumps(p["works_zones"]) if p.get("works_zones") else None,
             json.dumps(p["executors"], ensure_ascii=False)
-            if p.get("executors") else None))
+            if p.get("executors") else None,
+            json.dumps(p["work_sites"], ensure_ascii=False)
+            if p.get("work_sites") else None))
         link_rows.append((root, root, "initial", None, None))
         for a in amendments:
             link_rows.append((root, a["ada"], "amendment",
@@ -250,7 +269,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                      decision_rows)
     conn.executemany(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         project_rows)
     conn.executemany("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                      sorted(link_rows))

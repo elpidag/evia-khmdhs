@@ -35,6 +35,23 @@ export interface AnadohoiProject {
 	executors?:
 		| { name: string; dase_vat: string | null; ada: string; excerpt: string; note?: string }[]
 		| null;
+	/** curated θέση-level work locations (full records incl. evidence) */
+	work_sites?:
+		| {
+				name: string;
+				kind?: string;
+				municipality?: string | null;
+				pe?: string | null;
+				stremmata?: number | null;
+				source_ada: string;
+				excerpt: string;
+				lat?: number | null;
+				lon?: number | null;
+				geo_precision?: string | null;
+				geo_source?: string | null;
+				note?: string | null;
+		  }[]
+		| null;
 	area_stremmata: number | null;
 	location_text: string | null;
 	municipality: string | null;

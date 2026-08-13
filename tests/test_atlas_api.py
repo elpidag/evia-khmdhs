@@ -255,13 +255,13 @@ def _build_ana_db(path):
          "test", None))
     conn.execute(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         ("ΤΕΣΤ4653Π8-ΑΑΑ", "ΕΤΑΙΡΕΙΑ ΤΕΣΤ Α.Ε.", None, "Οδός 1",
          "apokatastasi", 100.0, "τεστ περιοχή", None, "Π.Ε. Ευβοίας",
          "Β. Εύβοια, Αύγ. 2021", 50_000.0, 50_000.0, "net", None,
          "2023-01-01",
          "2024-12-31", "2024-12-31", None, None, None, None, None, None,
-         "no_completion_recorded", "{}", None, "works", None, None))
+         "no_completion_recorded", "{}", None, "works", None, None, None))
     conn.execute("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                  ("ΤΕΣΤ4653Π8-ΑΑΑ", "ΤΕΣΤ4653Π8-ΑΑΑ", "initial", None, None))
     conn.execute("INSERT INTO meta VALUES ('status_as_of', '2026-08-02')")

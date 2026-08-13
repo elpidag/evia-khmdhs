@@ -11,6 +11,11 @@ export interface AnadohoiOverviewProject {
 	executors?:
 		| { name: string; dase_vat: string | null; ada: string; excerpt: string; note?: string }[]
 		| null;
+	/** curated θέση-level work locations (compact map form; lat/lon absent
+	 *  when only the Π.Ε. is known — those dots fall back client-side) */
+	work_sites?:
+		| { name: string; lat: number | null; lon: number | null; prec: string | null }[]
+		| null;
 	funder: string | null;
 	works_kind: string | null;
 	area: number | null;
