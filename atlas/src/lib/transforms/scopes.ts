@@ -19,7 +19,9 @@ export const SCOPE_LABELS: Record<string, string> = {
 	antinero_2026: 'Anti-nero 2026',
 	antinero_esa: 'ΕΣΑ reforestation',
 	antinero_restoration: 'Restoration works',
-	antinero_unknown_phase: 'Phase unknown'
+	antinero_unknown_phase: 'Phase unknown',
+	// kept in the dataset, excluded from every calculation (DATA_DECISIONS 2026-08-13)
+	antinero_probable: 'Probably Anti-nero — not included in the calculations'
 };
 
 /** warm ramp for the sequential phases; green/purple for the two

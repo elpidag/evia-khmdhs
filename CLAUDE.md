@@ -4,15 +4,22 @@ OSINT dataset + web UI for the Greek **Anti-nero** wildfire-prevention/restorati
 public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico.css.
 Everything derived is regenerable; `data/raw/` is never written to.
 
-**Current state** (2026-08-03): 344 contracts (252 in scope; the Atlas
-analytics basis is **stated net €667,496,652.26** — effective retired
+**Current state** (2026-08-13): 344 contracts (245 in scope; the Atlas
+analytics basis is **stated net €658,297,730.65** — effective retired
 2026-08-03, payments are their own layer: paid net €440.0M; webui keeps its
-historical effective-gross €616M), 890 payment orders (€565.8M paid
-gross, 5 Diavgeia-only with PDF-curated net amounts), all amendment chains
-closed, 179/180 map contractors located, 147 linked to GEMI profiles, 18
-curated work sites, 252/252 in-scope contracts linked to their forest
-authority (103-entry ΔΔ/ΔΧ registry; 3 documented authority-less),
-contractor HQs geocoded via Nominatim. Refreshable via `python -m khmdhs.refresh`.
+historical effective-gross presentation, now €604.5M on the same in_scope
+flags), plus 7 chains / 13 contracts demoted to **`antinero_probable`**
+(€9,198,921.61 net on tips): kept in the dataset, excluded from every
+calculation — RRF-16849 membership unproven from primary documents
+(user decision, DATA_DECISIONS 2026-08-13; curated
+`khmdhs/data/probable_related.json`, presented on the Atlas front page as
+«additional contracts found, probably related …»). 890 payment orders
+(€565.8M paid gross, 5 Diavgeia-only with PDF-curated net amounts), all
+amendment chains closed, 179/180 map contractors located, 147 linked to
+GEMI profiles, 18 curated work sites, 245/245 in-scope contracts linked
+to their forest authority (103-entry ΔΔ/ΔΧ registry; 3 documented
+authority-less), contractor HQs geocoded via Nominatim. Refreshable via
+`python -m khmdhs.refresh`.
 
 ## Hard constraints (do not violate)
 
@@ -121,7 +128,10 @@ refetching open contracts — prefer it for routine updates.
   `antinero_{i,ii,iii,iv,2026,unknown_phase,esa,restoration,umbrella,support}` /
   `non_antinero`; IN_SCOPE = execution phases + esa + restoration + unknown.
   Then: (1) amendments with weak evidence (no evidence, or unknown_phase)
-  inherit the predecessor's scope, iterating; (2) supersede pass — a
+  inherit the predecessor's scope, iterating; (1b) demote pass — ADAMs in
+  curated `data/probable_related.json` become `antinero_probable`
+  (in dataset, out of every calculation; DATA_DECISIONS 2026-08-13);
+  (2) supersede pass — a
   non-cancelled successor takes the old version out of scope **unless** it is a
   «ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ» with value <0.9× parent (supplementary = additive, both
   count; same-value ΑΠΕ restatements do supersede).
@@ -240,6 +250,7 @@ decisions land there FIRST, then get implemented.
 | File | Purpose |
 |---|---|
 | `antinero_supplement.json` | 55 contracts missing from the xlsx; phase overrides that win over all rules |
+| `probable_related.json` | 7 chains / 13 ADAMs demoted to `antinero_probable`: registry titles say ANTINERO II but no provable RRF-16849 financing evidence exists (empty fund metadata, full texts without any RRF language — ΤΑΙΠΕΔ-procured, ΚΑΕ 2910601001-funded). Kept in dataset, excluded from all calculations; shown on / as «additional contracts found, probably related» |
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
@@ -428,7 +439,19 @@ co-ops, orgs/units/procedure/type/CPV tables), `/dase/contracts`,
 basis labels, absolute + %-of-own-total yearly bars, shared-log2-bin
 size-distribution overlay with median markers, per-Π.Ε. paired bars,
 methodology footnotes — Anti-nero €616M effective vs ΔΑΣΕ €41.4M stated
-≈ 14.9×). All SQL in `webui/dase_queries.py` (imports search/bin
+≈ 14.9×). Atlas /dase (2026-08-13): redesigned to the shared hero (green
+cards + direct-award bar + paid card) and kicker titles; its map is now a
+**proportional-symbol map** — one circle per awarding forest unit at its
+`forest_authorities` seat (area = Σ stated net €, label = n, tooltip
+median; join via `dase_contract_regions.source` `registry:<name>`),
+kind-coloured from the green palette (dx page-green / dd works-ramp
+dark / non-forest palest+dashed at Π.Ε. centroids), ΑΔΜΗΕ off-map in
+the caveat, EFFIS burn scars ≥2021 underneath (attribution on the
+frame); click a circle → its contract list docks right of the map
+(lists in the payload), click a Π.Ε. → zoom; timeline-style legend
+strip above; payload `/api/dase/map` reconciles to the
+basis (pinned). webui /dase keeps its frozen choropleth. All SQL in
+`webui/dase_queries.py` (imports search/bin
 helpers from queries.py; `queries.antinero_yearly` is the one
 khmdhs-side addition). Second sqlite is opened by a **lazy
 `g.dase_conn` accessor** — khmdhs-only routes never touch dase.sqlite
@@ -652,8 +675,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   COALESCEs to the stated column); the payments layer (strip timeline,
   disbursement curves, paid KPIs, per-contract payment lists, contractor
   paid-per-year) reads through the lazy `_pay_conn()` which sees real
-  payment rows. Everything value-based reconciles to €667,496,652.26
-  (pinned); /compare is symmetric stated-vs-stated (≈19.6×); /explore has
+  payment rows. Everything value-based reconciles to €658,297,730.65
+  (pinned; was €667,496,652.26 until the 2026-08-13 antinero_probable
+  exclusion); /compare is symmetric stated-vs-stated (≈19.3×); /explore has
   a single «Stated value (net)» column (`?v=8`). Gotcha: an endpoint that
   needs payments MUST take `_pay_conn()` — on `g.conn` the payments table
   is empty by design.

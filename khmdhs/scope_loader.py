@@ -4,6 +4,12 @@ For each row in `contracts`, khmdhs.scope.classify() decides a scope
 (antinero_i…antinero_2026, umbrella, support, non_antinero). Curated
 phases from khmdhs/data/antinero_supplement.json override the rules.
 
+After classification and amendment inheritance, a demote pass applies
+khmdhs/data/probable_related.json: chains whose RRF-16849 membership
+cannot be proven from primary documents become `antinero_probable` —
+kept in the dataset, excluded from every calculation (DATA_DECISIONS
+2026-08-13).
+
 On top of the scope, a supersede pass walks prevReferenceNo links: when a
 contract has a later (non-cancelled) version in the DB, the older version
 is taken out of scope so modification chains count once, not twice.
@@ -28,6 +34,7 @@ from khmdhs.db import init_db
 from khmdhs.scope import IN_SCOPE, _strip_accents, classify
 
 SUPPLEMENT_FILE = Path(__file__).parent / "data" / "antinero_supplement.json"
+PROBABLE_FILE = Path(__file__).parent / "data" / "probable_related.json"
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS contract_scope (
@@ -49,7 +56,17 @@ def load_overrides(path: Path = SUPPLEMENT_FILE) -> dict[str, str]:
     return {adam: meta["phase"] for adam, meta in data.items()}
 
 
-def build_scopes(conn, overrides: dict[str, str]) -> tuple[dict[str, tuple[str, str]], dict[str, str]]:
+def load_demotions(path: Path = PROBABLE_FILE) -> set[str]:
+    """ADAMs curated as probably-Anti-nero-but-unproven (whole chains)."""
+    if not path.exists():
+        return set()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data.pop("_comment", None)
+    return set(data)
+
+
+def build_scopes(conn, overrides: dict[str, str],
+                 demotions: set[str] | None = None) -> tuple[dict[str, tuple[str, str]], dict[str, str]]:
     """Classify all contracts; return ({ref: (scope, basis)}, {ref: superseded_by})."""
     rows = conn.execute("""
         SELECT k.reference_number, k.title, k.public_funding_ref,
@@ -107,6 +124,16 @@ def build_scopes(conn, overrides: dict[str, str]) -> tuple[dict[str, tuple[str, 
                 scopes[ref] = (prev_scope, f"inherited_from_prev:{prev}")
                 changed = True
 
+    # Curated demotion: chains whose RRF membership is unproven stay in
+    # the dataset but leave every calculation (DATA_DECISIONS 2026-08-13).
+    # Runs after inheritance so amendments cannot re-inherit an in-scope
+    # value over the demotion.
+    for ref in demotions or ():
+        if ref in scopes:
+            scopes[ref] = ("antinero_probable", "curated:probable_related")
+        else:
+            logging.warning("probable_related.json lists %s but it is not stored", ref)
+
     # A contract is superseded when a non-cancelled successor exists in the
     # DB — unless the successor is a supplementary contract (ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ
     # ΣΥΜΒΑΣΗ) adding new money on top of the original, in which case both
@@ -128,16 +155,18 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m khmdhs.scope_loader")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB)
     parser.add_argument("--supplement", type=Path, default=SUPPLEMENT_FILE)
+    parser.add_argument("--probable", type=Path, default=PROBABLE_FILE)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
     overrides = load_overrides(args.supplement)
+    demotions = load_demotions(args.probable)
     conn = init_db(args.db)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
 
-    scopes, superseded = build_scopes(conn, overrides)
+    scopes, superseded = build_scopes(conn, overrides, demotions)
 
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     counts: dict[str, int] = {}

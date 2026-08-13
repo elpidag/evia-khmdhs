@@ -11,7 +11,7 @@ import json
 import sqlite3
 import unicodedata
 
-from khmdhs.greek_regions import canonical_pe
+from khmdhs.greek_regions import PE_CENTROIDS, canonical_pe
 from webui import dase_queries as dq
 from webui import queries as q
 
@@ -164,7 +164,16 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
 
     # dataset-state counts the prose pages (methodology) cite — computed,
     # never hardcoded, so a refresh cannot leave stale numbers in copy
-    facts: dict[str, int] = {}
+    facts: dict[str, int | float] = {}
+    try:
+        facts["kh_probable_n"], facts["kh_probable_eur"] = kh.execute("""
+            SELECT COUNT(*), ROUND(SUM(k.total_cost_with_vat), 2)
+            FROM contracts k
+            JOIN contract_scope s ON s.reference_number = k.reference_number
+            WHERE s.scope = 'antinero_probable'
+              AND s.superseded_by IS NULL""").fetchone()
+    except sqlite3.OperationalError:
+        pass
     try:
         facts["kh_done"] = kh.execute(f"""
             SELECT COUNT(DISTINCT a.attributed_ref)
@@ -285,7 +294,31 @@ def antinero_overview(kh: sqlite3.Connection,
         "top_authorities": q.top_authorities(kh, limit=5),
         "top_signers": q.top_signers(kh, limit=5),
         "coverage": q.flow_coverage(kh),
+        "probable": probable_related(kh),
     }
+
+
+def probable_related(kh: sqlite3.Connection) -> dict:
+    """Chains kept in the dataset but excluded from every calculation:
+    probably Anti-nero, RRF-16849 membership unproven from the primary
+    documents (curated khmdhs/data/probable_related.json, DATA_DECISIONS
+    2026-08-13). Counted on chain tips so each chain appears once; on the
+    Atlas stated-basis connection `total_cost_with_vat` carries the net."""
+    if not q._has_scope_table(kh):
+        return {"n": 0, "total_eur": 0.0, "rows": []}
+    rows = kh.execute("""
+        SELECT k.reference_number AS ref, k.title AS title,
+               k.contract_signed_date AS d, k.total_cost_with_vat AS eur
+        FROM contracts k
+        JOIN contract_scope s ON s.reference_number = k.reference_number
+        WHERE s.scope = 'antinero_probable' AND s.superseded_by IS NULL
+        ORDER BY k.contract_signed_date
+    """).fetchall()
+    out = [{"ref": r["ref"], "title": (r["title"] or "").strip()[:140],
+            "d": r["d"], "eur": r["eur"]} for r in rows]
+    return {"n": len(out),
+            "total_eur": round(sum(r["eur"] or 0.0 for r in out), 2),
+            "rows": out}
 
 
 # ---------------------------------------------------------------- payments
@@ -533,6 +566,82 @@ def dase_overview(dase: sqlite3.Connection) -> dict:
         "histogram": dq.value_histogram(dase),
         "by_pe": dq.money_by_pe(dase),
     }
+
+
+def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
+    """Proportional-symbol map payload: one circle per awarding forest unit.
+
+    `dase_contract_regions.source` records the matched registry authority
+    (`registry:<canonical name>`), which joins to the khmdhs
+    `forest_authorities` seats. Contracts awarded by non-forest bodies
+    (δήμοι, περιφέρειες, ministries — source curated/override) have no unit
+    seat; they aggregate per Π.Ε. at its centroid so the map still reconciles
+    to the live total. The 4 multi-Π.Ε. ΑΔΜΗΕ contracts stay off-map,
+    reported in `unresolved`. Each circle carries its contract list (ref,
+    trimmed title, date, net €) for the click-through panel. On the Atlas
+    connection `total_cost_with_vat` carries the net value
+    (apply_net_basis)."""
+    seats = {r["name"]: (r["lat"], r["lon"], r["kind"])
+             for r in kh.execute(
+                 "SELECT name, lat, lon, kind FROM forest_authorities")}
+    rows = dase.execute(f"""
+        SELECT r.source, r.region_pe, co.total_cost_with_vat AS eur,
+               co.reference_number AS ref, co.title,
+               COALESCE(co.contract_signed_date, co.submission_date) AS d
+        FROM contracts co
+        JOIN dase_contract_regions r USING (reference_number)
+        WHERE {dq.live_filter('co')}
+    """).fetchall()
+
+    def contract_row(r) -> dict:
+        t = (r["title"] or r["ref"]).strip()
+        return {"ref": r["ref"], "t": t[:80] + ("…" if len(t) > 80 else ""),
+                "d": (r["d"] or "")[:10] or None, "eur": r["eur"]}
+
+    def summarise(group: list) -> dict:
+        vals = sorted((r["eur"] or 0.0) for r in group)
+        mid = len(vals) // 2
+        median = vals[mid] if len(vals) % 2 else (vals[mid - 1] + vals[mid]) / 2
+        contracts = sorted((contract_row(r) for r in group),
+                           key=lambda c: -(c["eur"] or 0.0))
+        return {"n": len(vals), "eur": round(sum(vals), 2),
+                "median_eur": round(median, 2), "contracts": contracts}
+
+    units: dict[str, dict] = {}
+    other: dict[str, list] = {}
+    for r in rows:
+        src, pe = r["source"], r["region_pe"]
+        name = src.split(":", 1)[1] if src.startswith("registry:") else None
+        if name and name in seats and seats[name][0] is not None:
+            units.setdefault(name, {"pe": pe, "rows": []})["rows"].append(r)
+        elif pe:
+            other.setdefault(pe, []).append(r)
+
+    out_units = []
+    for name, u in units.items():
+        lat, lon, kind = seats[name]
+        out_units.append({"name": name, "kind": kind, "pe": u["pe"],
+                          "lat": lat, "lon": lon, **summarise(u["rows"])})
+    out_units.sort(key=lambda x: -x["eur"])
+
+    out_other = []
+    for pe, group in other.items():
+        cent = PE_CENTROIDS.get(pe)
+        if not cent:
+            continue
+        out_other.append({"pe": pe, "lat": cent[0], "lon": cent[1],
+                          **summarise(group)})
+    out_other.sort(key=lambda x: -x["eur"])
+
+    unresolved = dase.execute(f"""
+        SELECT COUNT(*), COALESCE(SUM(co.total_cost_with_vat), 0)
+        FROM contracts co
+        LEFT JOIN dase_contract_regions r USING (reference_number)
+        WHERE {dq.live_filter('co')} AND r.region_pe IS NULL
+    """).fetchone()
+    return {"units": out_units, "other": out_other,
+            "unresolved": {"n": unresolved[0],
+                           "eur": round(unresolved[1], 2)}}
 
 
 def dase_swarm(dase: sqlite3.Connection) -> dict:

@@ -260,6 +260,10 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
     def api_dase_overview():
         return jsonify(queries_extra.dase_overview(_dase_conn()))
 
+    @app.route("/api/dase/map")
+    def api_dase_map():
+        return jsonify(queries_extra.dase_map(_dase_conn(), g.conn))
+
     @app.route("/api/dase/swarm")
     def api_dase_swarm():
         return jsonify(queries_extra.dase_swarm(_dase_conn()))

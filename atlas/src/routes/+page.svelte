@@ -95,6 +95,9 @@
 		return labels[best] ?? '';
 	});
 	const firstPayYear = $derived((o.timeseries.months[0] ?? '').slice(0, 4));
+	// hero bar fills — both data-proportional
+	const bidPct = $derived((o.kpis.n_single_bidder / o.kpis.n_contracts) * 100);
+	const paidPct = $derived((o.kpis.paid_eur / o.kpis.stated_eur) * 100);
 </script>
 
 <svelte:head>
@@ -117,7 +120,7 @@
 		</div>
 		<div class="card">
 			<div class="num">{grInt(o.kpis.n_contractors)}</div>
-			<div class="lbl">contractors under a single awarding ministry (ΥΠΕΝ)</div>
+			<div class="lbl">contractors</div>
 		</div>
 		<div class="card">
 			<div class="num">{eurShort(o.kpis.stated_eur).toLowerCase()}</div>
@@ -126,11 +129,27 @@
 			</div>
 		</div>
 	</div>
-	<div class="dabar" role="img" aria-label="Share of contracts awarded directly">
-		<div class="track">
-			<div class="fill" style:width={`${o.kpis.pct_direct}%`}>
-				<div class="danum">{pct(o.kpis.pct_direct)}</div>
-				<div class="datext">of contracts were direct awards</div>
+	<div class="midcol">
+		<div class="bars">
+			<div class="dabar" role="img" aria-label="Share of contracts awarded directly">
+				<div class="track">
+					<div class="fill" style:width={`${o.kpis.pct_direct}%`}>
+						<div class="danum">{pct(o.kpis.pct_direct)}</div>
+						<div class="datext">of contracts were direct awards</div>
+					</div>
+				</div>
+			</div>
+			<div class="bidbar" role="img" aria-label="Contracts that drew exactly one bid">
+				<div class="track">
+					<div class="bfill" style:width={`${bidPct}%`}>{grInt(o.kpis.n_single_bidder)}</div>
+					<div class="btext">contracts drew <strong>1 bid</strong></div>
+				</div>
+			</div>
+		</div>
+		<div class="paidcard" role="img" aria-label="Paid so far, as a share of the stated total">
+			<div class="pfill" style:height={`${paidPct}%`}>
+				<div class="pnum">{eurShort(o.kpis.paid_eur).toLowerCase()}</div>
+				<div class="plbl">already paid</div>
 			</div>
 		</div>
 	</div>
@@ -147,6 +166,29 @@
 			)} contracts drew exactly one bid. This page follows what actually got paid, to whom,
 			and where — <a href="/methodology#antinero">methodology</a>.
 		</p>
+		{#if o.probable && o.probable.n > 0}
+			<details class="probable">
+				<summary>
+					+ {grInt(o.probable.n)} additional contracts found ({eurShort(
+						o.probable.total_eur
+					).toLowerCase()} excl. VAT), probably related to the Antinero programme, but not
+					included in the calculations
+				</summary>
+				<p class="pnote">
+					Their signed documents carry no provable RRF-16849 financing evidence — no fund
+					code, no Ταμείο Ανάκαμψης clause (<a href="/methodology#antinero">methodology</a>).
+				</p>
+				<ul>
+					{#each o.probable.rows as r (r.ref)}
+						<li>
+							<a href={`/antinero/contract/${r.ref}`}>{r.ref}</a>
+							{#if r.d}<span class="pd">{r.d}</span>{/if}
+							<span class="pt">{r.title}</span>
+						</li>
+					{/each}
+				</ul>
+			</details>
+		{/if}
 	</div>
 </section>
 
@@ -335,31 +377,44 @@
 		gap: var(--sp-6) var(--sp-12);
 		margin: var(--sp-6) 0 var(--sp-12);
 	}
-	/* cards column + the direct-award bar beside the first card */
+	/* cards column + the bars/paid column beside it */
 	.heroleft {
+		/* the two columns split the first map's span equally:
+		   160 + 268 + 16 + 268 = 712 = the left map's right edge at the
+		   1440 design width */
 		display: grid;
-		grid-template-columns: 300px 300px;
+		grid-template-columns: 268px 268px;
 		gap: var(--sp-4);
-		align-items: start;
+		align-items: stretch;
 	}
 	.cards {
 		/* three equal rows — every card the height of the tallest */
 		display: grid;
 		grid-template-rows: repeat(3, 1fr);
 		gap: var(--sp-4);
-		width: 300px;
+		width: 268px;
 		max-width: 100%;
 	}
-	/* the direct-award share bar, next to the contracts card */
-	.dabar {
-		grid-column: 2;
+	/* middle column mirrors the cards grid: the two bars share the first
+	   card's row (equal heights + the gap between), the paid card fills
+	   the third row so it matches the stated-value card exactly */
+	.midcol {
+		display: grid;
+		grid-template-rows: repeat(3, 1fr);
+		gap: var(--sp-4);
+		width: 268px;
+		max-width: 100%;
+	}
+	.bars {
 		grid-row: 1;
-		width: 300px;
-		max-width: 100%;
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+		gap: var(--sp-4);
 	}
-	.dabar .track {
-		height: 58px;
-		background: #f2f2f2;
+	.dabar .track,
+	.bidbar .track {
+		height: 100%;
+		background: #e0e0e0;
 		border-radius: 10px;
 		overflow: hidden;
 	}
@@ -371,7 +426,7 @@
 		flex-direction: column;
 		justify-content: center;
 		gap: 2px;
-		padding: 0 12px;
+		padding: 0 14px;
 	}
 	.dabar .danum {
 		font-family: var(--font-display);
@@ -382,16 +437,85 @@
 	.dabar .datext {
 		font-family: var(--font-display);
 		font-weight: 400;
+		font-size: var(--fs-12);
+		line-height: 1.2;
+	}
+	.bidbar .track {
+		display: flex;
+		align-items: center;
+	}
+	.bidbar .bfill {
+		height: 100%;
+		min-width: 40px;
+		background: var(--c-antinero);
+		color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-18);
+		flex: 0 0 auto;
+	}
+	.bidbar .btext {
+		padding-left: 10px;
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: var(--fs-13);
+		white-space: nowrap;
+	}
+	.bidbar .btext strong {
+		font-weight: 900;
+	}
+	/* paid vs stated: black fill rises to the paid share of the stated €;
+	   the unfilled remainder reads as light grey, no outer border */
+	.paidcard {
+		grid-row: 3;
+		position: relative;
+		background: #e0e0e0;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+	.paidcard .pfill {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: var(--c-antinero);
+		color: #fff;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		gap: 2px;
+		padding: 8px 14px 10px;
+	}
+	.paidcard .pnum {
+		font-family: var(--font-display);
+		font-weight: 900;
+		/* matches the card numbers' 36px cap; fits the 268px card */
+		font-size: 36px;
+		line-height: 0.95;
+		white-space: nowrap;
+	}
+	.paidcard .plbl {
+		font-family: var(--font-display);
+		font-weight: 400;
 		font-size: var(--fs-13);
 		line-height: 1.2;
 	}
 	@media (max-width: 900px) {
 		.heroleft {
-			grid-template-columns: 300px;
+			grid-template-columns: 268px;
 		}
-		.dabar {
-			grid-column: 1;
+		.midcol {
+			grid-template-rows: auto;
+		}
+		.bars,
+		.paidcard {
 			grid-row: auto;
+		}
+		.paidcard {
+			height: 117px;
 		}
 	}
 	.card {
@@ -406,7 +530,8 @@
 	.card .num {
 		font-family: var(--font-display);
 		font-weight: 900;
-		font-size: clamp(28px, 3.2vw, 40px);
+		/* 36px is the largest size at which the stated € fits a 268px card */
+		font-size: clamp(28px, 3.2vw, 36px);
 		line-height: 0.95;
 	}
 	.card .lbl {
@@ -426,6 +551,32 @@
 	.about p {
 		margin: 0;
 		max-width: var(--prose-w);
+	}
+	.probable {
+		margin-top: var(--sp-4);
+		max-width: var(--prose-w);
+		font-size: var(--fs-13);
+		color: var(--ink-faint);
+	}
+	.probable summary {
+		cursor: pointer;
+	}
+	.probable .pnote {
+		margin: var(--sp-2) 0 0;
+		font-size: var(--fs-13);
+	}
+	.probable ul {
+		margin: var(--sp-2) 0 0;
+		padding-left: 1.2em;
+	}
+	.probable li {
+		margin-bottom: 2px;
+	}
+	.probable .pd {
+		margin-left: 0.5em;
+	}
+	.probable .pt {
+		margin-left: 0.5em;
 	}
 	@media (max-width: 900px) {
 		.hero {
