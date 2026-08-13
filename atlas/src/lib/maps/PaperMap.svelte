@@ -201,8 +201,10 @@
 		}
 	});
 
-	// initial editorial framing (view / fitPoints), applied once per input
+	// initial editorial framing (view / fitPoints), applied once per input;
+	// homeT remembers it so resetZoom (un-drill) returns to the same frame
 	let appliedViewKey = $state('');
+	let homeT: { x: number; y: number; k: number } | null = null;
 	$effect(() => {
 		if (!projection || !path || focusPe) return;
 		const key = JSON.stringify(view ?? fitPoints ?? null);
@@ -210,10 +212,8 @@
 		if (view) {
 			const px = projection(view.center);
 			if (!px) return;
-			applyTransform(
-				{ k: view.k, x: width / 2 - view.k * px[0], y: height / 2 - view.k * px[1] },
-				false
-			);
+			homeT = { k: view.k, x: width / 2 - view.k * px[0], y: height / 2 - view.k * px[1] };
+			applyTransform(homeT, false);
 			appliedViewKey = key;
 		} else if (fitPoints && fitPoints.length) {
 			let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
@@ -228,10 +228,8 @@
 				1,
 				Math.min(8, (1 - fitPad) * Math.min(width / (x1 - x0), height / (y1 - y0)))
 			);
-			applyTransform(
-				{ k, x: width / 2 - (k * (x0 + x1)) / 2, y: height / 2 - (k * (y0 + y1)) / 2 },
-				false
-			);
+			homeT = { k, x: width / 2 - (k * (x0 + x1)) / 2, y: height / 2 - (k * (y0 + y1)) / 2 };
+			applyTransform(homeT, false);
 			appliedViewKey = key;
 		}
 	});
@@ -259,7 +257,7 @@
 	}
 
 	function resetZoom() {
-		applyTransform({ x: 0, y: 0, k: 1 });
+		applyTransform(homeT ?? { x: 0, y: 0, k: 1 });
 	}
 
 	function zoomBy(factor: number) {

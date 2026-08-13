@@ -344,17 +344,17 @@
 	<div class="cards">
 		<div class="card">
 			<div class="num">{grInt(k.n_projects)}</div>
-			<div class="lbl">announced projects<br />assignment acts</div>
+			<div class="lbl">announced projects</div>
 		</div>
 		<div class="card">
 			<div class="num">{grInt(k.n_companies)}</div>
-			<div class="lbl">private companies defined as restoration / reforestation contractors</div>
+			<div class="lbl">private companies as restoration / reforestation contractors</div>
 		</div>
 		<div class="card">
 			<div class="num">{eurShort(k.stated_eur).toLowerCase()}</div>
 			<div class="lbl">
-				value of projects (only {grInt(k.n_stated)} of {grInt(k.n_projects)} acts state a
-				figure)
+				value of projects<br />(only {grInt(k.n_stated)} of {grInt(k.n_projects)} acts state
+				a figure)
 			</div>
 		</div>
 	</div>
@@ -663,9 +663,12 @@
 		margin: var(--sp-6) 0 var(--sp-12);
 	}
 	.cards {
-		display: flex;
-		flex-direction: column;
+		/* three equal rows — every card the height of the tallest */
+		display: grid;
+		grid-template-rows: repeat(3, 1fr);
 		gap: var(--sp-4);
+		width: 300px;
+		max-width: 100%;
 	}
 	.card {
 		background: var(--c-anadohoi);
@@ -679,13 +682,13 @@
 	.card .num {
 		font-family: var(--font-display);
 		font-weight: 900;
-		font-size: clamp(34px, 4vw, 50px);
+		font-size: clamp(28px, 3.2vw, 40px);
 		line-height: 0.95;
 	}
 	.card .lbl {
 		font-family: var(--font-display);
 		font-weight: 400; /* Obviously Regular */
-		font-size: var(--fs-14);
+		font-size: var(--fs-13);
 		line-height: 1.2;
 	}
 	.about .kicker {

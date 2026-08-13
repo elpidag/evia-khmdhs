@@ -5,7 +5,7 @@
 	import ChoroLegend from '$lib/maps/ChoroLegend.svelte';
 	import DotLayer, { type DotPoint } from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
-	import { RAMP_HOME, RAMP_WORKS, makeChoro, spreadOverlaps } from '$lib/maps/useGeo';
+	import { RAMP_WORKS, makeChoro, spreadOverlaps } from '$lib/maps/useGeo';
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import DrillPanel from './DrillPanel.svelte';
@@ -102,7 +102,7 @@
 	});
 
 	const workChoro = $derived(makeChoro(RAMP_WORKS, sharedMax));
-	const homeChoro = $derived(makeChoro(RAMP_HOME, sharedMax));
+	const homeChoro = $derived(makeChoro(RAMP_WORKS, sharedMax));
 
 	// ---- points view ---------------------------------------------------
 	// Country level: contract-COUNT choropleth on the left (no dots there),
@@ -239,8 +239,11 @@
 
 <div class="twin">
 	<div class="panel">
-		<h3>Where the work happens</h3>
+		<h3>allocation of funding by location of contracts</h3>
 		<PaperMap
+			width={640}
+			height={620}
+			view={{ center: [23.8305, 38.3566], k: 1.08 }}
 			colorOf={view === 'money'
 				? (pe) => workChoro(workValues.get(pe) ?? 0)
 				: focus
@@ -309,8 +312,11 @@
 	</div>
 
 	<div class="panel">
-		<h3>Where the contractors are based</h3>
+		<h3>allocation of funding by base-location of contractors</h3>
 		<PaperMap
+			width={640}
+			height={620}
+			view={{ center: [23.8305, 38.3566], k: 1.08 }}
 			colorOf={view === 'money'
 				? (pe) => homeChoro(homeValues.get(pe) ?? 0)
 				: () => 'var(--land-empty)'}
@@ -334,7 +340,7 @@
 			{/snippet}
 			{#snippet legend()}
 				{#if view === 'money'}
-					<ChoroLegend ramp={RAMP_HOME} max={sharedMax} title="€ by contractor HQ (even-split)" />
+					<ChoroLegend ramp={RAMP_WORKS} max={sharedMax} title="€ by contractor HQ (even-split)" />
 				{:else}
 					<div>
 						one dot = one contractor HQ ({grInt(contractorDots.length)} of

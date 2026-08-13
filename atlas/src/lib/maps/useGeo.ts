@@ -120,14 +120,14 @@ export function makeChoro(ramp: string[], maxV: number): (v: number) => string {
 }
 
 export const RAMP_WORKS = [
-	'#fff7e6',
-	'#ffedc9',
-	'#ffdf9e',
-	'#ffc76a',
-	'#f5a43c',
-	'#de7a1c',
-	'#b8500e',
-	'#6c1a00'
+	'#cbe4d1',
+	'#b0d5be',
+	'#93c6a8',
+	'#6fb28c',
+	'#578f6e',
+	'#406e55',
+	'#2a4a38',
+	'#16241c'
 ];
 
 export const RAMP_HOME = [

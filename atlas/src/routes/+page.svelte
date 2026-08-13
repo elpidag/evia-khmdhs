@@ -9,8 +9,6 @@
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
-	import KpiRow from '$lib/ui/KpiRow.svelte';
-	import StatPair from '$lib/ui/StatPair.svelte';
 	import {
 		apiGetCached,
 		type AntineroMapPayload,
@@ -109,56 +107,52 @@
 	/>
 </svelte:head>
 
-<hgroup class="lede">
-	<p class="standfirst">
-		Greece's flagship wildfire-prevention programme (ΥΠΕΝ, RRF Action 16849) has signed
-		{grInt(o.kpis.n_contracts)} contracts since {o.yearly[0]?.year ?? '2022'}. This is what
-		actually got paid, to whom, and where.
-	</p>
-</hgroup>
-
-<KpiRow>
-	<StatPair
-		value={eurShort(o.kpis.stated_eur)}
-		label="total stated value of contracts"
-		compare="excl. VAT"
-		basis="Σ contracted values as registered"
-		color="var(--c-antinero)"
-	/>
-	<StatPair
-		value={eurShort(o.kpis.paid_eur)}
-		label="actually paid so far"
-		compare="excl. VAT · {grInt(o.kpis.n_payments)} payment orders"
-		basis="Σ non-cancelled payment orders"
-		color="var(--c-antinero)"
-	/>
-	<StatPair
-		value={eurShort(o.kpis.median_eur)}
-		label="median contract"
-		compare="excl. VAT"
-		basis="stated value, in-scope population"
-	/>
-	<StatPair
-		value={grInt(o.kpis.n_contracts)}
-		label="in-scope contracts"
-		compare="{grInt(o.kpis.n_single_bidder)} drew exactly one bid"
-	/>
-	<StatPair
-		value={grInt(o.kpis.n_contractors)}
-		label="contractors"
-		compare="under a single awarding ministry (ΥΠΕΝ)"
-	/>
-	<StatPair
-		value={pct(o.kpis.pct_direct)}
-		label="of contracts were direct awards"
-		compare="{eurShort(directEur)} — the bulk of the money too"
-	/>
-</KpiRow>
+<div class="antp">
+<section class="hero">
+	<div class="heroleft">
+	<div class="cards">
+		<div class="card">
+			<div class="num">{grInt(o.kpis.n_contracts)}</div>
+			<div class="lbl">in-scope contracts</div>
+		</div>
+		<div class="card">
+			<div class="num">{grInt(o.kpis.n_contractors)}</div>
+			<div class="lbl">contractors under a single awarding ministry (ΥΠΕΝ)</div>
+		</div>
+		<div class="card">
+			<div class="num">{eurShort(o.kpis.stated_eur).toLowerCase()}</div>
+			<div class="lbl">
+				total stated value of contracts<br />(excl. VAT)
+			</div>
+		</div>
+	</div>
+	<div class="dabar" role="img" aria-label="Share of contracts awarded directly">
+		<div class="track">
+			<div class="fill" style:width={`${o.kpis.pct_direct}%`}>
+				<div class="danum">{pct(o.kpis.pct_direct)}</div>
+				<div class="datext">of contracts were direct awards</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="about">
+		<div class="kicker">THE PROGRAMME</div>
+		<p>
+			Greece's flagship wildfire-prevention programme (ΥΠΕΝ, RRF Action 16849) has signed
+			{grInt(o.kpis.n_contracts)} contracts since {o.yearly[0]?.year ?? '2022'} — of the
+			{eurShort(o.kpis.stated_eur)} stated, {eurShort(o.kpis.paid_eur)} has actually been paid
+			({grInt(o.kpis.n_payments)} payment orders). {pct(o.kpis.pct_direct)} of contracts —
+			{eurShort(directEur)}, the bulk of the money — went by direct award, and {grInt(
+				o.kpis.n_single_bidder
+			)} contracts drew exactly one bid. This page follows what actually got paid, to whom,
+			and where — <a href="/methodology#antinero">methodology</a>.
+		</p>
+	</div>
+</section>
 
 {#if map}
 	<ChartFrame
-		title="The money lands on the map twice: where the forests are, and where the companies are"
-		subtitle="Left: € of works by project region. Right: the same € by the winning contractor's registered HQ."
+		title="MAP"
 		caveat="Contract values split evenly across a contract's regions (and partners), so both maps sum to the programme total; tooltips also show full exposure."
 		anchor="map"
 		methodology="even-split"
@@ -172,10 +166,10 @@
 <Defer height={900}>
 {#if payments}
 	<ChartFrame
-		title="When the money actually moved — the biggest single month was {peak.m} ({eurShort(
+		title="PAYMENTS TIMELINE"
+		subtitle="One tick per payment order ({grInt(payments.events.length)}), height ∝ √€, by programme phase — the biggest single month was {peak.m} ({eurShort(
 			peak.eur
-		)})"
-		subtitle="One tick per payment order ({grInt(payments.events.length)}), height ∝ √€, by programme phase. Hover for the order, click through to the contract."
+		)}). Hover for the order, click through to the contract."
 		caveat="{grInt(
 			payments.fallback
 		)} of {grInt(payments.events.length)} orders carry no signature date — the registry submission date is shown for those{payments
@@ -189,8 +183,8 @@
 	</ChartFrame>
 
 	<ChartFrame
-		title="Disbursement has been climbing every year since {firstPayYear}"
-		subtitle="Cumulative € of payment orders — stacked by phase, or same-point-in-year comparison."
+		title="CUMULATIVE DISBURSEMENT"
+		subtitle="Cumulative € of payment orders since {firstPayYear} — stacked by phase, or same-point-in-year comparison."
 		caveat="Payment orders attributed to a contract's final version; registry net-of-ΦΠΑ amounts."
 		anchor="disbursement"
 		methodology="stated-basis"
@@ -206,8 +200,10 @@
 <Defer height={340}>
 {#if swarm}
 	<ChartFrame
-		title="{grInt(o.kpis.n_contracts)} contracts, and almost all of them sit far above the direct-award ceilings"
-		subtitle="Every in-scope contract as one dot on a log scale (stated €, excl. VAT). Ringed dots drew a single bid."
+		title="CONTRACT VALUES"
+		subtitle="Every in-scope contract ({grInt(
+			o.kpis.n_contracts
+		)}) as one dot on a log scale (stated €, excl. VAT) — almost all sit far above the direct-award ceilings. Ringed dots drew a single bid."
 		caveat="The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis as these dots. RRF emergency provisions allowed direct awards above them; the lines are printed for scale."
 		anchor="swarm"
 		methodology="stated-basis"
@@ -225,12 +221,12 @@
 	{@const nPhases = sk.nodes.filter((n) => n.kind === 'phase').length}
 	{@const nTop = sk.nodes.filter((n) => n.kind === 'contractor').length}
 	<ChartFrame
-		title="{grInt(nPhases)} phases, {grInt(nTop)} companies: {eurShort(
+		title="MONEY FLOW"
+		subtitle="ΥΠΕΝ → programme phase → contractor (top {nTop} by stated €, everyone else aggregated) — {eurShort(
 			sk.links
 				.filter((l) => sk.nodes.find((n) => n.id === l.t)?.kind === 'contractor')
 				.reduce((s, l) => s + l.eur, 0)
-		)} of the {eurShort(o.kpis.total_eur)} ends at {grInt(nTop)} contractors"
-		subtitle="ΥΠΕΝ → programme phase → contractor (top {nTop} by stated €, everyone else aggregated)."
+		)} of the {eurShort(o.kpis.total_eur)} ends at those {grInt(nTop)} companies."
 		caveat="Consortium values split evenly between partners here, so every column sums to the programme total."
 		anchor="sankey"
 		methodology="even-split"
@@ -244,8 +240,10 @@
 
 <div class="pair">
 	<ChartFrame
-		title="Direct awards pile up around €{daModal} — far beyond the ν.4782/2021 ceilings"
-		subtitle="{grInt(o.direct_awards.n as number)} direct-award contracts by stated value (excl. VAT)."
+		title="DIRECT AWARDS"
+		subtitle="{grInt(
+			o.direct_awards.n as number
+		)} direct-award contracts by stated value (excl. VAT) — they pile up around €{daModal}, far beyond the ν.4782/2021 ceilings."
 		caveat="The statutory ceilings and these values are both excl. VAT; RRF emergency provisions allowed direct awards above the ceilings."
 		anchor="direct-awards"
 		methodology="procedures"
@@ -259,19 +257,22 @@
 	</ChartFrame>
 
 	<ChartFrame
-		title="Open procedures are the exception, not the rule"
-		subtitle="Stated € by award procedure."
+		title="AWARD PROCEDURES"
+		subtitle="Stated € by award procedure — open procedures are the exception, not the rule."
 		anchor="procedures"
 	>
-		<BarH rows={procRows} highlight={(r) => r.label.includes('Απευθείας')} />
+		<BarH rows={procRows} color="var(--c-antinero)" highlight={(r) => r.label.includes('Απευθείας')} />
 	</ChartFrame>
 </div>
 
 <Defer height={400}>
 {#if peYearly}
 	<ChartFrame
-		title="{grInt(Math.min(20, peYearly.pes.length))} regions absorb most of the money — each on the same scale"
-		subtitle="Yearly stated € per regional unit (top {Math.min(20, peYearly.pes.length)}). Click a facet to drill into it on the map."
+		title="MONEY BY REGION PER YEAR"
+		subtitle="Yearly stated € per regional unit (top {Math.min(
+			20,
+			peYearly.pes.length
+		)}, same scale). Click a facet to drill into it on the map."
 		caveat="Even-split attribution; stated € at signature year."
 		anchor="pe-yearly"
 		methodology="even-split"
@@ -284,38 +285,152 @@
 </Defer>
 
 <ChartFrame
-	title="{grInt(topRows.length)} contractors hold the largest shares of the {eurShort(o.kpis.total_eur)}"
-	subtitle="Top {topRows.length} contractors by stated contract value"
+	title="RANKING OF COMPANIES"
+	subtitle="according to sums contracted via the programme — top {topRows.length} of {grInt(
+		o.kpis.n_contractors
+	)} contractors, {eurShort(o.kpis.total_eur)} in total"
 	caveat="Consortium contract values are counted in full for each partner (maximum-exposure view)."
 	anchor="top-contractors"
 	methodology="stated-basis"
 >
-	<BarH rows={topRows} />
+	<BarH rows={topRows} color="#2b2b2b" inside barHeight={22} />
 </ChartFrame>
 
 <ChartFrame
-	title="Design costs a sliver: the median μελέτη is {pct(
+	title="STUDY COSTS"
+	subtitle="The ten largest study (μελέτη) costs extracted from the signed PDFs — the median is {pct(
 		(o.studies.summary.median_share as number) * 100
-	)} of a contract's net value"
-	subtitle="The ten largest study (μελέτη) costs extracted from the signed PDFs — {grInt(
-		o.studies.summary.n_with
-	)} of {grInt(o.studies.summary.n_in_scope)} contracts state one, {eurShort(
-		o.studies.summary.total_eur
-	)} in total."
+	)} of a contract's net value; {grInt(o.studies.summary.n_with)} of {grInt(
+		o.studies.summary.n_in_scope
+	)} contracts state one, {eurShort(o.studies.summary.total_eur)} in total."
 	caveat="ΕΣΑ design-build contracts bundle the study into the works price and honestly state none."
 	anchor="studies"
 	methodology="study-costs"
 >
-	<BarH rows={studyRows} color="var(--c-dase)" />
+	<BarH rows={studyRows} color="#8f8f8f" />
 </ChartFrame>
 
+</div>
+
 <style>
-	.lede {
+	/* every section title follows the sponsored-works kicker, in the
+	   antinero dataset colour (black) */
+	.antp :global(.frame .finding) {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		line-height: 1.3;
+		color: var(--c-antinero);
+	}
+	/* the two paper maps take the sponsored-works ground */
+	.antp :global(.map) {
+		background: #f2f2f2;
+		border: none;
+		box-shadow: none;
+	}
+	.hero {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: var(--sp-6) var(--sp-12);
+		margin: var(--sp-6) 0 var(--sp-12);
+	}
+	/* cards column + the direct-award bar beside the first card */
+	.heroleft {
+		display: grid;
+		grid-template-columns: 300px 300px;
+		gap: var(--sp-4);
+		align-items: start;
+	}
+	.cards {
+		/* three equal rows — every card the height of the tallest */
+		display: grid;
+		grid-template-rows: repeat(3, 1fr);
+		gap: var(--sp-4);
+		width: 300px;
+		max-width: 100%;
+	}
+	/* the direct-award share bar, next to the contracts card */
+	.dabar {
+		grid-column: 2;
+		grid-row: 1;
+		width: 300px;
+		max-width: 100%;
+	}
+	.dabar .track {
+		height: 58px;
+		background: #f2f2f2;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+	.dabar .fill {
+		height: 100%;
+		background: var(--c-antinero);
+		color: #fff;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 2px;
+		padding: 0 12px;
+	}
+	.dabar .danum {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-18);
+		line-height: 1;
+	}
+	.dabar .datext {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: var(--fs-13);
+		line-height: 1.2;
+	}
+	@media (max-width: 900px) {
+		.heroleft {
+			grid-template-columns: 300px;
+		}
+		.dabar {
+			grid-column: 1;
+			grid-row: auto;
+		}
+	}
+	.card {
+		background: var(--c-antinero);
+		color: #fff;
+		padding: var(--sp-4);
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-4);
+	}
+	.card .num {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: clamp(28px, 3.2vw, 40px);
+		line-height: 0.95;
+	}
+	.card .lbl {
+		font-family: var(--font-display);
+		font-weight: 400; /* Obviously Regular */
+		font-size: var(--fs-13);
+		line-height: 1.2;
+	}
+	.about .kicker {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		margin-bottom: var(--sp-3);
+		color: var(--c-antinero);
+	}
+	.about p {
+		margin: 0;
 		max-width: var(--prose-w);
 	}
-	.standfirst {
-		font-size: var(--fs-18);
-		color: var(--ink-soft);
+	@media (max-width: 900px) {
+		.hero {
+			grid-template-columns: 1fr;
+		}
 	}
 	.pair {
 		display: grid;
