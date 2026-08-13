@@ -51,7 +51,7 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<link rel="stylesheet" href="/fonts/fonts.css" />
-	<meta property="og:site_name" content="FORESTRY TRACKER" />
+	<meta property="og:site_name" content="FORESTRY WORKS TRACKER" />
 	<meta property="og:type" content="website" />
 	<meta name="twitter:card" content="summary" />
 </svelte:head>

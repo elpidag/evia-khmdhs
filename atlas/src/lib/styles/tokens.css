@@ -2,10 +2,11 @@
  * Atlas design tokens — newsprint palette, one loud accent.
  * Ramps ported verbatim from webui/static/geo_common.js for visual
  * continuity between the two sites.
- * Fonts: Sofia Sans (UI/data, excellent Greek) + Literata (headlines);
- * self-hosted greek+latin(+ext) woff2 subsets, see static/fonts/fonts.css
- * (regenerated from the Google Fonts CSS2 API — command in that file's
- * git history).
+ * Fonts: futura-100-greek (UI/data) + obviously (display/headlines) via
+ * the Adobe Typekit kit loaded in app.html; Sofia Sans stays as the
+ * self-hosted fallback (static/fonts/fonts.css, greek+latin woff2
+ * subsets regenerated from the Google Fonts CSS2 API — command in that
+ * file's git history).
  */
 :root {
 	/* paper & ink */

@@ -1,14 +1,14 @@
 <script lang="ts">
 	/** Quiet polygon layer for the digitised works zones — drawn under the
 	 *  project dots as geographic context; tooltip is convenience only. */
-	import type { Feature, MultiPolygon } from 'geojson';
+	import type { Feature, Polygon, MultiPolygon } from 'geojson';
 	import type { MapCtx } from './PaperMap.svelte';
 	import type { ZoneProps } from './useGeo';
 
 	interface Props {
 		ctx: MapCtx;
-		features: Feature<MultiPolygon, ZoneProps>[];
-		tipOf?: (f: Feature<MultiPolygon, ZoneProps>) => string;
+		features: Feature<Polygon | MultiPolygon, ZoneProps>[];
+		tipOf?: (f: Feature<Polygon | MultiPolygon, ZoneProps>) => string;
 	}
 	let { ctx, features, tipOf }: Props = $props();
 </script>

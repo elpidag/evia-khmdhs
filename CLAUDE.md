@@ -438,8 +438,11 @@ Third dataset: the ν.998/1979 **άρθρο 42 §3** sponsor scheme (13.08.2021 
 forest land, appointed by administrative act. **Diavgeia-only universe** (no
 procurement → no KHMDHS; act metadata is empty of substance — type 2.4.7.1,
 no relatedDecisions even on amendments → the signed PDFs are the source).
-State (2026-08-03): **322 decisions → 69 projects** (51 registry spellings /
-37 sponsor groups: ΔΕΗ, EREN, Coca-Cola 3Ε, Lidl, Dior,
+State (2026-08-12): **322 decisions → 69 projects** (51 registry spellings /
+36 sponsor groups after the Lidl Greek/Latin-script merge — labels are
+presentational `_SPONSOR_GROUPS` in queries_extra, rows keep the acts'
+verbatim names; «Coca-Cola (3Ε / Hellas)» names both legal entities of the
+restatement pair: ΔΕΗ, EREN, Lidl, Dior,
 Πειραιώς/Εθνική/Eurobank, ΤΙΤΑΝ, WWF …), 43 stated budgets, headline
 committed **€41.78M net-where-stated** (`COALESCE(budget_net_eur,
 budget_current)`; VAT basis curated per act: 15 explicitly net / 2 gross —
@@ -475,10 +478,56 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   published — revocation attached to the published root 63ΡΧ.
 - Non-fire same-instrument acts are IN (plane-disease sanitation ALFA
   WOOD/ΑΚΡΙΤΑΣ, salvage logging, δωρεά-funded ΣΤΑΝΤΑ) with notes; 2 projects
-  honestly pe-NULL (supra-Π.Ε.). ΔΑΣΕ cross-link: sponsors execute via
-  forest co-ops (NOVA Ζώνη 4 → ΔΑΣΕ Αγ. Δημητρίου Πιερίας; ΤΙΤΑΝ → ΔΑΣΕ
-  Γαρδικίου Τρικάλων). Tests in `tests/test_anadohoi.py` (units + real-DB
-  pins incl. status counts and Σ budgets).
+  honestly pe-NULL (supra-Π.Ε.). Tests in `tests/test_anadohoi.py` (units +
+  real-DB pins incl. status counts, Σ budgets, and the three curated-field
+  pins below).
+- **Curated `deliverables`** (2026-08-12, 69/69 root-act PDFs
+  human-reviewed): what each appointment covers — εκτέλεση έργου (42) /
+  μελέτη και έργο (17) / μελέτη only (10) — from the operative
+  «Ορίζουμε … με σκοπό …» sentence, verbatim excerpt in
+  `evidence.deliverables`. Regex only proposed (Greek inflection broke a
+  naive pass on 22 acts); every verdict is the user's. Convention: a σκοπός
+  phrased «υλοποίηση μελέτης» = εκπόνηση μελέτης → `study` (ΡΛ16, 9Φ9Ρ,
+  ΨΤΑΤ). The όροι boilerplate lies — acts stating «σύμφωνα με τα οριζόμενα
+  στην … σχετική μελέτη» are works-only (someone else did the study).
+- **Curated `executors`** (2026-08-12): the sponsor→ΔΑΣΕ link is systemic —
+  all 322 decision PDFs swept (34 fetch failures: timeouts + homoglyph
+  ΑΔΑs), **13 projects name executing forest co-ops** (23 rows: name,
+  `dase_vat`, source-act ΑΔΑ, verbatim excerpt). Identity policy: `dase_vat`
+  ONLY where the wording pins a single ΔΑΣΕ-registry entry (14 VATs);
+  ambiguous stay null WITH a note (Παντουρέ/Παπάδων not in registry;
+  «Σιδηρονερίου» ≈ 5 candidates; plain «Μίστρου» never merged onto «Άγιος
+  Κυπριανός»). Known TODO: the Eurobank Ζώνη-5 evidence acts (6ΔΤ1…) are
+  stored decisions with no `project_decisions` links. UI: /anadohoi
+  executors section + project-page «Works executed by» (chips →
+  `/dase/coop/<vat>`).
+- **Curated `works_zones`** (2026-08-12/13): 6 Εύβοια projects carry their
+  digitised zone ids (basis: each act's basin citation; ΡΕΧΥ/ΔΕΔΔΗΕ = all
+  NINE zones — its μελέτες table funds both Δασαρχεία, corrected
+  2026-08-13 with `evidence.works_zones`). Loader schema is now **29 cols**
+  (deliverables/works_zones/executors); the committed sqlite was migrated
+  IN PLACE for these fields (ALTER+UPDATE) because harvest.json lives only
+  on the Windows build machine — a plain loader re-run here can't rebuild.
+- **Β. Εύβοια works zones** (2026-08-12): the 9 Master-Plan flood-works
+  zones (ΛΙΜΝΗ Ι–V, ΙΣΤΙΑΙΑ Ι–ΙV; sheets 4.1/4.2 in `data/raw/XARTHS_*`,
+  ΥΛΗ 11.2021, 1:30.000) digitised: user-corrected pixel vertices in
+  curated `khmdhs/data/evia_works_zones_digitised.json` (the source of
+  truth, with the ΕΓΣΑ87 grid anchors, 721.75 px/5 km) →
+  `scripts/build_evia_zones.py` georeferences, clips to the hires Εύβοια
+  coastline, orients rings **CW for d3-geo's spherical winding**
+  (deliberately anti-RFC 7946 — rewind before feeding other GIS) and
+  writes the geojson twice (`data/processed/` + `atlas/static/geo/`, must
+  stay byte-identical — pinned). Digitised-vs-sheet-table areas 70–100%
+  (sheet 4.1 misprints Λίμνη ΙV: «20.6827,401» = 206,827 στρ). Site:
+  `ZoneMap.svelte` on project pages, `ZonesLayer.svelte` under the
+  /anadohoi map dots (zone-mapped dots sit at zone centroids). Tests:
+  `tests/test_evia_zones.py` (9 zones, area bands, bbox, CW winding,
+  copies identical).
+- `data/raw/BurtScars_EFFIS_2008-2025.geojson` (sic — typo'd name): 20 MB
+  Copernicus EFFIS burnt-area export for Greece 2008–2025, EPSG:3035,
+  **unwired** — nothing consumes it yet; provenance, attribution duty and
+  hygiene notes in DATA_DECISIONS 2026-08-13. Satellite estimates, never
+  to be mixed with ΦΕΚ οριοθετήσεις unlabelled.
 
 ## Αρωγή πυροπλήκτων dataset (`data/processed/arogi.sqlite` — 4th DB)
 
@@ -532,10 +581,28 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   ν.4412 εκτιμώμενη αξία (and the €30k/€60k άρθρο 118 ceilings) is defined
   χωρίς ΦΠΑ, so the net basis FIXED the direct-award chart's old
   gross-vs-net mismatch. Synthetic test fixtures default net = gross so
-  expectations hold on either basis. Nav order: Ανάδοχοι · Anti-nero ·
-  ΔΑΣΕ · Explore · Compare · Connections · Authorities · Methodology; the
-  three dataset pages open with harmonised KPI rows (stated net / paid net
-  / median net / counts / % direct).
+  expectations hold on either basis. The three dataset pages open with
+  harmonised KPI rows (stated net / paid net / median net / counts /
+  % direct).
+- **Rebrand «FORESTRY WORKS TRACKER»** (2026-08-12, commits
+  b35e5db…1d7161e): white paper (cream retired), `--c-antinero` is now
+  BLACK, `--c-dase` green `#52b788`; sticky compacting header (base.css
+  `scroll-padding-top` keeps `#anchors` clear). Nav is 4 primary tabs +
+  a MENU ▾ dropdown: SPONSORED WORKS (/anadohoi) · ANTINERO WORKS (/) ·
+  FOREST CO-OP WORKS (/dase) · EXPLORE, then ΑΡΩΓΗ · Compare ·
+  Connections · Authorities · Methodology in the menu; active tab renders
+  in its dataset hue. Fonts are now **Adobe Typekit loaded from
+  use.typekit.net in app.html** (futura-100-greek UI + obviously display;
+  domain-locked kit, external CDN — the old self-hosted doctrine no
+  longer holds; Sofia Sans woff2 stays as fallback, Literata is unused).
+  Root-level `kit.css` is the tracked Typekit licence/reference copy,
+  wired to nothing. /anadohoi was redesigned around the curated fields
+  (status waffle pair, TIMELINE Gantt with restatement fold, executors
+  table, ZoneMap dots); the front page follows the same design language.
+  Restatement fold convention: superseded rows are folded INTO their
+  successor client-side (`ganttProjects`) — charts count 68 live
+  projects, the curation/test split (42/17/10 deliverables) counts all
+  69 acts; both are correct on their own basis.
 - **Stated analytics basis** (DATA_DECISIONS 2026-08-03, second entry):
   contract-value analytics use STATED values — `g.conn` passes through
   `queries_extra.apply_stated_basis` (net views + an EMPTY
@@ -593,10 +660,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   counts per region pair, Σ≈€1.1B) — show shares, never sum as programme €.
 - **Stack**: Svelte 5 (runes) + TS + adapter-node (config lives inside
   `vite.config.ts`, no svelte.config file); plain CSS custom properties
-  (`src/lib/styles/tokens.css` — newsprint palette + the geo_common.js
-  ramps ported verbatim), NO Tailwind/Chart.js/Leaflet — d3-* + topojson
-  only. Self-hosted Sofia Sans + Literata (greek+latin woff2 subsets in
-  `atlas/static/fonts/`, ~260KB total). Components capped ~300 lines.
+  (`src/lib/styles/tokens.css` — white-paper palette since the 2026-08-12
+  rebrand + the geo_common.js ramps ported verbatim), NO
+  Tailwind/Chart.js/Leaflet — d3-* + topojson only. Fonts via the Adobe
+  Typekit kit (see the rebrand bullet); the self-hosted Sofia Sans woff2
+  subsets in `atlas/static/fonts/` remain as fallback. Components capped
+  ~300 lines.
 - **Design doctrine** (Tse/ProPublica): chart titles are findings, not
   topics; annotations printed on the chart; tooltips never carry
   load-bearing info; every chart has a caveat line anchored to
@@ -632,7 +701,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 342 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
+## Tests (`tests/`, 359 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

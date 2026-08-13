@@ -519,7 +519,7 @@
 	<ChartFrame
 		title="SCOPE OF APPOINTMENT"
 		subtitle="what each act appoints the sponsor for — from its operative σκοπός"
-		caveat="Curated from each root designation act's operative sentence, with the verbatim excerpt on the project page."
+		caveat={`Curated from each root designation act's operative sentence, with the verbatim excerpt on the project page. Counts the ${grInt(ganttProjects.length)} live projects — a superseded restatement's act is reviewed but not shown here.`}
 		anchor="deliverables"
 		methodology="anadohoi"
 	>
@@ -599,7 +599,7 @@
 					<div class="execcoops">
 						{#each r.executors as e (e.name)}
 							{#if e.dase_vat}
-								<a class="coop linked" href={`/dase/contractor/${e.dase_vat}`} title={e.excerpt}
+								<a class="coop linked" href={`/dase/coop/${e.dase_vat}`} title={e.excerpt}
 									>{e.name}</a
 								>
 							{:else}

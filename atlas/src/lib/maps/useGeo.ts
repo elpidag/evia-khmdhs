@@ -1,6 +1,6 @@
 /** Module-cached TopoJSON fetches — every map on every page shares one copy. */
 import { feature } from 'topojson-client';
-import type { FeatureCollection, MultiPolygon, MultiLineString } from 'geojson';
+import type { FeatureCollection, Polygon, MultiPolygon, MultiLineString } from 'geojson';
 import type { Topology } from 'topojson-specification';
 
 export interface PeProps {
@@ -52,7 +52,7 @@ export interface ZoneProps {
 /** the 9 digitised Β. Εύβοια works zones (plain GeoJSON, module-cached) */
 export const loadEviaZones = (
 	fetch: Fetch
-): Promise<FeatureCollection<MultiPolygon, ZoneProps>> => {
+): Promise<FeatureCollection<Polygon | MultiPolygon, ZoneProps>> => {
 	const url = '/geo/evia_works_zones.geojson';
 	if (!cache.has(url)) {
 		cache.set(
@@ -63,7 +63,7 @@ export const loadEviaZones = (
 			})
 		);
 	}
-	return cache.get(url) as Promise<FeatureCollection<MultiPolygon, ZoneProps>>;
+	return cache.get(url) as Promise<FeatureCollection<Polygon | MultiPolygon, ZoneProps>>;
 };
 
 export const loadCentroids = (fetch: Fetch): Promise<Record<string, [number, number]>> => {

@@ -1057,3 +1057,69 @@ chart's anecdotal footnote was REMOVED — replaced by a dedicated
 anadohoi_projects.json `executors`; the 13 source-act PDFs in
 anadohoi_cache. Affects: projects table (new column), /anadohoi,
 project pages, tests (13/23/14 pins).*
+
+## 2026-08-13 — Ανάδοχοι review correction: ΡΕΧΥ4653Π8-ΛΙΤ works_zones → all nine zones (the act's μελέτες table covers Ιστιαία Ι–ΙV too)
+
+The 2026-08-12 works_zones entry mapped the ΔΕΔΔΗΕ studies project
+(ΡΕΧΥ4653Π8-ΛΙΤ) to `limni_i..v` on the claim "the ΔΕΔΔΗΕ studies
+covered all five Λίμνη basins" — but that claim was never excerpt-backed
+(the stored `evidence.location` says only «…των καμένων εκτάσεων της
+Βόρειας Εύβοιας»), and this review's read of the act PDF shows it is
+wrong by omission: the act's own per-Δασαρχείο table (pages 2–3)
+enumerates the funded μελέτες for ΔΑΣΑΡΧΕΙΟ ΛΙΜΝΗΣ across «ΛΕΚΑΝΗ ΛΙΜΝΗ
+Ι» through «ΛΕΚΑΝΗ ΛΙΜΝΗ V» AND for ΔΑΣΑΡΧΕΙΟ ΙΣΤΙΑΙΑΣ across the
+«υδρολογικής λεκάνης της Ιστιαίας I (ρέμα Ξηριά)» through «Ιστιαίας IV
+(ρέμα Βασιλικών)» — i.e. all nine digitised zones. The project's own
+curated `notes` already recorded the matching budget split
+(«150.000€ … Δασαρχείου Λίμνης και 160.000€ … Δασαρχείου Ιστιαίας»), so
+the limni-only zone list was internally inconsistent with the entry's
+budget correction. Fixed: `works_zones` → all nine ids, and the field
+now carries its own verbatim evidence (`evidence.works_zones` = the
+budget-per-Δασαρχείο sentence that introduces the table,
+whitespace-collapsed containment verified against the cached act text).
+The committed sqlite row was updated in place (same reason as before:
+harvest.json lives on the build machine). *Evidence: signed act PDF
+ΡΕΧΥ4653Π8-ΛΙΤ (anadohoi_cache). Affects: 1 row (works_zones +
+evidence_json), /anadohoi map dot + project-page ZoneMap for ΡΕΧΥ.*
+
+## 2026-08-13 — EFFIS burn-scars raw layer: provenance recorded post-hoc (unwired, attribution required before display)
+
+`data/raw/BurtScars_EFFIS_2008-2025.geojson` arrived in commit 1d7161e
+("Track the … EFFIS burn-scars layer") with no decision entry; this
+records what is measurable from the file itself. Contents (verified by
+direct read 2026-08-13): 1,969 burnt-area features for Greece,
+`initialdat` 2008–2025, Σ 723,328 ha, CRS **EPSG:3035** (LAEA Europe —
+metres, must be reprojected before any d3/Leaflet use), `map_source`
+sentinel2 1,387 / modis 512 / mixed 70, per-feature land-cover and
+Natura-2000 percentages; the Β. Εύβοια 2021 event is present (5
+features with admlvl3 «Εύβοια», Σ 52,670 ha). It is an export of the
+Copernicus EMS **EFFIS** burnt-area product; the exact portal
+query/download date were not recorded (fetched on the other build
+machine) — noted honestly as unknown. NOTHING consumes the file yet
+(zero code references). Constraints recorded for whoever wires it:
+(1) display requires the attribution «© European Union, Copernicus
+Emergency Management Service — EFFIS»; (2) the perimeters are
+satellite rapid-mapping estimates (MODIS historically ≥30 ha), NOT
+official οριοθετήσεις — never mix them with the ΦΕΚ fire units of the
+arogi dataset without labelling the basis; (3) known hygiene: `country`
+is «Ελλάδα\xa0» (NBSP) on all but one feature, one `area_ha` is 0, and
+the filename typo «BurtScars» (sic) will propagate into references;
+(4) at 20.3 MB it is the largest tracked blob in the repo. *Evidence:
+the file itself; commit 1d7161e. Affects: no rows, no site output.*
+
+## 2026-08-13 — evia_works_zones.geojson ships d3-geo (CW) winding, deviating from RFC 7946
+
+Recording a deliberate deviation introduced by c2f3c0e: both copies of
+`evia_works_zones.geojson` (data/processed + atlas/static/geo) emit
+exterior rings CLOCKWISE (via shapely `orient(sign=-1.0)` in
+build_evia_zones.py) because d3-geo interprets GeoJSON rings
+spherically — a CCW exterior renders as the complement of the zone
+(the original bug: ZoneMap fitted the whole sphere, ZonesLayer filled
+the sea). RFC 7946 §3.1.6 mandates the opposite (CCW exteriors), so
+any spherical GIS consumer (PostGIS geography, BigQuery GIS,
+tippecanoe…) reading this published artifact must rewind first. The
+committed convention is pinned by `test_exterior_rings_wind_clockwise`
+(shoelace sign, added 2026-08-13) alongside a new pin that the two
+copies stay byte-identical. *Evidence: build_evia_zones.py orient()
+call; tests/test_evia_zones.py. Affects: no rows; documentation of an
+existing artifact property.*

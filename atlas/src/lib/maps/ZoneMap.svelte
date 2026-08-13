@@ -3,7 +3,7 @@
 	 *  Εύβοια outline with the project's zones highlighted and the other
 	 *  works zones as faint context. Data loads post-hydration. */
 	import { geoMercator, geoPath } from 'd3-geo';
-	import type { FeatureCollection, MultiPolygon } from 'geojson';
+	import type { FeatureCollection, Polygon, MultiPolygon } from 'geojson';
 	import { grInt } from '$lib/transforms/format';
 	import { loadEviaZones, loadPe, type PeProps, type ZoneProps } from './useGeo';
 
@@ -16,7 +16,7 @@
 	const H = 340;
 
 	let pe = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
-	let fc = $state.raw<FeatureCollection<MultiPolygon, ZoneProps> | null>(null);
+	let fc = $state.raw<FeatureCollection<Polygon | MultiPolygon, ZoneProps> | null>(null);
 	$effect(() => {
 		loadPe(fetch).then((v) => (pe = v));
 		loadEviaZones(fetch).then((v) => (fc = v));

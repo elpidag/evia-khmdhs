@@ -126,7 +126,7 @@
 			{#each executors as e (e.name + e.ada)}
 				<div class="execrow">
 					{#if e.dase_vat}
-						<a href={`/dase/contractor/${e.dase_vat}`}>{e.name}</a>
+						<a href={`/dase/coop/${e.dase_vat}`}>{e.name}</a>
 					{:else}
 						{e.name}
 					{/if}
