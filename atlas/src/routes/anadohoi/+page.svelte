@@ -805,11 +805,12 @@
 		margin: var(--sp-6) 0 var(--sp-12);
 	}
 	.cards {
-		/* three equal rows — every card the height of the tallest */
+		/* three equal rows — every card the height of the tallest;
+		   268px matches the Anti-nero page's equal hero columns */
 		display: grid;
 		grid-template-rows: repeat(3, 1fr);
 		gap: var(--sp-4);
-		width: 300px;
+		width: 268px;
 		max-width: 100%;
 	}
 	.card {
@@ -824,7 +825,8 @@
 	.card .num {
 		font-family: var(--font-display);
 		font-weight: 900;
-		font-size: clamp(28px, 3.2vw, 40px);
+		/* same cap as the Anti-nero cards so the KPI cards match across pages */
+		font-size: clamp(28px, 3.2vw, 36px);
 		line-height: 0.95;
 	}
 	.card .lbl {
