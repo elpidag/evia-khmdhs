@@ -63,19 +63,20 @@
 			}))
 		].sort((a, b) => b.eur - a.eur);
 	});
-	// the site's green palette: page green for Δασαρχεία, the works-ramp
-	// dark for Διευθύνσεις Δασών, its palest step for non-forest awarders
+	// works-ramp greens per the approved legend mock: dark for the
+	// Διευθύνσεις Δασών, light for the Δασαρχεία, black for non-forest
+	// awarders (δήμοι, περιφέρειες, ministries)
 	const KIND_COLOR: Record<MapPt['kindKey'], string> = {
-		dx: 'var(--c-dase)',
-		dd: '#2a4a38',
-		other: '#cbe4d1'
+		dd: '#406e55',
+		dx: '#6fb28c',
+		other: '#000000'
 	};
 	const KIND_LABEL: Record<MapPt['kindKey'], string> = {
-		dx: 'contracts of a Δασαρχείο, at its seat',
-		dd: 'contracts of a Διεύθυνση Δασών, at its seat',
-		other: 'municipal & other non-forest awarders, at the regional unit’s centre'
+		dd: 'forest directorate',
+		dx: 'local forest service office',
+		other: 'regional or municipal authority'
 	};
-	const LEGEND_KINDS: MapPt['kindKey'][] = ['dx', 'dd', 'other'];
+	const LEGEND_KINDS: MapPt['kindKey'][] = ['dd', 'dx', 'other'];
 	const maxEur = $derived(mapPts.length ? mapPts[0].eur : 1);
 	const R_MAX = 26;
 	const rOf = (v: number) => Math.max(2.5, R_MAX * Math.sqrt(v / maxEur));
@@ -91,6 +92,14 @@
 	// click a Π.Ε. polygon → zoom the map to it
 	let sel = $state.raw<MapPt | null>(null);
 	let mapPe = $state<string | null>(null);
+	// legend + contract list may never run past the map's bottom edge
+	let mapH = $state(0);
+	let keyH = $state(0);
+	// the Anti-nero maps' fixed frame — same footprint on every dataset page
+	const MAP_VIEW: { center: [number, number]; k: number } = {
+		center: [23.8305, 38.3566],
+		k: 1.08
+	};
 	const fireYearHi = $derived(
 		firesShown.length ? Math.max(...firesShown.map((f) => f.properties.yr)) : FIRES_FROM
 	);
@@ -230,30 +239,12 @@
 		anchor="dase-map"
 		methodology="dase-regions"
 	>
-		<!-- one legend for dots, size and fires — the timeline-legend strip -->
-		<ul class="mapkey">
-			{#each LEGEND_KINDS as k (k)}
-				<li>
-					<i class="dot" class:dashed={k === 'other'} style:background={KIND_COLOR[k]}></i>
-					{KIND_LABEL[k]}
-				</li>
-			{/each}
-			<li>
-				<svg class="sizeicon" width="30" height="26" aria-hidden="true">
-					<circle cx="15" cy="13" r="12" />
-					<circle cx="15" cy="19" r="6" />
-				</svg>
-				circle area = stated € of its co-op contracts (largest: {eurShort(maxEur)}) · printed
-				number = contracts
-			</li>
-			<li>
-				<i class="firegrad"></i>
-				burn scars of {FIRES_FROM}–{fireYearHi} fires, pale → dark by fire year
-			</li>
-		</ul>
 		<div class="maprow" class:open={sel !== null}>
-			<div class="map-holder">
+			<div class="map-holder" bind:clientHeight={mapH}>
 				<PaperMap
+					width={640}
+					height={620}
+					view={MAP_VIEW}
 					colorOf={() => '#fff'}
 					focusPe={mapPe}
 					onRegionClick={(pe) => (mapPe = mapPe === pe ? null : pe)}
@@ -271,7 +262,6 @@
 									cy={xy[1]}
 									r={rOf(p.eur) / ctx.k}
 									class="ucircle"
-									class:approx={p.kindKey === 'other'}
 									style:fill={KIND_COLOR[p.kindKey]}
 									onmouseenter={() => ctx.showTip(unitTip(p))}
 									onmouseleave={() => ctx.hideTip()}
@@ -282,7 +272,7 @@
 						<!-- labels drawn after every circle so overlaps never cover them -->
 						{#each mapPts as p (`l:${p.name}`)}
 							{@const xy = ctx.projection([p.lon, p.lat])}
-							{#if xy && p.kindKey !== 'other' && rOf(p.eur) >= 12}
+							{#if xy && rOf(p.eur) >= 12}
 								<text class="ulabel" x={xy[0]} y={xy[1]} dy="0.35em" font-size={11 / ctx.k}>
 									{p.n}
 								</text>
@@ -291,27 +281,63 @@
 					{/snippet}
 				</PaperMap>
 			</div>
-			{#if sel}
-				<aside class="unitpanel">
-					<header>
-						<div>
-							<div class="up-name">{sel.name}</div>
-							<div class="up-sub">
-								{grInt(sel.n)} contracts · {eurShort(sel.eur)} · median {eur(sel.median_eur)}
+			<div class="mapside">
+				<!-- the legend panel, top-aligned with the map: awarder dots
+				     stacked left, size + burnt-areas explanations right -->
+				<div class="mapkey" bind:clientHeight={keyH}>
+					<div class="mk-left">
+						<div class="mk-title">contracts awarded by</div>
+						<ul class="mk-kinds">
+							{#each LEGEND_KINDS as k (k)}
+								<li>
+									<i style:background={KIND_COLOR[k]}></i>
+									{KIND_LABEL[k]}
+								</li>
+							{/each}
+						</ul>
+					</div>
+					<div class="mk-right">
+						<div class="mk-size">
+							<svg width="40" height="40" aria-hidden="true">
+								<!-- small circle internally tangent at the bottom, x inside it -->
+								<circle class="mk-c" cx="20" cy="20" r="17" />
+								<circle class="mk-c" cx="20" cy="29" r="8" />
+								<text class="mk-x" x="20" y="29" dy="0.35em">x</text>
+							</svg>
+							<div class="mk-sizetext">
+								<p>circle size: total € awarded</p>
+								<p>x: number of contracts</p>
 							</div>
 						</div>
-						<button class="up-close" onclick={() => (sel = null)} aria-label="Close">×</button>
-					</header>
-					<ul>
-						{#each sel.contracts as c (c.ref)}
-							<li>
-								<a href={`/dase/contract/${c.ref}`}>{c.t}</a>
-								<span class="up-meta">{c.d ?? '—'} · {c.eur === null ? '—' : eur(c.eur)}</span>
-							</li>
-						{/each}
-					</ul>
-				</aside>
-			{/if}
+						<div class="mk-fires">
+							<div class="mk-firetitle">burnt areas</div>
+							<i class="firegrad"></i>
+							<div class="mk-years"><span>{FIRES_FROM}</span><span>{fireYearHi}</span></div>
+						</div>
+					</div>
+				</div>
+				{#if sel}
+					<aside class="unitpanel" style:max-height={`${Math.max(160, mapH - keyH - 16)}px`}>
+						<header>
+							<div>
+								<div class="up-name">{sel.name}</div>
+								<div class="up-sub">
+									{grInt(sel.n)} contracts · {eurShort(sel.eur)} · median {eur(sel.median_eur)}
+								</div>
+							</div>
+							<button class="up-close" onclick={() => (sel = null)} aria-label="Close">×</button>
+						</header>
+						<ul>
+							{#each sel.contracts as c (c.ref)}
+								<li>
+									<a href={`/dase/contract/${c.ref}`}>{c.t}</a>
+									<span class="up-meta">{c.d ?? '—'} · {c.eur === null ? '—' : eur(c.eur)}</span>
+								</li>
+							{/each}
+						</ul>
+					</aside>
+				{/if}
+			</div>
 		</div>
 	</ChartFrame>
 {:else}
@@ -428,19 +454,16 @@
 	.dasep :global(.region) {
 		stroke: #8f8f8f;
 	}
+	/* flat solid dots, exactly like the legend swatches — no outline;
+	   the hover ring is interaction feedback only */
 	.ucircle {
 		fill: var(--c-dase);
-		fill-opacity: 0.78;
-		stroke: #2d7a52;
-		stroke-width: 1;
-		vector-effect: non-scaling-stroke;
+		stroke: none;
 	}
 	.ucircle:hover {
-		fill-opacity: 0.95;
-	}
-	.ucircle.approx {
-		fill-opacity: 0.3;
-		stroke-dasharray: 4 3;
+		stroke: var(--ink);
+		stroke-width: 1.5;
+		vector-effect: non-scaling-stroke;
 	}
 	.ulabel {
 		fill: #fff;
@@ -449,58 +472,14 @@
 		text-anchor: middle;
 		pointer-events: none;
 	}
-	/* the map legend follows the sponsored-works timeline legend strip */
-	.mapkey {
-		list-style: none;
-		margin: 0 0 var(--sp-3);
-		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
-		border-radius: 6px;
-		display: grid;
-		grid-template-columns: repeat(3, auto);
-		justify-content: start;
-		gap: 6px var(--sp-7, 2rem);
-		font-size: var(--fs-14);
-		color: var(--ink-soft);
-	}
-	@media (max-width: 900px) {
-		.mapkey {
-			grid-template-columns: 1fr;
-		}
-	}
-	.mapkey li {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
-	.mapkey .dot {
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		flex: none;
-	}
-	.mapkey .dot.dashed {
-		border: 1.5px dashed #578f6e;
-	}
-	.mapkey .sizeicon {
-		flex: none;
-	}
-	.mapkey .sizeicon circle {
-		fill: none;
-		stroke: var(--c-dase);
-		stroke-width: 1.2;
-	}
-	.mapkey .firegrad {
-		width: 26px;
-		height: 12px;
-		border-radius: 2px;
-		flex: none;
-		background: linear-gradient(to right, #f0dfe1, #6b2d35);
-	}
-	/* map left; the clicked unit's contract list docks on the right */
+	/* map left; legend (and the clicked unit's contract list) on the right,
+	   top-aligned with the map */
 	.maprow {
+		/* map column matches the Anti-nero maps' rendered width (640×620
+		   viewBox → 552px at the 1440 design width); the legend column
+		   widens, so its texts wrap less and the panel runs shorter */
 		display: grid;
-		grid-template-columns: minmax(0, 44rem) 1fr;
+		grid-template-columns: minmax(0, 552px) minmax(250px, 1fr);
 		gap: var(--sp-4);
 		align-items: start;
 	}
@@ -509,11 +488,97 @@
 			grid-template-columns: 1fr;
 		}
 	}
+	.mapside {
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-4);
+	}
+	/* the legend panel per the approved mock: awarder dots stacked in the
+	   left column, size icon + burnt-areas gradient in the right one */
+	.mapkey {
+		background: #f2f2f2;
+		border-radius: 10px;
+		padding: var(--sp-2) var(--sp-4);
+		font-size: var(--fs-13);
+		color: var(--ink);
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: var(--sp-6);
+		align-items: start;
+	}
+	@media (max-width: 900px) {
+		.mapkey {
+			grid-template-columns: 1fr;
+		}
+	}
+	.mk-title {
+		margin-bottom: 8px;
+	}
+	.mk-kinds {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.mk-kinds li {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.mk-kinds i {
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		flex: none;
+	}
+	.mk-size {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+		margin-bottom: 8px;
+	}
+	.mk-size svg {
+		flex: none;
+	}
+	.mk-c {
+		fill: none;
+		stroke: var(--ink-soft);
+		stroke-width: 1.3;
+	}
+	.mk-x {
+		fill: var(--ink);
+		font-size: 11px;
+		text-anchor: middle;
+	}
+	.mk-sizetext {
+		max-width: 26em;
+	}
+	.mk-sizetext p {
+		margin: 0 0 2px;
+	}
+	.mk-firetitle {
+		margin-bottom: 4px;
+	}
+	.firegrad {
+		display: block;
+		max-width: 340px;
+		height: 14px;
+		border-radius: 3px;
+		background: linear-gradient(to right, #ffffff, #6b2d35);
+	}
+	.mk-years {
+		display: flex;
+		justify-content: space-between;
+		max-width: 340px;
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+	}
 	.unitpanel {
 		background: #fff;
 		border: 1px solid var(--line);
 		border-radius: 6px;
-		max-height: 560px;
 		display: flex;
 		flex-direction: column;
 	}
