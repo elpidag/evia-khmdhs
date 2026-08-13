@@ -8,8 +8,9 @@
 	import AreaYears from '$lib/charts/AreaYears.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
+	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import ZonesLayer from '$lib/maps/ZonesLayer.svelte';
-	import { loadCentroids, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
+	import { loadCentroids, loadEffisFires, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import { COLOR, NODATE_COLOR, noDate, type GanttProject } from '$lib/charts/ganttTheme';
 	import ProjectCard from '$lib/charts/ProjectCard.svelte';
@@ -112,24 +113,6 @@
 			.map((s) => ({ label: s.company, value: s.budget }))
 	);
 
-	// finding-title inputs — computed from the payload, never hardcoded
-	const bestFire = $derived.by(() => {
-		let best = null as null | { fire: string; share: number; n: number };
-		for (const f of fireCards) {
-			if (f.fire === 'εκτός πυρκαγιάς' || f.n < 2) continue;
-			const share = f.completed / f.n;
-			if (!best || share > best.share) best = { fire: f.fire, share, n: f.n };
-		}
-		return best;
-	});
-	const worstFire = $derived.by(() => {
-		let worst = null as null | { fire: string; n: number };
-		for (const f of fireCards) {
-			if (f.fire === 'εκτός πυρκαγιάς' || f.completed > 0) continue;
-			if (!worst || f.n > worst.n) worst = { fire: f.fire, n: f.n };
-		}
-		return worst;
-	});
 	// the commitment an amendment raised the most (e.g. a δωρεά increase)
 	const topRaise = $derived.by(() => {
 		let best = null as null | (typeof live)[number];
@@ -265,6 +248,27 @@
 		const ro = new ResizeObserver(measure);
 		if (el.parentElement) ro.observe(el.parentElement);
 		return () => ro.disconnect();
+	});
+
+	// EFFIS burnt scars for the fires map (lazy, module-cached)
+	let firesFc = $state.raw<Awaited<ReturnType<typeof loadEffisFires>> | null>(null);
+	$effect(() => {
+		loadEffisFires(fetch).then((fc) => (firesFc = fc));
+	});
+	/** the fires map shows 2018 onwards only */
+	const FIRES_FROM = 2018;
+	/** clicked Π.Ε. — the fires map zooms to it; same click zooms back */
+	let firePe = $state<string | null>(null);
+	const firesShown = $derived(
+		(firesFc?.features ?? []).filter((f) => f.properties.yr >= FIRES_FROM)
+	);
+	const fireYears = $derived.by(() => {
+		let lo = Infinity, hi = -Infinity;
+		for (const f of firesShown) {
+			lo = Math.min(lo, f.properties.yr);
+			hi = Math.max(hi, f.properties.yr);
+		}
+		return Number.isFinite(lo) ? { lo, hi } : null;
 	});
 
 	// map dots (client-side: needs centroids + the digitised works zones)
@@ -565,31 +569,69 @@
 </ChartFrame>
 </div>
 
+<div class="firesband">
 <ChartFrame
-	title="{bestFire?.fire ?? '—'} was certified — {worstFire?.fire ?? '—'} never was"
-	subtitle="projects grouped by the fire that triggered them · fill = share with a completion act"
-	caveat="The fire is the one each act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
+	title="PROJECTS AND FIRES THAT TRIGGERED THEM"
+	titleColor="#000"
+	caveat="Burnt-area perimeters: © European Union, Copernicus Emergency Management Service — EFFIS (satellite rapid-mapping estimates, not official οριοθετήσεις). The fire each project answers to is the one its act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
 	anchor="fires"
 	methodology="anadohoi"
 >
-	<div class="fire-grid">
-		{#each fireCards as f (f.fire)}
-			<div class="fire-card">
-				<div class="fire-name">{f.fire}</div>
-				<div class="fire-bar">
-					<div
-						class="fire-fill"
-						style:width={`${(100 * f.completed) / f.n}%`}
-					></div>
+	<div class="firesgrid">
+		<div class="fmcol">
+			<Defer height={760}>
+				<div class="mapscale">
+					<div class="map-wrap">
+						<PaperMap
+							interactive={false}
+							width={640}
+							height={620}
+							view={MAP_VIEW}
+							focusPe={firePe}
+							onRegionClick={(pe) => (firePe = firePe === pe ? null : pe)}
+						>
+							{#snippet overlay(ctx)}
+								{#if firesFc}
+									<FiresLayer
+										{ctx}
+										features={firesShown}
+										tipOf={(f) =>
+											`<strong>${f.properties.yr}</strong> · ${grInt(f.properties.ha)} ha${f.properties.name ? ` · ${f.properties.name}` : ''}`}
+									/>
+								{/if}
+							{/snippet}
+						</PaperMap>
+					</div>
+					{#if fireYears}
+						<div class="yearscale" aria-hidden="true">
+							<span>{fireYears.lo}</span>
+							<i></i>
+							<span>{fireYears.hi}</span>
+						</div>
+					{/if}
 				</div>
-				<div class="fire-stats">
-					{f.completed}/{f.n} completed
-					{#if f.budget > 0}· {eurShort(f.budget)}{/if}
+			</Defer>
+		</div>
+		<div class="fire-grid">
+			{#each fireCards as f (f.fire)}
+				<div class="fire-card">
+					<div class="fire-name">{f.fire}</div>
+					<div class="fire-bar">
+						<div
+							class="fire-fill"
+							style:width={`${(100 * f.completed) / f.n}%`}
+						></div>
+					</div>
+					<div class="fire-stats">
+						{f.completed}/{f.n} completed
+						{#if f.budget > 0}· {eurShort(f.budget)}{/if}
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		</div>
 	</div>
 </ChartFrame>
+</div>
 
 {#if execRows.length}
 	<ChartFrame
@@ -740,13 +782,56 @@
 			grid-template-columns: 1fr;
 		}
 	}
+	/* the fires section breaks out to the full usable page width */
+	.firesband {
+		margin-inline: min(0px, calc((100% - min(96vw, 1300px)) / 2));
+	}
+	/* fires map (with its vertical year scale) left, project cards right */
+	.firesgrid {
+		display: grid;
+		grid-template-columns: auto minmax(300px, 1fr);
+		gap: var(--sp-2) var(--sp-8, 3rem);
+		align-items: start;
+	}
+	@media (max-width: 900px) {
+		.firesgrid {
+			grid-template-columns: 1fr;
+		}
+		.firesband {
+			margin-inline: 0;
+		}
+	}
+	.mapscale {
+		display: flex;
+		gap: var(--sp-3);
+		align-items: flex-start;
+	}
+	.firesgrid .map-wrap {
+		max-width: 700px;
+		width: 700px;
+	}
+	.yearscale {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--sp-2);
+		height: 320px;
+		font-family: 'futura-100-greek', 'futura-100-greek-book', 'Sofia Sans', sans-serif;
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+	}
+	.yearscale i {
+		flex: 1;
+		width: 10px;
+		border-radius: 5px;
+		background: linear-gradient(to bottom, #ecdadc, #6b2d35);
+	}
 	.fire-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
 		gap: var(--sp-3);
 	}
 	.fire-card {
-		border-top: 2px solid var(--line-strong);
 		padding-top: var(--sp-1);
 	}
 	.fire-name {

@@ -1123,3 +1123,30 @@ committed convention is pinned by `test_exterior_rings_wind_clockwise`
 copies stay byte-identical. *Evidence: build_evia_zones.py orient()
 call; tests/test_evia_zones.py. Affects: no rows; documentation of an
 existing artifact property.*
+
+## 2026-08-13 — EFFIS burn scars wired to the /anadohoi fires map (display copy + attribution)
+
+The raw EFFIS layer (provenance entry above) now has a display pipeline:
+`scripts/build_effis_layer.py` simplifies each feature 120 m in the
+source EPSG:3035, reprojects to WGS84, orients exterior rings CLOCKWISE
+(d3-geo spherical winding — the c2f3c0e bug class), and keeps only
+`yr` (from initialdat), `ha` (rounded area_ha) and `name`
+(admlvl3/admlvl2, NBSP stripped) → 1,969 features, 1.1 MB, written to
+data/processed/effis_fires.geojson and duplicated into
+atlas/static/geo/ like the other map layers. Displayed on /anadohoi's
+«PROJECTS AND FIRES THAT TRIGGERED THEM» map (lazy-loaded,
+FiresLayer.svelte) coloured by year on a white→#6b2d35 gradient with a
+2008→2025 scale; the required attribution «© European Union, Copernicus
+Emergency Management Service — EFFIS» prints in the section caveat
+together with the estimates-not-οριοθετήσεις warning. The per-fire
+project cards (act-cited fires) moved beside the map unchanged — the
+two fire vocabularies (EFFIS perimeters vs act-cited fire units) are
+juxtaposed, never joined. *Evidence: the build script + output; the
+section caveat. Affects: no rows; new derived artefact + /anadohoi.*
+## 2026-08-13 — Fires map display window: 2018 onwards
+
+The /anadohoi fires map now filters the EFFIS display layer to
+`yr >= 2018` client-side (FIRES_FROM in the page; the built artefact
+keeps the full 2008–2025 range for future use). The year gradient and
+its 2018→2025 scale derive from the filtered set. *Affects: display
+only.*
