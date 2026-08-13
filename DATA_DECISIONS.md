@@ -1259,3 +1259,34 @@ sqlite migrated in place (same reason as before). *Evidence: act PDFs
 9ΕΘΠ/641Ξ/6ΛΡΨ/ΡΨΗΡ/9Ο0Λ (anadohoi_cache), ΛΛΒ14653Π8-ΑΦΑ (Diavgeia).
 Affects: 2 rows (status/completed_*), project_decisions relations,
 status counts 14→16 completed, tests.*
+
+## 2026-08-13 — Ανάδοχοι trail sweep: 4 σύνδεσμοι-μολύνσεις αφαιρούνται· ΨΤΑΤ → study_and_works (τα έργα εκτελούνται από τη ΣΤΑΝΤΑ)
+
+Full-trail sanity sweep after the 9Ο0Λ case (148 linked acts checked;
+double-links and root-citation absences read in the act texts). Three
+9Ο0Λ-class mislinks REMOVED: (1) 6ΡΤΣ (EREN, Λίμνη Ι) ← 9Ε47ΟΡ10-ΛΧΞ —
+the παραλαβή-committee act names ΔΕΗ as Ανάδοχο and covers only λεκάνες
+23.27.06/23.27.02 (Λίμνη ΙΙ/V), zero EREN/Λίμνη Ι mention; stays on
+9Κ9Τ + ΩΞΕΦ. (2) 964Ρ (Εθνική, Χίος) ← Ε2284653Π8-ΗΗΜ — Πράσινο Ταμείο
+credit allocation to Δ/νση Δασών Χίου, never cites the sponsor (its
+«Εθνική» hits are law titles); recorded as the Χίος instance of the
+Διακοπτό relay (sponsor μελέτη → state-funded works) but not the
+sponsor's lifecycle. (3) ΨΒ8Λ (ΔΕΠΑ Άβαντας) ← Ψ4ΟΥ + Ψ0ΓΕ — the
+Παλαγία «Λεκάνη Ι» μελέτη and its τροποποίηση, zero Άβαντας mention;
+they belong to sibling 6ΨΓΗ only (Άβαντας keeps its own 6ΙΓΥ; the
+plural-«των έργων» committee ΨΗ9Κ correctly stays on both). Genuinely
+shared double-links KEPT: the 6ΓΨΨ plane-timber specs on the three
+plane-disease projects; the five Κρυονέρι-Δροσοπηγή acts on ΤΙΤΑΝ +
+Κανελλοπούλου (one έργο, two sponsors). **ΨΤΑΤ deliverables study →
+study_and_works** (split 42/17/10 → 42/18/9): its ~30 works-
+administration acts are ΣΤΑΝΤΑ's own — 9ΣΙΜ/ΡΚΘ4 recite the Ρ6Χ5
+τροποποίηση «ορίζεται ως ανάδοχος η εταιρεία … ΣΤΑΝΤΑ» and ΣΤΑΝΤΑ's
+σύμβαση with Δασολόγο-Εργολήπτη for «Υλοποίηση εργασιών αναδάσωσης στη
+θέση Μύλος ρέμα» (ημερολόγια, 3 επιμετρήσεις/παραλαβές αφανών,
+κατασκευαστικά σχέδια). This supersedes the 2026-08-12 «υλοποίηση
+μελέτης = study» verdict FOR THIS PROJECT on trail evidence — the
+convention stands for ΡΛ16/9Φ9Ρ, whose trails show no works. Status
+stays active (interim παραλαβές only). sqlite migrated in place.
+*Evidence: act txts 9Ε47ΟΡ10-ΛΧΞ, Ε228, Ψ4ΟΥ, Ψ0ΓΕ, 9ΣΙΜ, ΡΚΘ4
+(anadohoi_cache). Affects: 4 project_decisions rows, 1 deliverables
+value, tests (42/18/9 pin).*

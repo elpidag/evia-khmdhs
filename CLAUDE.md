@@ -487,13 +487,16 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   pins below).
 - **Curated `deliverables`** (2026-08-12, 69/69 root-act PDFs
   human-reviewed): what each appointment covers — εκτέλεση έργου (42) /
-  μελέτη και έργο (17) / μελέτη only (10) — from the operative
+  μελέτη και έργο (18) / μελέτη only (9) — from the operative
   «Ορίζουμε … με σκοπό …» sentence, verbatim excerpt in
   `evidence.deliverables`. Regex only proposed (Greek inflection broke a
   naive pass on 22 acts); every verdict is the user's. Convention: a σκοπός
-  phrased «υλοποίηση μελέτης» = εκπόνηση μελέτης → `study` (ΡΛ16, 9Φ9Ρ,
-  ΨΤΑΤ). The όροι boilerplate lies — acts stating «σύμφωνα με τα οριζόμενα
-  στην … σχετική μελέτη» are works-only (someone else did the study).
+  phrased «υλοποίηση μελέτης» = εκπόνηση μελέτης → `study` (ΡΛ16, 9Φ9Ρ) —
+  but TRAIL EVIDENCE beats the σκοπός wording: ΨΤΑΤ was reclassified
+  study→study_and_works 2026-08-13 because its acts show ΣΤΑΝΤΑ itself
+  executing the Μύλος-ρέμα works. The όροι boilerplate lies — acts
+  stating «σύμφωνα με τα οριζόμενα στην … σχετική μελέτη» are works-only
+  (someone else did the study).
 - **Curated `executors`** (2026-08-12): the sponsor→ΔΑΣΕ link is systemic —
   all 322 decision PDFs swept (34 fetch failures: timeouts + homoglyph
   ΑΔΑs), **13 projects name executing forest co-ops** (23 rows: name,
@@ -630,7 +633,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   table, ZoneMap dots); the front page follows the same design language.
   Restatement fold convention: superseded rows are folded INTO their
   successor client-side (`ganttProjects`) — charts count 68 live
-  projects, the curation/test split (42/17/10 deliverables) counts all
+  projects, the curation/test split (42/18/9 deliverables) counts all
   69 acts; both are correct on their own basis.
 - **Stated analytics basis** (DATA_DECISIONS 2026-08-03, second entry):
   contract-value analytics use STATED values — `g.conn` passes through

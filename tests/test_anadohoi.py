@@ -196,7 +196,9 @@ def test_real_db_deliverables_curated_for_all(conn):
     σκοπός excerpt (DATA_DECISIONS 2026-08-11)."""
     counts = dict(conn.execute(
         "SELECT deliverables, COUNT(*) FROM projects GROUP BY deliverables"))
-    assert counts == {"works": 42, "study_and_works": 17, "study": 10}
+    # 42/18/9 since 2026-08-13: ΨΤΑΤ reclassified study → study_and_works
+    # on trail evidence (ΣΤΑΝΤΑ executes the Μύλος-ρέμα works itself)
+    assert counts == {"works": 42, "study_and_works": 18, "study": 9}
     missing_ev = conn.execute(
         "SELECT root_ada, evidence_json FROM projects").fetchall()
     for root, ev in missing_ev:
