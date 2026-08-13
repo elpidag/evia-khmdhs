@@ -94,6 +94,25 @@ def test_dase_pins(client):
     assert len(sw["ref"]) == 2018
 
 
+def test_dase_map_pins(client):
+    """Proportional-symbol map payload: unit circles + per-Π.Ε. residue +
+    off-map unresolved must reconcile exactly to the ΔΑΣΕ stated-net basis."""
+    m = client.get("/api/dase/map").get_json()
+    assert len(m["units"]) == 48
+    assert len(m["other"]) == 21
+    assert m["unresolved"]["n"] == 4
+    total = (sum(u["eur"] for u in m["units"])
+             + sum(g["eur"] for g in m["other"])
+             + m["unresolved"]["eur"])
+    assert total == pytest.approx(34_085_266.14, abs=0.01)
+    top = m["units"][0]
+    assert top["name"] == "Δασαρχείο Ιστιαίας" and top["n"] == 38
+    assert all(u["lat"] and u["lon"] for u in m["units"] + m["other"])
+    # every circle carries its full contract list for the click panel
+    assert all(len(g["contracts"]) == g["n"] for g in m["units"] + m["other"])
+    assert all(u["kind"] in ("dx", "dd") for u in m["units"])
+
+
 def test_connections_pins(client):
     n = client.get("/api/connections").get_json()
     assert len(n["contractor_authority"]) == 490

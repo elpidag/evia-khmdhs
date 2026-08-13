@@ -230,6 +230,40 @@ export interface DaseOverview {
 	};
 }
 
+export interface DaseMapContract {
+	ref: string;
+	t: string;
+	d: string | null;
+	eur: number | null;
+}
+
+export interface DaseMapPayload {
+	/** one circle per awarding forest unit, at its seat */
+	units: {
+		name: string;
+		/** forest_authorities registry kind: 'dx' Δασαρχείο / 'dd' Διεύθυνση Δασών */
+		kind: string | null;
+		pe: string | null;
+		lat: number;
+		lon: number;
+		n: number;
+		eur: number;
+		median_eur: number;
+		contracts: DaseMapContract[];
+	}[];
+	/** contracts awarded by non-forest bodies (δήμοι etc.), grouped per Π.Ε. */
+	other: {
+		pe: string;
+		lat: number;
+		lon: number;
+		n: number;
+		eur: number;
+		median_eur: number;
+		contracts: DaseMapContract[];
+	}[];
+	unresolved: { n: number; eur: number };
+}
+
 export interface DaseSwarm {
 	ref: string[];
 	t: string[];

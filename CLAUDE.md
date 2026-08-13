@@ -439,7 +439,19 @@ co-ops, orgs/units/procedure/type/CPV tables), `/dase/contracts`,
 basis labels, absolute + %-of-own-total yearly bars, shared-log2-bin
 size-distribution overlay with median markers, per-Π.Ε. paired bars,
 methodology footnotes — Anti-nero €616M effective vs ΔΑΣΕ €41.4M stated
-≈ 14.9×). All SQL in `webui/dase_queries.py` (imports search/bin
+≈ 14.9×). Atlas /dase (2026-08-13): redesigned to the shared hero (green
+cards + direct-award bar + paid card) and kicker titles; its map is now a
+**proportional-symbol map** — one circle per awarding forest unit at its
+`forest_authorities` seat (area = Σ stated net €, label = n, tooltip
+median; join via `dase_contract_regions.source` `registry:<name>`),
+kind-coloured from the green palette (dx page-green / dd works-ramp
+dark / non-forest palest+dashed at Π.Ε. centroids), ΑΔΜΗΕ off-map in
+the caveat, EFFIS burn scars ≥2021 underneath (attribution on the
+frame); click a circle → its contract list docks right of the map
+(lists in the payload), click a Π.Ε. → zoom; timeline-style legend
+strip above; payload `/api/dase/map` reconciles to the
+basis (pinned). webui /dase keeps its frozen choropleth. All SQL in
+`webui/dase_queries.py` (imports search/bin
 helpers from queries.py; `queries.antinero_yearly` is the one
 khmdhs-side addition). Second sqlite is opened by a **lazy
 `g.dase_conn` accessor** — khmdhs-only routes never touch dase.sqlite

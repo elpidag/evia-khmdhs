@@ -2,27 +2,102 @@
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
-	import ChoroLegend from '$lib/maps/ChoroLegend.svelte';
+	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
-	import { RAMP_HOME, makeChoro } from '$lib/maps/useGeo';
+	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
-	import { apiGetCached, type DaseSwarm } from '$lib/api';
+	import {
+		apiGetCached,
+		type DaseMapContract,
+		type DaseMapPayload,
+		type DaseSwarm
+	} from '$lib/api';
 	import { eur, eurShort, grInt, pct } from '$lib/transforms/format';
+	import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.overview);
 
 	let swarm = $state.raw<DaseSwarm | null>(null);
+	let dmap = $state.raw<DaseMapPayload | null>(null);
+	let firesFc = $state.raw<FeatureCollection<Polygon | MultiPolygon, FireProps> | null>(null);
 	$effect(() => {
 		apiGetCached<DaseSwarm>(fetch, '/api/dase/swarm').then((v) => (swarm = v));
+		apiGetCached<DaseMapPayload>(fetch, '/api/dase/map').then((v) => (dmap = v));
+		loadEffisFires(fetch).then((v) => (firesFc = v));
 	});
 
-	const peValues = $derived(new Map(o.by_pe.regions.map((r) => [r.pe, r.eur])));
-	const peRows = $derived(new Map(o.by_pe.regions.map((r) => [r.pe, r])));
-	const peMax = $derived(Math.max(...o.by_pe.regions.map((r) => r.eur)));
-	const choro = $derived(makeChoro(RAMP_HOME, peMax));
+	// the dataset starts Sept 2021 — salvage logging follows these burns
+	const FIRES_FROM = 2021;
+	const firesShown = $derived(
+		firesFc ? firesFc.features.filter((f) => f.properties.yr >= FIRES_FROM) : []
+	);
+
+	// one mark per awarding unit (solid) + per-Π.Ε. residue of municipal &
+	// other non-forest awarders (dashed), largest drawn first so small
+	// circles stay clickable on top
+	type MapPt = {
+		name: string;
+		pe: string | null;
+		lat: number;
+		lon: number;
+		n: number;
+		eur: number;
+		median_eur: number;
+		contracts: DaseMapContract[];
+		kindKey: 'dx' | 'dd' | 'other';
+	};
+	const mapPts = $derived.by<MapPt[]>(() => {
+		if (!dmap) return [];
+		return [
+			...dmap.units.map((u) => ({
+				...u,
+				kindKey: (u.kind === 'dd' ? 'dd' : 'dx') as MapPt['kindKey']
+			})),
+			...dmap.other.map((g) => ({
+				...g,
+				name: `Municipal & other awarders · ${g.pe}`,
+				kindKey: 'other' as const
+			}))
+		].sort((a, b) => b.eur - a.eur);
+	});
+	// the site's green palette: page green for Δασαρχεία, the works-ramp
+	// dark for Διευθύνσεις Δασών, its palest step for non-forest awarders
+	const KIND_COLOR: Record<MapPt['kindKey'], string> = {
+		dx: 'var(--c-dase)',
+		dd: '#2a4a38',
+		other: '#cbe4d1'
+	};
+	const KIND_LABEL: Record<MapPt['kindKey'], string> = {
+		dx: 'contracts of a Δασαρχείο, at its seat',
+		dd: 'contracts of a Διεύθυνση Δασών, at its seat',
+		other: 'municipal & other non-forest awarders, at the regional unit’s centre'
+	};
+	const LEGEND_KINDS: MapPt['kindKey'][] = ['dx', 'dd', 'other'];
+	const maxEur = $derived(mapPts.length ? mapPts[0].eur : 1);
+	const R_MAX = 26;
+	const rOf = (v: number) => Math.max(2.5, R_MAX * Math.sqrt(v / maxEur));
+	function unitTip(p: MapPt): string {
+		return (
+			`<strong>${p.name}</strong><br>` +
+			`${grInt(p.n)} contracts · ${eur(p.eur)}<br>` +
+			`median contract ${eur(p.median_eur)}`
+		);
+	}
+
+	// click a circle → its contract list docks right of the map;
+	// click a Π.Ε. polygon → zoom the map to it
+	let sel = $state.raw<MapPt | null>(null);
+	let mapPe = $state<string | null>(null);
+	const fireYearHi = $derived(
+		firesShown.length ? Math.max(...firesShown.map((f) => f.properties.yr)) : FIRES_FROM
+	);
+	function fireTip(f: Feature<Polygon | MultiPolygon, FireProps>): string {
+		const p = f.properties;
+		return `<strong>${p.yr}</strong> · ${grInt(p.ha)} ha${p.name ? ` · ${p.name}` : ''}`;
+	}
 
 	const coopRows = $derived(
 		o.top_coops.map((c) => ({
@@ -73,12 +148,6 @@
 
 	// hero bar fills — data-proportional
 	const paidPct = $derived((o.kpis.paid_eur / o.kpis.total_eur) * 100);
-
-	function peTip(pe: string): string {
-		const r = peRows.get(pe);
-		if (!r) return `<strong>${pe}</strong><br>no ΔΑΣΕ contracts recorded`;
-		return `<strong>${pe}</strong><br>${grInt(r.n_contracts)} contracts<br>${eur(r.eur)} stated`;
-	}
 </script>
 
 <svelte:head>
@@ -150,23 +219,104 @@
 	</div>
 </section>
 
-<ChartFrame
-	title="MAP"
-	subtitle="Co-op work concentrates in a handful of forest districts — {topPe} far above all. Stated € per regional unit, derived from the awarding forest unit."
-	caveat="{grInt(o.by_pe.unresolved.n)} ΑΔΜΗΕ power-line contracts span multiple Π.Ε. and stay honestly unresolved ({eurShort(
-		o.by_pe.unresolved.eur
-	)})."
-	anchor="dase-map"
-	methodology="dase-regions"
->
-	<div class="map-holder">
-		<PaperMap colorOf={(pe) => choro(peValues.get(pe) ?? 0)} tipOf={peTip}>
-			{#snippet legend()}
-				<ChoroLegend ramp={RAMP_HOME} max={peMax} title="€ of co-op contracts" />
-			{/snippet}
-		</PaperMap>
-	</div>
-</ChartFrame>
+{#if dmap}
+	<ChartFrame
+		title="MAP"
+		caveat="Click a circle for its contracts, click a regional unit to zoom to it. {grInt(
+			dmap.unresolved.n
+		)} ΑΔΜΗΕ power-line contracts span multiple Π.Ε. and stay off the map ({eurShort(
+			dmap.unresolved.eur
+		)}). Burn scars: © European Union, Copernicus Emergency Management Service — EFFIS; satellite rapid-mapping estimates, not official οριοθετήσεις."
+		anchor="dase-map"
+		methodology="dase-regions"
+	>
+		<!-- one legend for dots, size and fires — the timeline-legend strip -->
+		<ul class="mapkey">
+			{#each LEGEND_KINDS as k (k)}
+				<li>
+					<i class="dot" class:dashed={k === 'other'} style:background={KIND_COLOR[k]}></i>
+					{KIND_LABEL[k]}
+				</li>
+			{/each}
+			<li>
+				<svg class="sizeicon" width="30" height="26" aria-hidden="true">
+					<circle cx="15" cy="13" r="12" />
+					<circle cx="15" cy="19" r="6" />
+				</svg>
+				circle area = stated € of its co-op contracts (largest: {eurShort(maxEur)}) · printed
+				number = contracts
+			</li>
+			<li>
+				<i class="firegrad"></i>
+				burn scars of {FIRES_FROM}–{fireYearHi} fires, pale → dark by fire year
+			</li>
+		</ul>
+		<div class="maprow" class:open={sel !== null}>
+			<div class="map-holder">
+				<PaperMap
+					colorOf={() => '#fff'}
+					focusPe={mapPe}
+					onRegionClick={(pe) => (mapPe = mapPe === pe ? null : pe)}
+				>
+					{#snippet overlay(ctx)}
+						{#if firesShown.length}
+							<FiresLayer {ctx} features={firesShown} tipOf={fireTip} />
+						{/if}
+						{#each mapPts as p (p.name)}
+							{@const xy = ctx.projection([p.lon, p.lat])}
+							{#if xy}
+								<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+								<circle
+									cx={xy[0]}
+									cy={xy[1]}
+									r={rOf(p.eur) / ctx.k}
+									class="ucircle"
+									class:approx={p.kindKey === 'other'}
+									style:fill={KIND_COLOR[p.kindKey]}
+									onmouseenter={() => ctx.showTip(unitTip(p))}
+									onmouseleave={() => ctx.hideTip()}
+									onclick={() => (sel = sel?.name === p.name ? null : p)}
+								/>
+							{/if}
+						{/each}
+						<!-- labels drawn after every circle so overlaps never cover them -->
+						{#each mapPts as p (`l:${p.name}`)}
+							{@const xy = ctx.projection([p.lon, p.lat])}
+							{#if xy && p.kindKey !== 'other' && rOf(p.eur) >= 12}
+								<text class="ulabel" x={xy[0]} y={xy[1]} dy="0.35em" font-size={11 / ctx.k}>
+									{p.n}
+								</text>
+							{/if}
+						{/each}
+					{/snippet}
+				</PaperMap>
+			</div>
+			{#if sel}
+				<aside class="unitpanel">
+					<header>
+						<div>
+							<div class="up-name">{sel.name}</div>
+							<div class="up-sub">
+								{grInt(sel.n)} contracts · {eurShort(sel.eur)} · median {eur(sel.median_eur)}
+							</div>
+						</div>
+						<button class="up-close" onclick={() => (sel = null)} aria-label="Close">×</button>
+					</header>
+					<ul>
+						{#each sel.contracts as c (c.ref)}
+							<li>
+								<a href={`/dase/contract/${c.ref}`}>{c.t}</a>
+								<span class="up-meta">{c.d ?? '—'} · {c.eur === null ? '—' : eur(c.eur)}</span>
+							</li>
+						{/each}
+					</ul>
+				</aside>
+			{/if}
+		</div>
+	</ChartFrame>
+{:else}
+	<div class="skeleton" id="dase-map" style="height: 560px"></div>
+{/if}
 
 <Defer height={400}>
 {#if swarm}
@@ -268,11 +418,152 @@
 		line-height: 1.3;
 		color: var(--c-dase);
 	}
-	/* the paper map takes the shared ground */
+	/* the paper map takes the shared ground; regions stay white so the
+	   proportional circles carry the data */
 	.dasep :global(.map) {
 		background: #f2f2f2;
 		border: none;
 		box-shadow: none;
+	}
+	.dasep :global(.region) {
+		stroke: #8f8f8f;
+	}
+	.ucircle {
+		fill: var(--c-dase);
+		fill-opacity: 0.78;
+		stroke: #2d7a52;
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+	}
+	.ucircle:hover {
+		fill-opacity: 0.95;
+	}
+	.ucircle.approx {
+		fill-opacity: 0.3;
+		stroke-dasharray: 4 3;
+	}
+	.ulabel {
+		fill: #fff;
+		font-family: var(--font-display);
+		font-weight: 900;
+		text-anchor: middle;
+		pointer-events: none;
+	}
+	/* the map legend follows the sponsored-works timeline legend strip */
+	.mapkey {
+		list-style: none;
+		margin: 0 0 var(--sp-3);
+		padding: var(--sp-2) var(--sp-3);
+		background: #f2f2f2;
+		border-radius: 6px;
+		display: grid;
+		grid-template-columns: repeat(3, auto);
+		justify-content: start;
+		gap: 6px var(--sp-7, 2rem);
+		font-size: var(--fs-14);
+		color: var(--ink-soft);
+	}
+	@media (max-width: 900px) {
+		.mapkey {
+			grid-template-columns: 1fr;
+		}
+	}
+	.mapkey li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.mapkey .dot {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		flex: none;
+	}
+	.mapkey .dot.dashed {
+		border: 1.5px dashed #578f6e;
+	}
+	.mapkey .sizeicon {
+		flex: none;
+	}
+	.mapkey .sizeicon circle {
+		fill: none;
+		stroke: var(--c-dase);
+		stroke-width: 1.2;
+	}
+	.mapkey .firegrad {
+		width: 26px;
+		height: 12px;
+		border-radius: 2px;
+		flex: none;
+		background: linear-gradient(to right, #f0dfe1, #6b2d35);
+	}
+	/* map left; the clicked unit's contract list docks on the right */
+	.maprow {
+		display: grid;
+		grid-template-columns: minmax(0, 44rem) 1fr;
+		gap: var(--sp-4);
+		align-items: start;
+	}
+	@media (max-width: 900px) {
+		.maprow {
+			grid-template-columns: 1fr;
+		}
+	}
+	.unitpanel {
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 6px;
+		max-height: 560px;
+		display: flex;
+		flex-direction: column;
+	}
+	.unitpanel header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: var(--sp-2);
+		padding: var(--sp-3);
+		border-bottom: 1px solid var(--line);
+	}
+	.up-name {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+	}
+	.up-sub {
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+	}
+	.up-close {
+		border: none;
+		background: none;
+		font-size: var(--fs-18);
+		line-height: 1;
+		cursor: pointer;
+		color: var(--ink-soft);
+		padding: 0 2px;
+	}
+	.unitpanel ul {
+		list-style: none;
+		margin: 0;
+		padding: var(--sp-2) var(--sp-3);
+		overflow-y: auto;
+	}
+	.unitpanel li {
+		padding: 6px 0;
+		border-bottom: 1px solid #f0f0f0;
+		font-size: var(--fs-13);
+	}
+	.unitpanel li:last-child {
+		border-bottom: none;
+	}
+	.up-meta {
+		display: block;
+		color: var(--ink-faint);
+		font-size: var(--fs-12);
+	}
+	.ucircle {
+		cursor: pointer;
 	}
 	.hero {
 		display: grid;

@@ -1425,3 +1425,33 @@ in-scope tips). The Atlas front page carries a computed note with the
 user's wording + the 7 tips listed; /methodology documents the tier.
 *Evidence: pdf_cache texts of all 13 + the audit entries above.
 Affected: 13 contract_scope rows, every headline aggregate.*
+
+## 2026-08-13 — /dase map: proportional symbols per awarding unit + EFFIS underlay
+
+Display decision. The Atlas /dase Π.Ε. choropleth (Σ stated € per region)
+hid the dataset's central contrast — few huge fire-salvage contracts
+(Ιστιαίας/Λίμνης/Δωδεκανήσου/Πύργου) versus hundreds of small routine
+υλοτομικά in the northern heartland (Νευροκοπίου, Ξάνθης). Replaced by a
+proportional-symbol map: one circle per awarding forest unit at its
+registry seat (join key: `dase_contract_regions.source =
+'registry:<canonical name>'` → khmdhs `forest_authorities` lat/lon),
+circle AREA = Σ stated net €, printed number = contract count, tooltip
+adds the median. Contracts awarded by non-forest bodies (δήμοι,
+περιφέρειες, ministries — source curated/override) have no unit seat and
+aggregate per Π.Ε. at its centroid as dashed circles; the 4 multi-Π.Ε.
+ΑΔΜΗΕ contracts stay off-map in the caveat. The payload
+(`/api/dase/map`: 48 units + 21 Π.Ε. groups + unresolved) reconciles
+exactly to the €34,085,266.14 basis (pinned). Circles are coloured by
+unit kind from the site's green palette (Δασαρχεία = the page green,
+Διευθύνσεις Δασών = the works-ramp dark, non-forest awarders = its
+palest step, dashed); clicking a circle docks the unit's full contract
+list right of the map (lists shipped in the payload, every list length
+== n, pinned), clicking a Π.Ε. polygon zooms to it; dot/size/fire
+explanations live in a timeline-style legend strip above the map.
+Underneath, the EFFIS
+burn-scar layer (display copy, DATA_DECISIONS 2026-08-13 above) filtered
+to fire years ≥2021 — the dataset starts Sept 2021 and salvage logging
+follows those burns — with the mandatory «© European Union, Copernicus
+Emergency Management Service — EFFIS» attribution and the
+estimates-not-οριοθετήσεις caveat on the frame. webui's /dase choropleth
+is frozen and unchanged. *Affects: presentation only; no rows.*
