@@ -16,13 +16,17 @@
 		explanation?: Snippet;
 		/** waffle above, legend below — for half-width placements */
 		stacked?: boolean;
+		/** legend presentation order, when it differs from the cell order */
+		legendGroups?: WaffleGroup[];
 	}
 	let {
 		groups,
 		ariaLabel = 'One square per project',
 		explanation,
-		stacked = false
+		stacked = false,
+		legendGroups
 	}: Props = $props();
+	const lgroups = $derived(legendGroups ?? groups);
 
 	const cells = $derived(
 		groups.flatMap((g) =>
@@ -42,7 +46,7 @@
 	</div>
 	<div class="side">
 		<ul class="legend">
-			{#each groups as g (g.key)}
+			{#each lgroups as g (g.key)}
 				{#if g.count}
 					<li><i style:background={g.color}></i>{g.label}</li>
 				{/if}
@@ -67,10 +71,27 @@
 		gap: var(--sp-4);
 	}
 	.wrap.stacked .waffle {
-		max-width: 380px;
+		gap: 5px;
+	}
+	.wrap.stacked .waffle :global(.cell),
+	.wrap.stacked .cell {
+		border-radius: 5px;
 	}
 	.wrap.stacked .side {
 		grid-template-columns: 1fr;
+	}
+	/* legend under the squares: two columns, row-flow (mock layout); a
+	   lone last item spans the full width so long labels never squeeze */
+	.wrap.stacked .legend {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, auto));
+		justify-content: start;
+		column-gap: var(--sp-6);
+		row-gap: var(--sp-2);
+		font-size: var(--fs-13);
+	}
+	.wrap.stacked .legend li:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
 	}
 	.waffle {
 		display: grid;

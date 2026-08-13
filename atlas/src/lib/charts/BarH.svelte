@@ -16,6 +16,8 @@
 		max?: number;
 		/** highlight predicate — highlighted bars get full accent, rest muted */
 		highlight?: (r: BarRow) => boolean;
+		/** per-row colour (e.g. category ramps); wins over `color` */
+		colorOf?: (r: BarRow) => string;
 		/** names ON the bars (white) instead of above them; a bar too short
 		 *  for its name gets the name right after it in ink instead */
 		inside?: boolean;
@@ -28,6 +30,7 @@
 		color = 'var(--accent)',
 		max,
 		highlight,
+		colorOf,
 		inside = false,
 		barHeight = 14
 	}: Props = $props();
@@ -37,11 +40,17 @@
 	// inside mode: real text widths (hidden measuring spans) vs bar px widths
 	let trackW = $state(0);
 	let labelW = $state<number[]>([]);
+	let wordW = $state<number[]>([]);
 	const RESERVE = 60; // px kept free at the row's end for the value
-	const fits = $derived(
+	const longestWord = (s: string) =>
+		s.split(' ').reduce((a, b) => (b.length > a.length ? b : a), '');
+	/** 0 = one line · 1 = wrapped to two lines (tall bars) · 2 = outside */
+	const tier = $derived(
 		rows.map((r, i) => {
 			const bar = Math.max(0, trackW - RESERVE) * (r.value / maxV);
-			return (labelW[i] ?? Infinity) + 14 <= bar;
+			if ((labelW[i] ?? Infinity) + 14 <= bar) return 0;
+			if (barHeight >= 26 && (wordW[i] ?? Infinity) + 14 <= bar) return 1;
+			return 2;
 		})
 	);
 </script>
@@ -49,7 +58,9 @@
 {#if inside}
 	<div class="chart tight" bind:clientWidth={trackW}>
 		<div class="measure" aria-hidden="true">
-			{#each rows as r, i (i)}<span bind:clientWidth={labelW[i]}>{r.label}</span>{/each}
+			{#each rows as r, i (i)}<span bind:clientWidth={labelW[i]}>{r.label}</span><span
+					bind:clientWidth={wordW[i]}>{longestWord(r.label)}</span
+				>{/each}
 		</div>
 		{#each rows as r, i (i)}
 			{@const w = Math.max(0.4, (100 * r.value) / maxV)}
@@ -59,15 +70,15 @@
 					class="bar"
 					style:width={`calc((100% - ${RESERVE}px) * ${w / 100})`}
 					style:height={`${barHeight}px`}
-					style:background={color}
+					style:background={colorOf ? colorOf(r) : color}
 				>
-					{#if fits[i]}
-						<span class="on">
+					{#if tier[i] < 2}
+						<span class="on" class:two={tier[i] === 1}>
 							{#if r.href}<a href={r.href}>{r.label}</a>{:else}{r.label}{/if}
 						</span>
 					{/if}
 				</div>
-				{#if !fits[i]}
+				{#if tier[i] === 2}
 					<span class="off">
 						{#if r.href}<a href={r.href}>{r.label}</a>{:else}{r.label}{/if}
 					</span>
@@ -87,7 +98,7 @@
 					{#if r.sublabel}<small class="sub">{r.sublabel}</small>{/if}
 				</div>
 				<div class="track">
-					<div class="bar" style:width={`${w}%`} style:background={color}></div>
+					<div class="bar" style:width={`${w}%`} style:background={colorOf ? colorOf(r) : color}></div>
 					<span class="value">{fmt(r.value)}</span>
 				</div>
 			</div>
@@ -131,6 +142,10 @@
 		padding: 0 6px;
 		white-space: nowrap;
 		overflow: hidden;
+	}
+	.on.two {
+		white-space: normal;
+		line-height: 1.08;
 	}
 	.on a {
 		color: #fff;

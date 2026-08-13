@@ -66,6 +66,32 @@ export const loadEviaZones = (
 	return cache.get(url) as Promise<FeatureCollection<Polygon | MultiPolygon, ZoneProps>>;
 };
 
+export interface FireProps {
+	/** fire year (from the EFFIS initialdat) */
+	yr: number;
+	ha: number;
+	name: string;
+}
+
+/** EFFIS burnt scars 2008–2025, display copy (WGS84, simplified, CW —
+ *  scripts/build_effis_layer.py). Attribution required on display:
+ *  «© European Union, Copernicus Emergency Management Service — EFFIS». */
+export const loadEffisFires = (
+	fetch: Fetch
+): Promise<FeatureCollection<Polygon | MultiPolygon, FireProps>> => {
+	const url = '/geo/effis_fires.geojson';
+	if (!cache.has(url)) {
+		cache.set(
+			url,
+			fetch(url).then((r) => {
+				if (!r.ok) throw new Error(`${url}: ${r.status}`);
+				return r.json();
+			})
+		);
+	}
+	return cache.get(url) as Promise<FeatureCollection<Polygon | MultiPolygon, FireProps>>;
+};
+
 export const loadCentroids = (fetch: Fetch): Promise<Record<string, [number, number]>> => {
 	const url = '/geo/pe_centroids.json';
 	if (!cache.has(url)) {

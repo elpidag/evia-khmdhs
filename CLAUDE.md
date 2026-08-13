@@ -548,10 +548,15 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   `tests/test_evia_zones.py` (9 zones, area bands, bbox, CW winding,
   copies identical).
 - `data/raw/BurtScars_EFFIS_2008-2025.geojson` (sic — typo'd name): 20 MB
-  Copernicus EFFIS burnt-area export for Greece 2008–2025, EPSG:3035,
-  **unwired** — nothing consumes it yet; provenance, attribution duty and
-  hygiene notes in DATA_DECISIONS 2026-08-13. Satellite estimates, never
-  to be mixed with ΦΕΚ οριοθετήσεις unlabelled.
+  Copernicus EFFIS burnt-area export for Greece 2008–2025, EPSG:3035;
+  provenance, attribution duty and hygiene notes in DATA_DECISIONS
+  2026-08-13. Display copy built by `scripts/build_effis_layer.py`
+  (simplify 120 m in 3035 → WGS84 → CW winding → props yr/ha/name,
+  1.1 MB) into data/processed/ + atlas/static/geo/effis_fires.geojson;
+  shown on /anadohoi «PROJECTS AND FIRES THAT TRIGGERED THEM»
+  (`FiresLayer.svelte`, #6b2d35 year gradient, attribution in the frame
+  caveat). Satellite estimates, never to be mixed with ΦΕΚ οριοθετήσεις
+  unlabelled.
 
 ## Αρωγή πυροπλήκτων dataset (`data/processed/arogi.sqlite` — 4th DB)
 
