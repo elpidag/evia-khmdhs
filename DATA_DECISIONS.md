@@ -1314,3 +1314,51 @@ Loader schema 31 cols; committed sqlite migrated in place (harvest.json
 on the build machine). *Evidence: scripts/link_effis_scars.py report;
 per-link basis/km in anadohoi_projects.json. Affects: new column,
 project pages, tests.*
+
+## 2026-08-13 — Audit: how far the corpus itself proves «RRF Action 16849» membership
+
+Question asked of the dataset: can every live in-scope contract (251)
+be tied to RRF Action 16849 from primary evidence in this repo? Sweep
+of all cached contract texts (251/251 have a .txt) + registry metadata:
+**243/251** carry one of the three Ταμείο-Ανάκαμψης ΠΔΕ codes
+(2022ΤΑ07500000 / 2021ΤΑ07500002 / 2023ΤΑ07500012) in the structured
+KHMDHS funding field; of the 8 without, one (25SYMV017106210,
+Ξυλόκαστρο restoration) prints 16849 + ΟΠΣ 5201358 + the ΤΑ code in its
+PDF, and **7 are 2022 Anti-nero II lots/amendments whose PDFs appear to
+be textless scans and whose funding metadata is empty — their in-scope
+status rests on the «ΤΟΥ ANTINERO ΙΙ» title branding alone**. In PDF
+prose: 215/251 print ΤΑ/ΟΠΣ/RRF markers, 36 print the literal «16849»
+(all 8 ΕΣΑ, 3 restoration, and execution contracts under BOTH later
+fund codes — so ΟΠΣ 5201358 and 5222791 are each bridged to Action
+16849 by contract text inside the corpus). **Honest gap: no Anti-nero I
+contract (ΟΠΣ 5161079) prints 16849** — that phase's link to the RRF
+measure rests on programme-level documentation outside the corpus, not
+on any stored primary source. Site copy should therefore say the
+programme is RRF Action 16849 (true at programme level) but must not
+claim per-contract documentary proof. Homoglyph lesson re-learned: the
+audit's first fund-code counts disagreed between runs because typed
+«ΤΑ» literals mixed Greek/Latin — final numbers use
+khmdhs.scope.FUND_* constants. *Evidence: pdf_cache .txt sidecars,
+contracts.public_funding_ref_num, contract_scope.basis. Affects: no
+rows.*
+## 2026-08-13 — Backing the Anti-nero I → Δράση 16849 link: two primary sources located
+
+Follow-up to the same-day 16849 audit. The phase-I gap is now bridged
+by documents (two hops, each on a primary source): **(A)** ΕΥΣΤΑ/ΥΠΟΙΚ
+decision **ΡΚΥΕΗ-Ζ9Π** (29.07.2026, τροποποίηση αποφάσεων ένταξης ΣΑΤΑ
+075) lists row 45: «5161079 | Υποέργο 1: Εθνικό Σχέδιο Αναδάσωσης -
+Σχέδιο Προστασίας Δασών | 2022ΤΑ07500000» — the Anti-nero I ΟΠΣ and
+ΠΔΕ code ARE the Υποέργο-1 of the «Εθνικό Σχέδιο Αναδάσωσης» umbrella.
+**(B)** Απόφαση Ένταξης **ΨΛ9ΧΗ-ΞΟΒ** (33592 ΕΞ 2023, 02.03.2023)
+enters «SUB1. ΕΘΝΙΚΟ ΣΧΕΔΙΟ ΑΝΑΔΑΣΩΣΗΣ» (ΟΠΣ ΤΑ 5201358) into «τη
+Δράση με ID 16849», and the corpus's own contracts spell the Δράση
+name+ID («Το Έργο περιλαμβάνεται στη Δράση με ID 16849: "Εθνικό σχέδιο
+αναδάσωσης – Πρόγραμμα Προστασίας Δασών (Antinero II)"» —
+24SYMV014843550; 23SYMV013600200 cites ΨΛ9ΧΗ-ΞΟΒ itself). Residual
+honesty: the ORIGINAL ένταξη of 5161079 naming 16849 verbatim was not
+located (Diavgeia subject search only reaches metadata); the link for
+phase I therefore rests on the Δράση-title identity across (A) and
+(B). The 7 title-only 2022 ANTINERO II lots remain a separate gap —
+their PDFs are textless scans; OCR is the closure path. *Evidence: the
+two ΑΔΑs (permanently citable on Diavgeia) + pdf_cache texts. Affects:
+no rows.*
