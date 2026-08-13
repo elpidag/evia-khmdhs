@@ -444,12 +444,15 @@ cards + direct-award bar + paid card) and kicker titles; its map is now a
 **proportional-symbol map** — one circle per awarding forest unit at its
 `forest_authorities` seat (area = Σ stated net €, label = n, tooltip
 median; join via `dase_contract_regions.source` `registry:<name>`),
-kind-coloured from the green palette (dx page-green / dd works-ramp
-dark / non-forest palest+dashed at Π.Ε. centroids), ΑΔΜΗΕ off-map in
+kind-coloured per the user's legend mock (dd «forest directorate»
+#406e55 / dx «local forest service office» #6fb28c / municipal & other
+non-forest awarders solid black at Π.Ε. centroids), ΑΔΜΗΕ off-map in
 the caveat, EFFIS burn scars ≥2021 underneath (attribution on the
-frame); click a circle → its contract list docks right of the map
-(lists in the payload), click a Π.Ε. → zoom; timeline-style legend
-strip above; payload `/api/dase/map` reconciles to the
+frame); grey legend panel docked RIGHT of the map, top-aligned (dot
+key, nested-circle size icon, «burnt areas» white→maroon year-gradient
+bar); click a circle → its contract list docks below the legend
+(lists in the payload), click a Π.Ε. → zoom; payload `/api/dase/map`
+reconciles to the
 basis (pinned). webui /dase keeps its frozen choropleth. All SQL in
 `webui/dase_queries.py` (imports search/bin
 helpers from queries.py; `queries.antinero_yearly` is the one

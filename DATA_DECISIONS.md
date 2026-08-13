@@ -1674,3 +1674,18 @@ follows those burns — with the mandatory «© European Union, Copernicus
 Emergency Management Service — EFFIS» attribution and the
 estimates-not-οριοθετήσεις caveat on the frame. webui's /dase choropleth
 is frozen and unchanged. *Affects: presentation only; no rows.*
+
+## 2026-08-13 — /dase map legend per user mock (supersedes the colour/legend details above)
+
+Same-day refinement of the entry above, per the user's legend mock: kind
+colours are now Διευθύνσεις Δασών «forest directorate» #406e55 (works-ramp
+dark), Δασαρχεία «local forest service office» #6fb28c (works-ramp
+light), municipal/regional & other non-forest awarders SOLID BLACK
+(dashed retired); count labels may appear on any kind's circle when it
+is large enough. The legend left the strip above the map and is now a
+grey rounded panel DOCKED RIGHT of the map, top-aligned: «contracts
+awarded by» dot key, nested-circle size icon («circle size represents
+the amount of € awarded via the contracts», «x: number of contracts»),
+and a «burnt areas» white→#6b2d35 gradient bar labelled with the
+computed fire-year span. The clicked unit's contract list docks below
+the legend in the same column. *Affects: presentation only.*
