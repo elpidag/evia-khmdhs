@@ -48,6 +48,8 @@ FRAME = ROOT / "atlas/static/geo/frame.json"
 CACHE = ROOT / "data/processed/relief_cache"
 OUT_LO = ROOT / "atlas/static/geo/relief.avif"
 OUT_HI = ROOT / "atlas/static/geo/relief_hi.avif"
+OUT_LO_H = ROOT / "atlas/static/geo/relief_hypso.avif"
+OUT_HI_H = ROOT / "atlas/static/geo/relief_hypso_hi.avif"
 
 BUCKET = "https://copernicus-dem-30m.s3.amazonaws.com"
 
@@ -87,6 +89,23 @@ CAST_H_FLOOR = 0.25       # shadow weight of a sea-level caster (0..1) —
 SHADOW_RGB = (0x42, 0x44, 0x4a)   # charcoal shadow anchor — this is
                                   # the darkest colour any shadow can
                                   # reach (the tint ramp's floor)
+# hypsometric ramp in DISPLAY colours, sampled from the second reference
+# (Bosnia physical-3D map): bright mint lowlands → cream → saturated rust
+# mountains. These are final on-screen display tones.
+HYPSO_SHADE_GAMMA = 0.6   # lift the shading on the tinted style — Greece
+                          # is mostly slopes; without this the hypso map
+                          # reads far darker than the flat references
+HYPSO_STOPS = [
+    (0,    (0xa9, 0xc2, 0xa0)),
+    (200,  (0xb6, 0xc6, 0xb0)),
+    (450,  (0xcf, 0xcd, 0xaa)),
+    (700,  (0xd6, 0xc4, 0x9a)),
+    (1000, (0xc9, 0x9b, 0x72)),
+    (1300, (0xb4, 0x7a, 0x4e)),
+    (1700, (0x9c, 0x5e, 0x38)),
+    (2100, (0x8a, 0x4e, 0x2e)),
+    (2900, (0x7a, 0x42, 0x27)),
+]
 AVIF_Q = 68
 
 R_MERC = 6378137.0
@@ -272,11 +291,9 @@ def sun_gradient(shape: tuple[int, int]) -> np.ndarray:
     return 1.0 + GRAD_AMP * t
 
 
-def tint(lum: np.ndarray, sea: np.ndarray, shadow: np.ndarray) -> Image.Image:
-    """One neutral charcoal->white ramp for everything (geoblender look):
-    the sea is the background plate at BG_BASE, flats sit at HIGH_CAP just
-    under it, cast shadows grey the water they cross, a soft contact
-    shadow hugs the coast, and the sun gradient lights the whole plate."""
+def final_luminance(lum: np.ndarray, sea: np.ndarray,
+                    shadow: np.ndarray) -> np.ndarray:
+    """Shared last-mile: plate sea, contact shadows, sun gradient, grain."""
     from scipy.ndimage import distance_transform_edt
     lum = np.clip(lum, 0, 1)
     sea_lum = BG_BASE * np.clip(1.0 - CAST_DARK * shadow, 0, 1)
@@ -288,14 +305,48 @@ def tint(lum: np.ndarray, sea: np.ndarray, shadow: np.ndarray) -> Image.Image:
     # deterministic so the bake is reproducible
     rng = np.random.default_rng(GRAIN_SEED)
     final = final + rng.normal(0.0, GRAIN_AMP, final.shape)
-    final = np.clip(final, 0, 1)
+    return np.clip(final, 0, 1)
+
+
+def tint(final: np.ndarray, sea: np.ndarray) -> Image.Image:
+    """Greyscale style: one charcoal->white ramp for everything."""
     rgb = np.empty((*final.shape, 3), dtype="float32")
     for c, sc in enumerate(SHADOW_RGB):
         rgb[..., c] = sc + (255 - sc) * final
     return Image.fromarray(np.clip(rgb, 0, 255).astype("uint8"))
 
 
-def build(frame: dict, mosaic: Path, w: int, h: int, out: Path) -> None:
+def hypso_ramp(dem: np.ndarray) -> np.ndarray:
+    """Elevation -> atlas colour, linear between HYPSO_STOPS."""
+    elevs = np.array([e for e, _ in HYPSO_STOPS], dtype="float32")
+    cols = np.array([c for _, c in HYPSO_STOPS], dtype="float32")
+    out = np.empty((*dem.shape, 3), dtype="float32")
+    for c in range(3):
+        out[..., c] = np.interp(dem, elevs, cols[:, c])
+    return out
+
+
+def tint_hypso(final: np.ndarray, sea: np.ndarray,
+               dem: np.ndarray) -> Image.Image:
+    """Elevation style: hypsometric tint on land, modulated by the SAME
+    shading; the sea stays the grey plate so the toggle only recolours
+    the land."""
+    rgb = np.empty((*final.shape, 3), dtype="float32")
+    for c, sc in enumerate(SHADOW_RGB):
+        rgb[..., c] = sc + (255 - sc) * final
+    land = ~sea
+    ramp = hypso_ramp(dem)
+    # shading factor: flats (lum≈HIGH_CAP) show the pure tint, shadows
+    # darken it; the gamma lift keeps mid-slopes pastel like the reference
+    f = np.clip(final / HIGH_CAP, 0, 1.0) ** HYPSO_SHADE_GAMMA
+    f = f[..., None]
+    shaded = np.clip(ramp * f, 0, 255)
+    rgb[land] = shaded[land]
+    return Image.fromarray(np.clip(rgb, 0, 255).astype("uint8"))
+
+
+def build(frame: dict, mosaic: Path, w: int, h: int, out: Path,
+          out_hypso: Path) -> None:
     dem = warp_to_frame(mosaic, frame, w, h)
     # coastline hygiene: resampling leaves sub-metre partial-land pixels
     # along coasts (stippled fringe) and isolated specks in open sea (fake
@@ -321,12 +372,14 @@ def build(frame: dict, mosaic: Path, w: int, h: int, out: Path) -> None:
     if HYPSO_WEIGHT:
         hi_ref = max(float(np.percentile(dem_g[~sea], 98)), 1.0)
         lum = np.clip(lum - HYPSO_WEIGHT * np.clip(dem_g / hi_ref, 0, 1), 0, 1)
-    img = tint(lum, sea, shadow)
-    img.save(out, "AVIF", quality=AVIF_Q)
-    preview = CACHE / (out.stem + "_preview.png")
-    img.save(preview, "PNG")
-    print(f"{out.name}: {w}x{h}, {out.stat().st_size / 1024:.0f} KB "
-          f"(preview {preview.name})")
+    final = final_luminance(lum, sea, shadow)
+    for image, path in ((tint(final, sea), out),
+                        (tint_hypso(final, sea, dem_g), out_hypso)):
+        image.save(path, "AVIF", quality=AVIF_Q)
+        preview = CACHE / (path.stem + "_preview.png")
+        image.save(preview, "PNG")
+        print(f"{path.name}: {w}x{h}, {path.stat().st_size / 1024:.0f} KB "
+              f"(preview {preview.name})")
 
 
 def main() -> None:
@@ -338,8 +391,8 @@ def main() -> None:
     res_deg = span_deg / (3584 * 2)          # fetch at 2x the hi grid
     mosaic = fetch_mosaic((lons[0], lats[0], lons[1], lats[1]),
                           res_deg, refetch)
-    build(frame, mosaic, 3584, 3472, OUT_HI)
-    build(frame, mosaic, 1280, 1240, OUT_LO)
+    build(frame, mosaic, 3584, 3472, OUT_HI, OUT_HI_H)
+    build(frame, mosaic, 1280, 1240, OUT_LO, OUT_LO_H)
 
 
 if __name__ == "__main__":

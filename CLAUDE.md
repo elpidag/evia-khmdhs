@@ -729,7 +729,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `transparent` when `relief` is set — stroke highlights/hit-testing
   unaffected) and `.map.plate` carries the SAME plate gradient
   (#f1f1f1→#e2e2e3 @110° — must track the bake knobs) so the surround
-  beyond the image edge is seamless; scars stay the loudest layer. MANDATORY attribution in the hosting
+  beyond the image edge is seamless; scars stay the loudest layer. A
+  GREYSCALE/ELEVATION toggle on the fires map swaps in the second baked
+  styling (relief_hypso*.avif — hypsometric HYPSO_STOPS display tones
+  sampled from the user's Bosnia reference, 0.6 shade-gamma lift; the
+  page's legend-bar css gradient must track the stops). MANDATORY attribution in the hosting
   frame's caveat: «Relief: produced using Copernicus WorldDEM-30 © DLR
   e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided
   under COPERNICUS by the European Union and ESA; all rights reserved».

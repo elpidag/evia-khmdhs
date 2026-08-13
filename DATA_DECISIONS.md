@@ -1543,3 +1543,28 @@ verified; flats read as toned, textured ground instead of dead grey);
 plate — the render-sensor noise of the reference, reproducible bake.
 Assets 198 KB / 1.28 MB — inside budget. *Evidence: crop_thessaly2 in
 relief_cache. Affects: relief*.avif, look only.*
+
+## 2026-08-13 — Fires-map relief: toggle ΓΚΡΙ/ΥΨΟΜΕΤΡΙΚΟ (δεύτερο baked style)
+
+User request: a toggle between the greyscale relief and an elevation
+colourmap. One shading pass now emits TWO stylings (4 assets):
+relief*.avif (greyscale) + relief_hypso*.avif (hypsometric tints on
+the same grey plate — the toggle only recolours land). Palette
+iterations: first the atlas-classic ramp (guessed, replaced), then the
+Gąsiewska-Holc «Between Forests and Shores» legend sampled from the
+image (too dark as raw legend colours — its RENDER washes them, so a
+wash-toward-neutral was fitted), finally superseded by the user's
+second reference (Bosnia physical-3D map): brighter, saturated DISPLAY
+tones sampled directly (mint #a9c2a0 lowlands → cream → rust #7a4227
+peaks, HYPSO_STOPS, no wash) with a 0.6 shading-gamma lift — Greece is
+mostly slopes, the flat-country references read lighter than an
+honestly-shaded Greece would. Frontend: GREYSCALE/ELEVATION pill on
+the fires map, elevation legend bar (css gradient tracks HYPSO_STOPS)
+with 0–2.900 μ labels shown in elevation mode; PaperMap just receives
+a different {lo,hi} pair — the k≥2/narrow gating is unchanged. Bake
+robustness note: two knob-cluster edit regressions (NameError) slipped
+through because the bake's exit code was masked by a tail pipe — the
+runner now prints BAKE EXIT and a function smoke-test precedes long
+bakes. Budget test covers all four assets (196 KB–1.28 MB). *Evidence:
+previews + live toggles in the session log. Affects: new
+relief_hypso*.avif, fires-map UI, look only.*

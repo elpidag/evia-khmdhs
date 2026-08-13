@@ -14,12 +14,14 @@ pytestmark = pytest.mark.skipif(
 def test_relief_assets_exist_within_budget():
     """Both detail levels ship, within the payload budget the research
     fixed (lo always-loaded, hi behind the k>=2 trigger)."""
-    lo = (GEO / "relief.avif").stat().st_size
-    hi = (GEO / "relief_hi.avif").stat().st_size
     # budgets sized for the 3584px hi level (2026-08-13 sharpness ruling);
-    # hi only ever loads on desktop/tablet past the k>=2 zoom
-    assert lo <= 400_000, f"relief.avif {lo/1024:.0f} KB over budget"
-    assert hi <= 1_800_000, f"relief_hi.avif {hi/1024:.0f} KB over budget"
+    # hi only ever loads on desktop/tablet past the k>=2 zoom. Both relief
+    # styles (greyscale + hypsometric toggle) ship the same two levels.
+    for name, cap in (("relief.avif", 400_000), ("relief_hi.avif", 1_800_000),
+                      ("relief_hypso.avif", 400_000),
+                      ("relief_hypso_hi.avif", 1_800_000)):
+        size = (GEO / name).stat().st_size
+        assert size <= cap, f"{name} {size/1024:.0f} KB over budget"
 
 
 def test_frame_contract_exists():

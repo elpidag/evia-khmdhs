@@ -47,6 +47,14 @@
 	let pickFrame = $state(false);
 	let pickedView = $state<{ center: [number, number]; k: number } | null>(null);
 	// the page's FIXED frame — paste the picker's output here to change it
+	// fires-map relief style toggle: greyscale plate vs hypsometric tints
+	// (both baked by scripts/build_relief.py from the same shading pass)
+	let reliefStyle = $state<'grey' | 'hypso'>('grey');
+	const reliefAssets = $derived(
+		reliefStyle === 'hypso'
+			? { lo: '/geo/relief_hypso.avif', hi: '/geo/relief_hypso_hi.avif' }
+			: { lo: '/geo/relief.avif', hi: '/geo/relief_hi.avif' }
+	);
 	const MAP_VIEW: { center: [number, number]; k: number } | null = {
 		center: [23.8305, 38.3566],
 		k: 1.08
@@ -669,6 +677,27 @@
 >
 	<div class="firesgrid">
 		<div class="fmcol">
+			<div class="reliefbar">
+				<div class="relieftoggle" role="group" aria-label="Relief colouring">
+					<button
+						type="button"
+						class:active={reliefStyle === 'grey'}
+						onclick={() => (reliefStyle = 'grey')}>GREYSCALE</button
+					>
+					<button
+						type="button"
+						class:active={reliefStyle === 'hypso'}
+						onclick={() => (reliefStyle = 'hypso')}>ELEVATION</button
+					>
+				</div>
+				{#if reliefStyle === 'hypso'}
+					<div class="hypsokey" aria-hidden="true">
+						<span>0 μ</span>
+						<i></i>
+						<span>2.900 μ</span>
+					</div>
+				{/if}
+			</div>
 			<Defer height={760}>
 				<div class="mapscale">
 					<div class="map-wrap">
@@ -679,7 +708,7 @@
 							view={MAP_VIEW}
 							focusPe={firePe}
 							onRegionClick={(pe) => (firePe = firePe === pe ? null : pe)}
-							relief={{ lo: '/geo/relief.avif', hi: '/geo/relief_hi.avif' }}
+							relief={reliefAssets}
 						>
 							{#snippet overlay(ctx)}
 								{#if firesFc}
@@ -1122,6 +1151,58 @@
 		margin: 0;
 	}
 	/* the map: light-grey ground, white regions, grey hairline borders */
+	.reliefbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--sp-3);
+		margin-bottom: var(--sp-2);
+	}
+	.relieftoggle {
+		display: inline-flex;
+		border: 1px solid #8f8f8f;
+		border-radius: 999px;
+		overflow: hidden;
+	}
+	.relieftoggle button {
+		font: inherit;
+		font-size: var(--fs-12);
+		letter-spacing: 0.06em;
+		padding: 3px 14px;
+		border: 0;
+		background: none;
+		color: #6f6f6f;
+		cursor: pointer;
+	}
+	.relieftoggle button.active {
+		background: #000;
+		color: #fff;
+	}
+	.hypsokey {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+	}
+	.hypsokey i {
+		width: 120px;
+		height: 8px;
+		border-radius: 2px;
+		/* the baked HYPSO_STOPS display ramp (build_relief.py — must track it) */
+		background: linear-gradient(
+			90deg,
+			#a9c2a0,
+			#b6c6b0 7%,
+			#cfcdaa 16%,
+			#d6c49a 24%,
+			#c99b72 34%,
+			#b47a4e 45%,
+			#9c5e38 59%,
+			#8a4e2e 72%,
+			#7a4227
+		);
+	}
 	/* white-land styling for the DATA maps only — a relief map (.plate)
 	   must keep its transparent fills and plate-gradient surround, or the
 	   page CSS paints the polygons white OVER the relief (CSS beats the
