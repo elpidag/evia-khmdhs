@@ -1764,3 +1764,19 @@ carries a detectable decimal-shift error. Screening coverage is now
 universal at the text level (previously 892/2,164 payment-screened).
 *Affects: no rows; report `data/processed/contract_value_report.json`
 (gitignored), .txt corpus tracked.*
+
+## 2026-08-14 — ΔΑΣΕ display-name curation started (convention + tooling)
+
+The 250 canonical co-ops appear under 638 registry spellings; the user is
+curating uniform display names with the convention **ΔΑ.Σ.Ε. 'ΟΝΟΜΑ',
+ΤΟΠΟΘΕΣΙΑ** (all caps; the quoted nickname only where one exists) and the
+English mirror **F.W.CO-OP 'NAME', LOCATION** (toponyms/nicknames
+transliterated). Tooling committed at the repo root: `dase_name_curator.html`
+(offline card-per-co-op tool — shows every registry spelling, prefills both
+names per the convention with set-pooled nickname detection, autosaves in
+the browser, exports `{ΑΦΜ: {el, en}}` JSON) and `dase_names_review.tsv`
+(the flat review worksheet, incl. the 46 rejected keys with reasons).
+Names will land in `khmdhs/data/dase_contractors.json` as
+`display_el`/`display_en` and flow to the site once the user's export
+arrives; registry spellings in `contracts`/`contractors` are never
+rewritten. *Affects: nothing yet — presentation layer in progress.*
