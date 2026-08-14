@@ -25,6 +25,9 @@ from khmdhs.config import DASE_DB
 from khmdhs.db import init_db
 
 CORRECTIONS_FILE = Path(__file__).parent / "data" / "dase_contract_corrections.json"
+# the khmdhs (Anti-nero) DB's own corrections file, same format — applied by
+# khmdhs.refresh after the refetch/upsert phase (DATA_DECISIONS 2026-08-14)
+KHMDHS_CORRECTIONS_FILE = Path(__file__).parent / "data" / "contract_corrections.json"
 
 
 def apply_contract_corrections(conn: sqlite3.Connection,

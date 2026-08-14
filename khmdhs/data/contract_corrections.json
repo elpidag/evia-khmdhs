@@ -1,0 +1,9 @@
+{
+  "_comment": "Curated fixes for khmdhs (Anti-nero) contracts whose registry stated values are keying errors. Same format and mechanism as dase_contract_corrections.json: keyed by contract ΑΔΑΜ; total_cost_with_vat / total_cost_without_vat override the registry amounts when the signed PDF documents a different figure (cite the source in 'reason'); optional 'objects' maps contract_objects seq → corrected cost_without_vat where the child row repeats the error. Applied by khmdhs.contract_corrections — standalone CLI (--db data/processed/khmdhs.sqlite --corrections this file) and by khmdhs.refresh right after the refetch/upsert phase (INSERT OR REPLACE restores registry values). Corrections land only after human PDF review (DATA_DECISIONS 2026-08-14).",
+  "26SYMV018642772": {
+    "total_cost_without_vat": 4334353.41,
+    "total_cost_with_vat": 5374598.23,
+    "objects": {"0": 4334353.41},
+    "reason": "KHMDHS records net €3,341,238.72 / gross €4,143,136.01 — exactly the figures of 25SYMV017471484 «ΔΕΞΑΜΕΝΕΣ & ΚΡΟΥΝΟΙ ΠΕΡΙΑΣΤΙΚΟΥ ΔΑΣΟΥΣ ΘΕΣΣΑΛΟΝΙΚΗΣ» (whose own PDF confirms them in words), a cross-contract keying error. The signed Σουφλί contract PDF (contract/attachment/26SYMV018642772, Άρθρο 4.1) states the συμβατικό τίμημα in words and figures: «τέσσερα εκατομμύρια τριακόσιες τριάντα τέσσερις χιλιάδες τριακόσια πενήντα τρία ευρώ και σαράντα ένα λεπτά (4.334.353,41 €), πλέον ΦΠΑ (24%) και πέντε εκατομμύρια τριακόσιες εβδομήντα τέσσερις χιλιάδες πεντακόσια ενενήντα οκτώ ευρώ και είκοσι τρία λεπτά (5.374.598,23 €), συμπεριλαμβανομένου ΦΠΑ (24%)». No amendments, not cancelled, no other stored row carries the PDF figure."
+  }
+}

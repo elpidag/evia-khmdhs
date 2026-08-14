@@ -56,6 +56,15 @@ export interface ContractDetail {
 		paid_gross?: number | null;
 		payments?: Record<string, number | null>;
 	};
+	/** curated work-type category + its evidence: the descriptive project
+	 *  title from the signed PDF ('pdf') or the parent's ('inherited:<ref>') */
+	category: {
+		key: string;
+		label: string;
+		note: string | null;
+		title: string;
+		source: string;
+	} | null;
 	regions: { region_pe: string; source: string | null; note: string | null }[];
 	sites: { site_name: string; region_pe: string; page: number | null; excerpt: string | null }[];
 	timeline: {

@@ -95,6 +95,20 @@
 		return labels[best] ?? '';
 	});
 	const firstPayYear = $derived((o.timeseries.months[0] ?? '').slice(0, 4));
+	// work-type category chart: stated € or contract counts, same bars
+	let catMode = $state<'eur' | 'n'>('eur');
+	const catRows = $derived(
+		[...o.categories]
+			.sort((a, b) => (catMode === 'eur' ? b.eur - a.eur : b.n - a.n))
+			.map((c) => ({
+				label: c.label,
+				value: catMode === 'eur' ? c.eur : c.n,
+				sublabel: catMode === 'eur' ? `${grInt(c.n)} contracts` : eurShort(c.eur)
+			}))
+	);
+	const topCat = $derived(
+		o.categories.reduce((a, b) => (b.eur > a.eur ? b : a), o.categories[0])
+	);
 	// hero bar fills — both data-proportional
 	const bidPct = $derived((o.kpis.n_single_bidder / o.kpis.n_contracts) * 100);
 	const paidPct = $derived((o.kpis.paid_eur / o.kpis.stated_eur) * 100);
@@ -352,6 +366,62 @@
 	<BarH rows={studyRows} color="#8f8f8f" />
 </ChartFrame>
 
+{#if o.categories.length && topCat}
+	<ChartFrame
+		title="TYPES OF WORK"
+		subtitle="Every in-scope contract assigned one of {grInt(
+			o.categories.length
+		)} curated work-type categories from its signed PDF's project title — «{topCat.label}» dominates with {eurShort(
+			topCat.eur
+		)} across {grInt(topCat.n)} contracts ({pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme)."
+		caveat="One category per contract, curated from the signed PDF's descriptive project title with the contract's rarer CPV codes as tie-breaker, so the € columns sum to the programme's stated-net total."
+		anchor="categories"
+		methodology="categories"
+	>
+		<div class="mode" role="group" aria-label="Category metric">
+			<button
+				type="button"
+				class:active={catMode === 'eur'}
+				onclick={() => (catMode = 'eur')}>Stated €</button
+			>
+			<button type="button" class:active={catMode === 'n'} onclick={() => (catMode = 'n')}
+				>Contracts</button
+			>
+		</div>
+		<BarH
+			rows={catRows}
+			color="#2b2b2b"
+			inside
+			barHeight={22}
+			fmt={catMode === 'eur' ? eurShort : grInt}
+		/>
+	</ChartFrame>
+{/if}
+
+{#if o.cpvs.length}
+	{@const topCpv = o.cpvs[0]}
+	<ChartFrame
+		title="CPV CODES"
+		subtitle="All {grInt(o.cpvs.length)} procurement-vocabulary (CPV) codes declared across the {grInt(
+			o.kpis.n_contracts
+		)} in-scope contracts, sorted by reach — the most common, «{topCpv.desc}», appears on {grInt(
+			topCpv.n
+		)} of them ({pct((topCpv.n / o.kpis.n_contracts) * 100)})."
+		caveat="Codes and descriptions as declared in ΚΗΜΔΗΣ. Contracts declare several codes each, so counts sum to more than the number of contracts — and for the same reason no € is attributed per code."
+		anchor="cpvs"
+	>
+		<div class="cpvlist">
+			{#each o.cpvs as c (c.code)}
+				<div class="cpvrow">
+					<span class="cn">{grInt(c.n)}</span>
+					<span class="cc">{c.code}</span>
+					<span class="cd">{c.desc}</span>
+				</div>
+			{/each}
+		</div>
+	</ChartFrame>
+{/if}
+
 </div>
 
 <style>
@@ -592,5 +662,53 @@
 		.pair {
 			grid-template-columns: 1fr;
 		}
+	}
+	.mode {
+		display: inline-flex;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		overflow: hidden;
+		margin-bottom: var(--sp-2);
+	}
+	.mode button {
+		font: inherit;
+		font-size: var(--fs-13);
+		padding: 2px var(--sp-3);
+		border: 0;
+		background: var(--paper);
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.mode button.active {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.cpvlist {
+		columns: 3 300px;
+		column-gap: var(--sp-6);
+		font-size: var(--fs-13);
+	}
+	.cpvrow {
+		display: flex;
+		gap: 0.5em;
+		align-items: baseline;
+		break-inside: avoid;
+		padding: 2px 0;
+		border-bottom: 1px solid var(--paper-3);
+	}
+	.cn {
+		min-width: 2.2em;
+		text-align: right;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+	}
+	.cc {
+		color: var(--ink-faint);
+		font-size: var(--fs-12);
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+	}
+	.cd {
+		color: var(--ink-soft);
 	}
 </style>

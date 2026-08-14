@@ -162,6 +162,28 @@ CREATE TABLE IF NOT EXISTS contract_study_costs (
     FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
 );
 
+-- Curated work-type category per in-scope Anti-nero contract, ONE each so
+-- category aggregates reconcile to the programme total. Classified from
+-- the signed PDF's descriptive project title (stored verbatim as the
+-- evidence) with the CPV tail as tie-breaker; derivative documents
+-- inherit their parent chain's title (source 'inherited:<ref>')
+-- (DATA_DECISIONS 2026-08-14). Labels ship from the curated file via
+-- category_labels — never hardcoded in code.
+CREATE TABLE IF NOT EXISTS contract_categories (
+    reference_number TEXT PRIMARY KEY,
+    category         TEXT NOT NULL,
+    title            TEXT NOT NULL,      -- descriptive PDF project title
+    source           TEXT NOT NULL,      -- pdf | short_description | inherited:<ref>
+    curated_at       TEXT NOT NULL,
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS category_labels (
+    category TEXT PRIMARY KEY,
+    label    TEXT NOT NULL,
+    note     TEXT
+);
+
 -- Forest authorities (Διευθύνσεις Δασών / Δασαρχεία) from the curated
 -- registry khmdhs/data/forest_authorities.json; coordinates are the seat
 -- municipality's centroid (khmdhs/data/greek_municipalities.json, ΥΠΕΣ code).

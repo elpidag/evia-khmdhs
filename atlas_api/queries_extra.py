@@ -295,7 +295,75 @@ def antinero_overview(kh: sqlite3.Connection,
         "top_signers": q.top_signers(kh, limit=5),
         "coverage": q.flow_coverage(kh),
         "probable": probable_related(kh),
+        "cpvs": antinero_cpvs(kh),
+        "categories": antinero_categories(kh),
     }
+
+
+def antinero_categories(kh: sqlite3.Connection) -> list[dict]:
+    """Curated work-type category per in-scope contract (ONE each, so the
+    stated-net sums reconcile to the programme total; DATA_DECISIONS
+    2026-08-14). Labels come from the curated file via category_labels —
+    never hardcoded here. On the Atlas stated-basis connection
+    total_cost_with_vat carries the net figure."""
+    if not q._has_scope_table(kh) or not kh.execute(
+            "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') "
+            "AND name='contract_categories'").fetchone():
+        return []
+    rows = kh.execute("""
+        SELECT c.category AS key, l.label AS label,
+               COUNT(*) AS n, ROUND(SUM(k.total_cost_with_vat), 2) AS eur
+        FROM contract_categories c
+        JOIN contract_scope s ON s.reference_number = c.reference_number
+        JOIN contracts k ON k.reference_number = c.reference_number
+        LEFT JOIN category_labels l ON l.category = c.category
+        WHERE s.in_scope = 1
+        GROUP BY c.category
+        ORDER BY eur DESC, c.category
+    """).fetchall()
+    return [{"key": r["key"], "label": r["label"] or r["key"],
+             "n": r["n"], "eur": r["eur"] or 0.0} for r in rows]
+
+
+def antinero_cpvs(kh: sqlite3.Connection) -> list[dict]:
+    """Every CPV code declared on an in-scope contract, with the registry's
+    own description and the number of distinct in-scope contracts carrying
+    it. Contracts declare several codes each, so counts sum to more than the
+    contract count — € is deliberately NOT attributed per code (it would be
+    double-counted under every code a contract declares)."""
+    if not q._has_scope_table(kh):
+        return []
+    rows = kh.execute("""
+        SELECT c.cpv_code AS code, MIN(c.cpv_description) AS desc,
+               COUNT(DISTINCT c.reference_number) AS n
+        FROM contract_cpvs c
+        JOIN contract_scope s ON s.reference_number = c.reference_number
+        WHERE s.in_scope = 1
+        GROUP BY c.cpv_code
+        ORDER BY n DESC, c.cpv_code
+    """).fetchall()
+    return [{"code": r["code"], "desc": (r["desc"] or "").strip(), "n": r["n"]}
+            for r in rows]
+
+
+def contract_category(kh: sqlite3.Connection, ref: str) -> dict | None:
+    """The contract's curated work-type category with its evidence: the
+    descriptive project title from the signed PDF (source 'pdf', or
+    'inherited:<ref>' when the derivative document quotes only the
+    parties and the title comes from the parent's PDF)."""
+    if not kh.execute(
+            "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') "
+            "AND name='contract_categories'").fetchone():
+        return None
+    r = kh.execute("""
+        SELECT c.category AS key, l.label, l.note, c.title, c.source
+        FROM contract_categories c
+        LEFT JOIN category_labels l ON l.category = c.category
+        WHERE c.reference_number = ?""", (ref,)).fetchone()
+    if r is None:
+        return None
+    return {"key": r["key"], "label": r["label"] or r["key"],
+            "note": r["note"], "title": r["title"], "source": r["source"]}
 
 
 def probable_related(kh: sqlite3.Connection) -> dict:

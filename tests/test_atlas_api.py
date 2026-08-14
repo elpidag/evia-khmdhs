@@ -76,7 +76,8 @@ def test_antinero_overview_shape(client):
     body = r.get_json()
     for key in ("kpis", "procedures", "histogram", "direct_awards",
                 "timeseries", "yearly", "studies", "top_contractors",
-                "top_authorities", "top_signers", "coverage"):
+                "top_authorities", "top_signers", "coverage", "cpvs",
+                "categories"):
         assert key in body, key
     assert body["kpis"]["n_contracts"] == 1
     assert set(body["studies"]) == {"summary", "top"}

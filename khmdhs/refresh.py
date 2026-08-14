@@ -31,8 +31,12 @@ from pathlib import Path
 import requests
 
 from khmdhs import (
-    chain_loader, completion_acts_loader, forest_loader, linked_acts_loader,
-    payment_loader, region_loader, scope_loader, studies_loader,
+    categories_loader, chain_loader, completion_acts_loader,
+    contract_corrections, forest_loader, linked_acts_loader, payment_loader,
+    region_loader, scope_loader, studies_loader,
+)
+from khmdhs.contract_corrections import (
+    KHMDHS_CORRECTIONS_FILE,
 )
 from khmdhs.api import fetch_contract
 from khmdhs.config import DATA_PROCESSED, DEFAULT_DB, THROTTLE_SECONDS
@@ -90,6 +94,13 @@ def curation_todos(conn: sqlite3.Connection, refs: list[str] | None = None) -> l
             todos.append(f"{ref}: in scope but no curated regions (contract_regions.json)")
         if scope in ("antinero_unknown_phase",) or basis == "no_antinero_evidence":
             todos.append(f"{ref}: scope needs review ({scope}; {basis})")
+        if in_scope and _has_categories_table(conn):
+            n_cat = conn.execute(
+                "SELECT COUNT(*) FROM contract_categories WHERE reference_number = ?",
+                (ref,)).fetchone()[0]
+            if n_cat == 0:
+                todos.append(f"{ref}: in scope but no curated category "
+                             f"(contract_categories.json)")
         if in_scope and _has_forest_tables(conn):
             n_auth = conn.execute(
                 "SELECT COUNT(*) FROM contract_forest_authorities WHERE reference_number = ?",
@@ -98,6 +109,11 @@ def curation_todos(conn: sqlite3.Connection, refs: list[str] | None = None) -> l
                 todos.append(f"{ref}: in scope but no forest authority "
                              f"(forest_authorities.json aliases/overrides)")
     return todos
+
+
+def _has_categories_table(conn: sqlite3.Connection) -> bool:
+    return conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND "
+                        "name='contract_categories'").fetchone() is not None
 
 
 def _has_forest_tables(conn: sqlite3.Connection) -> bool:
@@ -182,6 +198,12 @@ def main(argv: list[str] | None = None) -> int:
         db_argv = ["--db", str(args.db)]
         print("\n-- chain_loader ------------------------------------------------")
         chain_loader.main(db_argv)
+        # refetch/chain upserts restore registry values (INSERT OR REPLACE) —
+        # re-stamp the curated stated-value corrections before any analytics
+        # loader runs (DATA_DECISIONS 2026-08-14, Σουφλί keying error)
+        print("\n-- contract_corrections ----------------------------------------")
+        contract_corrections.main(db_argv + [
+            "--corrections", str(KHMDHS_CORRECTIONS_FILE)])
         print("\n-- scope_loader ------------------------------------------------")
         scope_loader.main(db_argv)
         print("\n-- region_loader -----------------------------------------------")
@@ -190,6 +212,8 @@ def main(argv: list[str] | None = None) -> int:
         forest_loader.main(db_argv)
         print("\n-- studies_loader ----------------------------------------------")
         studies_loader.main(db_argv)
+        print("\n-- categories_loader -------------------------------------------")
+        categories_loader.main(db_argv)
         print("\n-- payment_loader ----------------------------------------------")
         payment_loader.main(db_argv)
         print("\n-- linked_acts_loader ------------------------------------------")

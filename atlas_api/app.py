@@ -231,6 +231,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["sites"] = queries.contract_sites(g.conn, adam)
         d["timeline"] = queries_extra.contract_timeline(g.conn, adam)
         d["gross"] = queries_extra.contract_gross(pay, adam)
+        d["category"] = queries_extra.contract_category(g.conn, adam)
         return jsonify(d)
 
     @app.route("/api/antinero/contractors")

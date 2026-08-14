@@ -40,6 +40,7 @@ data/processed/refresh_backup_*.json
 data/processed/refresh_state.json
 data/processed/site_candidates.json
 data/processed/study_cost_candidates.json
+data/processed/category_review.json
 data/processed/dase_pdf_cache/*
 !data/processed/dase_pdf_cache/*.txt
 data/processed/dase_state.json

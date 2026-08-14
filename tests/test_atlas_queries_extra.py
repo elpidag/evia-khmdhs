@@ -210,3 +210,101 @@ def test_money_by_pe_yearly_splits_and_buckets(kh):
     assert out["years"] == ["2023", "2024"]
     # contract B has no parsable date → honestly unresolved
     assert out["unresolved_eur"] == pytest.approx(500.0)
+
+
+# ------------------------------------------------------------------ cpvs
+
+def _cpv(conn, ref, code, desc, seq=0):
+    conn.execute(
+        "INSERT INTO contract_cpvs (reference_number, seq, cpv_code, cpv_description) "
+        "VALUES (?,?,?,?)", (ref, seq, code, desc))
+
+
+def test_antinero_cpvs_counts_in_scope_contracts_once(kh):
+    add_contract(kh, "22SYMV000000001", title="A")
+    set_scope(kh, "22SYMV000000001", "antinero_ii", 1)
+    add_contract(kh, "22SYMV000000002", title="B")
+    set_scope(kh, "22SYMV000000002", "antinero_ii", 1)
+    add_contract(kh, "22SYMV000000003", title="OUT")
+    set_scope(kh, "22SYMV000000003", "non_antinero", 0)
+    # shared code on both in-scope contracts; A declares it twice (two lots)
+    _cpv(kh, "22SYMV000000001", "77231300-1", "Υπηρεσίες διαχείρισης δασών", 0)
+    _cpv(kh, "22SYMV000000001", "77231300-1", "Υπηρεσίες διαχείρισης δασών", 1)
+    _cpv(kh, "22SYMV000000002", "77231300-1", "Υπηρεσίες διαχείρισης δασών", 0)
+    # code unique to B
+    _cpv(kh, "22SYMV000000002", "45233120-6", "Έργα οδοποιίας", 1)
+    # code only on the out-of-scope contract → excluded entirely
+    _cpv(kh, "22SYMV000000003", "66519300-4", "Ασφαλιστικές υπηρεσίες", 0)
+    kh.commit()
+
+    rows = qx.antinero_cpvs(kh)
+    assert [(r["code"], r["desc"], r["n"]) for r in rows] == [
+        ("77231300-1", "Υπηρεσίες διαχείρισης δασών", 2),
+        ("45233120-6", "Έργα οδοποιίας", 1),
+    ]
+
+
+def test_antinero_overview_includes_cpvs(kh):
+    add_contract(kh, "22SYMV000000001", title="A")
+    set_scope(kh, "22SYMV000000001", "antinero_ii", 1)
+    _cpv(kh, "22SYMV000000001", "77231300-1", "Υπηρεσίες διαχείρισης δασών")
+    kh.commit()
+    out = qx.antinero_overview(kh)
+    assert out["cpvs"][0]["code"] == "77231300-1"
+
+
+# ------------------------------------------------------------- categories
+
+def _categorize(conn, ref, cat, title="T", source="pdf"):
+    conn.execute(
+        "INSERT INTO contract_categories "
+        "(reference_number, category, title, source, curated_at) "
+        "VALUES (?,?,?,?, '2026-01-01')", (ref, cat, title, source))
+
+
+def test_antinero_categories_groups_and_reconciles(kh):
+    kh.execute("INSERT INTO category_labels (category, label, note) VALUES "
+               "('dasotexnika', 'Δασοτεχνικά έργα πρόληψης', NULL), "
+               "('meletes', 'Μελέτες', NULL)")
+    add_contract(kh, "22SYMV000000001", title="A", eur=1000.0)
+    set_scope(kh, "22SYMV000000001", "antinero_ii", 1)
+    _categorize(kh, "22SYMV000000001", "dasotexnika")
+    add_contract(kh, "22SYMV000000002", title="B", eur=600.0)
+    set_scope(kh, "22SYMV000000002", "antinero_ii", 1)
+    _categorize(kh, "22SYMV000000002", "dasotexnika")
+    add_contract(kh, "22SYMV000000003", title="C", eur=250.0)
+    set_scope(kh, "22SYMV000000003", "antinero_iii", 1)
+    _categorize(kh, "22SYMV000000003", "meletes")
+    # out of scope: categorized rows outside the basis never count
+    add_contract(kh, "22SYMV000000004", title="D", eur=99.0)
+    set_scope(kh, "22SYMV000000004", "non_antinero", 0)
+    _categorize(kh, "22SYMV000000004", "meletes")
+    kh.commit()
+
+    rows = qx.antinero_categories(kh)
+    assert [(r["key"], r["label"], r["n"], r["eur"]) for r in rows] == [
+        ("dasotexnika", "Δασοτεχνικά έργα πρόληψης", 2, 1600.0),
+        ("meletes", "Μελέτες", 1, 250.0),
+    ]
+    # single-category convention: Σ over categories == the in-scope total
+    total = kh.execute(
+        "SELECT SUM(total_cost_with_vat) FROM contracts k "
+        "JOIN contract_scope s ON s.reference_number = k.reference_number "
+        "WHERE s.in_scope = 1").fetchone()[0]
+    assert sum(r["eur"] for r in rows) == pytest.approx(total)
+    assert "categories" in qx.antinero_overview(kh)
+
+
+def test_contract_category_detail_supplement(kh):
+    kh.execute("INSERT INTO category_labels (category, label, note) VALUES "
+               "('ylotomies', 'Υλοτομίες', 'σημ')")
+    add_contract(kh, "22SYMV000000001", title="A")
+    _categorize(kh, "22SYMV000000001", "ylotomies",
+                title="Επείγουσες υλοτομικές εργασίες",
+                source="inherited:22SYMV000000009")
+    kh.commit()
+    got = qx.contract_category(kh, "22SYMV000000001")
+    assert got == {"key": "ylotomies", "label": "Υλοτομίες", "note": "σημ",
+                   "title": "Επείγουσες υλοτομικές εργασίες",
+                   "source": "inherited:22SYMV000000009"}
+    assert qx.contract_category(kh, "22SYMV000000002") is None

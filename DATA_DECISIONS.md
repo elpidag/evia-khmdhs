@@ -1780,3 +1780,88 @@ Names will land in `khmdhs/data/dase_contractors.json` as
 `display_el`/`display_en` and flow to the site once the user's export
 arrives; registry spellings in `contracts`/`contractors` are never
 rewritten. *Affects: nothing yet — presentation layer in progress.*
+
+## 2026-08-14 — Anti-nero work-type categories: curated 8-group taxonomy over the 245 in-scope contracts
+
+Every in-scope contract gets exactly ONE curated work-type category so the
+Atlas category chart reconciles to the stated-net basis
+(€658,297,730.65). The registry `contracts.title` is a ≤100-char
+shorthand; the classification source is the descriptive **project title
+inside the signed PDF** (era-dependent anchors: phase III/IV/2026 page-1
+«ΣΥΜΒΑΣΗ ΓΙΑ ΤΗΝ ΕΚΤΕΛΕΣΗ [ΤΜΗΜΑΤΟΣ] ΤΟΥ ΕΡΓΟΥ» + «…»; phase II
+«ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ ΕΡΓΟΥ» + «…»; phase I has NO page-1 title — it lives
+in the Ορισμοί under «υπό τον τίτλο "…"»; μελέτες under «ΣΥΜΒΑΣΗ ΔΜ-xx /
+ΣΠ-xx» headers; ΕΣΑ titles are two-level — umbrella «ΕΘΝΙΚΟ ΣΧΕΔΙΟ
+ΑΝΑΔΑΣΩΣΗΣ» plus the real lot title in «ΤΜΗΜΑ N: "…"»; APE/παράταση
+decisions under «ΘΕΜΑ: …»), with `contract_objects.short_description` as
+a cheap first pass (verbatim for III/IV/2026, generic gloss for I/II),
+recursion into `prev_reference_no` parents for the 47 derivative
+documents (amendments/APE/extensions filed under their own SYMV), and
+the discriminating CPV tail (in-scope reach < 50; e.g. 45246400-7
+αντιπλημμυρικά, 44611500-1 δεξαμενές, 77231600-4 αναδάσωση) as a
+tie-breaker ONLY — the CPV head is boilerplate shared by nearly all
+contracts. ~33 phase-II txts carry font-mangled accents («Εργασιίες
+ειδικωάν…»); matching is accent/space-folded and the stored titles are
+hand-cleaned. Taxonomy (stable keys, Greek labels shipped from the
+curated file — never hardcoded in code):
+`dasotexnika` Δασοτεχνικά έργα πρόληψης (καθαρισμοί, αντιπυρικές ζώνες,
+δασικό οδικό δίκτυο) · `miktes_zones` Μικτές αντιπυρικές ζώνες (οικισμοί
+& δρόμοι) · `arxaiologikoi` Προστασία αρχαιολογικών χώρων & μνημείων ·
+`ylotomies` Υλοτομίες ξερών & προσβεβλημένων δένδρων · `antidiavrotika`
+Αντιδιαβρωτικά & αντιπλημμυρικά έργα αποκατάστασης · `anadasoseis`
+Αναδασώσεις & δασικά φυτώρια (ΕΣΑ) · `meletes` Μελέτες & σχέδια
+αντιπυρικής προστασίας · `ydatodexamenes` Υποδομές νερού πυρόσβεσης
+(δεξαμενές & κρουνοί). Precedence: specific beats generic (a title naming
+ΜΑΖ / αρχαιολογικούς χώρους / υλοτομίες / δεξαμενές wins over the
+boilerplate καθαρισμός phrasing); derivatives inherit their parent
+chain's category. Artifacts: curated
+`khmdhs/data/contract_categories.json` (per-ADAM category + verbatim
+cleaned title as evidence + source pdf/short_description/inherited:<ref>)
+→ `khmdhs/categories_loader.py` → tables `contract_categories` +
+`category_labels`; in the refresh chain after studies_loader. Final curated counts (245/245, Σ stated net reconciles to €658,297,730.65 exactly): dasotexnika 155 (€361.2M) · miktes_zones 33 (€128.2M) · antidiavrotika 12 (€57.5M) · anadasoseis 8 (€45.9M) · arxaiologikoi 17 (€32.0M) · ylotomies 5 (€21.0M) · meletes 14 (€9.2M) · ydatodexamenes 1 (€3.3M). Review corrections vs the rule proposals: 11 ΜΕΛΕΤ/ΑΝΑΔΑΣ false hits moved to dasotexnika (έργα «με εγκεκριμένη μελέτη», «αντιπυρική προστασία αναδασώσεων» = καθαρισμοί γύρω από αναδασώσεις), the 24SYMV014774679 mixed mega-contract keeps dasotexnika (πυροφυλάκια/δεξαμενές are a trailing component), 4 ΕΣΑ/ΑΠΕ derivatives take their parents' titles, and 15 phase-I amendment titles resolve from parent PDFs (the amendments quote only the contracting parties).
+*Affects: new tables only; the Atlas «category» chart and its pins.*
+
+## 2026-08-14 — Category audit: one recategorization + a khmdhs stated-value keying error (Σουφλί)
+
+Mechanical audit of all 245 category assignments (cross-signals between
+curated title / registry title / short_description, per-category support
+requirement, scope consistency, discriminating-CPV hints, full-body
+vocabulary dominance, sibling-title consistency, € coincidence screening).
+238/245 passed unflagged; reviewed flags: the 24SYMV014774679 mixed
+mega-contract and the 4 ANTINERO III contracts whose bodies cite the
+«(Antinero II) – Αντιδιαβρωτικά & Αντιπλημμυρικά Έργα» FUNDING-programme
+name (ΟΠΣ ΤΑ 5201358 recital, not the work object) stay dasotexnika.
+Two real findings, both fixed:
+
+1. **26SYMV019200696 recategorized dasotexnika → ylotomies.** Its curated
+   title had been taken from the act's «Θεώρηση και έγκριση μελέτης με
+   τίτλο "…"» quote — the title of ONE study inside the contract. The
+   family's real title (verified in parent PDF 26SYMV018682054 and quoted
+   in the record's own short_description) is «Έργα αντιπυρικής προστασίας
+   σε δημόσια δασικά συμπλέγματα και αναδασωτέες εκτάσεις, καθώς και
+   δασοκομικοί χειρισμοί σε μεταπυρικά οικοσυστήματα … Δασαρχείων
+   Αλεξανδρούπολης και Διδυμοτείχου» — the same phrasing as its two
+   ylotomies siblings (26SYMV018599446, 26SYMV018642772). Title now
+   inherited from the parent. Counts become dasotexnika 154 / ylotomies 6.
+
+2. **26SYMV018642772 «ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΣΟΥΦΛΙΟΥ» registry
+   stated value is a keying error** — the row (and its raw payload, and
+   its contract_objects seq 0) carries €3,341,238.72 net / €4,143,136.01
+   gross, which are EXACTLY the figures of 25SYMV017471484 «ΔΕΞΑΜΕΝΕΣ &
+   ΚΡΟΥΝΟΙ ΠΕΡΙΑΣΤΙΚΟΥ ΔΑΣΟΥΣ ΘΕΣΣΑΛΟΝΙΚΗΣ» (whose PDF confirms them in
+   words). The Σουφλί signed PDF states its συμβατικό τίμημα in words and
+   figures: «τέσσερα εκατομμύρια τριακόσιες τριάντα τέσσερις χιλιάδες
+   τριακόσια πενήντα τρία ευρώ και σαράντα ένα λεπτά (4.334.353,41 €),
+   πλέον ΦΠΑ (24%) και … (5.374.598,23 €), συμπεριλαμβανομένου ΦΠΑ». No
+   amendments, not cancelled, no other row carries the PDF figure.
+   Corrected via the ΔΑΣΕ-built mechanism, now shared: curated
+   `khmdhs/data/contract_corrections.json` (khmdhs-side file) applied by
+   `khmdhs.contract_corrections` (standalone CLI + a `khmdhs.refresh`
+   step right after the refetch/upsert phase, since INSERT OR REPLACE
+   restores registry values). Candidates for future entries come from the
+   same audit-style screens; corrections land only after human PDF review.
+
+New Atlas analytics basis: stated net **€659,290,845.34**
+(was €658,297,730.65; +€993,114.69). All pins updated. *Affects: 1
+contracts row + 1 contract_objects row + 1 contract_categories row; every
+Anti-nero stated-basis aggregate; category chart counts/€.*

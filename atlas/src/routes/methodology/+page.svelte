@@ -128,6 +128,19 @@
 		bundle the study into the works price and honestly state none.
 	</p>
 
+	<h2 id="categories">Work-type categories</h2>
+	<p>
+		Every in-scope contract carries exactly one curated work-type category, assigned from the
+		descriptive project title inside its signed PDF (a different, richer text than the
+		registry's 100-character shorthand) with the contract's rarer CPV codes as tie-breaker.
+		Specific work beats the generic boilerplate: a title naming μικτές αντιπυρικές ζώνες,
+		αρχαιολογικούς χώρους, υλοτομίες or δεξαμενές wins over the standard καθαρισμός phrasing,
+		while amendments and ΑΠΕ approvals inherit their parent contract's title and category.
+		Because each contract counts once, the category sums reconcile to the programme's
+		stated-net total. The verbatim titles are stored in the dataset as the evidence; the
+		taxonomy and every assignment are documented in the decision log (2026-08-14).
+	</p>
+
 	<h2 id="pe-vocabulary">Regions (Π.Ε.)</h2>
 	<p>
 		All geography keys on the 74 Kallikratis regional units (περιφερειακές ενότητες), with

@@ -8,6 +8,11 @@
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.c);
 	const live = $derived(c.payments.filter((p) => !p.cancelled));
+	// category evidence provenance: the parent ADAM when the title was
+	// inherited from a previous version's PDF
+	const catSrcRef = $derived(
+		c.category?.source.startsWith('inherited:') ? c.category.source.slice(10) : null
+	);
 
 	const TIMELINE_KIND: Record<string, string> = {
 		request: 'Πρωτογενές αίτημα',
@@ -67,6 +72,7 @@
 		{#if c.scope}· <span class="chip">{scopeLabel(c.scope.scope)}</span>
 			{#if !c.scope.in_scope}<span class="chip bad">out of scope</span>{/if}
 		{/if}
+		{#if c.category}<span class="chip cat" title={c.category.note ?? ''}>{c.category.label}</span>{/if}
 		{#if c.cancelled}<span class="chip bad">cancelled</span>{/if}
 		{#if c.bids_submitted === 1}<span class="chip warn">single bidder</span>{/if}
 	</p>
@@ -102,6 +108,32 @@
 		compare="{(c.start_date ?? '—').slice(0, 10)} → {(c.end_date ?? 'open').slice(0, 10)}"
 	/>
 </KpiRow>
+
+{#if c.category}
+	<section>
+		<h2>Type of work</h2>
+		<p>
+			<span class="chip cat">{c.category.label}</span>
+			{#if c.category.note}<small class="muted">{c.category.note}</small>{/if}
+		</p>
+		<blockquote class="excerpt">«{c.category.title}»</blockquote>
+		<p class="muted">
+			<small>
+				The project title above is the classification evidence —
+				{#if catSrcRef}
+					stated in the signed PDF of the contract's previous version
+					<a class="tabular" href={`/antinero/contract/${catSrcRef}`}>{catSrcRef}</a>
+					(<a href={`/pdf/contract/${catSrcRef}`} target="_blank" rel="noopener">PDF</a>);
+					this record's own document quotes only the parties or the amendment object.
+				{:else}
+					stated verbatim in this contract's signed PDF.
+				{/if}
+				One curated category per contract; see the
+				<a href="/methodology#categories">methodology</a>.
+			</small>
+		</p>
+	</section>
+{/if}
 
 <section>
 	<h2>Contractors ({c.contractors.length})</h2>
@@ -359,6 +391,12 @@
 		background: var(--c-antinero);
 		color: #fff;
 		border-color: var(--c-antinero);
+	}
+	.chip.cat {
+		background: var(--paper-2);
+		border-color: var(--ink);
+		color: var(--ink);
+		font-weight: 600;
 	}
 	.chip.ok {
 		background: var(--c-anadohoi);

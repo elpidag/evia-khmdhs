@@ -4,8 +4,9 @@ OSINT dataset + web UI for the Greek **Anti-nero** wildfire-prevention/restorati
 public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico.css.
 Everything derived is regenerable; `data/raw/` is never written to.
 
-**Current state** (2026-08-13): 344 contracts (245 in scope; the Atlas
-analytics basis is **stated net €658,297,730.65** — effective retired
+**Current state** (2026-08-14): 344 contracts (245 in scope; the Atlas
+analytics basis is **stated net €659,290,845.34** (includes the curated
+Σουφλί keying-error correction, DATA_DECISIONS 2026-08-14) — effective retired
 2026-08-03, payments are their own layer: paid net €440.0M; webui keeps its
 historical effective-gross presentation, now €604.5M on the same in_scope
 flags), plus 7 chains / 13 contracts demoted to **`antinero_probable`**
@@ -110,7 +111,7 @@ excluded from aggregates (`antinero_umbrella`) to avoid double counting.
 ## Pipeline (ETL modules in `khmdhs/`)
 
 **Run order after any contract change**:
-`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `payment_loader` → `linked_acts_loader`
+`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `categories_loader` → `payment_loader` → `linked_acts_loader`
 (→ `diavgeia_loader` when ingesting new Diavgeia decisions, then `payment_loader` again).
 **`python -m khmdhs.refresh` runs the whole sequence for you** after
 refetching open contracts — prefer it for routine updates.
@@ -200,6 +201,27 @@ refetching open contracts — prefer it for routine updates.
   Contracts stating the figure twice: the contracted αμοιβή breakdown
   wins over the προϋπολογισμός δημοπράτησης estimate. ΕΣΑ design-build
   contracts itemise no study price (bundled) — honestly absent.
+- Work-type category layer (DATA_DECISIONS 2026-08-14): ONE curated
+  category per in-scope contract from the **descriptive project title
+  inside the signed PDF** (era-dependent anchors — phase I hides it in
+  the Ορισμοί under «υπό τον τίτλο»; derivatives quote only the parties →
+  resolve from the parent chain; ~33 phase-II txts have font-mangled
+  accents in the BODY but clean header titles), CPV tail as tie-breaker
+  only. `scripts/extract_contract_categories.py` emits the review
+  worksheet; verdicts live in curated `data/contract_categories.json`
+  (`_categories` meta = keys+Greek labels; per-ADAM category + verbatim
+  title evidence + source pdf/inherited:<ref>) → `categories_loader.py` →
+  `contract_categories` + `category_labels` (in refresh chain; WARNs on
+  uncovered in-scope contracts, `curation_todos` lists them). 8 keys:
+  dasotexnika 154 / miktes_zones 33 / arxaiologikoi 17 / meletes 14 /
+  antidiavrotika 12 / anadasoseis 8 / ylotomies 6 / ydatodexamenes 1
+  (post-audit, DATA_DECISIONS 2026-08-14 second entry); /antinero
+  contract pages show the category chip + a «Type of work» evidence
+  block (verbatim title, provenance link to the parent version when
+  inherited) via `queries_extra.contract_category`;
+  Σ stated net reconciles to the basis exactly (pinned). Atlas: TYPES OF
+  WORK BarH (€/count toggle) + CPV CODES list close the front page;
+  labels ship from `category_labels`, never hardcoded.
 - `linked_acts_loader.py` — full procurement family per contract:
   `GET /adamChain/<ΑΔΑΜ>` returns requests/approvedRequests/notices/
   auctions/contracts/payments (NOT just payments as previously noted);
@@ -253,12 +275,14 @@ decisions land there FIRST, then get implemented.
 | `probable_related.json` | 7 chains / 13 ADAMs demoted to `antinero_probable`: registry titles say ANTINERO II but no provable RRF-16849 financing evidence exists (empty fund metadata, full texts without any RRF language — ΤΑΙΠΕΔ-procured, ΚΑΕ 2910601001-funded). Kept in dataset, excluded from all calculations; shown on / as «additional contracts found, probably related» |
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
 | `dase_contract_corrections.json` | ΔΑΣΕ contract STATED-value keying errors with signed-PDF-documented true figures (+ optional `objects` seq overrides where the child row repeats the error); currently 1: the 21SYMV009374147 ×10 digit-glitch. Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`); candidates come from `scripts/validate_contract_values.py` |
+| `contract_corrections.json` | Same format/mechanism for the khmdhs (Anti-nero) DB; currently 1: 26SYMV018642772 «ΔΧ ΣΟΥΦΛΙΟΥ» carried the Θεσσαλονίκη δεξαμενές contract's figures — PDF-documented true value €4,334,353.41 net / €5,374,598.23 gross (DATA_DECISIONS 2026-08-14). Applied by `khmdhs.contract_corrections --corrections` + a `khmdhs.refresh` step right after chain_loader (refetch/upsert restores registry values) |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts |
 | `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid + **hand-curated `pe`** (the municipality's Π.Ε.; the ONLY complete municipality→Π.Ε. table — validated 4 ways by `scripts/build_pe_geojson.py`) (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
 | `pe_centroids.json` | 74 Π.Ε. → representative point (lat, lon), from the dissolved polygons; duplicated to `webui/static/` (`scripts/build_pe_geojson.py`) |
 | `study_costs.json` | 116 contracts → μελέτη cost net of ΦΠΑ (page + excerpt evidence) from the «Κόστος εκπόνησης μελετών» PDF anchor; loaded by `studies_loader` into `contract_study_costs`; tips inherit from predecessors in `queries.study_costs` |
+| `contract_categories.json` | 245/245 in-scope contracts → ONE curated work-type category (8-key taxonomy in `_categories` with Greek labels) + the signed PDF's verbatim project title as evidence + source (pdf / inherited:<ref>); proposals from `scripts/extract_contract_categories.py`, every verdict reviewed; loaded by `categories_loader` into `contract_categories` + `category_labels` (DATA_DECISIONS 2026-08-14) |
 | `city_to_pe.json`, `postal_prefix_to_pe.json` | address → Π.Ε. lookup tables |
 
 ## Database (`data/processed/khmdhs.sqlite`, committed)
@@ -700,9 +724,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   COALESCEs to the stated column); the payments layer (strip timeline,
   disbursement curves, paid KPIs, per-contract payment lists, contractor
   paid-per-year) reads through the lazy `_pay_conn()` which sees real
-  payment rows. Everything value-based reconciles to €658,297,730.65
+  payment rows. Everything value-based reconciles to €659,290,845.34
   (pinned; was €667,496,652.26 until the 2026-08-13 antinero_probable
-  exclusion); /compare is symmetric stated-vs-stated (≈20.7×); /explore has
+  exclusion, then €658,297,730.65 until the 2026-08-14 Σουφλί
+  stated-value correction); /compare is symmetric stated-vs-stated (≈20.7×); /explore has
   a single «Stated value (net)» column (`?v=8`). Gotcha: an endpoint that
   needs payments MUST take `_pay_conn()` — on `g.conn` the payments table
   is empty by design.

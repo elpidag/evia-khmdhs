@@ -372,6 +372,13 @@ export interface AntineroOverview {
 		total_eur: number;
 		rows: { ref: string; title: string; d: string | null; eur: number | null }[];
 	};
+	/** every CPV code declared on an in-scope contract (registry
+	 *  description, distinct-contract count) — no € per code: contracts
+	 *  declare several codes each */
+	cpvs: { code: string; desc: string; n: number }[];
+	/** curated work-type category per in-scope contract (ONE each, so the
+	 *  stated-net sums reconcile to the programme total) */
+	categories: { key: string; label: string; n: number; eur: number }[];
 }
 
 export interface ExploreRow {

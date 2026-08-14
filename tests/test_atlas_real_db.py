@@ -25,7 +25,7 @@ def client():
 def test_meta_pins(client):
     m = client.get("/api/meta").get_json()
     assert m["antinero"]["n_contracts"] == 245
-    assert m["antinero"]["total_eur"] == pytest.approx(658_297_730.65)
+    assert m["antinero"]["total_eur"] == pytest.approx(659_290_845.34)
     assert m["dase"]["n_contracts"] == 2018
     assert m["dase"]["total_eur"] == pytest.approx(31_801_612.14)
 
@@ -50,6 +50,48 @@ def test_probable_related_pins(client):
     assert d["scope"]["in_scope"] == 0
 
 
+def test_cpvs_pins(client):
+    """The CPV vocabulary section on the front page: every code declared on
+    an in-scope contract, counted once per contract."""
+    o = client.get("/api/antinero/overview").get_json()
+    cpvs = o["cpvs"]
+    assert len(cpvs) == 145
+    assert cpvs[0] == {"code": "77231300-1",
+                      "desc": "Υπηρεσίες διαχείρισης δασών", "n": 226}
+    # counts are per-contract: no code can exceed the in-scope population
+    n_contracts = o["kpis"]["n_contracts"]
+    assert all(0 < r["n"] <= n_contracts for r in cpvs)
+    assert all(r["desc"] for r in cpvs)
+    # sorted by reach, ties broken by code
+    assert cpvs == sorted(cpvs, key=lambda r: (-r["n"], r["code"]))
+
+
+def test_categories_pins(client):
+    """Curated work-type categories (DATA_DECISIONS 2026-08-14): one per
+    in-scope contract, so the stated-net sums reconcile to the programme
+    total exactly."""
+    o = client.get("/api/antinero/overview").get_json()
+    cats = o["categories"]
+    assert {c["key"]: c["n"] for c in cats} == {
+        "dasotexnika": 154, "miktes_zones": 33, "arxaiologikoi": 17,
+        "meletes": 14, "antidiavrotika": 12, "anadasoseis": 8,
+        "ylotomies": 6, "ydatodexamenes": 1}
+    assert sum(c["n"] for c in cats) == o["kpis"]["n_contracts"]
+    assert sum(c["eur"] for c in cats) == pytest.approx(659_290_845.34)
+    assert cats[0]["key"] == "dasotexnika"
+    assert cats[0]["eur"] == pytest.approx(359_263_907.38)
+    assert all(c["label"] and c["label"] != c["key"] for c in cats)
+    assert cats == sorted(cats, key=lambda c: (-c["eur"], c["key"]))
+    # detail supplement: label + verbatim-title evidence + provenance
+    # (26SYMV019200696 recategorized with inherited title, DATA_DECISIONS
+    # 2026-08-14 audit entry)
+    d = client.get("/api/antinero/contract/26SYMV019200696").get_json()
+    assert d["category"]["key"] == "ylotomies"
+    assert d["category"]["source"] == "inherited:26SYMV018682054"
+    assert "μεταπυρικά οικοσυστήματα" in d["category"]["title"]
+    assert d["category"]["label"] and d["category"]["note"]
+
+
 def test_payments_pins(client):
     p = client.get("/api/antinero/payments").get_json()
     assert len(p["events"]) == 863
@@ -62,8 +104,8 @@ def test_sankey_reconciles(client):
     s = client.get("/api/antinero/sankey").get_json()
     ministry_out = sum(l["eur"] for l in s["links"] if l["s"] == "ministry")
     contractor_in = sum(l["eur"] for l in s["links"] if l["s"] != "ministry")
-    assert ministry_out == pytest.approx(658_297_730.65, abs=1.0)
-    assert contractor_in == pytest.approx(658_297_730.65, abs=1.0)
+    assert ministry_out == pytest.approx(659_290_845.34, abs=1.0)
+    assert contractor_in == pytest.approx(659_290_845.34, abs=1.0)
 
 
 def test_swarm_pins(client):
@@ -76,7 +118,7 @@ def test_pe_yearly_reconciles(client):
     py = client.get("/api/antinero/pe-yearly").get_json()
     assert len(py["pes"]) == 59
     total = sum(p["total_eur"] for p in py["pes"]) + py["unresolved_eur"]
-    assert total == pytest.approx(658_297_730.65, abs=1.0)
+    assert total == pytest.approx(659_290_845.34, abs=1.0)
 
 
 def test_dase_pins(client):
@@ -124,7 +166,7 @@ def test_connections_pins(client):
     assert len(n["authorities"]) == 103
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
-        658_297_730.65, abs=1.0)
+        659_290_845.34, abs=1.0)
 
 
 def test_authorities_pins(client):
@@ -146,7 +188,7 @@ def test_pipelines_pins(client):
     p = client.get("/api/compare").get_json()["pipelines"]
     assert p["vat_overlap"] == []          # the zero-overlap headline fact
     assert p["antinero"]["n_vats"] == 163
-    assert p["antinero"]["total_eur"] == pytest.approx(658_297_730.65)
+    assert p["antinero"]["total_eur"] == pytest.approx(659_290_845.34)
     assert p["dase"]["total_eur"] == pytest.approx(31_801_612.14)
     assert p["dase_n_coops"] == 250
     assert [s["name"] for s in p["shared_awarders"]] == [
@@ -160,7 +202,7 @@ def test_explore_pins(client):
     assert len(e["rows"]) == 2332
     # value bases per dataset reconcile with their own conventions
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
-    assert kh_sum == pytest.approx(658_297_730.65, abs=1.0)
+    assert kh_sum == pytest.approx(659_290_845.34, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
     assert dase_sum == pytest.approx(31_801_612.14, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
