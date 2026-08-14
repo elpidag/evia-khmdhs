@@ -1509,12 +1509,18 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
                 "cancelled FROM contracts WHERE reference_number = ?",
                 (r["adam"],)).fetchone()
             if c is not None:
+                who = kh.execute(
+                    "SELECT name FROM contractors WHERE reference_number = ? "
+                    "ORDER BY seq LIMIT 1", (r["adam"],)).fetchone()
                 entry.update({
                     "title": (c["title"] or "")[:160] or None,
                     "d": _full_date(c["contract_signed_date"])
                          or _full_date(c["submission_date"]),
                     "cancelled": c["cancelled"] or 0,
                     "in_db": True,
+                    # first contractor — lets the family diagram label the
+                    # sibling and NAME-match its κατακύρωση (never guessed)
+                    "who": who["name"] if who else None,
                 })
         out.append(entry)
     # Diavgeia completion acts (οριστική παραλαβή / περαίωση / ολοκλήρωση)

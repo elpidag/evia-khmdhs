@@ -65,6 +65,8 @@ export interface ContractDetail {
 		d: string | null;
 		cancelled: number;
 		in_db: boolean;
+		/** in-db contract rows: first contractor name (family diagram labels) */
+		who?: string | null;
 		/** completion acts only (Diavgeia) */
 		ckind?: 'oristiki_paralavi' | 'paralavi' | 'peraiosi' | 'oloklirosi';
 		end_basis?: 'protocol_date' | 'act_date';

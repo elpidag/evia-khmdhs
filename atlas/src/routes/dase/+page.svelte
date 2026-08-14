@@ -475,11 +475,9 @@
 	/* map left; legend (and the clicked unit's contract list) on the right,
 	   top-aligned with the map */
 	.maprow {
-		/* map column matches the Anti-nero maps' rendered width (640×620
-		   viewBox → 552px at the 1440 design width); the legend column
-		   widens, so its texts wrap less and the panel runs shorter */
+		/* 640×620 viewBox rendered at 600px → 600×581.5 on screen */
 		display: grid;
-		grid-template-columns: minmax(0, 552px) minmax(250px, 1fr);
+		grid-template-columns: minmax(0, 600px) minmax(250px, 1fr);
 		gap: var(--sp-4);
 		align-items: start;
 	}

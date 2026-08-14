@@ -1,4 +1,5 @@
 <script lang="ts">
+	import FamilyTree from '$lib/charts/FamilyTree.svelte';
 	import KpiRow from '$lib/ui/KpiRow.svelte';
 	import StatPair from '$lib/ui/StatPair.svelte';
 	import { eur, eurShort } from '$lib/transforms/format';
@@ -35,6 +36,7 @@
 			d: (c.contract_signed_date ?? '').slice(0, 10) || null,
 			cancelled: c.cancelled ?? 0,
 			in_db: true,
+			who: c.contractors[0]?.name ?? null,
 			self: true
 		});
 		rows.sort((a, b) =>
@@ -99,7 +101,7 @@
 </KpiRow>
 
 {#if live.length}
-	<section>
+	<section id="payments">
 		<h2>Payment orders</h2>
 		<table>
 			<thead>
@@ -191,9 +193,18 @@
 	{#if timeline.length}
 		<h2>Procurement timeline ({timeline.length} acts)</h2>
 		<p class="muted">
-			The contract's full ΚΗΜΔΗΣ family — αίτημα → πρόσκληση → κατακύρωση → συμβάσεις,
-			chronological. Payment orders are listed above.
+			The contract's full ΚΗΜΔΗΣ family — αίτημα → πρόσκληση → κατακύρωση → συμβάσεις. This
+			contract's trail is drawn in green; grey boxes are the sibling acts of the same
+			procedure. An award connects to a contract only when it names that contract's co-op;
+			payment orders are listed above. Every box opens its act.
 		</p>
+		<FamilyTree
+			acts={timeline}
+			kindLabel={TIMELINE_KIND}
+			payments={live.length
+				? { n: live.length, eur: eurShort(c.paid_without_vat ?? 0) }
+				: null}
+		/>
 		<table class="listing">
 			<thead>
 				<tr><th>Date</th><th>Act</th><th>Title</th><th>PDF</th></tr>
