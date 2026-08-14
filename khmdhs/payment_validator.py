@@ -102,6 +102,25 @@ def largest_candidates(text: str, n: int = 8) -> list[str]:
     return [t for t, _ in sorted(seen.items(), key=lambda kv: -kv[1])[:n]]
 
 
+def shift_factor(stored: float, candidate: float,
+                 rel_tol: float = 0.005) -> float | None:
+    """Decimal-shift signature between a stored amount and a PDF amount.
+
+    Returns 10 or 100 when stored ≈ candidate×factor (registry over-keyed),
+    0.1 when candidate ≈ stored×10 (under-keyed), else None. The tolerance
+    is relative because the flagship error is a digit GLITCH, not a clean
+    shift (2,537,393.13 / 253,739.13 = 10.0000079 — `value/10` probes miss
+    it), while ratios like 9.8 from partially paid contracts must not hit.
+    """
+    if not stored or not candidate or candidate <= 0:
+        return None
+    ratio = stored / candidate
+    for factor in (10.0, 100.0, 0.1):
+        if abs(ratio - factor) / factor <= rel_tol:
+            return factor
+    return None
+
+
 # ---------------------------------------------------------------------------
 # PDF fetch + text extraction
 # ---------------------------------------------------------------------------

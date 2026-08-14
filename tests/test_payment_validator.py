@@ -6,6 +6,7 @@ from khmdhs.payment_validator import (
     amount_tokens,
     format_greek,
     largest_candidates,
+    shift_factor,
     validate_payment,
 )
 
@@ -109,3 +110,21 @@ def test_validate_corrected_reports_registry_value():
     )
     assert r["status"] == "ok_corrected"
     assert r["registry_amount_with_vat"] == 992420531.12
+
+
+def test_shift_factor_catches_digit_glitch():
+    # the flagship ΔΑΣΕ error: ratio 10.0000079, NOT an exact ×10
+    assert shift_factor(2537393.13, 253739.13) == 10.0
+
+
+def test_shift_factor_hundredfold_and_underkeyed():
+    assert shift_factor(2191041188.0, 21910411.88) == 100.0
+    assert shift_factor(1986.60, 19866.00) == 0.1
+
+
+def test_shift_factor_rejects_legitimate_ratios():
+    # partially-paid contracts hover near ×10 without being errors
+    assert shift_factor(16129.03, 1651.85) is None      # ratio 9.76
+    assert shift_factor(6649.33, 70833.17) is None      # paid 10.7× stated
+    assert shift_factor(0, 100.0) is None
+    assert shift_factor(100.0, 0) is None

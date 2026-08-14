@@ -252,6 +252,7 @@ decisions land there FIRST, then get implemented.
 | `antinero_supplement.json` | 55 contracts missing from the xlsx; phase overrides that win over all rules |
 | `probable_related.json` | 7 chains / 13 ADAMs demoted to `antinero_probable`: registry titles say ANTINERO II but no provable RRF-16849 financing evidence exists (empty fund metadata, full texts without any RRF language — ΤΑΙΠΕΔ-procured, ΚΑΕ 2910601001-funded). Kept in dataset, excluded from all calculations; shown on / as «additional contracts found, probably related» |
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
+| `dase_contract_corrections.json` | ΔΑΣΕ contract STATED-value keying errors with signed-PDF-documented true figures (+ optional `objects` seq overrides where the child row repeats the error); currently 1: the 21SYMV009374147 ×10 digit-glitch. Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`); candidates come from `scripts/validate_contract_values.py` |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts |
@@ -377,9 +378,21 @@ positives), every distinct VAT is human-reviewed into curated
 excluded; registry keying noise: two ΑΦΜ glued with «ΚΑΙ», stray accent
 prefixes, whitespace-variant VAT keys). Uses the shared khmdhs schema
 (scope tables stay empty); nothing touches khmdhs.sqlite.
-PDFs not yet fetched — `scripts/fetch_contract_pdfs.py --db
-data/processed/dase.sqlite --cache data/processed/dase_pdf_cache` when
-wanted. CPV quirk: 386 rows carry miskeyed 66519300-4 «ασφαλιστικές
+PDF/txt cache: `scripts/fetch_contract_pdfs.py --db
+data/processed/dase.sqlite --cache data/processed/dase_pdf_cache`
+(PDFs gitignored, .txt sidecars tracked — user decision 2026-08-14);
+`scripts/validate_contract_values.py` screens every stored stated value
+against the extracted text (statuses ok/ok_net_only/near_match/
+`decimal_shift_suspect`/mismatch/no_pdf/unreadable; direct ÷10 ÷100 ×10
+probes + `shift_factor` ratio fallback — the flagship error was a digit
+GLITCH at ratio 10.0000079 a clean division misses; suspects are
+candidates, corrections land only after human PDF review). Curated fixes:
+`khmdhs/data/dase_contract_corrections.json` →
+`khmdhs.contract_corrections` (standalone CLI + end of every
+`harvest_dase.py load`, whose INSERT OR REPLACE restores registry
+values; corrected rows carry `contracts.correction_note`, and a
+sibling-modal guard test fails on any live uncorrected ≈×10/×100
+outlier). CPV quirk: 386 rows carry miskeyed 66519300-4 «ασφαλιστικές
 υπηρεσίες» on υλοτομικά contracts.
 
 **Parity harvest** (2026-08-03, DATA_DECISIONS): `linked_acts_loader --db
@@ -408,9 +421,11 @@ future attempt).
 aggregates use **stated values, deduplicated** — exclude `cancelled=1`
 (82 rows, €2.35M) and non-cancelled rows whose `next_reference_no`
 resolves in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo,
-no multi-successor) → live population **2,018 rows / €41,418,963.96
-gross = €34,085,266.14 net** (`dase_queries.live_filter`, the
-scope_filter analogue; the Atlas presents net). Charts/rankings STAY on
+no multi-successor) → live population **2,018 rows / €38,587,233.00
+gross = €31,801,612.14 net** (`dase_queries.live_filter`, the
+scope_filter analogue; the Atlas presents net; includes the 1 curated
+stated-value correction — 21SYMV009374147 ×10 keying error,
+DATA_DECISIONS 2026-08-14). Charts/rankings STAY on
 stated values — payment coverage is structurally partial (891/2,018
 contracts, 2022–23 near-blank as registry practice) — the paid-net Σ
 appears only as a KPI with its coverage caveat. Co-ops key on
@@ -438,8 +453,8 @@ co-ops, orgs/units/procedure/type/CPV tables), `/dase/contracts`,
 ΔΑΣΕ ADAMs unchanged) and `/compare` (Anti-nero vs ΔΑΣΕ: KPI pair with
 basis labels, absolute + %-of-own-total yearly bars, shared-log2-bin
 size-distribution overlay with median markers, per-Π.Ε. paired bars,
-methodology footnotes — Anti-nero €616M effective vs ΔΑΣΕ €41.4M stated
-≈ 14.9×). Atlas /dase (2026-08-13): redesigned to the shared hero (green
+methodology footnotes — Anti-nero €604.5M effective vs ΔΑΣΕ €38.6M
+stated ≈ 15.7×). Atlas /dase (2026-08-13): redesigned to the shared hero (green
 cards + direct-award bar + paid card) and kicker titles; its map is now a
 **proportional-symbol map** — one circle per awarding forest unit at its
 `forest_authorities` seat (area = Σ stated net €, label = n, tooltip
@@ -453,7 +468,12 @@ key, nested-circle size icon, «burnt areas» white→maroon year-gradient
 bar); click a circle → its contract list docks below the legend
 (lists in the payload), click a Π.Ε. → zoom; payload `/api/dase/map`
 reconciles to the
-basis (pinned). webui /dase keeps its frozen choropleth. All SQL in
+basis (pinned). /dase contract pages draw the ΚΗΜΔΗΣ family as a
+FamilyTree diagram (trunk → award fan → contracts, viewed contract's
+trail green, payments terminal; award↔contract edges only on
+name-verified pairs — `contract_timeline` ships `who` for in-db
+siblings; the table below stays the accessible view). webui /dase keeps
+its frozen choropleth. All SQL in
 `webui/dase_queries.py` (imports search/bin
 helpers from queries.py; `queries.antinero_yearly` is the one
 khmdhs-side addition). Second sqlite is opened by a **lazy
@@ -680,7 +700,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   paid-per-year) reads through the lazy `_pay_conn()` which sees real
   payment rows. Everything value-based reconciles to €658,297,730.65
   (pinned; was €667,496,652.26 until the 2026-08-13 antinero_probable
-  exclusion); /compare is symmetric stated-vs-stated (≈19.3×); /explore has
+  exclusion); /compare is symmetric stated-vs-stated (≈20.7×); /explore has
   a single «Stated value (net)» column (`?v=8`). Gotcha: an endpoint that
   needs payments MUST take `_pay_conn()` — on `g.conn` the payments table
   is empty by design.

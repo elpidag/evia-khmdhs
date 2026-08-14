@@ -299,6 +299,11 @@ def cmd_load() -> None:
                  d.get("basis") or "name_regex+review",
                  date.today().isoformat()))
     conn.commit()
+    # LAST: the upserts above restore registry values (INSERT OR REPLACE),
+    # so the curated stated-value corrections must be re-stamped here.
+    from khmdhs.contract_corrections import apply_contract_corrections
+    n_corr = apply_contract_corrections(conn)
+    print(f"-- applied {n_corr} curated contract corrections")
     n = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()[0]
     print(f"-- loaded {loaded} contracts into {DB_PATH} (table now {n})")
     conn.close()

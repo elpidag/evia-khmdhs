@@ -1,0 +1,9 @@
+{
+  "_comment": "Curated fixes for ΔΑΣΕ contracts whose registry stated values are keying errors. Keyed by contract ΑΔΑΜ. Fields: total_cost_with_vat / total_cost_without_vat override the registry amounts when the signed PDF documents a different figure (cite the source in 'reason'); optional 'objects' maps contract_objects seq → corrected cost_without_vat where the child row repeats the error. Applied by khmdhs.contract_corrections — standalone CLI and at the end of every harvest_dase.py load (its INSERT OR REPLACE restores registry values). Candidates come from scripts/validate_contract_values.py; corrections land only after human PDF review (DATA_DECISIONS 2026-08-14).",
+  "21SYMV009374147": {
+    "total_cost_without_vat": 253739.13,
+    "total_cost_with_vat": 314636.52,
+    "objects": {"0": 253739.13},
+    "reason": "KHMDHS records net €2,537,393.13 / gross €3,146,367.48 — a ×10-scale digit-glitch keying error. The signed contract PDF (contract/attachment/21SYMV009374147) states «253.739,13» net + ΦΠΑ = «314.636,52»; all 7 sibling lots of the same Δασαρχείο Λίμνης πρόσκληση (21PROC009329287) carry exactly €253,739.13 net, and its own payment orders total €313,316.42 gross (€252,674.53 net) ≈ full settlement."
+  }
+}

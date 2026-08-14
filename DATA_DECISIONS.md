@@ -1689,3 +1689,50 @@ the amount of € awarded via the contracts», «x: number of contracts»),
 and a «burnt areas» white→#6b2d35 gradient bar labelled with the
 computed fire-year span. The clicked unit's contract list docks below
 the legend in the same column. *Affects: presentation only.*
+
+## 2026-08-14 — Contract pages: the ΚΗΜΔΗΣ family as a staged tree diagram
+
+The /dase contract page's flat procurement-timeline list hid the shape
+of multi-award procedures (e.g. 21SYMV009374147: one πρόσκληση of
+Δασαρχείο Λίμνης split among 8 co-ops). A FamilyTree diagram now renders
+above the table (which stays as the accessible/tabular view): funding
+acts → πρόσκληση as a trunk, κατακυρώσεις fanned below, συμβάσεις under
+them, the viewed contract's trail in the dataset green with its payment
+orders as the terminal node; every box opens its act (PDF proxy /
+sibling contract pages). HONESTY RULE: an award connects to a contract
+ONLY when the award title names that contract's contractor
+(fold-contains, legal-form prefixes stripped, unique hit required) —
+never paired by order; ambiguous/inflected names stay unpaired with no
+edge (2 of 8 in the reference family). `contract_timeline` now ships
+`who` (first contractor) for in-db contract rows so siblings are
+labelled by their co-op and matched by name. The caveat text states the
+rule; family provenance remains the registry's declared adamChain links.
+*Affects: presentation + one additive API field.*
+
+## 2026-08-14 — ΔΑΣΕ contract stated values corrected from signed PDFs
+
+ΔΑΣΕ registry stated values are corrected ONLY when the signed contract
+PDF documents a different figure; corrections live in
+`khmdhs/data/dase_contract_corrections.json` with the source cited,
+applied by `khmdhs/contract_corrections.py` (standalone CLI and at the
+end of every `harvest_dase.py load`, whose INSERT OR REPLACE would
+restore registry values); corrected rows carry `contracts.correction_note`.
+- `21SYMV009374147`: registry net €2,537,393.13 / gross €3,146,367.48 →
+  **€253,739.13 / €314,636.52** (signed contract PDF
+  `contract/attachment/21SYMV009374147` states «253.739,13» + ΦΠΑ =
+  «314.636,52»; ×10-scale digit-glitch keying error — all 7 sibling lots
+  of the Δασαρχείο Λίμνης πρόσκληση 21PROC009329287 carry exactly
+  €253,739.13 net, and its own payment orders total €313,316.42 gross
+  (€252,674.53 net) ≈ full settlement). Its `contract_objects` seq 0
+  repeated the wrong net and is corrected too.
+A sibling-modal guard test fails when any live uncorrected contract sits
+at ≈×10/×100 of its ≥3-sibling family's modal lot price;
+`scripts/validate_contract_values.py` screens every contract whose PDF
+text is extractable (the full ΔΑΣΕ PDF/txt cache
+`data/processed/dase_pdf_cache/` is fetched with
+`scripts/fetch_contract_pdfs.py`; .txt sidecars tracked per the user's
+2026-08-14 decision). Before this sweep only 892/2,164 contracts had any
+cross-check (payments); the remaining 1,272 (1,127 live) had none.
+New basis: live population 2,018 rows / **€38,587,233.00 gross =
+€31,801,612.14 net**. *Affects: 1 contracts row + 1 contract_objects
+row; every ΔΑΣΕ aggregate.*

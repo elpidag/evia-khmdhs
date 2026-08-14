@@ -26,7 +26,7 @@ def test_population_pins(conn):
     assert k["n_cancelled"] == 82
     assert k["n_superseded"] == 64
     assert k["n_contracts"] == 2018
-    assert k["total_eur"] == pytest.approx(41_418_963.96, abs=0.01)
+    assert k["total_eur"] == pytest.approx(38_587_233.00, abs=0.01)
     assert k["n_coops"] >= 245
     assert k["pct_direct"] > 90
 
@@ -73,6 +73,62 @@ def test_reference_contract_present_and_live(conn):
         " WHERE reference_number = '26SYMV019413118'").fetchone()
     assert row is not None
     assert row["cancelled"] == 0
+
+
+def test_no_uncorrected_decimal_shift_vs_sibling_modal(conn):
+    """A live uncorrected contract whose stated net sits at ≈×10/×100 of
+    its family's modal lot price is a registry keying error. Family =
+    contracts sharing a non-payment linked act; ≥3 siblings at an
+    IDENTICAL net price = standard per-unit lot pricing, so the modal is
+    trustworthy. The tolerance admits digit-glitch shifts (the flagship
+    21SYMV009374147 sat at ratio 10.0000079) while legitimate ratios stay
+    clear. Corrected rows are exempt via contracts.correction_note
+    (dase_contract_corrections.json, DATA_DECISIONS 2026-08-14). This
+    guard is deliberately NOT the khmdhs payments-vs-stated one: 58 ΔΑΣΕ
+    per-unit υλοτομικά are legitimately paid 1.5–16× their stated
+    estimate and would trip it."""
+    rows = conn.execute("""
+        WITH sib AS (
+            SELECT a.reference_number AS ref,
+                   c.total_cost_without_vat AS sib_net,
+                   c.reference_number AS sib_ref
+            FROM contract_linked_acts a
+            JOIN contract_linked_acts b ON b.adam = a.adam AND b.kind = a.kind
+                 AND b.reference_number != a.reference_number
+            JOIN contracts c ON c.reference_number = b.reference_number
+            WHERE a.kind IN ('notice','request','approved_request','auction')
+              AND c.cancelled = 0
+        ),
+        modal AS (
+            SELECT ref, sib_net, COUNT(DISTINCT sib_ref) AS n
+            FROM sib WHERE sib_net > 0 GROUP BY ref, sib_net HAVING n >= 3
+        )
+        SELECT DISTINCT k.reference_number
+        FROM contracts k JOIN modal m ON m.ref = k.reference_number
+        WHERE k.cancelled = 0
+          AND NOT EXISTS (SELECT 1 FROM contracts nx
+                          WHERE nx.reference_number = k.next_reference_no)
+          AND k.correction_note IS NULL
+          AND (ABS(k.total_cost_without_vat / m.sib_net - 10.0)  < 0.05
+            OR ABS(k.total_cost_without_vat / m.sib_net - 100.0) < 0.5)
+    """).fetchall()
+    assert [r["reference_number"] for r in rows] == []
+
+
+def test_corrected_value_regression_pin(conn):
+    """21SYMV009374147 stays at its PDF-documented value (DATA_DECISIONS
+    2026-08-14) — a re-load that forgets the corrections hook regresses
+    here first."""
+    row = conn.execute(
+        "SELECT total_cost_without_vat, total_cost_with_vat, correction_note"
+        " FROM contracts WHERE reference_number = '21SYMV009374147'").fetchone()
+    assert row["total_cost_without_vat"] == pytest.approx(253_739.13)
+    assert row["total_cost_with_vat"] == pytest.approx(314_636.52)
+    assert row["correction_note"]
+    obj = conn.execute(
+        "SELECT cost_without_vat FROM contract_objects"
+        " WHERE reference_number = '21SYMV009374147' AND seq = 0").fetchone()
+    assert obj["cost_without_vat"] == pytest.approx(253_739.13)
 
 
 def test_next_reference_column_matches_raw_json(conn):

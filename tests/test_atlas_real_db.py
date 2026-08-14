@@ -27,7 +27,7 @@ def test_meta_pins(client):
     assert m["antinero"]["n_contracts"] == 245
     assert m["antinero"]["total_eur"] == pytest.approx(658_297_730.65)
     assert m["dase"]["n_contracts"] == 2018
-    assert m["dase"]["total_eur"] == pytest.approx(34_085_266.14)
+    assert m["dase"]["total_eur"] == pytest.approx(31_801_612.14)
 
 
 def test_probable_related_pins(client):
@@ -104,7 +104,7 @@ def test_dase_map_pins(client):
     total = (sum(u["eur"] for u in m["units"])
              + sum(g["eur"] for g in m["other"])
              + m["unresolved"]["eur"])
-    assert total == pytest.approx(34_085_266.14, abs=0.01)
+    assert total == pytest.approx(31_801_612.14, abs=0.01)
     top = m["units"][0]
     assert top["name"] == "Δασαρχείο Ιστιαίας" and top["n"] == 38
     assert all(u["lat"] and u["lon"] for u in m["units"] + m["other"])
@@ -147,7 +147,7 @@ def test_pipelines_pins(client):
     assert p["vat_overlap"] == []          # the zero-overlap headline fact
     assert p["antinero"]["n_vats"] == 163
     assert p["antinero"]["total_eur"] == pytest.approx(658_297_730.65)
-    assert p["dase"]["total_eur"] == pytest.approx(34_085_266.14)
+    assert p["dase"]["total_eur"] == pytest.approx(31_801_612.14)
     assert p["dase_n_coops"] == 250
     assert [s["name"] for s in p["shared_awarders"]] == [
         "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ"
@@ -162,7 +162,7 @@ def test_explore_pins(client):
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
     assert kh_sum == pytest.approx(658_297_730.65, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
-    assert dase_sum == pytest.approx(34_085_266.14, abs=1.0)
+    assert dase_sum == pytest.approx(31_801_612.14, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
     stalled = [r for r in e["rows"]
                if r["ds"] == "anadohoi" and r["st"] == "no_completion_recorded"]
