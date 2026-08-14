@@ -142,26 +142,79 @@
     const win = Object.values(counts).sort((a, b) => b.n - a.n)[0];
     return win ? win.best : null;
   }
+  // form modifiers the user's sample keeps as prefixes (not stripped)
+  const MOD_RE = /^(ΑΝΑΓΚΑΣΤΙΚ\w*|ΕΛΕΥΘΕΡ\w*|ΑΓΡΟΤΙΚ\w*|[ΑΒΓ]'|\(?\d+Ο[ΣΥ]\)?)$/u;
   function parts(raw, nick) {
     let s = stripOuter(foldCaps(raw));
     const m = QRE.exec(s);
     if (m) { if (!nick) nick = m[1].trim(); s = s.replace(m[0], " "); }
-    let loc = toks(s);
+    const all = s.split(/[^\wΑ-ΩΪΫ/'()]+/).filter(Boolean);
+    const mods = all.filter(w => MOD_RE.test(w) && !FORM.has(w));
+    let loc = all.filter(w => w && !FORM.has(w) && !/^\d+$/.test(w) && !MOD_RE.test(w));
     if (nick) {
       const nt = new Set(toks(nick).concat(["Η", "Ο", "ΤΟ", "ΟΙ"]));
       loc = loc.filter(w => !nt.has(w));
-      // the top spelling may embed the nickname unquoted — already removed above
     }
-    return { nick, loc: loc.join(" ") };
+    return { nick, loc, mods };
+  }
+  // genitive → nominative for the ENGLISH toponym (per the user's sample:
+  // ΘΟΛΟΥ→THOLOS, ΛΙΒΑΔΕΡΟΥ→LIVADERO, ΝΕΥΡΟΚΟΠΙΟΥ→NEVROKOPI, ΑΓΙΩΝ
+  // ΘΕΟΔΩΡΩΝ→AGIOI THEODOROI, ΚΕΡΑΣΙΑΣ→KERASIA); heuristic — user edits.
+  function nominative(words) {
+    const out = [];
+    let prevAgioi = false;
+    for (let w of words) {
+      const orig = w;
+      if (w === "ΑΓΙΟΥ") w = "ΑΓΙΟΣ";
+      else if (w === "ΑΓΙΑΣ") w = "ΑΓΙΑ";
+      else if (w === "ΑΓΙΩΝ") w = "ΑΓΙΟΙ";
+      else if (w.endsWith("ΧΩΡΙΟΥ")) w = w.slice(0, -2);
+      else if (/(ΝΕΡΟΥ|ΕΡΟΥ|ΑΜΟΥ|ΟΥΝΟΥ)$/.test(w)) w = w.slice(0, -1);
+      else if (w.endsWith("ΙΟΥ")) w = w.slice(0, -2);
+      else if (w.endsWith("ΟΥ") && w.length > 4) w = w.slice(0, -2) + "ΟΣ";
+      else if (w.endsWith("ΩΝ") && w.length > 4) w = prevAgioi ? w.slice(0, -2) + "ΟΙ" : w.slice(0, -2) + "Α";
+      else if (w.endsWith("ΑΣ") && w.length > 4) w = w.slice(0, -1);
+      prevAgioi = (w === "ΑΓΙΟΙ");
+      out.push(w);
+      void orig;
+    }
+    return out;
+  }
+  function elPrefix(mods) {
+    let pre = "", ord = "";
+    for (const m of mods) {
+      if (/^ΑΝΑΓΚΑΣΤΙΚ/.test(m)) pre = "ΑΝΑΓΚΑΣΤΙΚΟΣ ";
+      else if (/^ΕΛΕΥΘΕΡ/.test(m)) pre = "ΕΛΕΥΘΕΡΟΥ ";
+      else if (/^ΑΓΡΟΤΙΚ/.test(m)) pre = "ΑΓΡΟΤΙΚΟΣ ";
+      else if (/^[ΑΒΓ]'$/.test(m)) pre = m + " ";
+      else if (/^\(?\d+Ο[ΣΥ]\)?$/.test(m)) ord = " (" + m.replace(/[()]/g, "").replace(/Ο[ΣΥ]$/, "ος") + ")";
+    }
+    return { pre, ord };
+  }
+  const ORD_EN = n => n + (n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th");
+  function enPrefix(mods) {
+    let pre = "", ord = "";
+    for (const m of mods) {
+      if (/^ΑΝΑΓΚΑΣΤΙΚ/.test(m)) pre = "A.";
+      else if (/^ΕΛΕΥΘΕΡ/.test(m)) pre = "FREE ";
+      else if (/^ΑΓΡΟΤΙΚ/.test(m)) pre = "A.";
+      else if (/^\(?\d+Ο[ΣΥ]\)?$/.test(m)) ord = " (" + ORD_EN(parseInt(m.replace(/\D/g, ""), 10)) + ")";
+    }
+    return { pre, ord };
   }
   function greekName(raw, nick) {
     const p = parts(raw, nick);
-    return "ΔΑ.Σ.Ε." + (p.nick ? " '" + p.nick + "'" : "") + (p.loc ? (p.nick ? ", " : " ") + p.loc : "");
+    const { pre, ord } = elPrefix(p.mods);
+    return pre + "ΔΑ.Σ.Ε." + ord + (p.nick ? " '" + p.nick + "'" : "")
+         + (p.loc.length ? " " + p.loc.join(" ") : "");
   }
   function englishName(raw, nick) {
     const p = parts(raw, nick);
-    return "F.W.CO-OP" + (p.nick ? " '" + translit(p.nick).toUpperCase() + "'" : "")
-         + (p.loc ? (p.nick ? ", " : " ") + translit(p.loc).toUpperCase() : "");
+    const { pre, ord } = enPrefix(p.mods);
+    const enNick = p.nick ? p.nick.replace(/^(Η|Ο|ΤΟ|ΟΙ)\s+/, "") : null;
+    return (pre === "A." ? "A.F.W.CO-OP" : pre + "F.W.CO-OP") + ord
+         + (enNick ? " '" + translit(enNick).toUpperCase() + "'" : "")
+         + (p.loc.length ? " " + translit(nominative(p.loc).join(" ")).toUpperCase() : "");
   }
 
   // Greek → Latin transliteration for the English prefill (edit freely)
