@@ -1736,3 +1736,31 @@ cross-check (payments); the remaining 1,272 (1,127 live) had none.
 New basis: live population 2,018 rows / **€38,587,233.00 gross =
 €31,801,612.14 net**. *Affects: 1 contracts row + 1 contract_objects
 row; every ΔΑΣΕ aggregate.*
+
+## 2026-08-14 — Full ΔΑΣΕ PDF sweep: every stated value screened, no further live-basis errors
+
+All 2,164 ΔΑΣΕ contract PDFs fetched into `data/processed/dase_pdf_cache/`
+(`scripts/fetch_contract_pdfs.py`; 0 missing, 0 unreadable — every PDF
+yielded text) and swept by `scripts/validate_contract_values.py`.
+Detector precision rules (first pass produced 161 false suspects): the
+implied true value must be ≥ €500, probe hits must match exactly (the
+`tolerant` method false-hits tiny amounts), and payments within 10% of
+the stored gross corroborate the registry figure. Final statuses:
+586 ok · 89 ok_net_only · 89 near_match · 1 ok_corrected (the flagship) ·
+1,390 mismatch (συμφωνητικά print per-συστάδα component tables, not one
+total — the stored value is their sum) · 9 decimal_shift_suspect, all
+human-reviewed:
+- 8 false positives: stored = exact sum of the PDF's section totals
+  (e.g. 5.748,26 + 8.319,78 = 14.068,04) with a coincidental VAT line
+  item near ratio 10.
+- `22SYMV011512410` (Δασαρχείο Σταυρού καυσόξυλα): a REAL ×100 keying
+  error (registry €1,199,702.00 net; PDF «11.997,02») — but the registry
+  corrected itself: superseded the same day by `22SYMV011512413` with the
+  correct €11,997.02 (verified in its PDF). The live dedup already
+  excludes the wrong original; no curated correction needed — superseded
+  originals keep their registry values by convention.
+Conclusion: after the 21SYMV009374147 correction, NO live ΔΑΣΕ contract
+carries a detectable decimal-shift error. Screening coverage is now
+universal at the text level (previously 892/2,164 payment-screened).
+*Affects: no rows; report `data/processed/contract_value_report.json`
+(gitignored), .txt corpus tracked.*

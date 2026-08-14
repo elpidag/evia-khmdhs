@@ -74,25 +74,38 @@ def validate_contract(row, text: str) -> dict:
         return out
 
     # decimal-shift probes: clean shifts first, then the ratio fallback
-    # against the text's own largest amounts (digit-glitch class)
+    # against the text's own largest amounts (digit-glitch class).
+    # Precision guards (the first full sweep produced 161 suspects, almost
+    # all false): the implied TRUE value must be a plausible contract total
+    # (≥ €500), probe hits must match exactly (the `tolerant` method is for
+    # confirming stored amounts, it false-hits tiny probes constantly), and
+    # payments ≈ stored corroborate the registry figure and veto suspicion.
+    paid_corroborates = (row["paid_gross"] and gross
+                         and abs(row["paid_gross"] - gross) / gross < 0.10)
     evidence = []
-    for basis, v in (("gross", gross), ("net", net)):
-        if not v:
-            continue
-        for factor, probe in ((10, round(v / 10, 2)), (100, round(v / 100, 2)),
-                              (0.1, round(v * 10, 2))):
-            method = amount_appears(text, probe)
-            if method:
-                evidence.append({"basis": basis, "factor": factor,
-                                 "kind": "probe", "pdf_amount": probe,
-                                 "method": method})
-        for tok in largest_candidates(text, 12):
-            cand = int(_digits(tok)) / 100.0
-            factor = shift_factor(v, cand)
-            if factor is not None:
-                evidence.append({"basis": basis, "factor": factor,
-                                 "kind": "ratio", "pdf_amount": cand,
-                                 "token": tok})
+    if not paid_corroborates:
+        for basis, v in (("gross", gross), ("net", net)):
+            if not v:
+                continue
+            for factor, probe in ((10, round(v / 10, 2)),
+                                  (100, round(v / 100, 2)),
+                                  (0.1, round(v * 10, 2))):
+                if probe < 500:
+                    continue
+                method = amount_appears(text, probe)
+                if method and method != "tolerant":
+                    evidence.append({"basis": basis, "factor": factor,
+                                     "kind": "probe", "pdf_amount": probe,
+                                     "method": method})
+            for tok in largest_candidates(text, 12):
+                cand = int(_digits(tok)) / 100.0
+                if cand < 500:
+                    continue
+                factor = shift_factor(v, cand)
+                if factor is not None:
+                    evidence.append({"basis": basis, "factor": factor,
+                                     "kind": "ratio", "pdf_amount": cand,
+                                     "token": tok})
     if evidence:
         out["status"] = "decimal_shift_suspect"
         out["evidence"] = evidence

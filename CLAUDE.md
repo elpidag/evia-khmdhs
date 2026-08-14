@@ -378,9 +378,11 @@ positives), every distinct VAT is human-reviewed into curated
 excluded; registry keying noise: two ΑΦΜ glued with «ΚΑΙ», stray accent
 prefixes, whitespace-variant VAT keys). Uses the shared khmdhs schema
 (scope tables stay empty); nothing touches khmdhs.sqlite.
-PDF/txt cache: `scripts/fetch_contract_pdfs.py --db
-data/processed/dase.sqlite --cache data/processed/dase_pdf_cache`
-(PDFs gitignored, .txt sidecars tracked — user decision 2026-08-14);
+PDF/txt cache: **complete** (2026-08-14) — all 2,164 contract PDFs in
+`data/processed/dase_pdf_cache/` (0 missing, 0 unreadable; PDFs
+gitignored ~918MB, the 2,164 .txt sidecars ~7.6MB tracked — user
+decision 2026-08-14; refetch via `scripts/fetch_contract_pdfs.py --db
+data/processed/dase.sqlite --cache data/processed/dase_pdf_cache`);
 `scripts/validate_contract_values.py` screens every stored stated value
 against the extracted text (statuses ok/ok_net_only/near_match/
 `decimal_shift_suspect`/mismatch/no_pdf/unreadable; direct ÷10 ÷100 ×10
