@@ -2,7 +2,10 @@
 	// dodge layout memo across navigations — the payload object identity is
 	// stable thanks to the client fetch cache, so revisiting the page skips
 	// the ~60ms layout for 2,018 points
-	const layoutCache = new WeakMap<object, { width: number; xs: number[]; ys: number[] }>();
+	const layoutCache = new WeakMap<
+		object,
+		{ width: number; xs: number[]; ys: number[]; r: number; h: number }
+	>();
 </script>
 
 <script lang="ts">
@@ -15,17 +18,19 @@
 	let { data }: { data: DaseSwarm } = $props();
 
 	let width = $state(900);
-	const height = 320;
 	const M = { top: 26, right: 16, bottom: 34, left: 16 };
 	const R = 2.6;
+	const MIN_H = 320;
+	const MAX_H = 560;
 
+	// sequential greens on the page's --c-dase family, light → deep by year
 	const YEAR_COLORS: Record<string, string> = {
-		'2021': '#bcd8f5',
-		'2022': '#92beec',
-		'2023': '#64a0df',
-		'2024': '#3d7fcb',
-		'2025': '#2258a5',
-		'2026': '#0d366b'
+		'2021': '#bfe3cf',
+		'2022': '#8fd1ae',
+		'2023': '#63bd8e',
+		'2024': '#43a276',
+		'2025': '#2d7d59',
+		'2026': '#1c5138'
 	};
 
 	interface Dot {
@@ -42,13 +47,28 @@
 		const vs = valid.map((i) => data.eur[i]!);
 		return scaleLog([Math.min(...vs), Math.max(...vs)], [M.left, width - M.right]).nice();
 	});
-	const dots = $derived.by((): Dot[] => {
-		let layout = layoutCache.get(data);
-		if (!layout || Math.abs(layout.width - width) > 2) {
-			const xs = valid.map((i) => x(data.eur[i]!));
-			layout = { width, xs, ys: dodge(xs, R + 0.4) };
-			layoutCache.set(data, layout);
+	const layout = $derived.by(() => {
+		let cached = layoutCache.get(data);
+		if (cached && Math.abs(cached.width - width) <= 2) return cached;
+		const xs = valid.map((i) => x(data.eur[i]!));
+		// same-priced contracts stack into tall columns; size the canvas to
+		// the tallest one (the fixed-height version clipped ~1/3 of it) and
+		// only shrink the dots when a narrow viewport would exceed the cap
+		let r = R;
+		let ys = dodge(xs, r + 0.4);
+		let half = Math.max(...ys.map(Math.abs)) + r + 2;
+		while (M.top + M.bottom + 2 * half > MAX_H && r > 1.5) {
+			r = Math.max(1.5, r * 0.85);
+			ys = dodge(xs, r + 0.4);
+			half = Math.max(...ys.map(Math.abs)) + r + 2;
 		}
+		const h = Math.round(Math.max(MIN_H, M.top + M.bottom + 2 * half));
+		cached = { width, xs, ys, r, h };
+		layoutCache.set(data, cached);
+		return cached;
+	});
+	const height = $derived(layout.h);
+	const dots = $derived.by((): Dot[] => {
 		const { xs, ys } = layout;
 		const cy = M.top + (height - M.top - M.bottom) / 2;
 		return valid.map((idx, j) => ({ i: idx, x: xs[j], y: cy + ys[j], eur: data.eur[idx]! }));
@@ -71,7 +91,7 @@
 		const cx = Math.floor(px / CELL);
 		const cy = Math.floor(py / CELL);
 		let best: Dot | null = null;
-		let bd = (R + 3) ** 2;
+		let bd = (layout.r + 3) ** 2;
 		for (let dx = -1; dx <= 1; dx++)
 			for (let dy = -1; dy <= 1; dy++)
 				for (const d of grid.get(`${cx + dx}:${cy + dy}`) ?? []) {
@@ -97,7 +117,7 @@
 		ctx.clearRect(0, 0, width, height);
 		for (const d of dots) {
 			ctx.beginPath();
-			ctx.arc(d.x, d.y, R, 0, 2 * Math.PI);
+			ctx.arc(d.x, d.y, layout.r, 0, 2 * Math.PI);
 			ctx.fillStyle = YEAR_COLORS[data.year[d.i] ?? ''] ?? '#8a7f6e';
 			ctx.globalAlpha = 0.85;
 			ctx.fill();
@@ -105,7 +125,7 @@
 		if (hover) {
 			ctx.globalAlpha = 1;
 			ctx.beginPath();
-			ctx.arc(hover.x, hover.y, R + 1.5, 0, 2 * Math.PI);
+			ctx.arc(hover.x, hover.y, layout.r + 1.5, 0, 2 * Math.PI);
 			ctx.strokeStyle = '#2a2118';
 			ctx.lineWidth = 1.5;
 			ctx.stroke();
