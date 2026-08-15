@@ -207,7 +207,7 @@
 			<div class="tip" style:background={hoverColor} style:color={tipInk(hoverColor)}>
 				<strong>{eur(hover.eur)}</strong><br />
 				signed {dmy(data.d?.[hover.i])}<br />
-				<span class="adam">{data.ref[hover.i]}</span>
+				{data.ref[hover.i]}
 			</div>
 		{/if}
 	</div>
@@ -291,9 +291,5 @@
 		font-size: var(--fs-13);
 		pointer-events: none;
 		box-shadow: var(--shadow-paper);
-	}
-	.adam {
-		font-family: var(--font-mono, Consolas, ui-monospace, monospace);
-		font-size: var(--fs-12);
 	}
 </style>
