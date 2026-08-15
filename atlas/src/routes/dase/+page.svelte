@@ -346,17 +346,10 @@
 
 <Defer height={400}>
 {#if swarm}
-	<ChartFrame
-		title="CONTRACT VALUES"
-		caveat="Stated values excl. VAT, deduplicated (cancelled and superseded versions excluded)."
-		anchor="dase-swarm"
-		methodology="dase-dedup"
-	>
+	<ChartFrame title="CONTRACT VALUES" anchor="dase-swarm">
 		<BeeswarmCanvas
 			data={swarm}
-			note="Every live contract ({grInt(
-				o.kpis.n_contracts
-			)}) as one dot on a log scale (stated €, excl. VAT), coloured by year. Hover to inspect, click through to go to the contract's page."
+			note="Every contract is represented as one dot on a log scale (stated €, excl. VAT). Colours are assigned according to the year the contract was signed. Hover to inspect, click through to go to the contract's page."
 		/>
 	</ChartFrame>
 {:else}
