@@ -193,7 +193,9 @@
 				<text class="axis" x={x(t)} y={height - 12}>{eurShort(t)}</text>
 			{/each}
 			<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
-			<text class="median-label" x={x(median) + 6} y={M.top + 10}>median {eurShort(median)}</text>
+			<text class="median-label" x={x(median)} y={M.top - 8} text-anchor="middle">
+				median {eurShort(median)}
+			</text>
 			{#if biggest}
 				<text class="note" x={biggest.x - 6} y={biggest.y - 10} text-anchor="end">
 					largest: {eurShort(biggest.eur)}
