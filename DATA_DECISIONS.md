@@ -1909,3 +1909,43 @@ New basis: live population **2,009 rows / €38,428,542.97 gross =
 €31,672,918.06 net** (−€128,694.08 net); paid net **€21,211,472.57**
 over 991 payment orders (−86,938.75). *Affects: 9 contracts rows +
 1 contract_payments row; every ΔΑΣΕ aggregate; paid KPIs.*
+
+## 2026-08-15 — Tenth ΔΑΣΕ double-posting: corrected re-issue under a phantom ΑΦΜ (Κουρκουλών Ευβοίας)
+
+Found through the name-curation cross-keying flag, not the text sweep —
+the pair carries two DIFFERENT contractor VATs, so the (VAT, date,
+amount) grouping of `find_duplicate_postings.py` never compared them.
+
+`24SYMV015423487` (Δήμος Μαντουδίου-Λίμνης-Αγίας Άννας, 2024-09-13,
+€13,395.00 net / €16,609.80 gross) names contractor «ΔΑΣΙΚΟΣ
+ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ» with ΑΦΜ «0310003799» —
+ten digits, and VIES confirms **EL031000379 does not exist** (invalid
+VAT). `24SYMV015485823` is the same contract re-posted with the real
+ΑΦΜ **096115714** (VIES: ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ
+ΕΥΒΟΙΑΣ, trade name «ΔΑΣΕ ΚΟΥΡΚΟΥΛΩΝ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ», seat
+Κουρκουλοί, 34005 Λίμνη). Normalized cached texts are 98% identical;
+the ONLY differences are the ΑΦΜ printed in the document body
+(0310003799 → 096115714), one internal date (13 → 25, the re-issue
+twelve days later) and one protocol/reference number. Same parties,
+same amount, same works. The single payment `24PAY015905505`
+(€13,395.00 net = full settlement) sits on the kept re-issue; the
+phantom-ΑΦΜ posting has none.
+
+Decision: exclude `24SYMV015423487` as `duplicate_of →
+24SYMV015485823` via `dase_contract_corrections.json` (same
+mechanism/banners/search behaviour as the nine 2026-08-14 exclusions).
+The phantom co-op «031000379» thereby leaves the live directory —
+it existed only through the botched first posting (250 → 249 co-ops).
+
+Guard hardened: `find_duplicate_postings.py` now runs a second,
+cross-VAT pass — groups live contracts by (date, amount) alone and
+compares texts — so a mis-keyed contractor ΑΦΜ can no longer hide a
+twin from the sweep. Cross-VAT suspects are flagged `same_vat: false`
+and remain human-review candidates (sibling lots of one πρόσκληση can
+be legitimately near-identical); the identical-text real-DB guard is
+unchanged.
+
+New basis: live population **2,008 rows / €38,411,933.17 gross =
+€31,659,523.06 net** (−€13,395.00 net); paid figures unchanged
+(€21,211,472.57 / 991 — the excluded posting carried no payments).
+*Affects: 1 contracts row; every ΔΑΣΕ aggregate; co-op directory count.*

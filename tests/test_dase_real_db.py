@@ -23,10 +23,10 @@ def conn():
 def test_population_pins(conn):
     k = dq.kpis(conn)
     assert k["gross_n"] == 2164
-    assert k["n_cancelled"] == 91   # 82 registry + 9 curated double-postings
+    assert k["n_cancelled"] == 92   # 82 registry + 10 curated double-postings
     assert k["n_superseded"] == 64
-    assert k["n_contracts"] == 2009
-    assert k["total_eur"] == pytest.approx(38_428_542.97, abs=0.01)
+    assert k["n_contracts"] == 2008
+    assert k["total_eur"] == pytest.approx(38_411_933.17, abs=0.01)
     assert k["n_coops"] >= 245
     assert k["pct_direct"] > 90
 
@@ -133,10 +133,12 @@ def test_corrected_value_regression_pin(conn):
 
 def test_no_unexcluded_double_postings(conn):
     """No two live contracts may carry identical PDF text (after stripping
-    the registry's ΑΔΑΜ stamps) for the same co-op, date and amount — the
-    signature of the same signed document uploaded twice (9 such twins are
-    excluded via dase_contract_corrections.json, DATA_DECISIONS
-    2026-08-14). Skips when the txt cache is absent."""
+    the registry's ΑΔΑΜ stamps) for the same date and amount — the
+    signature of the same signed document uploaded twice (10 such twins
+    are excluded via dase_contract_corrections.json, DATA_DECISIONS
+    2026-08-14 + 2026-08-15; the scanner also runs a cross-VAT pass so a
+    mis-keyed contractor ΑΦΜ can't hide a twin). Skips when the txt cache
+    is absent."""
     cache = DB.parent / "dase_pdf_cache"
     if not cache.exists():
         pytest.skip("dase_pdf_cache not present")
@@ -154,7 +156,7 @@ def test_duplicate_postings_are_linked_not_deleted(conn):
     rows = conn.execute(
         "SELECT reference_number, duplicate_of, cancelled, correction_note "
         "FROM contracts WHERE duplicate_of IS NOT NULL").fetchall()
-    assert len(rows) == 9
+    assert len(rows) == 10
     for r in rows:
         assert r["cancelled"] == 1
         assert r["correction_note"]

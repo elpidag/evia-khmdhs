@@ -236,6 +236,14 @@
     return out.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
   }
 
+  // dominant spelling of every OTHER co-op → its ΑΦΜ, to flag registry
+  // cross-keying (a stray name on this card that IS another co-op's name)
+  const foldKey = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase().replace(/[^\wΑ-ΩΪΫ]/g, "");
+  const topNameOwner = {};
+  coops.forEach(c => {
+    if (c.spellings.length) topNameOwner[foldKey(c.spellings[0].name)] = c.afm;
+  });
+
   let idx = 0;
   const $ = id => document.getElementById(id);
   const jump = $("jump");
@@ -262,6 +270,13 @@
       if (s.n === null) { const tag = document.createElement("span"); tag.className = "srcnote"; tag.textContent = " (curated file)"; setTimeout(() => b.appendChild(tag)); }
       const b = document.createElement("button");
       b.type = "button"; b.textContent = s.name || "—";
+      const owner = topNameOwner[foldKey(s.name)];
+      if (owner && owner !== c.afm) {
+        const w = document.createElement("span");
+        w.textContent = " ⚠ this is the name of ΑΦΜ " + owner + " (different co-op — registry cross-keying)";
+        w.style.cssText = "color:#a04b3c;font-size:12px;font-weight:700;";
+        b.appendChild(w);
+      }
       b.addEventListener("click", () => { const nk = setNick(c); $("el").value = greekName(s.name, nk); $("en").value = englishName(s.name, nk); $("en").focus(); });
       li.appendChild(n); li.appendChild(b); ul.appendChild(li);
     });

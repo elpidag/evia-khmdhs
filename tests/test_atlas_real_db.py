@@ -26,8 +26,8 @@ def test_meta_pins(client):
     m = client.get("/api/meta").get_json()
     assert m["antinero"]["n_contracts"] == 245
     assert m["antinero"]["total_eur"] == pytest.approx(659_290_845.34)
-    assert m["dase"]["n_contracts"] == 2009
-    assert m["dase"]["total_eur"] == pytest.approx(31_672_918.06)
+    assert m["dase"]["n_contracts"] == 2008
+    assert m["dase"]["total_eur"] == pytest.approx(31_659_523.06)
 
 
 def test_probable_related_pins(client):
@@ -123,17 +123,17 @@ def test_pe_yearly_reconciles(client):
 
 def test_dase_pins(client):
     d = client.get("/api/dase/overview").get_json()
-    assert d["kpis"]["n_contracts"] == 2009
-    assert d["kpis"]["n_coops"] == 250
+    assert d["kpis"]["n_contracts"] == 2008
+    assert d["kpis"]["n_coops"] == 249
     # 2026-08-03 payment harvest: net paid KPI with partial coverage
-    # (payments posted for 891 of 2,009 live contracts; charts stay stated)
+    # (payments posted for 891 of 2,008 live contracts; charts stay stated)
     assert d["kpis"]["paid_eur"] == pytest.approx(21_211_472.57)
     assert d["kpis"]["n_paid_contracts"] == 891
     assert d["kpis"]["n_payments"] == 991
     assert len(d["by_pe"]["regions"]) == 27
     assert d["by_pe"]["unresolved"]["n"] == 4
     sw = client.get("/api/dase/swarm").get_json()
-    assert len(sw["ref"]) == 2009
+    assert len(sw["ref"]) == 2008
 
 
 def test_dase_map_pins(client):
@@ -146,7 +146,7 @@ def test_dase_map_pins(client):
     total = (sum(u["eur"] for u in m["units"])
              + sum(g["eur"] for g in m["other"])
              + m["unresolved"]["eur"])
-    assert total == pytest.approx(31_672_918.06, abs=0.01)
+    assert total == pytest.approx(31_659_523.06, abs=0.01)
     top = m["units"][0]
     assert top["name"] == "Δασαρχείο Ιστιαίας" and top["n"] == 38
     assert all(u["lat"] and u["lon"] for u in m["units"] + m["other"])
@@ -189,8 +189,8 @@ def test_pipelines_pins(client):
     assert p["vat_overlap"] == []          # the zero-overlap headline fact
     assert p["antinero"]["n_vats"] == 163
     assert p["antinero"]["total_eur"] == pytest.approx(659_290_845.34)
-    assert p["dase"]["total_eur"] == pytest.approx(31_672_918.06)
-    assert p["dase_n_coops"] == 250
+    assert p["dase"]["total_eur"] == pytest.approx(31_659_523.06)
+    assert p["dase_n_coops"] == 249
     assert [s["name"] for s in p["shared_awarders"]] == [
         "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ"
     ]
@@ -198,13 +198,13 @@ def test_pipelines_pins(client):
 
 def test_explore_pins(client):
     e = client.get("/api/explore").get_json()
-    assert e["counts"] == {"antinero": 245, "dase": 2009, "anadohoi": 69}
-    assert len(e["rows"]) == 2323
+    assert e["counts"] == {"antinero": 245, "dase": 2008, "anadohoi": 69}
+    assert len(e["rows"]) == 2322
     # value bases per dataset reconcile with their own conventions
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
     assert kh_sum == pytest.approx(659_290_845.34, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
-    assert dase_sum == pytest.approx(31_672_918.06, abs=1.0)
+    assert dase_sum == pytest.approx(31_659_523.06, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
     stalled = [r for r in e["rows"]
                if r["ds"] == "anadohoi" and r["st"] == "no_completion_recorded"]
@@ -215,7 +215,7 @@ def test_explore_pins(client):
     kh_pr = [r["pr"] for r in e["rows"] if r["ds"] == "antinero"]
     assert kh_pr.count(1) == 40 and kh_pr.count(0) == 205
     dase_pr = [r["pr"] for r in e["rows"] if r["ds"] == "dase"]
-    assert dase_pr.count(1) == 144 and dase_pr.count(0) == 1865
+    assert dase_pr.count(1) == 143 and dase_pr.count(0) == 1865
     assert all(r["pr"] is None for r in e["rows"] if r["ds"] == "anadohoi")
     # end-date flag: 148 Anti-nero contracts have a completion act,
     # 16 sponsor projects are completed (incl. the 2026-08-13 review:

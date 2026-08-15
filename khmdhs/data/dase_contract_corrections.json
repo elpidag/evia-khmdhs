@@ -52,5 +52,10 @@
   "exclude": true,
   "duplicate_of": "21SYMV009502974",
   "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 21SYMV009502974 and is excluded from every calculation. Evidence: normalized PDF texts identical; the payment sits on the kept posting."
+ },
+ "24SYMV015423487": {
+  "exclude": true,
+  "duplicate_of": "24SYMV015485823",
+  "reason": "ΚΗΜΔΗΣ double-posting (corrected re-issue): the original posting printed a phantom contractor ΑΦΜ «0310003799» — VIES confirms EL031000379 does not exist — and was re-posted twelve days later as 24SYMV015485823 with the real ΑΦΜ 096115714 (VIES: ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ, «ΔΑΣΕ ΚΟΥΡΚΟΥΛΩΝ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ», Κουρκουλοί Λίμνης). Normalized texts 98% identical — only the in-document ΑΦΜ, one date and one protocol number differ; same parties, same €13,395.00. The full-settlement payment 24PAY015905505 sits on the kept re-issue (DATA_DECISIONS 2026-08-15)."
  }
 }

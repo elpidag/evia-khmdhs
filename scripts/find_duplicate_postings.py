@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 """Find registry double-postings: the same signed document uploaded twice
-under two ΑΔΑΜ (DATA_DECISIONS 2026-08-14 — 9 confirmed in the ΔΑΣΕ set).
+under two ΑΔΑΜ (DATA_DECISIONS 2026-08-14 — 9 confirmed in the ΔΑΣΕ set;
+plus a 10th on 2026-08-15 that hid behind a mis-keyed contractor ΑΦΜ).
 
 Method: group LIVE contracts sharing (canonical contractor VAT, signed
 date, stated net); within each group compare the cached PDF texts after
 stripping the registry's own ΑΔΑΜ stamps — identical (or ≥97% similar)
-normalized text marks a pair for human review. Excluded duplicates
-(contracts.duplicate_of set) never re-trip. Suspects are CANDIDATES:
-verify Αριθ. Πρωτ. / ΑΔΑ in the PDFs before curating an exclusion into
-dase_contract_corrections.json.
+normalized text marks a pair for human review. A second CROSS-VAT pass
+groups by (date, amount) alone, so a twin whose contractor ΑΦΜ was
+keyed wrong (the Κουρκουλών phantom «0310003799») cannot escape the
+sweep; such pairs carry same_vat=False and need extra scrutiny —
+sibling lots of one πρόσκληση can be legitimately near-identical.
+Excluded duplicates (contracts.duplicate_of set) never re-trip.
+Suspects are CANDIDATES: verify Αριθ. Πρωτ. / ΑΔΑ in the PDFs before
+curating an exclusion into dase_contract_corrections.json.
 
 Usage:
   .venv/bin/python scripts/find_duplicate_postings.py \
@@ -50,20 +55,23 @@ def find_pairs(conn, cache: Path, sim_threshold: float = 0.97) -> list[dict]:
         FROM contracts co
         WHERE {live_filter('co')} AND co.duplicate_of IS NULL
     """).fetchall()
-    groups = defaultdict(list)
+    vat_of, groups, xgroups = {}, defaultdict(list), defaultdict(list)
     for r in rows:
         if not r["n"]:
             continue
-        groups[(canonical_vat(r["vat"] or ""), r["dt"], round(r["n"], 2))].append(r["ref"])
+        vat_of[r["ref"]] = canonical_vat(r["vat"] or "")
+        groups[(vat_of[r["ref"]], r["dt"], round(r["n"], 2))].append(r["ref"])
+        xgroups[(r["dt"], round(r["n"], 2))].append(r["ref"])
 
-    out = []
-    for (vat, dt, amt), refs in sorted(groups.items()):
-        if len(refs) < 2:
-            continue
+    out, seen = [], set()
+
+    def compare(refs, dt, amt):
         texts = {ref: normalized_text(cache, ref) for ref in refs}
         for i in range(len(refs)):
             for j in range(i + 1, len(refs)):
-                a, b = refs[i], refs[j]
+                a, b = sorted((refs[i], refs[j]))
+                if (a, b) in seen:
+                    continue
                 ta, tb = texts[a], texts[b]
                 if ta is None or tb is None:
                     continue
@@ -71,9 +79,20 @@ def find_pairs(conn, cache: Path, sim_threshold: float = 0.97) -> list[dict]:
                     continue
                 sim = SequenceMatcher(None, ta, tb).ratio()
                 if sim >= sim_threshold:
+                    seen.add((a, b))
                     out.append({"a": a, "b": b, "date": dt, "eur": amt,
                                 "similarity": round(sim, 4),
-                                "identical": ta == tb})
+                                "identical": ta == tb,
+                                "same_vat": vat_of[a] == vat_of[b]})
+
+    for (vat, dt, amt), refs in sorted(groups.items()):
+        if len(refs) >= 2:
+            compare(refs, dt, amt)
+    # Cross-VAT pass: a mis-keyed contractor ΑΦΜ must not hide a twin
+    # (the Κουρκουλών phantom-ΑΦΜ pair, DATA_DECISIONS 2026-08-15).
+    for (dt, amt), refs in sorted(xgroups.items()):
+        if len(refs) >= 2:
+            compare(refs, dt, amt)
     return out
 
 
@@ -89,6 +108,8 @@ def main(argv: list[str] | None = None) -> int:
     pairs = find_pairs(conn, args.cache)
     for p in pairs:
         tag = "IDENTICAL" if p["identical"] else f"sim={p['similarity']}"
+        if not p["same_vat"]:
+            tag += "  [CROSS-VAT — check for a mis-keyed ΑΦΜ]"
         print(f"{p['a']} ↔ {p['b']}  {p['date']}  {p['eur']:,.2f} €  {tag}")
     print(f"\n{len(pairs)} suspect pair(s)")
     conn.close()
