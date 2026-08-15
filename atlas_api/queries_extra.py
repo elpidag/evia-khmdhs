@@ -620,12 +620,72 @@ def dase_kpis(dase: sqlite3.Connection) -> dict:
     return k
 
 
+# ------------------------------------------------------- ΔΑΣΕ display names
+
+def dase_display_names(dase: sqlite3.Connection) -> dict[str, dict]:
+    """Canonical ΑΦΜ → curated bilingual display names (dase_names_loader,
+    DATA_DECISIONS 2026-08-15). Empty when the table is absent — every
+    caller degrades to the registry/curated spelling."""
+    try:
+        return {r["vat"]: {"el": r["display_el"], "en": r["display_en"]}
+                for r in dase.execute(
+                    "SELECT vat, display_el, display_en FROM dase_display_names")}
+    except sqlite3.OperationalError:
+        return {}
+
+
+def _overlay_coop_name(row: dict, names: dict[str, dict]) -> dict:
+    """Swap a co-op row's `name` for the curated display name, keeping the
+    previous spelling as `registry_name` and adding `name_en`."""
+    d = names.get(row.get("vat") or "")
+    if d:
+        row["registry_name"] = row["name"]
+        row["name"] = d["el"]
+        row["name_en"] = d["en"]
+    return row
+
+
+def dase_coops(dase: sqlite3.Connection, q: str | None = None,
+               sort: str = "total_eur") -> list[dict]:
+    """list_coops with the display names overlaid BEFORE the search filter,
+    so a query matches the curated Greek name, the English name AND the
+    registry spelling."""
+    names = dase_display_names(dase)
+    out = [_overlay_coop_name(a, names) for a in dq._coop_rows(dase)]
+    if q:
+        needle = dq._search_norm(q)
+        fold = dq._phonetic_fold(needle)
+        out = [a for a in out
+               if dq._matches(needle, fold, a["vat"], a["name"],
+                              a.get("registry_name"), a.get("name_en"))]
+    key = sort if sort in ("total_eur", "n_contracts", "name") else "total_eur"
+    if key == "name":
+        return sorted(out, key=lambda a: a["name"] or "")
+    return sorted(out, key=lambda a: -(a[key] or 0))
+
+
+def dase_contract_display(dase: sqlite3.Connection) -> dict[str, str]:
+    """reference_number → ' | '-joined curated display names of its
+    contractor(s); registry spelling fallback for any partner without a
+    curated entry (e.g. a freshly harvested co-op)."""
+    names = dase_display_names(dase)
+    per_ref: dict[str, list] = {}
+    for r in dase.execute("SELECT reference_number, vat_number, name "
+                          "FROM contractors ORDER BY reference_number, seq"):
+        d = names.get(dq.canonical_vat(r["vat_number"]) or "")
+        per_ref.setdefault(r["reference_number"], []).append(
+            d["el"] if d else r["name"])
+    return {ref: " | ".join(v) for ref, v in per_ref.items()}
+
+
 def dase_overview(dase: sqlite3.Connection) -> dict:
     """Everything the ΔΑΣΕ overview page needs (webui /dase context)."""
+    names = dase_display_names(dase)
     return {
         "kpis": dase_kpis(dase),
         "yearly": dq.yearly_totals(dase),
-        "top_coops": dq.top_coops(dase, limit=10),
+        "top_coops": [_overlay_coop_name(a, names)
+                      for a in dq.top_coops(dase, limit=10)],
         "top_orgs": dq.top_orgs(dase, limit=10),
         "top_units": dq.top_units(dase, limit=10),
         "procedures": dq.procedure_mix(dase),
@@ -798,6 +858,10 @@ def pipelines(kh: sqlite3.Connection, dase: sqlite3.Connection) -> dict:
         dq.canonical_vat(r["vat_number"]) or r["vat_number"]: r["name"]
         for r in dase.execute("SELECT vat_number, name FROM dase_contractors")
     }
+    # curated display names win over the registry spelling (presentation only)
+    for v, d in dase_display_names(dase).items():
+        if v in name_by_canon:
+            name_by_canon[v] = d["el"]
     dase_vats: dict[str, dict] = {}
     for r in dase.execute(f"""
         SELECT c.vat_number, c.name,
@@ -1103,10 +1167,14 @@ def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
         curated = {dq.canonical_vat(r["vat_number"]) or r["vat_number"]: r["name"]
                    for r in dase.execute(
                        "SELECT vat_number, name FROM dase_contractors")}
+        display = dase_display_names(dase)
+        curated.update({v: d["el"] for v, d in display.items() if v in curated})
         for c in dase_contracts:
             vat = dq.canonical_vat(c["vat"]) if c["vat"] else None
             if vat is None:
                 continue
+            if vat in display:
+                c["contractor_name"] = display[vat]["el"]
             e = dase_top.setdefault(vat, {
                 "vat": vat, "name": curated.get(vat, c["contractor_name"]),
                 "n": 0, "eur": 0.0})
@@ -1290,6 +1358,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 "WHERE kind = 'notice'")}
         except sqlite3.OperationalError:
             dase_notice_refs = None
+        dase_disp = dase_contract_display(dase)
         for r in dase.execute(f"""
             SELECT co.reference_number AS ref, co.title,
                    co.contract_signed_date, co.submission_date,
@@ -1309,7 +1378,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 "d": _full_date(r["contract_signed_date"])
                      or _full_date(r["submission_date"]),
                 "t": (r["title"] or "")[:120],
-                "co": (r["names"] or "")[:110],
+                "co": (dase_disp.get(r["ref"]) or r["names"] or "")[:110],
                 "v": round(r["value"], 2) if r["value"] is not None else None,
                 "pe": pes, "hq": [],
                 "proc": _proc_kind(r["procedure_type"]),

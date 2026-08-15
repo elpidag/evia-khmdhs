@@ -161,7 +161,12 @@
 		<tbody>
 			{#each c.contractors as ct (ct.vat_number)}
 				<tr>
-					<td><a href={`/dase/coop/${ct.vat_number}`}>{ct.name}</a></td>
+					<td>
+						<a href={`/dase/coop/${ct.vat_number}`}>{ct.display_el ?? ct.name}</a>
+						{#if ct.display_el}
+							<br /><small class="muted">in the registry: {ct.name}</small>
+						{/if}
+					</td>
 					<td class="tabular muted">{ct.vat_number}</td>
 				</tr>
 			{/each}

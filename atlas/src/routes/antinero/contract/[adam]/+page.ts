@@ -33,7 +33,14 @@ export interface ContractDetail {
 	paid_without_vat: number | null;
 	effective_cost_with_vat: number | null;
 	scope: { scope: string; in_scope: number; superseded_by: string | null } | null;
-	contractors: { vat_number: string; name: string; country: string | null }[];
+	contractors: {
+		vat_number: string;
+		name: string;
+		country: string | null;
+		/** curated ΔΑΣΕ display names (added on /api/dase contract detail only) */
+		display_el?: string;
+		display_en?: string;
+	}[];
 	cpvs: { cpv_code: string; cpv_description: string | null }[];
 	nuts: { nuts_code: string; nuts_name: string | null }[];
 	objects: {

@@ -166,6 +166,39 @@ def test_duplicate_postings_are_linked_not_deleted(conn):
         assert kept is not None and kept["cancelled"] == 0
 
 
+def test_display_names_pins(conn):
+    """Curated bilingual display names (DATA_DECISIONS 2026-08-15): one per
+    live co-op, bijective with the live population, script-clean, and equal
+    to the committed JSON (a re-load that skips dase_names_loader drifts
+    here first)."""
+    import json
+    import unicodedata
+    rows = {r["vat"]: (r["display_el"], r["display_en"]) for r in conn.execute(
+        "SELECT vat, display_el, display_en FROM dase_display_names")}
+    assert len(rows) == 249
+    src = json.loads(
+        (Path(__file__).resolve().parent.parent / "khmdhs" / "data" /
+         "dase_display_names.json").read_text(encoding="utf-8"))
+    src = {k: (v["el"], v["en"]) for k, v in src.items() if not k.startswith("_")}
+    assert rows == src
+    for el, en in rows.values():
+        assert not any("LATIN" in unicodedata.name(c, "") for c in el), el
+        assert not any("GREEK" in unicodedata.name(c, "") for c in en), en
+    curated = {dq.canonical_vat(r[0]) for r in conn.execute(
+        "SELECT vat_number FROM dase_contractors")}
+    live = set()
+    for r in conn.execute("""
+        SELECT DISTINCT c.vat_number FROM contractors c
+        JOIN contracts co ON co.reference_number = c.reference_number
+        WHERE co.cancelled = 0 AND NOT EXISTS
+              (SELECT 1 FROM contracts nx
+               WHERE nx.reference_number = co.next_reference_no)"""):
+        cv = dq.canonical_vat(r[0])
+        if cv in curated:
+            live.add(cv)
+    assert set(rows) == live
+
+
 def test_next_reference_column_matches_raw_json(conn):
     """The dedup rule trusts next_reference_no — verify against raw_json
     (the khmdhs nextRefNo truncation bug never ran chain repair here)."""

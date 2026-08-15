@@ -28,6 +28,9 @@
 
 <hgroup>
 	<h1>{b.summary.name}</h1>
+	{#if b.summary.name_en}
+		<p class="ename">{b.summary.name_en}</p>
+	{/if}
 	<p class="muted tabular">
 		ΑΦΜ {b.summary.vat}
 		{#if b.summary.form}· {FORMS[b.summary.form] ?? b.summary.form}{/if}
@@ -56,8 +59,8 @@
 	/>
 </KpiRow>
 
-{#if b.summary.name_variants.length > 1}
-	<p class="muted"><small>Appears as: {b.summary.name_variants.join(' · ')}</small></p>
+{#if b.summary.name_variants.length}
+	<p class="muted"><small>Appears in the registry as: {b.summary.name_variants.join(' · ')}</small></p>
 {/if}
 
 <div class="cols">
@@ -133,5 +136,12 @@
 	}
 	td a:hover {
 		text-decoration: underline;
+	}
+	.ename {
+		color: var(--c-dase);
+		font-weight: 700;
+		font-size: var(--fs-14);
+		letter-spacing: 0.04em;
+		margin: 2px 0 0;
 	}
 </style>

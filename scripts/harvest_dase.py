@@ -304,6 +304,9 @@ def cmd_load() -> None:
     from khmdhs.contract_corrections import apply_all
     n_corr, n_pay = apply_all(conn)
     print(f"-- applied {n_corr} contract + {n_pay} payment curated corrections")
+    from khmdhs.dase_names_loader import load_names
+    n_names = load_names(conn)
+    print(f"-- loaded {n_names} curated display names")
     n = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()[0]
     print(f"-- loaded {loaded} contracts into {DB_PATH} (table now {n})")
     conn.close()

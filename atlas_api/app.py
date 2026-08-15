@@ -280,6 +280,12 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         if qterm:
             rows = rows + _trim_titles(
                 queries_extra.dase_duplicate_hits(conn, qterm))
+        # curated display names replace the registry spellings in the list
+        # (search above already ran on the registry strings, so both match)
+        disp = queries_extra.dase_contract_display(conn)
+        for r in rows:
+            r["contractor_names"] = (disp.get(r["reference_number"])
+                                     or r["contractor_names"])
         return jsonify({"rows": rows, "total_eur": total})
 
     @app.route("/api/dase/contract/<adam>")
@@ -296,12 +302,21 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["duplicates"] = [r[0] for r in conn.execute(
             "SELECT reference_number FROM contracts WHERE duplicate_of = ?",
             (adam,))]
+        # curated display names ADDED per contractor (name keeps the registry
+        # spelling — the FamilyTree matches siblings on registry names)
+        names = queries_extra.dase_display_names(conn)
+        for ct in d["contractors"]:
+            disp = names.get(dase_queries.canonical_vat(ct["vat_number"]) or "")
+            if disp:
+                ct["display_el"], ct["display_en"] = disp["el"], disp["en"]
         return jsonify(d)
 
     @app.route("/api/dase/coops")
     def api_dase_coops():
         qterm = (request.args.get("q") or "").strip() or None
-        return jsonify(dase_queries.list_coops(_dase_conn(), q=qterm))
+        # display-name aware variant of the frozen list_coops (search
+        # matches curated Greek + English names AND the registry spelling)
+        return jsonify(queries_extra.dase_coops(_dase_conn(), q=qterm))
 
     @app.route("/api/dase/coop/<vat>")
     def api_dase_coop(vat: str):
@@ -309,6 +324,8 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         summary = dase_queries.coop_summary(conn, vat)
         if summary is None:
             abort(404)
+        queries_extra._overlay_coop_name(
+            summary, queries_extra.dase_display_names(conn))
         return jsonify({
             "summary": summary,
             "contracts": dase_queries.coop_contracts(conn, vat),

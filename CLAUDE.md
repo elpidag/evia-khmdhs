@@ -284,7 +284,7 @@ decisions land there FIRST, then get implemented.
 | `study_costs.json` | 116 contracts → μελέτη cost net of ΦΠΑ (page + excerpt evidence) from the «Κόστος εκπόνησης μελετών» PDF anchor; loaded by `studies_loader` into `contract_study_costs`; tips inherit from predecessors in `queries.study_costs` |
 | `contract_categories.json` | 245/245 in-scope contracts → ONE curated work-type category (8-key taxonomy in `_categories` with Greek labels) + the signed PDF's verbatim project title as evidence + source (pdf / inherited:<ref>); proposals from `scripts/extract_contract_categories.py`, every verdict reviewed; loaded by `categories_loader` into `contract_categories` + `category_labels` (DATA_DECISIONS 2026-08-14) |
 | `city_to_pe.json`, `postal_prefix_to_pe.json` | address → Π.Ε. lookup tables |
-| `dase_display_names.json` | 249 ΔΑΣΕ co-ops → curated bilingual display names (el `ΔΑ.Σ.Ε. 'ΟΝΟΜΑ', ΤΟΠΟΘΕΣΙΑ` / en `F.W.CO-OP …`), keyed by canonical ΑΦΜ, every value user-reviewed in `dase_name_curator.html` (DATA_DECISIONS 2026-08-15: five judgment calls user-resolved, 25 mechanical homoglyph/punctuation slips normalized, phantom 031000379 dropped; bijective vs the live co-op population — pinned once wired). Presentation layer only: registry `contractors.name` spellings are never rewritten |
+| `dase_display_names.json` | 249 ΔΑΣΕ co-ops → curated bilingual display names (el `ΔΑ.Σ.Ε. 'ΟΝΟΜΑ', ΤΟΠΟΘΕΣΙΑ` / en `F.W.CO-OP …`), keyed by canonical ΑΦΜ, every value user-reviewed in `dase_name_curator.html` (DATA_DECISIONS 2026-08-15: five judgment calls user-resolved, 25 mechanical homoglyph/punctuation slips normalized, phantom 031000379 dropped). Loaded by `khmdhs.dase_names_loader` (validates canonical keys + rejects cross-script names; hooked at the end of `harvest_dase.py load`) into `dase_display_names`; the Atlas overlays them on every ΔΑΣΕ co-op surface via `queries_extra.dase_display_names`/`_overlay_coop_name` (real-DB pins: bijective vs the live population, payloads == table). Presentation layer only: registry `contractors.name` spellings are never rewritten, stay searchable, and remain visible as evidence («Appears in the registry as», contract-page «in the registry»); webui (:5000, frozen) keeps registry names |
 
 ## Database (`data/processed/khmdhs.sqlite`, committed)
 
@@ -463,7 +463,11 @@ stated values — payment coverage is structurally partial (891/2,008
 contracts, 2022–23 near-blank as registry practice) — the paid-net Σ
 appears only as a KPI with its coverage caveat. Co-ops key on
 the **canonical VAT** (first 8-9-digit run zfill(9) — same co-op under
-3+ spellings; 096034999 ≈ €1.9M across 12 name variants); awarding
+3+ spellings; 096034999 ≈ €1.9M across 12 name variants) and are
+PRESENTED under their curated bilingual display names
+(`dase_display_names.json` → `dase_names_loader` →
+`dase_display_names` table → Atlas overlays; registry spellings stay
+searchable + visible as evidence); awarding
 orgs group by normalised `organization_name`, never VAT (090273987
 carries both ΥΠΕΝ and ΑΠΔ ΘΣΕ rows). **Π.Ε. layer**:
 `khmdhs/dase_region_loader.py` derives each contract's Π.Ε. from

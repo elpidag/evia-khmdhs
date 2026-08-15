@@ -5,6 +5,10 @@ export interface CoopBundle {
 	summary: {
 		vat: string;
 		name: string;
+		/** curated English display name (dase_display_names) */
+		name_en?: string;
+		/** the pre-overlay curated/registry spelling */
+		registry_name?: string;
 		form: string | null;
 		n_contracts: number;
 		n_live: number;

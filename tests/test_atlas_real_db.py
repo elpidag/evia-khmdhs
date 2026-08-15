@@ -136,6 +136,52 @@ def test_dase_pins(client):
     assert len(sw["ref"]) == 2008
 
 
+def test_dase_display_name_pins(client):
+    """Curated display names replace registry spellings on every ΔΑΣΕ
+    co-op surface (DATA_DECISIONS 2026-08-15). Expectations come from the
+    dase_display_names table, never hardcoded."""
+    import sqlite3
+    conn = sqlite3.connect(f"file:{DASE_DB.as_posix()}?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    names = {r["vat"]: (r["display_el"], r["display_en"]) for r in conn.execute(
+        "SELECT vat, display_el, display_en FROM dase_display_names")}
+    assert len(names) == 249
+
+    o = client.get("/api/dase/overview").get_json()
+    for c in o["top_coops"]:
+        assert (c["name"], c["name_en"]) == names[c["vat"]]
+        assert c["registry_name"]
+
+    top_vat = o["top_coops"][0]["vat"]
+    d = client.get(f"/api/dase/coop/{top_vat}").get_json()
+    assert (d["summary"]["name"], d["summary"]["name_en"]) == names[top_vat]
+    assert d["summary"]["registry_name"]
+    assert d["summary"]["name_variants"]        # registry evidence intact
+
+    # the coops directory search matches the ENGLISH display name too
+    en_token = names[top_vat][1].split()[-1]
+    hits = client.get(f"/api/dase/coops?q={en_token}").get_json()
+    assert any(h["vat"] == top_vat for h in hits)
+
+    # /explore ΔΑΣΕ rows carry the display name (single-contractor case)
+    ref, vat = None, None
+    for r in conn.execute("""
+        SELECT co.reference_number, c.vat_number FROM contracts co
+        JOIN contractors c USING (reference_number)
+        WHERE co.cancelled = 0 AND NOT EXISTS
+              (SELECT 1 FROM contracts nx
+               WHERE nx.reference_number = co.next_reference_no)
+          AND (SELECT COUNT(*) FROM contractors c2
+               WHERE c2.reference_number = co.reference_number) = 1
+        LIMIT 1"""):
+        ref, vat = r[0], r[1]
+    conn.close()
+    from webui.dase_queries import canonical_vat
+    e = client.get("/api/explore").get_json()
+    row = next(x for x in e["rows"] if x["ds"] == "dase" and x["ref"] == ref)
+    assert row["co"] == names[canonical_vat(vat)][0][:110]
+
+
 def test_dase_map_pins(client):
     """Proportional-symbol map payload: unit circles + per-Π.Ε. residue +
     off-map unresolved must reconcile exactly to the ΔΑΣΕ stated-net basis."""
