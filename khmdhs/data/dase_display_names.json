@@ -1,0 +1,999 @@
+{
+ "_comment": "Curated bilingual display names for the 249 ΔΑΣΕ co-ops, keyed by canonical ΑΦΜ (dase_queries.canonical_vat). Every name reviewed and typed by the user in dase_name_curator.html (completed 2026-08-15; five consistency judgment calls resolved by the user, 23 mechanical homoglyph/punctuation slips normalized at merge — DATA_DECISIONS 2026-08-15). Conventions: el = ΔΑ.Σ.Ε. 'ΟΝΟΜΑ', ΤΟΠΟΘΕΣΙΑ (modifier prefixes ΑΝΑΓΚΑΣΤΙΚΟΣ/ΕΛΕΥΘΕΡΟΣ/ΑΓΡΟΤΙΚΟΣ/ΟΡΕΙΝΟΣ/Β' kept); en = F.W.CO-OP mirror with nominative toponyms. Registry spellings are never rewritten — this is a presentation layer on top of contractors.name.",
+ "090023568": {
+  "el": "ΔΑ.Σ.Ε. ΠΗΛΙΟΥ",
+  "en": "F.W.CO-OP PILIO"
+ },
+ "090273987": {
+  "el": "ΔΑ.Σ.Ε. Ο Υ Κ ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ",
+  "en": "F.W.CO-OP O Y K DIMOS KASTORIA"
+ },
+ "096000173": {
+  "el": "ΕΝΩΣΗ ΔΑΣΙΚΩΝ ΑΓΡΟΤΙΚΩΝ ΣΥΝΕΤΑΙΡΙΣΜΩΝ ΕΥΒΟΙΑΣ",
+  "en": "UNION AGRICULTURE & FORESTRY CO-OPS OF EVIA"
+ },
+ "096033500": {
+  "el": "ΔΑ.Σ.Ε. ΦΩΤΕΙΝΩΝ",
+  "en": "F.W.CO-OP FOTEINA"
+ },
+ "096033548": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ ΠΙΕΡΙΑΣ",
+  "en": "F.W.CO-OP AGIOS DIMITRIOS"
+ },
+ "096033689": {
+  "el": "ΔΑ.Σ.Ε. ΣΟΥΦΛΙΟΥ",
+  "en": "F.W.CO-OP SOUFLI"
+ },
+ "096033690": {
+  "el": "ΔΑ.Σ.Ε. ΜΕΓΑΛΟΥ ΔΕΡΕΙΟΥ",
+  "en": "F.W.CO-OP MEGA DEREIO"
+ },
+ "096033733": {
+  "el": "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΥ",
+  "en": "F.W.CO-OP SIDIRO"
+ },
+ "096033929": {
+  "el": "ΔΑ.Σ.Ε. ΩΡΑΙΟΥ",
+  "en": "F.W.CO-OP ORAIO"
+ },
+ "096033966": {
+  "el": "ΔΑ.Σ.Ε. 'ΒΟΡΕΙΟΣ ΗΠΕΙΡΟΣ'",
+  "en": "F.W.CO-OP 'NORTH EPIRUS'"
+ },
+ "096034164": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΡΙΤΣΑΣ-ΜΟΥΧΑΣ-ΚΑΣΤΑΝΙΑΣ",
+  "en": "F.W.CO-OP KARITSA-MOUCHA-KASTANIA"
+ },
+ "096034348": {
+  "el": "ΔΑ.Σ.Ε. ΑΝΑΒΡΥΤΟΥ",
+  "en": "F.W.CO-OP ANAVRITO"
+ },
+ "096034373": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΣΤΑΝΟΧΩΡΙΟΥ",
+  "en": "F.W.CO-OP KASTANOCHORI"
+ },
+ "096034397": {
+  "el": "ΔΑ.Σ.Ε. ΛΑΓΚΑΔΙΟΥ",
+  "en": "F.W.CO-OP LAGKADI"
+ },
+ "096034625": {
+  "el": "ΔΑ.Σ.Ε. ΛΙΘΟΤΟΠΟΥ",
+  "en": "F.W.CO-OP LITHOTOPOS"
+ },
+ "096034649": {
+  "el": "ΔΑ.Σ.Ε. ΠΟΛΥΓΥΡΟΥ",
+  "en": "F.W.CO-OP POLYGYROS"
+ },
+ "096034729": {
+  "el": "ΔΑ.Σ.Ε. ΑΙΣΥΜΗΣ (Α)",
+  "en": "F.W.CO-OP AISYMI (A)"
+ },
+ "096034730": {
+  "el": "ΔΑ.Σ.Ε. ΑΙΣΥΜΗΣ (Β)",
+  "en": "F.W.CO-OP AISYMI (B)"
+ },
+ "096034791": {
+  "el": "ΔΑ.Σ.Ε. ΓΟΜΑΤΙΟΥ",
+  "en": "F.W.CO-OP GOMATI"
+ },
+ "096034895": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΑΡΙΣΤΟΤΕΛΗΣ'",
+  "en": "F.W.CO-OP 'ARISTOTELIS'"
+ },
+ "096034902": {
+  "el": "ΔΑ.Σ.Ε. ΣΤΡΑΤΟΝΙΚΗΣ",
+  "en": "F.W.CO-OP STRATONIKI"
+ },
+ "096034987": {
+  "el": "ΔΑ.Σ.Ε. ΚΡΥΟΝΕΡΙΟΥ",
+  "en": "F.W.CO-OP KRYONERI"
+ },
+ "096034999": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΕΝΩΣΗ ΣΤΑΥΡΟΥ'",
+  "en": "F.W.CO-OP 'ENOSI STAVROS'"
+ },
+ "096035007": {
+  "el": "ΔΑ.Σ.Ε. ΣΤΕΦΑΝΙΝΩΝ ΘΕΣΣΑΛΟΝΙΚΗΣ",
+  "en": "F.W.CO-OP STEFANINA"
+ },
+ "096035019": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΔΡΥΣ' ΣΟΧΟΥ",
+  "en": "F.W.CO-OP 'DRYS' SOCHOS"
+ },
+ "096035032": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΡΟΟΔΟΣ' ΑΝΩ ΣΤΑΥΡΟΥ",
+  "en": "F.W.CO-OP 'PROODOS', ANO STAVROS"
+ },
+ "096035695": {
+  "el": "ΔΑ.Σ.Ε. ΑΘΑΜΑΝΙΑΣ ΤΡΙΚΑΛΩΝ",
+  "en": "F.W.CO-OP ATHAMANIA TRIKALA"
+ },
+ "096035738": {
+  "el": "ΔΑ.Σ.Ε. ΣΤΟΥΡΝΑΡΕΪΚΩΝ ΤΡΙΚΑΛΩΝ",
+  "en": "F.W.CO-OP STOURNAREIKA"
+ },
+ "096035900": {
+  "el": "ΔΑ.Σ.Ε. ΑΝΩ ΓΡΑΜΜΑΤΙΚΟΥ",
+  "en": "F.W.CO-OP ANO GRAMMATIKO"
+ },
+ "096036194": {
+  "el": "ΔΑ.Σ.Ε. ΝΕΟΥ ΠΕΤΡΙΤΣΙΟΥ",
+  "en": "F.W.CO-OP NEO PETRITSI"
+ },
+ "096038648": {
+  "el": "ΔΑ.Σ.Ε. ΤΣΑΠΟΥΡΝΙΑΣ",
+  "en": "F.W.CO-OP TSAPOURNIA"
+ },
+ "096040320": {
+  "el": "ΔΑ.Σ.Ε. ΧΡΥΣΟΥΠΟΛΗΣ",
+  "en": "F.W.CO-OP CHRYSOUPOLI"
+ },
+ "096040750": {
+  "el": "ΔΑ.Σ.Ε. ΒΡΑΧΑΣ",
+  "en": "F.W.CO-OP VRACHA"
+ },
+ "096040994": {
+  "el": "ΔΑ.Σ.Ε. ΔΑΔΙΑΣ",
+  "en": "F.W.CO-OP DADIA"
+ },
+ "096047960": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΟ ΠΕΡΤΟΥΛΙ'",
+  "en": "F.W.CO-OP 'PERTOULI'"
+ },
+ "096053559": {
+  "el": "ΔΑ.Σ.Ε. ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ ΠΕΛΛΑΣ",
+  "en": "F.W.CO-OP PEFKOTO"
+ },
+ "096053584": {
+  "el": "ΔΑ.Σ.Ε. ΔΟΛΙΑΝΩΝ",
+  "en": "F.W.CO-OP DOLIANA"
+ },
+ "096053688": {
+  "el": "ΔΑ.Σ.Ε. ΦΕΛΛΙΟΥ",
+  "en": "F.W.CO-OP FELLI"
+ },
+ "096061560": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΡΙΤΣΑΣ-ΕΛΑΦΟΥ-ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+  "en": "F.W.CO-OP KARITSA-ELAFOS-AGIA"
+ },
+ "096064168": {
+  "el": "ΔΑ.Σ.Ε. ΠΕΥΚΟΦΥΤΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP PEFKOFITO"
+ },
+ "096064297": {
+  "el": "ΔΑ.Σ.Ε. ΒΑΘΗΣ",
+  "en": "F.W.CO-OP VATHI"
+ },
+ "096064304": {
+  "el": "ΔΑ.Σ.Ε. ΕΛΛΗΝΙΚΟΥ",
+  "en": "F.W.CO-OP ELLINIKO"
+ },
+ "096064365": {
+  "el": "ΔΑ.Σ.Ε. ΠΟΝΤΟΚΕΡΑΣΙΑΣ",
+  "en": "F.W.CO-OP PONTOKERASIA"
+ },
+ "096064734": {
+  "el": "ΔΑ.Σ.Ε. ΠΕΝΤΑΛΟΦΟΥ-ΖΩΝΗΣ",
+  "en": "F.W.CO-OP PENTALOFOS-ZONI"
+ },
+ "096064863": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΙΩΝ ΘΕΟΔΩΡΩΝ",
+  "en": "F.W.CO-OP AGIOI THEODOROI"
+ },
+ "096065800": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ",
+  "en": "F.W.CO-OP AGIA FOTEINI"
+ },
+ "096066346": {
+  "el": "ΔΑ.Σ.Ε. ΒΑΡΒΑΡΑΣ",
+  "en": "F.W.CO-OP VARVARA"
+ },
+ "096066790": {
+  "el": "ΔΑ.Σ.Ε. ΜΙΚΡΟΚΛΕΙΣΟΥΡΑΣ",
+  "en": "F.W.CO-OP MIKROKLEISOURA"
+ },
+ "096067226": {
+  "el": "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΧΩΡΙΟΥ",
+  "en": "F.W.CO-OP SIDIROCHORI"
+ },
+ "096067380": {
+  "el": "ΔΑ.Σ.Ε. ΛΕΚΑΝΗΣ",
+  "en": "F.W.CO-OP LEKANI"
+ },
+ "096067681": {
+  "el": "ΔΑ.Σ.Ε. ΡΕΥΜΑΤΟΣ ΩΡΑΙΟΥ",
+  "en": "F.W.CO-OP REVMA-ORAIO"
+ },
+ "096068432": {
+  "el": "ΔΑ.Σ.Ε. ΚΕΡΚΙΝΗΣ",
+  "en": "F.W.CO-OP KERKINI"
+ },
+ "096071203": {
+  "el": "ΔΑ.Σ.Ε. ΟΡΕΙΝΗΣ",
+  "en": "F.W.CO-OP OREINI"
+ },
+ "096071288": {
+  "el": "ΔΑ.Σ.Ε. ΧΕΙΜΑΡΡΟΥ",
+  "en": "F.W.CO-OP CHIMARROS"
+ },
+ "096073988": {
+  "el": "ΔΑ.Σ.Ε. ΜΕΤΣΟΒΟΥ",
+  "en": "F.W.CO-OP METSOVO"
+ },
+ "096077490": {
+  "el": "ΔΑ.Σ.Ε. ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP PEFKOS, NESTORIO"
+ },
+ "096077521": {
+  "el": "ΔΑ.Σ.Ε. ΜΕΓΑΛΗΣ ΠΑΝΑΓΙΑΣ ΧΑΛΚΙΔΙΚΗΣ",
+  "en": "F.W.CO-OP MEGALI PANAGIA, CHALKIDIKI"
+ },
+ "096081510": {
+  "el": "ΔΑ.Σ.Ε. ΛΙΒΑΔΙΟΥ",
+  "en": "F.W.CO-OP LIVADI"
+ },
+ "096081522": {
+  "el": "ΔΑ.Σ.Ε. ΒΕΡΔΙΚΟΥΣΙΑΣ",
+  "en": "F.W.CO-OP VERDIKOUSIA"
+ },
+ "096085810": {
+  "el": "ΔΑ.Σ.Ε. (10ος) ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP (10th) PROMACHI"
+ },
+ "096085834": {
+  "el": "ΔΑ.Σ.Ε. (9ος) ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP (9th) PROMACHI"
+ },
+ "096085846": {
+  "el": "ΔΑ.Σ.Ε. ΠΡΟΜΑΧΩΝ (7ος)",
+  "en": "F.W.CO-OP PROMACHI (7th)"
+ },
+ "096085871": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΤΖΕΝΑ' ΝΟΤΙΑΣ",
+  "en": "F.W.CO-OP 'JENA' NOTIA"
+ },
+ "096085902": {
+  "el": "ΔΑ.Σ.Ε. (12ος) ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP (12th) PROMACHI"
+ },
+ "096085938": {
+  "el": "ΕΛΕΥΘΕΡΟΣ ΔΑ.Σ.Ε. ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ",
+  "en": "FREE F.W.CO-OP NEOCHORI, ALMOPIA"
+ },
+ "096086019": {
+  "el": "ΔΑ.Σ.Ε. (2ος) ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ",
+  "en": "F.W.CO-OP PEFKOTO (2nd)"
+ },
+ "096086093": {
+  "el": "ΔΑ.Σ.Ε. ΠΡΟΜΑΧΩΝ: ΝΕΑ ΓΕΝΙΑ",
+  "en": "F.W.CO-OP PROMACHI: NEW GENERATION"
+ },
+ "096086216": {
+  "el": "ΔΑ.Σ.Ε. 'ΜΕΓΑΣ ΑΛΕΞΑΝΔΡΟΣ' ΟΡΜΑΣ",
+  "en": "F.W.CO-OP 'MEGAS ALEXANDROS' ORMA"
+ },
+ "096086230": {
+  "el": "ΔΑ.Σ.Ε. (4ος) ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP (4th) PROMACHI"
+ },
+ "096086321": {
+  "el": "ΔΑ.Σ.Ε. ΑΡΙΔΑΙΑΣ",
+  "en": "F.W.CO-OP ARIDAIA"
+ },
+ "096088013": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΤΑΛΩΝΙΩΝ",
+  "en": "F.W.CO-OP KATALONIA"
+ },
+ "096093508": {
+  "el": "ΔΑ.Σ.Ε. ΠΡΟΦΗΤΗ ΗΛΙΑ",
+  "en": "F.W.CO-OP PROFITIS ILIAS"
+ },
+ "096095618": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΕΛΑΤΙΑ' ΣΙΔΗΡΟΝΕΡΟΥ",
+  "en": "F.W.CO-OP 'ELATIA' SIDIRONERO"
+ },
+ "096095620": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΡΟΟΔΟΣ' ΝΙΚΗΦΟΡΟΥ",
+  "en": "F.W.CO-OP 'PROODOS' NIKIFOROS"
+ },
+ "096095643": {
+  "el": "ΔΑ.Σ.Ε. ΠΛΑΤΑΝΙΑΣ",
+  "en": "F.W.CO-OP PLATANIA"
+ },
+ "096098227": {
+  "el": "ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
+  "en": "F.W.CO-OP AG. KYRIAKI-PALAIOGRATSANO-ELATI"
+ },
+ "096098822": {
+  "el": "ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
+  "en": "F.W.CO-OP AG. KYRIAKI-PALAIOGRATSANO-ELATI"
+ },
+ "096099390": {
+  "el": "ΔΑ.Σ.Ε. ΚΥΠΑΡΙΣΣΙΟΥ-ΣΗΜΙΑΣ",
+  "en": "F.W.CO-OP KIPARISSI-SIMIA"
+ },
+ "096099678": {
+  "el": "ΔΑ.Σ.Ε. ΠΕΝΤΑΛΟΦΟΥ ΕΒΡΟΥ",
+  "en": "F.W.CO-OP PENTALOFOS, EVROS"
+ },
+ "096115609": {
+  "el": "ΔΑ.Σ.Ε. ΡΟΒΙΩΝ",
+  "en": "F.W.CO-OP ROVIES"
+ },
+ "096115714": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ' ΚΟΥΡΚΟΥΛΩΝ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI' KOURKOULI"
+ },
+ "096115923": {
+  "el": "ΔΑ.Σ.Ε. ΑΝΘΗΡΟΥ-ΚΑΡΟΠΛΕΣΙΟΥ",
+  "en": "F.W.CO-OP ANTHIRO-KAROPLESI"
+ },
+ "096121014": {
+  "el": "ΔΑ.Σ.Ε. ΠΕΤΡΟΛΟΦΟΥ",
+  "en": "F.W.CO-OP PETROLOFOS"
+ },
+ "096133603": {
+  "el": "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ",
+  "en": "F.W.CO-OP SIDIRONERO"
+ },
+ "096133615": {
+  "el": "ΔΑ.Σ.Ε. ΛΙΒΑΔΕΡΟΥ",
+  "en": "F.W.CO-OP LIVADERO"
+ },
+ "096133640": {
+  "el": "ΔΑ.Σ.Ε. ΘΟΛΟΥ",
+  "en": "F.W.CO-OP THOLOS"
+ },
+ "096133664": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΕΛΑΤΙΑ' ΔΡΑΜΑΣ",
+  "en": "F.W.CO-OP 'ELATIA' DRAMAS"
+ },
+ "096133793": {
+  "el": "ΔΑ.Σ.Ε. ΜΑΥΡΟΒΑΤΟΥ",
+  "en": "F.W.CO-OP MAVROVATOS"
+ },
+ "096134114": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΜΑΚΕΔΟΝΙΑ' ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ",
+  "en": "F.W.CO-OP 'MAKEDONIA' AGIA FOTEINI"
+ },
+ "096134126": {
+  "el": "ΔΑ.Σ.Ε. ΦΛΑΜΟΥΡΙΑΣ",
+  "en": "F.W.CO-OP FLAMOURIA"
+ },
+ "096135196": {
+  "el": "ΔΑ.Σ.Ε. ΑΓ. ΝΙΚΟΛΑΟΥ",
+  "en": "F.W.CO-OP AG. NIKOLAOS"
+ },
+ "096135290": {
+  "el": "ΔΑ.Σ.Ε. ΕΠΙΝΙΑΝΩΝ",
+  "en": "F.W.CO-OP EPINIANA"
+ },
+ "096135319": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΡΠΕΝΗΣΙΟΥ",
+  "en": "F.W.CO-OP KARPENISI"
+ },
+ "096135356": {
+  "el": "ΔΑ.Σ.Ε. ΚΛΕΙΤΣΟΥ",
+  "en": "F.W.CO-OP KLEITSO"
+ },
+ "096135368": {
+  "el": "ΔΑ.Σ.Ε. ΚΟΡΥΣΧΑΔΩΝ",
+  "en": "F.W.CO-OP KORYSCHADES"
+ },
+ "096135556": {
+  "el": "ΔΑ.Σ.Ε. ΑΜΠΛΙΑΝΗΣ",
+  "en": "F.W.CO-OP AMPLIANI"
+ },
+ "096135565": {
+  "el": "ΔΑ.Σ.Ε. ΑΜΠΛΙΑΝΗΣ",
+  "en": "F.W.CO-OP AMPLIANI"
+ },
+ "096135610": {
+  "el": "ΔΑ.Σ.Ε. ΦΟΥΡΝΑΣ",
+  "en": "F.W.CO-OP FOURNA"
+ },
+ "096135633": {
+  "el": "ΔΑ.Σ.Ε. ΧΡΥΣΩΣ",
+  "en": "F.W.CO-OP CHRISO"
+ },
+ "096136410": {
+  "el": "ΔΑ.Σ.Ε. ΕΠΤΑΧΩΡΙΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP EPTACHORI, NESTORIO"
+ },
+ "096136421": {
+  "el": "ΔΑ.Σ.Ε. ΟΞΥΑΣ",
+  "en": "F.W.CO-OP OXYA"
+ },
+ "096136598": {
+  "el": "ΔΑ.Σ.Ε. ΖΟΥΖΟΥΛΗΣ",
+  "en": "F.W.CO-OP ZOUZOULI"
+ },
+ "096136863": {
+  "el": "ΔΑ.Σ.Ε. ΛΕΥΚΟΓΕΙΩΝ",
+  "en": "F.W.CO-OP LEFKOGIA"
+ },
+ "096136918": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΠΛΟΥΤΟΣ' ΑΧΛΑΔΙΑΣ",
+  "en": "F.W.CO-OP 'PLOUTOS' ACHLADIA"
+ },
+ "096139122": {
+  "el": "ΔΑ.Σ.Ε. ΣΚΡΑ",
+  "en": "F.W.CO-OP SKRA"
+ },
+ "096139226": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΡΠΗΣ",
+  "en": "F.W.CO-OP KARPI"
+ },
+ "096139238": {
+  "el": "ΔΑ.Σ.Ε. ΓΡΙΒΑΣ ΠΑΙΟΝΙΑΣ ΠΕΡΙΧΩΡΩΝ",
+  "en": "F.W.CO-OP GRIVA, PAIONIA"
+ },
+ "096139275": {
+  "el": "ΔΑ.Σ.Ε. ΠΗΓΗΣ-ΦΑΝΟΥ",
+  "en": "F.W.CO-OP PIGI-FANOS"
+ },
+ "096147195": {
+  "el": "ΔΑ.Σ.Ε. 'ΞΥΛΟΚΟΠΟΣ' ΚΑΡΥΟΦΥΤΟΥ",
+  "en": "F.W.CO-OP 'LOGGER' KARYOFYTO"
+ },
+ "096156917": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΡΟΔΟΠΗ' ΣΙΔΗΡΟΝΕΡΟΥ",
+  "en": "F.W.CO-OP 'RODOPI' SIDIRONERO"
+ },
+ "096157650": {
+  "el": "ΔΑ.Σ.Ε. ΙΣΩΜΑΤΟΣ",
+  "en": "F.W.CO-OP ISOMA"
+ },
+ "096157662": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΙΟΥ ΑΝΤΩΝΙΟΥ",
+  "en": "F.W.CO-OP AGIOS ANTONIOS"
+ },
+ "096160377": {
+  "el": "ΔΑ.Σ.Ε. ΒΕΡΤΙΣΚΟΥ-ΟΣΣΑΣ",
+  "en": "F.W.CO-OP VERTISKOS-OSSA"
+ },
+ "096178412": {
+  "el": "ΔΑ.Σ.Ε. ΚΕΧΡΟΥ",
+  "en": "F.W.CO-OP KECHROS"
+ },
+ "096178448": {
+  "el": "ΔΑ.Σ.Ε. ΧΑΡΑΔΡΑΣ",
+  "en": "F.W.CO-OP CHARADRA"
+ },
+ "096194018": {
+  "el": "ΔΑ.Σ.Ε. 'ΟΙ ΛΕΟΝΤΕΣ ΤΟΥ ΜΠΕΛΛΕΣ'",
+  "en": "F.W.CO-OP 'THE LIONS OF BELLES'"
+ },
+ "096203333": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΡΔΑΜΟΥ",
+  "en": "F.W.CO-OP KARDAMOS"
+ },
+ "096240840": {
+  "el": "ΔΑ.Σ.Ε. ΣΚΟΤΙΝΑΣ",
+  "en": "F.W.CO-OP SKOTINA"
+ },
+ "099207976": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΕΡΥΘΡΟΕΛΑΤΗ' ΒΥΡΩΝΕΙΑΣ",
+  "en": "F.W.CO-OP 'ERYTHROELATI' VYRONEIA"
+ },
+ "099240506": {
+  "el": "ΔΑ.Σ.Ε. 'ΔΡΥΣ' ΠΟΤΑΜΩΝ",
+  "en": "F.W.CO-OP 'DRYS' POTAMOI"
+ },
+ "099240543": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΑΕΤΟΣ' ΠΟΤΑΜΩΝ",
+  "en": "F.W.CO-OP 'EAGLE' POTAMOI"
+ },
+ "099240635": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ",
+  "en": "F.W.CO-OP KATO NEVROKOPI"
+ },
+ "099243730": {
+  "el": "ΔΑ.Σ.Ε. 'ΚΑΤΟΥΝΙΤΣΑ' ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ",
+  "en": "F.W.CO-OP 'KATOUNITSA' LOUTRAKI, ALMOPIA"
+ },
+ "099244241": {
+  "el": "ΔΑ.Σ.Ε. (1ος) ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ",
+  "en": "F.W.CO-OP (1st) LOUTRAKI, ALMOPIA"
+ },
+ "099244449": {
+  "el": "ΔΑ.Σ.Ε. (1ος) ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ",
+  "en": "F.W.CO-OP (1st) SOUTH ALMOPIA"
+ },
+ "099422688": {
+  "el": "ΑΓΡΟΤΙΚΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΛΑΡΙΣΑΣ",
+  "en": "FARMING FORESTRY CO-OP LARISA"
+ },
+ "099689971": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΚΡΙΤΑΣ' ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+  "en": "F.W.CO-OP 'AKRITAS', ALEXANDROUPOLI"
+ },
+ "099694608": {
+  "el": "ΔΑ.Σ.Ε. ΒΙΤΣΙΟΥ- ΚΛΕΙΣΟΥΡΑΣ",
+  "en": "F.W.CO-OP VITSI-KLEISOURA"
+ },
+ "099714593": {
+  "el": "ΑΓΡΟΤΙΚΟΣ ΔΑ.Σ.Ε. ΚΑΣΤΑΝΙΑΣ ΑΜΠΕΛΙΩΝ, ΚΛΕΙΝΟΥ",
+  "en": "A.F.W.CO-OP KASTANIAS ABELION, KLEINO"
+ },
+ "099714998": {
+  "el": "ΟΡΕΙΝΟΣ ΔΑ.Σ.Ε. ΧΡΥΣΟΜΗΛΙΑΣ",
+  "en": "MOUNTAIN F.W.CO-OP CHRYSOMILIA"
+ },
+ "099715160": {
+  "el": "ΔΑ.Σ.Ε. (5ος) ΧΡΥΣΟΜΗΛΙΑΣ",
+  "en": "F.W.CO-OP (5th) CHRYSOMILIA"
+ },
+ "099715610": {
+  "el": "ΔΑ.Σ.Ε. ΜΗΛΙΑΣ",
+  "en": "F.W.CO-OP MILIA"
+ },
+ "099718353": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ' ΕΛΑΦΟΥ",
+  "en": "F.W.CO-OP 'PANAGIA KABANA' ELAFOS"
+ },
+ "099742870": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΡΟΟΔΟΣ' ΣΚΑΛΩΤΗΣ",
+  "en": "F.W.CO-OP 'PROODOS' SKALOTI"
+ },
+ "099922148": {
+  "el": "ΔΑ.Σ.Ε. ΦΛΕΓΚΑ ΠΕΡΙΒΟΛΙΟΥ",
+  "en": "F.W.CO-OP FLEGKA PERIVOLI"
+ },
+ "129346925": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΑΓΙΟΣ ΤΡΥΦΩΝ' ΜΟΥΧΑΣ",
+  "en": "F.W.CO-OP 'AGIOS TRYFON' MOUCHA"
+ },
+ "800255232": {
+  "el": "ΔΑ.Σ.Ε. 'ΖΩΟΔΟΧΟΥ ΠΗΓΗΣ' ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP 'ZOODOCHOU PIGIS' KOTYLI, NESTORIO"
+ },
+ "800255256": {
+  "el": "ΔΑ.Σ.Ε. 'ΓΡΑΜΜΟΣ' ΧΡΥΣΗΣ",
+  "en": "F.W.CO-OP 'GRAMOS' CHRISI"
+ },
+ "800255650": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΠΥΡΓΟΣ' ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP 'PYRGOS' KOTYLI, NESTORIO"
+ },
+ "800282129": {
+  "el": "Β' ΔΑ.Σ.Ε. ΚΕΡΑΣΙΑΣ (Β)",
+  "en": "F.W.CO-OP KERASIA (B)"
+ },
+ "800282142": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΜΠΟΥ",
+  "en": "F.W.CO-OP KAMPOS"
+ },
+ "996509733": {
+  "el": "ΔΑ.Σ.Ε. ΣΤΟΜΙΟΥ",
+  "en": "F.W.CO-OP STOMIO"
+ },
+ "996511267": {
+  "el": "ΔΑ.Σ.Ε. ΑΤΛΑΣ ΑΛΕΞ/ΠΟΛΗΣ",
+  "en": "F.W.CO-OP ATLAS ALEX/POLIS"
+ },
+ "996514048": {
+  "el": "ΔΑ.Σ.Ε. ΠΟΛΥΘΕΑΣ",
+  "en": "F.W.CO-OP POLYTHEA"
+ },
+ "996514050": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΛΟΓΡΙΑΝΗΣ ΚΑΛΑΜΠΑΚΑΣ",
+  "en": "F.W.CO-OP KALOGRIANI"
+ },
+ "996535228": {
+  "el": "ΔΑ.Σ.Ε. ΒΡΥΑΣ-ΡΗΤΙΝΗΣ",
+  "en": "F.W.CO-OP VRIA-RITINI"
+ },
+ "996622521": {
+  "el": "ΔΑ.Σ.Ε. ΗΛΙΟΧΩΡΙΟΥ",
+  "en": "F.W.CO-OP ILIOCHORI"
+ },
+ "996631923": {
+  "el": "ΔΑ.Σ.Ε. ΒΟΪΟΥ ΚΟΖΑΝΗΣ",
+  "en": "F.W.CO-OP VOIO"
+ },
+ "996631935": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΑΓ ΠΑΡΑΣΚΕΥΗ' ΑΝΩ ΒΟΪΟΥ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI' ANO VOIO"
+ },
+ "996632249": {
+  "el": "ΔΑ.Σ.Ε. ΝΕΑΠΟΛΗΣ ΒΟΪΟΥ ΚΟΖΑΝΗΣ",
+  "en": "F.W.CO-OP NEAPOLI, VOIO"
+ },
+ "996700503": {
+  "el": "ΔΑ.Σ.Ε. 'ΝΕΟΣ' ΦΛΩΡΙΝΑΣ",
+  "en": "F.W.CO-OP 'NEOS' FLORINA"
+ },
+ "996700700": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΕΝΟΤΗΤΑ', Τ.Κ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ ΑΝΩ ΥΔΡΟΥΣΑΣ, ΑΤΡΑΠΟΥ, ΠΟΛΥΠΟΤΑΜΟΥ, ΣΥΝ. Σ. ΙΩΑΝΝΙΔΗ",
+  "en": "F.W.CO-OP 'UNITY' OF LOCAL COMMUNITIES, FLORINA"
+ },
+ "996700890": {
+  "el": "ΔΑ.Σ.Ε. 'ΟΙ ΥΛΟΤΟΜΟΙ', Τ.Κ. ΠΟΛΥΠΟΤΑΜΟΥ, ΦΛΩΡΙΝΑΣ",
+  "en": "F.W.CO-OP 'LOGGERS', LOCAL COMMUNITY POLIPOTAMO, FLORINA"
+ },
+ "996712631": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΛΟΧΩΡΙΟΥ",
+  "en": "F.W.CO-OP KALOCHORI"
+ },
+ "996713431": {
+  "el": "ΔΑ.Σ.Ε. 'ΟΙ ΑΚΡΙΤΕΣ' ΒΥΡΩΝΕΙΑΣ",
+  "en": "F.W.CO-OP 'AKRITES' VYRONEIA"
+ },
+ "996713836": {
+  "el": "ΔΑ.Σ.Ε. ΑΚΡΙΤΟΧΩΡΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ ΠΕΡΤΟΥΛΙ",
+  "en": "F.W.CO-OP AKRITOCHORIOU SINTIKIS SERRWN PERTOULI"
+ },
+ "996730685": {
+  "el": "ΔΑ.Σ.Ε. ΔΗΜΟΥ ΝΟΤΙΟΥ ΠΗΛΙΟΥ",
+  "en": "F.W.CO-OP MUNICIPALITY S. PILIO"
+ },
+ "996775144": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΚΙΣΣΑΒΟΣ' ΣΩΤΗΡΙΤΣΑΣ",
+  "en": "F.W.CO-OP 'KISSAVOS' SOTIRITSA"
+ },
+ "996777703": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΙΟΚΑΜΠΟΥ",
+  "en": "F.W.CO-OP AGIOKAMPOS"
+ },
+ "996811473": {
+  "el": "ΔΑ.Σ.Ε. ΓΑΡΔΙΚΙΟΥ",
+  "en": "F.W.CO-OP GARDIKI"
+ },
+ "996811504": {
+  "el": "ΔΑ.Σ.Ε. ΦΛΑΜΠΟΥΡΕΣΙΟΥ-ΤΥΜΦΑΙΩΝ",
+  "en": "F.W.CO-OP FLABOURESI-TYMFAIA"
+ },
+ "996811553": {
+  "el": "ΔΑ.Σ.Ε. ΑΜΑΡΑΝΤΟΥ-ΚΛΕΙΝΟΥ",
+  "en": "F.W.CO-OP AMARANTO-KLEINO"
+ },
+ "996838737": {
+  "el": "ΔΑ.Σ.Ε. ΦΛΑΜΠΟΥΡΑΡΙΟΥ-ΖΑΓΟΡΙΟΥ",
+  "en": "F.W.CO-OP FLABOURARI-ZAGORI"
+ },
+ "996838749": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΑΩΟΣ' ΒΩΒΟΥΣΑΣ",
+  "en": "F.W.CO-OP 'AOOS' VOVOUSA"
+ },
+ "996838774": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΣΜΟΛΙΚΑΣ' ΔΙΣΤΡΑΤΟΥ",
+  "en": "F.W.CO-OP 'SMOLIKAS' DISTRATO"
+ },
+ "996838829": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ' ΑΝΗΛΙΟΥ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI' ANILIO"
+ },
+ "996838842": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΟ ΑΡΚΟΥΔΟΡΕΜΑ' ΒΩΒΟΥΣΑΣ",
+  "en": "F.W.CO-OP 'ARKOUDOREMA' VOVOUSA"
+ },
+ "996838878": {
+  "el": "ΔΑ.Σ.Ε. ΠΩΓΩΝΙΟΥ",
+  "en": "F.W.CO-OP POGONI"
+ },
+ "996838891": {
+  "el": "ΔΑ.Σ.Ε. ΤΥΜΦΗΣ",
+  "en": "F.W.CO-OP TYMFI"
+ },
+ "996840038": {
+  "el": "ΔΑ.Σ.Ε. ΦΛΑΜΠΟΥΡΑΡΙΟΥ ΤΣΟΥΚΑ ΡΟΣΑ",
+  "en": "F.W.CO-OP FLABOURARI TSOUKA ROSA"
+ },
+ "996840296": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΠΕΛΕΚΥΣ' ΜΕΤΣΟΒΟΥ",
+  "en": "F.W.CO-OP 'THE AXE' METSOVO"
+ },
+ "996848036": {
+  "el": "ΕΛΕΥΘΕΡΟΥ ΔΑ.Σ.Ε. ΑΓΡΙΔΙΟΥ",
+  "en": "FREE F.W.CO-OP AGRIDI"
+ },
+ "996851495": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΠΡΟΦΗΤΗΣ ΗΛΙΑΣ' ΜΟΛΟΧΑΣ",
+  "en": "F.W.CO-OP 'PROFITIS ILIAS' MOLOCHA"
+ },
+ "996853532": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΝΑΓΕΝΝΗΣΗ' ΓΑΡΕΦΕΙΟΥ",
+  "en": "F.W.CO-OP 'ANAGENNISI' GAREFIO"
+ },
+ "996853998": {
+  "el": "ΔΑ.Σ.Ε. ΘΕΟΔΩΡΑΚΕΙΟΥ-ΚΙΝΗΜΑ ΑΛΛΑΓΗΣ",
+  "en": "F.W.CO-OP THEODORAKEIO- KINIMA ALLAGIS"
+ },
+ "996854290": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΕΛΛΗΝ' ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP 'ELLIN' PROMACHI"
+ },
+ "996854516": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ', ΒΟΡΕΙΝΟ ΑΛΜΩΠΙΑΣ",
+  "en": "F.W.CO-OP 'TO PALIO PEFKOTO', VOREINO ALMOPIAS"
+ },
+ "996875014": {
+  "el": "ΔΑ.Σ.Ε. ΚΥΡΙΑΚΟΧΩΡΙΟΥ & ΔΥΤΙΚΗΣ ΦΘΙΩΤΙΔΑΣ",
+  "en": "F.W.CO-OP KYRIAKOCHORI & WEST PHTHIOTIDA"
+ },
+ "996875099": {
+  "el": "ΔΑ.Σ.Ε. ΠΥΡΓΟΥ-ΣΠΕΡΧΕΙΟΥ Ν.ΦΘΙΩΤΙΔΑΣ",
+  "en": "F.W.CO-OP PYRGOS-SPERCHIOS"
+ },
+ "996879302": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΜΒΟΥΝΙΩΝ ΛΙΒΑΔΕΡΟΥ",
+  "en": "F.W.CO-OP KAMVOUNIA LIVADERO"
+ },
+ "996889971": {
+  "el": "ΔΑ.Σ.Ε. ΑΚΡΙΤΑΣ ΑΛΕΞ/ΠΟΛΗΣ",
+  "en": "F.W.CO-OP AKRITAS ALEX/POLIS"
+ },
+ "996895246": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ' ΜΙΣΤΡΟΥ",
+  "en": "F.W.CO-OP 'AGIOS KYPRIANOS' MISTROS"
+ },
+ "996957935": {
+  "el": "ΔΑ.Σ.Ε. ΑΝΑΤΟΛΙΚΟΥ ΟΛΥΜΠΟΥ-ΚΑΡΥΑΣ-ΚΟΚΚΙΝΟΠΗΛΟΥ",
+  "en": "F.W.CO-OP EAST OLYMPOS-KARIA-KOKKINOPILOS"
+ },
+ "996963038": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΣΠΑΝΗ ΠΕΤΡΑ' ΝΕΟΥ ΠΕΤΡΙΤΣΙΟΥ",
+  "en": "F.W.CO-OP 'SPANI PETRA' NEO PETRITSI"
+ },
+ "996963284": {
+  "el": "ΔΑ.Σ.Ε. ΣΤΡΥΜΩΝ",
+  "en": "F.W.CO-OP STRYMON"
+ },
+ "996972477": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΡΟΟΔΟΣ' ΑΧΛΑΔΙΑΣ",
+  "en": "F.W.CO-OP 'PROODOS' ACHLADIA"
+ },
+ "996972533": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΟ ΦΡΑΚΤΟ' ΠΑΡΑΝΕΣΤΙΟΥ",
+  "en": "F.W.CO-OP 'TO FRAKTO' PARANESTI"
+ },
+ "997105908": {
+  "el": "ΔΑ.Σ.Ε. 'ΝΕΣΤΩΡ' ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP 'NESTOR' NESTORIO"
+ },
+ "997106512": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ' ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI' PEFKOS"
+ },
+ "997106524": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ' ΕΠΤΑΧΩΡΙΟΥ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI' EPTACHORI"
+ },
+ "997106813": {
+  "el": "ΔΑ.Σ.Ε. ΝΕΟΥ ΟΙΚΙΣΜΟΥ ΚΟΡΕΣΤΕΙΩΝ",
+  "en": "F.W.CO-OP NEW SETTLEMENT KORESTIA"
+ },
+ "997106874": {
+  "el": "ΔΑ.Σ.Ε. Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ",
+  "en": "F.W.CO-OP KASTORIAS"
+ },
+ "997106930": {
+  "el": "ΔΑ.Σ.Ε. ΟΙΚΙΣΜΟΥ ΚΥΨΕΛΗΣ",
+  "en": "F.W.CO-OP KYPSELI SETTLEMENT"
+ },
+ "997107232": {
+  "el": "ΔΑ.Σ.Ε. ΝΕΣΤΟΡΙΟΥ",
+  "en": "F.W.CO-OP NESTORIO"
+ },
+ "997107397": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΣΤΟΡΙΑΣ ΑΓΙΟΣ ΠΑΝΤΕΛΕΗΜΟΝΑΣ",
+  "en": "F.W.CO-OP KASTORIA, AGIOS PANTELEIMONAS"
+ },
+ "997129709": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΖΙΑΤΖΙΑΣ' ΠΕΡΤΟΥΛΙΟΥ",
+  "en": "F.W.CO-OP 'TZIATZIAS' PERTOULI"
+ },
+ "997171856": {
+  "el": "ΔΑ.Σ.Ε. ΜΟΔΙΟΥ",
+  "en": "F.W.CO-OP MODI"
+ },
+ "997172910": {
+  "el": "ΔΑ.Σ.Ε. ΚΡΥΟΝΕΡΙΟΥ",
+  "en": "F.W.CO-OP KRYONERI"
+ },
+ "997175401": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΣΤΑΥΡΟΣ' ΚΑΡΙΤΣΑΣ",
+  "en": "F.W.CO-OP 'STAVROS' KARITSA"
+ },
+ "997175425": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΑΤΩΜΕΝΗ' ΚΑΛΛΙΠΕΥΚΗΣ",
+  "en": "F.W.CO-OP 'PATOMENI' KALLIPEFKI"
+ },
+ "997183530": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ' ΕΛΑΦΟΥ-ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+  "en": "F.W.CO-OP 'PANAGIA KABANA' ELAFOS-AGIA"
+ },
+ "997208737": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΟ ΦΡΑΓΜΑ' ΚΑΣΤΑΝΙΑΣ",
+  "en": "F.W.CO-OP 'FRAGMA' KASTANIA"
+ },
+ "997225027": {
+  "el": "ΔΑ.Σ.Ε. ΕΠΤΑΛΟΦΟΥ",
+  "en": "F.W.CO-OP EPTALOFOS"
+ },
+ "997225390": {
+  "el": "ΔΑ.Σ.Ε. ΠΕΝΤΑΛΟΦΟΥ-ΟΜΑΛΟΥ",
+  "en": "F.W.CO-OP PENTALOFO-OMALO"
+ },
+ "997225617": {
+  "el": "ΔΑ.Σ.Ε. 'ΟΙ ΜΑΚΕΔΟΝΕΣ' ΚΙΛΚΙΣ",
+  "en": "F.W.CO-OP 'MAKEDONES' KILKIS"
+ },
+ "997225666": {
+  "el": "ΔΑ.Σ.Ε. ΚΡΟΥΣΣΩΝ",
+  "en": "F.W.CO-OP KROUSSA"
+ },
+ "997309155": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΦΛΟΓΑ' ΑΥΓΕΡΙΝΟΥ ΝΕΑΠΟΛΗΣ",
+  "en": "F.W.CO-OP 'FLAME', AVGERINOS NEAPOLIS"
+ },
+ "997309339": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΚΛΕΨΙΟΣ' ΠΟΛΥΚΑΣΤΑΝΟΥ-ΑΥΓΕΡΙΝΟΥ",
+  "en": "F.W.CO-OP 'KLEPSIOS' POLYKASTANO-AVGERINOS"
+ },
+ "997357780": {
+  "el": "ΔΑ.Σ.Ε. ΚΑΤΩ ΣΩΤΗΡΙΤΣΑΣ-ΑΓΙΑΣ ΛΑΡΙΣΣΑΣ",
+  "en": "F.W.CO-OP KATO SOTIRITSA-AGIA"
+ },
+ "997454162": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΑ ΤΣΕΚΟΥΡΙΑ' ΓΑΡΕΦΕΙΟΥ",
+  "en": "F.W.CO-OP 'THE AXES' GAREFIO"
+ },
+ "997455552": {
+  "el": "ΔΑ.Σ.Ε. 'ΟΙ ΜΑΧΗΤΕΣ' ΠΕΡΙΚΛΕΙΑΣ",
+  "en": "F.W.CO-OP 'THE FIGHTERS' PERIKLIA"
+ },
+ "997456026": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ', Τ.Κ. ΒΡΟΝΤΕΡΟΥ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI', LOCAL COMMUNITY VRONTERO"
+ },
+ "997456155": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΚΟΤΣΙΦΑΣ' Τ. Κ. ΑΓΙΟΥ ΓΕΡΜΑΝΟΥ",
+  "en": "F.W.CO-OP 'KOTSIFAS' LOCAL COMMUNITY AGIOS GERMANOS"
+ },
+ "997456769": {
+  "el": "ΔΑ.Σ.Ε. Τ.Κ. ΑΚΡΙΤΑ, ΑΛΩΝΩΝ, ΦΛΑΜΠΟΥΡΟΥ ΦΛΩΡΙΝΑΣ",
+  "en": "F.W.CO-OP LOCAL COMMUNITIES AKRITA ALONON FLABOUROU,FLORINA"
+ },
+ "997458622": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΟ ΡΑΝΤΟΣΙ', ΞΙΝΟΥ ΝΕΡΟΥ",
+  "en": "F.W.CO-OP 'TO RANTOSI', XINO NERO"
+ },
+ "997600354": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ' ΑΡΧΑΓΓΕΛΟΥ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI' ARCHANGELOS"
+ },
+ "997600378": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΟ ΠΑΪΚΟ' ΑΡΧΑΓΓΕΛΟΥ",
+  "en": "F.W.CO-OP 'PAIKO' ARCHANGELOS"
+ },
+ "997600446": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΑ ΕΛΑΤΗΡΙΑ' ΣΩΣΑΝΔΡΑΣ",
+  "en": "F.W.CO-OP 'TA ELATIRIA' SOSANDRA"
+ },
+ "997650702": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΜΕΓΔΟΒΑΣ' ΝΕΡΑΪΔΑΣ",
+  "en": "F.W.CO-OP 'MEGDOVAS' NERAIDA"
+ },
+ "997841856": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ' ΚΥΨΕΛΗΣ",
+  "en": "F.W.CO-OP 'AGIA PARASKEVI' KYPSELI"
+ },
+ "997922367": {
+  "el": "ΔΑ.Σ.Ε. ΓΟΡΓΙΑΝΗΣ",
+  "en": "F.W.CO-OP GORGIANI"
+ },
+ "997922945": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΒΟΥΝΑΣΙΑ' ΔΕΣΚΑΤΗΣ",
+  "en": "F.W.CO-OP 'VOUNASIA' DESKATI"
+ },
+ "997961590": {
+  "el": "ΔΑ.Σ.Ε. ΔΙΒΟΥΝΟΥ",
+  "en": "F.W.CO-OP DIVOUNO"
+ },
+ "997962709": {
+  "el": "ΔΑ.Σ.Ε. ΠΑΪΚΟ ΠΑΙΟΝΙΑΣ",
+  "en": "F.W.CO-OP PAIKO PAIONIA"
+ },
+ "998121076": {
+  "el": "ΔΑ.Σ.Ε. 'ΔΟΛΟΠΕΣ - ΣΑΪΚΑΣ' ΚΑΡΟΠΛΕΣΙΟΥ",
+  "en": "F.W.CO-OP 'DOLOPES - SAIKA' KAROPLESI"
+ },
+ "998155971": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΓ. ΠΑΥΛΟΣ' ΒΩΛΑΚΑ",
+  "en": "F.W.CO-OP 'AG. PAVLOS' VOLAKAS"
+ },
+ "998494225": {
+  "el": "ΔΑ.Σ.Ε. 'ΝΕΑ ΔΥΝΑΜΗ' ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ",
+  "en": "F.W.CO-OP 'NEW POWER' PROMACHI"
+ },
+ "998494796": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΑΛΥΣΟΠΡΙΟΝΑ' ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP 'TA MAKEDONIKA ALYSOPRIONA' PROMACHI"
+ },
+ "998495117": {
+  "el": "ΔΑ.Σ.Ε. 'ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΤΣΕΚΟΥΡΙΑ' ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP 'MACEDONIAN AXES' PROMACHI"
+ },
+ "998638016": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΙΟΣ ΙΩΑΝΝΗΣ ΣΚΑΛΩΤΗΣ",
+  "en": "F.W.CO-OP AG. IOANNIS, SKALOTI"
+ },
+ "998736267": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΧΑΪΝΤΟΥ' ΡΕΥΜΑΤΟΣ",
+  "en": "F.W.CO-OP 'CHAINTOU' REVMA"
+ },
+ "998743209": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΙΑΣ ΒΑΡΒΑΡΑΣ",
+  "en": "F.W.CO-OP AGIA VARVARA"
+ },
+ "998752347": {
+  "el": "ΔΑ.Σ.Ε. ΧΡΥΣΟΜΗΛΙΑΣ-ΠΑΛΑΙΟΧΩΡΙΟΥ (ΣΤ)",
+  "en": "F.W.CO-OP CHRYSOMILIA-PALAIOCHORI"
+ },
+ "998752716": {
+  "el": "ΔΑ.Σ.Ε. ΠΡΟΤΥΠΟΣ ΧΡΥΣΟΜΗΛΙΑΣ",
+  "en": "F.W.CO-OP PROTIPOS CHRYSOMILIA"
+ },
+ "998977284": {
+  "el": "ΔΑ.Σ.Ε. 'ΑΓΙΟΣ ΔΗΜΗΤΡΙΟΣ' ΑΝΩ ΒΡΟΝΤΟΥΣ",
+  "en": "F.W.CO-OP 'AGIOS DIMITRIOS' ANO VRONTO"
+ },
+ "999156732": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΤΟΥΡΓΙΑ' ΚΡΑΝΙΑΣ",
+  "en": "F.W.CO-OP 'TOURGIA' KRANIA"
+ },
+ "999418712": {
+  "el": "ΔΑ.Σ.Ε. 'ΠΕΛΕΚΑΝΟΣ', ΑΝΩ ΠΟΡΟΪΩΝ",
+  "en": "F.W.CO-OP 'PELICAN', ANO POROIA"
+ },
+ "999419942": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΟΣΤΡΙΑ' ΑΚΡΙΤΟΧΩΡΙΟΥ",
+  "en": "F.W.CO-OP 'OSTRIA' AKRITOCHORI"
+ },
+ "999420351": {
+  "el": "ΔΑ.Σ.Ε. ΑΓΚΙΣΤΡΟΥ",
+  "en": "F.W.CO-OP AGKISTRO"
+ },
+ "999425788": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΟΞΙΑ' ΕΛΑΤΟΧΩΡΙΟΥ",
+  "en": "F.W.CO-OP 'OXIA' ELATOCHORI"
+ },
+ "999520915": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΟΜΟΝΟΙΑ' ΤΑΞΙΑΡΧΩΝ",
+  "en": "F.W.CO-OP 'OMONOIA' TAXIARCHES"
+ },
+ "999522306": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΕΝΟΤΗΤΑ' ΣΙΔΗΡΟΝΕΡΟΥ",
+  "en": "F.W.CO-OP 'ENOTITA' SIDIRONERO"
+ },
+ "999669304": {
+  "el": "ΔΑ.Σ.Ε. 'ΟΙ ΞΥΛΟΚΟΠΟΙ', Τ. Κ. ΠΟΛΥΠΟΤΑΜΟΥ ΦΛΩΡΙΝΑΣ",
+  "en": "F.W.CO-OP 'LOGGERS', LOCAL COMMUNITY POLYPOTAMO"
+ },
+ "999729317": {
+  "el": "Β' ΔΑ.Σ.Ε. ΚΑΡΔΑΜΟΥ (Β)",
+  "en": "F.W.CO-OP KARDAMOS (B)"
+ },
+ "999745016": {
+  "el": "ΔΑ.Σ.Ε. 'Ο ΝΕΟΣ ΔΑΣΙΚΟΣ' ΠΡΟΜΑΧΩΝ",
+  "en": "F.W.CO-OP 'NEOS DASIKOS' PROMACHI"
+ },
+ "999748006": {
+  "el": "ΔΑ.Σ.Ε. ΚΟΡΥΦΗΣ",
+  "en": "F.W.CO-OP KORYFI"
+ },
+ "999886267": {
+  "el": "ΔΑ.Σ.Ε. ΔΙΠΟΤΑΜΩΝ",
+  "en": "F.W.CO-OP DIPOTAMA"
+ },
+ "999886519": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΠΡΑΣΙΝΑΔΑ' ΣΙΛΛΗΣ",
+  "en": "F.W.CO-OP 'PRASINADA' SILLI"
+ },
+ "999888341": {
+  "el": "ΔΑ.Σ.Ε. 'Η ΟΜΟΝΟΙΑ' ΣΙΔΗΡΟΝΕΡΟΥ",
+  "en": "F.W.CO-OP 'OMONOIA' SIDIRONERO"
+ }
+}

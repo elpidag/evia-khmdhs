@@ -284,6 +284,7 @@ decisions land there FIRST, then get implemented.
 | `study_costs.json` | 116 contracts → μελέτη cost net of ΦΠΑ (page + excerpt evidence) from the «Κόστος εκπόνησης μελετών» PDF anchor; loaded by `studies_loader` into `contract_study_costs`; tips inherit from predecessors in `queries.study_costs` |
 | `contract_categories.json` | 245/245 in-scope contracts → ONE curated work-type category (8-key taxonomy in `_categories` with Greek labels) + the signed PDF's verbatim project title as evidence + source (pdf / inherited:<ref>); proposals from `scripts/extract_contract_categories.py`, every verdict reviewed; loaded by `categories_loader` into `contract_categories` + `category_labels` (DATA_DECISIONS 2026-08-14) |
 | `city_to_pe.json`, `postal_prefix_to_pe.json` | address → Π.Ε. lookup tables |
+| `dase_display_names.json` | 249 ΔΑΣΕ co-ops → curated bilingual display names (el `ΔΑ.Σ.Ε. 'ΟΝΟΜΑ', ΤΟΠΟΘΕΣΙΑ` / en `F.W.CO-OP …`), keyed by canonical ΑΦΜ, every value user-reviewed in `dase_name_curator.html` (DATA_DECISIONS 2026-08-15: five judgment calls user-resolved, 25 mechanical homoglyph/punctuation slips normalized, phantom 031000379 dropped; bijective vs the live co-op population — pinned once wired). Presentation layer only: registry `contractors.name` spellings are never rewritten |
 
 ## Database (`data/processed/khmdhs.sqlite`, committed)
 

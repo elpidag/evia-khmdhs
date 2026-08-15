@@ -1949,3 +1949,38 @@ New basis: live population **2,008 rows / €38,411,933.17 gross =
 €31,659,523.06 net** (−€13,395.00 net); paid figures unchanged
 (€21,211,472.57 / 991 — the excluded posting carried no payments).
 *Affects: 1 contracts row; every ΔΑΣΕ aggregate; co-op directory count.*
+
+## 2026-08-15 — ΔΑΣΕ display-name curation COMPLETE (249 co-ops, bilingual)
+
+The user finished naming all co-ops in `dase_name_curator.html`: one Greek
++ one English display name per canonical ΑΦΜ, every value typed or
+confirmed by the user. The five consistency judgment calls raised by the
+2026-08-15 check were resolved by the user in the curator's decisions
+panel: PAIKO **PAIONIA** (matches their Γρίβα card), **AISYMI** on both
+ΑΙΣΥΜΗ cards, **KARDAMOS** on both ΚΑΡΔΑΜΟΣ cards, the Β' co-ops marked
+with a **«(Β)» suffix** in both languages (their own convention, replacing
+the proposed «(2nd)»), and ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ **uppercased**.
+
+On top of the user's final export, 25 mechanical normalizations were
+applied (never touching wording): 13 Greek homoglyph letters inside
+English names → Latin (KAMVOUNIΑ, KΑΤΟ, POTAMΟΙ, (Α)/(Β) …), 7 Latin
+homoglyphs inside Greek names → Greek (ΝOTIOY, ΝEOY, ΠΕΝΤΑΛΟΦΟY,
+MΕΓΑΛΗΣ, 'H, the two «(B)» suffixes), punctuation (« » wrappers, curly
+quote, double space, space-before-quote, stray «F.W.CO-OP.» period,
+«Δ.Α.Σ.Ε.» → «ΔΑ.Σ.Ε.»), and the phantom-ΑΦΜ ghost entry 031000379
+dropped (its only posting was excluded as a duplicate the same day).
+
+Result: curated **`khmdhs/data/dase_display_names.json`** — 249 entries
+keyed by canonical ΑΦΜ, verified bijective against the live co-op
+population (249/249, zero unnamed, zero orphans) and free of cross-script
+characters. Conventions: el `ΔΑ.Σ.Ε. 'ΟΝΟΜΑ', ΤΟΠΟΘΕΣΙΑ`; en `F.W.CO-OP`
+mirror with nominative toponyms; modifier prefixes (ΑΝΑΓΚΑΣΤΙΚΟΣ →
+A. / ΕΛΕΥΘΕΡΟΣ → FREE / ΑΓΡΟΤΙΚΟΣ → A. or FARMING / ΟΡΕΙΝΟΣ → MOUNTAIN /
+Β') preserved. Registry spellings in `contractors.name` are NEVER
+rewritten — this is a presentation layer. Name-field resolution notes
+carried by the curation: 996713836 ΑΚΡΙΤΟΧΩΡΙΟΥ «ΠΕΡΤΟΥΛΙ» is distinct
+from 999419942 «Η ΟΣΤΡΙΑ» (PDF-verified); 996875099/996875014 Φθιώτιδα
+names verified via VIES + PDFs 2026-08-15. The interim 89-name snapshot
+(`dase_display_names.json` + `dase_names_review.tsv` at the project
+root) is superseded and removed. *Affects: presentation only — site
+wiring is the follow-up step; no aggregate changes.*
