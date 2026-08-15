@@ -227,7 +227,7 @@
 	}
 	.sidenote {
 		color: var(--ink-soft);
-		font-size: var(--fs-14);
+		font-size: var(--fs-13);
 		margin: 0;
 	}
 	.wrap {
@@ -269,9 +269,9 @@
 	.legend {
 		display: flex;
 		gap: var(--sp-4);
-		font-size: var(--fs-12);
+		font-size: var(--fs-13);
 		color: var(--ink-soft);
-		margin: 0 0 var(--sp-3);
+		margin: var(--sp-2) 0 var(--sp-4);
 	}
 	.legend i {
 		display: inline-block;
