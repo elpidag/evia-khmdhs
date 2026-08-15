@@ -272,10 +272,15 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
     @app.route("/api/dase/contracts")
     def api_dase_contracts():
         qterm = (request.args.get("q") or "").strip() or None
-        rows = _trim_titles(dase_queries.list_contracts(_dase_conn(), q=qterm))
-        return jsonify({"rows": rows,
-                        "total_eur": round(sum(r["total_cost_with_vat"] or 0
-                                               for r in rows), 2)})
+        conn = _dase_conn()
+        rows = _trim_titles(dase_queries.list_contracts(conn, q=qterm))
+        total = round(sum(r["total_cost_with_vat"] or 0 for r in rows), 2)
+        # a search may cite an excluded double-posting's ΑΔΑΜ — surface it
+        # (badged via duplicate_of), never counted in the total
+        if qterm:
+            rows = rows + _trim_titles(
+                queries_extra.dase_duplicate_hits(conn, qterm))
+        return jsonify({"rows": rows, "total_eur": total})
 
     @app.route("/api/dase/contract/<adam>")
     def api_dase_contract(adam: str):
@@ -287,6 +292,10 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d.pop("raw_pretty", None)
         d["timeline"] = queries_extra.contract_timeline(conn, adam)
         d["gross"] = queries_extra.contract_gross(conn, adam)
+        # registry double-postings kept reachable + cross-linked both ways
+        d["duplicates"] = [r[0] for r in conn.execute(
+            "SELECT reference_number FROM contracts WHERE duplicate_of = ?",
+            (adam,))]
         return jsonify(d)
 
     @app.route("/api/dase/coops")

@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS contracts (
     prev_reference_no              TEXT,
     next_reference_no              TEXT,
     correction_note                TEXT,
+    duplicate_of                   TEXT,
     raw_json                       TEXT,
     fetched_at                     TEXT NOT NULL
 );
@@ -278,6 +279,8 @@ def init_db(path: Path) -> sqlite3.Connection:
         ("contractor_locations", "geo_precision", "TEXT"),
         # curated stated-value corrections (dase_contract_corrections.json)
         ("contracts", "correction_note", "TEXT"),
+        # registry double-postings: the kept twin's ΑΔΑΜ (DATA_DECISIONS 2026-08-14)
+        ("contracts", "duplicate_of", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")

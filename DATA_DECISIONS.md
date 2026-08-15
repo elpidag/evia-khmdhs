@@ -1865,3 +1865,47 @@ New Atlas analytics basis: stated net **€659,290,845.34**
 (was €658,297,730.65; +€993,114.69). All pins updated. *Affects: 1
 contracts row + 1 contract_objects row + 1 contract_categories row; every
 Anti-nero stated-basis aggregate; category chart counts/€.*
+
+## 2026-08-14 — ΚΗΜΔΗΣ double-postings excluded from the ΔΑΣΕ dataset (9 contracts, 1 payment)
+
+A content sweep over the complete ΔΑΣΕ PDF/txt cache (groups sharing
+co-op+date+amount, texts compared after stripping the registry's own
+ΑΔΑΜ stamps) found 14 same-day same-amount pairs. Nine are the SAME
+signed document uploaded twice under two ΑΔΑΜ (normalized texts
+identical; the user verified two pairs against the PDFs — same Αριθ.
+Πρωτ. and same Diavgeia ΑΔΑ: Πενταλόφου 357167/ΩΧ2Π4653Π8-1ΙΞ and the
+«Η ΕΝΩΣΗ» Βυτίνας pair). Five pairs are verified DISTINCT (real diffs:
+συστάδες 4↔5 and 29↔35, protocol years 23/2023↔42/2024, an extra
+protocol citation, different dates) and stay untouched.
+
+Excluded duplicate → kept posting (keep = the payment-carrying twin,
+else the earlier ΑΔΑΜ):
+22SYMV009895951→22SYMV009895998 · 24SYMV015320152→24SYMV015319751 ·
+22SYMV011428409→22SYMV011425902 · 24SYMV015789944→24SYMV015789338 ·
+21SYMV009363348→21SYMV009363115 · 24SYMV015324834→24SYMV015324918 ·
+21SYMV009578833→21SYMV009579012 · 22SYMV011574438→22SYMV011574305 ·
+21SYMV009502419→21SYMV009502974.
+
+Payments: `22PAY010598913` excluded — same payment paper as
+`22PAY010599002` uploaded twice (user-verified; the PDF states
+86.504,06 € net / 107.265,03 € gross, matching the kept row; the
+duplicate's stored 86,938.75 was additionally mis-keyed). The two
+€7,498.00 payments of the 21SYMV009363115 pair are NOT duplicates —
+different protocol numbers and internal breakdowns (similarity 0.84) —
+both stay counted.
+
+Mechanism: `exclude: true` + `duplicate_of: <kept ΑΔΑΜ>` entries in
+`dase_contract_corrections.json` (applier sets `cancelled = 1`,
+`correction_note`, and the new `contracts.duplicate_of` column — ALTER
+guard in db.py); new `dase_payment_corrections.json` in the standard
+payment-corrections format applied via `payment_loader.apply_corrections`
+from the same runs. NOTHING disappears: duplicate pages stay reachable
+with a banner linking the kept ΑΔΑΜ (and the kept page links back), and
+ΑΔΑΜ search still finds duplicates, badged. Guard:
+`scripts/find_duplicate_postings.py` + a real-DB test pin that zero
+live identical-text twins exist.
+
+New basis: live population **2,009 rows / €38,428,542.97 gross =
+€31,672,918.06 net** (−€128,694.08 net); paid net **€21,211,472.57**
+over 991 payment orders (−86,938.75). *Affects: 9 contracts rows +
+1 contract_payments row; every ΔΑΣΕ aggregate; paid KPIs.*

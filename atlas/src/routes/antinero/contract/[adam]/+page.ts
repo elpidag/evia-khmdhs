@@ -20,6 +20,10 @@ export interface ContractDetail {
 	notice_reference_number: string | null;
 	prev_reference_no: string | null;
 	next_reference_no: string | null;
+	/** registry double-posting: the kept twin's ΑΔΑΜ (this row is excluded) */
+	duplicate_of?: string | null;
+	/** ΑΔΑΜs of double-postings of THIS contract (kept side) */
+	duplicates?: string[];
 	bids_submitted: number | null;
 	contract_duration: number | null;
 	contract_duration_unit: string | null;

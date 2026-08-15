@@ -23,10 +23,10 @@ def conn():
 def test_population_pins(conn):
     k = dq.kpis(conn)
     assert k["gross_n"] == 2164
-    assert k["n_cancelled"] == 82
+    assert k["n_cancelled"] == 91   # 82 registry + 9 curated double-postings
     assert k["n_superseded"] == 64
-    assert k["n_contracts"] == 2018
-    assert k["total_eur"] == pytest.approx(38_587_233.00, abs=0.01)
+    assert k["n_contracts"] == 2009
+    assert k["total_eur"] == pytest.approx(38_428_542.97, abs=0.01)
     assert k["n_coops"] >= 245
     assert k["pct_direct"] > 90
 
@@ -129,6 +129,39 @@ def test_corrected_value_regression_pin(conn):
         "SELECT cost_without_vat FROM contract_objects"
         " WHERE reference_number = '21SYMV009374147' AND seq = 0").fetchone()
     assert obj["cost_without_vat"] == pytest.approx(253_739.13)
+
+
+def test_no_unexcluded_double_postings(conn):
+    """No two live contracts may carry identical PDF text (after stripping
+    the registry's ΑΔΑΜ stamps) for the same co-op, date and amount — the
+    signature of the same signed document uploaded twice (9 such twins are
+    excluded via dase_contract_corrections.json, DATA_DECISIONS
+    2026-08-14). Skips when the txt cache is absent."""
+    cache = DB.parent / "dase_pdf_cache"
+    if not cache.exists():
+        pytest.skip("dase_pdf_cache not present")
+    import sys
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).resolve().parent.parent / "scripts"))
+    from find_duplicate_postings import find_pairs
+    pairs = [p for p in find_pairs(conn, cache) if p["identical"]]
+    assert pairs == []
+
+
+def test_duplicate_postings_are_linked_not_deleted(conn):
+    """Every curated double-posting exclusion stays reachable and points at
+    its kept twin; the twin is live."""
+    rows = conn.execute(
+        "SELECT reference_number, duplicate_of, cancelled, correction_note "
+        "FROM contracts WHERE duplicate_of IS NOT NULL").fetchall()
+    assert len(rows) == 9
+    for r in rows:
+        assert r["cancelled"] == 1
+        assert r["correction_note"]
+        kept = conn.execute(
+            "SELECT cancelled FROM contracts WHERE reference_number = ?",
+            (r["duplicate_of"],)).fetchone()
+        assert kept is not None and kept["cancelled"] == 0
 
 
 def test_next_reference_column_matches_raw_json(conn):

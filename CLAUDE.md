@@ -274,7 +274,7 @@ decisions land there FIRST, then get implemented.
 | `antinero_supplement.json` | 55 contracts missing from the xlsx; phase overrides that win over all rules |
 | `probable_related.json` | 7 chains / 13 ADAMs demoted to `antinero_probable`: registry titles say ANTINERO II but no provable RRF-16849 financing evidence exists (empty fund metadata, full texts without any RRF language — ΤΑΙΠΕΔ-procured, ΚΑΕ 2910601001-funded). Kept in dataset, excluded from all calculations; shown on / as «additional contracts found, probably related» |
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
-| `dase_contract_corrections.json` | ΔΑΣΕ contract STATED-value keying errors with signed-PDF-documented true figures (+ optional `objects` seq overrides where the child row repeats the error); currently 1: the 21SYMV009374147 ×10 digit-glitch. Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`); candidates come from `scripts/validate_contract_values.py` |
+| `dase_contract_corrections.json` | ΔΑΣΕ contract corrections: 1 stated-value keying error (21SYMV009374147 ×10 digit-glitch, `objects` seq override) + 9 registry double-postings excluded via `exclude:true` + `duplicate_of:<kept ΑΔΑΜ>` (pages stay reachable, cross-linked). Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`) together with `dase_payment_corrections.json` (1 duplicated payment). Candidates: `scripts/validate_contract_values.py` + `scripts/find_duplicate_postings.py` |
 | `contract_corrections.json` | Same format/mechanism for the khmdhs (Anti-nero) DB; currently 1: 26SYMV018642772 «ΔΧ ΣΟΥΦΛΙΟΥ» carried the Θεσσαλονίκη δεξαμενές contract's figures — PDF-documented true value €4,334,353.41 net / €5,374,598.23 gross (DATA_DECISIONS 2026-08-14). Applied by `khmdhs.contract_corrections --corrections` + a `khmdhs.refresh` step right after chain_loader (refetch/upsert restores registry values) |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
@@ -447,11 +447,15 @@ future attempt).
 aggregates use **stated values, deduplicated** — exclude `cancelled=1`
 (82 rows, €2.35M) and non-cancelled rows whose `next_reference_no`
 resolves in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo,
-no multi-successor) → live population **2,018 rows / €38,587,233.00
-gross = €31,801,612.14 net** (`dase_queries.live_filter`, the
-scope_filter analogue; the Atlas presents net; includes the 1 curated
-stated-value correction — 21SYMV009374147 ×10 keying error,
-DATA_DECISIONS 2026-08-14). Charts/rankings STAY on
+no multi-successor) → live population **2,009 rows / €38,428,542.97
+gross = €31,672,918.06 net** (`dase_queries.live_filter`, the
+scope_filter analogue; the Atlas presents net; includes the curated
+corrections — the 21SYMV009374147 ×10 keying error AND 9 registry
+double-postings excluded with `duplicate_of` cross-links + 1 duplicated
+payment (paid net €21,211,472.57 / 991 orders), DATA_DECISIONS
+2026-08-14; duplicate pages stay reachable, badged in search, and the
+guard `scripts/find_duplicate_postings.py` + real-DB tests keep new
+twins out). Charts/rankings STAY on
 stated values — payment coverage is structurally partial (891/2,018
 contracts, 2022–23 near-blank as registry practice) — the paid-net Σ
 appears only as a KPI with its coverage caveat. Co-ops key on
@@ -727,7 +731,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   payment rows. Everything value-based reconciles to €659,290,845.34
   (pinned; was €667,496,652.26 until the 2026-08-13 antinero_probable
   exclusion, then €658,297,730.65 until the 2026-08-14 Σουφλί
-  stated-value correction); /compare is symmetric stated-vs-stated (≈20.7×); /explore has
+  stated-value correction); /compare is symmetric stated-vs-stated (≈20.8×); /explore has
   a single «Stated value (net)» column (`?v=8`). Gotcha: an endpoint that
   needs payments MUST take `_pay_conn()` — on `g.conn` the payments table
   is empty by design.

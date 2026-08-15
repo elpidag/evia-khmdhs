@@ -71,6 +71,23 @@
 	</p>
 </hgroup>
 
+{#if c.duplicate_of}
+	<div class="dupbanner">
+		<strong>Registry double-posting.</strong> This ΑΔΑΜ is a second upload of the same signed
+		document and is excluded from every calculation — the counted posting is
+		<a href={`/dase/contract/${c.duplicate_of}`} class="tabular">{c.duplicate_of}</a>.
+	</div>
+{/if}
+{#if c.duplicates?.length}
+	<p class="muted dupnote">
+		Also posted in the registry as
+		{#each c.duplicates as dref, i (dref)}{i ? ', ' : ''}<a
+				href={`/dase/contract/${dref}`}
+				class="tabular">{dref}</a>{/each}
+		— duplicate upload{c.duplicates.length > 1 ? 's' : ''}, excluded from the calculations.
+	</p>
+{/if}
+
 <p>
 	<a class="pdf" href={`/pdf/contract/${c.reference_number}`} target="_blank" rel="noopener">
 		📄 View the signed contract PDF
@@ -293,6 +310,17 @@
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);
+	}
+	.dupbanner {
+		background: color-mix(in srgb, var(--c-dase) 12%, #fff);
+		border: 1.5px solid var(--c-dase);
+		border-radius: 8px;
+		padding: var(--sp-3) var(--sp-4);
+		margin: var(--sp-3) 0;
+		max-width: var(--prose-w);
+	}
+	.dupnote {
+		margin: var(--sp-2) 0;
 	}
 	section {
 		margin-bottom: var(--sp-8);

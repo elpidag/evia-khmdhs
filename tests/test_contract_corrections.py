@@ -71,3 +71,21 @@ def test_unknown_ref_warns_and_is_not_counted(tmp_path, caplog):
 def test_missing_file_is_noop(tmp_path):
     conn = _mini_db(tmp_path)
     assert apply_contract_corrections(conn, tmp_path / "absent.json") == 0
+
+
+def test_exclude_marks_duplicate_and_links_kept_twin(tmp_path):
+    conn = _mini_db(tmp_path)
+    p = _corrections(tmp_path, {
+        "21SYMV000000001": {
+            "exclude": True,
+            "duplicate_of": "21SYMV000000002",
+            "reason": "ΚΗΜΔΗΣ double-posting of 21SYMV000000002",
+        }})
+    assert apply_contract_corrections(conn, p) == 1
+    row = conn.execute(
+        "SELECT cancelled, duplicate_of, correction_note, total_cost_without_vat "
+        "FROM contracts WHERE reference_number = '21SYMV000000001'").fetchone()
+    assert row[0] == 1
+    assert row[1] == "21SYMV000000002"
+    assert "double-posting" in row[2]
+    assert row[3] == 2537393.13  # amounts untouched — the row is registry evidence

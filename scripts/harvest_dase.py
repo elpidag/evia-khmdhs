@@ -301,9 +301,9 @@ def cmd_load() -> None:
     conn.commit()
     # LAST: the upserts above restore registry values (INSERT OR REPLACE),
     # so the curated stated-value corrections must be re-stamped here.
-    from khmdhs.contract_corrections import apply_contract_corrections
-    n_corr = apply_contract_corrections(conn)
-    print(f"-- applied {n_corr} curated contract corrections")
+    from khmdhs.contract_corrections import apply_all
+    n_corr, n_pay = apply_all(conn)
+    print(f"-- applied {n_corr} contract + {n_pay} payment curated corrections")
     n = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()[0]
     print(f"-- loaded {loaded} contracts into {DB_PATH} (table now {n})")
     conn.close()

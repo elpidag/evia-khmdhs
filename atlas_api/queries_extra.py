@@ -636,6 +636,28 @@ def dase_overview(dase: sqlite3.Connection) -> dict:
     }
 
 
+def dase_duplicate_hits(dase: sqlite3.Connection, q: str) -> list[dict]:
+    """Excluded registry double-postings matching a contracts search — so a
+    citation of the duplicate ΑΔΑΜ still finds its page (badged), instead
+    of the row silently not existing (DATA_DECISIONS 2026-08-14). Uses the
+    same folding as the frozen list_contracts filter."""
+    rows = dase.execute("""
+        SELECT co.reference_number, co.title, co.contract_signed_date,
+               co.total_cost_with_vat, co.units_operator_name,
+               co.organization_name, co.duplicate_of,
+               (SELECT GROUP_CONCAT(c.name, ' | ') FROM contractors c
+                WHERE c.reference_number = co.reference_number) AS contractor_names
+        FROM contracts co WHERE co.duplicate_of IS NOT NULL
+        ORDER BY co.contract_signed_date DESC
+    """).fetchall()
+    needle = dq._search_norm(q)
+    fold = dq._phonetic_fold(needle)
+    return [dict(r) for r in rows
+            if dq._matches(needle, fold, r["reference_number"], r["title"],
+                           r["contractor_names"], r["units_operator_name"],
+                           r["organization_name"])]
+
+
 def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     """Proportional-symbol map payload: one circle per awarding forest unit.
 

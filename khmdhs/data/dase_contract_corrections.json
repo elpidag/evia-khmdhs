@@ -1,9 +1,56 @@
 {
-  "_comment": "Curated fixes for ΔΑΣΕ contracts whose registry stated values are keying errors. Keyed by contract ΑΔΑΜ. Fields: total_cost_with_vat / total_cost_without_vat override the registry amounts when the signed PDF documents a different figure (cite the source in 'reason'); optional 'objects' maps contract_objects seq → corrected cost_without_vat where the child row repeats the error. Applied by khmdhs.contract_corrections — standalone CLI and at the end of every harvest_dase.py load (its INSERT OR REPLACE restores registry values). Candidates come from scripts/validate_contract_values.py; corrections land only after human PDF review (DATA_DECISIONS 2026-08-14).",
-  "21SYMV009374147": {
-    "total_cost_without_vat": 253739.13,
-    "total_cost_with_vat": 314636.52,
-    "objects": {"0": 253739.13},
-    "reason": "KHMDHS records net €2,537,393.13 / gross €3,146,367.48 — a ×10-scale digit-glitch keying error. The signed contract PDF (contract/attachment/21SYMV009374147) states «253.739,13» net + ΦΠΑ = «314.636,52»; all 7 sibling lots of the same Δασαρχείο Λίμνης πρόσκληση (21PROC009329287) carry exactly €253,739.13 net, and its own payment orders total €313,316.42 gross (€252,674.53 net) ≈ full settlement."
-  }
+ "_comment": "Curated fixes for ΔΑΣΕ contracts whose registry stated values are keying errors. Keyed by contract ΑΔΑΜ. Fields: total_cost_with_vat / total_cost_without_vat override the registry amounts when the signed PDF documents a different figure (cite the source in 'reason'); optional 'objects' maps contract_objects seq → corrected cost_without_vat where the child row repeats the error. Applied by khmdhs.contract_corrections — standalone CLI and at the end of every harvest_dase.py load (its INSERT OR REPLACE restores registry values). Candidates come from scripts/validate_contract_values.py; corrections land only after human PDF review (DATA_DECISIONS 2026-08-14). exclude:true + duplicate_of:<kept ΑΔΑΜ> marks a registry double-posting: the applier sets cancelled=1, correction_note and contracts.duplicate_of; the page stays reachable and cross-linked (DATA_DECISIONS 2026-08-14, double-postings entry).",
+ "21SYMV009374147": {
+  "total_cost_without_vat": 253739.13,
+  "total_cost_with_vat": 314636.52,
+  "objects": {
+   "0": 253739.13
+  },
+  "reason": "KHMDHS records net €2,537,393.13 / gross €3,146,367.48 — a ×10-scale digit-glitch keying error. The signed contract PDF (contract/attachment/21SYMV009374147) states «253.739,13» net + ΦΠΑ = «314.636,52»; all 7 sibling lots of the same Δασαρχείο Λίμνης πρόσκληση (21PROC009329287) carry exactly €253,739.13 net, and its own payment orders total €313,316.42 gross (€252,674.53 net) ≈ full settlement."
+ },
+ "22SYMV009895951": {
+  "exclude": true,
+  "duplicate_of": "22SYMV009895998",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 22SYMV009895998 and is excluded from every calculation. Evidence: user-verified against the PDFs: same Αριθ. Πρωτ. and same ΑΔΑ, uploaded twice."
+ },
+ "24SYMV015320152": {
+  "exclude": true,
+  "duplicate_of": "24SYMV015319751",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 24SYMV015319751 and is excluded from every calculation. Evidence: normalized PDF texts identical (only the registry ΑΔΑΜ stamp differs)."
+ },
+ "22SYMV011428409": {
+  "exclude": true,
+  "duplicate_of": "22SYMV011425902",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 22SYMV011425902 and is excluded from every calculation. Evidence: user-verified against the PDFs: same Αριθ. Πρωτ. 357167 and same ΑΔΑ ΩΧ2Π4653Π8-1ΙΞ, uploaded twice."
+ },
+ "24SYMV015789944": {
+  "exclude": true,
+  "duplicate_of": "24SYMV015789338",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 24SYMV015789338 and is excluded from every calculation. Evidence: normalized PDF texts identical (only the registry ΑΔΑΜ stamp differs)."
+ },
+ "21SYMV009363348": {
+  "exclude": true,
+  "duplicate_of": "21SYMV009363115",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 21SYMV009363115 and is excluded from every calculation. Evidence: normalized PDF texts identical (only the registry ΑΔΑΜ stamp differs); its own €7,498.00 payment is a DISTINCT paper and stays counted."
+ },
+ "24SYMV015324834": {
+  "exclude": true,
+  "duplicate_of": "24SYMV015324918",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 24SYMV015324918 and is excluded from every calculation. Evidence: normalized PDF texts identical; the payment sits on the kept posting."
+ },
+ "21SYMV009578833": {
+  "exclude": true,
+  "duplicate_of": "21SYMV009579012",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 21SYMV009579012 and is excluded from every calculation. Evidence: normalized PDF texts identical; the payment sits on the kept posting."
+ },
+ "22SYMV011574438": {
+  "exclude": true,
+  "duplicate_of": "22SYMV011574305",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 22SYMV011574305 and is excluded from every calculation. Evidence: normalized PDF texts identical (only the registry ΑΔΑΜ stamp differs)."
+ },
+ "21SYMV009502419": {
+  "exclude": true,
+  "duplicate_of": "21SYMV009502974",
+  "reason": "ΚΗΜΔΗΣ double-posting: the same signed document was uploaded twice; this ΑΔΑΜ duplicates 21SYMV009502974 and is excluded from every calculation. Evidence: normalized PDF texts identical; the payment sits on the kept posting."
+ }
 }

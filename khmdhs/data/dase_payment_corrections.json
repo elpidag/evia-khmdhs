@@ -1,0 +1,7 @@
+{
+ "_comment": "ΔΑΣΕ payment corrections, same format as payment_corrections.json (exclude:true → cancelled; amount_* → overrides). Applied via payment_loader.apply_corrections from khmdhs.contract_corrections runs and harvest_dase.py load (DATA_DECISIONS 2026-08-14).",
+ "22PAY010598913": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ double-posting of the same payment paper as 22PAY010599002 (user-verified; the PDF states «ΚΑΘΑΡΗ ΑΞΙΑ» 86.504,06 € / 107.265,03 € gross, matching the kept row; this duplicate's stored 86,938.75 was additionally mis-keyed)."
+ }
+}

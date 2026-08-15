@@ -36,7 +36,10 @@
 		{#each shown as r (r.reference_number)}
 			<tr>
 				<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
-				<td><a href={`/dase/contract/${r.reference_number}`}>{r.title ?? r.reference_number}</a></td>
+				<td>
+					<a href={`/dase/contract/${r.reference_number}`}>{r.title ?? r.reference_number}</a>
+					{#if r.duplicate_of}<span class="chip bad">duplicate posting</span>{/if}
+				</td>
 				<td class="muted"><small>{r.contractor_names ?? '—'}</small></td>
 				<td class="muted"><small>{r.units_operator_name ?? r.organization_name ?? '—'}</small></td>
 				<td class="num">{eur(r.total_cost_with_vat)}</td>
