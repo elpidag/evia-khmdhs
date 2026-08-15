@@ -392,7 +392,9 @@
 	anchor="top-coops"
 	methodology="canonical-vat"
 >
-	<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={22} />
+	<div class="rankw">
+		<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={30} />
+	</div>
 </ChartFrame>
 
 <div class="pair">
@@ -790,5 +792,14 @@
 	}
 	.map-holder {
 		max-width: 44rem;
+	}
+	/* same footprint as the sponsored-works RANKING OF COMPANIES */
+	.rankw {
+		max-width: 75%;
+	}
+	@media (max-width: 900px) {
+		.rankw {
+			max-width: none;
+		}
 	}
 </style>
