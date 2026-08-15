@@ -808,7 +808,7 @@ def dase_swarm(dase: sqlite3.Connection) -> dict:
         WHERE {dq.live_filter('co')}
     """).fetchall()
     out: dict[str, list] = {"ref": [], "t": [], "eur": [], "year": [],
-                            "pe": [], "vat": []}
+                            "d": [], "pe": [], "vat": []}
     for r in rows:
         d = _full_date(r["contract_signed_date"]) or _full_date(r["submission_date"])
         t = (r["title"] or r["reference_number"]).strip()
@@ -816,6 +816,7 @@ def dase_swarm(dase: sqlite3.Connection) -> dict:
         out["t"].append(t[:70] + ("…" if len(t) > 70 else ""))
         out["eur"].append(r["total_cost_with_vat"])
         out["year"].append(d[:4] if d else None)
+        out["d"].append(d)
         out["pe"].append(r["region_pe"])
         out["vat"].append(dq.canonical_vat(r["vat"]) if r["vat"] else None)
     return out

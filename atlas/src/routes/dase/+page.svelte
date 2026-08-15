@@ -348,16 +348,16 @@
 {#if swarm}
 	<ChartFrame
 		title="CONTRACT VALUES"
-		subtitle="Every live contract ({grInt(
-			o.kpis.n_contracts
-		)}) as one dot on a log scale (stated €, excl. VAT), coloured by year — half sit below {eur(
-			o.kpis.median_eur
-		)}. Hover to inspect, click through."
 		caveat="Stated values excl. VAT, deduplicated (cancelled and superseded versions excluded)."
 		anchor="dase-swarm"
 		methodology="dase-dedup"
 	>
-		<BeeswarmCanvas data={swarm} />
+		<BeeswarmCanvas
+			data={swarm}
+			note="Every live contract ({grInt(
+				o.kpis.n_contracts
+			)}) as one dot on a log scale (stated €, excl. VAT), coloured by year. Hover to inspect, click through to go to the contract's page."
+		/>
 	</ChartFrame>
 {:else}
 	<div class="skeleton" style="height: 380px"></div>

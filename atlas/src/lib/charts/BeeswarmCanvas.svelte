@@ -15,7 +15,7 @@
 	import { eur, eurShort } from '$lib/transforms/format';
 	import { scaleLog } from 'd3-scale';
 
-	let { data }: { data: DaseSwarm } = $props();
+	let { data, note = '' }: { data: DaseSwarm; note?: string } = $props();
 
 	let width = $state(900);
 	const M = { top: 26, right: 16, bottom: 34, left: 16 };
@@ -150,50 +150,84 @@
 		[100, 1e3, 1e4, 1e5, 1e6].filter((v) => v >= x.domain()[0] && v <= x.domain()[1])
 	);
 	const years = $derived([...new Set(data.year.filter(Boolean))].sort() as string[]);
+
+	const dmy = (iso: string | null | undefined) =>
+		iso ? `${iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}` : '—';
+	// dark ink on the light year swatches, white on the deep ones
+	function tipInk(hex: string): string {
+		const n = parseInt(hex.slice(1), 16);
+		const lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+		return lum > 0.55 ? '#1c221f' : '#ffffff';
+	}
+	const hoverColor = $derived(
+		hover ? (YEAR_COLORS[data.year[hover.i] ?? ''] ?? '#8a7f6e') : ''
+	);
 </script>
 
-<div class="wrap" bind:clientWidth={width}>
-	<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-	<canvas
-		bind:this={canvas}
-		style:width="100%"
-		style:height="{height}px"
-		style:cursor={hover ? 'pointer' : 'default'}
-		onmousemove={onMove}
-		onmouseleave={() => (hover = null)}
-		onclick={onClick}
-	></canvas>
+<div class="legend">
+	{#each years as y (y)}
+		<span><i style:background={YEAR_COLORS[y]}></i>{y}</span>
+	{/each}
+</div>
 
-	<svg class="overlay" viewBox="0 0 {width} {height}">
-		{#each axisTicks as t (t)}
-			<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
-			<text class="axis" x={x(t)} y={height - 12}>{eurShort(t)}</text>
-		{/each}
-		<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
-		<text class="median-label" x={x(median) + 4} y={M.top + 10}>median {eurShort(median)}</text>
-		{#if biggest}
-			<text class="note" x={biggest.x - 6} y={biggest.y - 10} text-anchor="end">
-				largest: {eurShort(biggest.eur)}
-			</text>
-		{/if}
-	</svg>
-
-	<div class="legend">
-		{#each years as y (y)}
-			<span><i style:background={YEAR_COLORS[y]}></i>{y}</span>
-		{/each}
-	</div>
-
-	{#if hover}
-		<div class="tip">
-			<strong>{eur(hover.eur)}</strong> · {data.year[hover.i] ?? ''}<br />
-			{data.t[hover.i]}<br />
-			<span class="faint">{data.pe[hover.i] ?? 'Π.Ε. unresolved'}</span>
-		</div>
+<div class="cols">
+	{#if note}
+		<p class="sidenote">{note}</p>
 	{/if}
+
+	<div class="wrap" bind:clientWidth={width}>
+		<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+		<canvas
+			bind:this={canvas}
+			style:width="100%"
+			style:height="{height}px"
+			style:cursor={hover ? 'pointer' : 'default'}
+			onmousemove={onMove}
+			onmouseleave={() => (hover = null)}
+			onclick={onClick}
+		></canvas>
+
+		<svg class="overlay" viewBox="0 0 {width} {height}">
+			{#each axisTicks as t (t)}
+				<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
+				<text class="axis" x={x(t)} y={height - 12}>{eurShort(t)}</text>
+			{/each}
+			<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
+			<text class="median-label" x={x(median) + 6} y={M.top + 10}>median {eurShort(median)}</text>
+			{#if biggest}
+				<text class="note" x={biggest.x - 6} y={biggest.y - 10} text-anchor="end">
+					largest: {eurShort(biggest.eur)}
+				</text>
+			{/if}
+		</svg>
+
+		{#if hover}
+			<div class="tip" style:background={hoverColor} style:color={tipInk(hoverColor)}>
+				<strong>{eur(hover.eur)}</strong><br />
+				signed {dmy(data.d?.[hover.i])}<br />
+				<span class="adam">{data.ref[hover.i]}</span>
+			</div>
+		{/if}
+	</div>
 </div>
 
 <style>
+	.cols {
+		display: grid;
+		grid-template-columns: 210px minmax(0, 1fr);
+		gap: var(--sp-6);
+		align-items: start;
+	}
+	@media (max-width: 800px) {
+		.cols {
+			grid-template-columns: 1fr;
+		}
+	}
+	.sidenote {
+		color: var(--ink-soft);
+		font-size: var(--fs-14);
+		margin: 0;
+	}
 	.wrap {
 		position: relative;
 	}
@@ -217,10 +251,12 @@
 	}
 	.median {
 		stroke: var(--ink);
-		opacity: 0.5;
+		stroke-width: 2.5;
+		stroke-dasharray: 7 5;
 	}
 	.median-label {
-		font-size: 11px;
+		font-size: 12px;
+		font-weight: 800;
 		fill: var(--ink);
 	}
 	.note {
@@ -233,7 +269,7 @@
 		gap: var(--sp-4);
 		font-size: var(--fs-12);
 		color: var(--ink-soft);
-		margin-top: var(--sp-1);
+		margin: 0 0 var(--sp-3);
 	}
 	.legend i {
 		display: inline-block;
@@ -248,15 +284,14 @@
 		top: 0;
 		right: 0;
 		max-width: 24rem;
-		background: color-mix(in srgb, var(--paper) 94%, transparent);
-		border: 1px solid var(--line-strong);
 		border-radius: var(--radius);
 		padding: var(--sp-2) var(--sp-3);
 		font-size: var(--fs-13);
 		pointer-events: none;
 		box-shadow: var(--shadow-paper);
 	}
-	.faint {
-		color: var(--ink-faint);
+	.adam {
+		font-family: var(--font-mono, Consolas, ui-monospace, monospace);
+		font-size: var(--fs-12);
 	}
 </style>

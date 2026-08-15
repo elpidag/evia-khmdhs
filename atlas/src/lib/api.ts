@@ -269,6 +269,8 @@ export interface DaseSwarm {
 	t: string[];
 	eur: (number | null)[];
 	year: (string | null)[];
+	/** ISO signed date (submission fallback) — the tooltip's DD.MM.YYYY */
+	d: (string | null)[];
 	pe: (string | null)[];
 	vat: (string | null)[];
 }

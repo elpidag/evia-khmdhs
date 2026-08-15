@@ -134,6 +134,8 @@ def test_dase_pins(client):
     assert d["by_pe"]["unresolved"]["n"] == 4
     sw = client.get("/api/dase/swarm").get_json()
     assert len(sw["ref"]) == 2008
+    # full ISO date rides along for the tooltip's DD.MM.YYYY
+    assert len(sw["d"]) == 2008 and any(sw["d"])
 
 
 def test_dase_display_name_pins(client):
