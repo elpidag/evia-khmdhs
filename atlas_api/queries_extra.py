@@ -736,51 +736,99 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
                  "SELECT name, lat, lon, kind FROM forest_authorities")}
     rows = dase.execute(f"""
         SELECT r.source, r.region_pe, co.total_cost_with_vat AS eur,
-               co.reference_number AS ref, co.title,
+               co.reference_number AS ref,
+               co.units_operator_name AS unit, co.organization_name AS org,
                COALESCE(co.contract_signed_date, co.submission_date) AS d
         FROM contracts co
         JOIN dase_contract_regions r USING (reference_number)
         WHERE {dq.live_filter('co')}
     """).fetchall()
+    coop_of = dase_contract_display(dase)
 
-    def contract_row(r) -> dict:
-        t = (r["title"] or r["ref"]).strip()
-        return {"ref": r["ref"], "t": t[:80] + ("…" if len(t) > 80 else ""),
-                "d": (r["d"] or "")[:10] or None, "eur": r["eur"]}
+    def _unit_forest_kind(unit: str | None) -> str | None:
+        """Forest-service units that missed a registry seat (Δασαρχείο
+        Φουρνά lives in dase_units.json; ΔΔ Ηλείας/Πιερίας/Χαλκιδικής rows
+        matched via curated unit keys; the supra-regional ΕΠΙΘΕΩΡΗΣΗ has no
+        seat by nature) still belong to the green forest family — drawn at
+        the Π.Ε. centroid, never as «other bodies»."""
+        f = _fold_upper(unit or "")
+        if f.startswith("ΔΑΣΑΡΧΕΙΟ"):
+            return "dx"
+        if "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ" in f or f.startswith("ΕΠΙΘΕΩΡΗΣΗ"):
+            return "dd"
+        return None
 
-    def summarise(group: list) -> dict:
+    def _org_class(org: str | None) -> str:
+        """Remaining non-forest awarders: municipal/regional government
+        (δήμοι, περιφέρειες and their νομικά πρόσωπα — the ΔΗΜΟ- stem also
+        catches the registry's «ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ» typo and the
+        Αλμωπία entities' «…ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ» tails) vs every other public
+        body (εφορείες αρχαιοτήτων, ΟΣΕ, ports, universities, hospitals,
+        ΓΕΑ…)."""
+        f = _fold_upper(org or "")
+        if "ΔΗΜΟ" in f or f.startswith("ΠΕΡΙΦΕΡΕΙΑ") or "Δ.Ε.Υ.Α" in f or f.startswith("ΔΕΥΑ"):
+            return "muni"
+        return "misc"
+
+    def contract_row(r, by: str) -> dict:
+        return {"ref": r["ref"], "d": (r["d"] or "")[:10] or None,
+                "eur": r["eur"], "by": by,
+                "coop": coop_of.get(r["ref"]) or ""}
+
+    def summarise(group: list, by_of) -> dict:
         vals = sorted((r["eur"] or 0.0) for r in group)
         mid = len(vals) // 2
         median = vals[mid] if len(vals) % 2 else (vals[mid - 1] + vals[mid]) / 2
-        contracts = sorted((contract_row(r) for r in group),
+        contracts = sorted((contract_row(r, by_of(r)) for r in group),
                            key=lambda c: -(c["eur"] or 0.0))
         return {"n": len(vals), "eur": round(sum(vals), 2),
                 "median_eur": round(median, 2), "contracts": contracts}
 
     units: dict[str, dict] = {}
-    other: dict[str, list] = {}
+    seatless: dict[tuple, dict] = {}
+    other: dict[tuple, list] = {}
     for r in rows:
         src, pe = r["source"], r["region_pe"]
         name = src.split(":", 1)[1] if src.startswith("registry:") else None
         if name and name in seats and seats[name][0] is not None:
             units.setdefault(name, {"pe": pe, "rows": []})["rows"].append(r)
+            continue
+        fkind = _unit_forest_kind(r["unit"])
+        if fkind and pe:
+            key = ((r["unit"] or "").strip(), pe)
+            seatless.setdefault(key, {"kind": fkind, "rows": []})["rows"].append(r)
         elif pe:
-            other.setdefault(pe, []).append(r)
+            other.setdefault((pe, _org_class(r["org"])), []).append(r)
 
+    unit_by = lambda r: (r["unit"] or r["org"] or "").strip()  # noqa: E731
     out_units = []
     for name, u in units.items():
         lat, lon, kind = seats[name]
         out_units.append({"name": name, "kind": kind, "pe": u["pe"],
-                          "lat": lat, "lon": lon, **summarise(u["rows"])})
-    out_units.sort(key=lambda x: -x["eur"])
-
-    out_other = []
-    for pe, group in other.items():
+                          "lat": lat, "lon": lon,
+                          **summarise(u["rows"], unit_by)})
+    # forest units without a registry seat sit at their Π.Ε. centroid;
+    # a unit spanning several Π.Ε. gets one circle per Π.Ε., disambiguated
+    dup_names = {n for (n, _p) in seatless
+                 if sum(1 for (n2, _q) in seatless if n2 == n) > 1}
+    for (uname, pe), grp in seatless.items():
         cent = PE_CENTROIDS.get(pe)
         if not cent:
             continue
-        out_other.append({"pe": pe, "lat": cent[0], "lon": cent[1],
-                          **summarise(group)})
+        label = f"{uname} · {pe}" if uname in dup_names else uname
+        out_units.append({"name": label, "kind": grp["kind"], "pe": pe,
+                          "lat": cent[0], "lon": cent[1],
+                          **summarise(grp["rows"], unit_by)})
+    out_units.sort(key=lambda x: -x["eur"])
+
+    out_other = []
+    for (pe, klass), group in other.items():
+        cent = PE_CENTROIDS.get(pe)
+        if not cent:
+            continue
+        out_other.append({"pe": pe, "kind": klass,
+                          "lat": cent[0], "lon": cent[1],
+                          **summarise(group, lambda r: (r["org"] or r["unit"] or "").strip())})
     out_other.sort(key=lambda x: -x["eur"])
 
     unresolved = dase.execute(f"""

@@ -35,8 +35,8 @@
 		firesFc ? firesFc.features.filter((f) => f.properties.yr >= FIRES_FROM) : []
 	);
 
-	// one mark per awarding unit (solid) + per-Π.Ε. residue of municipal &
-	// other non-forest awarders (dashed), largest drawn first so small
+	// one mark per awarding unit + per-Π.Ε. circles for municipal/regional
+	// government and for other public bodies, largest drawn first so small
 	// circles stay clickable on top
 	type MapPt = {
 		name: string;
@@ -47,7 +47,7 @@
 		eur: number;
 		median_eur: number;
 		contracts: DaseMapContract[];
-		kindKey: 'dx' | 'dd' | 'other';
+		kindKey: 'dx' | 'dd' | 'muni' | 'misc';
 	};
 	const mapPts = $derived.by<MapPt[]>(() => {
 		if (!dmap) return [];
@@ -58,28 +58,57 @@
 			})),
 			...dmap.other.map((g) => ({
 				...g,
-				name: `Municipal & other awarders · ${g.pe}`,
-				kindKey: 'other' as const
+				name:
+					g.kind === 'muni'
+						? `Municipal & regional awarders · ${g.pe}`
+						: `Other public bodies · ${g.pe}`,
+				kindKey: g.kind as MapPt['kindKey']
 			}))
 		].sort((a, b) => b.eur - a.eur);
 	});
 	// works-ramp greens per the approved legend mock: dark for the
-	// Διευθύνσεις Δασών, light for the Δασαρχεία, black for non-forest
-	// awarders (δήμοι, περιφέρειες, ministries)
+	// Διευθύνσεις Δασών, light for the Δασαρχεία; black for municipal &
+	// regional government, grey for every other public body
 	const KIND_COLOR: Record<MapPt['kindKey'], string> = {
 		dd: '#406e55',
 		dx: '#6fb28c',
-		other: '#000000'
+		muni: '#000000',
+		misc: '#9b9b9b'
 	};
 	const KIND_LABEL: Record<MapPt['kindKey'], string> = {
 		dd: 'forest directorate',
 		dx: 'local forest service office',
-		other: 'regional or municipal authority'
+		muni: 'regional or municipal authority',
+		misc: 'other public body'
 	};
-	const LEGEND_KINDS: MapPt['kindKey'][] = ['dd', 'dx', 'other'];
+	const LEGEND_KINDS: MapPt['kindKey'][] = ['dd', 'dx', 'muni', 'misc'];
 	const maxEur = $derived(mapPts.length ? mapPts[0].eur : 1);
 	const R_MAX = 26;
 	const rOf = (v: number) => Math.max(2.5, R_MAX * Math.sqrt(v / maxEur));
+	// several circles can share a Π.Ε. centroid (seatless forest units,
+	// municipal, other bodies) — spread the smaller ones to the right so
+	// none hides underneath a bigger one
+	const xOff = $derived.by<Map<string, number>>(() => {
+		const byPos = new Map<string, MapPt[]>();
+		for (const p of mapPts) {
+			const key = `${p.lat.toFixed(4)}:${p.lon.toFixed(4)}`;
+			const arr = byPos.get(key);
+			if (arr) arr.push(p);
+			else byPos.set(key, [p]);
+		}
+		const off = new Map<string, number>();
+		for (const group of byPos.values()) {
+			let edge = 0; // mapPts is sorted by eur desc, so group is too
+			for (let i = 1; i < group.length; i++) {
+				edge = (edge || rOf(group[0].eur)) + rOf(group[i].eur) + 3;
+				off.set(group[i].name, edge);
+				edge += rOf(group[i].eur);
+			}
+		}
+		return off;
+	});
+	const dmyDate = (iso: string | null) =>
+		iso ? `${iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}` : '—';
 	function unitTip(p: MapPt): string {
 		return (
 			`<strong>${p.name}</strong><br>` +
@@ -258,7 +287,7 @@
 							{#if xy}
 								<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
 								<circle
-									cx={xy[0]}
+									cx={xy[0] + (xOff.get(p.name) ?? 0) / ctx.k}
 									cy={xy[1]}
 									r={rOf(p.eur) / ctx.k}
 									class="ucircle"
@@ -273,7 +302,13 @@
 						{#each mapPts as p (`l:${p.name}`)}
 							{@const xy = ctx.projection([p.lon, p.lat])}
 							{#if xy && rOf(p.eur) >= 12}
-								<text class="ulabel" x={xy[0]} y={xy[1]} dy="0.35em" font-size={11 / ctx.k}>
+								<text
+									class="ulabel"
+									x={xy[0] + (xOff.get(p.name) ?? 0) / ctx.k}
+									y={xy[1]}
+									dy="0.35em"
+									font-size={11 / ctx.k}
+								>
 									{p.n}
 								</text>
 							{/if}
@@ -321,20 +356,30 @@
 						<header>
 							<div>
 								<div class="up-name">{sel.name}</div>
-								<div class="up-sub">
-									{grInt(sel.n)} contracts · {eurShort(sel.eur)} · median {eur(sel.median_eur)}
+								<div class="up-stats">
+									{grInt(sel.n)} contracts, median: {eur(sel.median_eur)}, total amount: {eur(
+										sel.eur
+									)}
 								</div>
 							</div>
 							<button class="up-close" onclick={() => (sel = null)} aria-label="Close">×</button>
 						</header>
-						<ul>
-							{#each sel.contracts as c (c.ref)}
-								<li>
-									<a href={`/dase/contract/${c.ref}`}>{c.t}</a>
-									<span class="up-meta">{c.d ?? '—'} · {c.eur === null ? '—' : eur(c.eur)}</span>
-								</li>
-							{/each}
-						</ul>
+						<table class="uptable">
+							<thead>
+								<tr><th>ΑΔΑΜ</th><th>awarding unit</th><th>ΔΑΣΕ</th><th>date</th><th class="num">€</th></tr>
+							</thead>
+							<tbody>
+								{#each sel.contracts as c (c.ref)}
+									<tr>
+										<td><a href={`/dase/contract/${c.ref}`}>{c.ref}</a></td>
+										<td>{c.by || '—'}</td>
+										<td>{c.coop || '—'}</td>
+										<td class="nowrap">{dmyDate(c.d)}</td>
+										<td class="num">{c.eur === null ? '—' : eur(c.eur)}</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
 					</aside>
 				{/if}
 			</div>
@@ -588,9 +633,10 @@
 		font-weight: 900;
 		font-size: var(--fs-14);
 	}
-	.up-sub {
+	.up-stats {
 		font-size: var(--fs-12);
-		color: var(--ink-soft);
+		font-weight: 700;
+		color: var(--ink);
 	}
 	.up-close {
 		border: none;
@@ -601,24 +647,37 @@
 		color: var(--ink-soft);
 		padding: 0 2px;
 	}
-	.unitpanel ul {
-		list-style: none;
+	.uptable {
+		display: block;
+		overflow-y: auto;
 		margin: 0;
 		padding: var(--sp-2) var(--sp-3);
-		overflow-y: auto;
+		font-size: var(--fs-11, 11px);
+		border-collapse: collapse;
 	}
-	.unitpanel li {
-		padding: 6px 0;
-		border-bottom: 1px solid #f0f0f0;
-		font-size: var(--fs-13);
+	.uptable th {
+		text-align: left;
+		font-weight: 700;
+		color: var(--ink-soft);
+		padding: 2px 8px 4px 0;
+		white-space: nowrap;
 	}
-	.unitpanel li:last-child {
-		border-bottom: none;
+	.uptable td {
+		padding: 4px 8px 4px 0;
+		border-top: 1px solid #f0f0f0;
+		vertical-align: top;
 	}
-	.up-meta {
-		display: block;
-		color: var(--ink-faint);
-		font-size: var(--fs-12);
+	.uptable td a {
+		white-space: nowrap;
+	}
+	.uptable .num {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+		padding-right: 0;
+		white-space: nowrap;
+	}
+	.uptable .nowrap {
+		white-space: nowrap;
 	}
 	.ucircle {
 		cursor: pointer;

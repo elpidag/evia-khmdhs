@@ -188,8 +188,11 @@ def test_dase_map_pins(client):
     """Proportional-symbol map payload: unit circles + per-Π.Ε. residue +
     off-map unresolved must reconcile exactly to the ΔΑΣΕ stated-net basis."""
     m = client.get("/api/dase/map").get_json()
-    assert len(m["units"]) == 48
-    assert len(m["other"]) == 21
+    # 48 seat circles + 6 seatless forest units at Π.Ε. centroids
+    assert len(m["units"]) == 54
+    # per-Π.Ε. non-forest circles, split municipal/regional vs other bodies
+    assert len(m["other"]) == 25
+    assert {g["kind"] for g in m["other"]} == {"muni", "misc"}
     assert m["unresolved"]["n"] == 4
     total = (sum(u["eur"] for u in m["units"])
              + sum(g["eur"] for g in m["other"])
@@ -198,9 +201,13 @@ def test_dase_map_pins(client):
     top = m["units"][0]
     assert top["name"] == "Δασαρχείο Ιστιαίας" and top["n"] == 38
     assert all(u["lat"] and u["lon"] for u in m["units"] + m["other"])
-    # every circle carries its full contract list for the click panel
+    # every circle carries its full contract list for the click panel,
+    # each row with awarding unit/body + curated co-op display name
     assert all(len(g["contracts"]) == g["n"] for g in m["units"] + m["other"])
     assert all(u["kind"] in ("dx", "dd") for u in m["units"])
+    row = m["units"][0]["contracts"][0]
+    assert set(row) == {"ref", "d", "eur", "by", "coop"}
+    assert row["by"] and row["coop"]
 
 
 def test_connections_pins(client):

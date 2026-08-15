@@ -232,16 +232,20 @@ export interface DaseOverview {
 
 export interface DaseMapContract {
 	ref: string;
-	t: string;
 	d: string | null;
 	eur: number | null;
+	/** the awarding unit (forest circles) or body (per-Π.Ε. circles) */
+	by: string;
+	/** curated display name(s) of the co-op(s) that won it */
+	coop: string;
 }
 
 export interface DaseMapPayload {
-	/** one circle per awarding forest unit, at its seat */
+	/** one circle per awarding forest unit — at its seat, or at the Π.Ε.
+	 *  centroid for the few units without a registry seat */
 	units: {
 		name: string;
-		/** forest_authorities registry kind: 'dx' Δασαρχείο / 'dd' Διεύθυνση Δασών */
+		/** 'dx' Δασαρχείο / 'dd' Διεύθυνση Δασών-level body */
 		kind: string | null;
 		pe: string | null;
 		lat: number;
@@ -251,9 +255,11 @@ export interface DaseMapPayload {
 		median_eur: number;
 		contracts: DaseMapContract[];
 	}[];
-	/** contracts awarded by non-forest bodies (δήμοι etc.), grouped per Π.Ε. */
+	/** contracts awarded by non-forest bodies, grouped per Π.Ε. */
 	other: {
 		pe: string;
+		/** 'muni' δήμοι/περιφέρειες + their entities · 'misc' other public bodies */
+		kind: 'muni' | 'misc';
 		lat: number;
 		lon: number;
 		n: number;

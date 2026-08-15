@@ -496,14 +496,22 @@ cards + direct-award bar + paid card) and kicker titles; its map is now a
 **proportional-symbol map** — one circle per awarding forest unit at its
 `forest_authorities` seat (area = Σ stated net €, label = n, tooltip
 median; join via `dase_contract_regions.source` `registry:<name>`),
-kind-coloured per the user's legend mock (dd «forest directorate»
-#406e55 / dx «local forest service office» #6fb28c / municipal & other
-non-forest awarders solid black at Π.Ε. centroids), ΑΔΜΗΕ off-map in
+kind-coloured per the user's legend mock, FOUR kinds since 2026-08-15:
+dd «forest directorate» #406e55 / dx «local forest service office»
+#6fb28c / «regional or municipal authority» solid black at Π.Ε.
+centroids (δήμοι+περιφέρειες+their νομικά πρόσωπα, ΔΗΜΟ/ΠΕΡΙΦΕΡΕΙΑ/ΔΕΥΑ
+stems) / «other public body» grey #9b9b9b (εφορείες αρχαιοτήτων, ΟΣΕ,
+port, ΑΠΘ, hospital, ΓΕΑ). Seatless forest units (Δασαρχείο Φουρνά, ΔΔ
+Ηλείας/Ν. Πιερίας/Χαλκιδικής, the supra-regional ΕΠΙΘΕΩΡΗΣΗ — 6
+circles) stay GREEN, drawn at their Π.Ε. centroid; same-centroid
+circles spread right by radius so none hides. ΑΔΜΗΕ off-map in
 the caveat, EFFIS burn scars ≥2021 underneath (attribution on the
 frame); grey legend panel docked RIGHT of the map, top-aligned (dot
 key, nested-circle size icon, «burnt areas» white→maroon year-gradient
-bar); click a circle → its contract list docks below the legend
-(lists in the payload), click a Π.Ε. → zoom; payload `/api/dase/map`
+bar); click a circle → its contract table docks below the legend
+(bold n/median/total header; columns ΑΔΑΜ-link · awarding unit ·
+co-op display name · DD.MM.YYYY · €; rows in the payload), click a
+Π.Ε. → zoom; payload `/api/dase/map`
 reconciles to the
 basis (pinned). /dase contract pages draw the ΚΗΜΔΗΣ family as a
 FamilyTree diagram (trunk → award fan → contracts, viewed contract's
