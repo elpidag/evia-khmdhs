@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import { eurShort, grInt } from '$lib/transforms/format';
 
 	interface Edge {
@@ -102,7 +103,7 @@
 			>
 				<circle cx={colR - 10} cy={y} r="3" />
 				<text class="name" x={colR - 2} y={y + 4}>
-					{r.pe.replace('Π.Ε. ', '')}
+					{peEn(r.pe)}
 					<tspan class="val"> {eurShort(r.eur)}</tspan>
 				</text>
 			</g>

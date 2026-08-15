@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ruLabel } from '$lib/transforms/regions';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
 	import BarH from '$lib/charts/BarH.svelte';
@@ -204,7 +205,7 @@
 			.map((p) => ({
 				ada: p.ada,
 				company: p.company,
-				where: p.pe ?? p.fire ?? '',
+				where: (p.pe ? ruLabel(p.pe) : null) ?? p.fire ?? '',
 				executors: p.executors as Executor[]
 			}))
 			.sort((a, b) => a.company.localeCompare(b.company, 'el'))
@@ -581,7 +582,7 @@
 											? 'ψηφιοποιημένη ζώνη έργων'
 											: p.prec === 'municipality'
 												? 'κέντρο δήμου (κατά προσέγγιση)'
-												: 'κέντρο Π.Ε. (κατά προσέγγιση)')}
+												: 'regional-unit centre (approximate)')}
 								hrefOf={(p) => `/anadohoi/project/${p.ada}`}
 								onOver={(p) => showHover(p.ada as string, 'map')}
 								onOut={() => showHover(null, 'map')}

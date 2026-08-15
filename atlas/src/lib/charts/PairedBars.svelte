@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import type { ComparePayload } from '$lib/api';
 	import { eurShort } from '$lib/transforms/format';
 
@@ -31,7 +32,7 @@
 		{@const pa = r.antinero_eur / antineroTotal}
 		{@const pd = r.dase_eur / daseTotal}
 		<div class="row">
-			<span class="pe">{r.pe.replace('Π.Ε. ', '')}</span>
+			<span class="pe">{peEn(r.pe)}</span>
 			<div class="track left">
 				<span class="val">{r.antinero_eur ? eurShort(r.antinero_eur) : '—'}</span>
 				<div class="bar antinero" style:width={`${(100 * pa) / maxPct}%`}></div>

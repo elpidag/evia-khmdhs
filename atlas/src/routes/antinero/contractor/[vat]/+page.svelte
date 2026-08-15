@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ruLabel } from '$lib/transforms/regions';
 	import YearBars from '$lib/charts/YearBars.svelte';
 	import ChoroLegend from '$lib/maps/ChoroLegend.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
@@ -42,7 +43,7 @@
 	<p class="muted tabular">
 		ΑΦΜ {b.summary.vat_number}
 		{#if b.location?.city}· {b.location.city}{/if}
-		{#if b.location?.region_pe}({b.location.region_pe}){/if}
+		{#if b.location?.region_pe}({ruLabel(b.location.region_pe)}){/if}
 		{#if b.location?.gemi && b.location.gemi !== '-1'}
 			· <a href={`https://publicity.businessportal.gr/company/${b.location.gemi}`} target="_blank"
 				rel="noopener">ΓΕΜΗ profile</a>
@@ -89,8 +90,8 @@
 			tipOf={(pe) => {
 				const r = regionMap.get(pe);
 				return r
-					? `<strong>${pe}</strong><br>${grInt(r.n_contracts)} contracts · ${eur(r.split_eur)}`
-					: `<strong>${pe}</strong>`;
+					? `<strong>${ruLabel(pe)}</strong><br>${grInt(r.n_contracts)} contracts · ${eur(r.split_eur)}`
+					: `<strong>${ruLabel(pe)}</strong>`;
 			}}
 		>
 			{#snippet overlay(ctx)}

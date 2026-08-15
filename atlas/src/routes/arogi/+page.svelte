@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { eur, grInt } from '$lib/transforms/format';
@@ -168,7 +169,7 @@
 		<tr>
 			<th><button class="sort" onclick={() => toggleSort('d')}>First act {sort === 'd_desc' ? '↓' : sort === 'd_asc' ? '↑' : ''}</button></th>
 			<th>Fire</th>
-			<th>Π.Ε.</th>
+			<th>R.U.</th>
 			<th>Acts</th>
 			<th>Status</th>
 			<th class="num"><button class="sort" onclick={() => toggleSort('v')}>Σ.Σ. approved {sort === 'v_desc' ? '↓' : sort === 'v_asc' ? '↑' : ''}</button></th>
@@ -179,7 +180,7 @@
 			<tr>
 				<td class="tabular muted">{r.d ?? '—'}{#if r.d2 && r.d2 !== r.d}<span class="muted"> → {r.d2}</span>{/if}</td>
 				<td><a href={`/arogi/case/${encodeURIComponent(r.id)}`}>{r.fire ?? '— unattributed'}</a></td>
-				<td class="muted"><small>{r.pe ?? '—'}</small></td>
+				<td class="muted"><small>{r.pe ? peEn(r.pe) : '—'}</small></td>
 				<td class="num">{r.n}</td>
 				<td><span class="chip" class:ok={r.st === 'completed'}>{ST_LABEL[r.st] ?? r.st}</span></td>
 				<td class="num">{r.v === null ? '—' : eur(r.v)}</td>

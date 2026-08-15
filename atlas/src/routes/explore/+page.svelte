@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { apiGetCached, type ExplorePayload, type ExploreRow } from '$lib/api';
 	import { eur, grInt } from '$lib/transforms/format';
+	import { peEn } from '$lib/transforms/regions';
 	import { matches, phoneticFold, searchNorm } from '$lib/transforms/search';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 
@@ -287,7 +288,7 @@
 			<select value={pe} onchange={(e) => setParam('pe', e.currentTarget.value || null)}>
 				<option value="">All of Greece</option>
 				{#each peOptions as [p, n] (p)}
-					<option value={p}>{p} ({grInt(n)})</option>
+					<option value={p}>{peEn(p)} ({grInt(n)})</option>
 				{/each}
 			</select>
 		</label>
@@ -296,7 +297,7 @@
 			<select value={hq} onchange={(e) => setParam('hq', e.currentTarget.value || null)}>
 				<option value="">Any</option>
 				{#each hqOptions as [p, n] (p)}
-					<option value={p}>{p} ({grInt(n)})</option>
+					<option value={p}>{peEn(p)} ({grInt(n)})</option>
 				{/each}
 			</select>
 		</label>
@@ -362,7 +363,7 @@
 							>{/if}
 					</td>
 					<td class="muted"><small>{r.co || '—'}</small></td>
-					<td class="muted"><small>{r.pe.join(', ') || '—'}</small></td>
+					<td class="muted"><small>{r.pe.map(peEn).join(', ') || '—'}</small></td>
 					<td class="num">{r.v === null ? '—' : eur(r.v)}</td>
 				</tr>
 			{/each}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import BarH from '$lib/charts/BarH.svelte';
 	import FlowArcs from '$lib/maps/FlowArcs.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
@@ -24,7 +25,7 @@
 		).toSorted((a, b) => b.total_eur - a.total_eur)
 	);
 
-	const short = (pe: string) => pe.replace('Π.Ε. ', '');
+	const short = (pe: string) => peEn(pe);
 
 	// per WORK region: how much of its € is won by out-of-region firms
 	const perWork = $derived.by(() => {
@@ -284,7 +285,7 @@
 		{#each originRows as o (o.target_pe)}
 			{@const total = o.local_eur + o.imported_eur + o.unknown_eur}
 			<div class="orow">
-				<span class="olabel">{o.target_pe.replace('Π.Ε. ', '')}</span>
+				<span class="olabel">{peEn(o.target_pe)}</span>
 				<div class="obar">
 					<div class="seg local" style:width={`${(100 * o.local_eur) / total}%`}></div>
 					<div class="seg imported" style:width={`${(100 * o.imported_eur) / total}%`}></div>
@@ -305,7 +306,7 @@
 	title="A handful of companies reach into many regions"
 	subtitle="Contractor ↔ work-region links ({grInt(net.contractor_pe.length)} edges across {grInt(
 		Object.keys(net.contractors).length
-	)} contractors). {maxReach.name} alone works in {maxReach.n} Π.Ε."
+	)} contractors). {maxReach.name} alone works in {maxReach.n} regional units."
 	caveat="Edge € even-split across a contract's partners and regions — the layer sums to the programme total."
 	anchor="bipartite"
 	methodology="even-split"

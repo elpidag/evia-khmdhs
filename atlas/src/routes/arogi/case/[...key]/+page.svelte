@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ruLabel } from '$lib/transforms/regions';
 	import KpiRow from '$lib/ui/KpiRow.svelte';
 	import StatPair from '$lib/ui/StatPair.svelte';
 	import { eur, eurShort } from '$lib/transforms/format';
@@ -35,7 +36,7 @@
 	<p class="muted tabular">
 		{c.kind === 'batch' ? `Πράξη ${c.ada}` : c.case_key?.startsWith('ACT:') ? 'single act' : `file ${c.case_key}`}
 		{#if c.status}<span class="chip" class:ok={c.status === 'completed'}>{STATUS[c.status] ?? c.status}</span>{/if}
-		{#if c.pe}· {c.pe}{/if}
+		{#if c.pe}· {ruLabel(c.pe)}{/if}
 	</p>
 </hgroup>
 

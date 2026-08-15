@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import { spreadOverlaps } from '$lib/maps/useGeo';
@@ -93,7 +94,7 @@
 	<thead>
 		<tr>
 			<th>Authority</th>
-			<th>Π.Ε.</th>
+			<th>R.U.</th>
 			<th class="num">Anti-nero works</th>
 			<th class="num">ΔΑΣΕ awards</th>
 		</tr>
@@ -105,7 +106,7 @@
 					<a href={`/authority/${r.slug}`}>{r.name}</a>
 					<span class="chip">{r.kind === 'dx' ? 'Δασαρχείο' : 'Δ. Δασών'}</span>
 				</td>
-				<td class="muted"><small>{r.pe}</small></td>
+				<td class="muted"><small>{peEn(r.pe)}</small></td>
 				<td class="num">
 					{#if r.antinero_n}{r.antinero_n} · {eurShort(r.antinero_eur)}{:else}<span class="faint">—</span>{/if}
 				</td>

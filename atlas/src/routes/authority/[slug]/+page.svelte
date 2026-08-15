@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ruLabel } from '$lib/transforms/regions';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import KpiRow from '$lib/ui/KpiRow.svelte';
@@ -27,7 +28,7 @@
 <hgroup>
 	<h1>{a.name}</h1>
 	<p class="muted">
-		{kindLabel} · {a.pe}
+		{kindLabel} · {ruLabel(a.pe)}
 		{#if a.seat.city}· seat: {a.seat.city}{/if}
 	</p>
 </hgroup>

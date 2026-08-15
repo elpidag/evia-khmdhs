@@ -1984,3 +1984,29 @@ names verified via VIES + PDFs 2026-08-15. The interim 89-name snapshot
 (`dase_display_names.json` + `dase_names_review.tsv` at the project
 root) is superseded and removed. *Affects: presentation only — site
 wiring is the follow-up step; no aggregate changes.*
+
+## 2026-08-15 — English display names for the 74 Π.Ε. (Atlas presentation layer)
+
+The Atlas mixes English UI copy with Greek data names; the user asked for
+English region names on a defensible basis. Decision (user, 2026-08-15):
+base = the **official Eurostat Latin names** (`NAME_LATN` in the NUTS-3
+layer kept at `data/raw/greek_nuts3.geojson`, which follows the Greek
+state's ELOT 743 romanization), joined to the 74 canonical Π.Ε. through
+the legacy Π.Ε.→NUTS-3 bridge; merged NUTS units («Kavala, Thasos»,
+«Kalymnos, …, Kos, Rodos», «Peiraias, Nisoi» …) split by hand. On top,
+user-approved **familiar-English overrides** for the famous names: Evia,
+Heraklion, Corfu, Rhodes, Piraeus, Central/North/South/West Athens,
+East/West Attica, Attica Islands (Νήσων), Kefalonia, Ithaca, Rethymno,
+Kea-Kythnos, and **Lemnos** (user choice over official Limnos); the user
+kept **Larisa** (official single-s over Larissa), Thira (not Santorini),
+Lesvos, Voiotia, Chalkidiki, Zakynthos, Fthiotida, Ileia.
+
+Curated **`khmdhs/data/pe_names_en.json`** — 74 entries keyed by the
+canonical Π.Ε., each carrying its `nuts_id` + verbatim `name_latn` as
+evidence; byte-identical copy shipped to
+`atlas/src/lib/data/pe_names_en.json` (pinned equal by test, like the
+other double-copied geo data). Presentation only: every aggregation,
+permalink and API key stays on the Greek canonical Π.Ε.; the Atlas
+renders «R.U. <name>» (user-chosen prefix) wherever «Π.Ε. <name>»
+displayed before. webui (:5000, frozen) keeps Greek. *Affects: display
+strings on Atlas region surfaces; zero data/aggregate changes.*

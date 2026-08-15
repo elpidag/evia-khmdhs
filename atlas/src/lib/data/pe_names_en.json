@@ -1,0 +1,373 @@
+{
+ "_comment": "English display names for the 74 canonical Π.Ε. (DATA_DECISIONS 2026-08-15). Basis: official Eurostat NAME_LATN (ELOT 743) from data/raw/greek_nuts3.geojson via the legacy Π.Ε.→NUTS-3 bridge, merged units split by hand (name_latn = the verbatim official part); user-approved familiar-English overrides where en != name_latn (Evia, Heraklion, Corfu, Rhodes, Piraeus, the Athens/Attica sectors, Attica Islands, Kefalonia, Ithaca, Rethymno, Lemnos, Kea-Kythnos; user kept Larisa, Thira, Lesvos). Presentation only — every key/aggregate/permalink stays on the Greek canonical Π.Ε.; the Atlas renders 'R.U. <en>'. Byte-identical copy at atlas/src/lib/data/pe_names_en.json (pinned).",
+ "Π.Ε. Άνδρου": {
+  "en": "Andros",
+  "nuts_id": "EL422",
+  "name_latn": "Andros"
+ },
+ "Π.Ε. Άρτας": {
+  "en": "Arta",
+  "nuts_id": "EL541",
+  "name_latn": "Arta"
+ },
+ "Π.Ε. Έβρου": {
+  "en": "Evros",
+  "nuts_id": "EL511",
+  "name_latn": "Evros"
+ },
+ "Π.Ε. Αιτωλοακαρνανίας": {
+  "en": "Aitoloakarnania",
+  "nuts_id": "EL631",
+  "name_latn": "Aitoloakarnania"
+ },
+ "Π.Ε. Ανατολικής Αττικής": {
+  "en": "East Attica",
+  "nuts_id": "EL305",
+  "name_latn": "Anatoliki Attiki"
+ },
+ "Π.Ε. Αργολίδας": {
+  "en": "Argolida",
+  "nuts_id": "EL651",
+  "name_latn": "Argolida"
+ },
+ "Π.Ε. Αρκαδίας": {
+  "en": "Arkadia",
+  "nuts_id": "EL651",
+  "name_latn": "Arkadia"
+ },
+ "Π.Ε. Αχαΐας": {
+  "en": "Achaia",
+  "nuts_id": "EL632",
+  "name_latn": "Achaia"
+ },
+ "Π.Ε. Βοιωτίας": {
+  "en": "Voiotia",
+  "nuts_id": "EL641",
+  "name_latn": "Voiotia"
+ },
+ "Π.Ε. Βορείου Τομέα Αθηνών": {
+  "en": "North Athens",
+  "nuts_id": "EL301",
+  "name_latn": "Voreios Tomeas Athinon"
+ },
+ "Π.Ε. Γρεβενών": {
+  "en": "Grevena",
+  "nuts_id": "EL531",
+  "name_latn": "Grevena"
+ },
+ "Π.Ε. Δράμας": {
+  "en": "Drama",
+  "nuts_id": "EL514",
+  "name_latn": "Drama"
+ },
+ "Π.Ε. Δυτικής Αττικής": {
+  "en": "West Attica",
+  "nuts_id": "EL306",
+  "name_latn": "Dytiki Attiki"
+ },
+ "Π.Ε. Δυτικού Τομέα Αθηνών": {
+  "en": "West Athens",
+  "nuts_id": "EL302",
+  "name_latn": "Dytikos Tomeas Athinon"
+ },
+ "Π.Ε. Ευβοίας": {
+  "en": "Evia",
+  "nuts_id": "EL642",
+  "name_latn": "Evvoia"
+ },
+ "Π.Ε. Ευρυτανίας": {
+  "en": "Evrytania",
+  "nuts_id": "EL643",
+  "name_latn": "Evrytania"
+ },
+ "Π.Ε. Ζακύνθου": {
+  "en": "Zakynthos",
+  "nuts_id": "EL621",
+  "name_latn": "Zakynthos"
+ },
+ "Π.Ε. Ηλείας": {
+  "en": "Ileia",
+  "nuts_id": "EL633",
+  "name_latn": "Ileia"
+ },
+ "Π.Ε. Ημαθίας": {
+  "en": "Imathia",
+  "nuts_id": "EL521",
+  "name_latn": "Imathia"
+ },
+ "Π.Ε. Ηρακλείου": {
+  "en": "Heraklion",
+  "nuts_id": "EL431",
+  "name_latn": "Irakleio"
+ },
+ "Π.Ε. Θάσου": {
+  "en": "Thasos",
+  "nuts_id": "EL515",
+  "name_latn": "Thasos"
+ },
+ "Π.Ε. Θήρας": {
+  "en": "Thira",
+  "nuts_id": "EL422",
+  "name_latn": "Thira"
+ },
+ "Π.Ε. Θεσπρωτίας": {
+  "en": "Thesprotia",
+  "nuts_id": "EL542",
+  "name_latn": "Thesprotia"
+ },
+ "Π.Ε. Θεσσαλονίκης": {
+  "en": "Thessaloniki",
+  "nuts_id": "EL522",
+  "name_latn": "Thessaloniki"
+ },
+ "Π.Ε. Ιθάκης": {
+  "en": "Ithaca",
+  "nuts_id": "EL623",
+  "name_latn": "Ithaki"
+ },
+ "Π.Ε. Ικαρίας": {
+  "en": "Ikaria",
+  "nuts_id": "EL412",
+  "name_latn": "Ikaria"
+ },
+ "Π.Ε. Ιωαννίνων": {
+  "en": "Ioannina",
+  "nuts_id": "EL543",
+  "name_latn": "Ioannina"
+ },
+ "Π.Ε. Κέας-Κύθνου": {
+  "en": "Kea-Kythnos",
+  "nuts_id": "EL422",
+  "name_latn": "Kea, Kythnos"
+ },
+ "Π.Ε. Κέρκυρας": {
+  "en": "Corfu",
+  "nuts_id": "EL622",
+  "name_latn": "Kerkyra"
+ },
+ "Π.Ε. Καβάλας": {
+  "en": "Kavala",
+  "nuts_id": "EL515",
+  "name_latn": "Kavala"
+ },
+ "Π.Ε. Καλύμνου": {
+  "en": "Kalymnos",
+  "nuts_id": "EL421",
+  "name_latn": "Kalymnos"
+ },
+ "Π.Ε. Καρδίτσας": {
+  "en": "Karditsa",
+  "nuts_id": "EL611",
+  "name_latn": "Karditsa"
+ },
+ "Π.Ε. Καρπάθου": {
+  "en": "Karpathos",
+  "nuts_id": "EL421",
+  "name_latn": "Karpathos"
+ },
+ "Π.Ε. Καστοριάς": {
+  "en": "Kastoria",
+  "nuts_id": "EL532",
+  "name_latn": "Kastoria"
+ },
+ "Π.Ε. Κεντρικού Τομέα Αθηνών": {
+  "en": "Central Athens",
+  "nuts_id": "EL303",
+  "name_latn": "Kentrikos Tomeas Athinon"
+ },
+ "Π.Ε. Κεφαλληνίας": {
+  "en": "Kefalonia",
+  "nuts_id": "EL623",
+  "name_latn": "Kefallinia"
+ },
+ "Π.Ε. Κιλκίς": {
+  "en": "Kilkis",
+  "nuts_id": "EL523",
+  "name_latn": "Kilkis"
+ },
+ "Π.Ε. Κοζάνης": {
+  "en": "Kozani",
+  "nuts_id": "EL531",
+  "name_latn": "Kozani"
+ },
+ "Π.Ε. Κορινθίας": {
+  "en": "Korinthia",
+  "nuts_id": "EL652",
+  "name_latn": "Korinthia"
+ },
+ "Π.Ε. Κω": {
+  "en": "Kos",
+  "nuts_id": "EL421",
+  "name_latn": "Kos"
+ },
+ "Π.Ε. Λάρισας": {
+  "en": "Larisa",
+  "nuts_id": "EL612",
+  "name_latn": "Larisa"
+ },
+ "Π.Ε. Λέσβου": {
+  "en": "Lesvos",
+  "nuts_id": "EL411",
+  "name_latn": "Lesvos"
+ },
+ "Π.Ε. Λήμνου": {
+  "en": "Lemnos",
+  "nuts_id": "EL411",
+  "name_latn": "Limnos"
+ },
+ "Π.Ε. Λακωνίας": {
+  "en": "Lakonia",
+  "nuts_id": "EL653",
+  "name_latn": "Lakonia"
+ },
+ "Π.Ε. Λασιθίου": {
+  "en": "Lasithi",
+  "nuts_id": "EL432",
+  "name_latn": "Lasithi"
+ },
+ "Π.Ε. Λευκάδας": {
+  "en": "Lefkada",
+  "nuts_id": "EL624",
+  "name_latn": "Lefkada"
+ },
+ "Π.Ε. Μήλου": {
+  "en": "Milos",
+  "nuts_id": "EL422",
+  "name_latn": "Milos"
+ },
+ "Π.Ε. Μαγνησίας": {
+  "en": "Magnisia",
+  "nuts_id": "EL613",
+  "name_latn": "Magnisia"
+ },
+ "Π.Ε. Μεσσηνίας": {
+  "en": "Messinia",
+  "nuts_id": "EL653",
+  "name_latn": "Messinia"
+ },
+ "Π.Ε. Μυκόνου": {
+  "en": "Mykonos",
+  "nuts_id": "EL422",
+  "name_latn": "Mykonos"
+ },
+ "Π.Ε. Νάξου": {
+  "en": "Naxos",
+  "nuts_id": "EL422",
+  "name_latn": "Naxos"
+ },
+ "Π.Ε. Νήσων": {
+  "en": "Attica Islands",
+  "nuts_id": "EL307",
+  "name_latn": "Nisoi"
+ },
+ "Π.Ε. Νοτίου Τομέα Αθηνών": {
+  "en": "South Athens",
+  "nuts_id": "EL304",
+  "name_latn": "Notios Tomeas Athinon"
+ },
+ "Π.Ε. Ξάνθης": {
+  "en": "Xanthi",
+  "nuts_id": "EL512",
+  "name_latn": "Xanthi"
+ },
+ "Π.Ε. Πάρου": {
+  "en": "Paros",
+  "nuts_id": "EL422",
+  "name_latn": "Paros"
+ },
+ "Π.Ε. Πέλλας": {
+  "en": "Pella",
+  "nuts_id": "EL524",
+  "name_latn": "Pella"
+ },
+ "Π.Ε. Πειραιώς": {
+  "en": "Piraeus",
+  "nuts_id": "EL307",
+  "name_latn": "Peiraias"
+ },
+ "Π.Ε. Πιερίας": {
+  "en": "Pieria",
+  "nuts_id": "EL525",
+  "name_latn": "Pieria"
+ },
+ "Π.Ε. Πρέβεζας": {
+  "en": "Preveza",
+  "nuts_id": "EL541",
+  "name_latn": "Preveza"
+ },
+ "Π.Ε. Ρεθύμνου": {
+  "en": "Rethymno",
+  "nuts_id": "EL433",
+  "name_latn": "Rethymni"
+ },
+ "Π.Ε. Ροδόπης": {
+  "en": "Rodopi",
+  "nuts_id": "EL513",
+  "name_latn": "Rodopi"
+ },
+ "Π.Ε. Ρόδου": {
+  "en": "Rhodes",
+  "nuts_id": "EL421",
+  "name_latn": "Rodos"
+ },
+ "Π.Ε. Σάμου": {
+  "en": "Samos",
+  "nuts_id": "EL412",
+  "name_latn": "Samos"
+ },
+ "Π.Ε. Σερρών": {
+  "en": "Serres",
+  "nuts_id": "EL526",
+  "name_latn": "Serres"
+ },
+ "Π.Ε. Σποράδων": {
+  "en": "Sporades",
+  "nuts_id": "EL613",
+  "name_latn": "Sporades"
+ },
+ "Π.Ε. Σύρου": {
+  "en": "Syros",
+  "nuts_id": "EL422",
+  "name_latn": "Syros"
+ },
+ "Π.Ε. Τήνου": {
+  "en": "Tinos",
+  "nuts_id": "EL422",
+  "name_latn": "Tinos"
+ },
+ "Π.Ε. Τρικάλων": {
+  "en": "Trikala",
+  "nuts_id": "EL611",
+  "name_latn": "Trikala"
+ },
+ "Π.Ε. Φθιώτιδας": {
+  "en": "Fthiotida",
+  "nuts_id": "EL644",
+  "name_latn": "Fthiotida"
+ },
+ "Π.Ε. Φλώρινας": {
+  "en": "Florina",
+  "nuts_id": "EL533",
+  "name_latn": "Florina"
+ },
+ "Π.Ε. Φωκίδας": {
+  "en": "Fokida",
+  "nuts_id": "EL645",
+  "name_latn": "Fokida"
+ },
+ "Π.Ε. Χίου": {
+  "en": "Chios",
+  "nuts_id": "EL413",
+  "name_latn": "Chios"
+ },
+ "Π.Ε. Χαλκιδικής": {
+  "en": "Chalkidiki",
+  "nuts_id": "EL527",
+  "name_latn": "Chalkidiki"
+ },
+ "Π.Ε. Χανίων": {
+  "en": "Chania",
+  "nuts_id": "EL434",
+  "name_latn": "Chania"
+ }
+}

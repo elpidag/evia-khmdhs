@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import type { ComparePayload } from '$lib/api';
 	import { eurShort } from '$lib/transforms/format';
 	import { scaleLog } from 'd3-scale';
@@ -33,7 +34,7 @@
 	let tip = $state<string | null>(null);
 	function show(r: ComparePayload['by_pe'][0]) {
 		tip =
-			`<strong>${r.pe}</strong>` +
+			`<strong>${ruLabel(r.pe)}</strong>` +
 			`<br>Anti-nero: ${eurShort(r.antinero_eur)} · ${r.antinero_n} contracts` +
 			`<br>ΔΑΣΕ: ${eurShort(r.dase_eur)} · ${r.dase_n} contracts`;
 	}
@@ -55,7 +56,7 @@
 		{/each}
 
 		<text class="axis-title" x={width - M.right} y={height - 8} text-anchor="end">
-			Anti-nero € in the Π.Ε. →
+			Anti-nero € in the regional unit →
 		</text>
 		<text class="axis-title" x={12} y={M.top - 8}>ΔΑΣΕ € ↑</text>
 
@@ -94,14 +95,14 @@
 		{/each}
 
 		<text class="gutter-label" x={width - M.right} y={height - M.bottom - GUTTER / 2 + 3}
-			text-anchor="end">Anti-nero only ({onlyA.length} Π.Ε.)</text>
+			text-anchor="end">Anti-nero only ({onlyA.length} R.U.)</text>
 		<text class="gutter-label" x={M.left + GUTTER / 2 + 8} y={M.top + 12}>
-			ΔΑΣΕ only ({onlyD.length} Π.Ε.)
+			ΔΑΣΕ only ({onlyD.length} R.U.)
 		</text>
 
 		{#each labelled as r (r.pe)}
 			<text class="pe-label" x={x(r.antinero_eur) + 8} y={y(r.dase_eur) + 3}>
-				{r.pe.replace('Π.Ε. ', '')}
+				{peEn(r.pe)}
 			</text>
 		{/each}
 	</svg>

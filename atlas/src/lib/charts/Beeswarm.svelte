@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ruLabel } from '$lib/transforms/regions';
 	import type { SwarmRow } from '$lib/api';
 	import { dodge } from '$lib/transforms/beeswarm';
 	import { eur, eurShort } from '$lib/transforms/format';
@@ -75,7 +76,7 @@
 					onmouseenter={() =>
 						(tip = `<strong>${eur(p.d.eur)}</strong> · ${p.d.year ?? ''}<br>${p.d.t}` +
 							`<br><span style="color:var(--ink-faint)">${scopeLabel(p.d.scope)}` +
-							`${p.d.single_bidder ? ' · single bidder' : ''} · ${p.d.pe ?? ''}</span>`)}
+							`${p.d.single_bidder ? ' · single bidder' : ''} · ${p.d.pe ? ruLabel(p.d.pe) : ''}</span>`)}
 					onmouseleave={() => (tip = null)}
 				/>
 			</a>

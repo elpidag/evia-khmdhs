@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import CompareHist from '$lib/charts/CompareHist.svelte';
 	import PairedBars from '$lib/charts/PairedBars.svelte';
 	import ParallelPipelines from '$lib/charts/ParallelPipelines.svelte';
@@ -19,13 +20,13 @@
 			const v = Math.min(r.antinero_eur, r.dase_eur);
 			if (!best || v > best.v) best = { pe: r.pe, v };
 		}
-		return best?.pe.replace('Π.Ε. ', '') ?? '';
+		return peEn(best?.pe) || '';
 	});
 	const topDase = $derived.by(() => {
 		let best = null as null | { pe: string; v: number };
 		for (const r of c.by_pe)
 			if (!best || r.dase_eur > best.v) best = { pe: r.pe, v: r.dase_eur };
-		return best?.pe.replace('Π.Ε. ', '') ?? '';
+		return peEn(best?.pe) || '';
 	});
 
 	const yearMax = $derived(Math.max(...c.yearly.antinero, ...c.yearly.dase.map(() => 0), 1));
@@ -102,7 +103,7 @@
 
 <ChartFrame
 	title="Where both flows land: {topShared} gets millions from each — {topDase} is co-op country"
-	subtitle="Each regional unit by its € from both programmes (log–log). Colour-coded gutters hold the one-sided Π.Ε."
+	subtitle="Each regional unit by its € from both programmes (log–log). Colour-coded gutters hold the one-sided regional units."
 	anchor="pe-scatter"
 	methodology="even-split"
 >
@@ -112,7 +113,7 @@
 <ChartFrame
 	title="Region by region, the programmes weight differently"
 	subtitle="Top {Math.min(15, c.by_pe.length)} regional units — each programme's own share of its total, absolute € printed."
-	caveat="ΔΑΣΕ side omits {grInt(c.dase_unresolved.n)} multi-Π.Ε. contracts ({eurShort(
+	caveat="ΔΑΣΕ side omits {grInt(c.dase_unresolved.n)} multi-regional-unit contracts ({eurShort(
 		c.dase_unresolved.eur
 	)}, honestly unresolved)."
 	anchor="pe-paired"
@@ -168,7 +169,7 @@
 			every public contract won by a forest co-op anywhere in the state since 2021-09.
 		</li>
 		<li>
-			<strong>Π.Ε. derivation differs.</strong> Anti-nero regions are hand-curated per contract;
+			<strong>Regional-unit (Π.Ε.) derivation differs.</strong> Anti-nero regions are hand-curated per contract;
 			ΔΑΣΕ regions derive from the awarding forest unit.
 		</li>
 		<li>

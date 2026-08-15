@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import type { PeYearly } from '$lib/api';
 	import { eurShort } from '$lib/transforms/format';
 
@@ -23,7 +24,7 @@
 		{@const inner = years.map((y) => ({ y, v: f.years[y] ?? 0 }))}
 		<a class="facet" href={hrefOf?.(f.pe) ?? undefined}>
 			<div class="head">
-				<span class="pe">{f.pe.replace('Π.Ε. ', '')}</span>
+				<span class="pe">{peEn(f.pe)}</span>
 				<span class="total">{eurShort(f.total_eur)}</span>
 			</div>
 			<svg viewBox="0 0 120 46">

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ruLabel } from '$lib/transforms/regions';
 	import { dev } from '$app/environment';
 	import LocationCurator from '$lib/dev/LocationCurator.svelte';
 	import ZoneMap from '$lib/maps/ZoneMap.svelte';
@@ -180,7 +181,7 @@
 	<dd>
 		{p.location_text ?? '—'}
 		{#if p.pe}<br /><small class="muted"
-				>{p.pe}{p.municipality ? ` · Δήμος ${p.municipality}` : ''}</small
+				>{ruLabel(p.pe)}{p.municipality ? ` · Δήμος ${p.municipality}` : ''}</small
 			>{/if}
 	</dd>
 	<dt>Connected to fire event</dt>

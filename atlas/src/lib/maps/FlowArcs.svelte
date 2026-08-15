@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn } from '$lib/transforms/regions';
 	import type { MapCtx } from './PaperMap.svelte';
 	import { eurShort, grInt } from '$lib/transforms/format';
 
@@ -61,9 +62,9 @@
 	function tip(f: Flow): string {
 		const inbound = f.target_pe === focusPe;
 		return inbound
-			? `<strong>${f.source_pe.replace('Π.Ε. ', '')} firms → works in ${focusPe.replace('Π.Ε. ', '')}</strong>` +
+			? `<strong>${peEn(f.source_pe)} firms → works in ${peEn(focusPe)}</strong>` +
 					`<br>${eurShort(f.total_eur)} · ${grInt(f.n_contracts)} contracts`
-			: `<strong>${focusPe.replace('Π.Ε. ', '')} firms → works in ${f.target_pe.replace('Π.Ε. ', '')}</strong>` +
+			: `<strong>${peEn(focusPe)} firms → works in ${peEn(f.target_pe)}</strong>` +
 					`<br>${eurShort(f.total_eur)} · ${grInt(f.n_contracts)} contracts`;
 	}
 </script>
@@ -107,7 +108,7 @@
 			opacity="0.8"
 			onmouseenter={() =>
 				ctx.showTip(
-					`<strong>stays local</strong><br>${eurShort(localEur)} won by firms based in ${focusPe.replace('Π.Ε. ', '')}`
+					`<strong>stays local</strong><br>${eurShort(localEur)} won by firms based in ${peEn(focusPe)}`
 				)}
 			onmouseleave={() => ctx.hideTip()}
 		/>

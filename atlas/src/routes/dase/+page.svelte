@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
@@ -60,8 +61,8 @@
 				...g,
 				name:
 					g.kind === 'muni'
-						? `Municipal & regional awarders · ${g.pe}`
-						: `Other public bodies · ${g.pe}`,
+						? `Municipal & regional awarders · ${ruLabel(g.pe)}`
+						: `Other public bodies · ${ruLabel(g.pe)}`,
 				kindKey: g.kind as MapPt['kindKey']
 			}))
 		].sort((a, b) => b.eur - a.eur);
@@ -176,7 +177,7 @@
 
 	// finding-title inputs — computed from the payload, never hardcoded
 	const topPe = $derived(
-		[...o.by_pe.regions].sort((a, b) => b.eur - a.eur)[0]?.pe?.replace('Π.Ε. ', '') ?? ''
+		peEn([...o.by_pe.regions].sort((a, b) => b.eur - a.eur)[0]?.pe) || ''
 	);
 	const topYear = $derived([...o.yearly].sort((a, b) => b.eur - a.eur)[0]?.year ?? '');
 	const topOrgShare = $derived(
@@ -262,7 +263,7 @@
 		title="MAP"
 		caveat="Click a circle for its contracts, click a regional unit to zoom to it. {grInt(
 			dmap.unresolved.n
-		)} ΑΔΜΗΕ power-line contracts span multiple Π.Ε. and stay off the map ({eurShort(
+		)} ΑΔΜΗΕ power-line contracts span multiple regional units and stay off the map ({eurShort(
 			dmap.unresolved.eur
 		)}). Burn scars: © European Union, Copernicus Emergency Management Service — EFFIS; satellite rapid-mapping estimates, not official οριοθετήσεις."
 		anchor="dase-map"

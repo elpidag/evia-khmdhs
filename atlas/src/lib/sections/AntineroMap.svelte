@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ruLabel } from '$lib/transforms/regions';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import type { AntineroMapPayload } from '$lib/api';
@@ -196,26 +197,26 @@
 	// ---- tooltips ------------------------------------------------------
 	function workTip(pe: string): string {
 		const r = workBase.get(pe);
-		if (!r) return `<strong>${pe}</strong><br>no Anti-nero works recorded`;
+		if (!r) return `<strong>${ruLabel(pe)}</strong><br>no Anti-nero works recorded`;
 		return (
-			`<strong>${pe}</strong><br>${grInt(r.n_contracts)} contracts` +
+			`<strong>${ruLabel(pe)}</strong><br>${grInt(r.n_contracts)} contracts` +
 			`<br>${eur(r.split_eur)} even-split share` +
 			`<br><span style="color:var(--ink-faint)">${eurShort(r.exposure_eur)} full exposure</span>`
 		);
 	}
 	function countTip(pe: string): string {
 		const n = refsByPe.get(pe)?.size ?? 0;
-		if (!n) return `<strong>${pe}</strong><br>no contracts under authorities seated here`;
+		if (!n) return `<strong>${ruLabel(pe)}</strong><br>no contracts under authorities seated here`;
 		return (
-			`<strong>${pe}</strong><br>${grInt(n)} contract(s) under forest authorities seated here` +
+			`<strong>${ruLabel(pe)}</strong><br>${grInt(n)} contract(s) under forest authorities seated here` +
 			`<br><span style="color:var(--ink-faint)">click to see the individual works</span>`
 		);
 	}
 	function homeTip(pe: string): string {
 		const r = homeBase.get(pe);
-		if (!r) return `<strong>${pe}</strong><br>no contractor HQs located here`;
+		if (!r) return `<strong>${ruLabel(pe)}</strong><br>no contractor HQs located here`;
 		return (
-			`<strong>${pe}</strong><br>${grInt(r.n_contractors ?? 0)} contractors` +
+			`<strong>${ruLabel(pe)}</strong><br>${grInt(r.n_contractors ?? 0)} contractors` +
 			`<br>${eur(r.split_eur)} even-split share` +
 			`<br><span style="color:var(--ink-faint)">${eurShort(r.exposure_eur)} full exposure</span>`
 		);
@@ -233,7 +234,7 @@
 	/>
 	<small class="muted">
 		{eurShort(data.coverage.resolved_eur)} of {eurShort(data.coverage.total_eur)} is
-		region-resolved · click a Π.Ε. to drill
+		region-resolved · click a regional unit to drill
 	</small>
 </div>
 
@@ -302,10 +303,10 @@
 						fmt={grInt}
 					/>
 				{:else if focus.side === 'works'}
-					<div>one dot = one contract × authority in {focus.pe}</div>
+					<div>one dot = one contract × authority in {ruLabel(focus.pe)}</div>
 					<div>colour groups multi-authority contracts · hover links their seats</div>
 				{:else}
-					<div>works of contractors based in {focus.pe}</div>
+					<div>works of contractors based in {ruLabel(focus.pe)}</div>
 				{/if}
 			{/snippet}
 		</PaperMap>

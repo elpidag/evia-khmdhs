@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import KpiRow from '$lib/ui/KpiRow.svelte';
 	import StatPair from '$lib/ui/StatPair.svelte';
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
@@ -199,19 +200,19 @@
 	<h2>Where the work is</h2>
 	{#if c.regions.length}
 		<p>
-			{#each c.regions as r, i (i)}{#if i}, {/if}{r.region_pe}{/each}
+			{#each c.regions as r, i (i)}{#if i}, {/if}{ruLabel(r.region_pe)}{/each}
 		</p>
 	{:else}
 		<p class="muted">No curated project regions.</p>
 	{/if}
 	{#if c.sites.length}
 		<table>
-			<thead><tr><th>Named site</th><th>Π.Ε.</th><th>Evidence</th></tr></thead>
+			<thead><tr><th>Named site</th><th>R.U.</th><th>Evidence</th></tr></thead>
 			<tbody>
 				{#each c.sites as s, i (i)}
 					<tr>
 						<td>{s.site_name}</td>
-						<td>{s.region_pe}</td>
+						<td>{peEn(s.region_pe)}</td>
 						<td class="muted"><small>PDF p.{s.page}{s.excerpt ? ` — «${s.excerpt}»` : ''}</small></td>
 					</tr>
 				{/each}
