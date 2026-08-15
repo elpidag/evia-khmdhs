@@ -55,6 +55,17 @@
   .exportrow { margin-top: 26px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   .note { font-size: 12.5px; color: var(--soft); max-width: 60ch; }
   kbd { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; font-size: 12px; }
+  .dhead { font-weight: 900; font-size: 12px; letter-spacing: 0.08em; color: var(--deep); }
+  .dlist { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .dlist > li { font-size: 14px; }
+  .dq { font-weight: 700; margin-bottom: 2px; }
+  .dafm { font-family: Consolas, ui-monospace, monospace; font-size: 12px; color: var(--soft); }
+  .dafm button { font: inherit; background: none; border: none; padding: 0; color: var(--deep); text-decoration: underline; cursor: pointer; }
+  .dopts { display: flex; flex-direction: column; gap: 5px; margin-top: 6px; }
+  .dopt { text-align: left; font: inherit; font-size: 13.5px; line-height: 1.4; padding: 7px 11px; border-radius: 7px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+  .dopt:hover { background: var(--hl); }
+  .dopt.chosen { border-color: var(--accent); background: var(--hl); font-weight: 700; }
+  .dopt .mono { font-family: Consolas, ui-monospace, monospace; font-size: 12.5px; }
 </style>
 </head>
 <body>
@@ -72,6 +83,19 @@
     <span id="pos"></span>
     <span><span class="named" id="ndone"></span> named</span>
     <select id="jump" aria-label="Jump to co-op"></select>
+  </div>
+
+  <div class="card" id="decisionscard">
+    <div class="dhead">PENDING DECISIONS · <span id="ddone"></span></div>
+    <p class="hint">Five judgment calls left over from the 2026-08-15 consistency check.
+      Clicking an option writes the exact name(s) shown straight into your saved answers
+      (re-click another option to change your mind), so just export again when all five
+      carry a ✓. The 19 mechanical homoglyph/punctuation slips are fixed automatically
+      at merge time — no action needed for those.</p>
+    <ol class="dlist" id="dlist"></ol>
+    <p class="hint">Also: the «ΔΑ.Σ.Ε. ΚΟΥΡΚΟΥΛΩΝ» card with ΑΦΜ 031000379 needs no name —
+      that ΑΦΜ is a registry phantom (VIES-invalid); its one posting was excluded as a
+      duplicate today and the card is dropped from the final data.</p>
   </div>
 
   <div class="card">
@@ -323,9 +347,118 @@
   });
   $("clear").addEventListener("click", () => {
     if (confirm("Διαγραφή όλων των απαντήσεων από αυτόν τον browser;")) {
-      answers = {}; save(); render();
+      answers = {}; decided = {}; saveDecided(); save(); renderDecisions(); render();
     }
   });
+
+  // ---- five pending decisions (2026-08-15 consistency check) ----
+  // Base values = the user's completed curation (fallback if this browser's
+  // saved answers were cleared); options patch on top and stay composable.
+  const DFALLBACK = {
+    "997962709": { el: "ΔΑ.Σ.Ε. ΠΑΪΚΟ ΠΑΙΟΝΙΑΣ", en: "F.W.CO-OP PAIKO PEONIA" },
+    "096034729": { el: "ΔΑ.Σ.Ε. ΑΙΣΥΜΗΣ (Α)", en: "F.W.CO-OP AISYMIS (A)" },
+    "096034730": { el: "ΔΑ.Σ.Ε. ΑΙΣΥΜΗΣ (Β)", en: "F.W.CO-OP AISYMI (B)" },
+    "096203333": { el: "ΔΑ.Σ.Ε. ΚΑΡΔΑΜΟΥ", en: "F.W.CO-OP KARDAMOS" },
+    "999729317": { el: "Β' ΔΑ.Σ.Ε. ΚΑΡΔΑΜΟΥ", en: "F.W.CO-OP KARDAMOU" },
+    "800282129": { el: "Β' ΔΑ.Σ.Ε. ΚΕΡΑΣΙΑΣ", en: "F.W.CO-OP KERASIA" },
+    "996854516": { el: "ΔΑ.Σ.Ε. 'ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ', ΒΟΡΕΙΝΟ ΑΛΜΩΠΙΑΣ",
+                   en: "F.W.CO-OP 'To Palio Pefkoto', Voreino Almopias" },
+  };
+  const curAns = a => ({ ...(DFALLBACK[a] || {}), ...(answers[a] || {}) });
+  const setAns = (a, patch) => { answers[a] = { ...curAns(a), ...patch }; };
+  const patchEn = (a, fn) => setAns(a, { en: fn(curAns(a).en || "") });
+
+  const DECISIONS = [
+    { id: "paionia", afms: ["997962709"],
+      q: "ΠΑΪΚΟ ΠΑΙΟΝΙΑΣ — the English toponym. Your Greek name says ΠΑΙΟΝΙΑΣ, and you wrote PAIONIA yourself on the Γρίβα card (GRIVA, PAIONIA).",
+      opts: [
+        { label: "PAIONIA — F.W.CO-OP PAIKO PAIONIA (recommended, matches your Γρίβα card)",
+          apply: () => patchEn("997962709", s => s.replace(/P[EΕ][OΟ][NΝ][IΙ][AΑ]|PAIONIA/g, "PAIONIA")) },
+        { label: "PEONIA — F.W.CO-OP PAIKO PEONIA (as typed)",
+          apply: () => patchEn("997962709", s => s.replace(/P[EΕ][OΟ][NΝ][IΙ][AΑ]|PAIONIA/g, "PEONIA")) },
+      ]},
+    { id: "aisymi", afms: ["096034729", "096034730"],
+      q: "ΑΙΣΥΜΗ pair — one English name says AISYMIS, the other AISYMI.",
+      opts: [
+        { label: "Both AISYMI — F.W.CO-OP AISYMI (A) / F.W.CO-OP AISYMI (B) (recommended, nominative like the rest)",
+          apply: () => { patchEn("096034729", s => s.replace(/AISYMIS|AISYMI/g, "AISYMI"));
+                         patchEn("096034730", s => s.replace(/AISYMIS|AISYMI/g, "AISYMI")); } },
+        { label: "Both AISYMIS — F.W.CO-OP AISYMIS (A) / F.W.CO-OP AISYMIS (B)",
+          apply: () => { patchEn("096034729", s => s.replace(/AISYMIS|AISYMI/g, "AISYMIS"));
+                         patchEn("096034730", s => s.replace(/AISYMIS|AISYMI/g, "AISYMIS")); } },
+      ]},
+    { id: "kardamos", afms: ["096203333", "999729317"],
+      q: "ΚΑΡΔΑΜΟΣ twins — same village, English KARDAMOS on one card, KARDAMOU on the other.",
+      opts: [
+        { label: "Both KARDAMOS (recommended, nominative like the rest)",
+          apply: () => { patchEn("096203333", s => s.replace(/KARDAMO[US]S?/g, "KARDAMOS"));
+                         patchEn("999729317", s => s.replace(/KARDAMO[US]S?/g, "KARDAMOS")); } },
+        { label: "Leave each as typed — KARDAMOS / KARDAMOU",
+          apply: () => { patchEn("096203333", s => s.replace(/KARDAMO[US]S?/g, "KARDAMOS"));
+                         patchEn("999729317", s => s.replace(/KARDAMO[US]S?/g, "KARDAMOU")); } },
+      ]},
+    { id: "second", afms: ["800282129", "999729317"],
+      q: "Β' prefix — the Greek names keep Β' but the English drops it; elsewhere you used (1st)/(2nd)/(5th) markers.",
+      opts: [
+        { label: "Add (2nd) — F.W.CO-OP (2nd) KERASIA / F.W.CO-OP (2nd) KARDAMOS…",
+          apply: () => ["800282129", "999729317"].forEach(a =>
+            patchEn(a, s => s.includes("(2nd)") ? s : s.replace(/^F\.W\.CO-OP/, "F.W.CO-OP (2nd)"))) },
+        { label: "Keep dropping it in English (as typed)",
+          apply: () => ["800282129", "999729317"].forEach(a =>
+            patchEn(a, s => s.replace(" (2nd)", ""))) },
+      ]},
+    { id: "pefkoto", afms: ["996854516"],
+      q: "ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ — the only mixed-case English name (the « » wrappers go either way).",
+      opts: [
+        { label: "UPPERCASE like the rest — F.W.CO-OP 'TO PALIO PEFKOTO', VOREINO ALMOPIAS (recommended)",
+          apply: () => setAns("996854516", {
+            el: "ΔΑ.Σ.Ε. 'ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ', ΒΟΡΕΙΝΟ ΑΛΜΩΠΙΑΣ",
+            en: "F.W.CO-OP 'TO PALIO PEFKOTO', VOREINO ALMOPIAS" }) },
+        { label: "Keep mixed case — F.W.CO-OP 'To Palio Pefkoto', Voreino Almopias",
+          apply: () => setAns("996854516", {
+            el: "ΔΑ.Σ.Ε. 'ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ', ΒΟΡΕΙΝΟ ΑΛΜΩΠΙΑΣ",
+            en: "F.W.CO-OP 'To Palio Pefkoto', Voreino Almopias" }) },
+      ]},
+  ];
+  const DSTORE = "dase_name_decisions_v1";
+  let decided = {};
+  try { decided = JSON.parse(localStorage.getItem(DSTORE) || "{}"); } catch (e) { decided = {}; }
+  const saveDecided = () => localStorage.setItem(DSTORE, JSON.stringify(decided));
+
+  function renderDecisions() {
+    const ol = $("dlist");
+    ol.innerHTML = "";
+    DECISIONS.forEach(d => {
+      const li = document.createElement("li");
+      const q = document.createElement("div"); q.className = "dq";
+      q.textContent = (decided[d.id] !== undefined ? "✓ " : "") + d.q;
+      const chips = document.createElement("div"); chips.className = "dafm";
+      d.afms.forEach(a => {
+        const b = document.createElement("button");
+        b.type = "button"; b.textContent = "ΑΦΜ " + a;
+        b.addEventListener("click", () => {
+          const i = coops.findIndex(c => c.afm === a);
+          if (i >= 0) { saveCurrent(); idx = i; render(); }
+        });
+        chips.appendChild(b); chips.appendChild(document.createTextNode("  "));
+      });
+      const box = document.createElement("div"); box.className = "dopts";
+      d.opts.forEach((o, i) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "dopt" + (decided[d.id] === i ? " chosen" : "");
+        b.textContent = o.label;
+        b.addEventListener("click", () => {
+          o.apply(); decided[d.id] = i; save(); saveDecided();
+          renderDecisions(); updateMeta();
+          if (d.afms.includes(coops[idx].afm)) render();
+        });
+        box.appendChild(b);
+      });
+      li.appendChild(q); li.appendChild(chips); li.appendChild(box); ol.appendChild(li);
+    });
+    $("ddone").textContent = Object.keys(decided).length + " of " + DECISIONS.length + " decided";
+  }
+  renderDecisions();
 
   render();
 </script>
