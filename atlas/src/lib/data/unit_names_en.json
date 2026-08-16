@@ -1,0 +1,177 @@
+{
+ "_comment": "English display names for awarding sub-units (DATA_DECISIONS 2026-08-15): ΔΑΣΕ municipal/other operator units (dictionary translations, user-reviewed), the 4 ΥΠΕΝ signer units, and the forest units without a registry fold-match (Φουρνά incl. ΦΟΥΡΝΩΝ variant, ΔΔ Ηλείας/Ν. Πιερίας/Χαλκιδικής). Keyed by the EXACT registry units_operator_name string (homoglyphs, double spaces and all). Presentation only; byte-identical copy in atlas/src/lib/data (pinned).",
+ "OIKONOMIKO": {
+  "en": "Finance Office"
+ },
+ "TMHMA ΑΠΟΘΗΚΗΣ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {
+  "en": "Warehouse & Procurement Department"
+ },
+ "ΑΥΤΟΤΕΛΕΣ ΓΡΑΦΕΙΟ ΑΙΡΕΤΩΝ ΟΡΓΑΝΩΝ": {
+  "en": "Office of Elected Officials"
+ },
+ "ΑΥΤΟΤΕΛΕΣ ΤΜΗΜΑ ΠΟΙΟΤΗΤΑΣ ΖΩΗΣ ΚΑΙ ΑΝΑΚΥΚΛΩΣΗΣ": {
+  "en": "Quality of Life & Recycling Department"
+ },
+ "ΑΥΤΟΤΕΛΕΣ ΤΜΗΜΑ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΠΟΙΟΤΗΤΑΣ ΖΩΗΣ": {
+  "en": "Technical Services, Environment & Quality of Life Department"
+ },
+ "ΑΥΤΟΤΕΛΗΣ ΔΙΕΥΘΥΝΣΗ ΔΙΑΧΕΙΡΙΣΗΣ ΤΩΝ ΠΑΝΕΠΙΣΤΗΜΙΑΚΩΝ ΔΑΣΩΝ": {
+  "en": "Directorate for the Management of the University Forests"
+ },
+ "ΓΕΑ/ΑΤΑ/350ΠΚΒ": {
+  "en": "Hellenic Air Force — 350th Guided Missile Wing"
+ },
+ "ΓΕΝΙΚΗ ΓΡΑΜΜΑΤΕΙΑ ΔΑΣΩΝ": {
+  "en": "General Secretariat of Forests"
+ },
+ "ΓΕΝΙΚΗ ΔΕΥΘΥΝΣΗ ΔΑΣΩΝ ΚΑΙ ΔΑΣΙΚΟΥ ΠΕΡΙΒΑΛΛΟΝΤΟΣ": {
+  "en": "General Directorate of Forests and the Forest Environment"
+ },
+ "ΓΕΝΙΚΗ ΔΙΕΥΘΥΝΣΗ ΑΝΑΠΤΥΞΗΣ ΚΑΙ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ ΚΑΙ ΑΓΡΟΠΕΡΙΒΑΛΛΟΝΤΟΣ": {
+  "en": "General Directorate of Forest Development & Protection and the Agri-Environment"
+ },
+ "ΓΡΑΦΕΙΟ ΔΗΜΑΡΧΟΥ": {
+  "en": "Mayor's Office"
+ },
+ "ΓΡΑΦΕΙΟ ΛΟΓΙΣΤΗΡΙΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {
+  "en": "Accounting & Procurement Office"
+ },
+ "ΓΡΑΦΕΙΟ ΠΡΟΕΔΡΟΥ": {
+  "en": "President's Office"
+ },
+ "ΓΡΑΦΕΙΟ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ,ΛΟΓΙΣΤΗΡΙΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {
+  "en": "Budget, Accounting & Procurement Office"
+ },
+ "ΓΡΑΦΕΙΟ ΠΡΩΤΟΒΑΘΜΙΑΣ ΣΧΟΛΙΚΗΣ ΕΠΙΤΡΟΠΗΣ": {
+  "en": "Primary-Education School Committee Office"
+ },
+ "ΓΡΑΦΕΙΟ ΥΦΥΠΟΥΡΓΟΥ ΠΕΡΙΒΑΛΛΟΝΤΟΣ": {
+  "en": "Office of the Deputy Minister for the Environment"
+ },
+ "ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ": {
+  "en": "Fournas Forest Service Office"
+ },
+ "ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΩΝ": {
+  "en": "Fournas Forest Service Office"
+ },
+ "ΔΗΜΑΡΧΟΣ": {
+  "en": "Mayor"
+ },
+ "ΔΗΜΟΣ ΝΕΣΤΟΡΙΟΥ": {
+  "en": "Municipality of Nestorio"
+ },
+ "ΔΗΜΟΤΙΚΗ ΕΠΙΤΡΟΠΗ": {
+  "en": "Municipal Committee"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΗΛΕΙΑΣ": {
+  "en": "Ileia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Ν. ΠΙΕΡΙΑΣ": {
+  "en": "Pieria Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΧΑΛΚΙΔΙΚΗΣ": {
+  "en": "Chalkidiki Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΙΟΙΚΗΤΙΚΟΥ-ΟΙΚΟΝΟΜΙΚΟΥ ΠΕ ΕΥΒΟΙΑΣ": {
+  "en": "Administrative & Financial Directorate, R.U. Evia"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΙΟΙΚΗΤΙΚΩΝ ΚΑΙ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {
+  "en": "Directorate of Administrative & Financial Services"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΙΟΙΚΗΤΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {
+  "en": "Directorate of Administrative Services"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΝΕΩΝ ΕΡΓΩΝ ΜΕΤΑΦΟΡΑΣ": {
+  "en": "Directorate of New Transmission Projects"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {
+  "en": "Directorate of Financial Services"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ, ΤΟΠΙΚΗΣ ΑΝΑΠΤΥΞΗΣ, ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ & ΠΟΛΙΤΙΣΤΙΚΗΣ ΑΝΑΠΤΥΞΗΣ": {
+  "en": "Directorate of Financial Services, Local Development, Social Protection & Cultural Development"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΠΕΡΙΒΑΛΛΟΝΤΟΣ": {
+  "en": "Directorate of the Environment"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΠΕΡΙΒΑΛΛΟΝΤΟΣ & ΠΡΑΣΙΝΟΥ": {
+  "en": "Directorate of Environment & Green Spaces"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΠΕΡΙΒΑΛΛΟΝΤΟΣ, ΠΡΑΣΙΝΟΥ ΚΑΙ ΚΑΘΑΡΙΟΤΗΤΑΣ": {
+  "en": "Directorate of Environment, Green Spaces & Sanitation"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΗΡΗΣΗΣ ΓΡΑΜΜΗΣ": {
+  "en": "Track Maintenance Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΗΡΗΣΗΣ ΓΡΑΜΜΗΣ / ΥΠΗΡΕΣΙΑ ΣΥΝΤΗΡΗΣΗΣ ΓΡΑΜΜΗΣ ΜΑΚΕΔΟΝΙΑΣ ΘΡΑΚΗΣ": {
+  "en": "Track Maintenance Directorate — Macedonia–Thrace Service"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΕΡΓΩΝ Κ.Υ.": {
+  "en": "Directorate of Technical Works (HQ)"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΠΕΡΙΦΕΡΕΙΑΚΗΣ ΕΝΟΤΗΤΑΣ ΤΡΙΚΑΛΩΝ": {
+  "en": "Directorate of Technical Works, R.U. Trikala"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {
+  "en": "Directorate of Technical Services"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ  ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΔΟΜΗΣΗΣ": {
+  "en": "Directorate of Technical Services, Environment & Building"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΤΕΧΝΙΚΩΝ ΥΠΗΡΕΣΙΩΝ,ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΠΟΛΕΟΔΟΜΙΑΣ": {
+  "en": "Directorate of Technical Services, Environment & Planning"
+ },
+ "ΔΙΕΥΘΥΝΩΝ ΣΥΜΒΟΥΛΟΣ": {
+  "en": "Chief Executive Officer"
+ },
+ "ΔΙΟΙΚΗΣΗ ΠΑΝΕΠΙΣΤΗΜΙΑΚΟΥ ΔΑΣΟΥΣ ΠΕΡΤΟΥΛΙΟΥ (Α.Π.Θ.)": {
+  "en": "Pertouli University Forest Administration (A.U.TH.)"
+ },
+ "ΔΙΟΙΚΗΤΙΚΟ ΣΥΜΒΟΥΛΙΟ": {
+  "en": "Board of Directors"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ - ΘΡΑΚΗΣ": {
+  "en": "Forest Policy Inspectorate of Macedonia–Thrace"
+ },
+ "ΕΦΟΡΕΙΑ ΑΡΧΑΙΟΤΗΤΩΝ ΠΙΕΡΙΑΣ": {
+  "en": "Ephorate of Antiquities of Pieria"
+ },
+ "ΕΦΟΡΕΙΑ ΑΡΧΑΙΟΤΗΤΩΝ ΧΑΛΚΙΔΙΚΗΣ ΚΑΙ ΑΓΙΟΥ ΟΡΟΥΣ": {
+  "en": "Ephorate of Antiquities of Chalkidiki and Mount Athos"
+ },
+ "ΚΕΝΤΡΟ ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ-ΑΛΛΗΛΕΓΓΥΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ": {
+  "en": "Social Protection & Solidarity Centre of Almopia"
+ },
+ "ΟΙΚΟΝΟΜΙΚΗ ΥΠΗΡΕΣΙΑ": {
+  "en": "Finance Service"
+ },
+ "ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {
+  "en": "Financial Services"
+ },
+ "ΠΕΡΙΦΕΡΕΙΑΚΟΣ ΤΟΜΕΑΣ ΒΟΡΕΙΑΣ ΕΛΛΑΔΑΣ": {
+  "en": "Northern Greece Regional Division"
+ },
+ "ΤΕΧΝΙΚΗ ΥΠΗΡΕΣΙΑ": {
+  "en": "Technical Service"
+ },
+ "ΤΜΗΜΑ ΔΙΟΙΚΗΤΙΚΩΝ ΚΑΙ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {
+  "en": "Administrative & Financial Services Department"
+ },
+ "ΤΜΗΜΑ ΟΙΚΟΝΟΜΙΚΩΝ ΥΠΗΡΕΣΙΩΝ": {
+  "en": "Financial Services Department"
+ },
+ "ΤΜΗΜΑ ΠΡΟΜΗΘΕΙΩΝ": {
+  "en": "Procurement Department"
+ },
+ "ΤΜΗΜΑ ΠΡΟΜΗΘΕΙΩΝ ΚΑΙ ΑΠΟΘΗΚΗΣ": {
+  "en": "Procurement & Warehouse Department"
+ },
+ "ΤΜΗΜΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {
+  "en": "Budget & Procurement Department"
+ },
+ "ΤΜΗΜΑ ΠΡΟΥΠΟΛΟΓΙΣΜΟΥ, ΛΟΓΙΣΤΗΡΙΟΥ ΚΑΙ ΠΡΟΜΗΘΕΙΩΝ": {
+  "en": "Budget, Accounting & Procurement Department"
+ },
+ "ΤΟΜΕΑΣ ΔΙΟΙΚΗΣΗΣ & ΟΙΚΟΝΟΜΙΚΩΝ -ΤΜΗΜΑ ΠΡΟΜΗΘΕΙΩΝ": {
+  "en": "Administration & Finance Division — Procurement Department"
+ }
+}

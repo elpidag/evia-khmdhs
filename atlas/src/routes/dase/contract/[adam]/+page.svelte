@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { bodyEn, devGreek, orgEn } from '$lib/transforms/names';
 	import FamilyTree from '$lib/charts/FamilyTree.svelte';
 	import KpiRow from '$lib/ui/KpiRow.svelte';
 	import StatPair from '$lib/ui/StatPair.svelte';
@@ -177,8 +178,8 @@
 <section>
 	<h2>Procurement record</h2>
 	<dl class="facts">
-		<div><dt>Authority</dt><dd>{c.organization_name ?? '—'}</dd></div>
-		<div><dt>Operating unit</dt><dd>{c.units_operator_name ?? '—'}</dd></div>
+		<div><dt>Authority</dt><dd title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</dd></div>
+		<div><dt>Operating unit</dt><dd title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</dd></div>
 		<div><dt>Signer</dt><dd>{c.signer_name ?? '—'}</dd></div>
 		<div><dt>Type</dt><dd>{c.contract_type ?? '—'}</dd></div>
 		<div><dt>Legal framework</dt><dd>{c.legal_context ?? '—'}</dd></div>

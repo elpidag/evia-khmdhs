@@ -1,0 +1,150 @@
+{
+ "_comment": "English display names for the awarding organizations (DATA_DECISIONS 2026-08-15): ministries/decentralized administrations/regions use their official English titles; municipalities 'Municipality of <ELOT toponym>'; other bodies their official English names (user-reviewed: A.U.TH., plain General Hospital of Kozani). Keyed by the EXACT registry organization_name string incl. typos («ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ»). Presentation only; byte-identical copy in atlas/src/lib/data (pinned).",
+ "ΑΝΕΞΑΡΤΗΤΟΣ ΔΙΑΧΕΙΡΙΣΤΗΣ ΜΕΤΑΦΟΡΑΣ ΗΛΕΚΤΡΙΚΗΣ ΕΝΕΡΓΕΙΑΣ ΑΔΜΗΕ ΑΕ": {
+  "en": "Independent Power Transmission Operator (ADMIE)"
+ },
+ "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΘΕΣΣΑΛΙΑΣ - ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ": {
+  "en": "Decentralized Administration of Thessaly–Central Greece"
+ },
+ "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΜΑΚΕΔΟΝΙΑΣ – ΘΡΑΚΗΣ": {
+  "en": "Decentralized Administration of Macedonia–Thrace"
+ },
+ "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΠΕΛΟΠΟΝΝΗΣΟΥ, ΔΥΤΙΚΗΣ ΕΛΛΑΔΑΣ ΚΑΙ ΙΟΝΙΟΥ": {
+  "en": "Decentralized Administration of Peloponnese, Western Greece and the Ionian"
+ },
+ "ΑΡΙΣΤΟΤΕΛΕΙΟ ΠΑΝΕΠΙΣΤΗΜΙΟ ΘΕΣ/ΝΙΚΗΣ": {
+  "en": "Aristotle University of Thessaloniki (A.U.TH.)"
+ },
+ "ΓΕΝΙΚΟ ΝΟΣΟΚΟΜΕΙΟ ΚΟΖΑΝΗΣ ΜΑΜΑΤΣΕΙΟ": {
+  "en": "General Hospital of Kozani"
+ },
+ "Δ.Ε.Υ.Α ΛΑΓΚΑΔΑ": {
+  "en": "Municipal Water & Sewerage Utility of Lagkadas"
+ },
+ "ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ": {
+  "en": "Municipality of Argos Orestiko"
+ },
+ "ΔΗΜΟΣ ΑΛΜΩΠΙΑΣ": {
+  "en": "Municipality of Almopia"
+ },
+ "ΔΗΜΟΣ ΑΜΥΝΤΑΙΟΥ": {
+  "en": "Municipality of Amyntaio"
+ },
+ "ΔΗΜΟΣ ΑΡΙΣΤΟΤΕΛΗ": {
+  "en": "Municipality of Aristotelis"
+ },
+ "ΔΗΜΟΣ ΒΕΛΒΕΝΤΟΥ": {
+  "en": "Municipality of Velvento"
+ },
+ "ΔΗΜΟΣ ΔΙΡΦΥΩΝ - ΜΕΣΣΑΠΙΩΝ": {
+  "en": "Municipality of Dirfys–Messapia"
+ },
+ "ΔΗΜΟΣ ΔΟΜΟΚΟΥ": {
+  "en": "Municipality of Domokos"
+ },
+ "ΔΗΜΟΣ ΔΟΞΑΤΟΥ": {
+  "en": "Municipality of Doxato"
+ },
+ "ΔΗΜΟΣ ΔΡΑΜΑΣ": {
+  "en": "Municipality of Drama"
+ },
+ "ΔΗΜΟΣ ΕΔΕΣΣΑΣ": {
+  "en": "Municipality of Edessa"
+ },
+ "ΔΗΜΟΣ ΖΑΓΟΡΙΟΥ": {
+  "en": "Municipality of Zagori"
+ },
+ "ΔΗΜΟΣ ΘΕΡΜΗΣ": {
+  "en": "Municipality of Thermi"
+ },
+ "ΔΗΜΟΣ ΚΑΡΠΕΝΗΣΙΟΥ": {
+  "en": "Municipality of Karpenisi"
+ },
+ "ΔΗΜΟΣ ΚΑΣΤΟΡΙΑΣ": {
+  "en": "Municipality of Kastoria"
+ },
+ "ΔΗΜΟΣ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ": {
+  "en": "Municipality of Kato Nevrokopi"
+ },
+ "ΔΗΜΟΣ ΚΙΛΕΛΕΡ": {
+  "en": "Municipality of Kileler"
+ },
+ "ΔΗΜΟΣ ΛΑΡΙΣΑΙΩΝ": {
+  "en": "Municipality of Larisa"
+ },
+ "ΔΗΜΟΣ ΜΑΝΤΟΥΔΙΟΥ - ΛΙΜΝΗΣ - ΑΓΙΑΣ ΑΝΝΑΣ": {
+  "en": "Municipality of Mantoudi–Limni–Agia Anna"
+ },
+ "ΔΗΜΟΣ ΜΕΤΕΩΡΩΝ": {
+  "en": "Municipality of Meteora"
+ },
+ "ΔΗΜΟΣ ΝΕΑΣ ΠΡΟΠΟΝΤΙΔΑΣ": {
+  "en": "Municipality of Nea Propontida"
+ },
+ "ΔΗΜΟΣ ΝΕΣΤΟΡΙΟΥ": {
+  "en": "Municipality of Nestorio"
+ },
+ "ΔΗΜΟΣ ΝΟΤΙΟΥ ΠΗΛΙΟΥ": {
+  "en": "Municipality of South Pelion"
+ },
+ "ΔΗΜΟΣ ΞΑΝΘΗΣ": {
+  "en": "Municipality of Xanthi"
+ },
+ "ΔΗΜΟΣ ΠΑΓΓΑΙΟΥ": {
+  "en": "Municipality of Pangaio"
+ },
+ "ΔΗΜΟΣ ΠΑΡΓΑΣ": {
+  "en": "Municipality of Parga"
+ },
+ "ΔΗΜΟΣ ΠΥΛΑΙΑΣ - ΧΟΡΤΙΑΤΗ": {
+  "en": "Municipality of Pylaia–Chortiatis"
+ },
+ "ΔΗΜΟΣ ΣΑΜΟΘΡΑΚΗΣ": {
+  "en": "Municipality of Samothraki"
+ },
+ "ΔΗΜΟΣ ΤΥΡΝΑΒΟΥ": {
+  "en": "Municipality of Tyrnavos"
+ },
+ "ΔΗΜΟΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΥΔΡΕΥΣΗΣ ΚΑΙ ΑΠΟΧΕΥΤΕΣΗΣ ΔΟΞΑΤΟΥ": {
+  "en": "Municipal Water & Sewerage Utility of Doxato"
+ },
+ "ΕΝΙΑΙΕΣ ΣΧΟΛΙΚΕΣ ΕΠΙΤΡΟΠΕΣ ΠΡΩΤΟΒΑΘΜΙΑΣ ΚΑΙ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ ΕΚΠΑΙΔΕΥΣΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ.": {
+  "en": "Unified School Committees of the Municipality of Almopia"
+ },
+ "ΚΕΝΤΡΟ ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ-ΑΛΛΗΛΕΓΓΥΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ": {
+  "en": "Social Protection & Solidarity Centre of Almopia"
+ },
+ "ΛΟΥΤΡΑ ΛΟΥΤΡΑΚΙΟΥ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ Α.Ε": {
+  "en": "Loutraki Thermal Baths of Almopia S.A."
+ },
+ "ΟΡΓΑΝΙΣΜΟΣ ΛΙΜΕΝΟΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ Α.Ε": {
+  "en": "Alexandroupoli Port Authority S.A."
+ },
+ "ΟΡΓΑΝΙΣΜΟΣ ΣΙΔΗΡΟΔΡΟΜΩΝ ΕΛΛΑΔΑΣ (ΟΣΕ)": {
+  "en": "Hellenic Railways Organisation (OSE)"
+ },
+ "ΠΕΡΙΦΕΡΕΙΑ ΑΝΑΤΟΛΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ - ΘΡΑΚΗΣ": {
+  "en": "Region of Eastern Macedonia–Thrace"
+ },
+ "ΠΕΡΙΦΕΡΕΙΑ ΘΕΣΣΑΛΙΑΣ": {
+  "en": "Region of Thessaly"
+ },
+ "ΠΕΡΙΦΕΡΕΙΑ ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ": {
+  "en": "Region of Central Greece"
+ },
+ "ΤΑΜΕΙΟ ΔΙΟΙΚΗΣΗΣ ΔΙΑΧΕΙΡΗΣΗΣ ΠΑΝΕΠΙΣΤΗΜΙΑΚΩΝ ΔΑΣΩΝ": {
+  "en": "University Forests Administration & Management Fund"
+ },
+ "ΥΠΟΥΡΓΕΙΟ ΕΘΝΙΚΗΣ ΑΜΥΝΑΣ": {
+  "en": "Ministry of National Defence"
+ },
+ "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ": {
+  "en": "Ministry of Environment and Energy"
+ },
+ "ΥΠΟΥΡΓΕΙΟ ΠΟΛΙΤΙΣΜΟΥ": {
+  "en": "Ministry of Culture"
+ },
+ "ΥΠΟΥΡΓΕΙΟ ΠΟΛΙΤΙΣΜΟΥ ΚΑΙ ΑΘΛΗΤΙΣΜΟΥ": {
+  "en": "Ministry of Culture and Sports"
+ }
+}

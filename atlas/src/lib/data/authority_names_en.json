@@ -1,0 +1,312 @@
+{
+ "_comment": "English display names for the 103 forest authorities (DATA_DECISIONS 2026-08-15): '<Toponym> Forest Service Office' (Δασαρχεία) / '<Toponym> Forest Directorate' (Διευθύνσεις Δασών), toponym-first per the user; toponyms reuse pe_names_en.json where the seat names a Π.Ε., else ELOT 743 with the user's reviewed forms (Korinthos, Kalampaka, Sparta, Thebes, Mesolongi, Piraeus, Patras, Megara, Olympia, Athens, Dodecanese, Volos …). Presentation only; keyed by the canonical registry name; byte-identical copy in atlas/src/lib/data (pinned).",
+ "Δασαρχείο Άμφισσας": {
+  "en": "Amfissa Forest Service Office"
+ },
+ "Δασαρχείο Έδεσσας": {
+  "en": "Edessa Forest Service Office"
+ },
+ "Δασαρχείο Αγιάς": {
+  "en": "Agia Forest Service Office"
+ },
+ "Δασαρχείο Αγρινίου": {
+  "en": "Agrinio Forest Service Office"
+ },
+ "Δασαρχείο Αιγάλεω": {
+  "en": "Aigaleo Forest Service Office"
+ },
+ "Δασαρχείο Αιγίου": {
+  "en": "Aigio Forest Service Office"
+ },
+ "Δασαρχείο Αλεξανδρούπολης": {
+  "en": "Alexandroupoli Forest Service Office"
+ },
+ "Δασαρχείο Αλιβερίου": {
+  "en": "Aliveri Forest Service Office"
+ },
+ "Δασαρχείο Αλμυρού": {
+  "en": "Almyros Forest Service Office"
+ },
+ "Δασαρχείο Αμαλιάδας": {
+  "en": "Amaliada Forest Service Office"
+ },
+ "Δασαρχείο Αμφιλοχίας": {
+  "en": "Amfilochia Forest Service Office"
+ },
+ "Δασαρχείο Αριδαίας": {
+  "en": "Aridaia Forest Service Office"
+ },
+ "Δασαρχείο Αρναίας": {
+  "en": "Arnaia Forest Service Office"
+ },
+ "Δασαρχείο Αταλάντης": {
+  "en": "Atalanti Forest Service Office"
+ },
+ "Δασαρχείο Βέροιας": {
+  "en": "Veroia Forest Service Office"
+ },
+ "Δασαρχείο Βυτίνας": {
+  "en": "Vytina Forest Service Office"
+ },
+ "Δασαρχείο Βόλου": {
+  "en": "Volos Forest Service Office"
+ },
+ "Δασαρχείο Γουμένισσας": {
+  "en": "Goumenissa Forest Service Office"
+ },
+ "Δασαρχείο Διδυμοτείχου": {
+  "en": "Didymoteicho Forest Service Office"
+ },
+ "Δασαρχείο Δράμας": {
+  "en": "Drama Forest Service Office"
+ },
+ "Δασαρχείο Ελασσόνας": {
+  "en": "Elassona Forest Service Office"
+ },
+ "Δασαρχείο Θάσου": {
+  "en": "Thasos Forest Service Office"
+ },
+ "Δασαρχείο Θεσσαλονίκης": {
+  "en": "Thessaloniki Forest Service Office"
+ },
+ "Δασαρχείο Θηβών": {
+  "en": "Thebes Forest Service Office"
+ },
+ "Δασαρχείο Ιστιαίας": {
+  "en": "Istiaia Forest Service Office"
+ },
+ "Δασαρχείο Ιωαννίνων": {
+  "en": "Ioannina Forest Service Office"
+ },
+ "Δασαρχείο Καβάλας": {
+  "en": "Kavala Forest Service Office"
+ },
+ "Δασαρχείο Καλαμάτας": {
+  "en": "Kalamata Forest Service Office"
+ },
+ "Δασαρχείο Καλαμπάκας": {
+  "en": "Kalampaka Forest Service Office"
+ },
+ "Δασαρχείο Καπανδριτίου": {
+  "en": "Kapandriti Forest Service Office"
+ },
+ "Δασαρχείο Καρδίτσας": {
+  "en": "Karditsa Forest Service Office"
+ },
+ "Δασαρχείο Καρπενησίου": {
+  "en": "Karpenisi Forest Service Office"
+ },
+ "Δασαρχείο Κασσάνδρας": {
+  "en": "Kassandra Forest Service Office"
+ },
+ "Δασαρχείο Κιλκίς": {
+  "en": "Kilkis Forest Service Office"
+ },
+ "Δασαρχείο Κοζάνης": {
+  "en": "Kozani Forest Service Office"
+ },
+ "Δασαρχείο Κορίνθου": {
+  "en": "Korinthos Forest Service Office"
+ },
+ "Δασαρχείο Κυνουρίας": {
+  "en": "Kynouria Forest Service Office"
+ },
+ "Δασαρχείο Κυπαρισσίας": {
+  "en": "Kyparissia Forest Service Office"
+ },
+ "Δασαρχείο Κόνιτσας": {
+  "en": "Konitsa Forest Service Office"
+ },
+ "Δασαρχείο Λάρισας": {
+  "en": "Larisa Forest Service Office"
+ },
+ "Δασαρχείο Λίμνης": {
+  "en": "Limni Forest Service Office"
+ },
+ "Δασαρχείο Λαγκαδά": {
+  "en": "Lagkadas Forest Service Office"
+ },
+ "Δασαρχείο Λαμίας": {
+  "en": "Lamia Forest Service Office"
+ },
+ "Δασαρχείο Λαυρίου": {
+  "en": "Lavrio Forest Service Office"
+ },
+ "Δασαρχείο Λιβαδειάς": {
+  "en": "Livadeia Forest Service Office"
+ },
+ "Δασαρχείο Λιδωρικίου": {
+  "en": "Lidoriki Forest Service Office"
+ },
+ "Δασαρχείο Μεγάρων": {
+  "en": "Megara Forest Service Office"
+ },
+ "Δασαρχείο Μεσολογγίου": {
+  "en": "Mesolongi Forest Service Office"
+ },
+ "Δασαρχείο Μετσόβου": {
+  "en": "Metsovo Forest Service Office"
+ },
+ "Δασαρχείο Μουζακίου": {
+  "en": "Mouzaki Forest Service Office"
+ },
+ "Δασαρχείο Ναυπάκτου": {
+  "en": "Nafpaktos Forest Service Office"
+ },
+ "Δασαρχείο Νευροκοπίου": {
+  "en": "Nevrokopi Forest Service Office"
+ },
+ "Δασαρχείο Νιγρίτας": {
+  "en": "Nigrita Forest Service Office"
+ },
+ "Δασαρχείο Ξάνθης": {
+  "en": "Xanthi Forest Service Office"
+ },
+ "Δασαρχείο Ξυλοκάστρου": {
+  "en": "Xylokastro Forest Service Office"
+ },
+ "Δασαρχείο Ολυμπίας": {
+  "en": "Olympia Forest Service Office"
+ },
+ "Δασαρχείο Πάρνηθας": {
+  "en": "Parnitha Forest Service Office"
+ },
+ "Δασαρχείο Πατρών": {
+  "en": "Patras Forest Service Office"
+ },
+ "Δασαρχείο Πειραιά": {
+  "en": "Piraeus Forest Service Office"
+ },
+ "Δασαρχείο Πεντέλης": {
+  "en": "Penteli Forest Service Office"
+ },
+ "Δασαρχείο Περτουλίου": {
+  "en": "Pertouli Forest Service Office"
+ },
+ "Δασαρχείο Πολυγύρου": {
+  "en": "Polygyros Forest Service Office"
+ },
+ "Δασαρχείο Πόρου": {
+  "en": "Poros Forest Service Office"
+ },
+ "Δασαρχείο Πύργου": {
+  "en": "Pyrgos Forest Service Office"
+ },
+ "Δασαρχείο Σερρών": {
+  "en": "Serres Forest Service Office"
+ },
+ "Δασαρχείο Σιδηροκάστρου": {
+  "en": "Sidirokastro Forest Service Office"
+ },
+ "Δασαρχείο Σκοπέλου": {
+  "en": "Skopelos Forest Service Office"
+ },
+ "Δασαρχείο Σουφλίου": {
+  "en": "Soufli Forest Service Office"
+ },
+ "Δασαρχείο Σπάρτης": {
+  "en": "Sparta Forest Service Office"
+ },
+ "Δασαρχείο Σπερχειάδας": {
+  "en": "Spercheiada Forest Service Office"
+ },
+ "Δασαρχείο Σταυρού": {
+  "en": "Stavros Forest Service Office"
+ },
+ "Δασαρχείο Σταυρούπολης": {
+  "en": "Stavroupoli Forest Service Office"
+ },
+ "Δασαρχείο Τρίπολης": {
+  "en": "Tripoli Forest Service Office"
+ },
+ "Δασαρχείο Τρικάλων": {
+  "en": "Trikala Forest Service Office"
+ },
+ "Δασαρχείο Τσοτυλίου": {
+  "en": "Tsotyli Forest Service Office"
+ },
+ "Δασαρχείο Φουρνάς": {
+  "en": "Fournas Forest Service Office"
+ },
+ "Δασαρχείο Χαλκίδας": {
+  "en": "Chalkida Forest Service Office"
+ },
+ "Διεύθυνση Δασών Άρτας": {
+  "en": "Arta Forest Directorate"
+ },
+ "Διεύθυνση Δασών Έβρου": {
+  "en": "Evros Forest Directorate"
+ },
+ "Διεύθυνση Δασών Αθηνών": {
+  "en": "Athens Forest Directorate"
+ },
+ "Διεύθυνση Δασών Αργολίδας": {
+  "en": "Argolida Forest Directorate"
+ },
+ "Διεύθυνση Δασών Γρεβενών": {
+  "en": "Grevena Forest Directorate"
+ },
+ "Διεύθυνση Δασών Δωδεκανήσου": {
+  "en": "Dodecanese Forest Directorate"
+ },
+ "Διεύθυνση Δασών Ζακύνθου": {
+  "en": "Zakynthos Forest Directorate"
+ },
+ "Διεύθυνση Δασών Ημαθίας": {
+  "en": "Imathia Forest Directorate"
+ },
+ "Διεύθυνση Δασών Ηρακλείου": {
+  "en": "Heraklion Forest Directorate"
+ },
+ "Διεύθυνση Δασών Θεσπρωτίας": {
+  "en": "Thesprotia Forest Directorate"
+ },
+ "Διεύθυνση Δασών Κέρκυρας": {
+  "en": "Corfu Forest Directorate"
+ },
+ "Διεύθυνση Δασών Καστοριάς": {
+  "en": "Kastoria Forest Directorate"
+ },
+ "Διεύθυνση Δασών Κεφαλληνίας": {
+  "en": "Kefalonia Forest Directorate"
+ },
+ "Διεύθυνση Δασών Λάρισας": {
+  "en": "Larisa Forest Directorate"
+ },
+ "Διεύθυνση Δασών Λέσβου": {
+  "en": "Lesvos Forest Directorate"
+ },
+ "Διεύθυνση Δασών Λασιθίου": {
+  "en": "Lasithi Forest Directorate"
+ },
+ "Διεύθυνση Δασών Λευκάδας": {
+  "en": "Lefkada Forest Directorate"
+ },
+ "Διεύθυνση Δασών Πιερίας": {
+  "en": "Pieria Forest Directorate"
+ },
+ "Διεύθυνση Δασών Πρέβεζας": {
+  "en": "Preveza Forest Directorate"
+ },
+ "Διεύθυνση Δασών Ρεθύμνου": {
+  "en": "Rethymno Forest Directorate"
+ },
+ "Διεύθυνση Δασών Ροδόπης": {
+  "en": "Rodopi Forest Directorate"
+ },
+ "Διεύθυνση Δασών Σάμου": {
+  "en": "Samos Forest Directorate"
+ },
+ "Διεύθυνση Δασών Φλώρινας": {
+  "en": "Florina Forest Directorate"
+ },
+ "Διεύθυνση Δασών Φωκίδας": {
+  "en": "Fokida Forest Directorate"
+ },
+ "Διεύθυνση Δασών Χίου": {
+  "en": "Chios Forest Directorate"
+ },
+ "Διεύθυνση Δασών Χανίων": {
+  "en": "Chania Forest Directorate"
+ }
+}

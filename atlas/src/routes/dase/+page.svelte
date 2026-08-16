@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { bodyEn, devGreek, orgEn } from '$lib/transforms/names';
 	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
@@ -112,7 +113,7 @@
 		iso ? `${iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}` : '—';
 	function unitTip(p: MapPt): string {
 		return (
-			`<strong>${p.name}</strong><br>` +
+			`<strong>${bodyEn(p.name)}</strong><br>` +
 			`${grInt(p.n)} contracts · ${eur(p.eur)}<br>` +
 			`median contract ${eur(p.median_eur)}`
 		);
@@ -148,14 +149,14 @@
 	);
 	const orgRows = $derived(
 		o.top_orgs.map((c) => ({
-			label: c.name,
+			label: orgEn(c.name),
 			value: c.total_eur,
 			sublabel: `${grInt(c.n_contracts)} contracts`
 		}))
 	);
 	const unitRows = $derived(
 		o.top_units.map((c) => ({
-			label: c.name,
+			label: bodyEn(c.name),
 			value: c.total_eur,
 			sublabel: `${grInt(c.n_contracts)} contracts`
 		}))
@@ -356,7 +357,7 @@
 					<aside class="unitpanel" style:max-height={`${Math.max(160, mapH - keyH - 16)}px`}>
 						<header>
 							<div>
-								<div class="up-name">{sel.name}</div>
+								<div class="up-name" title={devGreek(sel.name)}>{bodyEn(sel.name)}</div>
 								<div class="up-stats">
 									{grInt(sel.n)} contracts, median: {eur(sel.median_eur)}, total amount: {eur(
 										sel.eur
@@ -373,7 +374,7 @@
 								{#each sel.contracts as c (c.ref)}
 									<tr>
 										<td><a href={`/dase/contract/${c.ref}`}>{c.ref}</a></td>
-										<td>{c.by || '—'}</td>
+										<td title={devGreek(c.by)}>{bodyEn(c.by) || '—'}</td>
 										<td>{c.coop || '—'}</td>
 										<td class="nowrap">{dmyDate(c.d)}</td>
 										<td class="num">{c.eur === null ? '—' : eur(c.eur)}</td>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { bodyEn, devGreek, orgEn } from '$lib/transforms/names';
 	import YearBars from '$lib/charts/YearBars.svelte';
 	import KpiRow from '$lib/ui/KpiRow.svelte';
 	import StatPair from '$lib/ui/StatPair.svelte';
@@ -74,8 +75,8 @@
 			<tbody>
 				{#each b.units as u, i (i)}
 					<tr>
-						<td>{u.unit ?? '—'}</td>
-						<td class="muted"><small>{u.org ?? ''}</small></td>
+						<td title={devGreek(u.unit)}>{bodyEn(u.unit) || '—'}</td>
+						<td class="muted" title={devGreek(u.org)}><small>{orgEn(u.org)}</small></td>
 						<td class="num">{u.n_contracts}×</td>
 						<td class="num">{eurShort(u.total_eur)}</td>
 					</tr>

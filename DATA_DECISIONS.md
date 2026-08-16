@@ -2010,3 +2010,43 @@ permalink and API key stays on the Greek canonical Π.Ε.; the Atlas
 renders «R.U. <name>» (user-chosen prefix) wherever «Π.Ε. <name>»
 displayed before. webui (:5000, frozen) keeps Greek. *Affects: display
 strings on Atlas region surfaces; zero data/aggregate changes.*
+
+## 2026-08-16 — English display names for awarding bodies and units (Atlas)
+
+Extending the Π.Ε. layer (2026-08-15) to every awarding-body name, per the
+user's reviewed proposal. Three curated files, each keyed by the EXACT
+registry string, each with a byte-identical copy in `atlas/src/lib/data`
+(pinned):
+
+- **`authority_names_en.json`** — the 103 forest authorities as
+  «<Toponym> Forest Service Office» (Δασαρχεία) / «<Toponym> Forest
+  Directorate» (Διευθύνσεις Δασών), toponym-first (user choice over the
+  «of»-form). Toponyms reuse `pe_names_en.json` where the seat names a
+  Π.Ε.; the rest are ELOT 743 with the user's reviewed forms — kept:
+  Korinthos, Kalampaka, Sparta, Thebes, Mesolongi, Piraeus, Samothraki;
+  also Patras, Megara, Olympia, Athens, Dodecanese, Volos etc.
+- **`org_names_en.json`** — all 49 live ΔΑΣΕ awarding organizations (incl.
+  the kh-shared ΥΠΕΝ): official English titles for ministries,
+  αποκεντρωμένες («Decentralized Administration of …»), «Region of …»,
+  «Municipality of <ELOT toponym>» (the «ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ» typo row
+  keyed as-is), official names for the misc bodies. User corrections:
+  «Aristotle University of Thessaloniki (A.U.TH.)», plain «General
+  Hospital of Kozani» (no «Μαματσείο» epithet).
+- **`unit_names_en.json`** — the 49 municipal/other operator units
+  (dictionary translations reviewed by the user), the 4 ΥΠΕΝ signer
+  units, and the forest units without a registry fold-match (Δασαρχείο
+  Φουρνά incl. the ΦΟΥΡΝΩΝ variant, ΔΔ Ηλείας / Ν. Πιερίας / Χαλκιδικής).
+
+Applied by `atlas/src/lib/transforms/names.ts` (`authEn`/`orgEn`/
+`unitEn`/`bodyEn` — accent/case/whitespace-folded lookups so raw
+registry spellings match; unmapped strings fall back to the Greek,
+honestly) on: /authorities + /authority pages, the /dase map circles,
+tooltips and click-panel, the AWARDING BODIES / AWARDING UNITS charts,
+coop-page unit tables, and both contract pages' Authority / Operating
+unit rows. Signer PERSON names and all quoted evidence stay Greek; co-op
+names stay Greek (user decision). **Dev-only audit aid** (user request):
+`devGreek()` adds the Greek original as a hover title on translated
+names when running `npm run dev`; production builds render none.
+Coverage + Latin-only + copy-identity + user-decision pins in
+`tests/test_body_names_en.py`. *Affects: display strings only; keys,
+aggregates and permalinks unchanged.*

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { authEn, devGreek } from '$lib/transforms/names';
 	import { peEn } from '$lib/transforms/regions';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
@@ -103,7 +104,7 @@
 		{#each rows as r (r.slug)}
 			<tr>
 				<td>
-					<a href={`/authority/${r.slug}`}>{r.name}</a>
+					<a href={`/authority/${r.slug}`} title={devGreek(r.name)}>{authEn(r.name)}</a>
 					<span class="chip">{r.kind === 'dx' ? 'Δασαρχείο' : 'Δ. Δασών'}</span>
 				</td>
 				<td class="muted"><small>{peEn(r.pe)}</small></td>

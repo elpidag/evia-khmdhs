@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { authEn } from '$lib/transforms/names';
 	import { ruLabel } from '$lib/transforms/regions';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
@@ -13,11 +14,11 @@
 </script>
 
 <svelte:head>
-	<title>{a.name} — forest authority</title>
-	<meta property="og:title" content={a.name} />
+	<title>{authEn(a.name)} — forest authority</title>
+	<meta property="og:title" content={authEn(a.name)} />
 	<meta
 		property="og:description"
-		content="{a.name}: {eurShort(a.antinero.total_eur)} of Anti-nero works · {grInt(
+		content="{authEn(a.name)}: {eurShort(a.antinero.total_eur)} of Anti-nero works · {grInt(
 			a.dase.contracts.length
 		)} ΔΑΣΕ contracts awarded"
 	/>
@@ -26,7 +27,7 @@
 <p class="crumb"><a href="/authorities">← Forest authorities</a></p>
 
 <hgroup>
-	<h1>{a.name}</h1>
+	<h1>{authEn(a.name)}</h1>
 	<p class="muted">
 		{kindLabel} · {ruLabel(a.pe)}
 		{#if a.seat.city}· seat: {a.seat.city}{/if}
@@ -66,7 +67,7 @@
 						points={[{ lat: a.seat.lat, lon: a.seat.lon, name: a.name }]}
 						r={6}
 						fillOf={() => 'var(--accent-deep)'}
-						tipOf={() => `<strong>${a.name}</strong><br>seat: ${a.seat.city ?? ''}`}
+						tipOf={() => `<strong>${authEn(a.name)}</strong><br>seat: ${a.seat.city ?? ''}`}
 					/>
 				{/if}
 			{/snippet}
