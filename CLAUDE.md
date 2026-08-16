@@ -503,9 +503,11 @@ median; join via `dase_contract_regions.source` `registry:<name>`),
 kind-coloured per the user's legend mock, FOUR kinds since 2026-08-15:
 dd «forest directorate» #406e55 / dx «local forest service office»
 #6fb28c / «regional or municipal authority» solid black at Π.Ε.
-centroids (δήμοι+περιφέρειες+their νομικά πρόσωπα, ΔΗΜΟ/ΠΕΡΙΦΕΡΕΙΑ/ΔΕΥΑ
-stems) / «other public body» grey #9b9b9b (εφορείες αρχαιοτήτων, ΟΣΕ,
-port, ΑΠΘ, hospital, ΓΕΑ). Seatless forest units (Δασαρχείο Φουρνά, ΔΔ
+centroids (δήμοι+περιφέρειες+their νομικά πρόσωπα — since 2026-08-16
+classified by the public-bodies REGISTRY scope municipal/regional via
+`public_body_aliases`, not name stems; unknown orgs render grey and the
+loader WARN + bijection test scream first) / «other public body» grey
+#9b9b9b (εφορείες αρχαιοτήτων, ΟΣΕ, port, ΑΠΘ, hospital, ΓΕΑ). Seatless forest units (Δασαρχείο Φουρνά, ΔΔ
 Ηλείας/Ν. Πιερίας/Χαλκιδικής, the supra-regional ΕΠΙΘΕΩΡΗΣΗ — 6
 circles) stay GREEN, drawn at their Π.Ε. centroid; same-centroid
 circles spread right by radius so none hides. ΑΔΜΗΕ off-map in

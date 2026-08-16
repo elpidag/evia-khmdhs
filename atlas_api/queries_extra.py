@@ -831,17 +831,28 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
             return "dd"
         return None
 
+    # legend classification comes from the public-bodies registry
+    # (DATA_DECISIONS 2026-08-16) instead of name-stem guessing: aliases
+    # are the VERBATIM organization strings (coverage bijection pinned in
+    # tests/test_public_bodies.py), scope is the user-reviewed tier-1 label
+    body_scope = {}
+    try:
+        for br in dase.execute(
+                "SELECT a.alias, b.scope FROM public_body_aliases a "
+                "JOIN public_bodies b ON b.key = a.body_key"):
+            body_scope[br["alias"]] = br["scope"]
+    except Exception:
+        pass
+
     def _org_class(org: str | None) -> str:
         """Remaining non-forest awarders: municipal/regional government
-        (δήμοι, περιφέρειες and their νομικά πρόσωπα — the ΔΗΜΟ- stem also
-        catches the registry's «ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ» typo and the
-        Αλμωπία entities' «…ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ» tails) vs every other public
-        body (εφορείες αρχαιοτήτων, ΟΣΕ, ports, universities, hospitals,
-        ΓΕΑ…)."""
-        f = _fold_upper(org or "")
-        if "ΔΗΜΟ" in f or f.startswith("ΠΕΡΙΦΕΡΕΙΑ") or "Δ.Ε.Υ.Α" in f or f.startswith("ΔΕΥΑ"):
-            return "muni"
-        return "misc"
+        (registry scope municipal/regional — δήμοι, περιφέρειες and their
+        νομικά πρόσωπα) draw black; every other public body (ΟΣΕ, ports,
+        universities, hospitals, ΓΕΑ…) grey. An org the registry does not
+        know renders grey — the loader WARN + the bijection test surface
+        it long before it ships."""
+        scope = body_scope.get((org or "").strip())
+        return "muni" if scope in ("municipal", "regional") else "misc"
 
     def contract_row(r, by: str) -> dict:
         return {"ref": r["ref"], "d": (r["d"] or "")[:10] or None,
