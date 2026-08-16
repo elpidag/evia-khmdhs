@@ -598,15 +598,18 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   all 322 decision PDFs swept (34 fetch failures: timeouts + homoglyph
   ΑΔΑs), **13 projects name executing forest co-ops** (23 rows: name,
   `dase_vat`, source-act ΑΔΑ, verbatim excerpt). Identity policy: `dase_vat`
-  ONLY where the wording pins a single ΔΑΣΕ-registry entry;
-  ambiguous stay null WITH a note (Παντουρέ/Παπάδων not in registry;
-  «Σιδηρονερίου» ≈ 5 candidates and «Περτουλίου Τρικάλων» ≈ 2 —
-  pending the user's review of the source acts). Exception decided
-  2026-08-16: BOTH Μίστρου rows (titleless «ΔΑ.Σ.Ε. Μίστρου» and
-  «ΔΑΣΕ ‘ΜΙΣΤΡΟΣ’») merged onto 996895246 — the registry's SOLE
-  Μίστρου co-op, whose own registry spellings include «ΔΑΣΕ ΜΙΣΤΡΟΥ»
-  and «ΜΙΣΤΡΟΣ-ΑΓ.ΚΥΠΡΙΑΝΟΣ» (DATA_DECISIONS entry; applied to the
-  curated JSON and the sqlite in place). Known TODO: the Eurobank Ζώνη-5 evidence acts (6ΔΤ1…) are
+  ONLY where the wording pins a single ΔΑΣΕ-registry entry, plus
+  user-reviewed verdicts for the ambiguous ones (DATA_DECISIONS
+  2026-08-16 + 2026-08-17): BOTH Μίστρου rows → 996895246 (the
+  registry's SOLE Μίστρου co-op; its own spellings include «ΔΑΣΕ
+  ΜΙΣΤΡΟΥ» and «ΜΙΣΤΡΟΣ-ΑΓ.ΚΥΠΡΙΑΝΟΣ»), «Σιδηρονερίου» → 096133603
+  (the village's TITLELESS co-op of five candidates), «Περτουλίου
+  Τρικάλων» → 997129709 ΤΖΙΑΤΖΙΑΣ. Identity-fix documentation lives
+  in `curation_note` (curated JSON + API payload, NEVER rendered on
+  the cards — user rule); the visible `note` is only for user-facing
+  honesty notes. Still VAT-less: Παντουρέ/Παπάδων (absent from the
+  ΔΑΣΕ contracts universe — nothing to link). Verdicts applied to the
+  curated JSON and the sqlite in place. Known TODO: the Eurobank Ζώνη-5 evidence acts (6ΔΤ1…) are
   stored decisions with no `project_decisions` links. UI: /anadohoi
   executors section + project-page «Works executed by» (chips →
   `/dase/coop/<vat>`). Pinned executors PRESENT under their ΔΑΣΕ

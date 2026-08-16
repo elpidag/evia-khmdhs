@@ -237,7 +237,10 @@ def test_real_db_executors_curated(conn):
                 assert e.get("note"), f"{root}: unlinked executor without note"
     assert n_rows == 23
     # 14 distinct co-op VATs resolve into the ΔΑΣΕ dataset
-    assert len(linked) == 14
+    # was 14 until the user-reviewed identity verdicts (DATA_DECISIONS
+    # 2026-08-16/17) pinned Σιδηρονερίου → 096133603 and Περτουλίου →
+    # 997129709 (the Μίστρου merge reused the already-linked 996895246)
+    assert len(linked) == 16
 
 
 def test_real_db_work_sites_curated(conn):

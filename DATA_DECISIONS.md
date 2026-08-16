@@ -2458,3 +2458,26 @@ NONE is a designation/amendment/extension/revocation/completion - the
 sponsor dataset (322 decisions / 69 projects) is unaffected and the
 open TODO from the previous entry is CLOSED. Future harvests run with
 the widened extractor, so such citations resolve normally from now on.
+
+## 2026-08-17 - Σιδηρονερίου + Περτουλίου executor identities resolved
+
+**User verdicts after reviewing the source acts and the candidate
+co-op profiles.** ΨΟΨΝ4653Π8-67Σ «ΔΑΣΕ ‘Σιδηρονερίου’ Δράμας» (ΔΕΗ
+συμβάσεις 12/11/2021 + 07/02/2022, source act ΨΙ87ΟΡ10-1Φ8) → pinned
+to 096133603 ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ, the village's TITLELESS co-op (the
+other four all carry titles - Ελατία/Ροδόπη/Ενότητα/Ομόνοια - and the
+same act-family writes titles when it means a titled co-op).
+964Ρ4653Π8-ΨΘΗ «ΔΑΣΕ Περτουλίου Τρικάλων» (Εθνική Τράπεζα Χίος,
+συμβάσεις 21/22-01-2026, source act Ρ5ΞΟ4653Π8-Φ1Φ) → pinned to
+997129709 ΔΑ.Σ.Ε. «ΤΖΙΑΤΖΙΑΣ» ΠΕΡΤΟΥΛΙΟΥ (the other candidate
+096047960 «ΤΟ ΠΕΡΤΟΥΛΙ» is the ΑΠΘ university-forest crew).
+**Presentation rule (user):** identity-fix documentation is recorded
+on the developer side only - a `curation_note` field in the curated
+JSON and the API payload that the cards never render; the two Μίστρου
+merge notes (2026-08-16) move to the same field. The visible `note`
+stays for genuinely user-facing honesty notes (Παντουρέ/Παπάδων «not
+in the registry», the Σιδέρη Μαρία installer context). With these two
+verdicts every executor row that CAN carry a registry identity does;
+the only VAT-less rows left are Παντουρέ and Παπάδων, absent from the
+ΔΑΣΕ contracts universe. Applied to anadohoi_projects.json + the
+committed sqlite in place, same mechanism as the Μίστρου entry.

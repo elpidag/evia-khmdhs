@@ -1187,7 +1187,7 @@
      "dase_vat": "996895246",
      "ada": "6ΙΥΙΟΡ10-Χ15",
      "excerpt": "Την από 07/10/2021 υπογραφείσα σύμβαση μεταξύ του ΔΑΣΕ ‘ΜΙΣΤΡΟΣ’ Μίστρου Χαλκίδας και της ΔΕΗ.",
-     "note": "merged onto the registry's sole Μίστρου co-op (user decision 2026-08-16): 996895246's own registry spellings include «ΔΑΣΕ ΜΙΣΤΡΟΥ» and «Συν/σμος Εργασίας ΜΙΣΤΡΟΣ-ΑΓ.ΚΥΠΡΙΑΝΟΣ»"
+     "curation_note": "merged onto the registry's sole Μίστρου co-op (user decision 2026-08-16): 996895246's own registry spellings include «ΔΑΣΕ ΜΙΣΤΡΟΥ» and «Συν/σμος Εργασίας ΜΙΣΤΡΟΣ-ΑΓ.ΚΥΠΡΙΑΝΟΣ». Developer-side only — never rendered on the cards"
     }
    ],
    "effis_scars": [
@@ -1921,10 +1921,10 @@
     },
     {
      "name": "ΔΑΣΕ Περτουλίου Τρικάλων",
-     "dase_vat": null,
+     "dase_vat": "997129709",
      "ada": "Ρ5ΞΟ4653Π8-Φ1Φ",
      "excerpt": "Τις από 21-01-2026 και 22-01-2026 Συμβάσεις Εκτέλεσης των αντιδιαβρωτικών έργων μεταξύ της εταιρείας «ΕΘΝΙΚΗ ΤΡΑΠΕΖΑ ΕΛΛΑΔΟΣ Α.Ε.» και των Δασικών Συνεταιρισμών Εργασίας «ΑΓΙΟΚΑΜΠΟΥ ΛΑΡΙΣΑΣ», «ΠΕΡΤΟΥΛΙΟΥ ΤΡΙΚΑΛΩΝ», «ΦΩΤΕΙΝΩΝ ΠΙΕΡΙΑΣ» & «ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ ΝΕΑΣ ΓΕΝΙΑΣ» όπως νόμιμα εκπροσωπούνται.",
-     "note": "two Περτούλι co-ops in the ΔΑΣΕ registry (096047960, 997129709); the act names no title — not merged"
+     "curation_note": "pinned to 997129709 ΔΑ.Σ.Ε. «ΤΖΙΑΤΖΙΑΣ» ΠΕΡΤΟΥΛΙΟΥ (user verdict 2026-08-17 after reviewing the source act and both candidates; the other Περτούλι co-op, 096047960 «ΤΟ ΠΕΡΤΟΥΛΙ», is the ΑΠΘ university-forest crew). Developer-side only — never rendered on the cards"
     },
     {
      "name": "ΔΑΣΕ Φωτεινών Πιερίας",
@@ -2646,7 +2646,7 @@
      "dase_vat": "996895246",
      "ada": "ΩΔΥΜΟΡ10-1ΝΟ",
      "excerpt": "Τα από 11/10/2021 Πρωτόκολλα εγκατάστασης των ΔΑ.Σ.Ε. Μίστρου, ΔΑ.Σ.Ε. Σιδηρόνερου ‘Η Ροδόπη’, ΔΑ.Σ.Ε. Σταυρού Θεσ/νίκης ‘Η Ένωση’ ως φορέων υλοποίησης του προαναφερόμενου έργου. 15.Το από 14/10/2021 Πρωτόκολλο εγκατάστασης του ΔΑ.Σ.Ε. Πωγωνίου ως φορέα υλοποίησης του προαναφερόμενου έργου. 16.Το από 19/11/2021 Πρωτόκολλο εγκατάστασης του ΔΑ.Σ.Ε. Παπάδων ως φορέα υλοποίησης του προαναφερόμενου έργου.",
-     "note": "merged onto the registry's sole Μίστρου co-op (user decision 2026-08-16): 996895246's own registry spellings include titleless «ΔΑΣΕ ΜΙΣΤΡΟΥ»"
+     "curation_note": "merged onto the registry's sole Μίστρου co-op (user decision 2026-08-16): 996895246's own registry spellings include titleless «ΔΑΣΕ ΜΙΣΤΡΟΥ». Developer-side only — never rendered on the cards"
     },
     {
      "name": "ΔΑ.Σ.Ε. Σιδηρόνερου «Η Ροδόπη»",
@@ -4613,10 +4613,10 @@
    "executors": [
     {
      "name": "ΔΑΣΕ «Σιδηρονερίου» Δράμας",
-     "dase_vat": null,
+     "dase_vat": "096133603",
      "ada": "ΨΙ87ΟΡ10-1Φ8",
      "excerpt": "Τις από 12/11/2021 και 07/02/2022 υπογραφείσες συμβάσεις μεταξύ του ΔΑΣΕ ‘Σιδηρονερίου’ Δράμας και της ΔΕΗ.",
-     "note": "five Σιδηρόνερο Δράμας co-ops in the ΔΑΣΕ registry; the act names no title — not merged"
+     "curation_note": "pinned to 096133603 ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ — the village's TITLELESS co-op — out of five Σιδηρόνερο Δράμας candidates (user verdict 2026-08-17 after reviewing the source act; the other four carry titles the act does not use). Developer-side only — never rendered on the cards"
     }
    ],
    "work_sites": [
