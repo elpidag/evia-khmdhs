@@ -39,6 +39,7 @@
 	}: Props = $props();
 
 	const W = 460;
+	const H = $derived(height);
 	const APPROX = new Set(['municipality', 'pe']);
 	/** black hover cards: fire top-left; zones + sites share bottom-left */
 	let fireTip = $state<string | null>(null);
@@ -52,10 +53,11 @@
 		loadEviaZones(fetch).then((v) => (fc = v));
 	});
 
-	// the padded lon/lat frame + zone selection, independent of the svg
-	// height. With linked burn scars the SCAR IS the frame (same rule as
-	// SiteMap): every card linked to the same fire — the Β. Εύβοια 2021
-	// scar — shares one identical window that shows the whole scar;
+	// the padded lon/lat frame + zone selection. With linked burn scars
+	// the SCAR IS the frame (same rule as SiteMap): every card linked to
+	// the same fire — the Β. Εύβοια 2021 scar — shares one identical
+	// window that shows the whole scar plus its regional surroundings
+	// (the ≥0.35°/0.27° pad floors keep the whole upper island in view);
 	// zones/sites only extend it when they poke beyond the padding.
 	const frameBox = $derived.by(() => {
 		if (!fc) return null;
@@ -79,8 +81,8 @@
 				fx0 = Math.min(fx0, b[0][0]); fy0 = Math.min(fy0, b[0][1]);
 				fx1 = Math.max(fx1, b[1][0]); fy1 = Math.max(fy1, b[1][1]);
 			}
-			const px = Math.max((fx1 - fx0) * 0.15, 0.35 - (fx1 - fx0));
-			const py = Math.max((fy1 - fy0) * 0.15, 0.27 - (fy1 - fy0));
+			const px = Math.max((fx1 - fx0) * 0.18, 0.35);
+			const py = Math.max((fy1 - fy0) * 0.18, 0.27);
 			return {
 				sel,
 				X0: Math.min(fx0 - px, gx0 - 0.03),
@@ -91,8 +93,8 @@
 		}
 		const sx = gx1 - gx0;
 		const sy = gy1 - gy0;
-		const padx = Math.max(sx * 0.15, 0.35 - sx);
-		const pady = Math.max(sy * 0.15, 0.27 - sy);
+		const padx = Math.max(sx * 0.18, 0.35);
+		const pady = Math.max(sy * 0.18, 0.27);
 		return { sel, X0: gx0 - padx, X1: gx1 + padx, Y0: gy0 - pady, Y1: gy1 + pady };
 	});
 
@@ -104,17 +106,6 @@
 				[fb.X1, fb.Y0], [fb.X0, fb.Y0]]]
 		};
 	}
-
-	// scar-framed maps take their aspect FROM the frame, so cards of the
-	// same fire are pixel-identical regardless of each card's facts-column
-	// height; zone-only maps keep tracking the column via the height prop
-	const H = $derived.by(() => {
-		if (!scars.length || !frameBox) return height;
-		const frame = frameGeo(frameBox);
-		const proj = geoMercator().fitWidth(W - 12, frame);
-		const b = geoPath(proj).bounds(frame);
-		return Math.min(760, Math.max(320, Math.round(b[1][1] - b[0][1]) + 12));
-	});
 
 	const view = $derived.by(() => {
 		if (!pe || !frameBox) return null;

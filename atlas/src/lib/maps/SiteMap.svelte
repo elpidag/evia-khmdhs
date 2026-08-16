@@ -56,6 +56,7 @@
 	}: Props = $props();
 
 	const W = 460;
+	const H = $derived(height);
 	const APPROX = new Set(['municipality', 'pe']);
 
 	let pe = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
@@ -74,10 +75,12 @@
 	// base (unzoomed) frame: centre + half-spans incl. padding.
 	// With linked burn scars, the SCAR IS the frame (padded), so every
 	// card linked to the same fire renders one identical window that
-	// always shows the whole scar (same rule in ZoneMap); sites/rivers
-	// only extend it when they poke beyond the padding. Without scars,
-	// the geometry frames itself — single-site maps keep the ~30 km
-	// half-window, wide geometry tightens to a modest margin.
+	// always shows the whole scar plus its regional surroundings — for
+	// the Β. Εύβοια fire, the whole upper island (same rule in ZoneMap);
+	// sites/rivers only extend it when they poke beyond the padding.
+	// Without scars, the geometry frames itself. The ≥0.35°/0.27° pad
+	// floors give single-site maps their ~30 km half-window and keep
+	// every frame regional, never a tight crop.
 	const base = $derived.by(() => {
 		if (!pe || (!sites.length && !scars.length)) return null;
 		const path0 = geoPath();
@@ -104,8 +107,8 @@
 				fx1 = Math.max(fx1, b[1][0]);
 				fy1 = Math.max(fy1, b[1][1]);
 			}
-			const px = Math.max((fx1 - fx0) * 0.15, 0.35 - (fx1 - fx0));
-			const py = Math.max((fy1 - fy0) * 0.15, 0.27 - (fy1 - fy0));
+			const px = Math.max((fx1 - fx0) * 0.18, 0.35);
+			const py = Math.max((fy1 - fy0) * 0.18, 0.27);
 			// never crop a site/river: extend the fire frame when needed
 			// (no-op when the geometry sits inside the padding, the norm)
 			const X0 = Math.min(fx0 - px, gx0 - 0.03);
@@ -116,36 +119,14 @@
 		}
 		const sx = gx1 - gx0;
 		const sy = gy1 - gy0;
-		const padx = Math.max(sx * 0.15, 0.35 - sx);
-		const pady = Math.max(sy * 0.15, 0.27 - sy);
+		const padx = Math.max(sx * 0.18, 0.35);
+		const pady = Math.max(sy * 0.18, 0.27);
 		return {
 			cx: (gx0 + gx1) / 2,
 			cy: (gy0 + gy1) / 2,
 			hx: sx / 2 + padx,
 			hy: sy / 2 + pady
 		};
-	});
-
-	// scar-framed maps take their aspect FROM the frame, so cards of the
-	// same fire are pixel-identical regardless of each card's facts-column
-	// height; other maps keep tracking the column via the height prop
-	const H = $derived.by(() => {
-		if (!scars.length || !base) return height;
-		const frame = {
-			type: 'Polygon' as const,
-			coordinates: [
-				[
-					[base.cx - base.hx, base.cy - base.hy],
-					[base.cx - base.hx, base.cy + base.hy],
-					[base.cx + base.hx, base.cy + base.hy],
-					[base.cx + base.hx, base.cy - base.hy],
-					[base.cx - base.hx, base.cy - base.hy]
-				]
-			]
-		};
-		const proj = geoMercator().fitWidth(W - 12, frame);
-		const b = geoPath(proj).bounds(frame);
-		return Math.min(760, Math.max(320, Math.round(b[1][1] - b[0][1]) + 12));
 	});
 
 	const view = $derived.by(() => {

@@ -2339,3 +2339,20 @@ which must not render as open sea). Padding was also harmonised into
 one continuous formula shared by both maps
 (max(span*0.15, floor-span): single-site maps keep the ~30 km
 half-window, wide geometry tightens to a modest margin).
+
+## 2026-08-16 - Correction: uniform card-map height, regional fire frames
+
+**User overruled two details of the same-day fire-frame entry:**
+aspect-derived map heights are OUT («the height of the maps of all
+cards should be the same») and the tightened scar padding was too
+zoomed («you have to be able to see the upper part of the island»).
+Now: every anadohoi card map renders at ONE fixed height (460, square
+- facts-column tracking retired with it), and the fire frame keeps the
+scar bbox but pads with the standard regional convention
+(0.18 x span, >=0.35°/0.27° floors - the same formula scar-less
+geometry frames use), which for the Β. Εύβοια 2021 fire brings the
+whole upper island (west tip lon 22.81 to the NE coast) plus the
+facing mainland into view. The shared-frame guarantee stands and is
+now verified at the pixel level: all 9 cards of EFFIS scar 213578
+render the scar at identical pixels (x 174-286, y 144-314 in the
+460x460 svg) across ZoneMap and SiteMap cards alike.
