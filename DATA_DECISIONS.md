@@ -2441,3 +2441,20 @@ cache re-scan with the widened extractor finds 13 cited-but-unstored
 short-prefix ΑΔΑs (Ψ1ΟΦΩΞΘ-ΓΒΓ cited 40x, ΩΣΖΦΟΡ1Υ-ΒΤ2 21x; a few
 are OCR truncations). Fetching/classifying them is a harvest step the
 user has not yet ordered - recorded here as the open TODO.
+
+## 2026-08-16 - Citation-crawl residual probed: no dataset impact
+
+The 13 cited-but-unstored short-prefix ΑΔΑs from the ΑΔΑ-shape entry
+were probed read-only against the Diavgeia metadata API: 4 are OCR
+truncations (404 - Φ1ΞΤΩΝΗ-ΓΒΓ, Ψ10ΦΩΞΘ-ΓΒΓ homoglyph-0 of Ψ1ΟΦ…,
+Ρ4653Π8-7ΨΡ, 6ΟΘΚ4653Π-ΤΦΚ) and 9 are real but purely administrative
+recital background: 4 δασικός-χάρτης postings (9ΣΧ2ΟΡ1Κ-4ΩΘ,
+6Δ2ΙΟΡ1Υ-1ΑΦ, ΩΙΗ8ΟΡ1Κ-3ΒΙ, ΨΧΑΔΟΡ1Κ-ΙΓΟ), 2 ΑΠΔ competence/
+signature delegations (ΩΣΖΦΟΡ1Υ-ΒΤ2, 9ΒΗ4ΟΡ1Υ-32Ε), the γραμματείες
+machinery act (ΩΩ8Δ6ΔΛ-5ΓΨ), a municipal land-grant-for-reforestation
+act (Ψ1ΟΦΩΞΘ-ΓΒΓ, the 40x citation - a precondition recital repeated
+across a trail) and a Π.Π.Δ. act for forest-road works (6ΕΚΨ7ΛΛ-Ν09).
+NONE is a designation/amendment/extension/revocation/completion - the
+sponsor dataset (322 decisions / 69 projects) is unaffected and the
+open TODO from the previous entry is CLOSED. Future harvests run with
+the widened extractor, so such citations resolve normally from now on.
