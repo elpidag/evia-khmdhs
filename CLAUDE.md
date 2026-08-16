@@ -875,7 +875,21 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   heading and table), `QuoteList` (verbatim Greek excerpts + source act
   links; same sp-8 breather as the trail) and `ActTimelineBar` (anadohoi:
   the project's own PromiseGantt row — same programme axis + ganttTheme
-  palette, printed start/deadline dates — in the trail's `top` slot).
+  palette, printed start/deadline dates — in the trail's `top` slot; the
+  project's EFFIS fires render as dots at their start date, one tone per
+  fire earliest-darkest — the `d` date property was added to the display
+  layer by build_effis_layer.py, rebuild BOTH copies). SiteMap: solid
+  per-fire scar fills matching the bar dots, min-size markers for <7px
+  scars, unlabelled pins (no white stroke), +/−/⌂ zoom with drag-pan,
+  click-NEAR-a-fire zooms to it (svg-level nearest-bbox hit — the EFFIS
+  multipolygons are too fragmented for path hit-testing), timeline-dot
+  hover selects the scar and shows the black top-left card (date · ha);
+  map height binds to the facts+caveat column (FactsHeader `leftHeight`
+  $bindable). Duration-worded deadlines suppressed on completed
+  projects; LOCATION labelled «as named in the designation act» with
+  the coverage caveat (DATA_DECISIONS 2026-08-16: the 9ΕΘΠ probe showed
+  follow-up acts may cover only part of the act's named fronts, and
+  Diavgeia search cannot see recitals).
   Contract pages add PROCUREMENT DETAILS OF <ΑΔΑΜ> (one-row wide table:
   authority/unit/signer/funding, EN names) and PAYMENT ORDERS; dase keeps
   the FamilyTree (Greek registry vocabulary — it matches on registry

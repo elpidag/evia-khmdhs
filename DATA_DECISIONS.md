@@ -2141,3 +2141,41 @@ matches. The 49 extra units genuinely award nothing in our data — the
 current 103-registry attribution stands validated against the complete
 official vocabulary. *Affects: reference table + /authorities section +
 one dase map circle; zero attribution or € changes.*
+
+## 2026-08-16 — Sponsored works: designation-act fronts vs follow-up coverage (9ΕΘΠ probe — negative), fire dates on the EFFIS layer
+
+**Finding (user challenge on /anadohoi/project/9ΕΘΠ4653Π8-ΠΡ4).** The
+ΔΕΔΔΗΕ study appointment names five fire fronts (Δερβενοχωρίων, Κουβαρά
+– Σαρωνίδας, Λουτρακίου, Αιγίου, Φυλής – Πάρνηθας) but the trail
+evidences approved studies for only two: the Δερβενοχώρια burn complex
+(641Ξ4653Π8-Υ9Ι + ΡΨΗΡ4653Π8-ΙΧΖ — basins named after the burned
+municipalities Μάνδρας-Ειδυλλίας/Ελευσίνας/Μεγαρέων) and Αίγιο
+(6ΛΡΨ4653Π8-3ΧΝ — Τ.Κ. of Δ.Ε. Διακοπτού). Probe for the other three
+fronts: (a) offline, every cached anadohoi act text grepped for
+«9ΕΘΠ4653Π8|89498/2832» → only the three already-linked acts cite it;
+(b) online, luminapi sweep of ΥΠΕΝ (100015996) subjects «Θεώρηση και
+έγκριση» + «έγκριση μελέτης» (1,890 distinct acts), narrowed to
+in-window (post-06.09.2023) erosion/flood-study approvals
+(ΥΔΡΟΝΟΜ/ΑΝΤΙΠΛΗΜΜΥΡ/ΑΝΤΙΔΙΑΒΡ → 49), all 46 non-linked PDFs fetched
+and full-text checked → **none cites the designation act**. Conclusion:
+no published approval exists for Κουβαρά–Σαρωνίδας, Λουτρακίου or
+Φυλής–Πάρνηθας — the trail is complete as far as Diavgeia shows, and
+the «completed» judgment (deliverable = the approved studies) stands
+with this coverage limit now stated. Method note: Diavgeia search
+indexes subjects/metadata only — recitals are NOT searchable — so
+citation-children can only be surfaced by local full-text checks.
+
+**Presentation.** LOCATION row labelled «as named in the designation
+act»; the FactsHeader caveat now states that the act may name more
+areas than the follow-up documents cover, that the map shows the work
+locations named in the trail documents, and that fire perimeters are
+satellite estimates © European Union, Copernicus EMS — EFFIS (the
+under-map EFFIS caption lines folded into it). Site-map pins lost
+their name labels (12-label soup buried the scars); fires render solid
+with one tone per fire (earliest darkest), matched by dots on the act
+timeline bar at each fire's start date; hover card (black, top-left)
+states date + ha.
+
+**Data layer.** `build_effis_layer.py` now emits the fire start date
+(`initialdat` → property `d`, ISO) — both display copies rebuilt,
+1,969 features, ids/years unchanged (tests pass unmodified).

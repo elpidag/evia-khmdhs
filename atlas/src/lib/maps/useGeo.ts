@@ -71,6 +71,8 @@ export interface FireProps {
 	id: number;
 	/** fire year (from the EFFIS initialdat) */
 	yr: number;
+	/** fire start date, ISO (EFFIS initialdat) — timeline markers */
+	d?: string;
 	ha: number;
 	name: string;
 }

@@ -7,7 +7,7 @@
 	import FamilyTree from '$lib/charts/FamilyTree.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
-	import { eur, eurShort, grInt } from '$lib/transforms/format';
+	import { dmy, eur, eurShort, grInt } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -133,11 +133,11 @@
 			{#if c.cancelled}<span class="chip bad">cancelled</span>{/if}
 		</dd>
 		<dt>Date</dt>
-		<dd>{(c.contract_signed_date ?? '—').slice(0, 10)}</dd>
+		<dd>{dmy(c.contract_signed_date) || '—'}</dd>
 		<dt>Contractor</dt>
 		<dd>
 			{#each c.contractors as ct, i (ct.vat_number)}
-				{#if i}, {/if}<a href={`/dase/coop/${ct.vat_number}`}>{ct.display_el ?? ct.name}</a>
+				{#if i}{', '}{/if}<a href={`/dase/coop/${ct.vat_number}`}>{ct.display_el ?? ct.name}</a>
 			{/each}
 			{#if c.contractors.some((x) => x.display_el)}
 				<br /><small class="muted"
@@ -173,8 +173,7 @@
 		<dt>Duration</dt>
 		<dd>
 			{c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'}
-			<small class="muted"
-				>{(c.start_date ?? '—').slice(0, 10)} → {(c.end_date ?? 'open').slice(0, 10)}</small
+			<small class="muted">{dmy(c.start_date) || '—'} → {c.end_date ? dmy(c.end_date) : 'open'}</small
 			>
 		</dd>
 		<dt>Amendments to initial contract</dt>
@@ -202,7 +201,7 @@
 		<dt>Status</dt>
 		<dd>
 			{#if c.cancelled}
-				<span class="chip bad">cancelled</span>
+				cancelled
 			{:else}
 				no completion record trackable
 				<small class="muted"
@@ -212,23 +211,25 @@
 		</dd>
 	{/snippet}
 	{#snippet map()}
-		<PaperMap
-			interactive={false}
-			colorOf={(p) => (p === pe ? 'color-mix(in srgb, var(--c-dase) 30%, #fff)' : '#fff')}
-			tipOf={(p) => `<strong>${ruLabel(p)}</strong>`}
-		>
-			{#snippet overlay(ctx)}
-				{#if seat}
-					<DotLayer
-						{ctx}
-						points={[{ lat: seat.lat, lon: seat.lon, name: seat.name }]}
-						r={4.5}
-						fillOf={() => 'var(--c-dase)'}
-						tipOf={() => `<strong>${bodyEn(seat.name)}</strong><br>awarding unit seat`}
-					/>
-				{/if}
-			{/snippet}
-		</PaperMap>
+		<div class="detailmap">
+			<PaperMap
+				interactive={false}
+				colorOf={(p) => (p === pe ? 'color-mix(in srgb, var(--c-dase) 30%, #fff)' : '#fff')}
+				tipOf={(p) => `<strong>${ruLabel(p)}</strong>`}
+			>
+				{#snippet overlay(ctx)}
+					{#if seat}
+						<DotLayer
+							{ctx}
+							points={[{ lat: seat.lat, lon: seat.lon, name: seat.name }]}
+							r={4.5}
+							fillOf={() => 'var(--c-dase)'}
+							tipOf={() => `<strong>${bodyEn(seat.name)}</strong><br>awarding unit seat`}
+						/>
+					{/if}
+				{/snippet}
+			</PaperMap>
+		</div>
 	{/snippet}
 </FactsHeader>
 
@@ -280,7 +281,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td class="tabular nowrap">{(c.contract_signed_date ?? '—').slice(0, 10)}</td>
+					<td class="tabular nowrap">{dmy(c.contract_signed_date) || '—'}</td>
 					<td>Contract</td>
 					<td class="tabular nowrap">{c.reference_number}</td>
 					<td>{c.title ?? '—'}</td>
@@ -338,7 +339,7 @@
 			<tbody>
 				{#each c.payments as p (p.payment_ref)}
 					<tr class:dead={p.cancelled === 1}>
-						<td class="tabular muted">{(p.signed_date ?? '—').slice(0, 10)}</td>
+						<td class="tabular muted">{dmy(p.signed_date) || '—'}</td>
 						<td>
 							<span class="tabular">{p.payment_ref}</span>
 							{#if p.credit}<span class="chip">credit</span>{/if}
@@ -378,6 +379,17 @@
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);
+	}
+	/* template map look — same as the sponsored-works maps:
+	   grey sea, no border, no paper shadow */
+	.detailmap :global(.map) {
+		background: #f2f2f2;
+		border: none;
+		box-shadow: none;
+		border-radius: 4px;
+	}
+	.detailmap :global(.map .region) {
+		stroke: #8f8f8f;
 	}
 	.tplsec h2 {
 		font-family: var(--font-display);

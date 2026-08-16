@@ -73,29 +73,21 @@
 				<path d={view.path(f) ?? ''} class="selzone" />
 			{/each}
 		</svg>
+		<!-- fire size/attribution live in the facts row + FactsHeader caveat -->
 		<figcaption>
 			{#each selProps as z (z.zone)}
 				<span class="zl"><i></i>{z.name} — {z.basin}
 					({grInt(z.extracted_stremmata)} στρ. όπως ψηφιοποιήθηκε)</span>
 			{/each}
-			{#each scars as f (f.properties.id)}
-				<span class="fl"><i></i>Αποτύπωμα πυρκαγιάς EFFIS {f.properties.yr} —
-					{grInt(f.properties.ha)} εκτάρια ({f.properties.name})</span>
-			{/each}
 			<span class="src">Ζώνες έργων από τους χάρτες του Master Plan Β. Εύβοιας
 				(4.1/4.2, Νοέμβριος 2021), ψηφιοποιημένες χειροκίνητα.</span>
-			{#if scars.length}
-				<span class="src">Περίμετροι πυρκαγιών: δορυφορικές εκτιμήσεις, όχι
-					οριοθετήσεις — © European Union, Copernicus Emergency Management
-					Service — EFFIS.</span>
-			{/if}
 		</figcaption>
 	</figure>
 {/if}
 
 <style>
 	.zonemap {
-		margin: var(--sp-3) 0 var(--sp-2);
+		margin: 0 0 var(--sp-2);
 		max-width: 460px;
 	}
 	/* same palette as the sponsored-works overview map:
@@ -113,22 +105,11 @@
 		stroke: var(--line);
 		stroke-width: 0.7;
 	}
+	/* solid fire tone, same as SiteMap — no alpha */
 	.scar {
-		fill: #6b2d35;
-		fill-opacity: 0.14;
+		fill: color-mix(in srgb, #6b2d35 85%, #fff);
 		stroke: #6b2d35;
-		stroke-opacity: 0.55;
 		stroke-width: 0.8;
-	}
-	.fl i {
-		display: inline-block;
-		width: 10px;
-		height: 10px;
-		border-radius: 2px;
-		background: #6b2d35;
-		opacity: 0.35;
-		border: 1px solid #6b2d35;
-		margin-right: 6px;
 	}
 	.ctxzone {
 		fill: none;

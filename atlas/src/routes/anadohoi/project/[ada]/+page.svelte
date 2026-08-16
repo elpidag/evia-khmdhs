@@ -105,6 +105,33 @@
 			.catch(() => (scarFeats = []));
 	});
 	const scarHa = $derived(scarFeats.reduce((s, f) => s + (f.properties.ha ?? 0), 0));
+	// one tone per fire, earliest darkest — shared by the map scars and
+	// the timeline-bar dots so the two read as the same objects
+	const FIRE_TONES = ['#6b2d35', '#9a4a48', '#c47a66', '#dba28c'];
+	const scarTone = $derived.by(() => {
+		const ordered = [...scarFeats].sort((a, b) =>
+			(a.properties.d ?? String(a.properties.yr)).localeCompare(
+				b.properties.d ?? String(b.properties.yr)
+			)
+		);
+		return new Map(
+			ordered.map((f, i) => [f.properties.id, FIRE_TONES[Math.min(i, FIRE_TONES.length - 1)]])
+		);
+	});
+	// timeline fire markers: the linked scars' start dates from the layer
+	const fireDots = $derived(
+		scarFeats
+			.map((f) => ({
+				id: f.properties.id,
+				d: f.properties.d ?? '',
+				ha: f.properties.ha,
+				name: f.properties.name,
+				color: scarTone.get(f.properties.id)
+			}))
+			.filter((f) => f.d !== '')
+	);
+	// timeline-dot hover ⇄ map selection
+	let hoverFireId = $state<number | null>(null);
 
 	// template facts derived from the decision trail
 	const designationDate = $derived(
@@ -165,13 +192,20 @@
 	]);
 
 	const CAVEAT =
-		'The location of the project is sourced from the designation act and geolocated in ' +
-		'approximation, depending on the information provided. The area of the fire is sourced ' +
-		'from the dataset provided by © European Union, Copernicus Emergency Management ' +
-		'Service — EFFIS.';
+		'LOCATION quotes the designation act, which may name more areas than the follow-up ' +
+		'documents cover; the map shows the work locations named in the documents of the trail, ' +
+		'geolocated in approximation depending on the information provided. Fire perimeters are ' +
+		'satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency ' +
+		'Management Service — EFFIS.';
 
 	// the dashed "today" rule of the act's timeline bar (as on /anadohoi)
 	const todayIso = new Date().toLocaleDateString('en-CA');
+
+	// map height tracks the facts+caveat column so the two bottoms align;
+	// the SiteMap/ZoneMap svgs render ~1 css px per viewBox unit at the
+	// column's full 460px width
+	let leftH = $state(0);
+	const mapH = $derived(Math.max(420, Math.round(leftH)));
 </script>
 
 <svelte:head>
@@ -188,7 +222,7 @@
 <div class="pp">
 	<p class="crumb"><a href="/anadohoi">← Sponsored works</a></p>
 
-	<FactsHeader caveat={CAVEAT}>
+	<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
 		{#snippet facts()}
 			<dt class="id">Designation act (ΑΔΑ)</dt>
 			<dd class="id">{p.root_ada}</dd>
@@ -222,20 +256,7 @@
 				{/if}
 			</dd>
 			<dt>Status</dt>
-			<dd>
-				{#if p.status === 'active'}
-					active
-				{:else}
-					<span
-						class="chip"
-						class:ok={p.status === 'completed'}
-						class:bad={p.status === 'revoked' || p.status === 'no_completion_recorded'}
-						class:warn={p.status === 'superseded'}
-					>
-						{STATUS[p.status] ?? p.status}
-					</span>
-				{/if}
-			</dd>
+			<dd>{STATUS[p.status] ?? p.status}</dd>
 			<dt>Area of intervention</dt>
 			<dd>
 				{#if p.area_stremmata === null}
@@ -262,7 +283,8 @@
 						<small class="muted">— initially {dmy(p.deadline_initial)}, extended by amendment</small
 						>
 					{/if}
-				{:else if p.deadline_text}
+				{:else if p.deadline_text && p.status !== 'completed'}
+					<!-- duration wording from the act; moot once the project completed -->
 					{p.deadline_text}
 				{:else}
 					—
@@ -283,7 +305,7 @@
 					{/each}
 				</dd>
 			{/if}
-			<dt>Location</dt>
+			<dt>Location <small class="muted">as named in the designation act</small></dt>
 			<dd>{p.location_text ?? '—'}</dd>
 			{#if p.pe}
 				<dt>Region</dt>
@@ -292,10 +314,16 @@
 		{/snippet}
 		{#snippet map()}
 			{#if sitePins.length || (scarFeats.length && !worksZones?.length)}
-				<SiteMap sites={sitePins} scars={scarFeats} height={460} />
+				<SiteMap
+					sites={sitePins}
+					scars={scarFeats}
+					height={mapH}
+					fireColorOf={(f) => scarTone.get(f.properties.id) ?? FIRE_TONES[0]}
+					selectedId={hoverFireId}
+				/>
 			{/if}
 			{#if worksZones?.length}
-				<ZoneMap zones={worksZones} scars={scarFeats} height={460} />
+				<ZoneMap zones={worksZones} scars={scarFeats} height={mapH} />
 			{/if}
 		{/snippet}
 	</FactsHeader>
@@ -311,6 +339,8 @@
 				revoked={p.revoked_date}
 				status={p.status}
 				today={todayIso}
+				fires={fireDots}
+				onFireHover={(id) => (hoverFireId = id)}
 			/>
 		{/snippet}
 	</DocTrail>

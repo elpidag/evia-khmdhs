@@ -7,8 +7,19 @@
 	 * "today" rule — plus printed start/deadline dates, since there is no
 	 * hover card here.
 	 */
-	import { dmy } from '$lib/transforms/format';
+	import { dmy, grInt } from '$lib/transforms/format';
 	import { COLOR, EXT_COLOR, NODATE_COLOR } from '$lib/charts/ganttTheme';
+
+	export interface FireMark {
+		/** EFFIS feature id — hover linking with the map's scars */
+		id?: number;
+		/** fire start date, ISO */
+		d: string;
+		ha: number;
+		name: string;
+		/** per-fire tone, shared with the map's scar fill */
+		color?: string;
+	}
 
 	interface Props {
 		/** designation act date */
@@ -24,6 +35,10 @@
 		today: string;
 		/** restated predecessor's designation date (folded, like the Gantt) */
 		start0?: string | null;
+		/** the project's linked EFFIS fires — maroon dots at their start date */
+		fires?: FireMark[];
+		/** fire-dot hover in/out — the page mirrors it onto the map */
+		onFireHover?: (id: number | null) => void;
 	}
 	let {
 		start,
@@ -33,7 +48,9 @@
 		revoked,
 		status,
 		today,
-		start0 = null
+		start0 = null,
+		fires = [],
+		onFireHover
 	}: Props = $props();
 
 	// identical axis convention to PromiseGantt: programme start → the
@@ -41,7 +58,7 @@
 	const T0 = new Date('2021-07-01').getTime();
 	const T1 = $derived.by(() => {
 		let m = new Date(today).getTime();
-		for (const d of [start, start0, deadline0, deadline, completed, revoked])
+		for (const d of [start, start0, deadline0, deadline, completed, revoked, ...fires.map((f) => f.d)])
 			if (d) {
 				const t = new Date(d).getTime();
 				if (!Number.isNaN(t)) m = Math.max(m, t);
@@ -102,6 +119,25 @@
 			class="today-label"
 			text-anchor={todayFlip ? 'end' : 'start'}>today ({dmy(today)})</text
 		>
+
+		<!-- the fire(s) that triggered the project, at their start dates -->
+		{#each fires as f, i (f.d + i)}
+			{@const fx = x(f.d)}
+			{#if fx !== null && fx >= 4}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<circle
+					cx={fx}
+					cy={BASE - BAR_H / 2}
+					r="3.5"
+					class="fire"
+					style:fill={f.color}
+					onmouseenter={() => onFireHover?.(f.id ?? null)}
+					onmouseleave={() => onFireHover?.(null)}
+				>
+					<title>πυρκαγιά {dmy(f.d)} — {grInt(f.ha)} εκτάρια ({f.name})</title>
+				</circle>
+			{/if}
+		{/each}
 
 		<!-- restated predecessor: its own designation until the re-issue -->
 		{#if xs0 !== null && xs > xs0}
@@ -186,5 +222,15 @@
 	.dlabel {
 		font-size: 10px;
 		fill: var(--ink-soft);
+	}
+	/* per-fire tones arrive inline, matching the site map's scar fills */
+	.fire {
+		fill: color-mix(in srgb, #6b2d35 85%, #fff);
+		stroke: #6b2d35;
+		stroke-width: 0.8;
+		cursor: pointer;
+	}
+	.fire:hover {
+		filter: brightness(0.82);
 	}
 </style>

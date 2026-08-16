@@ -64,6 +64,8 @@ def main() -> None:
                 # links resolve against it
                 "id": int(props["id"]),
                 "yr": year,
+                # fire start date (initialdat, ISO) — timeline markers
+                "d": str(props["initialdat"])[:10],
                 "ha": round(float(props.get("area_ha") or 0)),
                 # admin name, NBSP noise stripped
                 "name": str(props.get("admlvl3") or props.get("admlvl2") or "").replace("\xa0", " ").strip(),

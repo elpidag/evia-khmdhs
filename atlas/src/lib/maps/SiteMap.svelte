@@ -1,12 +1,15 @@
 <script lang="ts">
 	/** Compact map for a sponsor project's curated work site(s): the
-	 *  containing Π.Ε. outline(s) with one dot per site, labelled.
+	 *  containing Π.Ε. outline(s) with one unlabelled dot per site.
 	 *  Approximate sites (municipality-centre pins) render dashed.
 	 *  Optionally draws the project's linked EFFIS burn scar(s) under the
-	 *  pins (satellite estimates — attribution printed in the caption);
-	 *  renders scar-only when the project has scars but no pinned sites. */
+	 *  pins — per-fire tones via `fireColorOf` (matching the timeline-bar
+	 *  dots), sizes in a black hover card top-left (opposite the zoom
+	 *  buttons); attribution lives in the FactsHeader caveat. Renders
+	 *  scar-only when the project has scars but no pinned sites.
+	 *  Multi-site maps get +/−/⌂ zoom buttons (drag pans while zoomed). */
 	import { geoMercator, geoPath } from 'd3-geo';
-	import { grInt } from '$lib/transforms/format';
+	import { dmy, grInt } from '$lib/transforms/format';
 	import { loadPe, type FireProps, type PeProps } from './useGeo';
 	import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 
@@ -23,8 +26,18 @@
 		sites: SitePin[];
 		/** linked EFFIS burn-scar features (already filtered by id) */
 		scars?: Feature<Polygon | MultiPolygon, FireProps>[];
+		/** per-fire fill tone (defaults to the solid base maroon mix) */
+		fireColorOf?: (f: Feature<Polygon | MultiPolygon, FireProps>) => string;
+		/** externally selected fire (timeline-dot hover): highlighted + card shown */
+		selectedId?: number | null;
 	}
-	let { sites, scars = [], height = 340 }: Props = $props();
+	let {
+		sites,
+		scars = [],
+		height = 340,
+		fireColorOf = () => 'color-mix(in srgb, #6b2d35 85%, #fff)',
+		selectedId = null
+	}: Props = $props();
 
 	const W = 460;
 	const H = $derived(height);
@@ -35,7 +48,14 @@
 		loadPe(fetch).then((v) => (pe = v));
 	});
 
-	const view = $derived.by(() => {
+	/** zoom state: k = magnification, dx/dy = frame-centre offset (degrees) */
+	let zoom = $state({ k: 1, dx: 0, dy: 0 });
+	let svgEl = $state<SVGSVGElement | null>(null);
+	let dragging = false;
+	let tip = $state<string | null>(null);
+
+	// base (unzoomed) frame: centre + half-spans incl. padding
+	const base = $derived.by(() => {
 		if (!pe || (!sites.length && !scars.length)) return null;
 		let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
 		for (const s of sites) {
@@ -57,16 +77,30 @@
 		// so a slice of the surrounding region stays in frame
 		const padx = Math.max((x1 - x0) * 0.18, 0.35);
 		const pady = Math.max((y1 - y0) * 0.18, 0.27);
+		return {
+			cx: (x0 + x1) / 2,
+			cy: (y0 + y1) / 2,
+			hx: (x1 - x0) / 2 + padx,
+			hy: (y1 - y0) / 2 + pady
+		};
+	});
+
+	const view = $derived.by(() => {
+		if (!base) return null;
+		const cx = base.cx + zoom.dx;
+		const cy = base.cy + zoom.dy;
+		const hx = base.hx / zoom.k;
+		const hy = base.hy / zoom.k;
 		// ring wound CLOCKWISE — d3-geo spherical polygons invert otherwise
 		const frame = {
 			type: 'Polygon' as const,
 			coordinates: [
 				[
-					[x0 - padx, y0 - pady],
-					[x0 - padx, y1 + pady],
-					[x1 + padx, y1 + pady],
-					[x1 + padx, y0 - pady],
-					[x0 - padx, y0 - pady]
+					[cx - hx, cy - hy],
+					[cx - hx, cy + hy],
+					[cx + hx, cy + hy],
+					[cx + hx, cy - hy],
+					[cx - hx, cy - hy]
 				]
 			]
 		};
@@ -85,56 +119,172 @@
 				return xy ? { s, x: xy[0], y: xy[1] } : null;
 			})
 			.filter((d): d is { s: SitePin; x: number; y: number } => d !== null);
-		return { path, pins };
+		// a small fire (e.g. 27 ha) projects to ~2 px at regional zoom —
+		// give it a minimum-size marker so every timeline dot has a
+		// visible map counterpart
+		const scarMarks = scars
+			.map((f) => {
+				const b = path.bounds(f);
+				if (b[1][0] - b[0][0] >= 7 || b[1][1] - b[0][1] >= 7) return null;
+				const c = path.centroid(f);
+				return Number.isFinite(c[0]) ? { f, x: c[0], y: c[1] } : null;
+			})
+			.filter((d): d is { f: (typeof scars)[number]; x: number; y: number } => d !== null);
+		return { path, pins, scarMarks };
 	});
+
+	const zoomIn = () => (zoom = { ...zoom, k: Math.min(16, zoom.k * 1.6) });
+	const zoomOut = () => {
+		const k = Math.max(1, zoom.k / 1.6);
+		zoom = k === 1 ? { k: 1, dx: 0, dy: 0 } : { ...zoom, k };
+	};
+	const home = () => (zoom = { k: 1, dx: 0, dy: 0 });
+
+	let dragMoved = false;
+	function onPointerDown(e: PointerEvent) {
+		dragMoved = false;
+		if (zoom.k <= 1) return;
+		dragging = true;
+		(e.currentTarget as Element).setPointerCapture(e.pointerId);
+	}
+	function onPointerMove(e: PointerEvent) {
+		if (!dragging || !svgEl || !base) return;
+		dragMoved = true;
+		const unitPerPx = W / svgEl.clientWidth; // css px → viewBox units
+		const degX = (2 * base.hx) / zoom.k / (W - 12);
+		const degY = (2 * base.hy) / zoom.k / (H - 12);
+		zoom = {
+			k: zoom.k,
+			dx: zoom.dx - e.movementX * unitPerPx * degX,
+			dy: zoom.dy + e.movementY * unitPerPx * degY
+		};
+	}
+	function onPointerUp() {
+		dragging = false;
+	}
+
+	/** click anywhere NEAR a fire → zoom to it; the EFFIS shapes are
+	 *  fragmented multipolygons, so hit-testing the paths alone would
+	 *  demand pixel-perfect clicks on the shards */
+	function onSvgClick(e: MouseEvent) {
+		if (dragMoved) {
+			dragMoved = false;
+			return;
+		}
+		if (!view || !svgEl) return;
+		const r = svgEl.getBoundingClientRect();
+		const px = ((e.clientX - r.left) / r.width) * W;
+		const py = ((e.clientY - r.top) / r.height) * H;
+		const PAD = 24;
+		let best: { f: (typeof scars)[number]; d2: number } | null = null;
+		for (const f of scars) {
+			const b = view.path.bounds(f);
+			if (!Number.isFinite(b[0][0])) continue;
+			if (px < b[0][0] - PAD || px > b[1][0] + PAD || py < b[0][1] - PAD || py > b[1][1] + PAD)
+				continue;
+			const cx = (b[0][0] + b[1][0]) / 2;
+			const cy = (b[0][1] + b[1][1]) / 2;
+			const d2 = (px - cx) ** 2 + (py - cy) ** 2;
+			if (!best || d2 < best.d2) best = { f, d2 };
+		}
+		if (best) zoomToScar(best.f);
+	}
+
+	// the hover card states only the fire's date and size
+	const scarTip = (f: Feature<Polygon | MultiPolygon, FireProps>): string =>
+		`${f.properties.d ? dmy(f.properties.d) : f.properties.yr} · ${grInt(f.properties.ha)} ha`;
+	// timeline-dot hover shows the same card without a map hover
+	const shownTip = $derived.by(() => {
+		if (tip) return tip;
+		const f = selectedId === null ? null : scars.find((s) => s.properties.id === selectedId);
+		return f ? scarTip(f) : null;
+	});
+
+	/** click near a fire → frame that fire's own bounds */
+	function zoomToScar(f: Feature<Polygon | MultiPolygon, FireProps>) {
+		if (!base) return;
+		const b = geoPath().bounds(f); // planar lon/lat bounds
+		const cx = (b[0][0] + b[1][0]) / 2;
+		const cy = (b[0][1] + b[1][1]) / 2;
+		const hx = Math.max(((b[1][0] - b[0][0]) / 2) * 1.5, 0.02);
+		const hy = Math.max(((b[1][1] - b[0][1]) / 2) * 1.5, 0.016);
+		const k = Math.min(16, Math.max(1, Math.min(base.hx / hx, base.hy / hy)));
+		zoom = { k, dx: cx - base.cx, dy: cy - base.cy };
+	}
 </script>
 
 {#if view}
 	<figure class="sitemap">
-		<svg viewBox="0 0 {W} {H}" role="img" aria-label="Work locations of this project">
+		<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
+		<svg
+			bind:this={svgEl}
+			viewBox="0 0 {W} {H}"
+			role="img"
+			aria-label="Work locations of this project"
+			class:grab={zoom.k > 1}
+			onpointerdown={onPointerDown}
+			onpointermove={onPointerMove}
+			onpointerup={onPointerUp}
+			onpointercancel={onPointerUp}
+			onclick={onSvgClick}
+		>
 			{#if pe}
 				{#each pe.features as f (f.properties.pe)}
 					<path d={view.path(f) ?? ''} class="land" />
 				{/each}
 			{/if}
 			{#each scars as f (f.properties.id)}
-				<path d={view.path(f) ?? ''} class="scar" />
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<path
+					d={view.path(f) ?? ''}
+					class="scar"
+					class:sel={selectedId === f.properties.id}
+					style:fill={fireColorOf(f)}
+					onmouseenter={() => (tip = scarTip(f))}
+					onmouseleave={() => (tip = null)}
+				/>
 			{/each}
-			{#if view.pins.length > 1}
-				{#each view.pins as a, i (i)}
-					{#each view.pins.slice(i + 1) as b, j (j)}
-						<line x1={a.x} y1={a.y} x2={b.x} y2={b.y} class="link" />
-					{/each}
-				{/each}
-			{/if}
+			{#each view.scarMarks as m (m.f.properties.id)}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<circle
+					cx={m.x}
+					cy={m.y}
+					r="4.5"
+					class="scarmark"
+					class:sel={selectedId === m.f.properties.id}
+					style:fill={fireColorOf(m.f)}
+					onmouseenter={() => (tip = scarTip(m.f))}
+					onmouseleave={() => (tip = null)}
+				/>
+			{/each}
 			{#each view.pins as { s, x, y }, i (i)}
-				<circle cx={x} cy={y} r="6" class="pin" class:approx={APPROX.has(s.geo_precision ?? '')} />
-				<text {x} y={y - 10} class="lbl">{s.name}</text>
+				<circle
+					cx={x}
+					cy={y}
+					r={view.pins.length > 8 ? 4.5 : 6}
+					class="pin"
+					class:approx={APPROX.has(s.geo_precision ?? '')}
+				/>
 			{/each}
 		</svg>
-		<!-- site names label their own pins; the sourcing note lives in the
-		     FactsHeader caveat — only scar data + its estimates caveat remain -->
-		{#if scars.length}
-			<figcaption>
-				{#each scars as f (f.properties.id)}
-					<span class="fl"
-						><i></i>Αποτύπωμα πυρκαγιάς EFFIS {f.properties.yr} — {grInt(f.properties.ha)} εκτάρια
-						({f.properties.name})</span
-					>
-				{/each}
-				<span class="src"
-					>Περίμετροι πυρκαγιών: δορυφορικές εκτιμήσεις, όχι οριοθετήσεις — © European Union,
-					Copernicus Emergency Management Service — EFFIS.</span
-				>
-			</figcaption>
+		{#if sites.length > 1}
+			<div class="zoomctl">
+				<button onclick={zoomIn} title="Zoom in" aria-label="Zoom in">+</button>
+				<button onclick={zoomOut} title="Zoom out" aria-label="Zoom out">−</button>
+				<button onclick={home} title="Reset view" aria-label="Reset view">⌂</button>
+			</div>
+		{/if}
+		{#if shownTip}
+			<div class="tip">{shownTip}</div>
 		{/if}
 	</figure>
 {/if}
 
 <style>
 	.sitemap {
-		margin: var(--sp-3) 0 var(--sp-2);
+		margin: 0 0 var(--sp-2);
 		max-width: 460px;
+		position: relative;
 	}
 	/* same palette as the sponsored-works overview map:
 	   grey sea, white land, --line strokes */
@@ -145,65 +295,82 @@
 		background: #f2f2f2;
 		border: none;
 		border-radius: 4px;
+		touch-action: none;
+	}
+	svg.grab {
+		cursor: grab;
 	}
 	.land {
 		fill: #fff;
 		stroke: var(--line);
 		stroke-width: 0.7;
+		vector-effect: non-scaling-stroke;
 	}
+	/* solid per-fire fills arrive inline via fireColorOf */
 	.scar {
-		fill: #6b2d35;
-		fill-opacity: 0.14;
 		stroke: #6b2d35;
-		stroke-opacity: 0.55;
-		stroke-width: 0.8;
+		stroke-width: 0.9;
+		cursor: pointer;
 	}
-	.link {
-		stroke: var(--ink);
-		stroke-width: 1;
-		stroke-dasharray: 5 4;
-		opacity: 0.55;
+	.scar:hover,
+	.scar.sel {
+		filter: brightness(0.82);
+	}
+	.scarmark {
+		stroke: #6b2d35;
+		stroke-width: 0.9;
+		cursor: pointer;
+	}
+	.scarmark:hover,
+	.scarmark.sel {
+		filter: brightness(0.82);
 	}
 	.pin {
 		fill: var(--c-anadohoi);
 		fill-opacity: 0.85;
-		stroke: #fff;
-		stroke-width: 1.4;
+		stroke: none;
 	}
 	.pin.approx {
 		fill-opacity: 0.4;
 		stroke: var(--c-anadohoi);
 		stroke-dasharray: 2.5 2;
 	}
-	.lbl {
-		font-size: 11px;
-		fill: var(--ink);
-		text-anchor: middle;
-		paint-order: stroke;
-		stroke: #fff;
-		stroke-width: 2.5px;
-		font-weight: 600;
-	}
-	figcaption {
-		font-size: var(--fs-13);
-		color: var(--ink-soft);
-		margin-top: var(--sp-1);
+	.zoomctl {
+		position: absolute;
+		top: var(--sp-2);
+		right: var(--sp-2);
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
 	}
-	.fl i {
-		display: inline-block;
-		width: 10px;
-		height: 10px;
-		border-radius: 2px;
-		background: #6b2d35;
-		opacity: 0.35;
-		border: 1px solid #6b2d35;
-		margin-right: 6px;
+	.zoomctl button {
+		font: inherit;
+		font-size: var(--fs-16);
+		line-height: 1;
+		width: 1.8rem;
+		height: 1.8rem;
+		border: 1px solid var(--line);
+		border-radius: 4px;
+		background: color-mix(in srgb, var(--paper) 92%, transparent);
+		color: var(--ink-soft);
+		cursor: pointer;
 	}
-	.src {
-		color: var(--ink-faint);
-		font-size: var(--fs-12);
+	.zoomctl button:hover {
+		color: var(--ink);
+		background: var(--paper);
+	}
+	/* the fire card: black, white lettering, top-left — mirroring the
+	   zoom buttons in the opposite corner */
+	.tip {
+		position: absolute;
+		top: var(--sp-2);
+		left: var(--sp-2);
+		background: #000;
+		color: #fff;
+		border-radius: 4px;
+		padding: var(--sp-1) var(--sp-2);
+		font-size: var(--fs-13);
+		font-variant-numeric: tabular-nums;
+		pointer-events: none;
 	}
 </style>

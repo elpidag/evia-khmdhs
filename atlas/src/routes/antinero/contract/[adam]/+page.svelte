@@ -6,7 +6,7 @@
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
-	import { eur, eurShort, grInt } from '$lib/transforms/format';
+	import { dmy, eur, eurShort, grInt } from '$lib/transforms/format';
 	import { scopeLabel } from '$lib/transforms/scopes';
 	import type { PageData } from './$types';
 
@@ -146,11 +146,11 @@
 				>{/if}
 		</dd>
 		<dt>Date</dt>
-		<dd>{(c.contract_signed_date ?? '—').slice(0, 10)}</dd>
+		<dd>{dmy(c.contract_signed_date) || '—'}</dd>
 		<dt>Contractor</dt>
 		<dd>
 			{#each c.contractors as ct, i (ct.vat_number)}
-				{#if i}, {/if}<a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a>
+				{#if i}{', '}{/if}<a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a>
 			{/each}
 			{#if c.contractors.length > 1}
 				<br /><small class="muted"
@@ -182,7 +182,7 @@
 		<dd>
 			{#if c.authorities?.length}
 				{#each c.authorities as a, i (a.name)}
-					{#if i}, {/if}<span title={devGreek(a.name)}>{authEn(a.name)}</span>
+					{#if i}{', '}{/if}<span title={devGreek(a.name)}>{authEn(a.name)}</span>
 				{/each}
 			{:else}
 				<span title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</span>
@@ -193,7 +193,7 @@
 		<dt>Work regions</dt>
 		<dd>
 			{#if c.regions.length}
-				{#each c.regions as r, i (i)}{#if i}, {/if}{ruLabel(r.region_pe)}{/each}
+				{#each c.regions as r, i (i)}{#if i}{', '}{/if}{ruLabel(r.region_pe)}{/each}
 				{#if c.sites.length}
 					<small class="muted"> · {grInt(c.sites.length)} named site(s) below</small>
 				{/if}
@@ -204,8 +204,7 @@
 		<dt>Duration</dt>
 		<dd>
 			{c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'}
-			<small class="muted"
-				>{(c.start_date ?? '—').slice(0, 10)} → {(c.end_date ?? 'open').slice(0, 10)}</small
+			<small class="muted">{dmy(c.start_date) || '—'} → {c.end_date ? dmy(c.end_date) : 'open'}</small
 			>
 		</dd>
 		<dt>Amendments to initial contract</dt>
@@ -233,31 +232,32 @@
 		<dt>Status</dt>
 		<dd>
 			{#if c.cancelled}
-				<span class="chip bad">cancelled</span>
+				cancelled
 			{:else if completion}
-				<span class="chip ok">completed</span>
-				<small class="muted">{completion.d ?? ''}</small>
+				completed <small class="muted">{dmy(completion.d)}</small>
 			{:else}
 				no completion recorded
 			{/if}
 		</dd>
 	{/snippet}
 	{#snippet map()}
-		<PaperMap
-			interactive={false}
-			colorOf={(pe) => (regionSet.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, #fff)' : '#fff')}
-			tipOf={(pe) => `<strong>${ruLabel(pe)}</strong>`}
-		>
-			{#snippet overlay(ctx)}
-				<DotLayer
-					{ctx}
-					points={seatDots.map((a) => ({ ...a, lat: a.lat!, lon: a.lon! }))}
-					r={4}
-					fillOf={() => 'var(--c-antinero)'}
-					tipOf={(a) => `<strong>${authEn(String(a.name))}</strong><br>awarding forest authority seat`}
-				/>
-			{/snippet}
-		</PaperMap>
+		<div class="detailmap">
+			<PaperMap
+				interactive={false}
+				colorOf={(pe) => (regionSet.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, #fff)' : '#fff')}
+				tipOf={(pe) => `<strong>${ruLabel(pe)}</strong>`}
+			>
+				{#snippet overlay(ctx)}
+					<DotLayer
+						{ctx}
+						points={seatDots.map((a) => ({ ...a, lat: a.lat!, lon: a.lon! }))}
+						r={4}
+						fillOf={() => 'var(--c-antinero)'}
+						tipOf={(a) => `<strong>${authEn(String(a.name))}</strong><br>awarding forest authority seat`}
+					/>
+				{/snippet}
+			</PaperMap>
+		</div>
 	{/snippet}
 </FactsHeader>
 
@@ -294,7 +294,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td class="tabular nowrap">{(c.contract_signed_date ?? '—').slice(0, 10)}</td>
+					<td class="tabular nowrap">{dmy(c.contract_signed_date) || '—'}</td>
 					<td>Contract</td>
 					<td class="tabular nowrap">{c.reference_number}</td>
 					<td>{c.title ?? '—'}</td>
@@ -351,7 +351,7 @@
 			<tbody>
 				{#each c.payments as p (p.payment_ref)}
 					<tr class:dead={p.cancelled === 1}>
-						<td class="tabular muted">{(p.signed_date ?? '—').slice(0, 10)}</td>
+						<td class="tabular muted">{dmy(p.signed_date) || '—'}</td>
 						<td>
 							<span class="tabular">{p.payment_ref}</span>
 							{#if p.credit}<span class="chip">credit</span>{/if}
@@ -398,6 +398,17 @@
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);
+	}
+	/* template map look — same as the sponsored-works maps:
+	   grey sea, no border, no paper shadow */
+	.detailmap :global(.map) {
+		background: #f2f2f2;
+		border: none;
+		box-shadow: none;
+		border-radius: 4px;
+	}
+	.detailmap :global(.map .region) {
+		stroke: #8f8f8f;
 	}
 	.tplsec h2 {
 		font-family: var(--font-display);

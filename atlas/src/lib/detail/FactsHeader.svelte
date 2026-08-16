@@ -13,12 +13,15 @@
 		map?: Snippet;
 		/** provenance line under the facts (location sourcing, EFFIS…) */
 		caveat?: string;
+		/** measured height of the facts+caveat column — lets the caller
+		 *  size the map so its bottom meets the caveat's last line */
+		leftHeight?: number;
 	}
-	let { facts, map, caveat = '' }: Props = $props();
+	let { facts, map, caveat = '', leftHeight = $bindable(0) }: Props = $props();
 </script>
 
 <div class="head" class:nomap={!map}>
-	<div class="left">
+	<div class="left" bind:clientHeight={leftHeight}>
 		<dl class="facts">
 			{@render facts()}
 		</dl>
