@@ -286,11 +286,15 @@
 	// the dashed "today" rule of the act's timeline bar (as on /anadohoi)
 	const todayIso = new Date().toLocaleDateString('en-CA');
 
-	// ONE height for the maps of ALL cards (user decision 2026-08-16 —
-	// facts-column tracking and aspect-derived heights both retired);
-	// the SiteMap/ZoneMap svgs render ~1 css px per viewBox unit at the
+	// map height tracks the facts+caveat column so the map's lower edge
+	// aligns with the lower end of the explanatory text (user decision
+	// 2026-08-16); fire-framed maps keep one SHARED ZOOM regardless —
+	// they fit the scar frame by width at constant scale and centre it
+	// vertically, so the card's text length only adds/removes vertical
+	// context. The svgs render ~1 css px per viewBox unit at the
 	// column's full 460px width
-	const mapH = 460;
+	let leftH = $state(0);
+	const mapH = $derived(Math.max(420, Math.round(leftH)));
 </script>
 
 <svelte:head>
@@ -319,7 +323,11 @@
 			announced intervention size — the documents state no boundaries.
 		{/if}
 	{/snippet}
-	<FactsHeader caveat={CAVEAT} caveatExtra={worksZones?.length ? zoneSource : undefined}>
+	<FactsHeader
+		caveat={CAVEAT}
+		caveatExtra={worksZones?.length ? zoneSource : undefined}
+		bind:leftHeight={leftH}
+	>
 		{#snippet facts()}
 			<dt class="id">Designation act (ΑΔΑ)</dt>
 			<dd class="id">{p.root_ada}</dd>

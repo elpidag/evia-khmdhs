@@ -2356,3 +2356,20 @@ facing mainland into view. The shared-frame guarantee stands and is
 now verified at the pixel level: all 9 cards of EFFIS scar 213578
 render the scar at identical pixels (x 174-286, y 144-314 in the
 460x460 svg) across ZoneMap and SiteMap cards alike.
+
+## 2026-08-16 - Clarification: card-map height follows the left column
+
+**User clarified the previous entry's height rule:** the map's lower
+edge must align with the lower end of the explanatory text on the left
+- i.e. height TRACKS the facts+caveat column again (min 420), not one
+fixed square. The shared-fire-frame guarantee is kept by construction:
+fire-framed maps fit the scar frame BY WIDTH at constant scale and
+centre it vertically, so all cards of one fire share the same zoom and
+the same horizontal window, and a card's column height only
+adds/removes vertical padding context (a scar taller than the viewport
+falls back to a both-dims fit at rest, never while user-zoomed). The
+scar-frame x pad floor went 0.35°->0.40° because at exact width-fit
+the shown window IS the frame and 0.35° clipped the Λιχάδα cape tip
+(west extent of upper Εύβοια: lon 22.8116). Verified: the 9 Β. Εύβοια
+cards render the scar at identical pixels (x 172-286, ~114x176) at
+column-driven heights 462-673.

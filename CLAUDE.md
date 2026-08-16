@@ -887,19 +887,21 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   click-NEAR-a-fire zooms to it (svg-level nearest-bbox hit — the EFFIS
   multipolygons are too fragmented for path hit-testing), timeline-dot
   hover selects the scar and shows the black top-left card (date · ha);
-  ALL card maps share ONE fixed height (460 — user decision 2026-08-16;
-  both facts-column tracking via FactsHeader `leftHeight` and
-  aspect-derived heights are retired; the `leftHeight` $bindable remains
-  in FactsHeader, unused). Fire-framed maps (DATA_DECISIONS 2026-08-16,
-  two entries): when a project links EFFIS scar(s), the frame is the
-  scar bbox + the standard pads (0.18×span, ≥0.35°/0.27° floors — the
-  regional-context convention; never-crop extension for outlying
-  sites/zones), so every card of the same fire renders one identical
-  window showing the whole scar AND its surroundings — the 9
-  Β. Εύβοια-2021 cards all show the whole upper island, scar
-  pixel-identical across ZoneMap and SiteMap (verified x 174–286 ·
-  y 144–314 at 460×460); ZoneMap draws all Π.Ε. polygons — the frame
-  reaches the mainland coast. River-scoped acts draw their named watercourses from
+  map height tracks the facts+caveat column (FactsHeader `leftHeight`
+  $bindable, min 420) so the map's lower edge aligns with the lower end
+  of the left text (user clarification 2026-08-16, third same-day
+  entry). Fire-framed maps (DATA_DECISIONS 2026-08-16): when a project
+  links EFFIS scar(s), the frame is the scar bbox + pads (0.18×span,
+  floors 0.40° x / 0.27° y — 0.40 keeps the Λιχάδα cape in view;
+  never-crop extension for outlying sites/zones) fitted BY WIDTH at
+  constant scale and vertically centred — same-fire cards share one
+  zoom and one horizontal window (the 9 Β. Εύβοια-2021 cards show the
+  whole upper island; scar verified pixel-identical at x 172–286,
+  ~114×176) while each card's column height only adds/removes vertical
+  padding context; a scar taller than the viewport falls back to a
+  both-dims fit at rest (never while user-zoomed). ZoneMap draws all
+  Π.Ε. polygons — the frame reaches the mainland coast. River-scoped
+  acts draw their named watercourses from
   `context_rivers.geojson` (OSM Overpass courses, ~50 m simplify,
   per-feature curated `projects` application — never name-matched;
   `scripts/build_river_layer.py`, copies pinned by

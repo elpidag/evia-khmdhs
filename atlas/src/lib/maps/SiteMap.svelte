@@ -107,7 +107,9 @@
 				fx1 = Math.max(fx1, b[1][0]);
 				fy1 = Math.max(fy1, b[1][1]);
 			}
-			const px = Math.max((fx1 - fx0) * 0.18, 0.35);
+			// x floor 0.40°: at exact width-fit the shown window IS the
+			// frame, and 0.35° just clips the Λιχάδα cape tip on Εύβοια
+			const px = Math.max((fx1 - fx0) * 0.18, 0.4);
 			const py = Math.max((fy1 - fy0) * 0.18, 0.27);
 			// never crop a site/river: extend the fire frame when needed
 			// (no-op when the geometry sits inside the padding, the norm)
@@ -149,13 +151,44 @@
 			]
 		};
 		const proj = geoMercator();
-		proj.fitExtent(
-			[
-				[6, 6],
-				[W - 6, H - 6]
-			],
-			frame
-		);
+		if (scars.length) {
+			// fire-framed: fit by WIDTH at constant scale and centre the
+			// frame vertically — same-fire cards share one zoom and one
+			// horizontal window whatever each card's column height is;
+			// taller/shorter cards only gain/lose vertical PADDING context
+			proj.fitWidth(W - 12, frame);
+			const fb = geoPath(proj).bounds(frame);
+			const t = proj.translate();
+			proj.translate([t[0] + 6, t[1] + (H - (fb[1][1] - fb[0][1])) / 2 - fb[0][1]]);
+			// never crop the SCAR itself: at rest (k = 1) a very short
+			// column falls back to a both-dims fit; while the user zooms,
+			// the scar exceeding the viewport is the point
+			if (zoom.k === 1) {
+				let [sy0, sy1] = [Infinity, -Infinity];
+				const p0 = geoPath(proj);
+				for (const f of scars) {
+					const b = p0.bounds(f);
+					sy0 = Math.min(sy0, b[0][1]);
+					sy1 = Math.max(sy1, b[1][1]);
+				}
+				if (sy1 - sy0 > H - 12)
+					proj.fitExtent(
+						[
+							[6, 6],
+							[W - 6, H - 6]
+						],
+						frame
+					);
+			}
+		} else {
+			proj.fitExtent(
+				[
+					[6, 6],
+					[W - 6, H - 6]
+				],
+				frame
+			);
+		}
 		const path = geoPath(proj);
 		const baseR = sites.length > 8 ? 4.5 : 6;
 		const pins = sites
