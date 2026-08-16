@@ -288,7 +288,10 @@
 
 	// map height tracks the facts+caveat column so the two bottoms align;
 	// the SiteMap/ZoneMap svgs render ~1 css px per viewBox unit at the
-	// column's full 460px width
+	// column's full 460px width. Fire-framed maps (linked EFFIS scars)
+	// IGNORE this and derive their aspect from the scar frame instead,
+	// so every card of the same fire renders one identical window
+	// (DATA_DECISIONS 2026-08-16)
 	let leftH = $state(0);
 	const mapH = $derived(Math.max(420, Math.round(leftH)));
 </script>

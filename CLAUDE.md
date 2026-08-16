@@ -888,7 +888,14 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   multipolygons are too fragmented for path hit-testing), timeline-dot
   hover selects the scar and shows the black top-left card (date · ha);
   map height binds to the facts+caveat column (FactsHeader `leftHeight`
-  $bindable). River-scoped acts draw their named watercourses from
+  $bindable) — EXCEPT fire-framed maps (DATA_DECISIONS 2026-08-16):
+  when a project links EFFIS scar(s), the frame is the scar bbox +
+  continuous padding (never-crop extension for outlying sites/zones)
+  and the svg aspect derives from the frame, so every card of the same
+  fire renders one identical window showing the whole scar (all 9
+  Β. Εύβοια-2021 cards: 460×618, pixel-identical across ZoneMap and
+  SiteMap; ZoneMap draws all Π.Ε. polygons — the frame reaches the
+  mainland coast). River-scoped acts draw their named watercourses from
   `context_rivers.geojson` (OSM Overpass courses, ~50 m simplify,
   per-feature curated `projects` application — never name-matched;
   `scripts/build_river_layer.py`, copies pinned by

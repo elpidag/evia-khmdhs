@@ -39,7 +39,6 @@
 	}: Props = $props();
 
 	const W = 460;
-	const H = $derived(height);
 	const APPROX = new Set(['municipality', 'pe']);
 	/** black hover cards: fire top-left; zones + sites share bottom-left */
 	let fireTip = $state<string | null>(null);
@@ -53,37 +52,80 @@
 		loadEviaZones(fetch).then((v) => (fc = v));
 	});
 
-	const view = $derived.by(() => {
-		if (!pe || !fc) return null;
+	// the padded lon/lat frame + zone selection, independent of the svg
+	// height. With linked burn scars the SCAR IS the frame (same rule as
+	// SiteMap): every card linked to the same fire — the Β. Εύβοια 2021
+	// scar — shares one identical window that shows the whole scar;
+	// zones/sites only extend it when they poke beyond the padding.
+	const frameBox = $derived.by(() => {
+		if (!fc) return null;
 		const sel = fc.features.filter((f) => zones.includes(f.properties.zone));
 		if (!sel.length) return null;
-		// fit on the selection's bbox expanded ~65% for context; pinned
-		// sites extend the frame so the merged map never crops them
 		const path0 = geoPath();
-		let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
+		let [gx0, gy0, gx1, gy1] = [Infinity, Infinity, -Infinity, -Infinity];
 		for (const f of sel) {
 			const b = path0.bounds(f); // lon/lat planar bounds
-			x0 = Math.min(x0, b[0][0]); y0 = Math.min(y0, b[0][1]);
-			x1 = Math.max(x1, b[1][0]); y1 = Math.max(y1, b[1][1]);
+			gx0 = Math.min(gx0, b[0][0]); gy0 = Math.min(gy0, b[0][1]);
+			gx1 = Math.max(gx1, b[1][0]); gy1 = Math.max(gy1, b[1][1]);
 		}
 		for (const s of sites) {
-			x0 = Math.min(x0, s.lon); y0 = Math.min(y0, s.lat);
-			x1 = Math.max(x1, s.lon); y1 = Math.max(y1, s.lat);
+			gx0 = Math.min(gx0, s.lon); gy0 = Math.min(gy0, s.lat);
+			gx1 = Math.max(gx1, s.lon); gy1 = Math.max(gy1, s.lat);
 		}
-		const padx = (x1 - x0) * 0.65 + 0.01;
-		const pady = (y1 - y0) * 0.65 + 0.01;
-		// ring wound CLOCKWISE — d3-geo spherical polygons invert otherwise
-		const frame = {
+		if (scars.length) {
+			let [fx0, fy0, fx1, fy1] = [Infinity, Infinity, -Infinity, -Infinity];
+			for (const f of scars) {
+				const b = path0.bounds(f as Feature);
+				fx0 = Math.min(fx0, b[0][0]); fy0 = Math.min(fy0, b[0][1]);
+				fx1 = Math.max(fx1, b[1][0]); fy1 = Math.max(fy1, b[1][1]);
+			}
+			const px = Math.max((fx1 - fx0) * 0.15, 0.35 - (fx1 - fx0));
+			const py = Math.max((fy1 - fy0) * 0.15, 0.27 - (fy1 - fy0));
+			return {
+				sel,
+				X0: Math.min(fx0 - px, gx0 - 0.03),
+				X1: Math.max(fx1 + px, gx1 + 0.03),
+				Y0: Math.min(fy0 - py, gy0 - 0.03),
+				Y1: Math.max(fy1 + py, gy1 + 0.03)
+			};
+		}
+		const sx = gx1 - gx0;
+		const sy = gy1 - gy0;
+		const padx = Math.max(sx * 0.15, 0.35 - sx);
+		const pady = Math.max(sy * 0.15, 0.27 - sy);
+		return { sel, X0: gx0 - padx, X1: gx1 + padx, Y0: gy0 - pady, Y1: gy1 + pady };
+	});
+
+	/** frame polygon, wound CLOCKWISE — d3-geo spherical polygons invert otherwise */
+	function frameGeo(fb: { X0: number; X1: number; Y0: number; Y1: number }) {
+		return {
 			type: 'Polygon' as const,
-			coordinates: [[[x0 - padx, y0 - pady], [x0 - padx, y1 + pady],
-				[x1 + padx, y1 + pady], [x1 + padx, y0 - pady],
-				[x0 - padx, y0 - pady]]]
+			coordinates: [[[fb.X0, fb.Y0], [fb.X0, fb.Y1], [fb.X1, fb.Y1],
+				[fb.X1, fb.Y0], [fb.X0, fb.Y0]]]
 		};
+	}
+
+	// scar-framed maps take their aspect FROM the frame, so cards of the
+	// same fire are pixel-identical regardless of each card's facts-column
+	// height; zone-only maps keep tracking the column via the height prop
+	const H = $derived.by(() => {
+		if (!scars.length || !frameBox) return height;
+		const frame = frameGeo(frameBox);
+		const proj = geoMercator().fitWidth(W - 12, frame);
+		const b = geoPath(proj).bounds(frame);
+		return Math.min(760, Math.max(320, Math.round(b[1][1] - b[0][1]) + 12));
+	});
+
+	const view = $derived.by(() => {
+		if (!pe || !frameBox) return null;
+		const { sel } = frameBox;
+		const frame = frameGeo(frameBox);
 		const proj = geoMercator();
 		proj.fitExtent([[6, 6], [W - 6, H - 6]], frame);
 		const path = geoPath(proj);
-		const land = pe.features.filter((f) =>
-			JSON.stringify(f.properties).includes('Ευβοίας'));
+		// all Π.Ε. polygons — the whole-scar frame reaches the mainland
+		// coast across the strait, which must not render as open sea
+		const land = pe.features;
 		// site pins, SiteMap conventions: base radius, true ground size
 		// where a document states the area (1 στρ = 1,000 m²)
 		const baseR = sites.length > 8 ? 4.5 : 6;

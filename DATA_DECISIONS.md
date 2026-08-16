@@ -2312,3 +2312,30 @@ agreement vs the sheets' own tables: ΙστΙΙ 77.7%→**99.5%**, ΙστΙΙΙ
 70.3%→**100.0%** (all other zones byte-unchanged; georef/meta
 untouched; both display copies regenerated; test_evia_zones green
 unmodified). The curated vertex file remains the source of truth.
+
+## 2026-08-16 - Fire-framed detail maps: one shared frame per fire
+
+**Decision (user request: «for all the works that are connected with
+the north evia fire of 2021, the zoom frame of the map of the card of
+the designation act should be the same and it has to show the whole
+burnt scar»).** On the detail cards, whenever a project links EFFIS
+burn scar(s), the map frame is the SCAR's bbox plus the continuous
+padding (extended only if a site/zone/river pokes beyond the padding
+margin - a never-crop guard, a no-op today), and the svg viewBox
+aspect derives from that frame instead of the facts-column height.
+Every card linked to the same fire therefore renders one identical
+window that always contains the whole burnt scar. Verified live: all
+9 projects linked to the Β. Εύβοια 2021 scar (EFFIS id 213578,
+03.08.2021, 51,881 ha) - 6ΝΗ5/6ΠΔΕ/6ΡΤΣ/9ΑΖΛ/9Κ9Τ/ΡΕΧΥ/ΨΟΨΝ/ΨΧΟ2/ΩΞΕΦ
+- render pixel-identical 460x618 frames across both ZoneMap and
+SiteMap cards; zones overhang the scar bbox by at most ~1 km, well
+inside the ~5-6 km padding, so no card extends the shared frame.
+Scar-less maps (river cards, εκτός-fire projects) keep tracking the
+facts column via the height prop; the facts-column height binding is
+retired on fire-framed cards (the two goals are mutually exclusive -
+same frame requires same aspect). ZoneMap now draws ALL Π.Ε. polygons
+(the whole-scar frame reaches the mainland coast across the strait,
+which must not render as open sea). Padding was also harmonised into
+one continuous formula shared by both maps
+(max(span*0.15, floor-span): single-site maps keep the ~30 km
+half-window, wide geometry tightens to a modest margin).
