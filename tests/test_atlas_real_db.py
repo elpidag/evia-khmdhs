@@ -188,8 +188,33 @@ def test_dase_map_pins(client):
     """Proportional-symbol map payload: unit circles + per-Π.Ε. residue +
     off-map unresolved must reconcile exactly to the ΔΑΣΕ stated-net basis."""
     m = client.get("/api/dase/map").get_json()
-    # 48 seat circles + 6 seatless forest units at Π.Ε. centroids
-    assert len(m["units"]) == 54
+    # 48+1 seat circles + 4 seatless forest units at Π.Ε. centroids —
+    # spelling variants of seated authorities merge via Ν./ΝΟΜΟΥ-stripped
+    # folds and the curated EN identity («ΔΔ Ν. Πιερίας» → ΔΔ Πιερίας,
+    # «ΦΟΥΡΝΑ/ΦΟΥΡΝΩΝ» → Δασαρχείο Φουρνάς)
+    assert len(m["units"]) == 52
+    # no two circles may share a curated English identity (the Pieria/Fourna
+    # double-dot class of bug)
+    import json as _json
+    import unicodedata as _u
+    from pathlib import Path as _P
+
+    def _fold(s):
+        x = _u.normalize("NFD", (s or "").upper())
+        x = "".join(ch for ch in x if not _u.combining(ch))
+        return " ".join(x.split())
+
+    def _en_of(fname):
+        d = _json.loads((_P(__file__).resolve().parent.parent / "khmdhs" / "data" / fname).read_text(encoding="utf-8"))
+        return {_fold(k): v["en"] for k, v in d.items() if not k.startswith("_")}
+
+    a_en = _en_of("authority_names_en.json")
+    u_en = _en_of("unit_names_en.json")
+    idents = [" · ".join(a_en.get(_fold(part)) or u_en.get(_fold(part)) or part
+                          for part in u["name"].split(" · "))
+              for u in m["units"]]
+    assert len(idents) == len(set(idents)), sorted(
+        i for i in idents if idents.count(i) > 1)
     # per-Π.Ε. non-forest circles, split municipal/regional vs other bodies
     assert len(m["other"]) == 25
     assert {g["kind"] for g in m["other"]} == {"muni", "misc"}

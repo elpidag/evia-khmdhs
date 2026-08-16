@@ -22,6 +22,41 @@ def _fold_upper(s: str) -> str:
     return "".join(ch for ch in nfd if not unicodedata.combining(ch))
 
 
+_UNIT_EN_CACHE: dict | None = None
+_AUTH_EN_CACHE: dict | None = None
+
+
+def _names_en_file(fname: str) -> dict:
+    """Folded Greek key → curated English name from a khmdhs/data file."""
+    import json as _json
+    from pathlib import Path as _Path
+    p = _Path(__file__).resolve().parent.parent / "khmdhs" / "data" / fname
+    try:
+        data = _json.loads(p.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {}
+    return {" ".join(_fold_upper(k).split()): v["en"]
+            for k, v in data.items() if not k.startswith("_")}
+
+
+def _auth_en_map() -> dict:
+    """Folded registry authority name → curated English name."""
+    global _AUTH_EN_CACHE
+    if _AUTH_EN_CACHE is None:
+        _AUTH_EN_CACHE = _names_en_file("authority_names_en.json")
+    return _AUTH_EN_CACHE
+
+
+def _unit_en_map() -> dict:
+    """Folded unit spelling → curated English identity
+    (khmdhs/data/unit_names_en.json) — lets the dase map collapse
+    spelling variants of the same seatless unit onto one circle."""
+    global _UNIT_EN_CACHE
+    if _UNIT_EN_CACHE is None:
+        _UNIT_EN_CACHE = _names_en_file("unit_names_en.json")
+    return _UNIT_EN_CACHE
+
+
 # ------------------------------------------------------- net-of-ΦΠΑ basis
 
 def apply_net_basis(conn: sqlite3.Connection) -> sqlite3.Connection:
@@ -784,6 +819,41 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
         return {"n": len(vals), "eur": round(sum(vals), 2),
                 "median_eur": round(median, 2), "contracts": contracts}
 
+    # a seatless-looking unit may just be an alternative spelling of a
+    # seated registry authority: «ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Ν. ΠΙΕΡΙΑΣ» (Νομού …,
+    # the pre-2022 ΑΠΔ-era style) IS the seated ΔΔ Πιερίας — without this
+    # merge the same directorate draws two circles
+    def _wsfold(s: str | None) -> str:
+        return " ".join(_fold_upper(s or "").split())
+
+    seat_by_fold = {_wsfold(n): n for n, (lat, _lon, _k) in seats.items()
+                    if lat is not None}
+    # genitive/nominative spelling drift («ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ» vs the seated
+    # «Δασαρχείο Φουρνάς») is bridged through the curated English identity:
+    # if the unit's EN name equals a seated authority's EN name they are
+    # the same body (EN names are unique within the registry — pinned)
+    auth_en = _auth_en_map()
+    unit_en_all = _unit_en_map()
+    seat_by_en = {}
+    for f, n in seat_by_fold.items():
+        en = auth_en.get(f)
+        if en:
+            seat_by_en[en] = n
+
+    def _seat_match(unit: str | None) -> str | None:
+        f = _wsfold(unit)
+        f2 = " ".join(t for t in f.split() if t not in ("Ν.", "ΝΟΜΟΥ"))
+        hit = seat_by_fold.get(f) or seat_by_fold.get(f2)
+        if hit:
+            return hit
+        en = unit_en_all.get(f)
+        return seat_by_en.get(en) if en else None
+
+    # genitive spelling variants of the SAME seatless unit (ΔΑΣΑΡΧΕΙΟ
+    # ΦΟΥΡΝΑ / ΦΟΥΡΝΩΝ) collapse onto one circle via their curated
+    # English identity (unit_names_en.json); unmapped strings stand alone
+    unit_en = _unit_en_map()
+
     units: dict[str, dict] = {}
     seatless: dict[tuple, dict] = {}
     other: dict[tuple, list] = {}
@@ -795,8 +865,14 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
             continue
         fkind = _unit_forest_kind(r["unit"])
         if fkind and pe:
-            key = ((r["unit"] or "").strip(), pe)
-            seatless.setdefault(key, {"kind": fkind, "rows": []})["rows"].append(r)
+            seat_name = _seat_match(r["unit"])
+            if seat_name:
+                units.setdefault(seat_name, {"pe": pe, "rows": []})["rows"].append(r)
+                continue
+            ident = unit_en.get(_wsfold(r["unit"])) or _wsfold(r["unit"])
+            grp = seatless.setdefault((ident, pe), {
+                "kind": fkind, "label": (r["unit"] or "").strip(), "rows": []})
+            grp["rows"].append(r)
         elif pe:
             other.setdefault((pe, _org_class(r["org"])), []).append(r)
 
@@ -809,13 +885,13 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
                           **summarise(u["rows"], unit_by)})
     # forest units without a registry seat sit at their Π.Ε. centroid;
     # a unit spanning several Π.Ε. gets one circle per Π.Ε., disambiguated
-    dup_names = {n for (n, _p) in seatless
-                 if sum(1 for (n2, _q) in seatless if n2 == n) > 1}
-    for (uname, pe), grp in seatless.items():
+    dup_names = {i for (i, _p) in seatless
+                 if sum(1 for (i2, _q) in seatless if i2 == i) > 1}
+    for (ident, pe), grp in seatless.items():
         cent = PE_CENTROIDS.get(pe)
         if not cent:
             continue
-        label = f"{uname} · {pe}" if uname in dup_names else uname
+        label = f"{grp['label']} · {pe}" if ident in dup_names else grp["label"]
         out_units.append({"name": label, "kind": grp["kind"], "pe": pe,
                           "lat": cent[0], "lon": cent[1],
                           **summarise(grp["rows"], unit_by)})
