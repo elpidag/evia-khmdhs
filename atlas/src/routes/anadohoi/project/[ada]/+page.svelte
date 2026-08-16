@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { ruLabel } from '$lib/transforms/regions';
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
 	import ActTimelineBar from '$lib/detail/ActTimelineBar.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
@@ -89,9 +88,18 @@
 		note?: string | null;
 	}
 	const workSites = $derived(Array.isArray(p.work_sites) ? (p.work_sites as WorkSite[]) : null);
-	const sitePins = $derived(
-		(workSites ?? []).filter((s): s is WorkSite & SitePin => s.lat != null && s.lon != null)
-	);
+	const sitePins = $derived.by(() => {
+		const pins = (workSites ?? []).filter(
+			(s): s is WorkSite & SitePin => s.lat != null && s.lon != null
+		);
+		// single-pin projects with a stated project area but no per-site
+		// figure: the one dot carries the act's area
+		if (pins.length === 1 && !pins[0].stremmata && p.area_stremmata) {
+			return [{ ...pins[0], stremmata: p.area_stremmata }];
+		}
+		return pins;
+	});
+	const hasTrueSize = $derived(sitePins.some((s) => s.stremmata));
 	const scarIds = $derived(
 		new Set((Array.isArray(p.effis_scars) ? p.effis_scars : []).map((s) => s.id))
 	);
@@ -127,6 +135,20 @@
 			ordered.map((f, i) => [f.properties.id, FIRE_TONES[Math.min(i, FIRE_TONES.length - 1)]])
 		);
 	});
+	// FIRE EVENT value in English: the linked fires' start dates (the
+	// Greek event label survives only as a fallback when no scar dates
+	// are known; «εκτός πυρκαγιάς» projects say so in English)
+	const fireEventEn = $derived.by(() => {
+		if (!p.fire_event) return '—';
+		if (p.fire_event.includes('εκτός')) return 'no fire event';
+		const dates = scarFeats
+			.map((f) => f.properties.d)
+			.filter((d): d is string => !!d)
+			.sort();
+		if (dates.length) return dates.map(dmy).join(', ');
+		return p.fire_event;
+	});
+
 	// timeline fire markers: the linked scars' start dates from the layer
 	const fireDots = $derived(
 		scarFeats
@@ -233,6 +255,10 @@
 			'geocoding that name: at the named θέση where the document gives one, at the ' +
 			"municipality's centre where it names only a municipality (flagged «κατά προσέγγιση» " +
 			'on hover). ' +
+			(hasTrueSize
+				? 'Where a document states the intervention area, the dot is drawn at that area’s ' +
+					'true size at map scale (a minimum size applies when zoomed out). '
+				: '') +
 			(riverFeats.length
 				? 'River courses named by the act are drawn from OpenStreetMap — © OpenStreetMap ' +
 					'contributors, approximate. '
@@ -286,9 +312,9 @@
 				{:else}
 					{eurShort(budgetShown)}
 					{#if p.budget_net_eur !== null || p.budget_vat_basis === 'net'}
-						<small class="muted">excl. ΦΠΑ</small>
+						<small class="muted">excl. VAT</small>
 					{:else if p.budget_vat_basis === 'gross'}
-						<small class="muted">incl. ΦΠΑ</small>
+						<small class="muted">incl. VAT</small>
 					{/if}
 					{#if p.budget_current !== null && p.budget_current !== p.budget_eur}
 						<small class="muted"
@@ -305,34 +331,18 @@
 				{#if p.area_stremmata === null}
 					—
 				{:else}
-					{grInt(p.area_stremmata)} στρέμματα <small class="muted"
-						>({grInt(Math.round(p.area_stremmata / 10))} ha)</small
-					>
+					{grInt(Math.round(p.area_stremmata / 10))} ha
 				{/if}
 			</dd>
 			<dt>Fire event connected</dt>
 			<dd>
-				{p.fire_event ?? '—'}{#if scarHa}<small class="muted">
-						· burnt area {grInt(Math.round(scarHa))} ha</small
-					>{/if}
+				{fireEventEn}{#if scarHa}, burnt area : {grInt(Math.round(scarHa))} ha{/if}
 			</dd>
 			<dt>Amendments to initial act</dt>
 			<dd>{hasAmendments ? 'yes' : 'no'}</dd>
 			<dt>Current deadline</dt>
-			<dd>
-				{#if p.deadline_current}
-					{dmy(p.deadline_current)}
-					{#if p.deadline_initial && p.deadline_initial !== p.deadline_current}
-						<small class="muted">— initially {dmy(p.deadline_initial)}, extended by amendment</small
-						>
-					{/if}
-				{:else if p.deadline_text && p.status !== 'completed'}
-					<!-- duration wording from the act; moot once the project completed -->
-					{p.deadline_text}
-				{:else}
-					—
-				{/if}
-			</dd>
+			<!-- date only — the extension history lives on the timeline bar -->
+			<dd>{p.deadline_current ? dmy(p.deadline_current) : '—'}</dd>
 			{#if executors?.length}
 				<dt>Works executed by</dt>
 				<dd>
@@ -350,10 +360,6 @@
 			{/if}
 			<dt>Location <small class="muted">as named in the designation act</small></dt>
 			<dd>{p.location_text ?? '—'}</dd>
-			{#if p.pe}
-				<dt>Region</dt>
-				<dd>{ruLabel(p.pe)}{p.municipality ? ` · Δήμος ${p.municipality}` : ''}</dd>
-			{/if}
 		{/snippet}
 		{#snippet map()}
 			{#if sitePins.length || (scarFeats.length && !worksZones?.length)}

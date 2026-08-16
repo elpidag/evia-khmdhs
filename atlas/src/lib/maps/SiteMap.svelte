@@ -26,6 +26,9 @@
 		lon: number;
 		geo_precision?: string | null;
 		municipality?: string | null;
+		/** stated intervention area — the dot is drawn at this TRUE size
+		 *  at map scale (clamped to a minimum so it never vanishes) */
+		stremmata?: number | null;
 	}
 	interface Props {
 		/** svg viewBox height — the detail template asks for a taller map */
@@ -129,12 +132,30 @@
 			frame
 		);
 		const path = geoPath(proj);
+		const baseR = sites.length > 8 ? 4.5 : 6;
 		const pins = sites
 			.map((s) => {
 				const xy = proj([s.lon, s.lat]);
-				return xy ? { s, x: xy[0], y: xy[1] } : null;
+				if (!xy) return null;
+				// stated area → true ground radius → projected pixels
+				let r = baseR;
+				let trueSize = false;
+				if (s.stremmata && s.stremmata > 0) {
+					const rM = Math.sqrt((s.stremmata * 1000) / Math.PI); // 1 στρ = 1,000 m²
+					const dLon = rM / (111320 * Math.cos((s.lat * Math.PI) / 180));
+					const xy2 = proj([s.lon + dLon, s.lat]);
+					if (xy2) {
+						const rpx = Math.abs(xy2[0] - xy[0]);
+						trueSize = rpx > baseR;
+						r = Math.max(rpx, baseR);
+					}
+				}
+				return { s, x: xy[0], y: xy[1], r, trueSize };
 			})
-			.filter((d): d is { s: SitePin; x: number; y: number } => d !== null);
+			.filter(
+				(d): d is { s: SitePin; x: number; y: number; r: number; trueSize: boolean } =>
+					d !== null
+			);
 		// a small fire (e.g. 27 ha) projects to ~2 px at regional zoom —
 		// give it a minimum-size marker so every timeline dot has a
 		// visible map counterpart
@@ -280,17 +301,20 @@
 					onmouseleave={() => (tip = null)}
 				/>
 			{/each}
-			{#each view.pins as { s, x, y }, i (i)}
+			{#each view.pins as { s, x, y, r, trueSize }, i (i)}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<circle
 					cx={x}
 					cy={y}
-					r={view.pins.length > 8 ? 4.5 : 6}
+					{r}
 					class="pin"
+					class:truesize={trueSize}
 					style:fill={pinColor}
 					onmouseenter={() =>
 						(siteTip =
-							s.name + (APPROX.has(s.geo_precision ?? '') ? ' (κατά προσέγγιση)' : ''))}
+							s.name +
+							(s.stremmata ? ` — ${grInt(s.stremmata)} στρ.` : '') +
+							(APPROX.has(s.geo_precision ?? '') ? ' (κατά προσέγγιση)' : ''))}
 					onmouseleave={() => (siteTip = null)}
 				/>
 			{/each}
@@ -364,6 +388,11 @@
 	   (user decisions 2026-08-16) */
 	.pin {
 		stroke: none;
+	}
+	/* drawn at the stated area's true ground size: a touch translucent so
+	   the scar stays readable underneath */
+	.pin.truesize {
+		fill-opacity: 0.75;
 	}
 	.river {
 		fill: none;
