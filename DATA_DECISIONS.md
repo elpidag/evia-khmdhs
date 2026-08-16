@@ -2396,3 +2396,27 @@ remains visible as evidence in the excerpt tooltips and the verbatim
 quotes block. A real-DB guard test pins the coverage (every pinned
 executor VAT must have a display name) so future executor curation
 cannot drift from the ΔΑΣΕ naming.
+
+## 2026-08-16 - Μίστρου executor identity resolved: merged onto 996895246
+
+**User decision (revising the 2026-08-12 «plain Μίστρου never merged»
+rule for the executors layer).** The two VAT-less Μίστρου executor
+rows - 6ΠΔΕ4653Π8-Ω8Ρ «ΔΑΣΕ ‘ΜΙΣΤΡΟΣ’ Μίστρου Χαλκίδας» (σύμβαση
+07/10/2021 με ΔΕΗ) and 9Κ9Τ4653Π8-Δ0Ο «ΔΑ.Σ.Ε. Μίστρου» (πρωτόκολλο
+εγκατάστασης 11/10/2021) - now carry dase_vat 996895246 (ΔΑ.Σ.Ε.
+«ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ» ΜΙΣΤΡΟΥ). Basis: the ΔΑΣΕ registry's 2021-2026
+population contains exactly ONE Μίστρου co-op (996895246, 37
+contracts, largely ΑΠΔ Θ-ΣΕ - the Β. Εύβοια works milieu where both
+acts sit), and that VAT's own registry spellings include plain
+«ΔΑ.Σ.Ε. ΜΙΣΤΡΟΥ», titleless «ΔΑΣΙΚΟΣ ΣΥΝΕΤΕΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ»
+AND «Συν/σμος Εργασίας ΜΙΣΤΡΟΣ-ΑΓ.ΚΥΠΡΙΑΝΟΣ» - awarding bodies
+demonstrably refer to this same ΑΦΜ as both «Μίστρου» and «ΜΙΣΤΡΟΣ».
+GEMI publicity name-search could not disambiguate (its fuzzy matching
+ignores the toponym). Verbatim act names kept as evidence; notes
+updated to state the merge basis. The remaining VAT-less rows stay
+unresolved: «Σιδηρονερίου» (5 candidates) and «Περτουλίου Τρικάλων»
+(2 candidates) await the user's own review of the source files;
+Παντουρέ/Παπάδων are absent from the registry (nothing to link).
+Applied to curated anadohoi_projects.json AND the committed sqlite
+in place (surgical executors-column update - a loader re-run would
+recompute statuses as of today).
