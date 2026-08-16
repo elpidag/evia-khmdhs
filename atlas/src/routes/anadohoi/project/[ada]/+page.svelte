@@ -249,16 +249,20 @@
 			}))
 	]);
 
+	// zone cards explain the digitised areas; dot cards explain the dots
 	const CAVEAT = $derived(
 		'LOCATION quotes the designation act, which may name more areas than the follow-up ' +
-			'documents cover. Each dot is a work site NAMED in a document of the trail, placed by ' +
-			'geocoding that name: at the named θέση where the document gives one, at the ' +
-			"municipality's centre where it names only a municipality (flagged «κατά προσέγγιση» " +
-			'on hover). ' +
-			(hasTrueSize
-				? 'Where a document states the intervention area, the dot is drawn at that area’s ' +
-					'true size at map scale (a minimum size applies when zoomed out). '
-				: '') +
+			'documents cover. ' +
+			(worksZones?.length
+				? ''
+				: 'Each dot is a work site NAMED in a document of the trail, placed by geocoding ' +
+					'that name: at the named θέση where the document gives one, at the ' +
+					"municipality's centre where it names only a municipality (flagged «κατά " +
+					'προσέγγιση» on hover). ' +
+					(hasTrueSize
+						? 'Where a document states the intervention area, the dot is drawn at that ' +
+							'area’s true size at map scale (a minimum size applies when zoomed out). '
+						: '')) +
 			(riverFeats.length
 				? 'River courses named by the act are drawn from OpenStreetMap — © OpenStreetMap ' +
 					'contributors, approximate. '
@@ -291,7 +295,17 @@
 <div class="pp">
 	<p class="crumb"><a href="/anadohoi">← Sponsored works</a></p>
 
-	<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
+	{#snippet zoneSource()}
+		The areas of the projects are sourced by documents provided by the Evia Forest Directorate
+		(<a href="/pdf/zonesource/1" target="_blank" rel="noopener">pdf1</a>,
+		<a href="/pdf/zonesource/2" target="_blank" rel="noopener">pdf2</a>) after a formal request
+		regarding works that followed the fires of August 2021.
+	{/snippet}
+	<FactsHeader
+		caveat={CAVEAT}
+		caveatExtra={worksZones?.length ? zoneSource : undefined}
+		bind:leftHeight={leftH}
+	>
 		{#snippet facts()}
 			<dt class="id">Designation act (ΑΔΑ)</dt>
 			<dd class="id">{p.root_ada}</dd>

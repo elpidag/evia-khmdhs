@@ -13,11 +13,13 @@
 		map?: Snippet;
 		/** provenance line under the facts (location sourcing, EFFIS…) */
 		caveat?: string;
+		/** optional caveat tail that needs markup (links to source PDFs…) */
+		caveatExtra?: Snippet;
 		/** measured height of the facts+caveat column — lets the caller
 		 *  size the map so its bottom meets the caveat's last line */
 		leftHeight?: number;
 	}
-	let { facts, map, caveat = '', leftHeight = $bindable(0) }: Props = $props();
+	let { facts, map, caveat = '', caveatExtra, leftHeight = $bindable(0) }: Props = $props();
 </script>
 
 <div class="head" class:nomap={!map}>
@@ -25,8 +27,10 @@
 		<dl class="facts">
 			{@render facts()}
 		</dl>
-		{#if caveat}
-			<p class="caveat">{caveat}</p>
+		{#if caveat || caveatExtra}
+			<p class="caveat">
+				{caveat}{#if caveatExtra}{' '}{@render caveatExtra()}{/if}
+			</p>
 		{/if}
 	</div>
 	{#if map}

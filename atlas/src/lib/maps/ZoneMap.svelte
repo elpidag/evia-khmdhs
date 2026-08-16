@@ -1,10 +1,13 @@
 <script lang="ts">
 	/** Compact map for a sponsor project's digitised works zone(s): the
-	 *  Εύβοια outline with the project's zones highlighted and the other
-	 *  works zones as faint context. Data loads post-hydration. */
+	 *  Εύβοια outline with the project's zones as GREEN OUTLINES drawn
+	 *  above the solid fire fill (the fire stays visible through them);
+	 *  hovering the fire shows its date · ha, hovering a zone outline
+	 *  names it — both in the black top-left card. Data loads
+	 *  post-hydration. */
 	import { geoMercator, geoPath } from 'd3-geo';
 	import type { Feature, FeatureCollection, Polygon, MultiPolygon } from 'geojson';
-	import { grInt } from '$lib/transforms/format';
+	import { dmy, grInt } from '$lib/transforms/format';
 	import { loadEviaZones, loadPe, type FireProps, type PeProps, type ZoneProps } from './useGeo';
 
 	interface Props {
@@ -18,6 +21,9 @@
 
 	const W = 460;
 	const H = $derived(height);
+	/** black hover cards: fire top-left, zone bottom-left */
+	let fireTip = $state<string | null>(null);
+	let zoneTip = $state<string | null>(null);
 
 	let pe = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
 	let fc = $state.raw<FeatureCollection<Polygon | MultiPolygon, ZoneProps> | null>(null);
@@ -54,17 +60,24 @@
 			JSON.stringify(f.properties).includes('Ευβοίας'));
 		return { path, sel, land };
 	});
-	const selProps = $derived(view ? view.sel.map((f) => f.properties) : []);
 </script>
 
 {#if view && fc}
 	<figure class="zonemap">
+		<div class="mapbox">
 		<svg viewBox="0 0 {W} {H}" role="img" aria-label="Works zone of this project">
 			{#each view.land as f (f.properties.pe)}
 				<path d={view.path(f) ?? ''} class="land" />
 			{/each}
 			{#each scars as f (f.properties.id)}
-				<path d={view.path(f) ?? ''} class="scar" />
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<path
+					d={view.path(f) ?? ''}
+					class="scar"
+					onmouseenter={() =>
+						(fireTip = `${f.properties.d ? dmy(f.properties.d) : f.properties.yr} · ${grInt(f.properties.ha)} ha`)}
+					onmouseleave={() => (fireTip = null)}
+				/>
 			{/each}
 			{#each fc.features as f (f.properties.zone)}
 				<path d={view.path(f) ?? ''} class="ctxzone" />
@@ -72,16 +85,27 @@
 			{#each view.sel as f (f.properties.zone)}
 				<path d={view.path(f) ?? ''} class="selzone" />
 			{/each}
-		</svg>
-		<!-- fire size/attribution live in the facts row + FactsHeader caveat -->
-		<figcaption>
-			{#each selProps as z (z.zone)}
-				<span class="zl"><i></i>{z.name} — {z.basin}
-					({grInt(z.extracted_stremmata)} στρ. όπως ψηφιοποιήθηκε)</span>
+			<!-- invisible wide-stroke twins make the thin outlines hoverable
+			     WITHOUT stealing the interior from the fire's own hover -->
+			{#each view.sel as f (`hit:${f.properties.zone}`)}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<path
+					d={view.path(f) ?? ''}
+					class="zonehit"
+					onmouseenter={() => (zoneTip = `${f.properties.name} — ${f.properties.basin}`)}
+					onmouseleave={() => (zoneTip = null)}
+				/>
 			{/each}
-			<span class="src">Ζώνες έργων από τους χάρτες του Master Plan Β. Εύβοιας
-				(4.1/4.2, Νοέμβριος 2021), ψηφιοποιημένες χειροκίνητα.</span>
-		</figcaption>
+		</svg>
+		{#if fireTip}
+			<div class="tip">{fireTip}</div>
+		{/if}
+		{#if zoneTip}
+			<div class="tip zonecard">{zoneTip}</div>
+		{/if}
+		</div>
+		<!-- zone names live in the hover cards; provenance (Evia Forest
+		     Directorate sheets + pdf links) lives in the FactsHeader caveat -->
 	</figure>
 {/if}
 
@@ -89,6 +113,10 @@
 	.zonemap {
 		margin: 0 0 var(--sp-2);
 		max-width: 460px;
+	}
+	/* cards anchor to the MAP box, never over the caption below it */
+	.mapbox {
+		position: relative;
 	}
 	/* same palette as the sponsored-works overview map:
 	   grey sea, white land, --line strokes */
@@ -116,32 +144,39 @@
 		stroke: var(--c-anadohoi);
 		stroke-opacity: 0.35;
 		stroke-width: 0.7;
+		pointer-events: none;
 	}
+	/* the project's zones: green OUTLINE above the fire fill — no fill,
+	   so the fire stays visible and hoverable through them */
 	.selzone {
-		fill: var(--c-anadohoi);
-		fill-opacity: 0.4;
+		fill: none;
 		stroke: var(--c-anadohoi);
-		stroke-width: 1.4;
+		stroke-width: 1.8;
+		pointer-events: none;
 	}
-	figcaption {
+	.zonehit {
+		fill: none;
+		stroke: transparent;
+		stroke-width: 9;
+		pointer-events: stroke;
+	}
+	.tip {
+		position: absolute;
+		top: var(--sp-2);
+		left: var(--sp-2);
+		background: #000;
+		color: #fff;
+		border-radius: 4px;
+		padding: var(--sp-1) var(--sp-2);
 		font-size: var(--fs-13);
-		color: var(--ink-soft);
-		margin-top: var(--sp-1);
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
+		font-variant-numeric: tabular-nums;
+		pointer-events: none;
 	}
-	.zl i {
-		display: inline-block;
-		width: 10px;
-		height: 10px;
-		border-radius: 2px;
-		background: var(--c-anadohoi);
-		opacity: 0.55;
-		margin-right: 6px;
-	}
-	.src {
-		color: var(--ink-faint);
-		font-size: var(--fs-12);
+	/* zone card: bottom-left, at most half the map wide — wraps to two
+	   rows rather than spanning the frame */
+	.tip.zonecard {
+		top: auto;
+		bottom: var(--sp-2);
+		max-width: 50%;
 	}
 </style>

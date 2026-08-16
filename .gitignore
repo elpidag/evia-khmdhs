@@ -64,3 +64,4 @@ data/processed/authority_letterhead_cache/*
 !data/processed/authority_letterhead_cache/*.txt
 !data/processed/authority_letterhead_cache/letterheads.json
 data/processed/authority_link_audit.json
+data/processed/zone_sheets/

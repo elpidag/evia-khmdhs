@@ -10,7 +10,6 @@
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
-	import ZonesLayer from '$lib/maps/ZonesLayer.svelte';
 	import { loadCentroids, loadEffisFires, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import { COLOR, NODATE_COLOR, noDate, type GanttProject } from '$lib/charts/ganttTheme';
@@ -524,15 +523,10 @@
 										`<strong>${f.properties.yr}</strong> · ${grInt(f.properties.ha)} ha${f.properties.name ? ` · ${f.properties.name}` : ''}`}
 								/>
 							{/if}
-							{#if zonesFc}
-								<ZonesLayer
-									{ctx}
-									features={zonesFc.features}
-									tipOf={(f) =>
-										`<strong>${f.properties.name}</strong><br>${f.properties.basin}<br>` +
-										`${grInt(f.properties.extracted_stremmata)} στρ. (ψηφιοποιημένη ζώνη έργων)`}
-								/>
-							{/if}
+							<!-- NOTE: the digitised works zones are NOT drawn here — this
+							     map shows projects and fire outlines only; zonesFc still
+							     feeds the zone-mapped projects' dot centroids, and the
+							     zones themselves live on the project pages' ZoneMap -->
 							<!-- hovering a multi-site project links all its dots with
 							     dashed lines — «this work spans here AND here» -->
 							{#if hoveredAda}

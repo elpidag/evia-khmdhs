@@ -29,6 +29,27 @@ _PDF_KINDS = {
 
 bp = Blueprint("pdf", __name__, template_folder="templates")
 
+# digitisation sources of the Β. Εύβοια works zones (DATA_DECISIONS
+# 2026-08-16): the two map sheets provided by the Διεύθυνση Δασών
+# Ευβοίας, served straight from data/raw for every ZoneMap surface
+_ZONE_SOURCES = {
+    "1": "XARTHS_ERGON_DAS_LIMNHS_4.1.pdf",
+    "2": "XARTHS_ERGON_DAS_ISTIAIAS_4.2.pdf",
+}
+
+
+@bp.route("/pdf/zonesource/<key>")
+def zone_source_pdf(key: str):
+    name = _ZONE_SOURCES.get(key)
+    if name is None:
+        abort(404)
+    # PDF_CACHE_DIR = data/processed/pdf_cache → data/raw is two up + raw
+    path = Path(current_app.config["PDF_CACHE_DIR"]).parents[1] / "raw" / name
+    if not path.exists():
+        abort(404)
+    return send_file(path, mimetype="application/pdf",
+                     as_attachment=False, download_name=name)
+
 
 @bp.route("/pdf/<kind>/<adam>")
 def pdf_attachment(kind: str, adam: str):

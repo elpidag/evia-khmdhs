@@ -2279,3 +2279,36 @@ shows a black bottom-left card (white lettering) with the site's name,
 «κατά προσέγγιση» flagged there; the FactsHeader caveat rewritten to
 state explicitly HOW dots are placed (named in trail documents, geocoded
 at the named θέση, or municipality centre when only a δήμος is named).
+
+## 2026-08-16 — Β. Εύβοια zones: provenance statement + outline presentation
+
+**Provenance (user-stated, recorded).** The two digitisation source
+sheets (`data/raw/XARTHS_ERGON_DAS_LIMNHS_4.1.pdf`,
+`XARTHS_ERGON_DAS_ISTIAIAS_4.2.pdf` — the Master-Plan έργων maps, ΥΛΗ
+11.2021) were provided by the Διεύθυνση Δασών Ευβοίας after a formal
+request by the user, regarding the works that followed the August 2021
+fires. Every surface drawing the digitised zones now states this and
+links the two source PDFs (pdf1 = Λίμνης 4.1, pdf2 = Ιστιαίας 4.2),
+served by a new whitelisted atlas_api route `/pdf/zonesource/<1|2>`
+straight from data/raw.
+
+**Presentation (user decisions).** ZoneMap: the project's zones render
+as GREEN OUTLINES above the solid fire fill (no fill — the fire stays
+visible through them; invisible wide-stroke twins keep the outlines
+hoverable without stealing the interior); hovering the fire fill shows
+the black top-left card with the fire's date · ha (same as SiteMap);
+hovering a zone outline shows «<name> — <basin>». The /anadohoi
+overview map no longer draws the zones at all (projects + fire
+outlines only; zone centroids still place the zone-mapped dots).
+
+## 2026-08-16 — Β. Εύβοια zones: Ιστιαία ΙΙ + ΙΙΙ re-digitised by the user
+
+The polygon editor was rebuilt as a committed tool
+(`scripts/make_zone_editor.py` → `zone_editor.html`, sheet JPEGs carved
+from the source PDFs into gitignored data/processed/zone_sheets/). The
+user re-edited the two weakest zones of the 2026-08-12 digitisation:
+Ιστιαία ΙΙ (87→96 vertices) and Ιστιαία ΙΙΙ (60→77). Rebuilt geojson
+agreement vs the sheets' own tables: ΙστΙΙ 77.7%→**99.5%**, ΙστΙΙΙ
+70.3%→**100.0%** (all other zones byte-unchanged; georef/meta
+untouched; both display copies regenerated; test_evia_zones green
+unmodified). The curated vertex file remains the source of truth.
