@@ -20,6 +20,16 @@
 		/** per-fire tone, shared with the map's scar fill */
 		color?: string;
 	}
+	export interface ExtMark {
+		/** 1-based extension number (chronological) */
+		n: number;
+		/** the amendment's signing date, ISO — where the dot sits */
+		d: string;
+		/** the new deadline the amendment set (ISO) */
+		deadline: string | null;
+		/** the amendment act's ΑΔΑ — hover linking with the document trail */
+		ada?: string;
+	}
 
 	interface Props {
 		/** designation act date */
@@ -39,6 +49,12 @@
 		fires?: FireMark[];
 		/** fire-dot hover in/out — the page mirrors it onto the map */
 		onFireHover?: (id: number | null) => void;
+		/** deadline extensions: a dot ON the bar at each amendment's date */
+		extensions?: ExtMark[];
+		/** extension-dot hover in/out — the page highlights the trail row */
+		onExtHover?: (ada: string | null) => void;
+		/** trail-row hover: the matching extension dot grows a little */
+		highlightAda?: string | null;
 	}
 	let {
 		start,
@@ -50,8 +66,14 @@
 		today,
 		start0 = null,
 		fires = [],
-		onFireHover
+		onFireHover,
+		extensions = [],
+		onExtHover,
+		highlightAda = null
 	}: Props = $props();
+
+	const ORDINAL = (n: number): string =>
+		n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`;
 
 	// identical axis convention to PromiseGantt: programme start → the
 	// latest date in the row (or today) plus a small margin
@@ -70,7 +92,7 @@
 	const TOP = 16; // year-label band
 	const BASE = 46; // bar baseline
 	const BAR_H = 12;
-	const H = 62; // leaves room for the date labels under the bar
+	const H = 68; // room for the extension arrows + date labels under the bar
 
 	function x(d: string | null): number | null {
 		if (!d) return null;
@@ -110,15 +132,6 @@
 				<line x1={gx} y1={TOP - 2} x2={gx} y2={BASE + 4} class="grid" />
 			{/if}
 		{/each}
-
-		<line x1={todayX} y1={TOP - 2} x2={todayX} y2={BASE + 4} class="today" />
-		<!-- sits a line below the year labels, as on the overview Gantt -->
-		<text
-			x={todayFlip ? todayX - 4 : todayX + 4}
-			y="24"
-			class="today-label"
-			text-anchor={todayFlip ? 'end' : 'start'}>today ({dmy(today)})</text
-		>
 
 		<!-- the fire(s) that triggered the project, at their start dates -->
 		{#each fires as f, i (f.d + i)}
@@ -164,6 +177,70 @@
 		{#if xd !== null}
 			<line x1={xd} y1={BASE - BAR_H - 4} x2={xd} y2={BASE + 2} stroke={c} stroke-width="1.3" />
 		{/if}
+		<!-- deadline extensions: a dot on the bar at each amendment's date,
+		     marked 1st/2nd/…, with an arrow dipping under the bar to the NEW
+		     deadline the act set — the promised-vs-executed record -->
+		<defs>
+			<marker
+				id="extarrowhead"
+				viewBox="0 0 6 6"
+				refX="5"
+				refY="3"
+				markerWidth="6"
+				markerHeight="6"
+				orient="auto-start-reverse"
+			>
+				<path d="M0,0 L6,3 L0,6 Z" class="extarrowfill" />
+			</marker>
+		</defs>
+		{#each extensions as e (e.n)}
+			{@const ex = x(e.d)}
+			{@const en = x(e.deadline)}
+			{#if ex !== null && ex >= 4}
+				{#if en !== null && Math.abs(en - ex) > 8}
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<path
+						d={`M ${ex} ${BASE + 1} Q ${(ex + en) / 2} ${BASE + 12}, ${en} ${BASE + 2}`}
+						class="extarrow"
+						marker-end="url(#extarrowhead)"
+						onmouseenter={() => onExtHover?.(e.ada ?? null)}
+						onmouseleave={() => onExtHover?.(null)}
+					>
+						<title
+							>{ORDINAL(e.n)} extension — signed {dmy(e.d)} · deadline moved to {dmy(
+								e.deadline
+							)}</title
+						>
+					</path>
+				{/if}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<circle
+					cx={ex}
+					cy={BASE - BAR_H / 2}
+					r={highlightAda !== null && e.ada === highlightAda ? 4.5 : 3}
+					class="ext"
+					onmouseenter={() => onExtHover?.(e.ada ?? null)}
+					onmouseleave={() => onExtHover?.(null)}
+				>
+					<title
+						>{ORDINAL(e.n)} extension — signed {dmy(e.d)}{e.deadline
+							? ` · new deadline ${dmy(e.deadline)}`
+							: ''}</title
+					>
+				</circle>
+				<text x={ex} y={BASE - BAR_H - 4} class="extlbl">{ORDINAL(e.n)}</text>
+			{/if}
+		{/each}
+
+		<!-- today rule LAST so it stays visible over the coloured bar -->
+		<line x1={todayX} y1={TOP - 2} x2={todayX} y2={BASE + 4} class="today" />
+		<!-- sits a line below the year labels, as on the overview Gantt -->
+		<text
+			x={todayFlip ? todayX - 4 : todayX + 4}
+			y="24"
+			class="today-label"
+			text-anchor={todayFlip ? 'end' : 'start'}>today ({dmy(today)})</text
+		>
 		{#if xc !== null}
 			<text x={xc + 2} y={BASE - 2} class="mark ok">✔</text>
 		{/if}
@@ -172,11 +249,11 @@
 		{/if}
 
 		<!-- printed dates: designation under the bar start, deadline under its tick -->
-		<text x={xs} y={BASE + 14} class="dlabel" text-anchor={xs < 60 ? 'start' : 'middle'}>
+		<text x={xs} y={BASE + 20} class="dlabel" text-anchor={xs < 60 ? 'start' : 'middle'}>
 			{dmy(start)}
 		</text>
 		{#if xd !== null && xd - xs > 70}
-			<text x={xd} y={BASE + 14} class="dlabel" text-anchor={xd > W - 60 ? 'end' : 'middle'}>
+			<text x={xd} y={BASE + 20} class="dlabel" text-anchor={xd > W - 60 ? 'end' : 'middle'}>
 				{dmy(deadline)}
 			</text>
 		{/if}
@@ -232,5 +309,28 @@
 	}
 	.fire:hover {
 		filter: brightness(0.82);
+	}
+	.ext {
+		fill: var(--ink);
+		cursor: pointer;
+	}
+	.extarrow {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 1;
+		opacity: 0.6;
+		cursor: pointer;
+	}
+	.extarrow:hover {
+		opacity: 1;
+	}
+	.extarrowfill {
+		fill: var(--ink);
+	}
+	.extlbl {
+		font-size: 8.5px;
+		fill: var(--ink);
+		text-anchor: middle;
+		font-weight: 700;
 	}
 </style>

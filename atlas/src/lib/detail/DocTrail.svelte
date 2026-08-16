@@ -30,8 +30,24 @@
 		heading?: string;
 		/** optional strip between the heading and the table (timeline bar) */
 		top?: Snippet;
+		/** document code whose row is highlighted (timeline-dot hover) */
+		highlight?: string | null;
+		/** the page's own document row wears the project's timeline-bar
+		 *  colour permanently; selfInk sets its lettering colour */
+		selfColor?: string | null;
+		selfInk?: string;
+		/** row hover in/out (document code) — pages mirror it elsewhere */
+		onRowHover?: (code: string | null) => void;
 	}
-	let { rows, heading = 'DOCUMENT TRAIL–TIMELINE', top }: Props = $props();
+	let {
+		rows,
+		heading = 'DOCUMENT TRAIL–TIMELINE',
+		top,
+		highlight = null,
+		selfColor = null,
+		selfInk = 'var(--ink)',
+		onRowHover
+	}: Props = $props();
 	const dmy = (iso: string | null) =>
 		iso && iso.length >= 10 ? `${iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}` : '—';
 </script>
@@ -53,7 +69,15 @@
 		</thead>
 		<tbody>
 			{#each rows as r (r.code + r.type)}
-				<tr class:self={r.self}>
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<tr
+					class:self={r.self}
+					class:hl={highlight !== null && r.code === highlight}
+					style:background={r.self && selfColor ? selfColor : undefined}
+					style:color={r.self && selfColor ? selfInk : undefined}
+					onmouseenter={() => onRowHover?.(r.code)}
+					onmouseleave={() => onRowHover?.(null)}
+				>
 					<td class="tabular nowrap">{dmy(r.d)}</td>
 					<td>{r.type}{#if r.chip}<span class="chip bad">{r.chip}</span>{/if}</td>
 					<td class="tabular nowrap">{r.code}</td>
@@ -97,6 +121,18 @@
 	}
 	.self td {
 		font-weight: 700;
+	}
+	/* the self row wears the bar colour (tr-level style) — its lettering
+	   and links inherit the ink chosen for that colour */
+	.self td,
+	.self td a {
+		color: inherit;
+	}
+	/* timeline-dot hover: the linked act's row goes black, lettering white */
+	.hl td,
+	.hl td a {
+		background: #000;
+		color: #fff;
 	}
 	.nowrap {
 		white-space: nowrap;

@@ -888,7 +888,15 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   multipolygons are too fragmented for path hit-testing), timeline-dot
   hover selects the scar and shows the black top-left card (date · ha);
   map height binds to the facts+caveat column (FactsHeader `leftHeight`
-  $bindable). Duration-worded deadlines suppressed on completed
+  $bindable). River-scoped acts draw their named watercourses from
+  `context_rivers.geojson` (OSM Overpass courses, ~50 m simplify,
+  per-feature curated `projects` application — never name-matched;
+  `scripts/build_river_layer.py`, copies pinned by
+  `tests/test_river_layer.py`; «© OpenStreetMap contributors» in the
+  caveat). Site pins are ONE colour; hovering a pin shows a black
+  bottom-left card with the site's name («κατά προσέγγιση» flagged
+  there); the caveat states the dot-placement method explicitly.
+  Duration-worded deadlines suppressed on completed
   projects; LOCATION labelled «as named in the designation act» with
   the coverage caveat (DATA_DECISIONS 2026-08-16: the 9ΕΘΠ probe showed
   follow-up acts may cover only part of the act's named fronts, and

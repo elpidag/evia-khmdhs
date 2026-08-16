@@ -2245,3 +2245,37 @@ coverage BIJECTION (every awarding string in khmdhs+dase+anadohoi resolves
 to exactly one body; no stale aliases). Consumers (dase map legend kinds
 from the registry, tier-1 audits) come next; location semantics unchanged
 — work regions stay document-curated.
+
+## 2026-08-16 — 6Φ454653Π8-Ξ1Ζ (ALFA WOOD, Καλαμάς/Αχέροντας): four trail acts reclassified other→study_approval
+
+The four «Έγκριση μελέτης … μεταχρωματικού έλκους πλατάνου» acts
+(6ΟΜ04653Π8-1ΑΧ, 6ΨΞ04653Π8-Θ04, 9ΓΨΘ4653Π8-ΝΑΨ, 9ΚΟΗ4653Π8-ΜΥΗ) are
+literally study approvals — each cites the designation act verbatim in
+its recitals («…ΥΠΕΝ/ΔΠΔ/121316/7195/18-11-2022 (ΑΔΑ:6Φ454653Π8-Ξ1Ζ)
+πράξη ορισμού…», re-verified in the cached PDFs) — but were curated as
+relation `other` (displayed «Related act»). User approved the
+reclassification; anadohoi_projects.json lifecycle entries + the
+committed sqlite's project_decisions updated in place (loader-rebuild
+avoided per the standing in-place precedent). The 6ΓΨΨ4653Π8-2ΔΓ
+Προδιαγραφές εγκύκλιος stays `other`: it does not cite the root — the
+project's own amendments and its τεχνική μελέτη approval cite IT.
+
+## 2026-08-16 — Context-river layer for river-scoped sponsored projects + site-dot presentation
+
+**Decision.** Projects whose designation act names RIVERS (6Φ454653Π8-Ξ1Ζ:
+«Καλαμά και Αχέροντα Περιφέρειας Ηπείρου») get the named watercourses
+drawn on the card map: geometries from OpenStreetMap (Overpass, named
+waterway ways merged + simplified ~50 m), committed as
+`data/processed/context_rivers.geojson` + byte-identical
+`atlas/static/geo/context_rivers.geojson` (build:
+`scripts/build_river_layer.py`); each feature carries the project ΑΔΑs
+it applies to — application is curated per feature, never name-matched.
+Mandatory attribution in the card caveat: «© OpenStreetMap
+contributors», marked approximate (the line is the watercourse, not the
+act's intervention zone). Presentation (user decisions): site pins keep
+ONE colour (the approximate-precision pale/dashed variant retired — the
+precision qualifier moves into the hover card); hovering a site dot
+shows a black bottom-left card (white lettering) with the site's name,
+«κατά προσέγγιση» flagged there; the FactsHeader caveat rewritten to
+state explicitly HOW dots are placed (named in trail documents, geocoded
+at the named θέση, or municipality centre when only a δήμος is named).

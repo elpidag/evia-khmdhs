@@ -6,8 +6,9 @@
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
 	import ZoneMap from '$lib/maps/ZoneMap.svelte';
 	import SiteMap, { type SitePin } from '$lib/maps/SiteMap.svelte';
-	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
-	import type { Feature, Polygon, MultiPolygon } from 'geojson';
+	import { loadEffisFires, loadRivers, type FireProps, type RiverProps } from '$lib/maps/useGeo';
+	import { COLOR, NODATE_COLOR } from '$lib/charts/ganttTheme';
+	import type { Feature, LineString, MultiLineString, Polygon, MultiPolygon } from 'geojson';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
@@ -105,6 +106,14 @@
 			.catch(() => (scarFeats = []));
 	});
 	const scarHa = $derived(scarFeats.reduce((s, f) => s + (f.properties.ha ?? 0), 0));
+	// context rivers: drawn only when this project is curated on the feature
+	let riverFeats = $state.raw<Feature<LineString | MultiLineString, RiverProps>[]>([]);
+	$effect(() => {
+		loadRivers(fetch)
+			.then((fc) => (riverFeats = fc.features.filter((f) =>
+				f.properties.projects.includes(p.root_ada))))
+			.catch(() => (riverFeats = []));
+	});
 	// one tone per fire, earliest darkest — shared by the map scars and
 	// the timeline-bar dots so the two read as the same objects
 	const FIRE_TONES = ['#6b2d35', '#9a4a48', '#c47a66', '#dba28c'];
@@ -132,6 +141,33 @@
 	);
 	// timeline-dot hover ⇄ map selection
 	let hoverFireId = $state<number | null>(null);
+
+	// deadline extensions: ONLY amendment acts whose curated `detail`
+	// carries the new deadline date — budget/terms amendments get no dot
+	// (they stay in the trail table); verbatim excerpts live in the trail
+	const ISO = /^\d{4}-\d{2}-\d{2}$/;
+	const extMarks = $derived(
+		p.decisions
+			.filter((d) => d.relation === 'amendment' && d.issue_date && d.detail && ISO.test(d.detail))
+			.sort((a, b) => (a.issue_date ?? '').localeCompare(b.issue_date ?? ''))
+			.map((d, i) => ({ n: i + 1, d: d.issue_date as string, deadline: d.detail, ada: d.ada }))
+	);
+	// extension-dot hover → trail-row highlight
+	let hoverExtAda = $state<string | null>(null);
+	// trail-row hover → the timeline extension dot grows AND the row
+	// itself goes black (only for amendment acts that carry a dot)
+	let hoverTrailAda = $state<string | null>(null);
+	const extAdas = $derived(new Set(extMarks.map((e) => e.ada)));
+
+	// the project's identity hue = its timeline-bar colour (ganttTheme);
+	// site pins and the trail's self-row highlight wear the same colour
+	const barColor = $derived(
+		p.status === 'active' && !p.deadline_current
+			? NODATE_COLOR
+			: (COLOR[p.status] ?? NODATE_COLOR)
+	);
+	// self-row lettering is always white on the bar colour (user decision)
+	const barInk = '#fff';
 
 	// template facts derived from the decision trail
 	const designationDate = $derived(
@@ -191,12 +227,19 @@
 			}))
 	]);
 
-	const CAVEAT =
+	const CAVEAT = $derived(
 		'LOCATION quotes the designation act, which may name more areas than the follow-up ' +
-		'documents cover; the map shows the work locations named in the documents of the trail, ' +
-		'geolocated in approximation depending on the information provided. Fire perimeters are ' +
-		'satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency ' +
-		'Management Service — EFFIS.';
+			'documents cover. Each dot is a work site NAMED in a document of the trail, placed by ' +
+			'geocoding that name: at the named θέση where the document gives one, at the ' +
+			"municipality's centre where it names only a municipality (flagged «κατά προσέγγιση» " +
+			'on hover). ' +
+			(riverFeats.length
+				? 'River courses named by the act are drawn from OpenStreetMap — © OpenStreetMap ' +
+					'contributors, approximate. '
+				: '') +
+			'Fire perimeters are satellite estimates, not official οριοθετήσεις — © European ' +
+			'Union, Copernicus Emergency Management Service — EFFIS.'
+	);
 
 	// the dashed "today" rule of the act's timeline bar (as on /anadohoi)
 	const todayIso = new Date().toLocaleDateString('en-CA');
@@ -320,6 +363,8 @@
 					height={mapH}
 					fireColorOf={(f) => scarTone.get(f.properties.id) ?? FIRE_TONES[0]}
 					selectedId={hoverFireId}
+					rivers={riverFeats}
+					pinColor={barColor}
 				/>
 			{/if}
 			{#if worksZones?.length}
@@ -328,7 +373,14 @@
 		{/snippet}
 	</FactsHeader>
 
-	<DocTrail rows={trailRows}>
+	<DocTrail
+		rows={trailRows}
+		highlight={hoverExtAda ??
+			(hoverTrailAda !== null && extAdas.has(hoverTrailAda) ? hoverTrailAda : null)}
+		selfColor={barColor}
+		selfInk={barInk}
+		onRowHover={(code) => (hoverTrailAda = code)}
+	>
 		{#snippet top()}
 			<ActTimelineBar
 				start={designationDate}
@@ -341,6 +393,9 @@
 				today={todayIso}
 				fires={fireDots}
 				onFireHover={(id) => (hoverFireId = id)}
+				extensions={extMarks}
+				onExtHover={(ada) => (hoverExtAda = ada)}
+				highlightAda={hoverTrailAda}
 			/>
 		{/snippet}
 	</DocTrail>

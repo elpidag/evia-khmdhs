@@ -10,8 +10,15 @@
 	 *  Multi-site maps get +/−/⌂ zoom buttons (drag pans while zoomed). */
 	import { geoMercator, geoPath } from 'd3-geo';
 	import { dmy, grInt } from '$lib/transforms/format';
-	import { loadPe, type FireProps, type PeProps } from './useGeo';
-	import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
+	import { loadPe, type FireProps, type PeProps, type RiverProps } from './useGeo';
+	import type {
+		Feature,
+		FeatureCollection,
+		LineString,
+		MultiLineString,
+		MultiPolygon,
+		Polygon
+	} from 'geojson';
 
 	export interface SitePin {
 		name: string;
@@ -30,13 +37,19 @@
 		fireColorOf?: (f: Feature<Polygon | MultiPolygon, FireProps>) => string;
 		/** externally selected fire (timeline-dot hover): highlighted + card shown */
 		selectedId?: number | null;
+		/** context rivers named by the designation act (curated, OSM courses) */
+		rivers?: Feature<LineString | MultiLineString, RiverProps>[];
+		/** pin fill — the project's timeline-bar colour (identity hue) */
+		pinColor?: string;
 	}
 	let {
 		sites,
 		scars = [],
 		height = 340,
 		fireColorOf = () => 'color-mix(in srgb, #6b2d35 85%, #fff)',
-		selectedId = null
+		selectedId = null,
+		rivers = [],
+		pinColor = 'var(--c-anadohoi)'
 	}: Props = $props();
 
 	const W = 460;
@@ -53,6 +66,8 @@
 	let svgEl = $state<SVGSVGElement | null>(null);
 	let dragging = false;
 	let tip = $state<string | null>(null);
+	/** hovered site's name — the black bottom-left card */
+	let siteTip = $state<string | null>(null);
 
 	// base (unzoomed) frame: centre + half-spans incl. padding
 	const base = $derived.by(() => {
@@ -64,10 +79,11 @@
 			x1 = Math.max(x1, s.lon);
 			y1 = Math.max(y1, s.lat);
 		}
-		// linked burn scars extend the frame (lon/lat planar bounds)
+		// linked burn scars and context rivers extend the frame (planar
+		// lon/lat bounds) — a river-scoped act's whole extent stays visible
 		const path0 = geoPath();
-		for (const f of scars) {
-			const b = path0.bounds(f);
+		for (const f of [...scars, ...rivers]) {
+			const b = path0.bounds(f as Feature);
 			x0 = Math.min(x0, b[0][0]);
 			y0 = Math.min(y0, b[0][1]);
 			x1 = Math.max(x1, b[1][0]);
@@ -130,7 +146,7 @@
 				return Number.isFinite(c[0]) ? { f, x: c[0], y: c[1] } : null;
 			})
 			.filter((d): d is { f: (typeof scars)[number]; x: number; y: number } => d !== null);
-		return { path, pins, scarMarks };
+		return { path, pins, scarMarks, proj };
 	});
 
 	const zoomIn = () => (zoom = { ...zoom, k: Math.min(16, zoom.k * 1.6) });
@@ -233,6 +249,13 @@
 					<path d={view.path(f) ?? ''} class="land" />
 				{/each}
 			{/if}
+			{#each rivers as f (f.properties.name)}
+				<path d={view.path(f) ?? ''} class="river" />
+				{#if view.proj(f.properties.label_pt)}
+					{@const lp = view.proj(f.properties.label_pt)!}
+					<text x={lp[0]} y={lp[1] - 5} class="riverlbl">{f.properties.name}</text>
+				{/if}
+			{/each}
 			{#each scars as f (f.properties.id)}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<path
@@ -258,12 +281,17 @@
 				/>
 			{/each}
 			{#each view.pins as { s, x, y }, i (i)}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<circle
 					cx={x}
 					cy={y}
 					r={view.pins.length > 8 ? 4.5 : 6}
 					class="pin"
-					class:approx={APPROX.has(s.geo_precision ?? '')}
+					style:fill={pinColor}
+					onmouseenter={() =>
+						(siteTip =
+							s.name + (APPROX.has(s.geo_precision ?? '') ? ' (κατά προσέγγιση)' : ''))}
+					onmouseleave={() => (siteTip = null)}
 				/>
 			{/each}
 		</svg>
@@ -276,6 +304,9 @@
 		{/if}
 		{#if shownTip}
 			<div class="tip">{shownTip}</div>
+		{/if}
+		{#if siteTip}
+			<div class="tip sitecard">{siteTip}</div>
 		{/if}
 	</figure>
 {/if}
@@ -325,15 +356,26 @@
 	.scarmark.sel {
 		filter: brightness(0.82);
 	}
+	/* ONE colour for every site pin — the project's timeline-bar hue,
+	   passed inline; the precision qualifier lives in the hover card
+	   (user decisions 2026-08-16) */
 	.pin {
-		fill: var(--c-anadohoi);
-		fill-opacity: 0.85;
 		stroke: none;
 	}
-	.pin.approx {
-		fill-opacity: 0.4;
-		stroke: var(--c-anadohoi);
-		stroke-dasharray: 2.5 2;
+	.river {
+		fill: none;
+		stroke: #6d9dc5;
+		stroke-width: 1.6;
+		opacity: 0.85;
+	}
+	.riverlbl {
+		font-size: 10px;
+		font-style: italic;
+		fill: #46779e;
+		text-anchor: middle;
+		paint-order: stroke;
+		stroke: #fff;
+		stroke-width: 2px;
 	}
 	.zoomctl {
 		position: absolute;
@@ -360,7 +402,8 @@
 		background: var(--paper);
 	}
 	/* the fire card: black, white lettering, top-left — mirroring the
-	   zoom buttons in the opposite corner */
+	   zoom buttons in the opposite corner; the site card shares the look
+	   but docks bottom-left */
 	.tip {
 		position: absolute;
 		top: var(--sp-2);
@@ -372,5 +415,9 @@
 		font-size: var(--fs-13);
 		font-variant-numeric: tabular-nums;
 		pointer-events: none;
+	}
+	.tip.sitecard {
+		top: auto;
+		bottom: var(--sp-2);
 	}
 </style>

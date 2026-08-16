@@ -1,6 +1,6 @@
 /** Module-cached TopoJSON fetches — every map on every page shares one copy. */
 import { feature } from 'topojson-client';
-import type { FeatureCollection, Polygon, MultiPolygon, MultiLineString } from 'geojson';
+import type { FeatureCollection, LineString, Polygon, MultiPolygon, MultiLineString } from 'geojson';
 import type { Topology } from 'topojson-specification';
 
 export interface PeProps {
@@ -66,6 +66,16 @@ export const loadEviaZones = (
 	return cache.get(url) as Promise<FeatureCollection<Polygon | MultiPolygon, ZoneProps>>;
 };
 
+export interface RiverProps {
+	/** river name as in OSM (Greek) */
+	name: string;
+	en: string;
+	/** the project ΑΔΑs this river is curated to belong to */
+	projects: string[];
+	/** [lon, lat] midpoint of the longest branch — name-label anchor */
+	label_pt: [number, number];
+}
+
 export interface FireProps {
 	/** stable EFFIS feature id — anadohoi effis_scars links resolve on it */
 	id: number;
@@ -94,6 +104,25 @@ export const loadEffisFires = (
 		);
 	}
 	return cache.get(url) as Promise<FeatureCollection<Polygon | MultiPolygon, FireProps>>;
+};
+
+/** Context rivers for river-scoped sponsored projects (OSM courses,
+ *  scripts/build_river_layer.py). Attribution required on display:
+ *  «© OpenStreetMap contributors», marked approximate. */
+export const loadRivers = (
+	fetch: Fetch
+): Promise<FeatureCollection<LineString | MultiLineString, RiverProps>> => {
+	const url = '/geo/context_rivers.geojson';
+	if (!cache.has(url)) {
+		cache.set(
+			url,
+			fetch(url).then((r) => {
+				if (!r.ok) throw new Error(`${url}: ${r.status}`);
+				return r.json();
+			})
+		);
+	}
+	return cache.get(url) as Promise<FeatureCollection<LineString | MultiLineString, RiverProps>>;
 };
 
 export const loadCentroids = (fetch: Fetch): Promise<Record<string, [number, number]>> => {
