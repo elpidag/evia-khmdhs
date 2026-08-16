@@ -218,7 +218,9 @@ def case_key(text: str) -> str | None:
 
 # ----------------------------------------------------------- ΑΔΑ citations
 
-_ADA_RX = re.compile(r"\b([0-9Α-ΩA-Z]{10}-[0-9Α-ΩA-Z]{3})\b")
+# prefixes are 7–10 chars (org codes 3–6 chars; the old exactly-{10}
+# pattern missed ΑΠΔ/δήμος citations)
+_ADA_RX = re.compile(r"\b([0-9Α-ΩA-Z]{7,12}-[0-9Α-ΩA-Z]{3})\b")
 
 
 def cited_adas(text: str, self_ada: str | None = None) -> list[str]:

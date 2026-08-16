@@ -96,8 +96,10 @@ def pdf_attachment(kind: str, adam: str):
     )
 
 
-# Diavgeia ΑΔΑ: 10 chars + '-' + 3, digits and Greek capitals only.
-_ADA_RE = re.compile(r"[0-9Α-Ω]{10}-[0-9Α-Ω]{3}")
+# Diavgeia ΑΔΑ: 4 random chars + the ORG CODE (3–6 chars: περιφέρειες/δήμοι
+# 3, ΑΠΔ «ΟΡ10» 4, ΥΠΕΝ «4653Π8» 6) + '-' + 3, digits and Greek capitals.
+# A strict {10} prefix 404'd every ΑΠΔ/δήμος act (e.g. ΨΙ87ΟΡ10-1Φ8).
+_ADA_RE = re.compile(r"[0-9Α-Ω]{7,12}-[0-9Α-Ω]{3}")
 
 
 @bp.route("/pdf/diavgeia/<ada>")

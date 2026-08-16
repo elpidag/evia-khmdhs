@@ -2420,3 +2420,24 @@ unresolved: «Σιδηρονερίου» (5 candidates) and «Περτουλίο
 Applied to curated anadohoi_projects.json AND the committed sqlite
 in place (surgical executors-column update - a loader re-run would
 recompute statuses as of today).
+
+## 2026-08-16 - ΑΔΑ shape bug: org codes are 3-6 chars, not always 6
+
+**Found via a broken PDF link the user hit (ΨΙ87ΟΡ10-1Φ8 - 404).**
+Diavgeia ΑΔΑs are 4 random chars + the ORG CODE + '-' + 3 chars, and
+org codes vary in length: περιφέρειες/δήμοι 3 (…7ΛΗ, …ΩΞΘ), ΑΠΔ 4
+(ΟΡ10/ΟΡ1Υ/ΟΡ1Κ), ΥΠΕΝ 6 (4653Π8) - prefixes run 7-10 chars. Three
+regexes assumed exactly 10: the atlas /pdf/diavgeia proxy (404'd the
+PDF of every ΑΠΔ/δήμος act - 23 of 322 stored anadohoi decisions and
+1 arogi act), and the ΑΔΑ-citation extractors in khmdhs/anadohoi.py
+and khmdhs/arogi.py. All three widened to {7,12}; unit tests updated
+(truncation typos like «6ΟΘΚ4653Π-ΤΦΚ» now pass the SHAPE - they are
+indistinguishable from real short-org ΑΔΑs - and die at the callers'
+live-registry verification, the crawl doctrine already in place).
+Links verified serving on both origins for all short-prefix acts.
+KNOWN RESIDUAL: the anadohoi citation crawl ran under the narrow
+pattern, so short-prefix citations were never crawled to closure - a
+cache re-scan with the widened extractor finds 13 cited-but-unstored
+short-prefix ΑΔΑs (Ψ1ΟΦΩΞΘ-ΓΒΓ cited 40x, ΩΣΖΦΟΡ1Υ-ΒΤ2 21x; a few
+are OCR truncations). Fetching/classifying them is a harvest step the
+user has not yet ordered - recorded here as the open TODO.

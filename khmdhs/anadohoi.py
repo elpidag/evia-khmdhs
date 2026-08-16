@@ -92,11 +92,14 @@ def classify(subject: str | None, org_label: str | None,
 # --------------------------------------------------------------------------
 # ΑΔΑ citations
 
-# Diavgeia ΑΔΑs in this era are exactly 10 chars + '-' + 3 chars, digits and
-# Greek capitals. PDFs occasionally render Greek caps as Latin homoglyphs.
+# Diavgeia ΑΔΑ: 4 random chars + the org code + '-' + 3 chars, digits and
+# Greek capitals. Org codes are 3–6 chars (περιφέρειες/δήμοι 3, ΑΠΔ «ΟΡ10» 4,
+# ΥΠΕΝ «4653Π8» 6) → prefixes 7–10 chars; the old exactly-{10} pattern missed
+# every ΑΠΔ/δήμος citation. PDFs occasionally render Greek caps as Latin
+# homoglyphs.
 _LATIN2GREEK = str.maketrans("ABEZHIKMNOPTYX", "ΑΒΕΖΗΙΚΜΝΟΡΤΥΧ")
 _ADA_TOKEN = re.compile(
-    r"(?<![0-9Α-ΩA-Z])([0-9Α-ΩA-Z]{10}-[0-9Α-ΩA-Z]{3})(?![0-9Α-ΩA-Z])")
+    r"(?<![0-9Α-ΩA-Z])([0-9Α-ΩA-Z]{7,12}-[0-9Α-ΩA-Z]{3})(?![0-9Α-ΩA-Z])")
 
 
 def cited_adas(text: str, own_ada: str | None = None) -> list[str]:

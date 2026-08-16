@@ -78,10 +78,20 @@ def test_cited_adas_dedupe_own_and_homoglyphs():
         "Ω2ΕΞ4653Π8-6ΟΟ", "ΩΖ2Ο4653Π8-ΓΕΞ", "6ΡΛ34653Π8-028"]
 
 
+def test_cited_adas_short_org_codes():
+    # org codes are 3–6 chars → prefixes 7–10: ΑΠΔ («ΟΡ10», 8) and
+    # περιφέρειες/δήμοι (3-char codes, 7) are real ΑΔΑs the old
+    # exactly-{10} pattern missed (every ΑΠΔ citation went unextracted)
+    text = "(ΑΔΑ: ΨΙ87ΟΡ10-1Φ8) και (ΑΔΑ: 6ΝΑΧ7ΛΗ-Γ75)"
+    assert anadohoi.cited_adas(text) == ["ΨΙ87ΟΡ10-1Φ8", "6ΝΑΧ7ΛΗ-Γ75"]
+
+
 def test_cited_adas_rejects_non_ada_tokens():
-    # all-digit and all-letter tokens are not ΑΔΑs; 9-char registry typos
-    # («6ΟΘΚ4653Π-ΤΦΚ») must not match either.
-    text = "1234567890-123 ΑΒΓΔΕΖΗΘΙΚ-ΛΜΝ 6ΟΘΚ4653Π-ΤΦΚ"
+    # all-digit and all-letter tokens are not ΑΔΑs. Truncation typos
+    # («6ΟΘΚ4653Π-ΤΦΚ») now pass the SHAPE (indistinguishable from real
+    # short-org-code ΑΔΑs) and are rejected downstream by the caller's
+    # live-registry verification (404 = not an ΑΔΑ), per the docstring.
+    text = "1234567890-123 ΑΒΓΔΕΖΗΘΙΚ-ΛΜΝ"
     assert anadohoi.cited_adas(text) == []
 
 

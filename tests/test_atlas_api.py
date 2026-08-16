@@ -398,3 +398,16 @@ def test_diavgeia_pdf_non_pdf_body_not_cached(tmp_path, monkeypatch):
     r = app.test_client().get("/pdf/diavgeia/ΤΕΣΤ4653Π8-ΑΑΑ")
     assert r.status_code == 502
     assert not (cache / "ΤΕΣΤ4653Π8-ΑΑΑ.pdf").exists()
+
+
+def test_diavgeia_ada_shape_covers_all_org_code_lengths():
+    """ΑΔΑ prefixes are 4 random chars + a 3–6 char org code (περιφέρειες/
+    δήμοι 3, ΑΠΔ «ΟΡ10» 4, ΥΠΕΝ «4653Π8» 6). The old exactly-{10} pattern
+    404'd every ΑΠΔ/δήμος act PDF (e.g. ΨΙ87ΟΡ10-1Φ8)."""
+    from atlas_api.pdf_proxy import _ADA_RE
+    for ada in ("ΨΙ87ΟΡ10-1Φ8", "6ΝΑΧ7ΛΗ-Γ75", "ΨΟΨΝ4653Π8-67Σ",
+                "Ψ4Ζ8ΟΡ1Υ-ΡΚΧ"):
+        assert _ADA_RE.fullmatch(ada), ada
+    for bad in ("ΨΙ87ΟΡ10-1Φ", "ΨΙ8-1Φ8", "ΨΟΨΝ4653Π8ΧΧΧΧΧ-67Σ",
+                "ψοψν4653π8-67σ"):
+        assert not _ADA_RE.fullmatch(bad), bad
