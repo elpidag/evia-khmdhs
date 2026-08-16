@@ -31,7 +31,7 @@ from pathlib import Path
 import requests
 
 from khmdhs import (
-    categories_loader, chain_loader, completion_acts_loader,
+    bodies_loader, categories_loader, chain_loader, completion_acts_loader,
     contract_corrections, forest_loader, linked_acts_loader, payment_loader,
     region_loader, scope_loader, studies_loader,
 )
@@ -214,6 +214,8 @@ def main(argv: list[str] | None = None) -> int:
         studies_loader.main(db_argv)
         print("\n-- categories_loader -------------------------------------------")
         categories_loader.main(db_argv)
+        print("\n-- bodies_loader -----------------------------------------------")
+        bodies_loader.main(db_argv)
         print("\n-- payment_loader ----------------------------------------------")
         payment_loader.main(db_argv)
         print("\n-- linked_acts_loader ------------------------------------------")

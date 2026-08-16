@@ -36,6 +36,7 @@ data/processed/diavgeia_cache/*
 !data/processed/diavgeia_cache/*.txt
 data/processed/payment_validation_report.json
 data/processed/contract_value_report.json
+data/processed/public_bodies_worksheet.json
 data/processed/refresh_backup_*.json
 data/processed/refresh_state.json
 data/processed/site_candidates.json

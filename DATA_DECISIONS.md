@@ -2179,3 +2179,69 @@ states date + ha.
 **Data layer.** `build_effis_layer.py` now emits the fire start date
 (`initialdat` → property `d`, ISO) — both display copies rebuilt,
 1,969 features, ids/years unchanged (tests pass unmodified).
+
+## 2026-08-16 — Public-bodies registry (design + extraction phase)
+
+**Decision.** Build a unified registry of AWARDING bodies across the three
+datasets — curated `khmdhs/data/public_bodies.json`: one entry per body
+with a stable slug key, canonical name, ΑΦΜ (attribute, NOT key —
+090273987 is shared by ΥΠΕΝ and ΑΠΔ Θ-ΣΕ), a CLOSED kind vocabulary
+(ministry / decentralized_administration / region / municipality /
+municipal_entity / state_vehicle / other_public; forest units stay in
+forest_authorities.json + forest_units_directory.json and are referenced,
+never duplicated), a **scope** label that says when place-inference from
+the body is safe (municipal → its municipality, regional → its region,
+national → never), a municipality_code link into greek_municipalities.json
+(gives Π.Ε. + centroid for free), and an aliases array of VERBATIM
+registry spellings (typos kept — the name-normalization table, same
+doctrine as dase_display_names/org_names_en). Inspired by the FireWatch
+architecture studied today (organization registry + normalization
+registries as universal joins) while explicitly REJECTING its location
+semantics: work regions stay document-curated; the registry supplies the
+tier-1 baseline, validation audits and presentation (map kind legend,
+body chips), with the attribution tier always declared.
+
+**Mechanism.** `scripts/extract_public_bodies.py` sweeps distinct
+organization strings from khmdhs (3), dase (49) and anadohoi decisions
+(25), proposes kind/scope by name stems (the /dase map's stem heuristic,
+to be retired into the registry), pulls ΑΦΜ from the stored ΚΗΜΔΗΣ
+payloads (`raw_json.organizationVatNumber`), matches municipal bodies to
+greek_municipalities by genitive fold WITH a Π.Ε. cross-check against the
+bodies' own contracts' curated regions (duplicate municipality names
+resolve by ΥΠΕΣ code + Π.Ε. agreement, never by name — the Ηρακλείου
+lesson), and emits a review worksheet + curator HTML
+(public_bodies_curator.html). Every verdict is the user's; the curated
+JSON, loader (`public_bodies` + `public_body_aliases` tables in both
+contract DBs), coverage-bijection tests and consumers land after review.
+
+## 2026-08-16 — Public-bodies registry: verdicts landed, registry live
+
+All 67 bodies user-reviewed (public_bodies_curator.html export) and the
+five parked ones resolved after checking their exact contracts: ΑΔΜΗΕ
+(4 line-clearing contracts along ΓΜ 150/400kV), ΟΣΕ (Σ.Σ. Κίρκης +
+ΟΣΕ groves), Οργανισμός Λιμένος Αλεξανδρούπολης (works in its own port
+zone), ΓΝ Κοζάνης (trees at the hospital grounds), Ταμείο Πανεπιστημιακών
+Δασών (Περτούλι) — **user chose the strict `other_public / national` for
+all five** (no place-inference ever). ΔΥΠΑ and ΠΕΡ.ΓΕΝ. Νοσοκομείο
+Λάρισας aligned seat→national to match the explicit ΓΝ Κοζάνης verdict
+(flagged for veto); «ΛΟΥΤΡΑ ΛΟΥΤΡΑΚΙΟΥ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ Α.Ε» reclassified
+municipality→municipal_entity (same municipal scope). ΑΦΜ hygiene:
+Δήμος Διρφύων-Μεσσαπίων keyed '0997591330' in the payload → 997591330
+(VIES-confirmed name match); Δήμος Δομοκού carries an invalid 8-digit
+'80011783' and VIES rejects the plausible completions → afm honestly
+null with note. Final registry: 67 bodies / 68 verbatim aliases —
+37 municipalities, 5 municipal entities, 3 regions, 6 ministries,
+4 αποκεντρωμένες, 1 state vehicle (Πράσινο Ταμείο, user's label),
+11 other public; scopes 43 municipal / 3 regional / 21 national / 0 seat.
+
+Mechanism: curated `khmdhs/data/public_bodies.json` →
+`khmdhs/bodies_loader.py` (strict: refuses review/unknown vocab, municipal
+without a valid municipality_code, non-9-digit ΑΦΜ, cross-claimed aliases;
+WARNs on DB org strings the registry does not know) → tables
+`public_bodies` + `public_body_aliases` in BOTH contract DBs; hooked at
+the end of harvest_dase.py load and in the khmdhs.refresh chain.
+`tests/test_public_bodies.py`: validation units + real-DB pins incl. the
+coverage BIJECTION (every awarding string in khmdhs+dase+anadohoi resolves
+to exactly one body; no stale aliases). Consumers (dase map legend kinds
+from the registry, tier-1 audits) come next; location semantics unchanged
+— work regions stay document-curated.

@@ -307,6 +307,9 @@ def cmd_load() -> None:
     from khmdhs.dase_names_loader import load_names
     n_names = load_names(conn)
     print(f"-- loaded {n_names} curated display names")
+    from khmdhs.bodies_loader import load_bodies
+    n_bodies = load_bodies(conn)
+    print(f"-- loaded {n_bodies} public bodies (registry)")
     n = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()[0]
     print(f"-- loaded {loaded} contracts into {DB_PATH} (table now {n})")
     conn.close()

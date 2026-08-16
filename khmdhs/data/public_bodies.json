@@ -1,0 +1,1019 @@
+{
+ "_comment": "Public-bodies registry (DATA_DECISIONS 2026-08-16): one entry per AWARDING body across the khmdhs/dase/anadohoi datasets. key = stable slug; afm is an attribute, never a key (090273987 is shared by ΥΠΕΝ and ΑΠΔ Θ-ΣΕ); aliases are VERBATIM registry spellings (typos kept, never rewritten) — the name-normalization table. kind ∈ ministry|decentralized_administration|region|municipality|municipal_entity|state_vehicle|other_public (forest units live in forest_authorities.json / forest_units_directory.json and are never duplicated here). scope = when tier-1 place-inference from the body is safe: municipal → its municipality (code links greek_municipalities.json), regional → its region, national → never infer, seat → its own premises. Every verdict user-reviewed via public_bodies_curator.html (export 2026-08-16) + the parked-five resolution (chat, same date). Loaded by khmdhs.bodies_loader into public_bodies + public_body_aliases.",
+ "bodies": [
+  {
+   "key": "ypoyrgeio-perivallontos-kai-energeias",
+   "name": "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ",
+   "kind": "ministry",
+   "scope": "national",
+   "afm": "090273987",
+   "municipality_code": null,
+   "aliases": [
+    "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ"
+   ],
+   "datasets": [
+    "anadohoi",
+    "antinero",
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "apokentromeni-dioikisi-makedonias-thrakis",
+   "name": "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΜΑΚΕΔΟΝΙΑΣ – ΘΡΑΚΗΣ",
+   "kind": "decentralized_administration",
+   "scope": "national",
+   "afm": "997612629",
+   "municipality_code": null,
+   "aliases": [
+    "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΜΑΚΕΔΟΝΙΑΣ – ΘΡΑΚΗΣ"
+   ],
+   "datasets": [
+    "anadohoi",
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "apokentromeni-dioikisi-thessalias-stereas-elladas",
+   "name": "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΘΕΣΣΑΛΙΑΣ - ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ",
+   "kind": "decentralized_administration",
+   "scope": "national",
+   "afm": "998019451",
+   "municipality_code": null,
+   "aliases": [
+    "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΘΕΣΣΑΛΙΑΣ - ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ"
+   ],
+   "datasets": [
+    "anadohoi",
+    "antinero",
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "apokentromeni-dioikisi-peloponnisoy-dytikis-elladas-kai-ioni",
+   "name": "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΠΕΛΟΠΟΝΝΗΣΟΥ, ΔΥΤΙΚΗΣ ΕΛΛΑΔΑΣ ΚΑΙ ΙΟΝΙΟΥ",
+   "kind": "decentralized_administration",
+   "scope": "national",
+   "afm": "997824349",
+   "municipality_code": null,
+   "aliases": [
+    "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΠΕΛΟΠΟΝΝΗΣΟΥ, ΔΥΤΙΚΗΣ ΕΛΛΑΔΑΣ ΚΑΙ ΙΟΝΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-zagorioy",
+   "name": "ΔΗΜΟΣ ΖΑΓΟΡΙΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997854483",
+   "municipality_code": "9082",
+   "aliases": [
+    "ΔΗΜΟΣ ΖΑΓΟΡΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-almopias",
+   "name": "ΔΗΜΟΣ ΑΛΜΩΠΙΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997600077",
+   "municipality_code": "9042",
+   "aliases": [
+    "ΔΗΜΟΣ ΑΛΜΩΠΙΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "apokentromeni-dioikisi-attikis",
+   "name": "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΑΤΤΙΚΗΣ",
+   "kind": "decentralized_administration",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΑΠΟΚΕΝΤΡΩΜΕΝΗ ΔΙΟΙΚΗΣΗ ΑΤΤΙΚΗΣ"
+   ],
+   "datasets": [
+    "antinero"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-edessas",
+   "name": "ΔΗΜΟΣ ΕΔΕΣΣΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "998721868",
+   "municipality_code": "9043",
+   "aliases": [
+    "ΔΗΜΟΣ ΕΔΕΣΣΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-velventoy",
+   "name": "ΔΗΜΟΣ ΒΕΛΒΕΝΤΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "996877610",
+   "municipality_code": "9069",
+   "aliases": [
+    "ΔΗΜΟΣ ΒΕΛΒΕΝΤΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-doxatoy",
+   "name": "ΔΗΜΟΣ ΔΟΞΑΤΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997784913",
+   "municipality_code": "9001",
+   "aliases": [
+    "ΔΗΜΟΣ ΔΟΞΑΤΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimosia-ypiresia-apascholisis",
+   "name": "ΔΗΜΟΣΙΑ ΥΠΗΡΕΣΙΑ ΑΠΑΣΧΟΛΗΣΗΣ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΔΗΜΟΣΙΑ ΥΠΗΡΕΣΙΑ ΑΠΑΣΧΟΛΗΣΗΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": "Aligned to national per the user's explicit verdict on the equivalent ΓΝ Κοζάνης case (2026-08-16)"
+  },
+  {
+   "key": "dimos-kastorias",
+   "name": "ΔΗΜΟΣ ΚΑΣΤΟΡΙΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997840976",
+   "municipality_code": "9063",
+   "aliases": [
+    "ΔΗΜΟΣ ΚΑΣΤΟΡΙΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-mantoydioy-limnis-agias-annas",
+   "name": "ΔΗΜΟΣ ΜΑΝΤΟΥΔΙΟΥ - ΛΙΜΝΗΣ - ΑΓΙΑΣ ΑΝΝΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "800202091",
+   "municipality_code": "9153",
+   "aliases": [
+    "ΔΗΜΟΣ ΜΑΝΤΟΥΔΙΟΥ - ΛΙΜΝΗΣ - ΑΓΙΑΣ ΑΝΝΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "perifereia-thessalias",
+   "name": "ΠΕΡΙΦΕΡΕΙΑ ΘΕΣΣΑΛΙΑΣ",
+   "kind": "region",
+   "scope": "regional",
+   "afm": "997844846",
+   "municipality_code": null,
+   "aliases": [
+    "ΠΕΡΙΦΕΡΕΙΑ ΘΕΣΣΑΛΙΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "perifereia-stereas-elladas",
+   "name": "ΠΕΡΙΦΕΡΕΙΑ ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ",
+   "kind": "region",
+   "scope": "regional",
+   "afm": "997947718",
+   "municipality_code": null,
+   "aliases": [
+    "ΠΕΡΙΦΕΡΕΙΑ ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ"
+   ],
+   "datasets": [
+    "anadohoi",
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "ypoyrgeio-politismoy-kai-athlitismoy",
+   "name": "ΥΠΟΥΡΓΕΙΟ ΠΟΛΙΤΙΣΜΟΥ ΚΑΙ ΑΘΛΗΤΙΣΜΟΥ",
+   "kind": "ministry",
+   "scope": "national",
+   "afm": "090283815",
+   "municipality_code": null,
+   "aliases": [
+    "ΥΠΟΥΡΓΕΙΟ ΠΟΛΙΤΙΣΜΟΥ ΚΑΙ ΑΘΛΗΤΙΣΜΟΥ",
+    "ΥΠΟΥΡΓΕΙΟ ΠΟΛΙΤΙΣΜΟΥ"
+   ],
+   "datasets": [
+    "anadohoi",
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "anexartitos-diacheiristis-metaforas-ilektrikis-energeias-adm",
+   "name": "ΑΝΕΞΑΡΤΗΤΟΣ ΔΙΑΧΕΙΡΙΣΤΗΣ ΜΕΤΑΦΟΡΑΣ ΗΛΕΚΤΡΙΚΗΣ ΕΝΕΡΓΕΙΑΣ ΑΔΜΗΕ ΑΕ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": "099877486",
+   "municipality_code": null,
+   "aliases": [
+    "ΑΝΕΞΑΡΤΗΤΟΣ ΔΙΑΧΕΙΡΙΣΤΗΣ ΜΕΤΑΦΟΡΑΣ ΗΛΕΚΤΡΙΚΗΣ ΕΝΕΡΓΕΙΑΣ ΑΔΜΗΕ ΑΕ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "Grid operator: its 4 contracts are line-clearing along ΓΜ 150/400kV spanning several Π.Ε. — never infer a place (user decision 2026-08-16)"
+  },
+  {
+   "key": "dimos-kileler",
+   "name": "ΔΗΜΟΣ ΚΙΛΕΛΕΡ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "998223751",
+   "municipality_code": "9099",
+   "aliases": [
+    "ΔΗΜΟΣ ΚΙΛΕΛΕΡ"
+   ],
+   "datasets": [
+    "anadohoi",
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-larisaion",
+   "name": "ΔΗΜΟΣ ΛΑΡΙΣΑΙΩΝ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997844860",
+   "municipality_code": "9100",
+   "aliases": [
+    "ΔΗΜΟΣ ΛΑΡΙΣΑΙΩΝ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-meteoron",
+   "name": "ΔΗΜΟΣ ΜΕΤΕΩΡΩΝ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "998753608",
+   "municipality_code": "9112",
+   "aliases": [
+    "ΔΗΜΟΣ ΜΕΤΕΩΡΩΝ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-pylaias-chortiati",
+   "name": "ΔΗΜΟΣ ΠΥΛΑΙΑΣ - ΧΟΡΤΙΑΤΗ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997612469",
+   "municipality_code": "9037",
+   "aliases": [
+    "ΔΗΜΟΣ ΠΥΛΑΙΑΣ - ΧΟΡΤΙΑΤΗ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "eniaies-scholikes-epitropes-protovathmias-kai-deyterovathmia",
+   "name": "ΕΝΙΑΙΕΣ ΣΧΟΛΙΚΕΣ ΕΠΙΤΡΟΠΕΣ ΠΡΩΤΟΒΑΘΜΙΑΣ ΚΑΙ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ ΕΚΠΑΙΔΕΥΣΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ.",
+   "kind": "other_public",
+   "scope": "municipal",
+   "afm": "997600249",
+   "municipality_code": "9042",
+   "aliases": [
+    "ΕΝΙΑΙΕΣ ΣΧΟΛΙΚΕΣ ΕΠΙΤΡΟΠΕΣ ΠΡΩΤΟΒΑΘΜΙΑΣ ΚΑΙ ΔΕΥΤΕΡΟΒΑΘΜΙΑΣ ΕΚΠΑΙΔΕΥΣΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ."
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "prasino-tameio",
+   "name": "ΠΡΑΣΙΝΟ ΤΑΜΕΙΟ",
+   "kind": "state_vehicle",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΠΡΑΣΙΝΟ ΤΑΜΕΙΟ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimo-argoys-orestikoy",
+   "name": "ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "099295879",
+   "municipality_code": "9065",
+   "aliases": [
+    "ΔΗΜΟ ΑΡΓΟΥΣ ΟΡΕΣΤΙΚΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-dirfyon-messapion",
+   "name": "ΔΗΜΟΣ ΔΙΡΦΥΩΝ - ΜΕΣΣΑΠΙΩΝ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997591330",
+   "municipality_code": "9148",
+   "aliases": [
+    "ΔΗΜΟΣ ΔΙΡΦΥΩΝ - ΜΕΣΣΑΠΙΩΝ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "Payload keys the ΑΦΜ as '0997591330'; VIES confirms 997591330 = ΔΗΜΟΣ ΔΙΡΦΥΩΝ ΜΕΣΣΑΠΙΩΝ (2026-08-16)"
+  },
+  {
+   "key": "dimos-domokoy",
+   "name": "ΔΗΜΟΣ ΔΟΜΟΚΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9159",
+   "aliases": [
+    "ΔΗΜΟΣ ΔΟΜΟΚΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "Payload carries an invalid 8-digit ΑΦΜ '80011783'; VIES rejects the plausible completions — left honestly null (2026-08-16)"
+  },
+  {
+   "key": "dimos-karpenisioy",
+   "name": "ΔΗΜΟΣ ΚΑΡΠΕΝΗΣΙΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "998895715",
+   "municipality_code": "9157",
+   "aliases": [
+    "ΔΗΜΟΣ ΚΑΡΠΕΝΗΣΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-nestorioy",
+   "name": "ΔΗΜΟΣ ΝΕΣΤΟΡΙΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "800255883",
+   "municipality_code": "9064",
+   "aliases": [
+    "ΔΗΜΟΣ ΝΕΣΤΟΡΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "ypoyrgeio-klimatikis-krisis-kai-politikis-prostasias",
+   "name": "ΥΠΟΥΡΓΕΙΟ ΚΛΙΜΑΤΙΚΗΣ ΚΡΙΣΗΣ ΚΑΙ ΠΟΛΙΤΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ",
+   "kind": "ministry",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΥΠΟΥΡΓΕΙΟ ΚΛΙΜΑΤΙΚΗΣ ΚΡΙΣΗΣ ΚΑΙ ΠΟΛΙΤΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-dramas",
+   "name": "ΔΗΜΟΣ ΔΡΑΜΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997784894",
+   "municipality_code": "9002",
+   "aliases": [
+    "ΔΗΜΟΣ ΔΡΑΜΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-thermis",
+   "name": "ΔΗΜΟΣ ΘΕΡΜΗΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997612550",
+   "municipality_code": "9030",
+   "aliases": [
+    "ΔΗΜΟΣ ΘΕΡΜΗΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-kalymnion",
+   "name": "ΔΗΜΟΣ ΚΑΛΥΜΝΙΩΝ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9276",
+   "aliases": [
+    "ΔΗΜΟΣ ΚΑΛΥΜΝΙΩΝ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-samothrakis",
+   "name": "ΔΗΜΟΣ ΣΑΜΟΘΡΑΚΗΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "090072723",
+   "municipality_code": "9009",
+   "aliases": [
+    "ΔΗΜΟΣ ΣΑΜΟΘΡΑΚΗΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "kentro-koinonikis-prostasias-allileggyis-dimoy-almopias",
+   "name": "ΚΕΝΤΡΟ ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ-ΑΛΛΗΛΕΓΓΥΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ",
+   "kind": "municipal_entity",
+   "scope": "municipal",
+   "afm": "997600194",
+   "municipality_code": "9042",
+   "aliases": [
+    "ΚΕΝΤΡΟ ΚΟΙΝΩΝΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ-ΑΛΛΗΛΕΓΓΥΗΣ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "organismos-limenos-alexandroypolis-a-e",
+   "name": "ΟΡΓΑΝΙΣΜΟΣ ΛΙΜΕΝΟΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ Α.Ε",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": "090016356",
+   "municipality_code": null,
+   "aliases": [
+    "ΟΡΓΑΝΙΣΜΟΣ ΛΙΜΕΝΟΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ Α.Ε"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "Both contracts are works in its own port zone, but the user chose the strict national scope (2026-08-16)"
+  },
+  {
+   "key": "organismos-sidirodromon-elladas-ose",
+   "name": "ΟΡΓΑΝΙΣΜΟΣ ΣΙΔΗΡΟΔΡΟΜΩΝ ΕΛΛΑΔΑΣ (ΟΣΕ)",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": "094038689",
+   "municipality_code": null,
+   "aliases": [
+    "ΟΡΓΑΝΙΣΜΟΣ ΣΙΔΗΡΟΔΡΟΜΩΝ ΕΛΛΑΔΑΣ (ΟΣΕ)"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "Rail-network works (Σ.Σ. Κίρκης, ΟΣΕ groves) — never infer a place (user decision 2026-08-16)"
+  },
+  {
+   "key": "panepistimio-aigaioy",
+   "name": "ΠΑΝΕΠΙΣΤΗΜΙΟ ΑΙΓΑΙΟΥ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΠΑΝΕΠΙΣΤΗΜΙΟ ΑΙΓΑΙΟΥ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "per-gen-nosokomeio-larisas",
+   "name": "ΠΕΡ.ΓΕΝ. ΝΟΣΟΚΟΜΕΙΟ ΛΑΡΙΣΑΣ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΠΕΡ.ΓΕΝ. ΝΟΣΟΚΟΜΕΙΟ ΛΑΡΙΣΑΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": "Aligned to national per the user's explicit verdict on ΓΝ Κοζάνης (2026-08-16)"
+  },
+  {
+   "key": "4i-dype-makedonias-kai-thrakis",
+   "name": "4Η ΔΥΠΕ ΜΑΚΕΔΟΝΙΑΣ ΚΑΙ ΘΡΑΚΗΣ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "4Η ΔΥΠΕ ΜΑΚΕΔΟΝΙΑΣ ΚΑΙ ΘΡΑΚΗΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "aristoteleio-panepistimio-thes-nikis",
+   "name": "ΑΡΙΣΤΟΤΕΛΕΙΟ ΠΑΝΕΠΙΣΤΗΜΙΟ ΘΕΣ/ΝΙΚΗΣ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": "090024798",
+   "municipality_code": null,
+   "aliases": [
+    "ΑΡΙΣΤΟΤΕΛΕΙΟ ΠΑΝΕΠΙΣΤΗΜΙΟ ΘΕΣ/ΝΙΚΗΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "geniko-nosokomeio-kozanis-mamatseio",
+   "name": "ΓΕΝΙΚΟ ΝΟΣΟΚΟΜΕΙΟ ΚΟΖΑΝΗΣ ΜΑΜΑΤΣΕΙΟ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": "999133780",
+   "municipality_code": null,
+   "aliases": [
+    "ΓΕΝΙΚΟ ΝΟΣΟΚΟΜΕΙΟ ΚΟΖΑΝΗΣ ΜΑΜΑΤΣΕΙΟ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "Its contract is tree-cutting at the hospital grounds, but the user chose the strict national scope (2026-08-16)"
+  },
+  {
+   "key": "d-e-y-a-lagkada",
+   "name": "Δ.Ε.Υ.Α ΛΑΓΚΑΔΑ",
+   "kind": "municipal_entity",
+   "scope": "municipal",
+   "afm": "998246985",
+   "municipality_code": "9034",
+   "aliases": [
+    "Δ.Ε.Υ.Α ΛΑΓΚΑΔΑ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-amyntaioy",
+   "name": "ΔΗΜΟΣ ΑΜΥΝΤΑΙΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "999108285",
+   "municipality_code": "9070",
+   "aliases": [
+    "ΔΗΜΟΣ ΑΜΥΝΤΑΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-aristoteli",
+   "name": "ΔΗΜΟΣ ΑΡΙΣΤΟΤΕΛΗ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "998744730",
+   "municipality_code": "9056",
+   "aliases": [
+    "ΔΗΜΟΣ ΑΡΙΣΤΟΤΕΛΗ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-eretrias",
+   "name": "ΔΗΜΟΣ ΕΡΕΤΡΙΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9149",
+   "aliases": [
+    "ΔΗΜΟΣ ΕΡΕΤΡΙΑΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-istiaias-aidipsoy",
+   "name": "ΔΗΜΟΣ ΙΣΤΙΑΙΑΣ - ΑΙΔΗΨΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9150",
+   "aliases": [
+    "ΔΗΜΟΣ ΙΣΤΙΑΙΑΣ - ΑΙΔΗΨΟΥ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-kato-neyrokopioy",
+   "name": "ΔΗΜΟΣ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "090212982",
+   "municipality_code": "9003",
+   "aliases": [
+    "ΔΗΜΟΣ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-mylopotamoy",
+   "name": "ΔΗΜΟΣ ΜΥΛΟΠΟΤΑΜΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9317",
+   "aliases": [
+    "ΔΗΜΟΣ ΜΥΛΟΠΟΤΑΜΟΥ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-mytilinis",
+   "name": "ΔΗΜΟΣ ΜΥΤΙΛΗΝΗΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9261",
+   "aliases": [
+    "ΔΗΜΟΣ ΜΥΤΙΛΗΝΗΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-neas-propontidas",
+   "name": "ΔΗΜΟΣ ΝΕΑΣ ΠΡΟΠΟΝΤΙΔΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "998529948",
+   "municipality_code": "9058",
+   "aliases": [
+    "ΔΗΜΟΣ ΝΕΑΣ ΠΡΟΠΟΝΤΙΔΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-notioy-pilioy",
+   "name": "ΔΗΜΟΣ ΝΟΤΙΟΥ ΠΗΛΙΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997898770",
+   "municipality_code": "9107",
+   "aliases": [
+    "ΔΗΜΟΣ ΝΟΤΙΟΥ ΠΗΛΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-xanthis",
+   "name": "ΔΗΜΟΣ ΞΑΝΘΗΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997654473",
+   "municipality_code": "9017",
+   "aliases": [
+    "ΔΗΜΟΣ ΞΑΝΘΗΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-paggaioy",
+   "name": "ΔΗΜΟΣ ΠΑΓΓΑΙΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997732707",
+   "municipality_code": "9014",
+   "aliases": [
+    "ΔΗΜΟΣ ΠΑΓΓΑΙΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-paionias",
+   "name": "ΔΗΜΟΣ ΠΑΙΟΝΙΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9041",
+   "aliases": [
+    "ΔΗΜΟΣ ΠΑΙΟΝΙΑΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-pargas",
+   "name": "ΔΗΜΟΣ ΠΑΡΓΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "997963210",
+   "municipality_code": "9089",
+   "aliases": [
+    "ΔΗΜΟΣ ΠΑΡΓΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-payloy-mela",
+   "name": "ΔΗΜΟΣ ΠΑΥΛΟΥ ΜΕΛΑ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9036",
+   "aliases": [
+    "ΔΗΜΟΣ ΠΑΥΛΟΥ ΜΕΛΑ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-skydras",
+   "name": "ΔΗΜΟΣ ΣΚΥΔΡΑΣ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9045",
+   "aliases": [
+    "ΔΗΜΟΣ ΣΚΥΔΡΑΣ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-skyroy",
+   "name": "ΔΗΜΟΣ ΣΚΥΡΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9154",
+   "aliases": [
+    "ΔΗΜΟΣ ΣΚΥΡΟΥ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimos-tyrnavoy",
+   "name": "ΔΗΜΟΣ ΤΥΡΝΑΒΟΥ",
+   "kind": "municipality",
+   "scope": "municipal",
+   "afm": "998576300",
+   "municipality_code": "9102",
+   "aliases": [
+    "ΔΗΜΟΣ ΤΥΡΝΑΒΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimotiki-epicheirisi-ydreysis-kai-apocheytesis-doxatoy",
+   "name": "ΔΗΜΟΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΥΔΡΕΥΣΗΣ ΚΑΙ ΑΠΟΧΕΥΤΕΣΗΣ ΔΟΞΑΤΟΥ",
+   "kind": "municipal_entity",
+   "scope": "municipal",
+   "afm": "996972489",
+   "municipality_code": "9001",
+   "aliases": [
+    "ΔΗΜΟΤΙΚΗ ΕΠΙΧΕΙΡΗΣΗ ΥΔΡΕΥΣΗΣ ΚΑΙ ΑΠΟΧΕΥΤΕΣΗΣ ΔΟΞΑΤΟΥ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "dimotiko-limeniko-tameio-ko",
+   "name": "ΔΗΜΟΤΙΚΟ ΛΙΜΕΝΙΚΟ ΤΑΜΕΙΟ ΚΩ",
+   "kind": "municipal_entity",
+   "scope": "municipal",
+   "afm": null,
+   "municipality_code": "9284",
+   "aliases": [
+    "ΔΗΜΟΤΙΚΟ ΛΙΜΕΝΙΚΟ ΤΑΜΕΙΟ ΚΩ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "loytra-loytrakioy-dimoy-almopias-a-e",
+   "name": "ΛΟΥΤΡΑ ΛΟΥΤΡΑΚΙΟΥ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ Α.Ε",
+   "kind": "municipal_entity",
+   "scope": "municipal",
+   "afm": "090090279",
+   "municipality_code": "9042",
+   "aliases": [
+    "ΛΟΥΤΡΑ ΛΟΥΤΡΑΚΙΟΥ ΔΗΜΟΥ ΑΛΜΩΠΙΑΣ Α.Ε"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "Δημοτική Α.Ε. of Δήμος Αλμωπίας — reclassified municipality→municipal_entity (same municipal scope)"
+  },
+  {
+   "key": "perifereia-anatolikis-makedonias-thrakis",
+   "name": "ΠΕΡΙΦΕΡΕΙΑ ΑΝΑΤΟΛΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ - ΘΡΑΚΗΣ",
+   "kind": "region",
+   "scope": "regional",
+   "afm": "997687965",
+   "municipality_code": null,
+   "aliases": [
+    "ΠΕΡΙΦΕΡΕΙΑ ΑΝΑΤΟΛΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ - ΘΡΑΚΗΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "tameio-dioikisis-diacheirisis-panepistimiakon-dason",
+   "name": "ΤΑΜΕΙΟ ΔΙΟΙΚΗΣΗΣ ΔΙΑΧΕΙΡΗΣΗΣ ΠΑΝΕΠΙΣΤΗΜΙΑΚΩΝ ΔΑΣΩΝ",
+   "kind": "other_public",
+   "scope": "national",
+   "afm": "090049639",
+   "municipality_code": null,
+   "aliases": [
+    "ΤΑΜΕΙΟ ΔΙΟΙΚΗΣΗΣ ΔΙΑΧΕΙΡΗΣΗΣ ΠΑΝΕΠΙΣΤΗΜΙΑΚΩΝ ΔΑΣΩΝ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": "ΑΠΘ fund managing the university forests (Περτούλι, Ταξιάρχης); user chose national over seat (2026-08-16)"
+  },
+  {
+   "key": "ypoyrgeio-agrotikis-anaptyxis-kai-trofimon",
+   "name": "ΥΠΟΥΡΓΕΙΟ ΑΓΡΟΤΙΚΗΣ ΑΝΑΠΤΥΞΗΣ ΚΑΙ ΤΡΟΦΙΜΩΝ",
+   "kind": "ministry",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΥΠΟΥΡΓΕΙΟ ΑΓΡΟΤΙΚΗΣ ΑΝΑΠΤΥΞΗΣ ΚΑΙ ΤΡΟΦΙΜΩΝ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  },
+  {
+   "key": "ypoyrgeio-ethnikis-amynas",
+   "name": "ΥΠΟΥΡΓΕΙΟ ΕΘΝΙΚΗΣ ΑΜΥΝΑΣ",
+   "kind": "ministry",
+   "scope": "national",
+   "afm": "090153025",
+   "municipality_code": null,
+   "aliases": [
+    "ΥΠΟΥΡΓΕΙΟ ΕΘΝΙΚΗΣ ΑΜΥΝΑΣ"
+   ],
+   "datasets": [
+    "dase"
+   ],
+   "note": null
+  },
+  {
+   "key": "ypoyrgeio-prostasias-toy-politi",
+   "name": "ΥΠΟΥΡΓΕΙΟ ΠΡΟΣΤΑΣΙΑΣ ΤΟΥ ΠΟΛΙΤΗ",
+   "kind": "ministry",
+   "scope": "national",
+   "afm": null,
+   "municipality_code": null,
+   "aliases": [
+    "ΥΠΟΥΡΓΕΙΟ ΠΡΟΣΤΑΣΙΑΣ ΤΟΥ ΠΟΛΙΤΗ"
+   ],
+   "datasets": [
+    "anadohoi"
+   ],
+   "note": null
+  }
+ ]
+}
