@@ -295,7 +295,10 @@
 				/>
 			{/each}
 		</svg>
-		{#if sites.length > 1}
+		<!-- controls show wherever zooming is possible: multi-site maps,
+		     any map with a clickable fire, and ALWAYS once zoomed in —
+		     click-to-zoom must never strand the reader without a way back -->
+		{#if sites.length > 1 || scars.length > 0 || zoom.k > 1}
 			<div class="zoomctl">
 				<button onclick={zoomIn} title="Zoom in" aria-label="Zoom in">+</button>
 				<button onclick={zoomOut} title="Zoom out" aria-label="Zoom out">−</button>
