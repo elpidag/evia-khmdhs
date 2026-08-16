@@ -718,6 +718,26 @@ def _overlay_coop_name(row: dict, names: dict[str, dict]) -> dict:
     return row
 
 
+def overlay_executor_names(executors: list[dict] | None,
+                           names: dict[str, dict]) -> list[dict] | None:
+    """Present each curated sponsor-project executor under the SAME name
+    its co-op carries on every /dase surface (DATA_DECISIONS 2026-08-16:
+    same ΑΦΜ → same name): for rows with a pinned `dase_vat`, the act's
+    verbatim spelling moves to `act_name` (evidence — it also stays in
+    the excerpt), `name` becomes the curated display_el and `name_en` is
+    added. Identity-unconfirmed rows (dase_vat null) keep the act name
+    alone. No-op with an empty names map (ΔΑΣΕ DB absent)."""
+    if not executors:
+        return executors
+    for e in executors:
+        d = names.get(e.get("dase_vat") or "")
+        if d:
+            e["act_name"] = e["name"]
+            e["name"] = d["el"]
+            e["name_en"] = d["en"]
+    return executors
+
+
 def dase_coops(dase: sqlite3.Connection, q: str | None = None,
                sort: str = "total_eur") -> list[dict]:
     """list_coops with the display names overlaid BEFORE the search filter,

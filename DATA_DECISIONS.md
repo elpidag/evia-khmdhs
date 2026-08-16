@@ -2373,3 +2373,26 @@ the shown window IS the frame and 0.35° clipped the Λιχάδα cape tip
 (west extent of upper Εύβοια: lon 22.8116). Verified: the 9 Β. Εύβοια
 cards render the scar at identical pixels (x 172-286, ~114x176) at
 column-driven heights 462-673.
+
+## 2026-08-16 - Executor co-ops present under their ΔΑΣΕ display names
+
+**Decision (user: for the ΔΑ.Σ.Ε. appearing in the sponsored works,
+«for the same ΑΦΜ we have to be represented with the same name» as the
+forest co-op works dataset).** Audit first: all 17 curated executor
+rows carrying a pinned `dase_vat` (13 projects) resolve into the ΔΑΣΕ
+dataset population AND have a curated display name in
+dase_display_names.json - zero data gaps; the 6 VAT-less rows are the
+documented identity-unconfirmed cases (Παντουρέ/Παπάδων not in the
+registry; Μίστρου x2 and Σιδηρονερίου/Περτουλίου ambiguous) and keep
+their verbatim act names - honestly unresolved, no invented identity.
+The discrepancy was presentational: anadohoi surfaces showed the acts'
+verbatim spellings (e.g. «ΔΑΣΕ Αγιοκάμπου Λαρίσας») while /dase shows
+«ΔΑ.Σ.Ε. ΑΓΙΟΚΑΜΠΟΥ». Now `queries_extra.overlay_executor_names`
+(applied on /api/anadohoi/overview + /api/anadohoi/project) swaps each
+pinned executor's `name` for the curated display_el (adding `name_en`,
+keeping the act's verbatim spelling as `act_name`), same mechanism and
+graceful-absence degradation as the /dase overlay; the acts' wording
+remains visible as evidence in the excerpt tooltips and the verbatim
+quotes block. A real-DB guard test pins the coverage (every pinned
+executor VAT must have a display name) so future executor curation
+cannot drift from the ΔΑΣΕ naming.

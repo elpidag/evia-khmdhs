@@ -604,7 +604,14 @@ evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
   Κυπριανός»). Known TODO: the Eurobank Ζώνη-5 evidence acts (6ΔΤ1…) are
   stored decisions with no `project_decisions` links. UI: /anadohoi
   executors section + project-page «Works executed by» (chips →
-  `/dase/coop/<vat>`).
+  `/dase/coop/<vat>`). Pinned executors PRESENT under their ΔΑΣΕ
+  display names (DATA_DECISIONS 2026-08-16, same ΑΦΜ → same name:
+  `queries_extra.overlay_executor_names` on both /api/anadohoi
+  endpoints swaps `name` for display_el + adds `name_en`, keeps the
+  act's verbatim spelling as `act_name` — still visible in excerpt
+  tooltips/quotes; degrades to act spellings without the ΔΑΣΕ DB);
+  VAT-less rows keep act names. Real-DB pin
+  `test_executor_display_name_pins` guards the coverage.
 - **Curated `works_zones`** (2026-08-12/13): 6 Εύβοια projects carry their
   digitised zone ids (basis: each act's basin citation; ΡΕΧΥ/ΔΕΔΔΗΕ = all
   NINE zones — its μελέτες table funds both Δασαρχεία, corrected

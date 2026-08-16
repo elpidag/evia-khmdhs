@@ -337,6 +337,42 @@ def test_meta_anadohoi_pin(client):
     assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_784_256.85}
 
 
+def test_executor_display_name_pins(client):
+    """Sponsor-project executors present under the SAME name as their
+    co-op's /dase surfaces (DATA_DECISIONS 2026-08-16, same ΑΦΜ → same
+    name): every pinned executor ΑΦΜ must have a curated display name
+    (coverage guard — new executor curation cannot drift from the ΔΑΣΕ
+    naming) and the API ships it, keeping the act spelling as evidence."""
+    import sqlite3
+    conn = sqlite3.connect(f"file:{DASE_DB.as_posix()}?mode=ro", uri=True)
+    names = {r[0]: (r[1], r[2]) for r in conn.execute(
+        "SELECT vat, display_el, display_en FROM dase_display_names")}
+    conn.close()
+
+    o = client.get("/api/anadohoi/overview").get_json()
+    rows = [(p["ada"], e) for p in o["projects"]
+            for e in (p["executors"] or [])]
+    pinned = [e for _, e in rows if e.get("dase_vat")]
+    assert pinned
+    for e in pinned:
+        assert e["dase_vat"] in names           # coverage guard
+        el, en = names[e["dase_vat"]]
+        assert e["name"] == el
+        assert e["name_en"] == en
+        assert e["act_name"]                    # act spelling kept
+    # identity-unconfirmed rows keep their verbatim act names untouched
+    for _, e in rows:
+        if not e.get("dase_vat"):
+            assert "act_name" not in e and e["name"]
+
+    # the project endpoint carries the same overlay
+    ada = next(a for a, e in rows if e.get("dase_vat"))
+    p = client.get(f"/api/anadohoi/project/{ada}").get_json()
+    exe = [e for e in p["executors"] if e.get("dase_vat")]
+    assert exe
+    assert all(e["name"] == names[e["dase_vat"]][0] for e in exe)
+
+
 def test_arogi_pins(client):
     m = client.get("/api/meta").get_json()
     assert m["arogi"]["n_cases"] == 956 and m["arogi"]["n_fires"] == 10

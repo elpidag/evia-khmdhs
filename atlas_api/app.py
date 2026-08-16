@@ -337,15 +337,28 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
 
     # ---------------------------------------------------------- anadohoi
 
+    def _dase_names():
+        """Curated co-op display names for the executor overlay — empty
+        when the ΔΑΣΕ DB is absent (executors then keep act spellings)."""
+        try:
+            return queries_extra.dase_display_names(_dase_conn())
+        except Exception:
+            return {}
+
     @app.route("/api/anadohoi/overview")
     def api_anadohoi_overview():
-        return jsonify(queries_extra.anadohoi_overview(_anadohoi_conn()))
+        out = queries_extra.anadohoi_overview(_anadohoi_conn())
+        names = _dase_names()
+        for p in out["projects"]:
+            queries_extra.overlay_executor_names(p.get("executors"), names)
+        return jsonify(out)
 
     @app.route("/api/anadohoi/project/<ada>")
     def api_anadohoi_project(ada: str):
         p = queries_extra.anadohoi_project(_anadohoi_conn(), ada)
         if p is None:
             abort(404)
+        queries_extra.overlay_executor_names(p.get("executors"), _dase_names())
         return jsonify(p)
 
     # ------------------------------------------------------------- arogi
