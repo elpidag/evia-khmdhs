@@ -22,6 +22,8 @@ export interface ContractDetail {
 	next_reference_no: string | null;
 	/** registry double-posting: the kept twin's ΑΔΑΜ (this row is excluded) */
 	duplicate_of?: string | null;
+	/** curated correction note (dase corrections) */
+	correction_note?: string | null;
 	/** ΑΔΑΜs of double-postings of THIS contract (kept side) */
 	duplicates?: string[];
 	bids_submitted: number | null;
@@ -77,7 +79,19 @@ export interface ContractDetail {
 		source: string;
 	} | null;
 	regions: { region_pe: string; source: string | null; note: string | null }[];
+	/** linked forest authorities with their office seats (detail map) */
+	authorities?: {
+		name: string;
+		source: string | null;
+		kind: string | null;
+		lat: number | null;
+		lon: number | null;
+		region_pe: string | null;
+		seat_precision: string | null;
+	}[];
 	sites: { site_name: string; region_pe: string; page: number | null; excerpt: string | null }[];
+	/** ΔΑΣΕ detail map geo (region + awarding-unit seat); absent on kh side */
+	geo?: { pe: string | null; unit_seat: { name: string; lat: number; lon: number } | null };
 	timeline: {
 		adam: string;
 		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract' | 'completion';

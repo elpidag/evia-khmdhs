@@ -8,14 +8,16 @@
 	import { loadEviaZones, loadPe, type FireProps, type PeProps, type ZoneProps } from './useGeo';
 
 	interface Props {
+		/** svg viewBox height — the detail template asks for a taller map */
+		height?: number;
 		zones: string[];
 		/** linked EFFIS burn-scar features (drawn under the zones) */
 		scars?: Feature<Polygon | MultiPolygon, FireProps>[];
 	}
-	let { zones, scars = [] }: Props = $props();
+	let { zones, scars = [], height = 340 }: Props = $props();
 
 	const W = 460;
-	const H = 340;
+	const H = $derived(height);
 
 	let pe = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
 	let fc = $state.raw<FeatureCollection<Polygon | MultiPolygon, ZoneProps> | null>(null);
@@ -96,17 +98,19 @@
 		margin: var(--sp-3) 0 var(--sp-2);
 		max-width: 460px;
 	}
+	/* same palette as the sponsored-works overview map:
+	   grey sea, white land, --line strokes */
 	svg {
 		width: 100%;
 		height: auto;
 		display: block;
-		background: #e8f1f5;
-		border: 1px solid var(--line);
+		background: #f2f2f2;
+		border: none;
 		border-radius: 4px;
 	}
 	.land {
-		fill: var(--paper-2);
-		stroke: var(--line-strong);
+		fill: #fff;
+		stroke: var(--line);
 		stroke-width: 0.7;
 	}
 	.scar {

@@ -863,6 +863,36 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   monthly appointment strip with fire markers, deadline-slip slope.
   `/anadohoi/project/[ada]` = decision trail with per-act Diavgeia PDFs +
   the verbatim-excerpt evidence block.
+- **Detail-page template** (2026-08-17, user mockups; refined 2026-08-16
+  session): the three detail pages (/anadohoi/project, /antinero/contract,
+  /dase/contract) share one skeleton — `$lib/detail/FactsHeader` (CAPS
+  label/value rows; the act-code VALUE mirrors its label exactly — the
+  display face at fs-18/700, because the futura Book face has no true
+  bold; qualifier `small` text inside a label renders like the value, not
+  CAPS; caveat spans the full facts width; no MAP corner label),
+  `DocTrail` (uniform date · type · code · title · pdf table, ENGLISH
+  type labels; the viewed document bold; optional `top` snippet between
+  heading and table), `QuoteList` (verbatim Greek excerpts + source act
+  links; same sp-8 breather as the trail) and `ActTimelineBar` (anadohoi:
+  the project's own PromiseGantt row — same programme axis + ganttTheme
+  palette, printed start/deadline dates — in the trail's `top` slot).
+  Contract pages add PROCUREMENT DETAILS OF <ΑΔΑΜ> (one-row wide table:
+  authority/unit/signer/funding, EN names) and PAYMENT ORDERS; dase keeps
+  the FamilyTree (Greek registry vocabulary — it matches on registry
+  names) and the duplicate banners; anadohoi keeps SiteMap/ZoneMap in the
+  map slot (height 460; sponsored-overview palette — #f2f2f2 sea, #fff
+  land, borderless; single-site frames pad to a ~30 km half-window; site
+  legend + «Θέσεις όπως…» line dropped — pins are labelled, sourcing
+  lives in the caveat; EFFIS scar line kept; the LocationCurator dev box
+  removed). KPI cards dropped. User decisions: AREA row = curated
+  στρέμματα (+ha) on anadohoi only; contracts show WORK REGIONS instead
+  (per-contract areas = future PDF-curation task); FIRE EVENT row only on
+  anadohoi; status «active» renders plain (chips for the rest); the Π.Ε.
+  is its own REGION row («R.U. <en>» · Δήμος); LOCATION text stays Greek
+  — the 69-entry EN translation proposal awaits user review (2026-08-16).
+  Contract maps: Π.Ε. highlight + authority/unit seat dots
+  (`queries_extra.contract_authorities`, `dase_contract_geo` payload
+  additions).
 - **Tests**: `tests/test_atlas_api.py` (+ `_queries_extra`, `_real_db` as
   they land) with pytest; frontend `cd atlas && npm run check && npm test`
   (vitest transform units incl. `format.ts` goldens that must equal

@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { bodyEn, devGreek, orgEn } from '$lib/transforms/names';
-	import { peEn, ruLabel } from '$lib/transforms/regions';
-	import KpiRow from '$lib/ui/KpiRow.svelte';
-	import StatPair from '$lib/ui/StatPair.svelte';
+	import { authEn, bodyEn, devGreek, orgEn } from '$lib/transforms/names';
+	import { ruLabel } from '$lib/transforms/regions';
+	import FactsHeader from '$lib/detail/FactsHeader.svelte';
+	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
+	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
+	import PaperMap from '$lib/maps/PaperMap.svelte';
+	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
 	import { scopeLabel } from '$lib/transforms/scopes';
 	import type { PageData } from './$types';
@@ -10,29 +13,29 @@
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.c);
 	const live = $derived(c.payments.filter((p) => !p.cancelled));
-	// category evidence provenance: the parent ADAM when the title was
-	// inherited from a previous version's PDF
 	const catSrcRef = $derived(
 		c.category?.source.startsWith('inherited:') ? c.category.source.slice(10) : null
 	);
 
-	const TIMELINE_KIND: Record<string, string> = {
-		request: 'Πρωτογενές αίτημα',
-		approved_request: 'Ανάληψη υποχρέωσης',
-		notice: 'Διακήρυξη / πρόσκληση',
-		auction: 'Κατακύρωση / ανάθεση',
-		contract: 'Σύμβαση',
-		completion: 'Ολοκλήρωση'
+	// English document-type labels (user template, 2026-08-17)
+	const KIND: Record<string, string> = {
+		request: 'Primary request',
+		approved_request: 'Commitment approval',
+		notice: 'Call / notice',
+		auction: 'Award',
+		contract: 'Contract',
+		completion: 'Completion'
 	};
-	const CKIND_LABEL: Record<string, string> = {
-		oristiki_paralavi: 'Οριστική παραλαβή',
-		paralavi: 'Πρωτόκολλο παραλαβής',
-		peraiosi: 'Βεβαίωση περαίωσης',
-		oloklirosi: 'Διαπιστωτική ολοκλήρωσης'
+	const CKIND: Record<string, string> = {
+		oristiki_paralavi: 'Completion — final acceptance',
+		paralavi: 'Completion — acceptance protocol',
+		peraiosi: 'Completion — certificate',
+		oloklirosi: 'Completion — statement'
 	};
-	const TIMELINE_ORDER: Record<string, number> = {
+	const ORDER: Record<string, number> = {
 		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4, completion: 5
 	};
+
 	const timeline = $derived.by(() => {
 		if (!c.timeline.length) return [];
 		const rows = c.timeline.map((t) => ({ ...t, self: false }));
@@ -46,12 +49,77 @@
 			self: true
 		});
 		rows.sort((a, b) =>
-			`${a.d ?? '9999'}${TIMELINE_ORDER[a.kind]}`.localeCompare(
-				`${b.d ?? '9999'}${TIMELINE_ORDER[b.kind]}`
-			)
+			`${a.d ?? '9999'}${ORDER[a.kind]}`.localeCompare(`${b.d ?? '9999'}${ORDER[b.kind]}`)
 		);
 		return rows;
 	});
+	const completion = $derived(timeline.find((t) => t.kind === 'completion'));
+
+	const pdfHref = (t: (typeof timeline)[number]): string | null => {
+		if (t.kind === 'completion') return `/pdf/diavgeia/${t.adam}`;
+		if (t.kind !== 'contract')
+			return `/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`;
+		return t.in_db ? `/pdf/contract/${t.adam}` : null;
+	};
+	const trailRows = $derived<TrailRow[]>(
+		timeline.map((t) => ({
+			d: t.d,
+			type:
+				t.kind === 'completion'
+					? (CKIND[t.ckind ?? ''] ?? KIND.completion)
+					: (KIND[t.kind] ?? t.kind) + (t.self ? ' — this document' : ''),
+			code: t.adam,
+			title: t.title ?? null,
+			pdf: pdfHref(t),
+			self: t.self,
+			chip: t.cancelled === 1 ? 'cancelled' : undefined
+		}))
+	);
+
+	const quotes = $derived<Quote[]>([
+		...(c.category
+			? [
+					{
+						label: 'Type of work — descriptive project title',
+						text: c.category.title,
+						code: catSrcRef ?? c.reference_number,
+						href: `/pdf/contract/${catSrcRef ?? c.reference_number}`,
+						note: catSrcRef
+							? `Stated in the signed PDF of the previous version ${catSrcRef}; this record's own document quotes only the parties or the amendment object.`
+							: "Stated verbatim in this contract's signed PDF — the classification evidence."
+					}
+				]
+			: []),
+		...c.sites
+			.filter((s) => s.excerpt)
+			.map((s) => ({
+				label: `Work site — ${s.site_name}`,
+				text: s.excerpt as string,
+				code: c.reference_number,
+				href: `/pdf/contract/${c.reference_number}`,
+				note: s.page ? `PDF p.${s.page}` : null
+			})),
+		...(completion?.end_excerpt
+			? [
+					{
+						label: 'Completion',
+						text: completion.end_excerpt,
+						code: completion.adam,
+						href: `/pdf/diavgeia/${completion.adam}`
+					}
+				]
+			: [])
+	]);
+
+	const regionSet = $derived(new Set(c.regions.map((r) => r.region_pe)));
+	const seatDots = $derived(
+		(c.authorities ?? []).filter((a) => a.lat != null && a.lon != null)
+	);
+
+	const CAVEAT =
+		"Work regions and named sites are curated from the contract's signed documents. The map " +
+		"highlights the contract's regional units and marks the seats of the awarding forest " +
+		'authorities; site positions below regional-unit level are not mapped.';
 </script>
 
 <svelte:head>
@@ -67,18 +135,131 @@
 
 <p class="crumb"><a href="/antinero/contracts">← Anti-nero contracts</a></p>
 
-<hgroup>
-	<h1>{c.title ?? c.reference_number}</h1>
-	<p class="muted tabular">
-		ADAM {c.reference_number} · signed {(c.contract_signed_date ?? '—').slice(0, 10)}
-		{#if c.scope}· <span class="chip">{scopeLabel(c.scope.scope)}</span>
-			{#if !c.scope.in_scope}<span class="chip bad">out of scope</span>{/if}
-		{/if}
-		{#if c.category}<span class="chip cat" title={c.category.note ?? ''}>{c.category.label}</span>{/if}
-		{#if c.cancelled}<span class="chip bad">cancelled</span>{/if}
-		{#if c.bids_submitted === 1}<span class="chip warn">single bidder</span>{/if}
-	</p>
-</hgroup>
+<FactsHeader caveat={CAVEAT}>
+	{#snippet facts()}
+		<dt class="id">Contract (ΑΔΑΜ)</dt>
+		<dd class="id">
+			{c.reference_number}
+			{#if c.scope && !c.scope.in_scope}<span class="chip bad">out of scope</span>{/if}
+			{#if c.scope?.scope === 'antinero_probable'}<span class="chip warn"
+					>{scopeLabel(c.scope.scope)}</span
+				>{/if}
+		</dd>
+		<dt>Date</dt>
+		<dd>{(c.contract_signed_date ?? '—').slice(0, 10)}</dd>
+		<dt>Contractor</dt>
+		<dd>
+			{#each c.contractors as ct, i (ct.vat_number)}
+				{#if i}, {/if}<a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a>
+			{/each}
+			{#if c.contractors.length > 1}
+				<br /><small class="muted"
+					>consortium — each partner is credited the full value in per-contractor views</small
+				>
+			{/if}
+		</dd>
+		<dt>Procedure</dt>
+		<dd>
+			{c.procedure_type ?? '—'}
+			{#if c.bids_submitted === 1}<span class="chip warn">single bidder</span>{/if}
+		</dd>
+		<dt>Budget <small class="muted">(excl. VAT)</small></dt>
+		<dd>
+			{eurShort(c.total_cost_without_vat ?? 0)}
+			{#if c.gross?.stated_gross}<small class="muted"
+					>· {eurShort(c.gross.stated_gross)} incl. ΦΠΑ</small
+				>{/if}
+		</dd>
+		<dt>Type</dt>
+		<dd>
+			{#if c.category}<span class="chip cat" title={c.category.note ?? ''}
+					>{c.category.label}</span
+				>{:else}—{/if}
+		</dd>
+		<dt>Scope</dt>
+		<dd>{c.category?.key === 'meletes' ? 'study' : 'works'}</dd>
+		<dt>Awarding unit</dt>
+		<dd>
+			{#if c.authorities?.length}
+				{#each c.authorities as a, i (a.name)}
+					{#if i}, {/if}<span title={devGreek(a.name)}>{authEn(a.name)}</span>
+				{/each}
+			{:else}
+				<span title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</span>
+			{/if}
+		</dd>
+		<dt class="gap"></dt>
+		<dd class="gap"></dd>
+		<dt>Work regions</dt>
+		<dd>
+			{#if c.regions.length}
+				{#each c.regions as r, i (i)}{#if i}, {/if}{ruLabel(r.region_pe)}{/each}
+				{#if c.sites.length}
+					<small class="muted"> · {grInt(c.sites.length)} named site(s) below</small>
+				{/if}
+			{:else}
+				—
+			{/if}
+		</dd>
+		<dt>Duration</dt>
+		<dd>
+			{c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'}
+			<small class="muted"
+				>{(c.start_date ?? '—').slice(0, 10)} → {(c.end_date ?? 'open').slice(0, 10)}</small
+			>
+		</dd>
+		<dt>Amendments to initial contract</dt>
+		<dd>
+			{#if c.prev_reference_no || c.next_reference_no}
+				yes
+				{#if c.prev_reference_no}
+					<small class="muted"
+						>· previous <a class="tabular" href={`/antinero/contract/${c.prev_reference_no}`}
+							>{c.prev_reference_no}</a
+						></small
+					>
+				{/if}
+				{#if c.next_reference_no}
+					<small class="muted"
+						>· next <a class="tabular" href={`/antinero/contract/${c.next_reference_no}`}
+							>{c.next_reference_no}</a
+						></small
+					>
+				{/if}
+			{:else}
+				no
+			{/if}
+		</dd>
+		<dt>Status</dt>
+		<dd>
+			{#if c.cancelled}
+				<span class="chip bad">cancelled</span>
+			{:else if completion}
+				<span class="chip ok">completed</span>
+				<small class="muted">{completion.d ?? ''}</small>
+			{:else}
+				no completion recorded
+			{/if}
+		</dd>
+	{/snippet}
+	{#snippet map()}
+		<PaperMap
+			interactive={false}
+			colorOf={(pe) => (regionSet.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, #fff)' : '#fff')}
+			tipOf={(pe) => `<strong>${ruLabel(pe)}</strong>`}
+		>
+			{#snippet overlay(ctx)}
+				<DotLayer
+					{ctx}
+					points={seatDots.map((a) => ({ ...a, lat: a.lat!, lon: a.lon! }))}
+					r={4}
+					fillOf={() => 'var(--c-antinero)'}
+					tipOf={(a) => `<strong>${authEn(String(a.name))}</strong><br>awarding forest authority seat`}
+				/>
+			{/snippet}
+		</PaperMap>
+	{/snippet}
+</FactsHeader>
 
 <p>
 	<a class="pdf" href={`/pdf/contract/${c.reference_number}`} target="_blank" rel="noopener">
@@ -87,81 +268,82 @@
 	<small class="muted">fetched from KHMDHS once, then served from the local cache</small>
 </p>
 
-<KpiRow>
-	<StatPair
-		value={eurShort(c.total_cost_without_vat ?? 0)}
-		label="stated value (excl. VAT)"
-		compare={c.gross?.stated_gross ? `${eurShort(c.gross.stated_gross)} incl. ΦΠΑ` : ''}
-		basis="the analytic basis across the site"
-		color="var(--c-antinero)"
-	/>
-	<StatPair
-		value={String(live.length)}
-		label="payment orders"
-		compare={c.paid_without_vat !== null
-			? `${eurShort(c.paid_without_vat)} paid net${
-					c.gross?.paid_gross ? ` · ${eurShort(c.gross.paid_gross)} incl. ΦΠΑ` : ''
-				}`
-			: 'none recorded'}
-	/>
-	<StatPair
-		value={c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'}
-		label="duration"
-		compare="{(c.start_date ?? '—').slice(0, 10)} → {(c.end_date ?? 'open').slice(0, 10)}"
-	/>
-</KpiRow>
-
-{#if c.category}
-	<section>
-		<h2>Type of work</h2>
-		<p>
-			<span class="chip cat">{c.category.label}</span>
-			{#if c.category.note}<small class="muted">{c.category.note}</small>{/if}
-		</p>
-		<blockquote class="excerpt">«{c.category.title}»</blockquote>
-		<p class="muted">
-			<small>
-				The project title above is the classification evidence —
-				{#if catSrcRef}
-					stated in the signed PDF of the contract's previous version
-					<a class="tabular" href={`/antinero/contract/${catSrcRef}`}>{catSrcRef}</a>
-					(<a href={`/pdf/contract/${catSrcRef}`} target="_blank" rel="noopener">PDF</a>);
-					this record's own document quotes only the parties or the amendment object.
-				{:else}
-					stated verbatim in this contract's signed PDF.
-				{/if}
-				One curated category per contract; see the
-				<a href="/methodology#categories">methodology</a>.
-			</small>
-		</p>
-	</section>
+<DocTrail rows={trailRows} />
+{#if !timeline.length}
+	<p class="muted">
+		ΚΗΜΔΗΣ links no upstream acts (αίτημα, διακήρυξη, κατακύρωση) to this contract — the
+		registry's chain returns none, a linkage gap common across the programme's direct awards.
+	</p>
 {/if}
 
-<section>
-	<h2>Contractors ({c.contractors.length})</h2>
-	<table>
-		<tbody>
-			{#each c.contractors as ct (ct.vat_number)}
+<section class="tplsec">
+	<h2>Procurement details of {c.reference_number}</h2>
+	<div class="scrollx">
+		<table class="listing">
+			<thead>
 				<tr>
-					<td><a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a></td>
-					<td class="tabular muted">{ct.vat_number}</td>
-					<td class="muted">{ct.country ?? ''}</td>
+					<th>date</th>
+					<th>type of document</th>
+					<th>document code (ΑΔΑΜ)</th>
+					<th>title</th>
+					<th>contracting authority</th>
+					<th>operating unit</th>
+					<th>signer</th>
+					<th>funding</th>
 				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="tabular nowrap">{(c.contract_signed_date ?? '—').slice(0, 10)}</td>
+					<td>Contract</td>
+					<td class="tabular nowrap">{c.reference_number}</td>
+					<td>{c.title ?? '—'}</td>
+					<td title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</td>
+					<td title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</td>
+					<td>{c.signer_name ?? '—'}</td>
+					<td class="tabular">{c.public_funding_ref ?? '—'}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<dl class="facts more">
+		<div><dt>Award basis</dt><dd>{c.award_procedure ?? '—'}</dd></div>
+		<div><dt>Registry type</dt><dd>{c.contract_type ?? '—'}</dd></div>
+		<div><dt>Legal framework</dt><dd>{c.legal_context ?? '—'}</dd></div>
+		<div><dt>Bids</dt><dd>{c.bids_submitted ?? '—'}</dd></div>
+	</dl>
+	{#if c.cpvs.length}
+		<h3>CPV</h3>
+		<ul>
+			{#each c.cpvs.slice(0, 12) as cpv, i (i)}
+				<li><span class="tabular">{cpv.cpv_code}</span> {cpv.cpv_description ?? ''}</li>
 			{/each}
-		</tbody>
-	</table>
-	{#if c.contractors.length > 1}
-		<p class="muted"><small>Consortium — each partner is credited the full value in per-contractor views.</small></p>
+			{#if c.cpvs.length > 12}<li class="muted">… {grInt(c.cpvs.length - 12)} more</li>{/if}
+		</ul>
+	{/if}
+	{#if c.sites.length}
+		<h3>Named work sites</h3>
+		<table>
+			<thead><tr><th>site</th><th>regional unit</th></tr></thead>
+			<tbody>
+				{#each c.sites as s, i (i)}
+					<tr>
+						<td>{s.site_name}</td>
+						<td>{ruLabel(s.region_pe)}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
 	{/if}
 </section>
 
 {#if live.length}
-	<section>
+	<section class="tplsec">
 		<h2>Payment orders</h2>
 		<table>
 			<thead>
 				<tr
-					><th>Date</th><th>Order</th><th class="num">Amount (net)</th><th class="num"
+					><th>date</th><th>order</th><th class="num">amount (net)</th><th class="num"
 						>incl. ΦΠΑ</th
 					><th></th></tr
 				>
@@ -174,7 +356,9 @@
 							<span class="tabular">{p.payment_ref}</span>
 							{#if p.credit}<span class="chip">credit</span>{/if}
 							{#if p.cancelled}<span class="chip bad">cancelled</span>{/if}
-							{#if p.correction_note}<span class="chip warn" title={p.correction_note}>corrected</span>{/if}
+							{#if p.correction_note}<span class="chip warn" title={p.correction_note}
+									>corrected</span
+								>{/if}
 						</td>
 						<td class="num">{eur(p.amount_without_vat ?? p.amount_with_vat)}</td>
 						<td class="num muted"
@@ -187,238 +371,94 @@
 						<td>
 							<a href={`/pdf/payment/${p.payment_ref}`} target="_blank" rel="noopener">PDF</a>
 							{#if p.ada}
-								· <a href={`https://diavgeia.gov.gr/decision/view/${p.ada}`} target="_blank" rel="noopener">Διαύγεια</a>
+								· <a
+									href={`https://diavgeia.gov.gr/decision/view/${p.ada}`}
+									target="_blank"
+									rel="noopener">Διαύγεια</a
+								>
 							{/if}
 						</td>
 					</tr>
 				{/each}
 			</tbody>
 		</table>
+		<p class="muted">
+			<small
+				>{grInt(live.length)} live orders · {c.paid_without_vat !== null
+					? `${eurShort(c.paid_without_vat)} paid net`
+					: ''}{c.gross?.paid_gross ? ` · ${eurShort(c.gross.paid_gross)} incl. ΦΠΑ` : ''}</small
+			>
+		</p>
 	</section>
 {/if}
 
-<section>
-	<h2>Where the work is</h2>
-	{#if c.regions.length}
-		<p>
-			{#each c.regions as r, i (i)}{#if i}, {/if}{ruLabel(r.region_pe)}{/each}
-		</p>
-	{:else}
-		<p class="muted">No curated project regions.</p>
-	{/if}
-	{#if c.sites.length}
-		<table>
-			<thead><tr><th>Named site</th><th>R.U.</th><th>Evidence</th></tr></thead>
-			<tbody>
-				{#each c.sites as s, i (i)}
-					<tr>
-						<td>{s.site_name}</td>
-						<td>{peEn(s.region_pe)}</td>
-						<td class="muted"><small>PDF p.{s.page}{s.excerpt ? ` — «${s.excerpt}»` : ''}</small></td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	{/if}
-</section>
-
-<section>
-	<h2>Procurement record</h2>
-	<dl class="facts">
-		<div><dt>Authority</dt><dd title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</dd></div>
-		<div><dt>Operating unit</dt><dd title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</dd></div>
-		<div><dt>Signer</dt><dd>{c.signer_name ?? '—'}</dd></div>
-		<div><dt>Procedure</dt><dd>{c.procedure_type ?? '—'}</dd></div>
-		<div><dt>Award basis</dt><dd>{c.award_procedure ?? '—'}</dd></div>
-		<div><dt>Type</dt><dd>{c.contract_type ?? '—'}</dd></div>
-		<div><dt>Legal framework</dt><dd>{c.legal_context ?? '—'}</dd></div>
-		<div><dt>Funding</dt><dd>{c.public_funding_ref ?? '—'}</dd></div>
-		<div><dt>Bids</dt><dd>{c.bids_submitted ?? '—'}</dd></div>
-	</dl>
-	{#if c.cpvs.length}
-		<h3>CPV</h3>
-		<ul>
-			{#each c.cpvs.slice(0, 12) as cpv, i (i)}
-				<li><span class="tabular">{cpv.cpv_code}</span> {cpv.cpv_description ?? ''}</li>
-			{/each}
-			{#if c.cpvs.length > 12}<li class="muted">… {grInt(c.cpvs.length - 12)} more</li>{/if}
-		</ul>
-	{/if}
-</section>
-
-<section>
-	{#if timeline.length}
-		<h2>Procurement timeline ({timeline.length} acts)</h2>
-		<p class="muted">
-			The contract's full ΚΗΜΔΗΣ family — αίτημα → πρόσκληση → κατακύρωση → συμβάσεις,
-			chronological. Payment orders are listed above.
-		</p>
-		<table class="listing">
-			<thead>
-				<tr><th>Date</th><th>Act</th><th>Title</th><th>PDF</th></tr>
-			</thead>
-			<tbody>
-				{#each timeline as t (t.adam)}
-					<tr class:cancelled={t.cancelled === 1} class:self={t.self}>
-						<td class="tabular muted">{t.d ?? '—'}</td>
-						<td>
-							<span
-								class="chip"
-								class:hl={t.kind === 'auction' || t.self}
-								class:ok={t.kind === 'completion'}
-								>{t.kind === 'completion'
-									? (CKIND_LABEL[t.ckind ?? ''] ?? TIMELINE_KIND.completion)
-									: (TIMELINE_KIND[t.kind] ?? t.kind)}</span
-							>
-							<br /><small class="tabular muted">{t.adam}</small>
-						</td>
-						<td>
-							<small>
-								{#if t.self}
-									<strong>this contract</strong>
-								{:else if t.kind === 'contract' && t.in_db}
-									<a href={`/antinero/contract/${t.adam}`}>{t.title ?? t.adam}</a>
-								{:else}
-									{t.title ?? '—'}
-									{#if t.kind === 'contract'}<span class="muted">(εκτός dataset)</span>{/if}
-								{/if}
-								{#if t.cancelled === 1}<span class="chip bad">cancelled</span>{/if}
-								{#if t.kind === 'completion' && t.end_excerpt}
-									<blockquote class="excerpt">«{t.end_excerpt}»</blockquote>
-								{:else if t.kind === 'completion' && t.end_basis === 'act_date'}
-									<br /><span class="muted">(ημερομηνία πράξης — το πρωτόκολλο δεν χρονολογείται στο κείμενο)</span>
-								{/if}
-							</small>
-						</td>
-						<td class="nowrap">
-							{#if t.kind === 'completion'}
-								<a href={`/pdf/diavgeia/${t.adam}`} target="_blank" rel="noopener">📄 PDF</a>
-								<br /><a
-									class="ext"
-									href={`https://diavgeia.gov.gr/decision/view/${t.adam}`}
-									target="_blank"
-									rel="noopener"><small>Diavgeia ↗</small></a
-								>
-							{:else if t.kind !== 'contract'}
-								<a
-									href={`/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`}
-									target="_blank"
-									rel="noopener">📄 PDF</a
-								>
-							{:else if t.in_db}
-								<a href={`/pdf/contract/${t.adam}`} target="_blank" rel="noopener">📄 PDF</a>
-							{/if}
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	{:else}
-		<h2>Procurement timeline</h2>
-		<p class="muted">
-			ΚΗΜΔΗΣ links no upstream acts (αίτημα, διακήρυξη, κατακύρωση) to this contract — the
-			registry's chain returns none, a linkage gap common across the programme's direct
-			awards.
-		</p>
-	{/if}
-</section>
-
-{#if c.prev_reference_no || c.next_reference_no || c.scope?.superseded_by || c.notice_reference_number}
-	<section>
-		<h2>Amendment chain</h2>
-		<ul>
-			{#if c.notice_reference_number}
-				<li>Tender notice: <span class="tabular">{c.notice_reference_number}</span></li>
-			{/if}
-			{#if c.prev_reference_no}
-				<li>
-					Previous version:
-					<a class="tabular" href={`/antinero/contract/${c.prev_reference_no}`}>{c.prev_reference_no}</a>
-				</li>
-			{/if}
-			{#if c.next_reference_no}
-				<li>
-					Next version:
-					<a class="tabular" href={`/antinero/contract/${c.next_reference_no}`}>{c.next_reference_no}</a>
-				</li>
-			{/if}
-			{#if c.scope?.superseded_by && c.scope.superseded_by !== c.next_reference_no}
-				<li>
-					Superseded by:
-					<a class="tabular" href={`/antinero/contract/${c.scope.superseded_by}`}>{c.scope.superseded_by}</a>
-				</li>
-			{/if}
-		</ul>
-	</section>
-{/if}
+<QuoteList {quotes} />
 
 <style>
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);
 	}
-	section {
-		margin-bottom: var(--sp-8);
+	.tplsec h2 {
+		font-family: var(--font-display);
+		font-weight: 900;
+		text-transform: uppercase;
+		font-size: var(--fs-18);
 	}
-	.pdf {
-		font-weight: 600;
+	.tplsec {
+		margin-top: var(--sp-8);
 	}
-	.facts {
+	.scrollx {
+		overflow-x: auto;
+	}
+	.facts.more {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-		gap: var(--sp-2) var(--sp-6);
-		margin: 0;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: var(--sp-2) var(--sp-4);
+		margin-top: var(--sp-3);
 	}
-	.facts dt {
+	.facts.more dt {
+		color: var(--ink-soft);
 		font-size: var(--fs-12);
+	}
+	.facts.more dd {
+		margin: 0;
+		font-size: var(--fs-13);
+	}
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--fs-13);
+	}
+	th {
+		text-align: left;
+		font-weight: 400;
+		color: var(--ink-soft);
+		padding: 6px 10px 6px 0;
+		border-bottom: 1px solid var(--line-strong, var(--line));
+	}
+	td {
+		padding: 8px 10px 8px 0;
+		border-bottom: 1px solid var(--line);
+		vertical-align: top;
+	}
+	.num {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	.nowrap {
+		white-space: nowrap;
+	}
+	.dead td {
 		color: var(--ink-faint);
 	}
-	.facts dd {
-		margin: 0 0 var(--sp-2);
-		font-size: var(--fs-14);
-	}
-	tr.dead {
-		opacity: 0.55;
+	.chip.cat {
+		background: color-mix(in srgb, var(--c-antinero) 12%, #fff);
 	}
 	.muted {
 		color: var(--ink-soft);
 	}
-	td a {
-		text-decoration: none;
-	}
-	td a:hover {
-		text-decoration: underline;
-	}
-	.chip.hl {
-		background: var(--c-antinero);
-		color: #fff;
-		border-color: var(--c-antinero);
-	}
-	.chip.cat {
-		background: var(--paper-2);
-		border-color: var(--ink);
-		color: var(--ink);
-		font-weight: 600;
-	}
-	.chip.ok {
-		background: var(--c-anadohoi);
-		color: #fff;
-		border-color: var(--c-anadohoi);
-	}
-	.excerpt {
-		margin: var(--sp-1) 0 0;
-		padding-left: var(--sp-2);
-		border-left: 2px solid var(--line-strong);
-		color: var(--ink-soft);
-		font-style: italic;
-	}
-	tr.self {
-		background: color-mix(in srgb, var(--c-antinero) 7%, transparent);
-	}
-	tr.cancelled {
-		opacity: 0.55;
-	}
-	.nowrap {
-		white-space: nowrap;
+	.pdf {
+		font-weight: 700;
 	}
 </style>

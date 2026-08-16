@@ -232,6 +232,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["timeline"] = queries_extra.contract_timeline(g.conn, adam)
         d["gross"] = queries_extra.contract_gross(pay, adam)
         d["category"] = queries_extra.contract_category(g.conn, adam)
+        d["authorities"] = queries_extra.contract_authorities(g.conn, adam)
         return jsonify(d)
 
     @app.route("/api/antinero/contractors")
@@ -302,6 +303,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["duplicates"] = [r[0] for r in conn.execute(
             "SELECT reference_number FROM contracts WHERE duplicate_of = ?",
             (adam,))]
+        d["geo"] = queries_extra.dase_contract_geo(conn, g.conn, adam)
         # curated display names ADDED per contractor (name keeps the registry
         # spelling — the FamilyTree matches siblings on registry names)
         names = queries_extra.dase_display_names(conn)

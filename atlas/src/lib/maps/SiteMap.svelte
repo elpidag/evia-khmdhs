@@ -18,14 +18,16 @@
 		municipality?: string | null;
 	}
 	interface Props {
+		/** svg viewBox height — the detail template asks for a taller map */
+		height?: number;
 		sites: SitePin[];
 		/** linked EFFIS burn-scar features (already filtered by id) */
 		scars?: Feature<Polygon | MultiPolygon, FireProps>[];
 	}
-	let { sites, scars = [] }: Props = $props();
+	let { sites, scars = [], height = 340 }: Props = $props();
 
 	const W = 460;
-	const H = 340;
+	const H = $derived(height);
 	const APPROX = new Set(['municipality', 'pe']);
 
 	let pe = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
@@ -51,9 +53,10 @@
 			x1 = Math.max(x1, b[1][0]);
 			y1 = Math.max(y1, b[1][1]);
 		}
-		// pad proportionally; single-site maps get a fixed ~14 km half-window
-		const padx = Math.max((x1 - x0) * 0.18, 0.13);
-		const pady = Math.max((y1 - y0) * 0.18, 0.1);
+		// pad proportionally; single-site maps get a fixed ~30 km half-window
+		// so a slice of the surrounding region stays in frame
+		const padx = Math.max((x1 - x0) * 0.18, 0.35);
+		const pady = Math.max((y1 - y0) * 0.18, 0.27);
 		// ring wound CLOCKWISE — d3-geo spherical polygons invert otherwise
 		const frame = {
 			type: 'Polygon' as const,
@@ -109,33 +112,22 @@
 				<text {x} y={y - 10} class="lbl">{s.name}</text>
 			{/each}
 		</svg>
-		<figcaption>
-			{#each sites as s, i (i)}
-				<span class="sl"
-					><i class:approx={APPROX.has(s.geo_precision ?? '')}></i>{s.name}{s.municipality
-						? ` — Δ. ${s.municipality}`
-						: ''}{APPROX.has(s.geo_precision ?? '') ? ' (κέντρο δήμου, κατά προσέγγιση)' : ''}</span
-				>
-			{/each}
-			{#each scars as f (f.properties.id)}
-				<span class="fl"
-					><i></i>Αποτύπωμα πυρκαγιάς EFFIS {f.properties.yr} — {grInt(f.properties.ha)} εκτάρια
-					({f.properties.name})</span
-				>
-			{/each}
-			{#if sites.length}
-				<span class="src"
-					>Θέσεις όπως τις ονομάζουν οι πράξεις· ο γεωεντοπισμός τεκμηριώνεται ανά θέση
-					(methodology).</span
-				>
-			{/if}
-			{#if scars.length}
+		<!-- site names label their own pins; the sourcing note lives in the
+		     FactsHeader caveat — only scar data + its estimates caveat remain -->
+		{#if scars.length}
+			<figcaption>
+				{#each scars as f (f.properties.id)}
+					<span class="fl"
+						><i></i>Αποτύπωμα πυρκαγιάς EFFIS {f.properties.yr} — {grInt(f.properties.ha)} εκτάρια
+						({f.properties.name})</span
+					>
+				{/each}
 				<span class="src"
 					>Περίμετροι πυρκαγιών: δορυφορικές εκτιμήσεις, όχι οριοθετήσεις — © European Union,
 					Copernicus Emergency Management Service — EFFIS.</span
 				>
-			{/if}
-		</figcaption>
+			</figcaption>
+		{/if}
 	</figure>
 {/if}
 
@@ -144,17 +136,19 @@
 		margin: var(--sp-3) 0 var(--sp-2);
 		max-width: 460px;
 	}
+	/* same palette as the sponsored-works overview map:
+	   grey sea, white land, --line strokes */
 	svg {
 		width: 100%;
 		height: auto;
 		display: block;
-		background: #e8f1f5;
-		border: 1px solid var(--line);
+		background: #f2f2f2;
+		border: none;
 		border-radius: 4px;
 	}
 	.land {
-		fill: var(--paper-2);
-		stroke: var(--line-strong);
+		fill: #fff;
+		stroke: var(--line);
 		stroke-width: 0.7;
 	}
 	.scar {
@@ -197,19 +191,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
-	}
-	.sl i {
-		display: inline-block;
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
-		background: var(--c-anadohoi);
-		opacity: 0.85;
-		margin-right: 6px;
-	}
-	.sl i.approx {
-		opacity: 0.4;
-		outline: 1px dashed var(--c-anadohoi);
 	}
 	.fl i {
 		display: inline-block;

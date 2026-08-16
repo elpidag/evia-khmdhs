@@ -658,6 +658,43 @@ def dase_kpis(dase: sqlite3.Connection) -> dict:
 
 # ------------------------------------------------------- ΔΑΣΕ display names
 
+def contract_authorities(kh: sqlite3.Connection, adam: str) -> list[dict]:
+    """The contract's linked forest authorities with their seats — feeds
+    the detail-page map (template rebuild, 2026-08-17)."""
+    rows = kh.execute("""
+        SELECT cfa.authority_name AS name, cfa.source, fa.kind,
+               fa.lat, fa.lon, fa.region_pe, fa.seat_precision
+        FROM contract_forest_authorities cfa
+        LEFT JOIN forest_authorities fa ON fa.name = cfa.authority_name
+        WHERE cfa.reference_number = ?
+        ORDER BY cfa.seq""", (adam,)).fetchall()
+    return [dict(r) for r in rows]
+
+
+def dase_contract_geo(dase: sqlite3.Connection, kh: sqlite3.Connection,
+                      adam: str) -> dict:
+    """Region + awarding-unit seat for a ΔΑΣΕ contract's detail map."""
+    pe = None
+    row = dase.execute(
+        "SELECT region_pe FROM dase_contract_regions WHERE reference_number = ?",
+        (adam,)).fetchone()
+    if row:
+        pe = row["region_pe"]
+    unit = dase.execute(
+        "SELECT units_operator_name FROM contracts WHERE reference_number = ?",
+        (adam,)).fetchone()
+    seat = None
+    if unit and unit["units_operator_name"]:
+        f = " ".join(_fold_upper(unit["units_operator_name"]).split())
+        hit = kh.execute(
+            "SELECT name, lat, lon FROM forest_authorities").fetchall()
+        for r in hit:
+            if " ".join(_fold_upper(r["name"]).split()) == f and r["lat"]:
+                seat = {"name": r["name"], "lat": r["lat"], "lon": r["lon"]}
+                break
+    return {"pe": pe, "unit_seat": seat}
+
+
 def dase_display_names(dase: sqlite3.Connection) -> dict[str, dict]:
     """Canonical ΑΦΜ → curated bilingual display names (dase_names_loader,
     DATA_DECISIONS 2026-08-15). Empty when the table is absent — every
