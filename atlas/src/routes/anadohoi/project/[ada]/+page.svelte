@@ -100,6 +100,17 @@
 		return pins;
 	});
 	const hasTrueSize = $derived(sitePins.some((s) => s.stremmata));
+	// two-pin zone cards with an announced total area (no per-site split)
+	// draw the schematic capsule containing both sites at that area
+	const capsuleArea = $derived(
+		sitePins.length === 2 && !hasTrueSize && p.area_stremmata ? p.area_stremmata : null
+	);
+	// which digitisation sheets the project's zones come from (pdf links)
+	const zoneSheets = $derived.by(() => {
+		const s = new Set<string>();
+		for (const z of worksZones ?? []) s.add(z.startsWith('limni') ? '1' : '2');
+		return [...s].sort();
+	});
 	const scarIds = $derived(
 		new Set((Array.isArray(p.effis_scars) ? p.effis_scars : []).map((s) => s.id))
 	);
@@ -249,11 +260,12 @@
 			}))
 	]);
 
-	// zone cards explain the digitised areas; dot cards explain the dots
+	// zone cards explain the digitised areas; the dot wording appears
+	// whenever dots are on the map (incl. dots drawn over a zone map)
 	const CAVEAT = $derived(
 		'LOCATION quotes the designation act, which may name more areas than the follow-up ' +
 			'documents cover. ' +
-			(worksZones?.length
+			(worksZones?.length && !sitePins.length
 				? ''
 				: 'Each dot is a work site NAMED in a document of the trail, placed by geocoding ' +
 					'that name: at the named θέση where the document gives one, at the ' +
@@ -297,9 +309,15 @@
 
 	{#snippet zoneSource()}
 		The areas of the projects are sourced by documents provided by the Evia Forest Directorate
-		(<a href="/pdf/zonesource/1" target="_blank" rel="noopener">pdf1</a>,
-		<a href="/pdf/zonesource/2" target="_blank" rel="noopener">pdf2</a>) after a formal request
-		regarding works that followed the fires of August 2021.
+		({#each zoneSheets as k, i (k)}{#if i}{', '}{/if}<a
+				href={`/pdf/zonesource/${k}`}
+				target="_blank"
+				rel="noopener">{zoneSheets.length === 1 ? 'pdf' : `pdf${i + 1}`}</a
+			>{/each}) after a formal request regarding works that followed the fires of August 2021.
+		{#if capsuleArea}
+			The shaded band is schematic: the smallest area containing the named sites, drawn at the
+			announced intervention size — the documents state no boundaries.
+		{/if}
 	{/snippet}
 	<FactsHeader
 		caveat={CAVEAT}
@@ -376,7 +394,18 @@
 			<dd>{p.location_text ?? '—'}</dd>
 		{/snippet}
 		{#snippet map()}
-			{#if sitePins.length || (scarFeats.length && !worksZones?.length)}
+			<!-- ONE map per card: zone projects draw their pinned sites ON
+			     the zone map instead of a second SiteMap -->
+			{#if worksZones?.length}
+				<ZoneMap
+					zones={worksZones}
+					scars={scarFeats}
+					height={mapH}
+					sites={sitePins}
+					pinColor={barColor}
+					areaStremmata={capsuleArea}
+				/>
+			{:else if sitePins.length || scarFeats.length}
 				<SiteMap
 					sites={sitePins}
 					scars={scarFeats}
@@ -386,9 +415,6 @@
 					rivers={riverFeats}
 					pinColor={barColor}
 				/>
-			{/if}
-			{#if worksZones?.length}
-				<ZoneMap zones={worksZones} scars={scarFeats} height={mapH} />
 			{/if}
 		{/snippet}
 	</FactsHeader>
