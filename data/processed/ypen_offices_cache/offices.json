@@ -1,0 +1,1934 @@
+[
+ {
+  "inspectorate": "aigaiou",
+  "name": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΑΙΓΑΙΟΥ",
+  "street": "Ακτή Μιαούλη 83 & Μπότσαρη 2-8",
+  "tk": "18538",
+  "city": "Πειραιάς",
+  "phones": [
+   "2131311301"
+  ],
+  "emails": [
+   "eedp@eedpaig.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "aigaiou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ",
+  "street": "Ακτή Μιαούλη 83 & Μπότσαρη 2-8",
+  "tk": "18538",
+  "city": "Πειραιάς",
+  "phones": [
+   "2131311302"
+  ],
+  "emails": [
+   "eedp@eedpaig.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "aigaiou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΔΩΔΕΚΑΝΗΣΟΥ",
+  "street": "Γ. Μαύρου 2",
+  "tk": "85100",
+  "city": "Ρόδος",
+  "phones": [],
+  "emails": [
+   "dnsi-dason-dodsou@eedpaig.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "aigaiou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΥΚΛΑΔΩΝ",
+  "street": "Κλώνου & Κ. Στεφάνου 8",
+  "tk": "84100",
+  "city": "Ερμούπολη",
+  "phones": [],
+  "emails": [
+   "ddkykl@eedpaig.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "aigaiou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΛΕΣΒΟΥ",
+  "street": "Koυντουριώτη 79",
+  "tk": "81100",
+  "city": "Μυτιλήνη",
+  "phones": [],
+  "emails": [
+   "pvaddl@eedpaig.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "aigaiou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΣΑΜΟΥ",
+  "street": "Δερβενακίων 8",
+  "tk": "83100",
+  "city": "Βαθύ",
+  "phones": [
+   "2273027435"
+  ],
+  "emails": [
+   "pvaddass@eedpaig.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "aigaiou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΧΙΟΥ",
+  "street": "Κύπρου 2",
+  "tk": "82100",
+  "city": "Χίος",
+  "phones": [
+   "2271043333"
+  ],
+  "emails": [
+   "pvaddasx@eedpaig.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΑΤΤΙΚΗΣ",
+  "street": "Λεωφ. Μεσογείων 239",
+  "tk": "15451",
+  "city": "Νέο Ψυχικό",
+  "phones": [
+   "2110087601"
+  ],
+  "emails": [
+   "a.reppas@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ",
+  "street": "Λεωφ. Μεσογείων 239",
+  "tk": "15451",
+  "city": "Νέο Ψυχικό",
+  "phones": [
+   "2110087602",
+   "2110087608"
+  ],
+  "emails": [
+   "epitheorisi_dason@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΑΝΑΔΑΣΩΣΕΩΝ ΑΤΤΙΚΗΣ",
+  "street": "Αγίας Λαύρας 66",
+  "tk": "11141",
+  "city": "Αθήνα",
+  "phones": [
+   "2102283667",
+   "2102284072"
+  ],
+  "emails": [
+   "anadasoseis@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΑΘΗΝΩΝ",
+  "street": "Λεωφ. Μεσογείων 239",
+  "tk": "15451",
+  "city": "Νέο Ψυχικό",
+  "phones": [
+   "2110087621",
+   "2110087622"
+  ],
+  "emails": [
+   "dash_athina@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΑΝΑΤΟΛΙΚΗΣ ΑΤΤΙΚΗΣ",
+  "street": "Αγίου Ιωάννου 65",
+  "tk": "15342",
+  "city": "Αγία Παρασκευή",
+  "phones": [
+   "2106395280",
+   "2106017330"
+  ],
+  "emails": [
+   "dash_anat_attikh@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΔΥΤΙΚΗΣ ΑΤΤΙΚΗΣ",
+  "street": "Παλληκαρίδη 19-21",
+  "tk": "12243",
+  "city": "Αιγάλεω",
+  "phones": [
+   "2105901018",
+   "2105908977"
+  ],
+  "emails": [
+   "dash_dyt_attikh@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΠΕΙΡΑΙΑ",
+  "street": "Αγίου Διονυσίου 5",
+  "tk": "18545",
+  "city": "Πειραιάς",
+  "phones": [
+   "2104112726",
+   "2104124953"
+  ],
+  "emails": [
+   "dash_peiraia@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΙΓΑΛΕΩ",
+  "street": "Καποδιστρίου 22",
+  "tk": "12241",
+  "city": "Αιγάλεω",
+  "phones": [
+   "2105982315"
+  ],
+  "emails": [
+   "dasarxeio_aigaleo@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΠΑΝΔΡΙΤΙΟΥ",
+  "street": "",
+  "tk": "19014",
+  "city": "Καπανδρίτι",
+  "phones": [
+   "2295052155"
+  ],
+  "emails": [
+   "dasarxeio_kapandritiou@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΛΑΥΡΙΟΥ",
+  "street": "Νέγρη Φωκίωνος 5",
+  "tk": "19500",
+  "city": "Λαύριο",
+  "phones": [
+   "2292060880",
+   "2292023100"
+  ],
+  "emails": [
+   "dasarxeio_lavriou@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΜΕΓΑΡΩΝ",
+  "street": "Μινώας 12",
+  "tk": "19100",
+  "city": "Μέγαρα",
+  "phones": [
+   "2296081570"
+  ],
+  "emails": [
+   "dasarxeio_megaron@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΠΑΡΝΗΘΑΣ",
+  "street": "Λεωφ. Θρακομακεδόνων 142",
+  "tk": "13671",
+  "city": "Αχαρνές",
+  "phones": [
+   "2102434066"
+  ],
+  "emails": [
+   "dasarxeio_parnithas@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΠΕΙΡΑΙΑ",
+  "street": "Αγίου Διονυσίου 5",
+  "tk": "18545",
+  "city": "Πειραιάς",
+  "phones": [
+   "2104115555"
+  ],
+  "emails": [
+   "dp@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΠΕΝΤΕΛΗΣ",
+  "street": "Κλεισθένους 403",
+  "tk": "15344",
+  "city": "Γέρακας",
+  "phones": [
+   "2108035976",
+   "2106135010"
+  ],
+  "emails": [
+   "dasarxeio_pentelis@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "attikis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΠΟΡΟΥ & ΣΠΕΤΣΩΝ",
+  "street": "",
+  "tk": "18020",
+  "city": "Πόρος Τροιζήνας",
+  "phones": [],
+  "emails": [
+   "dasarxeio_porou@eedpatt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΗΠΕΙΡΟΥ – ΔΥΤΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ",
+  "street": "Μαρίκας Κοτοπούλη 62",
+  "tk": "45445",
+  "city": "Ιωάννινα",
+  "phones": [
+   "2651088060"
+  ],
+  "emails": [
+   "mtsiatoura@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ",
+  "street": "Μαρίκας Κοτοπούλη 62",
+  "tk": "45445",
+  "city": "Ιωάννινα",
+  "phones": [
+   "2651088066"
+  ],
+  "emails": [
+   "dasiperi@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΑΡΤΑΣ",
+  "street": "Περιφερειακή Οδός & Δημητρίου 2",
+  "tk": "47132",
+  "city": "Άρτα",
+  "phones": [
+   "2681026360"
+  ],
+  "emails": [
+   "ddartas@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΓΡΕΒΕΝΩΝ",
+  "street": "Τέρμα Κ. Ταλιαδούρη – Διοικητήριο",
+  "tk": "51100",
+  "city": "Γρεβενά",
+  "phones": [
+   "2462353400"
+  ],
+  "emails": [
+   "ddasgrev@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΘΕΣΠΡΩΤΙΑΣ",
+  "street": "Π. Τσαλδάρη 21",
+  "tk": "46100",
+  "city": "Ηγουμενίτσα",
+  "phones": [
+   "2665023100"
+  ],
+  "emails": [
+   "ddashgu@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΙΩΑΝΝΙΝΩΝ",
+  "street": "Μαρίκας Κοτοπούλη 62",
+  "tk": "45445",
+  "city": "Ιωάννινα",
+  "phones": [
+   "2651088030"
+  ],
+  "emails": [
+   "ddioa@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΚΑΣΤΟΡΙΑΣ",
+  "street": "Μ. Αλεξάνδρου, Διοικητήριο",
+  "tk": "52100",
+  "city": "Καστοριά",
+  "phones": [
+   "2467322230"
+  ],
+  "emails": [
+   "daskast@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΚΟΖΑΝΗΣ",
+  "street": "Περιοχή ΖΕΠ 51 00 Κοζάνη",
+  "tk": null,
+  "city": null,
+  "phones": [
+   "2461350125"
+  ],
+  "emails": [
+   "ddkoz@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΠΡΕΒΕΖΑΣ",
+  "street": "Λεωφ. Ειρήνης 83",
+  "tk": "48100",
+  "city": "Πρέβεζα",
+  "phones": [
+   "2682022306"
+  ],
+  "emails": [
+   "ddaspre@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΦΛΩΡΙΝΑΣ",
+  "street": "Πτολεμαίων 1 Διοικητήριο",
+  "tk": "53100",
+  "city": "Φλώρινα",
+  "phones": [
+   "2385024171"
+  ],
+  "emails": [
+   "dasonflo@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΙΩΑΝΝΙΝΩΝ",
+  "street": "Μαρίκας Κοτοπούλη 62",
+  "tk": "45445",
+  "city": "Ιωάννινα",
+  "phones": [
+   "2651088080"
+  ],
+  "emails": [
+   "dasioan@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΟΖΑΝΗΣ",
+  "street": "Περιοχή ΖΕΠ 51 00 Κοζάνη",
+  "tk": null,
+  "city": null,
+  "phones": [
+   "2461350230"
+  ],
+  "emails": [
+   "daskozanis@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΟΝΙΤΣΑΣ",
+  "street": "",
+  "tk": "44100",
+  "city": "Κόνιτσα",
+  "phones": [
+   "2655022498"
+  ],
+  "emails": [
+   "daskon@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΜΕΤΣΟΒΟΥ",
+  "street": "",
+  "tk": "44200",
+  "city": "Μέτσοβο",
+  "phones": [
+   "2656041277"
+  ],
+  "emails": [
+   "dasmets@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "ipeirou-dytikis-makedonias",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΤΣΟΤΥΛΙΟΥ",
+  "street": "",
+  "tk": "50002",
+  "city": "Τσοτύλι",
+  "phones": [
+   "2468049065"
+  ],
+  "emails": [
+   "dastso@eedphm.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "kritis",
+  "name": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΚΡΗΤΗΣ",
+  "street": "Παναγίας Μαλεβή (Δασικό Φυτώριο)",
+  "tk": "71410",
+  "city": "ΗΡΑΚΛΕΙΟ",
+  "phones": [
+   "2810264952"
+  ],
+  "emails": [
+   "g.papadopoulos@eedpkritis.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "kritis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ",
+  "street": "Παναγίας Μαλεβή (Δασικό Φυτώριο)",
+  "tk": "71410",
+  "city": "ΗΡΑΚΛΕΙΟ",
+  "phones": [],
+  "emails": [
+   "dsed@eedpkritis.ypen.gr",
+   "g.papadopoulos@eedpkritis.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "kritis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Ν. ΗΡΑΚΛΕΙΟΥ",
+  "street": "Παναγίας Μαλεβή (Δασικό Φυτώριο)",
+  "tk": "71410",
+  "city": "ΗΡΑΚΛΕΙΟ",
+  "phones": [],
+  "emails": [
+   "ddh@eedpkritis.ypen.gr",
+   "i.aspetakis@eedpkritis.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "kritis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Ν. ΛΑΣΙΘΙΟΥ",
+  "street": "Πηγάσου 9",
+  "tk": "72100",
+  "city": "ΑΓΙΟΣ ΝΙΚΟΛΑΟΣ",
+  "phones": [],
+  "emails": [
+   "dasilas@eedpkritis.ypen.gr",
+   "e.koudoumas@eedpkritis.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "kritis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Ν. ΡΕΘΥΜΝΗΣ",
+  "street": "Κόμβος Αμαρίου – Μυσσίρια",
+  "tk": "74100",
+  "city": "ΡΕΘΥΜΝΟ",
+  "phones": [],
+  "emails": [
+   "dasireth@eedpkritis.ypen.gr",
+   "n.voltirakis@eedpkritis.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "kritis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Ν. ΧΑΝΙΩΝ",
+  "street": "Χρυσοπηγή",
+  "tk": "73100",
+  "city": "ΧΑΝΙΑ",
+  "phones": [],
+  "emails": [
+   "dasichan@eedpkritis.ypen.gr",
+   "i.skoumpaki@eedpkritis.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ-ΘΡΑΚΗΣ",
+  "street": "Λεωφ. Γεωργικής Σχολής 32",
+  "tk": "55535",
+  "city": "Πυλαία Θεσσαλονίκης",
+  "phones": [
+   "2313309114"
+  ],
+  "emails": [
+   "gdmt@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ",
+  "street": "Λεωφ. Γεωργικής Σχολής 32",
+  "tk": "55535",
+  "city": "Πυλαία Θεσσαλονίκης",
+  "phones": [
+   "2313309585",
+   "2313309300"
+  ],
+  "emails": [
+   "dsed@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΑΝΑΔΑΣΩΣΕΩΝ ΚΕΝΤΡΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ",
+  "street": "26ης Οκτωβρίου 38-40 & Ανδρέου Γεωργίου",
+  "tk": "54627",
+  "city": "Θεσσαλονίκη",
+  "phones": [
+   "2314073961"
+  ],
+  "emails": [
+   "da-km@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΑΝΑΔΑΣΩΣΕΩΝ ΑΝΑΤΟΛΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ – ΘΡΑΚΗΣ",
+  "street": "Παναγή Τσαλδάρη 56-58",
+  "tk": "69132",
+  "city": "Κομοτηνή",
+  "phones": [
+   "2531071664"
+  ],
+  "emails": [
+   "da-amt@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε ΔΡΑΜΑΣ",
+  "street": "Αγ. Κωνσταντίνου 1",
+  "tk": "66100",
+  "city": "Δράμα",
+  "phones": [
+   "2521351850"
+  ],
+  "emails": [
+   "ddas-dra@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΕΒΡΟΥ",
+  "street": "Ελ. Βενιζέλου 5",
+  "tk": "68132",
+  "city": "Αλεξανδρούπολη",
+  "phones": [
+   "2551354164"
+  ],
+  "emails": [
+   "ddas-evr@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΗΜΑΘΙΑΣ",
+  "street": "Μαλακούση 4",
+  "tk": "59131",
+  "city": "Βέροια",
+  "phones": [
+   "2313309780"
+  ],
+  "emails": [
+   "ddas-hma@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΘΕΣΣΑΛΟΝΙΚΗΣ",
+  "street": "Ναυαρίνου 28 – Δημ. Καραολή",
+  "tk": "55131",
+  "city": "Καλαμαριά Θεσ/νίκης",
+  "phones": [
+   "2313309550"
+  ],
+  "emails": [
+   "ddas-the@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΑΒΑΛΑΣ",
+  "street": "Tέρμα Αργυροκάστρου",
+  "tk": "65404",
+  "city": "Καβάλα",
+  "phones": [
+   "2513501050"
+  ],
+  "emails": [
+   "ddas-kav@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΙΛΚΙΣ",
+  "street": "Αριστοτέλους 18",
+  "tk": "61100",
+  "city": "Κιλκίς",
+  "phones": [
+   "2341022658"
+  ],
+  "emails": [
+   "ddas-kil@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΞΑΝΘΗΣ",
+  "street": "Πλατεία Διοικητηρίου, Διοικητήριο",
+  "tk": "67133",
+  "city": "Ξάνθη",
+  "phones": [
+   "2541066010"
+  ],
+  "emails": [
+   "ddas-xan@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΠΕΛΛΑΣ",
+  "street": "Διοικητήριο",
+  "tk": "58200",
+  "city": "Έδεσσα",
+  "phones": [
+   "2381027620"
+  ],
+  "emails": [
+   "ddas-pel@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΠΙΕΡΙΑΣ",
+  "street": "Ηπείρου 10",
+  "tk": "60132",
+  "city": "Κατερίνη",
+  "phones": [],
+  "emails": [
+   "ddas-pie@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΡΟΔΟΠΗΣ",
+  "street": "3ο χλμ. Ε.Ο. Κομοτηνής-Αλεξανδρούπολης",
+  "tk": "69100",
+  "city": "Κομοτηνή",
+  "phones": [
+   "2531073673",
+   "2531023326",
+   "2531022894"
+  ],
+  "emails": [
+   "ddas-rod@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΣΕΡΡΩΝ",
+  "street": "Τέρμα Ομονοίας",
+  "tk": "62125",
+  "city": "Σέρρες",
+  "phones": [
+   "2321022633"
+  ],
+  "emails": [
+   "ddas-ser@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΧΑΛΚΙΔΙΚΗΣ",
+  "street": "Δασικό Κτίριο Πολυγύρου",
+  "tk": "63100",
+  "city": "Πολύγυρος",
+  "phones": [
+   "2371024272"
+  ],
+  "emails": [
+   "ddas-xal@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+  "street": "Ελευθερίου Βενιζέλου 5",
+  "tk": "68131",
+  "city": "Αλεξανδρούπολη",
+  "phones": [],
+  "emails": [
+   "das-ale@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΡΙΔΑΙΑΣ",
+  "street": "Λεωφ. Ξενιτίδη 18",
+  "tk": "58400",
+  "city": "Αριδαία",
+  "phones": [
+   "2384021242",
+   "2313309620"
+  ],
+  "emails": [
+   "das-arid@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΡΝΑΙΑΣ",
+  "street": "Αρναία",
+  "tk": "63074",
+  "city": "Αρναία",
+  "phones": [
+   "2372021201",
+   "2372021210"
+  ],
+  "emails": [
+   "das-arn@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΒΕΡΟΙΑΣ",
+  "street": "Διονυσίου Σολωμού 4",
+  "tk": "59132",
+  "city": "Βέροια",
+  "phones": [
+   "2313309636",
+   "2313309637"
+  ],
+  "emails": [
+   "das-ver@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΓΟΥΜΕΝΙΣΣΑΣ",
+  "street": "Μεγ. Αλεξάνδρου 24",
+  "tk": "63100",
+  "city": "Γουμένισσα",
+  "phones": [
+   "2313309990"
+  ],
+  "emails": [
+   "das-gou@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΔΙΔΥΜΟΤΕΙΧΟΥ",
+  "street": "Αδριανουπόλεως 1",
+  "tk": "68300",
+  "city": "Διδυμότειχο",
+  "phones": [
+   "2553022204"
+  ],
+  "emails": [
+   "das-did@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΔΡΑΜΑΣ",
+  "street": "Αγ. Κωνσταντίνου 1",
+  "tk": "66100",
+  "city": "Δράμα",
+  "phones": [
+   "2521351820"
+  ],
+  "emails": [
+   "das-dra@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΕΔΕΣΣΑΣ",
+  "street": "Λεωφ. 18 Οκτωβρίου – Διοικητήριο",
+  "tk": "58200",
+  "city": "Έδεσσα",
+  "phones": [
+   "2381023670",
+   "2381028342"
+  ],
+  "emails": [
+   "das-ede@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΘΑΣΟΥ",
+  "street": "Λεωφ. Θεολογίτη Αυγουστή 2",
+  "tk": "64004",
+  "city": "Θάσος",
+  "phones": [
+   "2593058140"
+  ],
+  "emails": [
+   "das-tha@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΘΕΣΣΑΛΟΝΙΚΗΣ",
+  "street": "26ης Οκτωβρίου 38-40 & Ανδρέου Γεωργίου",
+  "tk": "54627",
+  "city": "Θεσσαλονίκη",
+  "phones": [
+   "2313309050",
+   "2310508661"
+  ],
+  "emails": [
+   "das-the@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΒΑΛΑΣ",
+  "street": "Τέρμα Αργυροκάστρου",
+  "tk": "65404",
+  "city": "Καβάλα",
+  "phones": [
+   "2513501030"
+  ],
+  "emails": [
+   "das-kav@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΣΣΑΝΔΡΑΣ",
+  "street": "Κασσανδρεία",
+  "tk": "63077",
+  "city": "Κασσάνδρα",
+  "phones": [
+   "2374022218",
+   "2313309981"
+  ],
+  "emails": [
+   "das-kas@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ",
+  "street": "Κάτω Νευροκόπι",
+  "tk": "66033",
+  "city": "Κάτω Νευροκόπι",
+  "phones": [
+   "2523022239"
+  ],
+  "emails": [
+   "das-nev@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΙΛΚΙΣ",
+  "street": "21ης Ιουνίου 207",
+  "tk": "61100",
+  "city": "Κιλκίς",
+  "phones": [
+   "2341351151"
+  ],
+  "emails": [
+   "das-kil@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΛΑΓΚΑΔΑ",
+  "street": "Ηλιάδη Μελετίου 4",
+  "tk": "57200",
+  "city": "Λαγκαδάς",
+  "phones": [
+   "2394024024",
+   "2394022336"
+  ],
+  "emails": [
+   "das-lag@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΝΑΟΥΣΑΣ",
+  "street": "Γ. Γεννηματά 22",
+  "tk": "59200",
+  "city": "Νάουσα",
+  "phones": [
+   "2332022280",
+   "2332025525"
+  ],
+  "emails": [
+   "das-nao@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΝΙΓΡΙΤΑΣ",
+  "street": "Αθ. Αργυρού 19",
+  "tk": "62200",
+  "city": "Νιγρίτα",
+  "phones": [
+   "2322022450",
+   "2322022445"
+  ],
+  "emails": [
+   "das-nig@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΞΑΝΘΗΣ",
+  "street": "Αδριανουπόλεως 4",
+  "tk": "67100",
+  "city": "Ξάνθη",
+  "phones": [
+   "2541026500",
+   "2541022669"
+  ],
+  "emails": [
+   "das-xan@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΠΟΛΥΓΥΡΟΥ",
+  "street": "Δασικό Κτίριο",
+  "tk": "63100",
+  "city": "Πολύγυρος",
+  "phones": [],
+  "emails": [
+   "das-pol@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΕΡΡΩΝ",
+  "street": "Τέρμα Ομονοίας",
+  "tk": "62125",
+  "city": "Σέρρες",
+  "phones": [],
+  "emails": [
+   "das-ser@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΙΔΗΡΟΚΑΣΤΡΟΥ",
+  "street": "Νικολάου Ιντζέ 2",
+  "tk": "62300",
+  "city": "Σιδηρόκαστρο",
+  "phones": [
+   "2323025550",
+   "2323022383"
+  ],
+  "emails": [
+   "das-sid@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΟΥΦΛΙΟΥ",
+  "street": "Νεοφύτου Παπαναστασίου",
+  "tk": "68400",
+  "city": "Σουφλί",
+  "phones": [
+   "2554022221",
+   "2554022656"
+  ],
+  "emails": [
+   "das-sou@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΤΑΥΡΟΥ",
+  "street": "Σταυρός Θεσσαλονίκης",
+  "tk": "57014",
+  "city": "Σταυρός",
+  "phones": [
+   "2397061203",
+   "2397065118"
+  ],
+  "emails": [
+   "das-stv@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "makedonias-thrakis",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΤΑΥΡΟΥΠΟΛΗΣ",
+  "street": "Σταυρούπολη Ξάνθης",
+  "tk": "67062",
+  "city": "Σταυρούπολη",
+  "phones": [
+   "2542022218"
+  ],
+  "emails": [
+   "das-sta@eedpmt.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΠΕΛΟΠΟΝΝΗΣΟΥ-ΔΥΤΙΚΗΣ ΕΛΛΑΔΑΣ-ΙΟΝΙΟΥ",
+  "street": "Ν.Ε.Ο Πατρών-Αθηνών 158",
+  "tk": "26442",
+  "city": "Πάτρα",
+  "phones": [],
+  "emails": [
+   "eedp@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ",
+  "street": "Ν.Ε.Ο Πατρών-Αθηνών 33",
+  "tk": "26441",
+  "city": "Πάτρα",
+  "phones": [],
+  "emails": [
+   "dse-dason@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΑΙΤΩΛΟΑΚΑΡΝΑΝΙΑΣ",
+  "street": "Ιωσήφ Ρωγών 3",
+  "tk": "30200",
+  "city": "Μεσολόγγι",
+  "phones": [
+   "2631022536"
+  ],
+  "emails": [
+   "dd_aitol@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΑΡΓΟΛΙΔΑΣ",
+  "street": "Μιχαήλ Ιατρού 21",
+  "tk": "21100",
+  "city": "Ναύπλιο",
+  "phones": [],
+  "emails": [
+   "ddarg@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΑΡΚΑΔΙΑΣ",
+  "street": "Πλατεία Κολοκοτρώνη Θεοδώρου 22",
+  "tk": "22132",
+  "city": "Τρίπολη",
+  "phones": [
+   "2710242500"
+  ],
+  "emails": [
+   "ddark@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΑΧΑΪΑΣ",
+  "street": "Μπουμπουλίνας 57-59",
+  "tk": "26222",
+  "city": "Πάτρα",
+  "phones": [
+   "2610310654"
+  ],
+  "emails": [
+   "dda@eedpdi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΗΛΕΙΑΣ",
+  "street": "Αλφειού 42",
+  "tk": "27131",
+  "city": "Πύργος",
+  "phones": [
+   "2621034535"
+  ],
+  "emails": [
+   "ddilia@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΖΑΚΥΝΘΟΥ",
+  "street": "Ελευθερίου Βενιζέλου 1",
+  "tk": "29100",
+  "city": "Ζάκυνθος",
+  "phones": [],
+  "emails": [
+   "ddzak@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΕΡΚΥΡΑΣ",
+  "street": "Αλυκές Ποταμού",
+  "tk": "49100",
+  "city": "Κέρκυρα",
+  "phones": [
+   "2661081399"
+  ],
+  "emails": [
+   "ddker@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΕΦΑΛΛΗΝΙΑΣ",
+  "street": "Π.ΒΙΝΙΕΡΑΤΟΥ 5, ΠΛ.ΚΑΜΠΑΝΑΣ",
+  "tk": "28100",
+  "city": "Αργοστόλι",
+  "phones": [],
+  "emails": [
+   "ddkef@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΟΡΙΝΘΙΑΣ",
+  "street": "Σίνα 24",
+  "tk": "20131",
+  "city": "Κόρινθος",
+  "phones": [
+   "2741023843"
+  ],
+  "emails": [
+   "ddkor@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΛΑΚΩΝΙΑΣ",
+  "street": "Όρθιας Αρτέμιδος 135",
+  "tk": "23100",
+  "city": "Σπάρτη",
+  "phones": [],
+  "emails": [
+   "ddlak@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΛΕΥΚΑΔΑΣ",
+  "street": "Ξενοφώντος Γρηγόρη",
+  "tk": "31100",
+  "city": "Λευκάδα",
+  "phones": [],
+  "emails": [
+   "ddlef@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΜΕΣΣΗΝΙΑΣ",
+  "street": "Ύδρας 5",
+  "tk": "24131",
+  "city": "Καλαμάτα",
+  "phones": [
+   "2721020820"
+  ],
+  "emails": [
+   "ddmes@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΓΡΙΝΙΟΥ",
+  "street": "Γοργοποτάμου 17",
+  "tk": "30100",
+  "city": "Αγρίνιο",
+  "phones": [],
+  "emails": [
+   "dasagr@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΙΓΙΟΥ",
+  "street": "Δεσποτοπούλου 25",
+  "tk": "25100",
+  "city": "Αίγιο",
+  "phones": [],
+  "emails": [
+   "dasaigio@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΜΑΛΙΑΔΑΣ",
+  "street": "25ης Μαρτίου 23",
+  "tk": "27200",
+  "city": "Αμαλιάδα",
+  "phones": [],
+  "emails": [
+   "dasamal@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΜΦΙΛΟΧΙΑΣ",
+  "street": "Νικόλαου Στράτου 84",
+  "tk": "30500",
+  "city": "Αμφιλοχία",
+  "phones": [],
+  "emails": [
+   "dasamf@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΒΥΤΙΝΑΣ",
+  "street": "",
+  "tk": "22010",
+  "city": "Βυτίνα",
+  "phones": [],
+  "emails": [
+   "dasvyt@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΓΥΘΕΙΟΥ",
+  "street": "",
+  "tk": "23200",
+  "city": "Γύθειο",
+  "phones": [
+   "2733022255"
+  ],
+  "emails": [
+   "dasgyth@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΛΑΒΡΥΤΩΝ",
+  "street": "Στριφτόμπολα 1",
+  "tk": "25001",
+  "city": "Καλάβρυτα",
+  "phones": [],
+  "emails": [
+   "daskalav@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΛΑΜΑΤΑΣ",
+  "street": "Ύδρας 5",
+  "tk": "24100",
+  "city": "Καλαμάτα",
+  "phones": [],
+  "emails": [
+   "daskalam@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΟΡΙΝΘΟΥ",
+  "street": "Αράτου 39",
+  "tk": "20131",
+  "city": "Κόρινθος",
+  "phones": [],
+  "emails": [
+   "daskor@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΥΝΟΥΡΙΑΣ",
+  "street": "",
+  "tk": "22001",
+  "city": "Άστρος Κυνουρίας",
+  "phones": [],
+  "emails": [
+   "daskyn@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΥΠΑΡΙΣΣΙΑΣ",
+  "street": "ΔΗΜΑΡΧΟΥ ΚΑΛΑΝΤΖΑΚΟΥ & ΑΝΩΝΥΜΟΥ",
+  "tk": "24500",
+  "city": "Κυπαρισσία",
+  "phones": [],
+  "emails": [
+   "daskyp@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΜΕΣΟΛΟΓΓΙΟΥ",
+  "street": "Ιωσήφ Ρώγων 3",
+  "tk": "30200",
+  "city": "Μεσολόγγι",
+  "phones": [],
+  "emails": [
+   "damesol@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΜΟΛΑΩΝ",
+  "street": "",
+  "tk": "23052",
+  "city": "Μολάοι",
+  "phones": [
+   "2732022047"
+  ],
+  "emails": [
+   "dasmol@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΝΑΥΠΑΚΤΟΥ",
+  "street": "Θέρμου 58",
+  "tk": "30300",
+  "city": "Ναύπακτος",
+  "phones": [
+   "2634027246"
+  ],
+  "emails": [
+   "dasna@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΞΥΛΟΚΑΣΤΡΟΥ",
+  "street": "Π. Τσαλδάρη 5",
+  "tk": "20400",
+  "city": "Ξυλόκαστρο",
+  "phones": [],
+  "emails": [
+   "dasxylok@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΟΛΥΜΠΙΑΣ",
+  "street": "",
+  "tk": "27055",
+  "city": "Κρέστενα",
+  "phones": [],
+  "emails": [
+   "dasolymp@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΠΑΤΡΑΣ",
+  "street": "Μπουμπουλίνας 57-59",
+  "tk": "26222",
+  "city": "Πάτρα",
+  "phones": [],
+  "emails": [
+   "daspatras@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΠΥΡΓΟΥ",
+  "street": "Αλφειού 42",
+  "tk": "27100",
+  "city": "Πύργος",
+  "phones": [],
+  "emails": [
+   "daspyrg@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΠΑΡΤΗΣ",
+  "street": "Οδός των 118, αρ. 37",
+  "tk": "23100",
+  "city": "Σπάρτη",
+  "phones": [],
+  "emails": [
+   "dasspart@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "peloponnisou-dytikis-elladas-ioniou",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΤΡΙΠΟΛΗΣ",
+  "street": "Πλατεία Κολοκοτρώνη 22",
+  "tk": "22100",
+  "city": "Τρίπολη",
+  "phones": [],
+  "emails": [
+   "dastrip@eedpdpi.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΘΕΣΣΑΛΙΑΣ – ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ",
+  "street": "Σωκράτους 111",
+  "tk": "41336",
+  "city": "Λάρισα",
+  "phones": [
+   "2413503520"
+  ],
+  "emails": [
+   "eedpts@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ",
+  "street": "Σωκράτους 111",
+  "tk": "41336",
+  "city": "Λάρισα",
+  "phones": [
+   "2413503518"
+  ],
+  "emails": [
+   "dsedason@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΒΟΙΩΤΙΑΣ",
+  "street": "Κάδμου 11",
+  "tk": "32131",
+  "city": "Λιβαδειά",
+  "phones": [
+   "2261028951"
+  ],
+  "emails": [
+   "ddasonvoiot@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΕΥΒΟΙΑΣ",
+  "street": "5ο χλμ Χαλκίδας – Αρτάκης & Λεωφόρος Γεωρ. Παπανδρέου",
+  "tk": "34100",
+  "city": "Χαλκίδα",
+  "phones": [
+   "2221028966",
+   "2221084221"
+  ],
+  "emails": [
+   "ddasonevias@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΕΥΡΥΤΑΝΙΑΣ",
+  "street": "1ο χλμ Εθνικής Οδού Καρπενησίου – Αγρινίου",
+  "tk": "36100",
+  "city": "Καρπενήσι",
+  "phones": [
+   "2237023017"
+  ],
+  "emails": [
+   "ddasonevryt@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΑΡΔΙΤΣΑΣ",
+  "street": "Τέρμα Χαριλάου Φλωράκη",
+  "tk": "43100",
+  "city": "Καρδίτσα",
+  "phones": [
+   "2441080137"
+  ],
+  "emails": [
+   "ddasonkard@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΛΑΡΙΣΑΣ",
+  "street": "Σωκράτους 103",
+  "tk": "41336",
+  "city": "Λάρισα",
+  "phones": [
+   "2410554670"
+  ],
+  "emails": [
+   "ddasonlar@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΜΑΓΝΗΣΙΑΣ",
+  "street": "Ξενοφώντος 1",
+  "tk": "38333",
+  "city": "Βόλος",
+  "phones": [
+   "2421039107"
+  ],
+  "emails": [
+   "ddasonmagn@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΤΡΙΚΑΛΩΝ",
+  "street": "Κολοκοτρώνη 30",
+  "tk": "42132",
+  "city": "Τρίκαλα",
+  "phones": [
+   "2431555200"
+  ],
+  "emails": [
+   "ddasontrik@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΦΘΙΩΤΙΔΑΣ",
+  "street": "1ο χλμ Νέας Εθνικής Οδου Λαμίας-Αθηνών",
+  "tk": "35100",
+  "city": "Λαμία",
+  "phones": [
+   "2231053021"
+  ],
+  "emails": [
+   "ddasonfthiot@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΦΩΚΙΔΑΣ",
+  "street": "Επισκόπου Φιλοθέου 3",
+  "tk": "33100",
+  "city": "Άμφισσα",
+  "phones": [
+   "2265028875"
+  ],
+  "emails": [
+   "ddasonfok@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΓΙΑΣ",
+  "street": "Λαρίσης 2",
+  "tk": "40003",
+  "city": "Αγιά",
+  "phones": [
+   "2494022221"
+  ],
+  "emails": [
+   "dasagias@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΛΙΒΕΡΙΟΥ",
+  "street": "Πλάτωμα Αλιβερίου",
+  "tk": "34500",
+  "city": "Αλιβέρι",
+  "phones": [
+   "2223023715"
+  ],
+  "emails": [
+   "dasaliv@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΛΜΥΡΟΥ",
+  "street": "Βασιλέως Παύλου 1",
+  "tk": "37100",
+  "city": "Αλμυρός",
+  "phones": [
+   "2422021273",
+   "2422022204"
+  ],
+  "emails": [
+   "dasalmy@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΜΦΙΣΣΑΣ",
+  "street": "Επισκόπου Φιλοθέου 3",
+  "tk": "33100",
+  "city": "Άμφισσα",
+  "phones": [
+   "2265028264"
+  ],
+  "emails": [
+   "dasamf@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΑΤΑΛΑΝΤΗΣ",
+  "street": "Θεμιστοκλέους 4",
+  "tk": "35200",
+  "city": "Αταλάντη",
+  "phones": [
+   "2233022268",
+   "2233022171"
+  ],
+  "emails": [
+   "dasatalantis@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΒΟΛΟΥ",
+  "street": "Ξενοφώντος 1",
+  "tk": "38333",
+  "city": "Βόλος",
+  "phones": [
+   "2421039162",
+   "2421039163",
+   "2421026271"
+  ],
+  "emails": [
+   "dasavol@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΕΛΑΣΣΟΝΑΣ",
+  "street": "Κων/νου Οικονόμου 64",
+  "tk": "40200",
+  "city": "Ελασσόνα",
+  "phones": [
+   "2493022243"
+  ],
+  "emails": [
+   "daselas@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΘΗΒΩΝ",
+  "street": "Αγ. Φωτεινή – Μοσχοπόδι",
+  "tk": "32200",
+  "city": "Θήβα",
+  "phones": [
+   "2262027824",
+   "2262025815"
+  ],
+  "emails": [
+   "dasthivas@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΙΣΤΙΑΙΑΣ",
+  "street": "Ιστιαία",
+  "tk": "34200",
+  "city": "Ιστιαία",
+  "phones": [
+   "2226052234",
+   "2226054110"
+  ],
+  "emails": [
+   "dasistiaias@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΛΑΜΠΑΚΑΣ",
+  "street": "Ομογενών Αμερικής 1",
+  "tk": "42200",
+  "city": "Καλαμπάκα",
+  "phones": [
+   "2432305135",
+   "2432022410"
+  ],
+  "emails": [
+   "daskal@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΡΔΙΤΣΑΣ",
+  "street": "Τέρμα Φλωράκη Χαριλάου",
+  "tk": "43100",
+  "city": "Καρδίτσα",
+  "phones": [
+   "2441079841"
+  ],
+  "emails": [
+   "daskard@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΚΑΡΠΕΝΗΣΙΟΥ",
+  "street": "1ο χλμ Εθνικής Οδού Καρπενησίου – Αγρινίου",
+  "tk": "36100",
+  "city": "Καρπενήσι",
+  "phones": [
+   "2237022204"
+  ],
+  "emails": [
+   "daskarpen@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΛΑΜΙΑΣ",
+  "street": "1ο χλμ. ΝΕΟ Λαμίας Αθηνών",
+  "tk": "35133",
+  "city": "Λαμία",
+  "phones": [
+   "2231022319",
+   "2231022683",
+   "2231022398"
+  ],
+  "emails": [
+   "daslamias@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΛΑΡΙΣΑΣ",
+  "street": "Δ. Τσάτσου 2 και Φαρσάλων",
+  "tk": "41335",
+  "city": "Λάρισα",
+  "phones": [
+   "2410661926",
+   "2410661362"
+  ],
+  "emails": [
+   "daslar@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΛΙΒΑΔΕΙΑΣ",
+  "street": "Κάδμου 11",
+  "tk": "32100",
+  "city": "Λιβαδειά",
+  "phones": [
+   "2261028306",
+   "2261025001"
+  ],
+  "emails": [
+   "daslivad@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΛΙΔΩΡΙΚΙΟΥ",
+  "street": "Λιδωρίκι",
+  "tk": "33053",
+  "city": "Λιδωρίκι",
+  "phones": [
+   "2266022115"
+  ],
+  "emails": [
+   "daslid@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΛΙΜΝΗΣ",
+  "street": "Λίμνη Εύβοιας",
+  "tk": null,
+  "city": null,
+  "phones": [
+   "2227031218"
+  ],
+  "emails": [
+   "daslimnis@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΜΟΥΖΑΚΙΟΥ",
+  "street": "Παρθενώνος 2",
+  "tk": "43060",
+  "city": "Μουζάκι",
+  "phones": [
+   "2445041233",
+   "2445049154",
+   "2445049153"
+  ],
+  "emails": [
+   "dasamouz@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΚΟΠΕΛΟΥ",
+  "street": "Σκόπελος",
+  "tk": "37003",
+  "city": "Σκόπελος",
+  "phones": [
+   "2424022202"
+  ],
+  "emails": [
+   "dasaskop@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΣΠΕΡΧΕΙΑΔΑΣ",
+  "street": "Πιτσίκα 1",
+  "tk": "35003",
+  "city": "Σπερχειάδα",
+  "phones": [
+   "2236350623"
+  ],
+  "emails": [
+   "dassperx@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΤΡΙΚΑΛΩΝ",
+  "street": "Κολοκοτρώνη 30",
+  "tk": "42132",
+  "city": "Τρίκαλα",
+  "phones": [
+   "2431555234"
+  ],
+  "emails": [
+   "dastrik@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ",
+  "street": "Φουρνά Ευρυτανίας",
+  "tk": "36080",
+  "city": "Φουρνά",
+  "phones": [
+   "2237051233"
+  ],
+  "emails": [
+   "dasfourna@eedpts.ypen.gr"
+  ]
+ },
+ {
+  "inspectorate": "thessalias-stereas-elladas",
+  "name": "ΔΑΣΑΡΧΕΙΟ ΧΑΛΚΙΔΑΣ",
+  "street": "Πηλικα 28",
+  "tk": "34133",
+  "city": "Χαλκίδα",
+  "phones": [
+   "2221084444"
+  ],
+  "emails": [
+   "dasxalk@eedpts.ypen.gr"
+  ]
+ }
+]

@@ -7,6 +7,15 @@ export interface AuthorityProfile {
 	kind: string;
 	pe: string;
 	seat: { city: string | null; lat: number | null; lon: number | null };
+	/** curated office address (ΥΠΕΝ directory, Diavgeia-confirmed) */
+	contact: {
+		street: string | null;
+		postal_code: string | null;
+		city: string | null;
+		phone: string | null;
+		email: string | null;
+		precision: string | null;
+	};
 	antinero: {
 		contracts: {
 			reference_number: string;

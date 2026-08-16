@@ -15,6 +15,23 @@ export interface AuthorityRow {
 	dase_eur: number;
 }
 
+export interface OtherUnit {
+	name: string;
+	inspectorate: string;
+	unit_kind: string;
+	street: string | null;
+	tk: string | null;
+	city: string | null;
+	phone: string | null;
+	email: string | null;
+	lat: number | null;
+	lon: number | null;
+}
+
 export const load: PageLoad = async ({ fetch }) => {
-	return { rows: await apiGet<AuthorityRow[]>(fetch, '/api/authorities') };
+	const data = await apiGet<{ authorities: AuthorityRow[]; other_units: OtherUnit[] }>(
+		fetch,
+		'/api/authorities'
+	);
+	return { rows: data.authorities, otherUnits: data.other_units };
 };

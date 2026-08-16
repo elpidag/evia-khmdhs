@@ -229,13 +229,42 @@ def write_db(conn: sqlite3.Connection, registry: dict, gazetteer: dict,
         conn.execute("DELETE FROM forest_authorities")
         for name, a in registry["authorities"].items():
             muni = gazetteer[a["municipality_code"]]
+            # office layer (DATA_DECISIONS 2026-08-17): the geocoded office
+            # point wins over the seat-municipality centroid when validated
+            office = a.get("office") or {}
+            if office.get("lat"):
+                lat, lon = office["lat"], office["lon"]
+                precision = office.get("geo_precision") or "postcode"
+            else:
+                lat, lon, precision = muni["lat"], muni["lon"], "municipality"
             conn.execute("""
                 INSERT INTO forest_authorities
                     (name, kind, seat_city, municipality_code,
-                     municipality_name, lat, lon, region_pe)
-                VALUES (?,?,?,?,?,?,?,?)
+                     municipality_name, lat, lon, region_pe,
+                     street, postal_code, city, phone, email, seat_precision)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """, (name, a["kind"], a.get("seat_city"), a["municipality_code"],
-                  muni["name"], muni["lat"], muni["lon"], a["region_pe"]))
+                  muni["name"], lat, lon, a["region_pe"],
+                  office.get("street"), office.get("tk"), office.get("city"),
+                  (office.get("phones") or [None])[0],
+                  (office.get("emails") or [None])[0], precision))
+        # complete ΥΠΕΝ directory — reference layer, never matcher input
+        import json as _json
+        dir_path = Path(__file__).parent / "data" / "forest_units_directory.json"
+        if dir_path.exists():
+            directory = _json.loads(dir_path.read_text(encoding="utf-8"))
+            conn.execute("DELETE FROM forest_units_directory")
+            for u in directory["units"]:
+                conn.execute("""
+                    INSERT INTO forest_units_directory
+                        (name, inspectorate, unit_kind, street, tk, city,
+                         phone, email, authority_name, lat, lon)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                """, (u["name"], u["inspectorate"], u["unit_kind"],
+                      u.get("street"), u.get("tk"), u.get("city"),
+                      (u.get("phones") or [None])[0],
+                      (u.get("emails") or [None])[0], u.get("authority_name"),
+                      u.get("lat"), u.get("lon")))
         conn.execute("DELETE FROM contract_forest_authorities")
         for ref, hits in result.items():
             for seq, (name, source, excerpt) in enumerate(hits):

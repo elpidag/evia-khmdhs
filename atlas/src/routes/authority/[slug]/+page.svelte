@@ -11,6 +11,11 @@
 	let { data }: { data: PageData } = $props();
 	const a = $derived(data.a);
 	const kindLabel = $derived(a.kind === 'dx' ? 'Δασαρχείο' : 'Διεύθυνση Δασών');
+	const address = $derived(
+		[a.contact.street, [a.contact.postal_code, a.contact.city].filter(Boolean).join(' ')]
+			.filter(Boolean)
+			.join(', ')
+	);
 </script>
 
 <svelte:head>
@@ -33,6 +38,13 @@
 		{#if a.seat.city}· seat: {a.seat.city}{/if}
 	</p>
 </hgroup>
+
+{#if a.contact.street || a.contact.postal_code || a.contact.phone || a.contact.email}
+	<p class="muted contact">
+		{address}{#if a.contact.phone}&nbsp;· tel. {a.contact.phone}{/if}
+		{#if a.contact.email}&nbsp;· <a href={'mailto:' + a.contact.email}>{a.contact.email}</a>{/if}
+	</p>
+{/if}
 
 <KpiRow>
 	<StatPair
@@ -156,6 +168,11 @@
 {/if}
 
 <style>
+	.contact {
+		margin: -6px 0 var(--sp-4);
+		font-size: var(--fs-13);
+	}
+
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);

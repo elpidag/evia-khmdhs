@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { authEn, devGreek } from '$lib/transforms/names';
+	import { authEn, bodyEn, devGreek } from '$lib/transforms/names';
 	import { peEn } from '$lib/transforms/regions';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
@@ -11,7 +11,16 @@
 
 	let { data }: { data: PageData } = $props();
 	const rows = $derived(data.rows);
+	const otherUnits = $derived(data.otherUnits);
 	const both = $derived(rows.filter((r) => r.antinero_n && r.dase_n));
+	const otherDots = $derived(
+		spreadOverlaps(
+			otherUnits
+				.filter((u) => u.lat && u.lon)
+				.map((u) => ({ ...u, lat: u.lat!, lon: u.lon! })),
+			0.02
+		)
+	);
 
 	const dots = $derived(
 		spreadOverlaps(
@@ -63,6 +72,22 @@
 		tipOf={(pe) => `<strong>${pe}</strong>`}
 	>
 		{#snippet overlay(ctx)}
+			<!-- the rest of the ΥΠΕΝ network: hollow dots, no contract data -->
+			{#each otherDots as u (u.inspectorate + u.name)}
+				{@const xy = ctx.projection([u.lon, u.lat])}
+				{#if xy}
+					<circle
+						cx={xy[0]}
+						cy={xy[1]}
+						r={3.4 / ctx.k}
+						class="hollow"
+						role="img"
+						aria-label={bodyEn(u.name)}
+						onmouseenter={() => ctx.showTip(`<strong>${bodyEn(u.name)}</strong><br>no contracts recorded in either dataset`)}
+						onmouseleave={() => ctx.hideTip()}
+					/>
+				{/if}
+			{/each}
 			<DotLayer
 				{ctx}
 				points={dots}
@@ -87,6 +112,7 @@
 			<div><i class="dot" style="background:var(--c-antinero)"></i> Anti-nero works only</div>
 			<div><i class="dot" style="background:var(--c-dase)"></i> ΔΑΣΕ awards only</div>
 			<div><i class="dot" style="background:var(--ink-faint)"></i> neither</div>
+			<div><i class="dot hollowkey"></i> rest of the ΥΠΕΝ network — no contracts</div>
 		{/snippet}
 	</PaperMap>
 </div>
@@ -125,7 +151,49 @@
 	</small>
 </p>
 
+{#if otherUnits.length}
+	<section class="restnet">
+		<h2>The rest of the network — no contracts recorded</h2>
+		<p class="muted">
+			{grInt(otherUnits.length)} more ΥΠΕΝ forest-service units appear in the ministry's own
+			directory but award nothing in either dataset — supervisory inspectorates, reforestation
+			directorates, and field offices whose territory sees no Anti-nero or co-op contracts.
+			The absence is part of the picture.
+		</p>
+		<table class="listing">
+			<thead><tr><th>Unit</th><th>Seat</th><th>Contact</th></tr></thead>
+			<tbody>
+				{#each otherUnits as u (u.inspectorate + u.name)}
+					<tr>
+						<td title={devGreek(u.name)}>{bodyEn(u.name)}</td>
+						<td class="muted"><small>{[u.street, [u.tk, u.city].filter(Boolean).join(' ')].filter(Boolean).join(', ') || '—'}</small></td>
+						<td class="muted"><small>
+							{#if u.phone}{u.phone}{/if}
+							{#if u.email}{u.phone ? ' · ' : ''}<a href={'mailto:' + u.email}>{u.email}</a>{/if}
+						</small></td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</section>
+{/if}
+
 <style>
+	.hollow {
+		fill: var(--paper, #fff);
+		stroke: var(--ink-soft);
+		stroke-width: 1.2;
+	}
+	.hollowkey {
+		background: var(--paper, #fff);
+		border: 1.5px solid var(--ink-soft);
+	}
+	.restnet {
+		margin-top: var(--sp-10);
+	}
+	.restnet h2 {
+		font-size: var(--fs-18);
+	}
 	.lede {
 		max-width: var(--prose-w);
 	}

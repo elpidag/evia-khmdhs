@@ -8,6 +8,7 @@ the atlas test suite so a future webui refactor fails loudly here.
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 import unicodedata
 
@@ -824,10 +825,21 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     # the pre-2022 ΑΠΔ-era style) IS the seated ΔΔ Πιερίας — without this
     # merge the same directorate draws two circles
     def _wsfold(s: str | None) -> str:
-        return " ".join(_fold_upper(s or "").split())
+        f = " ".join(_fold_upper(s or "").split())
+        # dash-spacing variants («ΜΑΚΕΔΟΝΙΑΣ - ΘΡΑΚΗΣ» vs «ΜΑΚΕΔΟΝΙΑΣ-ΘΡΑΚΗΣ»)
+        return re.sub(r"\s*[-–]\s*", "-", f)
 
     seat_by_fold = {_wsfold(n): n for n, (lat, _lon, _k) in seats.items()
                     if lat is not None}
+    # supra-regional units seated via the ΥΠΕΝ directory (ΕΠΙΘΕΩΡΗΣΗ Μ-Θ):
+    # one circle at the real seat instead of per-Π.Ε. centroid dots
+    dir_seats = {}
+    try:
+        for r in kh.execute("SELECT name, lat, lon FROM forest_units_directory "
+                            "WHERE lat IS NOT NULL AND authority_name IS NULL"):
+            dir_seats[_wsfold(r["name"])] = (r["name"], r["lat"], r["lon"])
+    except Exception:
+        pass
     # genitive/nominative spelling drift («ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ» vs the seated
     # «Δασαρχείο Φουρνάς») is bridged through the curated English identity:
     # if the unit's EN name equals a seated authority's EN name they are
@@ -869,6 +881,14 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
             if seat_name:
                 units.setdefault(seat_name, {"pe": pe, "rows": []})["rows"].append(r)
                 continue
+            ds = dir_seats.get(_wsfold(r["unit"]))
+            if ds:
+                dname, dlat, dlon = ds
+                grp = seatless.setdefault((dname, None), {
+                    "kind": fkind, "label": dname, "rows": [],
+                    "lat": dlat, "lon": dlon, "pe": pe})
+                grp["rows"].append(r)
+                continue
             ident = unit_en.get(_wsfold(r["unit"])) or _wsfold(r["unit"])
             grp = seatless.setdefault((ident, pe), {
                 "kind": fkind, "label": (r["unit"] or "").strip(), "rows": []})
@@ -888,6 +908,12 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     dup_names = {i for (i, _p) in seatless
                  if sum(1 for (i2, _q) in seatless if i2 == i) > 1}
     for (ident, pe), grp in seatless.items():
+        if grp.get("lat") is not None:          # directory-seated (ΕΠΙΘ. Μ-Θ)
+            out_units.append({"name": grp["label"], "kind": grp["kind"],
+                              "pe": grp.get("pe"),
+                              "lat": grp["lat"], "lon": grp["lon"],
+                              **summarise(grp["rows"], unit_by)})
+            continue
         cent = PE_CENTROIDS.get(pe)
         if not cent:
             continue
@@ -1250,6 +1276,26 @@ def authorities_index(kh: sqlite3.Connection,
                   key=lambda r: -(r["antinero_eur"] + r["dase_eur"]))
 
 
+def forest_units_extra(kh: sqlite3.Connection) -> list[dict]:
+    """ΥΠΕΝ directory units OUTSIDE the contract registry (DATA_DECISIONS
+    2026-08-17): the parts of the forest-service network with no recorded
+    contracts in our datasets — the absence is itself a finding. Reference
+    layer only; empty when the table is absent."""
+    try:
+        rows = kh.execute("""
+            SELECT name, inspectorate, unit_kind, street, tk, city, phone, email,
+                   lat, lon
+            FROM forest_units_directory
+            WHERE authority_name IS NULL
+            ORDER BY CASE unit_kind
+                       WHEN 'inspectorate' THEN 0 WHEN 'coordination' THEN 1
+                       WHEN 'reforestation' THEN 2 WHEN 'dd' THEN 3 ELSE 4 END,
+                     inspectorate, name""").fetchall()
+    except sqlite3.OperationalError:
+        return []
+    return [dict(r) for r in rows]
+
+
 def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                       slug: str) -> dict | None:
     """Cross-dataset profile: the authority as Anti-nero works executor AND
@@ -1312,11 +1358,22 @@ def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             e["eur"] = round(e["eur"], 2)
         return out
 
+    keys = row.keys()
     return {
         "name": name, "slug": slug, "kind": row["kind"],
         "pe": row["region_pe"],
         "seat": {"city": row["municipality_name"],
                  "lat": row["lat"], "lon": row["lon"]},
+        # office layer (DATA_DECISIONS 2026-08-17): ΥΠΕΝ directory address
+        # confirmed by the authority's own Diavgeia letterheads
+        "contact": {
+            "street": row["street"] if "street" in keys else None,
+            "postal_code": row["postal_code"] if "postal_code" in keys else None,
+            "city": row["city"] if "city" in keys else None,
+            "phone": row["phone"] if "phone" in keys else None,
+            "email": row["email"] if "email" in keys else None,
+            "precision": row["seat_precision"] if "seat_precision" in keys else None,
+        },
         "antinero": {
             "contracts": anti_contracts,
             "total_eur": round(sum((c["eff"] or 0) / (c["n_auths"] or 1)

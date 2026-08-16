@@ -188,11 +188,12 @@ def test_dase_map_pins(client):
     """Proportional-symbol map payload: unit circles + per-Π.Ε. residue +
     off-map unresolved must reconcile exactly to the ΔΑΣΕ stated-net basis."""
     m = client.get("/api/dase/map").get_json()
-    # 48+1 seat circles + 4 seatless forest units at Π.Ε. centroids —
+    # 48+1 seat circles + 2 seatless forest units at Π.Ε. centroids +
+    # the directory-seated ΕΠΙΘΕΩΡΗΣΗ Μ-Θ (one circle at its Πυλαία seat) —
     # spelling variants of seated authorities merge via Ν./ΝΟΜΟΥ-stripped
     # folds and the curated EN identity («ΔΔ Ν. Πιερίας» → ΔΔ Πιερίας,
     # «ΦΟΥΡΝΑ/ΦΟΥΡΝΩΝ» → Δασαρχείο Φουρνάς)
-    assert len(m["units"]) == 52
+    assert len(m["units"]) == 51
     # no two circles may share a curated English identity (the Pieria/Fourna
     # double-dot class of bug)
     import json as _json
@@ -250,7 +251,12 @@ def test_connections_pins(client):
 
 
 def test_authorities_pins(client):
-    a = client.get("/api/authorities").get_json()
+    payload = client.get("/api/authorities").get_json()
+    a = payload["authorities"]
+    # the rest of the ΥΠΕΝ network (no recorded contracts) rides along as a
+    # reference section (DATA_DECISIONS 2026-08-17)
+    assert len(payload["other_units"]) == 49
+    assert all(u["name"] for u in payload["other_units"])
     assert len(a) == 103
     both = [r for r in a if r["antinero_n"] and r["dase_n"]]
     assert len(both) == 48          # authorities active in BOTH datasets

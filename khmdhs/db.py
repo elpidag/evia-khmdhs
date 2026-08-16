@@ -196,12 +196,39 @@ CREATE TABLE IF NOT EXISTS forest_authorities (
     municipality_name TEXT,
     lat               REAL,
     lon               REAL,
-    region_pe         TEXT
+    region_pe         TEXT,
+    -- office layer (DATA_DECISIONS 2026-08-17): curated ΥΠΕΝ-directory
+    -- address confirmed by Diavgeia letterheads; lat/lon above hold the
+    -- geocoded office point when seat_precision != 'municipality'
+    street            TEXT,
+    postal_code       TEXT,
+    city              TEXT,
+    phone             TEXT,
+    email             TEXT,
+    seat_precision    TEXT                  -- street | postcode | city | municipality
 );
 
 -- Which authority(ies) each contract's works fall under, extracted by the
 -- whitelist matcher in forest_loader (source records how: title/objects/pdf/
 -- override/inherited:<ref>); excerpt keeps the matched evidence citable.
+-- Complete ΥΠΕΝ forest-service directory (DATA_DECISIONS 2026-08-17):
+-- REFERENCE layer from khmdhs/data/forest_units_directory.json — display
+-- and audit vocabulary only, never fed to the contract matcher.
+CREATE TABLE IF NOT EXISTS forest_units_directory (
+    name           TEXT NOT NULL,
+    inspectorate   TEXT NOT NULL,
+    unit_kind      TEXT NOT NULL,   -- dx|dd|inspectorate|coordination|reforestation
+    street         TEXT,
+    tk             TEXT,
+    city           TEXT,
+    phone          TEXT,
+    email          TEXT,
+    authority_name TEXT,            -- registry authority when the unit is one of the 103
+    lat            REAL,            -- only where a unit needed its own seat (ΕΠΙΘ. Μ-Θ)
+    lon            REAL,
+    PRIMARY KEY (inspectorate, name)
+);
+
 CREATE TABLE IF NOT EXISTS contract_forest_authorities (
     reference_number TEXT NOT NULL,
     seq              INTEGER NOT NULL,
@@ -279,6 +306,13 @@ def init_db(path: Path) -> sqlite3.Connection:
         ("contractor_locations", "geo_precision", "TEXT"),
         # curated stated-value corrections (dase_contract_corrections.json)
         ("contracts", "correction_note", "TEXT"),
+        # forest-authority office layer (DATA_DECISIONS 2026-08-17)
+        ("forest_authorities", "street", "TEXT"),
+        ("forest_authorities", "postal_code", "TEXT"),
+        ("forest_authorities", "city", "TEXT"),
+        ("forest_authorities", "phone", "TEXT"),
+        ("forest_authorities", "email", "TEXT"),
+        ("forest_authorities", "seat_precision", "TEXT"),
         # registry double-postings: the kept twin's ΑΔΑΜ (DATA_DECISIONS 2026-08-14)
         ("contracts", "duplicate_of", "TEXT"),
     ):

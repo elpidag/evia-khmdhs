@@ -1,1098 +1,2743 @@
 {
-  "_comment": "Hand-curated registry of the Διευθύνσεις Δασών (dd) / Δασαρχεία (dx) observed in Anti-nero contract texts. aliases = genitive forms as they appear after trigger words (incl. registry typos); municipality_code joins khmdhs/data/greek_municipalities.json (ΥΠΕΣ Kallikratis code) for the seat coordinates; region_pe = the Π.Ε. of the seat. contract_overrides pin authorities for contracts whose text names none; no_authority documents contracts that genuinely name no forest authority (region-scoped works) — never guessed.",
-  "authorities": {
-    "Διεύθυνση Δασών Αθηνών": {
-      "kind": "dd",
-      "aliases": [
-        "ΑΘΗΝΩΝ"
-      ],
-      "seat_city": "Αθήνα",
-      "municipality": "Αθηναίων",
-      "municipality_code": "9186",
-      "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών"
-    },
-    "Διεύθυνση Δασών Αργολίδας": {
-      "kind": "dd",
-      "aliases": [
-        "ΑΡΓΟΛΙΔΑΣ"
-      ],
-      "seat_city": "Ναύπλιο",
-      "municipality": "Ναυπλιέων",
-      "municipality_code": "9236",
-      "region_pe": "Π.Ε. Αργολίδας"
-    },
-    "Διεύθυνση Δασών Άρτας": {
-      "kind": "dd",
-      "aliases": [
-        "ΑΡΤΑΣ"
-      ],
-      "seat_city": "Άρτα",
-      "municipality": "Αρταίων",
-      "municipality_code": "9073",
-      "region_pe": "Π.Ε. Άρτας"
-    },
-    "Διεύθυνση Δασών Γρεβενών": {
-      "kind": "dd",
-      "aliases": [
-        "ΓΡΕΒΕΝΩΝ"
-      ],
-      "seat_city": "Γρεβενά",
-      "municipality": "Γρεβενών",
-      "municipality_code": "9061",
-      "region_pe": "Π.Ε. Γρεβενών"
-    },
-    "Διεύθυνση Δασών Δωδεκανήσου": {
-      "kind": "dd",
-      "aliases": [
-        "ΔΩΔΕΚΑΝΗΣΟΥ"
-      ],
-      "seat_city": "Ρόδος",
-      "municipality": "Ρόδου",
-      "municipality_code": "9296",
-      "region_pe": "Π.Ε. Ρόδου"
-    },
-    "Διεύθυνση Δασών Έβρου": {
-      "kind": "dd",
-      "aliases": [
-        "ΕΒΡΟΥ"
-      ],
-      "seat_city": "Αλεξανδρούπολη",
-      "municipality": "Αλεξανδρούπολης",
-      "municipality_code": "9006",
-      "region_pe": "Π.Ε. Έβρου"
-    },
-    "Διεύθυνση Δασών Ζακύνθου": {
-      "kind": "dd",
-      "aliases": [
-        "ΖΑΚΥΝΘΟΥ"
-      ],
-      "seat_city": "Ζάκυνθος",
-      "municipality": "Ζακύνθου",
-      "municipality_code": "9116",
-      "region_pe": "Π.Ε. Ζακύνθου"
-    },
-    "Διεύθυνση Δασών Ημαθίας": {
-      "kind": "dd",
-      "aliases": [
-        "ΗΜΑΘΙΑΣ"
-      ],
-      "seat_city": "Βέροια",
-      "municipality": "Βέροιας",
-      "municipality_code": "9024",
-      "region_pe": "Π.Ε. Ημαθίας"
-    },
-    "Διεύθυνση Δασών Ηρακλείου": {
-      "kind": "dd",
-      "aliases": [
-        "ΗΡΑΚΛΕΙΟΥ"
-      ],
-      "seat_city": "Ηράκλειο",
-      "municipality": "Ηρακλείου",
-      "municipality_code": "9305",
-      "region_pe": "Π.Ε. Ηρακλείου"
-    },
-    "Διεύθυνση Δασών Θεσπρωτίας": {
-      "kind": "dd",
-      "aliases": [
-        "ΘΕΣΠΡΩΤΙΑΣ"
-      ],
-      "seat_city": "Ηγουμενίτσα",
-      "municipality": "Ηγουμενίτσας",
-      "municipality_code": "9077",
-      "region_pe": "Π.Ε. Θεσπρωτίας"
-    },
-    "Διεύθυνση Δασών Καστοριάς": {
-      "kind": "dd",
-      "aliases": [
-        "ΚΑΣΤΟΡΙΑΣ"
-      ],
-      "seat_city": "Καστοριά",
-      "municipality": "Καστοριάς",
-      "municipality_code": "9063",
-      "region_pe": "Π.Ε. Καστοριάς"
-    },
-    "Διεύθυνση Δασών Κέρκυρας": {
-      "kind": "dd",
-      "aliases": [
-        "ΚΕΡΚΥΡΑΣ"
-      ],
-      "seat_city": "Κέρκυρα",
-      "municipality": "Κέρκυρας",
-      "municipality_code": "9118",
-      "region_pe": "Π.Ε. Κέρκυρας"
-    },
-    "Διεύθυνση Δασών Κεφαλληνίας": {
-      "kind": "dd",
-      "aliases": [
-        "ΚΕΦΑΛΛΗΝΙΑΣ"
-      ],
-      "seat_city": "Αργοστόλι",
-      "municipality": "Κεφαλονιάς",
-      "municipality_code": "9120",
-      "region_pe": "Π.Ε. Κεφαλληνίας"
-    },
-    "Διεύθυνση Δασών Λάρισας": {
-      "kind": "dd",
-      "aliases": [
-        "ΛΑΡΙΣΑΣ"
-      ],
-      "seat_city": "Λάρισα",
-      "municipality": "Λαρισαίων",
-      "municipality_code": "9100",
-      "region_pe": "Π.Ε. Λάρισας"
-    },
-    "Διεύθυνση Δασών Λασιθίου": {
-      "kind": "dd",
-      "aliases": [
-        "ΛΑΣΙΘΙΟΥ"
-      ],
-      "seat_city": "Άγιος Νικόλαος",
-      "municipality": "Αγίου Νικολάου",
-      "municipality_code": "9310",
-      "region_pe": "Π.Ε. Λασιθίου"
-    },
-    "Διεύθυνση Δασών Λέσβου": {
-      "kind": "dd",
-      "aliases": [
-        "ΛΕΣΒΟΥ"
-      ],
-      "seat_city": "Μυτιλήνη",
-      "municipality": "Λέσβου",
-      "municipality_code": "9261",
-      "region_pe": "Π.Ε. Λέσβου"
-    },
-    "Διεύθυνση Δασών Λευκάδας": {
-      "kind": "dd",
-      "aliases": [
-        "ΛΕΥΚΑΔΑΣ"
-      ],
-      "seat_city": "Λευκάδα",
-      "municipality": "Λευκάδας",
-      "municipality_code": "9121",
-      "region_pe": "Π.Ε. Λευκάδας"
-    },
-    "Διεύθυνση Δασών Πιερίας": {
-      "kind": "dd",
-      "aliases": [
-        "ΠΙΕΡΙΑΣ"
-      ],
-      "seat_city": "Κατερίνη",
-      "municipality": "Κατερίνης",
-      "municipality_code": "9047",
-      "region_pe": "Π.Ε. Πιερίας"
-    },
-    "Διεύθυνση Δασών Πρέβεζας": {
-      "kind": "dd",
-      "aliases": [
-        "ΠΡΕΒΕΖΑΣ"
-      ],
-      "seat_city": "Πρέβεζα",
-      "municipality": "Πρέβεζας",
-      "municipality_code": "9090",
-      "region_pe": "Π.Ε. Πρέβεζας"
-    },
-    "Διεύθυνση Δασών Ρεθύμνου": {
-      "kind": "dd",
-      "aliases": [
-        "ΡΕΘΥΜΝΟΥ"
-      ],
-      "seat_city": "Ρέθυμνο",
-      "municipality": "Ρεθύμνης",
-      "municipality_code": "9318",
-      "region_pe": "Π.Ε. Ρεθύμνου"
-    },
-    "Διεύθυνση Δασών Ροδόπης": {
-      "kind": "dd",
-      "aliases": [
-        "ΡΟΔΟΠΗΣ"
-      ],
-      "seat_city": "Κομοτηνή",
-      "municipality": "Κομοτηνής",
-      "municipality_code": "9021",
-      "region_pe": "Π.Ε. Ροδόπης"
-    },
-    "Διεύθυνση Δασών Σάμου": {
-      "kind": "dd",
-      "aliases": [
-        "ΣΑΜΟΥ"
-      ],
-      "seat_city": "Σάμος",
-      "municipality": "Σάμου",
-      "municipality_code": "9264",
-      "region_pe": "Π.Ε. Σάμου"
-    },
-    "Διεύθυνση Δασών Φλώρινας": {
-      "kind": "dd",
-      "aliases": [
-        "ΦΛΩΡΙΝΑΣ"
-      ],
-      "seat_city": "Φλώρινα",
-      "municipality": "Φλώρινας",
-      "municipality_code": "9072",
-      "region_pe": "Π.Ε. Φλώρινας"
-    },
-    "Διεύθυνση Δασών Φωκίδας": {
-      "kind": "dd",
-      "aliases": [
-        "ΦΩΚΙΔΑΣ"
-      ],
-      "seat_city": "Άμφισσα",
-      "municipality": "Δελφών",
-      "municipality_code": "9165",
-      "region_pe": "Π.Ε. Φωκίδας"
-    },
-    "Διεύθυνση Δασών Χανίων": {
-      "kind": "dd",
-      "aliases": [
-        "ΧΑΝΙΩΝ"
-      ],
-      "seat_city": "Χανιά",
-      "municipality": "Χανίων",
-      "municipality_code": "9325",
-      "region_pe": "Π.Ε. Χανίων"
-    },
-    "Διεύθυνση Δασών Χίου": {
-      "kind": "dd",
-      "aliases": [
-        "ΧΙΟΥ"
-      ],
-      "seat_city": "Χίος",
-      "municipality": "Χίου",
-      "municipality_code": "9266",
-      "region_pe": "Π.Ε. Χίου"
-    },
-    "Δασαρχείο Αγιάς": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΓΙΑΣ"
-      ],
-      "seat_city": "Αγιά",
-      "municipality": "Αγιάς",
-      "municipality_code": "9097",
-      "region_pe": "Π.Ε. Λάρισας"
-    },
-    "Δασαρχείο Αγρινίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΓΡΙΝΙΟΥ"
-      ],
-      "seat_city": "Αγρίνιο",
-      "municipality": "Αγρινίου",
-      "municipality_code": "9123",
-      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
-    },
-    "Δασαρχείο Αιγάλεω": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΙΓΑΛΕΩ"
-      ],
-      "seat_city": "Αιγάλεω",
-      "municipality": "Αιγάλεω",
-      "municipality_code": "9181",
-      "region_pe": "Π.Ε. Δυτικού Τομέα Αθηνών"
-    },
-    "Δασαρχείο Αιγίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΙΓΙΟΥ"
-      ],
-      "seat_city": "Αίγιο",
-      "municipality": "Αιγιαλείας",
-      "municipality_code": "9130",
-      "region_pe": "Π.Ε. Αχαΐας"
-    },
-    "Δασαρχείο Αλεξανδρούπολης": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
-        "ΑΞΑΝΔΡΟΥΠΟΛΗΣ"
-      ],
-      "seat_city": "Αλεξανδρούπολη",
-      "municipality": "Αλεξανδρούπολης",
-      "municipality_code": "9006",
-      "region_pe": "Π.Ε. Έβρου"
-    },
-    "Δασαρχείο Αλιβερίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΛΙΒΕΡΙΟΥ"
-      ],
-      "seat_city": "Αλιβέρι",
-      "municipality": "Κύμης - Αλιβερίου",
-      "municipality_code": "9152",
-      "region_pe": "Π.Ε. Ευβοίας"
-    },
-    "Δασαρχείο Αλμυρού": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΛΜΥΡΟΥ"
-      ],
-      "seat_city": "Αλμυρός",
-      "municipality": "Αλμυρού",
-      "municipality_code": "9104",
-      "region_pe": "Π.Ε. Μαγνησίας"
-    },
-    "Δασαρχείο Αμαλιάδας": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΜΑΛΙΑΔΑΣ"
-      ],
-      "seat_city": "Αμαλιάδα",
-      "municipality": "Ήλιδας",
-      "municipality_code": "9139",
-      "region_pe": "Π.Ε. Ηλείας"
-    },
-    "Δασαρχείο Αμφιλοχίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΜΦΙΛΟΧΙΑΣ"
-      ],
-      "seat_city": "Αμφιλοχία",
-      "municipality": "Αμφιλοχίας",
-      "municipality_code": "9125",
-      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
-    },
-    "Δασαρχείο Άμφισσας": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΜΦΙΣΣΑΣ"
-      ],
-      "seat_city": "Άμφισσα",
-      "municipality": "Δελφών",
-      "municipality_code": "9165",
-      "region_pe": "Π.Ε. Φωκίδας"
-    },
-    "Δασαρχείο Αριδαίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΡΙΔΑΙΑΣ"
-      ],
-      "seat_city": "Αριδαία",
-      "municipality": "Αλμωπίας",
-      "municipality_code": "9042",
-      "region_pe": "Π.Ε. Πέλλας"
-    },
-    "Δασαρχείο Αρναίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΡΝΑΙΑΣ"
-      ],
-      "seat_city": "Αρναία",
-      "municipality": "Αριστοτέλη",
-      "municipality_code": "9056",
-      "region_pe": "Π.Ε. Χαλκιδικής"
-    },
-    "Δασαρχείο Αταλάντης": {
-      "kind": "dx",
-      "aliases": [
-        "ΑΤΑΛΑΝΤΗΣ"
-      ],
-      "seat_city": "Αταλάντη",
-      "municipality": "Λοκρών",
-      "municipality_code": "9161",
-      "region_pe": "Π.Ε. Φθιώτιδας"
-    },
-    "Δασαρχείο Βέροιας": {
-      "kind": "dx",
-      "aliases": [
-        "ΒΕΡΟΙΑΣ"
-      ],
-      "seat_city": "Βέροια",
-      "municipality": "Βέροιας",
-      "municipality_code": "9024",
-      "region_pe": "Π.Ε. Ημαθίας"
-    },
-    "Δασαρχείο Βόλου": {
-      "kind": "dx",
-      "aliases": [
-        "ΒΟΛΟΥ"
-      ],
-      "seat_city": "Βόλος",
-      "municipality": "Βόλου",
-      "municipality_code": "9105",
-      "region_pe": "Π.Ε. Μαγνησίας"
-    },
-    "Δασαρχείο Βυτίνας": {
-      "kind": "dx",
-      "aliases": [
-        "ΒΥΤΙΝΑΣ"
-      ],
-      "seat_city": "Βυτίνα",
-      "municipality": "Γορτυνίας",
-      "municipality_code": "9238",
-      "region_pe": "Π.Ε. Αρκαδίας"
-    },
-    "Δασαρχείο Γουμένισσας": {
-      "kind": "dx",
-      "aliases": [
-        "ΓΟΥΜΕΝΙΣΣΑΣ"
-      ],
-      "seat_city": "Γουμένισσα",
-      "municipality": "Παιονίας",
-      "municipality_code": "9041",
-      "region_pe": "Π.Ε. Κιλκίς"
-    },
-    "Δασαρχείο Διδυμοτείχου": {
-      "kind": "dx",
-      "aliases": [
-        "ΔΙΔΥΜΟΤΕΙΧΟΥ",
-        "ΔΙΔ ΤΕΙΧΟΥ"
-      ],
-      "seat_city": "Διδυμότειχο",
-      "municipality": "Διδυμοτείχου",
-      "municipality_code": "9007",
-      "region_pe": "Π.Ε. Έβρου"
-    },
-    "Δασαρχείο Δράμας": {
-      "kind": "dx",
-      "aliases": [
-        "ΔΡΑΜΑΣ"
-      ],
-      "seat_city": "Δράμα",
-      "municipality": "Δράμας",
-      "municipality_code": "9002",
-      "region_pe": "Π.Ε. Δράμας"
-    },
-    "Δασαρχείο Έδεσσας": {
-      "kind": "dx",
-      "aliases": [
-        "ΕΔΕΣΣΑΣ"
-      ],
-      "seat_city": "Έδεσσα",
-      "municipality": "Έδεσσας",
-      "municipality_code": "9043",
-      "region_pe": "Π.Ε. Πέλλας"
-    },
-    "Δασαρχείο Ελασσόνας": {
-      "kind": "dx",
-      "aliases": [
-        "ΕΛΑΣΣΟΝΑΣ"
-      ],
-      "seat_city": "Ελασσόνα",
-      "municipality": "Ελασσόνας",
-      "municipality_code": "9098",
-      "region_pe": "Π.Ε. Λάρισας"
-    },
-    "Δασαρχείο Θάσου": {
-      "kind": "dx",
-      "aliases": [
-        "ΘΑΣΟΥ"
-      ],
-      "seat_city": "Θάσος",
-      "municipality": "Θάσου",
-      "municipality_code": "9011",
-      "region_pe": "Π.Ε. Θάσου"
-    },
-    "Δασαρχείο Θεσσαλονίκης": {
-      "kind": "dx",
-      "aliases": [
-        "ΘΕΣΣΑΛΟΝΙΚΗΣ"
-      ],
-      "seat_city": "Θεσσαλονίκη",
-      "municipality": "Θεσσαλονίκης",
-      "municipality_code": "9031",
-      "region_pe": "Π.Ε. Θεσσαλονίκης"
-    },
-    "Δασαρχείο Θηβών": {
-      "kind": "dx",
-      "aliases": [
-        "ΘΗΒΩΝ",
-        "ΘΗΒΑΣ"
-      ],
-      "seat_city": "Θήβα",
-      "municipality": "Θηβαίων",
-      "municipality_code": "9144",
-      "region_pe": "Π.Ε. Βοιωτίας"
-    },
-    "Δασαρχείο Ιστιαίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΙΣΤΙΑΙΑΣ"
-      ],
-      "seat_city": "Ιστιαία",
-      "municipality": "Ιστιαίας - Αιδηψού",
-      "municipality_code": "9150",
-      "region_pe": "Π.Ε. Ευβοίας"
-    },
-    "Δασαρχείο Ιωαννίνων": {
-      "kind": "dx",
-      "aliases": [
-        "ΙΩΑΝΝΙΝΩΝ"
-      ],
-      "seat_city": "Ιωάννινα",
-      "municipality": "Ιωαννιτών",
-      "municipality_code": "9084",
-      "region_pe": "Π.Ε. Ιωαννίνων"
-    },
-    "Δασαρχείο Καβάλας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΑΒΑΛΑΣ"
-      ],
-      "seat_city": "Καβάλα",
-      "municipality": "Καβάλας",
-      "municipality_code": "9012",
-      "region_pe": "Π.Ε. Καβάλας"
-    },
-    "Δασαρχείο Καλαμάτας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΑΛΑΜΑΤΑΣ"
-      ],
-      "seat_city": "Καλαμάτα",
-      "municipality": "Καλαμάτας",
-      "municipality_code": "9254",
-      "region_pe": "Π.Ε. Μεσσηνίας"
-    },
-    "Δασαρχείο Καλαμπάκας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΑΛΑΜΠΑΚΑΣ"
-      ],
-      "seat_city": "Καλαμπάκα",
-      "municipality": "Καλαμπάκας",
-      "municipality_code": "9112",
-      "region_pe": "Π.Ε. Τρικάλων"
-    },
-    "Δασαρχείο Καπανδριτίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΑΠΑΝΔΡΙΤΙΟΥ"
-      ],
-      "seat_city": "Καπανδρίτι",
-      "municipality": "Ωρωπού",
-      "municipality_code": "9227",
-      "region_pe": "Π.Ε. Ανατολικής Αττικής"
-    },
-    "Δασαρχείο Καρδίτσας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΑΡΔΙΤΣΑΣ"
-      ],
-      "seat_city": "Καρδίτσα",
-      "municipality": "Καρδίτσας",
-      "municipality_code": "9092",
-      "region_pe": "Π.Ε. Καρδίτσας"
-    },
-    "Δασαρχείο Καρπενησίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΑΡΠΕΝΗΣΙΟΥ"
-      ],
-      "seat_city": "Καρπενήσι",
-      "municipality": "Καρπενησίου",
-      "municipality_code": "9157",
-      "region_pe": "Π.Ε. Ευρυτανίας"
-    },
-    "Δασαρχείο Κασσάνδρας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΑΣΣΑΝΔΡΑΣ"
-      ],
-      "seat_city": "Κασσάνδρεια",
-      "municipality": "Κασσάνδρας",
-      "municipality_code": "9057",
-      "region_pe": "Π.Ε. Χαλκιδικής"
-    },
-    "Δασαρχείο Κιλκίς": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΙΛΚΙΣ"
-      ],
-      "seat_city": "Κιλκίς",
-      "municipality": "Κιλκίς",
-      "municipality_code": "9040",
-      "region_pe": "Π.Ε. Κιλκίς"
-    },
-    "Δασαρχείο Κοζάνης": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΟΖΑΝΗΣ"
-      ],
-      "seat_city": "Κοζάνη",
-      "municipality": "Κοζάνης",
-      "municipality_code": "9068",
-      "region_pe": "Π.Ε. Κοζάνης"
-    },
-    "Δασαρχείο Κόνιτσας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΟΝΙΤΣΑΣ"
-      ],
-      "seat_city": "Κόνιτσα",
-      "municipality": "Κόνιτσας",
-      "municipality_code": "9085",
-      "region_pe": "Π.Ε. Ιωαννίνων"
-    },
-    "Δασαρχείο Κορίνθου": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΟΡΙΝΘΟΥ",
-        "ΚΟΡΙΝΘΙΑΣ"
-      ],
-      "seat_city": "Κόρινθος",
-      "municipality": "Κορινθίων",
-      "municipality_code": "9243",
-      "region_pe": "Π.Ε. Κορινθίας"
-    },
-    "Δασαρχείο Κυνουρίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΥΝΟΥΡΙΑΣ"
-      ],
-      "seat_city": "Άστρος",
-      "municipality": "Βόρειας Κυνουρίας",
-      "municipality_code": "9237",
-      "region_pe": "Π.Ε. Αρκαδίας"
-    },
-    "Δασαρχείο Κυπαρισσίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΚΥΠΑΡΙΣΣΙΑΣ"
-      ],
-      "seat_city": "Κυπαρισσία",
-      "municipality": "Τριφυλίας",
-      "municipality_code": "9258",
-      "region_pe": "Π.Ε. Μεσσηνίας"
-    },
-    "Δασαρχείο Λαγκαδά": {
-      "kind": "dx",
-      "aliases": [
-        "ΛΑΓΚΑΔΑ"
-      ],
-      "seat_city": "Λαγκαδάς",
-      "municipality": "Λαγκαδά",
-      "municipality_code": "9034",
-      "region_pe": "Π.Ε. Θεσσαλονίκης"
-    },
-    "Δασαρχείο Λαμίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΛΑΜΙΑΣ"
-      ],
-      "seat_city": "Λαμία",
-      "municipality": "Λαμιέων",
-      "municipality_code": "9160",
-      "region_pe": "Π.Ε. Φθιώτιδας"
-    },
-    "Δασαρχείο Λάρισας": {
-      "kind": "dx",
-      "aliases": [
-        "ΛΑΡΙΣΑΣ"
-      ],
-      "seat_city": "Λάρισα",
-      "municipality": "Λαρισαίων",
-      "municipality_code": "9100",
-      "region_pe": "Π.Ε. Λάρισας"
-    },
-    "Δασαρχείο Λαυρίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΛΑΥΡΙΟΥ"
-      ],
-      "seat_city": "Λαύριο",
-      "municipality": "Λαυρεωτικής",
-      "municipality_code": "9219",
-      "region_pe": "Π.Ε. Ανατολικής Αττικής"
-    },
-    "Δασαρχείο Λιβαδειάς": {
-      "kind": "dx",
-      "aliases": [
-        "ΛΙΒΑΔΕΙΑΣ",
-        "ΛΕΙΒΑΔΙΑΣ"
-      ],
-      "seat_city": "Λιβαδειά",
-      "municipality": "Λεβαδέων",
-      "municipality_code": "9145",
-      "region_pe": "Π.Ε. Βοιωτίας"
-    },
-    "Δασαρχείο Λιδωρικίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΛΙΔΩΡΙΚΙΟΥ"
-      ],
-      "seat_city": "Λιδωρίκι",
-      "municipality": "Δωρίδος",
-      "municipality_code": "9166",
-      "region_pe": "Π.Ε. Φωκίδας"
-    },
-    "Δασαρχείο Λίμνης": {
-      "kind": "dx",
-      "aliases": [
-        "ΛΙΜΝΗΣ"
-      ],
-      "seat_city": "Λίμνη",
-      "municipality": "Μαντουδίου - Λίμνης - Αγίας Άννας",
-      "municipality_code": "9153",
-      "region_pe": "Π.Ε. Ευβοίας"
-    },
-    "Δασαρχείο Μεγάρων": {
-      "kind": "dx",
-      "aliases": [
-        "ΜΕΓΑΡΩΝ"
-      ],
-      "seat_city": "Μέγαρα",
-      "municipality": "Μεγαρέων",
-      "municipality_code": "9231",
-      "region_pe": "Π.Ε. Δυτικής Αττικής"
-    },
-    "Δασαρχείο Μεσολογγίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΜΕΣΟΛΟΓΓΙΟΥ"
-      ],
-      "seat_city": "Μεσολόγγι",
-      "municipality": "Ιεράς Πόλης Μεσολογγίου",
-      "municipality_code": "9127",
-      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
-    },
-    "Δασαρχείο Μετσόβου": {
-      "kind": "dx",
-      "aliases": [
-        "ΜΕΤΣΟΒΟΥ"
-      ],
-      "seat_city": "Μέτσοβο",
-      "municipality": "Μετσόβου",
-      "municipality_code": "9086",
-      "region_pe": "Π.Ε. Ιωαννίνων"
-    },
-    "Δασαρχείο Μουζακίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΜΟΥΖΑΚΙΟΥ"
-      ],
-      "seat_city": "Μουζάκι",
-      "municipality": "Μουζακίου",
-      "municipality_code": "9094",
-      "region_pe": "Π.Ε. Καρδίτσας"
-    },
-    "Δασαρχείο Ναυπάκτου": {
-      "kind": "dx",
-      "aliases": [
-        "ΝΑΥΠΑΚΤΟΥ"
-      ],
-      "seat_city": "Ναύπακτος",
-      "municipality": "Ναυπακτίας",
-      "municipality_code": "9128",
-      "region_pe": "Π.Ε. Αιτωλοακαρνανίας"
-    },
-    "Δασαρχείο Νευροκοπίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΝΕΥΡΟΚΟΠΙΟΥ",
-        "Κ.ΝΕΥΡΟΚΟΠΙΟΥ",
-        "Κ. ΝΕΥΡΟΚΟΠΙΟΥ"
-      ],
-      "seat_city": "Κάτω Νευροκόπι",
-      "municipality": "Κάτω Νευροκοπίου",
-      "municipality_code": "9003",
-      "region_pe": "Π.Ε. Δράμας"
-    },
-    "Δασαρχείο Νιγρίτας": {
-      "kind": "dx",
-      "aliases": [
-        "ΝΙΓΡΙΤΑΣ"
-      ],
-      "seat_city": "Νιγρίτα",
-      "municipality": "Βισαλτίας",
-      "municipality_code": "9050",
-      "region_pe": "Π.Ε. Σερρών"
-    },
-    "Δασαρχείο Ξάνθης": {
-      "kind": "dx",
-      "aliases": [
-        "ΞΑΝΘΗΣ"
-      ],
-      "seat_city": "Ξάνθη",
-      "municipality": "Ξάνθης",
-      "municipality_code": "9017",
-      "region_pe": "Π.Ε. Ξάνθης"
-    },
-    "Δασαρχείο Ξυλοκάστρου": {
-      "kind": "dx",
-      "aliases": [
-        "ΞΥΛΟΚΑΣΤΡΟΥ"
-      ],
-      "seat_city": "Ξυλόκαστρο",
-      "municipality": "Ξυλοκάστρου - Ευρωστίνης",
-      "municipality_code": "9246",
-      "region_pe": "Π.Ε. Κορινθίας"
-    },
-    "Δασαρχείο Ολυμπίας": {
-      "kind": "dx",
-      "aliases": [
-        "ΟΛΥΜΠΙΑΣ"
-      ],
-      "seat_city": "Κρέστενα",
-      "municipality": "Ανδρίτσαινας - Κρεστένων",
-      "municipality_code": "9136",
-      "region_pe": "Π.Ε. Ηλείας"
-    },
-    "Δασαρχείο Πάρνηθας": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΑΡΝΗΘΑΣ"
-      ],
-      "seat_city": "Αχαρνές",
-      "municipality": "Αχαρνών",
-      "municipality_code": "9215",
-      "region_pe": "Π.Ε. Ανατολικής Αττικής"
-    },
-    "Δασαρχείο Πατρών": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΑΤΡΩΝ"
-      ],
-      "seat_city": "Πάτρα",
-      "municipality": "Πατρέων",
-      "municipality_code": "9134",
-      "region_pe": "Π.Ε. Αχαΐας"
-    },
-    "Δασαρχείο Πειραιά": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΕΙΡΑΙΑ",
-        "ΠΕΙΡΑΙΩΣ"
-      ],
-      "seat_city": "Πειραιάς",
-      "municipality": "Πειραιώς",
-      "municipality_code": "9205",
-      "region_pe": "Π.Ε. Πειραιώς"
-    },
-    "Δασαρχείο Πεντέλης": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΕΝΤΕΛΗΣ"
-      ],
-      "seat_city": "Πεντέλη",
-      "municipality": "Πεντέλης",
-      "municipality_code": "9176",
-      "region_pe": "Π.Ε. Βορείου Τομέα Αθηνών"
-    },
-    "Δασαρχείο Περτουλίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΕΡΤΟΥΛΙΟΥ"
-      ],
-      "seat_city": "Περτούλι",
-      "municipality": "Πύλης",
-      "municipality_code": "9113",
-      "region_pe": "Π.Ε. Τρικάλων"
-    },
-    "Δασαρχείο Πολυγύρου": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΟΛΥΓΥΡΟΥ"
-      ],
-      "seat_city": "Πολύγυρος",
-      "municipality": "Πολυγύρου",
-      "municipality_code": "9059",
-      "region_pe": "Π.Ε. Χαλκιδικής"
-    },
-    "Δασαρχείο Πόρου": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΟΡΟΥ"
-      ],
-      "seat_city": "Πόρος",
-      "municipality": "Πόρου",
-      "municipality_code": "9210",
-      "region_pe": "Π.Ε. Νήσων"
-    },
-    "Δασαρχείο Πύργου": {
-      "kind": "dx",
-      "aliases": [
-        "ΠΥΡΓΟΥ"
-      ],
-      "seat_city": "Πύργος",
-      "municipality": "Πύργου",
-      "municipality_code": "9141",
-      "region_pe": "Π.Ε. Ηλείας"
-    },
-    "Δασαρχείο Σερρών": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΕΡΡΩΝ"
-      ],
-      "seat_city": "Σέρρες",
-      "municipality": "Σερρών",
-      "municipality_code": "9054",
-      "region_pe": "Π.Ε. Σερρών"
-    },
-    "Δασαρχείο Σιδηροκάστρου": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΙΔΗΡΟΚΑΣΤΡΟΥ"
-      ],
-      "seat_city": "Σιδηρόκαστρο",
-      "municipality": "Σιντικής",
-      "municipality_code": "9055",
-      "region_pe": "Π.Ε. Σερρών"
-    },
-    "Δασαρχείο Σκοπέλου": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΚΟΠΕΛΟΥ"
-      ],
-      "seat_city": "Σκόπελος",
-      "municipality": "Σκοπέλου",
-      "municipality_code": "9111",
-      "region_pe": "Π.Ε. Σποράδων"
-    },
-    "Δασαρχείο Σουφλίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΟΥΦΛΙΟΥ"
-      ],
-      "seat_city": "Σουφλί",
-      "municipality": "Σουφλίου",
-      "municipality_code": "9010",
-      "region_pe": "Π.Ε. Έβρου"
-    },
-    "Δασαρχείο Σπάρτης": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΠΑΡΤΗΣ"
-      ],
-      "seat_city": "Σπάρτη",
-      "municipality": "Σπάρτης",
-      "municipality_code": "9252",
-      "region_pe": "Π.Ε. Λακωνίας"
-    },
-    "Δασαρχείο Σπερχειάδας": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΠΕΡΧΕΙΑΔΑΣ"
-      ],
-      "seat_city": "Σπερχειάδα",
-      "municipality": "Μακρακώμης",
-      "municipality_code": "9162",
-      "region_pe": "Π.Ε. Φθιώτιδας"
-    },
-    "Δασαρχείο Σταυρού": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΤΑΥΡΟΥ"
-      ],
-      "seat_city": "Σταυρός",
-      "municipality": "Βόλβης",
-      "municipality_code": "9027",
-      "region_pe": "Π.Ε. Θεσσαλονίκης"
-    },
-    "Δασαρχείο Σταυρούπολης": {
-      "kind": "dx",
-      "aliases": [
-        "ΣΤΑΥΡΟΥΠΟΛΗΣ"
-      ],
-      "seat_city": "Σταυρούπολη",
-      "municipality": "Ξάνθης",
-      "municipality_code": "9017",
-      "region_pe": "Π.Ε. Ξάνθης"
-    },
-    "Δασαρχείο Τρικάλων": {
-      "kind": "dx",
-      "aliases": [
-        "ΤΡΙΚΑΛΩΝ"
-      ],
-      "seat_city": "Τρίκαλα",
-      "municipality": "Τρικκαίων",
-      "municipality_code": "9114",
-      "region_pe": "Π.Ε. Τρικάλων"
-    },
-    "Δασαρχείο Τρίπολης": {
-      "kind": "dx",
-      "aliases": [
-        "ΤΡΙΠΟΛΗΣ"
-      ],
-      "seat_city": "Τρίπολη",
-      "municipality": "Τρίπολης",
-      "municipality_code": "9241",
-      "region_pe": "Π.Ε. Αρκαδίας"
-    },
-    "Δασαρχείο Τσοτυλίου": {
-      "kind": "dx",
-      "aliases": [
-        "ΤΣΟΤΥΛΙΟΥ"
-      ],
-      "seat_city": "Τσοτύλι",
-      "municipality": "Βοϊου",
-      "municipality_code": "9066",
-      "region_pe": "Π.Ε. Κοζάνης"
-    },
-    "Δασαρχείο Φουρνάς": {
-      "kind": "dx",
-      "aliases": [
-        "ΦΟΥΡΝΩΝ",
-        "ΦΟΥΡΝΑΣ"
-      ],
-      "seat_city": "Φουρνά",
-      "municipality": "Καρπενησίου",
-      "municipality_code": "9157",
-      "region_pe": "Π.Ε. Ευρυτανίας"
-    },
-    "Δασαρχείο Χαλκίδας": {
-      "kind": "dx",
-      "aliases": [
-        "ΧΑΛΚΙΔΑΣ"
-      ],
-      "seat_city": "Χαλκίδα",
-      "municipality": "Χαλκιδέων",
-      "municipality_code": "9155",
-      "region_pe": "Π.Ε. Ευβοίας"
-    }
+ "_comment": "Hand-curated registry of the Διευθύνσεις Δασών (dd) / Δασαρχεία (dx) observed in Anti-nero contract texts. aliases = genitive forms as they appear after trigger words (incl. registry typos); municipality_code joins khmdhs/data/greek_municipalities.json (ΥΠΕΣ Kallikratis code) for the seat coordinates; region_pe = the Π.Ε. of the seat. contract_overrides pin authorities for contracts whose text names none; no_authority documents contracts that genuinely name no forest authority (region-scoped works) — never guessed.",
+ "authorities": {
+  "Διεύθυνση Δασών Αθηνών": {
+   "kind": "dd",
+   "aliases": [
+    "ΑΘΗΝΩΝ"
+   ],
+   "seat_city": "Αθήνα",
+   "municipality": "Αθηναίων",
+   "municipality_code": "9186",
+   "region_pe": "Π.Ε. Κεντρικού Τομέα Αθηνών",
+   "office": {
+    "street": "Λεωφ. Μεσογείων 239",
+    "tk": "15451",
+    "city": "Νέο Ψυχικό",
+    "phones": [
+     "2110087621",
+     "2110087622"
+    ],
+    "emails": [
+     "dash_athina@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "ΡΛΔ04653Π8-7Γ6",
+    "excerpt": "2) 2 . /: 239 41 & . .: 154 51 112 57",
+    "lat": 38.0056101,
+    "lon": 23.7822671,
+    "geo_precision": "postcode"
+   }
   },
-  "contract_overrides": {
-    "23SYMV013600200": {
-      "authorities": [
-        "Δασαρχείο Λιβαδειάς",
-        "Δασαρχείο Λαγκαδά",
-        "Διεύθυνση Δασών Ροδόπης"
-      ],
-      "evidence": "Nursery-upgrade contract «Δασικών Φυτωρίων Αλίαρτου Π.Ε. Βοιωτίας, Λαγκαδά Π.Ε. Θεσσαλονίκης, Αμβροσίας και Οργάνης Π.Ε. Ροδόπης». The supplementary's PDF names the ΔΧ Λιβαδειάς cost committee (ΑΔΑ 6ΩΗΘ4653Π8-2ΞΞ); Λαγκαδάς nursery → ΔΧ Λαγκαδά, Αμβροσία/Οργάνη → ΔΔ Ροδόπης (no δασαρχεία in Ροδόπη) per the locations the title itself names."
-    },
-    "25SYMV016491944": {
-      "authorities": [
-        "Διεύθυνση Δασών Δωδεκανήσου"
-      ],
-      "evidence": "Title says «ΔΔ ΛΕΣΒΟΥ» but the signed PDF (fetched 2026-07-25) repeatedly declares works «αρμοδιότητας Διεύθυνσης Δασών Δωδεκανήσου … εντός του Δήμου Ρόδου της Π.Ε. Ρόδου (NUTS EL421)» — the title is a registry keying error; matches the curated project region Π.Ε. Ρόδου."
-    },
-    "26SYMV018739467": {
-      "authorities": [
-        "Διεύθυνση Δασών Φωκίδας",
-        "Δασαρχείο Ελασσόνας"
-      ],
-      "evidence": "Per-lot contract of a multi-lot πρόσκληση: the items text repeats the whole invitation (5 authorities) on every lot; the title «ΔΔ ΦΩΚΙΔΑΣ ΔΧ ΕΛΑΣΣΟΝΑΣ» names THIS lot's authorities and matches the curated regions (Π.Ε. Φωκίδας + Π.Ε. Λάρισας)."
-    },
-    "26SYMV018756094": {
-      "authorities": [
-        "Δασαρχείο Ολυμπίας"
-      ],
-      "evidence": "Per-lot contract of the same multi-lot πρόσκληση as 26SYMV018739467; the title «ΔΧ ΟΛΥΜΠΙΑΣ» names this lot's authority and matches the curated region Π.Ε. Ηλείας."
-    },
-    "25SYMV016495437": {
-      "authorities": [
-        "Δασαρχείο Αλεξανδρούπολης",
-        "Δασαρχείο Σουφλίου",
-        "Δασαρχείο Ξάνθης",
-        "Δασαρχείο Σταυρούπολης",
-        "Διεύθυνση Δασών Ροδόπης"
-      ],
-      "evidence": "Items text names the five specific authorities; the title «ΔΔ ΕΒΡΟΥ ΚΑΙ ΡΟΔΟΠΗΣ» is shorthand (Ξάνθη is not in Έβρος). Matches curated regions Π.Ε. Έβρου/Ξάνθης/Ροδόπης."
-    },
-    "25SYMV016670155": {
-      "authorities": [
-        "Δασαρχείο Καλαμπάκας",
-        "Δασαρχείο Λάρισας",
-        "Δασαρχείο Μουζακίου",
-        "Δασαρχείο Τρικάλων",
-        "Δασαρχείο Σπερχειάδας"
-      ],
-      "evidence": "Items text names the five δασαρχεία; the title's «ΔΔ ΛΑΡΙΣΑΣ ΤΡΙΚΑΛΩΝ …» misspells them as Διευθύνσεις Δασών. Matches curated regions Τρικάλων/Λάρισας/Καρδίτσας/Φθιώτιδας."
-    }
+  "Διεύθυνση Δασών Αργολίδας": {
+   "kind": "dd",
+   "aliases": [
+    "ΑΡΓΟΛΙΔΑΣ"
+   ],
+   "seat_city": "Ναύπλιο",
+   "municipality": "Ναυπλιέων",
+   "municipality_code": "9236",
+   "region_pe": "Π.Ε. Αργολίδας",
+   "office": {
+    "street": "Μιχαήλ Ιατρού 21",
+    "tk": "21100",
+    "city": "Ναύπλιο",
+    "emails": [
+     "ddarg@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "9ΕΑΠ4653Π8-8ΙΡ",
+    "excerpt": "& . .:332347 , . / : . 21 . : 211 00 : . : 27520-28226 ..(e-mail) : ddarg@eedpdpi.ypen.gr : � 4 2 ,",
+    "lat": 37.5663048,
+    "lon": 22.8109937,
+    "geo_precision": "street"
+   }
   },
-  "no_authority": {
-    "24SYMV015162689": "«Έργα αντιπυρικής προστασίας Περιφέρειας Αττικής» — region-scoped; no forest authority named in title/items.",
-    "25SYMV017328637": "ANTINERO IV ΠΕ Θεσσαλονίκης-Χαλκιδικής — the signed PDF references only «το αρμόδιο Δασαρχείο είτε η Διεύθυνση Δασών (κατά περίπτωση)», no specific authority.",
-    "25SYMV017345053": "ANTINERO IV Αττικής και όμορων ΠΕ — the signed PDF references only the generic «αρμόδιο Δασαρχείο/Διεύθυνση Δασών», no specific authority."
+  "Διεύθυνση Δασών Άρτας": {
+   "kind": "dd",
+   "aliases": [
+    "ΑΡΤΑΣ"
+   ],
+   "seat_city": "Άρτα",
+   "municipality": "Αρταίων",
+   "municipality_code": "9073",
+   "region_pe": "Π.Ε. Άρτας",
+   "office": {
+    "street": "Περιφερειακή Οδός & Δημητρίου 2",
+    "tk": "47132",
+    "city": "Άρτα",
+    "phones": [
+     "2681026360"
+    ],
+    "emails": [
+     "ddartas@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "9Μ9Κ4653Π8-Κ50",
+    "excerpt": ": & � : ... . / : 2 . : 47132 : . -. : 2681027254 E-mail : vziaraga@eedphm.ypen.gr dchelas@eedphm.ypen.",
+    "lat": 39.1613205,
+    "lon": 20.986264,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Γρεβενών": {
+   "kind": "dd",
+   "aliases": [
+    "ΓΡΕΒΕΝΩΝ"
+   ],
+   "seat_city": "Γρεβενά",
+   "municipality": "Γρεβενών",
+   "municipality_code": "9061",
+   "region_pe": "Π.Ε. Γρεβενών",
+   "office": {
+    "street": "Τέρμα Κ. Ταλιαδούρη – Διοικητήριο",
+    "tk": "51100",
+    "city": "Γρεβενά",
+    "phones": [
+     "2462353400"
+    ],
+    "emails": [
+     "ddasgrev@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "6ΧΜ04653Π8-2Β9",
+    "excerpt": ". 280 15232, . / : �. � . . : 51100 : . : : 24623 53401 e- mail : mpasagiannis@eedphm.ypen.gr",
+    "lat": 40.0844637,
+    "lon": 21.4273985,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Δωδεκανήσου": {
+   "kind": "dd",
+   "aliases": [
+    "ΔΩΔΕΚΑΝΗΣΟΥ"
+   ],
+   "seat_city": "Ρόδος",
+   "municipality": "Ρόδου",
+   "municipality_code": "9296",
+   "region_pe": "Π.Ε. Ρόδου",
+   "office": {
+    "street": "Γ. Μαύρου 2",
+    "tk": "85100",
+    "city": "Ρόδος",
+    "emails": [
+     "dnsi-dason-dodsou@eedpaig.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «aigaiou» (2026-08-16)",
+    "evidence_ada": "Ψ6ΑΘ4653Π8-0ΘΧ",
+    "excerpt": ".: ... /26 . / : 2 : . . : 851 00, : . . : t.kiottou@eedpaig.ypen.gr",
+    "lat": 36.4437233,
+    "lon": 28.227369,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Έβρου": {
+   "kind": "dd",
+   "aliases": [
+    "ΕΒΡΟΥ"
+   ],
+   "seat_city": "Αλεξανδρούπολη",
+   "municipality": "Αλεξανδρούπολης",
+   "municipality_code": "9006",
+   "region_pe": "Π.Ε. Έβρου",
+   "office": {
+    "street": "Ελ. Βενιζέλου 5",
+    "tk": "68132",
+    "city": "Αλεξανδρούπολη",
+    "phones": [
+     "2551354164"
+    ],
+    "emails": [
+     "ddas-evr@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΨΝ3Π4653Π8-19Δ",
+    "excerpt": "/ & . : . 5 . : 68132 / 32 : . 55102 :",
+    "lat": 40.8441882,
+    "lon": 25.870103,
+    "geo_precision": "street"
+   }
+  },
+  "Διεύθυνση Δασών Ζακύνθου": {
+   "kind": "dd",
+   "aliases": [
+    "ΖΑΚΥΝΘΟΥ"
+   ],
+   "seat_city": "Ζάκυνθος",
+   "municipality": "Ζακύνθου",
+   "municipality_code": "9116",
+   "region_pe": "Π.Ε. Ζακύνθου",
+   "office": {
+    "street": "Ελευθερίου Βενιζέλου 1",
+    "tk": "29100",
+    "city": "Ζάκυνθος",
+    "emails": [
+     "ddzak@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "Ψ7Η44653Π8-77Ρ",
+    "excerpt": "_________________________________ T./ : . 1 : .. : 29100 - - . . .. : . (, , .. 29100) : 26950 41125",
+    "lat": 37.7828669,
+    "lon": 20.8962212,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Ημαθίας": {
+   "kind": "dd",
+   "aliases": [
+    "ΗΜΑΘΙΑΣ"
+   ],
+   "seat_city": "Βέροια",
+   "municipality": "Βέροιας",
+   "municipality_code": "9024",
+   "region_pe": "Π.Ε. Ημαθίας",
+   "office": {
+    "street": "Μαλακούση 4",
+    "tk": "59131",
+    "city": "Βέροια",
+    "phones": [
+     "2313309780"
+    ],
+    "emails": [
+     "ddas-hma@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "62ΛΜ4653Π8-8Ι4",
+    "excerpt": "T. : 4 . : 59131 - .: : ..... : 23133097",
+    "lat": 40.5256999,
+    "lon": 22.2032908,
+    "geo_precision": "street"
+   }
+  },
+  "Διεύθυνση Δασών Ηρακλείου": {
+   "kind": "dd",
+   "aliases": [
+    "ΗΡΑΚΛΕΙΟΥ"
+   ],
+   "seat_city": "Ηράκλειο",
+   "municipality": "Ηρακλείου",
+   "municipality_code": "9305",
+   "region_pe": "Π.Ε. Ηρακλείου",
+   "office": {
+    "street": "Παναγίας Μαλεβή (Δασικό Φυτώριο)",
+    "tk": "71410",
+    "city": "ΗΡΑΚΛΕΙΟ",
+    "emails": [
+     "ddh@eedpkritis.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «kritis» (2026-08-16)",
+    "evidence_ada": "9Ν4Α4653Π8-ΚΜΧ",
+    "excerpt": ".gr .. ( ) . 2. : . : 714 10 . Fax :",
+    "lat": 35.33908,
+    "lon": 25.1332843,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Θεσπρωτίας": {
+   "kind": "dd",
+   "aliases": [
+    "ΘΕΣΠΡΩΤΙΑΣ"
+   ],
+   "seat_city": "Ηγουμενίτσα",
+   "municipality": "Ηγουμενίτσας",
+   "municipality_code": "9077",
+   "region_pe": "Π.Ε. Θεσπρωτίας",
+   "office": {
+    "street": "Π. Τσαλδάρη 21",
+    "tk": "46100",
+    "city": "Ηγουμενίτσα",
+    "phones": [
+     "2665023100"
+    ],
+    "emails": [
+     "ddashgu@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "91ΒΟ4653Π8-Η37",
+    "excerpt": ": : , & . / : . 21 . : 46100 : : 2665022241 Email : ampetika@eedphm.ypen.gr : . . .: 256423/27-06-2025 (",
+    "lat": 39.5045005,
+    "lon": 20.2639166,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Καστοριάς": {
+   "kind": "dd",
+   "aliases": [
+    "ΚΑΣΤΟΡΙΑΣ"
+   ],
+   "seat_city": "Καστοριά",
+   "municipality": "Καστοριάς",
+   "municipality_code": "9063",
+   "region_pe": "Π.Ε. Καστοριάς",
+   "office": {
+    "street": "Μ. Αλεξάνδρου, Διοικητήριο",
+    "tk": "52100",
+    "city": "Καστοριά",
+    "phones": [
+     "2467322230"
+    ],
+    "emails": [
+     "daskast@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "96Β54653Π8-07Σ",
+    "excerpt": ". . 331673 - : ./ : 1 .. :52100 : :2467308419 E- mail : lezimiathan@eedphm.ypen.gr :� \" 30 , .. \"",
+    "lat": 40.5216577,
+    "lon": 21.2636504,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Κέρκυρας": {
+   "kind": "dd",
+   "aliases": [
+    "ΚΕΡΚΥΡΑΣ"
+   ],
+   "seat_city": "Κέρκυρα",
+   "municipality": "Κέρκυρας",
+   "municipality_code": "9118",
+   "region_pe": "Π.Ε. Κέρκυρας",
+   "office": {
+    "street": "Αλυκές Ποταμού",
+    "tk": "49100",
+    "city": "Κέρκυρα",
+    "phones": [
+     "2661081399"
+    ],
+    "emails": [
+     "ddker@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "ΡΥΙΠ4653Π8-ΚΝ1",
+    "excerpt": "/ ./: : 1. .: .: 49100 - : . korissoscorfu@gmail.com : 2661081398",
+    "lat": 39.6217347,
+    "lon": 19.9180908,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Κεφαλληνίας": {
+   "kind": "dd",
+   "aliases": [
+    "ΚΕΦΑΛΛΗΝΙΑΣ"
+   ],
+   "seat_city": "Αργοστόλι",
+   "municipality": "Κεφαλονιάς",
+   "municipality_code": "9120",
+   "region_pe": "Π.Ε. Κεφαλληνίας",
+   "office": {
+    "street": "Π.ΒΙΝΙΕΡΑΤΟΥ 5, ΠΛ.ΚΑΜΠΑΝΑΣ",
+    "tk": "28100",
+    "city": "Αργοστόλι",
+    "emails": [
+     "ddkef@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "6ΝΞΜ4653Π8-ΒΞΑ",
+    "excerpt": "son: Location: Athens & . / : 5 . : 28100 - : . FAX : 2671-25911 : 26710-22293 e-mail: eioannatoy@eedpdpi.ypen.gr . . : 324973/05-08-26 . . .",
+    "lat": 38.1756733,
+    "lon": 20.4878796,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Λάρισας": {
+   "kind": "dd",
+   "aliases": [
+    "ΛΑΡΙΣΑΣ"
+   ],
+   "seat_city": "Λάρισα",
+   "municipality": "Λαρισαίων",
+   "municipality_code": "9100",
+   "region_pe": "Π.Ε. Λάρισας",
+   "office": {
+    "street": "Σωκράτους 103",
+    "tk": "41336",
+    "city": "Λάρισα",
+    "phones": [
+     "2410554670"
+    ],
+    "emails": [
+     "ddasonlar@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "note": "Κεφαλίδες δυσανάγνωστες — τιμή ΥΠΕΝ.",
+    "lat": 39.6494573,
+    "lon": 22.4324673,
+    "geo_precision": "street"
+   }
+  },
+  "Διεύθυνση Δασών Λασιθίου": {
+   "kind": "dd",
+   "aliases": [
+    "ΛΑΣΙΘΙΟΥ"
+   ],
+   "seat_city": "Άγιος Νικόλαος",
+   "municipality": "Αγίου Νικολάου",
+   "municipality_code": "9310",
+   "region_pe": "Π.Ε. Λασιθίου",
+   "office": {
+    "street": "Πηγάσου 9",
+    "tk": "72100",
+    "city": "ΑΓΙΟΣ ΝΙΚΟΛΑΟΣ",
+    "emails": [
+     "dasilas@eedpkritis.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «kritis» (2026-08-16)",
+    "evidence_ada": "ΨΦ1Ι4653Π8-4ΜΔ",
+    "excerpt": "& . /: 9 115 28 . .: 72100 s.kollarou@prv.ypeka.gr : / .:28410-82489",
+    "lat": 35.1919967,
+    "lon": 25.710098,
+    "geo_precision": "street"
+   }
+  },
+  "Διεύθυνση Δασών Λέσβου": {
+   "kind": "dd",
+   "aliases": [
+    "ΛΕΣΒΟΥ"
+   ],
+   "seat_city": "Μυτιλήνη",
+   "municipality": "Λέσβου",
+   "municipality_code": "9261",
+   "region_pe": "Π.Ε. Λέσβου",
+   "office": {
+    "street": "Koυντουριώτη 79",
+    "tk": "81100",
+    "city": "Μυτιλήνη",
+    "emails": [
+     "pvaddl@eedpaig.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «aigaiou» (2026-08-16)",
+    "evidence_ada": "ΕΠΖΚ4653Π8-Θ6Σ",
+    "excerpt": "- ---------------------------------------------------------------- T. / : 79 . : 811 00 : . : 2251350901 e-mail : pinelopi.koukoutou@eedpaig. ypen.gr : - / .",
+    "lat": 39.1037355,
+    "lon": 26.554788,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Λευκάδας": {
+   "kind": "dd",
+   "aliases": [
+    "ΛΕΥΚΑΔΑΣ"
+   ],
+   "seat_city": "Λευκάδα",
+   "municipality": "Λευκάδας",
+   "municipality_code": "9121",
+   "region_pe": "Π.Ε. Λευκάδας",
+   "office": {
+    "street": "Ξενοφώντος Γρηγόρη",
+    "tk": "31100",
+    "city": "Λευκάδα",
+    "emails": [
+     "ddlef@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "Ψ6ΜΤ4653Π8-Λ2Ω",
+    "excerpt": "/ & - & . : . / : . : . : 31100 : : 26450 - 24434 e-mail : m.tsachouridis@eedpdpi.ypen.gr :",
+    "lat": 38.8352622,
+    "lon": 20.7096606,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Πιερίας": {
+   "kind": "dd",
+   "aliases": [
+    "ΠΙΕΡΙΑΣ"
+   ],
+   "seat_city": "Κατερίνη",
+   "municipality": "Κατερίνης",
+   "municipality_code": "9047",
+   "region_pe": "Π.Ε. Πιερίας",
+   "office": {
+    "street": "Ηπείρου 10",
+    "tk": "60132",
+    "city": "Κατερίνη",
+    "emails": [
+     "ddas-pie@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "Ψ5474653Π8-ΠΜ4",
+    "excerpt": "..:339423 � / : 1031.2090000000.0003 . /: 10 ..: 60132 : . : 2351045477 e-mail: evadam@eedpmt.ypen.gr : : � � (..:24203010",
+    "lat": 40.2628825,
+    "lon": 22.5108187,
+    "geo_precision": "street"
+   }
+  },
+  "Διεύθυνση Δασών Πρέβεζας": {
+   "kind": "dd",
+   "aliases": [
+    "ΠΡΕΒΕΖΑΣ"
+   ],
+   "seat_city": "Πρέβεζα",
+   "municipality": "Πρέβεζας",
+   "municipality_code": "9090",
+   "region_pe": "Π.Ε. Πρέβεζας",
+   "office": {
+    "street": "Λεωφ. Ειρήνης 83",
+    "tk": "48100",
+    "city": "Πρέβεζα",
+    "phones": [
+     "2682022306"
+    ],
+    "emails": [
+     "ddaspre@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "Ρ1ΧΠ4653Π8-Ι0Υ",
+    "excerpt": ". .: 339590 - (. 98958,74277,309828) . : 481 00 . / : . 83 : : 2682 0 24870 E-Mail : ddaspre@apdhp-dm.gov.gr : www.apdh-dm.gov.gr :",
+    "lat": 38.9571673,
+    "lon": 20.7516209,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Ρεθύμνου": {
+   "kind": "dd",
+   "aliases": [
+    "ΡΕΘΥΜΝΟΥ"
+   ],
+   "seat_city": "Ρέθυμνο",
+   "municipality": "Ρεθύμνης",
+   "municipality_code": "9318",
+   "region_pe": "Π.Ε. Ρεθύμνου",
+   "office": {
+    "street": "Κόμβος Αμαρίου – Μυσσίρια",
+    "tk": "74100",
+    "city": "ΡΕΘΥΜΝΟ",
+    "emails": [
+     "dasireth@eedpkritis.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «kritis» (2026-08-16)",
+    "evidence_ada": "ΡΚΒ44653Π8-83Χ",
+    "excerpt": ": .: 74061 / : . () . : .. 74100 : . : 28311-80171 : / / : 1. 177 .. 86/69 � � 2. . 1/2021 (3/04-01-20",
+    "lat": 35.3676472,
+    "lon": 24.4736079,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Ροδόπης": {
+   "kind": "dd",
+   "aliases": [
+    "ΡΟΔΟΠΗΣ"
+   ],
+   "seat_city": "Κομοτηνή",
+   "municipality": "Κομοτηνής",
+   "municipality_code": "9021",
+   "region_pe": "Π.Ε. Ροδόπης",
+   "office": {
+    "street": "3ο χλμ. Ε.Ο. Κομοτηνής-Αλεξανδρούπολης",
+    "tk": "69100",
+    "city": "Κομοτηνή",
+    "phones": [
+     "2531073673",
+     "2531023326"
+    ],
+    "emails": [
+     "ddas-rod@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "9ΜΦ94653Π8-ΨΓΓ",
+    "excerpt": ". :337190 - / . . /: 3 � / .. 69100 .. : 25310 30617 : 25310 37230 Fax",
+    "lat": 41.1182,
+    "lon": 25.4035708,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Σάμου": {
+   "kind": "dd",
+   "aliases": [
+    "ΣΑΜΟΥ"
+   ],
+   "seat_city": "Σάμος",
+   "municipality": "Σάμου",
+   "municipality_code": "9264",
+   "region_pe": "Π.Ε. Σάμου",
+   "office": {
+    "street": "Δερβενακίων 8",
+    "tk": "83100",
+    "city": "Βαθύ",
+    "phones": [
+     "2273027435"
+    ],
+    "emails": [
+     "pvaddass@eedpaig.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «aigaiou» (2026-08-16)",
+    "evidence_ada": "ΡΝΗΗ4653Π8-ΤΓΡ",
+    "excerpt": ".. : 70012 . : 8 makat70@hotmail.com . : 83100 : . : 2273027435 E-mail : pvaddass@eedpaig.ypen.gr : : � , . 1",
+    "lat": 37.7474564,
+    "lon": 26.9818179,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Φλώρινας": {
+   "kind": "dd",
+   "aliases": [
+    "ΦΛΩΡΙΝΑΣ"
+   ],
+   "seat_city": "Φλώρινα",
+   "municipality": "Φλώρινας",
+   "municipality_code": "9072",
+   "region_pe": "Π.Ε. Φλώρινας",
+   "office": {
+    "street": "Πτολεμαίων 1 Διοικητήριο",
+    "tk": "53100",
+    "city": "Φλώρινα",
+    "phones": [
+     "2385024171"
+    ],
+    "emails": [
+     "dasonflo@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "6Α4Δ4653Π8-53Θ",
+    "excerpt": ". .: 339491 � & . / : : . . . : 531 00 : . : 2385 305226 . / : ioannidouev@eedphm.ypen.gr : � 1/5 20 2",
+    "lat": 40.7794406,
+    "lon": 21.4074743,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Φωκίδας": {
+   "kind": "dd",
+   "aliases": [
+    "ΦΩΚΙΔΑΣ"
+   ],
+   "seat_city": "Άμφισσα",
+   "municipality": "Δελφών",
+   "municipality_code": "9165",
+   "region_pe": "Π.Ε. Φωκίδας",
+   "office": {
+    "street": "Επισκόπου Φιλοθέου 3",
+    "tk": "33100",
+    "city": "Άμφισσα",
+    "phones": [
+     "2265028875"
+    ],
+    "emails": [
+     "ddasonfok@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΡΗΟΚ4653Π8-ΒΕΚ",
+    "excerpt": ". . : 304837 . / : . 3 : . : 331 00 34 : . : 22650-28875 104 32 Email : ddasonfok@eedp",
+    "lat": 38.5272729,
+    "lon": 22.3783845,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Χανίων": {
+   "kind": "dd",
+   "aliases": [
+    "ΧΑΝΙΩΝ"
+   ],
+   "seat_city": "Χανιά",
+   "municipality": "Χανίων",
+   "municipality_code": "9325",
+   "region_pe": "Π.Ε. Χανίων",
+   "office": {
+    "street": "Χρυσοπηγή",
+    "tk": "73100",
+    "city": "ΧΑΝΙΑ",
+    "emails": [
+     "dasichan@eedpkritis.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «kritis» (2026-08-16)",
+    "evidence_ada": "90ΩΔ4653Π8-ΗΒΘ",
+    "excerpt": "& . /: .. 73100 Email : : s.kollarou@prv.ypeka.gr : . : 2821084216 mail: dasichan@eedpkritis.",
+    "lat": 35.5120831,
+    "lon": 24.0191544,
+    "geo_precision": "postcode"
+   }
+  },
+  "Διεύθυνση Δασών Χίου": {
+   "kind": "dd",
+   "aliases": [
+    "ΧΙΟΥ"
+   ],
+   "seat_city": "Χίος",
+   "municipality": "Χίου",
+   "municipality_code": "9266",
+   "region_pe": "Π.Ε. Χίου",
+   "office": {
+    "street": "Κύπρου 2",
+    "tk": "82100",
+    "city": "Χίος",
+    "phones": [
+     "2271043333"
+    ],
+    "emails": [
+     "pvaddasx@eedpaig.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «aigaiou» (2026-08-16)",
+    "evidence_ada": "9ΛΦΡ4653Π8-ΟΙΨ",
+    "excerpt": "T. / : 2 : . : 82100 / & : .",
+    "lat": 38.3571292,
+    "lon": 26.1340612,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Αγιάς": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΓΙΑΣ"
+   ],
+   "seat_city": "Αγιά",
+   "municipality": "Αγιάς",
+   "municipality_code": "9097",
+   "region_pe": "Π.Ε. Λάρισας",
+   "office": {
+    "street": "Λαρίσης 2",
+    "tk": "40003",
+    "city": "Αγιά",
+    "phones": [
+     "2494022221"
+    ],
+    "emails": [
+     "dasagias@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΨΟΠΦ4653Π8-5Ψ9",
+    "excerpt": ". / : 2 : . . : 40003, : . : 24940 22221",
+    "lat": 39.7182438,
+    "lon": 22.7558517,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Αγρινίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΓΡΙΝΙΟΥ"
+   ],
+   "seat_city": "Αγρίνιο",
+   "municipality": "Αγρινίου",
+   "municipality_code": "9123",
+   "region_pe": "Π.Ε. Αιτωλοακαρνανίας",
+   "office": {
+    "street": "Γοργοποτάμου 17",
+    "tk": "30100",
+    "city": "Αγρίνιο",
+    "emails": [
+     "dasagr@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "9Θ9Γ4653Π8-ΛΤΒ",
+    "excerpt": ". 13 30100 . /: 17 30100 : . .: 2641057617 e-mail: dasagr@eedpdpi.",
+    "lat": 38.6241801,
+    "lon": 21.4127367,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Αιγάλεω": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΙΓΑΛΕΩ"
+   ],
+   "seat_city": "Αιγάλεω",
+   "municipality": "Αιγάλεω",
+   "municipality_code": "9181",
+   "region_pe": "Π.Ε. Δυτικού Τομέα Αθηνών",
+   "office": {
+    "street": "Καποδιστρίου 22",
+    "tk": "12241",
+    "city": "Αιγάλεω",
+    "phones": [
+     "2105982315"
+    ],
+    "emails": [
+     "dasarxeio_aigaleo@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "9ΡΩΝ4653Π8-ΑΜ4",
+    "excerpt": "4/2026 : . . /: 22 . : 122 41 : . :2105982315 EMAIL:dasarxeio_aigaleo@eedpatt.ypen.gr",
+    "lat": 37.9895935,
+    "lon": 23.6785276,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Αιγίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΙΓΙΟΥ"
+   ],
+   "seat_city": "Αίγιο",
+   "municipality": "Αιγιαλείας",
+   "municipality_code": "9130",
+   "region_pe": "Π.Ε. Αχαΐας",
+   "office": {
+    "street": "Δεσποτοπούλου 25",
+    "tk": "25100",
+    "city": "Αίγιο",
+    "emails": [
+     "dasaigio@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "Ρ0ΒΝ4653Π8-ΡΕ4",
+    "excerpt": ". : 1 . / : 25 : . : 251 00 : . : 2691023781 Email : dasaigio@eepdpdi.ypen.gr 2026-2027 :",
+    "lat": 38.2498914,
+    "lon": 22.0854929,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Αλεξανδρούπολης": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+    "ΑΞΑΝΔΡΟΥΠΟΛΗΣ"
+   ],
+   "seat_city": "Αλεξανδρούπολη",
+   "municipality": "Αλεξανδρούπολης",
+   "municipality_code": "9006",
+   "region_pe": "Π.Ε. Έβρου",
+   "office": {
+    "street": "Ελευθερίου Βενιζέλου 5",
+    "tk": "68131",
+    "city": "Αλεξανδρούπολη",
+    "emails": [
+     "das-ale@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "note": "Κεφαλίδα: 68132 (ίδια πόλη, παραλλαγή του 68131 της σελίδας ΥΠΕΝ).",
+    "lat": 40.845666,
+    "lon": 25.8778814,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Αλιβερίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΛΙΒΕΡΙΟΥ"
+   ],
+   "seat_city": "Αλιβέρι",
+   "municipality": "Κύμης - Αλιβερίου",
+   "municipality_code": "9152",
+   "region_pe": "Π.Ε. Ευβοίας",
+   "office": {
+    "street": "Πλάτωμα Αλιβερίου",
+    "tk": "34500",
+    "city": "Αλιβέρι",
+    "phones": [
+     "2223023715"
+    ],
+    "emails": [
+     "dasaliv@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΨΥ1Λ4653Π8-Ν9Π",
+    "excerpt": "12/08/2026 & . . 336038 � : . / : . : 345 00 : E. : 2223350524 : � , 49.852,45.. � ..� �� .. -",
+    "lat": 38.4091144,
+    "lon": 24.0380382,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Αλμυρού": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΛΜΥΡΟΥ"
+   ],
+   "seat_city": "Αλμυρός",
+   "municipality": "Αλμυρού",
+   "municipality_code": "9104",
+   "region_pe": "Π.Ε. Μαγνησίας",
+   "office": {
+    "street": "Βασιλέως Παύλου 1",
+    "tk": "37100",
+    "city": "Αλμυρός",
+    "phones": [
+     "2422021273",
+     "2422022204"
+    ],
+    "emails": [
+     "dasalmy@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "6Δ8Ψ4653Π8-ΧΚ0",
+    "excerpt": ". .:326895 . ..: 9/2026 . � . / . ./: .: 37100 : : 2422 0 21273",
+    "lat": 39.1841696,
+    "lon": 22.7653523,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Αμαλιάδας": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΜΑΛΙΑΔΑΣ"
+   ],
+   "seat_city": "Αμαλιάδα",
+   "municipality": "Ήλιδας",
+   "municipality_code": "9139",
+   "region_pe": "Π.Ε. Ηλείας",
+   "office": {
+    "street": "25ης Μαρτίου 23",
+    "tk": "27200",
+    "city": "Αμαλιάδα",
+    "emails": [
+     "dasamal@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "9Ζ1Χ4653Π8-ΣΡΘ",
+    "excerpt": "./ : 25 23 : � . : 27200 : . . : 2622026231 E-mail : dasamal@eedpdpi.ypen.gr � : �",
+    "lat": 37.7945115,
+    "lon": 21.3486473,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Αμφιλοχίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΜΦΙΛΟΧΙΑΣ"
+   ],
+   "seat_city": "Αμφιλοχία",
+   "municipality": "Αμφιλοχίας",
+   "municipality_code": "9125",
+   "region_pe": "Π.Ε. Αιτωλοακαρνανίας",
+   "office": {
+    "street": "Νικόλαου Στράτου 84",
+    "tk": "30500",
+    "city": "Αμφιλοχία",
+    "emails": [
+     "dasamf@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "ΨΜ7Λ4653Π8-73Η",
+    "excerpt": ". /: . 84 . : 30500 : / / : 2642022220 e-mail: dasamf@4776.s",
+    "lat": 38.8625997,
+    "lon": 21.1662939,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Άμφισσας": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΜΦΙΣΣΑΣ"
+   ],
+   "seat_city": "Άμφισσα",
+   "municipality": "Δελφών",
+   "municipality_code": "9165",
+   "region_pe": "Π.Ε. Φωκίδας",
+   "office": {
+    "street": "Επισκόπου Φιλοθέου 3",
+    "tk": "33100",
+    "city": "Άμφισσα",
+    "phones": [
+     "2265028264"
+    ],
+    "emails": [
+     "dasamf@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "Ρ37Ω4653Π8-8ΡΒ",
+    "excerpt": "026 Y & . .: 329980 ( ) - / . /: 3 : . . .: 331 00 331 00, : . : 22650 28264 Emai: dasamf@eedpts.ypen.gr",
+    "lat": 38.5272729,
+    "lon": 22.3783845,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Αριδαίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΡΙΔΑΙΑΣ"
+   ],
+   "seat_city": "Αριδαία",
+   "municipality": "Αλμωπίας",
+   "municipality_code": "9042",
+   "region_pe": "Π.Ε. Πέλλας",
+   "office": {
+    "street": "Λεωφ. Ξενιτίδη 18",
+    "tk": "58400",
+    "city": "Αριδαία",
+    "phones": [
+     "2384021242",
+     "2313309620"
+    ],
+    "emails": [
+     "das-arid@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΨΑΓΨ4653Π8-7ΧΡ",
+    "excerpt": ".: 341813 : T. : . . : 58400 : . : 2384021242 . / : das-arid@eedpmt.ypen.gr",
+    "lat": 40.9755942,
+    "lon": 22.0613735,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Αρναίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΡΝΑΙΑΣ"
+   ],
+   "seat_city": "Αρναία",
+   "municipality": "Αριστοτέλη",
+   "municipality_code": "9056",
+   "region_pe": "Π.Ε. Χαλκιδικής",
+   "office": {
+    "street": "Αρναία",
+    "tk": "63074",
+    "city": "Αρναία",
+    "phones": [
+     "2372021201",
+     "2372021210"
+    ],
+    "emails": [
+     "das-arn@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "9ΩΥΗ4653Π8-7Α1",
+    "excerpt": "41956 - . . / : .. 63074 � / & 2372021200 � 2",
+    "lat": 40.4952752,
+    "lon": 23.5897512,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Αταλάντης": {
+   "kind": "dx",
+   "aliases": [
+    "ΑΤΑΛΑΝΤΗΣ"
+   ],
+   "seat_city": "Αταλάντη",
+   "municipality": "Λοκρών",
+   "municipality_code": "9161",
+   "region_pe": "Π.Ε. Φθιώτιδας",
+   "office": {
+    "street": "Θεμιστοκλέους 4",
+    "tk": "35200",
+    "city": "Αταλάντη",
+    "phones": [
+     "2233022268",
+     "2233022171"
+    ],
+    "emails": [
+     "dasatalantis@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "Ρ1ΕΑ4653Π8-ΦΜΚ",
+    "excerpt": "... 2 : � . /: 4 . : 352 00 : . . : 2233350688/2233350684 e-mail: /2233022268-22171 vasiliki.tsochantari@",
+    "lat": 38.6533626,
+    "lon": 23.0001058,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Βέροιας": {
+   "kind": "dx",
+   "aliases": [
+    "ΒΕΡΟΙΑΣ"
+   ],
+   "seat_city": "Βέροια",
+   "municipality": "Βέροιας",
+   "municipality_code": "9024",
+   "region_pe": "Π.Ε. Ημαθίας",
+   "office": {
+    "street": "Διονυσίου Σολωμού 4",
+    "tk": "59132",
+    "city": "Βέροια",
+    "phones": [
+     "2313309636",
+     "2313309637"
+    ],
+    "emails": [
+     "das-ver@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΨΤ4Ω4653Π8-9ΓΟ",
+    "excerpt": ". / : . 4 : 1. .. : 59132 : - : . / /",
+    "lat": 40.5215342,
+    "lon": 22.2036834,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Βόλου": {
+   "kind": "dx",
+   "aliases": [
+    "ΒΟΛΟΥ"
+   ],
+   "seat_city": "Βόλος",
+   "municipality": "Βόλου",
+   "municipality_code": "9105",
+   "region_pe": "Π.Ε. Μαγνησίας",
+   "office": {
+    "street": "Ξενοφώντος 1",
+    "tk": "38333",
+    "city": "Βόλος",
+    "phones": [
+     "2421039162",
+     "2421039163"
+    ],
+    "emails": [
+     "dasavol@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "6ΣΡΖ4653Π8-Σ0Α",
+    "excerpt": "(...: ) .. : 24 . /: 1 . : 383 33 . : 311 : : .: 2421026271-39162-39163 FAX: 2421039163-2 -mail: dasavol",
+    "lat": 39.3638942,
+    "lon": 22.940527,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Βυτίνας": {
+   "kind": "dx",
+   "aliases": [
+    "ΒΥΤΙΝΑΣ"
+   ],
+   "seat_city": "Βυτίνα",
+   "municipality": "Γορτυνίας",
+   "municipality_code": "9238",
+   "region_pe": "Π.Ε. Αρκαδίας",
+   "office": {
+    "tk": "22010",
+    "city": "Βυτίνα",
+    "emails": [
+     "dasvyt@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "ΨΦΚΑ4653Π8-1Ο1",
+    "excerpt": ": - & : . / : 22010 : . : 27950 22213 & 22000 e-mail : dasvyt@eedpdpi.ypen.gr",
+    "lat": 37.6704077,
+    "lon": 22.182656,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Γουμένισσας": {
+   "kind": "dx",
+   "aliases": [
+    "ΓΟΥΜΕΝΙΣΣΑΣ"
+   ],
+   "seat_city": "Γουμένισσα",
+   "municipality": "Παιονίας",
+   "municipality_code": "9041",
+   "region_pe": "Π.Ε. Κιλκίς",
+   "office": {
+    "street": "Μεγ. Αλεξάνδρου 24",
+    "tk": "61300",
+    "city": "Γουμένισσα",
+    "phones": [
+     "2313309990"
+    ],
+    "emails": [
+     "das-gou@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "9ΒΟΨ4653Π8-299",
+    "excerpt": "Τ.Κ. : 613 00 … e-mail: das-gou@eedpmt.ypen.gr",
+    "note": "Το ΥΠΕΝ αναγράφει Τ.Κ. 63100 (κωδικός Πολυγύρου — προφανής αναγραμματισμός)· η επιστολόχαρτη κεφαλίδα της ίδιας της υπηρεσίας γράφει «Τ.Κ.: 613 00» (Γουμένισσα).",
+    "lat": 40.9466441,
+    "lon": 22.4519413,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Διδυμοτείχου": {
+   "kind": "dx",
+   "aliases": [
+    "ΔΙΔΥΜΟΤΕΙΧΟΥ",
+    "ΔΙΔ ΤΕΙΧΟΥ"
+   ],
+   "seat_city": "Διδυμότειχο",
+   "municipality": "Διδυμοτείχου",
+   "municipality_code": "9007",
+   "region_pe": "Π.Ε. Έβρου",
+   "office": {
+    "street": "Αδριανουπόλεως 1",
+    "tk": "68300",
+    "city": "Διδυμότειχο",
+    "phones": [
+     "2553022204"
+    ],
+    "emails": [
+     "das-did@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "6ΖΧ04653Π8-ΣΥΜ",
+    "excerpt": ": � .� ..- : 683 00 - 38, .. 68200, : .",
+    "lat": 41.3507759,
+    "lon": 26.502553,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Δράμας": {
+   "kind": "dx",
+   "aliases": [
+    "ΔΡΑΜΑΣ"
+   ],
+   "seat_city": "Δράμα",
+   "municipality": "Δράμας",
+   "municipality_code": "9002",
+   "region_pe": "Π.Ε. Δράμας",
+   "office": {
+    "street": "Αγ. Κωνσταντίνου 1",
+    "tk": "66100",
+    "city": "Δράμα",
+    "phones": [
+     "2521351820"
+    ],
+    "emails": [
+     "das-dra@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "63ΝΚ4653Π8-4ΞΧ",
+    "excerpt": ", : 1. O . , 2. �.-. ..� 0 (4 . -) .. 66100, 2521042900 : 082928578 . : 1. 47 55 . 4915( 63//24-3-2022). 2. .. 29/2",
+    "lat": 41.1360199,
+    "lon": 24.1438803,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Έδεσσας": {
+   "kind": "dx",
+   "aliases": [
+    "ΕΔΕΣΣΑΣ"
+   ],
+   "seat_city": "Έδεσσα",
+   "municipality": "Έδεσσας",
+   "municipality_code": "9043",
+   "region_pe": "Π.Ε. Πέλλας",
+   "office": {
+    "street": "Λεωφ. 18 Οκτωβρίου – Διοικητήριο",
+    "tk": "58200",
+    "city": "Έδεσσα",
+    "phones": [
+     "2381023670",
+     "2381028342"
+    ],
+    "emails": [
+     "das-ede@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "9ΙΑΔ4653Π8-00Λ",
+    "excerpt": ": . / 23 .. 58200 :1. . /: : .",
+    "lat": 40.8008523,
+    "lon": 22.0503508,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Ελασσόνας": {
+   "kind": "dx",
+   "aliases": [
+    "ΕΛΑΣΣΟΝΑΣ"
+   ],
+   "seat_city": "Ελασσόνα",
+   "municipality": "Ελασσόνας",
+   "municipality_code": "9098",
+   "region_pe": "Π.Ε. Λάρισας",
+   "office": {
+    "street": "Κων/νου Οικονόμου 64",
+    "tk": "40200",
+    "city": "Ελασσόνα",
+    "phones": [
+     "2493022243"
+    ],
+    "emails": [
+     "daselas@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΨΔΟ94653Π8-9ΞΩ",
+    "excerpt": "..: 11/2026 - : . . /: . 64 . : 40200 .: . . 2493307304 Email:a.tsaknakis@eedpts.ypen.gr",
+    "lat": 39.8946279,
+    "lon": 22.188631,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Θάσου": {
+   "kind": "dx",
+   "aliases": [
+    "ΘΑΣΟΥ"
+   ],
+   "seat_city": "Θάσος",
+   "municipality": "Θάσου",
+   "municipality_code": "9011",
+   "region_pe": "Π.Ε. Θάσου",
+   "office": {
+    "street": "Λεωφ. Θεολογίτη Αυγουστή 2",
+    "tk": "64004",
+    "city": "Θάσος",
+    "phones": [
+     "2593058140"
+    ],
+    "emails": [
+     "das-tha@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "Ψ2Θ94653Π8-Λ7Ε",
+    "excerpt": "E � . ---------------------------------- . /: . 2 . : 64004 : 2593058141 .: tdl-tha@eedpmt.ypen.gr .: . : 2/2026",
+    "lat": 40.7781968,
+    "lon": 24.7058815,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Θεσσαλονίκης": {
+   "kind": "dx",
+   "aliases": [
+    "ΘΕΣΣΑΛΟΝΙΚΗΣ"
+   ],
+   "seat_city": "Θεσσαλονίκη",
+   "municipality": "Θεσσαλονίκης",
+   "municipality_code": "9031",
+   "region_pe": "Π.Ε. Θεσσαλονίκης",
+   "office": {
+    "street": "26ης Οκτωβρίου 38-40 & Ανδρέου Γεωργίου",
+    "tk": "54627",
+    "city": "Θεσσαλονίκη",
+    "phones": [
+     "2313309050",
+     "2310508661"
+    ],
+    "emails": [
+     "das-the@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "9ΙΕ54653Π8-2ΦΧ",
+    "excerpt": "Ministry of : 9546538-2 Digital Governance Digitally signed b",
+    "lat": 40.6403167,
+    "lon": 22.9352716,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Θηβών": {
+   "kind": "dx",
+   "aliases": [
+    "ΘΗΒΩΝ",
+    "ΘΗΒΑΣ"
+   ],
+   "seat_city": "Θήβα",
+   "municipality": "Θηβαίων",
+   "municipality_code": "9144",
+   "region_pe": "Π.Ε. Βοιωτίας",
+   "office": {
+    "street": "Αγ. Φωτεινή – Μοσχοπόδι",
+    "tk": "32200",
+    "city": "Θήβα",
+    "phones": [
+     "2262027824",
+     "2262025815"
+    ],
+    "emails": [
+     "dasthivas@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "6ΜΔΛ4653Π8-Π09",
+    "excerpt": "328214 : . ...: 2/2026 . / : . . : 32200, : : 22620.27824, 22620.25815 : Email : dasthivas@eedpts.ypen.gr",
+    "lat": 38.3200705,
+    "lon": 23.3175613,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Ιστιαίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΙΣΤΙΑΙΑΣ"
+   ],
+   "seat_city": "Ιστιαία",
+   "municipality": "Ιστιαίας - Αιδηψού",
+   "municipality_code": "9150",
+   "region_pe": "Π.Ε. Ευβοίας",
+   "office": {
+    "street": "Ιστιαία",
+    "tk": "34200",
+    "city": "Ιστιαία",
+    "phones": [
+     "2226052234",
+     "2226054110"
+    ],
+    "emails": [
+     "dasistiaias@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "Ψ4ΛΑ4653Π8-21Φ",
+    "excerpt": ": .. � . . /: 34200 : . : 2226052234 e-mail: a.makantasi@eedpts.ypen.gr : � (1) ,",
+    "lat": 38.9580112,
+    "lon": 23.1462559,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Ιωαννίνων": {
+   "kind": "dx",
+   "aliases": [
+    "ΙΩΑΝΝΙΝΩΝ"
+   ],
+   "seat_city": "Ιωάννινα",
+   "municipality": "Ιωαννιτών",
+   "municipality_code": "9084",
+   "region_pe": "Π.Ε. Ιωαννίνων",
+   "office": {
+    "street": "Μαρίκας Κοτοπούλη 62",
+    "tk": "45445",
+    "city": "Ιωάννινα",
+    "phones": [
+     "2651088080"
+    ],
+    "emails": [
+     "dasioan@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "9ΧΦ24653Π8-ΜΙ8",
+    "excerpt": ".: : & . /: . 62, .. 1103 - .. 454 45 : : 26510 88107 E-mail: dasioan@eedphm.ypen.gr : .",
+    "lat": 39.681221,
+    "lon": 20.8347685,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Καβάλας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΑΒΑΛΑΣ"
+   ],
+   "seat_city": "Καβάλα",
+   "municipality": "Καβάλας",
+   "municipality_code": "9012",
+   "region_pe": "Π.Ε. Καβάλας",
+   "office": {
+    "street": "Τέρμα Αργυροκάστρου",
+    "tk": "65404",
+    "city": "Καβάλα",
+    "phones": [
+     "2513501030"
+    ],
+    "emails": [
+     "das-kav@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΡΤΑ44653Π8-66Ζ",
+    "excerpt": ": : , , . : 65404 . : 8,",
+    "lat": 40.9369224,
+    "lon": 24.4122766,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Καλαμάτας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΑΛΑΜΑΤΑΣ"
+   ],
+   "seat_city": "Καλαμάτα",
+   "municipality": "Καλαμάτας",
+   "municipality_code": "9254",
+   "region_pe": "Π.Ε. Μεσσηνίας",
+   "office": {
+    "street": "Ύδρας 5",
+    "tk": "24100",
+    "city": "Καλαμάτα",
+    "emails": [
+     "daskalam@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "note": "Κεφαλίδα: 24131 (ειδικός κωδικός Καλαμάτας· το ΥΠΕΝ δίνει τον γενικό 24100).",
+    "lat": 37.0275299,
+    "lon": 22.1082406,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Καλαμπάκας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΑΛΑΜΠΑΚΑΣ"
+   ],
+   "seat_city": "Καλαμπάκα",
+   "municipality": "Καλαμπάκας",
+   "municipality_code": "9112",
+   "region_pe": "Π.Ε. Τρικάλων",
+   "office": {
+    "street": "Ομογενών Αμερικής 1",
+    "tk": "42200",
+    "city": "Καλαμπάκα",
+    "phones": [
+     "2432305135",
+     "2432022410"
+    ],
+    "emails": [
+     "daskal@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "9ΒΠΔ4653Π8-ΤΑΡ",
+    "excerpt": "42200 - 2). : / & . - /",
+    "lat": 39.7064594,
+    "lon": 21.6271138,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Καπανδριτίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΑΠΑΝΔΡΙΤΙΟΥ"
+   ],
+   "seat_city": "Καπανδρίτι",
+   "municipality": "Ωρωπού",
+   "municipality_code": "9227",
+   "region_pe": "Π.Ε. Ανατολικής Αττικής",
+   "office": {
+    "tk": "19014",
+    "city": "Καπανδρίτι",
+    "phones": [
+     "2295052155"
+    ],
+    "emails": [
+     "dasarxeio_kapandritiou@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "ΨΗ4Λ4653Π8-Κ0Η",
+    "excerpt": ". 47 & 7, / . 115 22, . /: . 190 14 : . : 22950-52155 mail: a.damianidis@eedpatt.ypen.gr : � 35 . 998/79� : 1. 35 . 998/79. 2. .",
+    "lat": 38.2158722,
+    "lon": 23.8771927,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Καρδίτσας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΑΡΔΙΤΣΑΣ"
+   ],
+   "seat_city": "Καρδίτσα",
+   "municipality": "Καρδίτσας",
+   "municipality_code": "9092",
+   "region_pe": "Π.Ε. Καρδίτσας",
+   "office": {
+    "street": "Τέρμα Φλωράκη Χαριλάου",
+    "tk": "43100",
+    "city": "Καρδίτσα",
+    "phones": [
+     "2441079841"
+    ],
+    "emails": [
+     "daskard@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΨΨ174653Π8-50Χ",
+    "excerpt": "..: 338952 - : / ./: . .:43100 :. : . . : 2441079852 MSc Emai",
+    "lat": 39.3649796,
+    "lon": 21.923576,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Καρπενησίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΑΡΠΕΝΗΣΙΟΥ"
+   ],
+   "seat_city": "Καρπενήσι",
+   "municipality": "Καρπενησίου",
+   "municipality_code": "9157",
+   "region_pe": "Π.Ε. Ευρυτανίας",
+   "office": {
+    "street": "1ο χλμ Εθνικής Οδού Καρπενησίου – Αγρινίου",
+    "tk": "36100",
+    "city": "Καρπενήσι",
+    "phones": [
+     "2237022204"
+    ],
+    "emails": [
+     "daskarpen@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "90264653Π8-ΑΡΣ",
+    "excerpt": "2 . / : 1 .. � 10673, ..:36100 : : ....-. : 22370222024 1./ & . e-mail: da",
+    "lat": 38.9152433,
+    "lon": 21.7943495,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Κασσάνδρας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΑΣΣΑΝΔΡΑΣ"
+   ],
+   "seat_city": "Κασσάνδρεια",
+   "municipality": "Κασσάνδρας",
+   "municipality_code": "9057",
+   "region_pe": "Π.Ε. Χαλκιδικής",
+   "office": {
+    "street": "Κασσανδρεία",
+    "tk": "63077",
+    "city": "Κασσάνδρα",
+    "phones": [
+     "2374022218",
+     "2313309981"
+    ],
+    "emails": [
+     "das-kas@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "Ψ79Λ4653Π8-ΓΣΤ",
+    "excerpt": "ddas-xal@eedpmt.ypen.gr : 1031.2090000000.0003 . /: . : 63077 : : 2374020798 E-mail: g.stogiannou@eedpmt.ypen.gr : -",
+    "lat": 40.0840888,
+    "lon": 23.4169936,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Κιλκίς": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΙΛΚΙΣ"
+   ],
+   "seat_city": "Κιλκίς",
+   "municipality": "Κιλκίς",
+   "municipality_code": "9040",
+   "region_pe": "Π.Ε. Κιλκίς",
+   "office": {
+    "street": "21ης Ιουνίου 207",
+    "tk": "61100",
+    "city": "Κιλκίς",
+    "phones": [
+     "2341351151"
+    ],
+    "emails": [
+     "das-kil@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΨΙΒΡ4653Π8-ΤΘΠ",
+    "excerpt": "KOIN: . /: 21 207 1. . .: 61100 : A. 2. / : 23410",
+    "lat": 40.9988711,
+    "lon": 22.8796222,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Κοζάνης": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΟΖΑΝΗΣ"
+   ],
+   "seat_city": "Κοζάνη",
+   "municipality": "Κοζάνης",
+   "municipality_code": "9068",
+   "region_pe": "Π.Ε. Κοζάνης",
+   "office": {
+    "street": "Περιοχή ΖΕΠ",
+    "city": "Κοζάνη",
+    "phones": [
+     "2461350230"
+    ],
+    "emails": [
+     "daskozanis@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "note": "Τ.Κ. άλυτο: η σελίδα ΥΠΕΝ γράφει «Περιοχή ΖΕΠ 51 00» (κολοβό) και οι κεφαλίδες δεν εξάγουν καθαρό κωδικό — geocoding μέσω οδού/πόλης.",
+    "lat": 40.3007259,
+    "lon": 21.7883119,
+    "geo_precision": "city"
+   }
+  },
+  "Δασαρχείο Κόνιτσας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΟΝΙΤΣΑΣ"
+   ],
+   "seat_city": "Κόνιτσα",
+   "municipality": "Κόνιτσας",
+   "municipality_code": "9085",
+   "region_pe": "Π.Ε. Ιωαννίνων",
+   "office": {
+    "tk": "44100",
+    "city": "Κόνιτσα",
+    "phones": [
+     "2655022498"
+    ],
+    "emails": [
+     "daskon@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "6ΔΗ04653Π8-61Τ",
+    "excerpt": ". .: 333796 � . : : . / : 441 00 : : . : 26550 22996 : 26550 22498 E mail : daskon@eedphm.ypen.gr",
+    "lat": 40.0442949,
+    "lon": 20.7432809,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Κορίνθου": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΟΡΙΝΘΟΥ",
+    "ΚΟΡΙΝΘΙΑΣ"
+   ],
+   "seat_city": "Κόρινθος",
+   "municipality": "Κορινθίων",
+   "municipality_code": "9243",
+   "region_pe": "Π.Ε. Κορινθίας",
+   "office": {
+    "street": "Αράτου 39",
+    "tk": "20131",
+    "city": "Κόρινθος",
+    "emails": [
+     "daskor@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "Ψ0ΑΠ4653Π8-ΥΟΝ",
+    "excerpt": "..10432- : 2741085722 ( ) . /: 39 . : 20131 E-mail: daskor@eedpdpi.ypen.gr : , =821,00 .., \"\", .. , .. , , .. .",
+    "lat": 37.9410205,
+    "lon": 22.9249732,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Κυνουρίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΥΝΟΥΡΙΑΣ"
+   ],
+   "seat_city": "Άστρος",
+   "municipality": "Βόρειας Κυνουρίας",
+   "municipality_code": "9237",
+   "region_pe": "Π.Ε. Αρκαδίας",
+   "office": {
+    "tk": "22001",
+    "city": "Άστρος Κυνουρίας",
+    "emails": [
+     "daskyn@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "ΨΔΓ84653Π8-4ΒΡ",
+    "excerpt": ": ..22029, , & KOIN: 1./ / .. 2210"
+   }
+  },
+  "Δασαρχείο Κυπαρισσίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΚΥΠΑΡΙΣΣΙΑΣ"
+   ],
+   "seat_city": "Κυπαρισσία",
+   "municipality": "Τριφυλίας",
+   "municipality_code": "9258",
+   "region_pe": "Π.Ε. Μεσσηνίας",
+   "office": {
+    "street": "ΔΗΜΑΡΧΟΥ ΚΑΛΑΝΤΖΑΚΟΥ & ΑΝΩΝΥΜΟΥ",
+    "tk": "24500",
+    "city": "Κυπαρισσία",
+    "emails": [
+     "daskyp@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "6ΑΟ74653Π8-6ΗΓ",
+    "excerpt": ". . 338761 � & / & / . /: & : . . : 24500 : . : 2761022400 -mail:",
+    "lat": 37.251085,
+    "lon": 21.6690119,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Λαγκαδά": {
+   "kind": "dx",
+   "aliases": [
+    "ΛΑΓΚΑΔΑ"
+   ],
+   "seat_city": "Λαγκαδάς",
+   "municipality": "Λαγκαδά",
+   "municipality_code": "9034",
+   "region_pe": "Π.Ε. Θεσσαλονίκης",
+   "office": {
+    "street": "Ηλιάδη Μελετίου 4",
+    "tk": "57200",
+    "city": "Λαγκαδάς",
+    "phones": [
+     "2394024024",
+     "2394022336"
+    ],
+    "emails": [
+     "das-lag@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "note": "Κεφαλίδες δυσανάγνωστες (mangled ψηφία) — τιμή ΥΠΕΝ.",
+    "lat": 40.7484936,
+    "lon": 23.0645762,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Λαμίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΛΑΜΙΑΣ"
+   ],
+   "seat_city": "Λαμία",
+   "municipality": "Λαμιέων",
+   "municipality_code": "9160",
+   "region_pe": "Π.Ε. Φθιώτιδας",
+   "office": {
+    "street": "1ο χλμ. ΝΕΟ Λαμίας Αθηνών",
+    "tk": "35133",
+    "city": "Λαμία",
+    "phones": [
+     "2231022319",
+     "2231022683"
+    ],
+    "emails": [
+     "daslamias@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "9ΗΦΔ4653Π8-ΩΑ8",
+    "excerpt": ". : 323403 - : ./ :1 . ... - .: 35133 : . T: 22310-22319 FAX : 22310-26346 E�mail konstantina.assioura@eedpts.ypen.gr",
+    "lat": 38.8993832,
+    "lon": 22.433582,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Λάρισας": {
+   "kind": "dx",
+   "aliases": [
+    "ΛΑΡΙΣΑΣ"
+   ],
+   "seat_city": "Λάρισα",
+   "municipality": "Λαρισαίων",
+   "municipality_code": "9100",
+   "region_pe": "Π.Ε. Λάρισας",
+   "office": {
+    "street": "Δ. Τσάτσου 2 και Φαρσάλων",
+    "tk": "41335",
+    "city": "Λάρισα",
+    "phones": [
+     "2410661926",
+     "2410661362"
+    ],
+    "emails": [
+     "daslar@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "note": "Κεφαλίδες ασαφείς (μόνο 40003/Αγιάς ορατό σε παραπομπές) — τιμή ΥΠΕΝ.",
+    "lat": 39.6383092,
+    "lon": 22.4160706,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Λαυρίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΛΑΥΡΙΟΥ"
+   ],
+   "seat_city": "Λαύριο",
+   "municipality": "Λαυρεωτικής",
+   "municipality_code": "9219",
+   "region_pe": "Π.Ε. Ανατολικής Αττικής",
+   "office": {
+    "street": "Νέγρη Φωκίωνος 5",
+    "tk": "19500",
+    "city": "Λαύριο",
+    "phones": [
+     "2292060880",
+     "2292023100"
+    ],
+    "emails": [
+     "dasarxeio_lavriou@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "note": "Κεφαλίδες δυσανάγνωστες — τιμή ΥΠΕΝ.",
+    "lat": 37.7175892,
+    "lon": 24.0552148,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Λιβαδειάς": {
+   "kind": "dx",
+   "aliases": [
+    "ΛΙΒΑΔΕΙΑΣ",
+    "ΛΕΙΒΑΔΙΑΣ"
+   ],
+   "seat_city": "Λιβαδειά",
+   "municipality": "Λεβαδέων",
+   "municipality_code": "9145",
+   "region_pe": "Π.Ε. Βοιωτίας",
+   "office": {
+    "street": "Κάδμου 11",
+    "tk": "32100",
+    "city": "Λιβαδειά",
+    "phones": [
+     "2261028306",
+     "2261025001"
+    ],
+    "emails": [
+     "daslivad@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΨΥ104653Π8-6ΩΙ",
+    "excerpt": ". 333402 & . / : 11/ : 1. .. . : 32100 : 801838797, : . : 22610-81",
+    "lat": 38.4389171,
+    "lon": 22.8768723,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Λιδωρικίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΛΙΔΩΡΙΚΙΟΥ"
+   ],
+   "seat_city": "Λιδωρίκι",
+   "municipality": "Δωρίδος",
+   "municipality_code": "9166",
+   "region_pe": "Π.Ε. Φωκίδας",
+   "office": {
+    "street": "Λιδωρίκι",
+    "tk": "33053",
+    "city": "Λιδωρίκι",
+    "phones": [
+     "2266022115"
+    ],
+    "emails": [
+     "daslid@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΡΝΡΩ4653Π8-Α6Χ",
+    "excerpt": ": .. . /: . : 330 53 : . : 22660 22115 Email: daslid@eedpts.ypen.gr : � 67 . 998/79, �",
+    "lat": 38.5276506,
+    "lon": 22.1821457,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Λίμνης": {
+   "kind": "dx",
+   "aliases": [
+    "ΛΙΜΝΗΣ"
+   ],
+   "seat_city": "Λίμνη",
+   "municipality": "Μαντουδίου - Λίμνης - Αγίας Άννας",
+   "municipality_code": "9153",
+   "region_pe": "Π.Ε. Ευβοίας",
+   "office": {
+    "street": "Λίμνη Εύβοιας",
+    "tk": "34005",
+    "city": "Λίμνη",
+    "phones": [
+     "2227031218"
+    ],
+    "emails": [
+     "daslimnis@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "note": "Η σελίδα ΥΠΕΝ δίνει μόνο «Λίμνη Εύβοιας»· το Τ.Κ. 34005 από την κεφαλίδα.",
+    "lat": 38.7650752,
+    "lon": 23.3176259,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Μεγάρων": {
+   "kind": "dx",
+   "aliases": [
+    "ΜΕΓΑΡΩΝ"
+   ],
+   "seat_city": "Μέγαρα",
+   "municipality": "Μεγαρέων",
+   "municipality_code": "9231",
+   "region_pe": "Π.Ε. Δυτικής Αττικής",
+   "office": {
+    "street": "Μινώας 12",
+    "tk": "19100",
+    "city": "Μέγαρα",
+    "phones": [
+     "2296081570"
+    ],
+    "emails": [
+     "dasarxeio_megaron@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "Ψ5ΞΖ4653Π8-Α2Ι",
+    "excerpt": ".: .... . /: 12 . : 19100 : 2296320480",
+    "lat": 37.9949548,
+    "lon": 23.3455138,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Μεσολογγίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΜΕΣΟΛΟΓΓΙΟΥ"
+   ],
+   "seat_city": "Μεσολόγγι",
+   "municipality": "Ιεράς Πόλης Μεσολογγίου",
+   "municipality_code": "9127",
+   "region_pe": "Π.Ε. Αιτωλοακαρνανίας",
+   "office": {
+    "street": "Ιωσήφ Ρώγων 3",
+    "tk": "30200",
+    "city": "Μεσολόγγι",
+    "emails": [
+     "damesol@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "9ΣΖΧ4653Π8-Ω1Ι",
+    "excerpt": ". .:331143 . /: 3 : 302 00-.. : . .. 11 .: 26310-22419-28878",
+    "lat": 38.3720166,
+    "lon": 21.4283668,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Μετσόβου": {
+   "kind": "dx",
+   "aliases": [
+    "ΜΕΤΣΟΒΟΥ"
+   ],
+   "seat_city": "Μέτσοβο",
+   "municipality": "Μετσόβου",
+   "municipality_code": "9086",
+   "region_pe": "Π.Ε. Ιωαννίνων",
+   "office": {
+    "tk": "44200",
+    "city": "Μέτσοβο",
+    "phones": [
+     "2656041277"
+    ],
+    "emails": [
+     "dasmets@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "9ΞΩΔ4653Π8-ΠΘ1",
+    "excerpt": ".. - ( ). 2. 442 00 -",
+    "lat": 39.7693013,
+    "lon": 21.1830479,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Μουζακίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΜΟΥΖΑΚΙΟΥ"
+   ],
+   "seat_city": "Μουζάκι",
+   "municipality": "Μουζακίου",
+   "municipality_code": "9094",
+   "region_pe": "Π.Ε. Καρδίτσας",
+   "office": {
+    "street": "Παρθενώνος 2",
+    "tk": "43060",
+    "city": "Μουζάκι",
+    "phones": [
+     "2445041233",
+     "2445049154"
+    ],
+    "emails": [
+     "dasamouz@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "ΨΔ3Ν4653Π8-Ι0Γ",
+    "excerpt": "33 � : 430 60 - : : 1. . /: 2",
+    "lat": 39.4278258,
+    "lon": 21.664177,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Ναυπάκτου": {
+   "kind": "dx",
+   "aliases": [
+    "ΝΑΥΠΑΚΤΟΥ"
+   ],
+   "seat_city": "Ναύπακτος",
+   "municipality": "Ναυπακτίας",
+   "municipality_code": "9128",
+   "region_pe": "Π.Ε. Αιτωλοακαρνανίας",
+   "office": {
+    "street": "Θέρμου 58",
+    "tk": "30300",
+    "city": "Ναύπακτος",
+    "phones": [
+     "2634027246"
+    ],
+    "emails": [
+     "dasna@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "90ΒΛ4653Π8-1Ξ6",
+    "excerpt": "2026 . / : 58 . . : 30300 : : . : 2634350202 - 2634027246 : E- mail : f.m",
+    "lat": 38.3962381,
+    "lon": 21.8031927,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Νευροκοπίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΝΕΥΡΟΚΟΠΙΟΥ",
+    "Κ.ΝΕΥΡΟΚΟΠΙΟΥ",
+    "Κ. ΝΕΥΡΟΚΟΠΙΟΥ"
+   ],
+   "seat_city": "Κάτω Νευροκόπι",
+   "municipality": "Κάτω Νευροκοπίου",
+   "municipality_code": "9003",
+   "region_pe": "Π.Ε. Δράμας",
+   "office": {
+    "street": "Κάτω Νευροκόπι",
+    "tk": "66033",
+    "city": "Κάτω Νευροκόπι",
+    "phones": [
+     "2523022239"
+    ],
+    "emails": [
+     "das-nev@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "Ρ6ΞΔ4653Π8-ΦΤΒ",
+    "excerpt": "0 . . / : . . . : 66033 : . . : . . : 2523350345 FAX. : 2523021041 Email : em.fotiadis@eedpmt.ypen.gr",
+    "lat": 41.3469827,
+    "lon": 23.8720438,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Νιγρίτας": {
+   "kind": "dx",
+   "aliases": [
+    "ΝΙΓΡΙΤΑΣ"
+   ],
+   "seat_city": "Νιγρίτα",
+   "municipality": "Βισαλτίας",
+   "municipality_code": "9050",
+   "region_pe": "Π.Ε. Σερρών",
+   "office": {
+    "street": "Αθ. Αργυρού 19",
+    "tk": "62200",
+    "city": "Νιγρίτα",
+    "phones": [
+     "2322022450",
+     "2322022445"
+    ],
+    "emails": [
+     "das-nig@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΡΜΩ54653Π8-3ΔΖ",
+    "excerpt": ": . : 622 00 : . : 23220-22450 -22445 - FAX: 23220-24776",
+    "lat": 40.9078942,
+    "lon": 23.5003975,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Ξάνθης": {
+   "kind": "dx",
+   "aliases": [
+    "ΞΑΝΘΗΣ"
+   ],
+   "seat_city": "Ξάνθη",
+   "municipality": "Ξάνθης",
+   "municipality_code": "9017",
+   "region_pe": "Π.Ε. Ξάνθης",
+   "office": {
+    "street": "Αδριανουπόλεως 4",
+    "tk": "67100",
+    "city": "Ξάνθη",
+    "phones": [
+     "2541026500",
+     "2541022669"
+    ],
+    "emails": [
+     "das-xan@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "note": "Κεφαλίδα: 67133 (ειδικός τομέας Ξάνθης· το ΥΠΕΝ δίνει τον γενικό 67100).",
+    "lat": 41.13805,
+    "lon": 24.8864089,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Ξυλοκάστρου": {
+   "kind": "dx",
+   "aliases": [
+    "ΞΥΛΟΚΑΣΤΡΟΥ"
+   ],
+   "seat_city": "Ξυλόκαστρο",
+   "municipality": "Ξυλοκάστρου - Ευρωστίνης",
+   "municipality_code": "9246",
+   "region_pe": "Π.Ε. Κορινθίας",
+   "office": {
+    "street": "Π. Τσαλδάρη 5",
+    "tk": "20400",
+    "city": "Ξυλόκαστρο",
+    "emails": [
+     "dasxylok@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "98Χ74653Π8-9ΧΜ",
+    "excerpt": "026 & : / & / & / . / : . 5 . : 204 00 : .: 27433-60448, 2743022282, 28888 -mail:dasxylok@eedpdpi.ypen.gr . .: 341367 :",
+    "lat": 38.0773269,
+    "lon": 22.6365715,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Ολυμπίας": {
+   "kind": "dx",
+   "aliases": [
+    "ΟΛΥΜΠΙΑΣ"
+   ],
+   "seat_city": "Κρέστενα",
+   "municipality": "Ανδρίτσαινας - Κρεστένων",
+   "municipality_code": "9136",
+   "region_pe": "Π.Ε. Ηλείας",
+   "office": {
+    "tk": "27055",
+    "city": "Κρέστενα",
+    "emails": [
+     "dasolymp@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "90ΔΚ4653Π8-ΛΚΤ",
+    "excerpt": ". / : (E-mail: lagadinosj@gmail.com ) . :27055 : . : & :26250-22142 E-mail: dasolymp@",
+    "lat": 37.5923491,
+    "lon": 21.6212195,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Πάρνηθας": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΑΡΝΗΘΑΣ"
+   ],
+   "seat_city": "Αχαρνές",
+   "municipality": "Αχαρνών",
+   "municipality_code": "9215",
+   "region_pe": "Π.Ε. Ανατολικής Αττικής",
+   "office": {
+    "street": "Λεωφ. Θρακομακεδόνων 142",
+    "tk": "13671",
+    "city": "Αχαρνές",
+    "phones": [
+     "2102434066"
+    ],
+    "emails": [
+     "dasarxeio_parnithas@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "ΕΡΕΒ4653Π8-Υ5Υ",
+    "excerpt": ": . 142 Email: thanasesliolios233@gmail.com . : 136 71 / : . : 2110019413 Email: dasarxeio_parnithas@eedpatt.ypen.gr : 1 , � 2026 �.",
+    "lat": 38.0841607,
+    "lon": 23.7368653,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Πατρών": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΑΤΡΩΝ"
+   ],
+   "seat_city": "Πάτρα",
+   "municipality": "Πατρέων",
+   "municipality_code": "9134",
+   "region_pe": "Π.Ε. Αχαΐας",
+   "office": {
+    "street": "Μπουμπουλίνας 57-59",
+    "tk": "26222",
+    "city": "Πάτρα",
+    "emails": [
+     "daspatras@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "ΕΟ354653Π8-ΕΙ6",
+    "excerpt": "18537. /: 57-59 1) / , . . : 262 22 2) .... , . : . : 2610310666, 311824, .23 e-mail: daspatr",
+    "lat": 38.243705,
+    "lon": 21.7277516,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Πειραιά": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΕΙΡΑΙΑ",
+    "ΠΕΙΡΑΙΩΣ"
+   ],
+   "seat_city": "Πειραιάς",
+   "municipality": "Πειραιώς",
+   "municipality_code": "9205",
+   "region_pe": "Π.Ε. Πειραιώς",
+   "office": {
+    "street": "Αγίου Διονυσίου 5",
+    "tk": "18545",
+    "city": "Πειραιάς",
+    "phones": [
+     "2104115555"
+    ],
+    "emails": [
+     "dp@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "6Τ6Τ4653Π8-ΗΦΙ",
+    "excerpt": "... :2 . / : . 5 : .. . : 185 45 : . : 210 4179085 FAX : 210 4126447 EMAIL : dp@eedpatt.ypen.gr ' : 1. ..",
+    "lat": 37.9494403,
+    "lon": 23.6436232,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Πεντέλης": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΕΝΤΕΛΗΣ"
+   ],
+   "seat_city": "Πεντέλη",
+   "municipality": "Πεντέλης",
+   "municipality_code": "9176",
+   "region_pe": "Π.Ε. Βορείου Τομέα Αθηνών",
+   "office": {
+    "street": "Κλεισθένους 403",
+    "tk": "15344",
+    "city": "Γέρακας",
+    "phones": [
+     "2108035976",
+     "2106135010"
+    ],
+    "emails": [
+     "dasarxeio_pentelis@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "Ρ4ΛΙ4653Π8-Κ65",
+    "excerpt": ". ...: 08 / . : . /: 403, 15344, : . : 210 6135010 E-mail: dasarxeio_pentelis@eedpatt.ypen.gr ' :",
+    "lat": 38.0294105,
+    "lon": 23.8538248,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Περτουλίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΕΡΤΟΥΛΙΟΥ"
+   ],
+   "seat_city": "Περτούλι",
+   "municipality": "Πύλης",
+   "municipality_code": "9113",
+   "region_pe": "Π.Ε. Τρικάλων",
+   "office": {
+    "note": "Δεν είναι μονάδα ΥΠΕΝ — το δάσος Περτουλίου διοικείται από το Ταμείο Διοίκησης & Διαχείρισης Πανεπιστημιακών Δασών (Α.Π.Θ.)· απουσιάζει από τον κατάλογο ΥΠΕΝ και τη Διαύγεια του ΥΠΕΝ. Η έδρα μένει στο κεντροειδές δήμου."
+   }
+  },
+  "Δασαρχείο Πολυγύρου": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΟΛΥΓΥΡΟΥ"
+   ],
+   "seat_city": "Πολύγυρος",
+   "municipality": "Πολυγύρου",
+   "municipality_code": "9059",
+   "region_pe": "Π.Ε. Χαλκιδικής",
+   "office": {
+    "street": "Δασικό Κτίριο",
+    "tk": "63100",
+    "city": "Πολύγυρος",
+    "emails": [
+     "das-pol@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΡΙΔ74653Π8-64Ζ",
+    "excerpt": ": . . / : . � . : 631 00 .: 1) - :",
+    "lat": 40.37804,
+    "lon": 23.4425494,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Πόρου": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΟΡΟΥ"
+   ],
+   "seat_city": "Πόρος",
+   "municipality": "Πόρου",
+   "municipality_code": "9210",
+   "region_pe": "Π.Ε. Νήσων",
+   "office": {
+    "tk": "18020",
+    "city": "Πόρος Τροιζήνας",
+    "emails": [
+     "dasarxeio_porou@eedpatt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «attikis» (2026-08-16)",
+    "evidence_ada": "ΨΟΓ44653Π8-Η18",
+    "excerpt": "..../05/2026 : . / : . : 180 20 : . : (2298) 0 22387 - 22056 E-mail : dasarxeio_porou@eedpatt.ypen.gr ' : 1.-"
+   }
+  },
+  "Δασαρχείο Πύργου": {
+   "kind": "dx",
+   "aliases": [
+    "ΠΥΡΓΟΥ"
+   ],
+   "seat_city": "Πύργος",
+   "municipality": "Πύργου",
+   "municipality_code": "9141",
+   "region_pe": "Π.Ε. Ηλείας",
+   "office": {
+    "street": "Αλφειού 42",
+    "tk": "27100",
+    "city": "Πύργος",
+    "emails": [
+     "daspyrg@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "note": "Κεφαλίδα: 27131 (ειδικός κωδικός Πύργου· το ΥΠΕΝ δίνει τον γενικό 27100).",
+    "lat": 37.6708428,
+    "lon": 21.444951,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Σερρών": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΕΡΡΩΝ"
+   ],
+   "seat_city": "Σέρρες",
+   "municipality": "Σερρών",
+   "municipality_code": "9054",
+   "region_pe": "Π.Ε. Σερρών",
+   "office": {
+    "street": "Τέρμα Ομονοίας",
+    "tk": "62125",
+    "city": "Σέρρες",
+    "emails": [
+     "das-ser@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "91804653Π8-ΔΒΩ",
+    "excerpt": "12 -2026 - . : 336835 / . /: . : 62125 : .: 2321039126 email: matnik@eedpmt.ypen.gr : � , , & /: � 2026 , 2",
+    "lat": 41.0910711,
+    "lon": 23.5498031,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Σιδηροκάστρου": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΙΔΗΡΟΚΑΣΤΡΟΥ"
+   ],
+   "seat_city": "Σιδηρόκαστρο",
+   "municipality": "Σιντικής",
+   "municipality_code": "9055",
+   "region_pe": "Π.Ε. Σερρών",
+   "office": {
+    "street": "Νικολάου Ιντζέ 2",
+    "tk": "62300",
+    "city": "Σιδηρόκαστρο",
+    "phones": [
+     "2323025550",
+     "2323022383"
+    ],
+    "emails": [
+     "das-sid@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "98ΨΣ4653Π8-20Κ",
+    "excerpt": ": . . : 623 00 62043 :",
+    "lat": 41.2350438,
+    "lon": 23.3946866,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Σκοπέλου": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΚΟΠΕΛΟΥ"
+   ],
+   "seat_city": "Σκόπελος",
+   "municipality": "Σκοπέλου",
+   "municipality_code": "9111",
+   "region_pe": "Π.Ε. Σποράδων",
+   "office": {
+    "street": "Σκόπελος",
+    "tk": "37003",
+    "city": "Σκόπελος",
+    "phones": [
+     "2424022202"
+    ],
+    "emails": [
+     "dasaskop@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "908Θ4653Π8-ΧΓΔ",
+    "excerpt": "------------------------------- : . / : . : 370 03 / & : : 2421039107",
+    "lat": 39.122169,
+    "lon": 23.7272519,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Σουφλίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΟΥΦΛΙΟΥ"
+   ],
+   "seat_city": "Σουφλί",
+   "municipality": "Σουφλίου",
+   "municipality_code": "9010",
+   "region_pe": "Π.Ε. Έβρου",
+   "office": {
+    "street": "Νεοφύτου Παπαναστασίου",
+    "tk": "68400",
+    "city": "Σουφλί",
+    "phones": [
+     "2554022221",
+     "2554022656"
+    ],
+    "emails": [
+     "das-sou@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "Ε6Τ04653Π8-ΩΦΛ",
+    "excerpt": "oussos@gekterna.com : : . / : . , . : 684 00 : : 2313 309934 : 25540 22226 . . : das-sou@eedpmt.ypen.gr",
+    "lat": 41.1941684,
+    "lon": 26.302313,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Σπάρτης": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΠΑΡΤΗΣ"
+   ],
+   "seat_city": "Σπάρτη",
+   "municipality": "Σπάρτης",
+   "municipality_code": "9252",
+   "region_pe": "Π.Ε. Λακωνίας",
+   "office": {
+    "street": "Οδός των 118, αρ. 37",
+    "tk": "23100",
+    "city": "Σπάρτη",
+    "emails": [
+     "dasspart@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "Ψ99Ο4653Π8-6Τ4",
+    "excerpt": "& / & . / : 118 . 37 .: . . : 23100 :. :2731089349 Email:dasspart@eedpdpi.ypen.gr : .",
+    "lat": 37.0744494,
+    "lon": 22.4301778,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Σπερχειάδας": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΠΕΡΧΕΙΑΔΑΣ"
+   ],
+   "seat_city": "Σπερχειάδα",
+   "municipality": "Μακρακώμης",
+   "municipality_code": "9162",
+   "region_pe": "Π.Ε. Φθιώτιδας",
+   "office": {
+    "street": "Πιτσίκα 1",
+    "tk": "35003",
+    "city": "Σπερχειάδα",
+    "phones": [
+     "2236350623"
+    ],
+    "emails": [
+     "dassperx@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "983Ω4653Π8-ΛΛΤ",
+    "excerpt": "132 : .: . /: 1 1)/ , . : 350 03 , : 22360 43695 mail: g.tsamadias@eedpts.ypen.gr 1 ... -,",
+    "lat": 38.9107119,
+    "lon": 22.1230936,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Σταυρού": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΤΑΥΡΟΥ"
+   ],
+   "seat_city": "Σταυρός",
+   "municipality": "Βόλβης",
+   "municipality_code": "9027",
+   "region_pe": "Π.Ε. Θεσσαλονίκης",
+   "office": {
+    "street": "Σταυρός Θεσσαλονίκης",
+    "tk": "57014",
+    "city": "Σταυρός",
+    "phones": [
+     "2397061203",
+     "2397065118"
+    ],
+    "emails": [
+     "das-stv@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "ΨΜΖΥ4653Π8-ΘΛΞ",
+    "excerpt": ": - . / : .. : 57014 : : 23970 61203, 65118 e-mail : das-stv@eedpmt.ypen.gr : : 26SYMV019603722 2",
+    "lat": 40.6638771,
+    "lon": 23.7005465,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Σταυρούπολης": {
+   "kind": "dx",
+   "aliases": [
+    "ΣΤΑΥΡΟΥΠΟΛΗΣ"
+   ],
+   "seat_city": "Σταυρούπολη",
+   "municipality": "Ξάνθης",
+   "municipality_code": "9017",
+   "region_pe": "Π.Ε. Ξάνθης",
+   "office": {
+    "street": "Σταυρούπολη Ξάνθης",
+    "tk": "67062",
+    "city": "Σταυρούπολη",
+    "phones": [
+     "2542022218"
+    ],
+    "emails": [
+     "das-sta@eedpmt.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «makedonias-thrakis» (2026-08-16)",
+    "evidence_ada": "Ρ2274653Π8-ΗΓ6",
+    "excerpt": "6 - . / : : .. .. 670 62 : . � FAX : 25420-21004 : 25420-22218 E - mail : das-sta@eedpmt.ypen.gr : � �.",
+    "lat": 41.1988149,
+    "lon": 24.7053939,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Τρικάλων": {
+   "kind": "dx",
+   "aliases": [
+    "ΤΡΙΚΑΛΩΝ"
+   ],
+   "seat_city": "Τρίκαλα",
+   "municipality": "Τρικκαίων",
+   "municipality_code": "9114",
+   "region_pe": "Π.Ε. Τρικάλων",
+   "office": {
+    "street": "Κολοκοτρώνη 30",
+    "tk": "42132",
+    "city": "Τρίκαλα",
+    "phones": [
+     "2431555234"
+    ],
+    "emails": [
+     "dastrik@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "9Τ434653Π8-ΚΔΕ",
+    "excerpt": ". : 291415 & � . ./ 30 .. 42132 . 2431063470 email aggelou@eedpts.ypen.gr : 6 � .. �",
+    "lat": 39.5584098,
+    "lon": 21.7722677,
+    "geo_precision": "street"
+   }
+  },
+  "Δασαρχείο Τρίπολης": {
+   "kind": "dx",
+   "aliases": [
+    "ΤΡΙΠΟΛΗΣ"
+   ],
+   "seat_city": "Τρίπολη",
+   "municipality": "Τρίπολης",
+   "municipality_code": "9241",
+   "region_pe": "Π.Ε. Αρκαδίας",
+   "office": {
+    "street": "Πλατεία Κολοκοτρώνη 22",
+    "tk": "22100",
+    "city": "Τρίπολη",
+    "emails": [
+     "dastrip@eedpdpi.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «peloponnisou-dytikis-elladas-ioniou» (2026-08-16)",
+    "evidence_ada": "ΡΨ7Γ4653Π8-ΩΑΥ",
+    "excerpt": "& : . / : 22 . : 22100 : . : 2710-242391 e-mail : dastrip@eedpdpi.ypen.gr",
+    "lat": 37.5102911,
+    "lon": 22.3724241,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Τσοτυλίου": {
+   "kind": "dx",
+   "aliases": [
+    "ΤΣΟΤΥΛΙΟΥ"
+   ],
+   "seat_city": "Τσοτύλι",
+   "municipality": "Βοϊου",
+   "municipality_code": "9066",
+   "region_pe": "Π.Ε. Κοζάνης",
+   "office": {
+    "tk": "50002",
+    "city": "Τσοτύλι",
+    "phones": [
+     "2468049065"
+    ],
+    "emails": [
+     "dastso@eedphm.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «ipeirou-dytikis-makedonias» (2026-08-16)",
+    "evidence_ada": "6ΑΑΒ4653Π8-732",
+    "excerpt": ": : � . /: 500 02 : . : 24680 49060 FAX: 24680 32225 e-mail: dastso@eedphm.ypen.gr : � - ..",
+    "lat": 40.2629356,
+    "lon": 21.3257268,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Φουρνάς": {
+   "kind": "dx",
+   "aliases": [
+    "ΦΟΥΡΝΩΝ",
+    "ΦΟΥΡΝΑΣ"
+   ],
+   "seat_city": "Φουρνά",
+   "municipality": "Καρπενησίου",
+   "municipality_code": "9157",
+   "region_pe": "Π.Ε. Ευρυτανίας",
+   "office": {
+    "street": "Φουρνά Ευρυτανίας",
+    "tk": "36080",
+    "city": "Φουρνά",
+    "phones": [
+     "2237051233"
+    ],
+    "emails": [
+     "dasfourna@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "evidence_ada": "Ρ4ΙΡ4653Π8-ΒΧΘ",
+    "excerpt": ".: 334292 . /: . : 36080 : 22370- 51233 FAX: 22370- 51540 -: : / k.theodorakopoulos@eedpts.ypen.gr",
+    "lat": 39.0604373,
+    "lon": 21.8764693,
+    "geo_precision": "postcode"
+   }
+  },
+  "Δασαρχείο Χαλκίδας": {
+   "kind": "dx",
+   "aliases": [
+    "ΧΑΛΚΙΔΑΣ"
+   ],
+   "seat_city": "Χαλκίδα",
+   "municipality": "Χαλκιδέων",
+   "municipality_code": "9155",
+   "region_pe": "Π.Ε. Ευβοίας",
+   "office": {
+    "street": "Πηλικα 28",
+    "tk": "34133",
+    "city": "Χαλκίδα",
+    "phones": [
+     "2221084444"
+    ],
+    "emails": [
+     "dasxalk@eedpts.ypen.gr"
+    ],
+    "source": "ypen.gov.gr επιθεώρηση «thessalias-stereas-elladas» (2026-08-16)",
+    "note": "Κεφαλίδα: 34100 (γενικός· το ΥΠΕΝ δίνει τον ειδικό 34133 — ίδια πόλη).",
+    "lat": 38.460936,
+    "lon": 23.6003536,
+    "geo_precision": "street"
+   }
   }
+ },
+ "contract_overrides": {
+  "23SYMV013600200": {
+   "authorities": [
+    "Δασαρχείο Λιβαδειάς",
+    "Δασαρχείο Λαγκαδά",
+    "Διεύθυνση Δασών Ροδόπης"
+   ],
+   "evidence": "Nursery-upgrade contract «Δασικών Φυτωρίων Αλίαρτου Π.Ε. Βοιωτίας, Λαγκαδά Π.Ε. Θεσσαλονίκης, Αμβροσίας και Οργάνης Π.Ε. Ροδόπης». The supplementary's PDF names the ΔΧ Λιβαδειάς cost committee (ΑΔΑ 6ΩΗΘ4653Π8-2ΞΞ); Λαγκαδάς nursery → ΔΧ Λαγκαδά, Αμβροσία/Οργάνη → ΔΔ Ροδόπης (no δασαρχεία in Ροδόπη) per the locations the title itself names."
+  },
+  "25SYMV016491944": {
+   "authorities": [
+    "Διεύθυνση Δασών Δωδεκανήσου"
+   ],
+   "evidence": "Title says «ΔΔ ΛΕΣΒΟΥ» but the signed PDF (fetched 2026-07-25) repeatedly declares works «αρμοδιότητας Διεύθυνσης Δασών Δωδεκανήσου … εντός του Δήμου Ρόδου της Π.Ε. Ρόδου (NUTS EL421)» — the title is a registry keying error; matches the curated project region Π.Ε. Ρόδου."
+  },
+  "26SYMV018739467": {
+   "authorities": [
+    "Διεύθυνση Δασών Φωκίδας",
+    "Δασαρχείο Ελασσόνας"
+   ],
+   "evidence": "Per-lot contract of a multi-lot πρόσκληση: the items text repeats the whole invitation (5 authorities) on every lot; the title «ΔΔ ΦΩΚΙΔΑΣ ΔΧ ΕΛΑΣΣΟΝΑΣ» names THIS lot's authorities and matches the curated regions (Π.Ε. Φωκίδας + Π.Ε. Λάρισας)."
+  },
+  "26SYMV018756094": {
+   "authorities": [
+    "Δασαρχείο Ολυμπίας"
+   ],
+   "evidence": "Per-lot contract of the same multi-lot πρόσκληση as 26SYMV018739467; the title «ΔΧ ΟΛΥΜΠΙΑΣ» names this lot's authority and matches the curated region Π.Ε. Ηλείας."
+  },
+  "25SYMV016495437": {
+   "authorities": [
+    "Δασαρχείο Αλεξανδρούπολης",
+    "Δασαρχείο Σουφλίου",
+    "Δασαρχείο Ξάνθης",
+    "Δασαρχείο Σταυρούπολης",
+    "Διεύθυνση Δασών Ροδόπης"
+   ],
+   "evidence": "Items text names the five specific authorities; the title «ΔΔ ΕΒΡΟΥ ΚΑΙ ΡΟΔΟΠΗΣ» is shorthand (Ξάνθη is not in Έβρος). Matches curated regions Π.Ε. Έβρου/Ξάνθης/Ροδόπης."
+  },
+  "25SYMV016670155": {
+   "authorities": [
+    "Δασαρχείο Καλαμπάκας",
+    "Δασαρχείο Λάρισας",
+    "Δασαρχείο Μουζακίου",
+    "Δασαρχείο Τρικάλων",
+    "Δασαρχείο Σπερχειάδας"
+   ],
+   "evidence": "Items text names the five δασαρχεία; the title's «ΔΔ ΛΑΡΙΣΑΣ ΤΡΙΚΑΛΩΝ …» misspells them as Διευθύνσεις Δασών. Matches curated regions Τρικάλων/Λάρισας/Καρδίτσας/Φθιώτιδας."
+  }
+ },
+ "no_authority": {
+  "24SYMV015162689": "«Έργα αντιπυρικής προστασίας Περιφέρειας Αττικής» — region-scoped; no forest authority named in title/items.",
+  "25SYMV017328637": "ANTINERO IV ΠΕ Θεσσαλονίκης-Χαλκιδικής — the signed PDF references only «το αρμόδιο Δασαρχείο είτε η Διεύθυνση Δασών (κατά περίπτωση)», no specific authority.",
+  "25SYMV017345053": "ANTINERO IV Αττικής και όμορων ΠΕ — the signed PDF references only the generic «αρμόδιο Δασαρχείο/Διεύθυνση Δασών», no specific authority."
+ }
 }

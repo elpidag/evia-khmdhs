@@ -194,3 +194,26 @@ def test_real_db_authority_links_have_coords(real_conn):
         LEFT JOIN forest_authorities fa ON fa.name = cfa.authority_name
         WHERE fa.lat IS NULL OR fa.lon IS NULL""").fetchone()[0]
     assert n == 0
+
+
+def test_real_db_office_layer(real_conn):
+    """Office layer (DATA_DECISIONS 2026-08-17): every authority carries a
+    seat_precision; ΥΠΕΝ-directory Τ.Κ. present for all but the two
+    documented gaps (Περτουλίου = ΑΠΘ-run, Κοζάνης = garbled sources);
+    the Γουμένισσα ministry-page typo stays corrected to the letterhead's
+    61300 (ΑΔΑ 9ΒΟΨ4653Π8-299)."""
+    rows = real_conn.execute(
+        "SELECT name, postal_code, email, seat_precision "
+        "FROM forest_authorities").fetchall()
+    assert len(rows) == 103
+    assert all(r["seat_precision"] in
+               ("street", "postcode", "city", "municipality") for r in rows)
+    no_tk = sorted(r["name"] for r in rows if not r["postal_code"])
+    assert no_tk == ["Δασαρχείο Κοζάνης", "Δασαρχείο Περτουλίου"]
+    gou = real_conn.execute(
+        "SELECT postal_code FROM forest_authorities "
+        "WHERE name = 'Δασαρχείο Γουμένισσας'").fetchone()
+    assert gou["postal_code"] == "61300"
+    # geocoded office points must dominate — the whole point of the layer
+    n_office = sum(1 for r in rows if r["seat_precision"] != "municipality")
+    assert n_office >= 80

@@ -1,5 +1,5 @@
 {
- "_comment": "English display names for awarding sub-units (DATA_DECISIONS 2026-08-15): ΔΑΣΕ municipal/other operator units (dictionary translations, user-reviewed), the 4 ΥΠΕΝ signer units, and the forest units without a registry fold-match (Φουρνά incl. ΦΟΥΡΝΩΝ variant, ΔΔ Ηλείας/Ν. Πιερίας/Χαλκιδικής). Keyed by the EXACT registry units_operator_name string (homoglyphs, double spaces and all). Presentation only; byte-identical copy in atlas/src/lib/data (pinned).",
+ "_comment": "English display names for awarding sub-units (DATA_DECISIONS 2026-08-15): ΔΑΣΕ municipal/other operator units (dictionary translations, user-reviewed), the 4 ΥΠΕΝ signer units, and the forest units without a registry fold-match (Φουρνά incl. ΦΟΥΡΝΩΝ variant, ΔΔ Ηλείας/Ν. Πιερίας/Χαλκιδικής). Keyed by the EXACT registry units_operator_name string (homoglyphs, double spaces and all). Presentation only; byte-identical copy in atlas/src/lib/data (pinned); extended 2026-08-17 with the ΥΠΕΝ directory units outside the contract registry (forest_units_directory.json — inspectorates, coordination/reforestation directorates, no-contract ΔΔ/δασαρχεία), same toponym-first conventions.",
  "OIKONOMIKO": {
   "en": "Finance Office"
  },
@@ -173,5 +173,134 @@
  },
  "ΤΟΜΕΑΣ ΔΙΟΙΚΗΣΗΣ & ΟΙΚΟΝΟΜΙΚΩΝ -ΤΜΗΜΑ ΠΡΟΜΗΘΕΙΩΝ": {
   "en": "Administration & Finance Division — Procurement Department"
+ },
+ "ΔΑΣΑΡΧΕΙΟ ΓΥΘΕΙΟΥ": {
+  "en": "Gytheio Forest Service Office"
+ },
+ "ΔΑΣΑΡΧΕΙΟ ΚΑΛΑΒΡΥΤΩΝ": {
+  "en": "Kalavryta Forest Service Office"
+ },
+ "ΔΑΣΑΡΧΕΙΟ ΜΟΛΑΩΝ": {
+  "en": "Molaoi Forest Service Office"
+ },
+ "ΔΑΣΑΡΧΕΙΟ ΝΑΟΥΣΑΣ": {
+  "en": "Naousa Forest Service Office"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΑΝΑΔΑΣΩΣΕΩΝ ΑΝΑΤΟΛΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ – ΘΡΑΚΗΣ": {
+  "en": "Directorate of Reforestation of Eastern Macedonia–Thrace"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΑΝΑΔΑΣΩΣΕΩΝ ΑΤΤΙΚΗΣ": {
+  "en": "Directorate of Reforestation of Attica"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΑΝΑΔΑΣΩΣΕΩΝ ΚΕΝΤΡΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ": {
+  "en": "Directorate of Reforestation of Central Macedonia"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΑΝΑΤΟΛΙΚΗΣ ΑΤΤΙΚΗΣ": {
+  "en": "East Attica Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΔΥΤΙΚΗΣ ΑΤΤΙΚΗΣ": {
+  "en": "West Attica Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΙΩΑΝΝΙΝΩΝ": {
+  "en": "Ioannina Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΚΟΖΑΝΗΣ": {
+  "en": "Kozani Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε ΔΡΑΜΑΣ": {
+  "en": "Drama Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΑΙΤΩΛΟΑΚΑΡΝΑΝΙΑΣ": {
+  "en": "Aitoloakarnania Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΑΡΚΑΔΙΑΣ": {
+  "en": "Arkadia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΑΧΑΪΑΣ": {
+  "en": "Achaia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΒΟΙΩΤΙΑΣ": {
+  "en": "Voiotia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΕΥΒΟΙΑΣ": {
+  "en": "Evia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΕΥΡΥΤΑΝΙΑΣ": {
+  "en": "Evrytania Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΗΛΕΙΑΣ": {
+  "en": "Ileia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΘΕΣΣΑΛΟΝΙΚΗΣ": {
+  "en": "Thessaloniki Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΑΒΑΛΑΣ": {
+  "en": "Kavala Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΑΡΔΙΤΣΑΣ": {
+  "en": "Karditsa Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΙΛΚΙΣ": {
+  "en": "Kilkis Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΟΡΙΝΘΙΑΣ": {
+  "en": "Korinthia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΚΥΚΛΑΔΩΝ": {
+  "en": "Cyclades Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΛΑΚΩΝΙΑΣ": {
+  "en": "Lakonia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΜΑΓΝΗΣΙΑΣ": {
+  "en": "Magnisia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΜΕΣΣΗΝΙΑΣ": {
+  "en": "Messinia Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΞΑΝΘΗΣ": {
+  "en": "Xanthi Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΠΕΛΛΑΣ": {
+  "en": "Pella Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΣΕΡΡΩΝ": {
+  "en": "Serres Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΤΡΙΚΑΛΩΝ": {
+  "en": "Trikala Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΦΘΙΩΤΙΔΑΣ": {
+  "en": "Fthiotida Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ Π.Ε. ΧΑΛΚΙΔΙΚΗΣ": {
+  "en": "Chalkidiki Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ ΠΕΙΡΑΙΑ": {
+  "en": "Piraeus Forest Directorate"
+ },
+ "ΔΙΕΥΘΥΝΣΗ ΣΥΝΤΟΝΙΣΜΟΥ ΚΑΙ ΕΠΙΘΕΩΡΗΣΗΣ ΔΑΣΩΝ": {
+  "en": "Directorate of Forest Coordination & Inspection"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΑΙΓΑΙΟΥ": {
+  "en": "Forest Policy Inspectorate of the Aegean"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΑΤΤΙΚΗΣ": {
+  "en": "Forest Policy Inspectorate of Attica"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΗΠΕΙΡΟΥ – ΔΥΤΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ": {
+  "en": "Forest Policy Inspectorate of Epirus–Western Macedonia"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΘΕΣΣΑΛΙΑΣ – ΣΤΕΡΕΑΣ ΕΛΛΑΔΑΣ": {
+  "en": "Forest Policy Inspectorate of Thessaly–Central Greece"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΚΡΗΤΗΣ": {
+  "en": "Forest Policy Inspectorate of Crete"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΜΑΚΕΔΟΝΙΑΣ-ΘΡΑΚΗΣ": {
+  "en": "Forest Policy Inspectorate of Macedonia–Thrace"
+ },
+ "ΕΠΙΘΕΩΡΗΣΗ ΕΦΑΡΜΟΓΗΣ ΔΑΣΙΚΗΣ ΠΟΛΙΤΙΚΗΣ ΠΕΛΟΠΟΝΝΗΣΟΥ-ΔΥΤΙΚΗΣ ΕΛΛΑΔΑΣ-ΙΟΝΙΟΥ": {
+  "en": "Forest Policy Inspectorate of Peloponnese–Western Greece–Ionian"
  }
 }

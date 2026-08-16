@@ -58,3 +58,8 @@ atlas/test-results/
 data/processed/dase_diavgeia_cache/
 data/processed/arogi_cache/
 data/processed/relief_cache/
+data/processed/ypen_offices_cache/*.html
+data/processed/authority_letterhead_cache/*
+!data/processed/authority_letterhead_cache/*.txt
+!data/processed/authority_letterhead_cache/letterheads.json
+data/processed/authority_link_audit.json

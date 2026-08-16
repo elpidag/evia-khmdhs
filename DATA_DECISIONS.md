@@ -2050,3 +2050,94 @@ names when running `npm run dev`; production builds render none.
 Coverage + Latin-only + copy-identity + user-decision pins in
 `tests/test_body_names_en.py`. *Affects: display strings only; keys,
 aggregates and permalinks unchanged.*
+
+## 2026-08-17 — Forest-authority office layer: addresses, contacts, seat coordinates
+
+Until now every forest authority sat at its seat MUNICIPALITY's centroid.
+New office layer (user-approved plan; savewild.gr dropped as source):
+
+**Sources.** (1) The ministry's own directory: the 7 «Επιθεώρηση
+Εφαρμογής Δασικής Πολιτικής» pages on ypen.gov.gr each carry a contact
+TABLE (ΦΟΡΕΑΣ / ΤΑΧ. Δ/ΝΣΗ / ΤΗΛΕΦΩΝΟ / EMAIL) for every unit —
+fetched 2026-08-16/17 via windowed Playwright (Akamai 403s every
+non-interactive client), cached in `data/processed/ypen_offices_cache/`
+(HTML gitignored, parsed offices.json/matched.json tracked;
+`scripts/harvest_ypen_offices.py`). 151 unit rows parsed; 102/103
+registry authorities matched (tiered fold-matching; the ministry writes
+«Δ/ΝΣΗ ΔΑΣΩΝ Π.Ε. Χ», «ΔΑΣΑΡΧΕΙΟ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ», «ΠΑΤΡΑΣ» etc.).
+(2) Primary corroboration — Diavgeia letterheads: all ΥΠΕΝ forest units
+are registered with unit uids (org 100015996; labels carry Latin
+homoglyphs — «ΔΑΣΑΡXEIO ΠΑΤΡΩΝ»); `scripts/harvest_office_letterheads.py`
+fetched each authority's own recent decisions and checked the ΥΠΕΝ Τ.Κ.
+against the letterhead digits (which survive even font-mangled
+extraction). **90/102 confirmed** (ΑΔΑ + verbatim excerpt kept).
+
+**Differences found and resolutions** (all recorded per-entry in the
+`office.note` field): Γουμένισσας — ΥΠΕΝ page says Τ.Κ. 63100 (the
+Πολύγυρος code, an obvious digit transposition); the authority's own
+letterhead says «Τ.Κ.: 613 00» (ΑΔΑ 9ΒΟΨ4653Π8-299) → letterhead wins.
+Λίμνης — ΥΠΕΝ gives no Τ.Κ.; letterhead 34005 used. Same-town
+granularity variants noted, ΥΠΕΝ street+Τ.Κ. pair kept coherent:
+Αλεξανδρούπολης 68131↔68132, Ξάνθης 67100↔67133, Πύργου 27100↔27131,
+Καλαμάτας 24100↔24131, Χαλκίδας 34133↔34100. Letterheads inconclusive
+(mangled digits; recurring false candidates are the «4653Π8» ΑΔΑ prefix
+and cited law numbers): Λαγκαδά, Λαυρίου, Δασαρχείο+ΔΔ Λάρισας →
+ΥΠΕΝ values kept. Κοζάνης — ΥΠΕΝ prints a garbled «51 00» and the
+letterheads are unreadable → Τ.Κ. honestly absent, geocoded via
+street+city. Περτουλίου — not a ΥΠΕΝ unit at all (the university
+forest is run by the ΑΠΘ fund): no office data, seat stays municipality
+centroid.
+
+**Storage.** Additive `office` block per entry in
+`forest_authorities.json` (street/tk/city/phones/emails, source + fetch
+date, evidence_ada + excerpt where confirmed, note where differing;
+`scripts/build_authority_offices.py` re-merges). Aliases and all
+matcher-facing fields untouched. Person names (προϊστάμενοι) are NOT
+stored. 103 blocks, 101 with Τ.Κ.
+
+**Geocoding** (`scripts/geocode_authority_offices.py`): Nominatim
+structured tiers street+Τ.Κ.+city → Τ.Κ.+city → city, each retried in
+Greek→Latin transliteration; accepted only when the hit's postcode
+shares the Τ.Κ. 3-digit prefix or lies ≤35 km from the seat-municipality
+centroid. Result: **41 street / 58 postcode / 1 city / 3 municipality
+fallback** (Κυνουρίας, Πόρου failed validation; Περτουλίου no data).
+
+**DB/UI.** `forest_authorities` gains street/postal_code/city/phone/
+email/seat_precision (db.py ALTER guard); `forest_loader` prefers the
+validated office point over the municipality centroid — every seat-based
+map (dase circles, kh overview, webui) moves automatically. The Atlas
+/authority pages show a contact block (address · tel · mailto email)
+from `authority_profile.contact`. Pins in `test_forest.py`
+(103 precision values, the two documented Τ.Κ. gaps, Γουμένισσα 61300,
+≥80 office-precision seats). *Affects: seat coordinates and new contact
+columns; zero €/aggregate changes.*
+
+## 2026-08-17 — Complete ΥΠΕΝ directory (151 units) + full attribution audit
+
+**Directory (Phase A).** The full ministry contact directory — all 151
+unit rows of the 7 επιθεωρήσεις pages — becomes a curated REFERENCE
+layer: `khmdhs/data/forest_units_directory.json` → `forest_units_directory`
+table (loaded by forest_loader; NEVER fed to the contract matcher). 102
+rows cross-link to the contract registry; the other 49 (7 inspectorates,
+7 coordination directorates, 3 reforestation directorates, 28 ΔΔ + 4
+δασαρχεία with no contracts in our datasets) are now shown on
+/authorities as «The rest of the network — no contracts recorded», with
+their contacts and new English names (unit_names_en.json extended by 43
+entries, same conventions). The supra-regional ΕΠΙΘΕΩΡΗΣΗ Μ-Θ now draws
+as ONE /dase map circle at its real seat (Λεωφ. Γεωργικής Σχολής 32,
+Πυλαία — geocoded from its directory row) instead of two Π.Ε.-centroid
+dots.
+
+**Audit (Phase B).** Report-mode re-scan of every in-scope Anti-nero
+contract (title+items, then cached PDF text with a parent-chain
+suppression rule) and every ΔΑΣΕ operator-unit string, with the 32
+directory-only ΔΔ/δασαρχεία ADDED to the matcher vocabulary
+(`scripts/audit_authority_links.py` → authority_link_audit.json,
+gitignored). Result: **zero missed attributions** — one title hit total,
+25SYMV016670155, which is one of the six pinned contract_overrides (its
+title's «ΔΔ ΛΑΡΙΣΑΣ ΤΡΙΚΑΛΩΝ…» sloppiness was already human-resolved to
+the five δασαρχεία the items name); zero PDF-only hits; zero ΔΑΣΕ unit
+matches. The 49 extra units genuinely award nothing in our data — the
+current 103-registry attribution stands validated against the complete
+official vocabulary. *Affects: reference table + /authorities section +
+one dase map circle; zero attribution or € changes.*
