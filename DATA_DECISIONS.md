@@ -3256,4 +3256,14 @@ that every stored contract has a curated co-op contractor now exempts
 `related_to` rows explicitly (that claim is exactly what those exclusions
 disproved). 25SYMV017324270 carries the same defect — its record lists
 all eleven framework operators, one of them ΔΑΣΕ ΔΟΛΙΑΝΩΝ — and is left
-as-is pending the same verdict.
+given the same treatment right after (user: «ok do it»): award
+25AWRD017318485 produced THIRTY sibling contracts, one per framework
+operator, and ΔΟΛΙΑΝΩΝ's own is the stored, live **25SYMV017325165**
+(30.07.2025, €4.875 net, the co-op its sole contractor). So the excluded
+record now carries `contractors_keep: ["094311510"]` — the ten
+non-signing rows deleted — and `related_to: "25SYMV017325165"`,
+correcting the `""` I curated on 2026-08-17: I had recorded that no co-op
+contract existed in this procurement, when one does. Nothing counted
+changes (the contract was already excluded); the page simply stops
+listing eleven parties it never had and now links the co-op's real
+contract.

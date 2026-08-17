@@ -189,10 +189,13 @@ def test_excluded_sibling_states_its_reason_not_a_cancellation(client):
     back = [t for t in own["timeline"] if t["adam"] == "25SYMV016885520"]
     assert len(back) == 1 and back[0]["cancelled"] == 0
     assert back[0]["related_to"] is None
-    # the second out-of-scope contract has no in-scope sibling to point at
-    # — an empty string, still not a cancellation
-    alone = client.get("/api/dase/contract/25SYMV017324270").get_json()
-    assert alone["related_to"] == "" and alone["duplicate_of"] is None
+    # the second out-of-scope contract points at the co-op's own call-off
+    # of the same framework award (DATA_DECISIONS 2026-08-18)
+    other_excl = client.get("/api/dase/contract/25SYMV017324270").get_json()
+    assert other_excl["related_to"] == "25SYMV017325165"
+    assert other_excl["duplicate_of"] is None
+    coop_lot = client.get("/api/dase/contract/25SYMV017325165").get_json()
+    assert coop_lot["cancelled"] == 0 and coop_lot["related_to"] is None
     # a genuine double-posting keeps reporting itself as one: the two
     # exclusions must stay distinguishable on every surface
     dup = client.get("/api/dase/contract/21SYMV009363348").get_json()
