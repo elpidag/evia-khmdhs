@@ -2527,3 +2527,135 @@ CLAUDE.md ΔΑΣΕ note. *Evidence: raw_json objectDetailsList of all 386
 flagged contracts; 173 dase_pdf_cache txts printing the CPV trio; the
 ΚΥΑ text (verbatim above). Affects: no rows, no aggregates — copy and
 documentation only.*
+
+## 2026-08-17 — /dase AWARDING BODIES / UNITS: top-10 lists become category share bars
+
+Presentation decision (user request, modelled on the /anadohoi PROJECT
+SCOPE / PROJECT TYPE pair). The two /dase top-10 BarH rankings hid the
+dataset's institutional story, which categories tell directly: the
+decentralized administrations sign ~17% of the contracts but ~39% of
+the money (the big fire-salvage batches), and δασαρχεία are the
+working level (~81% of contracts). Replaced by two `StackedShareBar`
+pairs — each frame shows a CONTRACTS bar over a € NET bar with
+identical segment order and colours (user chose the two-measure
+layout over a single-count bar) — AWARDING BODIES by public-bodies
+registry kind (grey ramp, smallest first; municipal entities counted
+with their municipalities — same municipal scope tier), AWARDING
+UNITS by the map's four kinds in the map's own colours, so the bar
+doubles as a legend echo. Layout follows the sponsored-works pair
+exactly (user): the two frames STACK full-width (never side by side)
+and the bars run at the same 3/4 content width — measured identical
+at 840 px / fs-16 labels on both pages. With 5–6 categories the
+component's spill labels for narrow segments overlapped into soup, so
+each frame carries ONE shared key instead (both bars have the same
+categories/colours) listing every category with its exact n and € —
+`StackedShareBar` gained `outside={false}` for that, alongside the
+`fmt` badge formatter; the anadohoi bars keep both defaults and render
+unchanged.
+
+**Third frame — WHO AWARDS THROUGH WHOM** (user request: the two
+categories are connected, «would a diagram like the money flow work
+here?»). Yes: the joint distribution is NOT block-diagonal, and the
+crossing is the finding — ministries AND decentralized administrations
+both award through δασαρχεία, at **€36.3k vs €8.3k per contract, a
+4.4× gap** on €23.0M of work, which neither marginal bar can show. A
+three-column d3-sankey (`KindFlow.svelte`, new — the Anti-nero
+`Sankey.svelte` is hardwired to scope colours/phase labels/contractor
+links and stays untouched): **awarding bodies → operating units →
+contractors**, ribbon width = stated net €, coloured by the receiving
+unit so the map palette carries; the per-contract average is printed
+ON the ribbons entering the middle column (the finding must not hide
+in a tooltip); hovering a node dims the rest; co-op nodes link to
+their pages.
+
+Column decisions (user, 2026-08-17): (1) the middle column collapses
+the two non-forest kinds into ONE node «the body's own services» —
+«regional or municipal authorities» merely repeated what column 1
+already says, and «other public bodies» was positively WRONG there:
+the ministry→misc hairline is the Ministry of Culture's Ephorates of
+Antiquities (Platamon Castle vegetation clearing ×3, Chalkidiki sites)
+and the Air Force's ΓΕΑ/ΑΤΑ/350ΠΚΒ — units OF the awarding ministry,
+not other bodies. The AWARDING UNITS bar keeps the map's four kinds
+(it is the map-legend echo); the merge is a sankey-only presentation
+choice, stated in the caveat. (2) The third column shows the 10
+biggest co-ops by € plus one pooled «N other co-ops» node (top-10 =
+29.9% of €, so the pool is honestly the fat one); entity level for
+bodies/units was rejected as spaghetti (49 orgs / 101 units, ΥΠΕΝ
+alone 1,543 of 2,008). A consortium contract (19 live) counts once, at
+the co-op listed first, so all three columns reconcile to the basis.
+Presentation rounds 2-4 (user review of the rendered chart): the
+frame is titled **AWARDING PROCESS**; the computed subtitle is
+DROPPED; each column heading centres on that column's coloured bar;
+labels WRAP instead of truncating, but ONLY in the left column (20
+chars — the width that splits «decentralized administrations» while
+keeping «other public bodies» on one line): its 5 nodes sit far apart,
+so two rows there cost no height, and the narrow left margin (132px)
+lets the whole plot sit off-centre to the LEFT, paying for a 380px
+right margin. Middle and right labels therefore stay on ONE line —
+every co-op name prints in full (widest 339px) at the ORIGINAL 660px
+height, with no truncation and no ellipsis. (Wrapping the 11-node
+right column instead was tried and reverted: it forced nodePadding 44
+at height 790, past a screenful — the user's rule is that the whole
+graph must be readable at once.) Columns are VERTICALLY CENTRED on each other (user): all three carry
+the same € total, so they differ only in how much padding their node
+count adds, and d3-sankey packs each from the top — leaving the 5-
+and 3-node columns riding high against the 11-node one. A post-layout
+pass shifts each column's extent onto the plot's middle and moves
+every link end with the column it touches, so ribbons still meet
+their nodes (verified: the three column centres coincide to 0px).
+Column headings are drawn at a fixed y and deliberately do NOT move.
+Width reference is the MAP row (map 600 + legend 504 = the frame's
+full 1120 at x=80), NOT the beeswarm — whose canvas is only 886 at
+x=314 because a 210px side-note column eats its left edge, making it
+the page's outlier. The flow chart therefore spans the full frame
+width, its explanation in the ChartFrame caveat like the map's;
+`KindFlow` keeps an optional `note`/`methodologyHref` pair that
+switches on the beeswarm's two-column shell, unused here. Geometry is
+verified by comparing every rendered label box against every other,
+ignoring the line pairs belonging to one label; the pooled «other
+co-ops» node takes the same
+green as the named co-ops (a different colour read as a different
+kind of contractor), and ribbons are coloured by whichever endpoint
+is the UNIT column so the map palette still carries in the second
+stage, where every target is green. **The per-contract averages are
+REMOVED from the chart entirely** (round 3): printed on a ribbon they
+read as ambiguous twice over — «36,3 K € per contract» sounds like a
+recurring rate rather than the typical contract size on that route,
+and the rule that only ribbons entering the middle column AND wide
+enough to hold the text got one made the choice look arbitrary from
+the outside. The chart now encodes ONE measure, €, as bar and ribbon
+width, printed beside each bar. The black hover card fires on the
+BARS only and carries the single number the chart does not print —
+the contract count. (Consequence recorded honestly: the
+ministry-vs-ΑΠΔ scale gap is no longer stated anywhere on this frame;
+it survives in the AWARDING BODIES bars above, where the contracts
+and € rows diverge, and in this log.) Same review fixed a rule
+violation of my own making: the caveat had quoted «36,3 K €» and
+«8,3 K €» as literals — data-derived numbers hardcoded in UI copy,
+which the hard constraint forbids; the rewritten caveat carries none.
+Rendering
+review caught three defects invisible in code: d3-sankey throws on an
+empty graph and makes NaN geometry for links naming absent nodes (the
+component now degrades to drawing nothing), the on-ribbon annotations
+were centred on the plot and so landed on the middle column's labels
+(now placed at each ribbon's own inter-column midpoint), and the
+middle labels had to move above their nodes to leave the corridor
+clear.
+Mechanism: `queries_extra.dase_kind_mix`
+derives bars AND flows from ONE per-contract pass (`_dase_kind_rows`),
+so they can never disagree: the unit decision mirrors the map's circle
+kinds (`_unit_forest_kind` lifted to module scope and now shared with
+`dase_map`; rows the map leaves unplaced for lack of a Π.Ε. — the
+multi-Π.Ε. ΑΔΜΗΕ contracts — fold into «other public bodies»), bodies
+resolve through `public_bodies.kind` via the alias table (municipal
+entities counted with municipalities). Ships as `kind_mix` on
+`/api/dase/overview`. Registry-unknown orgs would land in an
+`unknown` bucket that the real-DB pin asserts absent. Top awarder names
+stay reachable (computed subtitle, map click panels, co-op pages).
+*Affects: presentation + additive API fields (`kind_mix` with
+bodies/units/flows/coops/coop_flows); pins `test_dase_kind_mix_pins` —
+Σn = 2,008 and Σ€ = basis on the bars, the body→unit flows AND both
+co-op layers, closed vocabularies, the ≥3× δασαρχεία gap, every named
+co-op carrying a curated display name, at least one top co-op served
+only by non-forest bodies, and a cross-check that the units marginal
+equals the /dase map's own circle classification.*

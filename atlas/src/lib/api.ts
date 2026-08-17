@@ -220,6 +220,24 @@ export interface DaseOverview {
 	}[];
 	top_orgs: { name: string; n_contracts: number; total_eur: number }[];
 	top_units: { name: string; n_contracts: number; total_eur: number }[];
+	/** category data: awarding bodies by public-bodies registry kind,
+	 *  awarding units by the map's kind vocabulary (dx/dd/muni/misc), and
+	 *  the joint body→unit distribution behind the delegation diagram */
+	kind_mix: {
+		bodies: { kind: string; n: number; eur: number }[];
+		units: { kind: string; n: number; eur: number }[];
+		flows: { body: string; unit: string; n: number; eur: number }[];
+		/** third column of the delegation diagram: the biggest co-ops by €,
+		 *  plus one pooled node (vat/label null, carries n_coops) */
+		coops: {
+			vat: string | null;
+			label: string | null;
+			n: number;
+			eur: number;
+			n_coops?: number;
+		}[];
+		coop_flows: { unit: string; vat: string | null; n: number; eur: number }[];
+	};
 	procedures: ProcedureRow[];
 	types: ProcedureRow[];
 	cpvs: { cpv: string; label: string; n_contracts: number; noise: boolean }[];

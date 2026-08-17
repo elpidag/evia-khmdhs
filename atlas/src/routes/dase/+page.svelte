@@ -4,6 +4,8 @@
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
+	import StackedShareBar from '$lib/charts/StackedShareBar.svelte';
+	import KindFlow, { type FlowLink, type FlowNode } from '$lib/charts/KindFlow.svelte';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
@@ -147,20 +149,132 @@
 			sublabel: `${c.n_contracts} contracts · ${c.n_units} units · ${pct(c.pct_direct)} direct`
 		}))
 	);
-	const orgRows = $derived(
-		o.top_orgs.map((c) => ({
-			label: orgEn(c.name),
-			value: c.total_eur,
-			sublabel: `${grInt(c.n_contracts)} contracts`
-		}))
-	);
-	const unitRows = $derived(
-		o.top_units.map((c) => ({
-			label: bodyEn(c.name),
-			value: c.total_eur,
-			sublabel: `${grInt(c.n_contracts)} contracts`
-		}))
-	);
+	// AWARDING BODIES / UNITS category share bars (kind_mix payload): one
+	// fixed segment order + colour per category, identical across the
+	// contracts and € rows so the two bars compare by eye. Bodies ramp in
+	// neutral greys (registry kinds, smallest first like the anadohoi
+	// scope/type pair); units reuse the map's kind colours, so the bar
+	// doubles as an echo of the map legend.
+	const BODY_KINDS: [string, string, string][] = [
+		['region', 'regions', '#d8d8d8'],
+		['other_public', 'other public bodies', '#bcbcbc'],
+		['municipality', 'municipalities', '#9a9a9a'],
+		['decentralized_administration', 'decentralized administrations', '#6c6c6c'],
+		['ministry', 'ministries', '#3d3d3d'],
+		['unknown', 'unclassified', '#e6e6e6']
+	];
+	const UNIT_KINDS: [string, string, string][] = [
+		['misc', 'other public bodies', KIND_COLOR.misc],
+		['muni', 'regional or municipal authorities', KIND_COLOR.muni],
+		['dd', 'forest directorates', KIND_COLOR.dd],
+		['dx', 'local forest service offices', KIND_COLOR.dx]
+	];
+	type KindRow = { kind: string; n: number; eur: number };
+	const kindSegs = (
+		rows: KindRow[] | undefined,
+		meta: [string, string, string][],
+		field: 'n' | 'eur'
+	) =>
+		meta.map(([key, label, color], i) => ({
+			label,
+			value: rows?.find((r) => r.kind === key)?.[field] ?? 0,
+			color,
+			badge: i === 0 ? ('outleft' as const) : ('above' as const)
+		}));
+	const kindShare = (rows: KindRow[] | undefined, kind: string, field: 'n' | 'eur') => {
+		const tot = rows?.reduce((s, r) => s + r[field], 0) ?? 0;
+		return tot ? (100 * (rows?.find((r) => r.kind === kind)?.[field] ?? 0)) / tot : 0;
+	};
+	// delegation diagram: awarding body → operating unit → contractor,
+	// ribbon width = € net. Nodes reuse the bars' category metadata so the
+	// charts share one vocabulary and one palette.
+	// In the middle column the two non-forest kinds collapse into ONE node:
+	// «regional or municipal authorities» merely repeats what column 1
+	// already says, and «other public bodies» is wrong there anyway (the
+	// Ephorate of Antiquities is a unit OF the ministry, not another body).
+	// What they have in common is the honest label: the body's own services.
+	const OWN = 'own';
+	const MIDDLE_KINDS: [string, string, string][] = [
+		[OWN, "the body's own services", '#9b9b9b'],
+		['dd', 'forest directorates', KIND_COLOR.dd],
+		['dx', 'local forest service offices', KIND_COLOR.dx]
+	];
+	const midKind = (unit: string) => (unit === 'dx' || unit === 'dd' ? unit : OWN);
+	const flowNodes = $derived.by<FlowNode[]>(() => {
+		const f = o.kind_mix?.flows ?? [];
+		const bodies: FlowNode[] = BODY_KINDS.map(([k, label, color]) => ({
+			id: `l:${k}`,
+			label,
+			color,
+			side: 'l' as const,
+			n: f.filter((x) => x.body === k).reduce((a, x) => a + x.n, 0),
+			eur: f.filter((x) => x.body === k).reduce((a, x) => a + x.eur, 0)
+		}));
+		const units: FlowNode[] = MIDDLE_KINDS.map(([k, label, color]) => ({
+			id: `m:${k}`,
+			label,
+			color,
+			side: 'm' as const,
+			n: f.filter((x) => midKind(x.unit) === k).reduce((a, x) => a + x.n, 0),
+			eur: f.filter((x) => midKind(x.unit) === k).reduce((a, x) => a + x.eur, 0)
+		}));
+		const coops: FlowNode[] = (o.kind_mix?.coops ?? []).map((c) => ({
+			id: `r:${c.vat ?? 'other'}`,
+			label: c.label ?? `${grInt(c.n_coops ?? 0)} other co-ops`,
+			// the pooled node is co-ops too — a different colour would read
+			// as a different kind of contractor
+			color: 'var(--c-dase)',
+			side: 'r' as const,
+			n: c.n,
+			eur: c.eur,
+			href: c.vat ? `/dase/coop/${c.vat}` : undefined
+		}));
+		return [...bodies, ...units, ...coops]
+			.filter((n) => n.n > 0)
+			.sort((a, b) => (a.side === b.side ? b.eur - a.eur : 0));
+	});
+	const flowLinks = $derived.by<FlowLink[]>(() => {
+		const merge = (rows: { key: string; n: number; eur: number }[]) => {
+			const m = new Map<string, FlowLink>();
+			for (const r of rows) {
+				const [s, t] = r.key.split('>');
+				const cur = m.get(r.key);
+				if (cur) {
+					cur.n += r.n;
+					cur.eur += r.eur;
+				} else m.set(r.key, { s, t, n: r.n, eur: r.eur });
+			}
+			return [...m.values()];
+		};
+		return [
+			...merge(
+				(o.kind_mix?.flows ?? []).map((f) => ({
+					key: `l:${f.body}>m:${midKind(f.unit)}`,
+					n: f.n,
+					eur: f.eur
+				}))
+			),
+			...merge(
+				(o.kind_mix?.coop_flows ?? []).map((f) => ({
+					key: `m:${midKind(f.unit)}>r:${f.vat ?? 'other'}`,
+					n: f.n,
+					eur: f.eur
+				}))
+			)
+		];
+	});
+	// the two bars of a frame share categories, so ONE legend serves both —
+	// and it carries the exact n/€ the narrow segments cannot show
+	const kindKey = (rows: KindRow[] | undefined, meta: [string, string, string][]) =>
+		meta
+			.map(([key, label, color]) => ({
+				label,
+				color,
+				n: rows?.find((r) => r.kind === key)?.n ?? 0,
+				eur: rows?.find((r) => r.kind === key)?.eur ?? 0
+			}))
+			.filter((r) => r.n > 0)
+			.sort((a, b) => b.n - a.n);
 	const yearRows = $derived(
 		o.yearly.map((y) => ({
 			label: y.year,
@@ -181,8 +295,17 @@
 		peEn([...o.by_pe.regions].sort((a, b) => b.eur - a.eur)[0]?.pe) || ''
 	);
 	const topYear = $derived([...o.yearly].sort((a, b) => b.eur - a.eur)[0]?.year ?? '');
-	const topOrgShare = $derived(
-		o.top_orgs.length ? (100 * o.top_orgs[0].n_contracts) / o.kpis.n_contracts : 0
+	const bodiesFinding = $derived(
+		`Ministries (led by ${orgEn(o.top_orgs[0]?.name ?? '')}) sign ` +
+			`${pct(kindShare(o.kind_mix?.bodies, 'ministry', 'n'))} of the contracts — ` +
+			`the decentralized administrations' fewer, larger awards carry ` +
+			`${pct(kindShare(o.kind_mix?.bodies, 'decentralized_administration', 'eur'))} of the money.`
+	);
+	const unitsFinding = $derived(
+		`Δασαρχεία are the working level — ` +
+			`${pct(kindShare(o.kind_mix?.units, 'dx', 'n'))} of the contracts, ` +
+			`${pct(kindShare(o.kind_mix?.units, 'dx', 'eur'))} of the money; ` +
+			`colours follow the map's key.`
 	);
 	const cpvNoiseN = $derived(o.cpvs.find((c) => c.noise)?.n_contracts ?? 0);
 
@@ -444,22 +567,76 @@
 	</div>
 </ChartFrame>
 
-<div class="pair">
+<div class="kindpair">
 	<ChartFrame
 		title="AWARDING BODIES"
-		subtitle="{o.top_orgs[0]?.name ?? 'ΥΠΕΝ'} awards {pct(topOrgShare)} of the contracts; other bodies share the rest (grouped by name — registry VATs collide)."
+		subtitle={bodiesFinding}
 		anchor="dase-orgs"
 		methodology="org-names"
 	>
-		<BarH rows={orgRows} color="var(--c-dase)" />
+		<div class="kindbars">
+			<StackedShareBar
+				segments={kindSegs(o.kind_mix?.bodies, BODY_KINDS, 'n')}
+				height={44}
+				outside={false}
+			/>
+			<span class="rowlab">contracts</span>
+			<StackedShareBar
+				segments={kindSegs(o.kind_mix?.bodies, BODY_KINDS, 'eur')}
+				height={44}
+				fmt={eurShort}
+				outside={false}
+			/>
+			<span class="rowlab">€ net</span>
+			<ul class="kindkey">
+				{#each kindKey(o.kind_mix?.bodies, BODY_KINDS) as k (k.label)}
+					<li>
+						<i style:background={k.color}></i>{k.label}
+						<b>{grInt(k.n)}</b><span>{eurShort(k.eur)}</span>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	</ChartFrame>
+
+	<ChartFrame title="AWARDING UNITS" subtitle={unitsFinding} anchor="dase-units">
+		<div class="kindbars">
+			<StackedShareBar
+				segments={kindSegs(o.kind_mix?.units, UNIT_KINDS, 'n')}
+				height={44}
+				outside={false}
+			/>
+			<span class="rowlab">contracts</span>
+			<StackedShareBar
+				segments={kindSegs(o.kind_mix?.units, UNIT_KINDS, 'eur')}
+				height={44}
+				fmt={eurShort}
+				outside={false}
+			/>
+			<span class="rowlab">€ net</span>
+			<ul class="kindkey">
+				{#each kindKey(o.kind_mix?.units, UNIT_KINDS) as k (k.label)}
+					<li>
+						<i style:background={k.color}></i>{k.label}
+						<b>{grInt(k.n)}</b><span>{eurShort(k.eur)}</span>
+					</li>
+				{/each}
+			</ul>
+		</div>
 	</ChartFrame>
 
 	<ChartFrame
-		title="AWARDING UNITS"
-		subtitle="Top awarding units by stated € — Δασαρχεία are the working level."
-		anchor="dase-units"
+		title="AWARDING PROCESS"
+		caveat="Every contract names an awarding body, the operating unit that ran it and the co-op that won it; a ribbon is that chain, and both ribbon and bar are sized by the stated net € printed beside each bar. Hover a bar for the number of contracts behind that money. Bodies that ran the procurement through their own services — municipal departments, ephorates of antiquities, ΟΣΕ line maintenance — share one middle node, since naming them again would only repeat the first column. The right column holds the biggest co-ops by €; the rest are pooled into one node of the same colour. A consortium contract counts once, at the co-op listed first."
+		anchor="dase-delegation"
+		methodology="org-names"
 	>
-		<BarH rows={unitRows} color="var(--c-dase)" />
+		<KindFlow
+			nodes={flowNodes}
+			links={flowLinks}
+			height={660}
+			headings={['awarding bodies', 'operating units', 'contractors']}
+		/>
 	</ChartFrame>
 </div>
 
@@ -848,6 +1025,70 @@
 	}
 	@media (max-width: 900px) {
 		.pair {
+			grid-template-columns: 1fr;
+		}
+	}
+	/* the two category frames stack like the sponsored-works scope/type
+	   pair — full content width each, never side by side */
+	.kindpair :global(.frame:first-child) {
+		margin-bottom: var(--sp-8, 2rem);
+	}
+	/* bars match the sponsored-works width (3/4 of the content) so the
+	   segment labels have the same room; the measure name sits in the
+	   leftover quarter. The contracts and € rows keep identical segment
+	   order + colours for comparability. */
+	.kindbars {
+		display: grid;
+		grid-template-columns: 75% auto;
+		gap: var(--sp-3);
+		align-items: center;
+	}
+	.kindbars .rowlab {
+		font-size: var(--fs-14);
+		color: var(--ink-soft);
+		white-space: nowrap;
+	}
+	/* one key for both bars — they share categories and colours. It also
+	   carries the exact n/€ of the segments too narrow to be labelled. */
+	.kindkey {
+		/* aligned to the bars above it, two roomy columns */
+		grid-column: 1 / 2;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--sp-1) var(--sp-8, 2rem);
+		margin: var(--sp-2) 0 0;
+		padding: 0;
+		list-style: none;
+		font-size: var(--fs-13);
+	}
+	.kindkey li {
+		display: grid;
+		grid-template-columns: auto 1fr auto auto;
+		align-items: baseline;
+		gap: 0 var(--sp-2);
+		border-top: 1px solid var(--line);
+		padding-top: 3px;
+	}
+	.kindkey i {
+		width: 10px;
+		height: 10px;
+		border-radius: 2px;
+	}
+	.kindkey b {
+		font-weight: 400;
+		font-variant-numeric: tabular-nums;
+	}
+	.kindkey span {
+		color: var(--ink-soft);
+		font-variant-numeric: tabular-nums;
+		min-width: 5.5em;
+		text-align: right;
+	}
+	@media (max-width: 900px) {
+		.kindbars {
+			grid-template-columns: 1fr auto;
+		}
+		.kindkey {
 			grid-template-columns: 1fr;
 		}
 	}

@@ -260,7 +260,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
 
     @app.route("/api/dase/overview")
     def api_dase_overview():
-        return jsonify(queries_extra.dase_overview(_dase_conn()))
+        return jsonify(queries_extra.dase_overview(_dase_conn(), g.conn))
 
     @app.route("/api/dase/map")
     def api_dase_map():

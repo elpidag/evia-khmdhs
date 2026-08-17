@@ -525,7 +525,49 @@ bar); click a circle → its contract table docks below the legend
 co-op display name · DD.MM.YYYY · €; rows in the payload), click a
 Π.Ε. → zoom; payload `/api/dase/map`
 reconciles to the
-basis (pinned). /dase contract pages draw the ΚΗΜΔΗΣ family as a
+basis (pinned). AWARDING BODIES / AWARDING UNITS (2026-08-17) are
+**category share-bar pairs**, not top-10 lists: two `StackedShareBar`
+rows per frame (contracts / € net, identical segment order+colours for
+comparability; the € badges via the new `fmt` prop), frames STACKED
+full-width with the bars at the sponsored-works 3/4 width (840px,
+fs-16 — pinned by eye against /anadohoi) and ONE shared key per frame
+carrying each category's exact n/€ (`outside={false}` suppresses the
+component's spill labels, which overlap past ~4 segments) — bodies by
+public-bodies registry kind in a grey ramp (ministry / ΑΠΔ /
+municipalities incl. entities / regions / other; ΑΠΔ sign 17% of
+contracts but ~39% of the €), units by the map's FOUR kinds in the
+map's own colours (bar = legend echo);
+then a third frame **AWARDING PROCESS** — a THREE-column
+d3-sankey (`KindFlow.svelte`; the Anti-nero `Sankey.svelte` is
+scope-hardwired and untouched): awarding bodies → operating units →
+contractors, width = stated net €, coloured by whichever endpoint is
+the UNIT column (so the map palette carries in both stages), headings
+centred on each column's bar, ONLY the left column's labels wrap (20
+chars) — that narrow margin (124) lets the plot sit off-centre left
+and pay for a 356 right margin, so middle and right labels stay on one
+line and co-op names print in full at height 660; the chart spans the
+frame's FULL width (1120), matching the map+legend row — the beeswarm's
+886 is the page outlier (its 210px side-note column); a post-layout
+pass vertically CENTRES every column on the plot's middle (d3 packs
+from the top, so fewer-node columns rode high) shifting link ends with
+them, headings excluded; node labels = € only,
+black hover card on the BARS
+only carrying the contract count (the one number not printed;
+ribbons have no card and no on-chart annotation — the per-contract
+averages were removed as ambiguous, DATA_DECISIONS 2026-08-17),
+node-hover dims the rest, co-op nodes link to their pages,
+empty/dangling graphs degrade to nothing (d3-sankey throws
+otherwise). NO subtitle by user decision. Middle column = 3 nodes: the two forest kinds + «the body's
+own services» (muni+misc merged — the bar keeps the map's 4 kinds;
+DATA_DECISIONS 2026-08-17 explains why «other public bodies» was wrong
+there). Right column = top-10 co-ops by € + one pooled node; consortium
+contracts count at their lead co-op so all three columns reconcile.
+`queries_extra.dase_kind_mix` derives bodies + units + flows + coops +
+coop_flows from ONE per-contract pass (`_dase_kind_rows`; unit kinds
+mirror the map via the now-shared `_unit_forest_kind`, map-unresolved
+ΑΔΜΗΕ folds into misc), ships as `kind_mix` on `/api/dase/overview`,
+reconciles to the basis (pinned; 'unknown' bucket pinned absent; units
+marginal cross-checked against the map payload). /dase contract pages draw the ΚΗΜΔΗΣ family as a
 FamilyTree diagram (trunk → award fan → contracts, viewed contract's
 trail green, payments terminal; award↔contract edges only on
 name-verified pairs — `contract_timeline` ships `who` for in-db

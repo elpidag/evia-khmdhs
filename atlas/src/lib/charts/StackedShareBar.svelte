@@ -18,8 +18,14 @@
 		segments: ShareSeg[];
 		/** bar height in px */
 		height?: number;
+		/** badge/tooltip value formatter (default: Greek-formatted integer) */
+		fmt?: (v: number) => string;
+		/** list labels too narrow to sit inside their segment underneath the
+		 *  bar (default). Turn OFF when the chart carries its own legend —
+		 *  with many small segments the spill labels would overlap. */
+		outside?: boolean;
 	}
-	let { segments, height = 50 }: Props = $props();
+	let { segments, height = 50, fmt = grInt, outside: showOutside = true }: Props = $props();
 
 	const segs = $derived(segments.filter((s) => s.value > 0));
 	const total = $derived(Math.max(1, segs.reduce((s, x) => s + x.value, 0)));
@@ -64,7 +70,7 @@
 					class="seg"
 					style:width={`${p.w}%`}
 					style:background={p.s.color}
-					title={`${p.s.label}: ${grInt(p.s.value)}`}
+					title={`${p.s.label}: ${fmt(p.s.value)}`}
 					onmouseenter={() => (hot = i)}
 					onmouseleave={() => (hot = null)}
 				>
@@ -79,26 +85,26 @@
 						class="badge"
 						class:show={hot === i}
 						style:left={`-19px`}
-						style:top={`${2 + height / 2 - 13}px`}>{grInt(p.s.value)}</span
+						style:top={`${2 + height / 2 - 13}px`}>{fmt(p.s.value)}</span
 					>
 				{:else if p.s.badge === 'outright'}
 					<span
 						class="badge"
 						class:show={hot === i}
 						style:left={`calc(100% + 19px)`}
-						style:top={`${2 + height / 2 - 13}px`}>{grInt(p.s.value)}</span
+						style:top={`${2 + height / 2 - 13}px`}>{fmt(p.s.value)}</span
 					>
 				{:else}
 					<span
 						class="badge"
 						class:show={hot === i}
 						style:left={`${p.center}%`}
-						style:top={`-25px`}>{grInt(p.s.value)}</span
+						style:top={`-25px`}>{fmt(p.s.value)}</span
 					>
 				{/if}
 			{/each}
 		</div>
-		{#if outside.length}
+		{#if showOutside && outside.length}
 			<div class="out">
 				{#each outside as p (p.s.label)}
 					{#if p.center > 92}
@@ -172,9 +178,13 @@
 	.badge {
 		position: absolute;
 		transform: translateX(-50%);
-		width: 26px;
+		/* circle for short counts, stretching into a pill for longer
+		   values (€ shorts, 4-digit counts) */
+		min-width: 26px;
+		width: max-content;
+		padding: 0 6px;
 		height: 26px;
-		border-radius: 50%;
+		border-radius: 13px;
 		background: #000;
 		color: #fff;
 		display: flex;

@@ -236,6 +236,74 @@ def test_dase_map_pins(client):
     assert row["by"] and row["coop"]
 
 
+def test_dase_kind_mix_pins(client):
+    """AWARDING BODIES / UNITS category share bars: both breakdowns must
+    reconcile to the live population and the stated-net basis, the units
+    side must stay inside the map's kind vocabulary, and no
+    registry-unknown awarding body may reach the payload (the coverage
+    bijection of tests/test_public_bodies.py, seen from the chart)."""
+    km = client.get("/api/dase/overview").get_json()["kind_mix"]
+    for side in ("bodies", "units"):
+        rows = km[side]
+        assert sum(r["n"] for r in rows) == 2008, side
+        assert sum(r["eur"] for r in rows) == pytest.approx(
+            31_659_523.06, abs=0.05), side
+    assert {r["kind"] for r in km["units"]} <= {"dx", "dd", "muni", "misc"}
+    # the joint distribution behind the delegation diagram must reconcile
+    # to the same basis and stay inside both vocabularies
+    flows = km["flows"]
+    assert sum(f["n"] for f in flows) == 2008
+    assert sum(f["eur"] for f in flows) == pytest.approx(31_659_523.06, abs=0.05)
+    assert {f["unit"] for f in flows} <= {"dx", "dd", "muni", "misc"}
+    assert {f["body"] for f in flows} == {r["kind"] for r in km["bodies"]}
+    # the finding the chart states: two body kinds reach δασαρχεία, the
+    # decentralized administrations at several times the ministry's scale
+    into_dx = {f["body"]: f["eur"] / f["n"] for f in flows if f["unit"] == "dx"}
+    assert set(into_dx) == {"ministry", "decentralized_administration"}
+    assert into_dx["decentralized_administration"] > 3 * into_dx["ministry"]
+    # third column: named co-ops + one pooled node, reconciling both ways
+    coops, cflows = km["coops"], km["coop_flows"]
+    assert len(coops) == 11                       # top 10 by € + the pool
+    assert sum(c["n"] for c in coops) == 2008
+    assert sum(c["eur"] for c in coops) == pytest.approx(31_659_523.06, abs=0.05)
+    pooled = [c for c in coops if c["vat"] is None]
+    assert len(pooled) == 1 and pooled[0]["n_coops"] > 0
+    assert all(c["label"] for c in coops if c["vat"])   # display names present
+    assert sum(f["n"] for f in cflows) == 2008
+    assert sum(f["eur"] for f in cflows) == pytest.approx(31_659_523.06, abs=0.05)
+    assert {f["unit"] for f in cflows} <= {"dx", "dd", "muni", "misc"}
+    named = {c["vat"] for c in coops if c["vat"]}
+    assert {f["vat"] for f in cflows if f["vat"]} == named
+    # the diagram's own claim: the 5th-largest co-op works only for
+    # non-forest bodies (no δασαρχείο/διεύθυνση ever hires it)
+    ce = {c["vat"]: c["label"] for c in coops if c["vat"]}
+    for vat in ce:
+        kinds = {f["unit"] for f in cflows if f["vat"] == vat}
+        assert kinds, vat
+    assert any(
+        {f["unit"] for f in cflows if f["vat"] == vat} <= {"muni", "misc"} for vat in ce
+    )
+    # units marginal must equal the /dase map's own circle classification
+    m = client.get("/api/dase/map").get_json()
+    from collections import defaultdict
+    agg: dict = defaultdict(lambda: [0, 0.0])
+    for u in m["units"] + m["other"]:
+        agg[u["kind"]][0] += u["n"]
+        agg[u["kind"]][1] += u["eur"]
+    agg["misc"][0] += m["unresolved"]["n"]
+    agg["misc"][1] += m["unresolved"]["eur"]
+    for row in km["units"]:
+        assert row["n"] == agg[row["kind"]][0], row["kind"]
+        assert row["eur"] == pytest.approx(agg[row["kind"]][1], abs=0.05), row["kind"]
+    body_kinds = {r["kind"] for r in km["bodies"]}
+    assert "unknown" not in body_kinds
+    assert body_kinds <= {"ministry", "decentralized_administration",
+                          "municipality", "region", "state_vehicle",
+                          "other_public"}
+    # δασαρχεία are the working level — the dominant units category
+    assert max(km["units"], key=lambda r: r["n"])["kind"] == "dx"
+
+
 def test_connections_pins(client):
     n = client.get("/api/connections").get_json()
     assert len(n["contractor_authority"]) == 490

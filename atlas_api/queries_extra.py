@@ -771,7 +771,7 @@ def dase_contract_display(dase: sqlite3.Connection) -> dict[str, str]:
     return {ref: " | ".join(v) for ref, v in per_ref.items()}
 
 
-def dase_overview(dase: sqlite3.Connection) -> dict:
+def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     """Everything the ΔΑΣΕ overview page needs (webui /dase context)."""
     names = dase_display_names(dase)
     return {
@@ -781,6 +781,7 @@ def dase_overview(dase: sqlite3.Connection) -> dict:
                       for a in dq.top_coops(dase, limit=10)],
         "top_orgs": dq.top_orgs(dase, limit=10),
         "top_units": dq.top_units(dase, limit=10),
+        "kind_mix": dase_kind_mix(dase, kh),
         "procedures": dq.procedure_mix(dase),
         "types": dq.type_mix(dase),
         "cpvs": dq.cpv_mix(dase, limit=10),
@@ -811,6 +812,21 @@ def dase_duplicate_hits(dase: sqlite3.Connection, q: str) -> list[dict]:
                            r["organization_name"])]
 
 
+def _unit_forest_kind(unit: str | None) -> str | None:
+    """Forest-service units that missed a registry seat (Δασαρχείο
+    Φουρνά lives in dase_units.json; ΔΔ Ηλείας/Πιερίας/Χαλκιδικής rows
+    matched via curated unit keys; the supra-regional ΕΠΙΘΕΩΡΗΣΗ has no
+    seat by nature) still belong to the green forest family — drawn at
+    the Π.Ε. centroid, never as «other bodies». Shared by the map circles
+    and the category/flow payload so one rule serves both."""
+    f = _fold_upper(unit or "")
+    if f.startswith("ΔΑΣΑΡΧΕΙΟ"):
+        return "dx"
+    if "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ" in f or f.startswith("ΕΠΙΘΕΩΡΗΣΗ"):
+        return "dd"
+    return None
+
+
 def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     """Proportional-symbol map payload: one circle per awarding forest unit.
 
@@ -837,19 +853,6 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
         WHERE {dq.live_filter('co')}
     """).fetchall()
     coop_of = dase_contract_display(dase)
-
-    def _unit_forest_kind(unit: str | None) -> str | None:
-        """Forest-service units that missed a registry seat (Δασαρχείο
-        Φουρνά lives in dase_units.json; ΔΔ Ηλείας/Πιερίας/Χαλκιδικής rows
-        matched via curated unit keys; the supra-regional ΕΠΙΘΕΩΡΗΣΗ has no
-        seat by nature) still belong to the green forest family — drawn at
-        the Π.Ε. centroid, never as «other bodies»."""
-        f = _fold_upper(unit or "")
-        if f.startswith("ΔΑΣΑΡΧΕΙΟ"):
-            return "dx"
-        if "ΔΙΕΥΘΥΝΣΗ ΔΑΣΩΝ" in f or f.startswith("ΕΠΙΘΕΩΡΗΣΗ"):
-            return "dd"
-        return None
 
     # legend classification comes from the public-bodies registry
     # (DATA_DECISIONS 2026-08-16) instead of name-stem guessing: aliases
@@ -1010,6 +1013,141 @@ def dase_map(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     return {"units": out_units, "other": out_other,
             "unresolved": {"n": unresolved[0],
                            "eur": round(unresolved[1], 2)}}
+
+
+def _dase_kind_rows(dase: sqlite3.Connection,
+                    kh: sqlite3.Connection) -> list[dict]:
+    """Per live ΔΑΣΕ contract: the awarding BODY's registry kind, the
+    awarding UNIT's kind and the stated net €.
+
+    The unit decision mirrors `dase_map`'s circle kinds exactly (registry
+    seat kind → dd/dx, seatless forest spellings stay in the forest
+    family, everything else splits muni/misc by the public-bodies registry
+    scope); rows the map leaves unplaced for lack of a Π.Ε. (the
+    multi-Π.Ε. ΑΔΜΗΕ power-line contracts) are other-public awarders and
+    land in misc. A real-DB test cross-checks the aggregate against the
+    map payload, so the two can never drift apart silently.
+
+    Body kinds come from the public-bodies registry (coverage bijection
+    pinned in tests/test_public_bodies.py); municipal entities count with
+    their municipalities (same municipal scope tier). An org string the
+    registry does not know lands in 'unknown' — the bodies_loader WARN and
+    the bijection test scream long before that ships, and the real-DB pin
+    asserts the bucket stays absent."""
+    seats = {r["name"]: (r["lat"], r["kind"])
+             for r in kh.execute("SELECT name, lat, kind FROM forest_authorities")}
+    body_kind: dict[str, str] = {}
+    scope: dict[str, str] = {}
+    try:
+        for r in dase.execute("SELECT a.alias, b.kind, b.scope "
+                              "FROM public_body_aliases a "
+                              "JOIN public_bodies b ON b.key = a.body_key"):
+            body_kind[r["alias"]] = r["kind"]
+            scope[r["alias"]] = r["scope"]
+    except sqlite3.OperationalError:
+        pass
+
+    out = []
+    for r in dase.execute(f"""
+        SELECT r.source AS source, r.region_pe AS region_pe,
+               co.units_operator_name AS unit, co.organization_name AS org,
+               co.total_cost_with_vat AS eur,
+               (SELECT c.vat_number FROM contractors c
+                WHERE c.reference_number = co.reference_number
+                ORDER BY c.seq LIMIT 1) AS vat
+        FROM contracts co
+        LEFT JOIN dase_contract_regions r USING (reference_number)
+        WHERE {dq.live_filter('co')}"""):
+        src, pe, org = r["source"] or "", r["region_pe"], (r["org"] or "").strip()
+        name = src.split(":", 1)[1] if src.startswith("registry:") else None
+        if name and name in seats and seats[name][0] is not None:
+            unit_kind = seats[name][1]
+        else:
+            forest = _unit_forest_kind(r["unit"])
+            if forest and pe:
+                unit_kind = forest
+            else:
+                unit_kind = ("muni" if scope.get(org) in ("municipal", "regional")
+                             else "misc")
+        kind = body_kind.get(org, "unknown")
+        out.append({"body": "municipality" if kind == "municipal_entity" else kind,
+                    "unit": unit_kind, "eur": r["eur"] or 0.0,
+                    # lead contractor: a consortium contract counts once, at
+                    # the co-op listed first, so the columns reconcile
+                    "vat": dq.canonical_vat(r["vat"]) or ""})
+    return out
+
+
+def dase_kind_mix(dase: sqlite3.Connection, kh: sqlite3.Connection,
+                  top_coops: int = 10) -> dict:
+    """Category payload for /dase: the AWARDING BODIES / AWARDING UNITS
+    share bars (`bodies`/`units` marginals) and the three-column
+    delegation diagram — `flows` (body→unit) and `coop_flows`
+    (unit→co-op) over the `coops` node list, top N by € plus one
+    «other co-ops» node carrying the long tail. Everything comes from one
+    per-contract pass (`_dase_kind_rows`), so no two charts on the page
+    can disagree; every layer reconciles to the live basis."""
+    rows = _dase_kind_rows(dase, kh)
+
+    def _marginal(key: str) -> list[dict]:
+        bucket: dict[str, dict] = {}
+        for r in rows:
+            d = bucket.setdefault(r[key], {"n": 0, "eur": 0.0})
+            d["n"] += 1
+            d["eur"] += r["eur"]
+        return sorted(({"kind": k, "n": v["n"], "eur": round(v["eur"], 2)}
+                       for k, v in bucket.items()), key=lambda x: -x["n"])
+
+    flows: dict[tuple, dict] = {}
+    for r in rows:
+        d = flows.setdefault((r["body"], r["unit"]), {"n": 0, "eur": 0.0})
+        d["n"] += 1
+        d["eur"] += r["eur"]
+
+    # third column: the co-ops themselves — the biggest N by €, the rest
+    # pooled into one node so the column still sums to the basis
+    per_coop: dict[str, dict] = {}
+    for r in rows:
+        d = per_coop.setdefault(r["vat"], {"n": 0, "eur": 0.0})
+        d["n"] += 1
+        d["eur"] += r["eur"]
+    ranked = sorted(per_coop.items(), key=lambda kv: -kv[1]["eur"])
+    named = {vat for vat, _ in ranked[:top_coops]}
+    display = dase_display_names(dase)
+    registry = {}
+    for r in dase.execute("SELECT vat_number, name FROM contractors"):
+        registry.setdefault(dq.canonical_vat(r["vat_number"]) or "", r["name"])
+
+    coops = [{"vat": vat,
+              "label": (display.get(vat) or {}).get("el") or registry.get(vat) or vat,
+              "n": v["n"], "eur": round(v["eur"], 2)}
+             for vat, v in ranked[:top_coops]]
+    rest = [v for vat, v in ranked[top_coops:]]
+    if rest:
+        coops.append({"vat": None, "label": None, "n_coops": len(rest),
+                      "n": sum(v["n"] for v in rest),
+                      "eur": round(sum(v["eur"] for v in rest), 2)})
+
+    coop_flows: dict[tuple, dict] = {}
+    for r in rows:
+        key = (r["unit"], r["vat"] if r["vat"] in named else None)
+        d = coop_flows.setdefault(key, {"n": 0, "eur": 0.0})
+        d["n"] += 1
+        d["eur"] += r["eur"]
+
+    return {
+        "bodies": _marginal("body"),
+        "units": _marginal("unit"),
+        "flows": sorted(({"body": b, "unit": u, "n": v["n"],
+                          "eur": round(v["eur"], 2)}
+                         for (b, u), v in flows.items()),
+                        key=lambda x: -x["eur"]),
+        "coops": coops,
+        "coop_flows": sorted(({"unit": u, "vat": vat, "n": v["n"],
+                               "eur": round(v["eur"], 2)}
+                              for (u, vat), v in coop_flows.items()),
+                             key=lambda x: -x["eur"]),
+    }
 
 
 def dase_swarm(dase: sqlite3.Connection) -> dict:
