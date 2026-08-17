@@ -3,5 +3,1044 @@
  "22PAY010598913": {
   "exclude": true,
   "reason": "ΚΗΜΔΗΣ double-posting of the same payment paper as 22PAY010599002 (user-verified; the PDF states «ΚΑΘΑΡΗ ΑΞΙΑ» 86.504,06 € / 107.265,03 € gross, matching the kept row; this duplicate's stored 86,938.75 was additionally mis-keyed)."
+ },
+ "21PAY009446247": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 21PAY009302902 (amount-token fingerprints of the two PDFs are identical), attributed to 21SYMV009141052. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009531750": {
+  "amount_with_vat": 7843.66,
+  "amount_without_vat": 6498.31,
+  "reason": "REVERSED exclusion + amount correction, visually read (DATA_DECISIONS 2026-08-17 scanned-pile review): this record's χρηματικό ένταλμα 149961 pays 7.843,66 against invoice 440/19.09.2021 — a SECOND 353-κ.μ. batch of συστάδα 16α Μουριών, distinct from the kept dossier record 21PAY009302902 (τιμ. 429/30-08-2021, same amount; its identical re-post 21PAY009446247 stays excluded). Stored 6.950,99 was the work component; corrected to the warrant, net := the contract's total net (the amount equals the contract to the cent)."
+ },
+ "21PAY009506479": {
+  "amount_with_vat": 1662.46,
+  "amount_without_vat": 1379.8,
+  "reason": "Registry keying error: stored 2.731,16 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 1.662,46. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009499048": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009356045 already carries: this record's own PDF states warrant total 7.649,42 == the kept row's stored amount, while this row was keyed 12.231,21. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009394458": {
+  "amount_with_vat": 10386.01,
+  "amount_without_vat": 8616.81,
+  "reason": "Registry keying error: stored 16.767,18 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 10.386,01. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009507122": {
+  "amount_with_vat": 452.3,
+  "amount_without_vat": 374.88,
+  "reason": "Registry keying error: stored 726,39 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 452,30. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009506481": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009341770 already carries: this record's own PDF states warrant total 7.497,53 == the kept row's stored amount, while this row was keyed 5.323,51. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009535472": {
+  "amount_with_vat": 625.23,
+  "amount_without_vat": 518.21,
+  "reason": "Registry keying error: stored 990,53 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 625,23. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009473132": {
+  "amount_with_vat": 15249.03,
+  "amount_without_vat": 12297.6,
+  "reason": "Registry keying error: stored 87.833,13 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 15.249,03. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009423218": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009320185 already carries: this record's own PDF states warrant total 4.872,48 == the kept row's stored amount, while this row was keyed 7.790,94. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009356136": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 21PAY009355857 (amount-token fingerprints of the two PDFs are identical), attributed to 21SYMV009198626. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009791093": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009589828 already carries: this record's own PDF states warrant total 3.731,71 == the kept row's stored amount, while this row was keyed 3.303,11. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009780795": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009603293 already carries: this record's own PDF states warrant total 5.181,64 == the kept row's stored amount, while this row was keyed 8.226,40. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009791106": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009589370 already carries: this record's own PDF states warrant total 15.337,66 == the kept row's stored amount, while this row was keyed 10.870,60. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009523715": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009394578 already carries: this record's own PDF states warrant total 4.189,39 == the kept row's stored amount, while this row was keyed 3.688,64. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009394817": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 21PAY009394728 (amount-token fingerprints of the two PDFs are identical), attributed to 21SYMV009269541. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009499139": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009394728 already carries: this record's own PDF states warrant total 8.028,60 == the kept row's stored amount, while this row was keyed 12.805,63. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009790780": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009639033 already carries: this record's own PDF states warrant total 7.254,30 == the kept row's stored amount, while this row was keyed 6.375,46. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009782001": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009610823 already carries: this record's own PDF states warrant total 5.969,25 == the kept row's stored amount, while this row was keyed 9.476,81. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009791083": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009538520 already carries: this record's own PDF states warrant total 5.285,28 == the kept row's stored amount, while this row was keyed 3.745,95. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009788469": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009639580 already carries: this record's own PDF states warrant total 7.254,30 == the kept row's stored amount, while this row was keyed 11.516,96. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009558424": {
+  "amount_with_vat": 7844.58,
+  "amount_without_vat": 6326.28,
+  "reason": "Registry keying error: stored 8.339,92 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 7.844,58. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009629524": {
+  "amount_with_vat": 2876.01,
+  "amount_without_vat": 2383.91,
+  "reason": "Registry keying error: stored 7.135,50 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 2.876,01. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009629348": {
+  "amount_with_vat": 21456.25,
+  "amount_without_vat": 17786.45,
+  "reason": "Registry keying error: stored 53.212,19 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 21.456,25. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009595559": {
+  "amount_with_vat": 15055.0,
+  "amount_without_vat": 12478.99,
+  "reason": "Registry keying error: stored 37.259,84 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 15.055,00. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009790734": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009603499 already carries: this record's own PDF states warrant total 1.865,38 == the kept row's stored amount, while this row was keyed 1.639,40. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009780858": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009610814 already carries: this record's own PDF states warrant total 11.399,61 == the kept row's stored amount, while this row was keyed 18.098,08. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009686200": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over the χρηματικό ένταλμα that 21PAY009512656 already carries: this record's own PDF states warrant total 9.119,69 == the kept row's stored amount, while this row was keyed 6.463,40. One warrant, one payment (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009668291": {
+  "amount_with_vat": 1683.27,
+  "amount_without_vat": 1357.48,
+  "reason": "Registry keying error: stored 1.872,81 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 1.683,27. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009586526": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 21PAY009586451 (amount-token fingerprints of the two PDFs are identical; warrant total 14.326,95), attributed to 21SYMV009459015. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009586451": {
+  "amount_with_vat": 14326.95,
+  "amount_without_vat": 11553.99,
+  "reason": "Registry keying error: stored 12.030,98 but its own χρηματικό ένταλμα states 14.326,95; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009854939": {
+  "amount_with_vat": 4614.01,
+  "amount_without_vat": 3816.73,
+  "reason": "Registry keying error: stored 7.441,28 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 4.614,01. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009789165": {
+  "amount_with_vat": 2310.59,
+  "amount_without_vat": 1911.95,
+  "reason": "Registry keying error: stored 3.720,64 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 2.310,59. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009788285": {
+  "amount_with_vat": 2310.59,
+  "amount_without_vat": 1911.95,
+  "reason": "Registry keying error: stored 3.720,64 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 2.310,59. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009853660": {
+  "amount_with_vat": 696.76,
+  "amount_without_vat": 577.17,
+  "reason": "Registry keying error: stored 1.116,19 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 696,76. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009774743": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 21PAY009774595 (amount-token fingerprints of the two PDFs are identical; warrant total 16.885,16), attributed to 21SYMV009467452. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009784721": {
+  "amount_with_vat": 2158.6,
+  "amount_without_vat": 1789.12,
+  "reason": "Registry keying error: stored 3.962,11 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 2.158,60. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "22PAY010831314": {
+  "amount_with_vat": 3700.98,
+  "amount_without_vat": 2984.66,
+  "reason": "Registry keying error: stored 4.880,85 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 3.700,98. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "22PAY011642628": {
+  "amount_with_vat": 2000.0,
+  "amount_without_vat": 1612.9,
+  "reason": "Registry keying error, visually read (DATA_DECISIONS 2026-08-17 scanned-pile review): both instalments of 22SYMV010618908 (7ος ΔΑΣΕ ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ, contract 4.000,00) were keyed with the full contract value. This record's own χρηματικό ένταλμα 00188 pays 2.000,00 (κρατήσεις 131,20, δικαιούχος 1.868,80) against invoice ΤΠΥ5 (ΔΣΕ 445)/14-11-2022; the two warrants cite different invoices, so they are two genuine instalments summing to the contract — the earlier fingerprint-based exclusion of 22PAY011642628 is REVERSED by this entry (amount-token fingerprints cannot distinguish same-priced instalments). Net := 2.000,00/1,24."
+ },
+ "22PAY011763275": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 22PAY011761478 (amount-token fingerprints of the two PDFs are identical), attributed to 22SYMV011332288. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015608984": {
+  "amount_with_vat": 4677.5,
+  "amount_without_vat": 3772.17,
+  "reason": "Registry keying error: stored 4.811,29 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 4.677,50. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY016359165": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 25PAY016358875 (amount-token fingerprints of the two PDFs are identical; warrant total 14.527,65), attributed to 24SYMV015390210. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015844117": {
+  "amount_with_vat": 2926.56,
+  "amount_without_vat": 2360.13,
+  "reason": "Registry keying error: stored 3.565,63 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 2.926,56. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017957804": {
+  "amount_with_vat": 4104.76,
+  "amount_without_vat": 3310.29,
+  "reason": "Registry keying error, visually read (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 6.557,12, but this record's own χρηματικό ένταλμα 01693 pays 4.104,76 (δικαιούχος 3.836,63). The three same-amount records on 25SYMV017429326 carry THREE different warrant numbers (01375/01693/01839) — three genuine same-priced instalments, so the earlier same-document exclusions are REVERSED; with the 6.278,23 order the contract's payments now sum close to its value. Net derived with the contract's own net:gross ratio."
+ },
+ "25PAY018057589": {
+  "exclude": true,
+  "reason": "ΚΗΜΔΗΣ re-post of the same χρηματικό ένταλμα as 25PAY018057013 (amount-token fingerprints of the two PDFs are identical; warrant total 22.269,87), attributed to 25SYMV017447852. One warrant, one payment: this duplicate is excluded (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017899059": {
+  "amount_with_vat": 8976.15,
+  "amount_without_vat": 7238.83,
+  "reason": "Registry keying error: stored 10.878,33 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 8.976,15. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017899104": {
+  "amount_with_vat": 4893.32,
+  "amount_without_vat": 3946.23,
+  "reason": "Registry keying error: stored 5.930,29 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 4.893,32. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017976758": {
+  "amount_with_vat": 33582.27,
+  "amount_without_vat": 27082.48,
+  "reason": "Registry keying error: stored 40.935,20 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 33.582,27. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "26PAY019044050": {
+  "amount_with_vat": 7113.3,
+  "amount_without_vat": 5922.4,
+  "reason": "Registry keying error: stored 8.590,02 appears nowhere in the attached χρηματικό ένταλμα, which states a total of 7.113,30. Corrected to the document; net derived with the contract's own net:gross ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "26PAY019323945": {
+  "amount_with_vat": 84665.22,
+  "amount_without_vat": 68278.4,
+  "reason": "Registry keying error: both instalments of 25SYMV017920941 were posted with the full contract value 97.365,01 (Σ = 194.730,02, twice the contract). This order's own PDF itemises 84.665,22 gross / 68.278,40 net; with 26PAY019324185 they sum to 97.360,15 ≈ the contract (DATA_DECISIONS 2026-08-17)."
+ },
+ "26PAY019324185": {
+  "amount_with_vat": 12694.93,
+  "amount_without_vat": 10237.85,
+  "reason": "Registry keying error: both instalments of 25SYMV017920941 were posted with the full contract value 97.365,01 (Σ = 194.730,02, twice the contract). This order's own PDF itemises 12.694,93 gross / 10.237,85 net; with 26PAY019323945 they sum to 97.360,15 ≈ the contract (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009588862": {
+  "amount_with_vat": 6055.9,
+  "amount_without_vat": 4993.99,
+  "reason": "ΕΦΚΑ understatement: stored 5.486,54/4.424,63 (g = 1,24×n, the work pair), while the warrant pays 6.055,90 — 569,36 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 569,36 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009589000": {
+  "amount_with_vat": 11855.12,
+  "amount_without_vat": 9560.57,
+  "reason": "ΕΦΚΑ understatement: stored 10.742,96/8.663,68, while the warrant pays 11.855,12 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 9.560,57 (exact, no derivation)."
+ },
+ "21PAY009558451": {
+  "amount_with_vat": 7702.56,
+  "amount_without_vat": 6211.75,
+  "reason": "ΕΦΚΑ understatement: stored 6.980,12/5.629,13, while the warrant pays 7.702,56 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 6.211,75 (exact, no derivation)."
+ },
+ "21PAY009368984": {
+  "amount_with_vat": 9260.97,
+  "amount_without_vat": 7683.41,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 6.792,00 in BOTH amount fields (= the contract's work-net), while the warrant pays 9.260,97; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (1.147,20:6.792,00) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009473127": {
+  "amount_with_vat": 2098.48,
+  "amount_without_vat": 1741.68,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 1.513,07 in BOTH amount fields (= the contract's work-net), while the warrant pays 2.098,48; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (259,56:1.513,07) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009368918": {
+  "amount_with_vat": 4887.98,
+  "amount_without_vat": 4056.89,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 3.525,60 in BOTH amount fields (= the contract's work-net), while the warrant pays 4.887,98; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (604,80:3.525,60) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009397925": {
+  "amount_with_vat": 11485.11,
+  "amount_without_vat": 9432.3,
+  "reason": "ΕΦΚΑ understatement: stored 10.606,17/8.553,36 (g = 1,24×n, the work pair), while the warrant pays 11.485,11 — 878,94 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 878,94 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009473129": {
+  "amount_with_vat": 8950.24,
+  "amount_without_vat": 7350.51,
+  "reason": "ΕΦΚΑ understatement: stored 8.265,28/6.665,55 (g = 1,24×n, the work pair), while the warrant pays 8.950,24 — 684,96 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 684,96 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009462390": {
+  "amount_with_vat": 7281.99,
+  "amount_without_vat": 5980.43,
+  "reason": "ΕΦΚΑ understatement: stored 6.724,71/5.423,15 (g = 1,24×n, the work pair), while the warrant pays 7.281,99 — 557,28 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 557,28 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009523678": {
+  "amount_with_vat": 576.3,
+  "amount_without_vat": 477.66,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 412,72 in BOTH amount fields (= the contract's work-net), while the warrant pays 576,30; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (66,92:412,72) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009462289": {
+  "amount_with_vat": 13960.6,
+  "amount_without_vat": 11583.93,
+  "reason": "ΕΦΚΑ understatement: stored 12.279,46/9.902,79 (g = 1,24×n, the work pair), while the warrant pays 13.960,60 — 1.681,14 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.681,14 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009558456": {
+  "amount_with_vat": 9501.42,
+  "amount_without_vat": 7662.43,
+  "reason": "ΕΦΚΑ understatement: stored 8.609,11/6.942,83, while the warrant pays 9.501,42 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 7.662,43 (exact, no derivation)."
+ },
+ "21PAY009473124": {
+  "amount_with_vat": 638.31,
+  "amount_without_vat": 528.64,
+  "reason": "ΕΦΚΑ understatement: stored 566,61/456,94 (g = 1,24×n, the work pair), while the warrant pays 638,31 — 71,70 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 71,70 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009744740": {
+  "amount_with_vat": 1207.44,
+  "amount_without_vat": 1000.77,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 869,66 in BOTH amount fields (= the contract's work-net), while the warrant pays 1.207,44; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (141,01:869,66) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009575391": {
+  "amount_with_vat": 5829.43,
+  "amount_without_vat": 4701.14,
+  "reason": "ΕΦΚΑ understatement: stored 5.280,71/4.258,64, while the warrant pays 5.829,43 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 4.701,14 (exact, no derivation)."
+ },
+ "21PAY009585886": {
+  "amount_with_vat": 5994.28,
+  "amount_without_vat": 4834.11,
+  "reason": "ΕΦΚΑ understatement: stored 5.430,05/4.379,07, while the warrant pays 5.994,28 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 4.834,11 (exact, no derivation)."
+ },
+ "21PAY009476599": {
+  "amount_with_vat": 4485.22,
+  "amount_without_vat": 3683.5,
+  "reason": "ΕΦΚΑ understatement: stored 4.142,22/3.340,50 (g = 1,24×n, the work pair), while the warrant pays 4.485,22 — 343,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 343,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009506502": {
+  "amount_with_vat": 4491.14,
+  "amount_without_vat": 3688.47,
+  "reason": "ΕΦΚΑ understatement: stored 4.147,14/3.344,47 (g = 1,24×n, the work pair), while the warrant pays 4.491,14 — 344,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 344,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009476702": {
+  "amount_with_vat": 10256.67,
+  "amount_without_vat": 8423.44,
+  "reason": "ΕΦΚΑ understatement: stored 9.471,67/7.638,44 (g = 1,24×n, the work pair), while the warrant pays 10.256,67 — 785,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 785,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009523254": {
+  "amount_with_vat": 12117.6,
+  "amount_without_vat": 9772.29,
+  "reason": "ΕΦΚΑ understatement: stored 10.657,60/8.594,84, while the warrant pays 12.117,60 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 9.772,29 (exact, no derivation)."
+ },
+ "21PAY009595328": {
+  "amount_with_vat": 11549.43,
+  "amount_without_vat": 9485.35,
+  "reason": "ΕΦΚΑ understatement: stored 10.664,43/8.600,35 (g = 1,24×n, the work pair), while the warrant pays 11.549,43 — 885,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 885,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009728993": {
+  "amount_with_vat": 14383.94,
+  "amount_without_vat": 11935.29,
+  "reason": "ΕΦΚΑ understatement: stored 12.651,35/10.202,70 (g = 1,24×n, the work pair), while the warrant pays 14.383,94 — 1.732,59 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.732,59 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009725368": {
+  "amount_with_vat": 12809.86,
+  "amount_without_vat": 10595.92,
+  "reason": "ΕΦΚΑ understatement: stored 11.438,67/9.224,73 (g = 1,24×n, the work pair), while the warrant pays 12.809,86 — 1.371,19 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.371,19 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009492499": {
+  "amount_with_vat": 6406.9,
+  "amount_without_vat": 5261.69,
+  "reason": "ΕΦΚΑ understatement: stored 5.916,90/4.771,69 (g = 1,24×n, the work pair), while the warrant pays 6.406,90 — 490,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 490,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009498831": {
+  "amount_with_vat": 4624.27,
+  "amount_without_vat": 3797.96,
+  "reason": "ΕΦΚΑ understatement: stored 4.269,27/3.442,96 (g = 1,24×n, the work pair), while the warrant pays 4.624,27 — 355,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 355,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009567020": {
+  "amount_with_vat": 15367.43,
+  "amount_without_vat": 12751.18,
+  "reason": "ΕΦΚΑ understatement: stored 13.517,31/10.901,06 (g = 1,24×n, the work pair), while the warrant pays 15.367,43 — 1.850,12 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.850,12 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009492428": {
+  "amount_with_vat": 14393.39,
+  "amount_without_vat": 11942.81,
+  "reason": "ΕΦΚΑ understatement: stored 12.661,35/10.210,77 (g = 1,24×n, the work pair), while the warrant pays 14.393,39 — 1.732,04 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.732,04 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009558465": {
+  "amount_with_vat": 5778.57,
+  "amount_without_vat": 4746.07,
+  "reason": "ΕΦΚΑ understatement: stored 5.334,57/4.302,07 (g = 1,24×n, the work pair), while the warrant pays 5.778,57 — 444,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 444,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009744745": {
+  "amount_with_vat": 6066.24,
+  "amount_without_vat": 5032.62,
+  "reason": "ΕΦΚΑ understatement: stored 5.340,38/4.306,76 (g = 1,24×n, the work pair), while the warrant pays 6.066,24 — 725,86 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 725,86 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009523304": {
+  "amount_with_vat": 8481.19,
+  "amount_without_vat": 7023.08,
+  "reason": "ΕΦΚΑ understatement: stored 7.533,57/6.075,46 (g = 1,24×n, the work pair), while the warrant pays 8.481,19 — 947,62 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 947,62 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009397704": {
+  "amount_with_vat": 18753.22,
+  "amount_without_vat": 15123.58,
+  "reason": "ΕΦΚΑ understatement: stored 16.523,38/13.325,31, while the warrant pays 18.753,22 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 15.123,58 (exact, no derivation)."
+ },
+ "21PAY009506480": {
+  "amount_with_vat": 1448.97,
+  "amount_without_vat": 1202.15,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 1.047,10 in BOTH amount fields (= the contract's work-net), while the warrant pays 1.448,97; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (176,86:1.047,10) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009671120": {
+  "amount_with_vat": 10110.9,
+  "amount_without_vat": 8376.34,
+  "reason": "ΕΦΚΑ understatement: stored 8.961,90/7.227,34 (g = 1,24×n, the work pair), while the warrant pays 10.110,90 — 1.149,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.149,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009727864": {
+  "amount_with_vat": 9602.92,
+  "amount_without_vat": 7959.03,
+  "reason": "ΕΦΚΑ understatement: stored 8.493,43/6.849,54 (g = 1,24×n, the work pair), while the warrant pays 9.602,92 — 1.109,49 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.109,49 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009567120": {
+  "amount_with_vat": 7668.19,
+  "amount_without_vat": 6184.03,
+  "reason": "ΕΦΚΑ understatement: stored 6.946,38/5.601,92, while the warrant pays 7.668,19 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 6.184,03 (exact, no derivation)."
+ },
+ "21PAY009369020": {
+  "amount_with_vat": 3705.82,
+  "amount_without_vat": 3053.79,
+  "reason": "ΕΦΚΑ understatement: stored 3.368,83/2.716,80 (g = 1,24×n, the work pair), while the warrant pays 3.705,82 — 336,99 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 336,99 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009476496": {
+  "amount_with_vat": 4686.71,
+  "amount_without_vat": 3888.35,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 3.438,45 in BOTH amount fields (= the contract's work-net), while the warrant pays 4.686,71; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (580,77:3.438,45) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009473137": {
+  "amount_with_vat": 5941.92,
+  "amount_without_vat": 4929.74,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 4.358,20 in BOTH amount fields (= the contract's work-net), while the warrant pays 5.941,92; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (736,12:4.358,20) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009368943": {
+  "amount_with_vat": 16279.89,
+  "amount_without_vat": 13370.08,
+  "reason": "ΕΦΚΑ understatement: stored 15.034,01/12.124,20 (g = 1,24×n, the work pair), while the warrant pays 16.279,89 — 1.245,88 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.245,88 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009473098": {
+  "amount_with_vat": 7109.08,
+  "amount_without_vat": 5838.43,
+  "reason": "ΕΦΚΑ understatement: stored 6.565,03/5.294,38 (g = 1,24×n, the work pair), while the warrant pays 7.109,08 — 544,05 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 544,05 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009422940": {
+  "amount_with_vat": 3644.53,
+  "amount_without_vat": 3017.12,
+  "reason": "ΕΦΚΑ understatement: stored 3.241,60/2.614,19 (g = 1,24×n, the work pair), while the warrant pays 3.644,53 — 402,93 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 402,93 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009368933": {
+  "amount_with_vat": 4759.0,
+  "amount_without_vat": 3908.39,
+  "reason": "ΕΦΚΑ understatement: stored 4.394,80/3.544,19 (g = 1,24×n, the work pair), while the warrant pays 4.759,00 — 364,20 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 364,20 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009586294": {
+  "amount_with_vat": 15153.74,
+  "amount_without_vat": 12498.76,
+  "reason": "ΕΦΚΑ understatement: stored 13.717,39/11.062,41 (g = 1,24×n, the work pair), while the warrant pays 15.153,74 — 1.436,35 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.436,35 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009558419": {
+  "amount_with_vat": 7286.25,
+  "amount_without_vat": 6010.2,
+  "reason": "ΕΦΚΑ understatement: stored 6.592,92/5.316,87 (g = 1,24×n, the work pair), while the warrant pays 7.286,25 — 693,33 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 693,33 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009558411": {
+  "amount_with_vat": 11298.35,
+  "amount_without_vat": 9111.57,
+  "reason": "ΕΦΚΑ understatement: stored 10.225,35/8.246,25, while the warrant pays 11.298,35 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 9.111,57 (exact, no derivation)."
+ },
+ "21PAY009523375": {
+  "amount_with_vat": 7475.44,
+  "amount_without_vat": 6139.31,
+  "reason": "ΕΦΚΑ understatement: stored 6.903,35/5.567,22 (g = 1,24×n, the work pair), while the warrant pays 7.475,44 — 572,09 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 572,09 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009847093": {
+  "amount_with_vat": 11935.76,
+  "amount_without_vat": 9903.93,
+  "reason": "ΕΦΚΑ understatement: stored 10.497,77/8.465,94 (g = 1,24×n, the work pair), while the warrant pays 11.935,76 — 1.437,99 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.437,99 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009523352": {
+  "amount_with_vat": 6979.82,
+  "amount_without_vat": 5792.44,
+  "reason": "ΕΦΚΑ understatement: stored 6.134,79/4.947,41, while the warrant pays 6.979,82 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 5.792,44 (exact, no derivation)."
+ },
+ "22PAY010266470": {
+  "amount_with_vat": 14068.05,
+  "amount_without_vat": 11345.19,
+  "reason": "ΕΦΚΑ understatement: stored 12.422,05/10.017,78, while the warrant pays 14.068,05 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 11.345,19 (exact, no derivation)."
+ },
+ "22PAY010266390": {
+  "amount_with_vat": 8116.2,
+  "amount_without_vat": 6545.32,
+  "reason": "ΕΦΚΑ understatement: stored 7.166,58/5.779,50, while the warrant pays 8.116,20 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 6.545,32 (exact, no derivation)."
+ },
+ "22PAY010239798": {
+  "amount_with_vat": 8229.54,
+  "amount_without_vat": 6636.76,
+  "reason": "ΕΦΚΑ understatement: stored 7.301,76/5.888,52, while the warrant pays 8.229,54 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 6.636,76 (exact, no derivation)."
+ },
+ "22PAY010283822": {
+  "amount_with_vat": 14068.05,
+  "amount_without_vat": 11345.19,
+  "reason": "ΕΦΚΑ understatement: stored 12.422,05/10.017,78, while the warrant pays 14.068,05 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 11.345,19 (exact, no derivation)."
+ },
+ "22PAY010298808": {
+  "amount_with_vat": 10970.58,
+  "amount_without_vat": 9099.62,
+  "reason": "ΕΦΚΑ understatement: stored 9.666,64/7.795,68 (g = 1,24×n, the work pair), while the warrant pays 10.970,58 — 1.303,94 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.303,94 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010298530": {
+  "amount_with_vat": 7575.09,
+  "amount_without_vat": 6108.94,
+  "reason": "ΕΦΚΑ understatement: stored 6.688,80/5.394,19, while the warrant pays 7.575,09 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 6.108,94 (exact, no derivation)."
+ },
+ "22PAY010298906": {
+  "amount_with_vat": 11378.41,
+  "amount_without_vat": 9377.14,
+  "reason": "ΕΦΚΑ understatement: stored 10.339,88/8.338,61 (g = 1,24×n, the work pair), while the warrant pays 11.378,41 — 1.038,53 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.038,53 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009473096": {
+  "amount_with_vat": 26322.74,
+  "amount_without_vat": 21845.23,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 18.656,30 in BOTH amount fields (= the contract's work-net), while the warrant pays 26.322,74; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (3.188,93:18.656,30) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009586168": {
+  "amount_with_vat": 6470.95,
+  "amount_without_vat": 5218.5,
+  "reason": "ΕΦΚΑ understatement: stored 5.863,13/4.728,33, while the warrant pays 6.470,95 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 5.218,50 (exact, no derivation)."
+ },
+ "21PAY009628360": {
+  "amount_with_vat": 14491.82,
+  "amount_without_vat": 12024.87,
+  "reason": "ΕΦΚΑ understatement: stored 12.745,91/10.278,96 (g = 1,24×n, the work pair), while the warrant pays 14.491,82 — 1.745,91 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.745,91 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009698841": {
+  "amount_with_vat": 4809.78,
+  "amount_without_vat": 3991.09,
+  "reason": "ΕΦΚΑ understatement: stored 4.229,90/3.411,21 (g = 1,24×n, the work pair), while the warrant pays 4.809,78 — 579,88 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 579,88 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009647810": {
+  "amount_with_vat": 12751.41,
+  "amount_without_vat": 10514.35,
+  "reason": "ΕΦΚΑ understatement: stored 11.558,15/9.321,09 (g = 1,24×n, the work pair), while the warrant pays 12.751,41 — 1.193,26 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.193,26 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009671491": {
+  "amount_with_vat": 8567.49,
+  "amount_without_vat": 7036.04,
+  "reason": "ΕΦΚΑ understatement: stored 7.912,49/6.381,04 (g = 1,24×n, the work pair), while the warrant pays 8.567,49 — 655,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 655,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009585987": {
+  "amount_with_vat": 11343.81,
+  "amount_without_vat": 9148.23,
+  "reason": "ΕΦΚΑ understatement: stored 10.266,53/8.279,46, while the warrant pays 11.343,81 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 9.148,23 (exact, no derivation)."
+ },
+ "21PAY009523395": {
+  "amount_with_vat": 9378.1,
+  "amount_without_vat": 7701.88,
+  "reason": "ΕΦΚΑ understatement: stored 8.660,49/6.984,27 (g = 1,24×n, the work pair), while the warrant pays 9.378,10 — 717,61 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 717,61 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009726811": {
+  "amount_with_vat": 7136.9,
+  "amount_without_vat": 5921.98,
+  "reason": "ΕΦΚΑ understatement: stored 6.277,09/5.062,17 (g = 1,24×n, the work pair), while the warrant pays 7.136,90 — 859,81 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 859,81 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009604814": {
+  "amount_with_vat": 14014.21,
+  "amount_without_vat": 11617.27,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 9.987,27 in BOTH amount fields (= the contract's work-net), while the warrant pays 14.014,21; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (393,45:2.410,72) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009604898": {
+  "amount_with_vat": 22248.1,
+  "amount_without_vat": 18450.91,
+  "reason": "ΕΦΚΑ understatement: stored 19.618,85/15.821,65, while the warrant pays 22.248,10 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 18.450,91 (exact, no derivation)."
+ },
+ "21PAY009611876": {
+  "amount_with_vat": 9347.05,
+  "amount_without_vat": 7747.71,
+  "reason": "ΕΦΚΑ understatement: stored 8.263,25/6.663,91, while the warrant pays 9.347,05 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 7.747,71 (exact, no derivation)."
+ },
+ "21PAY009627679": {
+  "amount_with_vat": 13222.81,
+  "amount_without_vat": 10903.04,
+  "reason": "ΕΦΚΑ understatement: stored 11.985,46/9.665,69 (g = 1,24×n, the work pair), while the warrant pays 13.222,81 — 1.237,35 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.237,35 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009593833": {
+  "amount_with_vat": 4560.81,
+  "amount_without_vat": 3745.63,
+  "reason": "ΕΦΚΑ understatement: stored 4.211,78/3.396,60 (g = 1,24×n, the work pair), while the warrant pays 4.560,81 — 349,03 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 349,03 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009668316": {
+  "amount_with_vat": 13529.03,
+  "amount_without_vat": 11221.85,
+  "reason": "ΕΦΚΑ understatement: stored 11.920,42/9.613,24 (g = 1,24×n, the work pair), while the warrant pays 13.529,03 — 1.608,61 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 1.608,61 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009593830": {
+  "amount_with_vat": 11171.48,
+  "amount_without_vat": 9174.73,
+  "reason": "ΕΦΚΑ understatement: stored 10.316,53/8.319,78 (g = 1,24×n, the work pair), while the warrant pays 11.171,48 — 854,95 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 854,95 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009760368": {
+  "amount_with_vat": 19819.02,
+  "amount_without_vat": 16433.77,
+  "reason": "ΕΦΚΑ understatement: stored 17.490,44/14.105,19 (g = 1,24×n, the work pair), while the warrant pays 19.819,02 — 2.328,58 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 2.328,58 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009773252": {
+  "amount_with_vat": 9976.18,
+  "amount_without_vat": 8045.31,
+  "reason": "ΕΦΚΑ understatement: stored 8.841,18/7.129,98, while the warrant pays 9.976,18 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 8.045,31 (exact, no derivation)."
+ },
+ "21PAY009744753": {
+  "amount_with_vat": 12477.21,
+  "amount_without_vat": 10062.27,
+  "reason": "ΕΦΚΑ understatement: stored 11.057,65/8.917,46, while the warrant pays 12.477,21 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 10.062,27 (exact, no derivation)."
+ },
+ "21PAY009773397": {
+  "amount_with_vat": 7582.43,
+  "amount_without_vat": 6114.86,
+  "reason": "ΕΦΚΑ understatement: stored 6.719,76/5.419,16, while the warrant pays 7.582,43 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 6.114,86 (exact, no derivation)."
+ },
+ "21PAY009603290": {
+  "amount_with_vat": 4849.43,
+  "amount_without_vat": 4023.86,
+  "reason": "ΕΦΚΑ understatement: stored 4.265,43/3.439,86 (g = 1,24×n, the work pair), while the warrant pays 4.849,43 — 584,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 584,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009647797": {
+  "amount_with_vat": 8668.9,
+  "amount_without_vat": 7148.06,
+  "reason": "ΕΦΚΑ understatement: stored 7.857,69/6.336,85 (g = 1,24×n, the work pair), while the warrant pays 8.668,90 — 811,21 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 811,21 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009611881": {
+  "amount_with_vat": 3185.06,
+  "amount_without_vat": 2642.92,
+  "reason": "ΕΦΚΑ understatement: stored 2.801,06/2.258,92 (g = 1,24×n, the work pair), while the warrant pays 3.185,06 — 384,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 384,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009686112": {
+  "amount_with_vat": 5555.74,
+  "amount_without_vat": 4562.69,
+  "reason": "ΕΦΚΑ understatement: stored 5.130,74/4.137,69 (g = 1,24×n, the work pair), while the warrant pays 5.555,74 — 425,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 425,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009668258": {
+  "amount_with_vat": 1683.27,
+  "amount_without_vat": 1390.95,
+  "reason": "ΕΦΚΑ understatement: stored 1.510,32/1.218,00 (g = 1,24×n, the work pair), while the warrant pays 1.683,27 — 172,95 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 172,95 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009631008": {
+  "amount_with_vat": 24162.79,
+  "amount_without_vat": 20049.54,
+  "reason": "ΕΦΚΑ understatement: stored 21.251,79/17.138,54 (g = 1,24×n, the work pair), while the warrant pays 24.162,79 — 2.911,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 2.911,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010239910": {
+  "amount_with_vat": 3462.3,
+  "amount_without_vat": 2864.34,
+  "reason": "ΕΦΚΑ understatement: stored 3.089,46/2.491,50, while the warrant pays 3.462,30 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 2.864,34 (exact, no derivation)."
+ },
+ "22PAY010194099": {
+  "amount_with_vat": 3462.29,
+  "amount_without_vat": 2864.33,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 2.491,50 in BOTH amount fields (= the contract's work-net), while the warrant pays 3.462,29; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (372,84:2.491,50) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009790687": {
+  "amount_with_vat": 3234.83,
+  "amount_without_vat": 2676.73,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 2.325,40 in BOTH amount fields (= the contract's work-net), while the warrant pays 3.234,83; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (351,33:2.325,40) — a derived figure, the weakest of the three rules."
+ },
+ "22PAY010107706": {
+  "amount_with_vat": 3234.82,
+  "amount_without_vat": 2676.73,
+  "reason": "ΕΦΚΑ understatement: stored 2.883,50/2.325,40, while the warrant pays 3.234,82 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 2.676,73 (exact, no derivation)."
+ },
+ "21PAY009671386": {
+  "amount_with_vat": 4388.64,
+  "amount_without_vat": 3641.56,
+  "reason": "ΕΦΚΑ understatement: stored 3.859,93/3.112,85 (g = 1,24×n, the work pair), while the warrant pays 4.388,64 — 528,71 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 528,71 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009686235": {
+  "amount_with_vat": 5876.18,
+  "amount_without_vat": 4825.95,
+  "reason": "ΕΦΚΑ understatement: stored 5.426,18/4.375,95 (g = 1,24×n, the work pair), while the warrant pays 5.876,18 — 450,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 450,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009844045": {
+  "amount_with_vat": 3916.59,
+  "amount_without_vat": 3216.55,
+  "reason": "ΕΦΚΑ understatement: stored 3.616,86/2.916,82 (g = 1,24×n, the work pair), while the warrant pays 3.916,59 — 299,73 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 299,73 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009728615": {
+  "amount_with_vat": 4078.85,
+  "amount_without_vat": 3349.81,
+  "reason": "ΕΦΚΑ understatement: stored 3.766,70/3.037,66 (g = 1,24×n, the work pair), while the warrant pays 4.078,85 — 312,15 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 312,15 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009727653": {
+  "amount_with_vat": 6492.81,
+  "amount_without_vat": 5332.31,
+  "reason": "ΕΦΚΑ understatement: stored 5.995,92/4.835,42 (g = 1,24×n, the work pair), while the warrant pays 6.492,81 — 496,89 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 496,89 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009774066": {
+  "amount_with_vat": 5688.02,
+  "amount_without_vat": 4587.11,
+  "reason": "ΕΦΚΑ understatement: stored 5.155,99/4.158,06, while the warrant pays 5.688,02 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 4.587,11 (exact, no derivation)."
+ },
+ "21PAY009728265": {
+  "amount_with_vat": 7797.89,
+  "amount_without_vat": 6288.61,
+  "reason": "ΕΦΚΑ understatement: stored 7.063,86/5.696,66, while the warrant pays 7.797,89 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 6.288,61 (exact, no derivation)."
+ },
+ "21PAY009668303": {
+  "amount_with_vat": 5187.38,
+  "amount_without_vat": 4302.75,
+  "reason": "ΕΦΚΑ understatement: stored 4.570,59/3.685,96 (g = 1,24×n, the work pair), while the warrant pays 5.187,38 — 616,79 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 616,79 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009668311": {
+  "amount_with_vat": 5340.09,
+  "amount_without_vat": 4431.04,
+  "reason": "ΕΦΚΑ understatement: stored 4.696,76/3.787,71 (g = 1,24×n, the work pair), while the warrant pays 5.340,09 — 643,33 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 643,33 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009728078": {
+  "amount_with_vat": 5066.93,
+  "amount_without_vat": 4086.25,
+  "reason": "ΕΦΚΑ understatement: stored 4.589,98/3.701,60, while the warrant pays 5.066,93 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 4.086,25 (exact, no derivation)."
+ },
+ "21PAY009726195": {
+  "amount_with_vat": 2049.11,
+  "amount_without_vat": 1652.51,
+  "reason": "ΕΦΚΑ understatement: stored 1.856,23/1.496,96, while the warrant pays 2.049,11 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 1.652,51 (exact, no derivation)."
+ },
+ "21PAY009727066": {
+  "amount_with_vat": 1437.17,
+  "amount_without_vat": 1189.54,
+  "reason": "ΕΦΚΑ understatement: stored 1.279,43/1.031,80 (g = 1,24×n, the work pair), while the warrant pays 1.437,17 — 157,74 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 157,74 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009727906": {
+  "amount_with_vat": 6241.01,
+  "amount_without_vat": 5033.07,
+  "reason": "ΕΦΚΑ understatement: stored 5.653,53/4.559,30, while the warrant pays 6.241,01 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 5.033,07 (exact, no derivation)."
+ },
+ "21PAY009790746": {
+  "amount_with_vat": 1090.6,
+  "amount_without_vat": 905.45,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 781,22 in BOTH amount fields (= the contract's work-net), while the warrant pays 1.090,60; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (135,68:781,22) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009790573": {
+  "amount_with_vat": 1597.73,
+  "amount_without_vat": 1324.25,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 1.149,72 in BOTH amount fields (= the contract's work-net), while the warrant pays 1.597,73; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (186,42:1.149,72) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009790723": {
+  "amount_with_vat": 2915.5,
+  "amount_without_vat": 2419.19,
+  "reason": "ΕΦΚΑ understatement: stored 2.564,26/2.067,95 (g = 1,24×n, the work pair), while the warrant pays 2.915,50 — 351,24 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 351,24 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009728863": {
+  "amount_with_vat": 4817.54,
+  "amount_without_vat": 3956.47,
+  "reason": "ΕΦΚΑ understatement: stored 4.448,86/3.587,79 (g = 1,24×n, the work pair), while the warrant pays 4.817,54 — 368,68 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 368,68 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009790542": {
+  "amount_with_vat": 434.02,
+  "amount_without_vat": 359.73,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 309,54 in BOTH amount fields (= the contract's work-net), while the warrant pays 434,02; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (50,19:309,54) — a derived figure, the weakest of the three rules."
+ },
+ "21PAY009790588": {
+  "amount_with_vat": 1108.88,
+  "amount_without_vat": 917.85,
+  "reason": "ΕΦΚΑ understatement: stored 986,99/795,96 (g = 1,24×n, the work pair), while the warrant pays 1.108,88 — 121,89 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 121,89 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009744769": {
+  "amount_with_vat": 7119.77,
+  "amount_without_vat": 5906.95,
+  "reason": "Registry keying error + ΕΦΚΑ understatement: stored 5.221,35 in BOTH amount fields (= the contract's work-net), while the warrant pays 7.119,77; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net decomposed with the contract's own ΕΦΚΑ:work ratio (881,91:5.221,35) — a derived figure, the weakest of the three rules."
+ },
+ "22PAY010734016": {
+  "amount_with_vat": 5129.44,
+  "amount_without_vat": 4212.62,
+  "reason": "ΕΦΚΑ understatement: stored 4.736,89/3.820,07 (g = 1,24×n, the work pair), while the warrant pays 5.129,44 — 392,55 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 392,55 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010733995": {
+  "amount_with_vat": 2939.04,
+  "amount_without_vat": 2413.73,
+  "reason": "ΕΦΚΑ understatement: stored 2.714,12/2.188,81 (g = 1,24×n, the work pair), while the warrant pays 2.939,04 — 224,92 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 224,92 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010780112": {
+  "amount_with_vat": 1329.52,
+  "amount_without_vat": 1091.89,
+  "reason": "ΕΦΚΑ understatement: stored 1.227,77/990,14 (g = 1,24×n, the work pair), while the warrant pays 1.329,52 — 101,75 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 101,75 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010751352": {
+  "amount_with_vat": 1240.55,
+  "amount_without_vat": 1018.82,
+  "reason": "ΕΦΚΑ understatement: stored 1.145,61/923,88 (g = 1,24×n, the work pair), while the warrant pays 1.240,55 — 94,94 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 94,94 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010751501": {
+  "amount_with_vat": 4543.35,
+  "amount_without_vat": 3731.29,
+  "reason": "ΕΦΚΑ understatement: stored 4.195,65/3.383,59 (g = 1,24×n, the work pair), while the warrant pays 4.543,35 — 347,70 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 347,70 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010751603": {
+  "amount_with_vat": 4900.33,
+  "amount_without_vat": 4024.46,
+  "reason": "ΕΦΚΑ understatement: stored 4.525,31/3.649,44 (g = 1,24×n, the work pair), while the warrant pays 4.900,33 — 375,02 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 375,02 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010733981": {
+  "amount_with_vat": 6099.63,
+  "amount_without_vat": 5009.44,
+  "reason": "ΕΦΚΑ understatement: stored 5.632,63/4.542,44 (g = 1,24×n, the work pair), while the warrant pays 6.099,63 — 467,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 467,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010847744": {
+  "amount_with_vat": 5284.85,
+  "amount_without_vat": 4340.17,
+  "reason": "ΕΦΚΑ understatement: stored 4.880,85/3.936,17 (g = 1,24×n, the work pair), while the warrant pays 5.284,85 — 404,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 404,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010780026": {
+  "amount_with_vat": 6096.79,
+  "amount_without_vat": 5007.15,
+  "reason": "ΕΦΚΑ understatement: stored 5.629,79/4.540,15 (g = 1,24×n, the work pair), while the warrant pays 6.096,79 — 467,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 467,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010733958": {
+  "amount_with_vat": 3391.35,
+  "amount_without_vat": 2785.28,
+  "reason": "ΕΦΚΑ understatement: stored 3.131,35/2.525,28 (g = 1,24×n, the work pair), while the warrant pays 3.391,35 — 260,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 260,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010831340": {
+  "amount_with_vat": 3700.98,
+  "amount_without_vat": 3039.24,
+  "reason": "ΕΦΚΑ understatement: stored 3.418,98/2.757,24 (g = 1,24×n, the work pair), while the warrant pays 3.700,98 — 282,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 282,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010780252": {
+  "amount_with_vat": 3431.87,
+  "amount_without_vat": 2818.54,
+  "reason": "ΕΦΚΑ understatement: stored 3.168,87/2.555,54 (g = 1,24×n, the work pair), while the warrant pays 3.431,87 — 263,00 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 263,00 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010937980": {
+  "amount_with_vat": 7315.36,
+  "amount_without_vat": 6007.84,
+  "reason": "ΕΦΚΑ understatement: stored 6.755,52/5.448,00 (g = 1,24×n, the work pair), while the warrant pays 7.315,36 — 559,84 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 559,84 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010734036": {
+  "amount_with_vat": 2497.53,
+  "amount_without_vat": 2051.13,
+  "reason": "ΕΦΚΑ understatement: stored 2.306,40/1.860,00 (g = 1,24×n, the work pair), while the warrant pays 2.497,53 — 191,13 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 191,13 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "22PAY010751548": {
+  "amount_with_vat": 3782.55,
+  "amount_without_vat": 3106.47,
+  "reason": "ΕΦΚΑ understatement: stored 3.493,08/2.817,00 (g = 1,24×n, the work pair), while the warrant pays 3.782,55 — 289,47 more, the 0%-ΦΠΑ ΕΦΚΑ component; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := stored net + the same 289,47 (a 0%-ΦΠΑ addition raises net and gross equally)."
+ },
+ "21PAY009476782": {
+  "amount_with_vat": 11287.01,
+  "amount_without_vat": 9361.97,
+  "reason": "ΕΦΚΑ understatement: stored 9.946,06/8.021,02, while the warrant pays 11.287,01 — the contract's full gross to the cent; the record was keyed with the co-op's work component only, while its own χρηματικό ένταλμα disburses work + the state-borne ΕΦΚΑ εργοδότη in one total («paid» = the whole disbursement, user decision DATA_DECISIONS 2026-08-17). Net := the contract's total net 9.361,97 (exact, no derivation)."
+ },
+ "26PAY018918500": {
+  "amount_with_vat": 10585.42,
+  "amount_without_vat": 8880.03,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 8.811,19/7.105,80 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #10.585,42# — 1.774,23 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.774,23."
+ },
+ "26PAY018918507": {
+  "amount_with_vat": 3935.6,
+  "amount_without_vat": 3301.54,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 3.275,96/2.641,90 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #3.935,60# — 659,64 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 659,64. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017759613"
+ },
+ "26PAY018918512": {
+  "amount_with_vat": 5102.72,
+  "amount_without_vat": 4280.63,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 4.247,45/3.425,36 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #5.102,72# — 855,27 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 855,27. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017767826"
+ },
+ "26PAY018918524": {
+  "amount_with_vat": 6446.26,
+  "amount_without_vat": 5407.72,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 5.365,80/4.327,26 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #6.446,26# — 1.080,46 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.080,46. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017766013"
+ },
+ "26PAY018918533": {
+  "amount_with_vat": 7545.5,
+  "amount_without_vat": 6329.86,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 6.280,80/5.065,16 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #7.545,50# — 1.264,70 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.264,70. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017773683"
+ },
+ "26PAY018918544": {
+  "amount_with_vat": 7681.21,
+  "amount_without_vat": 6443.71,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 6.393,76/5.156,26 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #7.681,21# — 1.287,45 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.287,45. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017895643"
+ },
+ "26PAY018918581": {
+  "amount_with_vat": 8386.9,
+  "amount_without_vat": 7035.7,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 6.981,18/5.629,98 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #8.386,90# — 1.405,72 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.405,72."
+ },
+ "26PAY018918595": {
+  "amount_with_vat": 11616.82,
+  "amount_without_vat": 9745.26,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 9.669,72/7.798,16 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #11.616,82# — 1.947,10 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.947,10. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017896809"
+ },
+ "26PAY018918600": {
+  "amount_with_vat": 7328.36,
+  "amount_without_vat": 6147.7,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 6.100,06/4.919,40 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #7.328,36# — 1.228,30 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.228,30. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017896238"
+ },
+ "26PAY018918608": {
+  "amount_with_vat": 2646.37,
+  "amount_without_vat": 2220.02,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 2.202,81/1.776,46 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #2.646,37# — 443,56 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 443,56. Re-linked (DATA_DECISIONS 2026-08-17): the registry lumped each co-op's whole Δασαρχείο Σπερχειάδας batch onto ONE of its contracts. The eleven batch payments pair 1:1 with the two co-ops' eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant total = 0,96133 × exactly one contract's stated gross (six-decimal agreement across all eleven pairs), so each payment belongs to that contract. attributed_ref set accordingly; contract_ref keeps the payload's original claim.",
+  "attributed_ref": "25SYMV017895184"
+ },
+ "26PAY018918483": {
+  "amount_with_vat": 8549.76,
+  "amount_without_vat": 7172.33,
+  "reason": "ΕΦΚΑ understatement, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 7.116,73/5.739,30 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #8.549,76# — 1.433,03 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component (warrant = stored × 1,2014 across the whole Δασαρχείο Σπερχειάδας batch). Net := stored net + the same 1.433,03."
+ },
+ "25PAY017905122": {
+  "amount_with_vat": 9940.11,
+  "amount_without_vat": 8248.27,
+  "reason": "Registry keying error, SCANNED warrant read visually (DATA_DECISIONS 2026-08-17 scanned-pile review): stored 10.062,44/8.349,77, but the χρηματικό ένταλμα states #9.940,11# to ΔΑΣΕ ΑΓ. ΝΙΚΟΛΑΟΥ (beneficiary matches the contract). Corrected to the document; net derived with the contract's own net:gross ratio."
+ },
+ "22PAY010923358": {
+  "amount_with_vat": 2000.0,
+  "amount_without_vat": 1612.9,
+  "reason": "Registry keying error, visually read (DATA_DECISIONS 2026-08-17 scanned-pile review): both instalments of 22SYMV010618908 (7ος ΔΑΣΕ ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ, contract 4.000,00) were keyed with the full contract value. This record's own χρηματικό ένταλμα 00089 pays 2.000,00 (κρατήσεις 131,20, δικαιούχος 1.868,80) against invoice ΤΠΥ3 (ΔΣΕ 238)/21-06-2022; the two warrants cite different invoices, so they are two genuine instalments summing to the contract — the earlier fingerprint-based exclusion of 22PAY011642628 is REVERSED by this entry (amount-token fingerprints cannot distinguish same-priced instalments). Net := 2.000,00/1,24."
+ },
+ "21PAY009327809": {
+  "exclude": true,
+  "reason": "Second ΚΗΜΔΗΣ record over one payment, visually read (DATA_DECISIONS 2026-08-17 scanned-pile review): this is the Δασαρχείο Φουρνά transmission letter (πρωτ. 185042/07-10-2021) REQUESTING the warrant for ΔΑΣΕ ΚΛΕΙΤΣΟΣ, invoice 09-09-2021 with components 627,09 + 115,84 = 742,93 — the amount the kept record 21PAY009545629 carries (text-verified). The letter's own printed total 742,53 is an internal arithmetic slip. One payment, one record (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009523708": {
+  "amount_with_vat": 23281.3,
+  "amount_without_vat": 19497.36,
+  "reason": "ΕΦΚΑ understatement: stored 19.550,34/15.766,40 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #23.281,30# — 3.730,96 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component at the 2021 rate (≈23,7% of net; the Κιλκίς καταστάσεις πληρωμής itemise ΙΚΑ ΕΡΓΟΔΟΤΗ 24,69%). Net := stored net + the same 3.730,96 (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009744727": {
+  "amount_with_vat": 9848.7,
+  "amount_without_vat": 8247.8,
+  "reason": "ΕΦΚΑ understatement: stored 8.271,30/6.670,40 (g = 1,24×n, the work pair), while the χρηματικό ένταλμα states #9.848,70# — 1.577,40 more, the 0%-ΦΠΑ state-borne ΕΦΚΑ component at the 2021 rate (≈23,7% of net; the Κιλκίς καταστάσεις πληρωμής itemise ΙΚΑ ΕΡΓΟΔΟΤΗ 24,69%). Net := stored net + the same 1.577,40 (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009512382": {
+  "amount_with_vat": 4577.5,
+  "amount_without_vat": 3815.83,
+  "reason": "Registry keying error: stored 4.579,50 does not appear in the attached χρηματικό ένταλμα, which states #4.577,50#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009223632": {
+  "amount_with_vat": 1657.03,
+  "amount_without_vat": 1336.31,
+  "reason": "Registry keying error: stored 1.722,97 does not appear in the attached χρηματικό ένταλμα, which states #1.657,03#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009698833": {
+  "amount_with_vat": 6101.85,
+  "amount_without_vat": 4920.85,
+  "reason": "Registry keying error: stored 6.139,05 does not appear in the attached χρηματικό ένταλμα, which states #6.101,85#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009558433": {
+  "amount_with_vat": 3485.93,
+  "amount_without_vat": 2811.23,
+  "reason": "Registry keying error: stored 3.612,62 does not appear in the attached χρηματικό ένταλμα, which states #3.485,93#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY014365948": {
+  "amount_with_vat": 3019.51,
+  "amount_without_vat": 2435.09,
+  "reason": "Registry keying error: stored 3.127,02 does not appear in the attached χρηματικό ένταλμα, which states #3.019,51#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY014358369": {
+  "amount_with_vat": 7122.48,
+  "amount_without_vat": 5743.94,
+  "reason": "Registry keying error: stored 7.378,83 does not appear in the attached χρηματικό ένταλμα, which states #7.122,48#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY014504177": {
+  "amount_with_vat": 7246.8,
+  "amount_without_vat": 5844.19,
+  "reason": "Registry keying error: stored 7.504,84 does not appear in the attached χρηματικό ένταλμα, which states #7.246,80#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015753147": {
+  "amount_with_vat": 4370.41,
+  "amount_without_vat": 3623.5,
+  "reason": "Registry keying error: stored 4.395,20 does not appear in the attached χρηματικό ένταλμα, which states #4.370,41#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015878871": {
+  "amount_with_vat": 12189.08,
+  "amount_without_vat": 9829.9,
+  "reason": "Registry keying error: stored 12.540,28 does not appear in the attached χρηματικό ένταλμα, which states #12.189,08#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015916447": {
+  "amount_with_vat": 12076.2,
+  "amount_without_vat": 9738.87,
+  "reason": "Registry keying error: stored 12.293,63 does not appear in the attached χρηματικό ένταλμα, which states #12.076,20#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015960088": {
+  "amount_with_vat": 7721.35,
+  "amount_without_vat": 6226.89,
+  "reason": "Registry keying error: stored 7.883,60 does not appear in the attached χρηματικό ένταλμα, which states #7.721,35#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015868995": {
+  "amount_with_vat": 9959.09,
+  "amount_without_vat": 8031.52,
+  "reason": "Registry keying error: stored 10.113,73 does not appear in the attached χρηματικό ένταλμα, which states #9.959,09#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY018079594": {
+  "amount_with_vat": 3839.0,
+  "amount_without_vat": 3095.97,
+  "reason": "Registry keying error: stored 3.919,75 does not appear in the attached χρηματικό ένταλμα, which states #3.839,00#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017859217": {
+  "amount_with_vat": 9242.07,
+  "amount_without_vat": 7453.29,
+  "reason": "Registry keying error: stored 9.498,21 does not appear in the attached χρηματικό ένταλμα, which states #9.242,07#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017858075": {
+  "amount_with_vat": 23652.71,
+  "amount_without_vat": 19576.4,
+  "reason": "Registry keying error: stored 23.663,87 does not appear in the attached χρηματικό ένταλμα, which states #23.652,71#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017722368": {
+  "amount_with_vat": 12605.19,
+  "amount_without_vat": 10165.48,
+  "reason": "Registry keying error: stored 12.872,04 does not appear in the attached χρηματικό ένταλμα, which states #12.605,19#. Corrected to the document; net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009725004": {
+  "amount_with_vat": 12269.8,
+  "amount_without_vat": 9895.0,
+  "reason": "Registry keying error: stored 12.266,82, but the attached χρηματικό ένταλμα states #12.269,80#. Corrected to the document («paid» = the disbursement); net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009785003": {
+  "amount_with_vat": 5483.23,
+  "amount_without_vat": 4421.96,
+  "reason": "Registry keying error: stored 5.424,39, but the attached χρηματικό ένταλμα states #5.483,23#. Corrected to the document («paid» = the disbursement); net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "21PAY009758831": {
+  "amount_with_vat": 3913.92,
+  "amount_without_vat": 3156.39,
+  "reason": "Registry keying error: stored 3.872,07, but the attached χρηματικό ένταλμα states #3.913,92#. Corrected to the document («paid» = the disbursement); net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "24PAY015951297": {
+  "amount_with_vat": 9802.64,
+  "amount_without_vat": 8131.79,
+  "reason": "Registry keying error: stored 9.739,07, but the attached χρηματικό ένταλμα states #9.802,64#. Corrected to the document («paid» = the disbursement); net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY016240964": {
+  "amount_with_vat": 10550.46,
+  "amount_without_vat": 8655.57,
+  "reason": "Registry keying error: stored 10.350,46, but the attached χρηματικό ένταλμα states #10.550,46#. Corrected to the document («paid» = the disbursement); net scaled with the stored pair's own ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "22PAY010424768": {
+  "amount_with_vat": 21468.14,
+  "amount_without_vat": 17313.01,
+  "reason": "Registry keying error: stored 21.937,86 appears nowhere in the attached λογαριασμός, whose own arithmetic prints the instalment — Σ εγκρίσεων 110.918,72 minus previously certified 89.450,58 = 21.468,14. Corrected to the document; net scaled with the stored pair's ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY018096900": {
+  "amount_with_vat": 13172.13,
+  "amount_without_vat": 10622.69,
+  "reason": "Registry keying error: stored 14.454,37 (the work pair), but the attached χρηματικό ένταλμα pays 13.172,13 (δικαιούχος 12.311,69 + κρατήσεις 860,44). Corrected to the document; net scaled with the stored pair's ratio (DATA_DECISIONS 2026-08-17)."
  }
 }

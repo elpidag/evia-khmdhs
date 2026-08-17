@@ -463,7 +463,22 @@ gross = €31,178,858.14 net** (`dase_queries.live_filter`, the
 scope_filter analogue; the Atlas presents net; includes the curated
 corrections — the 21SYMV009374147 ×10 keying error AND 10 registry
 double-postings excluded with `duplicate_of` cross-links + 1 duplicated
-payment (paid net €21,211,472.57 / 991 orders), DATA_DECISIONS
+payment (paid net €20,910,684.02 / 967 orders after the 2026-08-17
+payment audit, now CLOSED: ALL 1,033 payment PDFs fetched into
+dase_pdf_cache + validated, 212 curated payment entries — re-posted
+records excluded on WARRANT-NUMBER identity (amount fingerprints
+can't tell same-priced instalments apart: 4 early exclusions were
+reversed as proven instalments), payload amounts corrected to their
+own χρηματικά εντάλματα, 123 ΕΦΚΑ understatements raised to their
+warrant totals under the user convention **«paid» = the whole
+disbursement incl. the state-borne ΕΦΚΑ εργοδότη** (10,28%/12,8% of
+net in 2021, 24,97% in 2025), and all 42 scanned/odd documents read
+by eye — every stored order is text-verified, visually verified,
+curated with document evidence, or logged sub-euro noise;
+`payment_loader.apply_corrections` supports an optional
+**`attributed_ref` re-link** — used for the Σπερχειάδας batch, whose
+11 payments pair 1:1 with the two co-ops' 11 contracts at a uniform
+0,96133 ratio and are attributed accordingly), DATA_DECISIONS
 2026-08-14 + 2026-08-15 (the 10th hid behind a phantom contractor ΑΦΜ
 «0310003799» — VIES-invalid — so the scanner gained a cross-VAT pass);
 duplicate pages stay reachable, badged in search, and the

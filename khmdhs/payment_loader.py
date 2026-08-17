@@ -112,6 +112,13 @@ def apply_corrections(conn: sqlite3.Connection, path: Path = CORRECTIONS_FILE) -
     'exclude': true is stored as cancelled=1 with the reason in
     correction_note, so every aggregate skips the payment the same way it
     skips a registry-cancelled one; amount overrides replace the amounts.
+    An optional 'attributed_ref' RE-LINKS the payment to another stored
+    contract — for registry attribution errors where the warrant documents
+    a different contract than the payload claimed (DATA_DECISIONS
+    2026-08-17: the Δασαρχείο Σπερχειάδας batch lumped each co-op's
+    payments onto one of its contracts). The target must be stored, or the
+    re-link is refused with a warning; `contract_ref` keeps the payload's
+    original claim as evidence.
     """
     if not path.exists():
         return 0
@@ -121,6 +128,13 @@ def apply_corrections(conn: sqlite3.Connection, path: Path = CORRECTIONS_FILE) -
     with conn:
         for pay_ref, fix in data.items():
             reason = fix.get("reason") or "curated correction"
+            target = fix.get("attributed_ref")
+            if target is not None and not conn.execute(
+                    "SELECT 1 FROM contracts WHERE reference_number = ?",
+                    (target,)).fetchone():
+                logging.warning("re-link for %s refused: target %s not stored",
+                                pay_ref, target)
+                target = None
             if fix.get("exclude"):
                 cur = conn.execute(
                     "UPDATE contract_payments SET cancelled = 1, correction_note = ? "
@@ -130,9 +144,10 @@ def apply_corrections(conn: sqlite3.Connection, path: Path = CORRECTIONS_FILE) -
                     "UPDATE contract_payments SET "
                     "amount_with_vat = COALESCE(?, amount_with_vat), "
                     "amount_without_vat = COALESCE(?, amount_without_vat), "
+                    "attributed_ref = COALESCE(?, attributed_ref), "
                     "correction_note = ? WHERE payment_ref = ?",
                     (fix.get("amount_with_vat"), fix.get("amount_without_vat"),
-                     reason, pay_ref))
+                     target, reason, pay_ref))
             if cur.rowcount:
                 n += 1
                 logging.info("corrected %s: %s", pay_ref, reason)

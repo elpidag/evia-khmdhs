@@ -127,15 +127,46 @@ def test_dase_pins(client):
     assert d["kpis"]["n_coops"] == 249
     # 2026-08-03 payment harvest: net paid KPI with partial coverage
     # (payments posted for 891 of 2,008 live contracts; charts stay stated)
-    assert d["kpis"]["paid_eur"] == pytest.approx(21_211_472.57)
-    assert d["kpis"]["n_paid_contracts"] == 891
-    assert d["kpis"]["n_payments"] == 991
+    # 2026-08-17 payment audit (closed): re-posts excluded on warrant-number
+    # identity, payload amounts corrected to their own PDFs, 123 ΕΦΚΑ
+    # understatements raised to their warrant totals («paid» = the whole
+    # disbursement incl. the state-borne ΕΦΚΑ, user decision), every
+    # scanned/odd document read by eye, 4 exclusions reversed as proven
+    # same-priced instalments — every stored order document-checked
+    assert d["kpis"]["paid_eur"] == pytest.approx(20_910_684.02)
+    assert d["kpis"]["n_paid_contracts"] == 899   # +8: the Σπερχειάδας re-links
+    assert d["kpis"]["n_payments"] == 967
     assert len(d["by_pe"]["regions"]) == 27
     assert d["by_pe"]["unresolved"]["n"] == 4
     sw = client.get("/api/dase/swarm").get_json()
     assert len(sw["ref"]) == 2008
     # full ISO date rides along for the tooltip's DD.MM.YYYY
     assert len(sw["d"]) == 2008 and any(sw["d"])
+
+
+def test_dase_sperheiada_batch_relinks(client):
+    """The Δασαρχείο Σπερχειάδας Nov-2025 batch (DATA_DECISIONS
+    2026-08-17): the registry lumped each co-op's payments onto one
+    contract; the corrected attribution pairs the 11 payments 1:1 with
+    the 11 live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at the batch's uniform 0,96133 factor.
+    A harvest reload that loses the `attributed_ref` re-links regresses
+    here first."""
+    import sqlite3
+    conn = sqlite3.connect(f"file:{DASE_DB.as_posix()}?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    refs = ("25SYMV017758272", "25SYMV017759613", "25SYMV017766013",
+            "25SYMV017767826", "25SYMV017768486", "25SYMV017773683",
+            "25SYMV017895184", "25SYMV017895643", "25SYMV017896238",
+            "25SYMV017896809", "25SYMV017897089")
+    for ref in refs:
+        rows = conn.execute(
+            "SELECT amount_with_vat FROM contract_payments "
+            "WHERE attributed_ref = ? AND COALESCE(cancelled,0)=0", (ref,)).fetchall()
+        assert len(rows) == 1, ref                     # exactly one payment each
+        g = conn.execute("SELECT total_cost_with_vat FROM contracts "
+                         "WHERE reference_number = ?", (ref,)).fetchone()[0]
+        assert rows[0]["amount_with_vat"] / g == pytest.approx(0.96133, abs=0.0001), ref
+    conn.close()
 
 
 def test_dase_value_modes_are_one_population(client):

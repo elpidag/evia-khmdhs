@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { bodyEn, devGreek } from '$lib/transforms/names';
-	import { peEn, ruLabel } from '$lib/transforms/regions';
+	import { ruLabel } from '$lib/transforms/regions';
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
@@ -283,10 +283,6 @@
 	};
 
 	// finding-title inputs — computed from the payload, never hardcoded
-	const topPe = $derived(
-		peEn([...o.by_pe.regions].sort((a, b) => b.eur - a.eur)[0]?.pe) || ''
-	);
-	const topYear = $derived([...o.yearly].sort((a, b) => b.eur - a.eur)[0]?.year ?? '');
 	const cpvNoiseN = $derived(o.cpvs.find((c) => c.noise)?.n_contracts ?? 0);
 
 	// hero bar fills — data-proportional
@@ -365,7 +361,8 @@
 {#if dmap}
 	<ChartFrame
 		title="MAP"
-		caveat="Click a circle for its contracts, click a regional unit to zoom to it. {grInt(
+		subtitle="Location of the projects is assigned according to the location of the awarding unit"
+		caveat="Circles sit at the awarding forest unit's registry seat; awarders with no seat on record — δήμοι, περιφέρειες and the other public bodies, plus a few forest units — are drawn at the centre of their regional unit instead. Click a circle for its contracts, click a regional unit to zoom to it. {grInt(
 			dmap.unresolved.n
 		)} ΑΔΜΗΕ power-line contracts span multiple regional units and stay off the map ({eurShort(
 			dmap.unresolved.eur
@@ -565,7 +562,7 @@
 <div class="pair">
 	<ChartFrame
 		title="MONEY PER YEAR"
-		subtitle="Stated € and contract counts per signature year — {topYear} carried the biggest υλοτομία money; volumes stay high since."
+		subtitle="Stated € and contract counts per signature year"
 		anchor="dase-yearly"
 	>
 		<BarH rows={yearRows} color="var(--c-dase)" />
@@ -573,13 +570,8 @@
 </div>
 
 <ChartFrame
-	title="RANKING OF CO-OPS"
-	subtitle="according to sums contracted — top {coopRows.length} of {grInt(
-		o.kpis.n_coops
-	)} co-operatives collect {eurShort(coopRows.reduce((s, r) => s + r.value, 0))} of the {eurShort(
-		o.kpis.total_eur
-	)}, merged across registry spellings by canonical ΑΦΜ"
-	caveat="Consortium values counted in full for each partner (rare here: {grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)} contracts)."
+	title="TOP FOREST WORKERS’ CO-OPS BY CONTRACTED VALUE"
+	caveat="Registry spellings of one co-op are merged on its canonical ΑΦΜ. When several co-ops win a contract together, each partner is credited with the whole of it rather than a share — the registry does not record who took what — so those euros are counted more than once here; it stays rare ({grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)} contracts)."
 	anchor="top-coops"
 	methodology="canonical-vat"
 >

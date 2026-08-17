@@ -215,6 +215,17 @@
 		services: these are logging contracts whose price also funds the workers' social-insurance
 		contributions.
 	</p>
+	<p>
+		The same structure decides what «paid» means on these pages. One payment warrant (χρηματικό
+		ένταλμα) disburses both components — the co-op's work price and the state-borne ΕΦΚΑ — but
+		the registry's payment records were often keyed with only the work component. Because the
+		stated contract values include the ΕΦΚΑ lines, the paid figures follow the same convention:
+		where a payment's own warrant documents a larger total than the record states, the curated
+		correction raises the record to the warrant (each correction cites the warrant amount; where
+		the document does not print the net, it is derived from the contract's own component ratio
+		and says so). Paid and stated are therefore compared on one definition: the full public
+		disbursement.
+	</p>
 
 	<h2 id="zero-overlap">The zero-overlap finding</h2>
 	<p>

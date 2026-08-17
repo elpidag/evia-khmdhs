@@ -2482,6 +2482,228 @@ the only VAT-less rows left are Παντουρέ and Παπάδων, absent from
 ΔΑΣΕ contracts universe. Applied to anadohoi_projects.json + the
 committed sqlite in place, same mechanism as the Μίστρου entry.
 
+## 2026-08-17 — Scanned/odd payment documents all read by eye: 35 confirmed, 26 corrected, 4 exclusions REVERSED as proven instalments — every ΔΑΣΕ payment order is now document-checked
+
+The closing pass of the payment audit (user: «visually read all 42»).
+The 42 image-only payment PDFs were read page by page, and the sweep
+then widened to every remaining text-mismatch row (39) — because the
+first reads exposed a failure mode in my own earlier evidence: the
+amount-token fingerprint used for the re-post exclusions CANNOT
+distinguish two same-priced instalments. Every A/B exclusion was
+therefore re-verified by WARRANT NUMBER and invoice citation, not
+fingerprints.
+
+**Exclusions re-verified — 4 REVERSED as genuine instalments:**
+- 22SYMV010618908 (7ος ΔΑΣΕ ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ): the two 4.000,00
+  records are εντάλματα 00089/23-06-2022 and 00188/18-11-2022,
+  DIFFERENT invoices (ΤΠΥ3-238 vs ΤΠΥ5-445, the second citing «λοιπά
+  δικαιολογητικά στο ΧΕΠ00089») — two instalments of 2.000,00 each,
+  both keyed with the contract total. Both corrected to 2.000,00.
+- 25SYMV017429326 (Καρπενήσι per-tonne): the three 4.104,76-pattern
+  records are THREE different warrants (01375/01693/01839) — equal
+  because the παρτίδες are same-priced, not because one document was
+  re-posted. Both exclusions reversed; the 6.557,12 keying on 017957804
+  corrected to its document's 4.104,76; the contract's four orders now
+  sum ≈ its value.
+- 21SYMV009141052 (Κιλκίς): warrant 149961 cites invoice 440/19.09 — a
+  SECOND 353-κ.μ. batch of συστάδα 16α, distinct from the kept
+  dossier's τιμ. 429/30-08. Reversed and corrected to 7.843,66.
+The other exclusions STAND, now on document identity: 8 same-warrant
+re-posts share one warrant number on both PDFs, and all 7 questioned
+dossier↔warrant pairs cite the SAME invoice on both documents
+(τιμ. 304/305/311/316/317/435 + the Φουρνά 742,93 case) — one payment,
+one record. One NEW exclusion the same way: 21PAY009327809 is the
+Δασαρχείο Φουρνά transmission LETTER (πρωτ. 185042) requesting the
+warrant its twin 21PAY009545629 embodies; its components 627,09 +
+115,84 = 742,93 = the twin, its printed 742,53 total an internal slip.
+
+**Confirmed (35):** the 9 Γουμένισσας 2021 dossiers (tables validate
+the stored NET decomposition to the cent — work + ΦΠΑ + ΕΦΚΑ
+components; the ΣΚΡΑ same-amount «pair» is τιμ. 5 vs τιμ. 6 — two real
+payments); 4 of the 5 Καρπενησίου per-tonne warrants (beneficiary ΑΦΜ
+matches the contract co-op in every case — the 2–8× over-estimate
+payments are the measured-volume reality of per-tonne υλοτομικά, NOT
+errors); the 10-order May-2025 Σπερχειάδας batch (each warrant == its
+stored amount, each beneficiary on the right contract); the big rows
+25PAY017371429 (117.599,95, τιμολόγιο 94.838,67 net, ΑΔΑΜ δέσμευσης
+matches), 22PAY010599002/599175 (the Θέλπουσα λογαριασμοί),
+22PAY011781782, 25PAY016461493 (Δήμος Έδεσσας), 25PAY017609067 (ΔΑΣΕ
+ΜΟΔΙΟΥ), 26PAY019301197 (the ΔΑΣΕ ΑΡΙΣΤΟΤΕΛΗΣ invoice to ΑΔΜΗΕ:
+19.395,00 + ΦΠΑ = 24.049,80), 24PAY014183233 + 24PAY014167121 (Δήμου
+Πυλαίας-Χορτιάτη εντάλματα 0094Β/0078Β), 25PAY017949070 (δάκος-spray
+payment to the Εύβοια co-op union), and 26PAY018727393 (two invoice
+lines 19.000+1.000 net = stored exactly).
+
+**Corrected (26 + the 3 reversal-corrections):**
+- The Nov-2025 Σπερχειάδας batch (11 rows incl. no-red-flag
+  26PAY018918483): payloads keyed the work pair (g = 1,24×n) while the
+  warrants pay stored × 1,2014 — the ΕΦΚΑ family at the 2025 rate
+  (24,97% of net). One (26PAY018918544) was ALSO visibly misattributed
+  — its warrant pays ΔΑΣΕ ΠΥΡΓΟΥ-ΣΠΕΡΧΕΙΟΥ (996875099) while the
+  record sat on the Κυριακοχωρίου contract — and pulling that thread
+  (user: re-link it before committing) exposed the batch-wide truth:
+  the registry had lumped EACH co-op's whole batch onto one of its
+  contracts. The eleven batch payments pair **1:1 with the two co-ops'
+  eleven live 2025 ΣΥΜΦΩΝΗΤΙΚΑ at a uniform ratio — every warrant
+  total = 0,96133 × exactly one contract's stated gross, to six
+  decimals across all eleven pairs** — so each payment provably
+  belongs to that contract. `payment_loader.apply_corrections` gained
+  an optional **`attributed_ref`** field (re-link to a stored
+  contract, refused with a WARNING if the target is absent;
+  `contract_ref` keeps the payload's original claim as evidence;
+  unit-tested), and 8 payments were re-linked — after which every one
+  of the eleven contracts carries exactly its own payment at the
+  0,96133 ratio, and the apparent 3× over-payments on the two lumped
+  contracts dissolve entirely. Global paid totals unchanged
+  (re-attribution moves money between contracts, never changes it).
+- 2 more ΕΦΚΑ understatements at the 2021 rate (≈23,7% of net — the
+  Κιλκίς καταστάσεις print «ΙΚΑ ΕΡΓΟΔΟΤΗ 24,69%»), which the earlier
+  generator's conservative ≤20% band had skipped.
+- 16 rows stored slightly ABOVE their warrant (2,00–351,20) and 5
+  slightly below it (0,15–200,00): corrected to the document.
+- 25PAY017905122 (Καρπενήσι, stored 10.062,44 vs warrant 9.940,11),
+  25PAY018096900 (14.454,37 vs 13.172,13), and 22PAY010424768, whose
+  λογαριασμός prints the instalment as its own subtraction: 110.918,72
+  − 89.450,58 = 21.468,14 (stored 21.937,86).
+
+**Documented as noise, untouched (8):** 7 rows within ±0,60 of their
+warrant and 23PAY013210185 (doc pays 4.575,00, stored 4.575,60) —
+Σ |Δ| under €5 across all eight.
+
+*Affects: paid net €20.882.632,20 → **€20.910.684,02**; paid gross →
+€25.666.421,06; live orders 964 → **967** (4 reversals − 1 new
+exclusion). The corrections file holds 212 payment entries. Every one
+of the 1.033 stored ΔΑΣΕ payment orders is now text-verified against
+its own PDF, visually verified, curated with document evidence, or
+explicitly logged as sub-euro noise — the audit is CLOSED.*
+
+## 2026-08-17 — «Paid» includes the state-borne ΕΦΚΑ (user decision): 121 understated ΔΑΣΕ payment records corrected to their warrants
+
+Resolves the convention question the payment-audit entry (below)
+parked. Under the τιμές-ανάθεσης ΚΥΑ, a ΔΑΣΕ υλοτομικά assignment
+carries two components: the co-op's work price (24% ΦΠΑ) and the
+employer's ΕΦΚΑ contributions for the δασεργάτες, which the State
+bears as forest exploiter (0% ΦΠΑ; άρθρο 137 §3 ν.δ. 86/1969 — the
+CPV 66519300-4 entry). ONE χρηματικό ένταλμα disburses both, but the
+ΚΗΜΔΗΣ payment payload was frequently keyed with only the work
+component. **User decision: «paid» means the whole disbursement — the
+warrant total — because the stated basis already includes the ΕΦΚΑ
+object lines**, so paid-vs-stated comparisons are apples-to-apples
+only on that definition (the alternative left every fully-paid
+υλοτομικό looking ~10–17% short forever). Flagship evidence:
+21PAY009476782 stores 9.946,06/8.021,02 (exactly the work pair of
+21SYMV009323424: 8.021,02 ×1,24) while its own warrant pays
+#11.287,01# = work gross + the contract's itemised ΕΦΚΑ 1.340,95 to
+the cent.
+
+**121 curated corrections** in `dase_payment_corrections.json`,
+three rules of descending evidence strength, the rule named in each
+reason:
+- **30 rows — warrant == the contract's total gross to the cent**:
+  gross := the warrant, net := the contract's total net (both
+  documented, no derivation).
+- **75 rows — warrant = stored + an ΕΦΚΑ margin** (the consistent
+  10,28%/12,8%-of-net family; the addition is the 0%-ΦΠΑ component):
+  gross := the warrant, net := stored net + the same € (valid
+  because all 75 stored pairs already satisfy g = 1,24×n exactly —
+  asserted at generation time).
+- **16 rows — net==gross keying + understatement**: the payload
+  repeated the contract's work-net in both fields; gross := the
+  warrant, net decomposed with the contract's own ΕΦΚΑ:work ratio
+  (derived — the weakest rule, said so in each reason).
+
+*Affects: paid figures only. Paid gross €25.527.604,84 →
+€25.636.308,98 (+€108.704,14); paid net €20.793.285,13 →
+**€20.882.632,20** (+€89.347,07, +0,43%). Stated basis, order count
+(964) and contracts-with-payments (891) unchanged. 2 of the 18
+net==gross rows have scanned PDFs and stay with the scanned pile
+(separate decision). Methodology: the ΕΦΚΑ paragraph on
+/methodology#dase-cpv-noise now states the paid convention.*
+
+## 2026-08-17 — ΔΑΣΕ payment audit: every payment PDF fetched, 52 overstatement corrections (re-posted warrants + payload keying errors), paid net drops to the documented figures
+
+Follow-up to the Δωδεκανήσου entry (below): the user asked for the
+whole ΔΑΣΕ payment layer to be screened. `khmdhs.payment_validator`
+ran over **all 1.033 stored payment orders** (`--db dase.sqlite
+--cache dase_pdf_cache`, report
+`dase_payment_validation_report.json`) — the ΔΑΣΕ payment PDFs had
+never been fetched before; the cache is now complete and the .txt
+sidecars are tracked like the contract ones. Statuses: 707 ok / 67
+near_match / 9 ok_net_only / **250 mismatch**. The mismatches were
+then classified by machine-reading every warrant PDF (the amounts
+survive the cp1253 font-mangling; 42 PDFs are scanned images whose
+text is only the registry stamp — those are text-unverifiable) and
+testing exact arithmetic identities against the contract object
+lines and the ΥΔΕ χρηματικό-ένταλμα structure (warrant total ==
+beneficiary + κρατήσεις, printed twice per copy).
+
+**Corrected NOW — the overstatements (52 curated entries in
+`dase_payment_corrections.json`, all with per-row PDF evidence):**
+- **11 identical-document re-posts excluded** (family A): two or
+  three PAY ΑΔΑΜs whose PDFs carry byte-identical amount-token
+  fingerprints — the same χρηματικό ένταλμα posted repeatedly (one
+  contract, 25SYMV017429326, attached the same 4.104,76 warrant
+  THREE times, once keyed 6.557,12). The earliest ΑΔΑΜ is kept, the
+  re-posts get `exclude:true` + the fingerprint evidence; one kept
+  row (21PAY009586451) is corrected up to its warrant total
+  14.326,95, which both twins' stored 12.030,98 misstated.
+- **16 same-warrant extra records excluded** (family B): a second
+  ΚΗΜΔΗΣ record whose own PDF is a warrant another stored record
+  already carries — typically a scanned full-amount record plus a
+  later text-PDF record keyed with a component figure (work-net) of
+  the same warrant. One warrant, one payment: the extra record is
+  excluded, the evidence being that its own PDF's total equals the
+  kept row's stored amount to the cent.
+- **24 payload keying errors amount-corrected** (family C): the
+  stored amount appears
+  NOWHERE in the attached warrant. Flagships: 21PAY009473132 stored
+  87.833,13 vs its warrant's 15.249,03; 21PAY009629348 stored
+  53.212,19 vs 21.456,25; 21PAY009595559 stored 37.259,84 vs
+  15.055,00; and the 25SYMV017920941 pair, where BOTH instalments
+  were posted with the full contract value 97.365,01 (Σ 194.730,02 =
+  2× the contract) while their PDFs itemise 84.665,22/68.278,40 net
+  and 12.694,93/10.237,85 net, summing to ≈ the contract. Corrected
+  to the warrant totals; where the PDF does not print the net, the
+  net is derived with the contract's own net:gross ratio (documented
+  per row in the reason).
+The candidate universe was every live contract whose Σ non-cancelled
+payments exceeded 102% of its stated gross (81 contracts,
+€823.898,91 gross of apparent over-payment). Of those, 22 contracts'
+payments MATCH their own PDFs and stay untouched — they are (or may
+be) the legitimately-above-estimate per-unit υλοτομικά the
+2026-08-03 guard-test note documents; being right per document, they
+are not registry errors.
+
+**Found, NOT corrected — pending decisions:**
+- **Understatement families** (~139 rows, ≈ +€133k gross if
+  corrected): warrants that pay MORE than the stored amount — the
+  100-row `warrant_plus_efka` family (warrant = stored + a
+  consistent 10,28%/12,8%-of-net addition, the state-borne ΕΦΚΑ
+  εργοδότη component the CPV 66519300-4 entry documents), 17
+  full-vs-component rows and 22 net==gross work-net rows. These are
+  a DECLARATION-CONVENTION question (does «paid» include the ΕΦΚΑ
+  the State disburses on top of the co-op's invoice? the stated side
+  includes it, so consistency says yes), not per-row keying errors —
+  parked for the user's verdict before ~139 more entries land.
+- **41 unverifiable rows** on overshooting contracts: scanned PDFs
+  (no text layer) or templates without the warrant marker — among
+  them the 21SYMV009198626 triple (3 × 5.150,29, each matching its
+  own scanned-adjacent doc) and the 23SYMV012461845 pair. Need OCR
+  or manual eyes; listed in the validator report.
+
+*Affects: ΔΑΣΕ paid figures only — stated basis untouched. Paid net
+€21.211.472,57 → **€20.793.285,13** (−€418.187,44, −2,0%); live
+orders 991 → **964** (27 excluded re-posts/extra records; 25 amount
+corrections incl. the fix-kept row); contracts with payments stay
+891 (every corrected contract keeps ≥1 live order). Post-correction
+residue: 40 contracts still sum >102% of stated (€342.451,40) — the
+per-unit-legitimate family plus the unverifiable scanned rows, both
+documented above. Pins updated; the family-level outlier logic the
+khmdhs DB has cannot be copied here (per-unit υλοτομικά legitimately
+exceed stated), so the guard for THIS class is the validator report
+plus the duplicate-fingerprint scan
+(`scripts/find_duplicate_postings.py` remains contract-side only).*
+
 ## 2026-08-17 — Six Δωδεκανήσου contracts carried their GROSS figure in the net field: the ΔΑΣΕ net basis drops to €31.178.858,14
 
 User caught it on /dase/contract/24SYMV015692415: the chart, labelled

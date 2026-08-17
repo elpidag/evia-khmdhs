@@ -193,6 +193,39 @@ def test_apply_corrections(mem_conn, tmp_path):
     assert r["cancelled"] == 1 and r["correction_note"] == "bogus"
 
 
+def test_apply_corrections_relink(mem_conn, tmp_path):
+    """`attributed_ref` re-links a payment to another STORED contract —
+    for registry attribution errors documented from the warrant (the
+    Δασαρχείο Σπερχειάδας batch, DATA_DECISIONS 2026-08-17). A target
+    that is not stored is refused, everything else in the entry still
+    applies."""
+    import json
+    from khmdhs.payment_loader import apply_corrections
+    add_contract(mem_conn, "C1", eur=100.0)
+    add_contract(mem_conn, "C2", eur=100.0)
+    add_payment(mem_conn, "PMOVE", "C1", 50.0)
+    add_payment(mem_conn, "PSTAY", "C1", 60.0)
+    f = tmp_path / "corr.json"
+    f.write_text(json.dumps({
+        "PMOVE": {"amount_with_vat": 48.0, "attributed_ref": "C2",
+                  "reason": "warrant pays C2's co-op"},
+        "PSTAY": {"amount_with_vat": 61.0, "attributed_ref": "CGHOST",
+                  "reason": "target not stored"},
+    }), encoding="utf-8")
+    assert apply_corrections(mem_conn, f) == 2
+    r = mem_conn.execute(
+        "SELECT attributed_ref, contract_ref, amount_with_vat FROM contract_payments "
+        "WHERE payment_ref='PMOVE'").fetchone()
+    assert r["attributed_ref"] == "C2"
+    assert r["contract_ref"] == "C1"        # the payload's claim survives as evidence
+    assert r["amount_with_vat"] == 48.0
+    r = mem_conn.execute(
+        "SELECT attributed_ref, amount_with_vat FROM contract_payments "
+        "WHERE payment_ref='PSTAY'").fetchone()
+    assert r["attributed_ref"] == "C1"      # refused re-link leaves attribution alone
+    assert r["amount_with_vat"] == 61.0     # but the amount fix still lands
+
+
 def test_real_db_no_uncorrected_outliers():
     """No non-cancelled payment may exceed 150% of its contract family's
     total stated value — family = every version connected via prevReferenceNo
