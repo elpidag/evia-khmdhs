@@ -459,7 +459,7 @@ aggregates use **stated values, deduplicated** — exclude `cancelled=1`
 (82 rows, €2.35M) and non-cancelled rows whose `next_reference_no`
 resolves in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo,
 no multi-successor) → live population **2,008 rows / €38,411,933.17
-gross = €31,659,523.06 net** (`dase_queries.live_filter`, the
+gross = €31,178,858.14 net** (`dase_queries.live_filter`, the
 scope_filter analogue; the Atlas presents net; includes the curated
 corrections — the 21SYMV009374147 ×10 keying error AND 10 registry
 double-postings excluded with `duplicate_of` cross-links + 1 duplicated
@@ -468,7 +468,17 @@ payment (paid net €21,211,472.57 / 991 orders), DATA_DECISIONS
 «0310003799» — VIES-invalid — so the scanner gained a cross-VAT pass);
 duplicate pages stay reachable, badged in search, and the
 guard `scripts/find_duplicate_postings.py` + real-DB tests keep new
-twins out). Charts/rankings STAY on
+twins out). The net figure was €31,659,523.06 until 2026-08-17, when
+**6 Δ/νση Δασών Δωδεκανήσου contracts** were found carrying their GROSS
+in the net field (`totalCostWithoutVAT == totalCostWithVAT`,
+`vat_percent` '0'): their own payment orders split the same gross at
+×1.24, so the true nets are gross÷1.24 (−€480,664.92 off the basis;
+gross untouched, so webui's incl-VAT presentation is unchanged).
+Curated in `dase_contract_corrections.json`; the equality is now a
+guard test (`test_no_live_contract_states_gross_as_its_net`) — a
+future net==gross row fails the suite rather than inflating the basis,
+and NO ÷1.24 heuristic exists (a genuinely ΦΠΑ-exempt contract must
+trip it and get a human verdict). Anti-nero has zero such rows. Charts/rankings STAY on
 stated values — payment coverage is structurally partial (891/2,008
 contracts, 2022–23 near-blank as registry practice) — the paid-net Σ
 appears only as a KPI with its coverage caveat. Co-ops key on
@@ -561,7 +571,38 @@ mirror the map via the now-shared `_unit_forest_kind`, map-unresolved
 ΑΔΜΗΕ folds into misc), ships as `kind_mix` on `/api/dase/overview`
 (the bodies/units marginals now feed only the reconciliation pins),
 reconciles to the basis (pinned; 'unknown' bucket pinned absent; units
-marginal cross-checked against the map payload). /dase contract pages draw the ΚΗΜΔΗΣ family as a
+marginal cross-checked against the map payload). Below it **CONTRACT
+VALUES** is ONE frame under a two-button mode switch (2026-08-17):
+«Individual dots» (the canvas beeswarm) / «Value brackets» (the log
+histogram) — the retired SIZE DISTRIBUTION frame, merged because both
+drew the same 2,008 contracts, the same stated-net variable and the
+same median (verified, not assumed). Both modes render inside one
+`ui/SideNote` shell so the plot keeps the same width/left edge (886 at
+x=394), and nothing moves on toggle: the switch sits flush with the
+frame's RIGHT edge, the brackets draw at the beeswarm's own computed
+height (`plotHeight` `$bindable` out of the dodge layout; frame equal
+either way) and the median line/label share the beeswarm's dash and
+lettering. The **year legend serves both** modes from the left of that
+same line: the brackets are stacked by signature year in the dots'
+ramp (`charts/yearColors.ts`). **Both modes share ONE axis**: the
+Atlas /dase brackets come from `queries_extra.dase_value_histogram`,
+which derives pure-doubling edges from the live range anchored on
+€1.000 (`[0] + 1000·2^k`, k=−5…9 → €31,25–€512k; webui's own
+`value_histogram` brackets are untouched, that file is frozen), so
+equal-width slots are equal ratios; both charts then place values with
+the single `transforms/histogram.ts:binPosition` on identical margins,
+and the beeswarm needs no d3 scale at all. Median gap measured 0,0px —
+the coincidence is structural, not tuned. Segments are binned
+CLIENT-side from the swarm array (`transforms/histogram.ts`,
+reproducing `_bin_values`' half-open convention) on the histogram
+payload's own edges — deriving both modes from one array is what stops
+them drifting; bar counts still come from the server and
+`LogHistogram` draws any shortfall in the base colour rather than
+hiding it. `LogHistogram`'s `height`/`segments`/`segColors` are
+defaulted, so the Anti-nero direct-award histogram is untouched (it
+gained only the fix that reference-line labels now get their own row
+above the bar counts — median and count labels used to overprint).
+MONEY PER YEAR keeps its half-width column. /dase contract pages draw the ΚΗΜΔΗΣ family as a
 FamilyTree diagram (trunk → award fan → contracts, viewed contract's
 trail green, payments terminal; award↔contract edges only on
 name-verified pairs — `contract_timeline` ships `who` for in-db
@@ -809,7 +850,8 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   payment rows. Everything value-based reconciles to €659,290,845.34
   (pinned; was €667,496,652.26 until the 2026-08-13 antinero_probable
   exclusion, then €658,297,730.65 until the 2026-08-14 Σουφλί
-  stated-value correction); /compare is symmetric stated-vs-stated (≈20.8×); /explore has
+  stated-value correction); /compare is symmetric stated-vs-stated (≈21.1×
+  since the 2026-08-17 Δωδεκανήσου net corrections); /explore has
   a single «Stated value (net)» column (`?v=8`). Gotcha: an endpoint that
   needs payments MUST take `_pay_conn()` — on `g.conn` the payments table
   is empty by design.
@@ -993,7 +1035,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 359 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 40 frontend units)
+## Tests (`tests/`, 417 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 49 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

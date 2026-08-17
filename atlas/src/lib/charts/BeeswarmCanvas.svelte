@@ -13,25 +13,30 @@
 	import { goto } from '$app/navigation';
 	import { dodge } from '$lib/transforms/beeswarm';
 	import { eur, eurShort } from '$lib/transforms/format';
-	import { scaleLog } from 'd3-scale';
+	import { binPosition } from '$lib/transforms/histogram';
+	import { yearColor } from './yearColors';
 
-	let { data, note = '' }: { data: DaseSwarm; note?: string } = $props();
+	// the year legend and the explanatory note live on the page: they serve
+	// this chart AND the value-bracket view it toggles with. `plotHeight`
+	// reports the dodge layout's computed height back out, so that view can
+	// draw at the same height and the frame stops jumping on toggle.
+	// `edges` are that view's brackets: dots are placed on the bracket axis
+	// (one doubling per equal slot == a plain log scale, since
+	// `queries_extra.dase_value_histogram` derives pure-doubling edges), so
+	// the two modes share ONE scale and every reference line coincides.
+	let {
+		data,
+		edges,
+		plotHeight = $bindable(0)
+	}: { data: DaseSwarm; edges: number[]; plotHeight?: number } = $props();
 
+	// margins must match LogHistogram's exactly — the shared axis is defined
+	// in pixels, not just in value space
+	const M = { top: 26, right: 8, bottom: 34, left: 8 };
 	let width = $state(900);
-	const M = { top: 26, right: 16, bottom: 34, left: 16 };
 	const R = 2.6;
 	const MIN_H = 320;
 	const MAX_H = 560;
-
-	// sequential greens on the page's --c-dase family, light → deep by year
-	const YEAR_COLORS: Record<string, string> = {
-		'2021': '#bfe3cf',
-		'2022': '#8fd1ae',
-		'2023': '#63bd8e',
-		'2024': '#43a276',
-		'2025': '#2d7d59',
-		'2026': '#1c5138'
-	};
 
 	interface Dot {
 		i: number;
@@ -43,10 +48,9 @@
 	const valid = $derived(
 		data.ref.map((_, i) => i).filter((i) => (data.eur[i] ?? 0) > 0)
 	);
-	const x = $derived.by(() => {
-		const vs = valid.map((i) => data.eur[i]!);
-		return scaleLog([Math.min(...vs), Math.max(...vs)], [M.left, width - M.right]).nice();
-	});
+	// one slot per bracket, exactly as LogHistogram lays them out
+	const bw = $derived((width - M.left - M.right) / edges.length);
+	const x = $derived((v: number) => binPosition(v, edges, M.left, bw));
 	const layout = $derived.by(() => {
 		let cached = layoutCache.get(data);
 		if (cached && Math.abs(cached.width - width) <= 2) return cached;
@@ -68,6 +72,9 @@
 		return cached;
 	});
 	const height = $derived(layout.h);
+	$effect(() => {
+		plotHeight = height;
+	});
 	const dots = $derived.by((): Dot[] => {
 		const { xs, ys } = layout;
 		const cy = M.top + (height - M.top - M.bottom) / 2;
@@ -118,7 +125,7 @@
 		for (const d of dots) {
 			ctx.beginPath();
 			ctx.arc(d.x, d.y, layout.r, 0, 2 * Math.PI);
-			ctx.fillStyle = YEAR_COLORS[data.year[d.i] ?? ''] ?? '#8a7f6e';
+			ctx.fillStyle = yearColor(data.year[d.i]);
 			ctx.globalAlpha = 0.85;
 			ctx.fill();
 		}
@@ -146,10 +153,10 @@
 		return vs[Math.floor(vs.length / 2)] ?? 0;
 	});
 	const biggest = $derived(dots.reduce((m, d) => (d.eur > m.eur ? d : m), dots[0]));
+	// round decades that fall inside the bracket axis' own span
 	const axisTicks = $derived(
-		[100, 1e3, 1e4, 1e5, 1e6].filter((v) => v >= x.domain()[0] && v <= x.domain()[1])
+		[100, 1e3, 1e4, 1e5, 1e6].filter((v) => v >= edges[1] && v <= edges[edges.length - 1])
 	);
-	const years = $derived([...new Set(data.year.filter(Boolean))].sort() as string[]);
 
 	const dmy = (iso: string | null | undefined) =>
 		iso ? `${iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}` : '—';
@@ -159,77 +166,47 @@
 		const lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
 		return lum > 0.55 ? '#1c221f' : '#ffffff';
 	}
-	const hoverColor = $derived(
-		hover ? (YEAR_COLORS[data.year[hover.i] ?? ''] ?? '#8a7f6e') : ''
-	);
+	const hoverColor = $derived(hover ? yearColor(data.year[hover.i]) : '');
 </script>
 
-<div class="legend">
-	{#each years as y (y)}
-		<span><i style:background={YEAR_COLORS[y]}></i>{y}</span>
-	{/each}
-</div>
+<div class="wrap" bind:clientWidth={width}>
+	<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+	<canvas
+		bind:this={canvas}
+		style:width="100%"
+		style:height="{height}px"
+		style:cursor={hover ? 'pointer' : 'default'}
+		onmousemove={onMove}
+		onmouseleave={() => (hover = null)}
+		onclick={onClick}
+	></canvas>
 
-<div class="cols">
-	{#if note}
-		<p class="sidenote">{note}</p>
-	{/if}
-
-	<div class="wrap" bind:clientWidth={width}>
-		<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
-		<canvas
-			bind:this={canvas}
-			style:width="100%"
-			style:height="{height}px"
-			style:cursor={hover ? 'pointer' : 'default'}
-			onmousemove={onMove}
-			onmouseleave={() => (hover = null)}
-			onclick={onClick}
-		></canvas>
-
-		<svg class="overlay" viewBox="0 0 {width} {height}">
-			{#each axisTicks as t (t)}
-				<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
-				<text class="axis" x={x(t)} y={height - 12}>{eurShort(t)}</text>
-			{/each}
-			<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
-			<text class="median-label" x={x(median)} y={M.top - 8} text-anchor="middle">
-				median {eurShort(median)}
+	<svg class="overlay" viewBox="0 0 {width} {height}">
+		{#each axisTicks as t (t)}
+			<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
+			<text class="axis" x={x(t)} y={height - 12}>{eurShort(t)}</text>
+		{/each}
+		<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
+		<text class="median-label" x={x(median)} y={M.top - 8} text-anchor="middle">
+			median {eurShort(median)}
+		</text>
+		{#if biggest}
+			<text class="note" x={biggest.x - 6} y={biggest.y - 10} text-anchor="end">
+				largest: {eurShort(biggest.eur)}
 			</text>
-			{#if biggest}
-				<text class="note" x={biggest.x - 6} y={biggest.y - 10} text-anchor="end">
-					largest: {eurShort(biggest.eur)}
-				</text>
-			{/if}
-		</svg>
-
-		{#if hover}
-			<div class="tip" style:background={hoverColor} style:color={tipInk(hoverColor)}>
-				<strong>{eur(hover.eur)}</strong><br />
-				signed {dmy(data.d?.[hover.i])}<br />
-				{data.ref[hover.i]}
-			</div>
 		{/if}
-	</div>
+	</svg>
+
+	{#if hover}
+		<div class="tip" style:background={hoverColor} style:color={tipInk(hoverColor)}>
+			<strong>{eur(hover.eur)}</strong><br />
+			signed {dmy(data.d?.[hover.i])}<br />
+			{data.ref[hover.i]}
+		</div>
+	{/if}
 </div>
 
 <style>
-	.cols {
-		display: grid;
-		grid-template-columns: 210px minmax(0, 1fr);
-		gap: var(--sp-6);
-		align-items: start;
-	}
-	@media (max-width: 800px) {
-		.cols {
-			grid-template-columns: 1fr;
-		}
-	}
-	.sidenote {
-		color: var(--ink-soft);
-		font-size: var(--fs-13);
-		margin: 0;
-	}
 	.wrap {
 		position: relative;
 	}
@@ -265,21 +242,6 @@
 		font-size: 11px;
 		fill: var(--ink-soft);
 		font-style: italic;
-	}
-	.legend {
-		display: flex;
-		gap: var(--sp-4);
-		font-size: var(--fs-13);
-		color: var(--ink-soft);
-		margin: var(--sp-2) 0 var(--sp-4);
-	}
-	.legend i {
-		display: inline-block;
-		width: 0.7rem;
-		height: 0.7rem;
-		border-radius: 50%;
-		margin-right: 4px;
-		vertical-align: -1px;
 	}
 	.tip {
 		position: absolute;

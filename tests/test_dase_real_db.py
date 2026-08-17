@@ -115,6 +115,56 @@ def test_no_uncorrected_decimal_shift_vs_sibling_modal(conn):
     assert [r["reference_number"] for r in rows] == []
 
 
+def test_no_live_contract_states_gross_as_its_net(conn):
+    """A live contract whose net EQUALS its gross is a registry keying
+    error until proven otherwise: the Atlas presents every € net of ΦΠΑ,
+    so such a row silently feeds a VAT-inclusive amount into the net
+    basis. Six Δ/νση Δασών Δωδεκανήσου contracts did exactly that
+    (DATA_DECISIONS 2026-08-17) and are corrected; 2.002 of 2.008 live
+    contracts carry a real split, so the equality is the anomaly, not
+    the norm. A genuinely ΦΠΑ-exempt contract would trip this too — by
+    design: the verdict belongs to a human reading the PDF and its
+    payment orders, not to a ÷1,24 rule."""
+    rows = conn.execute("""
+        SELECT reference_number, total_cost_with_vat
+        FROM contracts
+        WHERE cancelled = 0
+          AND correction_note IS NULL
+          AND total_cost_without_vat IS NOT NULL
+          AND total_cost_without_vat = total_cost_with_vat
+          AND total_cost_with_vat > 0
+          AND NOT EXISTS (SELECT 1 FROM contracts nx
+                          WHERE nx.reference_number = contracts.next_reference_no)
+    """).fetchall()
+    assert [r["reference_number"] for r in rows] == []
+
+
+def test_dodekanisou_vat_corrections_pin(conn):
+    """The six Rhodes restoration lots keep their payment-documented net
+    (DATA_DECISIONS 2026-08-17). Each true net is its own stated gross
+    ÷1,24 — the ratio its payment order states."""
+    expected = {
+        "24SYMV015692415": 395_161.29,
+        "24SYMV015692407": 344_722.60,
+        "24SYMV015744883": 338_709.68,
+        "24SYMV015692405": 319_379.45,
+        "24SYMV015713189": 302_419.35,
+        "24SYMV015707036": 302_378.08,
+    }
+    for ref, net in expected.items():
+        row = conn.execute(
+            "SELECT total_cost_without_vat n, total_cost_with_vat g, correction_note"
+            " FROM contracts WHERE reference_number = ?", (ref,)).fetchone()
+        assert row is not None, ref
+        assert row["n"] == pytest.approx(net), ref
+        assert row["n"] == pytest.approx(row["g"] / 1.24, abs=0.01), ref
+        assert row["correction_note"], ref
+        obj = conn.execute(
+            "SELECT cost_without_vat FROM contract_objects"
+            " WHERE reference_number = ? AND seq = 0", (ref,)).fetchone()
+        assert obj["cost_without_vat"] == pytest.approx(net), ref
+
+
 def test_corrected_value_regression_pin(conn):
     """21SYMV009374147 stays at its PDF-documented value (DATA_DECISIONS
     2026-08-14) — a re-load that forgets the corrections hook regresses

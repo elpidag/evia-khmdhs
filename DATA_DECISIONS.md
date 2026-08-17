@@ -2482,6 +2482,191 @@ the only VAT-less rows left are Παντουρέ and Παπάδων, absent from
 ΔΑΣΕ contracts universe. Applied to anadohoi_projects.json + the
 committed sqlite in place, same mechanism as the Μίστρου entry.
 
+## 2026-08-17 — Six Δωδεκανήσου contracts carried their GROSS figure in the net field: the ΔΑΣΕ net basis drops to €31.178.858,14
+
+User caught it on /dase/contract/24SYMV015692415: the chart, labelled
+excl. VAT, was showing €490.000 — a VAT-INCLUSIVE amount. It was not a
+presentation bug (the Atlas net shim was doing its job); the registry
+row itself carries `totalCostWithoutVAT = totalCostWithVAT = 490000`,
+so the net column held the gross figure and every net-basis aggregate
+inherited it.
+
+**Scope of the error, swept:** of 2.008 live ΔΑΣΕ contracts, 2.002
+carry a real VAT split (1.355 at exactly ×1,24, the rest at mixed
+rates) and 0 have a null net. Exactly **6** have net == gross, and all
+six are one family: Δ/νση Δασών Δωδεκανήσου, 31.10–11.11.2024, the
+«Κατασκευή αντιδιαβρωτικών έργων αποκατάστασης και αντιδιαβρωτικής
+προστασίας» lots for the burnt Rhodes areas, each with `vat_percent`
+'0' on its single object line. The Anti-nero DB has **zero** such rows
+(244 live in-scope checked), so the fault is confined to these six.
+
+**Why they looked defensible, and what settled it.** Each signed PDF
+mentions ΦΠΑ exactly once, in recital 14, and what it cites is the
+EXEMPTION procedure — ΥΑ Α.1021/07-02-2022 «Διαδικασία απαλλαγής ΦΠΑ
+… στο πλαίσιο αντιμετώπισης αναγκών των πληγέντων από φυσικά φαινόμενα
+σε περιοχές που έχει ενεργοποιηθεί ο Μηχανισμός Κρατικής Αρωγής»
+(Β΄550) — and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων
+των νόμιμων φορολογικών επιβαρύνσεων», boilerplate that names no rate.
+Read alone, that plus `vat_percent` '0' argues the works are
+VAT-exempt and net == gross is correct. The **payment orders refute
+it**: every one of the six splits its contract's gross at exactly
+×1,24 —
+`24SYMV015692415` → 25PAY016222564 (ΑΔΑ 9ΦΞΖ4653Π8-ΘΩΩ) net
+€395.161,29 on gross €490.000; …407 → 25PAY016933274 €344.722,60;
+…883 → 25PAY016913049 €338.709,68; …405 → 25PAY016929629 €319.379,45;
+…189 → 25PAY016944003 €302.419,36; …036 → 25PAY016924872
+€302.378,08. Each payment net equals its contract's stated gross ÷1,24
+to the cent, so VAT at 24% is inside the contract figure and the
+exemption was cited in the legal framework without being applied to
+the price. Curated into `dase_contract_corrections.json` (6 entries,
+`total_cost_without_vat` + the `objects` seq-0 child row that repeats
+the error; the gross column is right and stays untouched), applied by
+`khmdhs.contract_corrections`. …189's payment reads €302.419,36 on
+gross €375.000,01 — one cent above the contract's own €375.000,00, so
+the stored figure is that contract's own gross ÷1,24 = €302.419,35,
+inside the ≤€0,02 registry-noise tolerance.
+
+No heuristic was introduced: «net == gross ⇒ divide by 1,24» would be
+wrong for a genuinely VAT-exempt contract, and with six cases the
+hard constraint («prefer manual curation over fragile heuristics»)
+points at curation. The equality itself is now a **guard test** —
+any future live contract with net == gross and no curated correction
+fails the suite, so the next occurrence surfaces instead of quietly
+inflating the basis.
+
+*Affects: the ΔΑΣΕ stated-NET basis only — €31.659.523,06 →
+**€31.178.858,14** (−€480.664,92, −1,5%); every Atlas pin, the
+/compare ratio and the CLAUDE.md figures updated with it. The GROSS
+basis (€38.411.933,17) and webui's incl-VAT presentation are unchanged
+— only the net column was wrong. Paid figures unchanged: those six
+payments already carried correct net amounts. Separately FOUND, NOT
+fixed: 22 of 991 live ΔΑΣΕ payment rows carry `amount_without_vat ==
+amount_with_vat` (21 small 2021 orders plus 25PAY016933274, whose
+GROSS field holds the net €344.722,60); they inflate no net figure —
+the net side is the one that reads right — but they understate the
+gross paid, and payment corrections need their own PDF review.*
+
+## 2026-08-17 — /dase CONTRACT VALUES: dots and value brackets become one frame under a toggle
+
+CONTRACT VALUES (beeswarm) and SIZE DISTRIBUTION (log histogram) were
+two frames describing ONE thing — the same 2,008 live contracts, the
+same variable (stated net €), the same median, on the same
+log-ish horizontal reading. Verified before merging, not assumed:
+`dase_swarm` and `dase_queries.value_histogram` both filter on
+`live_filter`, both read `total_cost_with_vat`, no live contract has a
+null or ≤0 value (so the beeswarm's `eur > 0` guard drops nothing),
+and both take the upper median of the sorted list. They are now ONE
+frame (`#dase-swarm`, the beeswarm's anchor kept; nothing linked to
+`#dase-hist` — checked repo-wide) with a two-button mode switch,
+«Individual dots» / «Value brackets» (user's labels). Default stays
+dots: no regression in what the page shows on load. The frame keeps
+its place under AWARDING PROCESS, so the page reads MAP · AWARDING
+PROCESS · CONTRACT VALUES · MONEY PER YEAR · RANKING OF CO-OPS ·
+CPV MIX; MONEY PER YEAR keeps the half-width column it had when the
+histogram sat beside it (user), the `.pair` grid now holding one child.
+
+This is a re-ENCODING toggle, not a filter — the design doctrine's
+«small multiples over filterable charts» is about hiding subsets of
+data, and nothing is hidden here; the in-house precedents are the
+front page's TYPES OF WORK €/count switch and the Anti-nero map's
+2-mode view. Both modes render inside one `ui/SideNote` shell (the
+beeswarm's 210px note column, hoisted out of `BeeswarmCanvas` so both
+can use it), so the plot keeps exactly the same width and left edge in
+both — measured 886 at x=394 either way. **Nothing may move when the
+reader toggles** (user): the switch sits flush with the frame's RIGHT
+edge with the year legend at the left of the same line, and the
+brackets draw at the beeswarm's own computed height (`plotHeight`,
+`$bindable` out of the dodge layout, which sizes itself to the
+tallest dot column) — frame height measured identical at 623px in
+both modes. The median line and its lettering are now one convention
+across the pair: the beeswarm's dash (2.5px, 7/5) and centred bold
+12px label, adopted by `LogHistogram` — which no other chart is
+affected by, the Anti-nero direct-award histogram passing thresholds
+and no median. The mode-specific explanation lives in the side note;
+the frame's caveat states the one thing a reader could get wrong:
+dots sit on a continuous logarithmic scale, brackets are doublings of
+EQUAL width, so positions are not comparable between the two modes.
+
+**ONE AXIS for both modes** (user, same day, second round). The two
+views first disagreed on where a value sits: the median line landed
+243px apart (x=880 as a dot, x=637 as a bracket position, on an 886px
+plot) — not a rounding artefact but the two axes disagreeing, and
+unfixable by nudging. The beeswarm's `.nice()`-ed log scale spanned
+€10–€1M, while webui's bracket table gives ONE equal slot to
+`[0, 1000)` — a range holding 4,5 doublings and 75 contracts — and
+three empty slots to €500k–€2M. Above €1.000 that table already IS a
+log axis (every edge a doubling), so the fix was to make the WHOLE
+table one: `queries_extra.dase_value_histogram` now derives the edges
+from the live range as pure doublings anchored on €1.000 —
+`[0] + 1000·2^k` for k = −5…9 today, i.e. €31,25 → €512k, sixteen
+slots. The leading `0` keeps `_bin_values`' half-open convention for
+anything below the first doubling; that bracket and the trailing
+overflow are empty, so the DRAWN axis is exactly the doubling span.
+Edges are derived, never a fixed table, so a refresh bringing a
+smaller or larger contract widens the axis by itself (pinned).
+`webui.dase_queries.value_histogram` is untouched — webui is frozen
+and keeps its own brackets; only the labels needed a new formatter,
+webui's `_short_eur` floor-dividing every sub-€1k edge to «0k».
+
+Client side, both charts now place a value with ONE function,
+`transforms/histogram.ts:binPosition` (slot index + log interpolation
+inside the slot), on identical margins — so the coincidence is
+structural, not a tuned constant: measured gap 0,0px. The beeswarm
+therefore drops d3's `scaleLog` entirely; with pure-doubling edges
+`binPosition` IS a log scale (equal ratios ⇒ equal distances, pinned
+in vitest), so nothing about the dots view is distorted — it simply
+stops wasting the `.nice()` padding, and its dodge layout repacks a
+little taller (464 → 548px, still under the 560 cap). The rejected
+alternative was the mirror image: put the dots on webui's bracket
+table, which would have crushed the 75 sub-€1k contracts into one
+slot width — distorting the very view whose job is the true spread.
+Two things now read the same in both modes that never could before:
+the median line, and the lone €43,37 contract, which appears as one
+dot and as a one-contract hairline bar at the same x. The frame's
+caveat was rewritten accordingly — the «positions are not comparable»
+warning is retired, replaced by the reason they now are. The computed
+subtitle was deleted (user): the median is printed on the chart and
+the caveat carries the basis.
+
+**The year legend now serves both modes** (user): the brackets are
+drawn as stacked segments, one per signature year, in the same ramp
+the dots use (`charts/yearColors.ts`, hoisted out of `BeeswarmCanvas`
+so dots, bars and legend read one table). The toggle sits on the left
+of that legend line. The stacking is a real finding, not decoration —
+the 125k–250k bracket is almost entirely 2021–22, so the biggest
+co-op contracts are an early-programme phenomenon. Mechanism: the
+segments are binned CLIENT-side from the swarm array
+(`transforms/histogram.ts`) on the histogram payload's own edges,
+reproducing `_bin_values`' half-open convention (`[e_i, e_{i+1})`,
+overflow into the last slot) — NOT a second per-year histogram from
+the API. Deriving both modes from one array is what makes it
+impossible for them to drift apart; the bar COUNT labels still come
+from the server's `counts`, and `LogHistogram` draws any segment
+shortfall in the base colour rather than hiding it, so a divergence
+would be visible as well as caught by the pin. Cost of the choice,
+accepted: the brackets view now waits for the swarm fetch instead of
+rendering from the SSR payload — it is behind `Defer` and is not the
+default mode.
+
+`LogHistogram` gained `height`, `segments` and `segColors`, all
+defaulted so the Anti-nero direct-awards histogram is untouched. The
+same review fixed a defect that predated this work: reference-line
+labels (median, the ν.4782 ceilings) and the bar-count labels were
+drawn in the SAME band, so a median falling near the modal bar
+overprinted that bar's count — as it did here (median €5.792 in the
+modal 4k–8k bracket). Reference labels now get their own row above
+the counts; the Anti-nero €30k/€60k threshold labels improve with it.
+*Affects: presentation + the /dase histogram EDGES on the Atlas side
+(`queries_extra.dase_value_histogram`, webui's untouched); no DB or
+loader change. Pins `test_dase_value_modes_are_one_population`
+(histogram n == swarm length == KPI count; swarm binned on the payload
+edges == the server's counts; every contract carries a year, so the
+segments sum to the bar totals with no uncategorised remainder; every
+drawn bracket exactly one doubling; €1.000 on an edge; the first
+doubling holds the smallest live contract and the last the largest;
+catch-all and overflow empty) plus 11 vitest units on the binning
+convention and on `binPosition` being a true log scale.*
+
 ## 2026-08-17 — Το CPV 66519300-4 στα ΔΑΣΕ υλοτομικά ΔΕΝ είναι keying noise: σημαίνει τις κρατικά χρηματοδοτούμενες εργοδοτικές εισφορές ΕΦΚΑ των δασεργατών
 
 The site had characterized the insurance CPV 66519300-4 «Επικουρικές

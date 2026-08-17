@@ -57,5 +57,47 @@
   "exclude": true,
   "duplicate_of": "24SYMV015485823",
   "reason": "ΚΗΜΔΗΣ double-posting (corrected re-issue): the original posting printed a phantom contractor ΑΦΜ «0310003799» — VIES confirms EL031000379 does not exist — and was re-posted twelve days later as 24SYMV015485823 with the real ΑΦΜ 096115714 (VIES: ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ, «ΔΑΣΕ ΚΟΥΡΚΟΥΛΩΝ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ», Κουρκουλοί Λίμνης). Normalized texts 98% identical — only the in-document ΑΦΜ, one date and one protocol number differ; same parties, same €13,395.00. The full-settlement payment 24PAY015905505 sits on the kept re-issue (DATA_DECISIONS 2026-08-15)."
+ },
+ "24SYMV015692415": {
+  "total_cost_without_vat": 395161.29,
+  "objects": {
+   "0": 395161.29
+  },
+  "reason": "Registry keying error: the contract row repeats the GROSS figure in the net field (totalCostWithoutVAT = totalCostWithVAT = 490.000,00, vat_percent '0'), so every net-basis aggregate counted a VAT-inclusive amount. Its own payment order 25PAY016222564 (ΑΔΑ 9ΦΞΖ4653Π8-ΘΩΩ) splits that same gross at 24% and states the net: 395.161,29. True net = 490.000,00 / 1,24 = 395.161,29. The signed PDF mentions ΦΠΑ once, citing the exemption procedure (ΥΑ Α.1021/07-02-2022, Β΄550) in recital 14, and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων των νόμιμων φορολογικών επιβαρύνσεων» without naming a rate — the payment order is the deciding document (DATA_DECISIONS 2026-08-17)."
+ },
+ "24SYMV015692407": {
+  "total_cost_without_vat": 344722.6,
+  "objects": {
+   "0": 344722.6
+  },
+  "reason": "Registry keying error: the contract row repeats the GROSS figure in the net field (totalCostWithoutVAT = totalCostWithVAT = 427.456,03, vat_percent '0'), so every net-basis aggregate counted a VAT-inclusive amount. Its own payment order 25PAY016933274 splits that same gross at 24% and states the net: 344.722,60. True net = 427.456,03 / 1,24 = 344.722,60. The signed PDF mentions ΦΠΑ once, citing the exemption procedure (ΥΑ Α.1021/07-02-2022, Β΄550) in recital 14, and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων των νόμιμων φορολογικών επιβαρύνσεων» without naming a rate — the payment order is the deciding document (DATA_DECISIONS 2026-08-17)."
+ },
+ "24SYMV015744883": {
+  "total_cost_without_vat": 338709.68,
+  "objects": {
+   "0": 338709.68
+  },
+  "reason": "Registry keying error: the contract row repeats the GROSS figure in the net field (totalCostWithoutVAT = totalCostWithVAT = 420.000,00, vat_percent '0'), so every net-basis aggregate counted a VAT-inclusive amount. Its own payment order 25PAY016913049 splits that same gross at 24% and states the net: 338.709,68. True net = 420.000,00 / 1,24 = 338.709,68. The signed PDF mentions ΦΠΑ once, citing the exemption procedure (ΥΑ Α.1021/07-02-2022, Β΄550) in recital 14, and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων των νόμιμων φορολογικών επιβαρύνσεων» without naming a rate — the payment order is the deciding document (DATA_DECISIONS 2026-08-17)."
+ },
+ "24SYMV015692405": {
+  "total_cost_without_vat": 319379.45,
+  "objects": {
+   "0": 319379.45
+  },
+  "reason": "Registry keying error: the contract row repeats the GROSS figure in the net field (totalCostWithoutVAT = totalCostWithVAT = 396.030,52, vat_percent '0'), so every net-basis aggregate counted a VAT-inclusive amount. Its own payment order 25PAY016929629 splits that same gross at 24% and states the net: 319.379,45. True net = 396.030,52 / 1,24 = 319.379,45. The signed PDF mentions ΦΠΑ once, citing the exemption procedure (ΥΑ Α.1021/07-02-2022, Β΄550) in recital 14, and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων των νόμιμων φορολογικών επιβαρύνσεων» without naming a rate — the payment order is the deciding document (DATA_DECISIONS 2026-08-17)."
+ },
+ "24SYMV015713189": {
+  "total_cost_without_vat": 302419.35,
+  "objects": {
+   "0": 302419.35
+  },
+  "reason": "Registry keying error: the contract row repeats the GROSS figure in the net field (totalCostWithoutVAT = totalCostWithVAT = 375.000,00, vat_percent '0'), so every net-basis aggregate counted a VAT-inclusive amount. Its own payment order 25PAY016944003 splits that same gross at 24% and states the net: 302.419,36. True net = 375.000,00 / 1,24 = 302.419,35. The payment states 302.419,36 on a gross of 375.000,01, one cent above this contract's own gross, so the stored net is 375.000,00 / 1,24 — inside the ≤€0,02 registry-noise tolerance. The signed PDF mentions ΦΠΑ once, citing the exemption procedure (ΥΑ Α.1021/07-02-2022, Β΄550) in recital 14, and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων των νόμιμων φορολογικών επιβαρύνσεων» without naming a rate — the payment order is the deciding document (DATA_DECISIONS 2026-08-17)."
+ },
+ "24SYMV015707036": {
+  "total_cost_without_vat": 302378.08,
+  "objects": {
+   "0": 302378.08
+  },
+  "reason": "Registry keying error: the contract row repeats the GROSS figure in the net field (totalCostWithoutVAT = totalCostWithVAT = 374.948,82, vat_percent '0'), so every net-basis aggregate counted a VAT-inclusive amount. Its own payment order 25PAY016924872 splits that same gross at 24% and states the net: 302.378,08. True net = 374.948,82 / 1,24 = 302.378,08. The signed PDF mentions ΦΠΑ once, citing the exemption procedure (ΥΑ Α.1021/07-02-2022, Β΄550) in recital 14, and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων των νόμιμων φορολογικών επιβαρύνσεων» without naming a rate — the payment order is the deciding document (DATA_DECISIONS 2026-08-17)."
  }
 }

@@ -5,11 +5,14 @@
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow, { type FlowLink, type FlowNode } from '$lib/charts/KindFlow.svelte';
+	import { YEAR_COLORS } from '$lib/charts/yearColors';
+	import { binByKey } from '$lib/transforms/histogram';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
+	import SideNote from '$lib/ui/SideNote.svelte';
 	import {
 		apiGetCached,
 		type DaseMapContract,
@@ -251,6 +254,34 @@
 		}))
 	);
 
+	// ---- contract values: one distribution, two encodings ----------------
+	// The dots and the brackets are the SAME contracts: both are built from
+	// the swarm array, binned client-side on the payload's own edges with the
+	// server's half-open convention (pinned in tests/test_atlas_real_db.py).
+	// That is what lets one year legend serve both modes.
+	let valueMode = $state<'dots' | 'brackets'>('dots');
+	// the dodge layout sizes itself to the tallest dot column; the brackets
+	// then draw at that height, so toggling never resizes the frame
+	let dotsHeight = $state(0);
+	const swarmYears = $derived(
+		swarm ? ([...new Set(swarm.year.filter(Boolean))].sort() as string[]) : []
+	);
+	const yearSegments = $derived(
+		swarm
+			? binByKey(
+					swarm.eur.map((v) => v ?? 0),
+					swarm.year,
+					o.histogram.edges,
+					swarmYears
+				)
+			: null
+	);
+	const VALUE_NOTES: Record<'dots' | 'brackets', string> = {
+		dots: 'Every contract is one dot on a log scale (stated €, excl. VAT). Colours are assigned according to the year the contract was signed. Hover to inspect, click through to go to the contract’s page.',
+		brackets:
+			'The same contracts counted into brackets, each one a doubling of value — which is why the bars sit on the same scale as the dots. Bar height is the number of contracts; within a bar the signature years stack in legend order, earliest at the bottom.'
+	};
+
 	// finding-title inputs — computed from the payload, never hardcoded
 	const topPe = $derived(
 		peEn([...o.by_pe.regions].sort((a, b) => b.eur - a.eur)[0]?.pe) || ''
@@ -479,17 +510,58 @@
 
 <Defer height={400}>
 {#if swarm}
-	<ChartFrame title="CONTRACT VALUES" anchor="dase-swarm">
-		<BeeswarmCanvas
-			data={swarm}
-			note="Every contract is represented as one dot on a log scale (stated €, excl. VAT). Colours are assigned according to the year the contract was signed. Hover to inspect, click through to go to the contract's page."
-		/>
+	<ChartFrame
+		title="CONTRACT VALUES"
+		caveat="Both views draw the same contracts from one list, on one axis: every bracket spans a doubling of value, which makes the equal-width slots a logarithmic scale, and the dots sit on that same scale — so a value is at the same place in both, the median line included. Colours are the signature year in both. Stated values excl. VAT; cancelled and superseded versions excluded."
+		anchor="dase-swarm"
+		methodology="dase-dedup"
+	>
+		<!-- year legend and mode switch share one line, legend left and
+		     switch against the frame's right edge: the colours mean the same
+		     thing in both modes, so the legend never changes -->
+		<div class="modes">
+			<div class="legend">
+				{#each swarmYears as y (y)}
+					<span><i style:background={YEAR_COLORS[y]}></i>{y}</span>
+				{/each}
+			</div>
+			<div class="mode" role="group" aria-label="Contract-value chart mode">
+				<button
+					type="button"
+					class:active={valueMode === 'dots'}
+					onclick={() => (valueMode = 'dots')}>Individual dots</button
+				>
+				<button
+					type="button"
+					class:active={valueMode === 'brackets'}
+					onclick={() => (valueMode = 'brackets')}>Value brackets</button
+				>
+			</div>
+		</div>
+		<SideNote note={VALUE_NOTES[valueMode]}>
+			{#if valueMode === 'dots'}
+				<BeeswarmCanvas data={swarm} edges={o.histogram.edges} bind:plotHeight={dotsHeight} />
+			{:else}
+				<LogHistogram
+					labels={o.histogram.labels}
+					counts={o.histogram.counts}
+					edges={o.histogram.edges}
+					color="var(--c-dase)"
+					median={o.histogram.median}
+					height={dotsHeight || 460}
+					segments={yearSegments}
+					segColors={swarmYears.map((y) => YEAR_COLORS[y])}
+				/>
+			{/if}
+		</SideNote>
 	</ChartFrame>
 {:else}
 	<div class="skeleton" style="height: 380px"></div>
 {/if}
 </Defer>
 
+<!-- MONEY PER YEAR keeps the half-width column it had when the size
+     histogram sat beside it -->
 <div class="pair">
 	<ChartFrame
 		title="MONEY PER YEAR"
@@ -497,20 +569,6 @@
 		anchor="dase-yearly"
 	>
 		<BarH rows={yearRows} color="var(--c-dase)" />
-	</ChartFrame>
-
-	<ChartFrame
-		title="SIZE DISTRIBUTION"
-		subtitle="{grInt(o.histogram.n)} live contracts by stated value — small sums, tight distribution."
-		anchor="dase-hist"
-	>
-		<LogHistogram
-			labels={o.histogram.labels}
-			counts={o.histogram.counts}
-			edges={o.histogram.edges}
-			color="var(--c-dase)"
-			median={o.histogram.median}
-		/>
 	</ChartFrame>
 </div>
 
@@ -907,6 +965,48 @@
 		.hero {
 			grid-template-columns: 1fr;
 		}
+	}
+	/* year legend left, mode switch hard right — one line above the chart */
+	.modes {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--sp-6);
+		flex-wrap: wrap;
+		margin: var(--sp-2) 0 var(--sp-4);
+	}
+	.mode {
+		display: inline-flex;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		overflow: hidden;
+	}
+	.mode button {
+		font: inherit;
+		font-size: var(--fs-13);
+		padding: 2px var(--sp-3);
+		border: 0;
+		background: var(--paper);
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.mode button.active {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.legend {
+		display: flex;
+		gap: var(--sp-4);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+	}
+	.legend i {
+		display: inline-block;
+		width: 0.7rem;
+		height: 0.7rem;
+		border-radius: 50%;
+		margin-right: 4px;
+		vertical-align: -1px;
 	}
 	.pair {
 		display: grid;

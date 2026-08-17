@@ -2,12 +2,14 @@
 
 Everything here composes the frozen webui query modules (`webui.queries`,
 `webui.dase_queries`) — those files are never edited; any behaviour of their
-private helpers we rely on (`q._payment_month`, `dq._org_key`) is pinned by
-the atlas test suite so a future webui refactor fails loudly here.
+private helpers we rely on (`q._payment_month`, `dq._org_key`,
+`q._bin_values`) is pinned by the atlas test suite so a future webui
+refactor fails loudly here.
 """
 from __future__ import annotations
 
 import json
+import math
 import re
 import sqlite3
 import unicodedata
@@ -771,6 +773,60 @@ def dase_contract_display(dase: sqlite3.Connection) -> dict[str, str]:
     return {ref: " | ".join(v) for ref, v in per_ref.items()}
 
 
+def _doubling_label(v: float) -> str:
+    """Bracket-edge label that survives below €1.000 (webui's `_short_eur`
+    floor-divides by 1000, so every sub-€1k edge would read «0k»)."""
+    if v >= 1_000_000:
+        return f"{v / 1_000_000:g}M".replace(".", ",")
+    if v >= 1_000:
+        return f"{v / 1_000:g}k".replace(".", ",")
+    return f"{round(v):g}"
+
+
+def dase_value_histogram(dase: sqlite3.Connection) -> dict:
+    """Value brackets for the Atlas /dase CONTRACT VALUES chart.
+
+    Same counts, different EDGES from webui's `value_histogram` (frozen,
+    and its brackets stay as they are): here every bracket is exactly one
+    doubling, anchored on €1.000 and extended to cover the live range.
+    That makes the bracket layout a true log axis — equal-width slots ARE
+    equal ratios — so the beeswarm the chart toggles with can place its
+    dots on the very same scale and the median line lands in one place in
+    both modes (DATA_DECISIONS 2026-08-17). webui's first bracket is an
+    unbounded `[0, 1000)` catch-all holding 4,5 doublings in one slot,
+    which no continuous scale can match.
+
+    Edges are DERIVED from the data (never a fixed table), so a refresh
+    that brings a smaller or larger contract widens the axis by itself.
+    The leading `0` edge keeps `_bin_values`' half-open convention intact
+    for anything below the first doubling; that bracket and the trailing
+    overflow one are normally empty.
+    """
+    values = [r[0] or 0.0 for r in dase.execute(f"""
+        SELECT co.total_cost_with_vat FROM contracts co
+        WHERE {dq.live_filter()}
+    """)]
+    live = [v for v in values if v > 0]
+    lo, hi = (min(live), max(live)) if live else (1_000.0, 1_000.0)
+    ANCHOR = 1_000.0
+    k_lo = math.floor(math.log2(lo / ANCHOR))
+    k_hi = math.ceil(math.log2(hi / ANCHOR))
+    if ANCHOR * 2 ** k_hi <= hi:            # hi exactly on an edge
+        k_hi += 1
+    edges = [0.0] + [ANCHOR * 2 ** k for k in range(k_lo, k_hi + 1)]
+
+    h = q._bin_values(values, tuple(edges))
+    values.sort()
+    h["median"] = values[len(values) // 2] if values else 0
+    h["labels"] = (
+        [f"≤{_doubling_label(edges[1])}"]
+        + [f"{_doubling_label(edges[i])}–{_doubling_label(edges[i + 1])}"
+           for i in range(1, len(edges) - 1)]
+        + [f"≥{_doubling_label(edges[-1])}"]
+    )
+    return h
+
+
 def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     """Everything the ΔΑΣΕ overview page needs (webui /dase context)."""
     names = dase_display_names(dase)
@@ -785,7 +841,7 @@ def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
         "procedures": dq.procedure_mix(dase),
         "types": dq.type_mix(dase),
         "cpvs": dq.cpv_mix(dase, limit=10),
-        "histogram": dq.value_histogram(dase),
+        "histogram": dase_value_histogram(dase),
         "by_pe": dq.money_by_pe(dase),
     }
 
