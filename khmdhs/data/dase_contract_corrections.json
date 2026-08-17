@@ -121,5 +121,25 @@
    "997841856"
   ],
   "reason": "Registry contractor list carries the parent award's awardee list. Award 25AWRD017394688 (Δ/νση Δασών Καστοριάς, Π.Δ. 126/86 κατανομή) assigns row 1 — ΔΤ 49δ, Δημόσιο Δάσος Βορείου Γράμμου, 1.320 κ.μ. οξυά, 67.400€ — to the ΣΥΜΠΡΑΞΗ of ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ and ΔΑΣΕ ΚΥΨΕΛΗΣ, executed as TWO contracts of 33.700,00 each: 25SYMV017823600 (Πεύκου Νεστορίου) and this one. The signed PDF names ΔΑ.Σ.Ε. ΚΥΨΕΛΗΣ «ΑΓ.ΠΑΡΑΣΚΕΥΗ», ΑΦΜ 997841856, and payment 25PAY017976758 pays that co-op for «Συστάδα 49Δ 1/2». ΔΑΣΕ ΟΞΥΑΣ and ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ «ΖΩΟΔΟΧΟΥ ΠΗΓΗΣ» are other rows of the same award with their own contracts and are dropped. The kept row's ΑΦΜ field glued two numbers («997106512 ΚΑΙ 997841856»), so the canonical-VAT rule was crediting the whole contract to 997106512 (Πεύκου Νεστορίου, who already holds the other half) — rewritten to the signing co-op (DATA_DECISIONS 2026-08-17)."
+ },
+ "23SYMV013066418": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a co-op contract: Δασαρχείο Αλιβερίου hires a privately owned machine from an individual earthmover — «μισθώνει για λογαριασμό του Δασαρχείου Αλιβερίου με ΑΦΜ 090273987 & Δ.Ο.Υ. ΨΥΧΙΚΟΥ, Iωάννη Μιχ. Καλόγηρο με έδρα την Κάρυστο, χωματουργό τον ιδιόκτητό τους Φορτωτή CATERPILLAR Τύπος 966C … αντί τιμήματος παραγωγικής ώρας». No forest co-operative is a party. It entered this contractor-led dataset only because its contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the awarding side (DATA_DECISIONS 2026-08-18). Its payment order 23PAY013718656 is excluded with it."
+ },
+ "23SYMV013322265": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a co-op contract: a stand-rental agreement for the forest pavilion at the 87th Thessaloniki International Fair — «αφετέρου η εταιρεία με την επωνυμία «Δ.Ε.Θ.-HELEXPO A.E.», με Α.Φ.Μ. 099356797, Δ.Ο.Υ. ΦΑΕ Θεσσαλονίκης». The registry names ΔΕΘ-HELEXPO Α.Ε. as the contractor, which is not a forest co-operative and holds no other contract here. It entered this contractor-led dataset only because its contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the awarding side (DATA_DECISIONS 2026-08-18)."
+ },
+ "24SYMV015485196": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a co-op contract: «αφετέρου η επιχείρηση με την επωνυμία «Α.Δρόσος & ΣΙΑ ΟΕ» με έδρα Θεσ/νίκη … και Α.Φ.Μ. 082356387 Δ.Ο.Υ. Η΄Θεσ/νίκης». A company, named as such in the registry too, with no other contract here. It entered this contractor-led dataset only because its contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the awarding side (DATA_DECISIONS 2026-08-18)."
+ },
+ "24SYMV015682407": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a co-op contract: «2.Η Τοφέα Αναστασία (Αλουμινοκατασκευές - Σιδηροκατασκευές) – Αυξέντιο Ξάνθης … ΑΦΜ: 133510498», an aluminium/steel fabricator awarded by 24AWRD015613805. Not a forest co-operative, and it holds no other contract here. It entered this contractor-led dataset only because its contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the awarding side (DATA_DECISIONS 2026-08-18)."
  }
 }

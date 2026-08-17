@@ -1062,5 +1062,9 @@
  "25PAY017210585": {
   "exclude": true,
   "reason": "Payment of 25SYMV016837212, excluded with its contract: the signed contract is Δήμος Θέρμης with Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε, not a forest co-op, so it leaves this contractor-led dataset. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report company money as co-op pay (DATA_DECISIONS 2026-08-17)."
+ },
+ "23PAY013718656": {
+  "exclude": true,
+  "reason": "Payment of 23SYMV013066418, excluded with its contract: the signed contract hires a privately owned loader from the earthmover Ιωάννης Μιχ. Καλόγηρος, not a forest co-operative. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report machine-hire money as co-op pay (DATA_DECISIONS 2026-08-18)."
  }
 }

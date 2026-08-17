@@ -3267,3 +3267,55 @@ contract existed in this procurement, when one does. Nothing counted
 changes (the contract was already excluded); the page simply stops
 listing eleven parties it never had and now links the co-op's real
 contract.
+
+## 2026-08-18 — Awardee review, batch B: four contracts whose signed PDF names no co-operative leave the ΔΑΣΕ population
+
+`scripts/audit_contract_awardees.py` screens every stored contract's
+registry contractor list against the ΑΦΜ its signed PDF announces. Of the
+2.164 contracts it flags 96 for human review; this entry closes the first
+13 (the 11 `vat_mismatch_name_ok` + the 2 `over_attributed`).
+
+**The root cause of the batch**: nine contracts carry **090273987** — the
+ΑΦΜ of the **Ελληνικό Δημόσιο**, i.e. the AWARDING side — in their
+contractor ΑΦΜ field. Because co-ops key on the canonical ΑΦΜ, those nine
+fused into one fictitious co-op that the ranking presented as «ΔΑ.Σ.Ε.
+Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ», 9 contracts, €49.145 net. Four of the nine are
+not co-op contracts at all and are EXCLUDED here (user verdict: «for the B
+GO AHEAD»); the five that are real co-op contracts under a mis-keyed ΑΦΜ
+are batch A, still open.
+
+**Excluded (`exclude` + `related_to: ""`), each quoting its PDF:**
+- **23SYMV013066418** €15.322,00 — Δασαρχείο Αλιβερίου hires a privately
+  owned CAT 966C loader from the earthmover Ιωάννης Μιχ. Καλόγηρος «αντί
+  τιμήματος παραγωγικής ώρας». Machine hire from an individual.
+- **23SYMV013322265** €5.610,00 — a stand-rental agreement for the forest
+  pavilion at the 87th Thessaloniki International Fair with «Δ.Ε.Θ.-HELEXPO
+  A.E.», ΑΦΜ 099356797. Named as ΔΕΘ-HELEXPO in the registry too.
+- **24SYMV015485196** €1.048,39 — «Α.Δρόσος & ΣΙΑ ΟΕ», ΑΦΜ 082356387.
+- **24SYMV015682407** €645,16 — «Τοφέα Αναστασία (Αλουμινοκατασκευές -
+  Σιδηροκατασκευές)», ΑΦΜ 133510498, awarded by 24AWRD015613805.
+
+None of the four names a co-op even in the registry: they entered this
+contractor-led dataset solely through the State ΑΦΜ. 23SYMV013066418's
+payment order 23PAY013718656 (€18.748,80 net) is excluded with it, because
+the paid KPI sums payments without joining to contracts.
+
+**Also examined, no action:** the two `over_attributed` flags are
+wrong-PDF uploads, not attribution errors — 24SYMV016100355 has a
+Βιοστερεά Α.Ε. composting contract attached, but its award act
+24AWRD016046059 awards «Κλάδεμα μεγάλων δένδρων» to the co-op for
+€13.640 incl. ΦΠΑ = the stored €11.000 net exactly, so the metadata is
+right and the attachment wrong; 22SYMV011841987 is a cancelled posting
+carrying the Βαρβάρας document while its live siblings (Κρυονερίου,
+Βαρβάρας, Αγιόκαμπου) are each correct. 24SYMV014934504 and
+23SYMV012239508 are extractor artefacts (the PDF's only labelled ΑΦΜ is
+the awarder's; registry name and ΑΦΜ agree), and 23SYMV013747204 is the
+jointly signed contract split earlier today.
+
+*Affects: ΔΑΣΕ live population **2.006 → 2.002**, stated net
+€30.881.588,14 → **€30.858.962,59**, gross €38.043.318,37 →
+€38.015.262,69; paid net €20.728.414,02 → **€20.709.665,22** and 962 →
+961 orders; n_cancelled 94 → 98; /compare ratio ≈21,4×. The phantom
+090273987 co-op still holds the five batch-A contracts (€26.520) pending
+that verdict. All four excluded pages stay reachable and badged «outside
+the dataset».*

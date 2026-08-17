@@ -207,6 +207,12 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=25)
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    # the report prints Greek names; a cp1252 console would kill the run
+    # halfway through (and before the report file is written)
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except AttributeError:                      # pragma: no cover
+        pass
 
     conn = sqlite3.connect(args.db)
     conn.row_factory = sqlite3.Row

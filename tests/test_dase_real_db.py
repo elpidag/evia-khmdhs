@@ -23,11 +23,11 @@ def conn():
 def test_population_pins(conn):
     k = dq.kpis(conn)
     assert k["gross_n"] == 2164
-    assert k["n_cancelled"] == 94   # 82 registry + 10 double-postings
+    assert k["n_cancelled"] == 98   # 82 registry + 10 double-postings
                                 # + 2 not-a-co-op contracts (2026-08-17)
     assert k["n_superseded"] == 64
-    assert k["n_contracts"] == 2006
-    assert k["total_eur"] == pytest.approx(38_043_318.37, abs=0.01)
+    assert k["n_contracts"] == 2002
+    assert k["total_eur"] == pytest.approx(38_015_262.69, abs=0.01)
     assert k["n_coops"] >= 245
     assert k["pct_direct"] > 90
 
