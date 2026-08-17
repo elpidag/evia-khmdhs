@@ -2553,6 +2553,37 @@ four judged here.
 962 orders (the 5 Θέρμης payments); n_cancelled 92 → 94; n_consortium
 19 → 1. Both excluded contracts keep reachable, badged pages.*
 
+**Amendment, same day (user):** an out-of-scope contract must not READ
+as cancelled. `cancelled = 1` is only the exclusion MECHANISM that these
+two records share with genuine registry cancellations and with
+double-postings — 25SYMV016837212 was never withdrawn: Δήμος Θέρμης
+signed it, it was performed, and it is simply somebody else's contract.
+A third marker `contracts.related_to` (ALTER guard in `db.py`, written
+by the same `exclude` correction) now records WHY: the in-scope sibling
+ΑΔΑΜ of the same procurement, or `""` when there is none. Its page opens
+with «Related contract, outside this dataset …» instead of the
+double-posting banner, its facts chip reads «outside the dataset», and —
+the visible defect the user caught — the ΚΗΜΔΗΣ **document trail on BOTH
+pages** now labels the row «outside the dataset» (neutral) rather than
+«cancelled» (warning). The trail took its label from `cancelled` alone,
+so the co-op's own page 25SYMV016885520 kept announcing a cancellation
+that never happened. `queries_extra.contract_timeline` therefore ships
+each in-db sibling's `duplicate_of` / `related_to` beside the flag
+(column-guarded so an older DB file degrades instead of failing), and
+one rule — `$lib/transforms/exclusion.ts:trailChip` — decides the label
+for both the ΔΑΣΕ and the Anti-nero contract pages, and for the contract
+list. Tone follows the fact: a cancellation and a double-posting stay
+WARNING chips (something went wrong, in the procurement or in the
+registry), «outside the dataset» is neutral (nothing is wrong with the
+contract; it is simply somebody else's). The search-reachability rule of
+2026-08-14 was widened with it — `dase_duplicate_hits` →
+**`dase_excluded_hits`**, so citing either excluded ΑΔΑΜ finds its page
+badged with its own reason instead of returning nothing; excluded rows
+are appended after the total is summed, so they stay uncounted.
+**No calculation changes**: the exclusion is still `cancelled = 1`.
+Pinned by `exclusion.test.ts` (6 cases) and the real-DB API pin
+`test_excluded_sibling_states_its_reason_not_a_cancellation`.
+
 ## 2026-08-17 — Scanned/odd payment documents all read by eye: 35 confirmed, 26 corrected, 4 exclusions REVERSED as proven instalments — every ΔΑΣΕ payment order is now document-checked
 
 The closing pass of the payment audit (user: «visually read all 42»).
@@ -3162,3 +3193,67 @@ co-op layers, closed vocabularies, the ≥3× δασαρχεία gap, every name
 co-op carrying a curated display name, at least one top co-op served
 only by non-forest bodies, and a cross-check that the units marginal
 equals the /dase map's own circle classification.*
+
+## 2026-08-18 — Jointly signed ΔΑΣΕ contracts are split EVENLY between the co-ops, not credited whole to each
+
+User decision, on the last inflation left in the co-op figures: «are you
+assigning the whole amount of the contract to both ΔΑΣΕ ΠΕΤΡΟΛΟΦΟΥ
+[096121014] and ΔΑΣΕ ΣΙΔΗΡΟΧΩΡΙΟΥ [096067226]? because that would be
+inflating the numbers again!» — we were, and it did.
+
+**The case.** 23SYMV013747204 (Δασαρχείο Αλεξανδρούπολης, 18.09.2023,
+€5.383,95 net) is the ONE live contract signed by two co-ops. Its PDF
+names «ο Ισταμπόλ Χασάν & Πυρελή Χουσεΐν, νόμιμος εκπρόσωπος του ΔΑ.Σ.Ε.
+Σιδηροχωρίου & Πετρολόφου (ΑΦΜ 096067226 & 096121014)», who
+«**συμφώνησαν από κοινού**» over ONE pooled quantity — 250,3 χ.κ.μ. oak
+at unit prices (9,27 €/χ.κ.μ. υλοτομία, 12,24 €/χ.κ.μ. μεταφορά). No
+share appears in the contract, in the award or in the registry, and the
+contract has no payment orders to disambiguate.
+
+**Rule.** The Atlas splits such a contract EVENLY between its partners on
+every per-co-op surface — the ranking, /dase/coops, and the co-op page's
+summary, per-year bars and per-awarder table. The Anti-nero
+maximum-exposure convention (2026-05-09) is untouched; this is the ΔΑΣΕ
+side only, and the site footer plus /methodology now state both. The
+split is the same convention the region maps and `pipelines` already use.
+
+**Why even, not something else.** «Από κοινού» with one representative
+per co-op is as close as the document comes to declaring a share, and an
+even split is the only rule that keeps per-co-op totals ADDABLE: they now
+sum to the live basis €30.881.588,14 exactly, where full attribution
+summed to €30.886.972,09 — €5.383,95 of double counting. Contract COUNTS
+stay whole (each co-op does hold the contract, jointly), and the contract
+keeps its own stated value everywhere, with the co-op's `share_eur`
+printed beside it on the co-op page and explained in a footnote.
+
+**Mechanism** (`atlas_api/queries_extra.py`, webui frozen):
+`dase_coop_shares` finds live contracts with >1 distinct canonical ΑΦΜ and
+allocates whole CENTS (`_even_cents` — the odd cent goes to the first
+partner by ΑΦΜ, so halving €5.383,95 loses nothing and the allocation is
+stable); `dase_coops` / `dase_coop_detail` give the over-credit back.
+Gotcha found and fixed while building it: the per-awarder table groups by
+(unit, org) and the same Δασαρχείο appears under both ΥΠΕΝ and its
+Αποκεντρωμένη, so matching the shared contract on the unit NAME alone
+subtracted the share TWICE; every breakdown must sum to the co-op's own
+total, and that is now a test.
+
+*Affects: ΔΑΣΕ ΣΙΔΗΡΟΧΩΡΙΟΥ €138.766,86 → **€136.074,89** (share
+€2.691,98), ΔΑΣΕ ΠΕΤΡΟΛΟΦΟΥ €68.993,53 → **€66.301,55** (share
+€2.691,97); Σ co-op € now == the basis. No KPI, chart of contracts, map
+or payment figure changes — the contract itself is untouched. Pinned by
+`test_coop_totals_are_even_split_and_sum_to_the_basis` (real DB) and four
+unit tests incl. the double-subtraction guard.*
+
+**Same-day companion fix.** 25SYMV016837212 (excluded 2026-08-17 as
+not-a-co-op) still LISTED ΔΑ.Σ.Ε. ΜΟΔΙΟΥ as a contractor on its page,
+because the exclusion only removed it from the calculations. The registry
+row is a paste of the parent award's awardee list; the signed contract
+names Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε (ΑΦΜ 999030521) alone. The curated
+correction now carries `contractors_keep: ["999030521"]`, so the co-op
+row is deleted and no page presents ΜΟΔΙΟΥ as a party to a contract it
+never signed — it keeps its own lot, 25SYMV016885520. The real-DB test
+that every stored contract has a curated co-op contractor now exempts
+`related_to` rows explicitly (that claim is exactly what those exclusions
+disproved). 25SYMV017324270 carries the same defect — its record lists
+all eleven framework operators, one of them ΔΑΣΕ ΔΟΛΙΑΝΩΝ — and is left
+as-is pending the same verdict.

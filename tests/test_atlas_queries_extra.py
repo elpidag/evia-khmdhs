@@ -184,6 +184,112 @@ def test_pipelines_zero_overlap_and_name_grouped_awarders(kh):
     dase.close()
 
 
+# --------------------------------------------------- ΔΑΣΕ even-split rule
+
+@pytest.mark.parametrize("total,n,expected", [
+    (538395, 2, [269198, 269197]),      # odd cent goes to the first partner
+    (1000, 2, [500, 500]),
+    (100, 3, [34, 33, 33]),
+    (0, 2, [0, 0]),
+])
+def test_even_cents_sums_back_exactly(total, n, expected):
+    parts = qx._even_cents(total, n)
+    assert parts == expected
+    assert sum(parts) == total
+
+
+def _dase_with(contracts):
+    from khmdhs.db import SCHEMA_SQL as S
+    from tests.test_dase_queries import add as add_dase, curate
+    dase = sqlite3.connect(":memory:")
+    dase.row_factory = sqlite3.Row
+    dase.executescript(S)
+    dase.executescript(
+        "CREATE TABLE dase_contractors (vat_number TEXT PRIMARY KEY,"
+        " name TEXT NOT NULL, form TEXT, basis TEXT, curated_at TEXT NOT NULL);")
+    for vat in {v for _, _, vats in contracts for v in vats}:
+        curate(dase, vat, name=f"ΔΑΣΕ {vat}")
+    for ref, eur, vats in contracts:
+        add_dase(dase, ref, eur=eur, vats=vats)
+    dase.commit()
+    return dase
+
+
+def test_jointly_signed_contracts_split_evenly_between_co_ops():
+    """A contract signed by two co-ops is credited half to each, so the
+    per-co-op column adds up to the live basis instead of counting the
+    same euros twice (user decision, DATA_DECISIONS 2026-08-17). The
+    contract COUNT stays 1 for both — each really does hold it."""
+    dase = _dase_with([
+        ("23SYMV000000001", 5383.95, ("096000001", "096000002")),   # joint
+        ("23SYMV000000002", 1000.00, ("096000001",)),               # solo
+    ])
+    rows = {a["vat"]: a for a in qx.dase_coops(dase)}
+    assert rows["096000001"]["total_eur"] == pytest.approx(1000.00 + 2691.98)
+    assert rows["096000002"]["total_eur"] == pytest.approx(2691.97)
+    assert rows["096000001"]["n_contracts"] == 2
+    assert rows["096000002"]["n_contracts"] == 1
+    # the invariant the split exists for: co-op totals sum to the basis
+    from webui import dase_queries as dq
+    assert round(sum(a["total_eur"] for a in rows.values()), 2) == \
+        pytest.approx(dq.kpis(dase)["total_eur"])
+    dase.close()
+
+
+def test_solo_contracts_are_never_touched_by_the_split():
+    dase = _dase_with([("23SYMV000000001", 1234.56, ("096000001",))])
+    assert qx.dase_coop_shares(dase) == {}
+    assert qx.dase_coops(dase)[0]["total_eur"] == pytest.approx(1234.56)
+    dase.close()
+
+
+def test_coop_detail_units_never_double_subtract_a_shared_share():
+    """The awarder table groups by (unit, org): the same Δασαρχείο appears
+    under ΥΠΕΝ and under its Αποκεντρωμένη Διοίκηση. Matching the shared
+    contract on the unit NAME alone gave the share back to BOTH groups —
+    the table then under-reported by a whole share. Every breakdown must
+    still sum to the co-op's own total."""
+    from webui import dase_queries as dq
+    dase = _dase_with([("23SYMV000000001", 5383.95,
+                        ("096000001", "096000002"))])
+    dase.execute("UPDATE contracts SET organization_name = 'ΑΠΟΚΕΝΤΡΩΜΕΝΗ' "
+                 "WHERE reference_number = '23SYMV000000002'")
+    from tests.test_dase_queries import add as add_dase
+    add_dase(dase, "23SYMV000000003", eur=1000.0, vats=("096000001",),
+             org="ΑΠΟΚΕΝΤΡΩΜΕΝΗ")          # same unit, different awarder
+    dase.commit()
+    vat = "096000001"
+    out = qx.dase_coop_detail(
+        dase, vat, dq.coop_summary(dase, vat), dq.coop_contracts(dase, vat),
+        dq.coop_yearly(dase, vat), dq.coop_units(dase, vat))
+    assert len(out["units"]) == 2
+    total = out["summary"]["total_eur"]
+    assert round(sum(u["total_eur"] for u in out["units"]), 2) == pytest.approx(total)
+    assert round(sum(y["eur"] for y in out["yearly"]), 2) == pytest.approx(total)
+    dase.close()
+
+
+def test_coop_detail_marks_the_shared_contract_and_splits_its_totals():
+    """The co-op page must explain the difference it shows: the contract
+    keeps its own stated value, the co-op's share rides beside it, and
+    summary/yearly/units all count the share."""
+    dase = _dase_with([("23SYMV000000001", 5383.95,
+                        ("096000001", "096000002"))])
+    from webui import dase_queries as dq
+    vat = "096000001"
+    out = qx.dase_coop_detail(
+        dase, vat, dq.coop_summary(dase, vat), dq.coop_contracts(dase, vat),
+        dq.coop_yearly(dase, vat), dq.coop_units(dase, vat))
+    assert out["summary"]["total_eur"] == pytest.approx(2691.98)
+    c = out["contracts"][0]
+    assert c["total_cost_with_vat"] == pytest.approx(5383.95)   # unchanged
+    assert c["share_eur"] == pytest.approx(2691.98)
+    assert c["n_parties"] == 2
+    assert out["yearly"][0]["eur"] == pytest.approx(2691.98)
+    assert out["units"][0]["total_eur"] == pytest.approx(2691.98)
+    dase.close()
+
+
 # -------------------------------------------------------------- pe-yearly
 
 def test_money_by_pe_yearly_splits_and_buckets(kh):

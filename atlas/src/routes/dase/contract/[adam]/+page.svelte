@@ -3,6 +3,7 @@
 	import { ruLabel } from '$lib/transforms/regions';
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
+	import { isOutOfScope, trailChip } from '$lib/transforms/exclusion';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
 	import FamilyTree from '$lib/charts/FamilyTree.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
@@ -13,6 +14,10 @@
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.c);
 	const live = $derived(c.payments.filter((p) => !p.cancelled));
+	// excluded because no co-op is a party to it — the registry cancelled
+	// nothing, so the page must not say «cancelled» (related_to is set by
+	// the curated correction, '' when no in-scope sibling exists)
+	const outOfScope = $derived(isOutOfScope(c));
 
 	// English document-type labels (user template, 2026-08-17)
 	const KIND: Record<string, string> = {
@@ -46,6 +51,8 @@
 			title: c.title,
 			d: (c.contract_signed_date ?? '').slice(0, 10) || null,
 			cancelled: c.cancelled ?? 0,
+			duplicate_of: c.duplicate_of ?? null,
+			related_to: c.related_to ?? null,
 			in_db: true,
 			who: c.contractors[0]?.name ?? null,
 			self: true
@@ -69,7 +76,7 @@
 			title: t.title ?? null,
 			pdf: pdfHref(t),
 			self: t.self,
-			chip: t.cancelled === 1 ? 'cancelled' : undefined
+			...trailChip(t)
 		}))
 	);
 
@@ -113,6 +120,18 @@
 		document and is excluded from every calculation — the counted posting is
 		<a href={`/dase/contract/${c.duplicate_of}`} class="tabular">{c.duplicate_of}</a>.
 	</div>
+{:else if outOfScope}
+	<!-- a valid, uncancelled contract that simply is not a co-op contract:
+	     the registry listed a co-op among its contractors, the signed PDF
+	     names someone else. Saying «cancelled» here would be a lie. -->
+	<div class="dupbanner">
+		<strong>Related contract, outside this dataset.</strong> The signed contract names no forest
+		co-operative as a party, so it is shown for reference and excluded from every calculation.
+		{#if c.related_to}
+			The co-operative's own contract in the same procurement is
+			<a href={`/dase/contract/${c.related_to}`} class="tabular">{c.related_to}</a>.
+		{/if}
+	</div>
 {/if}
 {#if c.duplicates?.length}
 	<p class="muted dupnote">
@@ -130,7 +149,8 @@
 		<dt class="id">Contract (ΑΔΑΜ)</dt>
 		<dd class="id">
 			{c.reference_number}
-			{#if c.cancelled}<span class="chip bad">cancelled</span>{/if}
+			{#if outOfScope}<span class="chip">outside the dataset</span>
+			{:else if c.cancelled}<span class="chip bad">cancelled</span>{/if}
 		</dd>
 		<dt>Date</dt>
 		<dd>{dmy(c.contract_signed_date) || '—'}</dd>
@@ -200,7 +220,10 @@
 		</dd>
 		<dt>Status</dt>
 		<dd>
-			{#if c.cancelled}
+			{#if outOfScope}
+				outside the dataset
+				<small class="muted">— no forest co-operative is a party to this contract</small>
+			{:else if c.cancelled}
 				cancelled
 			{:else}
 				no completion record trackable

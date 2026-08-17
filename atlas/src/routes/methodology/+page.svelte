@@ -105,10 +105,18 @@
 
 	<h2 id="max-exposure">Maximum-exposure convention</h2>
 	<p>
-		Per-contractor pages count consortium contracts <strong>in full for each partner</strong> —
-		the registry does not split consortium money, so per-entity totals answer “how much contract
-		value is this company party to”, not “how much did it invoice”. Summing per-contractor
-		totals therefore over-counts; programme totals never use this convention.
+		Anti-nero per-contractor pages count consortium contracts
+		<strong>in full for each partner</strong> — the registry does not split consortium money, so
+		per-entity totals answer “how much contract value is this company party to”, not “how much
+		did it invoice”. Summing per-contractor totals therefore over-counts; programme totals never
+		use this convention.
+	</p>
+	<p>
+		The <strong>forest co-op side does the opposite</strong>: a contract signed by several co-ops
+		jointly is split evenly between them, on the ranking, in the co-op list and on each co-op's
+		own page (its contract row shows both the contract's value and the co-op's share). Joint
+		contracts are vanishingly rare there and the documents state no shares, so the even split
+		keeps every co-op total addable — they sum to the dataset's stated total exactly.
 	</p>
 
 	<h2 id="procedures">Procedures and thresholds</h2>

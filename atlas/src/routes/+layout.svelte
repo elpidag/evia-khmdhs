@@ -125,8 +125,9 @@
 				</p>
 				<p class="fine">
 					Source: ΚΗΜΔΗΣ (KHMDHS) open data + Διαύγεια · data as of
-					{(data.meta.generated ?? '').slice(0, 10)} · all € net of ΦΠΑ · consortium contract
-					values are counted in full for each partner · <a href="/methodology">methodology</a>
+					{(data.meta.generated ?? '').slice(0, 10)} · all € net of ΦΠΑ · joint contracts count in
+					full for each partner on Anti-nero, split evenly on co-op works ·
+					<a href="/methodology">methodology</a>
 				</p>
 			{:else}
 				<p class="fine">API unavailable — start it with <code>python -m atlas_api</code>.</p>

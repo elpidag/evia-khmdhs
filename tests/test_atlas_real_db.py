@@ -169,6 +169,73 @@ def test_dase_sperheiada_batch_relinks(client):
     conn.close()
 
 
+def test_excluded_sibling_states_its_reason_not_a_cancellation(client):
+    """25SYMV016837212 is a valid, uncancelled ΚΗΜΔΗΣ contract that simply
+    names no co-op (DATA_DECISIONS 2026-08-17). It leaves the calculations
+    through `cancelled = 1` like every other exclusion, so the procurement
+    trail on its sibling's page — and on its own — must carry the REASON
+    (`related_to`) beside the flag; without it the row reads «cancelled»,
+    i.e. withdrawn, which it was not."""
+    d = client.get("/api/dase/contract/25SYMV016885520").get_json()
+    sib = [t for t in d["timeline"]
+           if t["adam"] == "25SYMV016837212"]
+    assert len(sib) == 1
+    assert sib[0]["cancelled"] == 1
+    assert sib[0]["related_to"] == "25SYMV016885520"
+    assert sib[0]["duplicate_of"] is None
+    own = client.get("/api/dase/contract/25SYMV016837212").get_json()
+    assert own["related_to"] == "25SYMV016885520"
+    # the kept sibling itself carries neither marker
+    back = [t for t in own["timeline"] if t["adam"] == "25SYMV016885520"]
+    assert len(back) == 1 and back[0]["cancelled"] == 0
+    assert back[0]["related_to"] is None
+    # the second out-of-scope contract has no in-scope sibling to point at
+    # — an empty string, still not a cancellation
+    alone = client.get("/api/dase/contract/25SYMV017324270").get_json()
+    assert alone["related_to"] == "" and alone["duplicate_of"] is None
+    # a genuine double-posting keeps reporting itself as one: the two
+    # exclusions must stay distinguishable on every surface
+    dup = client.get("/api/dase/contract/21SYMV009363348").get_json()
+    assert dup["duplicate_of"] == "21SYMV009363115"
+    assert dup["related_to"] is None
+
+
+def test_coop_totals_are_even_split_and_sum_to_the_basis(client):
+    """23SYMV013747204 is the one live contract two co-ops signed jointly
+    («συμφώνησαν από κοινού», one pooled quantity at unit prices, no share
+    stated anywhere). It is split evenly (user decision, DATA_DECISIONS
+    2026-08-17), so the per-co-op column adds up to the live basis exactly
+    instead of counting €5.383,95 twice — the strongest available check
+    that no co-op total is inflated."""
+    coops = client.get("/api/dase/coops").get_json()
+    basis = client.get("/api/dase/overview").get_json()["kpis"]["total_eur"]
+    assert round(sum(c["total_eur"] for c in coops), 2) == pytest.approx(basis)
+    by_vat = {c["vat"]: c for c in coops}
+    assert by_vat["096067226"]["total_eur"] == pytest.approx(136_074.89)
+    assert by_vat["096121014"]["total_eur"] == pytest.approx(66_301.55)
+    # both still HOLD the contract — only the € are halved
+    for vat, n in (("096067226", 14), ("096121014", 9)):
+        assert by_vat[vat]["n_contracts"] == n
+    detail = client.get("/api/dase/coop/096121014").get_json()
+    assert detail["summary"]["total_eur"] == pytest.approx(66_301.55)
+    shared = [c for c in detail["contracts"]
+              if c["reference_number"] == "23SYMV013747204"]
+    assert len(shared) == 1
+    assert shared[0]["n_parties"] == 2
+    assert shared[0]["share_eur"] == pytest.approx(2_691.97)
+    # the contract's own page keeps the contract's own value
+    assert shared[0]["total_cost_with_vat"] == pytest.approx(5_383.95)
+    other = [c for c in client.get("/api/dase/coop/096067226").get_json()["contracts"]
+             if c["reference_number"] == "23SYMV013747204"]
+    assert len(other) == 1
+    # no cent lost in the halving: the two shares rebuild the contract
+    assert shared[0]["share_eur"] + other[0]["share_eur"] == pytest.approx(5_383.95)
+    # every breakdown on the page adds up to the page's own total
+    total = detail["summary"]["total_eur"]
+    assert round(sum(y["eur"] for y in detail["yearly"]), 2) == pytest.approx(total)
+    assert round(sum(u["total_eur"] for u in detail["units"]), 2) == pytest.approx(total)
+
+
 def test_dase_value_modes_are_one_population(client):
     """CONTRACT VALUES draws the same contracts as dots or as value
     brackets, and the brackets are binned CLIENT-side from the swarm array

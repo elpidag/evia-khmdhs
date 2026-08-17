@@ -103,11 +103,29 @@
 					<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
 					<td><a href={`/dase/contract/${r.reference_number}`}>{r.title ?? r.reference_number}</a></td>
 					<td class="muted"><small>{r.units_operator_name ?? '—'}</small></td>
-					<td class="num">{eur(r.total_cost_with_vat)}</td>
+					<td class="num">
+						{eur(r.total_cost_with_vat)}
+						{#if r.share_eur !== undefined}
+							<br /><small class="muted"
+								>signed with {(r.n_parties ?? 2) - 1} other co-op{(r.n_parties ?? 2) > 2
+									? 's'
+									: ''} · {eur(r.share_eur)} counted here</small
+							>
+						{/if}
+					</td>
 				</tr>
 			{/each}
 		</tbody>
 	</table>
+	{#if b.contracts.some((r) => r.share_eur !== undefined)}
+		<p class="muted">
+			<small
+				>A contract signed jointly by several co-ops is split evenly between them: the table
+				shows each contract's own stated value, while this co-op's totals count its share.
+				Neither the registry nor the signed document records who took what.</small
+			>
+		</p>
+	{/if}
 </section>
 
 <style>

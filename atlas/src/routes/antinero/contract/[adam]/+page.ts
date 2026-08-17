@@ -22,6 +22,10 @@ export interface ContractDetail {
 	next_reference_no: string | null;
 	/** registry double-posting: the kept twin's ΑΔΑΜ (this row is excluded) */
 	duplicate_of?: string | null;
+	/** out of scope — the signed PDF names no qualifying party. Holds the
+	 *  in-scope sibling ΑΔΑΜ of the same procurement, '' when there is none.
+	 *  NOT a cancellation and NOT a duplicate (DATA_DECISIONS 2026-08-17). */
+	related_to?: string | null;
 	/** curated correction note (dase corrections) */
 	correction_note?: string | null;
 	/** ΑΔΑΜs of double-postings of THIS contract (kept side) */
@@ -98,6 +102,11 @@ export interface ContractDetail {
 		title: string | null;
 		d: string | null;
 		cancelled: number;
+		/** in-db contract rows — WHY the sibling is excluded, so the trail
+		 *  never prints «cancelled» over a double-posting or an out-of-scope
+		 *  contract (both carry cancelled = 1 as their exclusion mechanism) */
+		duplicate_of?: string | null;
+		related_to?: string | null;
 		in_db: boolean;
 		/** in-db contract rows: first contractor name (family diagram labels) */
 		who?: string | null;

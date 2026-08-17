@@ -23,6 +23,10 @@ export interface CoopBundle {
 		contract_signed_date: string | null;
 		units_operator_name: string | null;
 		total_cost_with_vat: number | null;
+		/** set only on contracts signed jointly with other co-ops: how many
+		 *  parties, and this co-op's even share (what the totals count) */
+		n_parties?: number;
+		share_eur?: number;
 	}[];
 	yearly: { year: string; n: number; eur: number }[];
 	units: { unit: string | null; org: string | null; n_contracts: number; total_eur: number }[];

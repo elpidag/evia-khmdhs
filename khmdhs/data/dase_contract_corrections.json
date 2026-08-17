@@ -102,11 +102,16 @@
  },
  "25SYMV017324270": {
   "exclude": true,
-  "reason": "Not a co-op contract: the signed PDF is between Περιφέρεια Θεσσαλίας (ΑΦΜ 997844846) and ΧΑΤΖΗΓΑΚΗΣ ΤΕΧΝΙΚΗ ΑΕ (ΑΦΜ 094311510) alone — «καλούμενος εφεξής ο Ανάδοχος», signed «ΓΙΑ ΤΗΝ ΑΝΑΔΟΧΟ ΕΤΑΙΡΕΙΑ» — an hourly machinery-hire call-off under the Daniel/Elias storm-damage framework. The ΚΗΜΔΗΣ record lists all ELEVEN operators of that framework (award 25AWRD017318485), among them ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΟΛΙΑΝΩΝ, which is why the contract entered this contractor-led dataset at all. The co-op signed nothing here, so the contract leaves the population (DATA_DECISIONS 2026-08-17)."
+  "reason": "Not a co-op contract: the signed PDF is between Περιφέρεια Θεσσαλίας (ΑΦΜ 997844846) and ΧΑΤΖΗΓΑΚΗΣ ΤΕΧΝΙΚΗ ΑΕ (ΑΦΜ 094311510) alone — «καλούμενος εφεξής ο Ανάδοχος», signed «ΓΙΑ ΤΗΝ ΑΝΑΔΟΧΟ ΕΤΑΙΡΕΙΑ» — an hourly machinery-hire call-off under the Daniel/Elias storm-damage framework. The ΚΗΜΔΗΣ record lists all ELEVEN operators of that framework (award 25AWRD017318485), among them ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΟΛΙΑΝΩΝ, which is why the contract entered this contractor-led dataset at all. The co-op signed nothing here, so the contract leaves the population (DATA_DECISIONS 2026-08-17).",
+  "related_to": ""
  },
  "25SYMV016837212": {
   "exclude": true,
-  "reason": "Not a co-op contract: the signed PDF is between Δήμος Θέρμης (ΑΦΜ 997612550) and Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε (ΑΦΜ 999030521) alone. Its award (25AWRD016779969) split the procurement in two lots — ομάδα Α to that company for 226.014,80 (= this contract's gross to the cent), ομάδα Β to ΔΑΣΕ Μοδίου for 111.600,00, which is the SEPARATE stored contract 25SYMV016885520. The ΚΗΜΔΗΣ record wrongly adds ΔΑΣΕ Μοδίου to the company's lot, crediting the co-op 182.270,00 net it never signed for while it already holds its own lot. Its five payment orders are excluded with it (DATA_DECISIONS 2026-08-17)."
+  "reason": "Not a co-op contract: the signed PDF is between Δήμος Θέρμης (ΑΦΜ 997612550) and Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε (ΑΦΜ 999030521) alone. Its award (25AWRD016779969) split the procurement in two lots — ομάδα Α to that company for 226.014,80 (= this contract's gross to the cent), ομάδα Β to ΔΑΣΕ Μοδίου for 111.600,00, which is the SEPARATE stored contract 25SYMV016885520. The ΚΗΜΔΗΣ record wrongly adds ΔΑΣΕ Μοδίου to the company's lot, crediting the co-op 182.270,00 net it never signed for while it already holds its own lot. Its five payment orders are excluded with it, and the ΔΑΣΕ Μοδίου contractor row is deleted so the page cannot present the co-op as a party to a contract it never signed (DATA_DECISIONS 2026-08-17).",
+  "related_to": "25SYMV016885520",
+  "contractors_keep": [
+   "999030521"
+  ]
  },
  "25SYMV017867270": {
   "contractors_keep": [

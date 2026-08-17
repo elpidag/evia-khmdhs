@@ -48,11 +48,18 @@ def apply_contract_corrections(conn: sqlite3.Connection,
     with conn:
         for ref, fix in data.items():
             if fix.get("exclude"):
+                # `related_to` marks an out-of-scope contract (its signed PDF
+                # names no qualifying party) as opposed to a double-posting:
+                # both leave the calculations via cancelled = 1, but only a
+                # duplicate is a duplicate, and the page must not read as a
+                # cancellation. Its value is the sibling ΑΔΑΜ of the same
+                # procurement that IS in scope, or "" when there is none.
                 cur = conn.execute(
                     """UPDATE contracts SET cancelled = 1,
-                           duplicate_of = ?, correction_note = ?
+                           duplicate_of = ?, related_to = ?, correction_note = ?
                        WHERE reference_number = ?""",
-                    (fix.get("duplicate_of"), fix.get("reason"), ref))
+                    (fix.get("duplicate_of"), fix.get("related_to"),
+                     fix.get("reason"), ref))
             else:
                 cur = conn.execute(
                     """UPDATE contracts SET

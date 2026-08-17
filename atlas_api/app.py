@@ -276,11 +276,12 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         conn = _dase_conn()
         rows = _trim_titles(dase_queries.list_contracts(conn, q=qterm))
         total = round(sum(r["total_cost_with_vat"] or 0 for r in rows), 2)
-        # a search may cite an excluded double-posting's ΑΔΑΜ — surface it
-        # (badged via duplicate_of), never counted in the total
+        # a search may cite an EXCLUDED contract's ΑΔΑΜ — surface it, badged
+        # for the reason it carries (duplicate_of / related_to), never
+        # counted in the total
         if qterm:
             rows = rows + _trim_titles(
-                queries_extra.dase_duplicate_hits(conn, qterm))
+                queries_extra.dase_excluded_hits(conn, qterm))
         # curated display names replace the registry spellings in the list
         # (search above already ran on the registry strings, so both match)
         disp = queries_extra.dase_contract_display(conn)
@@ -328,12 +329,14 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             abort(404)
         queries_extra._overlay_coop_name(
             summary, queries_extra.dase_display_names(conn))
-        return jsonify({
-            "summary": summary,
-            "contracts": dase_queries.coop_contracts(conn, vat),
-            "yearly": dase_queries.coop_yearly(conn, vat),
-            "units": dase_queries.coop_units(conn, vat),
-        })
+        # jointly held contracts are split evenly across their partners
+        # (DATA_DECISIONS 2026-08-17) — the frozen queries credit each
+        # partner with the whole contract
+        return jsonify(queries_extra.dase_coop_detail(
+            conn, vat, summary,
+            dase_queries.coop_contracts(conn, vat),
+            dase_queries.coop_yearly(conn, vat),
+            dase_queries.coop_units(conn, vat)))
 
     # ---------------------------------------------------------- anadohoi
 

@@ -38,11 +38,21 @@ def test_curated_contractors_pin(conn):
 
 
 def test_every_contract_has_a_curated_dase_contractor(conn):
+    """Every stored contract entered this contractor-led harvest because a
+    curated co-op is one of its contractors — EXCEPT the ones whose signed
+    PDF turned out to name none (`related_to`, DATA_DECISIONS 2026-08-17).
+    For those the registry claim was disproved and the co-op's contractor
+    row was deleted, so the page cannot present it as a party; they are
+    exempt here and must be excluded from the population instead."""
     directory = dq.coop_directory(conn)
+    exempt = {r["reference_number"]: r["cancelled"] for r in conn.execute(
+        "SELECT reference_number, cancelled FROM contracts "
+        "WHERE related_to IS NOT NULL")}
+    assert exempt and all(c == 1 for c in exempt.values())
     orphans = [
         ref for ref, in conn.execute(
             "SELECT DISTINCT reference_number FROM contracts")
-        if not any(
+        if ref not in exempt and not any(
             dq.canonical_vat(v) in directory
             for v, in conn.execute(
                 "SELECT vat_number FROM contractors WHERE reference_number=?",

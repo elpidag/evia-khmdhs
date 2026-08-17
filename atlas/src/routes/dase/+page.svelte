@@ -571,7 +571,7 @@
 
 <ChartFrame
 	title="TOP FOREST WORKERS’ CO-OPS BY CONTRACTED VALUE"
-	caveat="Registry spellings of one co-op are merged on its canonical ΑΦΜ. When several co-ops win a contract together, each partner is credited with the whole of it rather than a share — the registry does not record who took what — so those euros are counted more than once here; it stays rare ({grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)} contracts)."
+	caveat="Registry spellings of one co-op are merged on its canonical ΑΦΜ. Contracts signed by several co-ops jointly ({grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)}) are split evenly between the partners — neither the registry nor the signed document records who took what — so no euro is counted twice and these totals sum to the dataset's stated total."
 	anchor="top-coops"
 	methodology="canonical-vat"
 >

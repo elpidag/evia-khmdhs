@@ -1,11 +1,23 @@
 <script lang="ts">
 	import SearchBox from '$lib/ui/SearchBox.svelte';
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
+	import { trailChip } from '$lib/transforms/exclusion';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	let limit = $state(300);
-	const shown = $derived(data.rows.slice(0, limit));
+	// excluded rows ride along only when the search cited their ΑΔΑΜ; each
+	// is badged with ITS reason (live rows get no chip at all)
+	const shown = $derived(
+		data.rows.slice(0, limit).map((r) => ({
+			...r,
+			badge: trailChip({
+				cancelled: r.cancelled ?? 0,
+				duplicate_of: r.duplicate_of,
+				related_to: r.related_to
+			})
+		}))
+	);
 </script>
 
 <svelte:head>
@@ -38,7 +50,9 @@
 				<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
 				<td>
 					<a href={`/dase/contract/${r.reference_number}`}>{r.title ?? r.reference_number}</a>
-					{#if r.duplicate_of}<span class="chip bad">duplicate posting</span>{/if}
+					{#if r.badge.chip}<span class="chip" class:bad={r.badge.chipBad !== false}
+							>{r.badge.chip}</span
+						>{/if}
 				</td>
 				<td class="muted"><small>{r.contractor_names ?? '—'}</small></td>
 				<td class="muted"><small>{r.units_operator_name ?? r.organization_name ?? '—'}</small></td>

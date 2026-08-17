@@ -9,8 +9,11 @@ export interface DaseContractRow {
 	organization_name: string | null;
 	units_operator_name: string | null;
 	total_cost_with_vat: number | null;
-	/** set on excluded registry double-postings (surfaced only via search) */
+	/** excluded rows, surfaced only when the search cites their ΑΔΑΜ:
+	 *  a registry double-posting, or a contract naming no co-op party */
 	duplicate_of?: string | null;
+	related_to?: string | null;
+	cancelled?: number;
 }
 
 export const load: PageLoad = async ({ fetch, url }) => {

@@ -315,6 +315,12 @@ def init_db(path: Path) -> sqlite3.Connection:
         ("forest_authorities", "seat_precision", "TEXT"),
         # registry double-postings: the kept twin's ΑΔΑΜ (DATA_DECISIONS 2026-08-14)
         ("contracts", "duplicate_of", "TEXT"),
+        # a contract kept out of a contractor-led dataset because its signed
+        # PDF names no qualifying party — NOT a cancellation and NOT a
+        # duplicate: the sibling ΑΔΑΜ of the same procurement that IS in
+        # scope, so the page can say «related contract» (DATA_DECISIONS
+        # 2026-08-17). Empty string when there is no sibling to point at.
+        ("contracts", "related_to", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")

@@ -11,8 +11,11 @@
 		pdf: string | null;
 		/** the page's own document */
 		self?: boolean;
-		/** small warning chip, e.g. cancelled */
+		/** small chip after the type, e.g. cancelled */
 		chip?: string;
+		/** false = neutral chip (a fact about the row, not a warning);
+		 *  callers derive it with `trailChip` in $lib/transforms/exclusion */
+		chipBad?: boolean;
 	}
 </script>
 
@@ -79,7 +82,11 @@
 					onmouseleave={() => onRowHover?.(null)}
 				>
 					<td class="tabular nowrap">{dmy(r.d)}</td>
-					<td>{r.type}{#if r.chip}<span class="chip bad">{r.chip}</span>{/if}</td>
+					<td
+						>{r.type}{#if r.chip}<span class="chip" class:bad={r.chipBad !== false}
+								>{r.chip}</span
+							>{/if}</td
+					>
 					<td class="tabular nowrap">{r.code}</td>
 					<td class="ttl">{r.title ?? '—'}</td>
 					<td class="pdfcol">

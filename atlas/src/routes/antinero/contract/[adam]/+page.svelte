@@ -3,6 +3,7 @@
 	import { ruLabel } from '$lib/transforms/regions';
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
+	import { trailChip } from '$lib/transforms/exclusion';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
@@ -45,6 +46,8 @@
 			title: c.title,
 			d: (c.contract_signed_date ?? '').slice(0, 10) || null,
 			cancelled: c.cancelled ?? 0,
+			duplicate_of: c.duplicate_of ?? null,
+			related_to: c.related_to ?? null,
 			in_db: true,
 			self: true
 		});
@@ -72,7 +75,7 @@
 			title: t.title ?? null,
 			pdf: pdfHref(t),
 			self: t.self,
-			chip: t.cancelled === 1 ? 'cancelled' : undefined
+			...trailChip(t)
 		}))
 	);
 

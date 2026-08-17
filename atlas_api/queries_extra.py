@@ -746,13 +746,127 @@ def overlay_executor_names(executors: list[dict] | None,
     return executors
 
 
+def dase_coop_shares(dase: sqlite3.Connection) -> dict[str, list[dict]]:
+    """Live contracts held JOINTLY by several co-ops → each partner's even
+    share, keyed by canonical ΑΦΜ.
+
+    The frozen webui aggregates credit every partner with the WHOLE
+    contract (the max-exposure convention), which counts the same euros
+    twice in a per-co-op ranking. The registry records no shares and the
+    signed document states none — the one live case, 23SYMV013747204, has
+    the two co-ops' representatives «συμφωνήσαν από κοινού» over a single
+    pooled quantity at unit prices — so the Atlas splits such a contract
+    EVENLY between its partners (user decision, DATA_DECISIONS 2026-08-17;
+    the same convention the Anti-nero region maps and `pipelines` already
+    use). Contract COUNTS are untouched: each partner does hold the
+    contract, jointly.
+
+    Returns {canonical ΑΦΜ: [{ref, year, n_parties, full_eur, share_eur,
+    over_eur}]} — `over_eur` (full − share) is what a full-attribution
+    total must give back to reach the even-split basis.
+    """
+    per_ref: dict[str, dict] = {}
+    for r in dase.execute(f"""
+        SELECT co.reference_number AS ref, co.total_cost_with_vat AS eur,
+               COALESCE(co.contract_signed_date, co.submission_date) AS d,
+               c.vat_number AS vat
+        FROM contracts co JOIN contractors c USING (reference_number)
+        WHERE {dq.live_filter('co')}"""):
+        e = per_ref.setdefault(r["ref"], {"eur": r["eur"] or 0.0,
+                                          "year": (r["d"] or "")[:4] or None,
+                                          "vats": set()})
+        cv = dq.canonical_vat(r["vat"])
+        if cv:
+            e["vats"].add(cv)
+    out: dict[str, list[dict]] = {}
+    for ref, e in per_ref.items():
+        n = len(e["vats"])
+        if n < 2:                       # the ordinary single-party contract
+            continue
+        cents = round((e["eur"] or 0.0) * 100)
+        parts = _even_cents(cents, n)
+        for cv, part in zip(sorted(e["vats"]), parts):
+            share = part / 100
+            out.setdefault(cv, []).append({
+                "ref": ref, "year": e["year"], "n_parties": n,
+                "full_eur": round(e["eur"], 2), "share_eur": share,
+                "over_eur": round(cents / 100 - share, 2),
+            })
+    return out
+
+
+def _even_cents(total: int, n: int) -> list[int]:
+    """Split `total` cents into `n` parts that sum to it EXACTLY — the odd
+    cent(s) go to the first parts. Halving an odd amount and rounding both
+    halves would leave the ranking a cent short of the basis, so the
+    remainder is allocated rather than dropped; callers order the parties
+    deterministically (by ΑΦΜ) so the allocation is stable across runs."""
+    base, extra = divmod(total, n)
+    return [base + (1 if i < extra else 0) for i in range(n)]
+
+
+def _split_coop_totals(rows: list[dict], shares: dict[str, list[dict]],
+                       key: str = "total_eur") -> list[dict]:
+    """Turn full-attribution co-op rows into even-split ones in place."""
+    for a in rows:
+        over = sum(s["over_eur"] for s in shares.get(a.get("vat") or "", ()))
+        if over:
+            a[key] = round((a.get(key) or 0.0) - over, 2)
+    return rows
+
+
+def dase_coop_detail(dase: sqlite3.Connection, vat: str, summary: dict,
+                     contracts: list[dict], yearly: list[dict],
+                     units: list[dict]) -> dict:
+    """The co-op page payload on the even-split basis: its money total, its
+    per-year bars and its per-awarder table give back the over-credited
+    half of any jointly held contract, and the contract itself is marked
+    (`n_parties` / `share_eur`) so the list explains the difference instead
+    of silently disagreeing with the total. The contract keeps its own
+    stated value in `total_cost_with_vat` — that IS the contract's value —
+    and the co-op's share rides beside it."""
+    mine = dase_coop_shares(dase).get(dq.canonical_vat(vat) or "", [])
+    if not mine:
+        return {"summary": summary, "contracts": contracts,
+                "yearly": yearly, "units": units}
+    by_ref = {s["ref"]: s for s in mine}
+    summary["total_eur"] = round((summary.get("total_eur") or 0.0)
+                                 - sum(s["over_eur"] for s in mine), 2)
+    for c in contracts:
+        s = by_ref.get(c["reference_number"])
+        if s:
+            c["n_parties"] = s["n_parties"]
+            c["share_eur"] = s["share_eur"]
+    for b in yearly:
+        over = sum(s["over_eur"] for s in mine if s["year"] == str(b["year"]))
+        if over:
+            b["eur"] = round(b["eur"] - over, 2)
+    # the awarder table groups by (unit, org) — matching on the unit NAME
+    # alone would hit every group sharing it (one Δασαρχείο appears under
+    # both ΥΠΕΝ and its Αποκεντρωμένη), subtracting the share several times
+    key_of = {r["ref"]: (r["unit"], r["org"]) for r in dase.execute(
+        "SELECT reference_number AS ref, units_operator_name AS unit, "
+        "organization_name AS org FROM contracts WHERE reference_number IN (%s)"
+        % ",".join("?" * len(by_ref)), list(by_ref))}
+    for u in units:
+        over = sum(s["over_eur"] for ref, s in by_ref.items()
+                   if key_of.get(ref) == (u["unit"], u["org"]))
+        if over:
+            u["total_eur"] = round((u["total_eur"] or 0.0) - over, 2)
+    return {"summary": summary, "contracts": contracts,
+            "yearly": yearly, "units": units}
+
+
 def dase_coops(dase: sqlite3.Connection, q: str | None = None,
                sort: str = "total_eur") -> list[dict]:
     """list_coops with the display names overlaid BEFORE the search filter,
     so a query matches the curated Greek name, the English name AND the
-    registry spelling."""
+    registry spelling; jointly held contracts are split evenly, so the
+    column of totals sums to the live basis exactly."""
     names = dase_display_names(dase)
-    out = [_overlay_coop_name(a, names) for a in dq._coop_rows(dase)]
+    out = _split_coop_totals(
+        [_overlay_coop_name(a, names) for a in dq._coop_rows(dase)],
+        dase_coop_shares(dase))
     if q:
         needle = dq._search_norm(q)
         fold = dq._phonetic_fold(needle)
@@ -835,12 +949,12 @@ def dase_value_histogram(dase: sqlite3.Connection) -> dict:
 
 def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     """Everything the ΔΑΣΕ overview page needs (webui /dase context)."""
-    names = dase_display_names(dase)
     return {
         "kpis": dase_kpis(dase),
         "yearly": dq.yearly_totals(dase),
-        "top_coops": [_overlay_coop_name(a, names)
-                      for a in dq.top_coops(dase, limit=10)],
+        # dase_coops applies the even split before ranking — the frozen
+        # top_coops would rank on the double-counted full attribution
+        "top_coops": dase_coops(dase)[:10],
         "top_orgs": dq.top_orgs(dase, limit=10),
         "top_units": dq.top_units(dase, limit=10),
         "kind_mix": dase_kind_mix(dase, kh),
@@ -852,18 +966,25 @@ def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     }
 
 
-def dase_duplicate_hits(dase: sqlite3.Connection, q: str) -> list[dict]:
-    """Excluded registry double-postings matching a contracts search — so a
-    citation of the duplicate ΑΔΑΜ still finds its page (badged), instead
-    of the row silently not existing (DATA_DECISIONS 2026-08-14). Uses the
-    same folding as the frozen list_contracts filter."""
-    rows = dase.execute("""
+def dase_excluded_hits(dase: sqlite3.Connection, q: str) -> list[dict]:
+    """Curated exclusions matching a contracts search — registry
+    double-postings (DATA_DECISIONS 2026-08-14) and the contracts whose
+    signed PDF names no co-op (2026-08-17) — so a citation of the excluded
+    ΑΔΑΜ still finds its page, badged for what it is, instead of the row
+    silently not existing. Each row carries its own marker, so the list
+    can name the reason rather than calling everything a duplicate. Uses
+    the same folding as the frozen list_contracts filter."""
+    markers = _exclusion_present(dase)
+    if not markers:                                  # DB predates both
+        return []
+    rows = dase.execute(f"""
         SELECT co.reference_number, co.title, co.contract_signed_date,
                co.total_cost_with_vat, co.units_operator_name,
-               co.organization_name, co.duplicate_of,
+               co.organization_name, co.cancelled{_exclusion_cols(dase)},
                (SELECT GROUP_CONCAT(c.name, ' | ') FROM contractors c
                 WHERE c.reference_number = co.reference_number) AS contractor_names
-        FROM contracts co WHERE co.duplicate_of IS NOT NULL
+        FROM contracts co
+        WHERE {' OR '.join(f'co.{c} IS NOT NULL' for c in markers)}
         ORDER BY co.contract_signed_date DESC
     """).fetchall()
     needle = dq._search_norm(q)
@@ -2087,6 +2208,29 @@ def anadohoi_project(ana: sqlite3.Connection, ada: str) -> dict | None:
 _TIMELINE_ORDER = {"request": 0, "approved_request": 1, "notice": 2,
                    "auction": 3, "contract": 4, "completion": 5}
 
+# the two curated exclusion markers, selected only where the deployed DB has
+# them (db.py adds columns through an ALTER guard, so an older file may not)
+_EXCLUSION_COLS = ("duplicate_of", "related_to")
+
+
+def _exclusion_present(conn: sqlite3.Connection) -> list[str]:
+    """Whichever of the exclusion markers this DB file actually carries."""
+    try:
+        have = {r[1] for r in conn.execute("PRAGMA table_info(contracts)")}
+    except sqlite3.OperationalError:
+        return []
+    return [c for c in _EXCLUSION_COLS if c in have]
+
+
+def _exclusion_cols(conn: sqlite3.Connection) -> str:
+    """SQL fragment appending those markers to a `contracts` select list."""
+    return "".join(f", {c}" for c in _exclusion_present(conn))
+
+
+def _col(row: sqlite3.Row, name: str):
+    """Row value when the column was selected, else None."""
+    return row[name] if name in row.keys() else None
+
 
 def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
     """The contract's full procurement family (αίτημα → πρόσκληση →
@@ -2114,9 +2258,9 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
         }
         if r["kind"] == "contract":
             c = kh.execute(
-                "SELECT title, contract_signed_date, submission_date, "
-                "cancelled FROM contracts WHERE reference_number = ?",
-                (r["adam"],)).fetchone()
+                f"SELECT title, contract_signed_date, submission_date, "
+                f"cancelled{_exclusion_cols(kh)} FROM contracts "
+                f"WHERE reference_number = ?", (r["adam"],)).fetchone()
             if c is not None:
                 who = kh.execute(
                     "SELECT name FROM contractors WHERE reference_number = ? "
@@ -2126,6 +2270,12 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
                     "d": _full_date(c["contract_signed_date"])
                          or _full_date(c["submission_date"]),
                     "cancelled": c["cancelled"] or 0,
+                    # WHY the sibling is excluded — the trail must not print
+                    # «cancelled» over a double-posting or an out-of-scope
+                    # contract, both of which carry cancelled = 1 as their
+                    # exclusion mechanism (DATA_DECISIONS 2026-08-17)
+                    "duplicate_of": _col(c, "duplicate_of"),
+                    "related_to": _col(c, "related_to"),
                     "in_db": True,
                     # first contractor — lets the family diagram label the
                     # sibling and NAME-match its κατακύρωση (never guessed)
