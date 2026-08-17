@@ -165,12 +165,20 @@ def ensure_pdf(session: requests.Session, cache_dir: Path, adam: str,
 
 
 def pdf_text(cache_dir: Path, adam: str, refetch: bool = False) -> str | None:
-    """pdftotext -layout, cached as <ADAM>.txt beside the PDF."""
+    """pdftotext -layout -enc UTF-8, cached as <ADAM>.txt beside the PDF.
+
+    `-enc UTF-8` is NOT optional: without it pdftotext writes the system
+    codepage and DROPS every Greek character (verified 2026-08-17 — the
+    sidecars built before that date contain only digits, Latin and
+    punctuation, which is why they can carry an amount but never a name
+    or a τοποθεσία). Re-extract with `refetch=True` to repair a sidecar.
+    """
     pdf_p = cache_dir / f"{adam}.pdf"
     txt_p = cache_dir / f"{adam}.txt"
     if refetch or not txt_p.exists():
         try:
-            subprocess.run(["pdftotext", "-layout", str(pdf_p), str(txt_p)],
+            subprocess.run(["pdftotext", "-layout", "-enc", "UTF-8",
+                            str(pdf_p), str(txt_p)],
                            check=True, capture_output=True)
         except subprocess.CalledProcessError as e:
             logging.warning("%s: pdftotext failed: %s", adam, e.stderr[:200])
