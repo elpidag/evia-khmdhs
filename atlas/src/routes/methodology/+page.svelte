@@ -201,11 +201,19 @@
 		contracts span multiple units and stay honestly unresolved.
 	</p>
 
-	<h2 id="dase-cpv-noise">CPV keying noise</h2>
+	<h2 id="dase-cpv-noise">The insurance CPV on logging contracts</h2>
 	<p>
-		{show(f['dase_cpv_noise'])} live ΔΑΣΕ logging contracts carry a miskeyed insurance CPV
-		(66519300-4). They are flagged as
-		registry noise wherever CPVs are shown and never counted as insurance services.
+		{show(f['dase_cpv_noise'])} live ΔΑΣΕ logging contracts carry the insurance CPV 66519300-4
+		(«επικουρικές ασφαλιστικές υπηρεσίες»). This is not a keying error — and not insurance
+		procurement. The ministerial decisions that set the assignment prices for logging works
+		state that the prices do not include the employer's ΕΦΚΑ contribution for the forest
+		workers; that contribution burdens the forest's exploiter, which for public forests worked
+		by the co-ops is the State (ΚΥΑ ΥΠΕΝ/ΔΔΔ/128526/4106/2022 · άρθρο 137 §3 ν.δ. 86/1969).
+		Each award therefore itemises an «ασφαλιστικές/εργοδοτικές εισφορές (ΕΦΚΑ εργοδότη)» line
+		on top of the works, and in the registry records the insurance CPV sits exactly on that
+		line. The code stays flagged wherever CPVs are shown so the mix is never read as insurance
+		services: these are logging contracts whose price also funds the workers' social-insurance
+		contributions.
 	</p>
 
 	<h2 id="zero-overlap">The zero-overlap finding</h2>

@@ -2481,3 +2481,49 @@ verdicts every executor row that CAN carry a registry identity does;
 the only VAT-less rows left are Παντουρέ and Παπάδων, absent from the
 ΔΑΣΕ contracts universe. Applied to anadohoi_projects.json + the
 committed sqlite in place, same mechanism as the Μίστρου entry.
+
+## 2026-08-17 — Το CPV 66519300-4 στα ΔΑΣΕ υλοτομικά ΔΕΝ είναι keying noise: σημαίνει τις κρατικά χρηματοδοτούμενες εργοδοτικές εισφορές ΕΦΚΑ των δασεργατών
+
+The site had characterized the insurance CPV 66519300-4 «Επικουρικές
+ασφαλιστικές υπηρεσίες», found on 386 ΔΑΣΕ υλοτομικά contracts (378
+live), as a "mass registry keying error" (dase_queries.py NOISE_CPVS
+comment, /dase CPV MIX caveat + row suffix, /dase contract-page chip,
+/methodology#dase-cpv-noise, webui pill). A user-prompted investigation
+(2026-08-17) disproves the keying-error reading on two independent
+grounds:
+
+- **Registry payloads**: 207 of the 386 flagged contracts carry a
+  dedicated object line named «ΕΡΓΟΔΟΤΙΚΕΣ ΕΙΣΦΟΡΕΣ» / «ΑΣΦΑΛΙΣΤΙΚΕΣ
+  ΕΙΣΦΟΡΕΣ (ΕΦΚΑ/ΙΚΑ ΕΡΓΟΔΟΤΗ)» — and in ALL 207 the CPV sits exactly
+  on that line, never on the works line. The other 179 are
+  single-object «ανάθεση υλοτομικών εργασιών με αυτεπιστασία
+  αποκλειστικά σε δασικούς συνεταιρισμούς» awards whose one object
+  carries the trio 77211100-3 / 77211300-5 / 66519300-4; 173 signed
+  PDFs print the same trio in their own text — a deliberate,
+  systematic convention across five years and both awarding
+  authorities, not a slip.
+- **Legal mechanism**: the annual τιμές-ανάθεσης ΚΥΑ (e.g.
+  ΥΠΕΝ/ΔΔΔ/128526/4106/2022, Β΄ 6472) provides «Στις παραπάνω τιμές
+  δεν περιλαμβάνεται η εργοδοτική εισφορά υπέρ ΕΦΚΑ των δασεργατών, η
+  οποία επιβαρύνει τον εκμεταλλευτή του δάσους», and for δημόσια δάση
+  exploited με αυτεπιστασία the State bears that employer contribution
+  (άρθρο 137 §3 ν.δ. 86/1969· άρθρο 48 ν.4423/2016). The awarding
+  authority therefore budgets the εισφορές as a separate component of
+  each award and classifies it under the nearest insurance-family CPV.
+
+Decision: **analytics unchanged** — the contracts remain υλοτομικά,
+nothing aggregates by CPV, and the code stays flagged wherever CPVs
+are shown so the CPV mix is never read as procured insurance services.
+All copy is recharacterized from «registry keying noise/error» to
+«state-funded ΕΦΚΑ employer-contributions component»: the
+dase_queries.py comment (the NOISE_CPVS constant and the `noise`
+payload field are API surface and keep their names), the /dase CPV MIX
+caveat + row suffix, the /dase contract-page chip (warn → neutral
+info chip), /methodology#dase-cpv-noise (anchor id kept, heading/body
+rewritten as the public explanation), the frozen webui's pill
+label/tooltip (minimal text-only correction — a knowingly false
+factual claim must not stay served; no queries touched), and the
+CLAUDE.md ΔΑΣΕ note. *Evidence: raw_json objectDetailsList of all 386
+flagged contracts; 173 dase_pdf_cache txts printing the CPV trio; the
+ΚΥΑ text (verbatim above). Affects: no rows, no aggregates — copy and
+documentation only.*

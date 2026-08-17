@@ -170,7 +170,7 @@
 	);
 	const cpvRows = $derived(
 		o.cpvs.map((c) => ({
-			label: `${c.label}${c.noise ? ' — registry keying noise' : ''}`,
+			label: `${c.label}${c.noise ? ' — ΕΦΚΑ contributions, not insurance' : ''}`,
 			value: c.n_contracts,
 			sublabel: c.cpv
 		}))
@@ -466,7 +466,7 @@
 <ChartFrame
 	title="CPV MIX"
 	subtitle="Top CPV codes by contract count — υλοτομία dominates."
-	caveat="{grInt(cpvNoiseN)} υλοτομικά rows carry a miskeyed insurance CPV (66519300-4) — flagged, never counted as insurance."
+	caveat="{grInt(cpvNoiseN)} υλοτομικά rows carry the insurance CPV 66519300-4: it tags the state-funded ΕΦΚΑ contributions for the δασεργάτες itemised in the awards — not procured insurance."
 	anchor="dase-cpvs"
 	methodology="dase-cpv-noise"
 >

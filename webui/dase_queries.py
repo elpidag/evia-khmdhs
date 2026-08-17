@@ -390,8 +390,13 @@ def type_mix(conn: sqlite3.Connection) -> list[dict]:
     return [dict(r) for r in rows]
 
 
-# 386 contracts carry CPV 66519300-4 «ασφαλιστικές υπηρεσίες» — a mass
-# registry keying error on υλοτομικά contracts (DATA_DECISIONS 2026-07-26).
+# 386 contracts carry CPV 66519300-4 «Επικουρικές ασφαλιστικές υπηρεσίες»
+# on υλοτομικά contracts — NOT a keying error (DATA_DECISIONS 2026-08-17):
+# the code tags the award's «ΑΣΦΑΛΙΣΤΙΚΕΣ/ΕΡΓΟΔΟΤΙΚΕΣ ΕΙΣΦΟΡΕΣ (ΕΦΚΑ
+# ΕΡΓΟΔΟΤΗ)» component — the τιμές-ανάθεσης ΚΥΑ exclude the employer's
+# ΕΦΚΑ contribution for the δασεργάτες, which the State bears as forest
+# exploiter. Kept flagged so the CPV mix is never read as procured
+# insurance services; constant/field names are API surface and stay.
 NOISE_CPVS = {"66519300-4"}
 
 

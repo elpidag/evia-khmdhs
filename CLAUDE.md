@@ -423,8 +423,14 @@ candidates, corrections land only after human PDF review). Curated fixes:
 `harvest_dase.py load`, whose INSERT OR REPLACE restores registry
 values; corrected rows carry `contracts.correction_note`, and a
 sibling-modal guard test fails on any live uncorrected ≈×10/×100
-outlier). CPV quirk: 386 rows carry miskeyed 66519300-4 «ασφαλιστικές
-υπηρεσίες» on υλοτομικά contracts.
+outlier). CPV quirk resolved (DATA_DECISIONS 2026-08-17): 386 rows
+carry insurance CPV 66519300-4 on υλοτομικά contracts — NOT a keying
+error: it tags the award's «ΑΣΦΑΛΙΣΤΙΚΕΣ/ΕΡΓΟΔΟΤΙΚΕΣ ΕΙΣΦΟΡΕΣ (ΕΦΚΑ
+ΕΡΓΟΔΟΤΗ)» component (in 207/386 payloads the CPV sits on exactly that
+object line; the τιμές-ανάθεσης ΚΥΑ exclude the employer's ΕΦΚΑ
+contribution, which the State bears as forest exploiter, άρθρο 137 §3
+ν.δ. 86/1969). Still flagged wherever CPVs show, never counted as
+insurance procurement.
 
 **Parity harvest** (2026-08-03, DATA_DECISIONS): `linked_acts_loader --db
 dase.sqlite --with-payments` swept all 2,164 adamChains (0 missing; 1,668

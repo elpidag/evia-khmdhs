@@ -317,7 +317,10 @@
 				<li>
 					<span class="tabular">{cpv.cpv_code}</span>
 					{cpv.cpv_description ?? ''}
-					{#if cpv.cpv_code === '66519300-4'}<span class="chip warn">registry keying noise</span
+					{#if cpv.cpv_code === '66519300-4'}<span
+							class="chip"
+							title="The insurance CPV tags the ΕΦΚΑ employer contributions for the δασεργάτες that the award funds on top of the works — not procured insurance services."
+							>ΕΦΚΑ contributions, not insurance</span
 						>{/if}
 				</li>
 			{/each}
