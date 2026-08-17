@@ -23,10 +23,11 @@ def conn():
 def test_population_pins(conn):
     k = dq.kpis(conn)
     assert k["gross_n"] == 2164
-    assert k["n_cancelled"] == 92   # 82 registry + 10 curated double-postings
+    assert k["n_cancelled"] == 94   # 82 registry + 10 double-postings
+                                # + 2 not-a-co-op contracts (2026-08-17)
     assert k["n_superseded"] == 64
-    assert k["n_contracts"] == 2008
-    assert k["total_eur"] == pytest.approx(38_411_933.17, abs=0.01)
+    assert k["n_contracts"] == 2006
+    assert k["total_eur"] == pytest.approx(38_043_318.37, abs=0.01)
     assert k["n_coops"] >= 245
     assert k["pct_direct"] > 90
 
@@ -120,7 +121,7 @@ def test_no_live_contract_states_gross_as_its_net(conn):
     error until proven otherwise: the Atlas presents every € net of ΦΠΑ,
     so such a row silently feeds a VAT-inclusive amount into the net
     basis. Six Δ/νση Δασών Δωδεκανήσου contracts did exactly that
-    (DATA_DECISIONS 2026-08-17) and are corrected; 2.002 of 2.008 live
+    (DATA_DECISIONS 2026-08-17) and are corrected; 2.000 of 2.006 live
     contracts carry a real split, so the equality is the anomaly, not
     the norm. A genuinely ΦΠΑ-exempt contract would trip this too — by
     design: the verdict belongs to a human reading the PDF and its

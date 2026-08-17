@@ -2482,6 +2482,77 @@ the only VAT-less rows left are Παντουρέ and Παπάδων, absent from
 ΔΑΣΕ contracts universe. Applied to anadohoi_projects.json + the
 committed sqlite in place, same mechanism as the Μίστρου entry.
 
+## 2026-08-17 — «Consortium» was an artefact: the registry pastes the AWARD's awardee list onto single-party contracts. 2 contracts leave the dataset, 1 re-attributed, n_consortium 19 → 1
+
+The user questioned the caveat «Consortium values counted in full for
+each partner (rare here: 19 of 2.008 contracts)». It did not survive
+examination, and the award acts explain why.
+
+**The mechanism.** A ΚΗΜΔΗΣ contract record's `contractors` array
+sometimes carries the parent AWARD's whole awardee list rather than
+that contract's own party. The award is the document that settles it:
+25AWRD017394688 (Δ/νση Δασών Καστοριάς, Π.Δ. 126/86 κατανομή) is a
+30-row table — συστάδα · δάσος · λήμμα · **δαπάνη** · **ΔΑ.Σ.Ε.** —
+and its 30 rows map to 31 stored contracts with **every contract's
+gross equal to its row's δαπάνη to the cent**, the two ΣΥΜΠΡΑΞΗ rows
+executed as two half-value contracts each. Row 1 (ΔΤ 49δ, Δ.Δ.
+Βορείου Γράμμου, 1.320 κ.μ. οξυά, 67.400€, ΣΥΜΠΡΑΞΗ Πεύκου Νεστορίου
+– Κυψέλης) = 25SYMV017823600 + 25SYMV017867270, 33.700,00 each.
+
+**The four verdicts** (`contractors_keep` / `exclude` in
+`dase_contract_corrections.json`, each citing award + signed PDF +
+payment):
+- **25SYMV017324270 EXCLUDED** (€115.000 net): signed by Περιφέρεια
+  Θεσσαλίας with ΧΑΤΖΗΓΑΚΗΣ ΤΕΧΝΙΚΗ ΑΕ alone — an hourly
+  machinery-hire call-off of the Daniel/Elias framework. The record
+  lists all ELEVEN framework operators, one of them a co-op, which is
+  the only reason the contract entered this contractor-led dataset.
+- **25SYMV016837212 EXCLUDED** (€182.270 net): signed by Δήμος Θέρμης
+  with Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε alone. Its award split the
+  procurement in two lots — ομάδα Α to that company for 226.014,80
+  (= this contract's gross to the cent), ομάδα Β to ΔΑΣΕ Μοδίου for
+  111.600,00, **which is the separate stored contract
+  25SYMV016885520**. The co-op already holds its own lot and was
+  additionally credited the company's. Its 5 payment orders are
+  excluded with it, because `paid_eur` sums payments without joining
+  to contracts and would otherwise report company money as co-op pay.
+- **25SYMV017867270 RE-ATTRIBUTED** to ΔΑΣΕ ΚΥΨΕΛΗΣ (997841856): the
+  PDF names that co-op, payment 25PAY017976758 pays it for «Συστάδα
+  49Δ 1/2», and the two other listed co-ops are other rows of the same
+  award holding their own contracts. Its ΑΦΜ field had GLUED two
+  numbers («997106512 ΚΑΙ 997841856»), so the canonical-VAT rule was
+  crediting the contract to Πεύκου Νεστορίου — who already holds the
+  other half — while the signing co-op got nothing. The applier now
+  rewrites a glued field to the kept ΑΦΜ.
+- **23SYMV013747204 KEPT AS IS** (€5.384 net): a genuine σύμπραξη —
+  «νόμιμος εκπρόσωπος του ΔΑ.Σ.Ε. Σιδηροχωρίου & Πετρολόφου».
+
+**n_consortium fixed**: it counted contractor ROWS, so 16 records of
+one co-op typed twice under spelling variants inflated it. Those cost
+nothing — the canonical-ΑΦΜ merge already collapses them — and after
+the four verdicts exactly **ONE** live contract is shared by several
+co-ops. The /dase caveat now states the mechanism (each partner
+credited in full because the registry never records shares) with that
+honest count.
+
+**Mechanism added**: `contractors_keep` in
+`khmdhs.contract_corrections` — deletes contractor rows carrying none
+of the listed ΑΦΜ and rewrites a glued field to the kept one, refusing
+to act at all when no stored row matches (a typo can never empty a
+contract's contractor table).
+
+**Corroborated corpus-wide** by the new
+`scripts/audit_contract_awardees.py`, which screens all 2.164
+contracts against the ΑΦΜ their signed PDFs name: only 4 of the 20
+multi-contractor records have genuinely different parties, exactly the
+four judged here.
+
+*Affects: ΔΑΣΕ live population **2.008 → 2.006**, stated net
+€31.178.858,14 → **€30.881.588,14**, gross €38.411.933,17 →
+€38.043.318,37; paid net €20.910.684,02 → **€20.728.414,02** and 967 →
+962 orders (the 5 Θέρμης payments); n_cancelled 92 → 94; n_consortium
+19 → 1. Both excluded contracts keep reachable, badged pages.*
+
 ## 2026-08-17 — Scanned/odd payment documents all read by eye: 35 confirmed, 26 corrected, 4 exclusions REVERSED as proven instalments — every ΔΑΣΕ payment order is now document-checked
 
 The closing pass of the payment audit (user: «visually read all 42»).

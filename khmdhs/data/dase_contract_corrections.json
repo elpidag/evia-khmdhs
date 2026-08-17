@@ -99,5 +99,19 @@
    "0": 302378.08
   },
   "reason": "Registry keying error: the contract row repeats the GROSS figure in the net field (totalCostWithoutVAT = totalCostWithVAT = 374.948,82, vat_percent '0'), so every net-basis aggregate counted a VAT-inclusive amount. Its own payment order 25PAY016924872 splits that same gross at 24% and states the net: 302.378,08. True net = 374.948,82 / 1,24 = 302.378,08. The signed PDF mentions ΦΠΑ once, citing the exemption procedure (ΥΑ Α.1021/07-02-2022, Β΄550) in recital 14, and άρθρο 5 states the price «συμπεριλαμβανομένων και όλων των νόμιμων φορολογικών επιβαρύνσεων» without naming a rate — the payment order is the deciding document (DATA_DECISIONS 2026-08-17)."
+ },
+ "25SYMV017324270": {
+  "exclude": true,
+  "reason": "Not a co-op contract: the signed PDF is between Περιφέρεια Θεσσαλίας (ΑΦΜ 997844846) and ΧΑΤΖΗΓΑΚΗΣ ΤΕΧΝΙΚΗ ΑΕ (ΑΦΜ 094311510) alone — «καλούμενος εφεξής ο Ανάδοχος», signed «ΓΙΑ ΤΗΝ ΑΝΑΔΟΧΟ ΕΤΑΙΡΕΙΑ» — an hourly machinery-hire call-off under the Daniel/Elias storm-damage framework. The ΚΗΜΔΗΣ record lists all ELEVEN operators of that framework (award 25AWRD017318485), among them ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΟΛΙΑΝΩΝ, which is why the contract entered this contractor-led dataset at all. The co-op signed nothing here, so the contract leaves the population (DATA_DECISIONS 2026-08-17)."
+ },
+ "25SYMV016837212": {
+  "exclude": true,
+  "reason": "Not a co-op contract: the signed PDF is between Δήμος Θέρμης (ΑΦΜ 997612550) and Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε (ΑΦΜ 999030521) alone. Its award (25AWRD016779969) split the procurement in two lots — ομάδα Α to that company for 226.014,80 (= this contract's gross to the cent), ομάδα Β to ΔΑΣΕ Μοδίου for 111.600,00, which is the SEPARATE stored contract 25SYMV016885520. The ΚΗΜΔΗΣ record wrongly adds ΔΑΣΕ Μοδίου to the company's lot, crediting the co-op 182.270,00 net it never signed for while it already holds its own lot. Its five payment orders are excluded with it (DATA_DECISIONS 2026-08-17)."
+ },
+ "25SYMV017867270": {
+  "contractors_keep": [
+   "997841856"
+  ],
+  "reason": "Registry contractor list carries the parent award's awardee list. Award 25AWRD017394688 (Δ/νση Δασών Καστοριάς, Π.Δ. 126/86 κατανομή) assigns row 1 — ΔΤ 49δ, Δημόσιο Δάσος Βορείου Γράμμου, 1.320 κ.μ. οξυά, 67.400€ — to the ΣΥΜΠΡΑΞΗ of ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ and ΔΑΣΕ ΚΥΨΕΛΗΣ, executed as TWO contracts of 33.700,00 each: 25SYMV017823600 (Πεύκου Νεστορίου) and this one. The signed PDF names ΔΑ.Σ.Ε. ΚΥΨΕΛΗΣ «ΑΓ.ΠΑΡΑΣΚΕΥΗ», ΑΦΜ 997841856, and payment 25PAY017976758 pays that co-op for «Συστάδα 49Δ 1/2». ΔΑΣΕ ΟΞΥΑΣ and ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ «ΖΩΟΔΟΧΟΥ ΠΗΓΗΣ» are other rows of the same award with their own contracts and are dropped. The kept row's ΑΦΜ field glued two numbers («997106512 ΚΑΙ 997841856»), so the canonical-VAT rule was crediting the whole contract to 997106512 (Πεύκου Νεστορίου, who already holds the other half) — rewritten to the signing co-op (DATA_DECISIONS 2026-08-17)."
  }
 }

@@ -627,11 +627,17 @@ def dase_kpis(dase: sqlite3.Connection) -> dict:
     k = dq.kpis(dase)
     # consortium rows + worst-case registry spelling variance — cited in
     # page copy, computed so a refresh can't leave stale numbers
-    k["n_consortium"] = dase.execute(f"""
-        SELECT COUNT(*) FROM contracts co
-        WHERE {dq.live_filter('co')} AND
-          (SELECT COUNT(*) FROM contractors c
-           WHERE c.reference_number = co.reference_number) > 1""").fetchone()[0]
+    # Contracts genuinely shared by SEVERAL co-ops. Counting contractor ROWS
+    # overstated this five-fold (19 vs 4): most multi-row records are one
+    # co-op typed twice under spelling variants, which the canonical-ΑΦΜ
+    # merge already collapses — no euro is counted twice there
+    # (DATA_DECISIONS 2026-08-17).
+    k["n_consortium"] = sum(
+        1 for (refs,) in dase.execute(f"""
+            SELECT (SELECT GROUP_CONCAT(c.vat_number, '|') FROM contractors c
+                    WHERE c.reference_number = co.reference_number)
+            FROM contracts co WHERE {dq.live_filter('co')}""")
+        if refs and len({dq.canonical_vat(v) for v in refs.split('|') if v}) > 1)
     variants: dict[str, set] = {}
     for vat, name in dase.execute(f"""
         SELECT c.vat_number, c.name FROM contractors c

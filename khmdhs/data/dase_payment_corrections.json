@@ -1042,5 +1042,25 @@
   "amount_with_vat": 13172.13,
   "amount_without_vat": 10622.69,
   "reason": "Registry keying error: stored 14.454,37 (the work pair), but the attached χρηματικό ένταλμα pays 13.172,13 (δικαιούχος 12.311,69 + κρατήσεις 860,44). Corrected to the document; net scaled with the stored pair's ratio (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY018029542": {
+  "exclude": true,
+  "reason": "Payment of 25SYMV016837212, excluded with its contract: the signed contract is Δήμος Θέρμης with Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε, not a forest co-op, so it leaves this contractor-led dataset. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report company money as co-op pay (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017322267": {
+  "exclude": true,
+  "reason": "Payment of 25SYMV016837212, excluded with its contract: the signed contract is Δήμος Θέρμης with Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε, not a forest co-op, so it leaves this contractor-led dataset. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report company money as co-op pay (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017684852": {
+  "exclude": true,
+  "reason": "Payment of 25SYMV016837212, excluded with its contract: the signed contract is Δήμος Θέρμης with Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε, not a forest co-op, so it leaves this contractor-led dataset. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report company money as co-op pay (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017028264": {
+  "exclude": true,
+  "reason": "Payment of 25SYMV016837212, excluded with its contract: the signed contract is Δήμος Θέρμης with Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε, not a forest co-op, so it leaves this contractor-led dataset. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report company money as co-op pay (DATA_DECISIONS 2026-08-17)."
+ },
+ "25PAY017210585": {
+  "exclude": true,
+  "reason": "Payment of 25SYMV016837212, excluded with its contract: the signed contract is Δήμος Θέρμης with Α.ΑΡΑΒΙΔΗΣ – Ι. ΜΠΑΛΙΚΑΣ Ο.Ε, not a forest co-op, so it leaves this contractor-led dataset. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report company money as co-op pay (DATA_DECISIONS 2026-08-17)."
  }
 }

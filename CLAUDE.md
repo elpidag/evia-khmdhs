@@ -458,8 +458,9 @@ future attempt).
 aggregates use **stated values, deduplicated** — exclude `cancelled=1`
 (82 rows, €2.35M) and non-cancelled rows whose `next_reference_no`
 resolves in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo,
-no multi-successor) → live population **2,008 rows / €38,411,933.17
-gross = €31,178,858.14 net** (`dase_queries.live_filter`, the
+no multi-successor, and since 2026-08-17 two contracts whose signed
+PDF names no co-op party) → live population **2,006 rows /
+€38,043,318.37 gross = €30,881,588.14 net** (`dase_queries.live_filter`, the
 scope_filter analogue; the Atlas presents net; includes the curated
 corrections — the 21SYMV009374147 ×10 keying error AND 10 registry
 double-postings excluded with `duplicate_of` cross-links + 1 duplicated

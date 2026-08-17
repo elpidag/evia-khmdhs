@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 import sqlite3
 from pathlib import Path
 
@@ -74,7 +75,58 @@ def apply_contract_corrections(conn: sqlite3.Connection,
                 if cur.rowcount == 0:
                     logging.warning("objects correction for %s seq %s matched no row",
                                     ref, seq)
+            _apply_contractors_keep(conn, ref, fix.get("contractors_keep"))
     return n
+
+
+def _apply_contractors_keep(conn: sqlite3.Connection, ref: str,
+                            keep: list[str] | None) -> None:
+    """Reduce a contract's contractor rows to the ΑΦΜ its signed PDF names.
+
+    The ΚΗΜΔΗΣ contractor array sometimes carries the parent AWARD's whole
+    awardee list instead of that contract's own party (DATA_DECISIONS
+    2026-08-17), and every extra name is credited the contract's full value
+    in per-contractor views. `contractors_keep` lists the ΑΦΜ that the
+    signed contract actually names; rows carrying none of them are deleted,
+    and a kept row whose field glued several ΑΦΜ together
+    («997106512 ΚΑΙ 997841856» — the canonical-VAT rule silently keeps the
+    FIRST, i.e. the wrong co-op) is rewritten to the single kept ΑΦΜ.
+
+    Refuses to touch anything when no stored row matches the keep-list, so a
+    typo can never empty a contract's contractor table.
+    """
+    keep = [str(v).strip().zfill(9) for v in (keep or [])]
+    if not keep:
+        return
+    rows = conn.execute(
+        "SELECT seq, vat_number FROM contractors WHERE reference_number = ?",
+        (ref,)).fetchall()
+    plan: list[tuple[str, int, str]] = []
+    matched: set[str] = set()
+    for seq, raw in rows:
+        digits = {d.zfill(9) for d in re.findall(r"\d{8,9}", raw or "")}
+        hit = digits & set(keep)
+        if hit:
+            matched |= hit
+            single = sorted(hit)[0]
+            if (raw or "").strip() != single:
+                plan.append(("fix", seq, single))
+        else:
+            plan.append(("drop", seq, ""))
+    if not matched:
+        logging.warning("contractors_keep for %s matched no stored row (%s) — "
+                        "refusing to delete", ref, keep)
+        return
+    for action, seq, value in plan:
+        if action == "drop":
+            conn.execute("DELETE FROM contractors WHERE reference_number = ? "
+                         "AND seq = ?", (ref, seq))
+        else:
+            conn.execute("UPDATE contractors SET vat_number = ? WHERE "
+                         "reference_number = ? AND seq = ?", (value, ref, seq))
+    for absent in sorted(set(keep) - matched):
+        logging.warning("contractors_keep for %s: no stored row carries %s",
+                        ref, absent)
 
 
 def apply_all(conn: sqlite3.Connection,
