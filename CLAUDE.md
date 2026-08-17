@@ -525,19 +525,8 @@ bar); click a circle → its contract table docks below the legend
 co-op display name · DD.MM.YYYY · €; rows in the payload), click a
 Π.Ε. → zoom; payload `/api/dase/map`
 reconciles to the
-basis (pinned). AWARDING BODIES / AWARDING UNITS (2026-08-17) are
-**category share-bar pairs**, not top-10 lists: two `StackedShareBar`
-rows per frame (contracts / € net, identical segment order+colours for
-comparability; the € badges via the new `fmt` prop), frames STACKED
-full-width with the bars at the sponsored-works 3/4 width (840px,
-fs-16 — pinned by eye against /anadohoi) and ONE shared key per frame
-carrying each category's exact n/€ (`outside={false}` suppresses the
-component's spill labels, which overlap past ~4 segments) — bodies by
-public-bodies registry kind in a grey ramp (ministry / ΑΠΔ /
-municipalities incl. entities / regions / other; ΑΠΔ sign 17% of
-contracts but ~39% of the €), units by the map's FOUR kinds in the
-map's own colours (bar = legend echo);
-then a third frame **AWARDING PROCESS** — a THREE-column
+basis (pinned). Directly BELOW the map, the awarding side is told
+ONCE by **AWARDING PROCESS** (2026-08-17) — a THREE-column
 d3-sankey (`KindFlow.svelte`; the Anti-nero `Sankey.svelte` is
 scope-hardwired and untouched): awarding bodies → operating units →
 contractors, width = stated net €, coloured by whichever endpoint is
@@ -558,14 +547,19 @@ averages were removed as ambiguous, DATA_DECISIONS 2026-08-17),
 node-hover dims the rest, co-op nodes link to their pages,
 empty/dangling graphs degrade to nothing (d3-sankey throws
 otherwise). NO subtitle by user decision. Middle column = 3 nodes: the two forest kinds + «the body's
-own services» (muni+misc merged — the bar keeps the map's 4 kinds;
-DATA_DECISIONS 2026-08-17 explains why «other public bodies» was wrong
+own services» (muni+misc merged — DATA_DECISIONS 2026-08-17 explains
+why «other public bodies» was wrong
 there). Right column = top-10 co-ops by € + one pooled node; consortium
 contracts count at their lead co-op so all three columns reconcile.
+The earlier AWARDING BODIES / AWARDING UNITS share-bar frames were
+RETIRED into this diagram (same categories, colours and numbers —
+saying it twice earned nothing); `StackedShareBar` stays for
+/anadohoi's scope/type pair.
 `queries_extra.dase_kind_mix` derives bodies + units + flows + coops +
 coop_flows from ONE per-contract pass (`_dase_kind_rows`; unit kinds
 mirror the map via the now-shared `_unit_forest_kind`, map-unresolved
-ΑΔΜΗΕ folds into misc), ships as `kind_mix` on `/api/dase/overview`,
+ΑΔΜΗΕ folds into misc), ships as `kind_mix` on `/api/dase/overview`
+(the bodies/units marginals now feed only the reconciliation pins),
 reconciles to the basis (pinned; 'unknown' bucket pinned absent; units
 marginal cross-checked against the map payload). /dase contract pages draw the ΚΗΜΔΗΣ family as a
 FamilyTree diagram (trunk → award fan → contracts, viewed contract's

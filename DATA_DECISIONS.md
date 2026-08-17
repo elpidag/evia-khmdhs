@@ -2528,6 +2528,31 @@ flagged contracts; 173 dase_pdf_cache txts printing the CPV trio; the
 ΚΥΑ text (verbatim above). Affects: no rows, no aggregates — copy and
 documentation only.*
 
+## 2026-08-17 — /dase: the category share bars retired, AWARDING PROCESS carries the whole story
+
+Closing decision on the entry below (user): the AWARDING BODIES and
+AWARDING UNITS share-bar frames are REMOVED — the three-column
+AWARDING PROCESS diagram states the same categories, in the same
+colours, with the same n/€ (bars sized by €, counts on hover), and
+saying it twice on one page earned nothing. AWARDING PROCESS moves up
+to sit directly under the MAP (user), so the page reads WHERE the
+work is, then WHO commissioned it through whom, before the value
+distributions: MAP · AWARDING PROCESS · CONTRACT VALUES · MONEY PER
+YEAR · SIZE DISTRIBUTION · RANKING OF CO-OPS · CPV MIX. It renders
+eagerly rather than behind a `Defer` like the beeswarm — its data
+already rides in the SSR overview payload and the SVG is ~50 marks. The `#dase-orgs` / `#dase-units`
+anchors disappear with their frames (nothing linked to them —
+checked); `#dase-delegation` keeps the `org-names` methodology link.
+The `kind_mix.bodies` / `.units` MARGINALS stay in the payload
+although no chart reads them now: they are the reconciliation guard
+the real-DB pins assert against (Σn = 2,008, Σ€ = basis, and the
+units marginal == the /dase map's own circle classification), which
+is a data-integrity check independent of any UI. Dead page code went
+with the frames (StackedShareBar import, UNIT_KINDS, kindSegs /
+kindShare / kindKey, the two computed findings, ~1.7 KB of CSS);
+`StackedShareBar` itself stays — /anadohoi's scope/type pair uses it,
+including the `fmt`/`outside` props added for the retired bars.
+
 ## 2026-08-17 — /dase AWARDING BODIES / UNITS: top-10 lists become category share bars
 
 Presentation decision (user request, modelled on the /anadohoi PROJECT
