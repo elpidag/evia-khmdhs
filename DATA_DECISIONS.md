@@ -3319,3 +3319,72 @@ jointly signed contract split earlier today.
 090273987 co-op still holds the five batch-A contracts (€26.520) pending
 that verdict. All four excluded pages stay reachable and badged «outside
 the dataset».*
+
+## 2026-08-18 — Awardee review, batch A: six contractor ΑΦΜ the signed contracts prove wrong; the Greek State stops being a co-operative
+
+The other half of the 090273987 finding (batch B, same day). Five
+contracts are genuine co-op contracts whose registry ΑΦΜ field is simply
+wrong, and a sixth has a doubled digit. Co-ops key on the canonical ΑΦΜ
+and NEVER on the name — deliberately, because the registry spells one
+co-op three or more ways — so a wrong ΑΦΜ does not mislabel a row, it
+files the contract under a different entity.
+
+**Rewritten (`contractors_vat`, user verdict «yes on the five»):**
+- **24SYMV015522552 / 015522664 / 015522837** (€8.156,23 / €6.868,42 /
+  €4.161,29) — «…κ. Ζυγούρας Αθανάσιος, ως εκπρόσωπος του Ελληνικού
+  Δημοσίου με Α.Φ.Μ. 090273987 … και β) Η κα. Πρωτόγερου Ελευθερία,
+  πρόεδρος και νόμιμος εκπρόσωπος του ΔΑ.Σ.Ε. Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ …
+  και **Α.Φ.Μ 997106874**». The clerk copied the FIRST party's ΑΦΜ.
+- **24SYMV015532758** (€5.975,32) — «Ο κ. Νίκας Απόστολος … του ΔΑ.Σ.Ε.
+  ΠΕΥΚΟΦΥΤΟΥ ΝΕΣΤΟΡΙΟΥ … και **Α.Φ.Μ 096064168**».
+- **25SYMV017124601** (€14.045,60, ΑΔΜΗΕ) — a different fault: the field
+  holds «**0960988227**», TEN digits. The canonical rule takes the first
+  nine (096098822), an ΑΦΜ belonging to nobody, so the contract sat on a
+  one-contract ghost. The PDF names «ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ
+  - ΕΛΑΤΗΣ … **Α.Φ.Μ 096098227**»; the 099877486 beside it is ΑΔΜΗΕ's own.
+- **23SYMV013711668** (€1.358,52) — resolved on the NAME, user-approved
+  and flagged as such: this PDF prints no ΑΦΜ at all (6.259 characters,
+  not one). Five Σιδηρονέρι co-ops appear in the dataset (Η ΕΛΑΤΙΑ
+  096095618, Η ΡΟΔΟΠΗ 096156917, Η ΕΝΟΤΗΤΑ 999522306, one titleless
+  096133603, **Η ΟΜΟΝΟΙΑ 999888341**) and only the last carries the
+  registry row's title, spelled identically. Inference from a unique
+  name, not proof from the document — recorded in the entry's `reason`.
+
+**Mechanism added**: `contractors_vat` in `khmdhs.contract_corrections`
+— {registry ΑΦΜ → the ΑΦΜ the PDF states}, matching a row verbatim or as
+a 9-digit run inside it (so the ten-digit typo is addressable), targets
+validated as nine digits, unmatched keys logged and never invented,
+idempotent. Unit-tested incl. the refusal path.
+
+Both phantom identities also left the curated files —
+`dase_contractors.json` (260 → 258 loaded rows) and
+`dase_display_names.json` (249 → 247) — because the display-name file
+must stay bijective with the live co-op population (pinned).
+
+*Affects: NO money enters or leaves — the basis stays €30.858.962,59 and
+the population 2.002. The euros move to the co-ops that earned them:
+Ο.Υ.Κ. Δήμου Καστοριάς 7 → **10 contracts, €49.226,26**; Πευκοφύτου
+Νεστορίου 1 → **2, €15.476,94**; Αγ. Κυριακής-Παλαιογρατσάνου-Ελάτης
+9 → **10, €88.154,99**; Σιδηρονέρου «Η Ομόνοια» 24 → **25,
+€179.972,17**. n_coops 249 → **247** — the fictitious «ΔΑ.Σ.Ε. Ο.Υ.Κ.
+ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ [090273987]» (which was the Greek State) and the ghost
+096098822 are gone. Σ co-op € still reconciles to the basis exactly.*
+
+**Noted, not corrected — the registry's incl-ΦΠΑ figures on ΕΦΚΑ
+contracts.** Checking 24SYMV015522664 against its own price table (user
+question) showed three totals: the registry net €6.868,42 = the table's
+ΦΠΑ-free total (ΥΛΟΤΟΜΙΚΑ 8,78 + ΕΦΚΑ 1,20 + ΜΕΤΑΦΟΡΙΚΑ 10,98 + ΕΦΚΑ
+0,50 = 21,46 €/χ.κ.μ. × 320 = 6.867,20, the €1,22 gap being per-unit
+rounding) — so the figure the Atlas uses is document-correct; the
+registry's gross €8.516,84 = net × 1,24, which VATs the employer's ΕΦΚΑ
+although the contract's own table charges ΦΠΑ only on ΥΛΟΤΟΜΙΚΑ +
+ΜΕΤΑΦΟΡΙΚΑ (its printed unit price 26,20 €/χ.κ.μ. × 320 = €8.384,00);
+and the prose ceiling «θα ανέλθει ΕΩΣ του ποσού των 8.677,00€», ~3,5%
+above the table. 380 live contracts carry the ΕΦΚΑ CPV 66519300-4 and
+174 show gross == net × 1,24 exactly, so the registry's blind
+multiplication is systematic. The Atlas presents net everywhere, so no
+KPI, chart or ranking is affected — only the secondary «incl. ΦΠΑ»
+caption on those contract pages. Left as the registry's own figure
+rather than parsed per contract (the parse would be exactly the kind of
+fragile rule this project avoids); revisit if the gross ever becomes
+load-bearing.

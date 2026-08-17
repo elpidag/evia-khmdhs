@@ -47,12 +47,6 @@
   "form": "dase",
   "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
  },
- "090273987": {
-  "name": "ΔΑΣΕ Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ",
-  "is_dase": true,
-  "form": "dase",
-  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
- },
  "094311510": {
   "name": "ΧΑΤΖΗΓΑΚΗΣ ΤΕΧΝΙΚΗ ΑΕ",
   "is_dase": false,
@@ -520,12 +514,6 @@
   "is_dase": true,
   "form": "dase",
   "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
- },
- "096098822": {
-  "name": "ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
-  "is_dase": true,
-  "form": "dase",
-  "basis": "name_regex; full distinct-name list reviewed 2026-07-26; cleaned from keying-noise entry '0960988227'"
  },
  "0960988227": {
   "name": "ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",

@@ -89,3 +89,52 @@ def test_exclude_marks_duplicate_and_links_kept_twin(tmp_path):
     assert row[1] == "21SYMV000000002"
     assert "double-posting" in row[2]
     assert row[3] == 2537393.13  # amounts untouched — the row is registry evidence
+
+
+def _with_contractors(conn, rows):
+    for seq, vat in enumerate(rows):
+        conn.execute(
+            "INSERT INTO contractors (reference_number, seq, vat_number, name,"
+            " country, greek_vat) VALUES (?,?,?,?, 'GR', 1)",
+            ("21SYMV000000001", seq, vat, f"CO-OP {seq}"))
+    conn.commit()
+
+
+def test_contractors_vat_replaces_a_documented_wrong_afm(tmp_path):
+    """The registry sometimes files a contract under the AWARDING side's ΑΦΜ
+    (090273987, the Ελληνικό Δημόσιο) or under a doubled-digit typo. Co-ops
+    key on the ΑΦΜ, so the contract lands on a fictitious identity; the
+    curated rewrite puts back the ΑΦΜ the signed contract states
+    (DATA_DECISIONS 2026-08-18)."""
+    conn = _mini_db(tmp_path)
+    _with_contractors(conn, ["090273987", "0960988227"])
+    p = _corrections(tmp_path, {
+        "21SYMV000000001": {
+            "contractors_vat": {"090273987": "997106874",
+                                "0960988227": "096098227"},
+            "reason": "PDF names both co-ops with their own ΑΦΜ",
+        }})
+    assert apply_contract_corrections(conn, p) == 1
+    vats = [r[0] for r in conn.execute(
+        "SELECT vat_number FROM contractors WHERE reference_number ="
+        " '21SYMV000000001' ORDER BY seq")]
+    assert vats == ["997106874", "096098227"]      # ten-digit typo included
+    # idempotent: re-running finds nothing to rewrite and warns, never invents
+    assert apply_contract_corrections(conn, p) == 1
+    assert [r[0] for r in conn.execute(
+        "SELECT vat_number FROM contractors WHERE reference_number ="
+        " '21SYMV000000001' ORDER BY seq")] == vats
+
+
+def test_contractors_vat_refuses_a_non_afm_target(tmp_path, caplog):
+    conn = _mini_db(tmp_path)
+    _with_contractors(conn, ["090273987"])
+    p = _corrections(tmp_path, {
+        "21SYMV000000001": {"contractors_vat": {"090273987": "not-a-vat"},
+                            "reason": "typo in the curation"}})
+    with caplog.at_level("WARNING"):
+        apply_contract_corrections(conn, p)
+    assert "is not an ΑΦΜ" in caplog.text
+    assert conn.execute(
+        "SELECT vat_number FROM contractors WHERE reference_number ="
+        " '21SYMV000000001'").fetchone()[0] == "090273987"

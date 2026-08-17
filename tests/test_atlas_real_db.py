@@ -124,7 +124,7 @@ def test_pe_yearly_reconciles(client):
 def test_dase_pins(client):
     d = client.get("/api/dase/overview").get_json()
     assert d["kpis"]["n_contracts"] == 2002
-    assert d["kpis"]["n_coops"] == 249
+    assert d["kpis"]["n_coops"] == 247
     # 2026-08-03 payment harvest: net paid KPI with partial coverage
     # (payments posted for 891 of 2,008 live contracts; charts stay stated)
     # 2026-08-17 payment audit (closed): re-posts excluded on warrant-number
@@ -298,7 +298,7 @@ def test_dase_display_name_pins(client):
     conn.row_factory = sqlite3.Row
     names = {r["vat"]: (r["display_el"], r["display_en"]) for r in conn.execute(
         "SELECT vat, display_el, display_en FROM dase_display_names")}
-    assert len(names) == 249
+    assert len(names) == 247
 
     o = client.get("/api/dase/overview").get_json()
     for c in o["top_coops"]:
@@ -495,7 +495,7 @@ def test_pipelines_pins(client):
     assert p["antinero"]["n_vats"] == 163
     assert p["antinero"]["total_eur"] == pytest.approx(659_290_845.34)
     assert p["dase"]["total_eur"] == pytest.approx(30_858_962.59)
-    assert p["dase_n_coops"] == 249
+    assert p["dase_n_coops"] == 247
     assert [s["name"] for s in p["shared_awarders"]] == [
         "ΥΠΟΥΡΓΕΙΟ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΚΑΙ ΕΝΕΡΓΕΙΑΣ"
     ]

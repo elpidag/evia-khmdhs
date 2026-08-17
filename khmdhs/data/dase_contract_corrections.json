@@ -141,5 +141,41 @@
   "exclude": true,
   "related_to": "",
   "reason": "Not a co-op contract: «2.Η Τοφέα Αναστασία (Αλουμινοκατασκευές - Σιδηροκατασκευές) – Αυξέντιο Ξάνθης … ΑΦΜ: 133510498», an aluminium/steel fabricator awarded by 24AWRD015613805. Not a forest co-operative, and it holds no other contract here. It entered this contractor-led dataset only because its contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the awarding side (DATA_DECISIONS 2026-08-18)."
+ },
+ "24SYMV015522552": {
+  "contractors_vat": {
+   "090273987": "997106874"
+  },
+  "reason": "The contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the FIRST party — so the contract was filed under a fictitious co-op (co-ops key on the ΑΦΜ, never on the name). The signed contract states the real one: «…κ. Ζυγούρας Αθανάσιος, ως εκπρόσωπος του Ελληνικού Δημοσίου με Α.Φ.Μ. 090273987, Δ.Ο.Υ. Ψυχικού και β) Η κα. Πρωτόγερου Ελευθερία, πρόεδρος και νόμιμος εκπρόσωπος του ΔΑ.Σ.Ε. Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ, με έδρα το Σιδηροχώρι και Α.Φ.Μ 997106874». The co-op already holds 7 other contracts under 997106874, spelled identically (DATA_DECISIONS 2026-08-18)."
+ },
+ "24SYMV015522664": {
+  "contractors_vat": {
+   "090273987": "997106874"
+  },
+  "reason": "The contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the FIRST party — so the contract was filed under a fictitious co-op (co-ops key on the ΑΦΜ, never on the name). The signed contract states the real one: «…κ. Ζυγούρας Αθανάσιος, ως εκπρόσωπος του Ελληνικού Δημοσίου με Α.Φ.Μ. 090273987, Δ.Ο.Υ. Ψυχικού και β) Η κα. Πρωτόγερου Ελευθερία, πρόεδρος και νόμιμος εκπρόσωπος του ΔΑ.Σ.Ε. Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ, με έδρα το Σιδηροχώρι και Α.Φ.Μ 997106874». The co-op already holds 7 other contracts under 997106874, spelled identically (DATA_DECISIONS 2026-08-18)."
+ },
+ "24SYMV015522837": {
+  "contractors_vat": {
+   "090273987": "997106874"
+  },
+  "reason": "The contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the FIRST party — so the contract was filed under a fictitious co-op (co-ops key on the ΑΦΜ, never on the name). The signed contract states the real one: «…κ. Ζυγούρας Αθανάσιος, ως εκπρόσωπος του Ελληνικού Δημοσίου με Α.Φ.Μ. 090273987, Δ.Ο.Υ. Ψυχικού και β) Η κα. Πρωτόγερου Ελευθερία, πρόεδρος και νόμιμος εκπρόσωπος του ΔΑ.Σ.Ε. Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ, με έδρα το Σιδηροχώρι και Α.Φ.Μ 997106874». The co-op already holds 7 other contracts under 997106874, spelled identically (DATA_DECISIONS 2026-08-18)."
+ },
+ "24SYMV015532758": {
+  "contractors_vat": {
+   "090273987": "096064168"
+  },
+  "reason": "The contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the FIRST party — so the contract was filed under a fictitious co-op (co-ops key on the ΑΦΜ, never on the name). The signed contract states the real one: «…και β) Ο κ. Νίκας Απόστολος, πρόεδρος και νόμιμος εκπρόσωπος του ΔΑ.Σ.Ε. ΠΕΥΚΟΦΥΤΟΥ ΝΕΣΤΟΡΙΟΥ, με έδρα το Πευκόφυτο και Α.Φ.Μ 096064168». That ΑΦΜ is the co-op's curated identity and already holds its other contract (DATA_DECISIONS 2026-08-18)."
+ },
+ "25SYMV017124601": {
+  "contractors_vat": {
+   "0960988227": "096098227"
+  },
+  "reason": "Registry keying error in the contractor ΑΦΜ: the field holds «0960988227» — TEN digits. The canonical rule takes the first nine (096098822), an ΑΦΜ that belongs to nobody, so this ΑΔΜΗΕ contract sat on a one-contract ghost identity. The signed contract names «ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ - ΕΛΑΤΗΣ … Α.Φ.Μ 096098227 - Δ.Ο.Υ. ΚΟΖΑΝΗΣ», which already holds 9 contracts here; the 099877486 on the same line is ΑΔΜΗΕ's own ΑΦΜ, the ΕΠΙΧΕΙΡΗΣΗ side (DATA_DECISIONS 2026-08-18)."
+ },
+ "23SYMV013711668": {
+  "contractors_vat": {
+   "090273987": "999888341"
+  },
+  "reason": "The contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the FIRST party — so the contract was filed under a fictitious co-op (co-ops key on the ΑΦΜ, never on the name). The signed contract states the real one: nothing — this PDF prints no ΑΦΜ at all (6.259 characters, not one). Resolved on the registry NAME instead, user-approved: «ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ Η ΟΜΟΝΟΙΑ». Five Σιδηρονέρι co-ops appear in this dataset — Η ΕΛΑΤΙΑ 096095618, Η ΡΟΔΟΠΗ 096156917, Η ΕΝΟΤΗΤΑ 999522306, one titleless 096133603 and Η ΟΜΟΝΟΙΑ 999888341 — and only the last carries this title, spelled identically. Inference from a unique name, NOT proof from the document (DATA_DECISIONS 2026-08-18)."
  }
 }

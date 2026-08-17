@@ -83,7 +83,44 @@ def apply_contract_corrections(conn: sqlite3.Connection,
                     logging.warning("objects correction for %s seq %s matched no row",
                                     ref, seq)
             _apply_contractors_keep(conn, ref, fix.get("contractors_keep"))
+            _apply_contractors_vat(conn, ref, fix.get("contractors_vat"))
     return n
+
+
+def _apply_contractors_vat(conn: sqlite3.Connection, ref: str,
+                           mapping: dict | None) -> None:
+    """Replace a contractor ΑΦΜ the signed contract proves wrong.
+
+    Two registry faults need this (DATA_DECISIONS 2026-08-18): the field
+    carries the AWARDING side's ΑΦΜ — nine contracts held the Ελληνικό
+    Δημόσιο's 090273987, which fused them into one fictitious co-op — or a
+    digit is doubled («0960988227» for 096098227), giving a canonical ΑΦΜ
+    that belongs to nobody. Since co-ops key on the ΑΦΜ and never on the
+    name, either fault files the contract under the wrong entity.
+
+    `mapping` is {registry ΑΦΜ string → the ΑΦΜ the PDF states}; a key
+    matches a row either verbatim or as a 9-digit run inside it, so the
+    ten-digit typo is addressable. Targets must be nine digits. Rows that
+    match nothing are logged, never invented; re-running is a no-op.
+    """
+    for old, new in (mapping or {}).items():
+        old_s, new_s = str(old).strip(), str(new).strip().zfill(9)
+        if not re.fullmatch(r"\d{9}", new_s):
+            logging.warning("contractors_vat for %s: %r is not an ΑΦΜ", ref, new)
+            continue
+        hits = [seq for seq, raw in conn.execute(
+            "SELECT seq, vat_number FROM contractors WHERE reference_number = ?",
+            (ref,))
+            if (raw or "").strip() == old_s
+            or old_s.zfill(9) in {d.zfill(9)
+                                  for d in re.findall(r"\d{8,9}", raw or "")}]
+        if not hits:
+            logging.warning("contractors_vat for %s: no row carries %s",
+                            ref, old_s)
+            continue
+        for seq in hits:
+            conn.execute("UPDATE contractors SET vat_number = ? WHERE "
+                         "reference_number = ? AND seq = ?", (new_s, ref, seq))
 
 
 def _apply_contractors_keep(conn: sqlite3.Connection, ref: str,
