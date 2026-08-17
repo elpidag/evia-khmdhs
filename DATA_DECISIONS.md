@@ -3388,3 +3388,44 @@ caption on those contract pages. Left as the registry's own figure
 rather than parsed per contract (the parse would be exactly the kind of
 fragile rule this project avoids); revisit if the gross ever becomes
 load-bearing.
+
+## 2026-08-18 — Awardee review, `missing` class: 45 flags, zero corrections — and the scanner learns the public-bodies registry
+
+The third class of the 96 (`missing` = the signed PDF announces a party
+ΑΦΜ the registry's contractor list does not contain). Triaged by asking
+what each ΑΦΜ IS, against the two curated vocabularies the project already
+maintains: 43 of the 45 are **public bodies** — the awarding side, which
+can never be the contractor. The audit already suppressed awarding ΑΦΜ,
+but only those appearing on ≥5 contracts (a deliberate threshold: a few
+co-op ΑΦΜ sit in `organization_vat` by registry error and a blanket rule
+hid the very rows the audit exists to find). A δήμος that awarded two
+contracts fell through and read as a missing contractor on its own
+contracts.
+
+**Fix**: the audit now also treats every ΑΦΜ in the curated
+`public_bodies` registry (67 awarding bodies, ΑΦΜ curated per entry) as
+an awarding ΑΦΜ. A public body is never a forest co-op — the two curated
+vocabularies are disjoint by construction — so this can hide nothing the
+audit looks for. The class collapses **45 → 2** and `ok` rises 403 → 446.
+
+**The two survivors, both dismissed after reading the documents:**
+- **26SYMV019333598** (€53.032,65, Εφορεία Αρχαιοτήτων Χαλκιδικής): the
+  registry's contractor 996854516 «ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ
+  ΒΟΡΕΙΝΟΥ ΑΛΜΩΠΙΑΣ ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ» is exactly the party the contract
+  names. The second co-op ΑΦΜ (096085938 ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ) appears in
+  the integrity-clause annex as **υπεργολάβος** providing «δάνεια
+  στήριξη» for the άρθρο 2.2.6 capacity requirement — a subcontracting
+  relation between two co-ops, not a second contracting party. Recorded
+  here because it is the first such case seen; the dataset has no
+  subcontractor layer and does not claim one.
+- **25SYMV016635078** (€6.000, Δήμος Ν. Προποντίδας): parties are the
+  δήμος and ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΟΛΥΓΥΡΟΥ 096034649, both as stored.
+  The flagged 073576903 comes from the **digital-signature footer**
+  («Πατρώνυμο: ΧΡΗΣΤΟΣ … ΑΦΜ: 073576903 Ημ. Υπογραφής») — the natural
+  person who signed the file, not a party.
+
+*Affects: no data. Review status of the 96: `over_attributed` (2) and
+`missing` (2) dismissed with reasons, `vat_mismatch_name_ok` down to 4
+rows that are all already corrected or excluded — **41 scanned
+`no_text` contracts (€558.134,10 net) remain**, needing visual reads
+like the 42 payment documents of 2026-08-17.*

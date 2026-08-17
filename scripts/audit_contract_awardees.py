@@ -140,6 +140,18 @@ def audit(conn: sqlite3.Connection, cache: Path) -> list[dict]:
         "SELECT organization_vat FROM contracts WHERE organization_vat IS NOT NULL "
         "GROUP BY organization_vat HAVING COUNT(*) >= 5")}
     authorities.add("090273987")          # Ελληνικό Δημόσιο / ΥΠΕΝ
+    # …plus every ΑΦΜ in the curated public-bodies registry. A δήμος that
+    # awarded two contracts misses the threshold above, and its ΑΦΜ then
+    # reads as a «missing» contractor on its own contracts: that alone
+    # accounted for 43 of the 45 rows in the class (DATA_DECISIONS
+    # 2026-08-18). A public body is never a forest co-op, so this can hide
+    # nothing the audit is looking for — the co-op directory is the
+    # complementary vocabulary and the loader keeps the two disjoint.
+    try:
+        authorities |= {str(r[0]).strip().zfill(9) for r in conn.execute(
+            "SELECT afm FROM public_bodies WHERE afm IS NOT NULL")}
+    except sqlite3.OperationalError:      # registry not loaded in this DB
+        pass
     out = []
     for r in conn.execute("""SELECT reference_number ref, organization_vat org,
                                     total_cost_without_vat net, cancelled,
