@@ -3587,3 +3587,67 @@ too.
 `test_override_authority_links_ship_their_evidence` (all 6 contracts must
 carry evidence on every override link, and the registry title must stay
 unrewritten).*
+
+## 2026-08-18 — PROJECT BUDGET keyed as CONTRACT VALUE: 4 contracts overstated by €31,7M (4,8% of the Anti-nero basis)
+
+Found by the procurement-family analysis the user proposed instead of the
+work-location layer, and found within minutes of starting it.
+
+**How it surfaced.** 24SYMV015544651 («ΤΜΗΜΑΤΟΣ ΕΡΓΟΥ ΜΙΚΤΩΝ ΑΝΤΙΠΥΡΙΚΩΝ
+ΖΩΝΩΝ», €31,0M — the largest contract in the programme) cites πρόσκληση
+24PROC014447893 in its text. Seven other contracts cite the same
+πρόσκληση, and they are exactly the eight Δασαρχεία the parent project
+title names (Αλιβερίου, Ιστιαίας, Λίμνης, Χαλκίδας, Διδυμοτείχου,
+Καλαμάτας, Σπάρτης, Κυπαρισσίας). Beside siblings of €0,59M–4,18M, the
+€31M lot was visibly wrong.
+
+**The error.** The registry keyed the funding recital instead of the price:
+
+> «η συνεισφορά του **Ταμείου Ανάκαμψης** στον **συνολικό προϋπολογισμό
+> του ΕΡΓΟΥ** ανέρχεται σε χρηματικό ποσό ίσο με 31.024.697,04 ευρώ, ενώ
+> η αντίστοιχη συνεισφορά του ΠΔΕ … 7.445.927,29 ευρώ και αφορά στον ΦΠΑ 24%»
+
+That is the whole multi-lot project's budget (ΟΠΣ ΤΑ 5222791; note the ΠΔΕ
+figure is exactly its 24% ΦΠΑ). The contract's own price sits in **Άρθρο 5
+«Αμοιβή Αναδόχου»**.
+
+**Screened corpus-wide, not guessed**: of the 245 in-scope contracts, 19
+quote such an RRF project budget and **exactly 4 store it as their value**.
+
+| contract | stored net | true fee (Άρθρο 5) | paid | paid/true | paid/stored |
+|---|---|---|---|---|---|
+| 24SYMV015544651 Σπάρτης | 31.024.697,04 | **4.003.194,80** | 3.901.409,44 | 97% | 13% |
+| 24SYMV015170080 Αταλάντης κ.λπ. | 2.284.973,72 | **1.202.106,04** | 1.034.960,00 | 86% | 45% |
+| 24SYMV015170089 Πεντέλης κ.λπ. | 2.284.973,72 | **799.483,29** | 712.351,35 | 89% | 31% |
+| 24SYMV015170098 Σουφλίου | 2.284.973,72 | **156.871,91** | 135.059,75 | 86% | 6% |
+
+The last three are the three lots of ONE πρόσκληση (24PROC014835083), each
+stamped with the same project budget; their true fees sum to €2.158.461,24
+against that €2.284.973,72 budget — the difference being the tender
+discounts, as expected.
+
+**Each figure confirmed three ways**: the Άρθρο 5 wording; the incl-ΦΠΑ
+figure printed in the same sentence (all four verified present in the PDF
+text); and the payment orders, which land at 86–97% of the true fee and at
+6–45% of the stored one.
+
+**Also checked, clean**: the only other pair sharing an identical stored
+value (25SYMV016659302 / 25SYMV017779215, €3.363.432,24, identical texts
+after stripping ΑΔΑΜ stamps) needs no action — the first posting is already
+registry-cancelled and carries no payments.
+
+*Affects: Anti-nero stated-net basis €659.290.845,34 → **€627.572.883,18**
+(−€31.717.962,16, 4,8%). Contract values and their `contract_objects` rows
+corrected in `khmdhs/data/contract_corrections.json` (1 → 5 entries).
+Everything derived re-reconciled by itself — categories, sankey, Π.Ε.
+yearly, connections, pipelines and explore all still sum to the basis with
+no code change, because none of them hardcodes it. webui's effective-gross
+presentation is unchanged at €604.543.493,99: all four contracts have
+payments, so its effective-cost basis was already payment-driven.
+/compare ratio ≈22,0× → ≈21,0×.*
+
+**Open**: the fee-clause wording that made the audit possible appears in
+only 29 of 245 contracts, and the RRF-recital test only in 19 — so this
+error class is screened, but the wider "does the stored value match the
+document" question remains unaudited on the Anti-nero side, which has never
+had the value validator the ΔΑΣΕ side received.

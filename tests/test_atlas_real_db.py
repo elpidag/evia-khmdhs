@@ -25,7 +25,7 @@ def client():
 def test_meta_pins(client):
     m = client.get("/api/meta").get_json()
     assert m["antinero"]["n_contracts"] == 245
-    assert m["antinero"]["total_eur"] == pytest.approx(659_290_845.34)
+    assert m["antinero"]["total_eur"] == pytest.approx(627_572_883.18)
     assert m["dase"]["n_contracts"] == 1998
     assert m["dase"]["total_eur"] == pytest.approx(29_920_558.46)
 
@@ -77,7 +77,7 @@ def test_categories_pins(client):
         "meletes": 14, "antidiavrotika": 12, "anadasoseis": 8,
         "ylotomies": 6, "ydatodexamenes": 1}
     assert sum(c["n"] for c in cats) == o["kpis"]["n_contracts"]
-    assert sum(c["eur"] for c in cats) == pytest.approx(659_290_845.34)
+    assert sum(c["eur"] for c in cats) == pytest.approx(627_572_883.18)
     assert cats[0]["key"] == "dasotexnika"
     assert cats[0]["eur"] == pytest.approx(359_263_907.38)
     assert all(c["label"] and c["label"] != c["key"] for c in cats)
@@ -104,8 +104,8 @@ def test_sankey_reconciles(client):
     s = client.get("/api/antinero/sankey").get_json()
     ministry_out = sum(l["eur"] for l in s["links"] if l["s"] == "ministry")
     contractor_in = sum(l["eur"] for l in s["links"] if l["s"] != "ministry")
-    assert ministry_out == pytest.approx(659_290_845.34, abs=1.0)
-    assert contractor_in == pytest.approx(659_290_845.34, abs=1.0)
+    assert ministry_out == pytest.approx(627_572_883.18, abs=1.0)
+    assert contractor_in == pytest.approx(627_572_883.18, abs=1.0)
 
 
 def test_swarm_pins(client):
@@ -118,7 +118,7 @@ def test_pe_yearly_reconciles(client):
     py = client.get("/api/antinero/pe-yearly").get_json()
     assert len(py["pes"]) == 59
     total = sum(p["total_eur"] for p in py["pes"]) + py["unresolved_eur"]
-    assert total == pytest.approx(659_290_845.34, abs=1.0)
+    assert total == pytest.approx(627_572_883.18, abs=1.0)
 
 
 def test_override_authority_links_ship_their_evidence(client):
@@ -499,7 +499,7 @@ def test_connections_pins(client):
     assert len(n["authorities"]) == 103
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
-        659_290_845.34, abs=1.0)
+        627_572_883.18, abs=1.0)
 
 
 def test_authorities_pins(client):
@@ -526,7 +526,7 @@ def test_pipelines_pins(client):
     p = client.get("/api/compare").get_json()["pipelines"]
     assert p["vat_overlap"] == []          # the zero-overlap headline fact
     assert p["antinero"]["n_vats"] == 163
-    assert p["antinero"]["total_eur"] == pytest.approx(659_290_845.34)
+    assert p["antinero"]["total_eur"] == pytest.approx(627_572_883.18)
     assert p["dase"]["total_eur"] == pytest.approx(29_920_558.46)
     assert p["dase_n_coops"] == 246
     assert [s["name"] for s in p["shared_awarders"]] == [
@@ -540,7 +540,7 @@ def test_explore_pins(client):
     assert len(e["rows"]) == 2312
     # value bases per dataset reconcile with their own conventions
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
-    assert kh_sum == pytest.approx(659_290_845.34, abs=1.0)
+    assert kh_sum == pytest.approx(627_572_883.18, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
     assert dase_sum == pytest.approx(29_920_558.46, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
