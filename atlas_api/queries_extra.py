@@ -668,9 +668,17 @@ def dase_kpis(dase: sqlite3.Connection) -> dict:
 
 def contract_authorities(kh: sqlite3.Connection, adam: str) -> list[dict]:
     """The contract's linked forest authorities with their seats — feeds
-    the detail-page map (template rebuild, 2026-08-17)."""
+    the detail-page map (template rebuild, 2026-08-17).
+
+    `excerpt` rides along because 6 contracts are linked by curated
+    OVERRIDE rather than by their title, and 3 of those titles actively
+    contradict what the page then shows (25SYMV016491944 is titled «ΔΔ
+    ΛΕΣΒΟΥ» while its PDF places the works in Ρόδος). The evidence was
+    stored from the start and never left the DB, so the page read as our
+    error instead of the documented registry one (DATA_DECISIONS
+    2026-08-18)."""
     rows = kh.execute("""
-        SELECT cfa.authority_name AS name, cfa.source, fa.kind,
+        SELECT cfa.authority_name AS name, cfa.source, cfa.excerpt, fa.kind,
                fa.lat, fa.lon, fa.region_pe, fa.seat_precision
         FROM contract_forest_authorities cfa
         LEFT JOIN forest_authorities fa ON fa.name = cfa.authority_name

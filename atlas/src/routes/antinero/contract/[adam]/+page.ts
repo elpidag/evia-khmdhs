@@ -87,6 +87,9 @@ export interface ContractDetail {
 	authorities?: {
 		name: string;
 		source: string | null;
+		/** curated evidence, present when source is `override`: why these units
+		 *  and not the ones the registry title names */
+		excerpt?: string | null;
 		kind: string | null;
 		lat: number | null;
 		lon: number | null;

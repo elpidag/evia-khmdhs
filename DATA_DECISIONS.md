@@ -3547,3 +3547,43 @@ already rejected for the award-derived locations.
 *Affects: no data, no schema, no curated file. The work regions stay at
 Π.Ε. level, derived from the awarding unit as documented. Revisit only if
 διαχειριστικές μελέτες or a compartment layer become public.*
+
+## 2026-08-18 — Override authority links now SHOW their evidence: «ΔΔ ΛΕΣΒΟΥ» over works in Ρόδος no longer reads as our error
+
+User question, from the contract page: if «Διεύθυνση Δασών Λέσβου» is
+wrong, why does the document trail still print it?
+
+**Two answers, and one of them was a defect.**
+
+The trail prints the ΚΗΜΔΗΣ title **verbatim, and must** — that string IS
+the document's registry title and the primary evidence of the keying
+error. Rewriting it would edit the public record; the same rule keeps
+ΔΑΣΕ registry spellings visible beside their curated display names.
+
+The defect was silence. `forest_loader` links 6 contracts to their units
+by curated OVERRIDE and stores the justification in
+`contract_forest_authorities.excerpt` — but `queries_extra.contract_authorities`
+never selected that column, so the sentence reached nobody. A reader saw a
+title saying **Λέσβος**, a region saying **Ρόδος** and a unit saying
+**Δωδεκανήσου**, with no explanation: it read as the site's mistake rather
+than the registry's documented one.
+
+**Fixed**: the excerpt ships on the payload and renders in EXTRACTED QUOTES
+FROM DOCUMENTS as «Awarding unit — curated correction», noting that the
+units follow the signed PDF and not the title; the trail's own row carries
+a neutral chip «unit corrected from the PDF» so the contradiction is
+flagged where the reader meets it. For 25SYMV016491944 the page now quotes:
+«Title says «ΔΔ ΛΕΣΒΟΥ» but the signed PDF (fetched 2026-07-25) repeatedly
+declares works «αρμοδιότητας Διεύθυνσης Δασών Δωδεκανήσου … εντός του Δήμου
+Ρόδου της Π.Ε. Ρόδου (NUTS EL421)» — the title is a registry keying error».
+
+3 of the 6 titles actively contradict the units shown (25SYMV016491944
+Λέσβου→Δωδεκανήσου; 25SYMV016495437, whose «ΔΔ ΕΒΡΟΥ ΚΑΙ ΡΟΔΟΠΗΣ» omits
+Ξάνθη; 23SYMV013600200's nursery contract). The other 3 are abbreviations
+the override merely pins precisely — the same evidence line explains those
+too.
+
+*Affects: presentation only, no figure moves. Pinned by
+`test_override_authority_links_ship_their_evidence` (all 6 contracts must
+carry evidence on every override link, and the registry title must stay
+unrewritten).*

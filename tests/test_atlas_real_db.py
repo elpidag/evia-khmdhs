@@ -121,6 +121,37 @@ def test_pe_yearly_reconciles(client):
     assert total == pytest.approx(659_290_845.34, abs=1.0)
 
 
+def test_override_authority_links_ship_their_evidence(client):
+    """6 contracts are linked to their forest units by curated OVERRIDE, and
+    3 of those registry titles contradict what the page then shows —
+    25SYMV016491944 is titled «ΔΔ ΛΕΣΒΟΥ» over works its own PDF places in
+    Ρόδος. The evidence sentence was stored from the start but never left
+    the DB, so the page read as our error rather than the registry's
+    (DATA_DECISIONS 2026-08-18). Every override link must carry it."""
+    d = client.get("/api/antinero/contract/25SYMV016491944").get_json()
+    auth = d["authorities"]
+    assert len(auth) == 1
+    assert auth[0]["name"] == "Διεύθυνση Δασών Δωδεκανήσου"
+    assert auth[0]["source"] == "override"
+    assert "ΛΕΣΒΟΥ" in auth[0]["excerpt"]          # names the wrong title…
+    assert "Δωδεκανήσου" in auth[0]["excerpt"]     # …and what the PDF says
+    # the registry title itself is NEVER rewritten — it is the evidence
+    assert "ΛΕΣΒΟΥ" in d["title"]
+    assert d["regions"][0]["region_pe"] == "Π.Ε. Ρόδου"
+    import sqlite3
+    conn = sqlite3.connect(f"file:{DEFAULT_DB.as_posix()}?mode=ro", uri=True)
+    refs = [r[0] for r in conn.execute(
+        "SELECT DISTINCT reference_number FROM contract_forest_authorities"
+        " WHERE source LIKE 'override%'")]
+    conn.close()
+    assert len(refs) == 6
+    for ref in refs:
+        links = client.get(f"/api/antinero/contract/{ref}").get_json()["authorities"]
+        over = [a for a in links if (a["source"] or "").startswith("override")]
+        assert over, ref
+        assert all(a["excerpt"] for a in over), ref
+
+
 def test_dase_pins(client):
     d = client.get("/api/dase/overview").get_json()
     assert d["kpis"]["n_contracts"] == 1998

@@ -75,11 +75,36 @@
 			title: t.title ?? null,
 			pdf: pdfHref(t),
 			self: t.self,
-			...trailChip(t)
+			// the registry title stays verbatim — it IS the document's title and
+			// the evidence of the error; the chip points at the explanation below
+			...(t.self && overrideNote
+				? { chip: 'unit corrected from the PDF', chipBad: false }
+				: trailChip(t))
 		}))
 	);
 
+	// 6 contracts are linked to their forest units by curated OVERRIDE, and 3
+	// of those registry titles contradict the units shown (25SYMV016491944 is
+	// titled «ΔΔ ΛΕΣΒΟΥ» over works its PDF places in Ρόδος). The evidence
+	// exists; without it the page reads as our error, not the registry's.
+	// One sentence per contract — it is stored on every one of its links.
+	const overrideNote = $derived(
+		(c.authorities ?? []).find((a) => (a.source ?? '').startsWith('override') && a.excerpt)
+			?.excerpt ?? null
+	);
+
 	const quotes = $derived<Quote[]>([
+		...(overrideNote
+			? [
+					{
+						label: 'Awarding unit — curated correction',
+						text: overrideNote,
+						code: c.reference_number,
+						href: `/pdf/contract/${c.reference_number}`,
+						note: 'The units above follow the signed PDF, not the registry title.'
+					}
+				]
+			: []),
 		...(c.category
 			? [
 					{
