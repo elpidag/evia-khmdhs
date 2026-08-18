@@ -3509,3 +3509,41 @@ paid net €20.709.665,22 → **€20.405.695,74**, 961 → 953 orders, 897 → 
 paid contracts; n_cancelled 98 → 102; co-ops 247 → **246**; curated
 directory 258 → 257 rows. /compare ratio ≈22,0×. Π.Ε. Ευβοίας loses four
 contracts.*
+
+## 2026-08-18 — NEGATIVE FINDING: the συστάδα / δημόσιο δάσος layer is not built — the documents locate 20% of contracts and no compartment geometry exists
+
+Probed on the full live ΔΑΣΕ population (1.998 contracts), reading each
+contract's own cached text first and its award/notice/request acts second.
+Deterministic anchors, case-tolerant on the anchor and case-sensitive on
+the captured name:
+
+| element | contracts | share |
+|---|---|---|
+| συστάδα (compartment) | 1.607 | 80,4% |
+| δημόσιο δάσος | 475 | 23,8% |
+| δασικό σύμπλεγμα | 238 | 11,9% |
+| **συστάδα + δάσος together** | **403** | **20,2%** |
+
+(συστάδα found in the contract itself for 1.516, in its award for 91.)
+
+**Why that is not enough.** A compartment number is meaningless without
+its forest — numbering restarts in every δάσος, so «53β» is a place only
+as «53β of the Δημόσιο Δάσος Χαλάρας». The full pair exists for a fifth
+of the population; the other 60% would carry a bare id that locates
+nothing.
+
+**And it could never reach the map.** Greek forest compartment boundaries
+live in each Δασαρχείο's διαχειριστική μελέτη and are not published
+anywhere open — unlike the ανάδοχοι work-sites, this layer has no
+geometry to draw and no toponym to geocode below the forest name.
+
+**User decision**: do not build it («since we don't even have the names of
+the forests on all of the contracts I think we should not go on with
+this»). The forest NAME alone (475 contracts) is a genuine toponym that
+could be geocoded coarsely, but shipping a work-location feature that is
+blank on three of every four contracts repeats the partial-coverage trap
+already rejected for the award-derived locations.
+
+*Affects: no data, no schema, no curated file. The work regions stay at
+Π.Ε. level, derived from the awarding unit as documented. Revisit only if
+διαχειριστικές μελέτες or a compartment layer become public.*
