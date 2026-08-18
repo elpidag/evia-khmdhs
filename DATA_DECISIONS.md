@@ -3777,3 +3777,43 @@ procured as one.
 absent, CASCADE rebuild, and the eight-lot family 24PROC014447893 whose
 sibling comparison exposed the €31M project-budget error and which the
 ΚΗΜΔΗΣ chain links to zero contracts.*
+
+## 2026-08-18 — The contract page shows its procurement: acts the registry never linked, and the call's other contracts
+
+Two presentation defects closed, both found by the user reading the page.
+
+**1. The trail hid documents we hold.** DOCUMENT TRAIL–TIMELINE was built
+purely from `contract_linked_acts`, i.e. the registry's declared chain,
+which is empty for 188 of 344 contracts. So 24SYMV015170098 showed its
+call in the new diagram and an empty chain in the trail.
+
+Checked against the live registry before changing anything: the
+`adamChain` for that contract returns `notices: []`, `auctions: []`,
+`requests: []`, and the award's own record (24AWRD015088777, «Απόφαση
+Κατακύρωσης για την Εκπόνηση μελετών…») carries `contractRefNo: []` and
+`noticeReferenceNumber: None`. **Neither document points at the other in
+the open data** — the ΚΗΜΔΗΣ web UI joins them by ΕΣΗΔΗΣ number
+internally, which the API does not expose.
+
+The trail now also lists the acts the contract's OWN TEXT cites, dated
+from each PDF's «<ΑΔΑΜ> <YYYY-MM-DD>» registry stamp (there is no
+metadata to date them from) and chipped «cited in this contract» so the
+provenance is explicit — a row the contract asserts is not the same claim
+as a row the registry published. Titles stay «—»: we hold no reliable
+title for those acts and do not invent one.
+
+**2. «CONTRACTS UNDER THE SAME CALL»** (user's wording and sketch): the
+call at the centre, its contracts orbiting on dashed connectors, every
+circle's AREA proportional to stated net €, each labelled with its ΑΔΑΜ,
+the viewed contract filled. Sized to the map's column (≤460px) and placed
+beside the trail, so one procurement reads across the page. The centre is
+the sum, which is what makes an out-of-scale lot obvious — this is the
+view that exposed the €31M project-budget error.
+
+*Affects: presentation only. Two implementation notes worth keeping: the
+label widths size the viewBox, so an underestimate clips every edge label
+(measured at 6,6 units/char for the futura digits, and a render test now
+asserts no text escapes the SVG box); and Vite served STALE component CSS
+after a rewrite — the diagram rendered as black blobs because `.link`
+still carried the previous version's rules. Touching the file fixed it;
+suspect it before hunting a code bug.*

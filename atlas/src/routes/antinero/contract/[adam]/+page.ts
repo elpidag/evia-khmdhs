@@ -97,6 +97,18 @@ export interface ContractDetail {
 		seat_precision: string | null;
 	}[];
 	sites: { site_name: string; region_pe: string; page: number | null; excerpt: string | null }[];
+	/** procurement family read from the contract's own text: the πρόσκληση
+	 *  it cites and every sibling citing the same one. Null for direct
+	 *  awards and negotiations, which publish no call. */
+	family?: {
+		call: string;
+		role: string;
+		source: string;
+		excerpt: string;
+		amendments: string[];
+		total_eur: number;
+		contracts: { ref: string; title: string | null; d: string | null; eur: number | null }[];
+	} | null;
 	/** ΔΑΣΕ detail map geo (region + awarding-unit seat); absent on kh side */
 	geo?: { pe: string | null; unit_seat: { name: string; lat: number; lon: number } | null };
 	timeline: {
@@ -113,6 +125,10 @@ export interface ContractDetail {
 		in_db: boolean;
 		/** in-db contract rows: first contractor name (family diagram labels) */
 		who?: string | null;
+		/** the contract's own text cites this act; the registry never
+		 *  declared it, so it has no linked_acts row */
+		cited?: boolean;
+		role?: string;
 		/** completion acts only (Diavgeia) */
 		ckind?: 'oristiki_paralavi' | 'paralavi' | 'peraiosi' | 'oloklirosi';
 		end_basis?: 'protocol_date' | 'act_date';

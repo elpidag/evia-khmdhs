@@ -14,6 +14,7 @@ import re
 import sqlite3
 import unicodedata
 
+from khmdhs.config import PDF_CACHE_DIR
 from khmdhs.greek_regions import PE_CENTROIDS, canonical_pe
 from webui import dase_queries as dq
 from webui import queries as q
@@ -665,6 +666,46 @@ def dase_kpis(dase: sqlite3.Connection) -> dict:
 
 
 # ------------------------------------------------------- ΔΑΣΕ display names
+
+def contract_family(kh: sqlite3.Connection, adam: str) -> dict | None:
+    """The contract's procurement family: the πρόσκληση it cites and every
+    sibling contract citing the same one, each with its own stated net €.
+
+    Read from `contract_families`, which the loader derives from the
+    contracts' own signed texts — the ΚΗΜΔΗΣ chain declares this for only
+    40 of 245 in-scope contracts (DATA_DECISIONS 2026-08-18). Returns None
+    for direct awards and negotiations, which publish no call at all.
+    """
+    try:
+        me = kh.execute(
+            "SELECT adam, role, source, excerpt FROM contract_families"
+            " WHERE reference_number = ? AND kind = 'notice'"
+            " ORDER BY CASE role WHEN 'procurement' THEN 0 ELSE 1 END, seq",
+            (adam,)).fetchall()
+    except sqlite3.OperationalError:            # table not built yet
+        return None
+    if not me:
+        return None
+    call = me[0]
+    members = kh.execute("""
+        SELECT f.reference_number AS ref, c.title, c.contract_signed_date AS d,
+               c.total_cost_without_vat AS eur, s.in_scope
+          FROM contract_families f
+          JOIN contracts c ON c.reference_number = f.reference_number
+          LEFT JOIN contract_scope s ON s.reference_number = f.reference_number
+         WHERE f.adam = ? AND f.kind = 'notice' AND f.role = 'procurement'
+         ORDER BY c.total_cost_without_vat DESC""", (call["adam"],)).fetchall()
+    return {
+        "call": call["adam"],
+        "role": call["role"],
+        "source": call["source"],
+        "excerpt": call["excerpt"],
+        # the call's own amendments, when the contract cites them
+        "amendments": [r["adam"] for r in me[1:]],
+        "contracts": [dict(r) for r in members],
+        "total_eur": round(sum(r["eur"] or 0 for r in members), 2),
+    }
+
 
 def contract_authorities(kh: sqlite3.Connection, adam: str) -> list[dict]:
     """The contract's linked forest authorities with their seats — feeds
@@ -2262,6 +2303,23 @@ def _col(row: sqlite3.Row, name: str):
     return row[name] if name in row.keys() else None
 
 
+def _stamped_date(adam: str) -> str | None:
+    """The date ΚΗΜΔΗΣ stamped on the document itself.
+
+    Acts a contract cites but the registry never declared have no row in
+    `linked_acts`, so there is no metadata to read a date from — but every
+    ΚΗΜΔΗΣ PDF carries «<ΑΔΑΜ> <YYYY-MM-DD>» in its own stamp, which the
+    cached sidecar preserves.
+    """
+    p = PDF_CACHE_DIR / f"{adam}.txt"
+    try:
+        head = p.read_text(encoding="utf-8", errors="replace")[:4000]
+    except OSError:
+        return None
+    m = re.search(rf"{adam}\s+(\d{{4}}-\d{{2}}-\d{{2}})", head)
+    return m.group(1) if m else None
+
+
 def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
     """The contract's full procurement family (αίτημα → πρόσκληση →
     κατακύρωση → συμβάσεις), chronological. Sibling contracts resolve to
@@ -2330,6 +2388,32 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
             })
     except sqlite3.OperationalError:
         pass
+    # Acts the contract's OWN TEXT cites but the registry never declared:
+    # `linked_acts` names an upstream act for just 40 of 245 in-scope
+    # contracts, while 200 quote their πρόσκληση by ΑΔΑΜ (DATA_DECISIONS
+    # 2026-08-18). Without these the trail contradicts the PROCUREMENT
+    # FAMILY diagram on the same page — 24SYMV015170098 showed a call in
+    # the diagram and an empty chain in the trail.
+    try:
+        seen = {e["adam"] for e in out}
+        for r in kh.execute(
+                "SELECT adam, kind, role, excerpt FROM contract_families"
+                " WHERE reference_number = ? ORDER BY kind, seq", (ref,)):
+            if r["adam"] in seen:
+                continue
+            seen.add(r["adam"])
+            out.append({
+                "adam": r["adam"], "kind": r["kind"],
+                "title": None,          # never invented; the PDF is linked
+                "d": _stamped_date(r["adam"]),
+                "cancelled": 0, "in_db": False,
+                # provenance: this row is evidence from the contract, not a
+                # link the registry published
+                "cited": True, "role": r["role"], "excerpt": r["excerpt"],
+            })
+    except sqlite3.OperationalError:            # table not built yet
+        pass
+
     out.sort(key=lambda e: (e["d"] or "9999",
                             _TIMELINE_ORDER.get(e["kind"], 9)))
     return out

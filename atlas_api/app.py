@@ -230,6 +230,8 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["regions"] = queries.contract_project_regions(g.conn, adam)
         d["sites"] = queries.contract_sites(g.conn, adam)
         d["timeline"] = queries_extra.contract_timeline(g.conn, adam)
+        # the procurement family the contract's own text names
+        d["family"] = queries_extra.contract_family(g.conn, adam)
         d["gross"] = queries_extra.contract_gross(pay, adam)
         d["category"] = queries_extra.contract_category(g.conn, adam)
         d["authorities"] = queries_extra.contract_authorities(g.conn, adam)

@@ -5,6 +5,7 @@
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
 	import { trailChip } from '$lib/transforms/exclusion';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
+	import ProcurementFamily from '$lib/charts/ProcurementFamily.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import { dmy, eur, eurShort, grInt } from '$lib/transforms/format';
@@ -75,6 +76,9 @@
 			title: t.title ?? null,
 			pdf: pdfHref(t),
 			self: t.self,
+			// rows the registry never published: they are in the trail because
+			// this contract's text cites them, and the chip says so
+			...(t.cited ? { chip: 'cited in this contract', chipBad: false } : {}),
 			// the registry title stays verbatim — it IS the document's title and
 			// the evidence of the error; the chip points at the explanation below
 			...(t.self && overrideNote
@@ -311,7 +315,30 @@
 	<small class="muted">fetched from KHMDHS once, then served from the local cache</small>
 </p>
 
-<DocTrail rows={trailRows} />
+<div class="trailrow">
+	<DocTrail rows={trailRows} />
+	{#if c.family && c.family.contracts.length > 1}
+		<section class="famsec">
+			<h2>CONTRACTS UNDER THE SAME CALL</h2>
+			<p class="muted">
+				<small
+					>This contract is one of {c.family.contracts.length} awarded under call
+					{c.family.call}{c.family.source.startsWith('inherited')
+						? ` (cited by the version it amends, ${c.family.source.slice(10)})`
+						: ''}.</small
+				>
+			</p>
+			<ProcurementFamily
+				call={c.family.call}
+				contracts={c.family.contracts}
+				total={c.family.total_eur}
+				self={c.reference_number}
+				amendments={c.family.amendments}
+			/>
+		</section>
+	{/if}
+</div>
+
 {#if !timeline.length}
 	<p class="muted">
 		ΚΗΜΔΗΣ links no upstream acts (αίτημα, διακήρυξη, κατακύρωση) to this contract — the
@@ -438,6 +465,18 @@
 <QuoteList {quotes} />
 
 <style>
+	/* the family sits under the map, on the same column width, with the
+	   trail compressed beside it — one procurement read top to bottom */
+	.trailrow {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(300px, 460px);
+		gap: var(--sp-8);
+		align-items: start;
+		margin-bottom: var(--sp-6);
+	}
+	@media (max-width: 900px) {
+		.trailrow { grid-template-columns: minmax(0, 1fr); }
+	}
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);
