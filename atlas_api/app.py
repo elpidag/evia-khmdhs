@@ -239,6 +239,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["gross"] = queries_extra.contract_gross(pay, adam)
         d["category"] = queries_extra.contract_category(g.conn, adam)
         d["authorities"] = queries_extra.contract_authorities(g.conn, adam)
+        d["document_kind"] = queries_extra.contract_document_kind(g.conn, adam)
         return jsonify(d)
 
     @app.route("/api/antinero/contractors")

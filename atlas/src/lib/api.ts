@@ -405,6 +405,14 @@ export interface AntineroOverview {
 	/** curated work-type category per in-scope contract (ONE each, so the
 	 *  stated-net sums reconcile to the programme total) */
 	categories: { key: string; label: string; n: number; eur: number }[];
+	/** what KIND of σύμβαση each in-scope record is — all of them are
+	 *  συμβάσεις, the kind says which (original, revision of terms,
+	 *  supplementary contract or works, deadline extension) */
+	document_kinds: {
+		total: number;
+		counts: Record<string, number>;
+		labels: Record<string, { el: string; en: string }>;
+	};
 }
 
 export interface ExploreRow {

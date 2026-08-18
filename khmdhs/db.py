@@ -326,6 +326,13 @@ def init_db(path: Path) -> sqlite3.Connection:
         ("contractor_locations", "geo_precision", "TEXT"),
         # curated stated-value corrections (dase_contract_corrections.json)
         ("contracts", "correction_note", "TEXT"),
+        # what the ΣΥΜΒ record actually IS, read from the document itself:
+        # ΥΠΕΝ posts contracts, amendments, supplementary contracts AND
+        # ministry approvals under a ΣΥΜΒ ΑΔΑΜ, and the registry types them
+        # all «Έργα»/«Υπηρεσίες» (khmdhs/document_kinds.py, 2026-08-18)
+        ("contracts", "document_kind", "TEXT"),
+        ("contracts", "document_kind_evidence", "TEXT"),
+        ("contracts", "document_kind_source", "TEXT"),
         # forest-authority office layer (DATA_DECISIONS 2026-08-17)
         ("forest_authorities", "street", "TEXT"),
         ("forest_authorities", "postal_code", "TEXT"),

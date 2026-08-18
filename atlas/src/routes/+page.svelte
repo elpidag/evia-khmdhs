@@ -159,6 +159,24 @@
 	);
 	// hero bar fills — both data-proportional
 	const bidPct = $derived((o.kpis.n_single_bidder / o.kpis.n_contracts) * 100);
+	// what kind of σύμβαση each in-scope record is: computed from the payload,
+	// never typed. The supplementary works are one phenomenon in two document
+	// forms — the supplementary contract itself and the decision approving one
+	// — so they are stated as one number (DATA_DECISIONS 2026-08-18).
+	const dk = $derived.by(() => {
+		const c = o.document_kinds?.counts ?? {};
+		return {
+			total: o.document_kinds?.total ?? 0,
+			n_kinds: Object.keys(c).length,
+			contract: c.contract ?? 0,
+			amendment: c.amendment ?? 0,
+			supplementary:
+				(c.supplementary_contract ?? 0) +
+				(c.approval_ape_supplementary ?? 0) +
+				(c.approval_supplementary ?? 0),
+			extension: c.approval_schedule_extension ?? 0
+		};
+	});
 	const paidPct = $derived((o.kpis.paid_eur / o.kpis.stated_eur) * 100);
 </script>
 
@@ -228,6 +246,16 @@
 			)} contracts drew exactly one bid. This page follows what actually got paid, to whom,
 			and where — <a href="/methodology#antinero">methodology</a>.
 		</p>
+		{#if dk && dk.n_kinds > 0}
+			<p class="kinds">
+				All {grInt(dk.total)} are συμβάσεις, which is what the registry files them as; the
+				kind says which. {grInt(dk.contract)} are original contracts,
+				{grInt(dk.amendment)} revise the terms of one without touching its price,
+				{grInt(dk.supplementary)} add supplementary works, and {grInt(dk.extension)}
+				only extend a deadline —
+				<a href="/methodology#record-kinds">what each record is</a>.
+			</p>
+		{/if}
 		{#if o.probable && o.probable.n > 0}
 			<details class="probable">
 				<summary>
@@ -700,6 +728,11 @@
 	.about p {
 		margin: 0;
 		max-width: var(--prose-w);
+	}
+	.about p.kinds {
+		margin-top: var(--sp-3);
+		font-size: var(--fs-13);
+		color: var(--ink-faint);
 	}
 	.probable {
 		margin-top: var(--sp-4);

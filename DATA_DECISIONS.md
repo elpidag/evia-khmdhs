@@ -4015,3 +4015,330 @@ as a smudge rather than a label). Nothing was removed from the design:
 every label is drawn where it fits and returns if the box grows. The
 alternative — letting the nested view keep the frame's width while the
 timeline stays 400 — was not taken, because the user asked for one height.*
+
+## 2026-08-18 — Every in-scope contract audited against its own signed text, read down the CHAIN; and the contractor ΑΦΜ stop splitting one company into two
+
+Triggered by the user reading two source documents and highlighting what they
+carry (a phase-I contract, 22SYMV010447496, and the NOVA/Δίρφυς sponsor act
+6Χ7Ι4653Π8-ΙΧΣ), then spotting that «ΒΙΟΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ» and «Δ ΚΑΦΕΤΖΗΣ
+ΚΑΙ ΣΙΑ ΟΕ» are the same ΑΦΜ but read as two companies.
+
+### The structural finding: read the chain, never the tip
+
+**46 of the 245 in-scope contracts are amendments, and every short text in the
+corpus is one of them** — 22SYMV010806317, say, is a 10,7 kB «1η ΤΡΟΠΟΠΟΙΗΣΗ»
+whose 247 kB parent holds the price, the Δασαρχείο, the funding code and the
+parties. Concatenating each chain's ancestors lifts every anchor and leaves no
+contract under 20 kB:
+
+| anchor | tip only | chain |
+|---|---:|---:|
+| ΣΑΤΑ ενάριθμο | 177 | **222** |
+| εγγυητική + amount | 167 | **197** |
+| άρθρο «Αμοιβή Αναδόχου» | 83 | **118** |
+| «Προϋπολογισμός Δημοπράτησης» (the decoy) | 45 | **67** |
+| «αρμοδιότητας Δασαρχείου…» | 140 | **155** |
+| Π.Ε. / Δήμος named | 93 / 95 | **109 / 106** |
+| Α/Α ΕΣΗΔΗΣ | 41 | **56** |
+| «ως υπεργολάβο» | 20 | **43** |
+
+`scripts/audit_contract_documents.py` does this and writes three review files
+to `data/processed/` (`audit_fields`, `audit_extras`, `audit_identity`).
+Nothing it produces is written to a database: they are candidates.
+
+**What the audit found.** The stored net value appears verbatim in the
+contract's own text for **237/245** (gross 224); **4** contracts state
+neither. The εγγυητική corroborates the price for **153 of 163** checkable
+(the implied rate clusters on 5% with a tail to ~5,6%, plus a 2,5% group — so
+it is a SCALE check, the kind that catches a ×10 error, not a cent check).
+The funding ενάριθμο is confirmed from the document for **222/245 with zero
+disagreements**. **7 stored forest-authority links across 3 contracts are
+never named in the documents** — 22SYMV010856516 (ΔΔ Κεφαλληνίας, ΔΔ
+Καστοριάς, both `text`-matched), 23SYMV013600200 (three `override` links) and
+its heir 24SYMV015185915.
+
+Two extractor lessons worth keeping: the *reverse* authority test is the
+meaningful one — documents legitimately name MORE Δασαρχεία than a contract
+covers, because recitals quote the whole multi-lot procurement and cite other
+contracts' titles, so «stored ⊄ declared» is the error and «declared ⊅ stored»
+is noise. And a regex written in Greek must be folded into the same alphabet
+as the folded text, but folding must NOT uppercase, or `\s \d \w` become their
+inverses — that silently zeroed an entire probe run.
+
+### The identity defect, and its fix
+
+ΑΦΜ **998342580** carries four registry spellings across €13,04M because the
+signed contract says «με την επωνυμία «Δ. Καφετζής & ΣΙΑ Ο.Ε.» (δ.τ. «ΒΙΟΣ
+Α.Ε.»)» — one entity, legal name and trade name. **30 of the 156 in-scope
+contractors** carry more than one spelling, and the display rule was
+`MIN(name)`, i.e. alphabetical accident.
+
+Underneath that sat a harder defect: the aggregation groups on the **raw**
+`vat_number`, and 13 rows carried a whitespace-padded ΑΦΜ while one carried an
+eight-digit one. **Seven companies had their money split across two keys** —
+GREEN CONSTRUCTION €13.586.678,20, ΧΡ. ΚΥΡΙΑΚΑΚΗΣ €8.701.698,82, Γ.Ι.
+ΚΑΡΝΟΜΟΥΡΑΚΗΣ €6.861.723,35, ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ €5.381.590,93, ΚΟΙΝΟΠΡΑΞΙΑ
+ΕΛΛΗΝΙΚΑ ΕΡΓΑ–ΛΙΑΧΤΙΔΑ €4.461.356,76, Ν. ΠΑΠΑΔΟΠΟΥΛΟΣ €3.198.837,91,
+ΚΗΠΟΠΡΑΞΙΣ €1.347.184,06.
+
+Fixed at the two right places:
+
+- **`extract.py` strips the ΑΦΜ on ingest**, so the padding can never return,
+  and the committed DB was normalised in place (13 rows). This is a
+  normalisation, not a correction: no fact changes, so nothing is stamped.
+- **`25SYMV017073536` gets a curated `contractors_vat` entry**: the registry
+  keyed ΓΕΩΓΝΩΜΩΝ Ο.Ε. as «98434068», the signed contract states «με ΑΦΜ
+  **998434068** της ΔΟΥ Πατρών». Zero-padding the eight-digit value to
+  098434068 — the ΔΑΣΕ canonical-VAT rule — would have filed it under an ΑΦΜ
+  belonging to nobody, so the canonicaliser is not a substitute for reading
+  the document.
+- `contract_corrections.apply_contract_corrections` no longer stamps
+  `correction_note` for a party-only entry: the contract page renders that as
+  «Stated value — curated correction … the value shown is the one the signed
+  contract states», which would be a false statement about a price nobody
+  touched.
+
+*Affects: analytics. In-scope contractor keys 163 → **155**, the basis
+unchanged at €627.572.883,18. Three consequences worth naming: the network
+chart now sees **28** contractors bridging calls instead of 26 (two were
+hidden behind a split key); `/connections` flows rose 271 → **277** because a
+padded key had no `contractor_locations` row, so its contracts had no home
+region at all — **0 in-scope contracts are now unlocated**; and
+`contractor_authority` pairs fell 490 → 489, one pair that was counted twice.
+Pins updated in `tests/test_atlas_real_db.py` with the reason on each.*
+
+**Open, needing a human verdict** (all in the review files, none applied):
+the 4 contracts whose stated value is absent from their own text; the 7
+authority links the documents never name; **22 rows across 13 contracts whose
+registry ΑΦΜ is not among the ones their signed text states** — most are the
+consortium-versus-members distinction, but not obviously all; and the 30
+entities needing one curated display name, for 26 of which the document
+supplies the legal name and, where it exists, the δ.τ.
+
+## 2026-08-18 — PROJECT BUDGET keyed as CONTRACT VALUE, second sweep: 8 more contracts, −€1.675.269,22
+
+The morning's four corrections were found by hand, through the πρόσκληση-family
+analysis. The document audit turned the same error into a **screen** — does the
+stored value equal an amount the contract itself labels «Προϋπολογισμός
+Δημοπράτησης» / «εκτιμώμενη αξία» / the RRF project budget? — and ran it over
+every contract with cached text.
+
+The user's own reading of 22SYMV010856516 is the canonical case. Its parent's
+Άρθρο 7.1 states the fee, and a few lines below sits the ceiling:
+
+> «Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ … **συμφωνείται** έως ποσού … (**370.985,73 €**)
+> πλέον ΦΠΑ 24% (89.036,58€) και συνολικά έως ποσού … (460.022,31€)»
+> «Ο **Προϋπολογισμός Δημοπράτησης** … ανήλθε για το Υποέργο Γ στο ποσό **482.270,64€**»
+
+and `482.270,64 ÷ 1,24 = 388.927,94` — precisely the stored net. The registry
+recorded the advertised ceiling and back-computed a net from it.
+
+**Eight in-scope contracts, all phase I/II of 2022–23, all «Υποέργο X» lots of
+the same framework:**
+
+| contract | stored net | fee the contract agrees | overstated |
+|---|---:|---:|---:|
+| 22SYMV010795597 | 2.698.137,98 | 2.031.375,52 | 666.762,46 |
+| 22SYMV010795577 | 1.454.276,58 | 1.161.075,67 | 293.200,91 |
+| 22SYMV010795606 | 1.118.903,74 | 836.613,02 | 282.290,72 |
+| 22SYMV011323950 | 848.195,50 | 655.098,75 | 193.096,75 |
+| 22SYMV010856526 | 1.473.838,67 | 1.379.208,27 | 94.630,40 |
+| 22SYMV010856515 | 1.246.811,25 | 1.163.690,51 | 83.120,74 |
+| 22SYMV010856517 | 1.474.167,85 | 1.429.942,82 | 44.225,03 |
+| 22SYMV010856516 | 388.927,94 | 370.985,73 | 17.942,21 |
+
+Each verified against the canonical «Άρθρο 7 – Αμοιβή Αναδόχου … συμφωνείται
+έως ποσού …» clause with the ΦΠΑ pair checking out at ×1,24; the verbatim
+sentence is the `reason` on every entry. **13 entries** were written, because
+five of the eight share the wrong figure with their superseded predecessor,
+whose page is reachable and must not keep contradicting its own PDF.
+`contract_objects` rows carrying the same figure are corrected with them.
+
+**The screen is not a verdict.** It also flagged 23SYMV012834824 and
+23SYMV013039377, where the fee *genuinely equals* the budget — the contractor
+offered no discount — and those were left untouched. Two of ten would have been
+false corrections if the screen had been applied mechanically.
+
+**Sweep.** Re-run over all 344 Anti-nero contracts with cached text: only those
+two innocents remain, so the class is closed on this dataset. Over all 2.164
+ΔΑΣΕ contracts: 4 hits, all «Εκτιμώμενη αξία» in ΚΥΑ-priced direct awards where
+the estimate IS the contracted price by construction — no discount exists to
+create a gap. ΔΑΣΕ values were separately screened by
+`scripts/validate_contract_values.py`.
+
+*Affects: the Anti-nero analytics basis, **€627.572.883,18 → €625.897.613,96**
+(−0,27%). All eight are δασοτεχνικά, so the whole drop lands in that category
+(359.263.907,38 → 357.588.638,16). Ten pins updated in
+`tests/test_atlas_real_db.py`. Payments are untouched — this is a stated-value
+correction, and the paid layer was always independent.*
+
+**Two further findings from the same audit, NOT applied, awaiting a verdict:**
+25SYMV016658903 stores 3.184.186,76 where Άρθρο 4.1 states, in words and
+digits, 3.184.18**3**,76 (€3,00); and 26SYMV019512653, a «1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ
+ΣΥΜΒΑΣΗ» worth 80.995,65 € by its own text, carries the running total
+621.474,16 = 540.478,51 (original) + 80.995,65. The programme total is correct
+either way there, because the inflated figure is ≥0,9× the parent and the
+supersede rule therefore drops the parent — so the fix is a modelling choice,
+not an arithmetic one.
+
+## 2026-08-18 — The additive-supplementary rule now reads the PDF heading, not only the registry title
+
+The rule that stops a supplementary contract from wiping out the contract it
+supplements has existed since the beginning and works:
+
+```python
+additive = ("ΣΥΜΠΛΗΡΩΜΑΤΙΚ" in succ_title
+            and values[new_ref] < 0.9 * values[old_ref])
+```
+
+Audited across the whole dataset, it fires correctly four times
+(24SYMV015185915 at 0,23× its parent, 25SYMV016392306 at 0,15×,
+26SYMV018445120 at 0,23×, 26SYMV019471687 at 0,03× — both versions count) and
+correctly declines twice, where the «συμπληρωματική» restates the parent's
+full value (26SYMV019250208 and 26SYMV019200696, ratio 1,00 — ΑΠΕ
+recapitulations, which do supersede).
+
+**But it classified on the REGISTRY TITLE.** 26SYMV019512653 is titled
+«ΑΝΤΙΠΛΗΜΜΥΡΙΚΑ ΔΥΤΙΚΗΣ ΑΤΤΙΚΗΣ»; only its own PDF says «1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ
+ΣΥΜΒΑΣΗ». So the ratio test was never reached and the act was treated as a
+plain replacement — while, independently, the registry had stored its value as
+the RUNNING TOTAL (540.478,51 original + 80.995,65 supplement = 621.474,16).
+
+The two errors cancelled: counting only the tip gave the same €621.474,16 as
+counting both would have. **Nothing was ever double-counted** — which is why
+this surfaced as a documentation problem, not a money problem. The danger was
+latent: correcting the value alone would have left the title-blind rule in
+place, kept the parent superseded, and silently dropped €540.478,51.
+
+Both fixed together:
+- `scope_loader` now tests the successor's PDF **heading** (first 600 chars)
+  as well as its registry title. The heading only — «συμπληρωματικές
+  εργασίες» is ΕΣΥ boilerplate deeper in every contract, and reading the whole
+  document would classify half the corpus as supplementary.
+- 26SYMV019512653's value is corrected to its own stated 80.995,65 /
+  100.434,61 («ορίζεται στο ποσό των ογδόντα χιλιάδων εννιακοσίων ενενήντα
+  πέντε ευρώ και εξήντα πέντε λεπτών 80.995,65€ …»).
+
+Two other contracts say ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ only in their PDF (25SYMV016679557,
+26SYMV018612500); both restate their parent's full value, so they take the
+replaces branch either way. 26SYMV019512653 was the only case where the
+title-blindness mattered.
+
+*Affects: the in-scope population **245 → 246** and nothing else — the basis
+stays €625.897.613,96, because the €540.478,51 simply moves from being folded
+into the supplement to being carried by 26SYMV019488916, the act that now ends
+that line. That act is «Έγκριση παράτασης χρονοδιαγράμματος» of
+25SYMV017985934 posted under a ΣΥΜΒ ΑΔΑΜ — it restates the contract it
+extends, which is why it supersedes it and now carries its value. It was
+curated in on becoming countable: category `antidiavrotika` from the project
+title it quotes verbatim, and both Π.Ε. of «περιοχές αρμοδιότητας Δασαρχείου
+Αιγάλεω και Μεγάρων», matching the chain tip. Fourteen pins updated across
+`test_atlas_real_db`, `test_families`, `test_linked_acts`.*
+
+## 2026-08-18 — A ΣΥΜΒ ΑΔΑΜ is not always a contract: every record now says what it is
+
+> **Superseded the same day in two ways, both below.** (1) The tally here
+> reads 10 «Έγκριση Α.Π.Ε.» + 1 «Α.Π.Ε. και συμπληρωματικής σύμβασης»; the
+> rule's gap was `[^.]`, which cannot cross the dots of «Α.Π.Ε.» to reach the
+> «και της 1ης Συμπληρωματικής Σύμβασης» that follows — with `.{0,130}?` the
+> true split is **0 + 11**, and no in-scope record approves an ΑΠΕ alone.
+> (2) The framing «17 of the 246 are approvals, not contracts» was rejected by
+> the user: see «The vocabulary for a ΣΥΜΒ record» at the end of this file.
+
+The user's question — «if 26SYMV019488916 isn't a contract and it's an
+«Έγκριση παράτασης χρονοδιαγράμματος», we should say so in the type of
+document, that's what it is there for» — turned out to describe a systemic
+gap, not one record.
+
+**The registry cannot answer it.** `contract_type` is the ν.4412 object
+category: «Έργα» or «Υπηρεσίες», identical on the contract, its amendment,
+the supplementary contract and the ministry decision approving them.
+
+**The documents can**, in their heading or «ΘΕΜΑ:» line. Read across the
+whole stored population, the 246 in-scope records are:
+
+| what the document says it is | in scope |
+|---|---:|
+| Σύμβαση — contract | 200 |
+| Τροποποίηση σύμβασης — amendment | 25 |
+| Έγκριση Α.Π.Ε. — ministry approval of a revised works schedule | 10 |
+| Έγκριση παράτασης χρονοδιαγράμματος — schedule extension | 6 |
+| Συμπληρωματική σύμβαση — supplementary contract | 4 |
+| Έγκριση Α.Π.Ε. και συμπληρωματικής σύμβασης | 1 |
+
+So **17 of the 246 are ministry approvals, not contracts**, and 26SYMV019488916
+is one of twelve, not an oddity. The money is unaffected — an approval record
+carries the value of what it approves, and the supersede/additive rules
+already handle that — but «246 contracts» has to be read as «246 records».
+
+`khmdhs/document_kinds.py` classifies from the document (ordered rules, most
+specific act first, so «ΕΓΚΡΙΣΗ ΤΟΥ 2ΟΥ Α.Π.Ε. ΚΑΙ ΤΗΣ 1ΗΣ ΣΥΜΠΛΗΡΩΜΑΤΙΚΗΣ
+ΣΥΜΒΑΣΗΣ» is not filed as a plain ΑΠΕ), falls back to the registry title for
+the few whose PDF opens with a signature stamp and a letterhead
+(22SYMV011323950), and leaves anything else `unknown` for
+`data/document_kind_overrides.json` rather than guessing. Zero in-scope
+records are unknown today. Stored on `contracts` as `document_kind`,
+`document_kind_evidence` (verbatim) and `document_kind_source`
+(pdf / registry_title / curated); in the refresh chain after `families_loader`.
+
+Two extraction facts worth keeping: «ΥΜΒΑΣΗ» without its Σ is real — pdftotext
+drops the drop-cap — and the heading window has to be ~2.500 chars, because
+ministry decisions carry a letterhead before their ΘΕΜΑ line, while reading
+the whole document would match the ΕΣΥ boilerplate «συμπληρωματικές εργασίες»
+in every contract.
+
+*Affects: presentation and one new stored field. The contract page gains a
+DOCUMENT row (English label over the Greek the document uses), and the
+DOCUMENT TRAIL's type column stops calling every ΣΥΜΒ row «Contract» —
+26SYMV019488916's trail now reads Contract / Supplementary contract /
+Approval — schedule extension. Pinned by `test_document_kind_pins`
+(composition + the verbatim evidence). `contract_document_kind` degrades to
+None on a DB older than the ALTER guard, like the other post-hoc columns.*
+
+## 2026-08-18 — The vocabulary for a ΣΥΜΒ record: all 246 are συμβάσεις, the label says which kind
+
+Settled with the user after several rounds, and the rounds are the record:
+«approvals» was rejected because the word does not say what the act does;
+«acts / πράξεις» was rejected because ΚΗΜΔΗΣ files every one of these as a
+**σύμβαση** and inventing a second Greek term denies the registry's own word;
+«extra work» was rejected as too colloquial for an academic report; and a
+framing that opened «only 200 are contracts» was rejected as needlessly
+oppositional.
+
+What resolves all four: **all 246 ARE συμβάσεις — the label says which kind of
+σύμβαση**, which means the plain contract needs the qualifier it never had,
+«αρχική». The vocabulary is then ν.4412's own throughout, and Directive
+2014/24's in English:
+
+| in scope | Greek | English |
+|---:|---|---|
+| 200 | Αρχική σύμβαση | Original contract |
+| 25 | Τροποποίηση όρων | Revision of terms |
+| 4 | Συμπληρωματική σύμβαση | Supplementary contract |
+| 11 | Έγκριση συμπληρωματικών εργασιών | Approval of supplementary works |
+| 6 | Παράταση προθεσμίας | Deadline extension |
+
+Unused but defined: Έγκριση επιμέτρησης / Approval of revised quantities, and
+Δεν προσδιορίζεται / Not defined.
+
+The 4 and the 11 share a stem because they are one phenomenon in two document
+forms — the supplementary contract itself, and the ministry decision approving
+one — so a summary may sum them as **15 supplementary works** without
+inventing a category. The label is a title; the document's verbatim wording
+(«Έγκριση του 2ου Α.Π.Ε. και της 1ης Συμπληρωματικής Σύμβασης του έργου της
+Σύμβασης (4/2025) με ΑΔΑΜ: 25SYMV016432029») stays in
+`document_kind_evidence` and is shown beneath it — Α.Π.Ε. means nothing to a
+non-specialist in a title, and everything as evidence.
+
+Two facts established while settling this, both checked rather than assumed:
+**none of the 25 revisions changes the price** (0 of 25 differ from the
+contract they revise; they touch deadlines, acceptance and payment procedure,
+guarantee letters), and **the six extensions carry their parent's value to the
+cent**. So of the 246, only the 15 supplementary works move money.
+
+*Affects: presentation only. `document_kinds.KINDS` carries the bilingual
+pair; the contract page prints English over Greek and the DOCUMENT TRAIL type
+column uses the same words; `/api/meta` gains `kh_doc_<kind>` counts so the
+new `/methodology#record-kinds` paragraph is computed, never typed. Pinned by
+`test_document_kind_pins`, which now also pins the labels themselves so page
+and prose cannot drift apart.*

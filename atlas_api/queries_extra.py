@@ -248,6 +248,17 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             """).fetchone()[0]
         except sqlite3.OperationalError:
             pass
+    # what kind of σύμβαση each in-scope record is — the composition the
+    # methodology prints, computed so the prose cannot go stale
+    try:
+        for kind, n in kh.execute("""
+                SELECT c.document_kind, COUNT(*) FROM contracts c
+                JOIN contract_scope s ON s.reference_number = c.reference_number
+                WHERE s.in_scope = 1 AND c.document_kind IS NOT NULL
+                GROUP BY 1"""):
+            facts[f"kh_doc_{kind}"] = n
+    except sqlite3.OperationalError:
+        pass
     try:
         facts["n_authorities"] = kh.execute(
             "SELECT COUNT(*) FROM forest_authorities").fetchone()[0]
@@ -362,6 +373,7 @@ def antinero_overview(kh: sqlite3.Connection,
         "probable": probable_related(kh),
         "cpvs": antinero_cpvs(kh),
         "categories": antinero_categories(kh),
+        "document_kinds": antinero_document_kinds(kh),
     }
 
 
@@ -776,6 +788,50 @@ def antinero_network(kh: sqlite3.Connection) -> dict:
             "total_eur": round(sum(n["eur"] or 0 for n in nodes), 2),
         },
     }
+
+
+def antinero_document_kinds(kh: sqlite3.Connection) -> dict:
+    """The in-scope population by KIND of σύμβαση — the composition the front
+    page and /methodology both state in prose, computed so neither can go
+    stale. All of them ARE συμβάσεις (that is what ΚΗΜΔΗΣ files them as); the
+    kind says which (khmdhs/document_kinds.py, DATA_DECISIONS 2026-08-18)."""
+    from khmdhs.document_kinds import KINDS
+    try:
+        rows = kh.execute("""
+            SELECT c.document_kind AS kind, COUNT(*) AS n FROM contracts c
+            JOIN contract_scope s ON s.reference_number = c.reference_number
+            WHERE s.in_scope = 1 AND c.document_kind IS NOT NULL
+            GROUP BY 1 ORDER BY 2 DESC""").fetchall()
+    except sqlite3.OperationalError:
+        return {"total": 0, "counts": {}, "labels": {}}
+    counts = {r["kind"]: r["n"] for r in rows}
+    return {
+        "total": sum(counts.values()),
+        "counts": counts,
+        "labels": {k: {"el": KINDS[k][0], "en": KINDS[k][1]}
+                   for k in counts if k in KINDS},
+    }
+
+
+def contract_document_kind(kh: sqlite3.Connection, adam: str) -> dict | None:
+    """What this ΣΥΜΒ record IS, per its own document — a contract, an
+    amendment, a supplementary contract, or a ministry approval. The registry's
+    own `contract_type` cannot answer: it is the ν.4412 object category
+    («Έργα»/«Υπηρεσίες») and reads the same on all of them (khmdhs
+    /document_kinds.py, DATA_DECISIONS 2026-08-18)."""
+    from khmdhs.document_kinds import KINDS
+    try:
+        row = kh.execute(
+            "SELECT document_kind, document_kind_evidence, document_kind_source"
+            "  FROM contracts WHERE reference_number = ?", (adam,)).fetchone()
+    except sqlite3.OperationalError:
+        return None          # a DB older than the ALTER guard that adds these
+    if not row or not row["document_kind"]:
+        return None
+    el, en = KINDS.get(row["document_kind"], ("—", row["document_kind"]))
+    return {"kind": row["document_kind"], "label_el": el, "label_en": en,
+            "evidence": row["document_kind_evidence"],
+            "source": row["document_kind_source"]}
 
 
 def contract_family(kh: sqlite3.Connection, adam: str) -> dict | None:
@@ -2404,6 +2460,10 @@ def _exclusion_present(conn: sqlite3.Connection) -> list[str]:
     return [c for c in _EXCLUSION_COLS if c in have]
 
 
+def _column_exists(conn: sqlite3.Connection, table: str, column: str) -> bool:
+    return any(r[1] == column for r in conn.execute(f"PRAGMA table_info({table})"))
+
+
 def _exclusion_cols(conn: sqlite3.Connection) -> str:
     """SQL fragment appending those markers to a `contracts` select list."""
     return "".join(f", {c}" for c in _exclusion_present(conn))
@@ -2456,9 +2516,13 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
             "in_db": False,
         }
         if r["kind"] == "contract":
+            # `dk` is what the DOCUMENT says it is — a ΣΥΜΒ ΑΔΑΜ carries
+            # contracts, amendments, supplementary contracts and ministry
+            # approvals alike, and the trail must not label them all «Contract»
+            dk = ", document_kind" if _column_exists(kh, "contracts", "document_kind") else ""
             c = kh.execute(
                 f"SELECT title, contract_signed_date, submission_date, "
-                f"cancelled{_exclusion_cols(kh)} FROM contracts "
+                f"cancelled{dk}{_exclusion_cols(kh)} FROM contracts "
                 f"WHERE reference_number = ?", (r["adam"],)).fetchone()
             if c is not None:
                 who = kh.execute(
@@ -2475,6 +2539,7 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
                     # exclusion mechanism (DATA_DECISIONS 2026-08-17)
                     "duplicate_of": _col(c, "duplicate_of"),
                     "related_to": _col(c, "related_to"),
+                    "doc_kind": _col(c, "document_kind"),
                     "in_db": True,
                     # first contractor — lets the family diagram label the
                     # sibling and NAME-match its κατακύρωση (never guessed)

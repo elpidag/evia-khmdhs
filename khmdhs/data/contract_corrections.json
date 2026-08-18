@@ -1,43 +1,161 @@
 {
- "_comment": "Curated fixes for khmdhs (Anti-nero) contracts whose registry stated values are keying errors. Same format and mechanism as dase_contract_corrections.json: keyed by contract ΑΔΑΜ; total_cost_with_vat / total_cost_without_vat override the registry amounts when the signed PDF documents a different figure (cite the source in 'reason'); optional 'objects' maps contract_objects seq → corrected cost_without_vat where the child row repeats the error. Applied by khmdhs.contract_corrections — standalone CLI (--db data/processed/khmdhs.sqlite --corrections this file) and by khmdhs.refresh right after the refetch/upsert phase (INSERT OR REPLACE restores registry values). Corrections land only after human PDF review (DATA_DECISIONS 2026-08-14).",
- "26SYMV018642772": {
-  "total_cost_without_vat": 4334353.41,
-  "total_cost_with_vat": 5374598.23,
-  "objects": {
-   "0": 4334353.41
+  "_comment": "Curated fixes for khmdhs (Anti-nero) contracts whose registry stated values are keying errors. Same format and mechanism as dase_contract_corrections.json: keyed by contract ΑΔΑΜ; total_cost_with_vat / total_cost_without_vat override the registry amounts when the signed PDF documents a different figure (cite the source in 'reason'); optional 'objects' maps contract_objects seq → corrected cost_without_vat where the child row repeats the error. Applied by khmdhs.contract_corrections — standalone CLI (--db data/processed/khmdhs.sqlite --corrections this file) and by khmdhs.refresh right after the refetch/upsert phase (INSERT OR REPLACE restores registry values). Corrections land only after human PDF review (DATA_DECISIONS 2026-08-14).",
+  "26SYMV018642772": {
+    "total_cost_without_vat": 4334353.41,
+    "total_cost_with_vat": 5374598.23,
+    "objects": {
+      "0": 4334353.41
+    },
+    "reason": "KHMDHS records net €3,341,238.72 / gross €4,143,136.01 — exactly the figures of 25SYMV017471484 «ΔΕΞΑΜΕΝΕΣ & ΚΡΟΥΝΟΙ ΠΕΡΙΑΣΤΙΚΟΥ ΔΑΣΟΥΣ ΘΕΣΣΑΛΟΝΙΚΗΣ» (whose own PDF confirms them in words), a cross-contract keying error. The signed Σουφλί contract PDF (contract/attachment/26SYMV018642772, Άρθρο 4.1) states the συμβατικό τίμημα in words and figures: «τέσσερα εκατομμύρια τριακόσιες τριάντα τέσσερις χιλιάδες τριακόσια πενήντα τρία ευρώ και σαράντα ένα λεπτά (4.334.353,41 €), πλέον ΦΠΑ (24%) και πέντε εκατομμύρια τριακόσιες εβδομήντα τέσσερις χιλιάδες πεντακόσια ενενήντα οκτώ ευρώ και είκοσι τρία λεπτά (5.374.598,23 €), συμπεριλαμβανομένου ΦΠΑ (24%)». No amendments, not cancelled, no other stored row carries the PDF figure."
   },
-  "reason": "KHMDHS records net €3,341,238.72 / gross €4,143,136.01 — exactly the figures of 25SYMV017471484 «ΔΕΞΑΜΕΝΕΣ & ΚΡΟΥΝΟΙ ΠΕΡΙΑΣΤΙΚΟΥ ΔΑΣΟΥΣ ΘΕΣΣΑΛΟΝΙΚΗΣ» (whose own PDF confirms them in words), a cross-contract keying error. The signed Σουφλί contract PDF (contract/attachment/26SYMV018642772, Άρθρο 4.1) states the συμβατικό τίμημα in words and figures: «τέσσερα εκατομμύρια τριακόσιες τριάντα τέσσερις χιλιάδες τριακόσια πενήντα τρία ευρώ και σαράντα ένα λεπτά (4.334.353,41 €), πλέον ΦΠΑ (24%) και πέντε εκατομμύρια τριακόσιες εβδομήντα τέσσερις χιλιάδες πεντακόσια ενενήντα οκτώ ευρώ και είκοσι τρία λεπτά (5.374.598,23 €), συμπεριλαμβανομένου ΦΠΑ (24%)». No amendments, not cancelled, no other stored row carries the PDF figure."
- },
- "24SYMV015544651": {
-  "total_cost_without_vat": 4003194.8,
-  "total_cost_with_vat": 4963961.55,
-  "objects": {
-   "0": 4003194.8
+  "24SYMV015544651": {
+    "total_cost_without_vat": 4003194.8,
+    "total_cost_with_vat": 4963961.55,
+    "objects": {
+      "0": 4003194.8
+    },
+    "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται κατ' αποκοπή στο ποσό των τεσσάρων εκατομμυρίων τριών χιλιάδων εκατόν ενενήντα τεσσάρων ευρώ και ογδόντα λεπτών (4.003.194,80 €) πλέον ΦΠΑ 24%, και τεσσάρων εκατομμυρίων εννιακοσίων εξήντα τριών χιλιάδων εννιακοσίων εξήντα ενός ευρώ και πενήντα πέντε λεπτών (4.963.961,55 €) συμπεριλαμβανομένου ΦΠΑ». The stored 31.024.697,04 is the RRF contribution to the whole ΤΜΗΜΑΤΑ 1-8 project (ΟΠΣ ΤΑ 5222791), whose ΠΔΕ counterpart 7.445.927,29 is exactly its 24% ΦΠΑ; its seven sibling lots under πρόσκληση 24PROC014447893 are €0,59M-4,18M. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Its three payment orders total €3.901.409,44 = 97% of the true fee, 13% of the stored."
   },
-  "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται κατ' αποκοπή στο ποσό των τεσσάρων εκατομμυρίων τριών χιλιάδων εκατόν ενενήντα τεσσάρων ευρώ και ογδόντα λεπτών (4.003.194,80 €) πλέον ΦΠΑ 24%, και τεσσάρων εκατομμυρίων εννιακοσίων εξήντα τριών χιλιάδων εννιακοσίων εξήντα ενός ευρώ και πενήντα πέντε λεπτών (4.963.961,55 €) συμπεριλαμβανομένου ΦΠΑ». The stored 31.024.697,04 is the RRF contribution to the whole ΤΜΗΜΑΤΑ 1-8 project (ΟΠΣ ΤΑ 5222791), whose ΠΔΕ counterpart 7.445.927,29 is exactly its 24% ΦΠΑ; its seven sibling lots under πρόσκληση 24PROC014447893 are €0,59M-4,18M. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Its three payment orders total €3.901.409,44 = 97% of the true fee, 13% of the stored."
- },
- "24SYMV015170080": {
-  "total_cost_without_vat": 1202106.04,
-  "total_cost_with_vat": 1490611.49,
-  "objects": {
-   "0": 1202106.04
+  "24SYMV015170080": {
+    "total_cost_without_vat": 1202106.04,
+    "total_cost_with_vat": 1490611.49,
+    "objects": {
+      "0": 1202106.04
+    },
+    "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται στο ποσό του ενός εκατομμυρίου διακοσίων δύο χιλιάδων εκατόν έξι ευρώ και τεσσάρων λεπτών (1.202.106,04 €), πλέον ΦΠΑ 24%». The stored 2.284.973,72 is the project budget, stamped identically on all three lots of πρόσκληση 24PROC014835083 (Αταλάντης-Χαλκίδας-Λίμνης-Ιστιαίας-Αλιβερίου-Θηβών, Πεντέλης κ.λπ., Σουφλίου), whose true fees sum to €2.158.461,24. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Paid €1.034.960,00 = 86% of the true fee, 45% of the stored."
   },
-  "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται στο ποσό του ενός εκατομμυρίου διακοσίων δύο χιλιάδων εκατόν έξι ευρώ και τεσσάρων λεπτών (1.202.106,04 €), πλέον ΦΠΑ 24%». The stored 2.284.973,72 is the project budget, stamped identically on all three lots of πρόσκληση 24PROC014835083 (Αταλάντης-Χαλκίδας-Λίμνης-Ιστιαίας-Αλιβερίου-Θηβών, Πεντέλης κ.λπ., Σουφλίου), whose true fees sum to €2.158.461,24. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Paid €1.034.960,00 = 86% of the true fee, 45% of the stored."
- },
- "24SYMV015170089": {
-  "total_cost_without_vat": 799483.29,
-  "total_cost_with_vat": 991359.28,
-  "objects": {
-   "0": 799483.29
+  "24SYMV015170089": {
+    "total_cost_without_vat": 799483.29,
+    "total_cost_with_vat": 991359.28,
+    "objects": {
+      "0": 799483.29
+    },
+    "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται στο ποσό των επτακοσίων ενενήντα εννέα χιλιάδων τετρακοσίων ογδόντα τριών ευρώ και είκοσι εννέα λεπτών (799.483,29 €), πλέον ΦΠΑ 24%». Same project budget 2.284.973,72 as its two siblings under πρόσκληση 24PROC014835083. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Paid €712.351,35 = 89% of the true fee, 31% of the stored."
   },
-  "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται στο ποσό των επτακοσίων ενενήντα εννέα χιλιάδων τετρακοσίων ογδόντα τριών ευρώ και είκοσι εννέα λεπτών (799.483,29 €), πλέον ΦΠΑ 24%». Same project budget 2.284.973,72 as its two siblings under πρόσκληση 24PROC014835083. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Paid €712.351,35 = 89% of the true fee, 31% of the stored."
- },
- "24SYMV015170098": {
-  "total_cost_without_vat": 156871.91,
-  "total_cost_with_vat": 194521.17,
-  "objects": {
-   "0": 156871.91
+  "24SYMV015170098": {
+    "total_cost_without_vat": 156871.91,
+    "total_cost_with_vat": 194521.17,
+    "objects": {
+      "0": 156871.91
+    },
+    "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται στο ποσό των εκατόν πενήντα έξι χιλιάδων οκτακοσίων εβδομήντα ενός ευρώ και ενενήντα ενός λεπτών (156.871,91 €), πλέον ΦΠΑ 24%». Same project budget 2.284.973,72 as its two siblings under πρόσκληση 24PROC014835083 — here 14,6× the contract's own price. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Paid €135.059,75 = 86% of the true fee, 6% of the stored."
   },
-  "reason": "Registry keying error of the PROJECT-BUDGET class: the stored value is not this contract's price but «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ», i.e. the budget of the whole multi-lot project, which the contract quotes in its funding recital. The contract's own price is stated in Άρθρο 5 «Αμοιβή Αναδόχου»: «ορίζεται στο ποσό των εκατόν πενήντα έξι χιλιάδων οκτακοσίων εβδομήντα ενός ευρώ και ενενήντα ενός λεπτών (156.871,91 €), πλέον ΦΠΑ 24%». Same project budget 2.284.973,72 as its two siblings under πρόσκληση 24PROC014835083 — here 14,6× the contract's own price. Confirmed three ways: the Άρθρο 5 wording, the incl-ΦΠΑ figure printed in the same sentence, and the payment orders. Found by the πρόσκληση-family analysis of 2026-08-18 (DATA_DECISIONS). Paid €135.059,75 = 86% of the true fee, 6% of the stored."
- }
+  "25SYMV017073536": {
+    "contractors_vat": {
+      "98434068": "998434068"
+    },
+    "reason": "Contractor ΑΦΜ keyed with eight digits: the registry stores «98434068» for ΓΕΩΓΝΩΜΩΝ Ο.Ε., while the signed contract states «ΓΕΩΓΝΩΜΩΝ Ο.Ε.» που εδρεύει στην Πάτρα … με ΑΦΜ 998434068 της ΔΟΥ Πατρών». Zero-padding the eight-digit value to 098434068 would file the contract under an ΑΦΜ that belongs to nobody (DATA_DECISIONS 2026-08-18)."
+  },
+  "22SYMV010795597": {
+    "total_cost_without_vat": 2031375.52,
+    "total_cost_with_vat": 2518905.64,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (3.345.691,10 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του Αναδόχου για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνείται έως ποσού δύο εκατομμυρίων τριάντα μίας χιλιάδων τριακοσίων εβδομήντα πέ…» = 2.031.375,52 € πλέον ΦΠΑ, 2.518.905,64 € συνολικά.",
+    "objects": {
+      "0": 2031375.52
+    }
+  },
+  "22SYMV010795577": {
+    "total_cost_without_vat": 1161075.67,
+    "total_cost_with_vat": 1439733.83,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.803.302,96 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 1.161.075,67 € πλέον ΦΠΑ, 1.439.733,83 € συνολικά.",
+    "objects": {
+      "0": 1161075.67
+    }
+  },
+  "22SYMV010795606": {
+    "total_cost_without_vat": 836613.02,
+    "total_cost_with_vat": 1037400.14,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.387.440,64 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του Αναδόχου για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνείται έως ποσού οκτακοσίων τριάντα έξι χιλιάδων εξακοσίων δεκατριών ευρώ και δ…» = 836.613,02 € πλέον ΦΠΑ, 1.037.400,14 € συνολικά.",
+    "objects": {
+      "0": 836613.02
+    }
+  },
+  "22SYMV011323950": {
+    "total_cost_without_vat": 655098.75,
+    "total_cost_with_vat": 812322.45,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.051.762,42 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του Αναδόχου για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνείται έως ποσού εξακοσίων πενήντα πέντε χιλιάδων ενενήντα οκτώ ευρώ και εβδομή…» = 655.098,75 € πλέον ΦΠΑ, 812.322,45 € συνολικά.",
+    "objects": {
+      "0": 655098.75
+    }
+  },
+  "22SYMV010795585": {
+    "total_cost_without_vat": 655098.75,
+    "total_cost_with_vat": 812322.45,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.051.762,42 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του Αναδόχου για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνείται έως ποσού εξακοσίων πενήντα πέντε χιλιάδων ενενήντα οκτώ ευρώ και εβδομή…» = 655.098,75 € πλέον ΦΠΑ, 812.322,45 € συνολικά.",
+    "objects": {
+      "0": 655098.75
+    }
+  },
+  "22SYMV010856526": {
+    "total_cost_without_vat": 1379208.27,
+    "total_cost_with_vat": 1710218.25,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.827.559,95 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 1.379.208,27 € πλέον ΦΠΑ, 1.710.218,25 € συνολικά.",
+    "objects": {
+      "0": 1379208.27
+    }
+  },
+  "22SYMV010473684": {
+    "total_cost_without_vat": 1379208.27,
+    "total_cost_with_vat": 1710218.25,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.827.559,95 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 1.379.208,27 € πλέον ΦΠΑ, 1.710.218,25 € συνολικά.",
+    "objects": {
+      "0": 1379208.27
+    }
+  },
+  "22SYMV010856515": {
+    "total_cost_without_vat": 1163690.51,
+    "total_cost_with_vat": 1442976.23,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.546.045,95 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 1.163.690,51 € πλέον ΦΠΑ, 1.442.976,23 € συνολικά.",
+    "objects": {
+      "0": 1163690.51
+    }
+  },
+  "22SYMV010473680": {
+    "total_cost_without_vat": 1163690.51,
+    "total_cost_with_vat": 1442976.23,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.546.045,95 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 1.163.690,51 € πλέον ΦΠΑ, 1.442.976,23 € συνολικά.",
+    "objects": {
+      "0": 1163690.51
+    }
+  },
+  "22SYMV010856517": {
+    "total_cost_without_vat": 1429942.82,
+    "total_cost_with_vat": 1773129.1,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.827.968,13 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 1.429.942,82 € πλέον ΦΠΑ, 1.773.129,10 € συνολικά.",
+    "objects": {
+      "0": 1429942.82
+    }
+  },
+  "22SYMV010473685": {
+    "total_cost_without_vat": 1429942.82,
+    "total_cost_with_vat": 1773129.1,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.827.968,13 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 1.429.942,82 € πλέον ΦΠΑ, 1.773.129,10 € συνολικά.",
+    "objects": {
+      "0": 1429942.82
+    }
+  },
+  "22SYMV010856516": {
+    "total_cost_without_vat": 370985.73,
+    "total_cost_with_vat": 460022.31,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (482.270,65 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 370.985,73 € πλέον ΦΠΑ, 460.022,31 € συνολικά.",
+    "objects": {
+      "0": 370985.73
+    }
+  },
+  "22SYMV010473683": {
+    "total_cost_without_vat": 370985.73,
+    "total_cost_with_vat": 460022.31,
+    "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (482.270,65 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του ΑΝΑΔΟΧΟΥ για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου, που περιλαμβάνει αμοιβή εργασιών, Γ.Ε. και Ο.Ε., απρόβλεπτα και αναθεώρηση), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνεί…» = 370.985,73 € πλέον ΦΠΑ, 460.022,31 € συνολικά.",
+    "objects": {
+      "0": 370985.73
+    }
+  },
+  "26SYMV019512653": {
+    "total_cost_without_vat": 80995.65,
+    "total_cost_with_vat": 100434.61,
+    "objects": {
+      "0": 80995.65
+    },
+    "reason": "RUNNING TOTAL keyed as the contract value (DATA_DECISIONS 2026-08-18): this is a «1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ ΣΥΜΒΑΣΗ» and states its own price — «ορίζεται στο ποσό των ογδόντα χιλιάδων εννιακοσίων ενενήντα πέντε ευρώ και εξήντα πέντε λεπτών 80.995,65€, πλέον ΦΠΑ 24% … 100.434,61 € συμπεριλαμβανομένου ΦΠΑ 24%» — while the registry stored 621.474,16, i.e. 540.478,51 (the original contract) + 80.995,65. Applied together with the scope_loader fix that reads the PDF heading, so the supplement is additive and the original still counts: the programme total is unchanged."
+  }
 }

@@ -67,3 +67,8 @@ data/processed/authority_letterhead_cache/*
 data/processed/authority_link_audit.json
 data/processed/zone_sheets/
 data/processed/awardee_audit.json
+
+# audit review candidates (like the other *_report/review files above)
+data/processed/audit_fields.json
+data/processed/audit_extras.json
+data/processed/audit_identity.json

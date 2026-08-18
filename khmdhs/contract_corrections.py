@@ -60,7 +60,7 @@ def apply_contract_corrections(conn: sqlite3.Connection,
                        WHERE reference_number = ?""",
                     (fix.get("duplicate_of"), fix.get("related_to"),
                      fix.get("reason"), ref))
-            else:
+            elif {"total_cost_with_vat", "total_cost_without_vat"} & fix.keys():
                 cur = conn.execute(
                     """UPDATE contracts SET
                            total_cost_with_vat = COALESCE(?, total_cost_with_vat),
@@ -70,6 +70,15 @@ def apply_contract_corrections(conn: sqlite3.Connection,
                     (fix.get("total_cost_with_vat"),
                      fix.get("total_cost_without_vat"),
                      fix.get("reason"), ref))
+            else:
+                # A party-only fix (contractors_vat / contractors_keep) changes
+                # no euro figure, so it must NOT stamp correction_note: the
+                # contract page renders that as «Stated value — curated
+                # correction … the value shown is the one the signed contract
+                # states», which would be a false statement about the price.
+                cur = conn.execute(
+                    "SELECT 1 FROM contracts WHERE reference_number = ?", (ref,))
+                cur = type("R", (), {"rowcount": 1 if cur.fetchone() else 0})()
             if cur.rowcount == 0:
                 logging.warning("correction for %s matched no stored contract", ref)
                 continue

@@ -31,6 +31,7 @@ from pathlib import Path
 
 from khmdhs.config import DEFAULT_DB
 from khmdhs.db import init_db
+from khmdhs.forest_loader import PDF_CACHE
 from khmdhs.scope import IN_SCOPE, _strip_accents, classify
 
 SUPPLEMENT_FILE = Path(__file__).parent / "data" / "antinero_supplement.json"
@@ -144,11 +145,30 @@ def build_scopes(conn, overrides: dict[str, str],
         if old_ref not in scopes or new_ref in cancelled:
             continue
         succ_title = _strip_accents(titles.get(new_ref, "").upper())
-        additive = ("ΣΥΜΠΛΗΡΩΜΑΤΙΚ" in succ_title
+        # …and the document's own heading, because the registry title can be
+        # silent about what the act is: 26SYMV019512653 is titled
+        # «ΑΝΤΙΠΛΗΜΜΥΡΙΚΑ ΔΥΤΙΚΗΣ ΑΤΤΙΚΗΣ» and only its PDF says «1η
+        # ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ ΣΥΜΒΑΣΗ» (DATA_DECISIONS 2026-08-18)
+        supplementary = ("ΣΥΜΠΛΗΡΩΜΑΤΙΚ" in succ_title
+                         or "ΣΥΜΠΛΗΡΩΜΑΤΙΚ" in _pdf_heading(new_ref))
+        additive = (supplementary
                     and values.get(new_ref, 0) < 0.9 * values.get(old_ref, 0))
         if not additive:
             superseded[old_ref] = new_ref
     return scopes, superseded
+
+
+def _pdf_heading(ref: str, chars: int = 600) -> str:
+    """The first lines of the contract's own cached text, accent-stripped.
+
+    Only the heading: «ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ» appears in boilerplate deeper in every
+    ΕΣΥ (άρθρο 16 «συμπληρωματικές εργασίες»), so reading the whole document
+    would classify half the corpus as supplementary.
+    """
+    p = PDF_CACHE / f"{ref}.txt"
+    if not p.exists():
+        return ""
+    return _strip_accents(p.read_text(encoding="utf-8", errors="replace")[:chars].upper())
 
 
 def main(argv: list[str] | None = None) -> int:

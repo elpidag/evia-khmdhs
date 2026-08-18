@@ -107,7 +107,7 @@ def test_real_db_family_coverage(kh):
         SELECT COUNT(DISTINCT f.reference_number) FROM contract_families f
         JOIN contract_scope s ON s.reference_number = f.reference_number
         WHERE s.in_scope = 1 AND f.kind = 'notice'""").fetchone()[0]
-    assert rows == 219
+    assert rows == 220
     fams = kh.execute("""
         SELECT COUNT(DISTINCT f.adam) FROM contract_families f
         JOIN contract_scope s ON s.reference_number = f.reference_number

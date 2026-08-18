@@ -149,8 +149,14 @@ def child_rows(adam: str, item: dict) -> dict[str, list[tuple]]:
         if not isinstance(m, dict):
             continue
         country = (m.get("country") or {}).get("value")
+        # The registry pads some ΑΦΜ with spaces (' 999826258', '071851227 ').
+        # Every per-contractor view groups on this string, so an unstripped
+        # value silently splits one company into two — 7 of them, worth up to
+        # €13,6M each, until this was fixed (DATA_DECISIONS 2026-08-18).
+        vat = m.get("vatNumber")
         contractors.append(
-            (adam, i, m.get("vatNumber"), m.get("name"), country, _bool_int(m.get("greekVatNumber")))
+            (adam, i, vat.strip() if isinstance(vat, str) else vat,
+             m.get("name"), country, _bool_int(m.get("greekVatNumber")))
         )
 
     cpvs: list[tuple] = []

@@ -28,6 +28,13 @@ export interface ContractDetail {
 	related_to?: string | null;
 	/** curated correction note (dase corrections) */
 	correction_note?: string | null;
+	document_kind?: {
+		kind: string;
+		label_el: string;
+		label_en: string;
+		evidence: string | null;
+		source: string | null;
+	} | null;
 	/** ΑΔΑΜs of double-postings of THIS contract (kept side) */
 	duplicates?: string[];
 	bids_submitted: number | null;
@@ -121,6 +128,7 @@ export interface ContractDetail {
 		 *  never prints «cancelled» over a double-posting or an out-of-scope
 		 *  contract (both carry cancelled = 1 as their exclusion mechanism) */
 		duplicate_of?: string | null;
+		doc_kind?: string | null;
 		related_to?: string | null;
 		in_db: boolean;
 		/** in-db contract rows: first contractor name (family diagram labels) */

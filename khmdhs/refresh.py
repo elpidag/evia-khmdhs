@@ -31,7 +31,7 @@ from pathlib import Path
 import requests
 
 from khmdhs import (
-    bodies_loader, categories_loader, chain_loader, completion_acts_loader,
+    bodies_loader, document_kinds, categories_loader, chain_loader, completion_acts_loader,
     contract_corrections, families_loader, forest_loader, linked_acts_loader,
     payment_loader, region_loader, scope_loader, studies_loader,
 )
@@ -221,6 +221,8 @@ def main(argv: list[str] | None = None) -> int:
         # wipes it and this rebuilds it (as scope/region/forest do)
         print("\n-- families_loader ---------------------------------------------")
         families_loader.main(db_argv)
+        print("\n-- document_kinds ----------------------------------------------")
+        document_kinds.main(db_argv)
         print("\n-- bodies_loader -----------------------------------------------")
         bodies_loader.main(db_argv)
         print("\n-- payment_loader ----------------------------------------------")

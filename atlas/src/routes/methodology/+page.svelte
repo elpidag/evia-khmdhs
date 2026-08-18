@@ -149,6 +149,33 @@
 		taxonomy and every assignment are documented in the decision log (2026-08-14).
 	</p>
 
+	<h2 id="record-kinds">What a ΚΗΜΔΗΣ σύμβαση record is</h2>
+	<p>
+		ΥΠΕΝ files several kinds of act in the contracts register, all of them as
+		<em>συμβάσεις</em> with a ΣΥΜΒ ΑΔΑΜ: the contract itself, later revisions of
+		its terms, supplementary contracts for additional works, and the ministry
+		decisions approving those or extending a deadline. The registry's own type
+		field cannot tell them apart — it carries the ν.4412 object category
+		(«Έργα» / «Υπηρεσίες»), which reads the same on all of them — so each
+		record is classified from the wording of its own signed document, and that
+		wording is kept verbatim beside the label on the contract page.
+	</p>
+	<p>
+		The {show(nKh)} in-scope records are
+		<strong>{show(f['kh_doc_contract'])} original contracts</strong>,
+		{show(f['kh_doc_amendment'])} revisions of terms (which never change the
+		price — verified against every one of them),
+		{show((f['kh_doc_supplementary_contract'] ?? 0) +
+			(f['kh_doc_approval_ape_supplementary'] ?? 0))} supplementary works —
+		{show(f['kh_doc_supplementary_contract'])} posted as the supplementary
+		contract itself and {show(f['kh_doc_approval_ape_supplementary'])} as the
+		ministry decision approving one — and
+		{show(f['kh_doc_approval_schedule_extension'])} deadline extensions, which
+		change no money at all. Where a later record restates the whole contract it
+		replaces the earlier version in every total; where it carries only the
+		additional works, both count. Either way each euro is counted once.
+	</p>
+
 	<h2 id="procurement-families">Procurement families (which contracts answer the same call)</h2>
 	<p>
 		The registry's own chain declares any upstream act for only {show(f['kh_family_declared'])} of the

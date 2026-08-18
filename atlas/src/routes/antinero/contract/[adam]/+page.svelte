@@ -28,6 +28,21 @@
 		contract: 'Contract',
 		completion: 'Completion'
 	};
+	// a ΣΥΜΒ ΑΔΑΜ is not always a contract: ΥΠΕΝ posts amendments,
+	// supplementary contracts and ministry approvals under one too, and the
+	// trail has to say which (DATA_DECISIONS 2026-08-18)
+	// Every ΣΥΜΒ record IS a σύμβαση — the label says which kind, so the plain
+	// contract is «αρχική» (user, 2026-08-18). Kept in step with
+	// khmdhs/document_kinds.py:KINDS.
+	const DOCKIND: Record<string, string> = {
+		contract: 'Original contract',
+		amendment: 'Revision of terms',
+		supplementary_contract: 'Supplementary contract',
+		approval_ape_supplementary: 'Approval of supplementary works',
+		approval_supplementary: 'Approval of supplementary works',
+		approval_ape: 'Approval of revised quantities',
+		approval_schedule_extension: 'Deadline extension'
+	};
 	const CKIND: Record<string, string> = {
 		oristiki_paralavi: 'Completion — final acceptance',
 		paralavi: 'Completion — acceptance protocol',
@@ -47,6 +62,7 @@
 			title: c.title,
 			d: (c.contract_signed_date ?? '').slice(0, 10) || null,
 			cancelled: c.cancelled ?? 0,
+			doc_kind: c.document_kind?.kind ?? null,
 			duplicate_of: c.duplicate_of ?? null,
 			related_to: c.related_to ?? null,
 			in_db: true,
@@ -71,7 +87,9 @@
 			type:
 				t.kind === 'completion'
 					? (CKIND[t.ckind ?? ''] ?? KIND.completion)
-					: (KIND[t.kind] ?? t.kind) + (t.self ? ' — this document' : ''),
+					: (t.kind === 'contract'
+							? (DOCKIND[t.doc_kind ?? ''] ?? KIND.contract)
+							: (KIND[t.kind] ?? t.kind)) + (t.self ? ' — this document' : ''),
 			code: t.adam,
 			title: t.title ?? null,
 			pdf: pdfHref(t),
@@ -194,6 +212,16 @@
 		</dd>
 		<dt>Date</dt>
 		<dd>{dmy(c.contract_signed_date) || '—'}</dd>
+		{#if c.document_kind}
+			<!-- ΚΗΜΔΗΣ files contracts, amendments, supplementary contracts AND
+			     ministry approvals under one ΣΥΜΒ ΑΔΑΜ, and types all of them
+			     «Έργα»/«Υπηρεσίες»; this says what the document itself is -->
+			<dt>Document</dt>
+			<dd>
+				{c.document_kind.label_en}
+				<br /><small class="muted">{c.document_kind.label_el}</small>
+			</dd>
+		{/if}
 		<dt>Contractor</dt>
 		<dd>
 			{#each c.contractors as ct, i (ct.vat_number)}
