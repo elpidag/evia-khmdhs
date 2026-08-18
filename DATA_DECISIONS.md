@@ -3429,3 +3429,39 @@ audit looks for. The class collapses **45 → 2** and `ok` rises 403 → 446.
 rows that are all already corrected or excluded — **41 scanned
 `no_text` contracts (€558.134,10 net) remain**, needing visual reads
 like the 42 payment documents of 2026-08-17.*
+
+## 2026-08-18 — Awardee review CLOSED: the 41 scanned contracts all check out; every ΔΑΣΕ contract's party is now verified
+
+The last class of the 96. These contracts have no text layer, so the
+registry's contractor claim could not be screened mechanically. Two
+methods, in this order:
+
+**1. Cross-check against a TEXT-bearing act of the same procurement**
+(the award, notice or request — the parity harvest of 2026-08-03 cached
+them all). **29 of 41 confirmed**: 13 by the co-op's own ΑΦΜ printed in
+the award, 16 by a distinctive fold of its name (generic tokens —
+ΔΑΣΕ, ΣΥΝΕΤΑΙΡΙΣΜΟΣ, ΕΡΓΑΣΙΑΣ, ΑΓΙΟΥ … — are stop-listed, so a match
+means the toponym or the co-op's title, never the legal form).
+
+**2. Read by eye** — the remaining 12, whose acts are scans too. All
+twelve name the registry's co-op: ΔΑ.Σ.Ε. «Η Δρυς» Σοχού, Βερτίσκου-
+Όσσας (×2, one of them the already-excluded duplicate's twin), Κλειτσού
+(the document spells it «Κλειστού»), Πετρολόφου (**with ΑΦΜ 096121014**
+printed), Αγίου Δημητρίου, Λιβαδίου, Φωτεινών, Βρύας-Ρητίνης,
+Καταλωνίων, Βώλακα «Αγ. Παύλος». The Πιερίας ΣΥΜΦΩΝΗΤΙΚΑ name their
+co-op in the εγκατάσταση recital and the closing party clause but print
+no ΑΦΜ at all — the same document habit that made 23SYMV013711668
+unresolvable from its own text.
+
+**Zero corrections.** *Affects: no data.*
+
+**The 96 in full, closed:** 13 in the first pass (6 ΑΦΜ rewrites, 4
+exclusions, 3 dismissed), 45 `missing` → 2 dismissed after the audit
+learned the public-bodies registry, 41 scans verified. Of 2.164 stored
+contracts the screen produced **10 real defects** — 6 mis-keyed
+contractor ΑΦΜ and 4 contracts belonging to nobody's co-op — plus 2
+wrong-PDF uploads and 1 subcontracting relation worth knowing about. The
+scanner (`scripts/audit_contract_awardees.py`) stays as the guard: it is
+re-runnable after any harvest and now reports `ok` for 446 contracts
+that state their party in text, `no_party_vat` for the 1.669 whose
+documents name no ΑΦΜ beyond the authority's, and nothing else.
