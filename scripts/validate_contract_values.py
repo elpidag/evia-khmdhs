@@ -134,6 +134,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--refetch-text", action="store_true",
                         help="re-extract .txt even when one exists")
     args = parser.parse_args(argv)
+    # the summary prints Greek/arrows; a cp1252 console would kill the run
+    # after the work is done but before the report is written
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except AttributeError:                      # pragma: no cover
+        pass
 
     conn = init_db(args.db)
     conn.row_factory = __import__("sqlite3").Row

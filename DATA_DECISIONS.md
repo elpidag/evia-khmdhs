@@ -3651,3 +3651,42 @@ only 29 of 245 contracts, and the RRF-recital test only in 19 — so this
 error class is screened, but the wider "does the stored value match the
 document" question remains unaudited on the Anti-nero side, which has never
 had the value validator the ΔΑΣΕ side received.
+
+## 2026-08-18 — Anti-nero value audit (first ever): 344 contracts screened against their PDFs, no further errors beyond the 4 corrected
+
+The ΔΑΣΕ dataset got `scripts/validate_contract_values.py` across all 2.164
+contracts in August; the Anti-nero side had never been screened. After the
+project-budget corrections, it was run here for the first time
+(`--db khmdhs.sqlite --cache pdf_cache`; report at
+`data/processed/antinero_value_report.json`, untracked like its ΔΑΣΕ twin).
+
+**Result over 344 contracts**: ok 262 · mismatch 50 · ok_net_only 24 ·
+**ok_corrected 5** (the curated fixes re-verified) · near_match 3.
+
+**The 50 `mismatch` rows are not 50 errors.** «Mismatch» means only that
+the stored figure is not findable as text in the PDF — and many Anti-nero
+συμβάσεις never state a figure at all (three of them are 6,6 kB documents
+containing zero amount tokens; the validator's «largest amounts» for them
+are dates). Restricting to the 32 in-scope and classifying by whether the
+PAYMENTS corroborate the stored value:
+
+| group | contracts | net | verdict |
+|---|---|---|---|
+| payments at 89–104% of stored gross | 21 | €46,1M | correct; the mismatch is an extraction artefact |
+| 2022 contracts paid 72–83% | 4 | €4,7M | read individually — no error found |
+| 2025-26 contracts still being paid (16–83%) | 7 | €45,8M | in progress, indeterminate |
+
+The four read individually: 22SYMV011323950's PDF quotes «συνολικού
+προϋπολογισμού 812.322,45€ με ΦΠΑ» as a RECITAL of the original contract
+while the stored 1.051.762,42 is the post-Α.Π.Ε. value the same document
+approves — correct as stored; the other three state no amount anywhere.
+
+**Conclusion**: the four project-budget errors corrected earlier today were
+the only value defects this screen can see. Nothing in the audit contradicts
+any other stored figure. Note the ceiling honestly — for contracts whose
+document states no amount, only the payments corroborate, and for 2025-26
+works even that is inconclusive until they finish.
+
+*Affects: no data. `validate_contract_values.py` gained a stdout-encoding
+guard (a cp1252 console killed the run after the work but before the report
+was written) and is now proven to run against either DB.*

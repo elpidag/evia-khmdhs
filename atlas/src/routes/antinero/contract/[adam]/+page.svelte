@@ -94,6 +94,21 @@
 	);
 
 	const quotes = $derived<Quote[]>([
+		// a curated stated-value correction must be visible on the page it
+		// changes: 5 Anti-nero contracts carry one (DATA_DECISIONS 2026-08-14,
+		// 2026-08-18), and without this the page shows a figure that differs
+		// from the registry with no explanation
+		...(c.correction_note
+			? [
+					{
+						label: 'Stated value — curated correction',
+						text: c.correction_note,
+						code: c.reference_number,
+						href: `/pdf/contract/${c.reference_number}`,
+						note: 'The value shown above is the one the signed contract states, not the registry figure.'
+					}
+				]
+			: []),
 		...(overrideNote
 			? [
 					{
