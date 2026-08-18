@@ -189,10 +189,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m khmdhs.contract_corrections")
     parser.add_argument("--db", type=Path, default=DASE_DB)
     parser.add_argument("--corrections", type=Path, default=CORRECTIONS_FILE)
+    # each DB has its OWN payments file; without this the khmdhs refresh
+    # applied the ΔΑΣΕ one to the Anti-nero DB — harmless only because
+    # ΚΗΜΔΗΣ ΑΔΑΜ are globally unique, and it buried real warnings under
+    # ~226 «matched no stored payment» lines every run
+    parser.add_argument("--payments", type=Path, default=PAYMENT_CORRECTIONS_FILE)
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     conn = init_db(args.db)  # runs the ALTER guard so correction_note exists
-    n, n_p = apply_all(conn, args.corrections)
+    n, n_p = apply_all(conn, args.corrections, args.payments)
     print(f"applied {n} contract + {n_p} payment curated corrections to {args.db}")
     conn.close()
     return 0

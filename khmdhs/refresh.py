@@ -35,6 +35,7 @@ from khmdhs import (
     contract_corrections, forest_loader, linked_acts_loader, payment_loader,
     region_loader, scope_loader, studies_loader,
 )
+from khmdhs.payment_loader import CORRECTIONS_FILE as KH_PAYMENT_CORRECTIONS_FILE
 from khmdhs.contract_corrections import (
     KHMDHS_CORRECTIONS_FILE,
 )
@@ -203,7 +204,8 @@ def main(argv: list[str] | None = None) -> int:
         # loader runs (DATA_DECISIONS 2026-08-14, Σουφλί keying error)
         print("\n-- contract_corrections ----------------------------------------")
         contract_corrections.main(db_argv + [
-            "--corrections", str(KHMDHS_CORRECTIONS_FILE)])
+            "--corrections", str(KHMDHS_CORRECTIONS_FILE),
+            "--payments", str(KH_PAYMENT_CORRECTIONS_FILE)])
         print("\n-- scope_loader ------------------------------------------------")
         scope_loader.main(db_argv)
         print("\n-- region_loader -----------------------------------------------")

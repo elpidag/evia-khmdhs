@@ -85,15 +85,11 @@ def main() -> None:
         return
 
     url_template = ACT_URLS[args.acts] if args.acts else CONTRACT_PDF_URL
+    conn = None if args.adams else sqlite3.connect(args.db)
     if args.adams:
         refs = [ln.strip() for ln in
                 args.adams.read_text(encoding="utf-8").splitlines() if ln.strip()]
         logging.info("fetching %d listed ΑΔΑΜ as kind=%s", len(refs), args.acts)
-        conn = None
-    else:
-        conn = sqlite3.connect(args.db)
-    if args.adams:
-        pass
     elif args.acts:
         refs = [r[0] for r in conn.execute(
             "SELECT DISTINCT adam FROM linked_acts WHERE kind = ? ORDER BY adam",
