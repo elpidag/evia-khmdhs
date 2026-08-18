@@ -3817,3 +3817,201 @@ asserts no text escapes the SVG box); and Vite served STALE component CSS
 after a rewrite — the diagram rendered as black blobs because `.link`
 still carried the previous version's rules. Touching the file fixed it;
 suspect it before hunting a code bug.*
+
+## 2026-08-18 — The whole programme as one chart: the drawn unit is the CALL, and the three bands say how little of it was competed as lots
+
+The first attempt at a programme-wide network — 245 circles, 174 edges,
+one grey, nothing labelled — was rejected by the user on sight («this
+doesn't show anything really», then «it's huge and seems as if these dots
+are not connected»). Both criticisms were correct and both were structural,
+not cosmetic:
+
+- **Nothing was connected to the eye.** Cluster members orbited their hub
+  at `rHub + rMember + 7`, so the connector was a 7-pixel stub hidden
+  under two circles. The edges existed and were invisible.
+- **It was huge because most of it said nothing.** 110 of 245 contracts
+  have no sibling — 84 whose call produced exactly one contract, 26 with
+  no call at all. Drawn as "clusters of one" they took three quarters of
+  the field to repeat a single fact 110 times.
+
+**Rebuilt around what the data actually has.** Measured first, then drawn:
+134 calls, of which 50 produced more than one contract (32 pairs, 10
+triples, 5 quadruples, 1 quintuple, 2 with eight lots each), covering 135
+contracts.
+
+| band | what it is | contracts |
+|---|---|---:|
+| the field | 50 calls that produced lots, one star each | 135 |
+| band 1 | 84 calls that produced exactly one contract | 84 |
+| band 2 | no call at all — direct awards and negotiations | 26 |
+
+- **The drawn unit is the call, not the connected component.** A component
+  merged calls through shared contractors, which produced stars whose
+  spokes asserted a shared call that did not exist. Now one star = one
+  πρόσκληση: biggest lot at the centre, siblings on spokes long enough to
+  read (`+15`), each star labelled with its own Σ € on a baseline shared
+  across the row, and the six richest calls named by ΑΔΑΜ.
+- **Contractor bridges stay, as dashed links between star centres.** Calls
+  tied by a shared contractor are packed as ONE BLOCK, so a row never
+  breaks between them and no bridge sweeps diagonally across the chart.
+  Bridges over the same stretch are lifted 3,5 units apart — two dashed
+  lines on one axis read as a single solid rule, i.e. as the opposite of
+  what they mean. 9 companies won lots under two or more of the 50 calls.
+- **Colour is the programme phase** (the existing scope ramp), sizes are
+  areas ∝ stated net € on ONE scale across field and bands, so a large
+  direct award still reads as large.
+
+Everything load-bearing is printed on the chart (per-star €, the three band
+headings, the named calls); the hover card only repeats detail, per the
+site's chart doctrine.
+
+*Affects: presentation only, plus two computed additions.
+`queries_extra.antinero_network` now ships each contract's `phase` and the
+band/bridge counts the chart prints (`n_in_multi_calls`, `n_single_call`,
+`n_no_call`, `n_bridge_contractors`, `n_bridge_multi`) — no number in that
+copy is written by hand. `/api/meta` gains `kh_family_calls` /
+`kh_family_contracts` / `kh_family_none` / `kh_family_declared` for the new
+`/methodology#procurement-families` section the caveat links to, which the
+chart's caveat had been pointing at before it existed. Pinned by
+`tests/test_atlas_real_db.py::test_network_pins` (the three bands must
+partition 245 and the calls must be well-formed PROC ΑΔΑΜ) and
+`::test_meta_family_facts_match_the_network` (the prose and the picture
+must agree). Layout stays deterministic and pure —
+`transforms/network.ts`, 15 vitest units.*
+
+## 2026-08-18 — The programme chart becomes ONE population under three arrangements, and the default is time
+
+The star field answered «what was bought together» but the user's objection
+to it was about the grid it sat in — and the grid was the honest problem:
+**row 3, column 7 meant nothing**. Position carried no information, so the
+eye kept looking for an ordering that was not there.
+
+Rather than replace one arrangement with another, the chart now keeps ONE
+mark — a circle per in-scope contract, area ∝ stated net €, colour =
+programme phase — and lets a toggle rearrange it (`?net=` on `/`, so a view
+is a permalink like every other filter state on the site). Only the meaning
+of POSITION changes:
+
+| mode | position means | the finding it prints |
+|---|---|---|
+| `time` (default) | x = signature date, y = dodge | **34 of the 50 split calls signed every lot on one day** |
+| `call` | nothing — stars packed into rows | 50 calls produced lots; 84 produced one contract; 26 had no call |
+| `pack` | containment: a bubble per call | 84 of the 134 calls bought exactly one contract |
+
+Because the marks are one keyed list, a contract keeps its DOM node between
+arrangements and animates to its new place — Flourish's Data Explorer
+convention («object constancy during transitions»), which is what makes a
+toggle read as a rearrangement rather than as three unrelated charts.
+
+**Rejected, with reasons.** Geography (group by Π.Ε./authority): the same
+page already carries MAP and MONEY BY REGION PER YEAR two frames away.
+Chord / bipartite calls↔contractors: MONEY FLOW is already a Sankey to
+contractors. Arc diagram (one ordered line, arcs for same-call and
+same-contractor): the most compact candidate, but 134 call-arcs over 245
+nodes is a second hairball. Force-directed anything: not deterministic,
+therefore not testable, which this project's layouts must be.
+
+*Affects: presentation, plus one computed addition —
+`antinero_network`'s stats gain `n_same_day_calls` (verified against a
+direct SQL pass: 50 multi-lot calls, 34 of them single-day), pinned in
+`test_network_pins` along with the ISO shape of every node's date, since
+the timeline places every dot by it. New pure modules:
+`transforms/network.ts` gains `timeline()` (with a variable-radius dodge
+added to `transforms/beeswarm.ts`, because these dots differ in size) and
+`packed()` (d3-hierarchy — a new dependency, in-doctrine for a «d3-* +
+topojson only» stack; d3.pack is deterministic given a deterministic child
+order, which the sort guarantees); `transforms/networkScene.ts` assembles
+the per-mode scene so the component stays under the house line cap. 20
+vitest units for the two new layouts, 9 for the scene. Two implementation
+notes: the packed blob is round, so its scene crops the viewBox to the
+blob and caps the rendered width — a full-frame viewBox would be three
+quarters white paper; and labels now paint OVER the marks with a paper
+halo (`paint-order: stroke`), because in a packed layout anything drawn
+outside a circle lands on top of its neighbour.*
+
+## 2026-08-18 — Programme chart, user review: the fire season is drawn, the card is identity only, «by call» leaves the site, and the nested view is rebuilt around what «the middle» means
+
+Four decisions from the user's review of the three arrangements, all
+implemented:
+
+**1. The timeline shades Greece's fire season.** Every year's 1 May – 31
+October is a stripe behind the dots. The season is a single definition that
+ships from the API together with the count it implies
+(`fire_season: {from: "05-01", to: "10-31", n_contracts: 120}`), so the
+shading and the sentence beside it cannot drift apart — **120 of the 245
+in-scope contracts were signed inside a fire season**. Verified against a
+direct pass over the payload in `test_network_pins`.
+
+**2. The hover card carries identity only** — ΑΔΑΜ and amount. Everything
+else it used to repeat (phase, title, contractor, region, call) is either
+printed on the chart or a click away on the contract page; the doctrine says
+a tooltip must never be where a fact lives. A bug found while checking this:
+the in-circle labels intercepted pointer events, so the very marks that
+carried a label could not be hovered or clicked — chart text is now
+`pointer-events: none`.
+
+**3. «By call» (the star field) is off the site**, by user decision, and may
+return. `callScene` and its units stay in the codebase; only `NET_MODES`
+decides what the toggle offers, so putting it back is a one-line change.
+
+**4. The nested view was rebuilt so that the middle MEANS something.** The
+first version bucketed the 84 single-contract calls into one parent, which
+d3.pack — sorting by value — put in the centre, where it read as one
+enormous call. The user's correction: *the clustering in the centre should be
+the ones that are grouped in procurements, the individuals should be in the
+periphery.* So the layout no longer uses `d3.pack` at all:
+
+- each call's lots are packed with `packSiblings`, then every call bubble is
+  packed into a **core**;
+- the core is then packed as the FIRST sibling among the contracts bought on
+  their own, which therefore **ring** it;
+- radii are √€ throughout and scaled once at the end, so area ∝ € holds
+  across both levels and against the timeline.
+
+Styling follows the packed-circle reference the user supplied (a World-Bank
+style regions chart): the call bubble is its phase colour at full strength
+with a **rim** (drawn 12% wider than the lots it encloses) carrying the
+ΑΔΑΜ set along the arc, lots inside are the same hue lightened 42%, and ink
+is chosen by the fill's luminance — dark on a light hue, light on a dark one
+— for both the rim name and the in-circle amounts. Amounts inside marks use
+a new compact format (`eurTiny`: «11,6M», «812k»), presentation only: no
+total is ever stated that way. A label that cannot fit is dropped, never
+shrunk below reading size or spilled outside its circle. Contracts awarded
+with **no call published at all** carry a dashed edge, keyed in the legend.
+
+*Affects: presentation, plus the `fire_season` payload block and
+`format.ts:eurTiny` (goldens added). Pinned by `test_network_pins` (season
+bounds + count recomputed from the nodes) and by vitest units for the new
+packing — including one that asserts the property the user asked for: every
+grouped mark is closer to the blob centre than every solitary one.*
+
+## 2026-08-18 — One 400px box for every arrangement of the programme chart
+
+User decision: «When it was signed» and «Nested by call» are both 400 px
+tall, so the frame keeps one height and the page does not jump when the
+toggle is used. `NET_HEIGHT = 400` in `transforms/networkScene.ts` is the
+single knob.
+
+Making it exact needed two changes, both worth keeping:
+
+- **The timeline's viewBox is now the box itself** (`0 0 1120 400`, no
+  margins), so one unit is one rendered pixel at the frame's width and
+  «400» means 400. Its swarm no longer sets the height: `timeline()` takes
+  an exact height and, if the densest day needs more room than the box
+  allows, **shrinks the dots** (uniformly, so area ∝ € still holds) and
+  re-dodges, up to six passes. A dodge that overflowed its box would
+  overplot, which is the one thing a beeswarm exists to prevent. Today the
+  swarm fits with room to spare (it needed ~342 of 378), so nothing is
+  shrunk; the mechanism is there for future data.
+- **The packed blob gets a square viewBox of exactly the box, centred on
+  the blob, with the rendered width capped to match** — a circle is as
+  wide as it is tall, so 400 tall is 400 wide.
+
+*Consequence, stated plainly: at 400×400 the nested view has room for its
+circles but not for its lettering — the per-contract amounts drop out
+entirely and only the two largest calls keep their ΑΔΑΜ on the rim (a new
+gate suppresses a 15-character code bent round a small circle, which reads
+as a smudge rather than a label). Nothing was removed from the design:
+every label is drawn where it fits and returns if the box grows. The
+alternative — letting the nested view keep the frame's width while the
+timeline stays 400 — was not taken, because the user asked for one height.*

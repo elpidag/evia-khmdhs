@@ -112,7 +112,7 @@ excluded from aggregates (`antinero_umbrella`) to avoid double counting.
 ## Pipeline (ETL modules in `khmdhs/`)
 
 **Run order after any contract change**:
-`chain_loader` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `categories_loader` → `payment_loader` → `linked_acts_loader`
+`chain_loader` → `contract_corrections` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `categories_loader` → `families_loader` → `bodies_loader` → `payment_loader` → `linked_acts_loader` → `completion_acts_loader`
 (→ `diavgeia_loader` when ingesting new Diavgeia decisions, then `payment_loader` again).
 **`python -m khmdhs.refresh` runs the whole sequence for you** after
 refetching open contracts — prefer it for routine updates.
@@ -235,6 +235,23 @@ refetching open contracts — prefer it for routine updates.
   posted with none (the Atlas timeline says so honestly). 147 upstream
   acts stored. Atlas: `queries_extra.contract_timeline` +
   `/pdf/{request,notice,auction}/<ΑΔΑΜ>` proxy kinds.
+- `families_loader.py` — **procurement families read from the contracts'
+  own signed texts** (DATA_DECISIONS 2026-08-18), because the registry
+  chain declares any upstream act for only 76/245 in-scope contracts and a
+  πρόσκληση for 40. Scans each cached `.txt` for cited ΑΔΑΜ
+  (`##PROC#########` / `##AWRD#########` / sibling `##SYMV#########`),
+  classifies the role from the surrounding sentence and stores
+  `contract_families` (adam, kind, role, seq, verbatim excerpt; FK
+  CASCADE). Amendments inherit the predecessor's call — the accent trap
+  bit here: `τροποποι` never matches «Τροποποίησης», so `_unaccent()`
+  before testing (the uncorrected pass claimed 137 calls, the real number
+  is 134). Coverage: **219/245 in-scope contracts → 134 calls**; the
+  other 26 cite none (direct awards / negotiations publish no call) and
+  nothing is inferred for them. This layer is what exposed the €31,7M
+  project-budget keying error — three lots of one πρόσκληση all stating
+  the same figure. Atlas: `queries_extra.contract_family` (contract page
+  «CONTRACTS UNDER THE SAME CALL» radial) + `antinero_network`
+  (front-page programme chart).
 - `completion_acts_loader.py` — project-ENDING acts from Diavgeia:
   ΚΗΜΔΗΣ has no completion record type, but ΥΠΕΝ posts «Έγκριση
   Πρωτοκόλλου Οριστικής Παραλαβής … της Σύμβασης με ΑΔΑΜ: <SYMV>» acts
@@ -299,7 +316,9 @@ plus `fetch_log`, `contract_scope`, `contract_project_regions`,
 `contract_sites`, `contract_payments`, `contractor_locations` (incl. `gemi`,
 `lat/lon/geo_precision`), `forest_authorities` (seat coords) and
 `contract_forest_authorities` (FK CASCADE; `source` =
-title/objects/pdf/override/inherited:<ref>).
+title/objects/pdf/override/inherited:<ref>) and `contract_families`
+(FK CASCADE; the call/award/sibling ΑΔΑΜ each contract's own text cites,
+with the verbatim excerpt).
 Post-hoc columns are added via the ALTER-TABLE guard loop in `db.py:init_db`
 (CREATE TABLE IF NOT EXISTS won't alter deployed DBs).
 
@@ -934,7 +953,8 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `vite.config.ts`, no svelte.config file); plain CSS custom properties
   (`src/lib/styles/tokens.css` — white-paper palette since the 2026-08-12
   rebrand + the geo_common.js ramps ported verbatim), NO
-  Tailwind/Chart.js/Leaflet — d3-* + topojson only. Fonts via the Adobe
+  Tailwind/Chart.js/Leaflet — d3-* + topojson only (d3-hierarchy joined the
+  list on 2026-08-18 for the programme chart's packed arrangement). Fonts via the Adobe
   Typekit kit (see the rebrand bullet); the self-hosted Sofia Sans woff2
   subsets in `atlas/static/fonts/` remain as fallback. Components capped
   ~300 lines.
@@ -980,6 +1000,53 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   webui's). The anadohoi DB is a third **lazy** connection
   (`_anadohoi_conn`); `/pdf/diavgeia/<ΑΔΑ>` is a sibling caching proxy
   into `data/processed/anadohoi_cache/`.
+- **Front page «THE PROGRAMME WAS BOUGHT IN N SEPARATE PROCUREMENTS»**
+  (`ContractNetwork.svelte` + `transforms/network.ts`, DATA_DECISIONS
+  2026-08-18): the drawn unit is the CALL, not the contract and not the
+  connected component — one star per πρόσκληση that produced lots
+  (biggest lot at the centre, siblings on spokes), then two labelled
+  bands for the calls that produced exactly one contract and for the
+  contracts with no call at all. Area ∝ stated net € on ONE scale across
+  field and bands, colour = programme phase (`transforms/scopes`
+  ramp), each star labelled with its Σ € on a row-shared baseline and the
+  six richest named by ΑΔΑΜ. Calls sharing a contractor are packed as one
+  block so their dashed bridge stays inside a row; collinear bridges are
+  lifted 3,5u apart (two dashed lines on one axis read as one solid rule).
+  Since 2026-08-18 that field is one **arrangement** among several of the
+  same population (`?net=` permalink; `transforms/networkScene.ts` builds
+  the per-mode scene). **Offered: time + pack** — «call» (the star field)
+  was taken off the site by user decision the same day and may return;
+  its scene and units stay, `NET_MODES` alone decides what shows.
+  **time** (default): x = signature date, dodged by a variable-radius
+  beeswarm, lots of a call joined, Greece's **fire season (1 May – 31
+  Oct) shaded** — the season ships from the API WITH its count
+  (`fire_season`, 120 of 245) so stripe and sentence cannot drift; prints
+  «34 of the 50 split calls signed every lot on one day».
+  **pack**: two levels of `packSiblings` (NOT `d3.pack`, which sorts by
+  value and would centre whatever is biggest) — each call's lots packed
+  into a bubble, all bubbles packed into a CORE, then the core packed as
+  the first sibling among the contracts bought alone, so **grouped
+  procurements hold the middle and solitary contracts ring them** (a
+  pinned property). Bubble = phase hue at full strength with a 12% RIM
+  carrying its ΑΔΑΜ along the arc; lots inside = same hue lightened 42%;
+  ink picked by fill luminance; amounts inside marks use `format.eurTiny`
+  («11,6M»), presentation only. No-call contracts carry a dashed edge.
+  The scene crops the viewBox to the round blob and caps its width.
+  One mark throughout — circle, area ∝ stated net €, colour = phase — in
+  one keyed list, so a contract keeps its DOM node and animates between
+  arrangements; chart text is `pointer-events: none` (a label used to
+  swallow the hover of the mark it names). The hover card is identity
+  only: ΑΔΑΜ + amount. **Both arrangements draw in the same
+  `NET_HEIGHT = 400` box** (user, 2026-08-18) so the frame never jumps on
+  toggle: the timeline's viewBox IS the box (`0 0 1120 400`, one unit =
+  one px) and the swarm SHRINKS ITS DOTS to fit rather than overflowing;
+  the packed blob is a circle, so its square viewBox and its `maxW` are
+  both the box — i.e. 400×400, which is why its in-circle amounts
+  disappear at this size (labels are drawn only where they fit, and
+  return if the box grows). Layout is pure/deterministic (no force simulation
+  → testable: 47 vitest units across `network.ts` + `networkScene.ts`);
+  every printed number comes from `antinero_network`. Caveat →
+  `/methodology#procurement-families`.
 - **/explore** (all three datasets, one table): `/api/explore` ships ~2.3k
   compact rows once (gzipped by the response cache); ALL filtering/sorting
   is client-side for instant response — dataset/Π.Ε./HQ/procedure/status/

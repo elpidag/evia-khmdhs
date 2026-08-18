@@ -149,6 +149,27 @@
 		taxonomy and every assignment are documented in the decision log (2026-08-14).
 	</p>
 
+	<h2 id="procurement-families">Procurement families (which contracts answer the same call)</h2>
+	<p>
+		The registry's own chain declares any upstream act for only {show(f['kh_family_declared'])} of the
+		{show(nKh)} in-scope contracts, and a call (πρόσκληση) for {show(f['kh_notice'])} — a ΣΥΜΒ record
+		carries the links its own payload declared, and most were posted with none. So the call each
+		contract answers is read from the contract's <em>own signed text</em>, which recites the
+		πρόσκληση / διακήρυξη ΑΔΑΜ it was awarded under: {show(f['kh_family_contracts'])} contracts
+		resolve to {show(f['kh_family_calls'])} calls this way, and amendments inherit their
+		predecessor's call. {show(f['kh_family_none'])} contracts cite none — direct awards and
+		negotiations publish no call, and nothing is inferred for them.
+	</p>
+	<p>
+		On the programme chart the drawn unit is therefore the call, not the contract: one star per
+		πρόσκληση that produced more than one contract, the largest lot at its centre. The only
+		relation that crosses a family is a contractor holding lots under two different calls, drawn
+		as a dashed link. Contracting authority and Π.Ε. are deliberately <em>not</em> drawn as
+		links: the framework lots each name five to fourteen Δασαρχεία, so authority collapses
+		almost the whole programme into a single blob, and sharing a region is a coordinate, not a
+		relationship.
+	</p>
+
 	<h2 id="pe-vocabulary">Regions (Π.Ε.)</h2>
 	<p>
 		All geography keys on the 74 Kallikratis regional units (περιφερειακές ενότητες), with

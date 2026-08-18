@@ -28,6 +28,20 @@ export function eurShort(n: number | null | undefined): string {
 	return eur(n);
 }
 
+/**
+ * The shortest honest form of an amount — for printing INSIDE a mark, where
+ * «11,63 M €» does not fit but «11,6M» does. Presentation only: no chart
+ * states a total in this form, and `eurShort` stays the site's money format.
+ */
+export function eurTiny(n: number | null | undefined): string {
+	if (n === null || n === undefined || Number.isNaN(n)) return '';
+	const v = Math.abs(n);
+	if (v >= 1_000_000_000) return `${grNumber(n / 1_000_000_000, 1)}B`;
+	if (v >= 1_000_000) return `${grNumber(n / 1_000_000, 1)}M`;
+	if (v >= 1_000) return `${grNumber(Math.round(n / 1_000), 0)}k`;
+	return grNumber(n, 0);
+}
+
 export function grInt(n: number | null | undefined): string {
 	return grNumber(n, 0);
 }

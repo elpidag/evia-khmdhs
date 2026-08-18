@@ -253,6 +253,32 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "SELECT COUNT(*) FROM forest_authorities").fetchone()[0]
     except sqlite3.OperationalError:
         pass
+    # the procurement-family layer (calls resolved from the contracts' own
+    # signed texts) — the methodology prose cites these, so they are computed
+    try:
+        facts["kh_family_calls"], facts["kh_family_contracts"] = kh.execute(f"""
+            SELECT COUNT(DISTINCT f.adam), COUNT(DISTINCT f.reference_number)
+            FROM contract_families f
+            JOIN contract_scope s ON s.reference_number = f.reference_number
+            WHERE f.kind = 'notice' AND f.role = 'procurement'
+              AND s.in_scope = 1""").fetchone()
+        facts["kh_family_none"] = kh.execute(f"""
+            SELECT COUNT(*) FROM contract_scope s
+            WHERE s.in_scope = 1
+              AND NOT EXISTS (SELECT 1 FROM contract_families f
+                               WHERE f.reference_number = s.reference_number
+                                 AND f.kind = 'notice'
+                                 AND f.role = 'procurement')""").fetchone()[0]
+        # what the ΚΗΜΔΗΣ chain itself declares — the registry only knows the
+        # links the ΣΥΜΒ payload carried, which is the reason the family layer
+        # is read from the signed texts instead
+        facts["kh_family_declared"] = kh.execute(f"""
+            SELECT COUNT(DISTINCT cla.reference_number)
+            FROM contract_linked_acts cla
+            JOIN contract_scope s ON s.reference_number = cla.reference_number
+            WHERE s.in_scope = 1""").fetchone()[0]
+    except sqlite3.OperationalError:
+        pass
     if dase is not None:
         try:
             facts["dase_mixed_vat"] = dase.execute(f"""
@@ -666,6 +692,91 @@ def dase_kpis(dase: sqlite3.Connection) -> dict:
 
 
 # ------------------------------------------------------- ΔΑΣΕ display names
+
+def antinero_network(kh: sqlite3.Connection) -> dict:
+    """Every in-scope contract as a node, with the two relations that are
+    ACTS rather than attributes: the call it was awarded under, and the
+    contractor that won it.
+
+    Measured before choosing (DATA_DECISIONS 2026-08-18): linking by
+    contracting authority collapses 237 of 245 contracts into one blob —
+    the framework lots each name 5-14 Δασαρχεία — and linking by Π.Ε.
+    collapses all 245, since sharing a region is a coordinate, not a
+    relationship. Call + contractor leaves 110 readable components.
+    Authority and Π.Ε. ride along as attributes, for colour and tooltips.
+    """
+    rows = kh.execute(f"""
+        SELECT k.reference_number AS ref, k.total_cost_without_vat AS eur,
+               substr(k.title, 1, 90) AS title, k.contract_signed_date AS d,
+               (SELECT f.adam FROM contract_families f
+                 WHERE f.reference_number = k.reference_number
+                   AND f.kind = 'notice' AND f.role = 'procurement'
+                 ORDER BY f.seq LIMIT 1) AS call,
+               (SELECT c.vat_number FROM contractors c
+                 WHERE c.reference_number = k.reference_number
+                 ORDER BY c.seq LIMIT 1) AS vat,
+               (SELECT c.name FROM contractors c
+                 WHERE c.reference_number = k.reference_number
+                 ORDER BY c.seq LIMIT 1) AS who,
+               (SELECT p.region_pe FROM contract_project_regions p
+                 WHERE p.reference_number = k.reference_number
+                 ORDER BY p.seq LIMIT 1) AS pe,
+               (SELECT a.authority_name FROM contract_forest_authorities a
+                 WHERE a.reference_number = k.reference_number
+                 ORDER BY a.seq LIMIT 1) AS auth,
+               cat.category AS cat, s.scope AS phase
+          FROM contracts k
+          JOIN contract_scope s ON s.reference_number = k.reference_number
+                               AND s.in_scope = 1
+          LEFT JOIN contract_categories cat
+                 ON cat.reference_number = k.reference_number
+         ORDER BY k.total_cost_without_vat DESC""").fetchall()
+    nodes = [dict(r) for r in rows]
+    n_call = len({n["call"] for n in nodes if n["call"]})
+    # a call/contractor shared by 2+ contracts is what draws an edge
+    from collections import Counter
+    calls = Counter(n["call"] for n in nodes if n["call"])
+    vats = Counter(n["vat"] for n in nodes if n["vat"])
+    multi = {c for c, k in calls.items() if k > 1}
+    # a contractor holding lots under several calls is the only relation
+    # that crosses a procurement family — the bridge the chart annotates
+    by_vat: dict[str, set[str]] = {}
+    days: dict[str, set[str]] = {}
+    for n in nodes:
+        if n["vat"] and n["call"]:
+            by_vat.setdefault(n["vat"], set()).add(n["call"])
+        if n["call"] in multi:
+            days.setdefault(n["call"], set()).add(n["d"])
+    # Greece's statutory αντιπυρική περίοδος, 1 May - 31 October: the
+    # timeline arrangement shades it, and the constant travels WITH its
+    # count so the chart cannot drift from the number it prints
+    fire_from, fire_to = "05-01", "10-31"
+    in_season = sum(1 for n in nodes
+                    if n["d"] and fire_from <= n["d"][5:] <= fire_to)
+    return {
+        "nodes": nodes,
+        "fire_season": {"from": fire_from, "to": fire_to,
+                        "n_contracts": in_season},
+        "stats": {
+            "n_contracts": len(nodes),
+            "n_calls": n_call,
+            "n_multi_calls": len(multi),
+            "n_in_multi_calls": sum(1 for n in nodes if n["call"] in multi),
+            "n_single_call": sum(1 for n in nodes
+                                 if n["call"] and n["call"] not in multi),
+            "n_no_call": sum(1 for n in nodes if not n["call"]),
+            "n_contractors": len(vats),
+            "n_multi_contractors": sum(1 for v in vats.values() if v > 1),
+            "n_bridge_contractors": sum(1 for v in by_vat.values() if len(v) > 1),
+            "n_bridge_multi": sum(1 for v in by_vat.values()
+                                  if len(v & multi) > 1),
+            # a split call whose every lot was signed on ONE day — the
+            # timeline arrangement prints this, so it is computed here
+            "n_same_day_calls": sum(1 for v in days.values() if len(v) == 1),
+            "total_eur": round(sum(n["eur"] or 0 for n in nodes), 2),
+        },
+    }
+
 
 def contract_family(kh: sqlite3.Connection, adam: str) -> dict | None:
     """The contract's procurement family: the πρόσκληση it cites and every

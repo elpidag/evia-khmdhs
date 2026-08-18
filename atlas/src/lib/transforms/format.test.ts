@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { eur, eurShort, grInt, grNumber, pct } from './format';
+import { eur, eurShort, eurTiny, grInt, grNumber, pct } from './format';
 
 // Goldens mirror webui/filters.py docstrings + real KPI values — the two
 // sites must print money identically.
@@ -38,5 +38,19 @@ describe('grInt / pct', () => {
 	it('formats', () => {
 		expect(grInt(2018)).toBe('2.018');
 		expect(pct(90.9)).toBe('90,9%');
+	});
+});
+
+describe('eurTiny', () => {
+	it('shortens to what fits inside a circle, Greek decimal comma', () => {
+		expect(eurTiny(11_633_269.03)).toBe('11,6M');
+		expect(eurTiny(812_345)).toBe('812k');
+		expect(eurTiny(76_614.71)).toBe('77k');
+		expect(eurTiny(950)).toBe('950');
+	});
+
+	it('is empty for nothing, and never invents a unit', () => {
+		expect(eurTiny(null)).toBe('');
+		expect(eurTiny(undefined)).toBe('');
 	});
 });

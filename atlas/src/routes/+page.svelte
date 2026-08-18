@@ -8,6 +8,10 @@
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import ContractNetwork from '$lib/charts/ContractNetwork.svelte';
+	import type { NetNode } from '$lib/transforms/network';
+	import { NET_MODES, type NetMode } from '$lib/transforms/networkScene';
+	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
 	import {
 		apiGetCached,
@@ -18,6 +22,7 @@
 		type SwarmRow
 	} from '$lib/api';
 	import { eurShort, grInt, pct } from '$lib/transforms/format';
+	import { page } from '$app/state';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -30,12 +35,55 @@
 	let sankey = $state.raw<SankeyPayload | null>(null);
 	let swarm = $state.raw<SwarmRow[] | null>(null);
 	let peYearly = $state.raw<PeYearly | null>(null);
+	let network = $state.raw<{
+		nodes: NetNode[];
+		stats: Record<string, number>;
+		fire_season: { from: string; to: string; n_contracts: number };
+	} | null>(null);
 	$effect(() => {
 		apiGetCached<AntineroMapPayload>(fetch, '/api/antinero/map').then((v) => (map = v));
 		apiGetCached<PaymentsPayload>(fetch, '/api/antinero/payments').then((v) => (payments = v));
 		apiGetCached<SankeyPayload>(fetch, '/api/antinero/sankey').then((v) => (sankey = v));
 		apiGetCached<SwarmRow[]>(fetch, '/api/antinero/swarm').then((v) => (swarm = v));
 		apiGetCached<PeYearly>(fetch, '/api/antinero/pe-yearly').then((v) => (peYearly = v));
+		apiGetCached<{
+			nodes: NetNode[];
+			stats: Record<string, number>;
+			fire_season: { from: string; to: string; n_contracts: number };
+		}>(fetch, '/api/antinero/network').then((v) => (network = v));
+	});
+
+	// the programme chart is one population under three arrangements, and
+	// each arrangement has a different honest headline — every number in
+	// them comes from the payload's own stats
+	const netMode = $derived(
+		(NET_MODES.find((m) => m.value === page.url.searchParams.get('net'))?.value ??
+			'time') as NetMode
+	);
+	const netCopy = $derived.by(() => {
+		const st = network?.stats ?? {};
+		if (netMode === 'call')
+			return {
+				title: `THE PROGRAMME WAS BOUGHT IN ${grInt(st.n_calls)} SEPARATE PROCUREMENTS, MOST OF THEM ONE CONTRACT LONG`,
+				subtitle:
+					'Each star is one call: the biggest lot at its centre, the others around it. Below, the calls that produced a single contract, and the awards made with no call at all.',
+				caveat: 'The dashed lines join two calls won by the same contractor.'
+			};
+		if (netMode === 'pack')
+			return {
+				title: `${grInt(st.n_single_call)} OF THE ${grInt(st.n_calls)} CALLS BOUGHT EXACTLY ONE CONTRACT`,
+				subtitle:
+					'The contracts nested inside the call that bought them: the split procurements hold the middle, and every contract bought on its own rings them. Bubble area is the money.',
+				caveat:
+					'A bubble is one πρόσκληση and the circles inside it are its lots; a bare circle is a contract with no sibling, dashed when no call was published at all.'
+			};
+		return {
+			title: `${grInt(st.n_same_day_calls)} OF THE ${grInt(st.n_multi_calls)} SPLIT PROCUREMENTS SIGNED EVERY LOT ON ONE DAY`,
+			subtitle:
+				'Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined.',
+			caveat:
+				'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
+		};
 	});
 
 	const directEur = $derived(o.procedures.find((p) => p.label.includes('Απευθείας'))?.eur ?? 0);
@@ -218,6 +266,32 @@
 {:else}
 	<div class="skeleton" id="map" style="height: 560px"></div>
 {/if}
+
+<Defer height={640}>
+{#if network}
+	<ChartFrame
+		title={netCopy.title}
+		subtitle={netCopy.subtitle}
+		caveat="{netCopy.caveat} Circle area is the contract's stated value excl. VAT, on one scale in every arrangement; a call is the πρόσκληση the contract cites in its own signed text ({grInt(
+			network.stats.n_calls
+		)} resolved this way). Every layout is deterministic, not a force simulation."
+		anchor="network"
+		methodology="procurement-families"
+	>
+		<div class="netbar">
+			<SegmentToggle param="net" fallback="time" options={NET_MODES} />
+		</div>
+		<ContractNetwork
+			nodes={network.nodes}
+			stats={network.stats}
+			mode={netMode}
+			season={network.fire_season}
+		/>
+	</ChartFrame>
+{:else}
+	<div class="skeleton" id="network" style="height: 620px"></div>
+{/if}
+</Defer>
 
 <Defer height={900}>
 {#if payments}
@@ -425,6 +499,11 @@
 </div>
 
 <style>
+	.netbar {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: var(--sp-2);
+	}
 	/* every section title follows the sponsored-works kicker, in the
 	   antinero dataset colour (black) */
 	.antp :global(.frame .finding) {

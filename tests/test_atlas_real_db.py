@@ -4,6 +4,8 @@ All Atlas real-DB pins live in THIS one file so a `python -m khmdhs.refresh`
 touches exactly one place. Exact-value convention follows the other
 real-DB test modules.
 """
+import re
+
 import pytest
 
 from khmdhs.config import DASE_DB, DEFAULT_DB
@@ -119,6 +121,56 @@ def test_pe_yearly_reconciles(client):
     assert len(py["pes"]) == 59
     total = sum(p["total_eur"] for p in py["pes"]) + py["unresolved_eur"]
     assert total == pytest.approx(627_572_883.18, abs=1.0)
+
+
+def test_network_pins(client):
+    """The programme network is drawn from the families layer, so it must
+    partition the in-scope population exactly: every contract either cites a
+    call in its own signed text or cites none, and the two never overlap
+    (DATA_DECISIONS 2026-08-18). The chart's printed counts come straight
+    from these stats, so a drift shows up here first."""
+    net = client.get("/api/antinero/network").get_json()
+    st = net["stats"]
+    assert st["n_contracts"] == len(net["nodes"]) == 245
+    assert st["n_calls"] == 134
+    # the three bands the chart draws, and nothing left over
+    assert st["n_in_multi_calls"] + st["n_single_call"] + st["n_no_call"] == 245
+    assert (st["n_in_multi_calls"], st["n_multi_calls"]) == (135, 50)
+    assert (st["n_single_call"], st["n_no_call"]) == (84, 26)
+    # a call with no sibling is not a cluster, and a bridge needs two calls
+    assert st["n_bridge_multi"] <= st["n_bridge_contractors"] == 26
+    assert st["total_eur"] == pytest.approx(627_572_883.18, abs=1.0)
+    # the timeline arrangement prints this and places every dot by it
+    assert st["n_same_day_calls"] == 34
+    # the fire season travels WITH its count, so the shaded stripes and the
+    # sentence next to them cannot drift apart
+    fs = net["fire_season"]
+    assert (fs["from"], fs["to"]) == ("05-01", "10-31")
+    assert fs["n_contracts"] == 120
+    assert fs["n_contracts"] == sum(
+        1 for n in net["nodes"] if "05-01" <= (n["d"] or "")[5:] <= "10-31")
+    assert st["n_same_day_calls"] <= st["n_multi_calls"]
+    # every node carries what the chart colours, sizes, dates and labels by
+    assert all(n["phase"] for n in net["nodes"])
+    assert all(n["eur"] is not None for n in net["nodes"])
+    assert all(re.fullmatch(r"\d{4}-\d\d-\d\d", n["d"] or "") for n in net["nodes"])
+    # the calls the chart names are ΚΗΜΔΗΣ πρόσκληση ΑΔΑΜ, never invented
+    calls = {n["call"] for n in net["nodes"] if n["call"]}
+    assert len(calls) == 134
+    assert all(re.fullmatch(r"\d\dPROC\d{9}", c) for c in calls)
+
+
+def test_meta_family_facts_match_the_network(client):
+    """The methodology prose prints these; they must equal what the chart
+    shows, or the page explains a picture it is not drawing."""
+    f = client.get("/api/meta").get_json()["facts"]
+    st = client.get("/api/antinero/network").get_json()["stats"]
+    assert f["kh_family_calls"] == st["n_calls"]
+    assert f["kh_family_none"] == st["n_no_call"]
+    assert f["kh_family_contracts"] + f["kh_family_none"] == 245
+    # the registry's own chain declares far less than the texts do
+    assert f["kh_family_declared"] == 76
+    assert f["kh_notice"] == 40
 
 
 def test_override_authority_links_ship_their_evidence(client):

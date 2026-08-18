@@ -181,6 +181,10 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
     def api_antinero_sankey():
         return jsonify(queries_extra.sankey_flows(g.conn))
 
+    @app.route("/api/antinero/network")
+    def api_antinero_network():
+        return jsonify(queries_extra.antinero_network(g.conn))
+
     @app.route("/api/antinero/swarm")
     def api_antinero_swarm():
         return jsonify(queries_extra.contract_swarm(g.conn))
