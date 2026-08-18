@@ -3727,3 +3727,53 @@ columns against the live KPIs) and
 `test_every_dase_surface_reports_the_same_euros_per_coop`, which compares
 the ranking, the directory, each co-op's own page and the sankey co-op by
 co-op — the test that would have caught the original inconsistency.*
+
+## 2026-08-18 — Procurement FAMILIES derived from the contracts' own texts: 219 of 245 grouped into 134 calls
+
+User: «I was hoping for a node diagram from all these contracts» —
+πρόσκληση at the centre, its contracts around it, each with its ΑΔΑΜ and
+its €. This entry builds the DATA that diagram needs.
+
+**Why it has to come from the texts.** The ΚΗΜΔΗΣ chain declares an
+upstream act for only 40 of the 245 in-scope contracts. The documents are
+far more forthcoming: 200 cite their πρόσκληση by ΑΔΑΜ and 125 their
+κατακύρωση. 102 of the 128 προσκλήσεις so named were unknown to the
+registry metadata entirely and had never been fetched (now cached).
+
+**One key only: a cited ΑΔΑΜ.** Two alternatives were measured and
+REJECTED, both because they would invent relationships:
+- *Lot labels in titles* («ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ ΕΡΓΟΥ 11Α»): 21 of 59 labels
+  repeat across programme years — «ΕΡΓΟΥ 11Α» exists in 2023 AND 2024 —
+  so grouping on them merges different procurements into one plausible,
+  false family.
+- *Shared Diavgeia ΑΔΑ among the family-less*: the ΑΔΑ they share turn out
+  to be «Καθορισμός οργάνου που γνωμοδοτεί», «Ορισμός αποφαινόμενων
+  οργάνων» and the decision naming a Δασαρχείο as Διευθύνουσα Υπηρεσία —
+  common administrative plumbing, not a common procurement.
+
+**Result**: `contract_families` (FK CASCADE, rebuilt by `families_loader`
+in the refresh chain) — 424 rows: 275 procurement links, 4 amendments,
+145 awards. In scope: **219 contracts in 134 families**, holding €597,9M
+of the €627,6M basis. Sizes 84 single · 32 pairs · 10 triples · 5 quads ·
+1 five · **2 of eight**. Every row stores the sentence that cites the
+ΑΔΑΜ, and the pin re-checks that the ΑΔΑΜ appears inside its own excerpt.
+
+**Two ambiguities, both resolved from the documents**: a contract citing a
+SECOND πρόσκληση is always citing «Απόφαση Τροποποίησης της ως άνω
+Πρόσκλησης» — that call amended, so it is stored `role='amendment'` and
+the family is counted once (detecting it needed accent-folding: Python's
+«τροποποι» never matches «Τροποποίησης», the trap scope.py documents).
+And amendments with no citation inherit their predecessor's family, the
+convention regions/scope/categories already use — 27 do.
+
+**The 26 in-scope contracts with no family are correct, not missing**:
+every one is Απευθείας ανάθεση (άρθρο 118/328) or Διαπραγμάτευση χωρίς
+προηγούμενη δημοσίευση — procedures that publish no call. Among them the
+four Έβρος flood contracts (€39,3M), visibly one project but never
+procured as one.
+
+*Affects: new table only, no figure moves. Pinned by tests/test_families.py
+— coverage 219/134, every row quoting its ΑΔΑΜ, title-lot grouping proven
+absent, CASCADE rebuild, and the eight-lot family 24PROC014447893 whose
+sibling comparison exposed the €31M project-budget error and which the
+ΚΗΜΔΗΣ chain links to zero contracts.*

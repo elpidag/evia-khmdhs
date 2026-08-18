@@ -32,8 +32,8 @@ import requests
 
 from khmdhs import (
     bodies_loader, categories_loader, chain_loader, completion_acts_loader,
-    contract_corrections, forest_loader, linked_acts_loader, payment_loader,
-    region_loader, scope_loader, studies_loader,
+    contract_corrections, families_loader, forest_loader, linked_acts_loader,
+    payment_loader, region_loader, scope_loader, studies_loader,
 )
 from khmdhs.payment_loader import CORRECTIONS_FILE as KH_PAYMENT_CORRECTIONS_FILE
 from khmdhs.contract_corrections import (
@@ -216,6 +216,11 @@ def main(argv: list[str] | None = None) -> int:
         studies_loader.main(db_argv)
         print("\n-- categories_loader -------------------------------------------")
         categories_loader.main(db_argv)
+        # derives the procurement families from the cached contract
+        # texts; contract_families is FK CASCADE, so a contract refetch
+        # wipes it and this rebuilds it (as scope/region/forest do)
+        print("\n-- families_loader ---------------------------------------------")
+        families_loader.main(db_argv)
         print("\n-- bodies_loader -----------------------------------------------")
         bodies_loader.main(db_argv)
         print("\n-- payment_loader ----------------------------------------------")

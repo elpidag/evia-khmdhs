@@ -137,6 +137,26 @@ CREATE INDEX IF NOT EXISTS idx_cpr_nuts3 ON contract_project_regions(nuts3_code)
 
 -- Named work sites below Π.Ε. level (Δασαρχεία, τμήματα, θέσεις), curated
 -- from the contract PDFs; page + excerpt keep the evidence citable.
+-- Procurement FAMILY: which πρόσκληση (and award) a contract belongs to,
+-- read from the contract's OWN signed text. The ΚΗΜΔΗΣ chain declares this
+-- for only 40 of 245 in-scope contracts, while 200 of them cite their
+-- πρόσκληση by ΑΔΑΜ in the document — 128 families, 102 of whose
+-- προσκλήσεις the registry metadata never mentions (DATA_DECISIONS
+-- 2026-08-18). Every row quotes the citing sentence; nothing is inferred
+-- from titles, because lot labels («ΕΡΓΟΥ 11Α») repeat across programmes.
+CREATE TABLE IF NOT EXISTS contract_families (
+    reference_number TEXT NOT NULL,
+    seq              INTEGER NOT NULL,
+    adam             TEXT NOT NULL,
+    kind             TEXT NOT NULL,   -- notice | auction
+    role             TEXT NOT NULL,   -- procurement | amendment | award
+    source           TEXT NOT NULL,   -- text | inherited:<ref>
+    excerpt          TEXT NOT NULL,
+    loaded_at        TEXT NOT NULL,
+    PRIMARY KEY (reference_number, seq),
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS contract_sites (
     reference_number TEXT NOT NULL,
     seq              INTEGER NOT NULL,
