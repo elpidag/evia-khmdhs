@@ -30,6 +30,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# help text and log lines carry Greek; a cp1252 console would crash on
+# --help before argparse ever returns
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except AttributeError:                      # pragma: no cover
+    pass
+
 import requests
 
 from khmdhs.config import (AUCTION_PDF_URL, CONTRACT_PDF_URL, DEFAULT_DB,
@@ -53,6 +60,13 @@ def main() -> None:
                     help="sweep linked_acts of this kind instead of contracts")
     ap.add_argument("--refetch-text", action="store_true",
                     help="re-extract .txt for already-cached PDFs (no downloads)")
+    ap.add_argument("--adams", type=Path,
+                    help="fetch exactly the ΑΔΑΜ listed in this file (one per "
+                         "line) with --acts' URL template, instead of sweeping "
+                         "the DB. For acts a contract's TEXT cites but the "
+                         "registry never declared: 102 of the 128 προσκλήσεις "
+                         "the Anti-nero contracts quote are unknown to "
+                         "contract_linked_acts (DATA_DECISIONS 2026-08-18).")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
@@ -71,15 +85,24 @@ def main() -> None:
         return
 
     url_template = ACT_URLS[args.acts] if args.acts else CONTRACT_PDF_URL
-    conn = sqlite3.connect(args.db)
-    if args.acts:
+    if args.adams:
+        refs = [ln.strip() for ln in
+                args.adams.read_text(encoding="utf-8").splitlines() if ln.strip()]
+        logging.info("fetching %d listed ΑΔΑΜ as kind=%s", len(refs), args.acts)
+        conn = None
+    else:
+        conn = sqlite3.connect(args.db)
+    if args.adams:
+        pass
+    elif args.acts:
         refs = [r[0] for r in conn.execute(
             "SELECT DISTINCT adam FROM linked_acts WHERE kind = ? ORDER BY adam",
             (args.acts,))]
     else:
         refs = [r[0] for r in conn.execute(
             "SELECT reference_number FROM contracts ORDER BY reference_number")]
-    conn.close()
+    if conn is not None:
+        conn.close()
 
     session = requests.Session()
     state: dict = {}
@@ -87,8 +110,16 @@ def main() -> None:
     try:
         for i, ref in enumerate(refs, 1):
             had = (args.cache / f"{ref}.pdf").exists()
-            path = ensure_pdf(session, args.cache, ref, args.sleep, state,
-                              url_template=url_template)
+            try:
+                path = ensure_pdf(session, args.cache, ref, args.sleep, state,
+                                  url_template=url_template)
+            except requests.exceptions.RequestException as exc:
+                # one unreachable document must not end the sweep: the
+                # registry occasionally stalls on a single attachment, and
+                # the run is resumable anyway (skipped refs stay uncached)
+                logging.warning("%s: %s — skipped", ref, type(exc).__name__)
+                stats["no_pdf"] += 1
+                continue
             if path is None:
                 stats["no_pdf"] += 1
                 continue
