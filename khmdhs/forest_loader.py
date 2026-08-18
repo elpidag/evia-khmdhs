@@ -48,7 +48,13 @@ def fold(s: str | None) -> str:
 
 
 # Folded like the text they are compared against (ΚΑΙ folds to Latin KAI).
-_CONNECTORS = {",", "&"} | {fold(w) for w in ("ΚΑΙ", "ΤΟΥ", "ΤΗΣ", "ΤΩΝ")}
+# Tokens that may sit BETWEEN the trigger and the toponym without ending
+# the list. «Ν.» is Νομού: «Δ/νσεων Δασών Ν. Κεφαλληνίας και Καστοριάς»
+# is one real sentence in 22SYMV010473683, and without the skip the
+# matcher stopped dead at it and read neither authority.
+_CONNECTORS = ({",", "&"} |
+               {fold(w) for w in ("ΚΑΙ", "ΤΟΥ", "ΤΗΣ", "ΤΩΝ",
+                                  "Ν", "ΝΟΜΟΥ", "ΝΟΜΟΣ", "ΝΟΜΩΝ")})
 
 
 def _trigger_regex() -> re.Pattern:
@@ -96,7 +102,8 @@ class Matcher:
             toks = _token_stream(window)
             i, matched_any = 0, False
             while i < len(toks):
-                if toks[i] in _CONNECTORS:
+                # rstrip('.') like the alias test below: the token is «Ν.»
+                if toks[i].rstrip(".") in _CONNECTORS:
                     i += 1
                     continue
                 hit = None

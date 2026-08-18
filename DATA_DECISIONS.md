@@ -4342,3 +4342,56 @@ column uses the same words; `/api/meta` gains `kh_doc_<kind>` counts so the
 new `/methodology#record-kinds` paragraph is computed, never typed. Pinned by
 `test_document_kind_pins`, which now also pins the labels themselves so page
 and prose cannot drift apart.*
+
+## 2026-08-18 — The audit's two open flags were the audit's own blind spots: «Ν.» and «Α.Φ.Μ.»
+
+Both items left over from the document audit were reviewed against the
+documents. Neither was a data error; both were reading failures in the
+checking tools, now fixed and pinned.
+
+**1 · «Stored forest authority the document never names» (7 rows / 3
+contracts) — wrong on all counts.** The user's instinct was right:
+22SYMV010473683 says it plainly, in its «αρμοδιότητας» clause —
+«…αρμοδιότητας Δασαρχείων Ιωαννίνων **και Δ/νσεων Δασών Ν. Κεφαλληνίας και
+Καστοριάς** με Α/Α ΕΣΗΔΗΣ 187023». The matcher walks the tokens after a
+trigger («Δ/νσεων Δασών») and skips connectors, but its connector set held
+only ΚΑΙ/ΤΟΥ/ΤΗΣ/ΤΩΝ/,/& — so **«Ν.» (Νομού) stopped it dead**, and it read
+neither Διεύθυνση. Two compounding details: the connector test did not
+`rstrip('.')` the way the alias test does, so even adding «Ν» would not have
+matched the token «Ν.»; and fold() maps Greek→Latin homoglyphs, so the added
+words have to be folded like every other stop token.
+
+Fixed in `forest_loader._CONNECTORS` (+ Ν / ΝΟΜΟΥ / ΝΟΜΟΣ / ΝΟΜΩΝ, and the
+dot strip), pinned by `test_matcher_skips_the_nomos_token`. Re-running the
+loader over the whole DB changed **no stored link** — the three contracts
+already had theirs from the registry's items text — so this is a robustness
+fix on the PDF-fallback path, not a data change.
+
+The 5 rows the re-run still flags are the same phenomenon one step out: the
+audit reads only the 200 characters after «αρμοδιότητας», while the
+authority may be named in the item text instead. All five check out —
+26SYMV019488987/…89224/…89359/…89513 store Δασαρχεία Αλεξανδρούπολης and
+Σουφλίου and their registry item says «σε περιοχές ευθύνης των Δασαρχείων
+Αλεξανδρούπολης και Σουφλίου και της Διεύθυνσης Δασών Έβρου»;
+22SYMV010856515 stores Ολυμπίας + Αμαλιάδας and its item says «ΕΚΤΑΣΗ
+ΕΥΘΥΝΗΣ ΤΩΝ ΔΑΣΑΡΧΕΙΩΝ ΟΛΥΜΠΙΑΣ ΚΑΙ ΑΜΑΛΙΑΔΑΣ». **Zero stored
+forest-authority links are unsupported by the documents.** 23SYMV013600200's
+three overrides also stand: its own title names nurseries, not services
+(Αλιάρτου Π.Ε. Βοιωτίας, Λαγκαδά Π.Ε. Θεσσαλονίκης, Αμβροσίας και Οργάνης
+Π.Ε. Ροδόπης), and the supplementary contract's PDF names the Δασαρχείο
+Λιβαδειάς cost committee — which is exactly what the curated evidence says.
+
+**2 · 24SYMV016018183 «registry ΑΦΜ not in the signed text» — the ΑΦΜ is in
+the text, with dots.** The contract is signed by an **Ένωση Οικονομικών
+Φορέων** of two members, and states both: «NOVALIS … Ε.Π.Ε.», ΑΦΜ 998811782,
+and the sole trader «ΦΩΤΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ του ΕΥΘΥΜΙΟΥ», **Α.Φ.Μ.**
+122076788, Δ.Ο.Υ. ΓΡΕΒΕΝΩΝ. Both are stored, and the registry is right. The
+audit's regex was `ΑΦΜ\s*:?\s*(\d{9})`, which cannot see the dotted form —
+now `Α\.?Φ\.?Μ\.?`. The conflict count falls from 22 rows / 13 contracts to
+19 / 10, and every remaining row is the consortium ↔ members distinction in
+one direction or the other (registry lists the members, the document names
+the ένωση's own ΑΦΜ, or the reverse) — a modelling question, not an error.
+
+*Affects: `khmdhs/forest_loader.py` (connector set + dot strip),
+`scripts/audit_contract_documents.py` (ΑΦΜ pattern), `tests/test_forest.py`.
+No stored value, link or party changed.*

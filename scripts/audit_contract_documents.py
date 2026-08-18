@@ -207,7 +207,7 @@ def subcontractors(doc: Doc) -> list[dict]:
     out = []
     for m in re.finditer(fold_pattern(r"ΥΠΕΡΓΟΛΑΒ"), doc.f):
         window_f = doc.f[m.start(): m.start() + 700]
-        vat = re.search(fold_pattern(r"ΑΦΜ\s*:?\s*(\d{9})"), window_f)
+        vat = re.search(fold_pattern(r"Α\.?Φ\.?Μ\.?\s*:?\s*(\d{9})"), window_f)
         name = re.search(r"[«\"]([^»\"]{4,90})[»\"]", doc.raw[m.start(): m.start() + 700])
         if vat:
             out.append({"vat": vat.group(1),
@@ -241,7 +241,7 @@ def parties(doc: Doc) -> list[dict]:
         dt = re.search(r"δ\.?\s?τ\.?\s*[«\"]([^»\"]{2,60})[»\"]",
                        seg_raw, re.IGNORECASE)
         seat = re.search(fold_pattern(r"ΕΔΡΑ\s+([Α-ΩA-Z.\- ]{3,60})"), seg_f)
-        vat = re.search(fold_pattern(r"ΑΦΜ\s*:?\s*(\d{9})"), seg_f)
+        vat = re.search(fold_pattern(r"Α\.?Φ\.?Μ\.?\s*:?\s*(\d{9})"), seg_f)
         if not (name or vat):
             continue
         out.append({

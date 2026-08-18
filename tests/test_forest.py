@@ -55,6 +55,20 @@ def test_matcher_single_authority(matcher):
     assert [n for n, _ in found] == ["Δασαρχείο Πύργου"]
 
 
+def test_matcher_skips_the_nomos_token(matcher):
+    """«Ν.» is Νομού, and it sits between the trigger and the toponym in
+    22SYMV010473683: «αρμοδιότητας Δασαρχείων Ιωαννίνων και Δ/νσεων Δασών Ν.
+    Κεφαλληνίας και Καστοριάς». Until it was skipped the matcher stopped
+    there and read neither Διεύθυνση, which made the document audit report
+    two correctly-stored links as undeclared (DATA_DECISIONS 2026-08-18)."""
+    found = matcher.find("αρμοδιότητας Δασαρχείων Ιωαννίνων και Δ/νσεων Δασών "
+                         "Ν. Κεφαλληνίας και Καστοριάς")
+    assert [n for n, _ in found] == ["Δασαρχείο Ιωαννίνων",
+                                     "Διεύθυνση Δασών Κεφαλληνίας",
+                                     "Διεύθυνση Δασών Καστοριάς"]
+    assert [n for n, _ in matcher.find("Δασαρχείο Νομού Ιωαννίνων")] ==         ["Δασαρχείο Ιωαννίνων"]
+
+
 def test_matcher_genitive_list(matcher):
     found = matcher.find(
         "ΕΚΤΑΣΕΙΣ ΕΥΘΥΝΗΣ ΤΩΝ ΔΑΣΑΡΧΕΙΩΝ ΛΑΓΚΑΔΑ, ΝΙΓΡΙΤΑΣ, ΚΙΛΚΙΣ ΚΑΙ ΓΟΥΜΕΝΙΣΣΑΣ.")
