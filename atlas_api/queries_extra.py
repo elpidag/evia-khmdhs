@@ -1239,8 +1239,19 @@ def _dase_kind_rows(dase: sqlite3.Connection,
         pass
 
     out = []
+    # jointly signed contracts split their € evenly between the co-ops, the
+    # same rule the ranking and the co-op pages use (DATA_DECISIONS
+    # 2026-08-18) — a decision that held in one chart and not another would
+    # show one co-op two different totals on one page
+    shares = dase_coop_shares(dase)
+    share_by_ref: dict[str, list[tuple[str, float]]] = {}
+    for vat, items in shares.items():
+        for s in items:
+            share_by_ref.setdefault(s["ref"], []).append((vat, s["share_eur"]))
+
     for r in dase.execute(f"""
-        SELECT r.source AS source, r.region_pe AS region_pe,
+        SELECT co.reference_number AS ref,
+               r.source AS source, r.region_pe AS region_pe,
                co.units_operator_name AS unit, co.organization_name AS org,
                co.total_cost_with_vat AS eur,
                (SELECT c.vat_number FROM contractors c
@@ -1261,11 +1272,15 @@ def _dase_kind_rows(dase: sqlite3.Connection,
                 unit_kind = ("muni" if scope.get(org) in ("municipal", "regional")
                              else "misc")
         kind = body_kind.get(org, "unknown")
+        # `parties` carries the co-op layer: one entry per holder with its
+        # share. Body/unit stay per CONTRACT (`eur` whole, one row), so
+        # those marginals are unaffected; only the co-op column splits.
+        parties = share_by_ref.get(r["ref"]) or [
+            (dq.canonical_vat(r["vat"]) or "", r["eur"] or 0.0)]
         out.append({"body": "municipality" if kind == "municipal_entity" else kind,
                     "unit": unit_kind, "eur": r["eur"] or 0.0,
-                    # lead contractor: a consortium contract counts once, at
-                    # the co-op listed first, so the columns reconcile
-                    "vat": dq.canonical_vat(r["vat"]) or ""})
+                    "vat": dq.canonical_vat(r["vat"]) or "",
+                    "parties": parties})
     return out
 
 
@@ -1299,9 +1314,15 @@ def dase_kind_mix(dase: sqlite3.Connection, kh: sqlite3.Connection,
     # pooled into one node so the column still sums to the basis
     per_coop: dict[str, dict] = {}
     for r in rows:
-        d = per_coop.setdefault(r["vat"], {"n": 0, "eur": 0.0})
-        d["n"] += 1
-        d["eur"] += r["eur"]
+        for i, (vat, share) in enumerate(r["parties"]):
+            d = per_coop.setdefault(vat, {"n": 0, "eur": 0.0})
+            # € split between the holders, but the CONTRACT counted ONCE:
+            # this column is an aggregate over the population, so its Σn
+            # must equal the 1.998 live contracts, never 1.999. The count
+            # lands on the first holder by ΑΦΜ — the same deterministic
+            # order the cent allocation uses (user decision 2026-08-18).
+            d["n"] += 1 if i == 0 else 0
+            d["eur"] += share
     ranked = sorted(per_coop.items(), key=lambda kv: -kv[1]["eur"])
     named = {vat for vat, _ in ranked[:top_coops]}
     display = dase_display_names(dase)
@@ -1321,10 +1342,11 @@ def dase_kind_mix(dase: sqlite3.Connection, kh: sqlite3.Connection,
 
     coop_flows: dict[tuple, dict] = {}
     for r in rows:
-        key = (r["unit"], r["vat"] if r["vat"] in named else None)
-        d = coop_flows.setdefault(key, {"n": 0, "eur": 0.0})
-        d["n"] += 1
-        d["eur"] += r["eur"]
+        for i, (vat, share) in enumerate(r["parties"]):
+            key = (r["unit"], vat if vat in named else None)
+            d = coop_flows.setdefault(key, {"n": 0, "eur": 0.0})
+            d["n"] += 1 if i == 0 else 0
+            d["eur"] += share
 
     return {
         "bodies": _marginal("body"),

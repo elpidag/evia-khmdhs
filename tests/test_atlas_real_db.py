@@ -272,6 +272,48 @@ def test_coop_totals_are_even_split_and_sum_to_the_basis(client):
     assert round(sum(u["total_eur"] for u in detail["units"]), 2) == pytest.approx(total)
 
 
+def test_dase_sankey_counts_each_contract_exactly_once(client):
+    """Splitting a jointly signed contract's € between its holders must not
+    split the CONTRACT: every column of the AWARDING PROCESS diagram is an
+    aggregate over the live population, so each must sum to exactly the
+    1.998 live contracts — one contract, counted once (user, 2026-08-18)."""
+    o = client.get("/api/dase/overview").get_json()
+    n_live = o["kpis"]["n_contracts"]
+    km = o["kind_mix"]
+    for column in ("bodies", "units", "flows", "coops", "coop_flows"):
+        assert sum(r["n"] for r in km[column]) == n_live, column
+        assert sum(r["eur"] for r in km[column]) == pytest.approx(
+            o["kpis"]["total_eur"], abs=0.05), column
+
+
+def test_every_dase_surface_reports_the_same_euros_per_coop(client):
+    """One co-op, one number. The even split of a jointly signed contract
+    (DATA_DECISIONS 2026-08-18) has to hold on EVERY surface, not just the
+    one it was written for: the ranking, the co-op directory, the co-op's
+    own page and the AWARDING PROCESS sankey must agree to the cent.
+
+    They did not: the sankey attributed a joint contract to its lead co-op
+    at full value while the ranking split it, so ΣΙΔΗΡΟΧΩΡΙΟΥ and
+    ΠΕΤΡΟΛΟΦΟΥ each had two different totals on one page — invisible only
+    because both fall outside the top ten and land in the pooled node."""
+    coops = {c["vat"]: c["total_eur"] for c in client.get("/api/dase/coops").get_json()}
+    km = client.get("/api/dase/overview").get_json()["kind_mix"]
+    sankey = {c["vat"]: c["eur"] for c in km["coops"] if c["vat"]}
+    for vat, eur in sankey.items():
+        assert eur == pytest.approx(coops[vat], abs=0.02), vat
+    # the pooled node must equal the co-ops it pools, on the same basis
+    pooled = [c for c in km["coops"] if not c["vat"]][0]
+    rest = sum(v for k, v in coops.items() if k not in sankey)
+    assert pooled["eur"] == pytest.approx(rest, abs=0.05)
+    # and the two co-ops that share 23SYMV013747204 carry their halves here
+    for vat, share in (("096067226", 2_691.98), ("096121014", 2_691.97)):
+        page = client.get(f"/api/dase/coop/{vat}").get_json()
+        shared = [c for c in page["contracts"]
+                  if c["reference_number"] == "23SYMV013747204"]
+        assert shared and shared[0]["share_eur"] == pytest.approx(share)
+        assert page["summary"]["total_eur"] == pytest.approx(coops[vat], abs=0.02)
+
+
 def test_dase_value_modes_are_one_population(client):
     """CONTRACT VALUES draws the same contracts as dots or as value
     brackets, and the brackets are binned CLIENT-side from the swarm array
@@ -446,12 +488,16 @@ def test_dase_kind_mix_pins(client):
     # third column: named co-ops + one pooled node, reconciling both ways
     coops, cflows = km["coops"], km["coop_flows"]
     assert len(coops) == 11                       # top 10 by € + the pool
+    # the co-op column applies the even split (DATA_DECISIONS 2026-08-18):
+    # the € of a jointly signed contract divide between its holders, but the
+    # CONTRACT is counted ONCE — this is an aggregate over the population, so
+    # every column must sum to the 1.998 live contracts, never 1.999
     assert sum(c["n"] for c in coops) == 1998
     assert sum(c["eur"] for c in coops) == pytest.approx(29_920_558.46, abs=0.05)
     pooled = [c for c in coops if c["vat"] is None]
     assert len(pooled) == 1 and pooled[0]["n_coops"] > 0
     assert all(c["label"] for c in coops if c["vat"])   # display names present
-    assert sum(f["n"] for f in cflows) == 1998
+    assert sum(f["n"] for f in cflows) == 1998      # one contract, counted once
     assert sum(f["eur"] for f in cflows) == pytest.approx(29_920_558.46, abs=0.05)
     assert {f["unit"] for f in cflows} <= {"dx", "dd", "muni", "misc"}
     named = {c["vat"] for c in coops if c["vat"]}

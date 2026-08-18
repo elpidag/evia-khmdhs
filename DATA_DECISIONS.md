@@ -3690,3 +3690,40 @@ works even that is inconclusive until they finish.
 *Affects: no data. `validate_contract_values.py` gained a stdout-encoding
 guard (a cp1252 console killed the run after the work but before the report
 was written) and is now proven to run against either DB.*
+
+## 2026-08-18 — The even split now holds on EVERY ΔΑΣΕ surface, and a jointly signed contract is still counted once
+
+User, on finding the AWARDING PROCESS sankey still attributing a jointly
+signed contract to its lead co-op at full value: «this has to be resolved
+now! the splitting of the value to the two co-ops is the decision we made.
+it shouldn't be different in different places.»
+
+They were right, and the defect was mine: when the even split was
+implemented this morning it was applied to the ranking, the co-op directory
+and the co-op pages, but `_dase_kind_rows` kept its older «lead contractor»
+rule, so ΣΙΔΗΡΟΧΩΡΙΟΥ and ΠΕΤΡΟΛΟΦΟΥ each carried two different totals on
+one page. It was invisible only because both fall outside the top ten and
+land in the sankey's pooled node.
+
+**Now**: `_dase_kind_rows` carries a `parties` list per contract — the
+holders and their shares, from the same `dase_coop_shares` the ranking uses
+— and the co-op column and its flows sum those shares.
+
+**And the count stays whole** (user, immediately after: «no it is one
+contract. we cannot count it twice!»): the € divide between holders, the
+CONTRACT does not. Every column of the diagram is an aggregate over the
+population, so each must sum to the 1.998 live contracts — an intermediate
+version that counted the joint contract at both holders (1.999) was wrong
+and is fixed: the count lands on the first holder by ΑΦΜ, the same
+deterministic order the whole-cent allocation uses.
+
+Body and unit marginals are untouched by all of this: they stay per
+CONTRACT, one row each, whole €.
+
+*Affects: presentation only, no basis change. Every column — bodies, units,
+flows, coops, coop_flows — now sums to 1.998 contracts and €29.920.558,46.
+Pinned twice: `test_dase_sankey_counts_each_contract_exactly_once` (all five
+columns against the live KPIs) and
+`test_every_dase_surface_reports_the_same_euros_per_coop`, which compares
+the ranking, the directory, each co-op's own page and the sankey co-op by
+co-op — the test that would have caught the original inconsistency.*
