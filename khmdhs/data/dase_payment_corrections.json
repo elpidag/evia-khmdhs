@@ -1066,5 +1066,37 @@
  "23PAY013718656": {
   "exclude": true,
   "reason": "Payment of 23SYMV013066418, excluded with its contract: the signed contract hires a privately owned loader from the earthmover Ιωάννης Μιχ. Καλόγηρος, not a forest co-operative. Dropped here too because the paid KPI sums payments without joining to contracts, and would otherwise report machine-hire money as co-op pay (DATA_DECISIONS 2026-08-18)."
+ },
+ "23PAY013750420": {
+  "exclude": true,
+  "reason": "Payment of 22SYMV011776665, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
+ },
+ "23PAY013529079": {
+  "exclude": true,
+  "reason": "Payment of 22SYMV011776665, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
+ },
+ "23PAY013300359": {
+  "exclude": true,
+  "reason": "Payment of 22SYMV011776665, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
+ },
+ "23PAY012931899": {
+  "exclude": true,
+  "reason": "Payment of 23SYMV012666888, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
+ },
+ "25PAY017949070": {
+  "exclude": true,
+  "reason": "Payment of 24SYMV015377780, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
+ },
+ "25PAY017820141": {
+  "exclude": true,
+  "reason": "Payment of 24SYMV015377780, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
+ },
+ "25PAY017949246": {
+  "exclude": true,
+  "reason": "Payment of 24SYMV015723933, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
+ },
+ "25PAY017821053": {
+  "exclude": true,
+  "reason": "Payment of 24SYMV015723933, excluded with its contract: the contractor ΑΦΜ 096000173 is the Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας, a union of forest-agricultural co-operatives and not a ΔΑ.Σ.Ε.; the work is agricultural (δολωματικός ψεκασμός ελαιοδέντρων / election supplies). Dropped here too because the paid KPI sums payments without joining to contracts (DATA_DECISIONS 2026-08-18)."
  }
 }

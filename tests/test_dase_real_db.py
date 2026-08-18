@@ -23,18 +23,18 @@ def conn():
 def test_population_pins(conn):
     k = dq.kpis(conn)
     assert k["gross_n"] == 2164
-    assert k["n_cancelled"] == 98   # 82 registry + 10 double-postings
+    assert k["n_cancelled"] == 102   # 82 registry + 10 double-postings
                                 # + 2 not-a-co-op contracts (2026-08-17)
     assert k["n_superseded"] == 64
-    assert k["n_contracts"] == 2002
-    assert k["total_eur"] == pytest.approx(38_015_262.69, abs=0.01)
+    assert k["n_contracts"] == 1998
+    assert k["total_eur"] == pytest.approx(36_954_829.83, abs=0.01)
     assert k["n_coops"] >= 245
     assert k["pct_direct"] > 90
 
 
 def test_curated_contractors_pin(conn):
     n, = conn.execute("SELECT COUNT(*) FROM dase_contractors").fetchone()
-    assert n == 258
+    assert n == 257
 
 
 def test_every_contract_has_a_curated_dase_contractor(conn):
@@ -236,7 +236,7 @@ def test_display_names_pins(conn):
     import unicodedata
     rows = {r["vat"]: (r["display_el"], r["display_en"]) for r in conn.execute(
         "SELECT vat, display_el, display_en FROM dase_display_names")}
-    assert len(rows) == 247
+    assert len(rows) == 246
     src = json.loads(
         (Path(__file__).resolve().parent.parent / "khmdhs" / "data" /
          "dase_display_names.json").read_text(encoding="utf-8"))

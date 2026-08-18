@@ -59,12 +59,6 @@
   "form": null,
   "basis": "review bucket 2026-07-26: cooperative but not a forest labour co-op (ΚΟΙΝΣΕΠ/ΚΟΙΣΠΕ/urban/builders)"
  },
- "096000173": {
-  "name": "Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας",
-  "is_dase": true,
-  "form": "dase",
-  "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
- },
  "096033500": {
   "name": "ΔΑΣΕ ΦΩΤΕΙΝΩΝ ΠΙΕΡΙΑΣ",
   "is_dase": true,

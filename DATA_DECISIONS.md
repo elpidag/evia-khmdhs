@@ -3465,3 +3465,47 @@ scanner (`scripts/audit_contract_awardees.py`) stays as the guard: it is
 re-runnable after any harvest and now reports `ok` for 446 contracts
 that state their party in text, `no_party_vat` for the 1.669 whose
 documents name no ΑΦΜ beyond the authority's, and nothing else.
+
+## 2026-08-18 — ΑΦΜ 096000173 «Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας» is not a ΔΑ.Σ.Ε.: out of the registry, its four contracts out of the dataset
+
+User determination, and the largest single scope correction of the
+dataset so far. The entity is a **second-tier UNION of forest-AGRICULTURAL
+co-operatives**, not a δασικός συνεταιρισμός εργασίας of ν.4423/2016 —
+which is what this contractor-led dataset collects. It entered the
+curated registry in the 2026-07-26 name review, where the proposal regex
+saw «ΔΑΣΙΚΩΝ … ΣΥΝΕΤΑΙΡΙΣΜΩΝ» and the reviewer accepted it.
+
+**The work confirms the legal form**: all four contracts are for
+Περιφέρεια Στερεάς Ελλάδας / Δ/νση Διοικητικού-Οικονομικού Π.Ε. Ευβοίας,
+under **CPV 77100000-1 «Γεωργικές υπηρεσίες»** and **18930000-7 «Σάκοι
+και τσάντες»** — no forestry CPV anywhere:
+- **22SYMV011776665** €471.626,10 — «ΔΟΛΩΜΑΤΙΚΟΣ ΨΕΚΑΣΜΟΣ ΕΛΑΙΟΔΕΝΤΡΩΝ
+  Π.Ε. ΕΥΒΟΙΑΣ ΤΜΗΜΑΤΑ Α & Γ» (olive-fly bait spraying, δακοκτονία)
+- **24SYMV015723933** €354.255,00 — the same, ΤΜΗΜΑ Γ (Δήμος Ιστιαίας –
+  Αιδηψού)
+- **24SYMV015377780** €112.194,00 — the same, ΤΜΗΜΑ Β (Δήμος Μαντουδίου –
+  Λίμνης – Αγ. Άννας)
+- **23SYMV012666888** €329,03 — «Προμήθεια Σάκων για τις ανάγκες
+  διενέργειας των προσεχών βουλευτικών εκλογών της 21ης Μαΐου»
+
+Removed from `dase_contractors.json` and `dase_display_names.json`; the
+four contracts excluded via `exclude` + `related_to: ""` (pages stay
+reachable, badged «outside the dataset», each carrying this reason); their
+**8 payment orders excluded** with them, because the paid KPI sums
+payments without joining to contracts.
+
+**A pin caught the meaning of this before I did.** `test_dase_kind_mix_pins`
+asserted that one top-10 co-op is hired ONLY by non-forest bodies — that
+co-op was this Ένωση, 5th-largest by €, served solely by a Περιφέρεια.
+With it gone the assertion is now inverted and strengthened: **every**
+top-10 co-op must be hired by at least one δασαρχείο or διεύθυνση δασών,
+so a future top-10 entity that no forest service ever hires trips the
+suite and gets a human look — exactly the smell that identified this one.
+
+*Affects: ΔΑΣΕ live population **2.002 → 1.998**, stated net
+€30.858.962,59 → **€29.920.558,46** (−€938.404,13, the largest single
+correction: 3,0% of the basis), gross €38.015.262,69 → €36.954.829,83;
+paid net €20.709.665,22 → **€20.405.695,74**, 961 → 953 orders, 897 → 893
+paid contracts; n_cancelled 98 → 102; co-ops 247 → **246**; curated
+directory 258 → 257 rows. /compare ratio ≈22,0×. Π.Ε. Ευβοίας loses four
+contracts.*

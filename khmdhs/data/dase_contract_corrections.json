@@ -177,5 +177,25 @@
    "090273987": "999888341"
   },
   "reason": "The contractor ΑΦΜ field carries 090273987 — the ΑΦΜ of the Ελληνικό Δημόσιο, i.e. the FIRST party — so the contract was filed under a fictitious co-op (co-ops key on the ΑΦΜ, never on the name). The signed contract states the real one: nothing — this PDF prints no ΑΦΜ at all (6.259 characters, not one). Resolved on the registry NAME instead, user-approved: «ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ Η ΟΜΟΝΟΙΑ». Five Σιδηρονέρι co-ops appear in this dataset — Η ΕΛΑΤΙΑ 096095618, Η ΡΟΔΟΠΗ 096156917, Η ΕΝΟΤΗΤΑ 999522306, one titleless 096133603 and Η ΟΜΟΝΟΙΑ 999888341 — and only the last carries this title, spelled identically. Inference from a unique name, NOT proof from the document (DATA_DECISIONS 2026-08-18)."
+ },
+ "22SYMV011776665": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a ΔΑ.Σ.Ε. contract: the contractor is ΑΦΜ 096000173 «Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας», a second-tier UNION of forest-agricultural co-operatives — not a δασικός συνεταιρισμός εργασίας of ν.4423/2016, which is what this contractor-led dataset collects (user determination, DATA_DECISIONS 2026-08-18). It was accepted into the curated registry by the 2026-07-26 name review, whose regex saw «ΔΑΣΙΚΩΝ … ΣΥΝΕΤΑΙΡΙΣΜΩΝ». The work confirms it: «ΣΥΜΒΑΣΗ ΠΑΡΟΧΗΣ ΥΠΗΡΕΣΙΩΝ ΔΟΛΩΜΑΤΙΚΟΣ ΨΕΚΑΣΜΟΣ ΕΛΑΙΟΔΕΝΤΡΩΝ Π.Ε.ΕΥΒΟΙΑΣ ΤΜΗΜΑΤΑ Α & Γ» for Περιφέρεια Στερεάς Ελλάδας, CPV 77100000-1 «Γεωργικές υπηρεσίες» — olive-fly bait spraying, agriculture. Its three payment orders are excluded with it."
+ },
+ "23SYMV012666888": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a ΔΑ.Σ.Ε. contract: the contractor is ΑΦΜ 096000173 «Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας», a second-tier UNION of forest-agricultural co-operatives — not a δασικός συνεταιρισμός εργασίας of ν.4423/2016, which is what this contractor-led dataset collects (user determination, DATA_DECISIONS 2026-08-18). It was accepted into the curated registry by the 2026-07-26 name review, whose regex saw «ΔΑΣΙΚΩΝ … ΣΥΝΕΤΑΙΡΙΣΜΩΝ». The work confirms it: «Σύμβαση Προμήθειας Σάκων για τις ανάγκες διενέργειας των προσεχών βουλευτικών εκλογών της 21ης Μαΐου», CPV 18930000-7 «Σάκοι και τσάντες» — election supplies. Its payment order is excluded with it."
+ },
+ "24SYMV015377780": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a ΔΑ.Σ.Ε. contract: the contractor is ΑΦΜ 096000173 «Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας», a second-tier UNION of forest-agricultural co-operatives — not a δασικός συνεταιρισμός εργασίας of ν.4423/2016, which is what this contractor-led dataset collects (user determination, DATA_DECISIONS 2026-08-18). It was accepted into the curated registry by the 2026-07-26 name review, whose regex saw «ΔΑΣΙΚΩΝ … ΣΥΝΕΤΑΙΡΙΣΜΩΝ». The work confirms it: «ΣΥΜΒΑΣΗ ΔΟΛΩΜΑΤΙΚΟΣ ΨΕΚΑΣΜΟΣ ΕΛΑΙΟΔΕΝΤΡΩΝ Π.Ε.ΕΥΒΟΙΑΣ ΤΜΗΜΑ Β (ΔΗΜΟΣ ΜΑΝΤΟΥΔΙΟΥ-ΛΙΜΝΗΣ-Α.ΑΝΝΑΣ)», CPV 77100000-1 «Γεωργικές υπηρεσίες». Its two payment orders are excluded with it."
+ },
+ "24SYMV015723933": {
+  "exclude": true,
+  "related_to": "",
+  "reason": "Not a ΔΑ.Σ.Ε. contract: the contractor is ΑΦΜ 096000173 «Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας», a second-tier UNION of forest-agricultural co-operatives — not a δασικός συνεταιρισμός εργασίας of ν.4423/2016, which is what this contractor-led dataset collects (user determination, DATA_DECISIONS 2026-08-18). It was accepted into the curated registry by the 2026-07-26 name review, whose regex saw «ΔΑΣΙΚΩΝ … ΣΥΝΕΤΑΙΡΙΣΜΩΝ». The work confirms it: «ΣΥΜΒΑΣΗ ΔΟΛΩΜΑΤΙΚΟΣ ΨΕΚΑΣΜΟΣ ΕΛΑΙΟΔΕΝΤΡΩΝ Π.Ε.ΕΥΒΟΙΑΣ ΤΜΗΜΑ Γ (ΔΗΜΟΣ ΙΣΤΙΑΙΑΣ – ΑΙΔΗΨΟΥ)», CPV 77100000-1 «Γεωργικές υπηρεσίες». Its two payment orders are excluded with it."
  }
 }

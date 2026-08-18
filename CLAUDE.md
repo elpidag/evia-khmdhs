@@ -274,7 +274,7 @@ decisions land there FIRST, then get implemented.
 | `antinero_supplement.json` | 55 contracts missing from the xlsx; phase overrides that win over all rules |
 | `probable_related.json` | 7 chains / 13 ADAMs demoted to `antinero_probable`: registry titles say ANTINERO II but no provable RRF-16849 financing evidence exists (empty fund metadata, full texts without any RRF language — ΤΑΙΠΕΔ-procured, ΚΑΕ 2910601001-funded). Kept in dataset, excluded from all calculations; shown on / as «additional contracts found, probably related» |
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
-| `dase_contract_corrections.json` | ΔΑΣΕ contract corrections: 1 stated-value keying error (21SYMV009374147 ×10 digit-glitch, `objects` seq override) + 10 registry double-postings excluded via `exclude:true` + `duplicate_of:<kept ΑΔΑΜ>` (pages stay reachable, cross-linked; the 10th, 24SYMV015423487, is a corrected re-issue under a VIES-invalid phantom ΑΦΜ — caught cross-VAT, DATA_DECISIONS 2026-08-15) + 6 Δωδεκανήσου net==gross VAT corrections + **6 not-a-co-op contracts** excluded via `exclude:true` + `related_to:<in-scope sibling ΑΔΑΜ or "">` (DATA_DECISIONS 2026-08-17: the registry pasted the parent AWARD's whole awardee list onto a contract only one company signed) + 3 `contractors_keep` entries (deletes contractor rows the signed PDF doesn't name, and rewrites a GLUED ΑΦΜ field «X ΚΑΙ Y» to the kept one — the canonical-VAT rule silently keeps the first, i.e. the wrong co-op) + 6 `contractors_vat` rewrites (DATA_DECISIONS 2026-08-18: the contractor ΑΦΜ field held the AWARDING side's 090273987 — the Ελληνικό Δημόσιο — or a ten-digit typo, filing the contract under a fictitious co-op; the applier replaces it with the ΑΦΜ the signed contract states, targets validated as 9 digits, unmatched keys logged). **`cancelled = 1` is the shared exclusion MECHANISM, never the reason**: `duplicate_of` / `related_to` say which, and the Atlas labels each honestly (banner + facts chip + the document-trail row on BOTH siblings' pages — `$lib/transforms/exclusion.ts:trailChip`, one rule, unit-pinned); only a registry cancellation may read «cancelled». Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`) together with `dase_payment_corrections.json` (217 entries). Candidates: `scripts/validate_contract_values.py` + `scripts/find_duplicate_postings.py` (same-VAT pass + cross-VAT pass for mis-keyed ΑΦΜ twins) + `scripts/audit_contract_awardees.py` (screens every contract's registry contractor list against the ΑΦΜ its signed PDF names) |
+| `dase_contract_corrections.json` | ΔΑΣΕ contract corrections: 1 stated-value keying error (21SYMV009374147 ×10 digit-glitch, `objects` seq override) + 10 registry double-postings excluded via `exclude:true` + `duplicate_of:<kept ΑΔΑΜ>` (pages stay reachable, cross-linked; the 10th, 24SYMV015423487, is a corrected re-issue under a VIES-invalid phantom ΑΦΜ — caught cross-VAT, DATA_DECISIONS 2026-08-15) + 6 Δωδεκανήσου net==gross VAT corrections + **10 not-a-co-op contracts** excluded via `exclude:true` + `related_to:<in-scope sibling ΑΔΑΜ or "">` (DATA_DECISIONS 2026-08-17: the registry pasted the parent AWARD's whole awardee list onto a contract only one company signed) + 3 `contractors_keep` entries (deletes contractor rows the signed PDF doesn't name, and rewrites a GLUED ΑΦΜ field «X ΚΑΙ Y» to the kept one — the canonical-VAT rule silently keeps the first, i.e. the wrong co-op) + 6 `contractors_vat` rewrites (DATA_DECISIONS 2026-08-18: the contractor ΑΦΜ field held the AWARDING side's 090273987 — the Ελληνικό Δημόσιο — or a ten-digit typo, filing the contract under a fictitious co-op; the applier replaces it with the ΑΦΜ the signed contract states, targets validated as 9 digits, unmatched keys logged). **`cancelled = 1` is the shared exclusion MECHANISM, never the reason**: `duplicate_of` / `related_to` say which, and the Atlas labels each honestly (banner + facts chip + the document-trail row on BOTH siblings' pages — `$lib/transforms/exclusion.ts:trailChip`, one rule, unit-pinned); only a registry cancellation may read «cancelled». Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`) together with `dase_payment_corrections.json` (217 entries). Candidates: `scripts/validate_contract_values.py` + `scripts/find_duplicate_postings.py` (same-VAT pass + cross-VAT pass for mis-keyed ΑΦΜ twins) + `scripts/audit_contract_awardees.py` (screens every contract's registry contractor list against the ΑΦΜ its signed PDF names) |
 | `contract_corrections.json` | Same format/mechanism for the khmdhs (Anti-nero) DB; currently 1: 26SYMV018642772 «ΔΧ ΣΟΥΦΛΙΟΥ» carried the Θεσσαλονίκη δεξαμενές contract's figures — PDF-documented true value €4,334,353.41 net / €5,374,598.23 gross (DATA_DECISIONS 2026-08-14). Applied by `khmdhs.contract_corrections --corrections` + a `khmdhs.refresh` step right after chain_loader (refetch/upsert restores registry values) |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
@@ -392,7 +392,7 @@ splits a jointly signed contract EVENLY between its co-ops (DATA_DECISIONS
 
 Standalone DB of every contract 2021-09→today whose contractor is a
 forest labour cooperative (ΔΑ.Σ.Ε./ΑΔΣΕ/ΕΔΑΣΕ, ν.4423/2016 — example
-26SYMV019413118): 2,164 contracts, €47.0M gross, ~252 co-ops.
+26SYMV019413118): 2,164 contracts, €47.0M gross, ~251 co-ops.
 **Contractor-led harvest, NOT CPV-led** (the example's only CPV is
 77312000-0, outside the 772 δασοκομία family — CPV-first provably
 misses). `scripts/harvest_dase.py` (resumable: collect → close → load)
@@ -461,14 +461,14 @@ aggregates use **stated values, deduplicated** — exclude `cancelled=1`
 (82 rows, €2.35M) and non-cancelled rows whose `next_reference_no`
 resolves in-DB (64 rows, €3.24M; verified column == raw_json nextRefNo,
 no multi-successor, and since 2026-08-17 two contracts whose signed
-PDF names no co-op party) → live population **2,002 rows /
-€38,015,262.69 gross = €30,858,962.59 net** (`dase_queries.live_filter`, the
+PDF names no co-op party) → live population **1,998 rows /
+€36,954,829.83 gross = €29,920,558.46 net** (`dase_queries.live_filter`, the
 scope_filter analogue; the Atlas presents net; includes the curated
 corrections — the 21SYMV009374147 ×10 keying error AND 10 registry
 double-postings excluded with `duplicate_of` cross-links + 1 duplicated
-payment (paid net €20,709,665.22 / 961 orders after the 2026-08-17
+payment (paid net €20,405,695.74 / 953 orders after the 2026-08-17
 payment audit, now CLOSED: ALL 1,033 payment PDFs fetched into
-dase_pdf_cache + validated, 218 curated payment entries — re-posted
+dase_pdf_cache + validated, 226 curated payment entries — re-posted
 records excluded on WARRANT-NUMBER identity (amount fingerprints
 can't tell same-priced instalments apart: 4 early exclusions were
 reversed as proven instalments), payload amounts corrected to their
@@ -500,7 +500,7 @@ guard test (`test_no_live_contract_states_gross_as_its_net`) — a
 future net==gross row fails the suite rather than inflating the basis,
 and NO ÷1.24 heuristic exists (a genuinely ΦΠΑ-exempt contract must
 trip it and get a human verdict). Anti-nero has zero such rows. Charts/rankings STAY on
-stated values — payment coverage is structurally partial (897/2,002
+stated values — payment coverage is structurally partial (893/1,998
 contracts, 2022–23 near-blank as registry practice) — the paid-net Σ
 appears only as a KPI with its coverage caveat. Co-ops key on
 the **canonical VAT** (first 8-9-digit run zfill(9) — same co-op under
@@ -541,8 +541,8 @@ co-ops, orgs/units/procedure/type/CPV tables), `/dase/contracts`,
 ΔΑΣΕ ADAMs unchanged) and `/compare` (Anti-nero vs ΔΑΣΕ: KPI pair with
 basis labels, absolute + %-of-own-total yearly bars, shared-log2-bin
 size-distribution overlay with median markers, per-Π.Ε. paired bars,
-methodology footnotes — Anti-nero €604.5M effective vs ΔΑΣΕ €38.0M
-stated ≈ 15.9×). Atlas /dase (2026-08-13): redesigned to the shared hero (green
+methodology footnotes — Anti-nero €604.5M effective vs ΔΑΣΕ €37.0M
+stated ≈ 16.4×). Atlas /dase (2026-08-13): redesigned to the shared hero (green
 cards + direct-award bar + paid card) and kicker titles; its map is now a
 **proportional-symbol map** — one circle per awarding forest unit at its
 `forest_authorities` seat (area = Σ stated net €, label = n, tooltip
@@ -881,7 +881,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   payment rows. Everything value-based reconciles to €659,290,845.34
   (pinned; was €667,496,652.26 until the 2026-08-13 antinero_probable
   exclusion, then €658,297,730.65 until the 2026-08-14 Σουφλί
-  stated-value correction); /compare is symmetric stated-vs-stated (≈21.4×
+  stated-value correction); /compare is symmetric stated-vs-stated (≈22.0×
   after the 2026-08-18 awardee review); /explore has
   a single «Stated value (net)» column (`?v=8`). Gotcha: an endpoint that
   needs payments MUST take `_pay_conn()` — on `g.conn` the payments table
