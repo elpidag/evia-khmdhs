@@ -55,7 +55,7 @@ def test_authority_registry_fully_covered():
     reg = [r[0] for r in k.execute("SELECT name FROM forest_authorities")]
     k.close()
     assert set(names) == set(reg)
-    assert len(reg) == 103
+    assert len(reg) == 105
     # user conventions (2026-08-15): toponym-first wording
     for greek, en in names.items():
         if greek.startswith("Δασαρχείο"):

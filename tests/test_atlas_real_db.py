@@ -636,7 +636,7 @@ def test_connections_pins(client):
     n = client.get("/api/connections").get_json()
     # 489 since the duplicate-ΑΦΜ merge (DATA_DECISIONS 2026-08-18): one
     # contractor×authority pair was counted twice under two spellings
-    assert len(n["contractor_authority"]) == 489
+    assert len(n["contractor_authority"]) == 500
     # the same merge moved these: a padded ΑΦΜ key carried no
     # contractor_locations row, so its contracts had no home region at all —
     # merging them onto the real key ADDED flows (271 → 277) rather than
@@ -646,7 +646,7 @@ def test_connections_pins(client):
     assert len(n["contractor_signer"]) == 181
     assert len(n["pairs"]) == 12
     assert len(n["contractors"]) == 155
-    assert len(n["authorities"]) == 103
+    assert len(n["authorities"]) == 105
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
         625_897_613.96, abs=1.0)
@@ -659,11 +659,11 @@ def test_authorities_pins(client):
     # reference section (DATA_DECISIONS 2026-08-17)
     assert len(payload["other_units"]) == 49
     assert all(u["name"] for u in payload["other_units"])
-    assert len(a) == 103
+    assert len(a) == 105
     both = [r for r in a if r["antinero_n"] and r["dase_n"]]
     assert len(both) == 48          # authorities active in BOTH datasets
     slugs = {r["slug"] for r in a}
-    assert len(slugs) == 103        # bijective slugs
+    assert len(slugs) == 105        # bijective slugs
     # profile check on an authority active in BOTH datasets (the overall
     # top by stated € has no ΔΑΣΕ presence)
     pick = both[0]

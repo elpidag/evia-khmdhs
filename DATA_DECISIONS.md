@@ -4395,3 +4395,243 @@ the ένωση's own ΑΦΜ, or the reverse) — a modelling question, not an er
 *Affects: `khmdhs/forest_loader.py` (connector set + dot strip),
 `scripts/audit_contract_documents.py` (ΑΦΜ pattern), `tests/test_forest.py`.
 No stored value, link or party changed.*
+
+## 2026-08-18 — Work locations: no coordinates exist, but the contracts name their δήμοι — extraction opened for curation
+
+**Negative finding first.** Asked whether the site can place Anti-nero works
+more precisely than the Π.Ε., all 246 in-scope contracts were searched for
+every form a coordinate takes — ΕΓΣΑ87 grid pairs, Χ:/Υ: columns, WGS84
+decimals, kml/shp references. **Zero.** The contracts say why themselves:
+
+> «Τόπος εκτέλεσης της Σύμβασης είναι ο τόπος που προσδιορίζεται **στις
+> Μελέτες του Παραρτήματος VII της Πρόσκλησης Έργου** και **απεικονίζεται
+> στο χάρτη επέμβασης** που επισυνάπτεται σε κάθε μία εκ των ως άνω Μελετών.»
+
+The geometry exists as a map inside a μελέτη annex ΚΗΜΔΗΣ does not publish.
+The 147 linked upstream acts were checked too (all already cached, nothing to
+fetch): of the 34 προσκλήσεις exactly ONE states coordinates —
+25PROC017353453, a DMS bounding box round a group of sub-basins near Μέγαρα.
+So Π.Ε. → Δήμος is the only step available, and nothing finer.
+
+**What the documents do carry** is better than a keyword scatter: a
+structured, per-authority placement sentence.
+
+> «Τα προτεινόμενα έργα **αρμοδιότητας του Δασαρχείου Μεγάρων**
+> χωροθετούνται εντός των **Δήμων Μεγαρέων και Μάνδρας – Ειδυλλίας** της
+> **Περιφερειακής Ενότητας Δυτικής Αττικής** (NUTS: EL306)»
+
+A contract naming fifteen δήμοι is therefore not a recital quoting its whole
+multi-lot πρόσκληση — the fear that shaped the earlier plan — but five
+Δασαρχεία with three δήμοι each, and the document says which belongs to
+which. It also states the Π.Ε. and the NUTS code in the same breath, so the
+extraction can be held to a check the document itself supplies.
+
+`scripts/extract_contract_municipalities.py` reads that sentence down the
+CHAIN (tip → ancestors) and proposes only: **124 of 246 contracts, 292
+statements, 582 municipality assignments, 543 of them agreeing with every
+Π.Ε. the sentence itself states, 0 contradicting one, 11 names unresolved.**
+39 assignments sit outside the Π.Ε. WE curated for the contract — those are
+flagged for review in both directions, since the document may be right and
+our curation coarse (24SYMV014217832 names Κηφισιάς, Παπάγου-Χολαργού and
+Αγίας Παρασκευής where we recorded only Ανατολικής Αττικής). Output is
+`data/processed/municipality_review.json` (gitignored) plus the committed
+`municipality_curator.html`; verdicts will land in curated
+`khmdhs/data/contract_municipalities.json`. Nothing is written to the DB.
+
+Reading rules worth keeping (each cost a measurement):
+- a name counts **only inside the run a «Δήμου/Δήμων» introduces**. Matching
+  the vocabulary anywhere in the window instead pulled in the contractor's
+  home town and every Π.Ε. that shares a name with a δήμος — 93 assignments
+  outside the contract's own Π.Ε., against 39 now;
+- the window after «χωροθετούνται» must be a **lookahead**. A consuming one
+  swallows the next statement, and a five-lot contract reports one;
+- one misspelling must not take the rest of the list with it
+  («ΗΡΑΚΕΙΑΣ» for Ηρακλείας): the run is walked token by token and ends only
+  on two unknown words running;
+- the page-break watermark «ΣΕΛ.4 24SYMV014498953 2024-03-29» lands between
+  «Δήμου» and the name it introduces, and is stripped first;
+- six different hyphens are in use and the compound may have none at all
+  («Ξυλοκάστρου - Ευρωστίνης» / «Ξυλοκάστρου Ευρωστίνης»), so the lookup key
+  drops punctuation entirely;
+- the layer is **Καλλικράτης 2010** and the contracts use current names:
+  ν.4600/2019 renames and splits (Μετεώρων, Καμένων Βούρλων, Μυτιλήνης and
+  Δυτικής Λέσβου, Αργοστολίου/Σάμης/Ληξουρίου, Ανατολικής/Δυτικής Σάμου,
+  Σερβίων/Βελβεντού) resolve onto the parent unit we actually have a polygon
+  for, marked `via: rename` with the reason, rather than inventing a boundary;
+- `[\s-‐…]` is a character RANGE, not a set — and a Greek pattern must be
+  folded WITHOUT uppercasing, or `\s \d \w` inv­ert and `(?P<name>)` groups
+  are mangled. That trap has now cost four scans.
+
+*Affects: new `scripts/extract_contract_municipalities.py` +
+`tests/test_contract_municipalities.py` (9 units on real sentences) +
+`municipality_curator.html`. No DB, no API, no page — those follow the
+curation.*
+
+## 2026-08-19 — The work-location card is rebuilt on the document's own list, and the πρόσκληση joins as a second source
+
+User review of the first curator: «the cards are really confusing … in the
+text of the procurement there is actually a list for each contract and it
+mentions the δασαρχείο and the δήμος και δημοτικές ενότητες των
+περιφερειακών ενοτήτων … the τμήμα α και τμήμα β of one procurement usually
+refer to the two contracts we have already connected to the procurement». Both
+points were right, and one of them exposed a silent data loss.
+
+**The unit is the authority, and its δήμοι come in Π.Ε. GROUPS.** §3.6 of
+25SYMV016570021 reads: «…αρμοδιότητας του Δασαρχείου Αιγάλεω χωροθετούνται
+εντός των Δήμων Μάνδρας–Ειδυλλίας, Ελευσίνας και Ασπρόπυργου της Π.Ε.
+Δυτικής Αττικής (NUTS: EL306) **και** των Δήμων Χαϊδαρίου, Αγίας Βαρβάρας,
+Πετρούπολης, Ιλίου (Νέων Λιοσίων) και Αγίων Αναργύρων–Καματερού της Π.Ε.
+Δυτικού Τομέα Αθηνών (NUTS: EL302).» The first reader stopped at the first
+Π.Ε. clause and **dropped the second group — five δήμοι in that sentence
+alone**. It now walks group after group, and two more traps came out of it:
+`PE_CLAUSE` ends ON the «(» of the NUTS parenthetical, so the continuation
+«… ) και των Δήμων …» is only visible after skipping to «)», and «Ιλίου (Νέων
+Λιοσίων)» is an aside INSIDE a list, not the end of one.
+
+**The authority may be named after the δήμοι.** 24SYMV014192289 writes
+«χωροθετούνται εντός των Δήμων Ζαχάρως και Ανδρίτσαινας–Κρέστενας … 
+αρμοδιότητας Δασαρχείου Ολυμπίας», and the card said «no authority named in
+this sentence» while the document plainly names one. Both orders are read now:
+232 statements name it before the δήμοι, 22 after, 21 genuinely name none.
+
+**The card mirrors the document**: one block per Δασαρχείο, one row per Π.Ε.
+inside it (NUTS printed), chips for the δήμοι, the verbatim sentence behind a
+«the sentence» disclosure, and the sub-municipal phrases the sentence adds
+(«Δ.Ε. Ζαχάρως και Σκιλλούντος») printed as read-only evidence — that tier has
+no boundary layer in this project, so it is shown and not recorded. Where the
+same authority is stated twice (Άρθρο 3 summarises, §3.6 lists), the richer
+reading wins and no δήμος appears twice.
+
+**The πρόσκληση is now a second source.** The call names its τμήματα with
+their Δασαρχεία («Τμήμα Α: … αρμοδιότητας της Διεύθυνσης Δασών Φωκίδας και
+του Δασαρχείου Ελασσόνας»), and carries the same per-authority δήμος lists —
+100 of the 128 cached calls do. For a contract whose own text places some of
+its authorities and not others, the missing blocks are taken from its call
+**and only for the Δασαρχεία that contract actually holds**, because the call
+describes its sibling lots too. Every such block is stamped `from_call:
+<PROC ΑΔΑΜ>`, shown on the card as a dark chip and counted as needing a human
+eye. Coverage **124 → 143 of 246 contracts**; 303 authority blocks, 324 Π.Ε.
+rows, 576 δήμος assignments, 534 agreeing with every Π.Ε. the documents state,
+0 contradicting one.
+
+*Affects: `scripts/extract_contract_municipalities.py` (Places.run, groups_after,
+statements, dedupe, call source) and `tests/test_contract_municipalities.py`
+(13 units on real sentences). Still proposals only — no DB, no API, no page.*
+
+## 2026-08-19 — Forest services: the completion acts name them, the official directory guards the list, and jurisdiction is recorded where it crosses a Π.Ε.
+
+Three findings from a session of user review, all of them starting with the
+same question — which forest service works where.
+
+**1 · The Diavgeia completion acts name the service, and nothing else does.**
+ΥΠΕΝ signs one «Έγκριση Πρωτοκόλλου Παραλαβής» per accepted part and says
+whose area it was: «…για την περιοχή αρμοδιότητας **των Δασαρχείων Πάρνηθας,
+Λαυρίου, Καπανδριτίου και Πεντέλης**». 275 of the 283 stored acts do this.
+For the region-scoped «άμεσης διαχείρισης» contracts — written for a whole
+Περιφέρεια because the work follows fires — it is the ONLY statement of who
+executed them. `forest_loader.completion_authorities()` reads them AFTER the
+contract's own text, so they can only ADD: **28 links across 14 contracts**.
+24SYMV015162689 («ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΠΕΡΙΦΕΡΕΙΑΣ ΑΤΤΙΚΗΣ», €4,85M)
+went from no service at all to six, and its `no_authority` entry was retired
+with the reason kept. In-scope coverage **243 → 245 of 246**; the one left,
+25SYMV017328637, says only «το αρμόδιο Δασαρχείο είτε η Διεύθυνση Δασών κατά
+περίπτωση» and has no completion act yet.
+
+**2 · Two services were missing from the matcher's list, and the guard could
+not see them.** The user asked how the complete ΥΠΕΝ list they supplied was
+not in the matching process. Measured answer: the 151-unit
+`forest_units_directory.json` is the REFERENCE layer and the 103-entry
+`forest_authorities.json` is the matcher's whitelist; `audit_authority_links`
+exists precisely to check the second against the first and reported zero
+missed links — because it read titles, items and PDF bodies, and **not the
+completion acts**, which had just become a source. Sweeping every source with
+the full vocabulary: 16 mentions over 14 contracts, 13 of them a parent
+Διεύθυνση named beside its own child Δασαρχείο (letterhead, correctly
+ignored) and **2 real gaps**: ΔΔ Ευβοίας (named only in act ΡΧΗ04653Π8-ΥΥ1)
+and ΔΔ Κιλκίς (act 9ΜΖΔ4653Π8-ΑΕΝ). Both added — registry 103 → **105**.
+
+Merging all 32 directory-only units into the registry was tried and
+**reverted**: it produced exactly one new link and would have added 31
+services that appear in no contract, listed twice on /authorities (once as
+empty authorities, once as «the rest of the network»). The directory stays
+the audit vocabulary; the audit now covers completion acts too, with the
+parent/child suppression made honest by giving directory units their Π.Ε.
+Re-run against the pre-fix registry it reports exactly the two gaps, which is
+the regression test for this whole class.
+
+**3 · `covers_pe`: a service's reach beyond the Π.Ε. of its seat.**
+`region_pe` has always meant where the office IS — it places the map dot.
+Contracts, though, put services to work across boundaries, and the check
+«is this δήμος in the service's Π.Ε.» kept flagging real jurisdiction as
+suspect. Confirmed by the user and recorded per authority with the reason:
+Αιγάλεω → Δυτικής Αττικής, Πειραιά → Νήσων, Πεντέλης → Ανατολικής/Κεντρικού/
+Νοτίου Τομέα, Πάρνηθας → Δυτικής Αττικής, ΔΔ Σάμου → Ικαρίας («στην οποία
+υπάγεται το τοπικό Δασονομείο Ικαρίας»), ΔΔ Δωδεκανήσου → Κω («το Δασονομείο
+Κω υπάγεται απευθείας στη Δ/νση Δασών Δωδεκανήσου»), ΔΔ Κεφαλληνίας →
+Ιθάκης («δεν διαθέτει ξεχωριστή Διεύθυνση Δασών»), and Φουρνά → Καρδίτσας
+which the user accepted **explicitly without independent confirmation**, the
+note saying so and naming the two services that could contradict it.
+
+*Affects: `khmdhs/forest_loader.py` (+completion_authorities),
+`scripts/audit_authority_links.py` (+completion-act pass, Π.Ε. for directory
+units), `khmdhs/data/forest_authorities.json` (2 new services, 8 covers_pe,
+1 alias «ΣΠΕΡΧΙΑΔΑΣ», 1 retired no_authority), both copies of
+`authority_names_en.json`, and the count pins (103→105 authorities,
+489→500 authority↔contractor edges).*
+
+## 2026-08-19 — Work locations, second pass: the reading trail, the second document dialect, and the first curated verdicts
+
+Continuing the municipality layer (previous entry), after the user rejected
+reviewing 143 contract cards one by one — «you are not helping me do the
+revision … you need to have better options».
+
+**The review unit is the pair, not the contract.** Collapsed to one row per
+(forest service → δήμος) — **290 pairs over 220 δήμοι** — each carrying what
+independently backs it: the contract and its πρόσκληση saying the same, the
+Π.Ε. named in that sentence, the NUTS code printed beside it, the service's
+registered reach, and other contracts asserting the same pair. 251 have three
+or more, 33 two, 6 remain open. The registry's own NUTS column is useless for
+this (121 of its 124 rows say «EL»).
+
+**The extraction follows the user's own method** (2026-08-19): the contract's
+title first, then the award's ΘΕΜΑ, then the call — whose title says whether
+it covers this contract alone or several τμήματα, and whose «οι προς
+παρέμβαση εκτάσεις» / «οι εργασίες αφορούν» paragraphs carry the detail —
+and last the contract body. Every contract now carries that trail: 246
+contracts, 1.243 steps, each with the document, the anchor and the verbatim
+quote, so a proposal can be read back to its source instead of appearing from
+nowhere. The SECTION NUMBER is never assumed — «τόπος εκτέλεσης» sits at §2.6
+in 60 calls, §2.4 in 32, §2.7 in 24 — the anchors are phrases and the number
+is read off the text.
+
+**A second document dialect** was found and added: the 2025 «επείγουσες
+υλοτομικές εργασίες» calls write «…ανήκουν στην περιοχή ευθύνης των
+Δασαρχείων Θεσσαλονίκης, Λαγκαδά και Σταυρού, ενώ **διοικητικά ανήκουν**
+στους Δήμους Ωραιοκάστρου, … εντός των Δημοτικών Κοινοτήτων Μεσαίου και
+Πενταλόφου της Δ.Ε. Καλλιθέας». Coverage 143 → **153 of 246 contracts**
+(70% of the stated net €); 93 contracts still name no δήμος anywhere, which
+is what their documents say and the trail states plainly.
+
+**Reading bugs the review exposed**, each fixed and pinned: the authority may
+be named AFTER the δήμοι («χωροθετούνται … αρμοδιότητας Δασαρχείου Ολυμπίας»);
+one authority can hold TWO Π.Ε. groups and stopping at the first dropped five
+δήμοι; «ΚΑΙ» as a separator swallowed the first three letters of Δήμος
+**ΚΑΙ**σαριανής; a group may state only «(NUTS: EL303)» with no Π.Ε. name; the
+opening summary sentence («αρμοδιότητας των Δ/νσεων Δασών Άρτας, Θεσπρωτίας
+και Κέρκυρας») must NOT hand its δήμοι to every service it lists — the
+per-Π.Ε. groups that follow are the attribution; and «Δασαρχείου Σπερχιάδας»
+(without the ε) matched nothing, so Μακρακώμη was filed under Λαμίας.
+
+**First curated verdicts** (`khmdhs/data/municipality_overrides.json`, 17):
+where a contract assigns a δήμος to a service that does not serve it, the
+δήμος is NEVER dropped — the attribution is re-attributed when the competent
+service is a party to the SAME contract (Αρριανών → ΔΔ Ροδόπης, Σπάρτης →
+Δασαρχείο Σπάρτης, Μαλεβιζίου → ΔΔ Ηρακλείου) and kept as stated with the
+competent service named in the note when it is not (Δίου-Ολύμπου, Παρανέστι,
+Ελασσόνα, Σέρβια, Τανάγρα, Ιεράπετρα). The user's rule; their wording is the
+note.
+
+*Affects: `scripts/extract_contract_municipalities.py`,
+`municipality_curator.html`, `khmdhs/data/municipality_overrides.json`,
+`tests/test_contract_municipalities.py` (16 units). Still proposals — no DB
+table, no API, no page until the curation closes.*

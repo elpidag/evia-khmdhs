@@ -36,6 +36,17 @@ DIR_FILE = ROOT / "khmdhs" / "data" / "forest_units_directory.json"
 OUT = ROOT / "data" / "processed" / "authority_link_audit.json"
 
 
+def pe_of_toponym(tail: str) -> str | None:
+    """«ΕΥΒΟΙΑΣ» → «Π.Ε. Ευβοίας». The directory names a unit after the area it
+    administers, which is what the hierarchy rule needs to compare against."""
+    from khmdhs.greek_regions import PE_CENTROIDS
+    want = fold(tail)
+    for pe in PE_CENTROIDS:
+        if fold(pe.replace("Π.Ε. ", "")) == want:
+            return pe
+    return None
+
+
 def extended_registry() -> tuple[dict, dict[str, dict]]:
     registry, _gaz = load_registry()
     directory = json.loads(DIR_FILE.read_text(encoding="utf-8"))
@@ -51,7 +62,7 @@ def extended_registry() -> tuple[dict, dict[str, dict]]:
             continue
         key = f"[DIR] {name}"
         reg["authorities"][key] = {"kind": u["unit_kind"], "aliases": [tail],
-                                   "region_pe": None}
+                                   "region_pe": pe_of_toponym(tail)}
         extra[key] = u
     return reg, extra
 
@@ -69,7 +80,7 @@ def main() -> int:
         "SELECT name, region_pe FROM forest_authorities")}
 
     report = {"title_items_hits": [], "pdf_only_hits": [], "pdf_suppressed": 0,
-              "dase_unit_hits": []}
+              "completion_act_hits": [], "act_suppressed": 0, "dase_unit_hits": []}
     rows = kh.execute("""
         SELECT c.reference_number ref, c.title,
                (SELECT group_concat(short_description, ' | ')
@@ -108,6 +119,30 @@ def main() -> int:
                         {"ref": ref, "unit": extra[n]["name"], "excerpt": ex[:200],
                          "current_links": sorted(current.get(ref, []))})
 
+    # Completion acts (Diavgeia): «…για την περιοχή αρμοδιότητας των Δασαρχείων
+    # Πάρνηθας, Λαυρίου…». They became a source of the authority layer on
+    # 2026-08-19, and the audit has to cover every source the layer uses — the
+    # gap here is exactly how ΔΔ Ευβοίας stayed invisible for months.
+    try:
+        acts = kh.execute("""SELECT ada, cited_ref, attributed_ref, subject
+                             FROM contract_completion_acts""").fetchall()
+    except sqlite3.OperationalError:
+        acts = []
+    for a in acts:
+        hits = matcher.find(a["subject"] or "")
+        for n, ex in hits:
+            if n not in extra:
+                continue
+            ref = a["attributed_ref"] or a["cited_ref"]
+            unit_pe = reg["authorities"][n].get("region_pe")
+            cur_pes = {auth_pe.get(c) for c in current.get(ref, [])}
+            if unit_pe and unit_pe in cur_pes:
+                report["act_suppressed"] += 1      # its own child unit is linked
+                continue
+            report["completion_act_hits"].append(
+                {"ref": ref, "ada": a["ada"], "unit": extra[n]["name"],
+                 "excerpt": ex[:200], "current_links": sorted(current.get(ref, []))})
+
     # ΔΑΣΕ side: operator-unit strings vs directory-only vocabulary
     from webui.dase_queries import live_filter
     dase = sqlite3.connect(ROOT / "data" / "processed" / "dase.sqlite")
@@ -127,6 +162,8 @@ def main() -> int:
     print(f"title/items hits: {len(report['title_items_hits'])}")
     print(f"pdf-only hits (unsuppressed): {len(report['pdf_only_hits'])} "
           f"| suppressed as parent-chain noise: {report['pdf_suppressed']}")
+    print(f"completion-act hits: {len(report['completion_act_hits'])} "
+          f"| suppressed as parent-chain noise: {report['act_suppressed']}")
     print(f"dase unit hits: {len(report['dase_unit_hits'])}")
     print(f"→ {OUT}")
     return 0

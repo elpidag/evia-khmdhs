@@ -190,8 +190,17 @@ refetching open contracts — prefer it for routine updates.
   `scripts/build_municipalities.py`) against title+items (union) with
   cached-PDF fallback; amendments inherit (`inherited:<ref>`);
   `contract_overrides` pin the 6 reviewed title/items conflicts (per-lot
-  bundles, keying errors) and `no_authority` documents the 3 region-scoped
-  contracts that genuinely name none. Warns on new title/items
+  bundles, keying errors) and `no_authority` documents the region-scoped
+  contracts that genuinely name none (1 left; DATA_DECISIONS 2026-08-19).
+  **Fourth source since 2026-08-19: the Diavgeia completion acts**, whose
+  subject says «…για την περιοχή αρμοδιότητας των Δασαρχείων Πάρνηθας,
+  Λαυρίου…» — 275 of 283 name a service, and for the region-scoped «άμεσης
+  διαχείρισης» contracts it is the ONLY such statement (28 links / 14
+  contracts, `source=completion_act:<ΑΔΑ>`; read last so it can only ADD).
+  Authorities also carry **`covers_pe`** — the Π.Ε. a service administers
+  beyond the one its office sits in (8 user-confirmed: ΔΔ Σάμου→Ικαρίας,
+  ΔΔ Κεφαλληνίας→Ιθάκης, Πεντέλης→3 Attica sectors, …); `region_pe` still
+  means the SEAT and places the map dot. Warns on new title/items
   disagreements; TODO-lists uncovered in-scope contracts. Matcher gotcha:
   fold() maps Greek→Latin homoglyphs, so connector/stop tokens must be
   folded too («ΚΑΙ» → Latin "KAI").
@@ -320,6 +329,18 @@ refetching open contracts — prefer it for routine updates.
   are `near_match` noise; real mismatches are candidates for
   payment_corrections.json (human reviews the PDF first). Resumable; aborts
   after 3 consecutive 429s.
+- Municipality layer (proposals only, curation open — DATA_DECISIONS
+  2026-08-19): `scripts/extract_contract_municipalities.py` reads each
+  contract's CHAIN and its πρόσκληση the way the user reads them — title →
+  award ΘΕΜΑ → call (lot table, «οι προς παρέμβαση εκτάσεις», «οι εργασίες
+  αφορούν») → contract body — and emits a per-contract **reading trail**
+  (document, anchor, verbatim quote) plus one row per (service → δήμος) pair
+  tiered by independent confirmation. 153/246 contracts name a δήμος (220
+  distinct, 290 pairs); the other 93 stop at the authority and say so. The
+  section number is never assumed (τόπος εκτέλεσης sits at §2.4/§2.6/§2.7),
+  and two document dialects are read («χωροθετούνται» and «διοικητικά
+  ανήκουν»). Output: `data/processed/municipality_review.json` (gitignored)
+  + committed `municipality_curator.html`. Nothing is written to the DB.
 - `scripts/extract_site_candidates.py` — scans cached contract PDFs for
   site cues (ΔΑΣΑΡΧΕΙ, ΘΕΣΗ, Τ.Κ., …) into a review file; a human curates
   real sites into contract_regions.json. `scripts/export_prints.py` —
@@ -338,6 +359,7 @@ decisions land there FIRST, then get implemented.
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
 | `dase_contract_corrections.json` | ΔΑΣΕ contract corrections: 1 stated-value keying error (21SYMV009374147 ×10 digit-glitch, `objects` seq override) + 10 registry double-postings excluded via `exclude:true` + `duplicate_of:<kept ΑΔΑΜ>` (pages stay reachable, cross-linked; the 10th, 24SYMV015423487, is a corrected re-issue under a VIES-invalid phantom ΑΦΜ — caught cross-VAT, DATA_DECISIONS 2026-08-15) + 6 Δωδεκανήσου net==gross VAT corrections + **10 not-a-co-op contracts** excluded via `exclude:true` + `related_to:<in-scope sibling ΑΔΑΜ or "">` (DATA_DECISIONS 2026-08-17: the registry pasted the parent AWARD's whole awardee list onto a contract only one company signed) + 3 `contractors_keep` entries (deletes contractor rows the signed PDF doesn't name, and rewrites a GLUED ΑΦΜ field «X ΚΑΙ Y» to the kept one — the canonical-VAT rule silently keeps the first, i.e. the wrong co-op) + 6 `contractors_vat` rewrites (DATA_DECISIONS 2026-08-18: the contractor ΑΦΜ field held the AWARDING side's 090273987 — the Ελληνικό Δημόσιο — or a ten-digit typo, filing the contract under a fictitious co-op; the applier replaces it with the ΑΦΜ the signed contract states, targets validated as 9 digits, unmatched keys logged). **`cancelled = 1` is the shared exclusion MECHANISM, never the reason**: `duplicate_of` / `related_to` say which, and the Atlas labels each honestly (banner + facts chip + the document-trail row on BOTH siblings' pages — `$lib/transforms/exclusion.ts:trailChip`, one rule, unit-pinned); only a registry cancellation may read «cancelled». Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`) together with `dase_payment_corrections.json` (217 entries). Candidates: `scripts/validate_contract_values.py` + `scripts/find_duplicate_postings.py` (same-VAT pass + cross-VAT pass for mis-keyed ΑΦΜ twins) + `scripts/audit_contract_awardees.py` (screens every contract's registry contractor list against the ΑΦΜ its signed PDF names) |
 | `contract_corrections.json` | Same format/mechanism for the khmdhs (Anti-nero) DB; currently 6 — including one **party-only** entry (25SYMV017073536: the registry keyed ΓΕΩΓΝΩΜΩΝ Ο.Ε.'s ΑΦΜ with eight digits, «98434068»; the signed contract states 998434068, and zero-padding to 098434068 would file it under an ΑΦΜ belonging to nobody). A party-only entry deliberately does NOT stamp `correction_note` — the contract page renders that as a stated-value correction. Contractor ΑΦΜ are stripped on ingest in `extract.py`: 13 registry rows carried padded values and split 7 companies across two keys each (DATA_DECISIONS 2026-08-18). (a) 26SYMV018642772 «ΔΧ ΣΟΥΦΛΙΟΥ» carried the Θεσσαλονίκη δεξαμενές contract's figures — PDF-documented true value €4,334,353.41 net / €5,374,598.23 gross (DATA_DECISIONS 2026-08-14). (b) **4 PROJECT-BUDGET errors** (DATA_DECISIONS 2026-08-18): the registry keyed «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ» — the whole multi-lot project's budget, quoted in every contract's funding recital — as the contract's own price, while Άρθρο 5 «Αμοιβή Αναδόχου» states the real one: 24SYMV015544651 €31.02M→€4.00M, and the three lots of πρόσκληση 24PROC014835083 which all carried the same €2,284,973.72 (→€1.20M / €0.80M / €0.16M). −€31.7M off the basis, 4.8%. Found by the πρόσκληση-family analysis; screen with the RRF-recital test (stored value == the project budget the contract itself quotes). Applied by `khmdhs.contract_corrections --corrections` + a `khmdhs.refresh` step right after chain_loader (refetch/upsert restores registry values) |
+| `municipality_overrides.json` | 17 curated verdicts on WHICH forest service a δήμος belongs to, where the signed contract assigns it to one that does not serve that area (DATA_DECISIONS 2026-08-19). The δήμος is never dropped; only the attribution is curated — `reattributed` when the competent service is a party to the same contract, `as_stated` (with it named in the note) when it is not. Keys `<ΑΔΑΜ>|<ΥΠΕΣ code>`; validated by `tests/test_contract_municipalities.py` |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts. Since 2026-08-17 each entry also carries an **`office` block** (street/Τ.Κ./city/phones/emails + geocoded lat/lon/geo_precision): basis = the ΥΠΕΝ επιθεωρήσεις contact tables (ypen.gov.gr, Akamai-blocked for bots — fetched via WINDOWED Playwright, `scripts/harvest_ypen_offices.py`, cache `ypen_offices_cache/`) corroborated by each authority's own Diavgeia letterheads (`scripts/harvest_office_letterheads.py`, unit uids under org 100015996; 90/102 Τ.Κ. confirmed, ΑΔΑ+excerpt kept; the Γουμένισσα ministry-page typo 63100→61300 caught this way). Differences documented per-entry in `office.note`; merge via `scripts/build_authority_offices.py`, geocode via `scripts/geocode_authority_offices.py` (Nominatim tiers + Τ.Κ.-prefix/≤35km gates → 41 street / 58 postcode / 1 city / 3 municipality-fallback). `forest_loader` prefers the office point over the municipality centroid (`seat_precision` column); /authority pages show the contact block. Περτουλίου is ΑΠΘ-run (no ΥΠΕΝ office data — centroid) |

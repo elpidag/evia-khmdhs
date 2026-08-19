@@ -72,3 +72,7 @@ data/processed/awardee_audit.json
 data/processed/audit_fields.json
 data/processed/audit_extras.json
 data/processed/audit_identity.json
+
+# municipality extraction worksheet (proposals; verdicts live in
+# khmdhs/data/contract_municipalities.json)
+data/processed/municipality_review.json

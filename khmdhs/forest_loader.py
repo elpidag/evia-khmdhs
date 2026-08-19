@@ -164,6 +164,31 @@ def pdf_text(ref: str) -> str | None:
     return None
 
 
+def completion_authorities(conn: sqlite3.Connection,
+                           matcher: Matcher) -> dict[str, list[tuple[str, str, str]]]:
+    """{ref: [(authority, act ΑΔΑ, excerpt)]} from the Diavgeia completion acts.
+
+    ΥΠΕΝ signs one «Έγκριση Πρωτοκόλλου Παραλαβής» per accepted part, and the
+    subject line says whose area it was. 275 of the 283 stored acts name a
+    service that way, which is how the region-wide Attica contracts get an
+    authority at all (DATA_DECISIONS 2026-08-19).
+    """
+    try:
+        rows = conn.execute("""SELECT ada, cited_ref, attributed_ref, subject
+                               FROM contract_completion_acts""").fetchall()
+    except sqlite3.OperationalError:
+        return {}                       # a DB without the completion layer
+    out: dict[str, list[tuple[str, str, str]]] = {}
+    for r in rows:
+        found = matcher.find(r["subject"] or "")
+        if not found:
+            continue
+        for ref in {r["attributed_ref"], r["cited_ref"]} - {None}:
+            for name, excerpt in found:
+                out.setdefault(ref, []).append((name, r["ada"], excerpt))
+    return out
+
+
 def resolve_contracts(conn: sqlite3.Connection, registry: dict,
                       matcher: Matcher) -> tuple[dict, set[str]]:
     """Return ({ref: [(name, source, excerpt)]}, resolved_empty_refs)."""
@@ -209,6 +234,21 @@ def resolve_contracts(conn: sqlite3.Connection, registry: dict,
                 found = matcher.find(pdf)
                 source = "pdf"
         result[ref] = [(n, source, ex) for n, ex in found]
+
+    # The completion acts name the service that accepted the work — «…για την
+    # περιοχή αρμοδιότητας των Δασαρχείων Πάρνηθας, Λαυρίου, Καπανδριτίου και
+    # Πεντέλης» — and they are the ONLY place a region-scoped «άμεσης
+    # διαχείρισης» contract says who executed it (user, 2026-08-19). Read
+    # after the contract's own text so it never overrides it: these only ADD.
+    for ref, names in completion_authorities(conn, matcher).items():
+        if ref in no_authority or ref in overrides:
+            continue
+        have = {n for n, _s, _e in result.get(ref, [])}
+        for name, ada, excerpt in names:
+            if name not in have:
+                result.setdefault(ref, []).append(
+                    (name, f"completion_act:{ada}", excerpt))
+                have.add(name)
 
     # Amendments inherit from their predecessor (iterate: chains of ΑΠΕ).
     changed = True

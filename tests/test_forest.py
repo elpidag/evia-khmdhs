@@ -219,7 +219,7 @@ def test_real_db_office_layer(real_conn):
     rows = real_conn.execute(
         "SELECT name, postal_code, email, seat_precision "
         "FROM forest_authorities").fetchall()
-    assert len(rows) == 103
+    assert len(rows) == 105
     assert all(r["seat_precision"] in
                ("street", "postcode", "city", "municipality") for r in rows)
     no_tk = sorted(r["name"] for r in rows if not r["postal_code"])
