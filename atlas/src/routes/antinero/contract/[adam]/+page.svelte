@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { authEn, bodyEn, devGreek, orgEn } from '$lib/transforms/names';
-	import { ruLabel } from '$lib/transforms/regions';
+	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
 	import { trailChip } from '$lib/transforms/exclusion';
@@ -252,6 +252,53 @@
 	let mapW = $state(0);
 	const mapH = $derived(Math.max(420, Math.round(leftH)));
 
+	/**
+	 * What the TYPE row's hover card says — and only what the row does not.
+	 *
+	 * The work-type category and the multi-label themes are two vocabularies
+	 * over the same contract, so «Protection of archaeological sites and
+	 * monuments» would print again as «Archaeological sites, monasteries and
+	 * aesthetic forests» directly underneath. The mapping below says which
+	 * theme a category already states; the rest go in the card, with the CPV
+	 * coverage folded in — three water-tank codes are one fact, not three.
+	 */
+	const SAID_BY_CATEGORY: Record<string, string> = {
+		miktes_zones: 'miktes_zones',
+		arxaiologikoi: 'arxaiologikoi',
+		meletes: 'meletes',
+		antidiavrotika: 'antidiavrotika',
+		anadasoseis: 'anadasoseis',
+		ylotomies: 'ylotomies',
+		ydatodexamenes: 'nero'
+	};
+	const typeDetail = $derived.by(() => {
+		const said = SAID_BY_CATEGORY[c.category?.key ?? ''];
+		const extra = themes.filter((t) => t.key !== said).map((t) => t.en.toLowerCase());
+		const cpv = [...new Set(cpvNotes.map((n) => n.en.toLowerCase()))].filter(
+			(x) => !extra.includes(x)
+		);
+		const parts: string[] = [];
+		if (extra.length)
+			parts.push(`the contract's own title also names ${list(extra)}`);
+		else if (!themes.length)
+			parts.push(
+				"the contract's own title names no specific kind of work beyond fire protection, and nothing is inferred from the call, which lists the whole programme's menu"
+			);
+		if (cpv.length)
+			parts.push(
+				`its procurement's CPV codes also cover ${list(cpv)} — those codes belong to the call and are shared by every lot of it`
+			);
+		return parts.join('; ');
+	});
+	/** «a, b and c» — a list a reader can say out loud. Items that contain
+	 *  «and» themselves («clearing of forests and forest land») get
+	 *  semicolons instead, or the sentence reads as one run-on. */
+	const list = (xs: string[]): string => {
+		if (xs.length <= 1) return xs[0] ?? '';
+		const sep = xs.some((x) => x.includes(' and ')) ? '; ' : ', ';
+		return `${xs.slice(0, -1).join(sep)}${sep}${xs[xs.length - 1]}`;
+	};
+
 	const munis = $derived(c.municipalities ?? []);
 	let muniLayer = $state.raw<FeatureCollection<
 		GeoJSON.MultiPolygon | GeoJSON.Polygon,
@@ -265,16 +312,16 @@
 		const want = new Set(munis.map((m) => m.code));
 		return muniLayer.features.filter((f) => want.has(f.properties.code));
 	});
-	const regionLine = $derived(
-		c.regions.length ? c.regions.map((r) => ruLabel(r.region_pe)).join(', ') : ''
-	);
+	/** the regional units, English, without the «R.U.» prefix — the row now
+	 *  says «in Regional Units: …» once (user, 2026-08-20) */
+	const regionNames = $derived(c.regions.map((r) => peEn(r.region_pe)));
 	/** which document named them — the contract itself, or the call it cites */
 	const muniSource = $derived.by(() => {
 		if (!munis.length) return '';
 		const calls = [...new Set(munis.map((m) => m.from_call).filter(Boolean))];
 		if (calls.length && munis.every((m) => m.from_call))
-			return `as named in the call ${calls.join(', ')}`;
-		return calls.length ? 'as named in the contract and its call' : 'as named in the contract';
+			return `as stated in the call ${calls.join(', ')}`;
+		return calls.length ? 'as stated in the contract and its call' : 'as stated in the contract';
 	});
 
 	const themes = $derived(c.work_themes?.themes ?? []);
@@ -446,16 +493,16 @@
 		if (d?.fire_season)
 			return {
 				text: `the fire season of ${d.fire_season}`,
-				note: 'The contract sets no number of months: its works run within the fire season, 1 May – 31 October.'
+				note: 'the contract sets no number of months: its works run within the fire season, 1 May – 31 October'
 			};
 		if (d?.n) {
 			const unit = UNIT_EN[d.unit ?? ''] ?? d.unit ?? '';
 			const reg = d.registry_n
-				? ` ΚΗΜΔΗΣ records ${d.registry_n}${d.registry_unit ? ` ${d.registry_unit}` : ' (no unit)'}.`
+				? `; ΚΗΜΔΗΣ records ${d.registry_n}${d.registry_unit ? ` ${d.registry_unit}` : ' with no unit'}`
 				: '';
 			return {
 				text: `${d.n} ${unit}${d.n === 1 ? '' : 's'} ${BASIS_EN[d.basis ?? ''] ?? ''}`.trim(),
-				note: `As stated in the signed contract${d.source_ref !== c.reference_number ? ` ${d.source_ref}` : ''}.${reg}`
+				note: `as stated in the contract${d.source_ref !== c.reference_number ? ` ${d.source_ref}` : ''}${reg}`
 			};
 		}
 		// nothing curated for this record (a contract added since the last run)
@@ -465,7 +512,7 @@
 		const m = u.startsWith('ΗΜΕΡ') ? Math.round((n / 30.44) * 10) / 10 : n;
 		return {
 			text: `${m} month${m === 1 ? '' : 's'}`,
-			note: 'From the ΚΗΜΔΗΣ record; the signed text was not read for this contract.'
+			note: 'from the ΚΗΜΔΗΣ record; the signed text was not read for this contract'
 		};
 	});
 
@@ -556,9 +603,9 @@
 		<dd>
 			{dmy(c.own_date ?? c.contract_signed_date) || '—'}
 			{#if c.own_date_basis === 'published'}<Hint
-					text="The date this record was posted to ΚΗΜΔΗΣ. The document itself states none."
+					text="the date this record was posted to ΚΗΜΔΗΣ; the document itself states none"
 				/>{:else if c.own_date_basis === 'inherited'}<Hint
-					text="ΚΗΜΔΗΣ files later acts under the contract's own signature date; this is that date."
+					text="ΚΗΜΔΗΣ files later acts under the contract's own signature date; this is that date"
 				/>{/if}
 		</dd>
 		<dt>Contractor</dt>
@@ -567,36 +614,14 @@
 				{#if i}{', '}{/if}<a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a>
 			{/each}
 			{#if c.contractors.length > 1}<Hint
-					text="A consortium. Per-contractor views credit each partner with the full value, so partner totals cannot be added together."
+					text="a consortium; per-contractor views credit each partner with the full value, so partner totals cannot be added together"
 				/>{/if}
 		</dd>
 		<dt>Type</dt>
 		<dd>
 			{#if c.category}<span title={devGreek(c.category.label)}
 					>{c.category.label_en ?? c.category.label}</span
-				>{#if c.category.note}<Hint text={c.category.note} />{/if}{:else}—{/if}
-			<!-- what the contract's OWN title says the works are: 101 of 246
-			     name more than one kind, which one category cannot carry -->
-			{#if themes.length}
-				<div class="themes">
-					{#each themes as t (t.key)}<span class="theme" title={devGreek(t.el)}
-							>{t.en}</span
-						>{/each}
-				</div>
-			{:else}
-				<div class="themes muted">
-					no further detail stated<Hint
-						text="The contract's own project title names no specific kind of work beyond fire protection. Nothing is inferred from the call, which lists the whole programme's menu of works."
-					/>
-				</div>
-			{/if}
-			{#if cpvNotes.length}
-				<div class="themes muted">
-					CPV also covers {cpvNotes.map((n) => n.en.toLowerCase()).join(', ')}<Hint
-						text="These CPV codes belong to the procurement's own code list, which is shared by every lot of the call. They are shown as a note, never as this contract's work."
-					/>
-				</div>
-			{/if}
+				>{#if typeDetail}<Hint text={typeDetail} />{/if}{:else}—{/if}
 		</dd>
 		<dt>Scope</dt>
 		<dd>{c.category?.key === 'meletes' ? 'study' : 'works'}</dd>
@@ -608,10 +633,10 @@
 		<dd>
 			<span title={devGreek(c.procedure_type ?? '')}>{procedureEn(c.procedure_type)}</span>
 			{#if c.award_procedure}<Hint
-					text={`Ground stated in the registry: ${procedureEn(c.award_procedure)}.`}
+					text={`ground stated in the registry: ${procedureEn(c.award_procedure).toLowerCase()}`}
 				/>{/if}
 			{#if c.bids_submitted === 1}<Hint
-					text="One bid was submitted for this contract."
+					text="one bid was submitted for this contract"
 				/>{/if}
 		</dd>
 		<dt>Contracting authority</dt>
@@ -621,6 +646,7 @@
 		<dt>Areas of intervention</dt>
 		<dd>
 			{#if munis.length}
+				<span class="lead">Municipalities:</span>
 				{#each munis as m, i (m.code)}
 					{#if i}{', '}{/if}<span
 						class:flagged={m.outside_region}
@@ -632,13 +658,21 @@
 									? `${m.region_pe} — outside the curated regions; it is the seat region of the service that names it`
 									: m.outside_pe_explained === 'curated verdict'
 										? `${m.region_pe} — outside the curated regions; reviewed and kept as the document states it`
-										: (m.note ?? m.region_pe ?? '')}>Δήμος {m.name}</span
+										: (m.note ?? m.region_pe ?? '')}>{m.name}</span
 					>
 				{/each}
-				<br /><span class="sub">{regionLine}</span>{#if muniSource}<Hint text={muniSource} />{/if}
+				{#if regionNames.length}
+					<span class="lead">
+						in {regionNames.length === 1 ? 'Regional Unit' : 'Regional Units'}:</span
+					>
+					{regionNames.join(', ')}
+				{/if}{#if muniSource}<Hint text={muniSource} />{/if}
 			{:else}
-				{regionLine || '—'}<Hint
-					text="The contract's documents place the works in these regional units but name no municipality."
+				{#if regionNames.length}<span class="lead"
+						>Regional {regionNames.length === 1 ? 'Unit' : 'Units'}:</span
+					>
+					{regionNames.join(', ')}{:else}—{/if}<Hint
+					text="the contract's documents place the works in these regional units but name no municipality"
 				/>
 			{/if}
 		</dd>
@@ -654,8 +688,8 @@
 				{#if c.authorities.every((a) => a.source?.startsWith('completion_act'))}
 					<Hint
 						text={c.authorities.some((a) => a.source?.endsWith('|part'))
-							? 'The contract names no forest service. This one is named by an acceptance act that covers a single part of the works, so it is not the contract’s whole jurisdiction.'
-							: 'The contract names no forest service; these are the ones its acceptance acts name.'}
+							? 'the contract names no forest service; this one is named by an acceptance act that covers a single part of the works, so it is not the contract’s whole jurisdiction'
+							: 'the contract names no forest service; these are the ones its acceptance acts name'}
 					/>
 				{/if}
 			{:else}
@@ -911,24 +945,10 @@
 	.flagged {
 		border-bottom: 1px dotted var(--ink-faint);
 	}
-	/* the regional units under the municipalities: same size, quieter ink —
-	   one step of context, not a second fact */
-	.sub {
-		color: var(--ink-soft);
-	}
-	.themes {
-		margin-top: 3px;
-		display: flex;
-		gap: 4px 10px;
-		flex-wrap: wrap;
-	}
-	.theme {
-		font-size: var(--fs-12);
-		color: var(--ink-soft);
-	}
-	.theme + .theme::before {
-		content: '· ';
-		color: var(--ink-faint);
+	/* the whole sentence is one colour (user, 2026-08-20): «Municipalities»
+	   and «in Regional Units» carry a little weight, nothing else changes */
+	.lead {
+		font-weight: 600;
 	}
 	.tlnote {
 		margin: 0 0 var(--sp-4);

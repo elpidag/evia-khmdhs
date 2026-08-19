@@ -1295,7 +1295,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (folded ones read «XΩPIKHΣ APMOΔIOTHTAΣ» in half-Latin) and trimmed to
   word boundaries with «…»;
   two-way hover with the trail rows. Since 2026-08-19 the Anti-nero page is
-  arranged with TIMELINE (its own section ABOVE the trail, with the bar's
+  The TYPE row prints the curated category ALONE (a category→theme map says
+  which theme it already states) and its hover card carries what the row does
+  not — the extra themes the title names, and the CPV coverage deduplicated
+  by theme; AREAS reads «Municipalities: … in Regional Units: …». The map is
+  460 px wide and as tall as the facts+caveat column (floor 420; 506–579 px
+  in practice). Arranged with TIMELINE (its own section ABOVE the trail, with the bar's
   methodology note) and DOCUMENT TRAIL as PLAIN sections, and **folds**
   (`$lib/ui/Fold.svelte`, native `<details>` + arrow) on PROCUREMENT DETAILS /
   EXTRACTED QUOTES / CPV CODES; quotes and CPV share a 2fr/1fr row; the map is

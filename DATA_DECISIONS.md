@@ -5246,3 +5246,41 @@ dataset» — where it now appears, in the diagram.
 *Affects: `queries_extra.contract_timeline(own_records_only=…)`,
 `atlas_api/app.py` (both contract endpoints), the Anti-nero and ΔΑΣΕ contract
 pages, `tests/test_atlas_real_db.py` (1 new pin, 2 moved).*
+
+---
+
+## 2026-08-20 · The TYPE row says one thing, and the card carries the rest
+
+User review of 25SYMV017779215's card found three faults, all of them mine:
+
+1. **The type printed twice.** «Protection of archaeological sites and
+   monuments» (the curated category) sat above «Archaeological sites,
+   monasteries and aesthetic forests» (the multi-label theme) in a smaller,
+   greyer face — the same fact in two vocabularies and two letter heights.
+   The row now prints the category alone; a small mapping says which theme a
+   category already states (7 of the 8 map to one; «δασοτεχνικά» is the
+   generic one and states none), and only the themes that ADD something go
+   into the hover card: «The contract's own title also names clearing of
+   forests and forest land; forest road network.»
+2. **A CPV note repeated itself.** Three codes — 44611500-1, 50514200-3,
+   51810000-3 — all mean water tanks, and the line printed the phrase three
+   times. Deduplicated by theme, and moved off the row into the card, which
+   now reads exactly once: «Its procurement's CPV codes also cover water
+   tanks and water points — those codes belong to the call and are shared by
+   every lot of it.»
+3. **AREAS read as a list of prefixes.** It now reads as a sentence:
+   «Municipalities: Διδυμοτείχου, Μαρωνείας - Σαπών, Ξάνθης, Ορεστιάδας,
+   Σουφλίου, Τοπείρου in Regional Units: Evros, Xanthi, Rodopi» — the word
+   «Δήμος» once, the regional units named after them, both without the
+   «R.U.» prefix the row now says in full.
+
+Also: a list whose own items contain «and» joins with semicolons, or
+«clearing of forests and forest land and forest road network» reads as one
+run-on.
+
+**Map height** (asked): the map is 460 px wide — the template's column — and
+its height follows the facts+caveat column, floor 420 px. Measured today:
+506 px on 22SYMV010785854, 527 on 26SYMV019098206, 557 on 23SYMV012992150,
+579 on 25SYMV017779215.
+
+*Affects the Anti-nero contract page only.*

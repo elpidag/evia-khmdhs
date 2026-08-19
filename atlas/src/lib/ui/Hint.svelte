@@ -12,7 +12,9 @@
 	 */
 	interface Props {
 		text: string;
-		/** where the card opens: right of the marker by default */
+		/** which way the card opens — to the RIGHT of the marker by default
+		 *  (user, 2026-08-20). It overlaps the map slot beside the facts,
+		 *  which is what a tooltip is for; nothing clips it. */
 		align?: 'left' | 'right';
 	}
 	let { text, align = 'right' }: Props = $props();
@@ -60,23 +62,27 @@
 		border-color: var(--ink);
 		color: #fff;
 	}
+	/* every card is the same 200 px wide and grows downwards for a longer
+	   text (user, 2026-08-20) — cards that sized to their sentence read as a
+	   different component each time. Text at 14 px, like the values. */
 	.card {
 		position: absolute;
 		z-index: 5;
-		top: calc(100% + 6px);
-		left: 0;
-		width: max-content;
-		max-width: 30rem;
+		top: 50%;
+		left: calc(100% + 6px);
+		transform: translateY(-50%);
+		width: 200px;
+		max-width: 80vw;
 		background: #000;
 		color: #fff;
 		border-radius: 4px;
 		padding: var(--sp-2) var(--sp-3);
-		font-size: var(--fs-12);
+		font-size: var(--fs-14);
 		line-height: 1.45;
 		pointer-events: none;
 	}
 	.card.left {
 		left: auto;
-		right: 0;
+		right: calc(100% + 6px);
 	}
 </style>
