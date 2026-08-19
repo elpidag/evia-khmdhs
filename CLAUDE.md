@@ -1075,6 +1075,13 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   works-drill = per-contract dots (OKLCH hues for multi-authority
   contracts, dashed all-pairs seat-links on hover incl. off-region seats);
   home-drill = the co-ops' contracts' dots at country frame.
+- **Flow charts live on the Anti-nero page** since 2026-08-20 (user): the
+  out-of-region choropleth with its arcs (`$lib/sections/FlowMap.svelte`),
+  the local-vs-imported split (`OriginSplit.svelte`) and the bipartite sit
+  after the MAP frame on `/`, which fetches `/api/connections` post-hydration;
+  /connections keeps hubs, signers and consortium pairs and its hub tiles
+  link to `/#flows`. RANKING OF COMPANIES matches the sponsored ranking
+  (30 px bars, 75% measure, black); BarH clamps inside labels to two lines.
 - **/connections flow design** (no default arc spaghetti): default map =
   LINEAR %-of-works-won-by-out-of-region-firms choropleth (title
   auto-computes "only N% stays local" — 13%); click a region → FlowArcs

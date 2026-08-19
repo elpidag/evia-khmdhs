@@ -73,7 +73,7 @@
 					style:background={colorOf ? colorOf(r) : color}
 				>
 					{#if tier[i] < 2}
-						<span class="on" class:two={tier[i] === 1}>
+						<span class="on" class:two={tier[i] === 1} title={r.label}>
 							{#if r.href}<a href={r.href}>{r.label}</a>{:else}{r.label}{/if}
 						</span>
 					{/if}
@@ -143,9 +143,16 @@
 		white-space: nowrap;
 		overflow: hidden;
 	}
+	/* two lines and no more: a long company name wrapped to three inside a
+	   30 px bar and was cut mid-letter (user, 2026-08-20) */
 	.on.two {
 		white-space: normal;
 		line-height: 1.08;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 	.on a {
 		color: #fff;

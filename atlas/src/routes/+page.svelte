@@ -8,6 +8,11 @@
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import FlowMap from '$lib/sections/FlowMap.svelte';
+	import OriginSplit from '$lib/sections/OriginSplit.svelte';
+	import Bipartite from '$lib/sections/Bipartite.svelte';
+	import { loadCentroids } from '$lib/maps/useGeo';
+	import type { Connections } from './connections/+page';
 	import ContractNetwork from '$lib/charts/ContractNetwork.svelte';
 	import type { NetNode } from '$lib/transforms/network';
 	import { NET_MODES, type NetMode } from '$lib/transforms/networkScene';
@@ -40,7 +45,12 @@
 		stats: Record<string, number>;
 		fire_season: { from: string; to: string; n_contracts: number };
 	} | null>(null);
+	/** the flow layer, moved here from /connections (user, 2026-08-20) */
+	let net = $state.raw<Connections | null>(null);
+	let centroids = $state.raw<Record<string, [number, number]>>({});
 	$effect(() => {
+		apiGetCached<Connections>(fetch, '/api/connections').then((v) => (net = v));
+		loadCentroids(fetch).then((c) => (centroids = c));
 		apiGetCached<AntineroMapPayload>(fetch, '/api/antinero/map').then((v) => (map = v));
 		apiGetCached<PaymentsPayload>(fetch, '/api/antinero/payments').then((v) => (payments = v));
 		apiGetCached<SankeyPayload>(fetch, '/api/antinero/sankey').then((v) => (sankey = v));
@@ -295,6 +305,57 @@
 	<div class="skeleton" id="map" style="height: 560px"></div>
 {/if}
 
+{#if net}
+	{@const localPct = (() => {
+		let t = 0,
+			l = 0;
+		for (const f of net.flows) {
+			t += f.total_eur;
+			if (f.source_pe === f.target_pe) l += f.total_eur;
+		}
+		return t ? Math.round((100 * l) / t) : 0;
+	})()}
+	<ChartFrame
+		title="Only {localPct}% of the work-money goes to firms based where the work is"
+		subtitle="Each region is coloured by the share of its works won by out-of-region firms — darker means more of the money leaves. Click a region: red arrows show who reaches in, blue where its own firms reach out."
+		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
+			net.coverage.total_eur
+		)} resolved. Full-exposure convention: a multi-region contract counts toward every region pair it touches; the within-region shares are unaffected."
+		anchor="flows"
+		methodology="even-split"
+	>
+		<FlowMap flows={net.flows} {centroids} />
+	</ChartFrame>
+
+	<ChartFrame
+		title="In the biggest destinations, local firms take a small slice"
+		subtitle="€ of works in the top-{Math.min(12, net.origins.length)} destination regions, split by whether the winning firm is based in that region."
+		anchor="origins"
+		methodology="even-split"
+	>
+		<OriginSplit rows={net.origins.slice(0, 12)} />
+	</ChartFrame>
+
+	{@const maxReach = (() => {
+		const by = new Map<string, number>();
+		for (const e of net.contractor_pe) by.set(e.vat, (by.get(e.vat) ?? 0) + 1);
+		let top = { vat: '', n: 0 };
+		for (const [vat, n] of by) if (n > top.n) top = { vat, n };
+		return { n: top.n, name: net.contractors[top.vat]?.name ?? '—' };
+	})()}
+	<ChartFrame
+		title="A handful of companies reach into many regions"
+		subtitle="Contractor ↔ work-region links ({grInt(net.contractor_pe.length)} edges across {grInt(
+			Object.keys(net.contractors).length
+		)} contractors). {maxReach.name} alone works in {maxReach.n} regional units."
+		caveat="Edge € even-split across a contract's partners and regions — the layer sums to the programme total."
+		anchor="bipartite"
+		methodology="even-split"
+	>
+		<Bipartite edges={net.contractor_pe} contractors={net.contractors} />
+	</ChartFrame>
+{/if}
+
 <Defer height={640}>
 {#if network}
 	<ChartFrame
@@ -451,7 +512,12 @@
 	anchor="top-contractors"
 	methodology="stated-basis"
 >
-	<BarH rows={topRows} color="#2b2b2b" inside barHeight={22} />
+	<!-- same measure and bar height as the sponsored-works ranking, so the
+	     two datasets' rankings read alike; the bars stay black, this
+	     dataset's colour (user, 2026-08-20) -->
+	<div class="rankw">
+		<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={30} />
+	</div>
 </ChartFrame>
 
 <ChartFrame
@@ -527,6 +593,15 @@
 </div>
 
 <style>
+	/* the ranking's measure, shared with the sponsored-works page */
+	.rankw {
+		max-width: 75%;
+	}
+	@media (max-width: 900px) {
+		.rankw {
+			max-width: none;
+		}
+	}
 	.netbar {
 		display: flex;
 		justify-content: flex-end;

@@ -5312,3 +5312,34 @@ so there.
 
 *Affects `$lib/ui/Hint.svelte` (`lead`, `up`, `heading`, `width`, own
 typography, top-anchored, `pre-line` text) and the Anti-nero contract page.*
+
+---
+
+## 2026-08-20 · Where the money travels moves to the Anti-nero page
+
+Three frames left /connections for the dataset's own page (user):
+
+* «Only 12% of the work-money goes to firms based where the work is» — the
+  choropleth of each regional unit's out-of-region share with its flow arcs
+  and the largest-flows list;
+* «In the biggest destinations, local firms take a small slice»;
+* «A handful of companies reach into many regions» (the bipartite).
+
+They sit directly after the MAP, so the geography is told in one run. The
+first two were lifted into `$lib/sections/FlowMap.svelte` and
+`OriginSplit.svelte` rather than copied — logic and copy unchanged — and the
+page fetches `/api/connections` after hydration like every other heavy
+payload. /connections keeps the company hubs, the signatures and the
+consortium pairs; its hub tiles used to scroll to the flow map, so they now
+link to it at `/#flows`.
+
+**RANKING OF COMPANIES** matches the sponsored-works ranking: same 30 px
+bars, same 75% measure, names inside the bars — the bars stay black, this
+dataset's colour. That exposed a clipping bug in `BarH`: at that bar height
+a long Greek company name wrapped to three lines inside a 30 px bar and was
+cut mid-letter. Inside labels are now clamped to two lines with the full
+name on hover, which the sponsored page never tripped because its sponsor
+names are short.
+
+*Affects `$lib/sections/FlowMap.svelte` + `OriginSplit.svelte` (new),
+`$lib/charts/BarH.svelte`, `/` and `/connections`.*
