@@ -347,6 +347,43 @@ refetching open contracts — prefer it for routine updates.
   and two document dialects are read («χωροθετούνται» and «διοικητικά
   ανήκουν»). Output: `data/processed/municipality_review.json` (gitignored)
   + committed `municipality_curator.html`. Nothing is written to the DB.
+- Work-theme + duration layers (DATA_DECISIONS 2026-08-19, **curated and
+  loaded**): `scripts/extract_contract_details.py` reads every in-scope
+  contract's cached text once and emits `data/processed/
+  contract_details_review.json` (gitignored) + the committed
+  `contract_details_curator.html`. (a) `khmdhs/work_themes.py` — TWELVE
+  multi-label themes from the contract's own descriptive project title
+  (155 contracts name ≥1, **101 name ≥2** — one category per contract is
+  lossy; 91 say nothing beyond «αντιπυρική προστασία» and stay so), each
+  hit carrying the verbatim clause; CPV is a SCREEN not a source (9 marker
+  codes → 56 questions; «συντήρησης οδών» 130/246 and «χαρτογράφησης»
+  119/246 are deliberately NOT markers). The «Αντικείμενο της Σύμβασης»
+  article and the πρόσκληση were tested and rejected — boilerplate and
+  whole-programme menu respectively. (b) `khmdhs/contract_durations.py` —
+  the «συνολική προθεσμία … ορίζεται σε …» clause, chain-read: **246/246**
+  state a deadline (registry: 83) and 243 state the START BASIS (187 έναρξη
+  εργασιών / 51 υπογραφή), which the registry never carries. **The ΚΗΜΔΗΣ
+  duration field agrees with the document in 3 of 66 comparable cases.**
+  Traps encoded + pinned: the PENALTY article defines nothing (65 false
+  reads), the μελέτη's deadline is not the works' (design-build), «ΦΠΑ 24%»
+  sits before «Άρθρο 3 Διάρκεια» (16), phase-II PDFs put each accent in as
+  a separate letter → `loose()` allows a stray vowel only AFTER A VOWEL
+  (66), the two-letter «ΕΤ» stem needs a word boundary or «ΜΕ ΤΗ ΛΗΞΗ» reads
+  as «2 years» (3), and «Μήνες».upper() is «ΜΉΝΕΣ» so the comparison folds
+  accents. **Three contracts answer with a SEASON** — «η αντιπυρική περίοδος
+  του έτους 2024» — and Greece's runs 1 May – 31 October (user), so their
+  deadline is 31.10 of that year.
+  Verdicts (rules, user-approved 2026-08-19: show every theme · say so when
+  the title states none · CPV is only ever a note · document over registry)
+  live in curated `data/contract_work_themes.json` + `data/contract_durations.json`
+  (both with `_overrides`, merged by `--curate`) → `khmdhs/details_loader.py`
+  → `contract_work_themes` (330 links / 155 contracts) + `work_theme_labels`
+  + `contract_cpv_notes` (56) + `contract_durations` (246); in the refresh
+  chain after categories_loader. **`queries_extra.contract_deadlines` now
+  reads the curated duration FIRST** — every in-scope contract has a drawn
+  bar (243 document + 3 season, was 155 stubs) and extensions rose to 14
+  chains / 16 steps (9 παρατάσεις + 7 supplementary approvals carrying a
+  later end date, labelled apart).
 - `scripts/extract_site_candidates.py` — scans cached contract PDFs for
   site cues (ΔΑΣΑΡΧΕΙ, ΘΕΣΗ, Τ.Κ., …) into a review file; a human curates
   real sites into contract_regions.json. `scripts/export_prints.py` —

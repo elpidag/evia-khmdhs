@@ -205,6 +205,65 @@ CREATE TABLE IF NOT EXISTS category_labels (
     note     TEXT
 );
 
+-- What a contract's works ARE, MULTI-LABEL, read from the descriptive
+-- project title inside the signed PDF (DATA_DECISIONS 2026-08-19, user
+-- decision «show all of them»): 155 of 246 in-scope contracts name at
+-- least one kind of work and 101 name two or more, which the single
+-- `contract_categories` key cannot carry. The category stays the one key
+-- that reconciles to the programme total; these say what was bought.
+-- 91 contracts name none — an absence the page states rather than fills.
+CREATE TABLE IF NOT EXISTS contract_work_themes (
+    reference_number TEXT NOT NULL,
+    seq              INTEGER NOT NULL,
+    theme            TEXT NOT NULL,
+    excerpt          TEXT NOT NULL,      -- the verbatim clause that says it
+    source           TEXT NOT NULL,      -- pdf | inherited:<ref> | registry
+    curated_at       TEXT NOT NULL,
+    PRIMARY KEY (reference_number, theme),
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS work_theme_labels (
+    theme    TEXT PRIMARY KEY,
+    label_el TEXT NOT NULL,
+    label_en TEXT NOT NULL
+);
+
+-- CPV codes that name work the contract's own title does not — a NOTE,
+-- never a theme (user decision 2026-08-19): the CPV list belongs to the
+-- call and is shared by all its lots, so 107 mentions of «Δεξαμενές
+-- νερού» across 56 contracts are a question about the procurement, not a
+-- statement about this contract.
+CREATE TABLE IF NOT EXISTS contract_cpv_notes (
+    reference_number TEXT NOT NULL,
+    cpv_code         TEXT NOT NULL,
+    theme            TEXT NOT NULL,
+    PRIMARY KEY (reference_number, cpv_code),
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
+-- The deadline the CONTRACT states, and the clock it starts (DATA_DECISIONS
+-- 2026-08-19). The ΚΗΜΔΗΣ duration field carries a number for 83 of the 246
+-- in-scope contracts, never says what it counts from, and agrees with the
+-- signed text in 3 of the 65 cases where both exist — so the document is the
+-- source and the registry figure rides along as the cross-check. Three
+-- contracts state a SEASON instead («η αντιπυρική περίοδος του έτους 2024»).
+CREATE TABLE IF NOT EXISTS contract_durations (
+    reference_number TEXT PRIMARY KEY,
+    n                INTEGER,            -- NULL when the answer is a season
+    unit             TEXT,               -- months | days | years
+    days             INTEGER,            -- normalised, for comparison
+    basis            TEXT,               -- signature | works_start | …
+    fire_season      INTEGER,            -- the year, when that IS the answer
+    anchor           TEXT NOT NULL,      -- which wording stated it
+    excerpt          TEXT NOT NULL,      -- verbatim
+    source_ref       TEXT NOT NULL,      -- the document read (chain member)
+    registry_n       INTEGER,            -- what ΚΗΜΔΗΣ says, for the note
+    registry_unit    TEXT,
+    curated_at       TEXT NOT NULL,
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
 -- Forest authorities (Διευθύνσεις Δασών / Δασαρχεία) from the curated
 -- registry khmdhs/data/forest_authorities.json; coordinates are the seat
 -- municipality's centroid (khmdhs/data/greek_municipalities.json, ΥΠΕΣ code).

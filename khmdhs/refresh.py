@@ -216,9 +216,11 @@ def main(argv: list[str] | None = None) -> int:
         studies_loader.main(db_argv)
         print("\n-- categories_loader -------------------------------------------")
         categories_loader.main(db_argv)
-        # derives the procurement families from the cached contract
-        # texts; contract_families is FK CASCADE, so a contract refetch
-        # wipes it and this rebuilds it (as scope/region/forest do)
+        # what the works ARE (multi-label, from each contract's own
+        # title) and the deadline the contract itself states — both
+        # curated, both FK CASCADE (DATA_DECISIONS 2026-08-19)
+        print("\n-- details_loader ------------------------------------------------")
+        details_loader.main(db_argv)
         print("\n-- families_loader ---------------------------------------------")
         families_loader.main(db_argv)
         print("\n-- document_kinds ----------------------------------------------")

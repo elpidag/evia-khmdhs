@@ -272,7 +272,7 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
         for (ref,) in kh.execute(
                 "SELECT reference_number FROM contract_scope WHERE in_scope = 1"):
             dl = contract_deadlines(kh, ref)
-            key = f"kh_deadline_{dl['basis'] or 'none'}"
+            key = f"kh_deadline_{dl['basis'] or 'none'}"          # document | …
             facts[key] = facts.get(key, 0) + 1
             if dl["extensions"]:
                 n_ext_chains += 1
@@ -458,6 +458,67 @@ def contract_category(kh: sqlite3.Connection, ref: str) -> dict | None:
         return None
     return {"key": r["key"], "label": r["label"] or r["key"],
             "note": r["note"], "title": r["title"], "source": r["source"]}
+
+
+def contract_work_themes(kh: sqlite3.Connection, ref: str) -> dict:
+    """What this contract's works ARE, as its own title states them.
+
+    Multi-label by design (user, 2026-08-19): 101 of the 246 in-scope
+    contracts name two or more kinds of work, which the single category key
+    cannot carry. Each theme rides with the verbatim clause that states it.
+    `cpv_notes` is the other half of the rule: a marker CPV code that names
+    work the title does not is a NOTE about the procurement — the code list
+    belongs to the call and is shared by all its lots — never a theme.
+    """
+    out: dict = {"themes": [], "cpv_notes": [], "source": None}
+    if not _table(kh, "contract_work_themes"):
+        return out
+    for r in kh.execute("""
+            SELECT t.theme, t.excerpt, t.source, l.label_el, l.label_en
+            FROM contract_work_themes t
+            LEFT JOIN work_theme_labels l ON l.theme = t.theme
+            WHERE t.reference_number = ? ORDER BY t.seq""", (ref,)):
+        out["themes"].append({"key": r["theme"], "el": r["label_el"],
+                              "en": r["label_en"], "excerpt": r["excerpt"]})
+        out["source"] = r["source"]
+    if _table(kh, "contract_cpv_notes"):
+        for r in kh.execute("""
+                SELECT n.cpv_code, n.theme, l.label_el, l.label_en
+                FROM contract_cpv_notes n
+                LEFT JOIN work_theme_labels l ON l.theme = n.theme
+                WHERE n.reference_number = ? ORDER BY n.cpv_code""", (ref,)):
+            out["cpv_notes"].append({"cpv": r["cpv_code"], "key": r["theme"],
+                                     "el": r["label_el"], "en": r["label_en"]})
+    return out
+
+
+def contract_stated_duration(kh: sqlite3.Connection, ref: str) -> dict | None:
+    """The deadline the CONTRACT states, with the clock it starts on.
+
+    The document is the source and the ΚΗΜΔΗΣ field the cross-check (user,
+    2026-08-19): the registry has a number for 83 of 246 in-scope contracts,
+    never says what it counts from, and agrees with the signed text in 3 of
+    the 65 cases where both exist. Three contracts answer with a season —
+    Greece's fire season runs 1 May to 31 October, so their deadline is the
+    31 October of the year they name.
+    """
+    if not _table(kh, "contract_durations"):
+        return None
+    r = kh.execute("SELECT * FROM contract_durations WHERE reference_number = ?",
+                   (ref,)).fetchone()
+    if r is None:
+        return None
+    out = dict(r)
+    if out.get("fire_season"):
+        out["starts"] = f"{out['fire_season']}-05-01"
+        out["deadline"] = f"{out['fire_season']}-10-31"
+    return out
+
+
+def _table(conn: sqlite3.Connection, name: str) -> bool:
+    return bool(conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') AND name = ?",
+        (name,)).fetchone())
 
 
 def probable_related(kh: sqlite3.Connection) -> dict:
@@ -2215,6 +2276,32 @@ def contract_chain(kh: sqlite3.Connection, ref: str) -> list[dict]:
     return out
 
 
+def _document_deadline(kh: sqlite3.Connection, ref: str,
+                       rec: sqlite3.Row) -> tuple[str | None, str | None]:
+    """The deadline the CONTRACT states, as a date, or (None, None)."""
+    if not _table(kh, "contract_durations"):
+        return None, None
+    r = kh.execute("SELECT n, unit, days, basis, fire_season FROM"
+                   " contract_durations WHERE reference_number = ?",
+                   (ref,)).fetchone()
+    if r is None:
+        return None, None
+    if r["fire_season"]:                      # 1 May – 31 October
+        return f"{r['fire_season']}-10-31", "document_season"
+    if not r["days"]:
+        return None, None
+    base = (_full_date(rec["start_date"]) if r["basis"] == "works_start"
+            else _full_date(rec["contract_signed_date"]))
+    base = base or _full_date(rec["contract_signed_date"]) or _full_date(rec["start_date"])
+    if not base:
+        return None, None
+    try:
+        end = _dt.date.fromisoformat(base) + _dt.timedelta(days=int(r["days"]))
+    except ValueError:
+        return None, None
+    return end.isoformat(), "document"
+
+
 def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
     """The deadline the contract ANNOUNCED, and every later act that moved it.
 
@@ -2273,7 +2360,18 @@ def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
         return end.isoformat(), "duration"
 
     ref0, r0, _d0, _k0 = recs[0]
-    deadline, basis = announced(r0)
+    # The DOCUMENT first (user decision, 2026-08-19): the σύμβαση's own
+    # «συνολική προθεσμία … ορίζεται σε τρεις (3) μήνες από …» beats the
+    # registry field, which it matches in 3 of 65 comparable cases. The
+    # clock is the one the sentence names — signature, or the start of
+    # works — and a contract whose time is the fire season runs to 31.10.
+    # the curated row is keyed on the record IN SCOPE (the chain tip), while
+    # the base date comes from the σύμβαση that started the clock
+    deadline, basis = _document_deadline(kh, ref, r0)
+    if deadline is None and ref != ref0:
+        deadline, basis = _document_deadline(kh, ref0, r0)
+    if deadline is None:
+        deadline, basis = announced(r0)
     source_ref, source_rec = (ref0, r0) if deadline else (None, r0)
     rest = recs[1:]
     if deadline is None:                       # a later act is the only one

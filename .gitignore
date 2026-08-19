@@ -76,3 +76,9 @@ data/processed/audit_identity.json
 # municipality extraction worksheet (proposals; verdicts live in
 # khmdhs/data/contract_municipalities.json)
 data/processed/municipality_review.json
+# work-theme + duration proposals (the curator page carries the data)
+data/processed/contract_details_review.json
+# curator pages copied into the dev server's static dir (the committed
+# originals live at the repo root)
+atlas/static/contract_details_curator.html
+atlas/static/municipality_curator.html

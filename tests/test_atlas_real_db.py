@@ -900,10 +900,14 @@ def test_a_later_act_is_dated_by_its_own_document(client):
 
 def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     """The contract timeline's bar is signature → the deadline the contract
-    ANNOUNCED, with a lighter stretch per extension (user, 2026-08-19). Two
-    registry fields say what was announced and neither is a sentence of the
-    signed text, so the page quotes them as record fields — these pins hold
-    the counts the methodology prints and the two shapes the bar can take."""
+    ANNOUNCED, with a lighter stretch per extension (user, 2026-08-19).
+
+    Since the curated reading landed, the DOCUMENT is what announced it: 243
+    of 246 in-scope contracts state a deadline in their own signed text and
+    the other 3 state a fire season, which is one too — Greece's runs 1 May
+    to 31 October. The registry's own fields remain as the fallback for a
+    contract added since the last curation run, which is why the basis
+    vocabulary still carries them."""
     from collections import Counter
     seen = Counter()
     ext_steps = ext_chains = 0
@@ -917,19 +921,24 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
             # an extension only exists relative to a deadline already in force
             assert dl["deadline"] is not None, ref
             assert all(e["deadline"] > dl["deadline"] for e in dl["extensions"]), ref
-    assert seen == {"none": 155, "duration": 62, "end_date": 21, "act": 8}
-    assert (ext_chains, ext_steps) == (6, 8)
-    # the deepest case: an end date in the record, one «Παράταση προθεσμίας»
+    assert seen == {"document": 243, "document_season": 3}
+    # 16 steps over 14 chains: 9 «Παράταση προθεσμίας» records and 7
+    # supplementary approvals that carried a later end date with them —
+    # both move the day the works were due, and the chart labels which
+    assert (ext_chains, ext_steps) == (14, 16)
+    # the deepest case: 15 months from the start of works, then one
+    # «Παράταση προθεσμίας» — and the registry's own end date agrees to the
+    # day (2026-01-21 against the document's 2026-01-22)
     d = client.get("/api/antinero/contract/26SYMV019098206").get_json()["deadlines"]
-    assert d["deadline"] == "2026-01-21" and d["basis"] == "end_date"
+    assert d["deadline"] == "2026-01-22" and d["basis"] == "document"
     assert [e["deadline"] for e in d["extensions"]] == ["2026-05-31"]
-    # and the case where the σύμβαση announced nothing: the later act did
+    # and the contract whose time is a season, not a number of months
     d2 = client.get("/api/antinero/contract/26SYMV018978343").get_json()["deadlines"]
-    assert d2["basis"] == "act" and d2["source_ref"] == "26SYMV018978343"
+    assert d2["basis"] == "document_season" and d2["deadline"] == "2025-10-31"
     # the counts the methodology prose prints come from /api/meta, not prose
     f = client.get("/api/meta").get_json()["facts"]
-    assert f["kh_deadline_none"] == 155 and f["kh_deadline_end_date"] == 21
-    assert f["kh_deadline_ext_steps"] == 8
+    assert f["kh_deadline_document"] == 243 and f["kh_deadline_document_season"] == 3
+    assert f["kh_deadline_ext_steps"] == 16
 
 
 def test_authority_evidence_is_quotable_greek(kh):

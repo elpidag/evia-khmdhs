@@ -188,30 +188,33 @@
 		finished would look like a project that ran for years.
 	</p>
 	<p>
-		Two fields of the ΚΗΜΔΗΣ record say what was announced, and neither is a
-		sentence of the signed contract: an end date, which
-		{show(f['kh_deadline_end_date'])} of the {show(nKh)} in-scope contracts
-		carry, and a stated duration, which gives a deadline for
-		{show(f['kh_deadline_duration'])} more when counted from the start date.
-		Some records state the number without a unit; it is read as months,
-		because the one contract whose real dates can check it states 4 and ran
-		121 days, and the page says where a unit was assumed. For
-		{show(f['kh_deadline_act'])} contracts the σύμβαση announces nothing and a
-		later act of the same file does — that act's date is then the only
-		deadline on record and is labelled as such. The remaining
-		{show(f['kh_deadline_none'])} announce no deadline at all: their bar is a
-		stub, because inventing a span from the paperwork would be the error this
-		convention exists to avoid.
+		What was announced is read from the <strong>signed contract itself</strong>,
+		not from the register: «Η συνολική προθεσμία … ορίζεται σε τρεις (3) μήνες
+		από την έναρξη των εργασιών». {show(f['kh_deadline_document'])} of the
+		{show(nKh)} in-scope contracts state a deadline that way and every one of
+		them also states the clock it starts on — the day of signature, or the day
+		the works begin — which the register never records. The remaining
+		{show(f['kh_deadline_document_season'])} answer with a season instead: their
+		works run within the fire season, 1 May to 31 October, so their deadline is
+		the 31 October of the year they name.
+	</p>
+	<p>
+		The ΚΗΜΔΗΣ duration field is kept beside it as the cross-check, and it does
+		not survive the comparison: it carries a number for 83 contracts, never says
+		what that number counts, and <strong>agrees with the signed text in 3 of the
+		65 cases where both exist</strong> — 44 of its figures are bare numbers with
+		no unit at all, against a document that says «τρεις (3) μήνες». Where the two
+		differ the contract page shows both and quotes the sentence.
 	</p>
 	<p>
 		{show(f['kh_deadline_ext_chains'])} contracts had that deadline moved, in
-		{show(f['kh_deadline_ext_steps'])} steps, each one a «Παράταση προθεσμίας»
-		record carrying its new end date. On the same line the timeline marks
-		every later act on the contract, every payment order (€), the acceptance
-		of the works (✔) where a Diavgeia act records one —
-		{show(f['kh_done'])} contracts — and, before the signature, the
-		procurement that produced it: the primary request, the commitment
-		approval, the call and the award, wherever the register dates them.
+		{show(f['kh_deadline_ext_steps'])} steps — «Παράταση προθεσμίας» records and
+		supplementary approvals that carried a later end date with them; the chart
+		labels which. On the same line the timeline marks every later act on the
+		contract, every payment order (€), the acceptance of the works (✔) where a
+		Diavgeia act records one — {show(f['kh_done'])} contracts — and, before the
+		signature, the procurement that produced it: the primary request, the
+		commitment approval, the call and the award, wherever the register dates them.
 	</p>
 
 	<h2 id="procurement-families">Procurement families (which contracts answer the same call)</h2>

@@ -225,6 +225,9 @@
 			: ''
 	);
 
+	const themes = $derived(c.work_themes?.themes ?? []);
+	const cpvNotes = $derived(c.work_themes?.cpv_notes ?? []);
+
 	const quotes = $derived<Quote[]>([
 		// a curated stated-value correction must be visible on the page it
 		// changes: 5 Anti-nero contracts carry one (DATA_DECISIONS 2026-08-14,
@@ -296,35 +299,48 @@
 							: '.')
 				};
 			}),
-		// WHERE the duration and the timeline's bar come from. There is no
-		// sentence to quote: it is a field of the ΚΗΜΔΗΣ record itself, and
-		// saying so is the honest evidence
-		...(c.deadlines?.deadline || c.contract_duration
+		// WHERE the type chips come from: the contract's own project title,
+		// one quoted clause per theme (user, 2026-08-19)
+		...themes.map((t) => ({
+			label: `Type of work — ${t.en}`,
+			text: t.excerpt,
+			code: c.work_themes?.source?.startsWith('inherited:')
+				? c.work_themes.source.slice(10)
+				: c.reference_number,
+			href: `/pdf/contract/${
+				c.work_themes?.source?.startsWith('inherited:')
+					? c.work_themes.source.slice(10)
+					: c.reference_number
+			}`,
+			note: null
+		})),
+		// WHERE the duration comes from: the contract's own sentence, with
+		// the ΚΗΜΔΗΣ field named beside it where it disagrees
+		...(c.stated_duration?.excerpt
 			? [
 					{
-						label: 'Duration and deadline — ΚΗΜΔΗΣ record fields',
-						// the fields of the record the deadline was READ from: on a
-						// chain that is the σύμβαση, while the viewed record is the
-						// tip and its own dates are a different statement
-						text: [
-							dlFields.duration
-								? `ΔΙΑΡΚΕΙΑ: ${dlFields.duration}${dlFields.unit ? ` ${dlFields.unit}` : ''}`
-								: null,
-							dlFields.start_date ? `ΕΝΑΡΞΗ: ${dmy(dlFields.start_date)}` : null,
-							dlFields.end_date ? `ΛΗΞΗ: ${dmy(dlFields.end_date)}` : null
-						]
-							.filter(Boolean)
-							.join('   ·   '),
-						code: dlFields.ref,
-						href: `/pdf/contract/${dlFields.ref}`,
+						label: 'Duration — as the contract states it',
+						text: c.stated_duration.excerpt,
+						code: c.stated_duration.source_ref,
+						href: `/pdf/contract/${c.stated_duration.source_ref}`,
 						note:
-							c.deadlines?.basis === 'end_date'
-								? `Recorded in ΚΗΜΔΗΣ, not quoted from the signed text; the timeline bar runs to this end date${extNote}.`
-								: c.deadlines?.basis === 'duration'
-									? `Recorded in ΚΗΜΔΗΣ, not quoted from the signed text; the timeline bar runs to ${dmy(c.deadlines.deadline)}, the stated duration counted from the start date${c.deadlines.assumed ? ' with the unit read as months, because the record states none' : ''}${extNote}.`
-									: c.deadlines?.basis === 'act'
-										? `Recorded in ΚΗΜΔΗΣ on ${c.deadlines.source_ref}, a later act of this chain — the σύμβαση itself announced no deadline.`
-										: 'Recorded in ΚΗΜΔΗΣ. No end date and no duration, so the timeline draws no span.'
+							(c.stated_duration.registry_n
+								? `ΚΗΜΔΗΣ records ${c.stated_duration.registry_n}${c.stated_duration.registry_unit ? ` ${c.stated_duration.registry_unit}` : ' with no unit'}; the figure shown above is the one the signed text states. `
+								: 'The ΚΗΜΔΗΣ record states no duration for this contract. ') +
+							(c.stated_duration.source_ref !== c.reference_number
+								? `Read from ${c.stated_duration.source_ref}, the σύμβαση this record amends.`
+								: '')
+					}
+				]
+			: []),
+		...(c.stated_duration?.fire_season
+			? [
+					{
+						label: 'Duration — a season, not a number of months',
+						text: `Αντιπυρική Περίοδος: Είναι η αντιπυρική περίοδος του έτους ${c.stated_duration.fire_season}, όπως αυτή εκάστοτε καθορίζεται`,
+						code: c.stated_duration.source_ref,
+						href: `/pdf/contract/${c.stated_duration.source_ref}`,
+						note: 'Greece’s fire season runs 1 May to 31 October, so the works had until 31.10 of that year.'
 					}
 				]
 			: []),
@@ -341,20 +357,47 @@
 	]);
 
 	/**
-	 * Duration in months. The registry states a number and, for 37 of the 81
-	 * in-scope contracts that carry one, a unit — «Μήνες» or «Ημέρες». The
-	 * other 44 give a bare number: the single contract whose start and end
-	 * dates can check it (25SYMV017106210, stated 4, actual 121 days) says
-	 * months, so months is assumed and the row says that it was assumed.
+	 * DURATION — the contract's own sentence, with the ΚΗΜΔΗΣ field beside
+	 * it (user decision, 2026-08-19). The documents state a deadline for 243
+	 * of 246 in-scope contracts and the start basis for all 243; the registry
+	 * has a number for 83, never says what it counts from, and agrees with
+	 * the signed text in 3 of the 65 cases where both exist. Three contracts
+	 * answer with a season instead — Greece's fire season is 1 May to 31
+	 * October, so «the fire season of 2024» IS a deadline.
 	 */
+	const BASIS_EN: Record<string, string> = {
+		signature: 'from signature',
+		works_start: 'from the start of works',
+		publication: 'from publication',
+		protocol: 'from the installation protocol'
+	};
+	const UNIT_EN: Record<string, string> = { months: 'month', days: 'day', years: 'year' };
 	const duration = $derived.by(() => {
+		const d = c.stated_duration;
+		if (d?.fire_season)
+			return {
+				text: `the fire season of ${d.fire_season}`,
+				note: 'The contract sets no number of months: its works run within the fire season, 1 May – 31 October.'
+			};
+		if (d?.n) {
+			const unit = UNIT_EN[d.unit ?? ''] ?? d.unit ?? '';
+			const reg = d.registry_n
+				? ` ΚΗΜΔΗΣ records ${d.registry_n}${d.registry_unit ? ` ${d.registry_unit}` : ' (no unit)'}.`
+				: '';
+			return {
+				text: `${d.n} ${unit}${d.n === 1 ? '' : 's'} ${BASIS_EN[d.basis ?? ''] ?? ''}`.trim(),
+				note: `As stated in the signed contract${d.source_ref !== c.reference_number ? ` ${d.source_ref}` : ''}.${reg}`
+			};
+		}
+		// nothing curated for this record (a contract added since the last run)
 		const n = c.contract_duration;
-		if (!n) return { text: '—', assumed: false };
+		if (!n) return { text: '—', note: null };
 		const u = (c.contract_duration_unit ?? '').toUpperCase();
-		const days = u.startsWith('ΗΜΕΡ') || u.startsWith('DAY');
-		const years = u.startsWith('ΕΤ') || u.startsWith('YEAR');
-		const m = days ? Math.round((n / 30.44) * 10) / 10 : years ? n * 12 : n;
-		return { text: `${m} month${m === 1 ? '' : 's'}`, assumed: !u };
+		const m = u.startsWith('ΗΜΕΡ') ? Math.round((n / 30.44) * 10) / 10 : n;
+		return {
+			text: `${m} month${m === 1 ? '' : 's'}`,
+			note: 'From the ΚΗΜΔΗΣ record; the signed text was not read for this contract.'
+		};
 	});
 
 	/**
@@ -372,13 +415,17 @@
 				: '') +
 			'. ✔ marks the day the works were accepted, which may fall after that deadline; € marks a payment order, and the grey dots before the signature are the procurement that produced the contract.';
 		const src =
-			dl?.basis === 'end_date'
-				? ` The deadline is the end date stated in the ΚΗΜΔΗΣ record (${dmy(dl.deadline)}).`
-				: dl?.basis === 'duration'
-					? ` The deadline is the stated duration of ${dl.duration}${dl.unit ? ` ${dl.unit}` : ''} counted from the start date${dl.assumed ? ', the unit read as months because the record states none' : ''} (${dmy(dl.deadline)}).`
-					: dl?.basis === 'act'
-						? ` The σύμβαση announced no deadline; ${dmy(dl.deadline)} is the one ${dl.source_ref} set.`
-						: ' This contract announced no deadline in the registry, so the bar is a stub and no span is drawn.';
+			dl?.basis === 'document'
+				? ` The deadline is the one the contract itself states — ${duration.text} — which falls on ${dmy(dl.deadline)}.`
+				: dl?.basis === 'document_season'
+					? ` The contract sets no number of months: its works run within the fire season, 1 May – 31 October, so the deadline is ${dmy(dl.deadline)}.`
+					: dl?.basis === 'end_date'
+						? ` The deadline is the end date stated in the ΚΗΜΔΗΣ record (${dmy(dl.deadline)}).`
+						: dl?.basis === 'duration'
+							? ` The deadline is the ΚΗΜΔΗΣ duration of ${dl.duration}${dl.unit ? ` ${dl.unit}` : ''} counted from the start date (${dmy(dl.deadline)}).`
+							: dl?.basis === 'act'
+								? ` The σύμβαση announced no deadline; ${dmy(dl.deadline)} is the one ${dl.source_ref} set.`
+								: ' No deadline is on record for this contract, so the bar is a stub and no span is drawn.';
 		return head + src;
 	});
 
@@ -456,6 +503,27 @@
 			{#if c.category}<span class="chip cat" title={c.category.note ?? ''}
 					>{c.category.label}</span
 				>{:else}—{/if}
+			<!-- what the contract's OWN title says the works are: 101 of 246
+			     name more than one kind, which one category cannot carry
+			     (user, 2026-08-19) -->
+			{#if themes.length}
+				<div class="themes">
+					{#each themes as t (t.key)}<span class="theme" title={devGreek(t.el)}
+							>{t.en}</span
+						>{/each}
+				</div>
+			{:else}
+				<div class="themes muted"><small>the contract states no further detail</small></div>
+			{/if}
+			{#if cpvNotes.length}
+				<div class="themes muted">
+					<small
+						>the procurement's CPV codes also cover {cpvNotes
+							.map((n) => n.en.toLowerCase())
+							.join(', ')}</small
+					>
+				</div>
+			{/if}
 		</dd>
 		<dt>Scope</dt>
 		<dd>{c.category?.key === 'meletes' ? 'study' : 'works'}</dd>
@@ -495,11 +563,7 @@
 		<dt>Duration</dt>
 		<dd>
 			{duration.text}
-			{#if duration.assumed}<small
-					class="muted"
-					title="ΚΗΜΔΗΣ states the number without a unit for this contract; months is the reading the one checkable case supports"
-					>· unit not stated</small
-				>{/if}
+			{#if duration.note}<br /><small class="muted">{duration.note}</small>{/if}
 		</dd>
 		<dt>Amendments to original contract</dt>
 		<dd>{chain.length > 1 || c.prev_reference_no || c.next_reference_no ? 'yes' : 'no'}</dd>
@@ -710,6 +774,20 @@
 		font-size: var(--fs-18);
 		letter-spacing: 0.01em;
 		margin: 0 0 var(--sp-3);
+	}
+	.themes {
+		margin-top: 3px;
+		display: flex;
+		gap: 4px 10px;
+		flex-wrap: wrap;
+	}
+	.theme {
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+	}
+	.theme + .theme::before {
+		content: '· ';
+		color: var(--ink-faint);
 	}
 	.tlnote {
 		margin: 0 0 var(--sp-4);

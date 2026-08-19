@@ -93,11 +93,37 @@ export interface ContractDetail {
 		source: string;
 	} | null;
 	regions: { region_pe: string; source: string | null; note: string | null }[];
+	/** what the contract's own title says the works ARE — multi-label, with
+	 *  the verbatim clause each theme comes from; `cpv_notes` are codes that
+	 *  name work the title does not (a note, never a theme) */
+	work_themes?: {
+		themes: { key: string; el: string; en: string; excerpt: string }[];
+		cpv_notes: { cpv: string; key: string; el: string; en: string }[];
+		source: string | null;
+	} | null;
+	/** the deadline the CONTRACT states, with the ΚΗΜΔΗΣ figure beside it */
+	stated_duration?: {
+		n: number | null;
+		unit: string | null;
+		days: number | null;
+		basis: string | null;
+		fire_season: number | null;
+		starts?: string | null;
+		deadline?: string | null;
+		anchor: string;
+		excerpt: string;
+		source_ref: string;
+		registry_n: number | null;
+		registry_unit: string | null;
+	} | null;
 	/** what the contract PROMISED: the deadline it announced and the acts
 	 *  that moved it — the timeline bar draws this, not the paperwork */
 	deadlines?: {
 		deadline: string | null;
-		basis: 'end_date' | 'duration' | 'act' | null;
+		/** where the deadline came from: the contract's own sentence
+		 *  ('document'), its fire season ('document_season'), or — only when
+		 *  no curated reading exists — the registry's own fields */
+		basis: 'document' | 'document_season' | 'end_date' | 'duration' | 'act' | null;
 		source_ref: string | null;
 		duration: number | null;
 		unit: string | null;
@@ -110,7 +136,13 @@ export interface ContractDetail {
 			start_date: string | null;
 			end_date: string | null;
 		} | null;
-		extensions: { ref: string; d: string | null; deadline: string | null; n: number }[];
+		extensions: {
+			ref: string;
+			d: string | null;
+			deadline: string | null;
+			n: number;
+			kind?: string | null;
+		}[];
 	} | null;
 	/** linked forest authorities with their office seats (detail map) */
 	authorities?: {

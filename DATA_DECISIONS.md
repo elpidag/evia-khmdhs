@@ -4939,3 +4939,122 @@ paper halo behind these labels turns one into a strike through the words.
   still fit, measured against each label's own width.
 
 *Affects `$lib/detail/ChainTimeline.svelte` only.*
+
+---
+
+## 2026-08-19 · Proposals: what the works ARE, and how long the contract had
+
+Two layers read from the same cached contract texts in one pass, both
+PROPOSALS — nothing is in the database, the verdicts come next
+(`scripts/extract_contract_details.py` → `data/processed/contract_details_review.json`
++ the committed `contract_details_curator.html`).
+
+**1 · Work themes — multi-label, from the contract's own project title.**
+The curated category gives each contract ONE key and 154 of 246 land in
+«Δασοτεχνικά έργα πρόληψης». The titles say more: **155 contracts name at
+least one specific kind of work and 101 name two or more** — «…για τον
+καθαρισμό των δασών και δασικών εκτάσεων ΚΑΙ τη συντήρηση του δασικού οδικού
+δικτύου…». Twelve themes (`khmdhs/work_themes.py`), each hit carrying the
+verbatim clause: αντιπυρικές ζώνες 84 · δασικό οδικό δίκτυο 75 · καθαρισμοί
+59 · μικτές/εστεγασμένες ζώνες 37 · αρχαιολογικοί χώροι 18 · αναδασώσεις 15 ·
+μελέτες 14 · αντιδιαβρωτικά 13 · υλοτομίες 7 · δασοκομικά 6 · υδατοδεξαμενές
+2. **91 contracts state nothing beyond «αντιπυρική προστασία»** and stay that
+way.
+
+Three sources were tested and rejected as per-contract evidence: the
+contract's «Αντικείμενο της Σύμβασης» article (boilerplate in all 206 that
+carry it — it points to the call's annexes, which ΚΗΜΔΗΣ does not publish);
+the πρόσκληση's own text (4–10 themes per call, because it lists the
+programme's menu, not the lot's work — measured on the 91 cached calls); and
+the CPV codes (median 14 per contract, top code on 226 of 246, the set
+belongs to the call). CPV is kept as a **screen**: 9 marker codes raise a
+question on **56 contracts** — «your CPV list names δεξαμενές νερού and your
+title names no water works, which is right?» — with the two boilerplate codes
+(«συντήρησης οδών» on 130, «ψηφιακής χαρτογράφησης» on 119) deliberately not
+markers, because asking 156 times would bury the questions worth asking.
+
+**2 · Duration — the deadline the contract states, and the clock it starts.**
+`khmdhs/contract_durations.py` reads «Η συνολική προθεσμία … ορίζεται σε
+τρεις (3) μήνες από …» through the chain. **246 of 246 in-scope contracts
+state one** (the registry field has a number for 83 and never says what it
+counts from), and **243 state the start basis**: 187 «από την έναρξη των
+εργασιών», 51 «από την υπογραφή», 5 other.
+
+The finding worth the work: **the ΚΗΜΔΗΣ duration field matches the signed
+contract in 3 of the 66 cases where both exist.** 43 of the registry's
+figures carry no unit at all and differ from the document (3 μήνες in the
+text against a bare «21», «23», «6»), and 20 say «Μήνες» with a different
+number (3 against 5). The Atlas currently reads that field.
+
+Five traps, all now pinned by tests: the anchor also matches the PENALTY
+article («ποινική ρήτρα ίση με δεκαπέντε τοις εκατό (15%) … ανά ημέρα» read
+as 15 days on 65 contracts) → the clause must DEFINE something and the reject
+test runs on the defining part only; a design-build contract states the
+μελέτη's 20 days and the works' 3 months → the ΕΡΓΟ clause wins and a
+study-only read is marked; «…ΦΠΑ 24%. Άρθρο 3 Διάρκεια Σύμβασης…» → the
+percent guard belongs to the head, not the preceding paragraph (16
+contracts); phase-II PDFs render every accent as a separate letter
+(«οριέζεται», «μηέ νες») → `loose()` tolerates a stray vowel AFTER A VOWEL,
+which is exactly where the artefact puts it (66 contracts); and
+«Μήνες».upper() is «ΜΉΝΕΣ», so the registry comparison folds accents or every
+agreement reads as a difference.
+
+Next: the user's verdicts → curated `contract_work_themes.json` /
+`contract_durations.json` → loaders → the contract page reads the document
+first and the registry field becomes the cross-check.
+
+---
+
+## 2026-08-19 · The two layers land: what the works are, and the time the contract had
+
+The user reviewed the RULES rather than 246 rows (the proposals are quotes,
+not judgements) and settled four:
+
+1. **A contract shows every theme its title states** — 101 of 246 name two or
+   more, and one category could not carry them.
+2. **The 91 that state nothing say so** — «the contract states no further
+   detail», with the CPV list left visible below as what the procurement
+   covered. Borrowing the call's list was rejected: each πρόσκληση names 4–10
+   kinds because it lists the programme's menu.
+3. **CPV never adds a theme.** Where a marker code names work the title does
+   not (56 contracts, almost all «Δεξαμενές νερού»), the page carries a line
+   — «the procurement's CPV codes also cover water tanks» — and nothing else.
+4. **The document is the source for the deadline, the registry the
+   cross-check.**
+
+Curated files written from the proposals under those rules, each with an
+`_overrides` block the extractor merges on re-run:
+`khmdhs/data/contract_work_themes.json` (193 contracts — 155 with themes, 56
+with CPV notes) and `khmdhs/data/contract_durations.json` (246).
+`khmdhs/details_loader.py` → `contract_work_themes` (330 links) +
+`work_theme_labels` + `contract_cpv_notes` + `contract_durations`; in the
+refresh chain after categories_loader, FK CASCADE like every child table.
+
+**The fire season is a date, not a vagueness** (user, 2026-08-19): Greece's
+runs **1 May – 31 October**, so the three «άμεσης διαχείρισης» contracts whose
+time is «η αντιπυρική περίοδος του έτους 2024/2025» have a real deadline —
+the 31 October of that year. The same window the front-page timeline shades.
+
+**Consequence for the timeline.** The bar now measures the deadline the
+CONTRACT states: `contract_deadlines` reads the curated duration first and
+falls back to the registry only for a contract added since the last curation
+run. Every in-scope contract now has a drawn span — **243 `document` + 3
+`document_season`**, where before **155 had no deadline at all and drew a
+stub**. Extensions rose from 6 chains / 8 steps to **14 / 16**, because a
+deadline that exists can now be seen to move: 9 «Παράταση προθεσμίας» records
+and 7 supplementary approvals carrying a later end date, and the chart labels
+which of the two it is rather than calling both «extension».
+
+The contract page: TYPE carries the category chip and the themes under it;
+DURATION reads «5 months from signature · As stated in the signed contract
+22SYMV010447496»; the evidence block gains one quote per theme and the
+deadline sentence, with the ΚΗΜΔΗΣ figure named where it differs.
+`/methodology#contract-timeline` rewritten on the same basis.
+
+*Affects: `khmdhs/db.py` (4 tables), `khmdhs/details_loader.py` (new),
+`khmdhs/refresh.py`, `scripts/extract_contract_details.py` (`--curate`),
+`atlas_api/queries_extra.py` (`contract_work_themes`,
+`contract_stated_duration`, `_document_deadline`), `atlas_api/app.py`, the
+Anti-nero contract page, the methodology, `tests/test_contract_details.py`
+(16 units) and the real-DB pins. No basis change — themes and durations are
+descriptive layers, no euro moved.*

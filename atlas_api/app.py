@@ -238,6 +238,11 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["family"] = queries_extra.contract_family(g.conn, adam)
         d["gross"] = queries_extra.contract_gross(pay, adam)
         d["category"] = queries_extra.contract_category(g.conn, adam)
+        # what the works ARE (multi-label, from the contract's own title)
+        # and the deadline the contract itself states (DATA_DECISIONS
+        # 2026-08-19) — the registry duration rides along as the crosscheck
+        d["work_themes"] = queries_extra.contract_work_themes(g.conn, adam)
+        d["stated_duration"] = queries_extra.contract_stated_duration(g.conn, adam)
         d["authorities"] = queries_extra.contract_authorities(g.conn, adam)
         d["document_kind"] = queries_extra.contract_document_kind(g.conn, adam)
         # the contract's own version chain (τροποποιήσεις, παρατάσεις,

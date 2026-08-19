@@ -61,6 +61,9 @@
 	/** a later act that moved the announced deadline */
 	export interface ExtStep {
 		ref: string;
+		/** what the act IS — an extension of the deadline, or a supplementary
+		 *  approval that carried a later end date with it */
+		kind?: string | null;
 		/** the act's own date (ISO) — where its dot sits */
 		d: string | null;
 		/** the new deadline it set (ISO) */
@@ -81,9 +84,16 @@
 		/** the deadline the contract announced (ISO), null when it announced
 		 *  none — 155 of 246 in-scope contracts */
 		deadline?: string | null;
-		/** where that deadline came from: the registry's end date, the stated
-		 *  duration, or a later act when the σύμβαση announced none */
-		deadlineBasis?: 'end_date' | 'duration' | 'act' | null;
+		/** where that deadline came from: the contract's own sentence, its
+		 *  fire season, or — only when no reading exists — the registry's
+		 *  end date, stated duration, or a later act of the chain */
+		deadlineBasis?:
+			| 'document'
+			| 'document_season'
+			| 'end_date'
+			| 'duration'
+			| 'act'
+			| null;
 		/** deadline extensions, oldest first */
 		extensions?: ExtStep[];
 		/** current date (ISO) — the dashed «today» rule */
@@ -390,8 +400,12 @@
 				<title
 					>{dmy(signed)} → {dmy(deadline)} — the deadline the contract announced{deadlineBasis ===
 					'duration'
-						? ' (stated duration)'
-						: deadlineBasis === 'act'
+						? ' (ΚΗΜΔΗΣ duration)'
+						: deadlineBasis === 'document'
+							? ' (as the contract states it)'
+							: deadlineBasis === 'document_season'
+								? ' (the fire season, 1 May – 31 October)'
+								: deadlineBasis === 'act'
 							? ' (announced by a later act; the σύμβαση announced none)'
 							: ''}</title
 				>
@@ -483,9 +497,9 @@
 						onmouseleave={() => onActHover?.(null)}
 					>
 						<title
-							>{ORDINAL(e.n)} extension — signed {dmy(e.d)} · deadline moved to {dmy(
-								e.deadline
-							)}</title
+							>{ORDINAL(e.n)} {e.kind === 'approval_schedule_extension'
+								? 'extension'
+								: 'new deadline'} — signed {dmy(e.d)} · deadline moved to {dmy(e.deadline)}</title
 						>
 					</path>
 				{/if}
