@@ -264,6 +264,36 @@ CREATE TABLE IF NOT EXISTS contract_durations (
     FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
 );
 
+-- WHICH ΔΗΜΟΣ each contract worked in — one level finer than the Π.Ε.
+-- layer, read from the contract's own placement sentence or from the
+-- πρόσκληση it cites: «εντός των Δήμων Χαϊδαρίου και Ασπροπύργου,
+-- αρμοδιότητας Δασαρχείου Αιγάλεω» (DATA_DECISIONS 2026-08-19). 153 of
+-- 246 in-scope contracts name at least one; the other 93 stop at the
+-- forest service and the page says so. `outside_region` marks a δήμος
+-- whose Π.Ε. is NOT among the ones curated for the contract (49 rows):
+-- the document is recorded as it stands and the region layer is left
+-- alone, so nothing already published moves.
+CREATE TABLE IF NOT EXISTS contract_municipalities (
+    reference_number  TEXT NOT NULL,
+    municipality_code TEXT NOT NULL,      -- ΥΠΕΣ code (greek_municipalities.json)
+    name              TEXT NOT NULL,
+    region_pe         TEXT,               -- the δήμος's own Π.Ε.
+    authority         TEXT,               -- the service the sentence names
+    source_ref        TEXT,               -- the document read
+    from_call         TEXT,               -- set when only the πρόσκληση says it
+    excerpt           TEXT NOT NULL,      -- verbatim
+    outside_region    INTEGER NOT NULL DEFAULT 0,
+    -- set when the δήμος IS outside the curated regions but something
+    -- accounts for it: the naming service administers that Π.Ε. (its seat,
+    -- or a confirmed `covers_pe`), or the user has ruled on it. Only what
+    -- nothing explains stays flagged — 2 of the 49 that once were
+    outside_pe_explained TEXT,
+    note              TEXT,               -- rename/settlement note, or a verdict
+    curated_at        TEXT NOT NULL,
+    PRIMARY KEY (reference_number, municipality_code),
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
 -- Forest authorities (Διευθύνσεις Δασών / Δασαρχεία) from the curated
 -- registry khmdhs/data/forest_authorities.json; coordinates are the seat
 -- municipality's centroid (khmdhs/data/greek_municipalities.json, ΥΠΕΣ code).
@@ -407,6 +437,9 @@ def init_db(path: Path) -> sqlite3.Connection:
         # scope, so the page can say «related contract» (DATA_DECISIONS
         # 2026-08-17). Empty string when there is no sibling to point at.
         ("contracts", "related_to", "TEXT"),
+        # why a δήμος sits outside the contract's curated Π.Ε. — the naming
+        # service administers it, or the user ruled on it (2026-08-19)
+        ("contract_municipalities", "outside_pe_explained", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")

@@ -5058,3 +5058,77 @@ deadline sentence, with the ΚΗΜΔΗΣ figure named where it differs.
 Anti-nero contract page, the methodology, `tests/test_contract_details.py`
 (16 units) and the real-DB pins. No basis change — themes and durations are
 descriptive layers, no euro moved.*
+
+---
+
+## 2026-08-19 · The municipality layer lands: which δήμος each contract worked in
+
+The finest location the site published was the Π.Ε. Now it is the δήμος,
+where a document names one — read from the same kind of sentence the forest
+services come from: «ΕΝΤΟΣ ΤΩΝ ΔΗΜΩΝ ΧΑΪΔΑΡΙΟΥ ΚΑΙ ΑΣΠΡΟΠΥΡΓΟΥ,
+ΑΡΜΟΔΙΟΤΗΤΑΣ ΔΑΣΑΡΧΕΙΟΥ ΑΙΓΑΛΕΩ».
+
+**Rules the user approved** (rows never, rules only):
+
+1. **The πρόσκληση counts as evidence.** Its sentence is per-lot and names
+   the δήμος and the service together, and the contract cites it — 79 of the
+   595 rows are read that way and the page says which document said it.
+   (Unlike the work-themes case, where the call lists the programme's whole
+   menu and was rejected as per-contract evidence.)
+2. **A δήμος outside the contract's curated Π.Ε. is recorded and flagged.**
+   The document is what it is; the region layer is deliberately left alone,
+   so no euro moves on any map or chart. Asked what the 49 such rows were,
+   the registry answered most of it: **30 sit in a Π.Ε. the naming service is
+   already recorded as administering** (`covers_pe` — Πεντέλης covers Ανατ.
+   Αττική, Αιγάλεω covers Δυτ. Αττική, Σάμου covers Ικαρία), **11 are in
+   that service's own seat Π.Ε.**, and **6 carry a verdict the user had
+   already given** in `municipality_overrides.json`. So the flag now means
+   «nothing accounts for this» and **2 rows** keep it — both on
+   26SYMV019488828, a Ζάκυνθος/Άρτα/Πρέβεζα contract whose text also names
+   «στους Δήμους Λαυρεωτικής και Σαρωνίδας» and whose acceptance act names
+   Δασαρχείο Λαυρίου. `outside_pe_explained` carries the reason and the page
+   says it on hover.
+3. **Pre-Καλλικράτης names and settlements resolve to today's δήμος**:
+   ΘΕΣΠΙΕΩΝ → Θηβαίων (ν.3852/2010 merged it), ΠΑΠΑΓΟΥ → Παπάγου-Χολαργού,
+   ΣΑΡΩΝΙΔΑΣ → Σαρωνικού (a settlement, never a δήμος) — each keeping the
+   document's own wording. **Every one of the 220 names now resolves**; the
+   review file's «unresolved» column is empty.
+4. Δημοτικές ενότητες are still not recorded (earlier user decision).
+
+**Result: 595 rows over 153 contracts and 220 δήμοι.** The other 93 in-scope
+contracts name none and the page says «the documents name no municipality»
+rather than guessing.
+
+**The contract page header changed** (user, same session): «AREA WITHIN THE
+JURISDICTION OF» is now **AREAS OF INTERVENTION** — the δήμοι, with the
+regional units under them and the document that named them — and
+**RESPONSIBLE FOREST SERVICE BODY** follows it with the Δασαρχεία /
+Διευθύνσεις Δασών. The evidence block quotes one sentence per group of
+δήμοι, linked to the contract or the call it came from.
+
+**The map outlines them.** Greece publishes no municipality polygon file we
+could use directly, and the machine's only geopandas has shapely 2.0 (no
+`coverage_simplify`) — but the two committed layers already contain the
+geometry between them: polygonising each Π.Ε.'s outline together with its
+interior municipality borders reproduces its δήμοι exactly, with shared
+vertices and no slivers. `scripts/build_muni_polygons.py` does that, names
+each polygon by the ΥΠΕΣ representative point inside it (islands of a
+mainland δήμος go to the nearest one within the same Π.Ε.), and writes
+**all 325 at ~250 m / 4 decimals — 611 KB**, fetched lazily and only by a
+contract page that names a δήμος.
+
+**/explore filters by δήμος** (user, 2026-08-19): the payload carries `mu`
+on the 153 Anti-nero rows that have one — absent, not empty, on the rest —
+the facet lists the 220 δήμοι by contract count, the names join the
+Greeklish-tolerant search index, and `?mu=…` is a shareable permalink like
+every other filter. Only Anti-nero rows carry it; the other two datasets
+have no municipality layer, and the label says so.
+
+*Affects: `khmdhs/db.py` (`contract_municipalities`),
+`khmdhs/municipalities_loader.py` (new, in the refresh chain),
+`khmdhs/data/contract_municipalities.json` (curated, `_overrides` merged on
+re-run), `scripts/extract_contract_municipalities.py` (`--curate`, 3
+aliases), `scripts/build_muni_polygons.py` (new),
+`atlas_api/queries_extra.py` + `app.py`, the contract page and its map,
+`/explore`, `tests/test_atlas_real_db.py` (3 pins). No basis change: the region layer, the maps
+and every aggregate are untouched.*

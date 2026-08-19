@@ -93,6 +93,21 @@ export interface ContractDetail {
 		source: string;
 	} | null;
 	regions: { region_pe: string; source: string | null; note: string | null }[];
+	/** the δήμοι the contract's documents place the works in (2026-08-19) */
+	municipalities?: {
+		code: string;
+		name: string;
+		region_pe: string | null;
+		authority: string | null;
+		source_ref: string | null;
+		from_call: string | null;
+		excerpt: string;
+		outside_region: number;
+		/** why it sits outside the curated regions, when something does
+		 *  account for it: covers_pe | seat | curated verdict */
+		outside_pe_explained: string | null;
+		note: string | null;
+	}[];
 	/** what the contract's own title says the works ARE — multi-label, with
 	 *  the verbatim clause each theme comes from; `cpv_notes` are codes that
 	 *  name work the title does not (a note, never a theme) */

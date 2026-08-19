@@ -12,6 +12,8 @@
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import { dmy, eur, eurShort, grInt } from '$lib/transforms/format';
 	import { scopeLabel } from '$lib/transforms/scopes';
+	import { loadMunicipalities, type MuniProps } from '$lib/maps/useGeo';
+	import type { FeatureCollection } from 'geojson';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -225,6 +227,34 @@
 			: ''
 	);
 
+	/** the δήμοι the documents place the works in, one level finer than the
+	 *  Π.Ε. layer; `outside_region` marks a δήμος whose Π.Ε. we never curated
+	 *  for this contract — recorded as the document states it (2026-08-19) */
+	const munis = $derived(c.municipalities ?? []);
+	let muniLayer = $state.raw<FeatureCollection<
+		GeoJSON.MultiPolygon | GeoJSON.Polygon,
+		MuniProps
+	> | null>(null);
+	$effect(() => {
+		if (munis.length && !muniLayer) loadMunicipalities(fetch).then((fc) => (muniLayer = fc));
+	});
+	const muniShapes = $derived.by(() => {
+		if (!muniLayer) return [];
+		const want = new Set(munis.map((m) => m.code));
+		return muniLayer.features.filter((f) => want.has(f.properties.code));
+	});
+	const regionLine = $derived(
+		c.regions.length ? c.regions.map((r) => ruLabel(r.region_pe)).join(', ') : ''
+	);
+	/** which document named them — the contract itself, or the call it cites */
+	const muniSource = $derived.by(() => {
+		if (!munis.length) return '';
+		const calls = [...new Set(munis.map((m) => m.from_call).filter(Boolean))];
+		if (calls.length && munis.every((m) => m.from_call))
+			return `as named in the call ${calls.join(', ')}`;
+		return calls.length ? 'as named in the contract and its call' : 'as named in the contract';
+	});
+
 	const themes = $derived(c.work_themes?.themes ?? []);
 	const cpvNotes = $derived(c.work_themes?.cpv_notes ?? []);
 
@@ -277,6 +307,23 @@
 				href: `/pdf/contract/${c.reference_number}`,
 				note: s.page ? `PDF p.${s.page}` : null
 			})),
+		// WHERE the δήμοι come from — one quote per distinct sentence, since
+		// one sentence usually names several («εντός των Δήμων Χαϊδαρίου και
+		// Ασπροπύργου, αρμοδιότητας Δασαρχείου Αιγάλεω»)
+		...[...new Map(munis.map((m) => [m.excerpt, m])).values()].map((m) => ({
+			label: `Areas of intervention — ${munis
+				.filter((x) => x.excerpt === m.excerpt)
+				.map((x) => `Δήμος ${x.name}`)
+				.join(', ')}`,
+			text: m.excerpt,
+			code: m.source_ref,
+			href: `/pdf/${m.from_call ? 'notice' : 'contract'}/${m.source_ref}`,
+			note:
+				(m.from_call ? 'Named in the call this contract was awarded under. ' : '') +
+				(munis.some((x) => x.excerpt === m.excerpt && x.outside_region)
+					? 'A municipality here lies outside the regional units curated for this contract and no forest-service jurisdiction accounts for it; the document is recorded as it stands and the region layer is unchanged.'
+					: '')
+		})),
 		// WHERE the jurisdiction row got its services. Most contracts name them
 		// in their own title or object list; some are named only by the
 		// Diavgeia act that accepted the works — and one of those acts accepts
@@ -449,10 +496,15 @@
 		seatDots.length ? (seatDots.map((a) => [a.lon!, a.lat!]) as [number, number][]) : null
 	);
 
-	const CAVEAT =
-		"Work regions and named sites are curated from the contract's signed documents. The map " +
-		"highlights the contract's regional units and marks the seats of the awarding forest " +
-		'authorities; site positions below regional-unit level are not mapped.';
+	const CAVEAT = $derived(
+		"Areas of intervention are read from the contract's own signed documents or from the call " +
+			'it cites, and quoted below. The map highlights the contract’s regional units, outlines ' +
+			'the municipalities its documents name and marks the seats of the awarding forest ' +
+			'authorities' +
+			(munis.some((m) => m.outside_region)
+				? '; one municipality here lies outside the highlighted units and no forest-service jurisdiction accounts for it — the document is recorded as it stands and the region layer is left as curated.'
+				: '.')
+	);
 </script>
 
 <svelte:head>
@@ -538,7 +590,34 @@
 		</dd>
 		<dt>Contracting authority</dt>
 		<dd><span title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</span></dd>
-		<dt>Area within the jurisdiction of</dt>
+		<!-- the user's header, revised 2026-08-19: WHERE the works were is its
+		     own row and the service responsible for them follows it -->
+		<dt>Areas of intervention</dt>
+		<dd>
+			{#if munis.length}
+				{#each munis as m, i (m.code)}
+					{#if i}{', '}{/if}<span
+						class:flagged={m.outside_region}
+						title={m.outside_region
+							? `${m.region_pe} — not among this contract's curated work regions, and nothing accounts for it`
+							: m.outside_pe_explained === 'covers_pe'
+								? `${m.region_pe} — outside the curated regions, but the service that names it administers that regional unit`
+								: m.outside_pe_explained === 'seat'
+									? `${m.region_pe} — outside the curated regions; it is the seat region of the service that names it`
+									: m.outside_pe_explained === 'curated verdict'
+										? `${m.region_pe} — outside the curated regions; reviewed and kept as the document states it`
+										: (m.note ?? m.region_pe ?? '')}>Δήμος {m.name}</span
+					>
+				{/each}
+				<br /><small class="muted"
+					>{regionLine}{muniSource ? ` · ${muniSource}` : ''}</small
+				>
+			{:else}
+				{regionLine || '—'}
+				<br /><small class="muted">the documents name no municipality</small>
+			{/if}
+		</dd>
+		<dt>Responsible forest service body</dt>
 		<dd>
 			{#if c.authorities?.length}
 				{#each c.authorities as a, i (a.name)}
@@ -552,8 +631,7 @@
 					<br /><small class="muted"
 						>named by {c.authorities.some((a) => a.source?.endsWith('|part'))
 							? 'an acceptance act covering one part of the works'
-							: 'the acceptance acts'}; the contract itself names none — its work
-						regions are on the map</small
+							: 'the acceptance acts'}; the contract itself names none</small
 					>
 				{/if}
 			{:else}
@@ -616,6 +694,19 @@
 				tipOf={(pe) => `<strong>${ruLabel(pe)}</strong>`}
 			>
 				{#snippet overlay(ctx)}
+					<!-- the δήμοι the documents name, outlined inside their region
+					     (user, 2026-08-19). The layer is fetched only here, and only
+					     when a contract actually names one. -->
+					{#each muniShapes as f (f.properties.code)}
+						<path
+							d={ctx.path(f) ?? ''}
+							class="munishape"
+							role="img"
+							aria-label={`Δήμος ${f.properties.name}`}
+							onmouseenter={() => ctx.showTip(`<strong>Δήμος ${f.properties.name}</strong>`)}
+							onmouseleave={() => ctx.hideTip()}
+						/>
+					{/each}
 					<DotLayer
 						{ctx}
 						points={seatDots.map((a) => ({ ...a, lat: a.lat!, lon: a.lon! }))}
@@ -774,6 +865,17 @@
 		font-size: var(--fs-18);
 		letter-spacing: 0.01em;
 		margin: 0 0 var(--sp-3);
+	}
+	/* the named δήμοι: a wash and a firm edge inside the highlighted region */
+	.detailmap :global(.munishape) {
+		fill: color-mix(in srgb, var(--c-antinero) 26%, transparent);
+		stroke: var(--c-antinero);
+		stroke-width: 0.6;
+		vector-effect: non-scaling-stroke;
+		cursor: pointer;
+	}
+	.flagged {
+		border-bottom: 1px dotted var(--ink-faint);
 	}
 	.themes {
 		margin-top: 3px;

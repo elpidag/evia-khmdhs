@@ -346,7 +346,29 @@ refetching open contracts — prefer it for routine updates.
   section number is never assumed (τόπος εκτέλεσης sits at §2.4/§2.6/§2.7),
   and two document dialects are read («χωροθετούνται» and «διοικητικά
   ανήκουν»). Output: `data/processed/municipality_review.json` (gitignored)
-  + committed `municipality_curator.html`. Nothing is written to the DB.
+  + committed `municipality_curator.html`; `--curate` promotes the readings
+  to curated `data/contract_municipalities.json` (`_overrides` merged on
+  re-run) → `khmdhs/municipalities_loader.py` → `contract_municipalities`
+  (FK CASCADE; in the refresh chain after details_loader). **595 rows / 153
+  contracts / 220 δήμοι**; the other 93 name none and the page says so.
+  Rules (user-approved): the πρόσκληση counts as evidence and the row names
+  the document (79 rows); a δήμος outside the contract's curated Π.Ε. is
+  recorded and FLAGGED with the region layer untouched — but only where
+  NOTHING accounts for it: of 49 such rows, 30 sit in a Π.Ε. the naming
+  service administers (`covers_pe`), 11 in its own seat Π.Ε. and 6 carry a
+  user verdict, so **2 stay flagged** (`outside_pe_explained`); pre-Καλλικράτης
+  names and settlements resolve to today's δήμος (ΘΕΣΠΙΕΩΝ→Θηβαίων,
+  ΠΑΠΑΓΟΥ→Παπάγου-Χολαργού, ΣΑΡΩΝΙΔΑΣ→Σαρωνικού) — all 220 names resolve;
+  δημοτικές ενότητες stay unrecorded. Contract page: **AREAS OF INTERVENTION**
+  (δήμοι + R.U. + which document said it) above **RESPONSIBLE FOREST SERVICE
+  BODY**, one quoted sentence per group in the evidence block, and the named
+  δήμοι OUTLINED on the map from `greek_muni.geojson`; **/explore filters by
+  δήμος** (`mu` on the 153 rows that have one, facet by contract count, in
+  the search index, `?mu=` permalink) —
+  `scripts/build_muni_polygons.py` rebuilds the 325 municipality polygons by
+  polygonising each Π.Ε. outline together with its interior borders (no
+  geopandas, no `coverage_simplify`: the committed layers share vertices, so
+  the result has no slivers), ~250 m / 4 decimals, 611 KB, lazy-loaded.
 - Work-theme + duration layers (DATA_DECISIONS 2026-08-19, **curated and
   loaded**): `scripts/extract_contract_details.py` reads every in-scope
   contract's cached text once and emits `data/processed/

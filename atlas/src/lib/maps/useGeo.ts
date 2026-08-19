@@ -125,6 +125,33 @@ export const loadRivers = (
 	return cache.get(url) as Promise<FeatureCollection<LineString | MultiLineString, RiverProps>>;
 };
 
+/** Municipality POLYGONS (all 325, ~250 m). Fetched only by a page that
+ *  outlines a δήμος — `scripts/build_muni_polygons.py` reconstructs them
+ *  from the Π.Ε. outlines and the interior border lines. */
+export const loadMunicipalities = (
+	fetch: Fetch
+): Promise<FeatureCollection<GeoJSON.MultiPolygon | GeoJSON.Polygon, MuniProps>> => {
+	const url = '/geo/greek_muni.geojson';
+	if (!cache.has(url)) {
+		cache.set(
+			url,
+			fetch(url).then((r) => {
+				if (!r.ok) throw new Error(`${url}: ${r.status}`);
+				return r.json();
+			})
+		);
+	}
+	return cache.get(url) as Promise<
+		FeatureCollection<GeoJSON.MultiPolygon | GeoJSON.Polygon, MuniProps>
+	>;
+};
+
+export interface MuniProps {
+	code: string;
+	name: string;
+	pe: string;
+}
+
 export const loadCentroids = (fetch: Fetch): Promise<Record<string, [number, number]>> => {
 	const url = '/geo/pe_centroids.json';
 	if (!cache.has(url)) {

@@ -960,6 +960,68 @@ def test_authority_evidence_is_quotable_greek(kh):
     assert "για το τμήμα του έργου" in ex
 
 
+def test_the_municipality_layer_says_what_the_documents_say(client, kh):
+    """Which δήμος each contract worked in — one level finer than the Π.Ε.
+    layer (DATA_DECISIONS 2026-08-19). The rules the user approved are what
+    these pins hold: the call counts as evidence and the row says so; a
+    δήμος outside the contract's curated Π.Ε. is recorded and FLAGGED with
+    the region layer untouched; every name resolves to a Καλλικράτης δήμος.
+    """
+    n, c, flagged, from_call = kh.execute(
+        "SELECT COUNT(*), COUNT(DISTINCT reference_number), SUM(outside_region),"
+        " SUM(from_call IS NOT NULL) FROM contract_municipalities").fetchone()
+    assert (n, c) == (595, 153)
+    # only what NOTHING accounts for stays flagged: of the 49 δήμοι that sit
+    # outside their contract's curated regions, 30 are administered by the
+    # service that names them, 11 are in that service's own seat region and
+    # 6 carry a user verdict — 2 are left
+    assert flagged == 2 and from_call == 79
+    why = dict(kh.execute(
+        "SELECT outside_pe_explained, COUNT(*) FROM contract_municipalities"
+        " WHERE outside_pe_explained IS NOT NULL GROUP BY 1"))
+    assert why == {"covers_pe": 30, "seat": 11, "curated verdict": 6}
+    # every row carries its evidence and a code the gazetteer knows
+    codes = {r[0] for r in kh.execute("SELECT code FROM greek_municipalities")}         if kh.execute("SELECT 1 FROM sqlite_master WHERE name='greek_municipalities'"
+                      ).fetchone() else None
+    for r in kh.execute("SELECT reference_number, municipality_code, excerpt"
+                        " FROM contract_municipalities"):
+        assert r["excerpt"].strip(), r["reference_number"]
+        assert r["municipality_code"].isdigit()
+        if codes:
+            assert r["municipality_code"] in codes
+    # the region layer did NOT move: a flagged δήμος is still outside
+    row = kh.execute(
+        "SELECT region_pe FROM contract_municipalities WHERE reference_number = ?"
+        " AND name = ?", ("23SYMV012992150", "Ασπροπύργου")).fetchone()
+    assert row["region_pe"] == "Π.Ε. Δυτικής Αττικής"
+    pes = {r[0] for r in kh.execute(
+        "SELECT region_pe FROM contract_project_regions WHERE reference_number = ?",
+        ("23SYMV012992150",))}
+    assert "Π.Ε. Δυτικής Αττικής" not in pes
+    # and the endpoint carries it with the flag
+    d = client.get("/api/antinero/contract/23SYMV012992150").get_json()
+    asp = next(m for m in d["municipalities"] if m["name"] == "Ασπροπύργου")
+    # Αιγάλεω administers Δυτ. Αττική, so this one is explained, not flagged
+    assert asp["outside_region"] == 0 and asp["outside_pe_explained"] == "covers_pe"
+    assert asp["from_call"] == "23PROC012763593"
+    assert "ΑΣΠΡΟΠΥΡΓΟΥ" in asp["excerpt"].upper()
+
+
+def test_explore_carries_the_municipalities(client):
+    """/explore filters by δήμος, so the payload has to carry them — Anti-nero
+    rows only, and absent (not empty) for the 93 that name none, since the
+    row list is shipped once and every byte counts (2026-08-19)."""
+    rows = client.get("/api/explore").get_json()["rows"]
+    kh_rows = [r for r in rows if r["ds"] == "antinero"]
+    with_mu = [r for r in kh_rows if r.get("mu")]
+    assert len(kh_rows) == 246 and len(with_mu) == 153
+    assert len({m for r in with_mu for m in r["mu"]}) == 220
+    assert not any(r.get("mu") for r in rows if r["ds"] != "antinero")
+    # the δήμοι of one contract, as its call names them
+    row = next(r for r in kh_rows if r["ref"] == "23SYMV012992150")
+    assert "Μαραθώνος" in row["mu"] and "Ωρωπού" in row["mu"]
+
+
 def test_the_run_up_acts_fit_the_timeline_axis(kh):
     """The contract timeline draws the procurement's own acts — primary
     request, commitment approval, call, award — on a dotted run-up BEFORE the

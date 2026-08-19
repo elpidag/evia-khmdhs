@@ -442,6 +442,9 @@ export interface ExploreRow {
 	/** the chain's other ΑΔΑΜ — searchable, so citing an earlier version
 	 *  finds the contract instead of nothing */
 	alt?: string[];
+	/** the δήμοι the contract's documents name (Anti-nero only; absent for
+	 *  the 93 that name none, and for the other two datasets) */
+	mu?: string[];
 }
 
 export interface ExplorePayload {

@@ -492,6 +492,27 @@ def contract_work_themes(kh: sqlite3.Connection, ref: str) -> dict:
     return out
 
 
+def contract_municipalities(kh: sqlite3.Connection, ref: str) -> list[dict]:
+    """The δήμοι the contract's documents place its works in.
+
+    One level finer than the Π.Ε. layer and read from the same kind of
+    sentence the forest services come from — «εντός των Δήμων Χαϊδαρίου και
+    Ασπροπύργου, αρμοδιότητας Δασαρχείου Αιγάλεω» — either in the contract
+    or in the πρόσκληση it cites, and the row says which (DATA_DECISIONS
+    2026-08-19). `outside_region` marks the 49 whose Π.Ε. is not among the
+    ones curated for the contract: recorded as the document states it, with
+    the region layer deliberately left alone.
+    """
+    if not _table(kh, "contract_municipalities"):
+        return []
+    return [dict(r) for r in kh.execute("""
+        SELECT municipality_code AS code, name, region_pe, authority,
+               source_ref, from_call, excerpt, outside_region,
+               outside_pe_explained, note
+        FROM contract_municipalities WHERE reference_number = ?
+        ORDER BY name""", (ref,))]
+
+
 def contract_stated_duration(kh: sqlite3.Connection, ref: str) -> dict | None:
     """The deadline the CONTRACT states, with the clock it starts on.
 
@@ -2447,6 +2468,15 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
     except sqlite3.OperationalError:
         done_refs = None
 
+    # the δήμοι each contract's documents name, for the municipality filter
+    muni_map: dict[str, list[str]] = {}
+    try:
+        for r in kh.execute("SELECT reference_number, name FROM"
+                            " contract_municipalities ORDER BY name"):
+            muni_map.setdefault(r["reference_number"], []).append(r["name"])
+    except sqlite3.OperationalError:      # layer not loaded in this DB
+        pass
+
     # the version chains, and one lookup of what every member record IS
     chains = contract_chains(kh)
     versions: dict[str, dict] = {}
@@ -2514,6 +2544,9 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "co": (r["names"] or "")[:110],
             "v": round(r["value"], 2) if r["value"] is not None else None,
             "pe": pes, "hq": hqs,
+            # the δήμοι the contract's documents name — one level finer than
+            # the Π.Ε. filter, Anti-nero only (DATA_DECISIONS 2026-08-19)
+            **({"mu": muni_map[r["ref"]]} if muni_map.get(r["ref"]) else {}),
             "proc": _proc_kind(r["procedure_type"]),
             "st": "cancelled" if r["cancelled"] else None,
             "b1": 1 if r["bids_submitted"] == 1 else 0,

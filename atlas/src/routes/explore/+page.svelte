@@ -63,7 +63,7 @@
 				// earlier version must find the contract, not nothing
 				const hn = searchNorm(
 					`${r.ref} ${(r.alt ?? []).join(' ')} ${r.t} ${r.co} ` +
-						`${r.pe.join(' ')} ${r.hq.join(' ')}`
+						`${r.pe.join(' ')} ${r.hq.join(' ')} ${(r.mu ?? []).join(' ')}`
 				);
 				return { r, hn, hf: phoneticFold(hn) };
 			});
@@ -74,6 +74,8 @@
 	const ds = $derived(params.get('ds') ?? 'all');
 	const pe = $derived(params.get('pe') ?? '');
 	const hq = $derived(params.get('hq') ?? '');
+	/** municipality — one level finer than `pe`, Anti-nero only */
+	const mu = $derived(params.get('mu') ?? '');
 	const proc = $derived(params.get('proc') ?? 'all');
 	const st = $derived(params.get('st') ?? '');
 	const from = $derived(params.get('from') ?? '');
@@ -107,6 +109,7 @@
 		if (skip !== 'ds' && ds !== 'all' && r.ds !== ds) return false;
 		if (skip !== 'pe' && pe && !r.pe.includes(pe)) return false;
 		if (skip !== 'hq' && hq && !r.hq.includes(hq)) return false;
+		if (skip !== 'mu' && mu && !(r.mu ?? []).includes(mu)) return false;
 		if (skip !== 'proc' && proc !== 'all' && r.proc !== proc) return false;
 		if (skip !== 'st' && st && r.st !== st) return false;
 		if (skip !== 'from' && from && (!r.d || r.d < from)) return false;
@@ -160,6 +163,16 @@
 			for (const p of r.pe) counts.set(p, (counts.get(p) ?? 0) + 1);
 		return [...counts.entries()].sort((a, b) => b[1] - a[1]);
 	});
+	/** the δήμοι present in the data, most contracts first. Only Anti-nero
+	 *  rows carry them, so the facet counts are Anti-nero counts. */
+	const muOptions = $derived.by(() => {
+		const counts = new Map<string, number>();
+		for (const { r } of indexed)
+			for (const m of r.mu ?? []) counts.set(m, (counts.get(m) ?? 0) + 1);
+		return [...counts.entries()].sort(
+			(a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'el')
+		);
+	});
 	const hqOptions = $derived.by(() => {
 		const counts = new Map<string, number>();
 		for (const { r } of indexed)
@@ -198,7 +211,7 @@
 	const shown = $derived(filtered.slice(0, limit));
 
 	const anyFilter = $derived(
-		ds !== 'all' || !!pe || !!hq || proc !== 'all' || !!st || !!from ||
+		ds !== 'all' || !!pe || !!mu || !!hq || proc !== 'all' || !!st || !!from ||
 		!!to || !!vmin || !!prf || !!fin || !!q
 	);
 	function resetAll() {
@@ -303,6 +316,15 @@
 				<option value="">All of Greece</option>
 				{#each peOptions as [p, n] (p)}
 					<option value={p}>{peEn(p)} ({grInt(n)})</option>
+				{/each}
+			</select>
+		</label>
+		<label
+			>Municipality <small class="muted">(Anti-nero)</small>
+			<select value={mu} onchange={(e) => setParam('mu', e.currentTarget.value || null)}>
+				<option value="">Any</option>
+				{#each muOptions as [m, n] (m)}
+					<option value={m}>Δήμος {m} ({grInt(n)})</option>
 				{/each}
 			</select>
 		</label>

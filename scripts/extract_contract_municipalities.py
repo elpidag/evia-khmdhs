@@ -88,6 +88,13 @@ RENAMES = {
     "ΗΛΙΟΥΠΟΛΕΩΣ": ("9191", "genitive variant of Ηλιούπολης"),
     "ΔΩΡΙΔΑΣ": ("9166", "the documents decline Δωρίδος as Δωρίδας"),
     "Ν. ΠΡΟΠΟΝΤΙΔΑΣ": ("9058", "abbreviated Νέας Προποντίδας"),
+    # Places the documents name that are NOT Καλλικράτης δήμοι: a
+    # pre-2010 (Καποδιστριακός) unit and two settlements. Each resolves to
+    # the δήμος that contains it today, and the page keeps the document's
+    # own wording beside it (user decision, 2026-08-19).
+    "ΘΕΣΠΙΕΩΝ": ("9144", "Καποδιστριακός Δήμος Θεσπιέων; ν.3852/2010 merged it into Θηβαίων"),
+    "ΠΑΠΑΓΟΥ": ("9175", "the document names the Παπάγου half of Δήμου Παπάγου-Χολαργού"),
+    "ΣΑΡΩΝΙΔΑΣ": ("9225", "Σαρωνίδα is a settlement of Δήμου Σαρωνικού, not a δήμος"),
     "ΒΟΡΕΙΑΣ ΚΕΡΚΥΡΑΣ": ("9118", _SPLIT + " Κέρκυρας"),
     "ΚΕΝΤΡΙΚΗΣ ΚΕΡΚΥΡΑΣ ΚΑΙ ΔΙΑΠΟΝΤΙΩΝ ΝΗΣΩΝ": ("9118", _SPLIT + " Κέρκυρας"),
     "ΑΝΑΤΟΛΙΚΗΣ ΚΑΙ ΔΥΤΙΚΗΣ ΣΑΜΟΥ": ("9264", _SPLIT + " Σάμου"),
@@ -499,12 +506,77 @@ def dedupe(sts: list[dict]) -> list[dict]:
 
 
 
+CURATED_FILE = ROOT / "khmdhs" / "data" / "contract_municipalities.json"
+
+
+def write_curated(rows: list[dict]) -> int:
+    """Promote the readings to the curated file, under the approved rules.
+
+    Rules (user, 2026-08-19): a δήμος named in the contract OR in the
+    πρόσκληση that produced it counts, and the row says which document said
+    it; a δήμος outside the contract's curated Π.Ε. is recorded as the
+    document states it and FLAGGED, leaving the region layer untouched;
+    pre-Καλλικράτης names and settlements resolve to the δήμος that
+    contains them today, keeping the document's own wording. `_overrides`
+    is merged on every re-run, so a hand correction survives.
+    """
+    old = json.loads(CURATED_FILE.read_text(encoding="utf-8")) if CURATED_FILE.exists() else {}
+    ov = old.get("_overrides", {})
+    out = {
+        "_doc": ("Which δήμος each in-scope Anti-nero contract worked in, read "
+                 "from the contract's own placement sentence or from the "
+                 "πρόσκληση it cites («εντός των Δήμων Χαϊδαρίου και "
+                 "Ασπροπύργου, αρμοδιότητας Δασαρχείου Αιγάλεω»). Proposals "
+                 "from scripts/extract_contract_municipalities.py; rules "
+                 "approved 2026-08-19. `outside_region` marks a δήμος whose "
+                 "Π.Ε. is not among the ones curated for the contract — the "
+                 "region layer is deliberately left alone. Attribution "
+                 "verdicts live in municipality_overrides.json."),
+        "_overrides": ov,
+    }
+    for r in rows:
+        seen: dict[str, dict] = {}
+        for st in r["statements"]:
+            for g in st["groups"]:
+                for m in g["municipalities"]:
+                    e = seen.setdefault(m["code"], {
+                        "name": m["name"],
+                        "pe": m["pe"],
+                        "authority": g.get("authority"),
+                        "authority_basis": g.get("authority_basis"),
+                        "source_ref": st.get("source_ref"),
+                        "from_call": st.get("from_call"),
+                        "excerpt": " ".join((g.get("excerpt") or "").split()),
+                        "outside_region": m.get("status") == "outside_curated_pe",
+                        # set when the δήμος IS outside the curated regions but
+                        # something accounts for it — the service administers
+                        # that Π.Ε., or the user has ruled on it
+                        "outside_pe_explained": m.get("outside_pe_explained"),
+                        "via": m.get("via"),
+                        "note": m.get("rename_note"),
+                        "override": m.get("override"),
+                    })
+                    # a second reading of the same δήμος: prefer the one the
+                    # CONTRACT states over the call's, and keep the longer quote
+                    if not st.get("from_call") and e["from_call"]:
+                        e.update({"source_ref": st.get("source_ref"), "from_call": None,
+                                  "excerpt": " ".join((g.get("excerpt") or "").split())})
+        if seen:
+            out[r["ref"]] = {"municipalities": [dict(code=c, **v) for c, v in seen.items()]}
+    for ref, e in ov.items():
+        out[ref] = {**out.get(ref, {}), **e}
+    CURATED_FILE.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    return sum(1 for k in out if not k.startswith("_"))
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="extract_contract_municipalities")
     ap.add_argument("--db", type=Path, default=DEFAULT_DB)
     ap.add_argument("--cache", type=Path, default=PDF_CACHE_DIR)
     ap.add_argument("--out", type=Path, default=REVIEW_FILE)
     ap.add_argument("--curator", type=Path, default=CURATOR)
+    ap.add_argument("--curate", action="store_true",
+                    help="also write the curated contract_municipalities.json")
     args = ap.parse_args(argv)
 
     gaz = {k: v for k, v in json.loads(
@@ -620,16 +692,34 @@ def main(argv: list[str] | None = None) -> int:
                 for code, via in g["codes"]:
                     ov = overrides.get(f"{ref}|{code}")
                     pe = gaz[code]["pe"]
+                    # WHY a δήμος can sit outside the Π.Ε. we curated for the
+                    # contract, and only the last case is worth a reader's
+                    # attention (measured 2026-08-19: 30 · 11 · 6 · 2 of 49):
+                    #   the service that names it administers that Π.Ε.
+                    #     (forest_authorities `covers_pe` — Πεντέλης covers
+                    #     Ανατ. Αττική, Αιγάλεω covers Δυτ. Αττική, Σάμου
+                    #     covers Ικαρία), or the δήμος is in the service's own
+                    #     seat Π.Ε.  → the region curation is simply narrower
+                    #   the user has already ruled on it (municipality_overrides)
+                    #   nothing explains it → flagged
+                    explained = None
+                    if g_auth and pe in auth_pe.get(g_auth, ()):
+                        explained = ("seat" if pe == auth_pe[g_auth][0]
+                                     else "covers_pe")
+                    elif ov:
+                        explained = "curated verdict"
                     if g["pe_stated"] and pe != g["pe_stated"]:
                         status = "pe_mismatch"         # the document contradicts itself
-                    elif pes and pe not in pes:
-                        status = "outside_curated_pe"  # our own Π.Ε. curation disagrees
+                    elif pes and pe not in pes and not explained:
+                        status = "outside_curated_pe"  # nothing explains it
                     else:
                         status = "ok"
                     tally[status] += 1
                     munis.append({
                         "code": code, "name": gaz[code]["name"], "pe": pe,
                         "via": "curated" if ov else via, "status": status,
+                        "outside_pe_explained": explained
+                        if (pes and pe not in pes) else None,
                         "override": ov,
                         "rename_note": RENAMES[fold(gaz[code]["name"])][1]
                         if via == "rename" and fold(gaz[code]["name"]) in RENAMES else None,
@@ -671,6 +761,8 @@ def main(argv: list[str] | None = None) -> int:
                         encoding="utf-8")
     pairs = pair_evidence(rows, gaz, auth_pe)
     write_curator(rows, pairs, gaz, args.curator)
+    if args.curate:
+        print(f"curated → {write_curated(rows)} contracts in {CURATED_FILE.name}")
 
     n_muni = sum(len(g["municipalities"]) for r in rows for s in r["statements"]
                  for g in s["groups"])

@@ -221,6 +221,10 @@ def main(argv: list[str] | None = None) -> int:
         # curated, both FK CASCADE (DATA_DECISIONS 2026-08-19)
         print("\n-- details_loader ------------------------------------------------")
         details_loader.main(db_argv)
+        # which δήμος each contract worked in — one level finer than the
+        # Π.Ε. layer, read from the placement sentence (2026-08-19)
+        print("\n-- municipalities_loader -----------------------------------------")
+        municipalities_loader.main(db_argv)
         print("\n-- families_loader ---------------------------------------------")
         families_loader.main(db_argv)
         print("\n-- document_kinds ----------------------------------------------")
