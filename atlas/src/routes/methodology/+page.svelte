@@ -330,6 +330,16 @@
 
 	<h2 id="explore">The Explore table</h2>
 	<p>
+		An <strong>Anti-nero row is a contract, not a registry record</strong>. ΥΠΕΝ posts a
+		later act on an existing contract under a new ΣΥΜΒ ΑΔΑΜ — a revision of terms, a
+		deadline extension, an approval of supplementary works — so one contract can hold
+		several records. The row carries the original σύμβαση's title, lists every record of
+		the chain beneath it, spans «first act → last act» in the date column, links to the
+		record holding the current state, and counts the money <em>once</em>. Citing any of
+		the chain's ΑΔΑΜ finds it. ΔΑΣΕ and sponsor rows stay one row per record, which is
+		what those datasets are.
+	</p>
+	<p>
 		The combined table lists every Anti-nero contract, every live ΔΑΣΕ contract and every
 		sponsor project on one basis: the <strong>stated value, net of ΦΠΑ</strong> (for sponsor
 		projects, the committed budget after amendments — net where the act states it, often

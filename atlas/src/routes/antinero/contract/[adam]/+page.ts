@@ -66,6 +66,9 @@ export interface ContractDetail {
 	payments: {
 		payment_ref: string;
 		signed_date: string | null;
+		/** ISO date resolved by the API: signed_date, else the submission
+		 *  stamp — the timeline needs one for every tick */
+		d?: string | null;
 		title: string | null;
 		amount_with_vat: number | null;
 		amount_without_vat: number | null;
@@ -118,6 +121,17 @@ export interface ContractDetail {
 	} | null;
 	/** ΔΑΣΕ detail map geo (region + awarding-unit seat); absent on kh side */
 	geo?: { pe: string | null; unit_seat: { name: string; lat: number; lon: number } | null };
+	/** the contract's own version chain, oldest → newest: what each ΚΗΜΔΗΣ
+	 *  record of it IS, when, and the value it stated. [] when posted once —
+	 *  the registry's adamChain does not carry these links. */
+	chain: {
+		ref: string;
+		d: string | null;
+		kind: string | null;
+		eur: number | null;
+		title: string | null;
+		self: boolean;
+	}[];
 	timeline: {
 		adam: string;
 		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract' | 'completion';

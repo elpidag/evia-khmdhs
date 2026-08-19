@@ -240,6 +240,14 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["category"] = queries_extra.contract_category(g.conn, adam)
         d["authorities"] = queries_extra.contract_authorities(g.conn, adam)
         d["document_kind"] = queries_extra.contract_document_kind(g.conn, adam)
+        # the contract's own version chain (τροποποιήσεις, παρατάσεις,
+        # εγκρίσεις συμπληρωματικών) — the registry chain does not carry it
+        d["chain"] = queries_extra.contract_chain(g.conn, adam)
+        # a date for every payment tick on the timeline: 182 of the 886 live
+        # orders carry only the submission stamp, which contract_detail omits
+        pdates = queries_extra.payment_dates(pay, adam)
+        for p in d.get("payments") or []:
+            p["d"] = pdates.get(p["payment_ref"])
         return jsonify(d)
 
     @app.route("/api/antinero/contractors")

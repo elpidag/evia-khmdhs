@@ -4635,3 +4635,65 @@ note.
 `municipality_curator.html`, `khmdhs/data/municipality_overrides.json`,
 `tests/test_contract_municipalities.py` (16 units). Still proposals — no DB
 table, no API, no page until the curation closes.*
+
+## 2026-08-19 — In /explore an Anti-nero row is a CONTRACT, not a ΚΗΜΔΗΣ record; and the contract page draws its chain on the programme axis
+
+Searching `25SYMV017345053` returned nothing, although that record IS the
+€4.167.192,11 σύμβαση. /explore ships in-scope contracts only, and this one is
+out of scope because a later act on the same file (26SYMV018978343, «Έγκριση
+συμπληρωματικών εργασιών») is the chain tip.
+
+**«Superseded» was the wrong word for this**, as the user said. Of the 60
+excluded parents the later record is a τροποποίηση όρων in **32**, a παράταση
+προθεσμίας in **12**, an έγκριση συμπληρωματικών in **12** and a contract in
+**4** — and **57 of 60 carry the parent's exact value**. Nothing is replaced.
+The exclusion exists for ONE reason: count each chain once, at its tip.
+
+**The row is now the chain.** `queries_extra.contract_chains()` walks
+`contract_scope.superseded_by` transitively (it is a one-hop linked list) →
+**50 chains: 42 of two records, 7 of three, 1 of five**, 110 records in all.
+Additive supplementary CONTRACTS never enter it — both they and their parent
+stay in scope, and only an out-of-scope record carries `superseded_by`, so
+23SYMV013600200 and its 1η συμπληρωματική stay two rows as they must.
+
+Four presentation decisions, all the user's:
+- **date** «first → last» (22.10.2024 → 09.03.2026), sorting on the first, so
+  the date column keeps meaning «when it was contracted»;
+- **the original's title, the tip's page** — 7 of 50 tips are titled «1η
+  Τροποποίηση…» and 21 of 50 are cover notes under 12 kB, but the tip is the
+  record holding the current state;
+- **every record listed under the title** with what it IS, in the 2026-08-18
+  vocabulary, and **every ΑΔΑΜ of the chain searchable** (`alt`), so citing an
+  earlier version finds the contract instead of nothing;
+- value stays the tip's: Σ of the Anti-nero rows still reconciles to
+  **€625.897.613,96**, and no ΑΔΑΜ appears in two rows (both pinned).
+
+**The contract page gains a timeline** — `$lib/detail/ChainTimeline.svelte`,
+the sponsor pages' ActTimelineBar one level down: same 920×H box, same 10px
+axis in `--ink-faint`, same dashed «today» rule drawn last, same two-way hover
+with the trail (`highlight` / `onRowHover`, which DocTrail already supported).
+It draws the bar from signature to the day the work was accepted, a dot per
+later act, **a tick per payment order** — which no other view puts on a time
+axis — the ✔ of the completion act, and the printed **€ step** where a
+supplementary approval moved the price («€3,78M → €5,00M» on the Πάρνηθα
+chain, invisible until now). The axis is FIXED (2022-01-01 → today + 5 days)
+so two contract pages compare by eye, as the sponsor bars do. A contract with
+no acceptance on record is drawn faint and uncapped, so «we do not know when
+it ended» never reads as «it ended».
+
+The chain reaches the page as `contract.chain` (`queries_extra.contract_chain`)
+because the registry cannot supply it: `adamChain` links an upstream act for
+only 40 of 245 in-scope contracts, and the version links live in
+`prev_reference_no` / `superseded_by`. The trail now folds those records in
+too — before this, a contract's own amendments existed on the site but not on
+its page.
+
+Data behind the bar: 246/246 in-scope contracts have a signature date, 148
+have a Diavgeia completion act, 226 have payments, 22 have a registry end
+date, and **207 of 246 have three or more dated events**.
+
+*Affects: `atlas_api/queries_extra.py` (`contract_chains`, `contract_chain`,
+`explore_rows`), `atlas_api/app.py`, `atlas/src/lib/detail/ChainTimeline.svelte`
+(new), the /explore and contract pages, `/methodology#explore`,
+`tests/test_atlas_real_db.py` (2 pins) and `atlas` vitest (5 units). No
+loader, no DB change, no basis change.*

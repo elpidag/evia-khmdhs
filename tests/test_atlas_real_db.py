@@ -792,3 +792,73 @@ def test_arogi_pins(client):
     row = next(r for r in e["rows"] if r["n"] > 1)
     c = client.get(f"/api/arogi/case/{row['id']}").get_json()
     assert c["acts"] and all("ada" in a for a in c["acts"])
+
+
+def test_contract_chain_pins(client):
+    """ΥΠΕΝ posts a later act on an existing contract under a NEW ΣΥΜΒ ΑΔΑΜ,
+    and `scope_loader` takes the earlier record out of scope so the money is
+    counted once. /explore therefore ships ONE row per chain, and the row must
+    carry every record of it (DATA_DECISIONS 2026-08-19)."""
+    from atlas_api import queries_extra as qx
+    import sqlite3 as _sq
+    from khmdhs.config import DEFAULT_DB as _DB
+    con = _sq.connect(_DB)
+    con.row_factory = _sq.Row
+    chains = qx.contract_chains(con)
+    con.close()
+    # 42 chains of two records, 7 of three, one of five — 110 records in all
+    assert len(chains) == 50
+    sizes = sorted(len(v) for v in chains.values())
+    assert sizes[0] == 2 and sizes[-1] == 5
+    assert sum(sizes) == 110
+    # the deepest chain, in order, ending on the record that is in scope
+    parnitha = chains["26SYMV019098206"]
+    assert parnitha[0] == "24SYMV015643849"
+    assert parnitha[-1] == "26SYMV019098206"
+    # an ADDITIVE supplementary contract is not a version: both stay in scope
+    # and both keep their own row (23SYMV013600200 + its 1η συμπληρωματική)
+    flat = {m for seq in chains.values() for m in seq}
+    assert "24SYMV015185915" not in flat and "23SYMV013600200" not in flat
+
+    rows = client.get("/api/explore").get_json()["rows"]
+    kh = [r for r in rows if r["ds"] == "antinero"]
+    assert len(kh) == 246                     # unchanged: chains were already tips
+    seen = set()
+    for r in kh:                              # no ΑΔΑΜ may appear twice
+        for ref in [r["ref"], *r.get("alt", [])]:
+            assert ref not in seen, ref
+            seen.add(ref)
+    assert round(sum(r["v"] or 0 for r in kh), 2) == 625897613.96
+    row = next(r for r in kh if r["ref"] == "26SYMV019098206")
+    assert row["d"] == "2024-10-22" and row["d1"] == "2026-03-09"
+    assert row["t"].startswith("Εργασίες ειδικών δασοτεχνικών")   # the ORIGINAL's title
+    assert [v["k"] for v in row["vs"]] == [
+        "contract", "approval_ape_supplementary", "approval_schedule_extension",
+        "approval_ape_supplementary", "approval_ape_supplementary"]
+    assert row["vs"][0]["v"] == 3779479.64 and row["vs"][-1]["v"] == 4999994.82
+    # the €4,1M σύμβαση that used to be unreachable is searchable again
+    assert any("25SYMV017345053" in (r.get("alt") or []) for r in kh)
+
+
+def test_contract_chain_reaches_the_detail_page(client):
+    """Both ends of a chain must show the whole chain — the timeline draws
+    from it and the trail lists it."""
+    for ref, n in (("26SYMV019098206", 5), ("25SYMV017345053", 2),
+                   ("22SYMV010785854", 0)):
+        chain = client.get(f"/api/antinero/contract/{ref}").get_json()["chain"]
+        assert len(chain) == n, ref
+        assert sum(1 for a in chain if a["self"]) == (1 if n else 0)
+        for a in chain:                       # dates must be axis-ready
+            assert a["d"] is None or len(a["d"]) == 10
+
+
+def test_every_payment_tick_has_a_date(client):
+    """The timeline draws one tick per payment order, so every order needs a
+    date — and 182 of the 886 live orders carry only the submission stamp,
+    which the frozen contract_detail does not expose (DATA_DECISIONS
+    2026-08-19)."""
+    d = client.get("/api/antinero/contract/26SYMV019098206").get_json()
+    live = [p for p in d["payments"] if not p["cancelled"]]
+    assert live and all(p.get("d") and len(p["d"]) == 10 for p in live)
+    # the one that has no signed_date at all still gets its date
+    assert any(p["signed_date"] is None and p["d"] for p in live)

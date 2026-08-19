@@ -1114,8 +1114,15 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   every printed number comes from `antinero_network`. Caveat →
   `/methodology#procurement-families`.
 - **/explore** (all three datasets, one table): `/api/explore` ships ~2.3k
-  compact rows once (gzipped by the response cache); ALL filtering/sorting
-  is client-side for instant response — dataset/Π.Ε./HQ/procedure/status/
+  compact rows once (gzipped by the response cache); an **Anti-nero row is a
+  CONTRACT-CHAIN, not a record** (DATA_DECISIONS 2026-08-19):
+  `queries_extra.contract_chains` walks `contract_scope.superseded_by`
+  transitively into 50 chains (42×2, 7×3, 1×5 records), the row shows the
+  original σύμβαση's title, spans «first → last» (`d`/`d1`), lists every
+  record with its `document_kind` (`vs`), links to the tip whose value it
+  carries, and answers to every ΑΔΑΜ of the chain (`alt`) so citing an earlier
+  version finds it. Additive supplementary contracts stay separate rows. ALL
+  filtering/sorting is client-side for instant response — dataset/Π.Ε./HQ/procedure/status/
   dates/value/q as URL params (shareable). Greeklish search is a TS port
   (`transforms/search.ts`) pinned by goldens generated from
   `webui/queries.py` (`search.golden.json`); known shared limitation:
@@ -1179,7 +1186,15 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   follow-up acts may cover only part of the act's named fronts, and
   Diavgeia search cannot see recitals).
   Contract pages add PROCUREMENT DETAILS OF <ΑΔΑΜ> (one-row wide table:
-  authority/unit/signer/funding, EN names) and PAYMENT ORDERS; dase keeps
+  authority/unit/signer/funding, EN names) and PAYMENT ORDERS; the Anti-nero
+  one also carries **`ChainTimeline`** in the trail's `top` slot
+  (DATA_DECISIONS 2026-08-19) — ActTimelineBar's conventions on a FIXED
+  Anti-nero axis (2022-01-01 → today+5d): bar signature→acceptance, a dot per
+  later act of the chain, a tick per payment order, ✔ at the completion act,
+  and the printed € step where a supplementary approval moved the price;
+  two-way hover with the trail rows, and the chain (`contract.chain`, from
+  `queries_extra.contract_chain`) is folded into the trail because the
+  registry's adamChain does not carry version links; dase keeps
   the FamilyTree (Greek registry vocabulary — it matches on registry
   names) and the duplicate banners; anadohoi keeps SiteMap/ZoneMap in the
   map slot (height 460; sponsored-overview palette — #f2f2f2 sea, #fff

@@ -27,6 +27,17 @@
 		superseded: 'superseded',
 		cancelled: 'cancelled'
 	};
+	// what each record of a chain IS — the ν.4412 vocabulary settled on
+	// 2026-08-18; all 246 are συμβάσεις, the label says which kind
+	const VKIND: Record<string, string> = {
+		contract: 'original contract',
+		amendment: 'revision of terms',
+		supplementary_contract: 'supplementary contract',
+		approval_ape_supplementary: 'approval of supplementary works',
+		approval_supplementary: 'approval of supplementary works',
+		approval_ape: 'approval of revised quantities',
+		approval_schedule_extension: 'deadline extension'
+	};
 	const VMIN_OPTIONS = [
 		{ value: '', label: 'Any value' },
 		{ value: '10000', label: '≥ €10k' },
@@ -45,11 +56,14 @@
 	let indexed: Indexed[] = $state.raw([]);
 	$effect(() => {
 		// ?v= busts HTTP + module caches when the payload shape changes
-		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=8').then((p) => {
+		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=9').then((p) => {
 			payload = p;
 			indexed = p.rows.map((r) => {
+				// every ΑΔΑΜ of the chain is searchable: a citation of an
+				// earlier version must find the contract, not nothing
 				const hn = searchNorm(
-					`${r.ref} ${r.t} ${r.co} ${r.pe.join(' ')} ${r.hq.join(' ')}`
+					`${r.ref} ${(r.alt ?? []).join(' ')} ${r.t} ${r.co} ` +
+						`${r.pe.join(' ')} ${r.hq.join(' ')}`
 				);
 				return { r, hn, hf: phoneticFold(hn) };
 			});
@@ -318,6 +332,11 @@
 {#if payload}
 	<p class="count muted">
 		<strong>{grInt(filtered.length)}</strong> of {grInt(payload.rows.length)} rows match
+		<small
+			>(an Anti-nero row is a contract, not a ΚΗΜΔΗΣ record: its later acts —
+			τροποποιήσεις, παρατάσεις, εγκρίσεις συμπληρωματικών — are listed inside it and
+			counted once)</small
+		>
 		· shown value Σ {eur(totalShown)}
 		<small
 			>(all € stated, excl. VAT; Ανάδοχοι = committed budget where the act declares one, net
@@ -351,7 +370,9 @@
 		<tbody>
 			{#each shown as r (r.ds + r.ref)}
 				<tr class:cancelled={r.st === 'cancelled' || r.st === 'revoked'}>
-					<td class="tabular muted">{r.d ?? '—'}</td>
+					<td class="tabular muted"
+						>{r.d ?? '—'}{#if r.d1}<span class="thru">→ {r.d1}</span>{/if}</td
+					>
 					<td><span class="ds ds-{r.ds}">{DS_LABEL[r.ds]}</span></td>
 					<td>
 						<a href={detailHref(r)}>{r.t || r.ref}</a>
@@ -361,6 +382,17 @@
 								class:bad={r.st === 'cancelled' || r.st === 'revoked' || r.st === 'no_completion_recorded'}
 								>{ST_LABEL[r.st] ?? r.st}</span
 							>{/if}
+						{#if r.vs}
+							<!-- one contract, several ΚΗΜΔΗΣ records: the row is the
+							     chain, and this says what each record of it is -->
+							<div class="vers">
+								{#each r.vs as v (v.ref)}
+									<span class="ver" class:tip={v.ref === r.ref}
+										>{v.ref}<small>{VKIND[v.k ?? ''] ?? 'record'}</small></span
+									>
+								{/each}
+							</div>
+						{/if}
 					</td>
 					<td class="muted"><small>{r.co || '—'}</small></td>
 					<td class="muted"><small>{r.pe.map(peEn).join(', ') || '—'}</small></td>
@@ -382,6 +414,31 @@
 {/if}
 
 <style>
+	/* a chain row: its date cell carries the whole span, and the records of
+	   the chain sit under the title as what each of them IS */
+	.thru {
+		display: block;
+		color: var(--ink-faint);
+	}
+	.vers {
+		margin-top: 3px;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 8px;
+	}
+	.ver {
+		font-size: var(--fs-12);
+		color: var(--ink-faint);
+		font-variant-numeric: tabular-nums;
+	}
+	.ver small {
+		font-size: var(--fs-12);
+		margin-left: 4px;
+	}
+	.ver.tip {
+		color: var(--ink-soft);
+		font-weight: 700;
+	}
 	.filters {
 		margin: var(--sp-4) 0 var(--sp-3);
 		display: flex;

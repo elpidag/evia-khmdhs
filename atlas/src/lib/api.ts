@@ -433,6 +433,15 @@ export interface ExploreRow {
 	/** project end date on record: 1/0 (Anti-nero completion act /
 	 *  anadohoi completed status), null for ΔΑΣΕ (never harvested) */
 	fin: number | null;
+	/** last date of the contract's chain, when it has more than one record —
+	 *  the row's date cell reads «first → last» (Anti-nero only) */
+	d1?: string;
+	/** every record of the chain, oldest first: what each one IS, when, and
+	 *  the value it carried. Absent for a contract posted once. */
+	vs?: { ref: string; d: string | null; k: string | null; v: number | null }[];
+	/** the chain's other ΑΔΑΜ — searchable, so citing an earlier version
+	 *  finds the contract instead of nothing */
+	alt?: string[];
 }
 
 export interface ExplorePayload {

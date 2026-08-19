@@ -5,6 +5,7 @@
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
 	import { trailChip } from '$lib/transforms/exclusion';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
+	import ChainTimeline from '$lib/detail/ChainTimeline.svelte';
 	import ProcurementFamily from '$lib/charts/ProcurementFamily.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
@@ -15,6 +16,31 @@
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.c);
 	const live = $derived(c.payments.filter((p) => !p.cancelled));
+
+	/** the registry's date formats ('03/11/2023', '2026-07-24T00:00:00') —
+	 *  the API normalises the trail's, but payment dates arrive raw */
+	const iso = (v: string | null | undefined): string | null => {
+		if (!v) return null;
+		const s = v.trim();
+		if (s.length >= 10 && s[2] === '/' && s[5] === '/')
+			return `${s.slice(6, 10)}-${s.slice(3, 5)}-${s.slice(0, 2)}`;
+		if (s.length >= 10 && s[4] === '-' && s[7] === '-') return s.slice(0, 10);
+		return null;
+	};
+	const todayIso = new Date().toLocaleDateString('en-CA');
+	// hover binds the timeline's act dots to the trail's rows, both ways
+	let hoverAct = $state<string | null>(null);
+	let hoverRow = $state<string | null>(null);
+	const chainRefs = $derived(new Set(c.chain.map((a) => a.ref)));
+	const payTicks = $derived(
+		live.map((p) => ({
+			ref: p.payment_ref,
+			// `d` is resolved server-side (signed_date, else the submission
+			// stamp — 182 of 886 orders carry only the latter)
+			d: p.d ?? iso(p.signed_date),
+			eur: p.amount_without_vat
+		}))
+	);
 	const catSrcRef = $derived(
 		c.category?.source.startsWith('inherited:') ? c.category.source.slice(10) : null
 	);
@@ -54,8 +80,29 @@
 	};
 
 	const timeline = $derived.by(() => {
-		if (!c.timeline.length) return [];
 		const rows = c.timeline.map((t) => ({ ...t, self: false }));
+		// the contract's own later records — τροποποιήσεις, παρατάσεις,
+		// εγκρίσεις συμπληρωματικών. The registry's adamChain rarely links
+		// them, so without this the trail shows a contract whose amendments
+		// exist on the site but nowhere on its own page
+		const seen = new Set(rows.map((t) => t.adam));
+		for (const a of c.chain) {
+			if (a.self || seen.has(a.ref)) continue;
+			seen.add(a.ref);
+			rows.push({
+				adam: a.ref,
+				kind: 'contract' as const,
+				title: a.title,
+				d: a.d,
+				cancelled: 0,
+				doc_kind: a.kind,
+				duplicate_of: null,
+				related_to: null,
+				in_db: true,
+				self: false
+			});
+		}
+		if (!rows.length) return [];
 		rows.push({
 			adam: c.reference_number,
 			kind: 'contract' as const,
@@ -344,7 +391,24 @@
 </p>
 
 <div class="trailrow">
-	<DocTrail rows={trailRows} />
+	<DocTrail
+		rows={trailRows}
+		highlight={hoverAct ?? (hoverRow !== null && chainRefs.has(hoverRow) ? hoverRow : null)}
+		onRowHover={(code) => (hoverRow = code)}
+	>
+		{#snippet top()}
+			<ChainTimeline
+				signed={c.chain[0]?.d ?? iso(c.contract_signed_date)}
+				end={completion?.d ?? iso(c.end_date)}
+				endBasis={completion ? 'completion' : c.end_date ? 'contract' : null}
+				today={todayIso}
+				chain={c.chain}
+				payments={payTicks}
+				highlightRef={hoverRow}
+				onActHover={(ref) => (hoverAct = ref)}
+			/>
+		{/snippet}
+	</DocTrail>
 	{#if c.family && c.family.contracts.length > 1}
 		<section class="famsec">
 			<h2>CONTRACTS UNDER THE SAME CALL</h2>

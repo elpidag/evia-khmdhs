@@ -53,6 +53,12 @@ CURATOR = ROOT / "municipality_curator.html"
 # service that does not serve it (DATA_DECISIONS 2026-08-19)
 OVERRIDES_FILE = ROOT / "khmdhs" / "data" / "municipality_overrides.json"
 
+# NEVER rename what a document says. A name resolves only where identity is
+# certain — an official rename or split of the SAME unit — and never by guess:
+# 26PROC018350831 writes «Δήμο Λασιθίου» (no such δήμος; the Π.Ε. holds four)
+# and «Δήμους Λαυρεωτικης και Σαρωνίδας» (a settlement of Δήμος Σαρωνικού).
+# Both stay unresolved on the contract, visible as what the call actually says
+# (user decision 2026-08-19).
 # Post-Καλλικράτης names the documents use for a unit our 2010 gazetteer still
 # spells the old way. The polygon/centroid layer IS Καλλικράτης, so these
 # resolve onto the old code and the row is marked `via: rename` for the curator

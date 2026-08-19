@@ -2084,6 +2084,118 @@ def money_by_pe_yearly(kh: sqlite3.Connection) -> dict:
             "unresolved_eur": round(unresolved, 2)}
 
 
+# ------------------------------------------------------ contract chains
+
+def contract_chains(kh: sqlite3.Connection) -> dict[str, list[str]]:
+    """{chain tip: [ΑΔΑΜ oldest → newest]} for every contract posted more than
+    once.
+
+    ΥΠΕΝ posts a later act on an existing contract under a NEW ΣΥΜΒ ΑΔΑΜ — a
+    τροποποίηση όρων, a παράταση προθεσμίας, an έγκριση συμπληρωματικών
+    εργασιών — and `scope_loader` takes the earlier record out of scope with
+    `superseded_by` so the same money is counted once. Nothing is replaced
+    (57 of the 60 later records carry the parent's exact value); the chain IS
+    the contract, and this is what assembles it (DATA_DECISIONS 2026-08-19).
+
+    `superseded_by` is one hop, so the walk is transitive. Additive
+    supplementary CONTRACTS never appear here: both they and their parent stay
+    in scope, and only an out-of-scope record carries `superseded_by`.
+    """
+    try:
+        sup = {r["reference_number"]: r["superseded_by"] for r in kh.execute(
+            "SELECT reference_number, superseded_by FROM contract_scope "
+            "WHERE superseded_by IS NOT NULL")}
+    except sqlite3.OperationalError:        # a DB without the scope table
+        return {}
+    back: dict[str, list[str]] = {}
+    for earlier, later in sup.items():
+        back.setdefault(later, []).append(earlier)
+
+    def members(tip: str) -> list[str]:
+        out, stack, seen = [], [tip], set()
+        while stack:
+            cur = stack.pop()
+            if cur in seen:                 # a cycle would hang the walk
+                continue
+            seen.add(cur)
+            out.append(cur)
+            stack.extend(back.get(cur, ()))
+        return out
+
+    chains: dict[str, list[str]] = {}
+    for tip in {t for t in sup.values() if t not in sup}:
+        pool = set(members(tip))
+        # order by following the links from the record nothing precedes
+        seq: list[str] = []
+        cur = next((m for m in sorted(pool) if not back.get(m)), tip)
+        while cur and cur in pool:
+            pool.discard(cur)
+            seq.append(cur)
+            cur = sup.get(cur)
+        seq.extend(sorted(pool))            # branches, if the registry ever forks
+        chains[tip] = seq
+    return chains
+
+
+def payment_dates(pay: sqlite3.Connection, ref: str) -> dict[str, str]:
+    """{payment ΑΔΑΜ: ISO date} for one contract's orders.
+
+    The frozen `queries.contract_detail` exposes only `signed_date`, which
+    182 of the 886 live orders do not carry — their date is the submission
+    stamp. The timeline needs a date for every tick, so it is resolved here
+    rather than by editing webui.
+    """
+    try:
+        rows = pay.execute(
+            "SELECT payment_ref, signed_date, submission_date FROM contract_payments"
+            " WHERE attributed_ref = ? OR contract_ref = ?", (ref, ref)).fetchall()
+    except sqlite3.OperationalError:
+        return {}
+    out = {}
+    for r in rows:
+        d = _full_date(r["signed_date"]) or _full_date(r["submission_date"])
+        if d:
+            out[r["payment_ref"]] = d
+    return out
+
+
+def contract_chain(kh: sqlite3.Connection, ref: str) -> list[dict]:
+    """The contract's own version chain, oldest → newest, or [] when it was
+    posted once.
+
+    Every record of the chain, with the date it carries, WHAT it is
+    (`document_kind`) and the value it stated — which is what makes a price
+    change across a chain visible («€3,78M → €5,00M» on 26SYMV019098206).
+    The registry's adamChain cannot supply this: it names an upstream act for
+    only 40 of 245 in-scope contracts, and the version links live in
+    `contracts.prev_reference_no` / `contract_scope.superseded_by` instead.
+    """
+    chains = contract_chains(kh)
+    seq = next((v for v in chains.values() if ref in v), [])
+    if not seq:
+        return []
+    dk = ", document_kind" if _column_exists(kh, "contracts", "document_kind") else ""
+    out = []
+    for m in seq:
+        r = kh.execute(
+            f"SELECT title, contract_signed_date, submission_date,"
+            f" total_cost_without_vat{dk} FROM contracts"
+            f" WHERE reference_number = ?", (m,)).fetchone()
+        if r is None:
+            continue
+        out.append({
+            "ref": m,
+            "d": _full_date(r["contract_signed_date"])
+                 or _full_date(r["submission_date"]),
+            "kind": _col(r, "document_kind"),
+            "eur": (round(r["total_cost_without_vat"], 2)
+                    if r["total_cost_without_vat"] is not None else None),
+            "title": (r["title"] or "")[:160] or None,
+            "self": m == ref,
+        })
+    return out
+
+
 # ------------------------------------------------- explore (all 3 datasets)
 
 def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
@@ -2119,6 +2231,29 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
     except sqlite3.OperationalError:
         done_refs = None
 
+    # the version chains, and one lookup of what every member record IS
+    chains = contract_chains(kh)
+    versions: dict[str, dict] = {}
+    members = [m for seq in chains.values() for m in seq]
+    if members:
+        dk = ", document_kind" if _column_exists(kh, "contracts", "document_kind") else ""
+        for m in members:
+            v = kh.execute(
+                f"SELECT title, contract_signed_date, submission_date,"
+                f" total_cost_without_vat{dk} FROM contracts"
+                f" WHERE reference_number = ?", (m,)).fetchone()
+            if v is None:
+                continue
+            versions[m] = {
+                "ref": m,
+                "d": _full_date(v["contract_signed_date"])
+                     or _full_date(v["submission_date"]),
+                "k": _col(v, "document_kind"),
+                "v": (round(v["total_cost_without_vat"], 2)
+                      if v["total_cost_without_vat"] is not None else None),
+                "title": v["title"],
+            }
+
     eff = q.effective_cost(kh, "c")
     for r in kh.execute(f"""
         SELECT c.reference_number AS ref, c.title,
@@ -2140,11 +2275,24 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                       for p in (r["pes"] or "").split("|") if p})
         hqs = sorted({hq_map[v] for v in (r["vats"] or "").split("|")
                       if v in hq_map})
+        # ONE row per contract-CHAIN, not per ΚΗΜΔΗΣ record: a τροποποίηση or
+        # an έγκριση συμπληρωματικών is a later act on the same contract, and
+        # its earlier records were unreachable in this table until now. The
+        # row shows the ORIGINAL contract's title and links to the TIP, whose
+        # value it carries (user decisions, 2026-08-19).
+        chain = chains.get(r["ref"], [r["ref"]])
+        first = versions.get(chain[0], {})
+        dates = [v["d"] for v in (versions.get(m) for m in chain) if v and v["d"]]
+        row_d = (dates[0] if dates else None) or _full_date(
+            r["contract_signed_date"]) or _full_date(r["submission_date"])
         rows.append({
             "ds": "antinero", "ref": r["ref"],
-            "d": _full_date(r["contract_signed_date"])
-                 or _full_date(r["submission_date"]),
-            "t": (r["title"] or "")[:120],
+            "d": row_d,
+            # last date of the chain, for the «first → last» date cell; absent
+            # for a contract posted once, which is most of them
+            **({"d1": dates[-1]} if len(chain) > 1 and dates[-1] != row_d else {}),
+            "t": ((first.get("title") if len(chain) > 1 else None)
+                  or r["title"] or "")[:120],
             "co": (r["names"] or "")[:110],
             "v": round(r["value"], 2) if r["value"] is not None else None,
             "pe": pes, "hq": hqs,
@@ -2155,6 +2303,11 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                  else (1 if r["ref"] in notice_refs else 0),
             "fin": None if done_refs is None
                   else (1 if r["ref"] in done_refs else 0),
+            # every record of the chain: the versions chip row, and the ΑΔΑΜ
+            # the client search must answer to
+            **({"vs": [versions[m] for m in chain if m in versions],
+                "alt": [m for m in chain if m != r["ref"]]}
+               if len(chain) > 1 else {}),
         })
 
     if dase is not None:
