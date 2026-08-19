@@ -16,14 +16,32 @@
 		 *  (user, 2026-08-20). It overlaps the map slot beside the facts,
 		 *  which is what a tooltip is for; nothing clips it. */
 		align?: 'left' | 'right';
+		/** the marker LEADS the text it belongs to (before a heading), so its
+		 *  margin sits on the right instead of the left */
+		lead?: boolean;
+		/** override the shared 200 px — a legend needs its own measure */
+		width?: string;
+		/** open UPWARDS from the marker instead of downwards */
+		up?: boolean;
+		/** the marker belongs to a heading: it takes the heading's own face,
+		 *  size and weight instead of the small inline one (user, 2026-08-20) */
+		heading?: boolean;
 	}
-	let { text, align = 'right' }: Props = $props();
+	let {
+		text,
+		align = 'right',
+		lead = false,
+		width,
+		up = false,
+		heading = false
+	}: Props = $props();
 	let open = $state(false);
 </script>
 
-<span class="hint">
+<span class="hint" class:lead class:heading>
 	<button
 		type="button"
+		class:on={open}
 		aria-label={text}
 		onmouseenter={() => (open = true)}
 		onmouseleave={() => (open = false)}
@@ -31,7 +49,7 @@
 		onblur={() => (open = false)}>i</button
 	>
 	{#if open}
-		<span class="card" class:left={align === 'left'}>{text}</span>
+		<span class="card" class:left={align === 'left'} class:up style:width>{text}</span>
 	{/if}
 </span>
 
@@ -41,7 +59,14 @@
 		display: inline-block;
 		vertical-align: baseline;
 	}
+	.hint.lead button {
+		margin-left: 0;
+		margin-right: 6px;
+	}
 	button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		font-family: var(--font-ui);
 		font-size: 9px;
 		font-weight: 700;
@@ -56,10 +81,28 @@
 		color: var(--ink-soft);
 		cursor: help;
 	}
-	button:hover,
-	button:focus-visible {
-		background: var(--ink);
+	/* in a heading the marker IS heading lettering: same face, size, weight
+	   and letter-spacing, in a circle scaled to it */
+	.hint.heading button {
+		font: inherit;
+		font-size: inherit;
+		letter-spacing: 0;
+		line-height: 1;
+		width: 1.15em;
+		height: 1.15em;
+		/* the glyph is drawn a touch high inside the display face's box */
+		padding-bottom: 0.08em;
+		color: var(--ink);
 		border-color: var(--ink);
+	}
+	/* while its card is open the marker IS the card: black fill, white
+	   letter — the ink token is a warm dark brown and read as grey beside
+	   the card's black (user, 2026-08-20) */
+	.hint button.on,
+	.hint button:hover,
+	.hint button:focus-visible {
+		background: #000;
+		border-color: #000;
 		color: #fff;
 	}
 	/* every card is the same 200 px wide and grows downwards for a longer
@@ -68,21 +111,38 @@
 	.card {
 		position: absolute;
 		z-index: 5;
-		top: 50%;
+		/* cards grow DOWNWARDS from the marker: centring them vertically made
+		   a long one straddle the marker and cover the rows above */
+		top: -4px;
 		left: calc(100% + 6px);
-		transform: translateY(-50%);
 		width: 200px;
 		max-width: 80vw;
 		background: #000;
 		color: #fff;
 		border-radius: 4px;
 		padding: var(--sp-2) var(--sp-3);
+		/* the card carries its OWN typography: inside a CAPS display heading
+		   it inherited caps, 900 weight and letter-spacing, and printed the
+		   whole explanation in block capitals (user, 2026-08-20) */
+		font-family: var(--font-ui);
+		font-weight: 400;
 		font-size: var(--fs-14);
 		line-height: 1.45;
+		text-transform: none;
+		letter-spacing: normal;
+		text-align: left;
+		/* a card may be written as lines — the timeline's legend is one line
+		   per symbol (user, 2026-08-20) */
+		white-space: pre-line;
 		pointer-events: none;
 	}
 	.card.left {
 		left: auto;
 		right: calc(100% + 6px);
+	}
+	/* bottom-anchored on the marker: the card stands above it, to the side */
+	.card.up {
+		top: auto;
+		bottom: -4px;
 	}
 </style>

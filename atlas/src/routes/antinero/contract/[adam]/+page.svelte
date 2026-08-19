@@ -521,29 +521,24 @@
 	 * The wording follows THIS contract's own deadline source — never a
 	 * generic sentence that would be wrong for most of them.
 	 */
-	const barNote = $derived.by(() => {
-		const dl = c.deadlines;
-		const head =
-			'The bar is the time the contract was given: from signature to the deadline it announced' +
-			(dl?.extensions?.length
-				? ', with the lighter stretch added by ' +
-					(dl.extensions.length === 1 ? 'its extension' : `its ${dl.extensions.length} extensions`)
-				: '') +
-			'. ✔ marks the day the works were accepted, which may fall after that deadline; € marks a payment order, and the grey dots before the signature are the procurement that produced the contract.';
-		const src =
-			dl?.basis === 'document'
-				? ` The deadline is the one the contract itself states — ${duration.text} — which falls on ${dmy(dl.deadline)}.`
-				: dl?.basis === 'document_season'
-					? ` The contract sets no number of months: its works run within the fire season, 1 May – 31 October, so the deadline is ${dmy(dl.deadline)}.`
-					: dl?.basis === 'end_date'
-						? ` The deadline is the end date stated in the ΚΗΜΔΗΣ record (${dmy(dl.deadline)}).`
-						: dl?.basis === 'duration'
-							? ` The deadline is the ΚΗΜΔΗΣ duration of ${dl.duration}${dl.unit ? ` ${dl.unit}` : ''} counted from the start date (${dmy(dl.deadline)}).`
-							: dl?.basis === 'act'
-								? ` The σύμβαση announced no deadline; ${dmy(dl.deadline)} is the one ${dl.source_ref} set.`
-								: ' No deadline is on record for this contract, so the bar is a stub and no span is drawn.';
-		return head + src;
-	});
+	/**
+	 * The chart's legend — the symbols and nothing else (user, 2026-08-20).
+	 * Where this contract's own deadline comes from is the DURATION row's
+	 * business, and it says so there; repeating it here said it twice.
+	 */
+	const barNote = $derived.by(() =>
+		[
+			'▬  the bar — the time the contract was given: from signature to the deadline it announced',
+			...(c.deadlines?.extensions?.length
+				? [
+						`▭  the lighter stretch — ${c.deadlines.extensions.length === 1 ? 'the extension' : `the ${c.deadlines.extensions.length} extensions`} that moved that deadline`
+					]
+				: []),
+			'✔  the day the works were accepted, which may fall after the deadline',
+			'€  a payment order',
+			'•  the grey dots before the signature — the procurement that produced the contract'
+		].join(String.fromCharCode(10))
+	);
 
 	const regionSet = $derived(new Set(c.regions.map((r) => r.region_pe)));
 	const seatDots = $derived((c.authorities ?? []).filter((a) => a.lat != null && a.lon != null));
@@ -781,8 +776,14 @@
 </FactsHeader>
 
 <section class="plain">
-	<h2>Timeline</h2>
-	<ChainTimeline
+	<!-- the legend rides on the ⓘ after the heading and stands above and to
+	     the right of it, clear of the chart it explains (user, 2026-08-20) -->
+	<h2 class="withhint">
+		Timeline<Hint text={barNote} width="21rem" up heading />
+		<a class="mth" href="/methodology#contract-timeline">Methodology</a>
+	</h2>
+	<div class="tlrow">
+		<ChainTimeline
 		signed={chain[0]?.d ?? iso(c.own_date ?? c.contract_signed_date)}
 		signedRef={chain[0]?.ref ?? c.reference_number}
 		end={completion?.d ?? null}
@@ -799,9 +800,9 @@
 			: null}
 		onCallClick={showDiagram}
 		highlightRef={hoverRow}
-		onActHover={(ref) => (hoverAct = ref)}
-	/>
-	<p class="tlnote">{barNote} <a href="/methodology#contract-timeline">Methodology</a>.</p>
+			onActHover={(ref) => (hoverAct = ref)}
+		/>
+	</div>
 </section>
 
 <section class="plain">
@@ -950,11 +951,24 @@
 	.lead {
 		font-weight: 600;
 	}
-	.tlnote {
-		margin: 0 0 var(--sp-4);
-		color: var(--ink-soft);
+	/* the heading carries its ⓘ on the left and the methodology link on the
+	   right, so nothing sits between the chart and the trail */
+	.withhint {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+	.tlrow {
+		position: relative;
+	}
+	.mth {
+		margin-left: auto;
+		font-family: var(--font-ui);
+		font-weight: 400;
+		text-transform: none;
+		letter-spacing: normal;
 		font-size: var(--fs-12);
-		max-width: 78ch;
+		color: var(--ink-soft);
 	}
 	/* the switch rides ON the frame's top-right corner, so choosing a view
 	   costs no vertical space and the two views stay the same size */

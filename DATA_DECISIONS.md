@@ -5284,3 +5284,31 @@ its height follows the facts+caveat column, floor 420 px. Measured today:
 579 on 25SYMV017779215.
 
 *Affects the Anti-nero contract page only.*
+
+---
+
+## 2026-08-20 · The timeline's explanation moves onto its heading
+
+The paragraph that sat between the chart and the document trail — what the
+bar measures, what ✔ and € mark, where this contract's deadline comes from —
+is the same kind of note as the card rows', so it now rides on an **ⓘ before
+the word TIMELINE** and the space between the chart and the trail is empty.
+The methodology link keeps its place on the right of the same line, so the
+chart still answers to `/methodology#contract-timeline`.
+
+Two fixes the move exposed: inside a CAPS display heading the card inherited
+the heading's caps, 900 weight and letter-spacing and printed the whole
+explanation in block capitals — the card now carries its own typography —
+and a long card centred on its marker straddled it and covered the rows
+above, so every card grows DOWNWARDS from the marker it belongs to.
+
+Where it settled after review: the ⓘ sits **after the word TIMELINE**, in
+the heading's own face, size and weight (a circle scaled to the lettering,
+not the small inline marker), and its card stands **above and to the right**
+of it, clear of the chart. The card is a **legend** — one line per symbol, in
+its own 336 px measure — and carries nothing contract-specific: where this
+contract's deadline comes from is the DURATION row's business, and it says
+so there.
+
+*Affects `$lib/ui/Hint.svelte` (`lead`, `up`, `heading`, `width`, own
+typography, top-anchored, `pre-line` text) and the Anti-nero contract page.*
