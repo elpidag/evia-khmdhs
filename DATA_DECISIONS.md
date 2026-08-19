@@ -4697,3 +4697,245 @@ date, and **207 of 246 have three or more dated events**.
 (new), the /explore and contract pages, `/methodology#explore`,
 `tests/test_atlas_real_db.py` (2 pins) and `atlas` vitest (5 units). No
 loader, no DB change, no basis change.*
+
+---
+
+## 2026-08-19 · The procurement's own acts join the contract timeline, and one acceptance act stops standing for a whole contract
+
+Two corrections to the contract page, both from the user reading
+`/antinero/contract/26SYMV018978343`.
+
+**1 · The run-up.** The timeline drew the contract's life from its signature
+onward, while the document trail directly below it listed the acts that
+produced it — primary request, commitment approval, call, award — with their
+dates, unplaced. They are now marks on a dotted **run-up** to the signature
+(`ChainTimeline.runUp`), diamonds rather than the bar's dots because they are
+acts of the procurement, not of the contract, which did not exist yet.
+Measured: **217 of 246** in-scope contracts have at least one dated upstream
+act (41 request, 41 commitment approval, 217 call, 130 award), **41** have all
+four, **none** is dated after the contract it produced and none falls before
+the programme axis opens — pinned, because a mark outside the axis would be
+drawn off the frame rather than seen. Same-day acts (a request and its
+approval routinely share a date) nudge apart 6 units and print only the first
+label; the hover card and the trail row carry the rest.
+
+**2 · A part acceptance is not a jurisdiction.** 26SYMV018978343 showed
+«Area within the jurisdiction of: Chalkida Forest Service Office» while its
+map showed seven Attica regional units. Both were right about their own
+source and the page let them contradict each other: the contract is a
+region-scoped «άμεσης διαχείρισης» one whose text names **no** forest
+service, so its only link came from `forest_loader.completion_authorities` —
+and that act reads «Βεβαίωση περαίωσης … χωρικής αρμοδιότητας Δασαρχείου
+Χαλκίδας … **– για το τμήμα του έργου** με τίτλο "Υλοτομία Ξηρών ιστάμενων
+κωνοφόρων στο σύμπλεγμα Δίρφυος…"». It accepts **one part**, in Εύβοια, of
+works curated across Attica. The link is kept — the act does name it — but
+now carries `source = completion_act:<ΑΔΑ>|part`, and the page prints
+«named by an acceptance act covering one part of the works; the contract
+itself names none». **1 of the 29 completion-act links** is a part
+acceptance; the other 28 are unchanged. (Loader gotcha, the fifth time:
+`fold()` maps Greek onto Latin homoglyphs, so the needle «ΓΙΑ ΤΟ ΤΜΗΜΑ» has
+to be folded too — the raw Greek literal matched nothing and the first run
+silently marked zero rows.)
+
+*Affects: `khmdhs/forest_loader.py`, `atlas/src/lib/detail/ChainTimeline.svelte`,
+`atlas/src/routes/antinero/contract/[adam]/+page.svelte`,
+`tests/test_atlas_real_db.py` (2 pins). No basis change, no count change —
+725 contract links, 245/246 in-scope covered, as before.*
+
+---
+
+## 2026-08-19 · The contract timeline draws the time the contract was GIVEN, and every number on the page names its source
+
+Four corrections from the same reading of `/antinero/contract/26SYMV018978343`,
+all of them the same principle: a page may not show a fact without showing
+where it came from, and a bar may not measure something other than what it
+says it measures.
+
+**1 · The bar is the promise, not the paperwork.** It ran signature →
+completion act, which measures when the file was closed: a project accepted
+two years after the works finished looked like a project that ran two years.
+It now runs **signature → the deadline the contract announced**, with the
+sponsor pages' lighter stretch for each «Παράταση προθεσμίας» that moved it,
+the extension's arc dipping under the bar to the new date, and the ✔ of the
+acceptance left as a mark that may well fall after the deadline — which is
+the reading. Two ΚΗΜΔΗΣ fields say what was announced, and neither is a
+sentence of the signed text: the record's **end date** (21 of 246 in-scope)
+and the **stated duration** counted from the start date (62 more; the unit is
+read as months where the record omits it, and the page says so). For **8**
+the σύμβαση announces nothing and a later act of the chain does — that date
+is then the only one on record and is labelled `basis: act`, never passed off
+as the original's. The remaining **155 announce nothing at all** and get the
+Gantt's stub: no invented span. **6 chains** had their deadline moved, in
+**8 steps**. `queries_extra.contract_deadlines()`; counts ship as
+`/api/meta` facts so the methodology paragraph cannot go stale.
+
+**2 · Where the duration comes from is now on the page.** The facts row
+showed a number with no provenance. The evidence block gains a
+**«Duration and deadline — ΚΗΜΔΗΣ record fields»** entry quoting the record's
+own ΔΙΑΡΚΕΙΑ / ΕΝΑΡΞΗ / ΛΗΞΗ verbatim and saying in one line that they are
+*recorded in ΚΗΜΔΗΣ, not quoted from the signed text* — the honest statement,
+since no document sentence was read for them.
+
+**3 · Where the jurisdiction comes from is now on the page.** Contracts whose
+forest service is named only by a Diavgeia acceptance act now quote that act
+in the evidence block, linked to its PDF — and where the act accepts one part
+of the works (26SYMV018978343), the note says the quote does not describe the
+whole contract.
+
+**4 · Those excerpts were unquotable.** `Matcher.find()` cut its window out of
+the FOLDED text, so the stored evidence read «XΩPIKHΣ APMOΔIOTHTAΣ ΔAΣAPXEIOY»
+— Greek words spelled half in Latin. Matching still happens in the folded
+alphabet; the excerpt is now cut from the **original** subject at the same
+offsets (verified per call, folded window as fallback) and trimmed to word
+boundaries with «…» where it is cut. All 725 links re-loaded; pinned so a
+folded excerpt fails the suite.
+
+Presentation, same session: the run-up acts are grey dots rather than
+diamonds, payment orders are **€** marks on the same line as everything else,
+the «today» lettering sits on the year line where the axis is read, and the
+printed dates under the bar are gone — the marks carry their dates in their
+hover cards and the trail below prints them all.
+
+*Affects: `khmdhs/forest_loader.py` (`_excerpt`, unfolded excerpts),
+`atlas_api/queries_extra.py` (`contract_deadlines`, meta facts),
+`atlas_api/app.py`, `atlas/src/lib/detail/ChainTimeline.svelte`, the contract
+page, `/methodology#contract-timeline`, `tests/test_atlas_real_db.py` (2 pins).
+No basis change, no count change.*
+
+---
+
+## 2026-08-19 · The Anti-nero contract page, reorganised (user, same session)
+
+Presentation only — no number, basis or curated verdict changed.
+
+- **The payment orders moved into the document trail.** They are documents of
+  the contract with a date, a code and a PDF, and reading them in a separate
+  table meant reading the contract's story twice. The amount rides in the
+  title cell (net · incl. ΦΠΑ), the Διαύγεια act keeps its own link through a
+  new optional `alt` link on `TrailRow`, and the live-orders/paid total stays
+  as one line under the table. The standalone PAYMENT ORDERS section is gone.
+- **«DOCUMENT TRAIL–TIMELINE» is now «DOCUMENT TRAIL»**, on all three detail
+  pages — the timeline is no longer inside it. On the Anti-nero page it stands
+  above the trail as its own **TIMELINE** section with its methodology note.
+- **Every section title carries an arrow** (`$lib/ui/Fold.svelte`, native
+  `<details>`): TIMELINE and DOCUMENT TRAIL open on arrival, PROCUREMENT
+  DETAILS, EXTRACTED QUOTES and CPV CODES wait to be asked for. `DocTrail` and
+  `QuoteList` accept `heading={null}` so the fold prints the title once.
+- **EXTRACTED QUOTES and CPV CODES sit side by side** (2fr/1fr, stacking under
+  900px); the CPV list keeps its 12-code cap with a «… N more» toggle.
+- **The map is cropped to the contract's own ground** — the centroids of its
+  work regions plus its authority seats, grown to a 1,4° × 0,9° floor and
+  handed to PaperMap as a box, because PaperMap refuses a degenerate one and
+  a single-region contract (the common case) was getting no crop at all. The
+  MAP / DIAGRAM switch sits ON the frame's corner at 10px, so choosing a view
+  costs no vertical space; «Contracts under the same call» is now «Diagram».
+- **The timeline's two label rows were overprinting.** Act labels
+  («supplementary», «revision») now suppress a label within 62 units of the
+  previous one, the extension ordinal moved BELOW the bar onto its own row
+  («1st extension»), and the € marks step aside from act dots and from each
+  other. Acts label above the bar, extensions below; nothing shares a row.
+- **The duration quote cites the record it was read from.** On a chain the
+  deadline comes from the σύμβαση while the viewed record is the tip, whose
+  own ΕΝΑΡΞΗ/ΛΗΞΗ are a different statement — 26SYMV019098206 was quoting
+  09.03.2026–31.05.2026 under a bar drawn to 21.01.2026. `contract_deadlines`
+  now returns the `fields` it used (ref, duration, unit, start, end) and the
+  note names the act that extended them.
+
+*Affects: `atlas/src/lib/ui/Fold.svelte` (new), `$lib/detail/DocTrail.svelte`,
+`$lib/detail/QuoteList.svelte`, `$lib/detail/ChainTimeline.svelte`, the
+Anti-nero contract page, `atlas_api/queries_extra.py` (`contract_deadlines`
+`fields`).*
+
+**Open question the user raised, not yet built:** the duration is still a
+ΚΗΜΔΗΣ record field, not the contract's own sentence. The cached texts DO
+carry it — «Η συνολική προθεσμία ολοκλήρωσης του έργου ορίζεται σε τρεις (3)
+μήνες από την υπογραφή της παρούσας σύμβασης» — present in **212 of the 246**
+in-scope texts, and it also states the START BASIS (signature vs έναρξη
+εργασιών) that the registry field never gives. That is a study_costs-shaped
+task: extractor → review file → curated `data/contract_durations.json` →
+loader → table, with the registry field kept as the cross-check.
+
+---
+
+## 2026-08-19 · One basis on the page: net of ΦΠΑ, everywhere (user decision)
+
+The Atlas has been net-of-ΦΠΑ since 2026-08-03, but the detail pages still
+printed the registry's gross beside each net figure — «5,00 M € · 6,20 M €
+incl. ΦΠΑ», an «incl. ΦΠΑ» column in the payments table, a gross tail on the
+paid total. Two bases side by side is two things to keep straight for no gain,
+so the secondary figures are **removed**: the Anti-nero and ΔΑΣΕ contract
+pages now show net only, and the methodology says the site is net throughout
+rather than promising a gross line on detail pages. The gross stays available
+in the API payload (`gross`) and in `main.contracts` — nothing was recomputed,
+nothing moved basis. Checked after the change: 26SYMV019098206 states
+€4.999.994,82 net, its six live orders sum to €4.771.705,65 and the page's
+paid figure is the same number.
+
+Same session, same page:
+
+- **TIMELINE and DOCUMENT TRAIL lost their arrows** — they are what the page
+  is, not reference material to unfold. PROCUREMENT DETAILS, EXTRACTED QUOTES
+  and CPV CODES keep theirs.
+- **The timeline pairs with the trail on every element, both ways** (user):
+  the run-up acts, the acts of the chain, each payment order (€), each
+  extension arc and its label, the ✔ of the acceptance act and **the bar
+  itself** all highlight their trail row on hover and light up when their row
+  is hovered — the ✔ and the bar needed identities to pair with, so
+  `ChainTimeline` takes `endRef` and `signedRef`. Verified row by row on
+  26SYMV019098206: all 15 trail rows go black and every one of them lights a
+  mark (the extension lights three — its dot, its arc and its label).
+- **The detail map frames whole regions, not centres.** A frame built from
+  centroids cut Εύβοια in half on 26SYMV018978343 — Attica works whose only
+  named service sits in Χαλκίδα. `PaperMap` gained `fitPes`: fit these Π.Ε.
+  **whole**, merged with any `fitPoints`. The contract page passes its work
+  regions plus every authority's seat region, so the map shows the ground the
+  contract touches and the island the accepting service is on (verified: the
+  fitted window contains the Ευβοίας polygon bbox with margin).
+
+*Affects: the Anti-nero and ΔΑΣΕ contract pages, `$lib/detail/ChainTimeline.svelte`,
+`$lib/maps/PaperMap.svelte` (`fitPes`), `/methodology#net-basis`.*
+
+---
+
+## 2026-08-19 · The call mark carries what the diagram knows (user: «the cheap version, try it»)
+
+The procurement diagram answers a relational question — who else won a lot
+under this call — and the timeline answers a temporal one. Merging them would
+put sibling bars on a contract's own axis and drown it. What the timeline was
+missing is smaller: the call was already ON it, as a run-up dot, but said
+nothing about having produced other contracts.
+
+So the call's mark is now **filled, labelled «call · 1 of N», and clickable**:
+its card names the lots and their Σ stated net €, and clicking it swaps the
+header slot to the DIAGRAM view and scrolls it into the middle of the frame.
+No new data, no second chart, one extra fact on a mark that was already
+drawn. `ChainTimeline` takes `callInfo` ({ref, lots, total}) and `onCallClick`;
+the page passes them from `contract.family`, so the mark appears only where a
+call produced more than one contract. The label's underline was dropped — the
+paper halo behind these labels turns one into a strike through the words.
+
+*Kept if the user keeps it — offered as the try-it version of the merge.*
+
+---
+
+## 2026-08-19 · Timeline ink (user review)
+
+- **Marks on the bar print white, marks off it print dark.** The act dots
+  carried a paper fill and an ink outline; on the black bar that read as a
+  ring. They are now flat white with no stroke — but only where they actually
+  sit ON the bar, since a white dot on white paper is no dot at all. The €
+  payment marks follow the same rule. «On the bar» means the SOLID stretch
+  only: the extension is the same ink thinned, and white on 30% ink is
+  invisible, so marks over an extension print dark.
+- **The extension is black at 30%, not green.** It borrowed the sponsor
+  Gantt's `EXT_COLOR` (#b7e4c7), which on an Anti-nero page reads as the ΔΑΣΕ
+  dataset's colour. Same ink as the bar, thinned — the segment says «still the
+  same contract, extended», which is what it is.
+- **The call label was overprinting the request label** («rcall·1 of 5» on
+  26SYMV019098206): a primary request and its call are days apart on a
+  four-year axis, and forcing the call's label to always draw bypassed the
+  collision rule. Run-up labels are now claimed greedily with the **call
+  first** — it is the one that says something — and the others only where they
+  still fit, measured against each label's own width.
+
+*Affects `$lib/detail/ChainTimeline.svelte` only.*

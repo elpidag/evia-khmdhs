@@ -6,7 +6,14 @@
 	 * συμπληρωματικών εργασιών), a tick for every payment order, and the ✔ of
 	 * its completion act.
 	 *
-	 * It is the sponsor pages' ActTimelineBar one level down — same programme
+	 * Before the bar, the procurement that produced it: the primary request,
+ * the commitment approval, the call and the award, wherever the document
+ * trail has them dated (217 of 246 in-scope contracts have at least one;
+ * 6 more carry an act the registry never dated).
+ * They sit on a dotted run-up to the signature, because they are acts of the
+ * procurement, not of the contract — which did not exist yet.
+ *
+ * It is the sponsor pages' ActTimelineBar one level down — same programme
 	 * axis, same lettering, same dashed «today» rule drawn last, same
 	 * two-way hover with the document trail — with two differences the data
 	 * makes possible: payments, which no other view puts on a time axis, and
@@ -28,26 +35,69 @@
 		eur: number | null;
 		self?: boolean;
 	}
+	/** what the call that produced this contract also produced — the one
+	 *  fact from the procurement diagram that belongs on a time axis */
+	export interface CallInfo {
+		/** the call's ΑΔΑΜ, matched against the run-up act */
+		ref: string;
+		/** how many contracts answered it, this one included */
+		lots: number;
+		/** their Σ stated net € */
+		total: number;
+	}
+	/** an act of the procurement that PRECEDES the contract */
+	export interface RunUpAct {
+		ref: string;
+		/** ISO date, already normalised */
+		d: string | null;
+		kind: 'request' | 'approved_request' | 'notice' | 'auction';
+	}
 	export interface PayTick {
 		ref: string;
 		/** ISO date, already normalised */
 		d: string | null;
 		eur: number | null;
 	}
+	/** a later act that moved the announced deadline */
+	export interface ExtStep {
+		ref: string;
+		/** the act's own date (ISO) — where its dot sits */
+		d: string | null;
+		/** the new deadline it set (ISO) */
+		deadline: string | null;
+		/** 1-based, chronological */
+		n: number;
+	}
 	interface Props {
 		/** the contract's signature date (ISO) */
 		signed: string | null;
-		/** the day the work was accepted — a completion act, else the
-		 *  registry's contractual end; null when neither is on record */
+		/** the ΑΔΑΜ the BAR stands for — the σύμβαση itself, so its trail row
+		 *  has a mark to light like every other row does */
+		signedRef?: string | null;
+		/** the day the works were accepted (completion act), ISO or null */
 		end: string | null;
-		/** what `end` came from, for the printed label */
-		endBasis?: 'completion' | 'contract' | null;
+		/** the ΑΔΑ of that acceptance act — pairs the ✔ with its trail row */
+		endRef?: string | null;
+		/** the deadline the contract announced (ISO), null when it announced
+		 *  none — 155 of 246 in-scope contracts */
+		deadline?: string | null;
+		/** where that deadline came from: the registry's end date, the stated
+		 *  duration, or a later act when the σύμβαση announced none */
+		deadlineBasis?: 'end_date' | 'duration' | 'act' | null;
+		/** deadline extensions, oldest first */
+		extensions?: ExtStep[];
 		/** current date (ISO) — the dashed «today» rule */
 		today: string;
 		/** the version chain, oldest first; [] when posted once */
 		chain?: ChainAct[];
 		/** live payment orders */
 		payments?: PayTick[];
+		/** the procurement's own acts, before the signature */
+		runUp?: RunUpAct[];
+		/** the call's other lots — badges the call mark and makes it clickable */
+		callInfo?: CallInfo | null;
+		/** clicking the call mark (the page swaps the header to the diagram) */
+		onCallClick?: () => void;
 		/** ΑΔΑΜ whose act dot is enlarged (trail-row hover) */
 		highlightRef?: string | null;
 		/** act-dot hover in/out — the page highlights the trail row */
@@ -55,11 +105,18 @@
 	}
 	let {
 		signed,
+		signedRef = null,
 		end,
-		endBasis = null,
+		endRef = null,
+		deadline = null,
+		deadlineBasis = null,
+		extensions = [],
 		today,
 		chain = [],
 		payments = [],
+		runUp = [],
+		callInfo = null,
+		onCallClick,
 		highlightRef = null,
 		onActHover
 	}: Props = $props();
@@ -72,6 +129,23 @@
 		approval_supplementary: 'supplementary',
 		approval_ape: 'revised quantities',
 		approval_schedule_extension: 'extension'
+	};
+
+	// the extension fill the sponsor Gantt uses for a running project's
+	// extended stretch — the same convention, so the two read alike
+	// the extension is the SAME ink as the bar, thinned (user, 2026-08-19) —
+	// the sponsor pages' green said «other dataset» on an Anti-nero page
+	const EXT_FILL = 'var(--c-antinero)';
+	const EXT_OPACITY = 0.3;
+	const ORDINAL = (n: number): string =>
+		n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`;
+
+	// the same four words the document trail prints, shortened to fit
+	const RUNUP: Record<string, string> = {
+		request: 'request',
+		approved_request: 'approval',
+		notice: 'call',
+		auction: 'award'
 	};
 
 	// Anti-nero's own programme axis: the first in-scope signature is
@@ -91,7 +165,7 @@
 	const TOP = 16; // year-label band
 	const BASE = 46; // bar baseline
 	const BAR_H = 12;
-	const H = 76; // room for the payment ticks and the printed dates below
+	const H = 66; // year band, the bar line, the arcs and their label row
 
 	function x(d: string | null): number | null {
 		if (!d) return null;
@@ -110,13 +184,16 @@
 	});
 
 	const xs = $derived(x(signed));
-	const xe = $derived(x(end));
+	const xe = $derived(x(end));               // acceptance ✔, not a bar edge
+	const xd = $derived(x(deadline));          // the announced deadline
+	// the last deadline in force, after every extension
+	const xdLast = $derived(
+		x(extensions.length ? (extensions[extensions.length - 1].deadline ?? deadline) : deadline)
+	);
 	const todayX = $derived(x(today) ?? 4);
 	const todayFlip = $derived(todayX > W - 110);
-	// no acceptance on record: the bar runs to today, drawn faint and
-	// uncapped, so «we do not know when it ended» never reads as «it ended»
-	const xStop = $derived(xe ?? todayX);
-	const open = $derived(end === null);
+	// nothing was announced: the Gantt's stub, never an invented span
+	const stub = $derived(xd === null || xs === null || xd <= xs);
 
 	/**
 	 * Later records of the chain, with an x each.
@@ -129,6 +206,7 @@
 	const acts = $derived.by(() => {
 		const out: { a: ChainAct; x: number; label: boolean }[] = [];
 		let lastX = -99;
+		let lastLabel = -99;
 		let stack = 0;
 		for (const a of chain.length > 1 ? chain.slice(1) : []) {
 			const ax = x(a.d);
@@ -139,7 +217,11 @@
 				stack = 0;
 				lastX = ax;
 			}
-			out.push({ a, x: ax + stack * 7, label: stack === 0 });
+			// «supplementary» is 60 units wide at 8.5px: two acts a fortnight
+			// apart printed both labels on top of each other
+			const label = stack === 0 && ax - lastLabel >= 62;
+			if (label) lastLabel = ax;
+			out.push({ a, x: ax + stack * 7, label });
 		}
 		return out;
 	});
@@ -154,7 +236,83 @@
 		}
 		return out;
 	});
-	const ticks = $derived(payments.filter((p) => p.d !== null));
+	/**
+	 * Payment marks, nudged clear of each other and of the act dots they share
+	 * the line with — a € printed under a dot reads as neither.
+	 */
+	/** Where the bar's ink is: a mark inside it must print white to be seen,
+	 *  and a mark outside it must print dark for the same reason. */
+	const barSpan = $derived.by(() => {
+		if (xs === null) return null;
+		// only the SOLID stretch: the extension is the same ink thinned to
+		// 30%, and white on that is nearly invisible — a dark mark reads
+		const end = stub ? xs + 7 : (xd ?? xs);
+		return [xs, Math.max(end, xs)] as [number, number];
+	});
+	const onBar = (v: number): boolean =>
+		barSpan !== null && v >= barSpan[0] - 0.5 && v <= barSpan[1] + 0.5;
+
+	/** the bar stands for the σύμβαση, so it lights when that row is hovered */
+	const barHot = $derived(highlightRef !== null && signedRef === highlightRef);
+
+	const ticks = $derived.by(() => {
+		const taken = [...acts.map((m) => m.x), ...pre.map((m) => m.x)];
+		const out: { p: PayTick; x: number }[] = [];
+		for (const p of payments) {
+			let px = x(p.d);
+			if (px === null) continue;
+			for (let guard = 0; guard < 12; guard++) {
+				const clash = [...taken, ...out.map((o) => o.x)].some((t) => Math.abs(t - px!) < 5.5);
+				if (!clash) break;
+				px += 6;
+			}
+			out.push({ p, x: px });
+		}
+		return out;
+	});
+
+	/**
+	 * The procurement's acts, oldest first, placed on the run-up.
+	 *
+	 * A request and its commitment approval are routinely posted the same
+	 * day, so the marks nudge apart like the act dots do, and a label is
+	 * printed only where it would not overprint the previous one — the
+	 * hover card and the trail row below carry the rest.
+	 */
+	const pre = $derived.by(() => {
+		const out: { a: RunUpAct; x: number; label: boolean }[] = [];
+		const dated = runUp
+			.filter((a) => a.d !== null)
+			.slice()
+			.sort((a, b) => (a.d ?? '').localeCompare(b.d ?? ''));
+		let lastX = -99;
+		for (const a of dated) {
+			let ax = x(a.d);
+			if (ax === null) continue;
+			if (ax - lastX < 5) ax = lastX + 6;
+			lastX = ax;
+			out.push({ a, x: ax, label: false });
+		}
+		// Which labels get printed: a request and its call are days apart on a
+		// four-year axis, and both printed «rcall·1 of 5» over each other. The
+		// call label claims its box FIRST — it is the one that says something —
+		// and the rest are taken in time order only where they still fit.
+		const boxes: [number, number][] = [];
+		const width = (m: (typeof out)[number]) =>
+			((RUNUP[m.a.kind] ?? '').length + (m.a.ref === callInfo?.ref ? 9 : 0)) * 4.6;
+		const claim = (m: (typeof out)[number]) => {
+			const w = width(m);
+			const box: [number, number] = [m.x - w / 2 - 3, m.x + w / 2 + 3];
+			if (boxes.some(([l, r]) => box[0] < r && l < box[1])) return;
+			boxes.push(box);
+			m.label = true;
+		};
+		const call = out.find((m) => callInfo !== null && m.a.ref === callInfo.ref);
+		if (call) claim(call);
+		for (const m of out) if (m !== call) claim(m);
+		return out;
+	});
+	const preStart = $derived(pre.length ? pre[0].x : null);
 </script>
 
 {#if xs !== null}
@@ -167,25 +325,109 @@
 			{/if}
 		{/each}
 
-		<!-- the contract's own span -->
-		<rect
-			x={xs}
-			y={BASE - BAR_H}
-			width={Math.max(2, xStop - xs)}
-			height={BAR_H}
-			fill="var(--c-antinero)"
-			opacity={open ? 0.28 : 0.85}
-			rx="1"
-		/>
-
-		<!-- payment orders, under the baseline: the money's own rhythm -->
-		{#each ticks as p (p.ref)}
-			{@const px = x(p.d)}
-			{#if px !== null}
-				<line x1={px} y1={BASE + 2} x2={px} y2={BASE + 7} class="pay">
-					<title>{dmy(p.d)} — {eurShort(p.eur ?? 0)} (net)</title>
-				</line>
+		<!-- the procurement that produced the contract -->
+		{#if preStart !== null && xs !== null}
+			<line x1={preStart} y1={BASE - BAR_H / 2} x2={xs} y2={BASE - BAR_H / 2} class="runup" />
+		{/if}
+		{#each pre as m (m.a.ref)}
+			{@const isCall = callInfo !== null && m.a.ref === callInfo.ref}
+			<!-- the call mark is a SHORTCUT to the header's DIAGRAM button, which
+			     is a real <button> and carries the keyboard route -->
+			<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+			<circle
+				cx={m.x}
+				cy={BASE - BAR_H / 2}
+				r={(highlightRef !== null && m.a.ref === highlightRef) || isCall ? 4.5 : 3}
+				class="pre"
+				class:hot={highlightRef !== null && m.a.ref === highlightRef}
+				class:callmark={isCall}
+				onmouseenter={() => onActHover?.(m.a.ref)}
+				onmouseleave={() => onActHover?.(null)}
+				onclick={isCall ? () => onCallClick?.() : undefined}
+			>
+				<title
+					>{dmy(m.a.d)} — {RUNUP[m.a.kind] ?? 'act'} ({m.a.ref}){isCall
+						? ` · ${callInfo!.lots} contracts under this call, ${eurShort(callInfo!.total)} in total — click for the diagram`
+						: ''}</title
+				>
+			</circle>
+			{#if m.label}
+				<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
+				<text
+					x={m.x}
+					y={BASE - BAR_H - 4}
+					class="actlbl runlbl"
+					class:calllbl={isCall}
+					onclick={isCall ? () => onCallClick?.() : undefined}
+					>{RUNUP[m.a.kind]}{isCall ? ` · 1 of ${callInfo!.lots}` : ''}</text
+				>
 			{/if}
+		{/each}
+
+		<!-- what the contract promised: signature → announced deadline -->
+		{#if stub}
+			<rect
+				x={xs}
+				y={BASE - BAR_H}
+				width="7"
+				height={BAR_H}
+				fill="var(--c-antinero)"
+				opacity={barHot ? 1 : 0.85}
+				class:barhot={barHot}
+			>
+				<title>{dmy(signed)} — no deadline announced in the registry record</title>
+			</rect>
+		{:else}
+			<rect
+				x={xs}
+				y={BASE - BAR_H}
+				width={(xd ?? 0) - xs}
+				height={BAR_H}
+				fill="var(--c-antinero)"
+				opacity={barHot ? 1 : 0.85}
+				class:barhot={barHot}
+			>
+				<title
+					>{dmy(signed)} → {dmy(deadline)} — the deadline the contract announced{deadlineBasis ===
+					'duration'
+						? ' (stated duration)'
+						: deadlineBasis === 'act'
+							? ' (announced by a later act; the σύμβαση announced none)'
+							: ''}</title
+				>
+			</rect>
+		{/if}
+		<!-- every extension, in the sponsor pages' lighter fill -->
+		{#if xd !== null && xdLast !== null && xdLast > xd}
+			<rect
+				x={xd}
+				y={BASE - BAR_H}
+				width={xdLast - xd}
+				height={BAR_H}
+				fill={EXT_FILL}
+				opacity={EXT_OPACITY}
+				rx="1"
+			/>
+		{/if}
+		{#if xd !== null && !stub}
+			<line x1={xd} y1={BASE - BAR_H - 4} x2={xd} y2={BASE + 2} class="dline" />
+		{/if}
+
+		<!-- payment orders, on the same line as the rest: the money's rhythm -->
+		{#each ticks as t (t.p.ref)}
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<text
+				x={t.x}
+				y={BASE - BAR_H / 2 + 3.5}
+				class="pay"
+				class:onbar={onBar(t.x)}
+				class:hot={highlightRef !== null && t.p.ref === highlightRef}
+				text-anchor="middle"
+				onmouseenter={() => onActHover?.(t.p.ref)}
+				onmouseleave={() => onActHover?.(null)}
+			>
+				€<title>{dmy(t.p.d)} — {eurShort(t.p.eur ?? 0)}</title>
+			</text>
 		{/each}
 
 		<!-- every later act on the same contract -->
@@ -196,6 +438,8 @@
 				cy={BASE - BAR_H / 2}
 				r={highlightRef !== null && m.a.ref === highlightRef ? 4.5 : 3}
 				class="act"
+				class:onbar={onBar(m.x)}
+				class:hot={highlightRef !== null && m.a.ref === highlightRef}
 				class:selfact={m.a.self}
 				onmouseenter={() => onActHover?.(m.a.ref)}
 				onmouseleave={() => onActHover?.(null)}
@@ -205,6 +449,55 @@
 			{#if m.label}
 				<text x={m.x} y={BASE - BAR_H - 4} class="actlbl"
 					>{KIND[m.a.kind ?? ''] ?? 'act'}</text
+				>
+			{/if}
+		{/each}
+
+		<!-- deadline extensions: the act's dot, an arrow dipping under the bar
+		     to the NEW deadline it set — the promised-vs-executed record -->
+		<defs>
+			<marker
+				id="chainextarrow"
+				viewBox="0 0 6 6"
+				refX="5"
+				refY="3"
+				markerWidth="6"
+				markerHeight="6"
+				orient="auto-start-reverse"
+			>
+				<path d="M0,0 L6,3 L0,6 Z" class="extarrowfill" />
+			</marker>
+		</defs>
+		{#each extensions as e (e.n)}
+			{@const ex = x(e.d)}
+			{@const en = x(e.deadline)}
+			{#if ex !== null}
+				{#if en !== null && Math.abs(en - ex) > 8}
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<path
+						d={`M ${ex} ${BASE + 1} Q ${(ex + en) / 2} ${BASE + 12}, ${en} ${BASE + 2}`}
+						class="extarrow"
+						class:hot={highlightRef !== null && e.ref === highlightRef}
+						marker-end="url(#chainextarrow)"
+						onmouseenter={() => onActHover?.(e.ref)}
+						onmouseleave={() => onActHover?.(null)}
+					>
+						<title
+							>{ORDINAL(e.n)} extension — signed {dmy(e.d)} · deadline moved to {dmy(
+								e.deadline
+							)}</title
+						>
+					</path>
+				{/if}
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
+				<text
+					x={ex}
+					y={BASE + 18}
+					class="actlbl extlbl"
+					class:hot={highlightRef !== null && e.ref === highlightRef}
+					text-anchor="middle"
+					onmouseenter={() => onActHover?.(e.ref)}
+					onmouseleave={() => onActHover?.(null)}>{ORDINAL(e.n)} extension</text
 				>
 			{/if}
 		{/each}
@@ -219,26 +512,29 @@
 			{/if}
 		{/each}
 
-		<!-- today rule LAST so it stays visible over the bar -->
+		<!-- today rule LAST so it stays visible over the bar; its lettering
+		     sits on the year line, where the axis is read (user, 2026-08-19) -->
 		<line x1={todayX} y1={TOP - 2} x2={todayX} y2={BASE + 4} class="today" />
 		<text
 			x={todayFlip ? todayX - 4 : todayX + 4}
-			y="24"
+			y="10"
 			class="today-label"
-			text-anchor={todayFlip ? 'end' : 'start'}>today ({dmy(today)})</text
+			text-anchor={todayFlip ? 'end' : 'start'}>today</text
 		>
 
 		{#if xe !== null}
-			<text x={xe + 2} y={BASE - 2} class="mark">✔</text>
-		{/if}
-
-		<text x={xs} y={BASE + 22} class="dlabel">{dmy(signed)}</text>
-		{#if xe !== null && xe - xs > 90}
-			<text x={xe} y={BASE + 22} class="dlabel" text-anchor={xe > W - 60 ? 'end' : 'middle'}>
-				{dmy(end)}{endBasis === 'completion' ? ' accepted' : ''}
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<text
+				x={xe}
+				y={BASE - 2}
+				class="mark"
+				class:hot={highlightRef !== null && endRef === highlightRef}
+				text-anchor="middle"
+				onmouseenter={() => onActHover?.(endRef ?? null)}
+				onmouseleave={() => onActHover?.(null)}
+			>
+				✔<title>{dmy(end)} — works accepted</title>
 			</text>
-		{:else if open && todayX - xs > 90}
-			<text x={todayX - 6} y={BASE + 22} class="dlabel" text-anchor="end">no acceptance on record</text>
 		{/if}
 	</svg>
 {/if}
@@ -273,19 +569,20 @@
 		font-size: 11px;
 		font-weight: 900;
 		fill: var(--ink);
+		paint-order: stroke;
+		stroke: var(--paper);
+		stroke-width: 2.5px;
 	}
-	.dlabel {
-		font-size: 10px;
-		fill: var(--ink-soft);
-	}
+	/* a dot ON the bar prints white with no outline; off the bar it prints
+	   in ink, or it would be a white dot on white paper (user, 2026-08-19) */
 	.act {
-		fill: var(--paper);
-		stroke: var(--ink);
-		stroke-width: 1.4;
+		fill: var(--ink);
+		stroke: none;
 		cursor: pointer;
 	}
-	.act.selfact {
-		fill: var(--ink);
+	.act.onbar,
+	.act.selfact.onbar {
+		fill: #fff;
 	}
 	.actlbl {
 		font-size: 8.5px;
@@ -304,9 +601,87 @@
 		stroke: var(--paper);
 		stroke-width: 2.5px;
 	}
+	.runup {
+		stroke: var(--ink-faint);
+		stroke-width: 1;
+		stroke-dasharray: 2 3;
+	}
+	.pre {
+		fill: #9b9b9b;
+		stroke: none;
+		cursor: pointer;
+	}
+	.runlbl {
+		fill: var(--ink-soft);
+		font-weight: 600;
+	}
+	/* the call is the one run-up act that leads somewhere: to the other lots
+	   it produced, which the header's diagram draws (user, 2026-08-19) */
+	.pre.callmark {
+		fill: var(--ink);
+		cursor: pointer;
+	}
+	/* no underline: the halo behind these labels turns one into a strike
+	   through the words — the filled mark is the affordance */
+	.calllbl {
+		fill: var(--ink);
+		cursor: pointer;
+		font-weight: 700;
+	}
+	.calllbl:hover {
+		fill: var(--c-antinero);
+	}
+	.pay,
+	.mark,
+	.extlbl,
+	.extarrow {
+		cursor: pointer;
+	}
+	.pay.hot,
+	.mark.hot {
+		font-size: 12px;
+		fill: var(--c-antinero);
+	}
+	.extlbl.hot {
+		fill: var(--c-antinero);
+	}
+	.extarrow.hot {
+		stroke: var(--c-antinero);
+		stroke-width: 1.6;
+	}
+	.act.hot,
+	.pre.hot {
+		fill: var(--c-antinero);
+	}
 	.pay {
+		font-size: 9px;
+		font-weight: 700;
+		fill: var(--ink);
+		paint-order: stroke;
+		stroke: var(--paper);
+		stroke-width: 2.5px;
+	}
+	.pay.onbar {
+		fill: #fff;
+		stroke: none;
+	}
+	.barhot {
+		stroke: var(--ink);
+		stroke-width: 1.5;
+	}
+	.dline {
+		stroke: var(--c-antinero);
+		stroke-width: 1.3;
+	}
+	.extarrow {
+		fill: none;
 		stroke: var(--ink-soft);
 		stroke-width: 1;
-		opacity: 0.65;
+	}
+	.extarrowfill {
+		fill: var(--ink-soft);
+	}
+	.extlbl {
+		fill: var(--ink-soft);
 	}
 </style>

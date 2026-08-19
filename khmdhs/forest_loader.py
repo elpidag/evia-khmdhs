@@ -79,6 +79,27 @@ def _token_stream(window: str) -> list[str]:
     return re.findall(r"[Α-ΩA-Z][Α-ΩA-Z.\-']*|,|&", window)
 
 
+def _excerpt(text: str, start: int, stop: int) -> str:
+    """A window of the document, cut at word boundaries and marked when cut.
+
+    These excerpts are quoted on the contract pages as the evidence for the
+    jurisdiction row, so «…με τίτλο «Υλοτομία Ξηρών ιστάμεν» — a window that
+    stops mid-word — reads as a transcription error rather than as a cut.
+    """
+    head, tail = start > 0, stop < len(text)
+    frag = text[start:stop]
+    if head:
+        cut = frag.find(" ")
+        if 0 <= cut <= 20:
+            frag = frag[cut + 1:]
+    if tail:
+        cut = frag.rfind(" ")
+        if cut > len(frag) - 25:
+            frag = frag[:cut]
+    frag = frag.strip()
+    return ("… " if head else "") + frag + (" …" if tail else "")
+
+
 class Matcher:
     def __init__(self, registry: dict):
         self.trigger = _trigger_regex()
@@ -92,8 +113,18 @@ class Matcher:
                         for k, v in self.aliases.items()}
 
     def find(self, text: str | None) -> list[tuple[str, str]]:
-        """Return [(canonical_name, excerpt)] in first-seen order."""
+        """Return [(canonical_name, excerpt)] in first-seen order.
+
+        Matching happens in the folded alphabet, but the excerpt is cut from
+        the ORIGINAL text: a folded excerpt reads «XΩPIKHΣ APMOΔIOTHTAΣ» in
+        half-Latin letters, and these excerpts are quoted on the contract
+        pages as evidence. Folding is character-for-character on Greek, so
+        the offsets carry over — verified per call, and the folded window is
+        the fallback when they do not.
+        """
+        src = text or ""
         t = fold(text)
+        same = len(t) == len(src)
         out: list[tuple[str, str]] = []
         seen: set[str] = set()
         for m in self.trigger.finditer(t):
@@ -119,7 +150,8 @@ class Matcher:
                 if name not in seen:
                     seen.add(name)
                     start = max(0, m.start() - 30)
-                    out.append((name, t[start: m.end() + 90].strip()))
+                    stop = m.end() + 90
+                    out.append((name, _excerpt((src if same else t), start, stop)))
                 i += n
             if not matched_any:
                 continue
@@ -183,9 +215,18 @@ def completion_authorities(conn: sqlite3.Connection,
         found = matcher.find(r["subject"] or "")
         if not found:
             continue
+        # «…χωρικής αρμοδιότητας Δασαρχείου Χαλκίδας … ΓΙΑ ΤΟ ΤΜΗΜΑ του έργου
+        # με τίτλο "Υλοτομία … στο σύμπλεγμα Δίρφυος"»: the act accepts ONE
+        # part, so its service is not the contract's whole jurisdiction and
+        # the page must not present it as such (1 of 29 such links)
+        # fold() maps Greek onto Latin homoglyphs, so the needles must be
+        # folded as well — a raw Greek literal matches nothing
+        subj = fold(r["subject"])
+        part = any(fold(n) in subj for n in ("ΓΙΑ ΤΟ ΤΜΗΜΑ", "ΤΜΗΜΑΤΟΣ ΤΟΥ ΕΡΓΟΥ"))
+        ada = f"{r['ada']}|part" if part else r["ada"]
         for ref in {r["attributed_ref"], r["cited_ref"]} - {None}:
             for name, excerpt in found:
-                out.setdefault(ref, []).append((name, r["ada"], excerpt))
+                out.setdefault(ref, []).append((name, ada, excerpt))
     return out
 
 

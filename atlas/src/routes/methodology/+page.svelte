@@ -44,8 +44,9 @@
 		for payment orders; nothing is divided by a VAT rate — {show(f['dase_mixed_vat'])} ΔΑΣΕ
 		contracts blend 0%/13%/24% line items, so a flat conversion would be wrong). This is also the basis the law uses: the
 		ν.4412/2016 εκτιμώμενη αξία — and therefore the €30k/€60k direct-award ceilings — is
-		defined χωρίς ΦΠΑ, so net values compare against those thresholds correctly. Contract
-		detail pages keep a secondary «incl. ΦΠΑ» line with the registry's gross figures. Five
+		defined χωρίς ΦΠΑ, so net values compare against those thresholds correctly. Every figure on
+		the site is net, detail pages included — a second gross number beside each net one only
+		made two bases to keep straight (user, 2026-08-19). Five
 		Diavgeia-only clearance payments carried no net amount in any registry; their net figures
 		were extracted from the signed PDFs («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») and recorded as curated
 		corrections with excerpt evidence.
@@ -174,6 +175,43 @@
 		change no money at all. Where a later record restates the whole contract it
 		replaces the earlier version in every total; where it carries only the
 		additional works, both count. Either way each euro is counted once.
+	</p>
+
+	<h2 id="contract-timeline">The timeline on a contract page</h2>
+	<p>
+		The bar is <strong>the time the contract was given</strong>: from the day it
+		was signed to the deadline it announced, with a lighter stretch for each
+		extension of that deadline — the same reading as the sponsored-works
+		timeline, where a bar is a promise and the mark beside it is what happened.
+		It is deliberately not drawn from signature to the completion act: that
+		measures when the paperwork closed, and a project accepted years after it
+		finished would look like a project that ran for years.
+	</p>
+	<p>
+		Two fields of the ΚΗΜΔΗΣ record say what was announced, and neither is a
+		sentence of the signed contract: an end date, which
+		{show(f['kh_deadline_end_date'])} of the {show(nKh)} in-scope contracts
+		carry, and a stated duration, which gives a deadline for
+		{show(f['kh_deadline_duration'])} more when counted from the start date.
+		Some records state the number without a unit; it is read as months,
+		because the one contract whose real dates can check it states 4 and ran
+		121 days, and the page says where a unit was assumed. For
+		{show(f['kh_deadline_act'])} contracts the σύμβαση announces nothing and a
+		later act of the same file does — that act's date is then the only
+		deadline on record and is labelled as such. The remaining
+		{show(f['kh_deadline_none'])} announce no deadline at all: their bar is a
+		stub, because inventing a span from the paperwork would be the error this
+		convention exists to avoid.
+	</p>
+	<p>
+		{show(f['kh_deadline_ext_chains'])} contracts had that deadline moved, in
+		{show(f['kh_deadline_ext_steps'])} steps, each one a «Παράταση προθεσμίας»
+		record carrying its new end date. On the same line the timeline marks
+		every later act on the contract, every payment order (€), the acceptance
+		of the works (✔) where a Diavgeia act records one —
+		{show(f['kh_done'])} contracts — and, before the signature, the
+		procurement that produced it: the primary request, the commitment
+		approval, the call and the award, wherever the register dates them.
 	</p>
 
 	<h2 id="procurement-families">Procurement families (which contracts answer the same call)</h2>

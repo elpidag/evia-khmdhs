@@ -16,12 +16,16 @@
 		/** false = neutral chip (a fact about the row, not a warning);
 		 *  callers derive it with `trailChip` in $lib/transforms/exclusion */
 		chipBad?: boolean;
+		/** a second link after the pdf one (a payment order's Διαύγεια act) */
+		alt?: { href: string; label: string } | null;
 	}
 </script>
 
 <script lang="ts">
 	/**
-	 * DOCUMENT TRAIL–TIMELINE (user template, 2026-08-17): the SAME table
+	 * DOCUMENT TRAIL (user template, 2026-08-17; renamed and unbundled from
+	 * the timeline 2026-08-19, which now stands above it as its own section):
+	 * the SAME table
 	 * on every detail page — date · type of document · document code ·
 	 * title · pdf. Callers pass rows with English type labels already
 	 * resolved; the row for the viewed document itself is highlighted.
@@ -30,7 +34,8 @@
 
 	interface Props {
 		rows: TrailRow[];
-		heading?: string;
+		/** null prints no heading — the caller wraps the trail in a fold */
+		heading?: string | null;
 		/** optional strip between the heading and the table (timeline bar) */
 		top?: Snippet;
 		/** document code whose row is highlighted (timeline-dot hover) */
@@ -44,7 +49,7 @@
 	}
 	let {
 		rows,
-		heading = 'DOCUMENT TRAIL–TIMELINE',
+		heading = 'DOCUMENT TRAIL',
 		top,
 		highlight = null,
 		selfColor = null,
@@ -56,7 +61,7 @@
 </script>
 
 <section class="trail">
-	<h2>{heading}</h2>
+	{#if heading}<h2>{heading}</h2>{/if}
 	{#if top}
 		{@render top()}
 	{/if}
@@ -94,6 +99,9 @@
 							<a href={r.pdf} target="_blank" rel="noopener">PDF</a>
 						{:else}
 							—
+						{/if}
+						{#if r.alt}
+							· <a href={r.alt.href} target="_blank" rel="noopener">{r.alt.label}</a>
 						{/if}
 					</td>
 				</tr>

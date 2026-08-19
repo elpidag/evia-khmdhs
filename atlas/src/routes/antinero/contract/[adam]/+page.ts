@@ -93,6 +93,25 @@ export interface ContractDetail {
 		source: string;
 	} | null;
 	regions: { region_pe: string; source: string | null; note: string | null }[];
+	/** what the contract PROMISED: the deadline it announced and the acts
+	 *  that moved it — the timeline bar draws this, not the paperwork */
+	deadlines?: {
+		deadline: string | null;
+		basis: 'end_date' | 'duration' | 'act' | null;
+		source_ref: string | null;
+		duration: number | null;
+		unit: string | null;
+		assumed: boolean;
+		/** the registry fields the deadline was actually read from */
+		fields?: {
+			ref: string;
+			duration: number | null;
+			unit: string | null;
+			start_date: string | null;
+			end_date: string | null;
+		} | null;
+		extensions: { ref: string; d: string | null; deadline: string | null; n: number }[];
+	} | null;
 	/** linked forest authorities with their office seats (detail map) */
 	authorities?: {
 		name: string;
@@ -124,9 +143,17 @@ export interface ContractDetail {
 	/** the contract's own version chain, oldest → newest: what each ΚΗΜΔΗΣ
 	 *  record of it IS, when, and the value it stated. [] when posted once —
 	 *  the registry's adamChain does not carry these links. */
-	chain: {
+	/** the date of THIS document, and where it came from: `signed` (the
+	 *  registry's own field, correct for an original contract), `signature`
+	 *  (the digital-signature block of a later act), `published` (its ΚΗΜΔΗΣ
+	 *  stamp) or `inherited` (the registry's field, which for a later act is
+	 *  the contract's date, not its own) */
+	own_date?: string | null;
+	own_date_basis?: 'signed' | 'signature' | 'published' | 'inherited';
+	chain?: {
 		ref: string;
 		d: string | null;
+		d_basis?: string;
 		kind: string | null;
 		eur: number | null;
 		title: string | null;

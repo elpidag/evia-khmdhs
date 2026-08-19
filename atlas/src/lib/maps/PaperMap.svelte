@@ -56,6 +56,10 @@
 		/** initial framing: zoom to fit these lon/lat points (e.g. the data
 		 *  dots) with `fitPad` margin — an editorial crop of the country */
 		fitPoints?: [number, number][] | null;
+		/** initial framing: fit these Π.Ε. WHOLE, merged with fitPoints. A
+		 *  detail map should frame the regions it highlights rather than
+		 *  their centres — centres crop an island in half (user, 2026-08-19) */
+		fitPes?: string[] | null;
 		/** margin around fitted points as a fraction of the frame (default 0.12) */
 		fitPad?: number;
 		/** initial framing, hand-tuned: centre lon/lat + zoom factor
@@ -83,6 +87,7 @@
 		height = 620,
 		fitPoints = null,
 		fitPad = 0.12,
+		fitPes = null,
 		view = null,
 		onViewChange,
 		overlay,
@@ -211,7 +216,7 @@
 	let homeT: { x: number; y: number; k: number } | null = null;
 	$effect(() => {
 		if (!projection || !path || focusPe) return;
-		const key = JSON.stringify(view ?? fitPoints ?? null);
+		const key = JSON.stringify(view ?? [fitPoints, fitPes, coarse ? 1 : 0]);
 		if (!key || key === 'null' || key === appliedViewKey) return;
 		if (view) {
 			const px = projection(view.center);
@@ -219,13 +224,21 @@
 			homeT = { k: view.k, x: width / 2 - view.k * px[0], y: height / 2 - view.k * px[1] };
 			applyTransform(homeT, false);
 			appliedViewKey = key;
-		} else if (fitPoints && fitPoints.length) {
+		} else if ((fitPoints && fitPoints.length) || (fitPes && fitPes.length)) {
 			let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-			for (const c of fitPoints) {
+			for (const c of fitPoints ?? []) {
 				const q = projection(c);
 				if (!q) continue;
 				x0 = Math.min(x0, q[0]); y0 = Math.min(y0, q[1]);
 				x1 = Math.max(x1, q[0]); y1 = Math.max(y1, q[1]);
+			}
+			// whole regions, not their centres
+			for (const pe of fitPes ?? []) {
+				const f = coarse?.features.find((g) => g.properties.pe === pe);
+				if (!f) continue;
+				const [[bx0, by0], [bx1, by1]] = boundsOf(f as PeFeature);
+				x0 = Math.min(x0, bx0); y0 = Math.min(y0, by0);
+				x1 = Math.max(x1, bx1); y1 = Math.max(y1, by1);
 			}
 			if (x1 <= x0 || y1 <= y0) return;
 			const k = Math.max(

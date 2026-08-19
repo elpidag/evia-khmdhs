@@ -5,11 +5,13 @@ touches exactly one place. Exact-value convention follows the other
 real-DB test modules.
 """
 import re
+import sqlite3
 
 import pytest
 
 from khmdhs.config import DASE_DB, DEFAULT_DB
 from atlas_api import app as app_module
+from atlas_api import queries_extra as qx
 
 pytestmark = pytest.mark.skipif(
     not (DEFAULT_DB.exists() and DASE_DB.exists()),
@@ -22,6 +24,16 @@ def client():
     app = app_module.create_app()
     app.testing = True
     return app.test_client()
+
+
+@pytest.fixture(scope="module")
+def kh():
+    """A read-only handle on the committed Anti-nero DB, for pins that assert
+    on the data itself rather than on an endpoint."""
+    con = sqlite3.connect(DEFAULT_DB)
+    con.row_factory = sqlite3.Row
+    yield con
+    con.close()
 
 
 def test_meta_pins(client):
@@ -830,7 +842,13 @@ def test_contract_chain_pins(client):
             seen.add(ref)
     assert round(sum(r["v"] or 0 for r in kh), 2) == 625897613.96
     row = next(r for r in kh if r["ref"] == "26SYMV019098206")
-    assert row["d"] == "2024-10-22" and row["d1"] == "2026-03-09"
+    # the span runs from the contract's signature to the last act's OWN date —
+    # ΚΗΜΔΗΣ files every later act under the contract's date, so the registry
+    # field would have collapsed three of these five records onto one day
+    assert row["d"] == "2024-10-22" and row["d1"] == "2026-05-26"
+    assert [v["db"] for v in row["vs"]] == [
+        "signed", "signature", "signature", "published", "published"]
+    assert len({v["d"] for v in row["vs"]}) == 5
     assert row["t"].startswith("Εργασίες ειδικών δασοτεχνικών")   # the ORIGINAL's title
     assert [v["k"] for v in row["vs"]] == [
         "contract", "approval_ape_supplementary", "approval_schedule_extension",
@@ -862,3 +880,132 @@ def test_every_payment_tick_has_a_date(client):
     assert live and all(p.get("d") and len(p["d"]) == 10 for p in live)
     # the one that has no signed_date at all still gets its date
     assert any(p["signed_date"] is None and p["d"] for p in live)
+
+
+def test_a_later_act_is_dated_by_its_own_document(client):
+    """ΚΗΜΔΗΣ copies the CONTRACT's signature date onto every act posted
+    against it: 39 of the 46 in-scope records that are not an original
+    contract carry their parent's date verbatim. 26SYMV018978343 was signed
+    07.05.2026 and filed as 01.08.2025 (DATA_DECISIONS 2026-08-19)."""
+    from atlas_api import queries_extra as qx
+    assert qx.act_own_date("26SYMV018978343") == ("2026-05-07", "signature")
+    d = client.get("/api/antinero/contract/26SYMV018978343").get_json()
+    assert d["contract_signed_date"][:10] == "2025-08-01"   # the registry's
+    assert d["own_date"] == "2026-05-07"                    # the document's
+    assert d["own_date_basis"] == "signature"
+    # an original contract keeps the registry's field: it IS its signature
+    o = client.get("/api/antinero/contract/25SYMV017345053").get_json()
+    assert o["own_date"] == "2025-08-01" and o["own_date_basis"] == "signed"
+
+
+def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
+    """The contract timeline's bar is signature → the deadline the contract
+    ANNOUNCED, with a lighter stretch per extension (user, 2026-08-19). Two
+    registry fields say what was announced and neither is a sentence of the
+    signed text, so the page quotes them as record fields — these pins hold
+    the counts the methodology prints and the two shapes the bar can take."""
+    from collections import Counter
+    seen = Counter()
+    ext_steps = ext_chains = 0
+    for (ref,) in kh.execute(
+            "SELECT reference_number FROM contract_scope WHERE in_scope = 1"):
+        dl = qx.contract_deadlines(kh, ref)
+        seen[dl["basis"] or "none"] += 1
+        if dl["extensions"]:
+            ext_chains += 1
+            ext_steps += len(dl["extensions"])
+            # an extension only exists relative to a deadline already in force
+            assert dl["deadline"] is not None, ref
+            assert all(e["deadline"] > dl["deadline"] for e in dl["extensions"]), ref
+    assert seen == {"none": 155, "duration": 62, "end_date": 21, "act": 8}
+    assert (ext_chains, ext_steps) == (6, 8)
+    # the deepest case: an end date in the record, one «Παράταση προθεσμίας»
+    d = client.get("/api/antinero/contract/26SYMV019098206").get_json()["deadlines"]
+    assert d["deadline"] == "2026-01-21" and d["basis"] == "end_date"
+    assert [e["deadline"] for e in d["extensions"]] == ["2026-05-31"]
+    # and the case where the σύμβαση announced nothing: the later act did
+    d2 = client.get("/api/antinero/contract/26SYMV018978343").get_json()["deadlines"]
+    assert d2["basis"] == "act" and d2["source_ref"] == "26SYMV018978343"
+    # the counts the methodology prose prints come from /api/meta, not prose
+    f = client.get("/api/meta").get_json()["facts"]
+    assert f["kh_deadline_none"] == 155 and f["kh_deadline_end_date"] == 21
+    assert f["kh_deadline_ext_steps"] == 8
+
+
+def test_authority_evidence_is_quotable_greek(kh):
+    """The forest-authority excerpts are cut from the ORIGINAL subject, not
+    from the folded matching text: the contract page now quotes them as
+    evidence, and a folded excerpt reads «XΩPIKHΣ APMOΔIOTHTAΣ» in half-Latin
+    letters. Match in the folded alphabet, quote from the document."""
+    rows = kh.execute("SELECT reference_number, excerpt FROM"
+                      " contract_forest_authorities WHERE excerpt IS NOT NULL")
+    for r in rows:
+        # these two words appear in almost every act subject; folded they
+        # come out with Latin A/P/M/O/T inside a Greek word
+        assert "APMO" not in r["excerpt"], r["reference_number"]
+        assert "ΔAΣAPX" not in r["excerpt"], r["reference_number"]
+    ex = kh.execute("SELECT excerpt FROM contract_forest_authorities"
+                    " WHERE reference_number = ?",
+                    ("26SYMV018978343",)).fetchone()["excerpt"]
+    assert "χωρικής αρμοδιότητας Δασαρχείου Χαλκίδας" in ex
+    assert "για το τμήμα του έργου" in ex
+
+
+def test_the_run_up_acts_fit_the_timeline_axis(kh):
+    """The contract timeline draws the procurement's own acts — primary
+    request, commitment approval, call, award — on a dotted run-up BEFORE the
+    signature (user request, 2026-08-19). Two things must hold for that to be
+    an honest drawing: every such act is dated inside the programme axis
+    (T0 = 2022-01-01), and none of them post-dates the contract they produced.
+    """
+    kinds = {"request", "approved_request", "notice", "auction"}
+    n_with = late = 0
+    for (ref,) in kh.execute(
+            "SELECT reference_number FROM contract_scope WHERE in_scope = 1"):
+        up = [e for e in qx.contract_timeline(kh, ref)
+              if e["kind"] in kinds and e["d"]]
+        if not up:
+            continue
+        n_with += 1
+        assert all(e["d"] >= "2022-01-01" for e in up), ref
+        sig = kh.execute("SELECT contract_signed_date FROM contracts"
+                         " WHERE reference_number = ?", (ref,)).fetchone()[0]
+        if sig and min(e["d"] for e in up) > sig[:10]:
+            late += 1
+    assert late == 0
+    assert n_with >= 215      # 217 of 246 dated at the time of writing
+
+
+def test_a_part_acceptance_is_not_the_whole_jurisdiction(client, kh):
+    """26SYMV018978343 names no forest service of its own — it is a
+    region-scoped «άμεσης διαχείρισης» contract — so its ONLY authority link
+    comes from an acceptance act, and that act accepts «– για το τμήμα του
+    έργου … Δίρφυος»: one part, in Εύβοια, of works the curation places
+    across seven Attica Π.Ε. The link is kept (the act names it) but marked,
+    so the page cannot present one accepted part as the contract's whole
+    jurisdiction."""
+    rows = kh.execute(
+        "SELECT authority_name, source FROM contract_forest_authorities"
+        " WHERE reference_number = ?", ("26SYMV018978343",)).fetchall()
+    assert [r["authority_name"] for r in rows] == ["Δασαρχείο Χαλκίδας"]
+    assert rows[0]["source"].endswith("|part")
+    # exactly one such act across the programme — a marked exception, not a rule
+    n = kh.execute("SELECT COUNT(*) FROM contract_forest_authorities"
+                   " WHERE source LIKE '%|part'").fetchone()[0]
+    assert n == 1
+    d = client.get("/api/antinero/contract/26SYMV018978343").get_json()
+    assert d["authorities"][0]["source"].endswith("|part")
+
+
+def test_the_trail_dates_each_document_by_itself(client):
+    """The DOCUMENT TRAIL lists sibling records of the same chain — each must
+    carry ITS date, not the contract's, which ΚΗΜΔΗΣ copies onto all of them.
+    On 26SYMV019098206 three records were filed under 22.10.2024."""
+    t = client.get("/api/antinero/contract/26SYMV019098206").get_json()["timeline"]
+    by_ref = {r["adam"]: r for r in t}
+    assert by_ref["24SYMV015643849"]["d"] == "2024-10-22"        # the σύμβαση
+    assert by_ref["26SYMV018425922"]["d"] == "2025-07-31"        # its approval
+    assert by_ref["26SYMV018426173"]["d"] == "2025-11-12"        # the extension
+    assert by_ref["26SYMV018425922"]["d_basis"] == "signature"
+    assert len({by_ref[r]["d"] for r in
+                ("24SYMV015643849", "26SYMV018425922", "26SYMV018426173")}) == 3

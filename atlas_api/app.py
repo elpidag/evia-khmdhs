@@ -243,6 +243,15 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         # the contract's own version chain (τροποποιήσεις, παρατάσεις,
         # εγκρίσεις συμπληρωματικών) — the registry chain does not carry it
         d["chain"] = queries_extra.contract_chain(g.conn, adam)
+        # what the contract PROMISED — the deadline it announced and every
+        # act that moved it; the timeline bar draws that, not the paperwork
+        d["deadlines"] = queries_extra.contract_deadlines(g.conn, adam)
+        # ΚΗΜΔΗΣ files a later act under the CONTRACT's signature date; the
+        # header must show the date of THIS document (DATA_DECISIONS 2026-08-19)
+        own_d, own_basis = queries_extra.record_date(
+            adam, (d.get("document_kind") or {}).get("kind"),
+            d.get("contract_signed_date"))
+        d["own_date"], d["own_date_basis"] = own_d, own_basis
         # a date for every payment tick on the timeline: 182 of the 886 live
         # orders carry only the submission stamp, which contract_detail omits
         pdates = queries_extra.payment_dates(pay, adam)

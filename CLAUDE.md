@@ -197,6 +197,12 @@ refetching open contracts — prefer it for routine updates.
   Λαυρίου…» — 275 of 283 name a service, and for the region-scoped «άμεσης
   διαχείρισης» contracts it is the ONLY such statement (28 links / 14
   contracts, `source=completion_act:<ΑΔΑ>`; read last so it can only ADD).
+  An act accepting «– για το τμήμα του έργου …» is marked
+  `completion_act:<ΑΔΑ>|part` (1 of 29) and the contract page says so —
+  one accepted part is not the contract's whole jurisdiction, which is why
+  26SYMV018978343 showed a single Εύβοια service beside an Attica map
+  (DATA_DECISIONS 2026-08-19). Needle gotcha: `fold()` maps Greek onto
+  Latin, so the test string must be folded too.
   Authorities also carry **`covers_pe`** — the Π.Ε. a service administers
   beyond the one its office sits in (8 user-confirmed: ΔΔ Σάμου→Ικαρίας,
   ΔΔ Κεφαλληνίας→Ιθάκης, Πεντέλης→3 Attica sectors, …); `region_pe` still
@@ -928,6 +934,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   endpoints**; the true gross is exposed as `total_cost_gross` /
   `amount_gross` on the views, via `main.contracts`, and as the `gross`
   supplement on contract-detail endpoints (`queries_extra.contract_gross`).
+  **Since 2026-08-19 no page PRINTS a gross figure** — the detail pages'
+  «incl. ΦΠΑ» lines and columns are gone (user: two bases side by side is
+  two things to keep straight); the payload keeps `gross` for anyone who
+  needs it, and the methodology says the site is net throughout.
   webui (:5000) opens its own connections without the shim and keeps its
   historical incl-VAT presentation. Never apply the views to the anadohoi
   DB (no VAT columns; its net preference is explicit
@@ -1146,7 +1156,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   CAPS; caveat spans the full facts width; no MAP corner label),
   `DocTrail` (uniform date · type · code · title · pdf table, ENGLISH
   type labels; the viewed document bold; optional `top` snippet between
-  heading and table), `QuoteList` (verbatim Greek excerpts + source act
+  heading and table; `heading={null}` when a fold prints the title, optional
+  `alt` second link per row — the Anti-nero page puts its PAYMENT ORDERS in
+  the trail this way, amount in the title cell, Διαύγεια in `alt`, and the
+  standalone payments table is gone; heading renamed «DOCUMENT TRAIL»
+  2026-08-19), `QuoteList` (verbatim Greek excerpts + source act
   links; same sp-8 breather as the trail) and `ActTimelineBar` (anadohoi:
   the project's own PromiseGantt row — same programme axis + ganttTheme
   palette, printed start/deadline dates — in the trail's `top` slot; the
@@ -1189,10 +1203,48 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   authority/unit/signer/funding, EN names) and PAYMENT ORDERS; the Anti-nero
   one also carries **`ChainTimeline`** in the trail's `top` slot
   (DATA_DECISIONS 2026-08-19) — ActTimelineBar's conventions on a FIXED
-  Anti-nero axis (2022-01-01 → today+5d): bar signature→acceptance, a dot per
-  later act of the chain, a tick per payment order, ✔ at the completion act,
-  and the printed € step where a supplementary approval moved the price;
-  two-way hover with the trail rows, and the chain (`contract.chain`, from
+  Anti-nero axis (2022-01-01 → today+5d): the bar is what the contract
+  PROMISED — signature → the deadline it announced (`contract_deadlines`:
+  registry end_date 21 / stated duration 62 / a later act 8 / **155 announce
+  none → the Gantt's stub, never an invented span**), stretch of the SAME ink at 30% +
+  under-bar arc + ordinal per «Παράταση προθεσμίας» (6 chains, 8 steps), a
+  dot per later act of the chain, a **€** per payment order on that same
+  line — marks print WHITE on the solid bar and dark off it (a white dot on
+  white paper, or on the 30% extension, is no dot), ✔ where the works were accepted (may fall AFTER the deadline — that
+  gap is the reading; it is NOT the bar's end, that was the old
+  signature→paperwork bar the user rejected), and the printed € step where a
+  supplementary approval moved the price; «today» letters on the year line,
+  no printed dates under the bar;
+  BEFORE the signature, a dotted **run-up** carrying the procurement's own
+  acts as diamonds — primary request, commitment approval, call, award,
+  from the trail's own rows (217 of 246 have ≥1 dated, 41 have all four,
+  none dated after its contract — pinned; same-day acts nudge 6u and only
+  the first keeps a label, drawn as GREY dots);
+  the page states the bar's meaning in a note under it and every figure's
+  provenance in the evidence block — the ΚΗΜΔΗΣ ΔΙΑΡΚΕΙΑ/ΕΝΑΡΞΗ/ΛΗΞΗ
+  fields verbatim («recorded in ΚΗΜΔΗΣ, not quoted from the signed text»)
+  and the acceptance act that names the forest service, flagged when it
+  covers one part only. Matcher excerpts are cut from the ORIGINAL subject
+  (folded ones read «XΩPIKHΣ APMOΔIOTHTAΣ» in half-Latin) and trimmed to
+  word boundaries with «…»;
+  two-way hover with the trail rows. Since 2026-08-19 the Anti-nero page is
+  arranged with TIMELINE (its own section ABOVE the trail, with the bar's
+  methodology note) and DOCUMENT TRAIL as PLAIN sections, and **folds**
+  (`$lib/ui/Fold.svelte`, native `<details>` + arrow) on PROCUREMENT DETAILS /
+  EXTRACTED QUOTES / CPV CODES; quotes and CPV share a 2fr/1fr row; the map is
+  cropped to the contract's ground via **`PaperMap.fitPes`** (fit these Π.Ε.
+  WHOLE — work regions + every authority's seat region; a centroid-built frame
+  cut Εύβοια in half on 26SYMV018978343) with the small MAP/DIAGRAM switch
+  overlaid on the frame corner. Timeline↔trail hover pairs EVERY element
+  BOTH ways (run-up acts, chain acts, € payments, extension arcs, the ✔ via
+  `endRef`, the bar itself via `signedRef`; the trail row goes black, the mark
+  turns `--c-antinero`). The **call mark** is filled and labelled «call · 1 of
+  N» where its πρόσκληση produced more lots (`callInfo`/`onCallClick` from
+  `contract.family`): its card names lots + Σ €, clicking swaps the header to
+  the DIAGRAM — the cheap half of «put the circles diagram in the timeline»,
+  kept subject to user review. Chart labels never share a
+  row: acts above the bar (suppressed within 62u of the previous), extensions
+  below it, € marks nudged clear of the dots. The chain (`contract.chain`, from
   `queries_extra.contract_chain`) is folded into the trail because the
   registry's adamChain does not carry version links; dase keeps
   the FamilyTree (Greek registry vocabulary — it matches on registry

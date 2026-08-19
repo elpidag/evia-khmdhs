@@ -20,14 +20,15 @@
 	 */
 	interface Props {
 		quotes: Quote[];
-		heading?: string;
+		/** null prints no heading — the caller wraps the list in a fold */
+		heading?: string | null;
 	}
 	let { quotes, heading = 'EXTRACTED QUOTES FROM DOCUMENTS' }: Props = $props();
 </script>
 
 {#if quotes.length}
 	<section class="quotes">
-		<h2>{heading}</h2>
+		{#if heading}<h2>{heading}</h2>{/if}
 		{#each quotes as q (q.label + (q.code ?? '') + q.text.slice(0, 24))}
 			<div class="q">
 				<div class="qlabel">

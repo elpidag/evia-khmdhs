@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import math
 import re
+import datetime as _dt
 import sqlite3
 import unicodedata
 
@@ -262,6 +263,22 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
     try:
         facts["n_authorities"] = kh.execute(
             "SELECT COUNT(*) FROM forest_authorities").fetchone()[0]
+    except sqlite3.OperationalError:
+        pass
+    # what each contract PROMISED — the basis of the timeline bar, counted so
+    # the methodology paragraph cannot go stale (user, 2026-08-19)
+    try:
+        n_ext_steps = n_ext_chains = 0
+        for (ref,) in kh.execute(
+                "SELECT reference_number FROM contract_scope WHERE in_scope = 1"):
+            dl = contract_deadlines(kh, ref)
+            key = f"kh_deadline_{dl['basis'] or 'none'}"
+            facts[key] = facts.get(key, 0) + 1
+            if dl["extensions"]:
+                n_ext_chains += 1
+                n_ext_steps += len(dl["extensions"])
+        facts["kh_deadline_ext_chains"] = n_ext_chains
+        facts["kh_deadline_ext_steps"] = n_ext_steps
     except sqlite3.OperationalError:
         pass
     # the procurement-family layer (calls resolved from the contracts' own
@@ -2183,10 +2200,12 @@ def contract_chain(kh: sqlite3.Connection, ref: str) -> list[dict]:
             f" WHERE reference_number = ?", (m,)).fetchone()
         if r is None:
             continue
+        d, basis = record_date(m, _col(r, "document_kind"),
+                               r["contract_signed_date"] or r["submission_date"])
         out.append({
             "ref": m,
-            "d": _full_date(r["contract_signed_date"])
-                 or _full_date(r["submission_date"]),
+            "d": d,
+            "d_basis": basis,
             "kind": _col(r, "document_kind"),
             "eur": (round(r["total_cost_without_vat"], 2)
                     if r["total_cost_without_vat"] is not None else None),
@@ -2194,6 +2213,105 @@ def contract_chain(kh: sqlite3.Connection, ref: str) -> list[dict]:
             "self": m == ref,
         })
     return out
+
+
+def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
+    """The deadline the contract ANNOUNCED, and every later act that moved it.
+
+    The timeline bar draws promised-against-executed, the way the sponsor
+    pages do (user, 2026-08-19) — not signature-to-paperwork. Two sources say
+    what was promised, in this order:
+
+    * the registry's own `end_date` (21 of 246 in-scope originals), and
+    * the stated duration counted from the start date (62 more) — «Μήνες»,
+      «Ημέρες», or a bare number, which is read as months and SAID to be
+      assumed, because the one case whose real dates can check it
+      (25SYMV017106210: stated 4, actual 121 days) reads as months.
+
+    83 originals announce a deadline this way. For 10 more the σύμβαση
+    announces none and a later act of the same chain does — that act's date
+    is then the only announced deadline on record, and `basis` says so
+    («act») rather than passing it off as the original's. The remaining 153
+    announce nothing at all and the bar draws a stub, like the Gantt's
+    projects with no calendar deadline.
+
+    Extensions are later records announcing a deadline LATER than the one in
+    force — 6 chains, 8 steps, all of them «Παράταση προθεσμίας» records
+    carrying their new end date in the registry.
+    """
+    seq = [r["ref"] for r in contract_chain(kh, ref)] or [ref]
+    dk = ", document_kind" if _column_exists(kh, "contracts", "document_kind") else ""
+    recs = []
+    for m in seq:
+        r = kh.execute(
+            f"SELECT contract_signed_date, submission_date, start_date, end_date,"
+            f" contract_duration, contract_duration_unit{dk} FROM contracts"
+            f" WHERE reference_number = ?", (m,)).fetchone()
+        if r is None:
+            continue
+        d, _ = record_date(m, _col(r, "document_kind"),
+                           r["contract_signed_date"] or r["submission_date"])
+        recs.append((m, r, d, _col(r, "document_kind")))
+    if not recs:
+        return {"deadline": None, "basis": None, "source_ref": None,
+                "duration": None, "unit": None, "assumed": False,
+                "extensions": []}
+
+    def announced(r) -> tuple[str | None, str | None]:
+        if r["end_date"]:
+            return _full_date(r["end_date"]), "end_date"
+        n = r["contract_duration"]
+        base = _full_date(r["start_date"]) or _full_date(r["contract_signed_date"])
+        if not n or not base:
+            return None, None
+        u = (r["contract_duration_unit"] or "").upper()
+        days = n if u.startswith("ΗΜΕΡ") else n * 365 if u.startswith("ΕΤ") else round(n * 30.44)
+        try:
+            end = _dt.date.fromisoformat(base) + _dt.timedelta(days=int(days))
+        except ValueError:
+            return None, None
+        return end.isoformat(), "duration"
+
+    ref0, r0, _d0, _k0 = recs[0]
+    deadline, basis = announced(r0)
+    source_ref, source_rec = (ref0, r0) if deadline else (None, r0)
+    rest = recs[1:]
+    if deadline is None:                       # a later act is the only one
+        for m, r, _d, _k in rest:
+            got, _b = announced(r)
+            if got:
+                deadline, basis, source_ref, source_rec = got, "act", m, r
+                rest = [x for x in rest if x[0] != m]
+                break
+
+    extensions, cur, n = [], deadline, 0
+    for m, r, d, kind in rest:
+        got, _b = announced(r)
+        if got and cur and got > cur:
+            n += 1
+            extensions.append({"ref": m, "d": d, "deadline": got,
+                               "n": n, "kind": kind})
+            cur = got
+    return {
+        "deadline": deadline,
+        "basis": basis,
+        "source_ref": source_ref,
+        "duration": source_rec["contract_duration"],
+        "unit": source_rec["contract_duration_unit"],
+        "assumed": bool(source_rec["contract_duration"]
+                        and not source_rec["contract_duration_unit"]),
+        # the registry fields THE DEADLINE WAS READ FROM, verbatim, so the
+        # page can quote the record it actually used — on a chain the viewed
+        # record is the tip and its own dates are a different statement
+        "fields": {
+            "ref": source_ref or ref0,
+            "duration": source_rec["contract_duration"],
+            "unit": source_rec["contract_duration_unit"],
+            "start_date": _full_date(source_rec["start_date"]),
+            "end_date": _full_date(source_rec["end_date"]),
+        },
+        "extensions": extensions,
+    }
 
 
 # ------------------------------------------------- explore (all 3 datasets)
@@ -2244,10 +2362,12 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 f" WHERE reference_number = ?", (m,)).fetchone()
             if v is None:
                 continue
+            vd, vbasis = record_date(m, _col(v, "document_kind"),
+                                     v["contract_signed_date"] or v["submission_date"])
             versions[m] = {
                 "ref": m,
-                "d": _full_date(v["contract_signed_date"])
-                     or _full_date(v["submission_date"]),
+                "d": vd,
+                "db": vbasis,
                 "k": _col(v, "document_kind"),
                 "v": (round(v["total_cost_without_vat"], 2)
                       if v["total_cost_without_vat"] is not None else None),
@@ -2627,6 +2747,49 @@ def _col(row: sqlite3.Row, name: str):
     return row[name] if name in row.keys() else None
 
 
+# «Ημ/νία: 07/05/2026» from the ministry's digital-signature block. pdftotext
+# renders the μ of «Ημ/νία» as the MICRO SIGN in these files, so both letters
+# are accepted — with only μ the pattern matches nothing at all.
+_SIGNED_ON = re.compile(r"[ΗH][μµ]/ν[ίι]α\s*:?\s*(\d{2})/(\d{2})/(\d{4})")
+
+
+def act_own_date(adam: str) -> tuple[str | None, str | None]:
+    """(ISO date, basis) of the DOCUMENT itself, read from its own PDF.
+
+    ΚΗΜΔΗΣ copies the CONTRACT's `contractSignedDate` onto every later act
+    posted against it — 39 of the 46 in-scope records that are not an original
+    contract carry their parent's date verbatim, so 26SYMV018978343, signed
+    07.05.2026, is filed as 01.08.2025 (DATA_DECISIONS 2026-08-19). The
+    document's own date is in the signature block where it exists (15 of 46),
+    else in the ΚΗΜΔΗΣ publication stamp every one of them carries.
+    """
+    p = PDF_CACHE_DIR / f"{adam}.txt"
+    try:
+        head = p.read_text(encoding="utf-8", errors="replace")[:4000]
+    except OSError:
+        return None, None
+    m = _SIGNED_ON.search(head)
+    if m:
+        return f"{m.group(3)}-{m.group(2)}-{m.group(1)}", "signature"
+    m = re.search(rf"{adam}\s+(\d{{4}}-\d{{2}}-\d{{2}})", head)
+    return (m.group(1), "published") if m else (None, None)
+
+
+def record_date(adam: str, kind: str | None,
+                signed: str | None) -> tuple[str | None, str]:
+    """(ISO date, basis) for ONE ΚΗΜΔΗΣ record.
+
+    An original contract's `contractSignedDate` is its own signature date and
+    is used as-is. Every OTHER record — a τροποποίηση, a παράταση, an έγκριση
+    συμπληρωματικών — inherits that same field from the contract it acts on,
+    so its date must come from its own document instead (`act_own_date`).
+    """
+    if kind in (None, "contract"):
+        return _full_date(signed), "signed"
+    own, basis = act_own_date(adam)
+    return (own, basis) if own else (_full_date(signed), "inherited")
+
+
 def _stamped_date(adam: str) -> str | None:
     """The date ΚΗΜΔΗΣ stamped on the document itself.
 
@@ -2681,10 +2844,15 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
                 who = kh.execute(
                     "SELECT name FROM contractors WHERE reference_number = ? "
                     "ORDER BY seq LIMIT 1", (r["adam"],)).fetchone()
+                sib_d, sib_basis = record_date(
+                    r["adam"], _col(c, "document_kind"),
+                    c["contract_signed_date"] or c["submission_date"])
                 entry.update({
                     "title": (c["title"] or "")[:160] or None,
-                    "d": _full_date(c["contract_signed_date"])
-                         or _full_date(c["submission_date"]),
+                    # a later act inherits the CONTRACT's date in the registry;
+                    # the trail must show the date of the document it lists
+                    "d": sib_d,
+                    "d_basis": sib_basis,
                     "cancelled": c["cancelled"] or 0,
                     # WHY the sibling is excluded — the trail must not print
                     # «cancelled» over a double-posting or an out-of-scope

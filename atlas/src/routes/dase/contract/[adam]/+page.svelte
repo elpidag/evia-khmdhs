@@ -173,9 +173,7 @@
 		<dt>Budget <small class="muted">(excl. VAT)</small></dt>
 		<dd>
 			{eurShort(c.total_cost_without_vat ?? 0)}
-			{#if c.gross?.stated_gross}<small class="muted"
-					>· {eurShort(c.gross.stated_gross)} incl. ΦΠΑ</small
-				>{/if}
+
 		</dd>
 		<dt>Type</dt>
 		<dd>{c.contract_type ?? '—'}</dd>
@@ -357,9 +355,7 @@
 		<table>
 			<thead>
 				<tr
-					><th>date</th><th>order</th><th class="num">amount (net)</th><th class="num"
-						>incl. ΦΠΑ</th
-					><th></th></tr
+					><th>date</th><th>order</th><th class="num">amount (net)</th><th></th></tr
 				>
 			</thead>
 			<tbody>
@@ -375,13 +371,6 @@
 								>{/if}
 						</td>
 						<td class="num">{eur(p.amount_without_vat ?? p.amount_with_vat)}</td>
-						<td class="num muted"
-							><small
-								>{c.gross?.payments?.[p.payment_ref] != null
-									? eur(c.gross.payments[p.payment_ref])
-									: '—'}</small
-							></td
-						>
 						<td>
 							<a href={`/pdf/payment/${p.payment_ref}`} target="_blank" rel="noopener">PDF</a>
 						</td>
