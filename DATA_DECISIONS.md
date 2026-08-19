@@ -5132,3 +5132,117 @@ aliases), `scripts/build_muni_polygons.py` (new),
 `atlas_api/queries_extra.py` + `app.py`, the contract page and its map,
 `/explore`, `tests/test_atlas_real_db.py` (3 pins). No basis change: the region layer, the maps
 and every aggregate are untouched.*
+
+---
+
+## 2026-08-19 · The Anti-nero contract card, to the sponsored-works template
+
+User review of the card, and one data error it turned up.
+
+**The card.** Its second column now reads like the sponsored-works one:
+
+- **one language.** The work type prints its **English** label — eight added
+  to `contract_categories.json` (`label_en`), the Greek kept as the hover
+  title — and the awarding procedure prints Directive 2014/24/EU's own
+  wording via `$lib/transforms/procedures.ts`: «Ανοικτή διαδικασία» → *Open
+  procedure*, «Διαπραγμάτευση χωρίς προηγούμενη δημοσίευση» → *Negotiated
+  procedure without prior publication*, «Κατεπείγουσα ανάγκη οφειλόμενη σε
+  γεγονότα απρόβλεπτα…» → the Directive's art. 32(2)(c) ground in its
+  English. «Απευθείας ανάθεση» has no Directive equivalent — άρθρο 118 is
+  Greece's own below-threshold route — so it keeps *Direct award* with its
+  article reference. Article numbers stay literal: identifiers, not prose.
+- **no chip on the type** — the value is plain text, like every other value.
+- **explanations moved into hover cards** (`$lib/ui/Hint.svelte`): the grey
+  half-lines under values (which document dated the record, why a duration
+  was assumed, why a forest service is named by an acceptance act, what a
+  CPV note means) are now a small marker with the same black rectangle the
+  maps and charts use. Everything they say is still in the evidence block.
+- **one label column width across the detail pages** (15,5 rem), so long
+  labels wrap — «RESPONSIBLE FOREST SERVICE BODY», «AMENDMENTS TO ORIGINAL
+  CONTRACT» — instead of pushing the values sideways, and label and value
+  both start at the top of their row.
+- **the map's bottom edge meets the last line of the caveat**, as on the
+  sponsored pages: its width is the template's and never moves, its viewBox
+  takes the measured column width and the facts height. The caveat now says
+  what the map shows (shaded regional units, outlined municipalities, forest
+  service seats). The hover label is the sponsored map's **black card**.
+
+**The error.** Asked why 25SYMV016659302 reads «cancelled», the registry
+answers: ΥΠΕΝ cancelled it on 15.10.2025, «ΛΟΓΩ ΛΑΘΟΥΣ ΣΤΟ ΑΝΑΡΤΗΜΕΝΟ
+ΑΡΧΕΙΟ». It was **re-posted six days later as 25SYMV017779215** — same
+title, same signature date 10.04.2025, same €3.363.432,24, same contractor
+and ΑΦΜ, same three forest services; the re-posting carries the 4 payment
+orders. Both are in scope, so the basis counts that contract twice:
+**€625.897.613,96 → €622.534.181,72**, 246 → 245 contracts. **Applied the
+same day** on the user's word.
+
+*Also noted: the trail of 24SYMV014843550 lists 24SYMV014844210/…359/…409
+because the registry's adamChain returns the whole family — they are the
+other three lots of award 24AWRD014592135, not versions of this contract,
+and the trail must label them as such.*
+
+---
+
+## 2026-08-19 · A record the registry cancelled is not a contract of the programme
+
+The rule the double-count exposed, now in `scope_loader`: **a record ΚΗΜΔΗΣ
+itself cancelled is out of scope.** It was not before, because scope asked
+only what the contract IS, never whether the registry had withdrawn the
+record — so 25SYMV016659302, cancelled «ΛΟΓΩ ΛΑΘΟΥΣ ΣΤΟ ΑΝΑΡΤΗΜΕΝΟ ΑΡΧΕΙΟ»
+on 15.10.2025 and re-posted six days later as 25SYMV017779215, stood in the
+basis beside its own replacement. One row in the whole dataset; the rule is
+declared by the registry, nothing is inferred.
+
+**Basis: €625.897.613,96 → €622.534.181,72 · 246 → 245 in-scope contracts.**
+Every derived pin moved with it (17 real-DB tests), and the layers rebuilt:
+work themes 245, forest authorities 244/245 linked, families 219 contracts
+→ 134 calls, explore 2.312 rows, deadlines 242 document + 3 season.
+
+**The two records now find each other.** The registry publishes no link —
+no prev/next, no adamChain; the only common thread is that both texts cite
+πρόσκληση 25PROC016395141 — so the connection is curated: a
+`contract_corrections.json` entry (`exclude` + `duplicate_of`) records the
+cancellation reason verbatim, and `contract_timeline` adds the twin as a
+trail row on BOTH pages, labelled «cancelled record, re-posted as this
+contract» on one side and «the re-posting of the cancelled record» on the
+other. Neither page reads as a plain cancellation, which would hide that
+the contract exists and was paid.
+
+*Affects: `khmdhs/scope_loader.py` (the rule), `khmdhs/data/contract_corrections.json`
+(1 entry), `atlas_api/queries_extra.py` (`contract_timeline` twin rows), the
+contract page's trail chip, and every pinned figure that follows the basis.*
+
+---
+
+## 2026-08-19 · The document trail holds this contract's own records
+
+ΚΗΜΔΗΣ's `adamChain` returns the whole procurement FAMILY, so a multi-lot
+award put the other lots into a contract's trail — other companies'
+contracts, with their own pages, listed under «Original contract» as if they
+were documents of this one. Measured: **59 of 246** in-scope contracts carry
+a foreign ΣΥΜΒ row (121 rows), but 56 of those rows are the contract's own
+versions; only **19 pages** actually show another contract, up to **11 rows**
+on the four flood-works lots of one award.
+
+Labelling them was rejected as not making it easier to read (user). They are
+**removed from the table** instead, and the relationship they belong to is
+the one the DIAGRAM already draws — which knows the call for **220 of 246**
+contracts against the trail's 19, and on 17 of those 19 already contains
+every foreign row. Under the trail a single line now says «One of 4
+contracts awarded under call 23PROC013607586 — see the diagram» and switches
+the header slot to it.
+
+**What stays**: the primary request, the commitment approval, every call,
+the award, the contract's own version chain, its payment orders, its
+acceptance act, and the re-posted twin of a cancelled record. Only other
+contracts leave.
+
+**Both datasets follow the same rule** (user, 2026-08-19). The ΔΑΣΕ page
+drew its FamilyTree FROM the trail list, so the endpoint now returns two:
+`timeline` (own records, the table) and `family_acts` (the whole family, the
+diagram). An excluded sibling still states its reason — «outside the
+dataset» — where it now appears, in the diagram.
+
+*Affects: `queries_extra.contract_timeline(own_records_only=…)`,
+`atlas_api/app.py` (both contract endpoints), the Anti-nero and ΔΑΣΕ contract
+pages, `tests/test_atlas_real_db.py` (1 new pin, 2 moved).*

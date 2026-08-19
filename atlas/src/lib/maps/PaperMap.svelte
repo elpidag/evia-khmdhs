@@ -553,17 +553,19 @@
 		color: var(--ink);
 		background: var(--paper);
 	}
+	/* the same black card the sponsored-works maps use (user, 2026-08-19) —
+	   one hover-label look across every map on the site */
 	.tip {
 		position: absolute;
 		bottom: var(--sp-2);
 		left: var(--sp-2);
 		max-width: 22rem;
-		background: color-mix(in srgb, var(--paper) 94%, transparent);
-		border: 1px solid var(--line-strong);
-		border-radius: var(--radius);
-		padding: var(--sp-2) var(--sp-3);
+		background: #000;
+		color: #fff;
+		border-radius: 4px;
+		padding: var(--sp-1) var(--sp-2);
 		font-size: var(--fs-13);
+		font-variant-numeric: tabular-nums;
 		pointer-events: none;
-		box-shadow: var(--shadow-paper);
 	}
 </style>

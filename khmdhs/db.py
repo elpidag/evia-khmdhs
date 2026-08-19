@@ -440,6 +440,9 @@ def init_db(path: Path) -> sqlite3.Connection:
         # why a δήμος sits outside the contract's curated Π.Ε. — the naming
         # service administers it, or the user ruled on it (2026-08-19)
         ("contract_municipalities", "outside_pe_explained", "TEXT"),
+        # English display label for the work-type vocabulary: the contract
+        # card is an English page and cannot mix the two (user 2026-08-19)
+        ("category_labels", "label_en", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")

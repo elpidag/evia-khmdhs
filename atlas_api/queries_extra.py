@@ -449,14 +449,16 @@ def contract_category(kh: sqlite3.Connection, ref: str) -> dict | None:
             "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') "
             "AND name='contract_categories'").fetchone():
         return None
-    r = kh.execute("""
-        SELECT c.category AS key, l.label, l.note, c.title, c.source
+    en = ", l.label_en" if _column_exists(kh, "category_labels", "label_en") else ""
+    r = kh.execute(f"""
+        SELECT c.category AS key, l.label, l.note, c.title, c.source{en}
         FROM contract_categories c
         LEFT JOIN category_labels l ON l.category = c.category
         WHERE c.reference_number = ?""", (ref,)).fetchone()
     if r is None:
         return None
     return {"key": r["key"], "label": r["label"] or r["key"],
+            "label_en": _col(r, "label_en") or r["label"] or r["key"],
             "note": r["note"], "title": r["title"], "source": r["source"]}
 
 
@@ -2938,7 +2940,14 @@ def _stamped_date(adam: str) -> str | None:
     return m.group(1) if m else None
 
 
-def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
+def _chain_refs(kh: sqlite3.Connection, ref: str) -> set[str]:
+    """Every record of the contract's own version chain, `ref` included."""
+    seq = next((v for v in contract_chains(kh).values() if ref in v), None)
+    return set(seq) if seq else {ref}
+
+
+def contract_timeline(kh: sqlite3.Connection, ref: str,
+                      own_records_only: bool = False) -> list[dict]:
     """The contract's full procurement family (αίτημα → πρόσκληση →
     κατακύρωση → συμβάσεις), chronological. Sibling contracts resolve to
     their stored record when they belong to the dataset; payments are not
@@ -2963,6 +2972,17 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
             "in_db": False,
         }
         if r["kind"] == "contract":
+            # ΚΗΜΔΗΣ's adamChain returns the whole procurement FAMILY, so a
+            # multi-lot award puts the other lots here — other companies'
+            # contracts, with their own pages, listed as if they were
+            # documents of this one (19 in-scope pages, up to 11 rows each).
+            # The Anti-nero page drops them (`own_records_only`): the
+            # relationship is the DIAGRAM's, which knows the call for 220 of
+            # 246 contracts, and a line under the trail points at it (user,
+            # 2026-08-19). ΔΑΣΕ keeps them — its FamilyTree is drawn FROM
+            # this list, and an excluded sibling states its reason there.
+            if own_records_only and r["adam"] not in _chain_refs(kh, ref):
+                continue
             # `dk` is what the DOCUMENT says it is — a ΣΥΜΒ ΑΔΑΜ carries
             # contracts, amendments, supplementary contracts and ministry
             # approvals alike, and the trail must not label them all «Contract»
@@ -3040,6 +3060,41 @@ def contract_timeline(kh: sqlite3.Connection, ref: str) -> list[dict]:
                 "cited": True, "role": r["role"], "excerpt": r["excerpt"],
             })
     except sqlite3.OperationalError:            # table not built yet
+        pass
+
+    # The twin of a re-posted record. ΚΗΜΔΗΣ cancels a record and posts the
+    # contract again with NO link between the two — no prev/next, no
+    # adamChain — so the only way each page can show the other is the
+    # curated `duplicate_of` (DATA_DECISIONS 2026-08-19). Added on BOTH
+    # sides: the cancelled record points forward, the live one back.
+    try:
+        twins = [r["reference_number"] for r in kh.execute(
+            "SELECT reference_number FROM contracts WHERE duplicate_of = ?", (ref,))]
+        own = kh.execute("SELECT duplicate_of FROM contracts"
+                         " WHERE reference_number = ?", (ref,)).fetchone()
+        if own is not None and own["duplicate_of"]:
+            twins.append(own["duplicate_of"])
+        seen = {e["adam"] for e in out}
+        for t in twins:
+            if t in seen:
+                continue
+            c = kh.execute(
+                f"SELECT title, contract_signed_date, submission_date, cancelled"
+                f"{_exclusion_cols(kh)} FROM contracts WHERE reference_number = ?",
+                (t,)).fetchone()
+            if c is None:
+                continue
+            d, basis = record_date(t, "contract",
+                                   c["contract_signed_date"] or c["submission_date"])
+            out.append({
+                "adam": t, "kind": "contract", "d": d, "d_basis": basis,
+                "title": (c["title"] or "")[:160] or None,
+                "cancelled": c["cancelled"] or 0,
+                "duplicate_of": _col(c, "duplicate_of"),
+                "related_to": _col(c, "related_to"),
+                "doc_kind": "contract", "in_db": True, "twin": True,
+            })
+    except sqlite3.OperationalError:
         pass
 
     out.sort(key=lambda e: (e["d"] or "9999",

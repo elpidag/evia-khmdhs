@@ -56,11 +56,15 @@
 			grid-template-columns: 1fr;
 		}
 	}
+	/* One label column width for every detail page (user, 2026-08-19): the
+	   sponsored-works and Anti-nero cards line up, and a long label like
+	   «RESPONSIBLE FOREST SERVICE BODY» wraps onto a second row instead of
+	   pushing the values across. */
 	.facts {
 		display: grid;
-		grid-template-columns: max-content minmax(0, 1fr);
+		grid-template-columns: minmax(0, 15.5rem) minmax(0, 1fr);
 		column-gap: var(--sp-6);
-		row-gap: 6px;
+		row-gap: 8px;
 		margin: 0;
 	}
 	.facts :global(dt) {
@@ -69,11 +73,16 @@
 		text-transform: uppercase;
 		letter-spacing: 0.02em;
 		font-size: var(--fs-14);
+		line-height: 1.25;
+		align-self: start;
 	}
+	/* label and value both start at the top of their row: with wrapping
+	   labels and multi-line values, bottom-alignment put «AREAS OF
+	   INTERVENTION» beside the last δήμος instead of the first */
 	.facts :global(dd) {
 		margin: 0;
 		font-size: var(--fs-14);
-		align-self: end;
+		align-self: start;
 	}
 	/* qualifier text inside a label («of the designation decision») reads
 	   like the value it sits next to, not like the CAPS label */

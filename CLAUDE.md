@@ -5,7 +5,10 @@ public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico
 Everything derived is regenerable; `data/raw/` is never written to.
 
 **Current state** (2026-08-18): 344 contracts (246 in scope; the Atlas
-analytics basis is **stated net €625,897,613.96** (includes 19 curated
+analytics basis is **stated net €622,534,181.72** — 245 contracts since
+2026-08-19, when a record ΚΗΜΔΗΣ itself cancelled and re-posted was found
+counted twice (25SYMV016659302 → 25SYMV017779215; `scope_loader` now takes
+a registry-cancelled record out of scope) — (includes 19 curated
 keying-error corrections — the Σουφλί cross-contract one and the
 PROJECT-BUDGET-as-contract-value errors of 2026-08-18: 4 found by hand
 (−€31.7M) and 8 more found by the document audit's screen (−€1.68M, 13
@@ -1214,8 +1217,13 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   bold; qualifier `small` text inside a label renders like the value, not
   CAPS; caveat spans the full facts width; no MAP corner label),
   `DocTrail` (uniform date · type · code · title · pdf table, ENGLISH
-  type labels; the viewed document bold; optional `top` snippet between
-  heading and table; `heading={null}` when a fold prints the title, optional
+  type labels; the viewed document bold; **the table holds the contract's OWN
+  records only** — `contract_timeline(own_records_only=True)` drops the other
+  lots the registry's adamChain returns (19 in-scope pages, up to 11 rows),
+  and a line under it points at the DIAGRAM, which knows the call for 220 of
+  246; the ΔΑΣΕ page follows the same rule and feeds its FamilyTree from the
+  endpoint's second list `family_acts` (user, 2026-08-19); optional `top`
+  snippet between heading and table; `heading={null}` when a fold prints the title, optional
   `alt` second link per row — the Anti-nero page puts its PAYMENT ORDERS in
   the trail this way, amount in the title cell, Διαύγεια in `alt`, and the
   standalone payments table is gone; heading renamed «DOCUMENT TRAIL»

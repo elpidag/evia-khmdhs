@@ -191,13 +191,30 @@ def main(argv: list[str] | None = None) -> int:
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     counts: dict[str, int] = {}
     n_super = 0
+    n_cancelled = 0
+    # records ΚΗΜΔΗΣ itself cancelled — read here rather than threaded out of
+    # build_scopes, which needs the same set for the supersede pass
+    cancelled = {r[0] for r in conn.execute(
+        "SELECT reference_number FROM contracts WHERE cancelled = 1")}
     with conn:
         if not args.dry_run:
             conn.execute("DELETE FROM contract_scope")
         for ref, (scope, basis) in scopes.items():
             counts[scope] = counts.get(scope, 0) + 1
             sup = superseded.get(ref)
-            in_scope = 1 if (scope in IN_SCOPE and sup is None) else 0
+            # A record ΚΗΜΔΗΣ ITSELF cancelled is not a contract of the
+            # programme. 25SYMV016659302 was cancelled «ΛΟΓΩ ΛΑΘΟΥΣ ΣΤΟ
+            # ΑΝΑΡΤΗΜΕΝΟ ΑΡΧΕΙΟ» and re-posted six days later as
+            # 25SYMV017779215 — same title, date, value, contractor and
+            # services — with no link between the two, so both stood in
+            # scope and the basis counted that contract twice
+            # (DATA_DECISIONS 2026-08-19). The registry declares the
+            # cancellation; nothing here is inferred.
+            in_scope = 1 if (scope in IN_SCOPE and sup is None
+                             and ref not in cancelled) else 0
+            if ref in cancelled and scope in IN_SCOPE:
+                n_cancelled += 1
+                basis = f"{basis}; cancelled by the registry"
             if sup is not None and scope in IN_SCOPE:
                 n_super += 1
                 basis = f"{basis}; superseded_by:{sup}"
@@ -223,6 +240,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  superseded by later version: {n_super}")
     if in_scope_n is not None:
         print(f"  IN SCOPE for analytics: {in_scope_n} contracts, €{in_scope_eur} M")
+    if n_cancelled:
+        print(f"  excluded because ΚΗΜΔΗΣ cancelled the record: {n_cancelled}")
     conn.close()
     return 0
 

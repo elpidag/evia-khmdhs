@@ -42,9 +42,16 @@
 		completion: 'Ολοκλήρωση'
 	};
 
-	const timeline = $derived.by(() => {
-		if (!c.timeline?.length) return [];
-		const rows = c.timeline.map((t) => ({ ...t, self: false }));
+	/** the trail table: this contract's own records. The other lots of the
+	 *  same procurement live in the family diagram below, as on the
+	 *  Anti-nero pages (user, 2026-08-19). */
+	const timeline = $derived.by(() => rowsOf(c.timeline ?? []));
+	/** the diagram: the whole family the registry's chain returns */
+	const familyActs = $derived(rowsOf(c.family_acts ?? c.timeline ?? []));
+
+	function rowsOf(src: NonNullable<typeof c.timeline>) {
+		if (!src.length) return [];
+		const rows = src.map((t) => ({ ...t, self: false }));
 		rows.push({
 			adam: c.reference_number,
 			kind: 'contract' as const,
@@ -61,7 +68,7 @@
 			`${a.d ?? '9999'}${ORDER[a.kind]}`.localeCompare(`${b.d ?? '9999'}${ORDER[b.kind]}`)
 		);
 		return rows;
-	});
+	}
 
 	const pdfHref = (t: (typeof timeline)[number]): string | null => {
 		if (t.kind !== 'contract')
@@ -268,7 +275,7 @@
 	</p>
 {/if}
 
-{#if timeline.length > 1}
+{#if familyActs.length > 1}
 	<section class="tplsec">
 		<h2>Procurement family</h2>
 		<p class="muted">
@@ -277,7 +284,7 @@
 			connects to a contract only when it names that contract's co-op.
 		</p>
 		<FamilyTree
-			acts={timeline}
+			acts={familyActs}
 			kindLabel={TREE_KIND}
 			payments={live.length ? { n: live.length, eur: eurShort(c.paid_without_vat ?? 0) } : null}
 		/>

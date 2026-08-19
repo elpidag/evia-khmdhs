@@ -7,6 +7,8 @@
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
 	import ChainTimeline from '$lib/detail/ChainTimeline.svelte';
 	import Fold from '$lib/ui/Fold.svelte';
+	import Hint from '$lib/ui/Hint.svelte';
+	import { procedureEn } from '$lib/transforms/procedures';
 	import ProcurementFamily from '$lib/charts/ProcurementFamily.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
@@ -35,6 +37,11 @@
 	const hasFamily = $derived(!!c.family && c.family.contracts.length > 1);
 	let view = $state<'map' | 'family'>('map');
 	let cpvAll = $state(false);
+	/** swap the header slot to the procurement diagram and bring it into view */
+	const showDiagram = () => {
+		view = 'family';
+		document.querySelector('.detailmap, .famslot')?.scrollIntoView({ block: 'center' });
+	};
 	// hover binds the timeline's act dots to the trail's rows, both ways
 	let hoverAct = $state<string | null>(null);
 	let hoverRow = $state<string | null>(null);
@@ -194,9 +201,18 @@
 			...(t.cited ? { chip: 'cited in this contract', chipBad: false } : {}),
 			// the registry title stays verbatim — it IS the document's title and
 			// the evidence of the error; the chip points at the explanation below
-			...(t.self && overrideNote
-				? { chip: 'unit corrected from the PDF', chipBad: false }
-				: trailChip(t))
+			// the twin of a re-posted record: the registry links the two
+			// nowhere, so the row says which side of the re-posting it is
+			...(t.twin
+				? {
+						chip: t.cancelled
+							? 'cancelled record, re-posted as this contract'
+							: 'the re-posting of the cancelled record',
+						chipBad: false
+					}
+				: t.self && overrideNote
+					? { chip: 'unit corrected from the PDF', chipBad: false }
+					: trailChip(t))
 			}))
 		].sort((a, b) => `${a.d ?? '9999'}`.localeCompare(`${b.d ?? '9999'}`))
 	);
@@ -230,6 +246,12 @@
 	/** the δήμοι the documents place the works in, one level finer than the
 	 *  Π.Ε. layer; `outside_region` marks a δήμος whose Π.Ε. we never curated
 	 *  for this contract — recorded as the document states it (2026-08-19) */
+	/** the map's bottom edge meets the last line of the caveat, as on the
+	 *  sponsored-works pages; the width is the template's and never moves */
+	let leftH = $state(0);
+	let mapW = $state(0);
+	const mapH = $derived(Math.max(420, Math.round(leftH)));
+
 	const munis = $derived(c.municipalities ?? []);
 	let muniLayer = $state.raw<FeatureCollection<
 		GeoJSON.MultiPolygon | GeoJSON.Polygon,
@@ -497,14 +519,14 @@
 	);
 
 	const CAVEAT = $derived(
-		"Areas of intervention are read from the contract's own signed documents or from the call " +
-			'it cites, and quoted below. The map highlights the contract’s regional units, outlines ' +
-			'the municipalities its documents name and marks the seats of the awarding forest ' +
-			'authorities' +
+		'On the map: the regional units this contract worked in are shaded, the municipalities its ' +
+			'documents name are outlined inside them, and each dot is the seat of a forest service ' +
+			'responsible for the works' +
 			(munis.some((m) => m.outside_region)
-				? '; one municipality here lies outside the highlighted units and no forest-service jurisdiction accounts for it — the document is recorded as it stands and the region layer is left as curated.'
+				? '. One municipality here falls outside the shaded units — that is what the document says, and the region layer is left as curated.'
 				: '.')
 	);
+
 </script>
 
 <svelte:head>
@@ -520,7 +542,7 @@
 
 <p class="crumb"><a href="/antinero/contracts">← Anti-nero contracts</a></p>
 
-<FactsHeader caveat={CAVEAT}>
+<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
 	{#snippet facts()}
 		<dt class="id">Contract</dt>
 		<dd class="id">
@@ -533,31 +555,28 @@
 		<dt>Date</dt>
 		<dd>
 			{dmy(c.own_date ?? c.contract_signed_date) || '—'}
-			{#if c.own_date_basis === 'published'}<small class="muted"
-					>· posted to ΚΗΜΔΗΣ; the document states no date</small
-				>{:else if c.own_date_basis === 'inherited'}<small class="muted"
-					>· ΚΗΜΔΗΣ repeats the contract's own date on this act</small
-				>{/if}
+			{#if c.own_date_basis === 'published'}<Hint
+					text="The date this record was posted to ΚΗΜΔΗΣ. The document itself states none."
+				/>{:else if c.own_date_basis === 'inherited'}<Hint
+					text="ΚΗΜΔΗΣ files later acts under the contract's own signature date; this is that date."
+				/>{/if}
 		</dd>
 		<dt>Contractor</dt>
 		<dd>
 			{#each c.contractors as ct, i (ct.vat_number)}
 				{#if i}{', '}{/if}<a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a>
 			{/each}
-			{#if c.contractors.length > 1}
-				<br /><small class="muted"
-					>consortium — each partner is credited the full value in per-contractor views</small
-				>
-			{/if}
+			{#if c.contractors.length > 1}<Hint
+					text="A consortium. Per-contractor views credit each partner with the full value, so partner totals cannot be added together."
+				/>{/if}
 		</dd>
 		<dt>Type</dt>
 		<dd>
-			{#if c.category}<span class="chip cat" title={c.category.note ?? ''}
-					>{c.category.label}</span
-				>{:else}—{/if}
+			{#if c.category}<span title={devGreek(c.category.label)}
+					>{c.category.label_en ?? c.category.label}</span
+				>{#if c.category.note}<Hint text={c.category.note} />{/if}{:else}—{/if}
 			<!-- what the contract's OWN title says the works are: 101 of 246
-			     name more than one kind, which one category cannot carry
-			     (user, 2026-08-19) -->
+			     name more than one kind, which one category cannot carry -->
 			{#if themes.length}
 				<div class="themes">
 					{#each themes as t (t.key)}<span class="theme" title={devGreek(t.el)}
@@ -565,15 +584,17 @@
 						>{/each}
 				</div>
 			{:else}
-				<div class="themes muted"><small>the contract states no further detail</small></div>
+				<div class="themes muted">
+					no further detail stated<Hint
+						text="The contract's own project title names no specific kind of work beyond fire protection. Nothing is inferred from the call, which lists the whole programme's menu of works."
+					/>
+				</div>
 			{/if}
 			{#if cpvNotes.length}
 				<div class="themes muted">
-					<small
-						>the procurement's CPV codes also cover {cpvNotes
-							.map((n) => n.en.toLowerCase())
-							.join(', ')}</small
-					>
+					CPV also covers {cpvNotes.map((n) => n.en.toLowerCase()).join(', ')}<Hint
+						text="These CPV codes belong to the procurement's own code list, which is shared by every lot of the call. They are shown as a note, never as this contract's work."
+					/>
 				</div>
 			{/if}
 		</dd>
@@ -585,8 +606,13 @@
 		</dd>
 		<dt>Awarding procedure</dt>
 		<dd>
-			{c.procedure_type ?? '—'}
-			{#if c.bids_submitted === 1}<span class="chip warn">single bidder</span>{/if}
+			<span title={devGreek(c.procedure_type ?? '')}>{procedureEn(c.procedure_type)}</span>
+			{#if c.award_procedure}<Hint
+					text={`Ground stated in the registry: ${procedureEn(c.award_procedure)}.`}
+				/>{/if}
+			{#if c.bids_submitted === 1}<Hint
+					text="One bid was submitted for this contract."
+				/>{/if}
 		</dd>
 		<dt>Contracting authority</dt>
 		<dd><span title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</span></dd>
@@ -609,12 +635,11 @@
 										: (m.note ?? m.region_pe ?? '')}>Δήμος {m.name}</span
 					>
 				{/each}
-				<br /><small class="muted"
-					>{regionLine}{muniSource ? ` · ${muniSource}` : ''}</small
-				>
+				<br /><span class="sub">{regionLine}</span>{#if muniSource}<Hint text={muniSource} />{/if}
 			{:else}
-				{regionLine || '—'}
-				<br /><small class="muted">the documents name no municipality</small>
+				{regionLine || '—'}<Hint
+					text="The contract's documents place the works in these regional units but name no municipality."
+				/>
 			{/if}
 		</dd>
 		<dt>Responsible forest service body</dt>
@@ -623,16 +648,15 @@
 				{#each c.authorities as a, i (a.name)}
 					{#if i}{', '}{/if}<span title={devGreek(a.name)}>{authEn(a.name)}</span>
 				{/each}
+				<!-- a region-scoped «άμεσης διαχείρισης» contract names no forest
+				     service at all; the only ones on record are those an acceptance
+				     act happened to name, and one of those acts covers one part -->
 				{#if c.authorities.every((a) => a.source?.startsWith('completion_act'))}
-					<!-- a region-scoped «άμεσης διαχείρισης» contract names no forest
-					     service at all; the only ones on record are those an
-					     acceptance act happened to name, and one of those acts covers
-					     a single part of the works -->
-					<br /><small class="muted"
-						>named by {c.authorities.some((a) => a.source?.endsWith('|part'))
-							? 'an acceptance act covering one part of the works'
-							: 'the acceptance acts'}; the contract itself names none</small
-					>
+					<Hint
+						text={c.authorities.some((a) => a.source?.endsWith('|part'))
+							? 'The contract names no forest service. This one is named by an acceptance act that covers a single part of the works, so it is not the contract’s whole jurisdiction.'
+							: 'The contract names no forest service; these are the ones its acceptance acts name.'}
+					/>
 				{/if}
 			{:else}
 				<span title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</span>
@@ -640,8 +664,7 @@
 		</dd>
 		<dt>Duration</dt>
 		<dd>
-			{duration.text}
-			{#if duration.note}<br /><small class="muted">{duration.note}</small>{/if}
+			{duration.text}{#if duration.note}<Hint text={duration.note} />{/if}
 		</dd>
 		<dt>Amendments to original contract</dt>
 		<dd>{chain.length > 1 || c.prev_reference_no || c.next_reference_no ? 'yes' : 'no'}</dd>
@@ -684,8 +707,10 @@
 				</p>
 			</div>
 		{:else}
-		<div class="detailmap">
+		<div class="detailmap" bind:clientWidth={mapW}>
 			<PaperMap
+				width={mapW || 460}
+				height={mapH}
 				interactive={false}
 				fitPoints={worksPoints}
 				fitPes={worksPes}
@@ -738,10 +763,7 @@
 		callInfo={hasFamily
 			? { ref: c.family!.call, lots: c.family!.contracts.length, total: c.family!.total_eur }
 			: null}
-		onCallClick={() => {
-			view = 'family';
-			document.querySelector('.detailmap, .famslot')?.scrollIntoView({ block: 'center' });
-		}}
+		onCallClick={showDiagram}
 		highlightRef={hoverRow}
 		onActHover={(ref) => (hoverAct = ref)}
 	/>
@@ -756,6 +778,18 @@
 		highlight={hoverAct ?? hoverRow}
 		onRowHover={(code) => (hoverRow = code)}
 	/>
+	<!-- the other lots of the same procurement are not documents of THIS
+	     contract, so they left the table; the relationship they belong to is
+	     the diagram's, and this line is the way in (user, 2026-08-19) -->
+	{#if hasFamily}
+		<p class="muted">
+			<small
+				>One of {grInt(c.family!.contracts.length)} contracts awarded under call
+				<span class="tabular">{c.family!.call}</span> —
+				<button class="linkish" onclick={showDiagram}>see the diagram</button>
+			</small>
+		</p>
+	{/if}
 	{#if live.length}
 		<p class="muted">
 			<small
@@ -876,6 +910,11 @@
 	}
 	.flagged {
 		border-bottom: 1px dotted var(--ink-faint);
+	}
+	/* the regional units under the municipalities: same size, quieter ink —
+	   one step of context, not a second fact */
+	.sub {
+		color: var(--ink-soft);
 	}
 	.themes {
 		margin-top: 3px;
@@ -1014,9 +1053,6 @@
 	}
 	.nowrap {
 		white-space: nowrap;
-	}
-	.chip.cat {
-		background: color-mix(in srgb, var(--c-antinero) 12%, #fff);
 	}
 	.muted {
 		color: var(--ink-soft);

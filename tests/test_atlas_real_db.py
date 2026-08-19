@@ -38,8 +38,8 @@ def kh():
 
 def test_meta_pins(client):
     m = client.get("/api/meta").get_json()
-    assert m["antinero"]["n_contracts"] == 246
-    assert m["antinero"]["total_eur"] == pytest.approx(625_897_613.96)
+    assert m["antinero"]["n_contracts"] == 245
+    assert m["antinero"]["total_eur"] == pytest.approx(622_534_181.72)
     assert m["dase"]["n_contracts"] == 1998
     assert m["dase"]["total_eur"] == pytest.approx(29_920_558.46)
 
@@ -71,7 +71,7 @@ def test_cpvs_pins(client):
     cpvs = o["cpvs"]
     assert len(cpvs) == 145
     assert cpvs[0] == {"code": "77231300-1",
-                      "desc": "Υπηρεσίες διαχείρισης δασών", "n": 226}
+                      "desc": "Υπηρεσίες διαχείρισης δασών", "n": 225}
     # counts are per-contract: no code can exceed the in-scope population
     n_contracts = o["kpis"]["n_contracts"]
     assert all(0 < r["n"] <= n_contracts for r in cpvs)
@@ -87,11 +87,11 @@ def test_categories_pins(client):
     o = client.get("/api/antinero/overview").get_json()
     cats = o["categories"]
     assert {c["key"]: c["n"] for c in cats} == {
-        "dasotexnika": 154, "miktes_zones": 33, "arxaiologikoi": 17,
+        "dasotexnika": 154, "miktes_zones": 33, "arxaiologikoi": 16,
         "meletes": 14, "antidiavrotika": 13, "anadasoseis": 8,
         "ylotomies": 6, "ydatodexamenes": 1}
     assert sum(c["n"] for c in cats) == o["kpis"]["n_contracts"]
-    assert sum(c["eur"] for c in cats) == pytest.approx(625_897_613.96)
+    assert sum(c["eur"] for c in cats) == pytest.approx(622_534_181.72)
     assert cats[0]["key"] == "dasotexnika"
     # −€1.675.269,22 on 2026-08-18: all eight tender-budget corrections
     # are δασοτεχνικά contracts, so the whole drop lands in this category
@@ -120,13 +120,13 @@ def test_sankey_reconciles(client):
     s = client.get("/api/antinero/sankey").get_json()
     ministry_out = sum(l["eur"] for l in s["links"] if l["s"] == "ministry")
     contractor_in = sum(l["eur"] for l in s["links"] if l["s"] != "ministry")
-    assert ministry_out == pytest.approx(625_897_613.96, abs=1.0)
-    assert contractor_in == pytest.approx(625_897_613.96, abs=1.0)
+    assert ministry_out == pytest.approx(622_534_181.72, abs=1.0)
+    assert contractor_in == pytest.approx(622_534_181.72, abs=1.0)
 
 
 def test_swarm_pins(client):
     sw = client.get("/api/antinero/swarm").get_json()
-    assert len(sw) == 246
+    assert len(sw) == 245
     assert all(r["pe"] for r in sw)        # every in-scope contract has regions
 
 
@@ -134,7 +134,7 @@ def test_pe_yearly_reconciles(client):
     py = client.get("/api/antinero/pe-yearly").get_json()
     assert len(py["pes"]) == 59
     total = sum(p["total_eur"] for p in py["pes"]) + py["unresolved_eur"]
-    assert total == pytest.approx(625_897_613.96, abs=1.0)
+    assert total == pytest.approx(622_534_181.72, abs=1.0)
 
 
 def test_document_kind_pins(client):
@@ -151,11 +151,11 @@ def test_document_kind_pins(client):
         JOIN contract_scope s ON s.reference_number = c.reference_number
         WHERE s.in_scope = 1"""))
     con.close()
-    assert sum(kinds.values()) == 246
+    assert sum(kinds.values()) == 245
     # 246 συμβάσεις: 200 original contracts, 25 revisions of terms,
     # 15 supplementary works (4 as the contract, 11 as its approval),
     # 6 deadline extensions — the composition /methodology prints
-    assert kinds["contract"] == 200
+    assert kinds["contract"] == 199
     assert kinds["amendment"] == 25
     assert kinds["supplementary_contract"] + kinds["approval_ape_supplementary"] == 15
     assert kinds["approval_schedule_extension"] == 6
@@ -187,17 +187,17 @@ def test_network_pins(client):
     from these stats, so a drift shows up here first."""
     net = client.get("/api/antinero/network").get_json()
     st = net["stats"]
-    assert st["n_contracts"] == len(net["nodes"]) == 246
+    assert st["n_contracts"] == len(net["nodes"]) == 245
     assert st["n_calls"] == 134
     # the three bands the chart draws, and nothing left over
-    assert st["n_in_multi_calls"] + st["n_single_call"] + st["n_no_call"] == 246
-    assert (st["n_in_multi_calls"], st["n_multi_calls"]) == (137, 51)
+    assert st["n_in_multi_calls"] + st["n_single_call"] + st["n_no_call"] == 245
+    assert (st["n_in_multi_calls"], st["n_multi_calls"]) == (136, 51)
     assert (st["n_single_call"], st["n_no_call"]) == (83, 26)
     # a call with no sibling is not a cluster, and a bridge needs two calls
     # 28 since the duplicate-ΑΦΜ merge of 2026-08-18: two companies were
     # hidden behind a whitespace-split key and did not read as bridges
     assert st["n_bridge_multi"] <= st["n_bridge_contractors"] == 28
-    assert st["total_eur"] == pytest.approx(625_897_613.96, abs=1.0)
+    assert st["total_eur"] == pytest.approx(622_534_181.72, abs=1.0)
     # the timeline arrangement prints this and places every dot by it
     assert st["n_same_day_calls"] == 35
     # the fire season travels WITH its count, so the shaded stripes and the
@@ -225,7 +225,7 @@ def test_meta_family_facts_match_the_network(client):
     st = client.get("/api/antinero/network").get_json()["stats"]
     assert f["kh_family_calls"] == st["n_calls"]
     assert f["kh_family_none"] == st["n_no_call"]
-    assert f["kh_family_contracts"] + f["kh_family_none"] == 246
+    assert f["kh_family_contracts"] + f["kh_family_none"] == 245
     # the registry's own chain declares far less than the texts do
     assert f["kh_family_declared"] == 77
     assert f["kh_notice"] == 41
@@ -320,7 +320,9 @@ def test_excluded_sibling_states_its_reason_not_a_cancellation(client):
     (`related_to`) beside the flag; without it the row reads «cancelled»,
     i.e. withdrawn, which it was not."""
     d = client.get("/api/dase/contract/25SYMV016885520").get_json()
-    sib = [t for t in d["timeline"]
+    # since 2026-08-19 the other lots of a procurement live in the family
+    # diagram rather than the trail table — the reason rides with the row
+    sib = [t for t in d["family_acts"]
            if t["adam"] == "25SYMV016837212"]
     assert len(sib) == 1
     assert sib[0]["cancelled"] == 1
@@ -329,7 +331,7 @@ def test_excluded_sibling_states_its_reason_not_a_cancellation(client):
     own = client.get("/api/dase/contract/25SYMV016837212").get_json()
     assert own["related_to"] == "25SYMV016885520"
     # the kept sibling itself carries neither marker
-    back = [t for t in own["timeline"] if t["adam"] == "25SYMV016885520"]
+    back = [t for t in own["family_acts"] if t["adam"] == "25SYMV016885520"]
     assert len(back) == 1 and back[0]["cancelled"] == 0
     assert back[0]["related_to"] is None
     # the second out-of-scope contract points at the co-op's own call-off
@@ -661,7 +663,7 @@ def test_connections_pins(client):
     assert len(n["authorities"]) == 105
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
-        625_897_613.96, abs=1.0)
+        622_534_181.72, abs=1.0)
 
 
 def test_authorities_pins(client):
@@ -690,7 +692,7 @@ def test_pipelines_pins(client):
     # 155, not 163: seven companies were split across a whitespace-padded
     # ΑΦΜ and one across an eight-digit one (DATA_DECISIONS 2026-08-18)
     assert p["antinero"]["n_vats"] == 155
-    assert p["antinero"]["total_eur"] == pytest.approx(625_897_613.96)
+    assert p["antinero"]["total_eur"] == pytest.approx(622_534_181.72)
     assert p["dase"]["total_eur"] == pytest.approx(29_920_558.46)
     assert p["dase_n_coops"] == 246
     assert [s["name"] for s in p["shared_awarders"]] == [
@@ -700,11 +702,11 @@ def test_pipelines_pins(client):
 
 def test_explore_pins(client):
     e = client.get("/api/explore").get_json()
-    assert e["counts"] == {"antinero": 246, "dase": 1998, "anadohoi": 69}
-    assert len(e["rows"]) == 2313
+    assert e["counts"] == {"antinero": 245, "dase": 1998, "anadohoi": 69}
+    assert len(e["rows"]) == 2312
     # value bases per dataset reconcile with their own conventions
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
-    assert kh_sum == pytest.approx(625_897_613.96, abs=1.0)
+    assert kh_sum == pytest.approx(622_534_181.72, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
     assert dase_sum == pytest.approx(29_920_558.46, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
@@ -715,7 +717,7 @@ def test_explore_pins(client):
     # διακήρυξη; the ΔΑΣΕ chain harvest (2026-08-03) covered all 2,164
     # contracts, so its flag is populated too
     kh_pr = [r["pr"] for r in e["rows"] if r["ds"] == "antinero"]
-    assert kh_pr.count(1) == 41 and kh_pr.count(0) == 205
+    assert kh_pr.count(1) == 41 and kh_pr.count(0) == 204
     dase_pr = [r["pr"] for r in e["rows"] if r["ds"] == "dase"]
     assert dase_pr.count(1) == 136 and dase_pr.count(0) == 1862
     assert all(r["pr"] is None for r in e["rows"] if r["ds"] == "anadohoi")
@@ -724,7 +726,7 @@ def test_explore_pins(client):
     # ΑΔΜΗΕ via the 9Ο0Λ παραλαβή, ΔΕΔΔΗΕ via its last μελέτη approval);
     # ΔΑΣΕ endings were never harvested
     kh_fin = [r["fin"] for r in e["rows"] if r["ds"] == "antinero"]
-    assert kh_fin.count(1) == 148 and kh_fin.count(0) == 98
+    assert kh_fin.count(1) == 148 and kh_fin.count(0) == 97
     an_fin = [r["fin"] for r in e["rows"] if r["ds"] == "anadohoi"]
     assert an_fin.count(1) == 16
     assert all(r["fin"] is None for r in e["rows"] if r["ds"] == "dase")
@@ -834,13 +836,13 @@ def test_contract_chain_pins(client):
 
     rows = client.get("/api/explore").get_json()["rows"]
     kh = [r for r in rows if r["ds"] == "antinero"]
-    assert len(kh) == 246                     # unchanged: chains were already tips
+    assert len(kh) == 245                     # unchanged: chains were already tips
     seen = set()
     for r in kh:                              # no ΑΔΑΜ may appear twice
         for ref in [r["ref"], *r.get("alt", [])]:
             assert ref not in seen, ref
             seen.add(ref)
-    assert round(sum(r["v"] or 0 for r in kh), 2) == 625897613.96
+    assert round(sum(r["v"] or 0 for r in kh), 2) == 622534181.72
     row = next(r for r in kh if r["ref"] == "26SYMV019098206")
     # the span runs from the contract's signature to the last act's OWN date —
     # ΚΗΜΔΗΣ files every later act under the contract's date, so the registry
@@ -921,7 +923,7 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
             # an extension only exists relative to a deadline already in force
             assert dl["deadline"] is not None, ref
             assert all(e["deadline"] > dl["deadline"] for e in dl["extensions"]), ref
-    assert seen == {"document": 243, "document_season": 3}
+    assert seen == {"document": 242, "document_season": 3}
     # 16 steps over 14 chains: 9 «Παράταση προθεσμίας» records and 7
     # supplementary approvals that carried a later end date with them —
     # both move the day the works were due, and the chart labels which
@@ -937,7 +939,7 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     assert d2["basis"] == "document_season" and d2["deadline"] == "2025-10-31"
     # the counts the methodology prose prints come from /api/meta, not prose
     f = client.get("/api/meta").get_json()["facts"]
-    assert f["kh_deadline_document"] == 243 and f["kh_deadline_document_season"] == 3
+    assert f["kh_deadline_document"] == 242 and f["kh_deadline_document_season"] == 3
     assert f["kh_deadline_ext_steps"] == 16
 
 
@@ -1014,12 +1016,38 @@ def test_explore_carries_the_municipalities(client):
     rows = client.get("/api/explore").get_json()["rows"]
     kh_rows = [r for r in rows if r["ds"] == "antinero"]
     with_mu = [r for r in kh_rows if r.get("mu")]
-    assert len(kh_rows) == 246 and len(with_mu) == 153
+    assert len(kh_rows) == 245 and len(with_mu) == 152
     assert len({m for r in with_mu for m in r["mu"]}) == 220
     assert not any(r.get("mu") for r in rows if r["ds"] != "antinero")
     # the δήμοι of one contract, as its call names them
     row = next(r for r in kh_rows if r["ref"] == "23SYMV012992150")
     assert "Μαραθώνος" in row["mu"] and "Ωρωπού" in row["mu"]
+
+
+def test_the_trail_holds_only_this_contracts_own_records(client):
+    """ΚΗΜΔΗΣ's adamChain returns the whole procurement family, so a
+    multi-lot award used to put the OTHER lots in a contract's trail —
+    other companies' contracts, listed as if they were documents of this one
+    (19 in-scope pages, up to 11 rows each). The Anti-nero trail now keeps
+    the procurement's acts and this contract's own records, and the diagram
+    carries the family (user, 2026-08-19)."""
+    d = client.get("/api/antinero/contract/24SYMV014843550").get_json()
+    kinds = [t["kind"] for t in d["timeline"]]
+    # the call, the award, the request and the commitment approval all stay
+    assert kinds.count("notice") == 3 and "auction" in kinds
+    assert "request" in kinds and "approved_request" in kinds
+    # the three other lots of award 24AWRD014592135 are gone
+    assert not [t for t in d["timeline"] if t["kind"] == "contract"]
+    assert d["family"] and len(d["family"]["contracts"]) > 1
+    # a contract's OWN later records stay: the Πάρνηθα chain keeps all four
+    d2 = client.get("/api/antinero/contract/26SYMV019098206").get_json()
+    own = {t["adam"] for t in d2["timeline"] if t["kind"] == "contract"}
+    assert "24SYMV015643849" in own and "26SYMV018426173" in own
+    # ΔΑΣΕ follows the same rule (user, 2026-08-19): its trail holds its own
+    # records, its FamilyTree is fed by `family_acts`
+    d3 = client.get("/api/dase/contract/25SYMV016885520").get_json()
+    assert not [t for t in d3["timeline"] if t["adam"] == "25SYMV016837212"]
+    assert [t for t in d3["family_acts"] if t["adam"] == "25SYMV016837212"]
 
 
 def test_the_run_up_acts_fit_the_timeline_axis(kh):

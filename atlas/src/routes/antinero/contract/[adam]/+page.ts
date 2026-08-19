@@ -88,11 +88,17 @@ export interface ContractDetail {
 	category: {
 		key: string;
 		label: string;
+		/** English display label — the card is an English page */
+		label_en?: string;
 		note: string | null;
 		title: string;
 		source: string;
 	} | null;
 	regions: { region_pe: string; source: string | null; note: string | null }[];
+	/** the whole procurement family the registry's chain returns — the ΔΑΣΕ
+	 *  page draws its FamilyTree from this, while `timeline` holds only the
+	 *  contract's own records (user, 2026-08-19) */
+	family_acts?: ContractDetail['timeline'];
 	/** the δήμοι the contract's documents place the works in (2026-08-19) */
 	municipalities?: {
 		code: string;
@@ -219,6 +225,8 @@ export interface ContractDetail {
 		doc_kind?: string | null;
 		related_to?: string | null;
 		in_db: boolean;
+		/** the re-posted twin of a registry-cancelled record (2026-08-19) */
+		twin?: boolean;
 		/** in-db contract rows: first contractor name (family diagram labels) */
 		who?: string | null;
 		/** the contract's own text cites this act; the registry never

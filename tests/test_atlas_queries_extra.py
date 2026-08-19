@@ -410,7 +410,10 @@ def test_contract_category_detail_supplement(kh):
                 source="inherited:22SYMV000000009")
     kh.commit()
     got = qx.contract_category(kh, "22SYMV000000001")
-    assert got == {"key": "ylotomies", "label": "Υλοτομίες", "note": "σημ",
+    # `label_en` falls back to the Greek label where the curated file (or
+    # this fixture) carries none — the card never prints an empty type
+    assert got == {"key": "ylotomies", "label": "Υλοτομίες",
+                   "label_en": "Υλοτομίες", "note": "σημ",
                    "title": "Επείγουσες υλοτομικές εργασίες",
                    "source": "inherited:22SYMV000000009"}
     assert qx.contract_category(kh, "22SYMV000000002") is None

@@ -233,7 +233,10 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d.pop("raw_pretty", None)
         d["regions"] = queries.contract_project_regions(g.conn, adam)
         d["sites"] = queries.contract_sites(g.conn, adam)
-        d["timeline"] = queries_extra.contract_timeline(g.conn, adam)
+        # own records only: the other lots of a multi-lot award are not
+        # documents of this contract — the diagram carries that relation
+        d["timeline"] = queries_extra.contract_timeline(
+            g.conn, adam, own_records_only=True)
         # the procurement family the contract's own text names
         d["family"] = queries_extra.contract_family(g.conn, adam)
         d["gross"] = queries_extra.contract_gross(pay, adam)
@@ -330,7 +333,12 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             abort(404)
         d.pop("raw_json", None)
         d.pop("raw_pretty", None)
-        d["timeline"] = queries_extra.contract_timeline(conn, adam)
+        # the same rule as Anti-nero (user, 2026-08-19): the TABLE holds this
+        # contract's own records, and the other lots of the procurement —
+        # which the registry's adamChain returns — feed the family DIAGRAM
+        d["timeline"] = queries_extra.contract_timeline(
+            conn, adam, own_records_only=True)
+        d["family_acts"] = queries_extra.contract_timeline(conn, adam)
         d["gross"] = queries_extra.contract_gross(conn, adam)
         # registry double-postings kept reachable + cross-linked both ways
         d["duplicates"] = [r[0] for r in conn.execute(

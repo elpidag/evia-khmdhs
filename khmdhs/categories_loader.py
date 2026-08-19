@@ -78,9 +78,20 @@ def write_db(conn: sqlite3.Connection, curated: dict) -> int:
         [(ref, e["category"], e["title"], e["source"], today)
          for ref, e in entries.items()])
     conn.execute("DELETE FROM category_labels")
-    conn.executemany(
-        "INSERT INTO category_labels (category, label, note) VALUES (?,?,?)",
-        [(key, m["label"], m.get("note")) for key, m in cats.items()])
+    # `label_en` reaches deployed DBs through the ALTER guard, so a file
+    # written before it existed still loads (the fixtures do exactly that)
+    has_en = any(r[1] == "label_en"
+                 for r in conn.execute("PRAGMA table_info(category_labels)"))
+    if has_en:
+        conn.executemany(
+            "INSERT INTO category_labels (category, label, label_en, note)"
+            " VALUES (?,?,?,?)",
+            [(key, m["label"], m.get("label_en"), m.get("note"))
+             for key, m in cats.items()])
+    else:
+        conn.executemany(
+            "INSERT INTO category_labels (category, label, note) VALUES (?,?,?)",
+            [(key, m["label"], m.get("note")) for key, m in cats.items()])
     conn.commit()
 
     has_scope = conn.execute(
