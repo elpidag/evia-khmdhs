@@ -2753,6 +2753,13 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             }
 
     eff = q.effective_cost(kh, "c")
+    # every party of every contract, and the curated display names, so the row
+    # shows one name per ΑΦΜ and still answers to the registry spellings
+    kh_names = antinero_display_names(kh)
+    kh_parties: dict[str, list[tuple[str, str]]] = {}
+    for _r in kh.execute("SELECT reference_number, vat_number, name FROM contractors"):
+        kh_parties.setdefault(_r["reference_number"], []).append(
+            ((_r["vat_number"] or "").strip(), _r["name"] or ""))
     for r in kh.execute(f"""
         SELECT c.reference_number AS ref, c.title,
                c.contract_signed_date, c.submission_date,
@@ -2779,6 +2786,14 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
         # row shows the ORIGINAL contract's title and links to the TIP, whose
         # value it carries (user decisions, 2026-08-19).
         chain = chains.get(r["ref"], [r["ref"]])
+        # the curated display name, with every registry spelling kept in the
+        # row's searchable text (DATA_DECISIONS 2026-08-20)
+        pairs = kh_parties.get(r["ref"], [])
+        shown = " · ".join(dict.fromkeys(
+            (kh_names.get(v, {}).get("el") or n) for v, n in pairs)) or (
+            r["names"] or "")
+        also = [n for v, n in pairs
+                if kh_names.get(v, {}).get("el") not in (None, n)]
         first = versions.get(chain[0], {})
         dates = [v["d"] for v in (versions.get(m) for m in chain) if v and v["d"]]
         row_d = (dates[0] if dates else None) or _full_date(
@@ -2791,7 +2806,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             **({"d1": dates[-1]} if len(chain) > 1 and dates[-1] != row_d else {}),
             "t": ((first.get("title") if len(chain) > 1 else None)
                   or r["title"] or "")[:120],
-            "co": (r["names"] or "")[:110],
+            "co": shown[:110],
             "v": round(r["value"], 2) if r["value"] is not None else None,
             "pe": pes, "hq": hqs,
             # the δήμοι the contract's documents name — one level finer than
@@ -2806,9 +2821,14 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                   else (1 if r["ref"] in done_refs else 0),
             # every record of the chain: the versions chip row, and the ΑΔΑΜ
             # the client search must answer to
-            **({"vs": [versions[m] for m in chain if m in versions],
-                "alt": [m for m in chain if m != r["ref"]]}
+            **({"vs": [versions[m] for m in chain if m in versions]}
                if len(chain) > 1 else {}),
+            # `alt` is ΑΔΑΜ only (the chain's other records); the registry
+            # spellings the display name replaced ride in `ac`, and the client
+            # searches both
+            **({"alt": [m for m in chain if m != r["ref"]]}
+               if len(chain) > 1 else {}),
+            **({"ac": also} if also else {}),
         })
 
     if dase is not None:

@@ -1293,3 +1293,21 @@ def test_contractor_display_names_are_presented_and_both_names_search(client):
     # a joint venture prints as «Κ/Ξ » plus its members' own display names
     kx = next(r for r in rows if r["vat_number"] == "996609013")
     assert kx["name"] == "Κ/Ξ Τ&Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε. – ΜΕΣΟΓΕΙΟΣ Α.Ε."
+
+
+def test_explore_and_the_contract_page_present_the_display_name(client):
+    """Same name on every surface, and the spelling it replaced stays in the
+    row's searchable text (`ac`) — `alt` is ΑΔΑΜ only."""
+    kh = [r for r in client.get("/api/explore").get_json()["rows"]
+          if r["ds"] == "antinero"]
+    bios = [r for r in kh if r["co"] == "ΒΙΟΣ Α.Ε."]
+    assert len(bios) == 6
+    assert any("ΚΑΦΕΤΖΗΣ" in n for r in bios for n in (r.get("ac") or []))
+    assert all(re.fullmatch(r"\d\d[A-Z]+\d+", m)
+               for r in kh for m in (r.get("alt") or []))
+    # 70 of the 245 rows are held by a joint venture
+    assert sum(1 for r in kh if r["co"].startswith("Κ/Ξ ")) == 70
+    d = client.get("/api/antinero/contract/22SYMV010447496").get_json()
+    party = d["contractors"][0]
+    assert (party["name"], party["registry_name"]) == (
+        "ΒΙΟΣ Α.Ε.", "Δ ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ ΟΕ")

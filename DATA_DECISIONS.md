@@ -5763,6 +5763,12 @@ registry holds**, so «ΚΑΦΕΤΖΗΣ» still finds ΒΙΟΣ Α.Ε. — and is
 contractor page under «In the registry as …». The money is untouched: the
 ranking still sums to **€622.534.181,72** over 151 contractors.
 
+The overlay reaches every surface that prints a contractor: the ranking, the
+contractors list and its search, the contractor page, the member-firm view, the
+contract page (each party with `registry_name` beside it) and the /explore `co`
+column, where the spellings the display name replaced ride in a new `ac` field
+that the client searches — `alt` stays ΑΔΑΜ-only, which a pin enforces.
+
 *Affects `scripts/extract_name_evidence.py` (new) and
 `scripts/extract_contractor_names.py`, curated
 `khmdhs/data/contractor_display_names.json` (new, 195 entries),

@@ -245,6 +245,8 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["party_correction"] = queries_extra.contract_party_correction(adam)
         # a joint venture wound up after the job still signed the contract:
         # name it, and say what the register says about it now
+        # each party under its curated display name, registry spelling beside it
+        queries_extra.overlay_contractor_names(g.conn, d.get("contractors") or [])
         d["contractor_status"] = queries_extra.contractor_registry_status(
             g.conn, [c.get("vat_number") for c in d.get("contractors", [])])
         # what the works ARE (multi-label, from the contract's own title)

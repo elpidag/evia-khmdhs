@@ -62,7 +62,7 @@
 				// every ΑΔΑΜ of the chain is searchable: a citation of an
 				// earlier version must find the contract, not nothing
 				const hn = searchNorm(
-					`${r.ref} ${(r.alt ?? []).join(' ')} ${r.t} ${r.co} ` +
+					`${r.ref} ${(r.alt ?? []).join(' ')} ${r.t} ${r.co} ${(r.ac ?? []).join(' ')} ` +
 						`${r.pe.join(' ')} ${r.hq.join(' ')} ${(r.mu ?? []).join(' ')}`
 				);
 				return { r, hn, hf: phoneticFold(hn) };

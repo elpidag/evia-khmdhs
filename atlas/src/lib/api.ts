@@ -437,6 +437,8 @@ export interface ExploreRow {
 	d: string | null;
 	t: string;
 	co: string;
+	/** registry spellings the curated display name replaced — searchable */
+	ac?: string[];
 	/** stated value net of ΦΠΑ (anadohoi: committed, net where stated) */
 	v: number | null;
 	pe: string[];
