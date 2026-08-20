@@ -6,6 +6,14 @@ export interface Connections {
 	contractor_pe: { vat: string; pe: string; n: number; eur: number }[];
 	contractor_signer: { vat: string; signer: string; n: number; eur: number }[];
 	flows: { source_pe: string; target_pe: string; n_contracts: number; total_eur: number }[];
+	/** the same flows with a signature-year dimension — Σ over years == flows */
+	flows_yearly: {
+		source_pe: string;
+		target_pe: string;
+		year: string;
+		n_contracts: number;
+		total_eur: number;
+	}[];
 	origins: {
 		target_pe: string;
 		n_contracts: number;

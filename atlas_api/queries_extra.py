@@ -2086,6 +2086,47 @@ def pipelines(kh: sqlite3.Connection, dase: sqlite3.Connection) -> dict:
 
 # -------------------------------------------------------------- connections
 
+def region_flows_yearly(kh: sqlite3.Connection) -> list[dict]:
+    """`q.region_flows` with a signature-year dimension, for the focused flow
+    map's year filter (user, 2026-08-20). Same conventions to the letter:
+    full-exposure attribution (a contract counts toward every home×work
+    region pair it touches — show shares, never sum as programme €), the
+    same exclusions, € = effective cost on the caller's connection. Rows are
+    re-aggregated AFTER canonical_pe so spelling aliases cannot split a
+    pair-year. Σ over the years reconciles to `q.region_flows` (pinned)."""
+    params: list = list(q.EXCLUDED_CONTRACTOR_VATS)
+    sql = f"""
+        SELECT cl.region_pe   AS source_pe,
+               cpr.region_pe  AS target_pe,
+               substr(COALESCE(co.contract_signed_date, co.submission_date), 1, 4)
+                              AS year,
+               COUNT(DISTINCT co.reference_number)   AS n_contracts,
+               SUM({q.effective_cost(kh, 'co')})     AS total_eur
+        FROM contractors c
+        JOIN contractor_locations cl      ON cl.vat_number = c.vat_number
+        JOIN contracts co                 ON co.reference_number = c.reference_number
+        JOIN contract_project_regions cpr ON cpr.reference_number = co.reference_number
+        WHERE c.vat_number NOT IN (?, ?)
+          AND cl.region_pe IS NOT NULL
+          AND {q.scope_filter(kh, 'co.reference_number')}
+        GROUP BY cl.region_pe, cpr.region_pe, year
+    """
+    agg: dict[tuple, dict] = {}
+    for r in kh.execute(sql, params):
+        src = canonical_pe(r["source_pe"]) or r["source_pe"]
+        tgt = canonical_pe(r["target_pe"]) or r["target_pe"]
+        key = (src, tgt, r["year"])
+        e = agg.setdefault(key, {"source_pe": src, "target_pe": tgt,
+                                 "year": r["year"], "n_contracts": 0,
+                                 "total_eur": 0.0})
+        e["n_contracts"] += r["n_contracts"]
+        e["total_eur"] += r["total_eur"] or 0.0
+    out = sorted(agg.values(), key=lambda e: -e["total_eur"])
+    for e in out:
+        e["total_eur"] = round(e["total_eur"], 2)
+    return out
+
+
 def network_payload(kh: sqlite3.Connection) -> dict:
     """Every relationship layer for the /connections page in one JSON.
 
@@ -2176,6 +2217,8 @@ def network_payload(kh: sqlite3.Connection) -> dict:
         "contractor_pe": rnd(cp),
         "contractor_signer": rnd(cs),
         "flows": q.region_flows(kh),
+        # the focused map's year filter reads these; Σ over years == flows
+        "flows_yearly": region_flows_yearly(kh),
         "origins": q.project_region_origins(kh),
         "pairs": rnd(pairs),
         # curated display names on every surface (DATA_DECISIONS 2026-08-20)

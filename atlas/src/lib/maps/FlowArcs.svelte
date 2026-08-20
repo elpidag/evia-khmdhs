@@ -24,12 +24,13 @@
 	}
 	let { ctx, flows, centroids, focusPe }: Props = $props();
 
-	// black-white-grayscale only (user, 2026-08-20): direction is carried by
-	// the arrowheads, the solid/dashed distinction and the table chips —
-	// solid black reaches IN, dashed grey reaches OUT, the ringed white dot
-	// is the money that never leaves
-	const IN = '#111111';
-	const OUT = '#9a9a9a';
+	// black-white-grayscale only, all arcs BLACK, direction by line STYLE
+	// (user, 2026-08-20, third pass — grey read poorly, all-solid explained
+	// poorly): solid black reaches IN to the focused region, dashed black
+	// reaches OUT of it, arrowheads point home → work at a fixed size so the
+	// stroke width alone carries the €; the ringed white dot is the money
+	// that never leaves
+	const ARC = '#111111';
 	const LOCAL = '#ffffff';
 
 	const shown = $derived(
@@ -74,29 +75,19 @@
 </script>
 
 <defs>
+	<!-- fixed-size arrowhead (userSpaceOnUse, ÷k against the zoom): the
+	     stroke width alone carries the €, the head only the direction -->
 	<marker
-		id="fa-in"
+		id="fa-head"
 		viewBox="0 0 10 10"
 		refX="8"
 		refY="5"
-		markerWidth="3.2"
-		markerHeight="3.2"
+		markerWidth={11 / ctx.k}
+		markerHeight={11 / ctx.k}
 		orient="auto-start-reverse"
-		markerUnits="strokeWidth"
+		markerUnits="userSpaceOnUse"
 	>
-		<path d="M 0 0 L 10 5 L 0 10 z" fill={IN} />
-	</marker>
-	<marker
-		id="fa-out"
-		viewBox="0 0 10 10"
-		refX="8"
-		refY="5"
-		markerWidth="3.2"
-		markerHeight="3.2"
-		orient="auto-start-reverse"
-		markerUnits="strokeWidth"
-	>
-		<path d="M 0 0 L 10 5 L 0 10 z" fill={OUT} />
+		<path d="M 0 0 L 10 5 L 0 10 z" fill={ARC} />
 	</marker>
 </defs>
 
@@ -128,10 +119,10 @@
 		<path
 			class="flow"
 			{d}
-			stroke={f.target_pe === focusPe ? IN : OUT}
+			stroke={ARC}
 			stroke-dasharray={f.target_pe === focusPe ? undefined : `${8 / ctx.k} ${5 / ctx.k}`}
 			stroke-width={(1 + 7 * Math.sqrt(f.total_eur / maxEur)) / ctx.k}
-			marker-end={f.target_pe === focusPe ? 'url(#fa-in)' : 'url(#fa-out)'}
+			marker-end="url(#fa-head)"
 			onmouseenter={() => ctx.showTip(tip(f))}
 			onmouseleave={() => ctx.hideTip()}
 		/>

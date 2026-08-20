@@ -5,8 +5,9 @@
 	 * the biggest destinations' local/imported split beside it — one frame,
 	 * the two views linked (user, 2026-08-20). Clicking a region on the map
 	 * or a destination bar focuses both: the map draws only ITS flows —
-	 * solid black for firms reaching in, dashed grey for its own firms
-	 * reaching out, a ringed white dot for the money that stays — and the
+	 * solid black for firms reaching IN, dashed black for its own firms
+	 * reaching OUT, arrowheads at a fixed size so the stroke width alone
+	 * carries the €, a ringed white dot for the money that stays — and the
 	 * bars give way to that region's flow table.
 	 */
 	import PaperMap from '$lib/maps/PaperMap.svelte';
@@ -35,15 +36,40 @@
 		/** the biggest destinations' local/imported split — the resting
 		 *  right-hand view; clicking a bar focuses the map on that region */
 		origins?: OriginRow[];
+		/** the same flows per signature year — powers the focused view's
+		 *  year filter (user, 2026-08-20) */
+		flowsYearly?: (Flow & { year: string })[];
 	}
-	let { flows, centroids, origins = [] }: Props = $props();
+	let { flows, centroids, origins = [], flowsYearly = [] }: Props = $props();
 
 	let flowFocus = $state<string | null>(null);
+	let flowYear = $state<string | null>(null);
 	const short = (pe: string) => peEn(pe);
+
+	function focusRegion(pe: string | null) {
+		flowFocus = pe;
+		flowYear = null; // a fresh region starts on all years
+	}
+
+	/** which years this region has any flow in — the rest render dimmed */
+	const focusYears = $derived.by(() => {
+		if (!flowFocus) return new Set<string>();
+		return new Set(
+			flowsYearly
+				.filter((f) => f.source_pe === flowFocus || f.target_pe === flowFocus)
+				.map((f) => f.year)
+		);
+	});
+	const allYears = $derived([...new Set(flowsYearly.map((f) => f.year))].sort());
+
+	/** the flow set the focused arcs and table draw from — all years, or one */
+	const flowsShown = $derived(
+		flowYear ? flowsYearly.filter((f) => f.year === flowYear) : flows
+	);
 
 	const focusFlows = $derived(
 		(flowFocus
-			? flows.filter((f) => f.source_pe === flowFocus || f.target_pe === flowFocus)
+			? flowsShown.filter((f) => f.source_pe === flowFocus || f.target_pe === flowFocus)
 			: flows.slice(0, 12)
 		).toSorted((a, b) => b.total_eur - a.total_eur)
 	);
@@ -90,12 +116,12 @@
 			? (pe) => (pe === flowFocus ? '#e0e0e0' : 'var(--land-empty)')
 			: importChoro}
 		tipOf={flowFocus ? undefined : importTip}
-		onRegionClick={(pe) => (flowFocus = flowFocus === pe ? null : pe)}
+		onRegionClick={(pe) => focusRegion(flowFocus === pe ? null : pe)}
 		focusPe={null}
 	>
 		{#snippet overlay(ctx)}
 			{#if flowFocus && Object.keys(centroids).length}
-				<FlowArcs {ctx} {flows} {centroids} focusPe={flowFocus} />
+				<FlowArcs {ctx} flows={flowsShown} {centroids} focusPe={flowFocus} />
 			{/if}
 		{/snippet}
 		{#snippet legend()}
@@ -124,13 +150,32 @@
 		<h3>
 			{#if flowFocus}
 				{peEn(flowFocus)}
-				<button class="btn-more" onclick={() => (flowFocus = null)}>✕ clear</button>
+				<button class="btn-more" onclick={() => focusRegion(null)}>✕ clear</button>
 			{:else}
 				Biggest destinations — who takes the money
 			{/if}
 		</h3>
+		{#if flowFocus && allYears.length}
+			<div class="years" role="group" aria-label="Filter the flows by year">
+				<button class:active={flowYear === null} onclick={() => (flowYear = null)}>
+					all years
+				</button>
+				{#each allYears as y (y)}
+					<button
+						class:active={flowYear === y}
+						class:none={!focusYears.has(y)}
+						onclick={() => (flowYear = flowYear === y ? null : y)}
+					>
+						{y}
+					</button>
+				{/each}
+			</div>
+			{#if flowYear && focusFlows.length === 0}
+				<p class="empty">no flows touch {short(flowFocus)} in {flowYear}</p>
+			{/if}
+		{/if}
 		{#if !flowFocus && origins.length}
-			<OriginSplit rows={origins} selected={flowFocus} onSelect={(pe) => (flowFocus = pe)} />
+			<OriginSplit rows={origins} selected={flowFocus} onSelect={(pe) => focusRegion(pe)} />
 		{:else}
 		<table>
 			<tbody>
@@ -191,6 +236,9 @@
 		vertical-align: 3px;
 		margin-right: 4px;
 	}
+	i.sw.dash {
+		background: repeating-linear-gradient(90deg, #111111 0 5px, transparent 5px 9px);
+	}
 	i.sw.round {
 		width: 0.6rem;
 		height: 0.6rem;
@@ -198,9 +246,6 @@
 		vertical-align: -1px;
 		background: #ffffff;
 		border: 1.5px solid #111111;
-	}
-	i.sw.dash {
-		background: repeating-linear-gradient(90deg, #9a9a9a 0 5px, transparent 5px 9px);
 	}
 	.faint {
 		color: var(--ink-faint);
@@ -232,7 +277,7 @@
 		background: #111111;
 	}
 	i.dir.out {
-		background: #9a9a9a;
+		background: repeating-linear-gradient(90deg, #111111 0 3px, transparent 3px 6px);
 	}
 	i.dir.local {
 		background: #ffffff;
@@ -241,6 +286,33 @@
 	.chip {
 		font-size: var(--fs-12);
 		color: var(--ink-soft);
+	}
+	.years {
+		display: inline-flex;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		overflow: hidden;
+		margin: 0 0 var(--sp-2);
+	}
+	.years button {
+		font: inherit;
+		font-size: var(--fs-12);
+		padding: 1px var(--sp-2);
+		border: 0;
+		background: var(--paper);
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.years button.active {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.years button.none {
+		opacity: 0.35;
+	}
+	.empty {
+		font-size: var(--fs-12);
+		color: var(--ink-faint);
 	}
 	.btn-more {
 		font: inherit;

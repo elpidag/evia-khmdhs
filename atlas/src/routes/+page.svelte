@@ -381,14 +381,19 @@
 	})()}
 	<ChartFrame
 		title="WHERE THE MONEY TRAVELS"
-		subtitle="Only {localPct}% of the money goes to firms based where the work is. Each region is coloured by the share of its works won by out-of-region firms — darker means more of the money leaves — and the bars beside the map split the biggest destinations’ € by the winner’s base. Click a region or a bar: solid black arrows show who reaches in, dashed grey where its own firms reach out."
+		subtitle="Only {localPct}% of the money goes to firms based where the work is. Each region is coloured by the share of its works won by out-of-region firms — darker means more of the money leaves — and the bars beside the map split the biggest destinations’ € by the winner’s base. Click a region or a bar: solid black arrows show who reaches in, dashed black where its own firms reach out — width is the €, and the year buttons replay the focused flows one signature year at a time."
 		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
 			net.coverage.total_eur
 		)} resolved. Full-exposure convention: a multi-region contract counts toward every region pair it touches; the within-region shares are unaffected."
 		anchor="flows"
 		methodology="even-split"
 	>
-		<FlowMap flows={net.flows} {centroids} origins={net.origins.slice(0, 12)} />
+		<FlowMap
+			flows={net.flows}
+			flowsYearly={net.flows_yearly}
+			{centroids}
+			origins={net.origins.slice(0, 12)}
+		/>
 	</ChartFrame>
 
 	{@const maxReach = (() => {
