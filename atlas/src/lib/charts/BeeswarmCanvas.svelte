@@ -27,8 +27,23 @@
 	let {
 		data,
 		edges,
-		plotHeight = $bindable(0)
-	}: { data: DaseSwarm; edges: number[]; plotHeight?: number } = $props();
+		plotHeight = $bindable(0),
+		colors = yearColor,
+		ring,
+		thresholds = [],
+		linkBase = '/dase/contract/'
+	}: {
+		data: DaseSwarm;
+		edges: number[];
+		plotHeight?: number;
+		/** dot colour by signature year — defaults to the ΔΑΣΕ greens */
+		colors?: (y: string | null | undefined) => string;
+		/** per-row flag drawn as a ring (Anti-nero: single-bid contracts) */
+		ring?: (number | null)[];
+		/** dashed reference lines on the shared axis (ν.4782 ceilings) */
+		thresholds?: { v: number; label: string }[];
+		linkBase?: string;
+	} = $props();
 
 	// margins must match LogHistogram's exactly — the shared axis is defined
 	// in pixels, not just in value space
@@ -125,9 +140,18 @@
 		for (const d of dots) {
 			ctx.beginPath();
 			ctx.arc(d.x, d.y, layout.r, 0, 2 * Math.PI);
-			ctx.fillStyle = yearColor(data.year[d.i]);
+			ctx.fillStyle = colors(data.year[d.i]);
 			ctx.globalAlpha = 0.85;
 			ctx.fill();
+			if (ring?.[d.i]) {
+				ctx.globalAlpha = 1;
+				ctx.beginPath();
+				ctx.arc(d.x, d.y, layout.r + 0.9, 0, 2 * Math.PI);
+				ctx.strokeStyle = '#111111';
+				ctx.lineWidth = 0.9;
+				ctx.stroke();
+				ctx.globalAlpha = 0.85;
+			}
 		}
 		if (hover) {
 			ctx.globalAlpha = 1;
@@ -145,7 +169,7 @@
 		hover = nearest((ev.clientX - rect.left) * sx, (ev.clientY - rect.top) * sx);
 	}
 	function onClick() {
-		if (hover) goto(`/dase/contract/${data.ref[hover.i]}`);
+		if (hover) goto(`${linkBase}${data.ref[hover.i]}`);
 	}
 
 	const median = $derived.by(() => {
@@ -166,7 +190,7 @@
 		const lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
 		return lum > 0.55 ? '#1c221f' : '#ffffff';
 	}
-	const hoverColor = $derived(hover ? yearColor(data.year[hover.i]) : '');
+	const hoverColor = $derived(hover ? colors(data.year[hover.i]) : '');
 </script>
 
 <div class="wrap" bind:clientWidth={width}>
@@ -185,6 +209,10 @@
 		{#each axisTicks as t (t)}
 			<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
 			<text class="axis" x={x(t)} y={height - 12}>{eurShort(t)}</text>
+		{/each}
+		{#each thresholds as th (th.v)}
+			<line class="thresh" x1={x(th.v)} x2={x(th.v)} y1={M.top} y2={height - M.bottom} />
+			<text class="thresh-label" x={x(th.v) + 4} y={M.top + 10}>{th.label}</text>
 		{/each}
 		<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
 		<text class="median-label" x={x(median)} y={M.top - 8} text-anchor="middle">
@@ -227,6 +255,14 @@
 		font-size: 11px;
 		fill: var(--ink-faint);
 		text-anchor: middle;
+	}
+	.thresh {
+		stroke: var(--c-threshold);
+		stroke-dasharray: 3 4;
+	}
+	.thresh-label {
+		font-size: 10px;
+		fill: var(--c-threshold);
 	}
 	.median {
 		stroke: var(--ink);

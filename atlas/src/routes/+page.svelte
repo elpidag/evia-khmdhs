@@ -1,6 +1,10 @@
 <script lang="ts">
 	import BarH from '$lib/charts/BarH.svelte';
-	import Beeswarm from '$lib/charts/Beeswarm.svelte';
+	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
+	import SideNote from '$lib/ui/SideNote.svelte';
+	import { YEAR_GREYS, yearGrey } from '$lib/charts/yearColors';
+	import { binByKey } from '$lib/transforms/histogram';
+	import type { DaseSwarm } from '$lib/api';
 	import DisbursementCurves from '$lib/charts/DisbursementCurves.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import Sankey from '$lib/charts/Sankey.svelte';
@@ -9,7 +13,6 @@
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import FlowMap from '$lib/sections/FlowMap.svelte';
-	import OriginSplit from '$lib/sections/OriginSplit.svelte';
 	import Bipartite from '$lib/sections/Bipartite.svelte';
 	import { loadCentroids } from '$lib/maps/useGeo';
 	import type { Connections } from './connections/+page';
@@ -168,6 +171,43 @@
 			label: `€${Math.round(v / 1000)}k`
 		}))
 	);
+	// the CONTRACT VALUES frame: the ΔΑΣΕ dots/brackets convention, greys by
+	// signature year (user, 2026-08-20). The swarm list becomes the canvas
+	// component's column arrays; the ring column marks single-bid contracts.
+	let valueMode = $state<'dots' | 'brackets'>('dots');
+	let dotsHeight = $state(0);
+	const swarmCols = $derived.by((): (DaseSwarm & { ring: number[] }) | null => {
+		if (!swarm) return null;
+		return {
+			ref: swarm.map((r) => r.ref),
+			t: swarm.map((r) => r.t),
+			eur: swarm.map((r) => r.eur),
+			year: swarm.map((r) => r.year),
+			d: swarm.map((r) => r.d),
+			pe: swarm.map((r) => r.pe),
+			vat: swarm.map(() => null),
+			ring: swarm.map((r) => r.single_bidder)
+		};
+	});
+	const swarmYears = $derived(
+		swarmCols ? ([...new Set(swarmCols.year.filter(Boolean))].sort() as string[]) : []
+	);
+	const yearSegments = $derived(
+		swarmCols
+			? binByKey(
+					swarmCols.eur.map((v) => v ?? 0),
+					swarmCols.year,
+					o.value_histogram.edges,
+					swarmYears
+				)
+			: []
+	);
+	const VALUE_NOTES: Record<'dots' | 'brackets', string> = {
+		dots: 'Every in-scope contract is one dot on a log scale (stated €, excl. VAT). Greys are the signature year — lighter is earlier. Ringed dots drew a single bid. Hover to inspect, click through to the contract’s page.',
+		brackets:
+			'The same contracts counted into brackets, each one a doubling of value — which is why the bars sit on the same scale as the dots. Bar height is the number of contracts; within a bar the signature years stack in legend order, earliest at the bottom.'
+	};
+
 	// the modal direct-award bin, for the finding title
 	const daModal = $derived.by(() => {
 		const counts = o.direct_awards.counts as number[];
@@ -340,24 +380,15 @@
 		return t ? Math.round((100 * l) / t) : 0;
 	})()}
 	<ChartFrame
-		title="Only {localPct}% of the work-money goes to firms based where the work is"
-		subtitle="Each region is coloured by the share of its works won by out-of-region firms — darker means more of the money leaves. Click a region: red arrows show who reaches in, blue where its own firms reach out."
+		title="WHERE THE MONEY TRAVELS"
+		subtitle="Only {localPct}% of the money goes to firms based where the work is. Each region is coloured by the share of its works won by out-of-region firms — darker means more of the money leaves — and the bars beside the map split the biggest destinations’ € by the winner’s base. Click a region or a bar: solid black arrows show who reaches in, dashed grey where its own firms reach out."
 		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
 			net.coverage.total_eur
 		)} resolved. Full-exposure convention: a multi-region contract counts toward every region pair it touches; the within-region shares are unaffected."
 		anchor="flows"
 		methodology="even-split"
 	>
-		<FlowMap flows={net.flows} {centroids} />
-	</ChartFrame>
-
-	<ChartFrame
-		title="In the biggest destinations, local firms take a small slice"
-		subtitle="€ of works in the top-{Math.min(12, net.origins.length)} destination regions, split by whether the winning firm is based in that region."
-		anchor="origins"
-		methodology="even-split"
-	>
-		<OriginSplit rows={net.origins.slice(0, 12)} />
+		<FlowMap flows={net.flows} {centroids} origins={net.origins.slice(0, 12)} />
 	</ChartFrame>
 
 	{@const maxReach = (() => {
@@ -368,10 +399,12 @@
 		return { n: top.n, name: net.contractors[top.vat]?.name ?? '—' };
 	})()}
 	<ChartFrame
-		title="A handful of companies reach into many regions"
-		subtitle="Contractor ↔ work-region links ({grInt(net.contractor_pe.length)} edges across {grInt(
+		title="WHO REACHES WHERE"
+		subtitle="A handful of companies reach into many regions: {grInt(
+			net.contractor_pe.length
+		)} contractor ↔ work-region links across {grInt(
 			Object.keys(net.contractors).length
-		)} contractors). {maxReach.name} alone works in {maxReach.n} regional units."
+		)} contractors — {maxReach.name} alone works in {maxReach.n} regional units."
 		caveat="Edge € even-split across a contract's partners and regions — the layer sums to the programme total."
 		anchor="bipartite"
 		methodology="even-split"
@@ -444,14 +477,59 @@
 {#if swarm}
 	<ChartFrame
 		title="CONTRACT VALUES"
-		subtitle="Every in-scope contract ({grInt(
+		subtitle="All {grInt(
 			o.kpis.n_contracts
-		)}) as one dot on a log scale (stated €, excl. VAT) — almost all sit far above the direct-award ceilings. Ringed dots drew a single bid."
-		caveat="The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis as these dots. RRF emergency provisions allowed direct awards above them; the lines are printed for scale."
+		)} in-scope contracts on one log axis (stated €, excl. VAT) — almost all sit far above the direct-award ceilings. Ringed dots drew a single bid."
+		caveat="Both views draw the same contracts from one list, on one axis: every bracket spans a doubling of value, which makes the equal-width slots a logarithmic scale, and the dots sit on that same scale — so a value is at the same place in both, the median line included. Greys are the signature year in both. The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis; RRF emergency provisions allowed direct awards above them."
 		anchor="swarm"
 		methodology="stated-basis"
 	>
-		<Beeswarm rows={swarm} {thresholds} />
+		{#if swarmCols}
+			<div class="modes">
+				<div class="vlegend">
+					{#each swarmYears as y (y)}
+						<span><i style:background={YEAR_GREYS[y]}></i>{y}</span>
+					{/each}
+				</div>
+				<div class="mode" role="group" aria-label="Contract-value chart mode">
+					<button
+						type="button"
+						class:active={valueMode === 'dots'}
+						onclick={() => (valueMode = 'dots')}>Individual dots</button
+					>
+					<button
+						type="button"
+						class:active={valueMode === 'brackets'}
+						onclick={() => (valueMode = 'brackets')}>Value brackets</button
+					>
+				</div>
+			</div>
+			<SideNote note={VALUE_NOTES[valueMode]}>
+				{#if valueMode === 'dots'}
+					<BeeswarmCanvas
+						data={swarmCols}
+						edges={o.value_histogram.edges}
+						colors={yearGrey}
+						ring={swarmCols.ring}
+						thresholds={miniThresholds}
+						linkBase="/antinero/contract/"
+						bind:plotHeight={dotsHeight}
+					/>
+				{:else}
+					<LogHistogram
+						labels={o.value_histogram.labels}
+						counts={o.value_histogram.counts}
+						edges={o.value_histogram.edges}
+						color="var(--c-antinero)"
+						median={o.value_histogram.median}
+						height={dotsHeight || 460}
+						segments={yearSegments}
+						segColors={swarmYears.map((y) => YEAR_GREYS[y])}
+						thresholds={miniThresholds}
+					/>
+				{/if}
+			</SideNote>
+		{/if}
 	</ChartFrame>
 {:else}
 	<div class="skeleton" style="height: 320px"></div>
@@ -495,6 +573,7 @@
 			labels={o.direct_awards.labels as string[]}
 			counts={o.direct_awards.counts as number[]}
 			edges={o.direct_awards.edges as number[]}
+			color="var(--c-antinero)"
 			thresholds={miniThresholds}
 		/>
 	</ChartFrame>
@@ -639,10 +718,56 @@
 			max-width: none;
 		}
 	}
+	.modes {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--sp-6);
+		flex-wrap: wrap;
+		margin: var(--sp-2) 0 var(--sp-4);
+	}
+	.mode {
+		display: inline-flex;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		overflow: hidden;
+	}
+	.mode button {
+		font: inherit;
+		font-size: var(--fs-13);
+		padding: 2px var(--sp-3);
+		border: 0;
+		background: var(--paper);
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.mode button.active {
+		background: var(--ink);
+		color: var(--paper);
+	}
+	.vlegend {
+		display: flex;
+		gap: var(--sp-4);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+	}
+	.vlegend i {
+		display: inline-block;
+		width: 0.7rem;
+		height: 0.7rem;
+		border-radius: 50%;
+		margin-right: 4px;
+		vertical-align: -1px;
+	}
 	.netbar {
 		display: flex;
 		justify-content: flex-end;
 		margin-bottom: var(--sp-2);
+	}
+	/* black-white-grayscale only on this page (user, 2026-08-20): the
+	   reference-line ink follows */
+	.antp {
+		--c-threshold: #4a4a4a;
 	}
 	/* every section title follows the sponsored-works kicker, in the
 	   antinero dataset colour (black) */

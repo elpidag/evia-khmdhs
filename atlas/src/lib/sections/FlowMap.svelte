@@ -2,14 +2,16 @@
 	/**
 	 * Where the work-money goes against where the firms are: a choropleth of
 	 * the share each regional unit's works pay to firms based elsewhere, with
-	 * the largest flows beside it. Clicking a region draws only ITS flows —
-	 * red for firms reaching in, blue for its own firms reaching out.
-	 *
-	 * Lifted out of /connections so the Anti-nero page can carry it (user,
-	 * 2026-08-20); the logic and the copy are unchanged.
+	 * the biggest destinations' local/imported split beside it — one frame,
+	 * the two views linked (user, 2026-08-20). Clicking a region on the map
+	 * or a destination bar focuses both: the map draws only ITS flows —
+	 * solid black for firms reaching in, dashed grey for its own firms
+	 * reaching out, a ringed white dot for the money that stays — and the
+	 * bars give way to that region's flow table.
 	 */
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import FlowArcs from '$lib/maps/FlowArcs.svelte';
+	import OriginSplit from '$lib/sections/OriginSplit.svelte';
 	import { RAMP_WORKS } from '$lib/maps/useGeo';
 	import { peEn } from '$lib/transforms/regions';
 	import { eurShort } from '$lib/transforms/format';
@@ -20,11 +22,21 @@
 		n_contracts: number;
 		total_eur: number;
 	}
+	interface OriginRow {
+		target_pe: string;
+		total_eur: number;
+		local_eur: number;
+		imported_eur: number;
+		unknown_eur: number;
+	}
 	interface Props {
 		flows: Flow[];
 		centroids: Record<string, [number, number]>;
+		/** the biggest destinations' local/imported split — the resting
+		 *  right-hand view; clicking a bar focuses the map on that region */
+		origins?: OriginRow[];
 	}
-	let { flows, centroids }: Props = $props();
+	let { flows, centroids, origins = [] }: Props = $props();
 
 	let flowFocus = $state<string | null>(null);
 	const short = (pe: string) => peEn(pe);
@@ -75,7 +87,7 @@
 <div class="flow-grid">
 	<PaperMap
 		colorOf={flowFocus
-			? (pe) => (pe === flowFocus ? 'var(--ramp-works-1)' : 'var(--land-empty)')
+			? (pe) => (pe === flowFocus ? '#e0e0e0' : 'var(--land-empty)')
 			: importChoro}
 		tipOf={flowFocus ? undefined : importTip}
 		onRegionClick={(pe) => (flowFocus = flowFocus === pe ? null : pe)}
@@ -89,15 +101,15 @@
 		{#snippet legend()}
 			{#if flowFocus}
 				<div>
-					<i class="sw" style="background:#b33a1a"></i> firms based elsewhere → works in {short(
+					<i class="sw" style="background:#111111"></i> firms based elsewhere → works in {short(
 						flowFocus
 					)}
 				</div>
 				<div>
-					<i class="sw" style="background:#2258a5"></i>
+					<i class="sw dash"></i>
 					{short(flowFocus)} firms → works elsewhere
 				</div>
-				<div><i class="sw round" style="background:#3d7a4a"></i> money that stays local</div>
+				<div><i class="sw round"></i> money that stays local</div>
 				<div class="faint">arrows point home → work · width ∝ €</div>
 			{:else}
 				<div><strong>% of works won by out-of-region firms</strong></div>
@@ -114,9 +126,12 @@
 				{peEn(flowFocus)}
 				<button class="btn-more" onclick={() => (flowFocus = null)}>✕ clear</button>
 			{:else}
-				Largest flows
+				Biggest destinations — who takes the money
 			{/if}
 		</h3>
+		{#if !flowFocus && origins.length}
+			<OriginSplit rows={origins} selected={flowFocus} onSelect={(pe) => (flowFocus = pe)} />
+		{:else}
 		<table>
 			<tbody>
 				{#each focusFlows as f, i (i)}
@@ -136,6 +151,7 @@
 				{/each}
 			</tbody>
 		</table>
+		{/if}
 	</div>
 </div>
 
@@ -180,6 +196,11 @@
 		height: 0.6rem;
 		border-radius: 50%;
 		vertical-align: -1px;
+		background: #ffffff;
+		border: 1.5px solid #111111;
+	}
+	i.sw.dash {
+		background: repeating-linear-gradient(90deg, #9a9a9a 0 5px, transparent 5px 9px);
 	}
 	.faint {
 		color: var(--ink-faint);
@@ -208,13 +229,14 @@
 		vertical-align: -1px;
 	}
 	i.dir.in {
-		background: #b33a1a;
+		background: #111111;
 	}
 	i.dir.out {
-		background: #2258a5;
+		background: #9a9a9a;
 	}
 	i.dir.local {
-		background: #3d7a4a;
+		background: #ffffff;
+		border: 1.5px solid #111111;
 	}
 	.chip {
 		font-size: var(--fs-12);

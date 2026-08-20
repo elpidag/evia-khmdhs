@@ -5783,3 +5783,96 @@ list + search, contractor page, member-firm view),
 regex (`extract_contractor_names.py`, `harvest_ypen_offices.py`) — a shell
 heredoc eating the backslash of «». Both cleaned; the lesson is to edit
 Python regexes with a file, never through a heredoc.*
+
+## 2026-08-20 · Two seats from the contracts, a grayscale Anti-nero page, and what ΓΕΜΗ knows about the ventures
+
+**The two missing HQ dots.** Every in-scope contract has a curated work region
+and every Π.Ε. value is canonical, but 2 of the 151 contractors — the ventures
+996674333 (ΣΙΔΕΡΗ–ΕΛ.ΤΕ.) and 996830790 (ΦΙΛΑΝΤΑΡΑΚΗ–ΛΙΤΣΟΣ) — carried a
+region and no point, so their dots were missing from the HQ maps. Their own
+contracts state their seats («με έδρα στη Λυκόβρυση Αττικής επί της οδού
+Μπουμπουλίνας, αρ. 10Α, Τ.Κ. 14123» — 22SYMV010635347; «με έδρα στο Ίλιον
+Αττικής επί της οδού Λεοντίου, αρ. 35, Τ.Κ. 13121» — 22SYMV010795585); both
+geocoded street-level through the normal Nominatim gate (postcode prefix +
+curated Π.Ε. agree), source `contract_preamble`. **151/151 in-scope contractors
+now carry a dot.**
+
+**The Anti-nero page goes black-white-grayscale** (user): no greens, reds or
+blues anywhere on `/` or its maps. The works ramp, the phase colours (ordinal
+greys — the phases are ordered in time, so lightness carries the order), the
+flow arcs (solid black IN / dashed grey OUT / white-ringed local dot), the HQ
+dots, the Sankey/Bipartite/disbursement accents and the threshold ink all
+moved; the drilled map's per-contract OKLCH hues became two alternating greys,
+accepting that a multi-authority contract's dots now group visibly only on
+hover (the dashed seat-links). CONTRACT VALUES became the ΔΑΣΕ merged frame:
+dots/brackets toggle on one pure-doubling axis anchored on €1.000
+(`antinero_value_histogram`, pinned Σ counts == 245 == every in-scope
+contract), coloured by SIGNATURE YEAR in greys — the user explicitly dropped
+the phase categories there — with the single-bid rings and the ν.4782 ceiling
+lines kept. The flow map and the local-share bars merged into one linked
+frame, and the computed finding sentences moved from the frame titles into
+the subtitles (the titles are short caps, as on the ΔΑΣΕ page).
+
+**ΓΕΜΗ knows the ventures' members, and it was under our nose.** The
+publicity `/api/company/details` payload — which `gemi.py` already calls,
+reading only `.company` out of it — carries `managementPersons`: each member
+with ΑΦΜ, the role «Εταίρος - Μέλος» and a PERCENTAGE, plus the register's
+act history with the «Ανακοίνωση σύστασης» reference. Sweep over the 19
+undocumented ventures holding a ΓΕΜΗ number: 10 return member rows (some
+partial — one of two members). The σύσταση PDFs themselves are NOT publicly
+downloadable (every route the SPA exposes — `/api/download/{statutes,
+authority,rest}/<id>` — serves other document classes; the announcement
+files' `~/uploads/…` paths resolve on no public host). **Convention set by
+the user the same day: the ΓΕΜΗ percentages are the venture's internal
+participation shares, NOT a record of how any contract's money was
+distributed — the State paid the venture as one entity. The even split
+stays; percentages ride as recorded metadata only.** Membership entries from
+this source await the user's per-venture confirmation before anything enters
+`consortium_members.json`.
+
+*Affects `khmdhs/data/contractor_locations.json` (2 seats),
+`atlas_api/queries_extra.py` (`antinero_value_histogram`, swarm `d`),
+`atlas/src/lib/maps/useGeo.ts`, `transforms/scopes.ts`,
+`charts/yearColors.ts` (+`YEAR_GREYS`), `charts/BeeswarmCanvas.svelte`
+(parametrized), `charts/Beeswarm.svelte` (deleted), `maps/FlowArcs.svelte`,
+`sections/{FlowMap,OriginSplit,AntineroMap,Bipartite}.svelte`,
+`charts/{Sankey,DisbursementCurves}.svelte`, `src/routes/+page.svelte`, and
+`tests/test_atlas_real_db.py` (+1 pin). 530 Python tests, 108 frontend.*
+
+## 2026-08-20 · Five ventures documented from the register (batch A confirmed)
+
+The user confirmed the five ventures whose ΓΕΜΗ `managementPersons` rows list
+every member: Κ/Ξ Κ. ΣΠΑΝΟΣ & ΣΙΑ Ε.Ε. – ΠΑΠΑΔΟΠΟΥΛΟΣ (70/30), Κ/Ξ ΛΑΜΠΙΡΗΣ
+– ΔΗΜΟΠΟΥΛΟΣ (99/1), Κ/Ξ ΛΙΤΣΑ – ΚΥΡΙΑΖΑΤΗΣ (50/50), Κ/Ξ ΓΕΜΑ – ΤΑΣΚΟΥΔΗΣ/
+ΓΚΑΤΖΙΟΣ (50/50), Κ/Ξ ΦΙΛΑΝΤΑΡΑΚΗ – ΛΙΤΣΟΣ (no % recorded). Source
+`gemi:<number>`, the register row verbatim as the excerpt, percentage kept as
+`gemi_percentage` metadata under the even-split convention. The layer is now
+**57 ventures / 41 documented (83 links, 58 firms) / 16 undocumented**; the
+member-firm view still sums to €622.534.181,72 (138 names), and the
+undocumented ventures' € fell €75,3M → €60,6M. Three member ΑΦΜ are new to
+the dataset (999501790, 034704122, 801264804). Pins updated in
+`tests/test_atlas_real_db.py`.
+
+## 2026-08-20 · Five more from the register (batch B) — the «missing member» was a role spelling
+
+Batch B confirmed. The earlier «ΓΕΜΗ lists only one member» pattern was an
+artifact of the sweep's own filter: the register writes a member who also
+runs the venture under the combined role **«Μέλος & Διαχειριστής»**, which
+the first pass had misfiled as a non-member row. Read in full, all five B
+ventures carry BOTH members with ΑΦΜ and percentages that sum to exactly
+100%: ΣΙΔΕΡΗ–ΜΠΟΥΡΑΣ 50/50, ΚΑΖΑΝΤΣΟΓΛΟΥ–ΒΕΛΩΝΗΣ 75/25, ΝΤΙΝΟΠΟΥΛΟΣ–
+ΛΑΓΚΑΔΙΝΟΣ 50/50, ΤΣΑΝΤΑΛΗ–ΒΕΛΩΝΗΣ 80/20, ΛΕΦΤΣΗΣ–ΑΦΟΙ ΔΙΑΜΑΝΤΟΓΛΟΥ 50/50.
+The encoded trap («a person signing FOR a member company is not a member»)
+is about contract signatures and does not apply to a register row that says
+«Μέλος». Three second-members are independently corroborated with the same
+ΑΦΜ in procurement documents (ΝΤΙΝΟΠΟΥΛΟΣ 100287570 in πρόσκληση
+25PROC016893018, ΤΣΑΝΤΑΛΗ 148024200 in 24PROC014217714, ΛΕΦΤΣΗΣ 061303461
+in the venture's own contract 23SYMV012992146).
+
+The layer is now **57 ventures / 46 documented (93 links, 63 firms) / 11
+undocumented**; unattributed venture money fell to **€40.816.532,04**. The
+member-firm view still sums to €622.534.181,72 over 136 names; ΣΙΔΕΡΗ ΜΑΡΙΑ
+enters the top-5 (€15,25M through three ventures and her own work). One new
+ΑΦΜ enters the dataset (100287570 ΝΤΙΝΟΠΟΥΛΟΣ). The 11 that remain: 9 with
+a ΓΕΜΗ record that lists no member rows and 2 with no ΓΕΜΗ number at all —
+no reachable source names them.

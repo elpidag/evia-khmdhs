@@ -24,9 +24,13 @@
 	}
 	let { ctx, flows, centroids, focusPe }: Props = $props();
 
-	const IN = '#b33a1a';
-	const OUT = '#2258a5';
-	const LOCAL = '#3d7a4a';
+	// black-white-grayscale only (user, 2026-08-20): direction is carried by
+	// the arrowheads, the solid/dashed distinction and the table chips —
+	// solid black reaches IN, dashed grey reaches OUT, the ringed white dot
+	// is the money that never leaves
+	const IN = '#111111';
+	const OUT = '#9a9a9a';
+	const LOCAL = '#ffffff';
 
 	const shown = $derived(
 		flows
@@ -105,7 +109,9 @@
 			cy={p[1]}
 			r={(4 + 9 * Math.sqrt(localEur / maxEur)) / ctx.k}
 			fill={LOCAL}
-			opacity="0.8"
+			stroke="#111111"
+			stroke-width={1.6 / ctx.k}
+			opacity="0.9"
 			onmouseenter={() =>
 				ctx.showTip(
 					`<strong>stays local</strong><br>${eurShort(localEur)} won by firms based in ${peEn(focusPe)}`
@@ -123,6 +129,7 @@
 			class="flow"
 			{d}
 			stroke={f.target_pe === focusPe ? IN : OUT}
+			stroke-dasharray={f.target_pe === focusPe ? undefined : `${8 / ctx.k} ${5 / ctx.k}`}
 			stroke-width={(1 + 7 * Math.sqrt(f.total_eur / maxEur)) / ctx.k}
 			marker-end={f.target_pe === focusPe ? 'url(#fa-in)' : 'url(#fa-out)'}
 			onmouseenter={() => ctx.showTip(tip(f))}

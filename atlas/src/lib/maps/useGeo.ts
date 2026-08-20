@@ -205,15 +205,16 @@ export function makeChoro(ramp: string[], maxV: number): (v: number) => string {
 	};
 }
 
+// black-white-grayscale only on the Anti-nero surfaces (user, 2026-08-20)
 export const RAMP_WORKS = [
-	'#cbe4d1',
-	'#b0d5be',
-	'#93c6a8',
-	'#6fb28c',
-	'#578f6e',
-	'#406e55',
-	'#2a4a38',
-	'#16241c'
+	'#f0f0f0',
+	'#dcdcdc',
+	'#c4c4c4',
+	'#a6a6a6',
+	'#858585',
+	'#5f5f5f',
+	'#383838',
+	'#111111'
 ];
 
 export const RAMP_HOME = [

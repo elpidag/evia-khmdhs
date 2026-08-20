@@ -141,7 +141,7 @@
 	}
 	.edge {
 		fill: none;
-		stroke: var(--accent);
+		stroke: var(--ink);
 		opacity: 0.35;
 	}
 	.node {
@@ -159,10 +159,10 @@
 	}
 	.node.on text {
 		font-weight: 700;
-		fill: var(--accent);
+		fill: var(--ink);
 	}
 	.node:hover text {
-		fill: var(--accent);
+		fill: var(--ink);
 	}
 	.val {
 		fill: var(--ink-faint);

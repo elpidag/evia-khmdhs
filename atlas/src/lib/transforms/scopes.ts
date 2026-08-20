@@ -24,17 +24,20 @@ export const SCOPE_LABELS: Record<string, string> = {
 	antinero_probable: 'Probably Anti-nero — not included in the calculations'
 };
 
-/** warm ramp for the sequential phases; green/purple for the two
- *  qualitatively different strands (reforestation, restoration) */
+/** ordinal greys, light → dark down the phase order — the phases are
+ *  ordered in time, so a grey ramp keeps them legible without hue
+ *  (black-white-grayscale only on the Anti-nero page: user, 2026-08-20);
+ *  the two qualitatively different strands take the darkest steps and
+ *  the unknown phase the lightest, so it reads as "least defined" */
 export const SCOPE_COLORS: Record<string, string> = {
-	antinero_i: '#c9a227',
-	antinero_ii: '#de7a1c',
-	antinero_iii: '#b33a1a',
-	antinero_iv: '#7c2d12',
-	antinero_2026: '#451a03',
-	antinero_esa: '#3d7a4a',
-	antinero_restoration: '#6b4b8a',
-	antinero_unknown_phase: '#8a7f6e'
+	antinero_i: '#dedede',
+	antinero_ii: '#c4c4c4',
+	antinero_iii: '#a6a6a6',
+	antinero_iv: '#828282',
+	antinero_2026: '#5a5a5a',
+	antinero_esa: '#3a3a3a',
+	antinero_restoration: '#141414',
+	antinero_unknown_phase: '#efefef'
 };
 
 export const scopeLabel = (s: string): string => SCOPE_LABELS[s] ?? s;

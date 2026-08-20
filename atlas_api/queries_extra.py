@@ -379,6 +379,9 @@ def antinero_overview(kh: sqlite3.Connection,
         "kpis": antinero_kpis(kh, pconn),
         "procedures": q.procedure_mix(kh),
         "histogram": q.contract_value_histogram(kh),
+        # the merged dots/brackets frame reads THESE pure-doubling edges;
+        # `histogram` above keeps webui's frozen brackets for compatibility
+        "value_histogram": antinero_value_histogram(kh),
         "direct_awards": q.direct_award_distribution(kh),
         "timeseries": q.disbursement_timeseries(pconn),
         "yearly": q.antinero_yearly(pconn),
@@ -841,6 +844,7 @@ def contract_swarm(kh: sqlite3.Connection) -> list[dict]:
             "eur": r["eff"],
             "scope": r["scope"],
             "year": d[:4] if d else None,
+            "d": d,
             "proc": _proc_kind(r["procedure_type"]),
             "single_bidder": 1 if r["bids_submitted"] == 1 else 0,
             "pe": canonical_pe(r["pe"]) or r["pe"] if r["pe"] else None,
@@ -1491,6 +1495,38 @@ def dase_value_histogram(dase: sqlite3.Connection) -> dict:
         k_hi += 1
     edges = [0.0] + [ANCHOR * 2 ** k for k in range(k_lo, k_hi + 1)]
 
+    h = q._bin_values(values, tuple(edges))
+    values.sort()
+    h["median"] = values[len(values) // 2] if values else 0
+    h["labels"] = (
+        [f"≤{_doubling_label(edges[1])}"]
+        + [f"{_doubling_label(edges[i])}–{_doubling_label(edges[i + 1])}"
+           for i in range(1, len(edges) - 1)]
+        + [f"≥{_doubling_label(edges[-1])}"]
+    )
+    return h
+
+
+def antinero_value_histogram(kh: sqlite3.Connection) -> dict:
+    """Value brackets for the Anti-nero CONTRACT VALUES chart — the ΔΑΣΕ
+    convention, one dataset over (user, 2026-08-20): every bracket is exactly
+    one doubling, anchored on €1.000 and derived from the live range, so the
+    equal-width slots ARE a log axis and the beeswarm the chart toggles with
+    places its dots on the very same scale. Values = the swarm's own basis
+    (effective cost on the caller's connection — stated net through the
+    Atlas's shadow views)."""
+    values = [r[0] or 0.0 for r in kh.execute(f"""
+        SELECT {q.effective_cost(kh, 'k')} FROM contracts k
+        JOIN contract_scope s ON s.reference_number = k.reference_number
+        WHERE s.in_scope = 1""")]
+    live = [v for v in values if v > 0]
+    lo, hi = (min(live), max(live)) if live else (1_000.0, 1_000.0)
+    ANCHOR = 1_000.0
+    k_lo = math.floor(math.log2(lo / ANCHOR))
+    k_hi = math.ceil(math.log2(hi / ANCHOR))
+    if ANCHOR * 2 ** k_hi <= hi:
+        k_hi += 1
+    edges = [0.0] + [ANCHOR * 2 ** k for k in range(k_lo, k_hi + 1)]
     h = q._bin_values(values, tuple(edges))
     values.sort()
     h["median"] = values[len(values) // 2] if values else 0

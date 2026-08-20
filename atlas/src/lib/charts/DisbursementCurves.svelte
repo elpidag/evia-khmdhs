@@ -125,8 +125,8 @@
 				y={M.top}
 				width={xYoy(243) - xYoy(120)}
 				height={height - M.top - M.bottom}
-				fill="var(--accent)"
-				opacity="0.06"
+				fill="var(--ink)"
+				opacity="0.05"
 			/>
 			<text class="season-label" x={xYoy(120) + 4} y={M.top + 12}>fire season</text>
 			{#each yYoy.ticks(4) as t (t)}
@@ -198,19 +198,19 @@
 		stroke-width: 1.4;
 	}
 	.yoy-line.current {
-		stroke: var(--accent);
+		stroke: var(--ink);
 		stroke-width: 2.4;
 	}
 	text.series-label {
 		fill: var(--ink-soft);
 	}
 	text.series-label.current {
-		fill: var(--accent);
+		fill: var(--ink);
 		font-weight: 700;
 	}
 	.season-label {
 		font-size: 10px;
-		fill: var(--accent);
+		fill: var(--ink-soft);
 		opacity: 0.75;
 	}
 </style>

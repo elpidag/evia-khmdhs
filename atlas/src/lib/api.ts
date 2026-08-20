@@ -160,6 +160,8 @@ export interface SwarmRow {
 	eur: number;
 	scope: string;
 	year: string | null;
+	/** ISO signed date (submission fallback) — the tooltip's DD.MM.YYYY */
+	d: string | null;
 	proc: 'direct' | 'open' | 'nego' | 'other';
 	single_bidder: 0 | 1;
 	pe: string | null;
@@ -360,6 +362,9 @@ export interface AntineroOverview {
 	kpis: Kpis;
 	procedures: ProcedureRow[];
 	histogram: { edges: number[]; counts: number[]; labels: string[]; median: number };
+	/** pure-doubling brackets shared by the dots/brackets CONTRACT VALUES
+	 *  frame — same convention as the ΔΑΣΕ chart (user, 2026-08-20) */
+	value_histogram: { edges: number[]; counts: number[]; labels: string[]; median: number };
 	direct_awards: {
 		labels: string[];
 		counts: number[];

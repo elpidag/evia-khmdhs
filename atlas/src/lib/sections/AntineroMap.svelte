@@ -129,8 +129,8 @@
 		for (const p of data.contract_points) m.set(p.ref, (m.get(p.ref) ?? 0) + 1);
 		return m;
 	});
-	const SINGLE_FILL = '#6e6353';
-	const DRILL_STROKE = '#3a3429';
+	const SINGLE_FILL = '#6b6b6b';
+	const DRILL_STROKE = '#333333';
 
 	const contractDots = $derived.by(() => {
 		let pts = data.contract_points;
@@ -161,14 +161,12 @@
 		const multi = [...new Set(contractDots.map((p) => p.ref as string))]
 			.filter((r) => (authCount.get(r) ?? 0) > 1)
 			.sort();
-		const n = Math.max(1, multi.length);
+		// grayscale only (user, 2026-08-20): adjacent multi-authority
+		// contracts alternate between two greys, and which dots belong
+		// together is shown by the dashed hover links rather than by hue
 		const m = new Map<string, string>();
 		multi.forEach((ref, i) => {
-			const hue = (20 + (360 * i) / n) % 360;
-			m.set(
-				ref,
-				i % 2 ? `oklch(0.70 0.13 ${hue.toFixed(1)})` : `oklch(0.55 0.16 ${hue.toFixed(1)})`
-			);
+			m.set(ref, i % 2 ? '#9a9a9a' : '#3f3f3f');
 		});
 		return m;
 	});
@@ -279,7 +277,7 @@
 						r={focus.side === 'works' ? 6 : 4.5}
 						fillOf={focus.side === 'works'
 							? (p) => drillColors?.get(p.ref as string) ?? SINGLE_FILL
-							: () => 'var(--accent)'}
+							: () => 'var(--ink)'}
 						stroke={focus.side === 'works' ? DRILL_STROKE : 'rgba(42,33,24,.45)'}
 						tipOf={(p) =>
 							`<strong>${p.title}</strong><br>${p.authority}<br>${eur(p.eff_eur as number)}` +
@@ -331,7 +329,7 @@
 						{ctx}
 						points={contractorDots}
 						r={focus?.side === 'home' ? 6 : 4.5}
-						fillOf={() => 'var(--c-dase-deep)'}
+						fillOf={() => '#2b2b2b'}
 						tipOf={(p) =>
 							`<strong>${p.name}</strong><br>${p.pe ?? ''} · ${p.precision}` +
 							`<br>${grInt(p.n_contracts as number)} contracts · ${eur(p.total_eur as number)}`}

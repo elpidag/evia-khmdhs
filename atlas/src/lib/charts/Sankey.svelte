@@ -42,7 +42,7 @@
 		if (n.kind === 'ministry') return 'var(--ink)';
 		if (n.kind === 'phase') return scopeColor(n.id);
 		if (n.kind === 'rest') return 'var(--ink-faint)';
-		return 'var(--accent)';
+		return 'var(--ink)';
 	}
 	function linkDim(l: Link): boolean {
 		if (!hovered) return false;
@@ -131,7 +131,7 @@
 		fill: var(--ink);
 	}
 	.label a:hover {
-		fill: var(--accent);
+		fill: var(--ink);
 	}
 	.value {
 		fill: var(--ink-faint);

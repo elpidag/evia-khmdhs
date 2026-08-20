@@ -755,13 +755,15 @@ def test_member_firm_view_is_the_same_money(client, kh):
     members are on record is replaced by them, its € split evenly."""
     o = client.get("/api/antinero/overview").get_json()
     facts = o["consortiums"]
-    # 57 since the party-clause screen of 2026-08-20 found three ventures the
-    # ΓΕΜΗ sweep could not see and documented two more from their own contracts
-    assert (facts["n"], facts["n_documented"], facts["n_firms"]) == (57, 36, 52)
+    # 57 since the party-clause screen of 2026-08-20; 46 documented since the
+    # same day's ΓΕΜΗ managementPersons sweep (user-confirmed batches A + B):
+    # the register lists each member with ΑΦΜ and role — batch B's second
+    # members sit under the combined role «Μέλος & Διαχειριστής»
+    assert (facts["n"], facts["n_documented"], facts["n_firms"]) == (57, 46, 63)
     # the ventures hold 31,7% of the programme; the undocumented ones sit
     # identically in both views and the page says so
     assert facts["eur"] == pytest.approx(197_612_041.99, abs=0.01)
-    assert facts["eur_unsplit"] == pytest.approx(75_263_310.33, abs=0.01)
+    assert facts["eur_unsplit"] == pytest.approx(40_816_532.04, abs=0.01)
 
     con = sqlite3.connect(DEFAULT_DB)
     con.row_factory = sqlite3.Row
@@ -773,7 +775,7 @@ def test_member_firm_view_is_the_same_money(client, kh):
     assert total == pytest.approx(622_534_181.72, abs=0.01)
     assert total == pytest.approx(sum(r["total_eur"] or 0 for r in parties), abs=0.01)
     # substituting members for ventures leaves FEWER names, not more
-    assert len(firms) == 141 and len(parties) == 151
+    assert len(firms) == 136 and len(parties) == 151
     # the point of the view: Τ&Τ ΚΑΤΑΣΚΕΥΕΣ is 8th as a contractor and 3rd as
     # a firm, because half of a €22,9M κοινοπραξία is its own
     tt = next(r for r in firms if r["vat_number"] == "998807500")
@@ -791,13 +793,13 @@ def test_consortium_members_are_firms_not_ventures(kh):
     ventures = {r[0] for r in kh.execute("SELECT vat_number FROM consortiums")}
     members = {r[0] for r in kh.execute("SELECT member_vat FROM consortium_members")}
     assert not (ventures & members)
-    assert len(members) == 52
+    assert len(members) == 63
     # every member carries the document it was read from, or the entry says
     # plainly that it was identified by name against the registry
-    assert kh.execute("SELECT COUNT(*) FROM consortium_members").fetchone()[0] == 73
+    assert kh.execute("SELECT COUNT(*) FROM consortium_members").fetchone()[0] == 93
     undocumented = kh.execute(
         "SELECT COUNT(*) FROM consortiums WHERE members_documented = 0").fetchone()[0]
-    assert undocumented == 21
+    assert undocumented == 11
 
 
 def test_connections_pins(client):
@@ -1311,3 +1313,18 @@ def test_explore_and_the_contract_page_present_the_display_name(client):
     party = d["contractors"][0]
     assert (party["name"], party["registry_name"]) == (
         "ΒΙΟΣ Α.Ε.", "Δ ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ ΟΕ")
+
+
+def test_value_histogram_covers_every_contract_on_doubling_edges(client):
+    """The merged dots/brackets CONTRACT VALUES frame (user, 2026-08-20):
+    pure-doubling edges anchored on €1.000, every in-scope contract counted,
+    and the swarm it toggles with ships the same population with a date."""
+    o = client.get("/api/antinero/overview").get_json()
+    vh = o["value_histogram"]
+    assert sum(vh["counts"]) == o["kpis"]["n_contracts"] == 245
+    inner = vh["edges"][1:]
+    assert all(b == a * 2 for a, b in zip(inner, inner[1:]))
+    assert vh["median"] > 0
+    sw = client.get("/api/antinero/swarm").get_json()
+    assert len(sw) == 245
+    assert all(r["d"] for r in sw)          # the tooltip's signature date
