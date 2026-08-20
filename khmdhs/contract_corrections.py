@@ -71,7 +71,8 @@ def apply_contract_corrections(conn: sqlite3.Connection,
                      fix.get("total_cost_without_vat"),
                      fix.get("reason"), ref))
             else:
-                # A party-only fix (contractors_vat / contractors_keep) changes
+                # A party-only fix (contractors_vat / contractors_keep /
+                # contractor_party) changes
                 # no euro figure, so it must NOT stamp correction_note: the
                 # contract page renders that as «Stated value — curated
                 # correction … the value shown is the one the signed contract
@@ -93,6 +94,7 @@ def apply_contract_corrections(conn: sqlite3.Connection,
                                     ref, seq)
             _apply_contractors_keep(conn, ref, fix.get("contractors_keep"))
             _apply_contractors_vat(conn, ref, fix.get("contractors_vat"))
+            _apply_contractor_party(conn, ref, fix.get("contractor_party"))
     return n
 
 
@@ -124,12 +126,64 @@ def _apply_contractors_vat(conn: sqlite3.Connection, ref: str,
             or old_s.zfill(9) in {d.zfill(9)
                                   for d in re.findall(r"\d{8,9}", raw or "")}]
         if not hits:
-            logging.warning("contractors_vat for %s: no row carries %s",
-                            ref, old_s)
+            # already applied — the row carries the corrected ΑΦΜ, which is
+            # what a second run without a refetch in between looks like.
+            # Warning on it printed 7 false alarms every refresh (1 khmdhs,
+            # 6 ΔΑΣΕ) and would have buried a real «matched nothing», the
+            # signal that a curated fix has gone stale.
+            done = any((raw or "").strip() == new_s for _seq, raw in conn.execute(
+                "SELECT seq, vat_number FROM contractors WHERE reference_number = ?",
+                (ref,)))
+            if not done:
+                logging.warning("contractors_vat for %s: no row carries %s",
+                                ref, old_s)
             continue
         for seq in hits:
             conn.execute("UPDATE contractors SET vat_number = ? WHERE "
                          "reference_number = ? AND seq = ?", (new_s, ref, seq))
+
+
+def _apply_contractor_party(conn: sqlite3.Connection, ref: str,
+                            party: dict | None) -> None:
+    """Replace a contract's contractor rows with the ONE party that signed it.
+
+    ΥΠΕΝ keys the winner into the registry's `contractingMembersDataList`,
+    and for a joint venture that field is filled two different ways: 60
+    in-scope consortium contracts carry the κοινοπραξία itself, with its own
+    ΑΦΜ, and 7 carry its MEMBERS instead (DATA_DECISIONS 2026-08-20). The
+    members are not the contracting party — the signed contract names «η
+    κοινοπραξία με την επωνυμία … Α.Φ.Μ. …», seated at its own address, and
+    binds its members «ενιαία, αδιαίρετα, αλληλέγγυα», stating no shares.
+    Keying the members made every per-contractor view credit each of them
+    with the contract's whole value.
+
+    `party` is {"vat": …, "name": …, "evidence": <verbatim preamble>}; the
+    ΑΦΜ must be the one the PDF prints. Nothing is lost: the registry's own
+    list stays verbatim in contracts.raw_json, and consortium membership is
+    curated as its own layer.
+
+    Idempotent — re-running rewrites the same single row.
+    """
+    if not party:
+        return
+    vat = str(party.get("vat", "")).strip()
+    name = (party.get("name") or "").strip()
+    if not re.fullmatch(r"\d{9}", vat) or not name:
+        logging.warning("contractor_party for %s: %r / %r is not a usable party",
+                        ref, party.get("vat"), party.get("name"))
+        return
+    rows = conn.execute(
+        "SELECT seq, vat_number, country, greek_vat FROM contractors "
+        "WHERE reference_number = ? ORDER BY seq", (ref,)).fetchall()
+    if not rows:
+        logging.warning("contractor_party for %s: contract has no contractor rows",
+                        ref)
+        return
+    country, greek_vat = rows[0][2], rows[0][3]
+    conn.execute("DELETE FROM contractors WHERE reference_number = ?", (ref,))
+    conn.execute("INSERT INTO contractors (reference_number, seq, vat_number, "
+                 "name, country, greek_vat) VALUES (?, 0, ?, ?, ?, ?)",
+                 (ref, vat, name, country, greek_vat))
 
 
 def _apply_contractors_keep(conn: sqlite3.Connection, ref: str,

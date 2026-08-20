@@ -124,6 +124,80 @@ def kpis(conn: sqlite3.Connection) -> dict:
     }
 
 
+# ---------------------------------------------------------------------------
+# Contracts signed by more than one party
+# ---------------------------------------------------------------------------
+
+def joint_contract_shares(conn: sqlite3.Connection) -> dict[str, list[dict]]:
+    """Each party's EVEN share of the contracts signed by more than one of
+    them, keyed by ΑΦΜ (user decision, DATA_DECISIONS 2026-08-20).
+
+    A contract cannot be counted whole for each of its partners: they did not
+    each receive it, and doing so made the sum of the per-contractor totals
+    disagree with the programme's own total — two figures for the same money.
+    Equal parts is all the documents support: none states a «ποσοστό
+    συμμετοχής», the consortium articles bind the members «ενιαία, αδιαίρετα,
+    αλληλέγγυα», and ΓΕΜΗ publishes no shares.
+
+    Deliberately basis-agnostic: the € come from `effective_cost` on the
+    caller's own connection, so this returns gross-effective figures for the
+    webui and net-stated ones through the Atlas's shadow views. That is why
+    the split lives here and not in the Atlas layer — one rule, both sites.
+
+    Whole cents (`_even_cents`): halving an odd amount and rounding both
+    halves would leave the ranking a cent away from the total. Parties are
+    ordered by ΑΦΜ so the allocation is stable across runs.
+
+    Returns {ΑΦΜ: [{ref, n_parties, full_eur, share_eur, over_eur}]};
+    `over_eur` is what a full-attribution total must give back.
+    """
+    per_ref: dict[str, dict] = {}
+    for r in conn.execute(f"""
+        SELECT c.reference_number AS ref, c.vat_number AS vat,
+               {effective_cost(conn, 'co')} AS eur
+        FROM contractors c JOIN contracts co USING (reference_number)
+        WHERE {scope_filter(conn, 'c.reference_number')}"""):
+        e = per_ref.setdefault(r["ref"], {"eur": r["eur"] or 0.0, "vats": set()})
+        if (r["vat"] or "").strip():
+            e["vats"].add(r["vat"].strip())
+    out: dict[str, list[dict]] = {}
+    for ref, e in per_ref.items():
+        n = len(e["vats"])
+        if n < 2:
+            continue
+        for vat, part in zip(sorted(e["vats"]),
+                             _even_cents(round((e["eur"] or 0.0) * 100), n)):
+            share = part / 100
+            out.setdefault(vat, []).append({
+                "ref": ref, "n_parties": n, "full_eur": round(e["eur"], 2),
+                "share_eur": share, "over_eur": round(e["eur"] - share, 2)})
+    return out
+
+
+def _even_cents(total: int, n: int) -> list[int]:
+    """Split `total` cents into `n` parts summing to it EXACTLY; the odd
+    cent(s) go to the first parts."""
+    base, extra = divmod(total, n)
+    return [base + (1 if i < extra else 0) for i in range(n)]
+
+
+def apply_joint_split(conn: sqlite3.Connection, rows: list[dict],
+                      keys: tuple[str, ...] = ("total_eur",),
+                      vat_key: str = "vat_number",
+                      shares: dict[str, list[dict]] | None = None) -> list[dict]:
+    """Turn full-attribution per-contractor rows into even-split ones, in
+    place. Rows without a joint contract are untouched."""
+    shares = joint_contract_shares(conn) if shares is None else shares
+    for row in rows:
+        over = sum(s["over_eur"] for s in shares.get((row.get(vat_key) or "").strip(), ()))
+        if not over:
+            continue
+        for key in keys:
+            if row.get(key) is not None:
+                row[key] = round(row[key] - over, 2)
+    return rows
+
+
 def top_contractors(conn: sqlite3.Connection, limit: int = 10) -> list[dict]:
     rows = conn.execute(f"""
         SELECT c.vat_number,
@@ -139,8 +213,12 @@ def top_contractors(conn: sqlite3.Connection, limit: int = 10) -> list[dict]:
         GROUP BY c.vat_number
         ORDER BY total_eur DESC
         LIMIT ?
-    """, (limit,)).fetchall()
-    return [dict(r) for r in rows]
+    """, (max(limit * 4, 40),)).fetchall()
+    # split the jointly signed contracts, then re-sort and cut: a partner
+    # demoted by its own share must not keep a place it no longer holds
+    out = apply_joint_split(conn, [dict(r) for r in rows])
+    out.sort(key=lambda r: -(r.get("total_eur") or 0.0))
+    return out[:limit]
 
 
 def top_authorities(conn: sqlite3.Connection, limit: int = 5) -> list[dict]:
@@ -210,7 +288,10 @@ def list_contractors(conn: sqlite3.Connection, q: str | None = None, sort: str =
         GROUP BY c.vat_number
         ORDER BY {order}
     """
-    return [dict(r) for r in conn.execute(sql, params).fetchall()]
+    out = apply_joint_split(conn, [dict(r) for r in conn.execute(sql, params)])
+    if sort in ("total_eur", "total_eur_desc"):
+        out.sort(key=lambda r: -(r.get("total_eur") or 0.0))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -330,6 +411,13 @@ def contractor_summary(conn: sqlite3.Connection, vat: str) -> dict | None:
     if row is None:
         return None
     d = dict(row)
+    # this contractor's own money: its even share of anything it signed with
+    # someone else, and the per-contract shares so a page can print them
+    shares = joint_contract_shares(conn).get(vat.strip(), [])
+    apply_joint_split(conn, [d], keys=("total_eur", "total_eur_no_vat"),
+                      shares={vat.strip(): shares})
+    d["vat_number"] = d.get("vat_number") or vat
+    d["shares"] = {sh["ref"]: sh for sh in shares}
     # # of contracts where this contractor was part of a consortium
     d["n_consortium"] = conn.execute(f"""
         SELECT COUNT(DISTINCT c1.reference_number)
@@ -395,7 +483,25 @@ def contractor_signers(conn: sqlite3.Connection, vat: str) -> list[dict]:
         GROUP BY co.signer_name
         ORDER BY total_eur DESC
     """, (vat,)).fetchall()
-    return [dict(r) for r in rows]
+    out = [dict(r) for r in rows]
+    # a jointly signed contract counts as this company's share here too, or
+    # the signer rows would add up to more than the company's own total
+    shares = joint_contract_shares(conn).get(vat.strip(), [])
+    if shares:
+        by_signer: dict[str, float] = {}
+        marks = ",".join("?" * len(shares))
+        for r in conn.execute(
+                f"SELECT reference_number, signer_name FROM contracts "
+                f"WHERE reference_number IN ({marks})",
+                [sh["ref"] for sh in shares]):
+            over = next(sh["over_eur"] for sh in shares
+                        if sh["ref"] == r["reference_number"])
+            by_signer[r["signer_name"]] = by_signer.get(r["signer_name"], 0.0) + over
+        for row in out:
+            if row["name"] in by_signer:
+                row["total_eur"] = round(row["total_eur"] - by_signer[row["name"]], 2)
+        out.sort(key=lambda r: -(r.get("total_eur") or 0.0))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -1066,6 +1172,10 @@ def contractor_points(conn: sqlite3.Connection) -> dict:
         LEFT JOIN contractor_locations cl ON cl.vat_number = c.vat_number
         GROUP BY c.vat_number
     """).fetchall()
+    # one dot per company, carrying its OWN money: a contract signed with
+    # someone else counts as this company's share (2026-08-20)
+    over_by_vat = {v: sum(sh["over_eur"] for sh in lst)
+                   for v, lst in joint_contract_shares(conn).items()}
     points, n_total, with_coords = [], 0, set()
     for r in rows:
         n_total += 1
@@ -1076,7 +1186,9 @@ def contractor_points(conn: sqlite3.Connection) -> dict:
                            "pe": canonical_pe(r["region_pe"]) or r["region_pe"],
                            "precision": r["geo_precision"],
                            "n_contracts": r["n_contracts"],
-                           "total_eur": round(r["total_eur"] or 0.0, 2)})
+                           "total_eur": round((r["total_eur"] or 0.0)
+                                              - over_by_vat.get(
+                                                  (r["vat_number"] or "").strip(), 0.0), 2)})
     unmapped = conn.execute(f"""
         SELECT COALESCE(SUM(eff), 0) FROM
           (SELECT k.reference_number, {effective_cost(conn, 'k')} AS eff
@@ -1252,11 +1364,16 @@ def contractor_yearly(conn: sqlite3.Connection, vat: str) -> dict:
         return years.setdefault(year, {"year": year, "paid_eur": 0.0,
                                        "stated_eur": 0.0, "n_payments": 0})
 
+    # this company's share of anything it signed with someone else — the
+    # money went to the parties together, not to each of them (2026-08-20)
+    joint = {sh["ref"]: sh["n_parties"]
+             for sh in joint_contract_shares(conn).get(vat.strip(), [])}
     refs = [r["reference_number"] for r in contracts]
     if refs:
         placeholders = ",".join("?" * len(refs))
         for p in conn.execute(f"""
-            SELECT signed_date, submission_date, amount_with_vat
+            SELECT signed_date, submission_date, amount_with_vat,
+                   attributed_ref
             FROM contract_payments
             WHERE cancelled = 0 AND attributed_ref IN ({placeholders})
         """, refs):
@@ -1264,13 +1381,15 @@ def contractor_yearly(conn: sqlite3.Connection, vat: str) -> dict:
             if y is None:
                 continue
             b = bucket(y)
-            b["paid_eur"] += p["amount_with_vat"] or 0.0
+            b["paid_eur"] += (p["amount_with_vat"] or 0.0) / joint.get(
+                p["attributed_ref"], 1)
             b["n_payments"] += 1
     for r in contracts:
         if r["n_payments"] == 0:
             y = _year_of(r["contract_signed_date"], r["submission_date"])
             if y is not None:
-                bucket(y)["stated_eur"] += r["stated"] or 0.0
+                bucket(y)["stated_eur"] += (r["stated"] or 0.0) / joint.get(
+                    r["reference_number"], 1)
     out = sorted(years.values(), key=lambda b: b["year"])
     for b in out:
         b["paid_eur"] = round(b["paid_eur"], 2)

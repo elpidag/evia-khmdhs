@@ -8,6 +8,7 @@
 	import ChainTimeline from '$lib/detail/ChainTimeline.svelte';
 	import Fold from '$lib/ui/Fold.svelte';
 	import Hint from '$lib/ui/Hint.svelte';
+	import { registryStatusNote } from '$lib/transforms/registry';
 	import { procedureEn } from '$lib/transforms/procedures';
 	import ProcurementFamily from '$lib/charts/ProcurementFamily.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
@@ -343,6 +344,24 @@
 					}
 				]
 			: []),
+		// WHO signed it, where the registry named someone else (DATA_DECISIONS
+		// 2026-08-20). A party fix moves no euro, so it carries no
+		// correction_note — but the contractor row differs from the registry
+		// and only this sentence says why
+		...(c.party_correction?.evidence
+			? [
+					{
+						label:
+							c.party_correction.kind === 'party'
+								? 'Contracting party — read from the signed contract'
+								: 'Contracting party — the registry named companies the contract does not',
+						text: c.party_correction.evidence,
+						code: c.reference_number,
+						href: `/pdf/contract/${c.reference_number}`,
+						note: c.party_correction.note ?? undefined
+					}
+				]
+			: []),
 		...(overrideNote
 			? [
 					{
@@ -606,10 +625,18 @@
 		<dt>Contractor</dt>
 		<dd>
 			{#each c.contractors as ct, i (ct.vat_number)}
-				{#if i}{', '}{/if}<a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a>
+				{#if i}{', '}{/if}<a href={`/antinero/contractor/${ct.vat_number}`}>{ct.name}</a
+				>{#if c.contractor_status?.[ct.vat_number]}{@const st = c.contractor_status[
+						ct.vat_number
+					]}<Hint text={registryStatusNote(st)} />{#if st.gemi && st.gemi !== '-1'}<a
+							class="reg"
+							href={`https://publicity.businessportal.gr/company/${st.gemi}`}
+							target="_blank"
+							rel="noopener">ΓΕΜΗ</a
+						>{/if}{/if}
 			{/each}
 			{#if c.contractors.length > 1}<Hint
-					text="a consortium; per-contractor views credit each partner with the full value, so partner totals cannot be added together"
+					text="signed by two parties together; each company's own page counts half of it, so no euro is counted twice"
 				/>{/if}
 		</dd>
 		<dt>Type</dt>
@@ -919,6 +946,13 @@
 </div>
 
 <style>
+	/* the register's own page for a company whose status the card mentions */
+	a.reg {
+		font-family: var(--font-ui);
+		font-size: var(--fs-12);
+		margin-left: 4px;
+		white-space: nowrap;
+	}
 	/* the header's square slot shows the map or the call's other contracts;
 	   the trail runs full width beneath, so its timeline has the same span as
 	   the sponsored-works bar (user, 2026-08-19) */

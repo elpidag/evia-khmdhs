@@ -241,6 +241,12 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["family"] = queries_extra.contract_family(g.conn, adam)
         d["gross"] = queries_extra.contract_gross(pay, adam)
         d["category"] = queries_extra.contract_category(g.conn, adam)
+        # who signed it, where the registry named someone else
+        d["party_correction"] = queries_extra.contract_party_correction(adam)
+        # a joint venture wound up after the job still signed the contract:
+        # name it, and say what the register says about it now
+        d["contractor_status"] = queries_extra.contractor_registry_status(
+            g.conn, [c.get("vat_number") for c in d.get("contractors", [])])
         # what the works ARE (multi-label, from the contract's own title)
         # and the deadline the contract itself states (DATA_DECISIONS
         # 2026-08-19) — the registry duration rides along as the crosscheck
@@ -274,11 +280,12 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
     def api_antinero_contractors():
         qterm = (request.args.get("q") or "").strip() or None
         sort = (request.args.get("sort") or "total_eur").strip()
-        return jsonify(queries.list_contractors(g.conn, q=qterm, sort=sort))
+        return jsonify(queries_extra.antinero_contractors_list(
+            g.conn, qterm=qterm, sort=sort))
 
     @app.route("/api/antinero/contractor/<vat>")
     def api_antinero_contractor(vat: str):
-        summary = queries.contractor_summary(g.conn, vat)
+        summary = queries_extra.antinero_contractor_summary(g.conn, vat)
         if summary is None:
             abort(404)
         return jsonify({

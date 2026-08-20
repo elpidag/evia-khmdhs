@@ -646,20 +646,112 @@ def test_dase_kind_mix_pins(client):
     assert max(km["units"], key=lambda r: r["n"])["kind"] == "dx"
 
 
+def test_per_contractor_totals_sum_to_the_programme_basis(client):
+    """The ranking and the headline must be the same money (user decision,
+    DATA_DECISIONS 2026-08-20). Before it, a jointly signed contract was
+    counted whole for each partner and the per-contractor Σ stood €32,5M
+    above the basis."""
+    rows = client.get("/api/antinero/contractors").get_json()
+    assert len(rows) == 151
+    assert sum(r["total_eur"] or 0.0 for r in rows) == pytest.approx(
+        622_534_181.72, abs=0.01)
+
+
+def test_one_in_scope_contract_is_signed_by_two_parties(kh):
+    """Every other joint venture signed as a κοινοπραξία with an ΑΦΜ of its
+    own; 24SYMV016018183 is an «Ένωση Οικονομικών Φορέων» that has none, so
+    its two members ARE the parties and its € is halved between them."""
+    multi = [r["reference_number"] for r in kh.execute("""
+        SELECT ct.reference_number FROM contracts ct
+        JOIN contract_scope s ON s.reference_number = ct.reference_number
+        JOIN contractors co ON co.reference_number = ct.reference_number
+        WHERE s.in_scope = 1
+        GROUP BY ct.reference_number HAVING COUNT(*) > 1""")]
+    assert multi == ["24SYMV016018183"]
+
+
+def test_curated_contract_parties_are_the_ones_the_pdfs_name(kh):
+    """The nine 2026-08-20 party corrections, each read from the contract's
+    own preamble. A regression here means the registry's member list came
+    back — INSERT OR REPLACE restores it, so contract_corrections must run
+    after every refetch."""
+    expected = {
+        "26SYMV018718889": "996551622",   # Κ/Ξ ΤΙΓΚΑΣ – ΧΑΤΖΗΝΙΚΟΛΑΟΥ
+        "23SYMV013201917": "996625363",   # Κ/Ξ ΦΙΛΙΠΠΑΚΗΣ – ΑΛΣΟΣ
+        "26SYMV018661963": "803202324",   # Κ/Ξ ΛΑΜΠΙΡΗΣ – ΡΕΒΕΛΙΩΤΗΣ
+        "26SYMV018779399": "803233350",   # Κ/Ξ ΒΕΛΩΝΗΣ – ΚΑΖΑΝΤΣΟΓΛΟΥ
+        "23SYMV013201961": "996665717",   # Κ/Ξ ΑΓΓΕΛΑΤΟΣ – ΓΚΙΚΑΣ – ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ
+        "26SYMV018755812": "803214556",   # Κ/Ξ ΦΙΛΙΠΠΑΚΗΣ – ΑΠΟΣΤΟΛΙΔΗΣ
+        "26SYMV018756094": "803210570",   # Κ/Ξ ΛΑΓΚΑΔΙΝΟΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ
+        "26SYMV018739467": "998255970",   # signed by ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ alone
+        "26SYMV018725481": "998255970",
+    }
+    for ref, vat in expected.items():
+        rows = [r["vat_number"] for r in kh.execute(
+            "SELECT vat_number FROM contractors WHERE reference_number = ?",
+            (ref,))]
+        assert rows == [vat], ref
+        # and the party must be locatable, or its contracts fall off the maps
+        assert kh.execute("SELECT COUNT(*) FROM contractor_locations "
+                          "WHERE vat_number = ? AND region_pe IS NOT NULL",
+                          (vat,)).fetchone()[0] == 1, vat
+
+
+def test_joint_contract_shares_are_whole_cents(kh):
+    """The split allocates every cent: two halves of €183.304,03 cannot both
+    be rounded, or the ranking lands a cent short of the basis."""
+    con = sqlite3.connect(DEFAULT_DB)
+    con.row_factory = sqlite3.Row
+    qx.apply_stated_basis(con)
+    shares = qx.antinero_contractor_shares(con)
+    con.close()
+    flat = [s for rows in shares.values() for s in rows]
+    assert {s["ref"] for s in flat} == {"24SYMV016018183"}
+    assert sum(s["share_eur"] for s in flat) == pytest.approx(
+        flat[0]["full_eur"], abs=0.005)
+    assert sorted(s["share_eur"] for s in flat) == [91_652.01, 91_652.02]
+
+
+def test_wound_up_joint_ventures_are_flagged_not_hidden(client, kh):
+    """A κοινοπραξία is formed for one job and wound up when it ends — 20 of
+    the in-scope contractors are no longer active in ΓΕΜΗ. They stay the
+    contractors of their contracts (they signed them); the page says what the
+    register says now, and links it (user, 2026-08-20)."""
+    gone = {r["vat_number"]: r["gemi_status"] for r in kh.execute("""
+        SELECT vat_number, gemi_status FROM contractor_locations
+         WHERE gemi_status IS NOT NULL AND gemi_status <> 'Ενεργή'
+           AND vat_number IN (SELECT co.vat_number FROM contractors co
+                              JOIN contract_scope s USING (reference_number)
+                              WHERE s.in_scope = 1)""")}
+    assert len(gone) == 20
+    assert set(gone.values()) == {"Διαγραφή", "Λύση - Εκκαθάριση"}
+    # the struck-off ΦΙΛΙΠΠΑΚΗΣ–ΑΛΣΟΣ joint venture is still the contractor
+    d = client.get("/api/antinero/contract/23SYMV013201917").get_json()
+    assert [c["vat_number"] for c in d["contractors"]] == ["996625363"]
+    st = d["contractor_status"]["996625363"]
+    assert st["status"] == "Διαγραφή" and st["gemi"] == "171650506000"
+    # an active party carries no flag
+    assert client.get("/api/antinero/contract/26SYMV018718889").get_json()[
+        "contractor_status"] == {}
+
+
 def test_connections_pins(client):
     n = client.get("/api/connections").get_json()
-    # 489 since the duplicate-ΑΦΜ merge (DATA_DECISIONS 2026-08-18): one
-    # contractor×authority pair was counted twice under two spellings
-    assert len(n["contractor_authority"]) == 500
-    # the same merge moved these: a padded ΑΦΜ key carried no
-    # contractor_locations row, so its contracts had no home region at all —
-    # merging them onto the real key ADDED flows (271 → 277) rather than
-    # removing them
-    assert len(n["contractor_pe"]) == 401
-    assert len(n["flows"]) == 277
-    assert len(n["contractor_signer"]) == 181
-    assert len(n["pairs"]) == 12
-    assert len(n["contractors"]) == 155
+    # every count here dropped on 2026-08-20, when nine contracts were
+    # re-keyed to the party their signed text names: seven joint ventures
+    # signed as a κοινοπραξία holding its own ΑΦΜ (the registry had listed
+    # its members) and two were signed by one company alone. Ten individuals
+    # who only ever appeared as members left the contractor population, and
+    # with them their edges — 500 → 475 authority pairs, 401 → 377 region
+    # pairs, 277 → 258 flows, 181 → 174 signer pairs
+    assert len(n["contractor_authority"]) == 475
+    assert len(n["contractor_pe"]) == 377
+    assert len(n["flows"]) == 258
+    assert len(n["contractor_signer"]) == 174
+    # and with them the visible partnerships: a κοινοπραξία is ONE registry
+    # party, so only the ένωση that signed without an ΑΦΜ of its own is left
+    assert len(n["pairs"]) == 1          # was 12 before the party corrections
+    assert len(n["contractors"]) == 151
     assert len(n["authorities"]) == 105
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
@@ -689,9 +781,11 @@ def test_authorities_pins(client):
 def test_pipelines_pins(client):
     p = client.get("/api/compare").get_json()["pipelines"]
     assert p["vat_overlap"] == []          # the zero-overlap headline fact
-    # 155, not 163: seven companies were split across a whitespace-padded
-    # ΑΦΜ and one across an eight-digit one (DATA_DECISIONS 2026-08-18)
-    assert p["antinero"]["n_vats"] == 155
+    # 151, not 163: seven companies were split across a whitespace-padded
+    # ΑΦΜ and one across an eight-digit one (DATA_DECISIONS 2026-08-18), and
+    # ten more were joint-venture MEMBERS the registry had keyed as parties
+    # (DATA_DECISIONS 2026-08-20) — the κοινοπραξία that signed replaced them
+    assert p["antinero"]["n_vats"] == 151
     assert p["antinero"]["total_eur"] == pytest.approx(622_534_181.72)
     assert p["dase"]["total_eur"] == pytest.approx(29_920_558.46)
     assert p["dase_n_coops"] == 246

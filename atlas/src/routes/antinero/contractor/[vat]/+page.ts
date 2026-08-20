@@ -15,6 +15,12 @@ export interface ContractorBundle {
 		first_signed: string | null;
 		last_signed: string | null;
 		countries: string | null;
+		/** even share of each contract this company signed together with
+		 *  others, keyed by ΑΔΑΜ (DATA_DECISIONS 2026-08-20) */
+		shares?: Record<
+			string,
+			{ ref: string; n_parties: number; full_eur: number; share_eur: number }
+		>;
 	};
 	contracts: {
 		reference_number: string;
@@ -39,6 +45,8 @@ export interface ContractorBundle {
 		source: string | null;
 		source_url: string | null;
 		gemi: string | null;
+		/** ΓΕΜΗ's current word on the company, verbatim (user 2026-08-20) */
+		gemi_status?: string | null;
 		lat: number | null;
 		lon: number | null;
 		geo_precision: string | null;

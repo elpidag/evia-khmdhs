@@ -119,11 +119,40 @@ def test_contractors_vat_replaces_a_documented_wrong_afm(tmp_path):
         "SELECT vat_number FROM contractors WHERE reference_number ="
         " '21SYMV000000001' ORDER BY seq")]
     assert vats == ["997106874", "096098227"]      # ten-digit typo included
-    # idempotent: re-running finds nothing to rewrite and warns, never invents
+    # idempotent: re-running finds nothing to rewrite and never invents
     assert apply_contract_corrections(conn, p) == 1
     assert [r[0] for r in conn.execute(
         "SELECT vat_number FROM contractors WHERE reference_number ="
         " '21SYMV000000001' ORDER BY seq")] == vats
+
+
+def test_contractors_vat_is_quiet_once_applied(tmp_path, caplog):
+    """A second run without a refetch in between must say nothing: the row
+    already carries the corrected ΑΦΜ. Warning on it printed seven false
+    alarms on every refresh (one khmdhs, six ΔΑΣΕ) and would have buried the
+    real signal — a curated fix that matches nothing any more."""
+    conn = _mini_db(tmp_path)
+    _with_contractors(conn, ["090273987"])
+    p = _corrections(tmp_path, {
+        "21SYMV000000001": {"contractors_vat": {"090273987": "997106874"},
+                            "reason": "the PDF names the co-op's own ΑΦΜ"}})
+    apply_contract_corrections(conn, p)
+    with caplog.at_level("WARNING"):
+        apply_contract_corrections(conn, p)
+    assert caplog.text == ""
+
+
+def test_contractors_vat_still_warns_when_nothing_matches(tmp_path, caplog):
+    """The stale-fix signal must survive: neither the old ΑΦΜ nor the new one
+    is on the contract, so the curation no longer describes the data."""
+    conn = _mini_db(tmp_path)
+    _with_contractors(conn, ["044098856"])
+    p = _corrections(tmp_path, {
+        "21SYMV000000001": {"contractors_vat": {"090273987": "997106874"},
+                            "reason": "targets a row that is not there"}})
+    with caplog.at_level("WARNING"):
+        apply_contract_corrections(conn, p)
+    assert "no row carries 090273987" in caplog.text
 
 
 def test_contractors_vat_refuses_a_non_afm_target(tmp_path, caplog):

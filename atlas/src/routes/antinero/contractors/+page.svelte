@@ -14,8 +14,8 @@
 <hgroup>
 	<h1>Anti-nero contractors</h1>
 	<p class="muted">
-		{grInt(data.rows.length)} companies{data.q ? ` for «${data.q}»` : ''} · consortium values
-		counted in full for each partner
+		{grInt(data.rows.length)} companies{data.q ? ` for «${data.q}»` : ''} · a jointly signed
+		contract is split evenly between its partners
 	</p>
 </hgroup>
 
@@ -40,7 +40,7 @@
 			<th class="num">Contracts</th>
 			<th class="num">Single-bid</th>
 			<th class="num">Direct %</th>
-			<th class="num">Total (net, max-exposure)</th>
+			<th class="num">Total (net)</th>
 		</tr>
 	</thead>
 	<tbody>

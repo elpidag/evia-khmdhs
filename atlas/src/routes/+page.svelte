@@ -508,7 +508,8 @@
 	subtitle="according to sums contracted via the programme — top {topRows.length} of {grInt(
 		o.kpis.n_contractors
 	)} contractors, {eurShort(o.kpis.total_eur)} in total"
-	caveat="Consortium contract values are counted in full for each partner (maximum-exposure view)."
+	caveat="Each contract is counted once: a jointly signed one is split evenly between its
+	partners, so these totals add up to the programme total."
 	anchor="top-contractors"
 	methodology="stated-basis"
 >

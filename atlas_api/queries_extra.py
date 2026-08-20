@@ -383,7 +383,7 @@ def antinero_overview(kh: sqlite3.Connection,
         "timeseries": q.disbursement_timeseries(pconn),
         "yearly": q.antinero_yearly(pconn),
         "studies": {"summary": studies["summary"], "top": top_studies},
-        "top_contractors": q.top_contractors(kh, limit=10),
+        "top_contractors": antinero_top_contractors(kh, limit=10),
         "top_authorities": q.top_authorities(kh, limit=5),
         "top_signers": q.top_signers(kh, limit=5),
         "coverage": q.flow_coverage(kh),
@@ -438,6 +438,88 @@ def antinero_cpvs(kh: sqlite3.Connection) -> list[dict]:
     """).fetchall()
     return [{"code": r["code"], "desc": (r["desc"] or "").strip(), "n": r["n"]}
             for r in rows]
+
+
+def contractor_registry_status(kh: sqlite3.Connection,
+                               vats: list[str]) -> dict[str, dict]:
+    """What the ΓΕΜΗ register says TODAY about each of these companies.
+
+    A κοινοπραξία is formed for a job and wound up when it ends: «ΚΟΙΝΟΠΡΑΞΙΑ
+    ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ Ι.Κ.Ε» is struck off, well after it signed. 25
+    of the 147 companies with a ΓΕΜΗ number are no longer active. It stays the
+    contractor — it is who signed — but a page naming it has to say what
+    became of it (user, 2026-08-20).
+
+    Returns {ΑΦΜ: {status, gemi}} for the companies whose current status is
+    anything other than «Ενεργή»; an active company needs no note. No date is
+    carried: the publicity API's `dateGemiRegistered` is the registration
+    date, not the date the status changed — the register's own status-history
+    table is what the ΓΕΜΗ link goes to.
+    """
+    if not vats:
+        return {}
+    keys = [v.strip() for v in vats if v and v.strip()]
+    if not keys:
+        return {}
+    marks = ",".join("?" * len(keys))
+    out: dict[str, dict] = {}
+    try:
+        rows = kh.execute(
+            f"""SELECT vat_number, gemi, gemi_status
+                  FROM contractor_locations
+                 WHERE vat_number IN ({marks})""", keys)
+    except sqlite3.OperationalError:      # columns not migrated yet
+        return {}
+    for r in rows:
+        st = (r["gemi_status"] or "").strip()
+        if not st or st == "Ενεργή":
+            continue
+        out[r["vat_number"]] = {"status": st, "gemi": r["gemi"]}
+    return out
+
+
+_PARTY_FIX_CACHE: dict | None = None
+
+
+def contract_party_correction(ref: str) -> dict | None:
+    """The curated correction of WHO signed this contract, if it has one.
+
+    A party-only fix changes no euro figure, so it deliberately does not
+    stamp `correction_note` (the page renders that as a stated-value
+    correction). It still has to be visible and checkable on the page it
+    changes: the contract's contractor list differs from the registry's,
+    and only the signed preamble says why (DATA_DECISIONS 2026-08-20).
+
+    Returns {kind, evidence, note} — `evidence` is the verbatim sentence the
+    party was read from and `note` explains it in the reader's terms. The
+    entry's `reason` is the curation trail and is deliberately NOT shipped:
+    it is written for whoever audits the dataset, not for the page (the same
+    split as the sponsored-works `curation_note`, user rule).
+    """
+    global _PARTY_FIX_CACHE
+    if _PARTY_FIX_CACHE is None:
+        import json as _json
+        from pathlib import Path as _Path
+        f = (_Path(__file__).resolve().parent.parent / "khmdhs" / "data"
+             / "contract_corrections.json")
+        try:
+            data = _json.loads(f.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            data = {}
+        _PARTY_FIX_CACHE = {}
+        for k, fix in data.items():
+            if k.startswith("_") or not isinstance(fix, dict):
+                continue
+            party = fix.get("contractor_party")
+            if party:
+                _PARTY_FIX_CACHE[k] = {"kind": "party",
+                                       "evidence": party.get("evidence"),
+                                       "note": fix.get("note")}
+            elif fix.get("contractors_keep"):
+                _PARTY_FIX_CACHE[k] = {"kind": "keep",
+                                       "evidence": fix.get("evidence"),
+                                       "note": fix.get("note")}
+    return _PARTY_FIX_CACHE.get(ref)
 
 
 def contract_category(kh: sqlite3.Connection, ref: str) -> dict | None:
@@ -1064,52 +1146,41 @@ def overlay_executor_names(executors: list[dict] | None,
 
 
 def dase_coop_shares(dase: sqlite3.Connection) -> dict[str, list[dict]]:
-    """Live contracts held JOINTLY by several co-ops → each partner's even
-    share, keyed by canonical ΑΦΜ.
+    """Per-co-op even shares of the jointly held contracts. Thin alias: the
+    split itself moved into `webui.dase_queries.joint_coop_shares` on
+    2026-08-20 so the ΔΑΣΕ pages of BOTH sites apply it once (the Atlas used
+    to correct the frozen totals here, which would now subtract twice)."""
+    return dq.joint_coop_shares(dase)
 
-    The frozen webui aggregates credit every partner with the WHOLE
-    contract (the max-exposure convention), which counts the same euros
-    twice in a per-co-op ranking. The registry records no shares and the
-    signed document states none — the one live case, 23SYMV013747204, has
-    the two co-ops' representatives «συμφωνήσαν από κοινού» over a single
-    pooled quantity at unit prices — so the Atlas splits such a contract
-    EVENLY between its partners (user decision, DATA_DECISIONS 2026-08-17;
-    the same convention the Anti-nero region maps and `pipelines` already
-    use). Contract COUNTS are untouched: each partner does hold the
-    contract, jointly.
 
-    Returns {canonical ΑΦΜ: [{ref, year, n_parties, full_eur, share_eur,
-    over_eur}]} — `over_eur` (full − share) is what a full-attribution
-    total must give back to reach the even-split basis.
-    """
-    per_ref: dict[str, dict] = {}
-    for r in dase.execute(f"""
-        SELECT co.reference_number AS ref, co.total_cost_with_vat AS eur,
-               COALESCE(co.contract_signed_date, co.submission_date) AS d,
-               c.vat_number AS vat
-        FROM contracts co JOIN contractors c USING (reference_number)
-        WHERE {dq.live_filter('co')}"""):
-        e = per_ref.setdefault(r["ref"], {"eur": r["eur"] or 0.0,
-                                          "year": (r["d"] or "")[:4] or None,
-                                          "vats": set()})
-        cv = dq.canonical_vat(r["vat"])
-        if cv:
-            e["vats"].add(cv)
-    out: dict[str, list[dict]] = {}
-    for ref, e in per_ref.items():
-        n = len(e["vats"])
-        if n < 2:                       # the ordinary single-party contract
-            continue
-        cents = round((e["eur"] or 0.0) * 100)
-        parts = _even_cents(cents, n)
-        for cv, part in zip(sorted(e["vats"]), parts):
-            share = part / 100
-            out.setdefault(cv, []).append({
-                "ref": ref, "year": e["year"], "n_parties": n,
-                "full_eur": round(e["eur"], 2), "share_eur": share,
-                "over_eur": round(cents / 100 - share, 2),
-            })
-    return out
+# The even split of a jointly signed contract lives in the SHARED layer
+# (`webui.queries.joint_contract_shares` / `apply_joint_split`), so both sites
+# apply it once and identically — the Atlas used to correct the frozen totals
+# here, which would now subtract the same euros twice (DATA_DECISIONS
+# 2026-08-20). What remains here is only the thin re-sorting the Atlas needs.
+
+def antinero_contractor_shares(kh: sqlite3.Connection) -> dict[str, list[dict]]:
+    """Per-ΑΦΜ even shares, on the caller's basis. Thin alias of the shared
+    helper, kept because the Atlas tests and the contractor page ask for it
+    by this name."""
+    return q.joint_contract_shares(kh)
+
+
+def antinero_top_contractors(kh: sqlite3.Connection, limit: int = 10) -> list[dict]:
+    """The ranking, already even-split by the shared query."""
+    return q.top_contractors(kh, limit=limit)
+
+
+def antinero_contractors_list(kh: sqlite3.Connection, qterm: str | None = None,
+                              sort: str = "total_eur") -> list[dict]:
+    """/antinero/contractors, already even-split by the shared query."""
+    return q.list_contractors(kh, q=qterm, sort=sort)
+
+
+def antinero_contractor_summary(kh: sqlite3.Connection, vat: str) -> dict | None:
+    """The contractor page's totals and its per-contract shares, both from
+    the shared query."""
+    return q.contractor_summary(kh, vat)
 
 
 def _even_cents(total: int, n: int) -> list[int]:
@@ -1123,10 +1194,13 @@ def _even_cents(total: int, n: int) -> list[int]:
 
 
 def _split_coop_totals(rows: list[dict], shares: dict[str, list[dict]],
-                       key: str = "total_eur") -> list[dict]:
-    """Turn full-attribution co-op rows into even-split ones in place."""
+                       key: str = "total_eur",
+                       vat_key: str = "vat") -> list[dict]:
+    """Turn full-attribution rows into even-split ones in place. `vat_key` is
+    the row's ΑΦΜ field — «vat» on the ΔΑΣΕ side, «vat_number» in the frozen
+    Anti-nero queries; getting it wrong silently leaves the totals unsplit."""
     for a in rows:
-        over = sum(s["over_eur"] for s in shares.get(a.get("vat") or "", ()))
+        over = sum(s["over_eur"] for s in shares.get(a.get(vat_key) or "", ()))
         if over:
             a[key] = round((a.get(key) or 0.0) - over, 2)
     return rows
@@ -1147,29 +1221,12 @@ def dase_coop_detail(dase: sqlite3.Connection, vat: str, summary: dict,
         return {"summary": summary, "contracts": contracts,
                 "yearly": yearly, "units": units}
     by_ref = {s["ref"]: s for s in mine}
-    summary["total_eur"] = round((summary.get("total_eur") or 0.0)
-                                 - sum(s["over_eur"] for s in mine), 2)
     for c in contracts:
         s = by_ref.get(c["reference_number"])
         if s:
             c["n_parties"] = s["n_parties"]
             c["share_eur"] = s["share_eur"]
-    for b in yearly:
-        over = sum(s["over_eur"] for s in mine if s["year"] == str(b["year"]))
-        if over:
-            b["eur"] = round(b["eur"] - over, 2)
-    # the awarder table groups by (unit, org) — matching on the unit NAME
-    # alone would hit every group sharing it (one Δασαρχείο appears under
-    # both ΥΠΕΝ and its Αποκεντρωμένη), subtracting the share several times
-    key_of = {r["ref"]: (r["unit"], r["org"]) for r in dase.execute(
-        "SELECT reference_number AS ref, units_operator_name AS unit, "
-        "organization_name AS org FROM contracts WHERE reference_number IN (%s)"
-        % ",".join("?" * len(by_ref)), list(by_ref))}
-    for u in units:
-        over = sum(s["over_eur"] for ref, s in by_ref.items()
-                   if key_of.get(ref) == (u["unit"], u["org"]))
-        if over:
-            u["total_eur"] = round((u["total_eur"] or 0.0) - over, 2)
+    # summary, yearly and units arrive already split from dase_queries
     return {"summary": summary, "contracts": contracts,
             "yearly": yearly, "units": units}
 
@@ -1181,9 +1238,7 @@ def dase_coops(dase: sqlite3.Connection, q: str | None = None,
     registry spelling; jointly held contracts are split evenly, so the
     column of totals sums to the live basis exactly."""
     names = dase_display_names(dase)
-    out = _split_coop_totals(
-        [_overlay_coop_name(a, names) for a in dq._coop_rows(dase)],
-        dase_coop_shares(dase))
+    out = [_overlay_coop_name(a, names) for a in dq._coop_rows(dase)]
     if q:
         needle = dq._search_norm(q)
         fold = dq._phonetic_fold(needle)
@@ -1731,8 +1786,8 @@ def pipelines(kh: sqlite3.Connection, dase: sqlite3.Connection) -> dict:
         e = kh_vats.setdefault(vat, {"vat": vat, "name": r["name"], "eur": 0.0})
         e["eur"] += r["total_eur"] or 0.0
 
-    # dase side keyed by canonical VAT, € even-split (top_coops is the
-    # max-exposure view and would over-count the 19 consortium rows).
+    # dase side keyed by canonical VAT, € even-split (top_coops credits every
+    # partner with the whole contract and would over-count the 19 joint rows).
     name_by_canon = {
         dq.canonical_vat(r["vat_number"]) or r["vat_number"]: r["name"]
         for r in dase.execute("SELECT vat_number, name FROM dase_contractors")
@@ -2043,7 +2098,9 @@ def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 WHERE c.reference_number = k.reference_number) AS contractors,
                (SELECT c.vat_number FROM contractors c
                 WHERE c.reference_number = k.reference_number
-                ORDER BY c.seq LIMIT 1) AS vat
+                ORDER BY c.seq LIMIT 1) AS vat,
+               (SELECT GROUP_CONCAT(c.vat_number, '|') FROM contractors c
+                WHERE c.reference_number = k.reference_number) AS vats
         FROM contract_forest_authorities cfa
         JOIN contracts k USING (reference_number)
         JOIN contract_scope s ON s.reference_number = k.reference_number
@@ -2052,11 +2109,18 @@ def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
     """, (name,))]
     anti_top: dict[str, dict] = {}
     for c in anti_contracts:
-        e = anti_top.setdefault(c["vat"], {"vat": c["vat"],
-                                           "name": (c["contractors"] or "").split(" · ")[0],
-                                           "n": 0, "eur": 0.0})
-        e["n"] += 1
-        e["eur"] += (c["eff"] or 0.0) / (c["n_auths"] or 1)
+        # a contract signed by several parties splits between them here too,
+        # or this authority's ranking would credit the first-listed company
+        # with money the others hold as well (DATA_DECISIONS 2026-08-20)
+        vats = [v for v in (c["vats"] or c["vat"] or "").split("|") if v]
+        names = (c["contractors"] or "").split(" · ")
+        for i, vat in enumerate(vats):
+            e = anti_top.setdefault(vat, {
+                "vat": vat,
+                "name": names[i] if i < len(names) else (names[0] if names else vat),
+                "n": 0, "eur": 0.0})
+            e["n"] += 1
+            e["eur"] += (c["eff"] or 0.0) / (c["n_auths"] or 1) / len(vats)
 
     dase_contracts: list[dict] = []
     dase_top: dict[str, dict] = {}

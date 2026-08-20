@@ -125,8 +125,8 @@
 				</p>
 				<p class="fine">
 					Source: ΚΗΜΔΗΣ (KHMDHS) open data + Διαύγεια · data as of
-					{(data.meta.generated ?? '').slice(0, 10)} · all € net of ΦΠΑ · joint contracts count in
-					full for each partner on Anti-nero, split evenly on co-op works ·
+					{(data.meta.generated ?? '').slice(0, 10)} · all € net of ΦΠΑ · a contract signed jointly is
+					split evenly between its partners ·
 					<a href="/methodology">methodology</a>
 				</p>
 			{:else}

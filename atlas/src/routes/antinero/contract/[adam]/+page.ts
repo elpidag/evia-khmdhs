@@ -28,6 +28,16 @@ export interface ContractDetail {
 	related_to?: string | null;
 	/** curated correction note (dase corrections) */
 	correction_note?: string | null;
+	/** curated correction of WHO signed, with the preamble sentence it was
+	 *  read from (DATA_DECISIONS 2026-08-20) */
+	party_correction?: {
+		kind: 'party' | 'keep';
+		evidence: string | null;
+		note: string | null;
+	} | null;
+	/** ΓΕΜΗ's CURRENT word on a contractor that is no longer active, keyed by
+	 *  ΑΦΜ — a joint venture is wound up once its job ends (user 2026-08-20) */
+	contractor_status?: Record<string, { status: string; gemi: string | null }>;
 	document_kind?: {
 		kind: string;
 		label_el: string;

@@ -106,6 +106,30 @@ def real_conn():
     conn.close()
 
 
+def test_real_db_contractor_totals_sum_to_the_headline(real_conn):
+    """No mismatch between the ranking and the headline on THIS site either
+    (user, 2026-08-20). The split lives in the shared query layer precisely
+    so both sites tell the same story: a contract signed by several parties
+    counts once, in even shares."""
+    headline = queries.kpis(real_conn)["total_eur"]
+    listed = sum(r["total_eur"] or 0.0 for r in queries.list_contractors(real_conn))
+    assert listed == pytest.approx(headline, abs=0.01)
+    # and a partner's own page agrees with the row in that list
+    vat = "122076788"                       # ΦΩΤΟΠΟΥΛΟΣ, half of an ένωση
+    summary = queries.contractor_summary(real_conn, vat)
+    row = next(r for r in queries.list_contractors(real_conn)
+               if r["vat_number"] == vat)
+    assert summary["total_eur"] == pytest.approx(row["total_eur"], abs=0.01)
+    assert list(summary["shares"]) == ["24SYMV016018183"]
+    # the signer table and the yearly bars carry the same share, not the whole
+    signers = queries.contractor_signers(real_conn, vat)
+    assert sum(r["total_eur"] for r in signers) == pytest.approx(
+        summary["total_eur"], abs=0.01)
+    yearly = queries.contractor_yearly(real_conn, vat)["years"]
+    assert sum(b["paid_eur"] + b["stated_eur"] for b in yearly) == pytest.approx(
+        summary["total_eur"], abs=0.01)
+
+
 def test_real_db_known_classifications(real_conn):
     expected = {
         "22SYMV010473684": ("antinero_i", 0),        # ΕΡΓΟΥ 3.Α — superseded by its amendment

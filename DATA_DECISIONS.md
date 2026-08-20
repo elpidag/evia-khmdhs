@@ -5343,3 +5343,179 @@ names are short.
 
 *Affects `$lib/sections/FlowMap.svelte` + `OriginSplit.svelte` (new),
 `$lib/charts/BarH.svelte`, `/` and `/connections`.*
+
+---
+
+## 2026-08-20 · One contract, one party — and one convention for the money
+
+The ranking and the programme basis were two different totals for the same
+money: per-contractor € summed to **€655.057.006,56** against a basis of
+**€622.534.181,72**. The user's rule: *«we cannot have a different amount of
+money for the ranking and a different for the basis, and we can't count the
+total of one contract for each company as they did not receive it — since we
+do not have more information we should do an equal split.»*
+
+Reading the contracts first changed the question. **68 of the 245 in-scope
+contracts are signed by a κοινοπραξία or ένωση**, and the registry keys
+**60 of them correctly**: one contractor, the joint venture's own ΑΦΜ (41
+such entities, €141,8M). The ten contracts that listed several ΑΦΜ are the
+same kind of contract keyed wrongly:
+
+| | what the signed contract says |
+|---|---|
+| **7** | the party is a κοινοπραξία **with its own ΑΦΜ**, printed in the preamble; the registry stored its members |
+| **1** | 24SYMV016018183 — «Ένωση Οικονομικών Φορέων NOVALIS Ε.Π.Ε. – ΦΩΤΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ», **genuinely two parties**, no joint ΑΦΜ |
+| **2** | 26SYMV018739467 · 26SYMV018725481 — signed by **ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε. alone**; the other two companies appear nowhere in the text |
+
+Verbatim, from 26SYMV018718889: «η κοινοπραξία με την επωνυμία «ΤΙΓΚΑΣ
+ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ», με έδρα την Καβάλα … **Α.Φ.Μ.
+996551622** της ΔΟΥ Καβάλας». The registry stored 043170596 and 113864390 —
+the two men. Article 9 binds the members «ενιαία, αδιαίρετα, αλληλέγγυα» and
+states **no shares**.
+
+Two screens agree on the extent: `scripts/audit_contract_awardees.py` over
+all 344 contracts (2 `over_attributed`, 6 `vat_mismatch_name_ok`), and a
+κοινοπραξία-preamble sweep of every in-scope contract. Its one other hit is
+a false positive — 22SYMV010856516, where pdftotext split «ΑΦΜ 99964389 6»
+and the labelled run belongs to the company's representative; the registry
+is right there.
+
+**Decisions.**
+
+1. **The party is what the signed contract names.** Nine contracts corrected
+   via `contract_corrections.json` — a new `contractor_party` key (ΑΦΜ, name,
+   verbatim preamble) for the seven, `contractors_keep` for the two. The
+   registry's own list stays verbatim in `contracts.raw_json`. Registered
+   names confirmed independently: six in ΓΕΜΗ, the seventh in VIES.
+2. **A contract signed by more than one party is split evenly**, whole cents
+   (`antinero_contractor_shares` → `_split_coop_totals`), on the ranking, the
+   contractors list and the contractor page — the rule the ΔΑΣΕ side already
+   uses. No document supports anything finer: **no contract states a
+   «ποσοστό συμμετοχής»**, and ΓΕΜΗ's publicity API returns a κοινοπραξία's
+   name, seat and legal type but **no members and no shares** (probed live).
+   The maximum-exposure convention is retired from the site.
+3. **The seven consortium seats are curated** into
+   `contractor_locations.json` from ΓΕΜΗ/VIES with the contract as
+   corroboration, all seven geocoded (5 address-level, 2 municipality) —
+   without them those contracts would vanish from the HQ maps.
+
+**Result: 151 contractors (from 155), exactly one in-scope contract with two
+parties, and Σ per-contractor € == €622.534.181,72 == the basis, to the
+cent** (pinned). The top of the ranking does not move — no joint venture sat
+in it. Ten individuals who appeared only as members leave the contractor
+population, and their edges with them: 500 → 475 contractor×authority pairs,
+401 → 377 region pairs, 277 → 258 flows, 181 → 174 signer pairs.
+
+**A finding this exposed:** /connections said «Consortiums are the
+exception» on 12 partner pairs — which was only ever true of the registry's
+party lists. Joint ventures are not the exception: 41 of them hold 22,8% of
+the programme, invisible to that layer because each signs as one entity.
+With the correction the layer sees 1 pair, so the frame is drawn only when
+there is a network to draw, and the honest picture waits on the consortium
+membership layer.
+
+**Next (user decision, same day): members side by side, not instead.** The
+ranking stays on the legal contracting party; a second view will attribute
+the same money to member firms. Measured sources for membership: the
+consortium's own name (41/41, names only), member ΑΦΜ inside the contract
+(10/41), **the award act (25 of the 26 that have one name 2+ ΑΦΜ**, but a
+multi-lot award lists other bidders too), ΓΕΜΗ ΑΦΜ→name (deterministic) and
+ΓΕΜΗ name→ΑΦΜ (ambiguous — four «ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ»). Triangulating title ×
+award pool × registry resolves **34 of 79 member slots (43%)** — under the
+80% rule, so it is curated with machine proposals.
+
+*Affects `khmdhs/contract_corrections.py` (`contractor_party`),
+`khmdhs/data/contract_corrections.json` (+9), `contractor_locations.json`
+(+7), `atlas_api/queries_extra.py` (`antinero_contractor_shares`,
+`antinero_top_contractors`, `antinero_contractors_list`,
+`antinero_contractor_summary`, `_split_coop_totals` vat_key, authority
+ranking), `atlas_api/app.py`, `/`, `/antinero/contractors`,
+`/antinero/contractor/[vat]`, `/antinero/contract/[adam]`, `/connections`,
+`/methodology#joint-contracts`, the footer, and `tests/test_atlas_real_db.py`
+(4 new pins, 6 moved).*
+
+---
+
+## 2026-08-20 · What the register says about the contractor now
+
+A κοινοπραξία is formed for one job and wound up when it ends. The joint
+venture that signed 23SYMV013201917 shows in ΓΕΜΗ as **Ενεργή 18.07.2023 →
+Λύση-Εκκαθάριση 20.01.2025 → Διαγραφή 19.03.2025** — struck off, twenty
+months after signing. User decision: **the contractor is never rewritten —
+it signed the contract — but the page must say what became of it and link
+the register.**
+
+`scripts/harvest_gemi_status.py` swept the publicity API for every
+contractor carrying a ΓΕΜΗ number (147 companies, throttled, resumable):
+**122 active, 21 struck off, 4 in liquidation**; of the in-scope
+contractors, **20 are no longer active** and every one of them is a joint
+venture. Stored as `contractor_locations.gemi_status`, verbatim Greek.
+
+**No date is shown.** The API's `dateGemiRegistered` looked like the status
+date on the first record checked, but on active companies it is plainly the
+registration date — 26 of them differ from the company's own start date and
+one reads 1992, nine years *before* it. Rather than print a date whose
+meaning we cannot state, the note carries the status alone and the ΓΕΜΗ link
+goes to the register's own «Ιστορικό Κατάστασης» table.
+
+Rendering: an ⓘ next to the contractor on the contract page and beside the
+ΓΕΜΗ link on the contractor page — «ΓΕΜΗ records this company as struck off
+the register (Διαγραφή). It stays the contractor of this contract — it is
+the company that signed.» The Greek term is always kept; the English gloss
+is a reviewed map of the five statuses seen, and an unknown status prints in
+Greek alone (`$lib/transforms/registry.ts`, unit-pinned).
+
+*Affects `scripts/harvest_gemi_status.py` (new), `khmdhs/db.py`,
+`khmdhs/contractor_loader.py`, `khmdhs/data/contractor_locations.json`,
+`queries_extra.contractor_registry_status`, `atlas_api/app.py`,
+`$lib/transforms/registry.ts` (new, 3 units), the Anti-nero contract and
+contractor pages, and one real-DB pin.*
+
+---
+
+## 2026-08-20 · One split, in the shared layer — the old site reconciles too
+
+The even split shipped that morning lived in the Atlas layer, so :5000 still
+counted a jointly signed contract whole for each partner: its contractor
+column stood **€195.692,64** above its own headline, and the ΔΑΣΕ page of the
+same site stood **€6.676,10** above its own. User: *«I do not want to have
+mismatches in the data. the webui has to have the correct data as well.»*
+
+So the rule moved to where both sites read from — `webui/queries.py`
+(`joint_contract_shares`, `_even_cents`, `apply_joint_split`) and
+`webui/dase_queries.py` (`joint_coop_shares`) — and the Atlas copies became
+thin aliases. This is a deliberate exception to the freeze on those modules,
+and the reason is the freeze's own logic: a correctness rule implemented
+twice drifts, and applied twice double-counts (which is exactly what would
+have happened here — the Atlas subtracted the over-credit from totals that
+were now already split).
+
+It is basis-agnostic by construction: the € come from `effective_cost` on the
+caller's connection, so one implementation returns gross-effective figures
+for webui and net-stated ones through the Atlas's shadow views.
+
+Split on both sites now: the ranking, the contractors/co-ops list, the
+entity's own total, its **signer/awarder table**, its **per-year bars**
+(paid and stated alike) and the **map dots**. Contract counts and each
+contract's own value are untouched — the entity's share rides beside it.
+
+Reconciliation, all four pinned:
+
+| | headline | Σ of the entity column |
+|---|---:|---:|
+| webui · Anti-nero | €601.043.031,36 | €601.043.031,36 |
+| webui · ΔΑΣΕ | €36.954.829,83 | €36.954.829,83 |
+| Atlas · Anti-nero | €622.534.181,72 | €622.534.181,72 |
+| Atlas · ΔΑΣΕ | €29.920.558,46 | €29.920.558,46 |
+
+Also fixed the same day: `contractors_vat` warned «no row carries X» on every
+re-run once applied — 7 contracts (1 khmdhs, 6 ΔΑΣΕ) printing a false alarm
+on every refresh, which is how the real signal (a curated fix that matches
+nothing any more) would have been missed. It is now silent when the row
+already carries the corrected ΑΦΜ, and still warns when neither value is
+there; both sides unit-pinned.
+
+*Affects `webui/queries.py`, `webui/dase_queries.py` (the freeze exception),
+`atlas_api/queries_extra.py` (overlays retired to aliases),
+`khmdhs/contract_corrections.py`, and pins in `tests/test_webui_queries.py`,
+`tests/test_dase_real_db.py`, `tests/test_contract_corrections.py`.*

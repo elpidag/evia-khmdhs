@@ -143,6 +143,53 @@ def yearly_totals(conn: sqlite3.Connection) -> list[dict]:
     return out
 
 
+def joint_coop_shares(conn: sqlite3.Connection) -> dict[str, list[dict]]:
+    """Live contracts held JOINTLY by several co-ops → each partner's EVEN
+    share, keyed by canonical ΑΦΜ (DATA_DECISIONS 2026-08-17; moved here
+    from the Atlas layer on 2026-08-20 so both sites split once and
+    identically).
+
+    Crediting every partner with the whole contract counted the same euros
+    twice in a per-co-op ranking, which left the column of totals above the
+    dataset's own total. The registry records no shares and the signed
+    document states none — the one live case, 23SYMV013747204, has the two
+    co-ops' representatives «συμφωνήσαν από κοινού» over a single pooled
+    quantity at unit prices. Contract COUNTS are untouched: each partner
+    does hold the contract, jointly.
+
+    Returns {canonical ΑΦΜ: [{ref, year, n_parties, full_eur, share_eur,
+    over_eur}]}; `over_eur` is what a full-attribution total gives back.
+    """
+    per_ref: dict[str, dict] = {}
+    for r in conn.execute(f"""
+        SELECT co.reference_number AS ref, co.total_cost_with_vat AS eur,
+               COALESCE(co.contract_signed_date, co.submission_date) AS d,
+               c.vat_number AS vat
+        FROM contracts co JOIN contractors c USING (reference_number)
+        WHERE {live_filter('co')}"""):
+        e = per_ref.setdefault(r["ref"], {"eur": r["eur"] or 0.0,
+                                          "year": (r["d"] or "")[:4] or None,
+                                          "vats": set()})
+        cv = canonical_vat(r["vat"])
+        if cv:
+            e["vats"].add(cv)
+    out: dict[str, list[dict]] = {}
+    for ref, e in per_ref.items():
+        n = len(e["vats"])
+        if n < 2:                       # the ordinary single-party contract
+            continue
+        cents = round((e["eur"] or 0.0) * 100)
+        base, extra = divmod(cents, n)
+        parts = [base + (1 if i < extra else 0) for i in range(n)]
+        for cv, part in zip(sorted(e["vats"]), parts):
+            share = part / 100
+            out.setdefault(cv, []).append({
+                "ref": ref, "year": e["year"], "n_parties": n,
+                "full_eur": round(e["eur"], 2), "share_eur": share,
+                "over_eur": round(cents / 100 - share, 2)})
+    return out
+
+
 def _coop_rows(conn: sqlite3.Connection) -> list[dict]:
     """One merged row per canonical co-op VAT over the live population."""
     directory = coop_directory(conn)
@@ -153,6 +200,10 @@ def _coop_rows(conn: sqlite3.Connection) -> list[dict]:
         FROM contractors c JOIN contracts co USING (reference_number)
         WHERE {live_filter()}
     """).fetchall()
+    # a contract signed by several co-ops counts as each one's even share,
+    # so this column sums to the live basis instead of above it (2026-08-20)
+    over_by_vat = {v: sum(sh["over_eur"] for sh in lst)
+                   for v, lst in joint_coop_shares(conn).items()}
     agg: dict[str, dict] = {}
     for r in rows:
         cv = canonical_vat(r["vat_number"])
@@ -177,7 +228,7 @@ def _coop_rows(conn: sqlite3.Connection) -> list[dict]:
         a["units"].add(_WS.sub(" ", (r["units_operator_name"] or "").strip()))
     out = []
     for a in agg.values():
-        a["total_eur"] = round(a["total_eur"], 2)
+        a["total_eur"] = round(a["total_eur"] - over_by_vat.get(a["vat"], 0.0), 2)
         a["n_units"] = len(a.pop("units"))
         a["pct_direct"] = (round(100.0 * a["n_direct"] / a["n_contracts"], 1)
                            if a["n_contracts"] else 0)
@@ -242,6 +293,7 @@ def coop_summary(conn: sqlite3.Connection, vat: str) -> dict | None:
         SELECT DISTINCT name FROM contractors
         WHERE reference_number IN ({placeholders}) ORDER BY name
     """, refs)]
+    over = sum(sh["over_eur"] for sh in joint_coop_shares(conn).get(cv or "", []))
     cur = directory.get(cv, {})
     return {
         "vat": cv,
@@ -250,7 +302,7 @@ def coop_summary(conn: sqlite3.Connection, vat: str) -> dict | None:
         "name_variants": names,
         "n_contracts": row["n_all"],
         "n_live": row["n_live"],
-        "total_eur": row["eur"] or 0,
+        "total_eur": round((row["eur"] or 0) - over, 2),
         "first_date": row["first_date"],
         "last_date": row["last_date"],
     }
@@ -279,6 +331,10 @@ def coop_yearly(conn: sqlite3.Connection, vat: str) -> list[dict]:
     if not refs:
         return []
     placeholders = ",".join("?" * len(refs))
+    cv = canonical_vat(vat)
+    over_by_year: dict[str, float] = {}
+    for sh in joint_coop_shares(conn).get(cv or "", []):
+        over_by_year[sh["year"]] = over_by_year.get(sh["year"], 0.0) + sh["over_eur"]
     years: dict[str, dict] = {}
     for r in conn.execute(f"""
         SELECT co.contract_signed_date, co.submission_date,
@@ -292,6 +348,9 @@ def coop_yearly(conn: sqlite3.Connection, vat: str) -> list[dict]:
         b = years.setdefault(y, {"year": y, "n": 0, "eur": 0.0})
         b["n"] += 1
         b["eur"] = round(b["eur"] + (r["eur"] or 0.0), 2)
+    for y, over in over_by_year.items():          # this co-op's share only
+        if y in years:
+            years[y]["eur"] = round(years[y]["eur"] - over, 2)
     return sorted(years.values(), key=lambda b: b["year"])
 
 
@@ -300,6 +359,9 @@ def coop_units(conn: sqlite3.Connection, vat: str) -> list[dict]:
     if not refs:
         return []
     placeholders = ",".join("?" * len(refs))
+    cv = canonical_vat(vat)
+    mine = {sh["ref"]: sh["over_eur"]
+            for sh in joint_coop_shares(conn).get(cv or "", [])}
     rows = conn.execute(f"""
         SELECT co.units_operator_name AS unit,
                co.organization_name AS org,
@@ -310,7 +372,22 @@ def coop_units(conn: sqlite3.Connection, vat: str) -> list[dict]:
         GROUP BY co.units_operator_name, co.organization_name
         ORDER BY total_eur DESC
     """, refs).fetchall()
-    return [dict(r) for r in rows]
+    out = [dict(r) for r in rows]
+    if mine:
+        # the table groups by (unit, org): matching on the unit NAME alone
+        # would hit every group sharing it and subtract the share twice
+        marks = ",".join("?" * len(mine))
+        key_of = {r["ref"]: (r["unit"], r["org"]) for r in conn.execute(
+            f"SELECT reference_number AS ref, units_operator_name AS unit, "
+            f"organization_name AS org FROM contracts "
+            f"WHERE reference_number IN ({marks})", list(mine))}
+        for u in out:
+            over = sum(o for ref, o in mine.items()
+                       if key_of.get(ref) == (u["unit"], u["org"]))
+            if over:
+                u["total_eur"] = round((u["total_eur"] or 0.0) - over, 2)
+        out.sort(key=lambda u: -(u["total_eur"] or 0.0))
+    return out
 
 
 # ---------------------------------------------------------------------------

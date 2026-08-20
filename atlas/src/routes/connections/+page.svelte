@@ -156,12 +156,21 @@
 	</div>
 </ChartFrame>
 
+<!-- Joint ventures almost always sign as a κοινοπραξία with an ΑΦΜ of its own,
+     so the registry records ONE party and this layer can only see the rare
+     contract signed by the partners as themselves (DATA_DECISIONS 2026-08-20).
+     Until the consortium-membership layer lands, the frame draws only when
+     there is a network to draw. -->
+{#if net.pairs.length > 2}
 <ChartFrame
-	title="Consortiums are the exception: {grInt(net.pairs.length)} partnerships, {grInt(nRecurring)} recurring"
-	subtitle="Every contractor–contractor relationship in the dataset."
-	caveat="Pair € = full value of the shared contracts (both partners are fully exposed)."
+	title="Companies that signed side by side: {grInt(net.pairs.length)} partnerships, {grInt(
+		nRecurring
+	)} recurring"
+	subtitle="Contractor–contractor relationships visible in the registry's own party lists."
+	caveat="Pair € = the full value of the contracts the two signed together — a pair's figure is
+	the contract, not either partner's share."
 	anchor="cliques"
-	methodology="max-exposure"
+	methodology="joint-contracts"
 >
 	<div class="cliques">
 		{#each cliques as g, gi (gi)}
@@ -183,6 +192,7 @@
 		{/each}
 	</div>
 </ChartFrame>
+{/if}
 
 <style>
 	.lede {

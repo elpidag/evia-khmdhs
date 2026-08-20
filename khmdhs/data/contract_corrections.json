@@ -162,5 +162,84 @@
   "exclude": true,
   "duplicate_of": "25SYMV017779215",
   "reason": "ΚΗΜΔΗΣ cancelled this record on 15.10.2025, reason «ΛΟΓΩ ΛΑΘΟΥΣ ΣΤΟ ΑΝΑΡΤΗΜΕΝΟ ΑΡΧΕΙΟ», and the same contract was posted again six days later as 25SYMV017779215 — same title, same signature date 10.04.2025, same €3.363.432,24 net, same contractor (ΓΕΩΡΥΘΜΙΚΗ, ΑΦΜ 999308989) and the same three forest services; the re-posting carries the four payment orders and this record carries none. The registry publishes no link between the two — no prev/next, no adamChain — so both stood in scope and the programme basis counted the contract twice (DATA_DECISIONS 2026-08-19)."
+ },
+ "26SYMV018718889": {
+  "contractor_party": {
+   "vat": "996551622",
+   "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ",
+   "evidence": "β. η κοινοπραξία με την επωνυμία «ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ», με έδρα την Καβάλα, επί της οδού Μεγάλου Αλεξάνδρου, αριθμ. 27, Τ.Κ. 65302, Α.Φ.Μ. 996551622 της ΔΟΥ Καβάλας, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον κ. Κυριάκο Ένδρο του Θωμά (στο εξής ο «Ανάδοχος»)."
+  },
+  "reason": "Registry keyed the joint venture's MEMBERS as the contracting parties (DATA_DECISIONS 2026-08-20). The signed contract names ONE party: ΚΟΙΝΟΠΡΑΞΙΑ ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ, ΑΦΜ 996551622, seated at Καβάλα, Μεγάλου Αλεξάνδρου 27, Τ.Κ. 65302, and binds its members «ενιαία, αδιαίρετα, αλληλέγγυα» while stating no shares. The same registry field carries the κοινοπραξία itself on 60 other in-scope consortium contracts; here it carried 2 member ΑΦΜ (043170596, 113864390), so every per-contractor view credited each member with the contract's whole value. Registered name confirmed by VIES. The registry's own list is untouched in raw_json; membership is curated as its own layer.",
+  "note": "ΚΗΜΔΗΣ records the two companies that formed this joint venture. The contract was signed by the joint venture itself — «ΚΟΙΝΟΠΡΑΞΙΑ ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ», ΑΦΜ 996551622, based in Καβάλα — and that is the contractor shown on this page. Nearly every other joint venture in the programme is recorded the same way."
+ },
+ "23SYMV013201917": {
+  "contractor_party": {
+   "vat": "996625363",
+   "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ Ι.Κ.Ε.",
+   "evidence": "β) η κοινοπραξία με την επωνυμία «ΚΟΙΝΟΠΡΑΞΙΑ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ ΙΚΕ», που εδρεύει στο Εύοσμο Θεσσαλονίκης, επί της προέκτασης οδού Ολυμπιάδας (ΑΦΜ 996625363 - ΓΕΜΗ 171650506000) αποτελούμενη από α) τον Παντελή Φιλιππάκη του Ματθαίου και της Ελένης, Δασολόγο – Ε.Δ.Ε., ο οποίος διατηρεί ατομική επιχείρηση, με έδρα τη Θεσσαλονίκη επί της οδού Σταύρου Βουτυρά αρίθ. 7 και ΑΦΜ 110324970, και β) την Ιδιωτική Κεφαλαιουχική Εταιρεία με την επωνυμία «Άλσος Ι.Κ.Ε.», που εδρεύει στο Δήμο Κορδελιού -Ευόσμου νομού Θεσσαλ"
+  },
+  "reason": "Registry keyed the joint venture's MEMBERS as the contracting parties (DATA_DECISIONS 2026-08-20). The signed contract names ONE party: ΚΟΙΝΟΠΡΑΞΙΑ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ Ι.Κ.Ε., ΑΦΜ 996625363, seated at Εύοσμος Θεσσαλονίκης, προέκταση οδού Ολυμπιάδος, Τ.Κ. 56224, and binds its members «ενιαία, αδιαίρετα, αλληλέγγυα» while stating no shares. The same registry field carries the κοινοπραξία itself on 60 other in-scope consortium contracts; here it carried 2 member ΑΦΜ (801045078, 110324970), so every per-contractor view credited each member with the contract's whole value. Registered name confirmed by ΓΕΜΗ 171650506000, which the contract itself prints. The registry's own list is untouched in raw_json; membership is curated as its own layer.",
+  "note": "ΚΗΜΔΗΣ records the two companies that formed this joint venture. The contract was signed by the joint venture itself — «ΚΟΙΝΟΠΡΑΞΙΑ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ Ι.Κ.Ε.», ΑΦΜ 996625363, based in Εύοσμος Θεσσαλονίκης — and that is the contractor shown on this page. Nearly every other joint venture in the programme is recorded the same way."
+ },
+ "26SYMV018661963": {
+  "contractor_party": {
+   "vat": "803202324",
+   "name": "ΕΝΩΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ - Κ/Ξ",
+   "evidence": "β. η κοινοπραξία με την επωνυμία «ΕΝΩΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ - Κ/Ξ», που εδρεύει στην Σαλαμίνα επί τις οδού Σόλωνος και Σικελιανού αρ. 13, Τ.Κ. 18900, με ΑΦΜ: 803202324 ΔΟΥ ΚΕΦΟΔΕ ΑΤΤΙΚΗΣ, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον κ. Ρεβελιώτη Παναγιώτη (στο εξής ο «Ανάδοχος»)."
+  },
+  "reason": "Registry keyed the joint venture's MEMBERS as the contracting parties (DATA_DECISIONS 2026-08-20). The signed contract names ONE party: ΕΝΩΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ - Κ/Ξ, ΑΦΜ 803202324, seated at Σαλαμίνα, Σόλωνος και Σικελιανού 13, Τ.Κ. 18900, and binds its members «ενιαία, αδιαίρετα, αλληλέγγυα» while stating no shares. The same registry field carries the κοινοπραξία itself on 60 other in-scope consortium contracts; here it carried 2 member ΑΦΜ (046212303, 045497240), so every per-contractor view credited each member with the contract's whole value. Registered name confirmed by ΓΕΜΗ 191926507000. The registry's own list is untouched in raw_json; membership is curated as its own layer.",
+  "note": "ΚΗΜΔΗΣ records the two companies that formed this joint venture. The contract was signed by the joint venture itself — «ΕΝΩΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ – ΡΕΒΕΛΙΩΤΗΣ Κ/Ξ», ΑΦΜ 803202324, based in Σαλαμίνα — and that is the contractor shown on this page. Nearly every other joint venture in the programme is recorded the same way."
+ },
+ "26SYMV018779399": {
+  "contractor_party": {
+   "vat": "803233350",
+   "name": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ - ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+   "evidence": "β. η κοινοπραξία με την επωνυμία «ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ - ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΚΟΙΝΟΠΡΑΞΙΑ», που εδρεύει στη Νέα Μαγνησία Θεσσαλονίκης, επί της οδού Μεγάλου Αλεξάνδρου, αριθμ. 10, Τ.Κ. 57008, με ΑΦΜ 803233350 της ΔΟΥ Ιωνίας Θεσσαλονίκης, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον κ. Γεώργιο Βελώνη του Νικολάου (στο εξής ο «Ανάδοχος»)."
+  },
+  "reason": "Registry keyed the joint venture's MEMBERS as the contracting parties (DATA_DECISIONS 2026-08-20). The signed contract names ONE party: ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ - ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΚΟΙΝΟΠΡΑΞΙΑ, ΑΦΜ 803233350, seated at Νέα Μαγνησία Θεσσαλονίκης, Μεγάλου Αλεξάνδρου 10, Τ.Κ. 57008, and binds its members «ενιαία, αδιαίρετα, αλληλέγγυα» while stating no shares. The same registry field carries the κοινοπραξία itself on 60 other in-scope consortium contracts; here it carried 2 member ΑΦΜ (102486448, 043659132), so every per-contractor view credited each member with the contract's whole value. Registered name confirmed by ΓΕΜΗ 192664404000. The registry's own list is untouched in raw_json; membership is curated as its own layer.",
+  "note": "ΚΗΜΔΗΣ records the two companies that formed this joint venture. The contract was signed by the joint venture itself — «ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ - ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΚΟΙΝΟΠΡΑΞΙΑ», ΑΦΜ 803233350, based in Νέα Μαγνησία Θεσσαλονίκης — and that is the contractor shown on this page. Nearly every other joint venture in the programme is recorded the same way."
+ },
+ "23SYMV013201961": {
+  "contractor_party": {
+   "vat": "996665717",
+   "name": "Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ-ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ-ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
+   "evidence": "β) η κοινοπραξία με την επωνυμία «Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ-ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ-ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ», που εδρεύει στη Χαλκίδα, επί της οδού Δρακοπούλου αριθ. 18 (ΑΦΜ 996665717/Δ.Ο.Υ. Χαλκίδας - ΓΕΜΗ 171504322000) αποτελούμενη από α) τον Ζήση Αγγελάτο του Κωνσταντίνου και της Παναγιώτας, κάτοικο Χαλκίδας νομού Ευβοίας, επί της οδού Δρακοπούλου αριθ. 18, Τ.Κ. 34100 και Α.Φ.Μ. 075195407/ ΔΟΥ Χαλκίδας, με αριθμό δελτίου αστυνομικής ταυτότητας ΑΝ990948, (β) τον Αθανάσιο Γκίκα του Γεωργίου και της Τασίας, κάτοικο Κορίνθου, επ"
+  },
+  "reason": "Registry keyed the joint venture's MEMBERS as the contracting parties (DATA_DECISIONS 2026-08-20). The signed contract names ONE party: Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ-ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ-ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ, ΑΦΜ 996665717, seated at Χαλκίδα, Δρακοπούλου 18, Τ.Κ. 34100, and binds its members «ενιαία, αδιαίρετα, αλληλέγγυα» while stating no shares. The same registry field carries the κοινοπραξία itself on 60 other in-scope consortium contracts; here it carried 3 member ΑΦΜ (122499275, 073533221, 075195407), so every per-contractor view credited each member with the contract's whole value. Registered name confirmed by ΓΕΜΗ 171504322000, which the contract itself prints. The registry's own list is untouched in raw_json; membership is curated as its own layer.",
+  "note": "ΚΗΜΔΗΣ records the three companies that formed this joint venture. The contract was signed by the joint venture itself — «Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ-ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ-ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ», ΑΦΜ 996665717, based in Χαλκίδα — and that is the contractor shown on this page. Nearly every other joint venture in the programme is recorded the same way."
+ },
+ "26SYMV018755812": {
+  "contractor_party": {
+   "vat": "803214556",
+   "name": "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ ΚΑΙ Μ ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε Κ/Ξ",
+   "evidence": "β. η κοινοπραξία με την επωνυμία «ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ ΚΑΙ Μ ΑΠΟΣΤΟΛΙΔΗΣ ΣΙΑ Ε.Ε Κ/Ξ», που εδρεύει στο Ηράκλειο, επί τις οδού Βασιλικής αρ. 0, Τ.Κ. 70012, με ΑΦΜ: 803214556 της ΔΟΥ Ηρακλείου, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον κ. Φιλιππάκη Παντελή (στο εξής ο «Ανάδοχος»)."
+  },
+  "reason": "Registry keyed the joint venture's MEMBERS as the contracting parties (DATA_DECISIONS 2026-08-20). The signed contract names ONE party: ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ ΚΑΙ Μ ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε Κ/Ξ, ΑΦΜ 803214556, seated at Βασιλική Γόρτυνας, Ηράκλειο, Τ.Κ. 70012, and binds its members «ενιαία, αδιαίρετα, αλληλέγγυα» while stating no shares. The same registry field carries the κοινοπραξία itself on 60 other in-scope consortium contracts; here it carried 2 member ΑΦΜ (110324970, 999173415), so every per-contractor view credited each member with the contract's whole value. Registered name confirmed by ΓΕΜΗ 192269627000. The registry's own list is untouched in raw_json; membership is curated as its own layer.",
+  "note": "ΚΗΜΔΗΣ records the two companies that formed this joint venture. The contract was signed by the joint venture itself — «ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ ΚΑΙ Μ ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε Κ/Ξ», ΑΦΜ 803214556, based in Βασιλική Γόρτυνας, Ηράκλειο — and that is the contractor shown on this page. Nearly every other joint venture in the programme is recorded the same way."
+ },
+ "26SYMV018756094": {
+  "contractor_party": {
+   "vat": "803210570",
+   "name": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+   "evidence": "β. η κοινοπραξία με την επωνυμία «ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ» και τον δ.τ. «ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΕΡΓΑ ΠΡΑΣΙΝΟΥ ΚΟΙΝΟΠΡΑΞΙΑ», με έδρα τον Εύοσμο Θεσσαλονίκης, επί της οδού Εφέσου, αρ. 23, Τ.Κ. 562 24, με ΑΦΜ 803210570 της ΔΟΥ Αμπελοκήπων, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον Λαγκαδινό Ιωάννη του Γεωργίου (στο εξής ο «Ανάδοχος»)."
+  },
+  "reason": "Registry keyed the joint venture's MEMBERS as the contracting parties (DATA_DECISIONS 2026-08-20). The signed contract names ONE party: ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ, ΑΦΜ 803210570, seated at Εύοσμος Θεσσαλονίκης, Εφέσου 23, Τ.Κ. 56224, and binds its members «ενιαία, αδιαίρετα, αλληλέγγυα» while stating no shares. The same registry field carries the κοινοπραξία itself on 60 other in-scope consortium contracts; here it carried 3 member ΑΦΜ (998255970, 044622622, 045958594), so every per-contractor view credited each member with the contract's whole value. Registered name confirmed by ΓΕΜΗ 192205206000. The registry's own list is untouched in raw_json; membership is curated as its own layer.",
+  "note": "ΚΗΜΔΗΣ records the two companies that formed this joint venture. The contract was signed by the joint venture itself — «ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ», ΑΦΜ 803210570, based in Εύοσμος Θεσσαλονίκης — and that is the contractor shown on this page. Nearly every other joint venture in the programme is recorded the same way."
+ },
+ "26SYMV018739467": {
+  "contractors_keep": [
+   "998255970"
+  ],
+  "reason": "Registry over-attribution (DATA_DECISIONS 2026-08-20): the contractor list carries three ΑΦΜ — 998255970, 044622622, 045958594 — but the signed contract names a single party, «η ετερόρρυθμη εταιρεία με την επωνυμία «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.» … με ΑΦΜ 998255970 της ΔΟΥ ΚΕΦΟΔΕ ΑΤΤΙΚΗΣ», and mentions neither of the other two anywhere in its text. The same three-name list was stamped on all three lots of the same award, each of which in fact went to a different party. Screened by scripts/audit_contract_awardees.py (class over_attributed).",
+  "evidence": "β. η ετερόρρυθμη εταιρεία με την επωνυμία «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.» που εδρεύει στην Καλλιθέα Αττικής, επί της οδού Ελ. Βενιζέλου, αρ. 176, Τ.Κ. 176 75, με ΑΦΜ 998255970 της ΔΟΥ ΚΕΦΟΔΕ ΑΤΤΙΚΗΣ, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον Μάστορη Δημήτριο του Νικολάου (στο εξής ο «Ανάδοχος»).",
+  "note": "ΚΗΜΔΗΣ records three companies. The signed contract names one — «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.», ΑΦΜ 998255970 — and never mentions the other two. The same three names were recorded on all three lots of this procurement, although the award decision (26AWRD018688757) gave each lot to a different bidder."
+ },
+ "26SYMV018725481": {
+  "contractors_keep": [
+   "998255970"
+  ],
+  "reason": "Registry over-attribution (DATA_DECISIONS 2026-08-20): the contractor list carries three ΑΦΜ — 998255970, 044622622, 045958594 — but the signed contract names a single party, «η ετερόρρυθμη εταιρεία με την επωνυμία «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.» … με ΑΦΜ 998255970 της ΔΟΥ ΚΕΦΟΔΕ ΑΤΤΙΚΗΣ», and mentions neither of the other two anywhere in its text. The same three-name list was stamped on all three lots of the same award, each of which in fact went to a different party. Screened by scripts/audit_contract_awardees.py (class over_attributed).",
+  "evidence": "β. η ετερόρρυθμη εταιρεία με την επωνυμία «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.» που εδρεύει στην Καλλιθέα Αττικής, επί της οδού Ελ. Βενιζέλου 176, Τ.Κ. 176 75, με ΑΦΜ 998255970 της ΔΟΥ ΚΕΦΟΔΕ ΑΤΤΙΚΗΣ, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον Μάστορη Δημήτριο του Νικολάου (στο εξής ο «Ανάδοχος»).",
+  "note": "ΚΗΜΔΗΣ records three companies. The signed contract names one — «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.», ΑΦΜ 998255970 — and never mentions the other two. The same three names were recorded on all three lots of this procurement, although the award decision (26AWRD018688757) gave each lot to a different bidder."
  }
 }

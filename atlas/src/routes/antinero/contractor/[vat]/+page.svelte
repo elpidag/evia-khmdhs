@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Hint from '$lib/ui/Hint.svelte';
+	import { registryStatusNote } from '$lib/transforms/registry';
 	import { ruLabel } from '$lib/transforms/regions';
 	import YearBars from '$lib/charts/YearBars.svelte';
 	import ChoroLegend from '$lib/maps/ChoroLegend.svelte';
@@ -32,7 +34,7 @@
 		property="og:description"
 		content="{grInt(b.summary.n_contracts)} Anti-nero contracts, {eurShort(
 			b.summary.total_eur
-		)} (max-exposure) · {b.location?.city ?? ''}"
+		)} · {b.location?.city ?? ''}"
 	/>
 </svelte:head>
 
@@ -48,6 +50,11 @@
 			· <a href={`https://publicity.businessportal.gr/company/${b.location.gemi}`} target="_blank"
 				rel="noopener">ΓΕΜΗ profile</a>
 		{/if}
+		{#if b.location?.gemi_status && b.location.gemi_status !== 'Ενεργή'}
+			· <span class="gone">{b.location.gemi_status}</span><Hint
+				text={registryStatusNote({ status: b.location.gemi_status })}
+			/>
+		{/if}
 	</p>
 </hgroup>
 
@@ -55,7 +62,7 @@
 	<StatPair
 		value={eurShort(b.summary.total_eur)}
 		label="across {grInt(b.summary.n_contracts)} contracts"
-		basis="stated € excl. VAT, consortium values in full (max-exposure)"
+		basis="stated € excl. VAT · a jointly signed contract counts as this partner's even share"
 		color="var(--c-antinero)"
 	/>
 	<StatPair
@@ -177,14 +184,37 @@
 						{#if r.cancelled}<span class="chip bad">cancelled</span>{/if}
 					</td>
 					<td class="muted"><small>{r.units_operator_name ?? '—'}</small></td>
-					<td class="num">{eur(r.total_cost_with_vat)}</td>
+					<td class="num">
+						{eur(r.total_cost_with_vat)}
+						{#if b.summary.shares?.[r.reference_number]}
+							{@const sh = b.summary.shares[r.reference_number]}
+							<br /><small class="muted"
+								>signed with {sh.n_parties - 1} other compan{sh.n_parties > 2
+									? 'ies'
+									: 'y'} · {eur(sh.share_eur)} counted here</small
+							>
+						{/if}
+					</td>
 				</tr>
 			{/each}
 		</tbody>
 	</table>
+	{#if Object.keys(b.summary.shares ?? {}).length}
+		<p class="muted">
+			<small
+				>A contract signed jointly is split evenly between its partners: the table shows each
+				contract's own stated value, while this company's totals count its share. Neither the
+				registry nor the signed document records who took what.</small
+			>
+		</p>
+	{/if}
 </section>
 
 <style>
+	/* a company the register no longer lists as active — stated, not hidden */
+	.gone {
+		color: var(--ink-soft);
+	}
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);

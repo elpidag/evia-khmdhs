@@ -20,6 +20,15 @@ def conn():
     c.close()
 
 
+def test_coop_totals_sum_to_the_live_basis(conn):
+    """The ΔΑΣΕ page of the OLD site reconciles too: since 2026-08-20 the even
+    split of a jointly signed contract lives in dase_queries, so both sites
+    apply it once and neither column of totals stands above the basis."""
+    headline = dq.kpis(conn)["total_eur"]
+    listed = sum(r["total_eur"] or 0.0 for r in dq.list_coops(conn))
+    assert listed == pytest.approx(headline, abs=0.01)
+
+
 def test_population_pins(conn):
     k = dq.kpis(conn)
     assert k["gross_n"] == 2164

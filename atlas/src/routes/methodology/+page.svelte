@@ -104,20 +104,29 @@
 		<strong>full exposure</strong> (the whole contract value) where useful.
 	</p>
 
-	<h2 id="max-exposure">Maximum-exposure convention</h2>
+	<h2 id="joint-contracts">Contracts signed by more than one party</h2>
 	<p>
-		Anti-nero per-contractor pages count consortium contracts
-		<strong>in full for each partner</strong> — the registry does not split consortium money, so
-		per-entity totals answer “how much contract value is this company party to”, not “how much
-		did it invoice”. Summing per-contractor totals therefore over-counts; programme totals never
-		use this convention.
+		A jointly signed contract is <strong>split evenly between its partners</strong>, on both
+		datasets, on every per-contractor surface: the ranking, the contractor list, and each
+		company's own page (whose contract row shows the contract's own value beside this partner's
+		share). Whole cents are allocated, so per-company totals add up to the programme total
+		exactly — the ranking and the headline are the same money.
 	</p>
 	<p>
-		The <strong>forest co-op side does the opposite</strong>: a contract signed by several co-ops
-		jointly is split evenly between them, on the ranking, in the co-op list and on each co-op's
-		own page (its contract row shows both the contract's value and the co-op's share). Joint
-		contracts are vanishingly rare there and the documents state no shares, so the even split
-		keeps every co-op total addable — they sum to the dataset's stated total exactly.
+		Equal parts is what the documents support and nothing more. No contract in either dataset
+		states a <span lang="el">«ποσοστό συμμετοχής»</span>; the consortium articles bind the
+		members <span lang="el">«ενιαία, αδιαίρετα, αλληλέγγυα»</span> — jointly and indivisibly —
+		and ΓΕΜΗ publishes members' shares for none of them. Until 20.08.2026 the Anti-nero side
+		instead counted such a contract in full for each partner, which put the sum of the
+		per-company totals well above the programme's own total; that convention is retired.
+	</p>
+	<p>
+		Most joint ventures never reach this rule, because they sign as a
+		<span lang="el">κοινοπραξία</span> that holds its own ΑΦΜ, seat and ΓΕΜΗ registration: the
+		contracting party is one entity and the contract is counted once, for it. Where the registry
+		instead keyed the venture's <em>members</em> as the parties, the signed contract's own
+		preamble was read and the party corrected — each such correction is listed on the contract's
+		page with the sentence it came from.
 	</p>
 
 	<h2 id="procedures">Procedures and thresholds</h2>

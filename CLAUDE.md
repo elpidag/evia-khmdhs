@@ -22,8 +22,10 @@ calculation — RRF-16849 membership unproven from primary documents
 `khmdhs/data/probable_related.json`, presented on the Atlas front page as
 «additional contracts found, probably related …»). 890 payment orders
 (€565.8M paid gross, 5 Diavgeia-only with PDF-curated net amounts), all
-amendment chains closed, 179/180 map contractors located, 147 linked to
-GEMI profiles, 18 curated work sites, 245/245 in-scope contracts linked
+amendment chains closed, 184/187 map contractors located, 153 linked to
+GEMI profiles (151 contractors hold the in-scope contracts since the
+2026-08-20 party corrections — 149 geocoded, 126 with a ΓΕΜΗ profile),
+18 curated work sites, 245/245 in-scope contracts linked
 to their forest authority (103-entry ΔΔ/ΔΧ registry; 3 documented
 authority-less), contractor HQs geocoded via Nominatim. Refreshable via
 `python -m khmdhs.refresh`.
@@ -426,10 +428,10 @@ decisions land there FIRST, then get implemented.
 | `probable_related.json` | 7 chains / 13 ADAMs demoted to `antinero_probable`: registry titles say ANTINERO II but no provable RRF-16849 financing evidence exists (empty fund metadata, full texts without any RRF language — ΤΑΙΠΕΔ-procured, ΚΑΕ 2910601001-funded). Kept in dataset, excluded from all calculations; shown on / as «additional contracts found, probably related» |
 | `payment_corrections.json` | 3 registry keying errors (×100 missing decimal; one-of-two invoices) with PDF-documented true amounts + 5 Diavgeia-only payments whose net («ΚΑΘΑΡΗ ΑΞΙΑ ΠΑΡΑΣΤΑΤΙΚΟΥ») is PDF-curated (`amount_without_vat`-only entries); `exclude:true` → treated as cancelled. Candidates come from `payment_validator` |
 | `dase_contract_corrections.json` | ΔΑΣΕ contract corrections: 1 stated-value keying error (21SYMV009374147 ×10 digit-glitch, `objects` seq override) + 10 registry double-postings excluded via `exclude:true` + `duplicate_of:<kept ΑΔΑΜ>` (pages stay reachable, cross-linked; the 10th, 24SYMV015423487, is a corrected re-issue under a VIES-invalid phantom ΑΦΜ — caught cross-VAT, DATA_DECISIONS 2026-08-15) + 6 Δωδεκανήσου net==gross VAT corrections + **10 not-a-co-op contracts** excluded via `exclude:true` + `related_to:<in-scope sibling ΑΔΑΜ or "">` (DATA_DECISIONS 2026-08-17: the registry pasted the parent AWARD's whole awardee list onto a contract only one company signed) + 3 `contractors_keep` entries (deletes contractor rows the signed PDF doesn't name, and rewrites a GLUED ΑΦΜ field «X ΚΑΙ Y» to the kept one — the canonical-VAT rule silently keeps the first, i.e. the wrong co-op) + 6 `contractors_vat` rewrites (DATA_DECISIONS 2026-08-18: the contractor ΑΦΜ field held the AWARDING side's 090273987 — the Ελληνικό Δημόσιο — or a ten-digit typo, filing the contract under a fictitious co-op; the applier replaces it with the ΑΦΜ the signed contract states, targets validated as 9 digits, unmatched keys logged). **`cancelled = 1` is the shared exclusion MECHANISM, never the reason**: `duplicate_of` / `related_to` say which, and the Atlas labels each honestly (banner + facts chip + the document-trail row on BOTH siblings' pages — `$lib/transforms/exclusion.ts:trailChip`, one rule, unit-pinned); only a registry cancellation may read «cancelled». Applied by `khmdhs.contract_corrections` (standalone + end of `harvest_dase.py load`) together with `dase_payment_corrections.json` (217 entries). Candidates: `scripts/validate_contract_values.py` + `scripts/find_duplicate_postings.py` (same-VAT pass + cross-VAT pass for mis-keyed ΑΦΜ twins) + `scripts/audit_contract_awardees.py` (screens every contract's registry contractor list against the ΑΦΜ its signed PDF names) |
-| `contract_corrections.json` | Same format/mechanism for the khmdhs (Anti-nero) DB; currently 6 — including one **party-only** entry (25SYMV017073536: the registry keyed ΓΕΩΓΝΩΜΩΝ Ο.Ε.'s ΑΦΜ with eight digits, «98434068»; the signed contract states 998434068, and zero-padding to 098434068 would file it under an ΑΦΜ belonging to nobody). A party-only entry deliberately does NOT stamp `correction_note` — the contract page renders that as a stated-value correction. Contractor ΑΦΜ are stripped on ingest in `extract.py`: 13 registry rows carried padded values and split 7 companies across two keys each (DATA_DECISIONS 2026-08-18). (a) 26SYMV018642772 «ΔΧ ΣΟΥΦΛΙΟΥ» carried the Θεσσαλονίκη δεξαμενές contract's figures — PDF-documented true value €4,334,353.41 net / €5,374,598.23 gross (DATA_DECISIONS 2026-08-14). (b) **4 PROJECT-BUDGET errors** (DATA_DECISIONS 2026-08-18): the registry keyed «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ» — the whole multi-lot project's budget, quoted in every contract's funding recital — as the contract's own price, while Άρθρο 5 «Αμοιβή Αναδόχου» states the real one: 24SYMV015544651 €31.02M→€4.00M, and the three lots of πρόσκληση 24PROC014835083 which all carried the same €2,284,973.72 (→€1.20M / €0.80M / €0.16M). −€31.7M off the basis, 4.8%. Found by the πρόσκληση-family analysis; screen with the RRF-recital test (stored value == the project budget the contract itself quotes). Applied by `khmdhs.contract_corrections --corrections` + a `khmdhs.refresh` step right after chain_loader (refetch/upsert restores registry values) |
+| `contract_corrections.json` | Same format/mechanism for the khmdhs (Anti-nero) DB; currently 30 — including **9 party corrections of 2026-08-20**: 7 contracts whose registry rows named a κοινοπραξία's MEMBERS instead of the κοινοπραξία that signed (new `contractor_party` key: the ΑΦΜ, the registered name and the verbatim preamble sentence; ΓΕΜΗ/VIES confirm all 7) and 2 whose list carried companies the signed text never names (`contractors_keep`). Also one **party-only** entry (25SYMV017073536: the registry keyed ΓΕΩΓΝΩΜΩΝ Ο.Ε.'s ΑΦΜ with eight digits, «98434068»; the signed contract states 998434068, and zero-padding to 098434068 would file it under an ΑΦΜ belonging to nobody). A party-only entry deliberately does NOT stamp `correction_note` — the contract page renders that as a stated-value correction. Contractor ΑΦΜ are stripped on ingest in `extract.py`: 13 registry rows carried padded values and split 7 companies across two keys each (DATA_DECISIONS 2026-08-18). (a) 26SYMV018642772 «ΔΧ ΣΟΥΦΛΙΟΥ» carried the Θεσσαλονίκη δεξαμενές contract's figures — PDF-documented true value €4,334,353.41 net / €5,374,598.23 gross (DATA_DECISIONS 2026-08-14). (b) **4 PROJECT-BUDGET errors** (DATA_DECISIONS 2026-08-18): the registry keyed «η συνεισφορά του Ταμείου Ανάκαμψης στον συνολικό προϋπολογισμό του ΕΡΓΟΥ» — the whole multi-lot project's budget, quoted in every contract's funding recital — as the contract's own price, while Άρθρο 5 «Αμοιβή Αναδόχου» states the real one: 24SYMV015544651 €31.02M→€4.00M, and the three lots of πρόσκληση 24PROC014835083 which all carried the same €2,284,973.72 (→€1.20M / €0.80M / €0.16M). −€31.7M off the basis, 4.8%. Found by the πρόσκληση-family analysis; screen with the RRF-recital test (stored value == the project budget the contract itself quotes). Applied by `khmdhs.contract_corrections --corrections` + a `khmdhs.refresh` step right after chain_loader (refetch/upsert restores registry values) |
 | `municipality_overrides.json` | 17 curated verdicts on WHICH forest service a δήμος belongs to, where the signed contract assigns it to one that does not serve that area (DATA_DECISIONS 2026-08-19). The δήμος is never dropped; only the attribution is curated — `reattributed` when the competent service is a party to the same contract, `as_stated` (with it named in the note) when it is not. Keys `<ΑΔΑΜ>|<ΥΠΕΣ code>`; validated by `tests/test_contract_municipalities.py` |
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
-| `contractor_locations.json` | ~180 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` |
+| `contractor_locations.json` | 187 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` + **`gemi_status`** — what the register says TODAY, verbatim (147 swept by `scripts/harvest_gemi_status.py`: 122 Ενεργή / 21 Διαγραφή / 4 Λύση-Εκκαθάριση; 20 in-scope contractors are wound-up joint ventures, flagged with an ⓘ + ΓΕΜΗ link and never rewritten — they signed the contract). NO status date is stored: the API's `dateGemiRegistered` is the registration date (DATA_DECISIONS 2026-08-20) |
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts. Since 2026-08-17 each entry also carries an **`office` block** (street/Τ.Κ./city/phones/emails + geocoded lat/lon/geo_precision): basis = the ΥΠΕΝ επιθεωρήσεις contact tables (ypen.gov.gr, Akamai-blocked for bots — fetched via WINDOWED Playwright, `scripts/harvest_ypen_offices.py`, cache `ypen_offices_cache/`) corroborated by each authority's own Diavgeia letterheads (`scripts/harvest_office_letterheads.py`, unit uids under org 100015996; 90/102 Τ.Κ. confirmed, ΑΔΑ+excerpt kept; the Γουμένισσα ministry-page typo 63100→61300 caught this way). Differences documented per-entry in `office.note`; merge via `scripts/build_authority_offices.py`, geocode via `scripts/geocode_authority_offices.py` (Nominatim tiers + Τ.Κ.-prefix/≤35km gates → 41 street / 58 postcode / 1 city / 3 municipality-fallback). `forest_loader` prefers the office point over the municipality centroid (`seat_precision` column); /authority pages show the contact block. Περτουλίου is ΑΠΘ-run (no ΥΠΕΝ office data — centroid) |
 | `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid + **hand-curated `pe`** (the municipality's Π.Ε.; the ONLY complete municipality→Π.Ε. table — validated 4 ways by `scripts/build_pe_geojson.py`) (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
 | `pe_centroids.json` | 74 Π.Ε. → representative point (lat, lon), from the dissolved polygons; duplicated to `webui/static/` (`scripts/build_pe_geojson.py`) |
@@ -537,10 +539,28 @@ victims' names), refuses non-`%PDF` bodies, serves
 inline (`as_attachment=False`) so PDFs open in the tab, and returns an
 auto-retrying `pdf_wait.html` (503 + Retry-After) during registry 429 windows.
 
-Consortium contracts attribute the **full** value to each partner (max-exposure
-view, stated in the footer) — **Anti-nero only**. On the ΔΑΣΕ side the Atlas
-splits a jointly signed contract EVENLY between its co-ops (DATA_DECISIONS
-2026-08-18), so per-co-op totals are addable; see the ΔΑΣΕ section.
+**A contract signed by several parties is split EVENLY between them**, on
+both datasets and on BOTH sites (user, DATA_DECISIONS 2026-08-20: «we cannot
+have a different amount of money for the ranking and a different for the
+basis»). The split lives in the SHARED layer — `queries.joint_contract_shares`
+/ `apply_joint_split` and `dase_queries.joint_coop_shares` — so it is applied
+once and identically; the Atlas's own copies were retired to thin aliases
+(applying both would subtract the same euros twice). All four columns of
+totals now equal their own headline to the cent: webui Anti-nero
+€601.043.031,36, webui ΔΑΣΕ €36.954.829,83, Atlas Anti-nero €622.534.181,72,
+Atlas ΔΑΣΕ €29.920.558,46 (pinned in `test_webui_queries` /
+`test_dase_real_db` / `test_atlas_real_db`). It is basis-agnostic on purpose:
+the € come from `effective_cost` on the caller's connection, so the same code
+returns gross-effective for webui and net-stated through the Atlas's shadow
+views. Split surfaces: ranking, contractors/co-ops list, the entity page's
+total, its signer/awarder table, its per-year bars and the map dots; contract
+COUNTS and each contract's own value are untouched, and the entity's share
+rides beside it. Anti-nero has exactly ONE joint contract left
+(24SYMV016018183, an ένωση with no ΑΦΜ of its own): the other joint ventures
+sign as a κοινοπραξία that holds its own ΑΦΜ and is one contractor. Where the
+registry keyed the venture's MEMBERS instead, the party was corrected from the
+signed preamble (7 contracts + 2 over-attributed ones, `contractor_party` /
+`contractors_keep`).
 
 ## ΔΑΣΕ dataset (`data/processed/dase.sqlite` — SEPARATE from Anti-nero)
 
@@ -667,8 +687,8 @@ whole, the contract keeps its own stated value and the co-op's
 `share_eur` rides beside it): the registry records no shares and the one
 live case (23SYMV013747204, «συμφώνησαν από κοινού» over one pooled
 quantity) states none, so full attribution to both would count €5.383,95
-twice — DATA_DECISIONS 2026-08-18, pinned by Σ co-op € == basis. The
-Anti-nero max-exposure convention is unchanged. Co-ops are
+twice — DATA_DECISIONS 2026-08-18, pinned by Σ co-op € == basis. Anti-nero
+follows the SAME rule since 2026-08-20 (DATA_DECISIONS). Co-ops are
 PRESENTED under their curated bilingual display names
 (`dase_display_names.json` → `dase_names_loader` →
 `dase_display_names` table → Atlas overlays; registry spellings stay
@@ -980,9 +1000,13 @@ side, mismatches highlighted, never merged).
 ## Atlas (second web UI: `atlas/` SvelteKit + `atlas_api/` Flask JSON API)
 
 A separate, publication-grade site over the same two DBs — **`webui/` is
-frozen**: `atlas_api` imports `webui.queries` / `webui.dase_queries` /
-`webui.filters` read-only and never edits them; ALL new SQL goes in
-`atlas_api/queries_extra.py`. The `/pdf/<kind>/<adam>` caching proxy is a
+frozen for FEATURES**: `atlas_api` imports `webui.queries` /
+`webui.dase_queries` / `webui.filters` and ALL new SQL goes in
+`atlas_api/queries_extra.py`. The one thing that DOES go into the frozen
+modules is a shared correctness rule that both sites must obey — the
+even split of a jointly signed contract (2026-08-20) lives there for exactly
+that reason: implemented twice it drifts, and applied twice it double-counts.
+When you touch them, run the whole suite: the Atlas pins ride on that code. The `/pdf/<kind>/<adam>` caching proxy is a
 verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
 `pdf_wait.html`) sharing the same `data/processed/pdf_cache/`.
 
@@ -1346,7 +1370,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 417 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 49 frontend units)
+## Tests (`tests/`, 496 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 105 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

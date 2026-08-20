@@ -443,6 +443,14 @@ def init_db(path: Path) -> sqlite3.Connection:
         # English display label for the work-type vocabulary: the contract
         # card is an English page and cannot mix the two (user 2026-08-19)
         ("category_labels", "label_en", "TEXT"),
+        # what the ΓΕΜΗ register says about the company TODAY, verbatim
+        # («Ενεργή» / «Λύση - Εκκαθάριση» / «Διαγραφή»). A joint venture is
+        # wound up once its job ends, and a page that names one as the
+        # contractor has to say so (user, 2026-08-20). No date: the API's
+        # `dateGemiRegistered` is the REGISTRATION date (one active company
+        # reads 1992, before its own start date), not the status date — the
+        # register's own status-history table has those.
+        ("contractor_locations", "gemi_status", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
