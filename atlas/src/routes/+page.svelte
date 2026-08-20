@@ -405,7 +405,7 @@
 		)} contractor ↔ work-region links across {grInt(
 			Object.keys(net.contractors).length
 		)} contractors — {maxReach.name} alone works in {maxReach.n} regional units."
-		caveat="Edge € even-split across a contract's partners and regions — the layer sums to the programme total."
+		caveat="Edge € even-split across a contract's partners and regions — the layer sums to the programme total. At rest each column lists its biggest rows; selecting a contractor or a region reshuffles the other column to exactly its counterparts, so every link is reachable."
 		anchor="bipartite"
 		methodology="even-split"
 	>

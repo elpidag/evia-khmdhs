@@ -2165,6 +2165,7 @@ def network_payload(kh: sqlite3.Connection) -> dict:
 
     homes = {r["vat_number"]: r["region_pe"] for r in kh.execute(
         "SELECT vat_number, region_pe FROM contractor_locations")}
+    display = antinero_display_names(kh)
     authorities = {r["name"]: {"pe": r["region_pe"], "kind": r["kind"],
                                "lat": r["lat"], "lon": r["lon"]}
                    for r in kh.execute(
@@ -2177,7 +2178,9 @@ def network_payload(kh: sqlite3.Connection) -> dict:
         "flows": q.region_flows(kh),
         "origins": q.project_region_origins(kh),
         "pairs": rnd(pairs),
-        "contractors": {vat: {"name": names[vat],
+        # curated display names on every surface (DATA_DECISIONS 2026-08-20)
+        "contractors": {vat: {"name": (display.get(vat) or {}).get("el")
+                              or names[vat],
                               "home_pe": homes.get(vat),
                               "eur": round(totals[vat], 2)}
                         for vat in names},
