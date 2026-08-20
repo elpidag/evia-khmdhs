@@ -657,17 +657,20 @@ def test_per_contractor_totals_sum_to_the_programme_basis(client):
         622_534_181.72, abs=0.01)
 
 
-def test_one_in_scope_contract_is_signed_by_two_parties(kh):
+def test_two_in_scope_contracts_are_signed_by_two_parties(kh):
     """Every other joint venture signed as a κοινοπραξία with an ΑΦΜ of its
-    own; 24SYMV016018183 is an «Ένωση Οικονομικών Φορέων» that has none, so
-    its two members ARE the parties and its € is halved between them."""
+    own. These two have none, so their members ARE the parties and the € is
+    halved between them: 24SYMV016018183 is an «Ένωση Οικονομικών Φορέων»,
+    and 22SYMV010795606 is a κοινοπραξία whose party clause enumerates two
+    firms while stating no ΑΦΜ for itself — the registry keyed it under the
+    first of them (DATA_DECISIONS 2026-08-20, second entry)."""
     multi = [r["reference_number"] for r in kh.execute("""
         SELECT ct.reference_number FROM contracts ct
         JOIN contract_scope s ON s.reference_number = ct.reference_number
         JOIN contractors co ON co.reference_number = ct.reference_number
         WHERE s.in_scope = 1
         GROUP BY ct.reference_number HAVING COUNT(*) > 1""")]
-    assert multi == ["24SYMV016018183"]
+    assert multi == ["22SYMV010795606", "24SYMV016018183"]
 
 
 def test_curated_contract_parties_are_the_ones_the_pdfs_name(kh):
@@ -686,6 +689,11 @@ def test_curated_contract_parties_are_the_ones_the_pdfs_name(kh):
         "26SYMV018739467": "998255970",   # signed by ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ alone
         "26SYMV018725481": "998255970",
     }
+    # and the one correction that names TWO parties, because the κοινοπραξία
+    # that signed states no ΑΦΜ of its own
+    assert [r["vat_number"] for r in kh.execute(
+        "SELECT vat_number FROM contractors WHERE reference_number = ? "
+        "ORDER BY seq", ("22SYMV010795606",))] == ["998255970", "998434068"]
     for ref, vat in expected.items():
         rows = [r["vat_number"] for r in kh.execute(
             "SELECT vat_number FROM contractors WHERE reference_number = ?",
@@ -706,10 +714,16 @@ def test_joint_contract_shares_are_whole_cents(kh):
     shares = qx.antinero_contractor_shares(con)
     con.close()
     flat = [s for rows in shares.values() for s in rows]
-    assert {s["ref"] for s in flat} == {"24SYMV016018183"}
-    assert sum(s["share_eur"] for s in flat) == pytest.approx(
-        flat[0]["full_eur"], abs=0.005)
-    assert sorted(s["share_eur"] for s in flat) == [91_652.01, 91_652.02]
+    assert {s["ref"] for s in flat} == {"22SYMV010795606", "24SYMV016018183"}
+    for ref in ("22SYMV010795606", "24SYMV016018183"):
+        rows = [s for s in flat if s["ref"] == ref]
+        assert sum(s["share_eur"] for s in rows) == pytest.approx(
+            rows[0]["full_eur"], abs=0.005), ref
+    assert sorted(s["share_eur"] for s in flat if
+                  s["ref"] == "24SYMV016018183") == [91_652.01, 91_652.02]
+    # an even €836.613,02 halves exactly; the odd one above cannot
+    assert sorted(s["share_eur"] for s in flat if
+                  s["ref"] == "22SYMV010795606") == [418_306.51, 418_306.51]
 
 
 def test_wound_up_joint_ventures_are_flagged_not_hidden(client, kh):
@@ -741,11 +755,13 @@ def test_member_firm_view_is_the_same_money(client, kh):
     members are on record is replaced by them, its € split evenly."""
     o = client.get("/api/antinero/overview").get_json()
     facts = o["consortiums"]
-    assert (facts["n"], facts["n_documented"], facts["n_firms"]) == (54, 32, 48)
-    # the ventures hold 30,4% of the programme; the undocumented ones sit
+    # 57 since the party-clause screen of 2026-08-20 found three ventures the
+    # ΓΕΜΗ sweep could not see and documented two more from their own contracts
+    assert (facts["n"], facts["n_documented"], facts["n_firms"]) == (57, 36, 52)
+    # the ventures hold 31,7% of the programme; the undocumented ones sit
     # identically in both views and the page says so
-    assert facts["eur"] == pytest.approx(189_408_121.08, abs=0.01)
-    assert facts["eur_unsplit"] == pytest.approx(72_815_015.36, abs=0.01)
+    assert facts["eur"] == pytest.approx(197_612_041.99, abs=0.01)
+    assert facts["eur_unsplit"] == pytest.approx(75_263_310.33, abs=0.01)
 
     con = sqlite3.connect(DEFAULT_DB)
     con.row_factory = sqlite3.Row
@@ -757,7 +773,7 @@ def test_member_firm_view_is_the_same_money(client, kh):
     assert total == pytest.approx(622_534_181.72, abs=0.01)
     assert total == pytest.approx(sum(r["total_eur"] or 0 for r in parties), abs=0.01)
     # substituting members for ventures leaves FEWER names, not more
-    assert len(firms) == 144 and len(parties) == 151
+    assert len(firms) == 141 and len(parties) == 151
     # the point of the view: Τ&Τ ΚΑΤΑΣΚΕΥΕΣ is 8th as a contractor and 3rd as
     # a firm, because half of a €22,9M κοινοπραξία is its own
     tt = next(r for r in firms if r["vat_number"] == "998807500")
@@ -775,13 +791,13 @@ def test_consortium_members_are_firms_not_ventures(kh):
     ventures = {r[0] for r in kh.execute("SELECT vat_number FROM consortiums")}
     members = {r[0] for r in kh.execute("SELECT member_vat FROM consortium_members")}
     assert not (ventures & members)
-    assert len(members) == 48
+    assert len(members) == 52
     # every member carries the document it was read from, or the entry says
     # plainly that it was identified by name against the registry
-    assert kh.execute("SELECT COUNT(*) FROM consortium_members").fetchone()[0] == 65
+    assert kh.execute("SELECT COUNT(*) FROM consortium_members").fetchone()[0] == 73
     undocumented = kh.execute(
         "SELECT COUNT(*) FROM consortiums WHERE members_documented = 0").fetchone()[0]
-    assert undocumented == 22
+    assert undocumented == 21
 
 
 def test_connections_pins(client):
@@ -792,14 +808,17 @@ def test_connections_pins(client):
     # its members) and two were signed by one company alone. Ten individuals
     # who only ever appeared as members left the contractor population, and
     # with them their edges — 500 → 475 authority pairs, 401 → 377 region
-    # pairs, 277 → 258 flows, 181 → 174 signer pairs
-    assert len(n["contractor_authority"]) == 475
-    assert len(n["contractor_pe"]) == 377
-    assert len(n["flows"]) == 258
-    assert len(n["contractor_signer"]) == 174
+    # pairs, 277 → 258 flows, 181 → 174 signer pairs. Each rose by one the
+    # same day, when ΓΕΩΓΝΩΜΩΝ Ο.Ε. was recorded as the second party of
+    # 22SYMV010795606: one firm, one more contract, one more of each edge
+    assert len(n["contractor_authority"]) == 476
+    assert len(n["contractor_pe"]) == 378
+    assert len(n["flows"]) == 259
+    assert len(n["contractor_signer"]) == 175
     # and with them the visible partnerships: a κοινοπραξία is ONE registry
-    # party, so only the ένωση that signed without an ΑΦΜ of its own is left
-    assert len(n["pairs"]) == 1          # was 12 before the party corrections
+    # party, so the only pairs left are the two contracts whose venture had no
+    # ΑΦΜ of its own to sign with
+    assert len(n["pairs"]) == 2          # was 12 before the party corrections
     assert len(n["contractors"]) == 151
     assert len(n["authorities"]) == 105
     # even-split conservation: the Π.Ε. layer covers every in-scope contract

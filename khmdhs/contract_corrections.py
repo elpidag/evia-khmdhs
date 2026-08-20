@@ -144,8 +144,9 @@ def _apply_contractors_vat(conn: sqlite3.Connection, ref: str,
 
 
 def _apply_contractor_party(conn: sqlite3.Connection, ref: str,
-                            party: dict | None) -> None:
-    """Replace a contract's contractor rows with the ONE party that signed it.
+                            party: dict | list | None) -> None:
+    """Replace a contract's contractor rows with the party or parties that
+    signed it.
 
     ΥΠΕΝ keys the winner into the registry's `contractingMembersDataList`,
     and for a joint venture that field is filled two different ways: 60
@@ -157,20 +158,38 @@ def _apply_contractor_party(conn: sqlite3.Connection, ref: str,
     Keying the members made every per-contractor view credit each of them
     with the contract's whole value.
 
-    `party` is {"vat": …, "name": …, "evidence": <verbatim preamble>}; the
-    ΑΦΜ must be the one the PDF prints. Nothing is lost: the registry's own
+    `party` is {"vat": …, "name": …, "evidence": <verbatim preamble>}, or a
+    LIST of them where the signed text names more than one contracting party.
+    A list is not the venture case reversed: it is the venture that never got
+    an ΑΦΜ. 22SYMV010795606 is signed by «κοινοπραξίας «ΚΞΙΑ ΑΝΑΠΤΥΞΙΑΚΗ
+    ΠΡΑΣΙΝΟΥ ΓΕΩΓΝΩΜΩΝ ΟΕ», αποτελούμενη από: α) … ΑΦΜ 998255970 και β) …
+    ΑΦΜ 998434068», and the venture states no ΑΦΜ of its own, so the registry
+    keyed the contract under member α alone and credited it the whole
+    €836.613,02. Two parties on the row make the shared even-split rule
+    (`queries.apply_joint_split`) give each its half, as it already does for
+    the ένωση 24SYMV016018183 (DATA_DECISIONS 2026-08-20).
+
+    The ΑΦΜ must be the one the PDF prints. Nothing is lost: the registry's own
     list stays verbatim in contracts.raw_json, and consortium membership is
     curated as its own layer.
 
-    Idempotent — re-running rewrites the same single row.
+    Idempotent — re-running rewrites the same rows.
     """
     if not party:
         return
-    vat = str(party.get("vat", "")).strip()
-    name = (party.get("name") or "").strip()
-    if not re.fullmatch(r"\d{9}", vat) or not name:
-        logging.warning("contractor_party for %s: %r / %r is not a usable party",
-                        ref, party.get("vat"), party.get("name"))
+    parties = party if isinstance(party, list) else [party]
+    clean: list[tuple[str, str]] = []
+    for one in parties:
+        vat = str((one or {}).get("vat", "")).strip()
+        name = ((one or {}).get("name") or "").strip()
+        if not re.fullmatch(r"\d{9}", vat) or not name:
+            logging.warning("contractor_party for %s: %r / %r is not a usable "
+                            "party", ref, (one or {}).get("vat"),
+                            (one or {}).get("name"))
+            return
+        clean.append((vat, name))
+    if len({v for v, _ in clean}) != len(clean):
+        logging.warning("contractor_party for %s: the same ΑΦΜ twice", ref)
         return
     rows = conn.execute(
         "SELECT seq, vat_number, country, greek_vat FROM contractors "
@@ -181,9 +200,10 @@ def _apply_contractor_party(conn: sqlite3.Connection, ref: str,
         return
     country, greek_vat = rows[0][2], rows[0][3]
     conn.execute("DELETE FROM contractors WHERE reference_number = ?", (ref,))
-    conn.execute("INSERT INTO contractors (reference_number, seq, vat_number, "
-                 "name, country, greek_vat) VALUES (?, 0, ?, ?, ?, ?)",
-                 (ref, vat, name, country, greek_vat))
+    for seq, (vat, name) in enumerate(clean):
+        conn.execute("INSERT INTO contractors (reference_number, seq, vat_number, "
+                     "name, country, greek_vat) VALUES (?, ?, ?, ?, ?, ?)",
+                     (ref, seq, vat, name, country, greek_vat))
 
 
 def _apply_contractors_keep(conn: sqlite3.Connection, ref: str,

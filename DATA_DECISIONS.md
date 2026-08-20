@@ -5591,3 +5591,97 @@ tables, `khmdhs/refresh.py` (chain + the missing imports),
 ranking's «As contracted / By member firm» toggle (`?rank=firm`),
 `/methodology#member-firms`, and `tests/test_consortiums.py` (8 units) +
 2 real-DB pins.*
+
+## 2026-08-20 · Ask the contracts, not the registers, what a joint venture is
+
+The membership layer of this morning swept the ventures by asking ΓΕΜΗ what
+each contractor IS (`gemi_legal_type = 'Κοινοπραξία'`) and by reading the
+registry name. A register can be silent. **ΑΦΜ 996514860 «ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ
+– Μ.&Κ. ΤΕΧΝΙΚΑ ΕΡΓΑ Α.Ε.» is in no ΓΕΜΗ at all** and its registry name
+carries no marker, so a €4.447.572,92 venture was invisible to the sweep — its
+own contract 25SYMV016670155 says «2. **η κοινοπραξία** με την επωνυμία … με
+ΑΦΜ 996514860», and VIES registers it as «ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ Μ
+ΚΑΙ Κ ΤΕΧΝΙΚΑ».
+
+So the population is now decided by the documents. **`scripts/screen_joint_ventures.py`**
+reads every in-scope contract CHAIN, finds each contractor's own ΑΦΜ in the
+signed text and looks back one 500-char party-clause window for a venture word;
+the anchor is the ΑΦΜ because «σε περίπτωση κοινοπραξίας…» is ΕΣΥ boilerplate in
+every contract. A second pass (`--members`) re-reads the clause for
+«αποτελούμενη από …». It reports three signals — document / ΓΕΜΗ / name — and a
+**guard test fails on any venture the documents name that the curation lacks**.
+151 contractors, 58 answer as ventures, 1,4 s, no blind spots (every in-scope
+chain has cached text). Two mechanics had to be right: the fold is
+length-preserving (a 1:1 char table applied BEFORE `.upper()`, since «ΐ».upper()
+is three characters) so offsets found in folded text cut excerpts from the
+ORIGINAL, and the needles match loosely — phase-II PDFs write «αποτελουύμενης»
+and «Κοινοπραξιίας».
+
+**The screen found four ventures the curation did not carry, and re-reading the
+54 curated ones found no missed member on any of them.** Every extra ΑΦΜ in
+those clauses is a signatory or an ΑΔΑΜ, both already excluded by rule. The
+verdicts, all the user's:
+
+* **996514860** ΤΣΙΑΝΑΒΑΣ – Μ.&Κ. (€4.447.572,92) — recorded, **members
+  undocumented**: 996514860 is the only ΑΦΜ in its contract, no award act was
+  declared and the 76 Diavgeia acts citing it are schedule/supervision
+  approvals. Both firms are identifiable (ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ 044705095 is the
+  first invitee of its own πρόσκληση 25PROC016306915; Μ. & Κ. ΤΕΧΝΙΚΑ ΕΡΓΑ Α.Ε.
+  099334013 is named with its ΑΦΜ in two OTHER προσκλήσεις) — but no document
+  states them to be the members, and the signatory Γιαννούλας Βάιος is neither.
+* **996550190** ΚΑΡΝΟΜΟΥΡΑΚΗΣ Α.Ε. – ΑΛΚΗ Ι.Κ.Ε./ΥΠΟΕΡΓΟ Β (€1.020.119,23) and
+  **996870356** ΜΠΟΜΠΟΤΗ – ΞΑΝΘΟΠΟΥΛΟΣ (€2.736.228,76) — recorded **with
+  members**, both enumerated in their own contracts. The second is stated twice
+  over, in the original σύμβαση 22SYMV010488925 and in the amendment that
+  superseded it, and both its ΑΦΜ (044739770, 102529416) already sat in the
+  curated file as members of other ventures, read from award acts.
+* **996553688** ΚΞ ΚΑΡΝΟΜΟΥΡΑΚΗΣ – ΑΛΚΗ/ΥΠΟΕΡΓΟ Δ and **996831933** ΠΑΠΠΑΣ –
+  ΠΑΝΤΟΥΛΗΣ were recorded this morning as members-undocumented; their own
+  contracts enumerate the members, so both are now documented. The morning's
+  curation read award acts and προσκλήσεις; the party clause is a source it did
+  not read.
+* **996604620** ΛΑΜΠΙΡΗΣ – ΔΗΜΟΠΟΥΛΟΣ and **997227555** ΛΕΦΤΣΗΣ – ΑΦΟΙ
+  ΔΙΑΜΑΝΤΟΓΛΟΥ stay undocumented: their clauses name only «τον διαχειριστή και
+  εκπρόσωπο της κοινοπραξίας» with his ΑΦΜ, and a representative is not a
+  member — the same rule that was already encoded this morning.
+
+**The fifth case is a venture that never got an ΑΦΜ.** 22SYMV010795606 is signed
+by «**κοινοπραξίας** «ΚΞΙΑ ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΓΕΩΓΝΩΜΩΝ ΟΕ», **αποτελούμενη
+από:** α) την ετερόρρυθμη εταιρεία «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ» (ΑΦΜ
+998255970) **και** β) την ομόρρυθμη εταιρεία «ΓΕΩΓΝΩΜΩΝ ΟΕ» (ΑΦΜ 998434068) …
+δυνάμει του από 28.12.2021 ιδιωτικού συμφωνητικού σύστασης κοινοπραξίας», and
+the venture states no ΑΦΜ and holds no ΓΕΜΗ number. The registry therefore keyed
+the contract under member α — whose ΑΦΜ is its own (ΓΕΜΗ 124272601000 registers
+998255970 as «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ», legal form ΕΕ) — and credited
+that firm the whole €836.613,02. Both payment orders on the contract pay «ΚΞΙΑ
+ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ - ΓΕΩΓΝΩΜΩΝ Ο.Ε.», i.e. the pair.
+
+It cannot be curated as a venture — the layer keys on the venture's ΑΦΜ, and
+here the only ΑΦΜ belongs to a member, so recording it would make the loader
+refuse (a venture listing itself) and would mark the firm's three solo contracts
+as a venture's. **User decision: record both signatories on that one contract**,
+exactly as the ένωση 24SYMV016018183 is handled, and let the shared even split
+give each **€418.306,51**. `contractor_party` now accepts a LIST for this.
+The firm's other three in-scope contracts (23SYMV013039380, 26SYMV018725481,
+26SYMV018739467, €3,02M) name «η ετερόρρυθμη εταιρεία … (στο εξής ο
+«Ανάδοχος»)» and no venture at all — they are correctly its own and untouched.
+The screen knows about jointly signed contracts, so it asks for no venture entity
+there; the entry for 22SYMV010795606 also keeps its earlier PROJECT-BUDGET value
+correction. One entry, two corrections: `reason` is stamped into
+`correction_note` and printed on the page as the stated-value correction, so it
+stays the value text alone and the party trail goes into an audit-only
+`party_reason` key — the same split as `reason` vs `note`.
+
+The basis does not move — **€622.534.181,72** — and neither does the contract
+count. The layer is now **57 ventures, 36 with curated members (73 links, 52
+firms), 21 undocumented**; the member view's names go 144 → 141, the undocumented
+ventures' € is €75.263.310,33 and the ventures hold 31,7% of the programme. Every
+number ships from `/api/antinero/overview`, so the site's copy follows.
+
+*Affects `scripts/screen_joint_ventures.py` (new),
+`khmdhs/data/consortium_members.json` (54 → 57 entries; 4 verdicts),
+`khmdhs/data/contract_corrections.json` (22SYMV010795606 gains a two-party
+`contractor_party`), `khmdhs/contract_corrections.py` (`_apply_contractor_party`
+takes a list), `atlas_api/queries_extra.contract_party_correction` (quotes one
+sentence for several parties), `tests/test_consortiums.py` (+1 real-DB guard) and
+6 real-DB pins in `tests/test_atlas_real_db.py`.*

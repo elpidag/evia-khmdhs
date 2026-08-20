@@ -743,13 +743,26 @@
   "name": "Κ/ΞΙΑ ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ– ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ",
   "legal_type": "Κοινοπραξία",
   "gemi": "171279401000",
-  "basis": "gemi+name",
+  "basis": "gemi+contract",
   "contracts": [
    "23SYMV012992069"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "041813088",
+    "name": "ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ (ατομική επιχείρηση)",
+    "source": "23SYMV012992069",
+    "excerpt": "ίρηση με την επωνυμιία ΠΑΠΠΑΣ Ευαά γγελος του Γεωργιίου, Δασολοό γο -ΕΔΕ, κατοιάκου Καματερουά Αττικηά ς επιά της οδουά Κωστηά Παλαμαά 7, Τ.Κ. 134 51 με Α.Φ.Μ. 041813088, ΔΟΥ Αγιί ων Αναργυ"
+   },
+   {
+    "vat": "050232986",
+    "name": "ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ (ατομική επιχείρηση)",
+    "source": "23SYMV012992069",
+    "excerpt": "ν ατομικηή επιχειήρηση με την επωνυμιήα ΠΑΝΤΟΥΛΗΣ Φωώτιος του Ευαγγεέλου, Δασολοέγο-ΕΔΕ, κατοιάκου Δραάμας, επιά του 3ου χλμ Δραάμας και Καλλιφυύ του με Α.Φ.Μ. 050232986, ΔΟΥ Δραά μας, νομι"
+   }
+  ],
+  "note": "Its own contract 23SYMV012992069 names both members with their ΑΦΜ, as ατομικές επιχειρήσεις: «…με ΑΦΜ 996831933 και αριθμό Γ.Ε.ΜΗ. 171279401000, αποτελούμενης από α) την ατομική επιχείρηση … ΠΑΠΠΑΣ Ευάγγελος του Γεωργίου … Α.Φ.Μ. 041813088, β) την ατομική επιχείρηση … ΠΑΝΤΟΥΛΗΣ Φώτιος του Ευαγγέλου … Α.Φ.Μ. 050232986», and the same sentence adds that the constituting agreement «συνήφθη μεταξύ των οικονομικών φορέων» of those two names. Here the two members are also the two signatories, which is why the enumeration — not the signature — is the evidence. Recorded as undocumented on 2026-08-20 and corrected by the party-clause screen of the same day. ΠΑΝΤΟΥΛΗΣ holds two in-scope contracts in his own name. The contract's text layer writes each accent as a separate letter («αποτελουύμενης»), so the excerpt is verbatim from it, not tidied.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "041813088",
@@ -809,13 +822,26 @@
   "name": "ΚΞ Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ΥΠΟΕΡΓΟ Δ",
   "legal_type": "Κοινοπραξία",
   "gemi": "171364401000",
-  "basis": "gemi+name",
+  "basis": "gemi+contract",
   "contracts": [
    "23SYMV012992145"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "800363439",
+    "name": "Γ.Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ",
+    "source": "23SYMV012992145",
+    "excerpt": "ΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ», που εδρευέει στο Μαρουέ σι Αττικηέ ς, επιέ της οδουέ Ανδρεέ α Παπανδρεέ ου 19, ΤΚ 15124, ΑΦΜ 800363439 και εκπροσωπειάται ν"
+   },
+   {
+    "vat": "800844340",
+    "name": "ΑΛΚΗ Ι.Κ.Ε.",
+    "source": "23SYMV012992145",
+    "excerpt": "αποή (ii) την ιδιωτικηή κεφαλαιουχικηή εταιρειήα με την επωνυμιήα «ΑΛΚΗ Ι.Κ.Ε.», με εά δρα την Καβαά λα, επιά της οδουά Μεγαάλου Αλεξαάνδρου 27, ΤΚ 65302, ΑΦΜ 800844340 και εκπροσωπειήται ν"
+   }
+  ],
+  "note": "Its own contract 23SYMV012992145 names both members with their ΑΦΜ — «…με ΑΦΜ 996553688, αποτελούμενης από (i) … ΑΦΜ 800363439 … και από (ii) «ΑΛΚΗ Ι.Κ.Ε.» … ΑΦΜ 800844340». Recorded as undocumented on 2026-08-20 because the curation read the award acts and the προσκλήσεις; the party-clause screen of the same day read the contracts themselves and found it. Same pair as ΥΠΟΕΡΓΟ Β (996550190). The third ΑΦΜ, 034725904, is Καρνομουράκης Γεώργιος signing in person — not a member. The contract's text layer writes each accent as a separate letter («αποτελουύμενης»), so the excerpt is verbatim from it, not tidied.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "800363439",
@@ -1272,5 +1298,65 @@
    }
   ],
   "note": "Award 25AWRD016690955 (Τμήμα Α) enumerates both members with their ΑΦΜ and awards exactly this contract value €1.298.214,40. The contract itself names only the venture (its whole 62 kB contain just two ΑΦΜ: the Ministry and 802850526) but cites that award by ΑΔΑΜ in recital v, is seated at Μπόνου 7 Βόλος — Κ. ΣΠΑΝΟΣ address — and is signed by Δημήτριος Σκαρλατούδης, the other member. ΝΤΑΝΟΣ and ΣΚΑΝΔΑΛΟΣ in the same papers won Τμήμα Β and are not members here."
+ },
+ "996514860": {
+  "name": "ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ – Μ.&Κ. ΤΕΧΝΙΚΑ ΕΡΓΑ Α.Ε.",
+  "legal_type": "Κοινοπραξία",
+  "gemi": null,
+  "basis": "contract",
+  "contracts": [
+   "25SYMV016670155"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). This venture was missed by the ΓΕΜΗ sweep: it is in no ΓΕΜΗ register and its registry name carries no marker — only its own contract says what it is, «2. η κοινοπραξία με την επωνυμία «ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ – Μ.&Κ. ΤΕΧΝΙΚΑ ΕΡΓΑ Α.Ε.» … με ΑΦΜ 996514860», corroborated by the VIES registered name «ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ Μ ΚΑΙ Κ ΤΕΧΝΙΚΑ». No document states its members: 996514860 is the only ΑΦΜ in the contract, the registry declared no award act, and the 76 Diavgeia acts citing the contract are schedule and supervision approvals. Both firms in the title are identifiable — ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΙΩΑΝΝΗ (ΑΦΜ 044705095) is the first of the five invitees of this contract's own πρόσκληση 25PROC016306915, and Μ. & Κ. ΤΕΧΝΙΚΑ ΕΡΓΑ Α.Ε. (ΑΦΜ 099334013) is named with its ΑΦΜ in two OTHER προσκλήσεις (24PROC014159061, 24PROC014624686) — but neither document says they are the members of this venture, and the signatory Γιαννούλας Βάιος is neither of them.",
+  "members_documented": false
+ },
+ "996550190": {
+  "name": "Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ ΥΠΟΕΡΓΟ Β",
+  "legal_type": "Κοινοπραξία",
+  "gemi": null,
+  "basis": "contract",
+  "contracts": [
+   "23SYMV012992148"
+  ],
+  "members": [
+   {
+    "vat": "800363439",
+    "name": "Γ.Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ",
+    "source": "23SYMV012992148",
+    "excerpt": "ΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ», που εδρευύει στο Μαρουύ σι Αττικηέ ς, επιέ της οδουέ Ανδρεέα Παπανδρεέου 19, ΤΚ 15124, ΑΦΜ 800363439 και εκπροσωπειίται ν"
+   },
+   {
+    "vat": "800844340",
+    "name": "ΑΛΚΗ Ι.Κ.Ε.",
+    "source": "23SYMV012992148",
+    "excerpt": "ποή (ii) την ιδιωτικηή κεφαλαιουχικηά εταιρειάα με την επωνυμιάα «ΑΛΚΗ Ι.Κ.Ε.», με εά δρα την Καβαά λα, επιά της οδουύ Μεγαά λου Αλεξαά νδρου 27, ΤΚ 65302, ΑΦΜ 800844340 και εκπροσωπειίται ν"
+   }
+  ],
+  "note": "Both members are named with their ΑΦΜ in the party clause of the venture's OWN contract: «Κοινοπραξίας με την επωνυμία «…/ ΥΠΟΕΡΓΟ Β» … με ΑΦΜ 996550190, αποτελούμενης από (i) … ΑΦΜ 800363439 … και από (ii) «ΑΛΚΗ Ι.Κ.Ε.» … ΑΦΜ 800844340». Found by the party-clause screen of 2026-08-20 (scripts/screen_joint_ventures.py): this venture is in no ΓΕΜΗ register, so the earlier sweep never saw it. The third ΑΦΜ in the clause, 045351317, is Καφετζής Δημήτριος signing FOR ΑΛΚΗ Ι.Κ.Ε. — a representative is not a member. Both firms also hold three in-scope contracts each in their own name. The contract's text layer writes each accent as a separate letter («αποτελουύμενης»), so the excerpt is verbatim from it, not tidied."
+ },
+ "996870356": {
+  "name": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": null,
+  "basis": "contract",
+  "contracts": [
+   "22SYMV010806398"
+  ],
+  "members": [
+   {
+    "vat": "044739770",
+    "name": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "22SYMV010806398",
+    "excerpt": "ΟΣ ΒΑΣΙΛΕΙΟΣ» αποτελούμενη από α) την ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ- ΒΑΣΙΛΙΚΗ του ΚΩΝΣΤΑΝΤΙΝΟΥ, με Α.Δ.Τ. ΑΙ 390532, έδρα την οδό Μεγ. Αλεξάνδρου 27, Καβάλα και με ΑΦΜ 044739770, Δ.Ο.Υ. Καβάλας τηλ"
+   },
+   {
+    "vat": "102529416",
+    "name": "ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΙΩΣΗΦ",
+    "source": "22SYMV010806398",
+    "excerpt": "044739770, Δ.Ο.Υ. Καβάλας τηλέφωνο 6942200063, β) τον ΞΑΝΘΟΠΟΥΛΟ ΒΑΣΙΛΕΙΟ του ΙΩΣΗΦ, με Α.Δ.Τ. ΑΒ 907382, έδρα την οδό Μεγ. Αλεξάνδρου 27 Καβάλα και με Α.Φ.Μ. 102529416 ΔΟΥ Καβάλας τηλέφωνο"
+   }
+  ],
+  "note": "Stated TWICE, independently: the original σύμβαση 22SYMV010488925 and the amendment 22SYMV010806398 that superseded it both carry the clause «κοινοπραξίας «ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ» με ΑΦΜ 996870356, την οποία συνέστησαν στις 07.04.2022 τα μέλη της ένωσης … αποτελούμενη από α) … ΑΦΜ 044739770, β) … Α.Φ.Μ. 102529416». Found by the party-clause screen of 2026-08-20; the venture is in no ΓΕΜΗ register. Both ΑΦΜ arrive here from a second, independent direction: 044739770 is already a curated member of 996550834 and 102529416 of 996551148, both read from award acts."
  }
 }

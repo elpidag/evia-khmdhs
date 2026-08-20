@@ -86,3 +86,4 @@ data/processed/gemi_names.json
 # originals live at the repo root)
 atlas/static/contract_details_curator.html
 atlas/static/municipality_curator.html
+data/processed/contractor_names_review.json

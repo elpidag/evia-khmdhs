@@ -516,8 +516,13 @@ def contract_party_correction(ref: str) -> dict | None:
                 continue
             party = fix.get("contractor_party")
             if party:
+                # a list = several signing parties (a venture with no ΑΦΜ of
+                # its own); they are named in one sentence, so quote it once
+                ones = party if isinstance(party, list) else [party]
+                ev = [p.get("evidence") for p in ones if p.get("evidence")]
                 _PARTY_FIX_CACHE[k] = {"kind": "party",
-                                       "evidence": party.get("evidence"),
+                                       "evidence": " ".join(dict.fromkeys(ev))
+                                       or None,
                                        "note": fix.get("note")}
             elif fix.get("contractors_keep"):
                 _PARTY_FIX_CACHE[k] = {"kind": "keep",

@@ -12,6 +12,8 @@ import json
 import pytest
 
 from khmdhs import consortium_loader as cl
+from khmdhs.config import DEFAULT_DB
+from scripts import screen_joint_ventures
 from tests.conftest import add_contract, set_scope
 
 
@@ -99,3 +101,18 @@ def test_warns_on_a_venture_of_one(db, caplog):
     with caplog.at_level("WARNING"):
         cl.validate(data, db)
     assert "single member" in caplog.text
+
+
+# --- real-DB guard -----------------------------------------------------------
+# The 2026-08-20 curation asked ΓΕΜΗ and the registry name what each contractor
+# IS. Both were silent about 996514860, and a €4,45M venture went unrecorded.
+# The signed contracts are not silent, so the population is guarded against
+# them: whatever the party clauses call a joint venture must be curated.
+
+@pytest.mark.skipif(not DEFAULT_DB.exists(), reason="committed database not present")
+def test_every_joint_venture_the_documents_name_is_curated():
+    missing = screen_joint_ventures.uncurated(DEFAULT_DB)
+    assert not missing, (
+        "in-scope contractors the signed contracts call a joint venture but "
+        "consortium_members.json does not carry: " +
+        ", ".join(f"{v} ({e['name']})" for v, e in sorted(missing.items())))

@@ -68,7 +68,21 @@
   "reason": "PROJECT-BUDGET-as-contract-value (DATA_DECISIONS 2026-08-18, second sweep): the registry keyed the «Προϋπολογισμός Δημοπράτησης» — the tender ceiling quoted a few lines below the price — as the contract value (1.387.440,64 € gross) and derived the net by dividing it by 1,24. The signed contract states the agreed fee: «7.1. Η συνολική αμοιβή του Αναδόχου για την εκτέλεση του Έργου (Οικονομικό Αντικείμενο του Έργου), που αποτελεί αντικείμενο της παρούσας Σύμβασης συμφωνείται έως ποσού οκτακοσίων τριάντα έξι χιλιάδων εξακοσίων δεκατριών ευρώ και δ…» = 836.613,02 € πλέον ΦΠΑ, 1.037.400,14 € συνολικά.",
   "objects": {
    "0": 836613.02
-  }
+  },
+  "contractor_party": [
+   {
+    "vat": "998255970",
+    "name": "ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ",
+    "evidence": "και β) κοινοπραξίας «ΚΞΙΑ ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΓΕΩΓΝΩΜΩΝ ΟΕ», αποτελούμενη από: α) την ετερόρρυθμη εταιρεία «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ» (έδρα Καλλιθέα Αττικής, Ελευθερίου Βενιζέλου 176, ΑΦΜ 998255970) και β) την ομόρρυθμη εταιρεία «ΓΕΩΓΝΩΜΩΝ ΟΕ» (έδρα Πάτρα, Ρήγα Φεραίου 153, ΑΦΜ 998434068), νομίμως εκπροσωπούμενη από τους Γεώργιο Μπαρούση με ΑΦΜ 052119033 και ΑΔΤ ΑΒ070017 και Δημήτριο Μάστορη με ΑΦΜ 037886557 και ΑΔΤ ΑΚ788130, οι οποίοι εκπροσωπούν την εταιρεία από κοινού, είτε μεμονωμένα, δυνάμει του από 28.12.2021 ιδιωτικού συμφωνητικού σύστασης κοινοπραξίας"
+   },
+   {
+    "vat": "998434068",
+    "name": "ΓΕΩΓΝΩΜΩΝ ΟΕ",
+    "evidence": "και β) κοινοπραξίας «ΚΞΙΑ ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΓΕΩΓΝΩΜΩΝ ΟΕ», αποτελούμενη από: α) την ετερόρρυθμη εταιρεία «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ» (έδρα Καλλιθέα Αττικής, Ελευθερίου Βενιζέλου 176, ΑΦΜ 998255970) και β) την ομόρρυθμη εταιρεία «ΓΕΩΓΝΩΜΩΝ ΟΕ» (έδρα Πάτρα, Ρήγα Φεραίου 153, ΑΦΜ 998434068), νομίμως εκπροσωπούμενη από τους Γεώργιο Μπαρούση με ΑΦΜ 052119033 και ΑΔΤ ΑΒ070017 και Δημήτριο Μάστορη με ΑΦΜ 037886557 και ΑΔΤ ΑΚ788130, οι οποίοι εκπροσωπούν την εταιρεία από κοινού, είτε μεμονωμένα, δυνάμει του από 28.12.2021 ιδιωτικού συμφωνητικού σύστασης κοινοπραξίας"
+   }
+  ],
+  "note": "ΚΗΜΔΗΣ records one contractor for this contract, ΑΦΜ 998255970. The signed contract names two: it was awarded to a κοινοπραξία of ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ Ε.Ε. and ΓΕΩΓΝΩΜΩΝ Ο.Ε., and that κοινοπραξία has no ΑΦΜ of its own — the registry used the first company's. Both companies are shown here, and the contract's value is split evenly between them, as on every jointly signed contract.",
+  "party_reason": "The contract is signed by a κοινοπραξία that states NO ΑΦΜ of its own, so the registry keyed it under member α alone (998255970, «ΚΞΙΑ ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΓΕΩΓΝΩΜΩΝ ΟΕ») and credited that firm the whole €836.613,02. Found by the party-clause screen of 2026-08-20 (scripts/screen_joint_ventures.py), user decision the same day. 998255970 is the firm's own ΑΦΜ, not the venture's: ΓΕΜΗ 124272601000 registers it as «ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ», legal form ΕΕ. Its three other in-scope contracts (23SYMV013039380, 26SYMV018725481, 26SYMV018739467) name «η ετερόρρυθμη εταιρεία … (στο εξής ο «Ανάδοχος»)» and no venture at all, so they are correctly its own and stay untouched. ΓΕΩΓΝΩΜΩΝ Ο.Ε. (998434068, ΓΕΜΗ 35248216000, Πάτρα) holds two in-scope contracts in its own name. Both payment orders on this contract pay «ΚΞΙΑ ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ - ΓΕΩΓΝΩΜΩΝ Ο.Ε.», i.e. the pair. Recording both parties lets the shared even-split give each €418.306,51 instead of charging one signatory the pair's whole contract; the basis does not move and the contract count stays whole. Registry list untouched in raw_json."
  },
  "22SYMV011323950": {
   "total_cost_without_vat": 655098.75,
