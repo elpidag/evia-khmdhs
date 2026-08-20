@@ -97,14 +97,38 @@
 	});
 
 	const directEur = $derived(o.procedures.find((p) => p.label.includes('Απευθείας'))?.eur ?? 0);
-	const topRows = $derived(
-		o.top_contractors.map((c) => ({
+	// the ranking has two views of the same money (user, 2026-08-20): the
+	// company that SIGNED, and the firms behind it. A κοινοπραξία signs 54 of
+	// the contracts, so «as contracted» hides whoever is inside it.
+	const RANK_MODES = [
+		{ value: 'party', label: 'As contracted' },
+		{ value: 'firm', label: 'By member firm' }
+	];
+	const rankMode = $derived(
+		o.member_firms ? (page.url.searchParams.get('rank') ?? 'party') : 'party'
+	);
+	const topRows = $derived.by(() => {
+		const rows: {
+			vat_number: string;
+			name: string;
+			n_contracts: number;
+			total_eur: number;
+			via_eur?: number;
+			n_ventures?: number;
+		// degrade to the contracted view when the API predates this layer,
+		// rather than throwing on an undefined list
+		}[] = (rankMode === 'firm' ? o.member_firms : o.top_contractors) ?? o.top_contractors;
+		return rows.map((c) => ({
 			label: c.name,
 			value: c.total_eur,
 			href: `/antinero/contractor/${c.vat_number}`,
-			sublabel: `${c.n_contracts} contracts`
-		}))
-	);
+			sublabel: c.via_eur
+				? `${c.n_contracts} contracts · ${eurShort(c.via_eur)} through ${
+						c.n_ventures
+					} joint venture${(c.n_ventures ?? 0) > 1 ? 's' : ''}`
+				: `${c.n_contracts} contracts`
+		}));
+	});
 	const procRows = $derived(
 		o.procedures.map((p) => ({
 			label: p.label,
@@ -505,14 +529,26 @@
 
 <ChartFrame
 	title="RANKING OF COMPANIES"
-	subtitle="according to sums contracted via the programme — top {topRows.length} of {grInt(
-		o.kpis.n_contractors
-	)} contractors, {eurShort(o.kpis.total_eur)} in total"
-	caveat="Each contract is counted once: a jointly signed one is split evenly between its
-	partners, so these totals add up to the programme total."
+	subtitle={rankMode === 'firm'
+		? `the same money attributed to the firms BEHIND the joint ventures — ${grInt(
+				o.consortiums.n_documented
+			)} of the ${grInt(o.consortiums.n)} ventures have members on record, ${grInt(
+				o.consortiums.n_firms
+			)} firms in all`
+		: `according to sums contracted via the programme — top ${topRows.length} of ${grInt(
+				o.kpis.n_contractors
+			)} contractors, ${eurShort(o.kpis.total_eur)} in total`}
+	caveat={rankMode === 'firm'
+		? `A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
+				o.consortiums.eur_unsplit
+			)} sits identically in both views. Both add up to the programme total.`
+		: 'Each contract is counted once: a jointly signed one is split evenly between its partners, so these totals add up to the programme total.'}
 	anchor="top-contractors"
-	methodology="stated-basis"
+	methodology={rankMode === 'firm' ? 'joint-contracts' : 'stated-basis'}
 >
+	<div class="netbar">
+		<SegmentToggle param="rank" fallback="party" options={RANK_MODES} />
+	</div>
 	<!-- same measure and bar height as the sponsored-works ranking, so the
 	     two datasets' rankings read alike; the bars stay black, this
 	     dataset's colour (user, 2026-08-20) -->

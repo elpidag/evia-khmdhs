@@ -190,7 +190,19 @@ def enumerated_members(conn: sqlite3.Connection, jv: dict) -> dict[str, dict]:
                 k = folded.find(phrase, a, a + 900)
                 if k < 0:
                     continue
-                for m in AFM_RE.finditer(folded[k:k + 1500]):
+                # the enumeration ENDS where the venture's representative is
+                # named — «…εκπροσωπούμενη από τον κοινό εκπρόσωπο της
+                # κοινοπραξίας Αλέξανδρο Αλεξίου … με ΑΦΜ 059102914» is a
+                # person acting for it, not a member firm, and a fixed window
+                # swallowed him (and a second signatory) into the Φιλιππάκης
+                # –Άλσος venture
+                window = folded[k:k + 1500]
+                for stop in ("ΕΚΠΡΟΣΩΠΟΥΜΕΝΗ", "ΚΟΙΝΟ ΕΚΠΡΟΣΩΠΟ", "ΕΚΠΡΟΣΩΠΟΥΜΕΝΟΥ",
+                             "ΠΟΥ ΘΑ ΑΠΟΚΑΛΕΙΤΑΙ", "ΣΤΟ ΕΞΗΣ Ο"):
+                    i = window.find(fold(stop))
+                    if i > 0:
+                        window = window[:i]
+                for m in AFM_RE.finditer(window):
                     vat = re.sub(r"\s", "", m.group(1))
                     if vat in (STATE_VAT, jv["vat"]) or vat in out:
                         continue

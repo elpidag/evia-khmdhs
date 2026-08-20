@@ -1,0 +1,1276 @@
+{
+ "_doc": "Curated membership of the Anti-nero joint ventures: which firms each κοινοπραξία is made of, with the document and the verbatim sentence each member was read from. Proposed by scripts/extract_consortium_members.py, every entry confirmed by the user one at a time (DATA_DECISIONS 2026-08-20). The joint venture stays the CONTRACTOR of its contracts — this layer only says who is behind it.",
+ "996609013": {
+  "name": "\"ΚΟΙΝΟΠΡΑΞΙΑ Τ&Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε.-ΜΕΣΟΓΕΙΟΣ Α.Ε.(ΑΝΑΔΑΣΩΣΕΙΣ)",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "177173501000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014843550",
+   "24SYMV014844210"
+  ],
+  "members": [
+   {
+    "vat": "998807500",
+    "name": "Τ & Τ ΚΑΤΑΣΚΕΥΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+    "source": "24AWRD014592135",
+    "excerpt": "ανώνυμη εταιρεία με την επωνυμία «Τ & Τ ΚΑΤΑΣΚΕΥΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ» με δ.τ. «Τ & Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε.» (ΑΡ. ΓΕΜΗ 007249601000), που εδρεύει στην Αθήνα (Λεωφ. Κηφισίας αρ. 118Β, ΤΚ: 11526 ) με Α.Φ.Μ. 998807500 ΔOY ΦΑΕ ΑΘΗΝΩΝ και (2) την ανώνυμη εταιρ"
+   },
+   {
+    "vat": "099361052",
+    "name": "ΜΕΣΟΓΕΙΟΣ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΤΑΙΡΙΑ",
+    "source": "24AWRD014592135",
+    "excerpt": "μη εταιρεία με την επωνυμία «ΜΕΣΟΓΕΙΟΣ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΤΑΙΡΙΑ» με δ.τ. «ΜΕΣΟΓΕΙΟΣ Α.Ε.» (ΑΡ. ΓΕΜΗ 003941401000), η οποία εδρεύει στην Αθήνα (Αιόλου αρ. 67, ΤΚ: 10559) με Α.Φ.Μ. 099361052 ΔOY ΦΑΕ ΑΘΗΝΩΝ, με ποσοστό έκπτωσης 23%,"
+   }
+  ],
+  "note": "Both members and their ΑΦΜ are named in award 24AWRD014592135, which awards Τμήμα 1 at exactly this contract value. ΟΡΚΑ and ΖΙΤΑΚΑΤ appear in the same act as winners of other lots and are not members."
+ },
+ "802794641": {
+  "name": "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΠΙΕΡΙΑΣ 2025 Κ Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "182901844000",
+  "basis": "gemi",
+  "contracts": [
+   "26SYMV018977660"
+  ],
+  "members": [
+   {
+    "vat": "999501790",
+    "name": "Κ.ΣΠΑΝΟΣ & ΣΙΑ ΕΕ",
+    "source": "25SYMV016570159",
+    "excerpt": "ν οδό Μπόνου 7, Βόλος ΤΚ: 38445 με ΑΦΜ 802794641 και Δ.Ο.Υ ΒΟΛΟΥ, η οποία αποτελείται από τα κάτωθι μέλη: α. την εταιρεία με την επωνυμία «Κ. ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ ΕΕ», με έδρα τον Βόλο, επί της οδού Μπόνου αρ. 7, με Α.Φ.Μ 999501790 και Δ.Ο.Υ Βόλου, νομίμως εκπρο"
+   },
+   {
+    "vat": "045420075",
+    "name": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΧΑΡΑΛΑΜΠΟΣ",
+    "source": "25SYMV016570159",
+    "excerpt": "ν Σπανό Κωνσταντίνο του Γεωργίου, και β. την ατομική επιχείρηση με την επωνυμία «ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ του ΧΑΡΑΛΑΜΠΟΥ», με έδρα την Θεσσαλονίκη, επί της οδού Β. Κορνάρου αρ. 13, ΤΚ 54248 με ΑΦΜ 045420075 και Δ.Ο.Υ Ζ΄ Θεσσαλονίκης, νομίμως εκπρο"
+   }
+  ],
+  "note": "The venture is named after the job, not its members — ΓΕΜΗ legal form identified it. Its own contract (original version 25SYMV016570159) states both members with their ΑΦΜ in one sentence headed by the venture ΑΦΜ."
+ },
+ "996674333": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ-ΕΛ.ΤΕ. Ε.Π.Ε.",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "164272001000",
+  "basis": "gemi+name",
+  "contracts": [
+   "22SYMV010864314"
+  ],
+  "members": [
+   {
+    "vat": "036692199",
+    "name": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
+    "source": "22SYMV010864314",
+    "excerpt": "της παρούσας σύμβασης, και που θα αποκαλείται εφεξής για συντομία \"ΕΡΓΟΔΟΤΗΣ\" και β) της κοινοπραξίας με την επωνυμία «ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ – ΕΛ.ΤΕ. Ε.Π.Ε.», με έδρα στη Λυκόβρυση Αττικής επί της οδού Μπουμπουλίνας, αρ. 10Α, Τ.Κ. 14123, με ΑΦΜ 996674333, της ΔΟΥ Αμαρουσίου, αρ. Γ.Ε.ΜΗ. 164272001000, νομίμως εκπροσωπούμενη από την Μαρία Σιδέρη και τον Κωνσταντίνο Ασήμη, δυνάμει του από 10.05.2022 Καταστατικού Σύστασης Κοινοπραξίας"
+   },
+   {
+    "vat": "998885119",
+    "name": "ΕΛΛΗΝΙΚΗ ΤΕΧΝΙΚΗ-ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ-ΕΡΓΟΛΗΠΤΙΚΗ-ΚΤΗΜΑΤΙΚΗ-ΕΜΠΟΡΙΚΗ ΚΑΙ ΕΡΓΩΝ ΥΠΟΔΟΜΗΣ Ε.Π.Ε. (δ.τ. ΕΛ.ΤΕ. Ε.Π.Ε.)",
+    "source": "22SYMV010635347",
+    "excerpt": "ήρα», ως ισχύει, και τον Κανονισμό (ΕΕ) 2016/679 του Ευρωπαϊκού Κοινοβουλίου και του Συμβουλίου (εφεξής «Κανονισμός»), αλλά και με κάθε νομοθέτημα της Ελληνικής και Ευρωπαϊκής νομοθεσίας που ρυθμίζει την προστασία των Δεδομένων Προσωπικού Χαρακτήρα ή την ιδιωτική ζωή. 10.2.Ο Ανάδοχος θα μεριμνά για την προστασία του επιχειρηματικού και προσωπικού απορρήτου. Ειδικότερα, o Ανάδοχος θα απέχει από κάθε αθέμιτη ή τυχαία παραβίαση εμπιστευτικών πληροφοριών και προσωπικών"
+   }
+  ],
+  "note": "Neither member ΑΦΜ is printed in the venture papers: the contract states only ΑΦΜ 996674333 and names the two signatories, Μαρία Σιδέρη and Κωνσταντίνος Ασήμης. Identified by name — ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ is a contractor in the registry under 036692199 with the identical patronymic; ΕΛ.ΤΕ. Ε.Π.Ε. is the διακριτικός τίτλος the registry itself records for 998885119, confirmed independently by ΓΕΜΗ 6586501000 (ΕΠΕ, active). Both are Anti-nero contractors in their own right."
+ },
+ "996514480": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ ΕΕ ΓΕΩΡΓΙΟΥ Δ ΦΟΥΚΑΣ Ν Κ ΣΙΑ ΟΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "177355553000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014809263"
+  ],
+  "members": [
+   {
+    "vat": "801706520",
+    "name": "BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+    "source": "24PROC014597593",
+    "excerpt": "ΑΙ ΣΙΑ Ο.Ε. Ι. Κότσικα 1 & Σαχτούρη, 34100 Κάρυστος ΑΦΜ: 099190930 Τηλ.: 2224025045, 6974700638 Email: georgiou.texni@gmail.com 3. ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε. Σωκράτους 33, 42132 Τρίκαλα ΑΦΜ: 801706520 Τηλ.: 2431072430, 6971662009 Email: info"
+   },
+   {
+    "vat": "099190930",
+    "name": "ΓΕΩΡΓΙΟΥ Δ.-ΦΟΥΚΑΣ Ν. ΚΑΙ ΣΙΑ Ο.Ε",
+    "source": "24PROC014597593",
+    "excerpt": "η Λακωνίας ΑΦΜ: 111908101 Τηλ.: 2734023246, 6973884637 Email: jlivanos1982@yahoo.gr 24PROC014597593 2024-04-15 2. ΓΕΩΡΓΙΟΥ Δ.- ΦΟΥΚΑΣ Ν. ΚΑΙ ΣΙΑ Ο.Ε. Ι. Κότσικα 1 & Σαχτούρη, 34100 Κάρυστος ΑΦΜ: 099190930 Τηλ.: 2224025045, 6974700638 Email: geor"
+   }
+  ],
+  "note": "Award 24AWRD014672358 names the pair with both trade names («ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ ΕΕ με δ.τ. BIODASOS - ΓΕΩΡΓΙΟΥ Δ. - ΦΟΥΚΑΣ Ν. & ΣΙΑ ΟΕ με δ.τ. ΤΕΧΝΗ») and the πρόσκληση 24PROC014597593 prints both ΑΦΜ. 801706520 is stored in the registry as ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε. and in ΓΕΜΗ as BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ — the same company, renamed."
+ },
+ "996608815": {
+  "name": "Κ/ΞΙΑ ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ – ΜΠΟΥΡΑΣ ΗΛΙΑΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "175896201000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014439912"
+  ],
+  "members": [
+   {
+    "vat": "023230385",
+    "name": "ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24PROC014286757",
+    "excerpt": "αρχείων Πειραιά και Πεντέλης, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979» ΤΕΥΧΟΣ 1 – ΠΡΟΣΚΛΗΣΗ Προς: 1. ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ Παξών 9, 15772 Ζωγράφου Αττική ΑΦΜ: 023230385 Τηλ.: 6936877678 Email: vliaro@tee.gr 24"
+   },
+   {
+    "vat": "034149091",
+    "name": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΤΟΥ ΣΠΥΡΙΔΩΝΟΣ",
+    "source": "24PROC014286757",
+    "excerpt": "ΡΗΣ ΖΑΧΑΡΙΑΣ ΤΟΥ ΣΤΕΦΑΝΟΥ Τσαμαδού 48, 26222 Πάτρα ΑΦΜ: 062332811 Τηλ.: 2610330342, 6944339941 Email: olympicsod@yahoo.com 3. ΜΠΟΥΡΑΣ ΗΛΙΑΣ ΤΟΥ ΣΠΥΡΙΔΩΝΑ Ροδοδάφνης 16, 14569 Άνοιξη Αττικής ΑΦΜ: 034149091 Τηλ.: 2106219131, 6944416700 Email: ilia"
+   }
+  ],
+  "note": "Πρόσκληση 24PROC014286757 lists both with their ΑΦΜ. Two corroborations that these are the members and not merely invitees: the venture is seated at Παξών 9 Ζωγράφου, which is Λιαροστάθης own address in that same list, and the contract is signed for the venture by Μπούρας Ηλίας του Σπυρίδωνα himself. The member is the individual 034149091, not the company ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε.Ε. (998126035)."
+ },
+ "996496315": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΡΕΤΗ ΓΚΑΡΑΝΑΤΣΙΟΥ - ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "177161444000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014774679"
+  ],
+  "members": [
+   {
+    "vat": "043778194",
+    "name": "ΓΚΑΡΑΝΑΤΣΙΟΥ ΑΡΕΤΗ ΤΟΥ ΑΘΑΝΑΣΙΟΥ",
+    "source": "24PROC014615504",
+    "excerpt": "ΣΠΥΡΙΔΩΝ ΤΟΥ ΓΕΡΑΣΙΜΟΥ Χίου 4, 16672 Βάρη Αττικής ΑΦΜ: 073449705 Τηλ.: 2109958789, 6974582193 Email: spiroszavi@gmail.com 2. ΓΚΑΡΑΝΑΤΣΙΟΥ ΑΡΕΤΗ ΤΟΥ ΑΘΑΝΑΣΙΟΥ Δ. Γεωργιάδου 278, 38222 Βόλος ΑΦΜ: 043778194 Τηλ.: 2421070548, 6946033261 Email: arga"
+   },
+   {
+    "vat": "045420075",
+    "name": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΧΑΡΑΛΑΜΠΟΣ",
+    "source": "24AWRD014672362",
+    "excerpt": "ΜΩΝ1-ΤΓΕ ii. ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΧΑΡΑΛΑΜΠΟΥ με έδρα στην Θεσσαλονίκη στην οδό Β. Κορνάρου, αριθ. 13, ΤΚ 54248, τηλ.: 2310323474 και κιν.: 6972818744, email: nikos.prasino@gmail.com με ΑΦΜ: 045420075, ΔOY Ζ’ ΘΕΣΣΑΛΟΝΙΚΗΣ, στην τιμή της οικ"
+   }
+  ],
+  "note": "Award 24AWRD014672362 states both in one sentence with their ΑΦΜ and ends on this contract exact value. ΓΚΑΡΑΝΑΤΣΙΟΥ is a sole trader with no ΓΕΜΗ record; the award names her in full."
+ },
+ "802828870": {
+  "name": "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "183520344000",
+  "basis": "gemi",
+  "contracts": [
+   "25SYMV016712403"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). No document we hold names them: the contract states only the venture ΑΦΜ and its signatory, the registry declared no award act, and the 16 Diavgeia acts citing the contract are schedule approvals, extensions, ΑΠΕ and payment approvals with no text layer. Two unreconciled pointers were left on the record rather than guessed: the contract is signed by Ζαβιτσάνος Σπυρίδων, one of the five firms invited by πρόσκληση 25PROC016428942 (ΑΦΜ 073449705), while the venture is seated at Δ. Γεωργιάδου 278 Βόλος, which is ΓΚΑΡΑΝΑΤΣΙΟΥ ΑΡΕΤΗ address (043778194) — and she is not among the five.",
+  "members_documented": false
+ },
+ "802662240": {
+  "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε. Κ/Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "180451622000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV015889457"
+  ],
+  "members": [
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24AWRD015648582",
+    "excerpt": "Χαλκίδα Ευβοίας, οδός Βαθροβουνίου 0, Τ.Κ.: 34100, και απαρτίζεται από α) την ατομική επιχείρηση «ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ του ΚΩΝ/ΝΟΥ», με έδρα στη Χαλκίδα Ευβοίας, οδός Βαθροβουνίου 0, Τ.Κ. 34100, Α.Φ.Μ.: 075195407, Δ.Ο.Υ.: ΧΑΛΚΙΔΑΣ, τηλέφωνο: 2221089814"
+   },
+   {
+    "vat": "801706520",
+    "name": "BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+    "source": "24AWRD015648582",
+    "excerpt": "νο: 2221089814, email: z.agelatos@gmail.com, και β) την επιχείρηση με την επωνυμία «ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ ΕΕ» με δ.τ. “BIODASOS”» που εδρεύει στα Τρίκαλα, οδός Σωκράτους 33, Τ.Κ. 42132, ΑΦΜ: 801706520, Δ.Ο.Υ. ΤΡΙΚΑΛΩΝ, τηλέφωνο: 2431072430,"
+   }
+  ],
+  "note": "Award 24AWRD015648582 (Τμήμα 4) names both members with ΑΦΜ, ΔΟΥ, address and email. Third venture of 801706520 (ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε., δ.τ. BIODASOS)."
+ },
+ "996813651": {
+  "name": "BIODASOS-ΤΕΧΝΗ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171026653000",
+  "basis": "gemi",
+  "contracts": [
+   "23SYMV012895723",
+   "23SYMV012896177"
+  ],
+  "members": [
+   {
+    "vat": "801706520",
+    "name": "BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+    "source": "23SYMV012895723",
+    "excerpt": "ελείταί από τα κάτωθί μέλη: Α) την ετερόρρύθμη εταίρεία με την επωνύμία «ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε.» καί δίακρίτίκό τίτλο “BIODASOS”, πού εδρεύεί στα Τρίκαλα, επί της οδού Σωκράτούς αρίθ. 33, ΤΚ: 42132, με ΑΦΜ: 801706520 αρμοδίότητας ΔΟΥ: Τρίκαλων νόμ"
+   },
+   {
+    "vat": "099190930",
+    "name": "ΓΕΩΡΓΙΟΥ Δ.-ΦΟΥΚΑΣ Ν. ΚΑΙ ΣΙΑ Ο.Ε",
+    "source": "23SYMV012895723",
+    "excerpt": "2023-06-16 ομόρρύθμη εταίρεία με την επωνύμία «ΓΕΩΡΓΙΟΥ Δ. – ΦΟΥΚΑΣ Ν. & ΣΙΑ Ο.Ε.» καί δίακρίτίκό τίτλο “TEXNH”, πού εδρεύεί στην Κάρύστο, επί της οδού Ι. Κότσίκα 1 & Σαχτούρη, ΤΚ 34001, με ΑΦΜ: 099190930, αρμοδίότητας Δ.Ο.Υ. Κύμης, νόμίμα εκπρ"
+   }
+  ],
+  "note": "Its own contract 23SYMV012895723 enumerates both members with ΑΦΜ and trade names, and both principals sign for the venture. Same two firms as venture 996514480 (case 4) — two separate κοινοπραξίες for different jobs, each with its own ΑΦΜ and ΓΕΜΗ registration."
+ },
+ "996714243": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ - ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "177167252000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014774694"
+  ],
+  "members": [
+   {
+    "vat": "043844534",
+    "name": "ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+    "source": "24PROC014624686",
+    "excerpt": "ΑΣΤΕΡΙΟΥ Παλαιοχώρα, 63073 Πολύγυρος Χαλκιδικής ΑΦΜ: 042997774 Τηλ.: 2371061743, 6980505833 Email: karavatoskostas@hotmail.com 5. ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΙΩΑΝΝΗ Χρ. Σμύρνης 11, 62123 Σέρρες ΑΦΜ: 043844534 Τηλ.: 2321062233, 6946007179 Email: task"
+   },
+   {
+    "vat": "998746814",
+    "name": "ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
+    "source": "24AWRD014701509",
+    "excerpt": "Ο.Υ. Σερρών, και ii) την ιδιωτική κεφαλαιουχική εταιρεία με την επωνυμία «ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ - ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ», με έδρα στις Σέρρες, στην οδό Χρυσοστόμου Σμύρνης 11 - Τ.Κ. 62123, Α.Φ.Μ. 998746814 - Δ.Ο.Υ. Σερρών. Ο Εντεταλμένος Σύμβουλο"
+   }
+  ],
+  "note": "The venture name reads like three members but the award 24AWRD014701509 states two: the sole trader ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ (043844534) and the company ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ (998746814), whose own name carries both partners. Corroborated by πρόσκληση 24PROC014624686 and by the contract being signed by Νικόλαος Τασκούδης himself."
+ },
+ "802662066": {
+  "name": "ΜΑΝΑΡΙΤΣΑΣ ΑΓΓΕΛΑΤΟΣ Κ/Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "180446822000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV015889443"
+  ],
+  "members": [
+   {
+    "vat": "054537472",
+    "name": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24AWRD015648410",
+    "excerpt": "εδρεύει στη Λίμνη Ευβοίας, οδός Λίμνη 0 Τ.Κ. 34005 και απαρτίζεται από τις ατομικές επιχειρήσεις α) «ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ ΤΟΥ ΚΩΝ/ΝΟΥ», με έδρα στη Λίμνη Ευβοίας, οδός Λίμνη 0, Τ.Κ. 34005, Α.Φ.Μ.: 054537472, ΔΟΥ ΧΑΛΚΙΔΑΣ, τηλέφωνο: 2227032623, em"
+   },
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24AWRD015648410",
+    "excerpt": "νη 0, Τ.Κ. 34005, Α.Φ.Μ.: 054537472, ΔΟΥ ΧΑΛΚΙΔΑΣ, τηλέφωνο: 2227032623, email: limnibm@otenet.gr, και β) «ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ του ΚΩΝ/ΝΟΥ» με έδρα στη Χαλκίδα, οδός Βαθροβουνίου 0, Τ.Κ. 34100, Α.Φ.Μ.: 075195407, ΔΟΥ ΧΑΛΚΙΔΑΣ, τηλέφωνο: 2221089814, em"
+   }
+  ],
+  "note": "Award 24AWRD015648410 states the two members with their ΑΦΜ in one sentence. The same two sole traders formed two separate κοινοπραξίες on the same day, one per lot of the competition, named in opposite order (ΑΦΜ 802662066 and 802662122)."
+ },
+ "802662122": {
+  "name": "ΑΓΓΕΛΑΤΟΣ ΜΑΝΑΡΙΤΣΑΣ Κ/Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "180448822000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV015889446"
+  ],
+  "members": [
+   {
+    "vat": "054537472",
+    "name": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24AWRD015648497",
+    "excerpt": "εδρεύει στη Λίμνη Ευβοίας, οδός Λίμνη 0 Τ.Κ. 34005 και απαρτίζεται από τις ατομικές επιχειρήσεις α) «ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ ΤΟΥ ΚΩΝ/ΝΟΥ», με έδρα στη Λίμνη Ευβοίας, οδός Λίμνη 0, Τ.Κ. 34005, Α.Φ.Μ.: 054537472, ΔΟΥ ΧΑΛΚΙΔΑΣ, τηλέφωνο: 2227032623, em"
+   },
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24AWRD015648497",
+    "excerpt": "νη 0, Τ.Κ. 34005, Α.Φ.Μ.: 054537472, ΔΟΥ ΧΑΛΚΙΔΑΣ, τηλέφωνο: 2227032623, email: limnibm@otenet.gr, και β) «ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ του ΚΩΝ/ΝΟΥ» με έδρα στη Χαλκίδα, οδός Βαθροβουνίου 0, Τ.Κ. 34100, Α.Φ.Μ.: 075195407, ΔΟΥ ΧΑΛΚΙΔΑΣ, τηλέφωνο: 2221089814, em"
+   }
+  ],
+  "note": "Award 24AWRD015648497 states the two members with their ΑΦΜ in one sentence. The same two sole traders formed two separate κοινοπραξίες on the same day, one per lot of the competition, named in opposite order (ΑΦΜ 802662066 and 802662122)."
+ },
+ "996679758": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "164016904000",
+  "basis": "gemi+name",
+  "contracts": [
+   "22SYMV010864301"
+  ],
+  "members": [
+   {
+    "vat": "999607559",
+    "name": "ΛΙΑΧΤΙΔΑ Ανώνυμη Τεχνική Εμπορική & Βιομηχανική Εταιρεία (δ.τ. ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε.)",
+    "source": "22SYMV010864301",
+    "excerpt": "μυρά, για την υπογραφή της παρούσας σύμβασης, και που θα αποκαλείται εφεξής για συντομία \"ΕΡΓΟΔΟΤΗΣ\" και β) της κοινοπραξίας με επωνυμία «ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΧΤΙΔΑ ΑTEBE ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ», με έδρα Θεσσαλονίκη, Γ. Φραντζή 1 (Τ.Κ. 54655), με ΑΦΜ 996679758, Δ.Ο.Υ. ΦΑΕ Θεσσαλονικής, εκπροσωπούμενη από τον εταίρο (διαχειριστή – εκπρόσωπο) «ΛΙΑΧΤΙΔΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ», διά του νομίμου εκπροσώπου αυτού, Ανδρέα Παγωνίδη του Νικολάου, Προέδρου και"
+   },
+   {
+    "vat": "997973588",
+    "name": "ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε.",
+    "source": "22SYMV010864301",
+    "excerpt": "πογραφή της παρούσας σύμβασης, και που θα αποκαλείται εφεξής για συντομία \"ΕΡΓΟΔΟΤΗΣ\" και β) της κοινοπραξίας με επωνυμία «ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΧΤΙΔΑ ΑTEBE ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ», με έδρα Θεσσαλονίκη, Γ. Φραντζή 1 (Τ.Κ. 54655), με ΑΦΜ 996679758, Δ.Ο.Υ. ΦΑΕ Θεσσαλονικής, εκπροσωπούμενη από τον εταίρο (διαχειριστή – εκπρόσωπο) «ΛΙΑΧΤΙΔΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ», διά του νομίμου εκπροσώπου αυτού, Ανδρέα Παγωνίδη του Νικολάου, Προέδρου και Διευθύνοντος Συ"
+   }
+  ],
+  "note": "ΑΦΜ read from award 23AWRD012927708, which belongs to the SIBLING venture 996681011 («ΕΛΛΗΝΙΚΑ ΕΡΓΑ – ΛΙΑΧΤΙΔΑ», 2023) — the same two firms in the opposite order, a year later. This 2022 venture declared no award act; its own contract names ΛΙΑΧΤΙΔΑ as its «εταίρος» but prints no member ΑΦΜ, and the 073220150 in that sentence is Ανδρέας Παγωνίδης, the person representing ΛΙΑΧΤΙΔΑ, not a member. Corroborated by the shared seat Γ. Φραντζή 1 Θεσσαλονίκη and the same representative in both ventures. User confirmed 2026-08-20."
+ },
+ "996605179": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΔΙΟΝΥΣΙΟΣ ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΤΟΥ ΖΑΦΕΙΡΗ - ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "174579607000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014192289"
+  ],
+  "members": [
+   {
+    "vat": "043999046",
+    "name": "ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΔΙΟΝΥΣΙΟΣ ΤΟΥ ΖΑΦΕΙΡΗ",
+    "source": "24SYMV014192289",
+    "excerpt": "ς παρούσας σύμβασης (στο εξής ο «Εργοδότης» ή/και η «Αναθέτουσα Αρχή») και 2. η κοινοπραξία με την επωνυμία «ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΔΙΟΝΥΣΙΟΣ ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΤΟΥ ΖΑΦΕΙΡΗ - ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ», που εδρεύει στη Σαλαμίνα, οδό Ν. Παπανικολάου 10, ΤΚ 18900, με ΑΦΜ 996605179 της ΔΟΥ Ε’ Πειραιά, νομίμως εκπροσωπούμενη για την υπογραφή της παρούσας από τον νόμιμο εκπρόσωπο της κοινοπραξίας, κ. Παναγιώτη Ρεβελιώτη του Ανδρέα (στο εξής ο «Ανάδοχος»). Ο Εργ"
+   },
+   {
+    "vat": "046212303",
+    "name": "ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΑΝΔΡΕΑΣ",
+    "source": "23PROC014034891",
+    "excerpt": "κεμβρίου 2023 Προς: 1. ΓΕΩΡΓΙΟΣ ΛΑΜΠΙΡΗΣ Αγ. Ανδρέου 124, 26221 Πάτρα ΑΦΜ: 045497240 Τηλ.: 2614005448, 6932573361 mail: gelampi@yahoo.gr 2. ΠΑΝΑΓΙΩΤΗΣ ΡΕΒΕΛΙΩΤΗΣ Δεληγιάννη 9, 22132 Τρίπολη ΑΦΜ: 046212303 Τηλ.: 6976644558 mail: panrevel1@gmail.c"
+   }
+  ],
+  "note": "ΡΕΒΕΛΙΩΤΗΣ: ΑΦΜ from πρόσκληση 23PROC014034891, and he signs the contract for the venture. ΖΑΦΕΙΡΟΠΟΥΛΟΣ: his ΑΦΜ appears NOWHERE in this venture file — the contract names him only inside the venture title («ΖΑΦΕΙΡΟΠΟΥΛ» occurs once, «εταίρος» never) and he is not among the seven invitees. Identified as ΓΕΜΗ 156958907000 «ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΔΙΟΝΥΣΙΟΣ ΤΟΥ ΖΑΦΕΙΡΗ», ατομική επιχείρηση at Ν. Παπανικολάου 10 Σαλαμίνα — which is the venture own registered seat — corroborated by two ΖΙΤΑΚΑΤ contracts naming the same man, address and ΑΦΜ 043999046 as ΖΙΤΑΚΑΤ representative. His single-member ΙΚΕ 802167866 at the same address was considered and rejected: the venture title is the natural person with his patronymic, which is what the sole-trader entry carries. User decision 2026-08-20 after review of both options."
+ },
+ "802647782": {
+  "name": "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ ΕΕ - ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ ΕΕ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "180187701000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV015889080"
+  ],
+  "members": [
+   {
+    "vat": "999826258",
+    "name": "ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ ΚΑΙ ΣΙΑ ΕΕ",
+    "source": "24AWRD015578378",
+    "excerpt": "αι απαρτίζεται από τις επιχειρήσεις α) «ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ ΚΑΙ ΣΙΑ Ε.Ε.», με έδρα στη Σταμάτα Αττικής, οδός Λ. Σταμάτας αριθ. 5, ΤΚ 14575, κιν. τηλ.: 6974798693, email: chkiri@otenet.gr, με ΑΦΜ: 999826258 ΔΟΥ ΚΗΦΙΣΙΑΣ, και β) ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ"
+   },
+   {
+    "vat": "999448728",
+    "name": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.",
+    "source": "24AWRD015578378",
+    "excerpt": "με ΑΦΜ: 999826258 ΔΟΥ ΚΗΦΙΣΙΑΣ, και β) ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε. με έδρα στην Καλλιθέα Αττικής, οδός Ελευθερίου Βενιζέλου αριθ. 172, ΤΚ 17675, τηλ.: 2109570615, email: idram@tee.gr, με ΑΦΜ: 999448728, ΔOΥ ΚΑΛΛΙΘΕΑΣ, με κριτήριο ανάθεσης τη"
+   }
+  ],
+  "note": "Three-way agreement: the venture seat Λ. Σταμάτας 5 is Κυριακάκης own address, both principals sign the contract as joint managers of the κοινοπραξία, and award 24AWRD015578378 prints both member ΑΦΜ."
+ },
+ "997080725": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΑΝΤΑΛΗ Π. ΟΥΡΑΝΙΑ - ΒΕΛΩΝΗΣ ΝΙΚ. ΓΕΩΡΓΙΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "176126104000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014431913",
+   "24SYMV014944866",
+   "25SYMV016392306"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "043659132",
+    "name": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΝΙΚΟΛΑΟΣ"
+   },
+   {
+    "vat": "148024200",
+    "name": "ΤΣΑΝΤΑΛΗ ΟΥΡΑΝΙΑ ΠΑΝΑΓΙΩΤΗΣ"
+   }
+  ]
+ },
+ "802619365": {
+  "name": "Σιδέρη Μαρία του Δημητρίου - Ηλίας Μπούρας και ετερρόρυθμη ΕΤ Κοινοπραξία",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "179682501000",
+  "basis": "gemi+name",
+  "contracts": [
+   "26SYMV019098206"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "036692199",
+    "name": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΔΗΜΗΤΡΙΟΣ"
+   },
+   {
+    "vat": "998126035",
+    "name": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ ΕΕ"
+   }
+  ]
+ },
+ "996514405": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΝΤΙΝΟΠΟΥΛΟΣ ΑΠΟΣΤΟΛΟΣ - ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "176274553000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014492614"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "045958594",
+    "name": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ ΓΕΩΡΓΙΟΣ"
+   },
+   {
+    "vat": "100287570",
+    "name": "ΝΤΙΝΟΠΟΥΛΟΣ ΑΠΟΣΤΟΛΟΣ ΤΟΥ ΣΩΤΗΡΙΟΥ"
+   }
+  ]
+ },
+ "996605211": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ – ΧΡΗΣΤΟΣ ΚΥΡΙΑΖΑΤΗΣ & ΣΙΑ Ε.Ε.",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "175038907000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014279455"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "045312261",
+    "name": "ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+   },
+   {
+    "vat": "998353594",
+    "name": "ΚΥΡΙΑΖΑΤΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ ΕΕ"
+   }
+  ]
+ },
+ "996666474": {
+  "name": "Κ/ΞΙΑ ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ - ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ",
+  "legal_type": null,
+  "gemi": "-1",
+  "basis": "name",
+  "contracts": [
+   "24SYMV014415736"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "045860542",
+    "name": "ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ ΤΟΥ ΑΡΙΣΤΕΙΔΗ"
+   },
+   {
+    "vat": "073533221",
+    "name": "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΓΕΩΡΓΙΟΣ"
+   }
+  ]
+ },
+ "996664604": {
+  "name": "ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ – ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ – ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "170518722000",
+  "basis": "gemi",
+  "contracts": [
+   "22SYMV010856518",
+   "22SYMV010856519",
+   "22SYMV010856521"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "054537472",
+    "name": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+   },
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+   }
+  ]
+ },
+ "802827387": {
+  "name": "Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ - ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "183496802000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV016722680",
+   "25SYMV016723758"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "800349931",
+    "name": "Α.ΗΛΙΟΠΟΥΛΟΣ - Β.ΠΑΡΛΑΝΤΖΑΣ ΟΕ"
+   },
+   {
+    "vat": "998731143",
+    "name": "ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ"
+   }
+  ]
+ },
+ "996714083": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ – ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "175712152000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014415876"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "038925014",
+    "name": "ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ"
+   },
+   {
+    "vat": "998746814",
+    "name": "ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ"
+   }
+  ]
+ },
+ "802865853": {
+  "name": "«ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε.Ε. - ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε.Ε. ΚΟΙΝΟΠΡΑΞΙΑ»",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "184231301000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV016921666",
+   "25SYMV016921696"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "998126035",
+    "name": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ ΕΕ"
+   },
+   {
+    "vat": "999448728",
+    "name": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε."
+   }
+  ]
+ },
+ "802838906": {
+  "name": "ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ – ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε. ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "183707904000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV016782219"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "042971088",
+    "name": "ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ ΤΟΥ ΔΗΜΗΤΡΙΟΥ"
+   },
+   {
+    "vat": "999735729",
+    "name": "ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε."
+   }
+  ]
+ },
+ "996666622": {
+  "name": "ΚΞ ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ - ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ - ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "177632622000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014917317"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "073533221",
+    "name": "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΓΕΩΡΓΙΟΣ"
+   },
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+   },
+   {
+    "vat": "122499275",
+    "name": "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ ΑΘΑΝΑΣΙΟΣ"
+   }
+  ]
+ },
+ "996496038": {
+  "name": "Κ/ΞΙΑ Κ. ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ ΕΕ – ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "175437444000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014316183"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "045420075",
+    "name": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΧΑΡΑΛΑΜΠΟΣ"
+   },
+   {
+    "vat": "999501790",
+    "name": "Κ.ΣΠΑΝΟΣ & ΣΙΑ ΕΕ"
+   }
+  ]
+ },
+ "996604620": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΔΗΜΟΠΟΥΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΔΑΜ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171248307000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV013009341",
+   "23SYMV013009352"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "032604510",
+    "name": "ΑΔΑΜ Ε. ΧΡΗΣΤΟΣ"
+   },
+   {
+    "vat": "034704122",
+    "name": "ΚΩΝΣΤΑΝΤΙΝΟΣ ΔΗΜΟΠΟΥΛΟΣ"
+   },
+   {
+    "vat": "045497240",
+    "name": "ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΒΛΑΣΙΟΣ"
+   }
+  ]
+ },
+ "802604573": {
+  "name": "ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ - ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "179415145000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV015889478"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "051122328",
+    "name": "ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ ΤΟΥ ΠΕΤΡΟΥ"
+   },
+   {
+    "vat": "051955363",
+    "name": "ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΤΟΥ ΝΙΚΟΛΑΟΥ"
+   }
+  ]
+ },
+ "996714741": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ ΜΟΝΟΠΡΟΣΩΠΗ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΙΑ Ι.Κ.Ε. - ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ - ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "183023252000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV016491949"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "801264804",
+    "name": "ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ ΜΟΝΟΠΡΟΣΩΠΗ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΙΑ Ι.Κ.Ε."
+   },
+   {
+    "vat": "998746814",
+    "name": "ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ"
+   }
+  ]
+ },
+ "802849435": {
+  "name": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ – ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "183918954000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV016782541"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "036343031",
+    "name": "ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ"
+   },
+   {
+    "vat": "044397659",
+    "name": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ ΛΟΥΚΑΣ"
+   }
+  ]
+ },
+ "802669608": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ- ΒΕΛΩΝΗΣ ΝΙΚ. ΓΕΩΡΓΙΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "180590106000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV015889466"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "043659132",
+    "name": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΝΙΚΟΛΑΟΣ"
+   },
+   {
+    "vat": "102486448",
+    "name": "ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΝΕΟΦΥΤΟΣ"
+   }
+  ]
+ },
+ "996831933": {
+  "name": "Κ/ΞΙΑ ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ– ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171279401000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV012992069"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "041813088",
+    "name": "ΕΥΑΓΓΕΛΟΣ ΠΑΠΠΑΣ ΤΟΥ ΓΕΩΡΓΙΟΥ"
+   },
+   {
+    "vat": "050232986",
+    "name": "ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΕΥΑΓΓΕΛΟΣ"
+   }
+  ]
+ },
+ "997227555": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΛΕΦΤΣΗΣ ΧΡΗΣΤΟΣ - ΑΦΟΙ ΔΙΑΜΑΝΤΟΓΛΟΥ ΟΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171288635000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV012992146"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "061303461",
+    "name": "ΛΕΦΤΣΗΣ ΧΡΗΣΤΟΣ ΤΟΥ ΠΕΤΡΟΥ"
+   },
+   {
+    "vat": "998528048",
+    "name": "ΑΦΟΙ ΔΙΑΜΑΝΤΟΓΛΟΥ ΟΕ"
+   }
+  ]
+ },
+ "996830790": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ - ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "164538201000",
+  "basis": "gemi+name",
+  "contracts": [
+   "22SYMV011323950"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "033419558",
+    "name": "ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΙΩΑΝΝΗΣ"
+   },
+   {
+    "vat": "044850827",
+    "name": "ΛΙΤΣΟΣ ΗΛΙΑΣ ΑΓΓΕΛΟΣ"
+   }
+  ]
+ },
+ "996553688": {
+  "name": "ΚΞ Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ΥΠΟΕΡΓΟ Δ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171364401000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV012992145"
+  ],
+  "members": [],
+  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
+  "members_documented": false,
+  "named_in_title": [
+   {
+    "vat": "800363439",
+    "name": "Γ.Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ"
+   },
+   {
+    "vat": "800844340",
+    "name": "ΑΛΚΗ Ι Κ Ε"
+   },
+   {
+    "vat": "996550190",
+    "name": "Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ ΥΠΟΕΡΓΟ Β"
+   }
+  ]
+ },
+ "996551622": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ",
+  "legal_type": null,
+  "gemi": "-1",
+  "basis": "name",
+  "contracts": [
+   "26SYMV018718889"
+  ],
+  "members": [
+   {
+    "vat": "043170596",
+    "name": "ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΤΩΝΙΟΣ",
+    "source": "26AWRD018581138",
+    "excerpt": "ς οδού Μεγάλου Αλεξάνδρου 27, ΤΚ 653 02, και αποτελείται από: 1. την ατομική επιχείρηση με την επωνυμία «ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΝΤΩΝΙΟΥ», με έδρα την Κατερίνη, επί της οδού 25ης Μαρτίου, αρ. 56, Τ.Κ. 601 32, ΑΦΜ 043170596, ΔΟΥ Π. Πατρών Γερμανού 3-5,"
+   },
+   {
+    "vat": "113864390",
+    "name": "ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ ΔΗΜΟΣΘΕΝΗΣ",
+    "source": "26AWRD018581138",
+    "excerpt": "ιχεία επικοινωνίας: τηλ. 2351037866, 6946468564 και email ktigas@gmail.com, και 2. την ατομική επιχείρηση με την επωνυμία «ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ ΤΟΥ ΔΗΜΟΣΘΕΝΗ», με έδρα την Μάκρη Αλεξανδρούπολης, Τ.Κ. 681 00, ΑΦΜ 113864390, ΔΟΥ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ και στοι"
+   }
+  ],
+  "note": "Members enumerated by document 26AWRD018581138. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996551148": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ – ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ",
+  "legal_type": null,
+  "gemi": "-1",
+  "basis": "name",
+  "contracts": [
+   "25SYMV016762267"
+  ],
+  "members": [
+   {
+    "vat": "102529416",
+    "name": "ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΙΩΣΗΦ",
+    "source": "25AWRD016570379",
+    "excerpt": "ου Αλεξάνδρου αρ. 27, Τ.Κ. 65302, που αποτελείται από τα κάτωθι μέλη: α) Η ατομική επιχείρηση με την επωνυμία «ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ», με έδρα την Καβάλα, επί της οδού Μεγάλου Αλεξάνδρου αρ. 27, Τ.Κ. 65302, με ΑΦΜ 102529416, ΔΟΥ Καβάλας και στοιχεία επι"
+   },
+   {
+    "vat": "137004661",
+    "name": "ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΧΡΙΣΤΟΦΥΛΗ",
+    "source": "25AWRD016570379",
+    "excerpt": "βάλας και στοιχεία επικοινωνίας τηλ: 6945530186, email: vxanth82@gmail.com, β) Η ατομική επιχείρηση με την επωνυμία «ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ», με έδρα την Κομοτηνή, επί της οδού Αποστόλου Σούζου αρ. 14, Τ.Κ. 69133, με ΑΦΜ 137004661, ΔΟΥ Κομοτηνής και στοιχεία ε"
+   }
+  ],
+  "note": "Members enumerated by document 25AWRD016570379. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996681011": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε. – ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε.",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171439004000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV013038705",
+   "23SYMV013038766",
+   "23SYMV013038813"
+  ],
+  "members": [
+   {
+    "vat": "997973588",
+    "name": "ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ",
+    "source": "23AWRD012927708",
+    "excerpt": "ΕΙΩΝ ΕΛΛΗΝΙΚΑ ΕΡΓΑ - ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε.», αποτελούμενη από: (i) την ομόρρυθμη εταιρεία με την επωνυμία «ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε.» με δ.τ. «ΕΛΛΗΝΙΚΑ ΕΡΓΑ», που εδρεύει επί της οδού Ορφανίδου αρ.1 στη Θεσσαλονίκη, με ΑΦΜ 997973588 και εκπροσωπείται νόμιμα από τ"
+   },
+   {
+    "vat": "999607559",
+    "name": "ΛΙΑΧΤΙΔΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+    "source": "23AWRD012927708",
+    "excerpt": "ου Δημητρίου και (ii) την ανώνυμη εταιρεία με την επωνυμία «ΛΙΑΧΤΙΔΑ Ανώνυμη Τεχνική Εμπορική & Βιομηχανική Εταιρεία» με δ.τ. «ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε.», που εδρεύει επί της οδού Γ. Φραντζή αρ.1 στη Θεσσαλονίκη, με ΑΦΜ 999607559 και εκπροσωπείται νόμιμα από τ"
+   }
+  ],
+  "note": "Members enumerated by document 23AWRD012927708. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996625363": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ Ι.Κ.Ε.",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171650506000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV013201917"
+  ],
+  "members": [
+   {
+    "vat": "110324970",
+    "name": "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ — εργολήπτης δημοσίων έργων",
+    "source": "23SYMV013201917",
+    "excerpt": "ΕΜΗ 171650506000) αποτελούμενη από α) τον Παντελή Φιλιππάκη του Ματθαίου και της Ελένης, Δασολόγο – Ε.Δ.Ε., ο οποίος διατηρεί ατομική επιχείρηση, με έδρα τη Θεσσαλονίκη επί της οδού Σταύρου Βουτυρά αρίθ. 7 και ΑΦΜ 110324970, και β) την Ιδιωτική Κεφαλαιο"
+   },
+   {
+    "vat": "801045078",
+    "name": "ΑΛΣΟΣ ΙΚΕ",
+    "source": "23SYMV013201917",
+    "excerpt": "τυρά αρίθ. 7 και ΑΦΜ 110324970, και β) την Ιδιωτική Κεφαλαιουχική Εταιρεία με την επωνυμία «Άλσος Ι.Κ.Ε.», που εδρεύει στο Δήμο Κορδελιού -Ευόσμου νομού Θεσσαλονίκης, επί της προέκτασης της οδού Ολυμπιάδος, με ΑΦΜ 801045078, εκπροσωπούμενη από τον κοινό"
+   }
+  ],
+  "note": "Members enumerated by document 23SYMV013201917. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "803202324": {
+  "name": "ΕΝΩΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ - Κ/Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "191926507000",
+  "basis": "gemi+name",
+  "contracts": [
+   "26SYMV018661963"
+  ],
+  "members": [
+   {
+    "vat": "045497240",
+    "name": "ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΒΛΑΣΙΟΣ",
+    "source": "26AWRD018554425",
+    "excerpt": "Συμβάσεων Στρατηγικής Σημασίας 26AWRD018554425 2026-02-27 1. την ατομική επιχείρηση με την επωνυμία «ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ», με έδρα την Πάτρα Αχαΐας, επί της οδού Αγίου Ανδρέου, αρ. 124, Τ.Κ. 262 21, ΑΦΜ 045497240, ΔΟΥ ΠΑΤΡΩΝ και στοιχεία επικ"
+   },
+   {
+    "vat": "046212303",
+    "name": "ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΑΝΔΡΕΑΣ",
+    "source": "26AWRD018554425",
+    "excerpt": "ίας: τηλ. 2614 005448, 6932573361 και email gelampi@yahoo.gr, και 2. την ατομική επιχείρηση με την επωνυμία «ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ», με έδρα την Τρίπολη, επί της οδού Δεληγιάννη, αρ. 9, Τ.Κ. 221 32, ΑΦΜ 046212303, ΔΟΥ ΤΡΙΠΟΛΗΣ και στοιχεία επ"
+   }
+  ],
+  "note": "Members enumerated by document 26AWRD018554425. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "803233350": {
+  "name": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ - ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "192664404000",
+  "basis": "gemi+name",
+  "contracts": [
+   "26SYMV018779399"
+  ],
+  "members": [
+   {
+    "vat": "043659132",
+    "name": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΝΙΚΟΛΑΟΣ",
+    "source": "26AWRD018652374",
+    "excerpt": "ΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ – ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ», που αποτελείται από: 1. την ατομική επιχείρηση με την επωνυμία «ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΝΙΚΟΛΑΟΥ», με έδρα την Θεσσαλονίκη, επί της οδού Καλής Ελπίδος, αρ. 58, Τ.Κ. 546 36, ΑΦΜ 043659132, ΔΟΥ Δ’ Θεσσαλονίκης και στοι"
+   },
+   {
+    "vat": "102486448",
+    "name": "ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΝΕΟΦΥΤΟΣ",
+    "source": "26AWRD018652374",
+    "excerpt": "ονάδα Συμβάσεων Στρατηγικής Σημασίας 26AWRD018652374 2026-03-16 2. την ατομική επιχείρηση με την επωνυμία «ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΤΟΥ ΝΕΟΦΥΤΟΥ», με έδρα την Καβάλα, επί της οδού Κουντουριώτου, αρ. 8, Τ.Κ. 652 01, ΑΦΜ 102486448, ΔΟΥ Καβάλας και στοιχεία επι"
+   }
+  ],
+  "note": "Members enumerated by document 26AWRD018652374. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996665717": {
+  "name": "Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ-ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ-ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171504322000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV013201961"
+  ],
+  "members": [
+   {
+    "vat": "073533221",
+    "name": "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΓΕΩΡΓΙΟΣ",
+    "source": "23SYMV013201961",
+    "excerpt": ". 34100 και Α.Φ.Μ. 075195407/ ΔΟΥ Χαλκίδας, με αριθμό δελτίου αστυνομικής ταυτότητας ΑΝ990948, (β) τον Αθανάσιο Γκίκα του Γεωργίου και της Τασίας, κάτοικο Κορίνθου, επί της οδού Νοταρά αριθ. 38, Τ.Κ. 20100 και Α.Φ.Μ. 073533221/ΔΟΥ Κορίνθου, με αριθμό δελτί"
+   },
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "23SYMV013201961",
+    "excerpt": "(ΑΦΜ 996665717/Δ.Ο.Υ. Χαλκίδας - ΓΕΜΗ 171504322000) αποτελούμενη από α) τον Ζήση Αγγελάτο του Κωνσταντίνου και της Παναγιώτας, κάτοικο Χαλκίδας νομού Ευβοίας, επί της οδού Δρακοπούλου αριθ. 18, Τ.Κ. 34100 και Α.Φ.Μ. 075195407/ ΔΟΥ Χαλκίδας, με αριθμό δελτ"
+   },
+   {
+    "vat": "122499275",
+    "name": "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ ΑΘΑΝΑΣΙΟΣ",
+    "source": "23SYMV013201961",
+    "excerpt": "Α.Φ.Μ. 073533221/ΔΟΥ Κορίνθου, με αριθμό δελτίου αστυνομικής ταυτότητας ΑΝ970973 και (γ) τον Γεώργιο Σταματονικολό του Αθανασίου και της Αναστασίας, κάτοικο Χαλκίδας, επί της οδού Ελευθερίας 1, Τ.Κ. 34100 και Α.Φ.Μ. 122499275/ΔΟΥ Χαλκίδας, με αριθμό δελτί"
+   }
+  ],
+  "note": "Members enumerated by document 23SYMV013201961. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "802940220": {
+  "name": "ΜΑΝΑΡΙΤΣΑΣ ΛΙΑΡΗ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "185796222000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV017458229"
+  ],
+  "members": [
+   {
+    "vat": "045860542",
+    "name": "ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ ΤΟΥ ΑΡΙΣΤΕΙΔΗ",
+    "source": "25AWRD017258091",
+    "excerpt": "– Μονάδα Συμβάσεων Στρατηγικής Σημασίας 25AWRD017258091 2025-07-21 2. την ατομική επιχείρηση με την επωνυμία «ΕΛΕΥΘΕΡΙΑ ΛΙΑΡΗ ΤΟΥ ΑΡΙΣΤΕΙΔΗ», με έδρα τη Λίμνη Ευβοίας, επί της οδού Καστριά Λίμνης, Τ.Κ. 34005, ΑΦΜ 045860542 και ΔΟΥ Χαλκίδας, με κριτήριο"
+   },
+   {
+    "vat": "054537472",
+    "name": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "25AWRD017258091",
+    "excerpt": "ΡΙΑ», η οποία εδρεύει στη Λίμνη Ευβοίας, Τ.Κ. 34005, και αποτελείται από τα κάτωθι μέλη: 1. την ατομική επιχείρηση με την επωνυμία «ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ», με έδρα τη Λίμνη Ευβοίας, Τ.Κ. 34005, ΑΦΜ 054537472 και ΔΟΥ Χαλκίδας, και Καραγιώρ"
+   }
+  ],
+  "note": "Members enumerated by document 25AWRD017258091. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996815029": {
+  "name": "ΓΕΩΡΓΙΟΥ ΚΩΝ. ΔΗΜΗΤΡΙΟΣ – ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "175965322000",
+  "basis": "gemi",
+  "contracts": [
+   "24SYMV014447963",
+   "24SYMV014447969"
+  ],
+  "members": [
+   {
+    "vat": "036343031",
+    "name": "ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ",
+    "source": "24AWRD014354371",
+    "excerpt": "αι ΔOΥ ΚΥΜΗΣ, και στοιχεία επικοινωνίας: τηλ.: 6977806216, email: georgiou.texni@gmail.com, και 2) «ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ», με έδρα στο Νομό Λάρισας, στο Φλάμπουρο Ελασσόνας Λάρισας, ΤΚ 40200, με ΑΦΜ: 036343031 και ΔOΥ ΛΑΡΙΣΑΣ, και στοιχεία"
+   },
+   {
+    "vat": "045780333",
+    "name": "ΓΕΩΡΓΙΟΥ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+    "source": "24AWRD014354371",
+    "excerpt": "ΩΡΓΙΟΥ ΚΩΝ. ΔΗΜΗΤΡΙΟΣ – ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ», που αποτελείται από τις ατομικές επιχειρήσεις: 1) «ΓΕΩΡΓΙΟΥ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ» με έδρα στο Νομό Ευβοίας, στο Νικάσι Καρύστου, ΤΚ 34001, με ΑΦΜ: 045780333 και ΔOΥ ΚΥΜΗΣ, και στοιχεία επ"
+   }
+  ],
+  "note": "Members enumerated by document 24AWRD014354371. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996551289": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
+  "legal_type": null,
+  "gemi": "-1",
+  "basis": "name",
+  "contracts": [
+   "25SYMV017232810"
+  ],
+  "members": [
+   {
+    "vat": "066526621",
+    "name": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ ΤΟΥ ΣΤΥΛΙΑΝΟΥ",
+    "source": "25SYMV017232810",
+    "excerpt": "65302, με ΑΦΜ: 996551289 ΔΟΥ Καβάλας, αποτελούμενη από: 1.την ατομική επιχείρηση με την επωνυμία «ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ ΤΟΥ ΣΤΥΛΙΑΝΟΥ», με έδρα τις Κρηνίδες Καβάλας, επί της οδού Εγνατίας, αρ. 65, Τ.Κ. 64003, ΑΦΜ 066526621, ΔΟΥ Καβάλας, και 2. την ατομ"
+   },
+   {
+    "vat": "117925460",
+    "name": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "25SYMV017232810",
+    "excerpt": "αρ. 65, Τ.Κ. 64003, ΑΦΜ 066526621, ΔΟΥ Καβάλας, και 2. την ατομική επιχείρηση με την επωνυμία «ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ», με έδρα τη Σιάτιστα Κοζάνης, επί της οδού Μ. Κωνσταντίνου, αρ. 10, Τ.Κ. 50300, ΑΦΜ 117925460, ΔΟΥ Κοζάνης όπως εκπροσωπείτ"
+   }
+  ],
+  "note": "Members enumerated by document 25SYMV017232810. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "803214556": {
+  "name": "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ ΚΑΙ Μ ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε Κ/Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "192269627000",
+  "basis": "gemi+name",
+  "contracts": [
+   "26SYMV018755812"
+  ],
+  "members": [
+   {
+    "vat": "110324970",
+    "name": "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ — εργολήπτης δημοσίων έργων",
+    "source": "26AWRD018652231",
+    "excerpt": "α Δ.Δ. Βασιλικής Δήμου Γόρτυνας, Τ.Κ. 70012, και αποτελείται από: 1. την ατομική επιχείρηση με την επωνυμία «ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ», με έδρα την Θεσσαλονίκη, επί της οδού Σταύρου Βουτυρά αριθμ. 7, Τ.Κ. 54627, ΑΦΜ 110324970, ΔΟΥ Ε’ Θεσσαλονίκης και στοι"
+   },
+   {
+    "vat": "999173415",
+    "name": "Μ ΑΠΟΣΤΟΛΙΔΗΣ Κ ΣΙΑ ΕΕ ΚΑΤΑΣΚΕΥΩΝ",
+    "source": "26AWRD018652231",
+    "excerpt": "W. www.growthfund.gr Μονάδα Συμβάσεων Στρατηγικής Σημασίας 26AWRD018652231 2026-03-16 2. την ετερόρρυθμη εταιρεία με την επωνυμία «Μ. ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε.» με έδρα Δ.Δ. Βασιλικής Δήμου Γόρτυνας, Τ.Κ. 70012, Α.Φ.Μ. 999173415, ΔΟΥ Ηρακλείου και στοιχεία ε"
+   }
+  ],
+  "note": "Members enumerated by document 26AWRD018652231. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "803210570": {
+  "name": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "192205206000",
+  "basis": "gemi+name",
+  "contracts": [
+   "26SYMV018756094"
+  ],
+  "members": [
+   {
+    "vat": "044622622",
+    "name": "ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΝΙΚΟΛΑΟΣ",
+    "source": "26AWRD018688757",
+    "excerpt": "αι στοιχεία επικοινωνίας: τηλ. 6937198910 και email lagadinosj@gmail.com, και 2. την ατομική επιχείρηση με την επωνυμία «ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ», με έδρα την Πάτρα, επί της οδού Τσαμιάδου, αρ. 39, Τ.Κ. 265 04, ΑΦΜ 044622622, ΔΟΥ Πατρών και στοιχεία επικ"
+   },
+   {
+    "vat": "045958594",
+    "name": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ ΓΕΩΡΓΙΟΣ",
+    "source": "26AWRD018688757",
+    "excerpt": "ΒΑΣΙΛΕΙΟΣ», με έδρα την Θεσσαλονίκη και αποτελείται από: 1. την ατομική επιχείρηση με την επωνυμία «ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ ΤΟΥ ΓΕΩΡΓΙΟΥ», με έδρα τον Εύοσμο Θεσσαλονίκης, επί της οδού Εφέσου, αρ. 23, Τ.Κ. 562 24, ΑΦΜ 045958594, ΔΟΥ ΚΕΦΟΔΕ Αττικής και στοιχ"
+   }
+  ],
+  "note": "Members enumerated by document 26AWRD018688757. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996774829": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) GREEN CONSTRUCTION ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ – ΣΤΑΥΡΟΣ ΤΣΙΦΤΣΟΓΛΟΥ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "174552401000",
+  "basis": "gemi+name",
+  "contracts": [
+   "24SYMV014185360"
+  ],
+  "members": [
+   {
+    "vat": "035592572",
+    "name": "ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24AWRD014095836",
+    "excerpt": "σογαίας, Τ.Κ. 19003, η οποία αποτελείται από τα ακόλουθα μέλη: (α) την ατομική εργοληπτική επιχείρηση με την επωνυμία «ΣΤΑΥΡΟΣ ΤΣΙΦΤΣΟΓΛΟΥ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ» που εδρεύει στο Ηράκλειο Θεσσαλονίκης, Τ.Κ. 57200 με ΑΦΜ 035592572 και (β) την εργοληπτική επιχεί"
+   },
+   {
+    "vat": "998256075",
+    "name": "GREEN CONSTRUCTION A.T.E.",
+    "source": "24AWRD014095836",
+    "excerpt": ") την εργοληπτική επιχείρηση με την επωνυμία «GREEN CONSTRUCTION AΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ» και διακριτικό τίτλο «Green Construction A.T.E.», που εδρεύει στη ΘΕΣΗ ΑΙΜΑΤΟΡΙΖΑ, Μαρκόπουλο Μεσογαίας, Τ.Κ. 19003 με ΑΦΜ 998256075, έναντι συνολικής αμοιβής ύψο"
+   }
+  ],
+  "note": "Members enumerated by document 24AWRD014095836. Machine proposal applied without change: every member is stated as such by a document AND named in the venture title (user decision 2026-08-20 — the 13 clean document-listed ventures applied as a batch)."
+ },
+ "996593557": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) IΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.- ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "171244201000",
+  "basis": "gemi+name",
+  "contracts": [
+   "23SYMV012972469",
+   "23SYMV012972686"
+  ],
+  "members": [
+   {
+    "vat": "999448728",
+    "name": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.",
+    "source": "23SYMV012972469",
+    "excerpt": "και αρ. ΓΕΜΗ 171244201000, αποτελούμενη από: (i) την ετερόρρυθμη εταιρεία με την επωνυμία «ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε.Ε.», που εδρεύει στην Καλλιθέα Αττικής, επί της οδού Ελευθερίου Βενιζέλου 172, ΤΚ 17675, ΑΦΜ 999448728 και εκπροσωπείται νόμιμα από τ"
+   },
+   {
+    "vat": "036692199",
+    "name": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΔΗΜΗΤΡΙΟΣ",
+    "source": "23SYMV012972469",
+    "excerpt": "ροσωπείται νόμιμα από τον κ. Ιωάννη Δραμητινό του Γεωργίου και (ii) την ατομική επιχείρηση με την επωνυμία «ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ», με έδρα στη Λυκόβρυση Αττικής, επί της οδού Μπουμπουλίνας 10Α, ΤΚ 14123, ΑΦΜ 036692199 και εκπροσωπείται νόμιμα για τ"
+   }
+  ],
+  "note": "Contract 23SYMV012972469 enumerates two members with their ΑΦΜ. The machine also proposed 031583314 — that is Ιωάννης Δραμητινός the man, signing for his own company: the same sentence says the venture is represented «από κοινού από τους δύο εκπροσώπους των δύο μερών της κοινοπραξίας». Dropped as a representative (user decision 2026-08-20)."
+ },
+ "802778407": {
+  "name": "ΚΑΡΑΛΗ ΖΩΗ Ε.Ε. - ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "182599740000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV016569184"
+  ],
+  "members": [
+   {
+    "vat": "802456271",
+    "name": "ΚΑΡΑΛΗ ΖΩΗ Ε.Ε.",
+    "source": "25AWRD016314503",
+    "excerpt": "Η ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΚΑΡΑΛΗ ΖΩΗ Ε.Ε. – ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ», με έδρα τη Θέση Γένεσι Τρικάλων Τ.Κ.: 42100, που αποτελείται από τα κάτωθι μέλη: α) Η εργοληπτική επιχείρηση με επωνυμία «ΚΑΡΑΛΗ ΖΩΗ Ε.Ε.» με ΑΦΜ: 802456271, της Δ.Ο.Υ. Τρικάλων, που εδρ"
+   },
+   {
+    "vat": "071851227",
+    "name": "ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΓΕΩΡΓΙΟΣ",
+    "source": "25AWRD016314503",
+    "excerpt": "Ε.Ε.» με ΑΦΜ: 802456271, της Δ.Ο.Υ. Τρικάλων, που εδρεύει στο Γενέσι Τρικάλων Τ.Κ. 42100, Τηλ. 6940068164, E-mail: morchellaee@gmail.com, και β) Η ατομική επιχείρηση με επωνυμία «ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ» με ΑΦΜ: 071851227, της Δ.Ο.Υ. Λάρισας, που εδρε"
+   }
+  ],
+  "note": "Award 25AWRD016314503 enumerates both members with their ΑΦΜ. The contract prints no member ΑΦΜ but confirms a two-party venture by having one signatory from each («από α) τον κο Τριανταφύλλου Κωνσταντίνο και β) την κα Κάραλη Ζωή»). The machine third proposal, 034704122 ΔΗΜΟΠΟΥΛΟΣ, is a competing invitee of the πρόσκληση who appears nowhere in the contract — ticked only because he shares the first name Κωνσταντίνος with the title. Dropped."
+ },
+ "996550834": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ - ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ",
+  "legal_type": null,
+  "gemi": "-1",
+  "basis": "name",
+  "contracts": [
+   "24SYMV015079058"
+  ],
+  "members": [
+   {
+    "vat": "044739770",
+    "name": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+    "source": "24AWRD014904962",
+    "excerpt": "Η ΚΩΝΣΤΑΝΤΙΝΙΑ- ΒΑΣΙΛΙΚΗ- ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ”», η οποία αποτελείται από τα εξής μέλη: α) τον οικονομικό φορέα «ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ-ΒΑΣΙΛΙΚΗ του ΚΩΝΣΤΑΝΤΙΝΟΥ», με έδρα Μεγάλου Αλεξάνδρου 27, Καβάλα, ΤΚ 65302, ΑΦΜ: 044739770, Τηλ.: 6942200063, email: dia"
+   },
+   {
+    "vat": "045351317",
+    "name": "ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΓΕΩΡΓΙΟΣ",
+    "source": "24AWRD014904962",
+    "excerpt": "άλου Αλεξάνδρου 27, Καβάλα, ΤΚ 65302, ΑΦΜ: 044739770, Τηλ.: 6942200063, email: diaboboti@gmail.com και β) τον οικονομικό φορέα «ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ του ΓΕΩΡΓΙΟΥ» με έδρα Μεγάλου Αλεξάνδρου 27, Καβάλα, ΤΚ 65302, ΑΦΜ: 045351317, Τηλ.: 6942200062, email: dim"
+   }
+  ],
+  "note": "Award 24AWRD014904962 enumerates both members with their ΑΦΜ; both sit at Μεγάλου Αλεξάνδρου 27 Καβάλα, the venture own seat. The award names the winner as an ΕΝΩΣΗ with no ΑΦΜ of its own — the κοινοπραξία ΑΦΜ 996550834 is constituted afterwards and is what signs the contract. The machine third proposal 996870356 is Μπομπότη OTHER joint venture (with ΞΑΝΘΟΠΟΥΛΟΣ, contracts 22SYMV010488925/010806398 of 2022) and carried no document quote — dropped."
+ },
+ "996699548": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ ΕΕ - ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "164013301000",
+  "basis": "gemi+name",
+  "contracts": [
+   "22SYMV010856525"
+  ],
+  "members": [
+   {
+    "vat": "999448728",
+    "name": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.",
+    "source": "22SYMV010856525",
+    "excerpt": "5561), με ΑΦΜ 996699548, Δ.Ο.Υ. Χολαργού, αποτελούμενη από την Ετερόρρυθμη Εταιρεία με την επωνυμία «ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.» με έδρα την οδό Λεωφόρο Ελευθερίου Βενιζέλου αρ.172 στην Καλλιθέα Αττικής και ΑΦΜ: 999448728 ΔΟΥ: Καλλιθέας και Αριθμός ΓΕΜ"
+   },
+   {
+    "vat": "998152201",
+    "name": "ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ",
+    "source": "22SYMV010856525",
+    "excerpt": "αγνωσταρά αρ.1, κάτοχο του υπ’ αριθμόν ΑΑ027298 Α.Δ.Τ. και ΑΦΜ: 031583314 και την Ετερόρρυθμη εταιρεία με την επωνυμία «ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ & ΣΙΑ Ε.Ε» με έδρα την οδό Ξανθίππου αρ.61 στον Χολαργό Αττικής, ΑΦΜ: 998152201 ΔΟΥ: Χολαργού και Αριθμός ΓΕΜΗ"
+   }
+  ],
+  "note": "The contract sentence «αποτελούμενη από» governs two Ε.Ε. companies, each followed by «όπως νομίμως εκπροσωπείται από» its manager with that person own ΑΦΜ. The two managers — 031583314 Ιωάννης Δραμητινός and 046248521 Ευαγγελία Ανδριανοπούλου — were dropped as representatives, not members (user decision 2026-08-20)."
+ },
+ "802850526": {
+  "name": "ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ/Ξ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "183936544000",
+  "basis": "gemi+name",
+  "contracts": [
+   "25SYMV016791030"
+  ],
+  "members": [
+   {
+    "vat": "043658123",
+    "name": "ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ ΣΤΕΦΑΝΟΣ",
+    "source": "25AWRD016690955",
+    "excerpt": "ΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ – Κ. ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ ΕΕ», που αποτελείται από τα κάτωθι μέλη: α) την ατομική επιχείρηση με την επωνυμία «ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ του ΣΤΕΦΑΝΟΥ», που εδρεύει στο Στεφανόβουνο Ελασσόνας, Τ.Κ 40200, Α.Φ.Μ.: 043658123, Δ.Ο.Υ.: Λάρισας, και στοιχεί"
+   },
+   {
+    "vat": "999501790",
+    "name": "Κ.ΣΠΑΝΟΣ & ΣΙΑ ΕΕ",
+    "source": "25AWRD016690955",
+    "excerpt": "00, Α.Φ.Μ.: 043658123, Δ.Ο.Υ.: Λάρισας, και στοιχεία επικοινωνίας τηλέφωνο: 6977253765, email: jskarlato@yahoo.com β) την τεχνική εταιρεία «Κ ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ ΕΕ» που εδρεύει στο Βόλο, οδός Μπόνου 7, Τ.Κ. 38445, Α.Φ.Μ.: 999501790, Δ.Ο.Υ.: Βόλου, και στοιχεία"
+   }
+  ],
+  "note": "Award 25AWRD016690955 (Τμήμα Α) enumerates both members with their ΑΦΜ and awards exactly this contract value €1.298.214,40. The contract itself names only the venture (its whole 62 kB contain just two ΑΦΜ: the Ministry and 802850526) but cites that award by ΑΔΑΜ in recital v, is seated at Μπόνου 7 Βόλος — Κ. ΣΠΑΝΟΣ address — and is signed by Δημήτριος Σκαρλατούδης, the other member. ΝΤΑΝΟΣ and ΣΚΑΝΔΑΛΟΣ in the same papers won Τμήμα Β and are not members here."
+ }
+}

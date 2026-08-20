@@ -121,12 +121,32 @@
 		per-company totals well above the programme's own total; that convention is retired.
 	</p>
 	<p>
-		Most joint ventures never reach this rule, because they sign as a
+		Most joint ventures never reach that rule, because they sign as a
 		<span lang="el">κοινοπραξία</span> that holds its own ΑΦΜ, seat and ΓΕΜΗ registration: the
 		contracting party is one entity and the contract is counted once, for it. Where the registry
 		instead keyed the venture's <em>members</em> as the parties, the signed contract's own
 		preamble was read and the party corrected — each such correction is listed on the contract's
 		page with the sentence it came from.
+	</p>
+	<h2 id="member-firms">Who is behind a joint venture</h2>
+	<p>
+		Counting the party that signed leaves the firms inside a
+		<span lang="el">κοινοπραξία</span> invisible, so the company ranking offers a second view:
+		<strong>by member firm</strong>. It is the same population and the same total, with one
+		substitution — a venture whose membership is on record is replaced by its members and its €
+		divided evenly between them. Nothing else moves, and both views add up to the programme
+		total.
+	</p>
+	<p>
+		Membership is <strong>curated from documents, one venture at a time</strong>. The strong
+		evidence is a sentence that lists the members —
+		<span lang="el">«αποτελούμενη από α) … ΑΦΜ … και β) … ΑΦΜ …»</span> — in the contract itself
+		or in the award decision; a firm identified only because the venture is named after it, or
+		because it was invited to the same competition, is <em>not</em> recorded as a member. Two
+		traps are handled explicitly and were both caught in review: the person signing for a member
+		company is not a third member, and another joint venture of the same firms is not a member
+		either. Where no document names the members, the venture keeps its own row and the page says
+		so, rather than the name being taken as proof.
 	</p>
 
 	<h2 id="procedures">Procedures and thresholds</h2>

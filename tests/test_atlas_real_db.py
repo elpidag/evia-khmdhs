@@ -735,6 +735,55 @@ def test_wound_up_joint_ventures_are_flagged_not_hidden(client, kh):
         "contractor_status"] == {}
 
 
+def test_member_firm_view_is_the_same_money(client, kh):
+    """The second ranking (user, 2026-08-20): the same population and the same
+    total as «as contracted», with one substitution — a joint venture whose
+    members are on record is replaced by them, its € split evenly."""
+    o = client.get("/api/antinero/overview").get_json()
+    facts = o["consortiums"]
+    assert (facts["n"], facts["n_documented"], facts["n_firms"]) == (54, 32, 48)
+    # the ventures hold 30,4% of the programme; the undocumented ones sit
+    # identically in both views and the page says so
+    assert facts["eur"] == pytest.approx(189_408_121.08, abs=0.01)
+    assert facts["eur_unsplit"] == pytest.approx(72_815_015.36, abs=0.01)
+
+    con = sqlite3.connect(DEFAULT_DB)
+    con.row_factory = sqlite3.Row
+    qx.apply_stated_basis(con)
+    firms = qx.antinero_member_firms(con)
+    parties = qx.antinero_contractors_list(con)
+    con.close()
+    total = sum(r["total_eur"] for r in firms)
+    assert total == pytest.approx(622_534_181.72, abs=0.01)
+    assert total == pytest.approx(sum(r["total_eur"] or 0 for r in parties), abs=0.01)
+    # substituting members for ventures leaves FEWER names, not more
+    assert len(firms) == 144 and len(parties) == 151
+    # the point of the view: Τ&Τ ΚΑΤΑΣΚΕΥΕΣ is 8th as a contractor and 3rd as
+    # a firm, because half of a €22,9M κοινοπραξία is its own
+    tt = next(r for r in firms if r["vat_number"] == "998807500")
+    assert tt["via_eur"] == pytest.approx(11_439_920.44, abs=0.01)
+    assert [r["vat_number"] for r in firms].index("998807500") == 2
+    # and no joint venture with curated members survives as a name of its own
+    with_members = {r[0] for r in kh.execute(
+        "SELECT venture_vat FROM consortium_members")}
+    assert not (with_members & {r["vat_number"] for r in firms})
+
+
+def test_consortium_members_are_firms_not_ventures(kh):
+    """A κοινοπραξία is never a member of a κοινοπραξία — the machine proposed
+    exactly that for ΛΙΑΧΤΙΔΑ and ΜΠΟΜΠΟΤΗ, and both were rejected on review."""
+    ventures = {r[0] for r in kh.execute("SELECT vat_number FROM consortiums")}
+    members = {r[0] for r in kh.execute("SELECT member_vat FROM consortium_members")}
+    assert not (ventures & members)
+    assert len(members) == 48
+    # every member carries the document it was read from, or the entry says
+    # plainly that it was identified by name against the registry
+    assert kh.execute("SELECT COUNT(*) FROM consortium_members").fetchone()[0] == 65
+    undocumented = kh.execute(
+        "SELECT COUNT(*) FROM consortiums WHERE members_documented = 0").fetchone()[0]
+    assert undocumented == 22
+
+
 def test_connections_pins(client):
     n = client.get("/api/connections").get_json()
     # every count here dropped on 2026-08-20, when nine contracts were

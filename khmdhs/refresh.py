@@ -32,7 +32,8 @@ import requests
 
 from khmdhs import (
     bodies_loader, document_kinds, categories_loader, chain_loader, completion_acts_loader,
-    contract_corrections, families_loader, forest_loader, linked_acts_loader,
+    consortium_loader, contract_corrections, details_loader, families_loader,
+    forest_loader, linked_acts_loader, municipalities_loader,
     payment_loader, region_loader, scope_loader, studies_loader,
 )
 from khmdhs.payment_loader import CORRECTIONS_FILE as KH_PAYMENT_CORRECTIONS_FILE
@@ -225,6 +226,10 @@ def main(argv: list[str] | None = None) -> int:
         # Π.Ε. layer, read from the placement sentence (2026-08-19)
         print("\n-- municipalities_loader -----------------------------------------")
         municipalities_loader.main(db_argv)
+        # who is behind each joint venture — the venture stays the contractor,
+        # this only records the firms it is made of (DATA_DECISIONS 2026-08-20)
+        print("\n-- consortium_loader ---------------------------------------")
+        consortium_loader.main(db_argv)
         print("\n-- families_loader ---------------------------------------------")
         families_loader.main(db_argv)
         print("\n-- document_kinds ----------------------------------------------")

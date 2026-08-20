@@ -223,6 +223,33 @@ CREATE TABLE IF NOT EXISTS contract_work_themes (
     FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
 );
 
+-- WHO IS BEHIND a joint venture (DATA_DECISIONS 2026-08-20). The venture
+-- itself stays the CONTRACTOR of its contracts — it is what signed them, and
+-- what every per-contractor surface counts. This layer only records the firms
+-- it is made of, so a second view can attribute the same money to them.
+-- Keyed on the venture's ΑΦΜ, NOT on a contract: the same κοινοπραξία holds
+-- several contracts, and a member is a member of the venture, not of a lot.
+CREATE TABLE IF NOT EXISTS consortiums (
+    vat_number   TEXT PRIMARY KEY,       -- the joint venture's own ΑΦΜ
+    name         TEXT NOT NULL,
+    legal_type   TEXT,                   -- ΓΕΜΗ's legal form, «Κοινοπραξία»
+    gemi         TEXT,
+    basis        TEXT,                   -- gemi | name | gemi+name
+    members_documented INTEGER NOT NULL, -- 0 = no document names its members
+    note         TEXT                    -- how the verdict was reached
+);
+
+CREATE TABLE IF NOT EXISTS consortium_members (
+    venture_vat TEXT NOT NULL,
+    seq         INTEGER NOT NULL,
+    member_vat  TEXT NOT NULL,
+    member_name TEXT,
+    source      TEXT,                    -- the ΑΔΑΜ the member was read from
+    excerpt     TEXT,                    -- the verbatim sentence
+    PRIMARY KEY (venture_vat, member_vat),
+    FOREIGN KEY (venture_vat) REFERENCES consortiums(vat_number) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS work_theme_labels (
     theme    TEXT PRIMARY KEY,
     label_el TEXT NOT NULL,

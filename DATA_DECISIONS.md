@@ -5519,3 +5519,75 @@ there; both sides unit-pinned.
 `atlas_api/queries_extra.py` (overlays retired to aliases),
 `khmdhs/contract_corrections.py`, and pins in `tests/test_webui_queries.py`,
 `tests/test_dase_real_db.py`, `tests/test_contract_corrections.py`.*
+
+---
+
+## 2026-08-20 · Who is behind each joint venture, and a second ranking
+
+54 in-scope contractors are joint ventures holding 67 contracts — **€189,4M,
+30,4% of the programme** — and each signs as ONE entity, so the firms inside
+them are invisible in every per-contractor view. User decision: show BOTH —
+the ranking stays on the contracting party, and a second view attributes the
+same money to the member firms.
+
+**Identifying the ventures** is settled by ΓΕΜΗ's legal form «Κοινοπραξία»
+(harvested into `contractor_locations.gemi_legal_type`), which marks 49, plus
+the registry name, which marks 48; the union is 54, so six ventures named
+after their job rather than their members — «ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΠΙΕΡΙΑΣ 2025
+Κ Ξ» — stop being missed.
+
+**Membership is curated, one venture at a time.** Proposals come from
+`scripts/extract_consortium_members.py`: every labelled ΑΦΜ in the venture's
+own contracts and in the acts of the same procurement, plus a ΓΕΜΗ name
+lookup for the 101 firms the programme did not know. Two evidence rules
+pre-tick a candidate — a document *lists* it as a member, or the venture is
+named after it — and four matching traps were measured and fixed rather than
+guessed:
+
+* «Τ & Τ ΚΑΤΑΣΚΕΥΕΣ» is one letter and a stop word → a compacted-name test,
+  for document candidates only;
+* every κοινοπραξία name starts with «ΚΟΙΝΟΠΡΑΞΙΑ», which matched all 54 to
+  each other until stop words came out of that test first;
+* a joint venture is never a member of another, so they leave the universe;
+* Greek naming: one shared word matched 1.795 pairs and two still matched
+  1.105 (a first name and a patronymic are two words), so a registry-wide
+  match now needs a word that identifies exactly ONE company.
+
+**Result: 54 of 54 curated — 32 with members (€116,6M), 22 recorded as
+members-undocumented (€72,8M).** 65 member links over 48 firms, of which **21
+are firms the programme had never seen**, because they only ever worked
+through a venture. Nineteen ventures were decided by the user one at a time
+against the full documents; 13 were applied as a batch after two worked
+examples.
+
+**The standard, set by the user:** a document must state membership. A
+venture's name is not evidence — «ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΑΝΤΑΛΗ – ΒΕΛΩΝΗΣ» names both
+firms and its contract names neither as a member, so it is recorded
+undocumented. Two traps were caught in review and are now encoded: **the
+person signing for a member company is not a third member** (the enumeration
+window used to swallow «τον κοινό εκπρόσωπο … με ΑΦΜ …»), and **another joint
+venture of the same firms is not a member** (proposed for both ΛΙΑΧΤΙΔΑ and
+ΜΠΟΜΠΟΤΗ, rejected).
+
+**The second view** (`queries_extra.antinero_member_firms`) is the same
+population and the same total with one substitution: a venture with curated
+members is replaced by them and its € split evenly, whole cents. It sums to
+**€622.534.181,72**, the same as the contracting-party view, and the
+undocumented ventures' **€72,8M sits identically in both** — stated in the
+frame's caveat rather than hidden. 151 names become 144. The finding it
+exposes: **Τ&Τ ΚΑΤΑΣΚΕΥΕΣ moves from 8th to 3rd** (€20,4M, of which €11,4M
+through the κοινοπραξία with ΜΕΣΟΓΕΙΟΣ, which itself appears at 9th having
+been invisible), and ΤΣΙΜΠΩΝΗ/BIODASOS reaches €10,1M through three ventures.
+
+Found and fixed on the way: **`details_loader` and `municipalities_loader`
+were called in `khmdhs/refresh.py` but never imported** — a NameError that
+would have stopped the whole refresh chain at that step since 2026-08-19.
+
+*Affects `scripts/extract_consortium_members.py` + `consortium_curator.html`
+(new), `khmdhs/data/consortium_members.json` (new, 54 entries),
+`khmdhs/consortium_loader.py` (new) + `consortiums` / `consortium_members`
+tables, `khmdhs/refresh.py` (chain + the missing imports),
+`queries_extra.antinero_member_firms` / `antinero_consortium_facts`, the `/`
+ranking's «As contracted / By member firm» toggle (`?rank=firm`),
+`/methodology#member-firms`, and `tests/test_consortiums.py` (8 units) +
+2 real-DB pins.*

@@ -384,6 +384,10 @@ def antinero_overview(kh: sqlite3.Connection,
         "yearly": q.antinero_yearly(pconn),
         "studies": {"summary": studies["summary"], "top": top_studies},
         "top_contractors": antinero_top_contractors(kh, limit=10),
+        # the same money attributed to the firms behind the joint
+        # ventures — the second view of the ranking (2026-08-20)
+        "member_firms": antinero_member_firms(kh, limit=10),
+        "consortiums": antinero_consortium_facts(kh),
         "top_authorities": q.top_authorities(kh, limit=5),
         "top_signers": q.top_signers(kh, limit=5),
         "coverage": q.flow_coverage(kh),
@@ -1164,6 +1168,120 @@ def antinero_contractor_shares(kh: sqlite3.Connection) -> dict[str, list[dict]]:
     helper, kept because the Atlas tests and the contractor page ask for it
     by this name."""
     return q.joint_contract_shares(kh)
+
+
+def antinero_consortium_facts(kh: sqlite3.Connection) -> dict:
+    """What the member view rests on, so the page can state it instead of
+    hardcoding it: how many joint ventures there are, how many have curated
+    members, and how much money sits in the ones that have none (which is
+    identical in both views)."""
+    try:
+        rows = list(kh.execute("SELECT vat_number, members_documented FROM consortiums"))
+    except sqlite3.OperationalError:
+        return {"n": 0, "n_documented": 0, "n_firms": 0, "eur_unsplit": 0.0}
+    documented = {r["vat_number"] for r in rows if r["members_documented"]}
+    undocumented = {r["vat_number"] for r in rows} - documented
+    per_vat: dict[str, float] = {}
+    shares = q.joint_contract_shares(kh)
+    for r in kh.execute(f"""
+        SELECT c.reference_number AS ref, c.vat_number AS vat,
+               {q.effective_cost(kh, 'co')} AS eur
+        FROM contractors c JOIN contracts co USING (reference_number)
+        WHERE {q.scope_filter(kh, 'c.reference_number')}"""):
+        vat = (r["vat"] or "").strip()
+        own = next((sh["share_eur"] for sh in shares.get(vat, [])
+                    if sh["ref"] == r["ref"]), r["eur"] or 0.0)
+        per_vat[vat] = per_vat.get(vat, 0.0) + own
+    n_firms = kh.execute("SELECT COUNT(DISTINCT member_vat) FROM "
+                         "consortium_members").fetchone()[0]
+    return {
+        "n": len(rows),
+        "n_documented": len(documented),
+        "n_firms": n_firms,
+        "eur": round(sum(per_vat.get(v, 0.0) for v in per_vat if v in documented
+                         or v in undocumented), 2),
+        "eur_unsplit": round(sum(per_vat.get(v, 0.0) for v in undocumented), 2),
+    }
+
+
+def antinero_member_firms(kh: sqlite3.Connection,
+                          limit: int | None = None) -> list[dict]:
+    """The same money, attributed to the FIRMS BEHIND the joint ventures.
+
+    The ranking counts the contracting party, which is what signed — and for
+    54 in-scope contractors that party is a κοινοπραξία, hiding the firms it
+    is made of (DATA_DECISIONS 2026-08-20). This is the second view the user
+    asked for: identical population, identical total, one substitution — a
+    venture whose members are curated is replaced by them, its € split evenly
+    (whole cents, `_even_cents`), and everything else stays as it is.
+
+    A venture whose members no document names keeps its own row: 22 of the 54
+    are in that state, so €72,8M sits identically in both views. That is the
+    honest outcome and the page says so.
+
+    Rows carry `is_venture` (an uncurated venture standing for itself) and
+    `via` (how much of the firm's total came through ventures), so the page
+    can show what moved without a second query.
+    """
+    shares = q.joint_contract_shares(kh)
+    members: dict[str, list[str]] = {}
+    try:
+        for r in kh.execute("SELECT venture_vat, member_vat FROM consortium_members "
+                            "ORDER BY venture_vat, seq"):
+            members.setdefault(r["venture_vat"], []).append(r["member_vat"])
+    except sqlite3.OperationalError:          # layer not loaded yet
+        members = {}
+    names = {r["vat"]: r["name"] for r in kh.execute(
+        "SELECT vat_number AS vat, MIN(name) AS name FROM contractors "
+        "GROUP BY vat_number")}
+    for r in kh.execute("SELECT member_vat AS vat, member_name AS name "
+                        "FROM consortium_members WHERE member_name IS NOT NULL"):
+        names.setdefault(r["vat"], r["name"])
+
+    out: dict[str, dict] = {}
+
+    def credit(vat: str, eur: float, ref: str, through: str | None) -> None:
+        e = out.setdefault(vat, {"vat_number": vat, "name": names.get(vat, vat),
+                                 "total_eur": 0.0, "via_eur": 0.0,
+                                 "refs": set(), "ventures": set()})
+        e["total_eur"] += eur
+        e["refs"].add(ref)
+        if through:
+            e["via_eur"] += eur
+            e["ventures"].add(through)
+
+    for r in kh.execute(f"""
+        SELECT c.reference_number AS ref, c.vat_number AS vat,
+               {q.effective_cost(kh, 'co')} AS eur
+        FROM contractors c JOIN contracts co USING (reference_number)
+        WHERE {q.scope_filter(kh, 'c.reference_number')}"""):
+        vat = (r["vat"] or "").strip()
+        if not vat:
+            continue
+        # what this party holds of the contract, after the even split between
+        # parties that the ranking already applies
+        own = next((sh["share_eur"] for sh in shares.get(vat, [])
+                    if sh["ref"] == r["ref"]), r["eur"] or 0.0)
+        mem = members.get(vat)
+        if not mem:
+            credit(vat, own, r["ref"], None)
+            continue
+        for m, part in zip(mem, _even_cents(round(own * 100), len(mem))):
+            credit(m, part / 100, r["ref"], vat)
+
+    rows = []
+    for e in out.values():
+        rows.append({"vat_number": e["vat_number"], "name": e["name"],
+                     "total_eur": round(e["total_eur"], 2),
+                     "via_eur": round(e["via_eur"], 2),
+                     "n_contracts": len(e["refs"]),
+                     "n_ventures": len(e["ventures"]),
+                     "is_venture": e["vat_number"] in members
+                     or bool(kh.execute("SELECT 1 FROM consortiums WHERE "
+                                        "vat_number = ?",
+                                        (e["vat_number"],)).fetchone())})
+    rows.sort(key=lambda r: -r["total_eur"])
+    return rows[:limit] if limit else rows
 
 
 def antinero_top_contractors(kh: sqlite3.Connection, limit: int = 10) -> list[dict]:

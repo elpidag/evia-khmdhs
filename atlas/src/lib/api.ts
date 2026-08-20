@@ -388,6 +388,22 @@ export interface AntineroOverview {
 		}[];
 	};
 	top_contractors: TopContractor[];
+	/** the same money attributed to the firms BEHIND the joint ventures
+	 *  (DATA_DECISIONS 2026-08-20) — identical population, identical total */
+	member_firms: (TopContractor & {
+		via_eur: number;
+		n_ventures: number;
+		is_venture: boolean;
+	})[];
+	/** what the member view rests on, computed, never hardcoded */
+	consortiums: {
+		n: number;
+		n_documented: number;
+		n_firms: number;
+		eur: number;
+		/** € in ventures whose members no document names — identical in both views */
+		eur_unsplit: number;
+	};
 	top_authorities: Record<string, unknown>[];
 	top_signers: Record<string, unknown>[];
 	coverage: Record<string, number>;
