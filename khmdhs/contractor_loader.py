@@ -67,15 +67,15 @@ def main(argv: list[str] | None = None) -> int:
                    (vat_number, legal_name, address, postal_code, city, region_pe,
                     nuts3_code, gemi, lat, lon, geo_precision,
                     source, source_url, notes, curated_at,
-                    gemi_status)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    gemi_status, gemi_legal_type)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (vat, d.get("legal_name"), d.get("address"), d.get("postal_code"),
                  d.get("city"), pe, nuts3, d.get("gemi"),
                  d.get("lat"), d.get("lon"), d.get("geo_precision"),
                  d.get("source"), d.get("source_url"), d.get("notes"),
                  d.get("curated_at"),
                  # what ΓΕΜΗ says about the company today, verbatim
-                 d.get("gemi_status")),
+                 d.get("gemi_status"), d.get("gemi_legal_type")),
             )
     logging.info("Done. Wrote %d contractor_locations rows.", n)
     conn.close()

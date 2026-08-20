@@ -78,6 +78,10 @@ data/processed/audit_identity.json
 data/processed/municipality_review.json
 # work-theme + duration proposals (the curator page carries the data)
 data/processed/contract_details_review.json
+# joint-venture membership: the proposals and the ΓΕΜΗ name cache are
+# rebuildable; the curated verdicts live in khmdhs/data/
+data/processed/consortium_members_review.json
+data/processed/gemi_names.json
 # curator pages copied into the dev server's static dir (the committed
 # originals live at the repo root)
 atlas/static/contract_details_curator.html

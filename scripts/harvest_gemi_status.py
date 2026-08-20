@@ -59,9 +59,13 @@ def main(argv: list[str] | None = None) -> int:
             hit = harvested.get(vat.strip())
             if not hit or not hit.get("status"):
                 continue
-            if e.get("gemi_status") != hit["status"]:
+            if (e.get("gemi_status") != hit["status"]
+                    or e.get("gemi_legal_type") != hit.get("legal_type")):
                 changed += 1
             e["gemi_status"] = hit["status"]
+            # the register's legal FORM — «Κοινοπραξία» is the authoritative
+            # marker of a joint venture, and it finds six the names miss
+            e["gemi_legal_type"] = hit.get("legal_type")
             # deliberately no date: `dateGemiRegistered` is the registration
             # date, not the status date (26 active companies show the two
             # differing, one of them by nine years in the wrong direction)

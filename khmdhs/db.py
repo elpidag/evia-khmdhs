@@ -451,6 +451,9 @@ def init_db(path: Path) -> sqlite3.Connection:
         # reads 1992, before its own start date), not the status date — the
         # register's own status-history table has those.
         ("contractor_locations", "gemi_status", "TEXT"),
+        # the register's legal form; «Κοινοπραξία» is what makes an
+        # entity a joint venture, whatever its name happens to say
+        ("contractor_locations", "gemi_legal_type", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
