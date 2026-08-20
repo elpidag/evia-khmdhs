@@ -4,7 +4,14 @@ import { apiGet } from '$lib/api';
 export interface ContractorBundle {
 	summary: {
 		vat_number: string;
+		/** every registry spelling, comma-joined — kept as evidence */
 		names: string;
+		/** the curated display name (DATA_DECISIONS 2026-08-20) */
+		name?: string;
+		/** an official English name, where a body has one (ΤΑΙΠΕΔ → HRADF) */
+		name_en?: string;
+		/** the registry spelling the list was showing before the overlay */
+		registry_name?: string;
 		greek_vat: number;
 		n_contracts: number;
 		n_single_bidder: number;

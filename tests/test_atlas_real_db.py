@@ -1270,3 +1270,26 @@ def test_the_trail_dates_each_document_by_itself(client):
     assert by_ref["26SYMV018425922"]["d_basis"] == "signature"
     assert len({by_ref[r]["d"] for r in
                 ("24SYMV015643849", "26SYMV018425922", "26SYMV018426173")}) == 3
+
+
+def test_contractor_display_names_are_presented_and_both_names_search(client):
+    """The curated display name is what the site prints; the registry spelling
+    rides beside it and stays searchable (DATA_DECISIONS 2026-08-20). Searching
+    «BIODASOS» has to find the firm the registry calls «ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ
+    ΣΙΑ Ε.Ε.» — that is the reason the layer exists."""
+    rows = client.get("/api/antinero/contractors").get_json()
+    assert len(rows) == 151
+    assert sum(r["total_eur"] or 0.0 for r in rows) == pytest.approx(
+        622_534_181.72, abs=0.01)
+    bios = next(r for r in rows if r["vat_number"] == "998342580")
+    assert bios["name"] == "ΒΙΟΣ Α.Ε." and bios["registry_name"] != bios["name"]
+    # the name it signed four of its contracts under still finds it
+    old_name = client.get("/api/antinero/contractors?q=ΚΑΦΕΤΖΗΣ").get_json()
+    assert "998342580" in {r["vat_number"] for r in old_name}
+    found = client.get("/api/antinero/contractors?q=BIODASOS").get_json()
+    assert "801706520" in {r["vat_number"] for r in found}
+    also = client.get("/api/antinero/contractors?q=ΤΣΙΜΠΩΝΗ").get_json()
+    assert "801706520" in {r["vat_number"] for r in also}
+    # a joint venture prints as «Κ/Ξ » plus its members' own display names
+    kx = next(r for r in rows if r["vat_number"] == "996609013")
+    assert kx["name"] == "Κ/Ξ Τ&Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε. – ΜΕΣΟΓΕΙΟΣ Α.Ε."

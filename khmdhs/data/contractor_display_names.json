@@ -1,0 +1,2021 @@
+{
+ "_doc": "ONE canonical display name per contractor ΑΦΜ (DATA_DECISIONS 2026-08-20). Rules: the registered name (ΓΕΜΗ, else VIES) shortened to its distinctive head plus the legal form; a person as ΕΠΩΝΥΜΟ ΟΝΟΜΑ ΤΟΥ ΠΑΤΡΩΝΥΜΟΥ; a renamed company under today's name everywhere. Registry spellings are never rewritten — they stay searchable and visible as evidence. `_overrides` is merged on re-run and wins.",
+ "_overrides": {
+  "093897751": {
+   "name": "ΟΡΚΑ Α.Τ.Ε.Ε.",
+   "note": "The papers spell the head both ways — «ΟΡΚΑ» 25 mentions, «ΟΡ.ΚΑ.» 6 — and the δ.τ. is declared twice over: «ΟΡ.ΚΑ. Α.Τ.Ε.Ε.» (22SYMV010785854) and «ΟΡΚΑ Α.Τ.Ε.Ε.» (24SYMV014844409). ΓΕΜΗ registers ΟΡΚΑ, so ΟΡΚΑ it is. Reading the dots as ΟΡγάνωσης-ΚΑτασκευής is an inference no document states, and was rejected as evidence."
+  },
+  "099862798": {
+   "name": "ΕΡΓΑ ΠΡΑΣΙΝΟΥ Α.Τ.Ε.",
+   "note": "Its documents declare the δ.τ. «ΕΡΓΟΠΡΑΣΙΝΟ Α.Τ.Ε.» 10 times, but the registered name is what the payment orders, the calls and most contracts write (35 mentions against 10). Kept as ΕΡΓΑ ΠΡΑΣΙΝΟΥ; ΕΡΓΟΠΡΑΣΙΝΟ stays searchable."
+  },
+  "997471299": {
+   "name": "ΤΑΙΠΕΔ",
+   "name_en": "HRADF",
+   "note": "Acronym of «Ταμείο Αξιοποίησης Ιδιωτικής Περιουσίας του Δημοσίου», which its own contract declares as the διακριτικός τίτλος (22SYMV010499028); in English the fund's own name, Hellenic Republic Asset Development Fund. The umbrella body, excluded from every aggregate."
+  },
+  "802619365": {
+   "name": "Κ/Ξ ΣΙΔΕΡΗ ΜΑΡΙΑ – ΗΛΙΑΣ ΜΠΟΥΡΑΣ Ε.Ε.",
+   "note": "No contract quotes this venture's name and its members are not curated, so the registry spelling stood: «Σιδέρη Μαρία του Δημητρίου - Ηλίας Μπούρας και ετερρόρυθμη ΕΤ Κοινοπραξία», where «ετερρόρυθμη ΕΤ» is the registry's own garbling of «ετερόρρυθμη εταιρεία»."
+  },
+  "802827387": {
+   "name": "Κ/Ξ Α. ΗΛΙΟΠΟΥΛΟΣ Β. ΠΑΡΛΑΝΤΖΑΣ Ο.Ε. – ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ Ε.Ε.",
+   "note": "Registry name «Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ - ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ», with the marker stranded at the end. Α. ΗΛΙΟΠΟΥΛΟΣ Β. ΠΑΡΛΑΝΤΖΑΣ Ο.Ε. is ONE firm — the payment orders bill «Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ» beside «ΓΑΙΟ[ΣΤΑΤ] ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ» (25PAY018107613) — so no dash goes between the two partners."
+  },
+  "996714741": {
+   "name": "Κ/Ξ ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ Ι.Κ.Ε. – ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ Ι.Κ.Ε.",
+   "note": "The registry writes each member's legal form out in full, 126 characters of it; the forms are abbreviated here and nothing else is changed."
+  },
+  "996813189": {
+   "name": "Κ/Ξ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ Α.Ε. – ΚΑΤΣΙΑΒΑΣ ΧΡ. – ΝΑΤΣΗΣ ΚΩΝ. Ο.Ε. – ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ",
+   "note": "Its own contracts quote the name with the marker inside it — «ΚΟΙΝΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ …» (22SYMV011470180), «ΚΟΙΝ/ΞΙΑ …» (23SYMV011953055) — so the marker moves to the front as «Κ/Ξ» and the three members keep their own names."
+  }
+ },
+ "094206769": {
+  "name": "ΗΛΙΟΧΩΡΑ Α.Ε.",
+  "basis": "the δ.τ. its documents declare (5×)",
+  "kind": "company",
+  "registered": "ΗΛΙΟΧΩΡΑ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ ΒΙΟΜΗΧΑΝΙΚΩΝ ΕΜΠΟΡΙΚΩΝ ΤΕΧΝΙΚΩΝ ΤΟΥΡΙΣΤΙΚΩΝ ΚΑΙ ΞΕΝΟΔΟΧΕΙΑΚΩΝ ΕΠΙΧΕΙΡΗΣΕΩΝ",
+  "spellings": [
+   "ΗΛΙΟΧΩΡΑ Α.Ε."
+  ],
+  "source": "24AWRD015974005"
+ },
+ "996609013": {
+  "name": "Κ/Ξ Τ&Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε. – ΜΕΣΟΓΕΙΟΣ Α.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ T ΚΑΙ T ΚΑΤΑΣΚΕΥΕΣ ΑΕ ΜΕΣΟΓΕΙΟΣ ΑΕ 2 ΑΝΑΔΑΣΩΣΕΙΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ Τ &Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε.-ΜΕΣΟΓΕΙΟΣ Α.Ε.(ΑΝΑΔΑΣΩΣΕΙΣ)\"",
+   "\"ΚΟΙΝΟΠΡΑΞΙΑ Τ&Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε.-ΜΕΣΟΓΕΙΟΣ Α.Ε.(ΑΝΑΔΑΣΩΣΕΙΣ)"
+  ],
+  "source": "24SYMV014843550"
+ },
+ "099124894": {
+  "name": "ΖΙΤΑΚΑΤ Α.Τ.Ε.Β.Ε.",
+  "basis": "the δ.τ. its documents declare (3×)",
+  "kind": "company",
+  "registered": "ΖΙΤΑΚΑΤ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ - ΕΜΠΟΡΙΚΗ - ΒΙΟΜΗΧΑΝΙΚΗ",
+  "spellings": [
+   "ΖΙΤΑΚΑΤ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΙΑ Α.Ε.",
+   "ΖΙΤΑΚΑΤ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+   "ΖΙΤΑΚΑΤ ΑΤΕΒΕ"
+  ],
+  "source": "22SYMV010473680"
+ },
+ "099862798": {
+  "name": "ΕΡΓΑ ΠΡΑΣΙΝΟΥ Α.Τ.Ε.",
+  "basis": "user decision",
+  "kind": "company",
+  "registered": "ΕΡΓΑ ΠΡΑΣΙΝΟΥ ΑΤΕ",
+  "spellings": [
+   "ΕΡΓΑ ΠΡΑΣΙΝΟΥ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΙΑ",
+   "ΕΡΓΟΠΡΑΣΙΝΟ Α.Τ.Ε."
+  ],
+  "source": "22SYMV010489083",
+  "note": "Its documents declare the δ.τ. «ΕΡΓΟΠΡΑΣΙΝΟ Α.Τ.Ε.» 10 times, but the registered name is what the payment orders, the calls and most contracts write (35 mentions against 10). Kept as ΕΡΓΑ ΠΡΑΣΙΝΟΥ; ΕΡΓΟΠΡΑΣΙΝΟ stays searchable."
+ },
+ "998256075": {
+  "name": "GREEN CONSTRUCTION Α.Τ.Ε.",
+  "basis": "the δ.τ. its documents declare (9×)",
+  "kind": "company",
+  "registered": "GREEN CONSTRUCTION A.T.E.",
+  "spellings": [
+   "GREEN CONSTRUCTION A.T.E.",
+   "GREEN CONSTRUCTION ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "23SYMV012820428"
+ },
+ "998342580": {
+  "name": "ΒΙΟΣ Α.Ε.",
+  "basis": "the δ.τ. its documents declare (4×)",
+  "kind": "company",
+  "registered": "ΒΙΟΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΙΑ",
+  "spellings": [
+   "Δ ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ ΟΕ",
+   "Δ.ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ Ο.Ε.",
+   "ΒΙΟΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+   "ΒΙΟΣ Α.Ε."
+  ],
+  "source": "22SYMV010447496"
+ },
+ "093897751": {
+  "name": "ΟΡΚΑ Α.Τ.Ε.Ε.",
+  "basis": "user decision",
+  "kind": "company",
+  "registered": "ΟΡΚΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΚΑΙ ΕΜΠΟΡΙΚΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΟΡΚΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΚΑΙ ΕΜΠΟΡΙΚΗ ΕΤΑΙΡΕΙΑ ΟΡΓΑΝΩΣΗΣ ΚΑΙ ΚΑΤΑΣΚΕΥΗΣ ΤΕΧΝΙΚΩΝ ΕΡΓΩΝ"
+  ],
+  "source": "22SYMV010785854",
+  "note": "The papers spell the head both ways — «ΟΡΚΑ» 25 mentions, «ΟΡ.ΚΑ.» 6 — and the δ.τ. is declared twice over: «ΟΡ.ΚΑ. Α.Τ.Ε.Ε.» (22SYMV010785854) and «ΟΡΚΑ Α.Τ.Ε.Ε.» (24SYMV014844409). ΓΕΜΗ registers ΟΡΚΑ, so ΟΡΚΑ it is. Reading the dots as ΟΡγάνωσης-ΚΑτασκευής is an inference no document states, and was rejected as evidence."
+ },
+ "998807500": {
+  "name": "Τ&Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε.",
+  "basis": "the δ.τ. its documents declare (6×)",
+  "kind": "company",
+  "registered": "Τ & Τ ΚΑΤΑΣΚΕΥΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "Τ ΚΑΙ Τ ΚΑΤΑΣΚΕΥΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+   "Τ ΚΑΙ Τ ΑΝΩΝΥΜΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΑΝΑΠΤΥΞΙΑΚΗ ΤΟΥΡΙΣΤΙΚΗ ΚΑΙ ΕΝΕΡΓΕΙΑΚΗ ΕΤΑΙΡΕΙΑ",
+   "Τ & Τ ΚΑΤΑΣΚΕΥΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "22SYMV010447493"
+ },
+ "801729255": {
+  "name": "GREEN EDGE Α.Ε.",
+  "basis": "the δ.τ. its documents declare (3×)",
+  "kind": "company",
+  "registered": "GREEN EDGE ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "GREEN EDGE ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΙΑ"
+  ],
+  "source": "24SYMV014244175"
+ },
+ "050232986": {
+  "name": "ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΕΥΑΓΓΕΛΟΣ",
+  "spellings": [
+   "ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ",
+   "ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ (ατομική επιχείρηση)"
+  ],
+  "source": "23AWRD012870117"
+ },
+ "036692199": {
+  "name": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΔΗΜΗΤΡΙΟΣ",
+  "spellings": [
+   "ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
+   "ΜΑΡΙΑ ΣΙΔΕΡΗ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
+   "ΣΙΔΕΡΗ ΜΑΡΙΑ ΔΗΜΗΤΡΙΟΣ"
+  ],
+  "source": "22SYMV010551306"
+ },
+ "139713737": {
+  "name": "ΚΑΡΑΘΑΝΑΣΗΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΔΙΑΜΑΝΤΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΑΡΑΘΑΝΑΣΗΣ ΝΙΚΟΛΑΟΣ ΔΙΑΜΑΝΤΗΣ",
+  "spellings": [
+   "ΝΙΚΟΛΑΟΣ ΚΑΡΑΘΑΝΑΣΗΣ ΤΟΥ ΔΙΑΜΑΝΤΗ",
+   "ΚΑΡΑΘΑΝΑΣΗΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΔΙΑΜΑΝΤΗ"
+  ],
+  "source": "24AWRD014210755"
+ },
+ "999826258": {
+  "name": "ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (6×)",
+  "kind": "company",
+  "registered": "ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ & ΣΙΑ ΕΕ",
+   "ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ ΚΑΙ ΣΙΑ ΕΕ"
+  ],
+  "source": "22SYMV010489083"
+ },
+ "802122302": {
+  "name": "ΔΑΣΟΤΕΧΝΙΚΑ ΕΡΓΑ ABIES Ε.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ΔΑΣΟΤΕΧΝΙΚΑ ΕΡΓΑ ABIES Ε Ε",
+  "spellings": [
+   "ΔΑΣΟΤΕΧΝΙΚΑ ΕΡΓΑ ABIES Ε.Ε."
+  ],
+  "source": "24SYMV014354915"
+ },
+ "997080725": {
+  "name": "Κ/Ξ ΤΣΑΝΤΑΛΗ Π. ΟΥΡΑΝΙΑ – ΒΕΛΩΝΗΣ ΝΙΚ. ΓΕΩΡΓΙΟΣ",
+  "basis": "the name its own contract quotes (3×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΑΝΤΑΛΗ Π ΟΥΡΑΝΙΑ ΒΕΛΩΝΗΣ ΝΙΚ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΑΝΤΑΛΗ Π. ΟΥΡΑΝΙΑ – ΒΕΛΩΝΗΣ ΝΙΚ. ΓΕΩΡΓΙΟΣ",
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΑΝΤΑΛΗ Π. ΟΥΡΑΝΙΑ - ΒΕΛΩΝΗΣ ΝΙΚ. ΓΕΩΡΓΙΟΣ"
+  ],
+  "source": "24SYMV014431913"
+ },
+ "094297270": {
+  "name": "ΔΙΟΝ Α.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "ΔΙΟΝ ΑΝΩΝΥΜΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΔΙΟΝ ΑΝΩΝΥΜΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ"
+  ]
+ },
+ "044850827": {
+  "name": "ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΙΤΣΟΣ ΗΛΙΑΣ ΑΓΓΕΛΟΣ",
+  "spellings": [
+   "ΛΙΤΣΟΣ ΗΛΙΑΣ του ΑΓΓΕΛΟΥ",
+   "ΛΙΤΣΟΣ ΗΛΙΑΣ TOY ΑΓΓΕΛΟΥ"
+  ],
+  "source": "23PROC012860295"
+ },
+ "800363439": {
+  "name": "Γ.Ι.ΚΑΡΝΟΜΟΥΡΑΚΗΣ Α.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "Γ.Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ",
+  "spellings": [
+   "Γ.Ι.ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ, ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ",
+   "Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ",
+   "Γ.Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ"
+  ]
+ },
+ "035781463": {
+  "name": "ΠΑΤΣΙΚΑΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΠΑΤΣΙΚΑΣ ΝΙΚΟΛΑΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΠΑΤΣΙΚΑΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ"
+  ],
+  "source": "24AWRD014286548"
+ },
+ "044397125": {
+  "name": "ΦΑΚΙΡΗΣ ΤΑΞΙΑΡΧΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΦΑΚΙΡΗΣ ΤΑΞΙΑΡΧΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΤΑΞΙΑΡΧΗΣ ΦΑΚΙΡΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+   "ΦΑΚΙΡΗΣ ΤΑΞΙΑΡΧΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ"
+  ],
+  "source": "23PROC012469066"
+ },
+ "998068840": {
+  "name": "ΣΑΚΚΟΣ Χ. & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (6×)",
+  "kind": "company",
+  "registered": "ΣΑΚΚΟΣ Χ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΜΑΚΕΔΟΝΙΚΑ ΕΡΓΑ ΠΡΑΣΙΝΟΥ",
+   "ΣΑΚΚΟΣ Χ. & ΣΙΑ Ε.Ε."
+  ],
+  "source": "23SYMV012833668"
+ },
+ "800844340": {
+  "name": "ΑΛΚΗ Ι.Κ.Ε.",
+  "basis": "the short name its own documents use (10×)",
+  "kind": "company",
+  "registered": "ΑΛΚΗ Ι Κ Ε",
+  "spellings": [
+   "ΑΛΚΗ Ι.Κ.Ε."
+  ],
+  "source": "23SYMV012992145"
+ },
+ "999607559": {
+  "name": "ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε.",
+  "basis": "the δ.τ. its documents declare (8×)",
+  "kind": "company",
+  "registered": "ΛΙΑΧΤΙΔΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΛΙΑΧΤΙΔΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+   "ΛΙΑΧΤΙΔΑ Ανώνυμη Τεχνική Εμπορική & Βιομηχανική Εταιρεία (δ.τ. ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε.)"
+  ],
+  "source": "23AWRD012927708"
+ },
+ "998152201": {
+  "name": "ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (4×)",
+  "kind": "company",
+  "registered": "ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ Ε.Ε.",
+   "ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΟΥ ΚΑΙ ΣΙΑ Ε.Ε.",
+   "ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ"
+  ],
+  "source": "22SYMV010551306"
+ },
+ "802619365": {
+  "name": "Κ/Ξ ΣΙΔΕΡΗ ΜΑΡΙΑ – ΗΛΙΑΣ ΜΠΟΥΡΑΣ Ε.Ε.",
+  "basis": "user decision",
+  "kind": "venture",
+  "registered": "ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ ΕΤΕΡΡΟΡΥΘΜΗ ΕΤ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "Σιδέρη Μαρία του Δημητρίου - Ηλίας Μπούρας και ετερρόρυθμη ΕΤ Κοινοπραξία"
+  ],
+  "note": "No contract quotes this venture's name and its members are not curated, so the registry spelling stood: «Σιδέρη Μαρία του Δημητρίου - Ηλίας Μπούρας και ετερρόρυθμη ΕΤ Κοινοπραξία», where «ετερρόρυθμη ΕΤ» is the registry's own garbling of «ετερόρρυθμη εταιρεία»."
+ },
+ "996551622": {
+  "name": "Κ/Ξ ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ – ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ - ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ"
+  ],
+  "source": "26SYMV018718889"
+ },
+ "801423948": {
+  "name": "ONE AND ONLY PLAYGROUNDS ΜΟΝ. Α.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ONE AND ONLY PLAYGROUNDS ΜΟΝΟΠΡΟΣΩΠΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ONE AND ONLY PLAYGROUNDS ΜΟΝ. ΑΕ"
+  ],
+  "source": "26AWRD018521173"
+ },
+ "031213597": {
+  "name": "ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+   "ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ του ΓΕΩΡΓΙΟΥ"
+  ],
+  "source": "24AWRD014265251"
+ },
+ "802794641": {
+  "name": "Κ/Ξ Κ.ΣΠΑΝΟΣ & ΣΙΑ Ε.Ε. – ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΠΙΕΡΙΑΣ 2025 Κ Ξ",
+  "spellings": [
+   "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΠΙΕΡΙΑΣ 2025 Κ Ξ"
+  ],
+  "source": "25SYMV016570159"
+ },
+ "036891000": {
+  "name": "ΑΛΑΦΟΓΙΑΝΝΗ ΑΙΚΑΤΕΡΙΝΗ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΑΛΑΦΟΓΙΑΝΝΗ ΑΙΚΑΤΕΡΙΝΗ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΑΙΚΑΤΕΡΙΝΗ ΑΛΑΦΟΓΙΑΝΝΗ"
+  ],
+  "source": "24AWRD014147878"
+ },
+ "996551148": {
+  "name": "Κ/Ξ ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ – ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ - ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ – ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ"
+  ],
+  "source": "25SYMV016762267"
+ },
+ "998269962": {
+  "name": "ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (7×)",
+  "kind": "company",
+  "registered": "ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ ΕΕ"
+  ],
+  "source": "22AWRD011258574"
+ },
+ "996674333": {
+  "name": "Κ/Ξ ΣΙΔΕΡΗ ΜΑΡΙΑ – ΕΛ.ΤΕ. Ε.Π.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ-ΕΛ.ΤΕ. Ε.Π.Ε.",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ-ΕΛ.ΤΕ. Ε.Π.Ε."
+  ],
+  "source": "22SYMV010635347"
+ },
+ "996514480": {
+  "name": "Κ/Ξ BIODASOS Α.Ε. – ΓΕΩΡΓΙΟΥ Δ. – ΦΟΥΚΑΣ Ν. & ΣΙΑ Ο.Ε. (2024)",
+  "basis": "composed from its curated members; disambiguated from the other venture of the same firms",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ ΓΕΩΡΓΙΟΥ Δ ΦΟΥΚΑΣ Ν Κ ΣΙΑ ΟΕ ΤΕΧΝΗ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ ΕΕ ΓΕΩΡΓΙΟΥ Δ ΦΟΥΚΑΣ Ν Κ ΣΙΑ ΟΕ"
+  ],
+  "source": "24SYMV014809263"
+ },
+ "045351317": {
+  "name": "ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+   "ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ ΓΕΩΡΓΙΟΣ"
+  ],
+  "source": "22SYMV010447496"
+ },
+ "045139263": {
+  "name": "ΛΟΓΟΘΕΤΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΠΑΝΑΓΙΩΤΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΟΓΟΘΕΤΗΣ ΓΕΩΡΓΙΟΣ ΠΑΝΑΓΙΩΤΗΣ",
+  "spellings": [
+   "ΛΟΓΟΘΕΤΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΠΑΝΑΓΙΩΤΗ"
+  ],
+  "source": "23SYMV013019364"
+ },
+ "996681011": {
+  "name": "Κ/Ξ ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε. – ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε. – ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε."
+  ]
+ },
+ "996608815": {
+  "name": "Κ/Ξ ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ – ΜΠΟΥΡΑΣ ΗΛΙΑΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ-ΜΠΟΥΡΑΣ ΗΛΙΑΣ ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ",
+  "spellings": [
+   "Κ/ΞΙΑ ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ – ΜΠΟΥΡΑΣ ΗΛΙΑΣ"
+  ],
+  "source": "24SYMV014439912"
+ },
+ "997424631": {
+  "name": "ΗΡΩΝ Α.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΗΡΩΝ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΟΙΚΟΔΟΜΙΚΗ ΚΤΗΜΑΤΙΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΕΜΠΟΡΙΚΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΗΡΩΝ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ - ΟΙΚΟΔΟΜΙΚΗ - ΚΤΗΜΑΤΙΚΗ - ΞΕΝΟΔΟΧΕΙΑΚΗ - ΕΜΠΟΡΙΚΗ - ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "26AWRD018598691"
+ },
+ "996514860": {
+  "name": "Κ/Ξ ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ – Μ.&Κ. ΤΕΧΝΙΚΑ ΕΡΓΑ Α.Ε.",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ Μ ΚΑΙ Κ ΤΕΧΝΙΚΑ",
+  "spellings": [
+   "ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ – Μ.&Κ. ΤΕΧΝΙΚΑ ΕΡΓΑ Α.Ε."
+  ],
+  "source": "25SYMV016670155"
+ },
+ "996514405": {
+  "name": "Κ/Ξ ΝΤΙΝΟΠΟΥΛΟΣ ΑΠΟΣΤΟΛΟΣ - ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΝΤΙΝΟΠΟΥΛΟΣ ΑΠΟΣΤΟΛΟΣ ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΝΤΙΝΟΠΟΥΛΟΣ ΑΠΟΣΤΟΛΟΣ - ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ"
+  ],
+  "source": "24SYMV014492614"
+ },
+ "093307430": {
+  "name": "ΒΙΟΛΙΑΠ Α.Τ.Ε.Β.Ε.",
+  "basis": "the δ.τ. its documents declare (4×)",
+  "kind": "company",
+  "registered": "ΒΙΟΛΙΑΠ Α.Τ.Ε.Β.Ε.",
+  "spellings": [
+   "ΒΙΟΛΙΑΠ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "24AWRD014175065"
+ },
+ "998434068": {
+  "name": "ΓΕΩΓΝΩΜΩΝ Ο.Ε.",
+  "basis": "the short name its own documents use (3×)",
+  "kind": "company",
+  "registered": "ΓΕΩΓΝΩΜΩΝ ΟΕ",
+  "spellings": [
+   "ΓΕΩΓΝΩΜΩΝ Ο.Ε.",
+   "ΓΕΩΓΝΩΜΩΝ ΟΕ"
+  ],
+  "source": "22SYMV010795606"
+ },
+ "045312261": {
+  "name": "ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΛΙΤΣΑ ΕΥΔΟΚΙΑ του ΚΩΝΣΤΑΝΤΙΝΟΥ"
+  ],
+  "source": "22SYMV011632177"
+ },
+ "801838797": {
+  "name": "ΝΙΚΟΛΑΟΣ ΔΗΜΗΤΡΙΟΥ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ΝΙΚΟΛΑΟΣ ΔΗΜΗΤΡΙΟΥ ΣΙΑ Ε Ε",
+  "spellings": [
+   "ΝΙΚΟΛΑΟΣ ΔΗΜΗΤΡΙΟΥ & ΣΙΑ Ε.Ε."
+  ],
+  "source": "24AWRD014169462"
+ },
+ "996496315": {
+  "name": "Κ/Ξ ΓΚΑΡΑΝΑΤΣΙΟΥ ΑΡΕΤΗ ΤΟΥ ΑΘΑΝΑΣΙΟΥ – ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΡΕΤΗ ΓΚΑΡΑΝΑΤΣΙΟΥ- ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ Κ/Ξ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΑΡΕΤΗ ΓΚΑΡΑΝΑΤΣΙΟΥ - ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ"
+  ],
+  "source": "24SYMV014774679"
+ },
+ "072740076": {
+  "name": "ΠΑΠΑΣΠΥΡΟΣ ΗΛΙΑΣ ΤΟΥ ΘΩΜΑ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΠΑΠΑΣΠΥΡΟΣ ΗΛΙΑΣ ΘΩΜΑΣ",
+  "spellings": [
+   "ΠΑΠΑΣΠΥΡΟΣ ΗΛΙΑΣ ΤΟΥ ΘΩΜΑ"
+  ],
+  "source": "24AWRD014403335"
+ },
+ "055481330": {
+  "name": "ΔΡΟΣΟΥ ΣΠΥΡΙΔΟΥΛΑ ΤΟΥ ΑΔΑΜΑΝΤΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΔΡΟΣΟΥ ΣΠΥΡΙΔΟΥΛΑ ΑΔΑΜΑΝΤΙΟΣ",
+  "spellings": [
+   "ΔΡΟΣΟΥ ΣΠΥΡΙΔΟΥΛΑ του ΑΔΑΜΑΝΤΙΟΥ"
+  ],
+  "source": "24PROC014210746"
+ },
+ "038377527": {
+  "name": "ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ"
+  ],
+  "source": "24PROC014159061"
+ },
+ "996625363": {
+  "name": "Κ/Ξ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ – ΑΛΣΟΣ Ι.Κ.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ Ι.Κ.Ε.",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΑΛΣΟΣ Ι.Κ.Ε."
+  ],
+  "source": "23SYMV013201917"
+ },
+ "802828870": {
+  "name": "Κ/Ξ ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ Ξ",
+  "spellings": [
+   "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ Ξ"
+  ],
+  "source": "25SYMV016712403"
+ },
+ "996605211": {
+  "name": "Κ/Ξ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ – ΧΡΗΣΤΟΣ ΚΥΡΙΑΖΑΤΗΣ & ΣΙΑ Ε.Ε.",
+  "basis": "no contract quotes it; registry spelling",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ-ΚΥΡΙΑΖΑΤΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ – ΧΡΗΣΤΟΣ ΚΥΡΙΑΖΑΤΗΣ & ΣΙΑ Ε.Ε."
+  ]
+ },
+ "044739770": {
+  "name": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ - ΒΑΣΙΛΙΚΗ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+   "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+  ],
+  "source": "22SYMV010488925"
+ },
+ "044397659": {
+  "name": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΛΟΥΚΑ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ ΛΟΥΚΑΣ",
+  "spellings": [
+   "ΝΤΑΝΟΣ,,ΒΑΣΙΛΕΙΟΣ,ΛΟΥΚΑΣ",
+   "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ του ΛΟΥΚΑ"
+  ],
+  "source": "22SYMV011360183"
+ },
+ "094118874": {
+  "name": "ΑΙΑΣ Α.Τ.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΑΙΑΣ ΑΝΩΝΥΜΟΣ ΤΕΧΝΙΚΗ ΕΤΑΙΡΙΑ",
+  "spellings": [
+   "ΑΙΑΣ Α.Τ.Ε."
+  ],
+  "source": "26AWRD018610065"
+ },
+ "996666474": {
+  "name": "Κ/Ξ ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ - ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "Κ/ΞΙΑ ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ - ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ",
+  "spellings": [
+   "Κ/ΞΙΑ ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ - ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ"
+  ],
+  "source": "24SYMV014415736"
+ },
+ "023230385": {
+  "name": "ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+   "ΛΙΑΡΟΣΤΑΘΗΣ ΒΑΣΙΛ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+  ],
+  "source": "22SYMV010473683"
+ },
+ "999173415": {
+  "name": "Μ. ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (1×)",
+  "kind": "company",
+  "registered": "Μ ΑΠΟΣΤΟΛΙΔΗΣ Κ ΣΙΑ ΕΕ ΚΑΤΑΣΚΕΥΩΝ",
+  "spellings": [
+   "Μ ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε. ΚΑΤΑΣΚΕΥΩΝ",
+   "Μ ΑΠΟΣΤΟΛΙΔΗΣ Κ ΣΙΑ ΕΕ ΚΑΤΑΣΚΕΥΩΝ"
+  ],
+  "source": "26AWRD018652231"
+ },
+ "033419558": {
+  "name": "ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΜΑΡΙΑ ΦΙΛΑΝΤΑΡΑΚΗ ΤΟΥ ΙΩΑΝΝΗ"
+  ],
+  "source": "24AWRD014251041"
+ },
+ "802662240": {
+  "name": "Κ/Ξ ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ – BIODASOS Α.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε Ε Κ Ξ",
+  "spellings": [
+   "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε. Κ/Ξ"
+  ],
+  "source": "24SYMV015889457"
+ },
+ "142452280": {
+  "name": "ΚΑΡΑΛΗ ΔΕΣΠΟΙΝΑ ΤΟΥ ΒΑΣΙΛΕΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΑΡΑΛΗ ΔΕΣΠΟΙΝΑ ΒΑΣΙΛΕΙΟΣ",
+  "spellings": [
+   "ΚΑΡΑΛΗ ΔΕΣΠΟΙΝΑ ΤΟΥ ΒΑΣΙΛΕΙΟΥ"
+  ],
+  "source": "24PROC014279436"
+ },
+ "803202324": {
+  "name": "Κ/Ξ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΕΝΩΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ - Κ/Ξ",
+  "spellings": [
+   "ΕΝΩΣΗ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ - Κ/Ξ"
+  ]
+ },
+ "996664604": {
+  "name": "Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ – ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ – ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
+  "basis": "the name its own contract quotes (6×)",
+  "kind": "venture",
+  "registered": "ΚΞΙΑ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
+  "spellings": [
+   "ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ – ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ – ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ"
+  ],
+  "source": "22SYMV010584641"
+ },
+ "803027799": {
+  "name": "FORESTVISION Ι.Κ.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "FORESTVISION Ι Κ Ε",
+  "spellings": [
+   "ForestVision Ι.Κ.Ε."
+  ],
+  "source": "26AWRD018529169"
+ },
+ "801569138": {
+  "name": "ERGOMASS Ι.Κ.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ERGOMASS Ι Κ Ε",
+  "spellings": [
+   "ERGOMASS Ι.Κ.Ε."
+  ],
+  "source": "26AWRD018598680"
+ },
+ "996593557": {
+  "name": "Κ/Ξ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε. – ΣΙΔΕΡΗ ΜΑΡΙΑ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ Κ Ξ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε Ε ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) IΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.- ΣΙΔΕΡΗ ΜΑΡΙΑ ΤΟΥ ΔΗΜΗΤΡΙΟΥ"
+  ]
+ },
+ "802827387": {
+  "name": "Κ/Ξ Α. ΗΛΙΟΠΟΥΛΟΣ Β. ΠΑΡΛΑΝΤΖΑΣ Ο.Ε. – ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ Ε.Ε.",
+  "basis": "user decision",
+  "kind": "venture",
+  "registered": "Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ - ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "25SYMV016722680",
+  "note": "Registry name «Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ - ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ», with the marker stranded at the end. Α. ΗΛΙΟΠΟΥΛΟΣ Β. ΠΑΡΛΑΝΤΖΑΣ Ο.Ε. is ONE firm — the payment orders bill «Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ» beside «ΓΑΙΟ[ΣΤΑΤ] ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ» (25PAY018107613) — so no dash goes between the two partners."
+ },
+ "801706520": {
+  "name": "BIODASOS Α.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε.",
+   "BIODASOS ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ"
+  ]
+ },
+ "998255970": {
+  "name": "ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (6×)",
+  "kind": "company",
+  "registered": "ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΜΟΝΟΠΡΟΣΩΠΗ ΙΚΕ & ΣΙΑ Ε.Ε.",
+   "ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ & ΣΙΑ Ε.Ε.",
+   "ΑΝΑΠΤΥΞΙΑΚΗ ΠΡΑΣΙΝΟΥ ΚΑΙ ΣΙΑ ΕΕ"
+  ],
+  "source": "22SYMV010795606"
+ },
+ "998353594": {
+  "name": "ΚΥΡΙΑΖΑΤΗΣ ΧΡΗΣΤΟΣ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ΚΥΡΙΑΖΑΤΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΚΥΡΙΑΖΑΤΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ Ε.Ε."
+  ],
+  "source": "26AWRD018655638"
+ },
+ "802174648": {
+  "name": "Κ. ΤΣΙΦΤΣΟΓΛΟΥ & ΣΙΑ Ο.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "Κ ΤΣΙΦΤΣΟΓΛΟΥ ΚΑΙ ΣΙΑ Ο Ε",
+  "spellings": [
+   "Κ. ΤΣΙΦΤΣΟΓΛΟΥ ΚΑΙ ΣΙΑ Ο.Ε."
+  ],
+  "source": "24AWRD014316008"
+ },
+ "996714083": {
+  "name": "Κ/Ξ ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ – ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ Ι.Κ.Ε.",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ – ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ"
+  ],
+  "source": "24SYMV014415876"
+ },
+ "996813651": {
+  "name": "Κ/Ξ BIODASOS Α.Ε. – ΓΕΩΡΓΙΟΥ Δ. – ΦΟΥΚΑΣ Ν. & ΣΙΑ Ο.Ε. (2023)",
+  "basis": "composed from its curated members; disambiguated from the other venture of the same firms",
+  "kind": "venture",
+  "registered": "BIODASOS-ΤΕΧΝΗ",
+  "spellings": [
+   "BIODASOS-ΤΕΧΝΗ"
+  ]
+ },
+ "802865853": {
+  "name": "Κ/Ξ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε. - ΗΛΙΑΣ ΜΠΟΥΡΑΣ & ΣΙΑ Ε.Ε",
+  "basis": "the name its own contract quotes (2×)",
+  "kind": "venture",
+  "registered": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε Ε ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε Ε ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε.Ε. - ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε.Ε. ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "25SYMV016921666"
+ },
+ "801689474": {
+  "name": "ΑΓΓΕΛΑΤΟΣ-ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ Ο.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ΑΓΓΕΛΑΤΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ Ο Ε",
+  "spellings": [
+   "ΑΓΓΕΛΑΤΟΣ-ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ Ο.Ε."
+  ],
+  "source": "24AWRD014696933"
+ },
+ "802838906": {
+  "name": "Κ/Ξ ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ – ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε Ε ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ – ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε. ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "25SYMV016782219"
+ },
+ "999640010": {
+  "name": "P. & C. DEVELOPMENT S.A.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΠΙ ΕΝΤ ΣΙ ΝΤΙΒΕΛΟΠΜΕΝΤ ΤΕΧΝΙΚΗ -ΟΙΚΟΔΟΜΙΚΗ - ΕΜΠΟΡΙΚΗ - ΝΑΥΤΙΛΙΑΚΗ ΚΑΙ ΤΟΥΡΙΣΤΙΚΗ ΜΟΝΟΠΡΟΣΩΠΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΠΙ ΕΝΤ ΝΤΙΒΕΛΟΠΜΕΝΤ ΤΕΧΝΙΚΗ-ΟΙΚΟΔΟΜΙΚΗ-ΕΜΠΟΡΙΚΗ-ΝΑΥΤΙΛΙΑΚΗ & ΤΟΥΡΙΣΤΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "23AWRD013539666"
+ },
+ "997973588": {
+  "name": "ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε.",
+  "basis": "the short name its own documents use (7×)",
+  "kind": "company",
+  "registered": "ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ",
+  "spellings": [
+   "ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε.",
+   "ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ"
+  ],
+  "source": "23AWRD012927708"
+ },
+ "996666622": {
+  "name": "Κ/Ξ ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ - ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ - ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΚΞ ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ",
+  "spellings": [
+   "ΚΞ ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ - ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ - ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ"
+  ],
+  "source": "24SYMV014917317"
+ },
+ "102529416": {
+  "name": "ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΙΩΣΗΦ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΙΩΣΗΦ",
+  "spellings": [
+   "ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΙΩΣΗΦ",
+   "ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΙΩΣΗΦ"
+  ],
+  "source": "22SYMV010488925"
+ },
+ "043482580": {
+  "name": "ΑΛΤΑΝΗΣ ΣΠΥΡΙΔΩΝ ΤΟΥ ΣΩΚΡΑΤΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΑΛΤΑΝΗΣ ΣΠΥΡΙΔΩΝ ΣΩΚΡΑΤΗΣ",
+  "spellings": [
+   "ΣΠΥΡΙΔΩΝ ΑΛΤΑΝΗΣ",
+   "ΑΛΤΑΝΗΣ ΣΠΥΡΙΔΩΝ ΤΟΥ ΣΩΚΡΑΤΗ"
+  ],
+  "source": "23SYMV013201917"
+ },
+ "043658123": {
+  "name": "ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΣΤΕΦΑΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ ΣΤΕΦΑΝΟΣ",
+  "spellings": [
+   "ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΣΤΕΦΑΝΟΥ",
+   "ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ ΣΤΕΦΑΝΟΣ"
+  ],
+  "source": "22PROC011082770"
+ },
+ "996496038": {
+  "name": "Κ/Ξ Κ. ΣΠΑΝΟΣ & ΣΙΑ ΕΕ – ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ Κ ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ Ε Ε ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΧΑΡΑΛΑΜΠΟΥΣ",
+  "spellings": [
+   "Κ/ΞΙΑ Κ. ΣΠΑΝΟΣ ΚΑΙ ΣΙΑ ΕΕ – ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ"
+  ],
+  "source": "24SYMV014316183"
+ },
+ "803233350": {
+  "name": "Κ/Ξ ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ – ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ - ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ - ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "26SYMV018779399"
+ },
+ "112528220": {
+  "name": "ΑΘΑΝΑΣΙΟΥ ΧΑΡΑΛΑΜΠΟΣ ΤΟΥ ΕΥΘΥΜΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΑΘΑΝΑΣΙΟΥ ΧΑΡΑΛΑΜΠΟΣ ΕΥΘΥΜΙΟΣ",
+  "spellings": [
+   "ΑΘΑΝΑΣΙΟΥ ΧΑΡΑΛΑΜΠΟΣ ΤΟΥ ΕΥΘΥΜΙΟΥ"
+  ],
+  "source": "24PROC014192492"
+ },
+ "996604620": {
+  "name": "Κ/Ξ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΔΗΜΟΠΟΥΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΔΑΜ",
+  "basis": "no contract quotes it; registry spelling",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΔΗΜΟΠΟΥΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΔΑΜ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ – ΔΗΜΟΠΟΥΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΔΑΜ"
+  ]
+ },
+ "999308989": {
+  "name": "ΓΕΩΡΥΘΜΙΚΗ Α.Τ.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΓΕΩΡΥΘΜΙΚΗ ΑΤΕ",
+  "spellings": [
+   "ΓΕΩΡΥΘΜΙΚΗ ΑΝΩΝΥΜΗ, ΤΕΧΝΙΚΗ, ΕΜΠΟΡΙΚΗ, ΒΙΟΜΗΧΑΝΙΚΗ, ΤΟΥΡΙΣΤΙΚΗ, ΛΑΤΟΜΙΚΗ ΚΑΙ ΚΤΗΜΑΤΙΚΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "25SYMV016659302"
+ },
+ "802604573": {
+  "name": "Κ/Ξ ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ - ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ - ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "24SYMV015889478"
+ },
+ "045420075": {
+  "name": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΧΑΡΑΛΑΜΠΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΧΑΡΑΛΑΜΠΟΣ",
+  "spellings": [
+   "Νικόλαος Παπαδόπουλος",
+   "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΧΑΡΑΛΑΜΠΟΥ",
+   "ΠΑΠΑΔΟΠΟΥΛΟΣ ΝΙΚΟΛΑΟΣ ΧΑΡΑΛΑΜΠΟΣ"
+  ],
+  "source": "24AWRD014244149"
+ },
+ "998746814": {
+  "name": "ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ - ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ Ι.Κ.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
+  "spellings": [
+   "ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ IKE",
+   "ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ - ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ",
+   "ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ"
+  ]
+ },
+ "031014455": {
+  "name": "ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΓΕΣΘΗΜΑΝΗ ΤΟΥ ΘΕΟΦΙΛΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΓΕΣΘΗΜΑΝΗ ΘΕΟΦΙΛΟΣ",
+  "spellings": [
+   "ΧΡΙΣΤΟΦΟΡΙΔΟΥ ΓΕΣΘΗΜΑΝΗ ΤΟΥ ΘΕΟΦΙΛΟΥ"
+  ],
+  "source": "24PROC014238021"
+ },
+ "996665717": {
+  "name": "Κ/Ξ ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ – ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ – ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ-ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ-ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
+  "spellings": [
+   "Κ/Ξ ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ-ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ-ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ"
+  ],
+  "source": "23SYMV013201961"
+ },
+ "099226444": {
+  "name": "HELLASOD Α.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "HELLASOD ΑΕ",
+  "spellings": [
+   "HELLASOD Α.Ε."
+  ],
+  "source": "24AWRD014316263"
+ },
+ "032899263": {
+  "name": "ΤΣΑΛΙΚΗΣ ΜΙΧΑΗΛ ΤΟΥ ΜΙΧΑΗΛ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΤΣΑΛΙΚΗΣ ΜΙΧΑΗΛ ΜΙΧΑΗΛ",
+  "spellings": [
+   "ΤΣΑΛΙΚΗΣ ΜΙΧΑΗΛ ΤΟΥ ΜΙΧΑΗΛ"
+  ],
+  "source": "24AWRD015362090"
+ },
+ "052362520": {
+  "name": "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ"
+  ],
+  "source": "23SYMV013039373"
+ },
+ "802940220": {
+  "name": "Κ/Ξ ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ – ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΜΑΝΑΡΙΤΣΑΣ ΛΙΑΡΗ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΜΑΝΑΡΙΤΣΑΣ ΛΙΑΡΗ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "25SYMV017458229"
+ },
+ "996815029": {
+  "name": "Κ/Ξ ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ – ΓΕΩΡΓΙΟΥ ΔΗΜΗΤΡΙΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΓΕΩΡΓΙΟΥ ΚΩΝ ΔΗΜΗΤΡΙΟΣ - ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "spellings": [
+   "ΓΕΩΡΓΙΟΥ ΚΩΝ. ΔΗΜΗΤΡΙΟΣ – ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ"
+  ],
+  "source": "24SYMV014447963"
+ },
+ "040847463": {
+  "name": "ΛΕΙΒΑΔΙΤΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΣΤΕΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΕΙΒΑΔΙΤΗΣ ΓΕΩΡΓΙΟΣ ΣΤΕΡΓΙΟΣ",
+  "spellings": [
+   "ΛΕΙΒΑΔΙΤΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΣΤΕΡΓΙΟΥ"
+  ],
+  "source": "22SYMV010489083"
+ },
+ "998731143": {
+  "name": "ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (3×)",
+  "kind": "company",
+  "registered": "ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ",
+  "spellings": [
+   "ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ"
+  ],
+  "source": "22SYMV010795606"
+ },
+ "996714741": {
+  "name": "Κ/Ξ ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ Ι.Κ.Ε. – ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ Ι.Κ.Ε.",
+  "basis": "user decision",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ ΜΟΝΟΠΡΟΣΩΠΗ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΙΑ Ι.Κ.Ε.-ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ ΓΚΑΤΖΙΟΣ Ι. ΦΩΤ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΓΕΜΑ ΗΛΙΑΚΗ ΕΝΕΡΓΕΙΑ ΜΟΝΟΠΡΟΣΩΠΗ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΙΑ Ι.Κ.Ε. - ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ - ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ"
+  ],
+  "note": "The registry writes each member's legal form out in full, 126 characters of it; the forms are abbreviated here and nothing else is changed."
+ },
+ "036298541": {
+  "name": "ΛΙΟΛΙΟΣ ΑΡΙΣΤΟΒΟΥΛΟΣ ΤΟΥ ΑΘΑΝΑΣΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΙΟΛΙΟΣ ΑΡΙΣΤΟΒΟΥΛΟΣ ΑΘΑΝΑΣΙΟΣ",
+  "spellings": [
+   "ΛΙΟΛΙΟΣ,,ΑΡΙΣΤ,ΑΘΑΝΑΣΙΟΣ",
+   "ΑΡΙΣΤΟΒΟΥΛΟΣ ΛΙΟΛΙΟΣ του ΑΘΑΝΑΣΙΟΥ",
+   "ΛΙΟΛΙΟΣ ΑΡΙΣΤΟΒΟΥΛΟΣ"
+  ],
+  "source": "24AWRD014169467"
+ },
+ "054537472": {
+  "name": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "Ευάγγελος Μαναρίτσας",
+   "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+   "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+  ],
+  "source": "23SYMV012963827"
+ },
+ "094496848": {
+  "name": "ΤΟΜΗ Α.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "ΤΟΜΗ ΑΝΩΝΥΜΗ ΒΙΟΜΗΧΑΝΙΚΗ - ΕΜΠΟΡΙΚΗ - ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΤΟΜΗ ΑΝΩΝΥΜΗ ΒΙΟΜΗΧΑΝΙΚΗ ΕΜΠΟΡΙΚΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+   "ΤΟΜΗ ΑΝΩΝΥΜΗ ΒΙΟΜΗΧΑΝΙΚΗ - ΕΜΠΟΡΙΚΗ - ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ"
+  ]
+ },
+ "802778407": {
+  "name": "Κ/Ξ ΚΑΡΑΛΗ ΖΩΗ Ε.Ε. – ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΑΡΑΛΗ ΖΩΗ Ε Ε ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΚΑΡΑΛΗ ΖΩΗ Ε.Ε. - ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "25SYMV016569184"
+ },
+ "996714243": {
+  "name": "Κ/Ξ ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΙΩΑΝΝΗ – ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ - ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ Ι.Κ.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ - ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ - ΤΑΣΚΟΥΔΗΣ Ι ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι ΦΩΤΙΟΣ ΙΚΕ"
+  ],
+  "source": "24SYMV014774694"
+ },
+ "996551289": {
+  "name": "Κ/Ξ ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ"
+  ],
+  "source": "25SYMV017232810"
+ },
+ "996870356": {
+  "name": "Κ/Ξ ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ",
+  "spellings": [
+   "ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ"
+  ],
+  "source": "22SYMV010488925"
+ },
+ "996699548": {
+  "name": "Κ/Ξ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε. – ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ & ΣΙΑ Ε.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ ΕΕ - ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ ΕΕ - ΕΥΑΓΓΕΛΙΑ ΑΝΔΡΙΑΝΟΠΟΥΛΟΥ ΚΑΙ ΣΙΑ ΕΕ"
+  ]
+ },
+ "802662066": {
+  "name": "Κ/Ξ ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ – ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ (802662066)",
+  "basis": "composed from its curated members; disambiguated from the other venture of the same firms",
+  "kind": "venture",
+  "registered": "ΜΑΝΑΡΙΤΣΑΣ ΑΓΓΕΛΑΤΟΣ Κ Ξ",
+  "spellings": [
+   "ΜΑΝΑΡΙΤΣΑΣ ΑΓΓΕΛΑΤΟΣ Κ/Ξ"
+  ],
+  "source": "24SYMV015889443"
+ },
+ "802849435": {
+  "name": "Κ/Ξ ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ – ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ – ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "25SYMV016782541"
+ },
+ "117925460": {
+  "name": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+   "ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+  ],
+  "source": "24AWRD014576660"
+ },
+ "045351993": {
+  "name": "ΠΟΡΑΒΟΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΑΘΑΝΑΣΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΠΟΡΑΒΟΣ ΔΗΜΗΤΡΙΟΣ ΑΘΑΝΑΣΙΟΣ",
+  "spellings": [
+   "ΠΟΡΑΒΟΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΑΘΑΝΑΣΙΟΥ"
+  ],
+  "source": "25PROC016709625"
+ },
+ "803214556": {
+  "name": "Κ/Ξ ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ – Μ. ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ ΚΑΙ Μ ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε Κ/Ξ",
+  "spellings": [
+   "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ ΚΑΙ Μ ΑΠΟΣΤΟΛΙΔΗΣ & ΣΙΑ Ε.Ε Κ/Ξ"
+  ],
+  "source": "26SYMV018755812"
+ },
+ "996679758": {
+  "name": "Κ/Ξ ΛΙΑΧΤΙΔΑ Α.Τ.Ε.Β.Ε. – ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΛΙΑΧΤΙΔΑ ΑΤΕΒΕ ΕΛΛΗΝΙΚΑ ΕΡΓΑ ΟΕ"
+  ]
+ },
+ "802669608": {
+  "name": "Κ/Ξ ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ- ΒΕΛΩΝΗΣ ΝΙΚ. ΓΕΩΡΓΙΟΣ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΣΑΒΒΑΣ ΚΑΖΑΝΤΣΟΓΛΟΥ ΒΕΛΩΝΗΣ ΝΙΚ ΓΕΩΡΓΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ- ΒΕΛΩΝΗΣ ΝΙΚ. ΓΕΩΡΓΙΟΣ"
+  ],
+  "source": "24SYMV015889466"
+ },
+ "996831933": {
+  "name": "Κ/Ξ ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ – ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "Κ/ΞΙΑ ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ– ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ",
+  "spellings": [
+   "Κ/ΞΙΑ ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ– ΠΑΝΤΟΥΛΗΣ ΦΩΤΙΟΣ ΤΟΥ ΕΥΑΓΓΕΛΟΥ"
+  ]
+ },
+ "996605179": {
+  "name": "Κ/Ξ ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΔΙΟΝΥΣΙΟΣ ΤΟΥ ΖΑΦΕΙΡΗ – ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΔΙΟΝΥΣΙΟΣ ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΤΟΥ ΖΑΦΕΙΡΗ-ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΔΙΟΝΥΣΙΟΣ ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΤΟΥ ΖΑΦΕΙΡΗ - ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ"
+  ]
+ },
+ "999814120": {
+  "name": "Η. ΑΠΟΣΤΟΛΙΔΗΣ - Ν.ΠΑΓΚΑΣ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (3×)",
+  "kind": "company",
+  "registered": "Η ΑΠΟΣΤΟΛΙΔΗΣ Ν ΠΑΓΚΑΣ ΚΑΙ ΣΙΑ Ε Ε",
+  "spellings": [
+   "Η. ΑΠΟΣΤΟΛΙΔΗΣ - Ν. ΠΑΓΚΑΣ ΚΑΙ ΣΙΑ Ε.Ε",
+   "Η. ΑΠΟΣΤΟΛΙΔΗΣ - Ν.ΠΑΓΚΑΣ ΚΑΙ ΣΙΑ Ε.Ε."
+  ],
+  "source": "24AWRD015088777"
+ },
+ "802662122": {
+  "name": "Κ/Ξ ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ – ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ (802662122)",
+  "basis": "composed from its curated members; disambiguated from the other venture of the same firms",
+  "kind": "venture",
+  "registered": "ΑΓΓΕΛΑΤΟΣ ΜΑΝΑΡΙΤΣΑΣ Κ Ξ",
+  "spellings": [
+   "ΑΓΓΕΛΑΤΟΣ ΜΑΝΑΡΙΤΣΑΣ Κ/Ξ"
+  ],
+  "source": "24SYMV015889446"
+ },
+ "801045078": {
+  "name": "ΑΛΣΟΣ Ι.Κ.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΑΛΣΟΣ ΙΚΕ",
+  "spellings": [
+   "ΑΛΣΟΣ ΙΚΕ",
+   "Άλσος Ι.Κ.Ε."
+  ],
+  "source": "22SYMV010473684"
+ },
+ "802647782": {
+  "name": "Κ/Ξ ΧΡΗΣΤΟΣ ΚΥΡΙΑΚΑΚΗΣ & ΣΙΑ Ε.Ε. – ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑΕΕ ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑΕΕ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΚΥΡΙΑΚΑΚΗΣ ΧΡΗΣΤΟΣ ΚΑΙ ΣΙΑ ΕΕ - ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ ΕΕ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ],
+  "source": "24SYMV015889080"
+ },
+ "800948976": {
+  "name": "ΚΗΠΟΠΡΑΞΙΣ Ο.Ε.",
+  "basis": "the short name its own documents use (4×)",
+  "kind": "company",
+  "registered": "ΚΗΠΟΠΡΑΞΙΣ Ο.Ε.",
+  "spellings": [
+   "ΚΗΠΟΠΡΑΞΙΣ Ο.Ε."
+  ],
+  "source": "23AWRD012870117"
+ },
+ "999643896": {
+  "name": "ΝΑΤΟΥΡΑ Α.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΝΑΤΟΥΡΑ ΑΕ",
+  "spellings": [
+   "ΝΑΤΟΥΡΑ ΑΝΩΝ ΤΕΧΝ ΚΤΗΜ ΒΙΟΜΤΟΥΡ ΛΑΤ ΚΑΙ ΕΜΠΟΡ ΕΤΑΙΡ ΓΕΩΡΓΙΚΩΝ ΚΤΗΝΙΑΤΡΙΚ ΕΙΔΩΝ ΚΑΙ ΠΕΡΙΒΑΝΤΟΛΟΓΙΚΩΝ ΜΕΛΕΤΩΝ",
+   "ΝΑΤΟΥΡΑ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΚΤΗΜΑΤΙΚΗ ΒΙΟΜΗΧΑΝΙΚΗ ΤΟΥΡΙΣΤΙΚΗ ΛΑΤΟΜΙΚΗ ΚΑΙ ΕΜΠΟΡΙΚΗ ΕΤΑΙΡΕΙΑ ΓΕΩΡΓΙΚΩΝ ΚΤΗΝΙΑΤΡΙΚΩΝ ΕΙΔΩΝ & ΠΕΡΙΒΑΝΤΟΛΟΓΙΚΩΝ ΜΕΛΕΤΩΝ"
+  ],
+  "source": "22SYMV010473683"
+ },
+ "802850526": {
+  "name": "Κ/Ξ ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ – Κ.ΣΠΑΝΟΣ & ΣΙΑ Ε.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ Ξ",
+  "spellings": [
+   "ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ/Ξ"
+  ],
+  "source": "25SYMV016791030"
+ },
+ "997227555": {
+  "name": "Κ/Ξ ΛΕΦΤΣΗΣ ΧΡΗΣΤΟΣ - ΑΦΟΙ ΔΙΑΜΑΝΤΟΓΛΟΥ Ο.Ε.",
+  "basis": "no contract quotes it; registry spelling",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΛΕΦΤΣΗΣ ΧΡΗΣΤΟΣ ΑΦΟΙ ΔΙΑΜΑΝΤΟΓΛΟΥ ΟΕ ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΛΕΦΤΣΗΣ ΧΡΗΣΤΟΣ - ΑΦΟΙ ΔΙΑΜΑΝΤΟΓΛΟΥ ΟΕ"
+  ]
+ },
+ "803210570": {
+  "name": "Κ/Ξ ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ – ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
+  "spellings": [
+   "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ – ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ"
+  ]
+ },
+ "996550190": {
+  "name": "Κ/Ξ Γ.Ι.ΚΑΡΝΟΜΟΥΡΑΚΗΣ Α.Ε. – ΑΛΚΗ Ι.Κ.Ε. (ΥΠΟΕΡΓΟ Β)",
+  "basis": "composed from its curated members; disambiguated from the other venture of the same firms",
+  "kind": "venture",
+  "registered": "Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ ΥΠΟΕΡΓΟ Β",
+  "spellings": [
+   "Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ ΥΠΟΕΡΓΟ Β"
+  ]
+ },
+ "996774829": {
+  "name": "Κ/Ξ ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ – GREEN CONSTRUCTION Α.Τ.Ε.",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) GREEN CONSTRUCTION ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ – ΣΤΑΥΡΟΣ ΤΣΙΦΤΣΟΓΛΟΥ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) GREEN CONSTRUCTION ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ – ΣΤΑΥΡΟΣ ΤΣΙΦΤΣΟΓΛΟΥ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ"
+  ]
+ },
+ "042325306": {
+  "name": "ΛΙΑΠΟΠΟΥΛΟΥ ΑΡΙΣΤΕΑ ΤΟΥ ΑΝΔΡΟΝΙΚΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΙΑΠΟΠΟΥΛΟΥ ΑΡΙΣΤΕΑ ΑΝΔΡΟΝΙΚΟΣ",
+  "spellings": [
+   "ΑΡΙΣΤΕΑ ΛΙΑΠΟΠΟΥΛΟΥ ΤΟΥ ΑΝΔΡΟΝΙΚΟΥ"
+  ],
+  "source": "24PROC014752161"
+ },
+ "035592572": {
+  "name": "ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+   "ΤΣΙΦΤΣΟΓΛΟΥ ΣΤΑΥΡΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+  ],
+  "source": "22PROC011082770"
+ },
+ "996550834": {
+  "name": "Κ/Ξ ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ",
+  "basis": "composed from its curated members",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ - ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ - ΚΑΦΕΤΖΗΣ ΔΗΜΗΤΡΙΟΣ"
+  ],
+  "source": "24SYMV015079058"
+ },
+ "148024200": {
+  "name": "ΤΣΑΝΤΑΛΗ ΟΥΡΑΝΙΑ ΤΟΥ ΠΑΝΑΓΙΩΤΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΤΣΑΝΤΑΛΗ ΟΥΡΑΝΙΑ ΠΑΝΑΓΙΩΤΗΣ",
+  "spellings": [
+   "ΤΣΑΝΤΑΛΗ Π. ΟΥΡΑΝΙΑ"
+  ],
+  "source": "24PROC014217714"
+ },
+ "999970164": {
+  "name": "ΤΕΧΝΟΟΜΟΙΟΣΤΑΣΗ Ε.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΓΟΥΝΑΡΗΣ Ν ΚΟΝΤΟΣ Κ ΕΤΕΡΟΡΡΥΘΜΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΓΟΥΝΑΡΗΣ Ν. - ΚΟΝΤΟΣ Κ. ΕΤΕΡΟΡΡΥΘΜΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "24AWRD015088777"
+ },
+ "113864390": {
+  "name": "ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ ΤΟΥ ΔΗΜΟΣΘΕΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ ΔΗΜΟΣΘΕΝΗΣ",
+  "spellings": [
+   "ΝΙΚΟΛΑΟΣ ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΤΟΥ ΔΗΜΟΣΘΕΝΗ",
+   "ΧΑΤΖΗΝΙΚΟΛΑΟΥ ΝΙΚΟΛΑΟΣ ΔΗΜΟΣΘΕΝΗΣ"
+  ],
+  "source": "23SYMV013039377"
+ },
+ "071851227": {
+  "name": "ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+   "ΤΡΙΑΝΤΑΦΥΛΛΟΥ ΚΩΝΣΤΑΝΤΙΝΟΣ ΓΕΩΡΓΙΟΣ"
+  ],
+  "source": "25PROC016267581"
+ },
+ "996830790": {
+  "name": "Κ/Ξ ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ - ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ",
+  "basis": "the name its own contract quotes (2×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ - ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΦΙΛΑΝΤΑΡΑΚΗ ΜΑΡΙΑ ΤΟΥ ΙΩΑΝΝΗ - ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ"
+  ],
+  "source": "22SYMV010795585"
+ },
+ "802234256": {
+  "name": "ΠΟΛΟΣ Ε.Ε.",
+  "basis": "the short name its own documents use (1×)",
+  "kind": "company",
+  "registered": "ΠΟΛΟΣ Ε Ε",
+  "spellings": [
+   "ΠΟΛΟΣ Ε.Ε."
+  ],
+  "source": "25SYMV017177853"
+ },
+ "998885119": {
+  "name": "ΕΛ.ΤΕ. Ε.Π.Ε.",
+  "basis": "the δ.τ. its documents declare (3×)",
+  "kind": "company",
+  "registered": "ΕΛΛΗΝΙΚΗ ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΡΓΟΛΗΠΤΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΕΡΓΩΝ ΥΠΟΔΟΜΗΣ ΕΤΑΙΡΕΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ",
+  "spellings": [
+   "ΕΛΛΗΝΙΚΗ ΤΕΧΝΙΚΗ ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ ΕΡΓΟΛΗΠΤΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΜΠΟΡΙΚΗ ΚΑΙ ΕΡΓΩΝ ΥΠΟΔΟΜΗΣ ΕΤΑΙΡΕΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ και διακριτικό τίτλο ΕΛ.ΤΕ. Ε.Π.Ε.",
+   "ΕΛΛΗΝΙΚΗ ΤΕΧΝΙΚΗ-ΚΑΤΑΣΚΕΥΑΣΤΙΚΗ-ΕΡΓΟΛΗΠΤΙΚΗ-ΚΤΗΜΑΤΙΚΗ-ΕΜΠΟΡΙΚΗ ΚΑΙ ΕΡΓΩΝ ΥΠΟΔΟΜΗΣ Ε.Π.Ε. (δ.τ. ΕΛ.ΤΕ. Ε.Π.Ε.)"
+  ],
+  "source": "25AWRD017895833"
+ },
+ "996553688": {
+  "name": "Κ/Ξ Γ.Ι.ΚΑΡΝΟΜΟΥΡΑΚΗΣ Α.Ε. – ΑΛΚΗ Ι.Κ.Ε. (ΥΠΟΕΡΓΟ Δ)",
+  "basis": "composed from its curated members; disambiguated from the other venture of the same firms",
+  "kind": "venture",
+  "registered": "ΚΞ Γ Ι ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ ΑΛΚΗ ΙΚΕ ΥΠΟΕΡΓΟ Δ",
+  "spellings": [
+   "ΚΞ Γ. Ι. ΚΑΡΝΟΜΟΥΡΑΚΗΣ ΑΝΩΝΥΜΗ ΕΝΕΡΓΕΙΑΚΗ ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ ΑΚΙΝΗΤΩΝ ΕΤΑΙΡΙΑ – ΑΛΚΗ Ι.Κ.Ε./ΥΠΟΕΡΓΟ Δ"
+  ]
+ },
+ "801294415": {
+  "name": "ΟΛΥΜΠΟΣ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ Ι.Κ.Ε.",
+  "basis": "the short name its own documents use (4×)",
+  "kind": "company",
+  "registered": "ΟΛΥΜΠΟΣ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ Ι Κ Ε",
+  "spellings": [
+   "ΟΛΥΜΠΟΣ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ Ι.Κ.Ε."
+  ],
+  "source": "24AWRD015088777"
+ },
+ "998126035": {
+  "name": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ ΕΕ",
+  "spellings": [
+   "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε.Ε."
+  ],
+  "source": "23SYMV012926526"
+ },
+ "093940770": {
+  "name": "Φ.ΦΑΣΟΥΛΑΣ- Ν. ΜΑΝΤΖΙΟΣ Ε.Ε.",
+  "basis": "the short name its own documents use (1×)",
+  "kind": "company",
+  "registered": "Φ ΦΑΣΟΥΛΑΣ Ν ΜΑΝΤΖΙΟΣ ΕΕ",
+  "spellings": [
+   "Φ.ΦΑΣΟΥΛΑΣ- Ν. ΜΑΝΤΖΙΟΣ Ε.Ε."
+  ],
+  "source": "24SYMV014662259"
+ },
+ "099946299": {
+  "name": "ΙΩΑΝΝΗΣ ΚΑΡΑΚΩΣΤΑΣ & ΣΙΑ Ο.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ΙΩΑΝΝΗΣ ΚΑΡΑΚΩΣΤΑΣ ΚΑΙ ΣΙΑ ΟΕ",
+  "spellings": [
+   "ΙΩΑΝΝΗΣ ΚΑΡΑΚΩΣΤΑΣ ΚΑΙ ΣΙΑ Ο.Ε."
+  ],
+  "source": "22SYMV011360183"
+ },
+ "099957333": {
+  "name": "ΟΜΙΚΡΟΝ Α.Ε.",
+  "basis": "the short name its own documents use (1×)",
+  "kind": "company",
+  "registered": "ΟΜΙΚΡΟΝ ΣΥΜΒΟΥΛΟΙ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ΟΜΙΚΡΟΝ ΣΥΜΒΟΥΛΟΙ ΠΕΡΙΒΑΛΛΟΝΤΟΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "24SYMV014662301"
+ },
+ "099482396": {
+  "name": "ΟΙΚΟΔΑΣΟΣ Ε.Π.Ε.",
+  "basis": "the δ.τ. its documents declare (1×)",
+  "kind": "company",
+  "registered": "ΟΙΚΟΔΑΣΟΣ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ ΚΑΙ ΥΠΗΡΕΣΙΩΝ ΕΤΑΙΡΕΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ",
+  "spellings": [
+   "ΟΙΚΟΔΑΣΟΣ ΕΤΑΙΡΙΑ ΜΕΛΕΤΩΝ ΚΑΙ ΥΠΗΡΕΣΙΩΝ ΕΤΑΙΡΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ"
+  ],
+  "source": "24SYMV014662191"
+ },
+ "800339138": {
+  "name": "ENCODIA Ι.Κ.Ε.",
+  "basis": "the δ.τ. its documents declare (1×)",
+  "kind": "company",
+  "registered": "ENCODIA ΣΥΜΒΟΥΛΟΙ ΜΗΧΑΝΙΚΟΙ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΕΙΑ",
+  "spellings": [
+   "ENCODIA ΣΥΜΒΟΥΛΟΙ ΜΗΧΑΝΙΚΟΙ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΕΙΑ"
+  ],
+  "source": "24SYMV014662322"
+ },
+ "093897818": {
+  "name": "ΠΑΝΑΓΙΩΤΗΣ ΚΑΡΑΜΟΣΧΟΣ & ΣΥΝΕΡΓΑΤΕΣ Ε.Ε.",
+  "basis": "the short name its own documents use (2×)",
+  "kind": "company",
+  "registered": "ΠΑΝΑΓΙΩΤΗΣ ΚΑΡΑΜΟΣΧΟΣ ΚΑΙ ΣΥΝΕΡΓΑΤΕΣ ΕΕ",
+  "spellings": [
+   "ΠΑΝΑΓΙΩΤΗΣ ΚΑΡΑΜΟΣΧΟΣ ΚΑΙ ΣΥΝΕΡΓΑΤΕΣ Ε.Ε."
+  ],
+  "source": "24AWRD015744160"
+ },
+ "122076788": {
+  "name": "ΦΩΤΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΕΥΘΥΜΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΦΩΤΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ ΕΥΘΥΜΙΟΣ",
+  "spellings": [
+   "ΦΩΤΟΠΟΥΛΟΣ ΓΕΩΡΓΙΟΣ του ΕΥΘΥΜΙΟΥ"
+  ],
+  "source": "22SYMV010635347"
+ },
+ "998811782": {
+  "name": "NOVALIS Ε.Π.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "NOVALIS ΑΝΑΠΤΥΞΙΑΚΕΣ, ΠΕΡΙΒΑΛΛΟΝΤΟΛΟΓΙΚΕΣ, ΔΑΣΙΚΕΣ, ΓΕΩΤΕΧΝΙΚΕΣ, ΑΛΙΕΥΤΙΚΕΣ ΜΕΛΕΤΕΣ ΚΑΙ ΜΕΛΕΤΕΣ ΧΑΡΤΟΓΡΑΦΙΑΣ - ΓΕΩΓΡΑΦΙΚ",
+  "spellings": [
+   "NOVALIS ΑΝΑΠΤΥΞΙΑΚΕΣ, ΠΕΡΙΒΑΛΛΟΝΤΟΛΟΓΙΚΕΣ, ΔΑΣΙΚΕΣ, ΓΕΩΤΕΧΝΙΚΕΣ, ΑΛΙΕΥΤΙΚΕΣ ΜΕΛΕΤΕΣ ΚΑΙ ΜΕΛΕΤΕΣ ΧΑΡΤΟΓΡΑΦΙΑΣ - ΓΕΩΓΡΑΦΙΚΩΝ ΣΥΣΤΗΜΑΤΩΝ ΠΛΗΡΟΦΟΡΙΩΝ ΕΤΑΙΡΕΙΑ ΠΕΡΙΟΡΙΣΜΕΝΗΣ ΕΥΘΥΝΗΣ"
+  ],
+  "source": "24AWRD015744160"
+ },
+ "998643917": {
+  "name": "NERCO – Ν. ΧΛΥΚΑΣ & ΣΥΝΕΡΓΑΤΕΣ Α.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "NERCO Ν ΧΛΥΚΑΣ ΚΑΙ ΣΥΝΕΡΓΑΤΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ",
+  "spellings": [
+   "NERCO – Ν. ΧΛΥΚΑΣ ΚΑΙ ΣΥΝΕΡΓΑΤΕΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ ΜΕΛΕΤΩΝ"
+  ]
+ },
+ "800710872": {
+  "name": "ΑΝΑΣΤΑΣΙΟΥ Γ. - ΜΠΑΛΤΟΓΙΑΝΝΗ Φ. Ο.Ε.",
+  "basis": "the short name its own documents use (1×)",
+  "kind": "company",
+  "registered": "ΑΝΑΣΤΑΣΙΟΥ Γ ΜΠΑΛΤΟΓΙΑΝΝΗ Φ Ο Ε",
+  "spellings": [
+   "ΑΝΑΣΤΑΣΙΟΥ Γ. - ΜΠΑΛΤΟΓΙΑΝΝΗ Φ. Ο.Ε."
+  ],
+  "source": "24SYMV014662280"
+ },
+ "025751414": {
+  "name": "ΓΚΑΡΓΚΑΝΙΤΗΣ ΛΑΜΠΡΟΣ",
+  "basis": "no patronymic documented",
+  "kind": "person",
+  "registered": "ΓΚΑΡΓΚΑΝΙΤΗΣ ΛΑΜΠΡΟΣ",
+  "spellings": [
+   "ΓΚΑΡΓΚΑΝΙΤΗΣ ΛΑΜΠΡΟΣ"
+  ]
+ },
+ "028816742": {
+  "name": "ΜΑΡΟΥΔΗΣ ΔΑΥΙΔ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΜΑΡΟΥΔΗΣ ΔΑΥΙΔ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΔΑΥΙΔ ΜΑΡΟΥΔΗΣ"
+  ],
+  "source": "18SYMV003394941"
+ },
+ "034149091": {
+  "name": "ΜΠΟΥΡΑΣ ΗΛΙΑΣ ΤΟΥ ΣΠΥΡΙΔΩΝΑ",
+  "basis": "document (the register spells it otherwise)",
+  "kind": "person",
+  "registered": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΤΟΥ ΣΠΥΡΙΔΩΝΟΣ",
+  "spellings": [
+   "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΤΟΥ ΣΠΥΡΙΔΩΝΟΣ"
+  ],
+  "source": "24AWRD014362060"
+ },
+ "036343031": {
+  "name": "ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document",
+  "kind": "person",
+  "registered": "ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ",
+  "spellings": [
+   "ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ"
+  ],
+  "source": "24AWRD014354371"
+ },
+ "040207632": {
+  "name": "ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ ΔΗΜΗΤΡΙΟΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ ΔΗΜΗΤΡΙΟΣ"
+  ],
+  "source": "17PAY002198631"
+ },
+ "041813088": {
+  "name": "ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΕΥΑΓΓΕΛΟΣ ΠΑΠΠΑΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "spellings": [
+   "ΠΑΠΠΑΣ ΕΥΑΓΓΕΛΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ (ατομική επιχείρηση)"
+  ],
+  "source": "23AWRD012870117"
+ },
+ "043170596": {
+  "name": "ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΑΝΤΩΝΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΤΩΝΙΟΣ",
+  "spellings": [
+   "ΤΙΓΚΑΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΑΝΤΩΝΙΟΣ"
+  ],
+  "source": "25PROC016298570"
+ },
+ "043659132": {
+  "name": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΝΙΚΟΛΑΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΝΙΚΟΛΑΟΣ",
+  "spellings": [
+   "ΒΕΛΩΝΗΣ ΓΕΩΡΓΙΟΣ ΝΙΚΟΛΑΟΣ"
+  ],
+  "source": "24PROC014217714"
+ },
+ "043778194": {
+  "name": "ΓΚΑΡΑΝΑΤΣΙΟΥ ΑΡΕΤΗ ΤΟΥ ΑΘΑΝΑΣΙΟΥ",
+  "basis": "no registered name; longest registry spelling",
+  "kind": "unknown",
+  "registered": null,
+  "spellings": [
+   "ΓΚΑΡΑΝΑΤΣΙΟΥ ΑΡΕΤΗ ΤΟΥ ΑΘΑΝΑΣΙΟΥ"
+  ]
+ },
+ "043844534": {
+  "name": "ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "no registered name; longest registry spelling",
+  "kind": "unknown",
+  "registered": null,
+  "spellings": [
+   "ΤΑΣΚΟΥΔΗΣ ΝΙΚΟΛΑΟΣ ΤΟΥ ΙΩΑΝΝΗ"
+  ]
+ },
+ "043999046": {
+  "name": "ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΔΙΟΝΥΣΙΟΣ ΤΟΥ ΖΑΦΕΙΡΗ",
+  "basis": "no registered name; longest registry spelling",
+  "kind": "unknown",
+  "registered": null,
+  "spellings": [
+   "ΖΑΦΕΙΡΟΠΟΥΛΟΣ ΔΙΟΝΥΣΙΟΣ ΤΟΥ ΖΑΦΕΙΡΗ"
+  ]
+ },
+ "044098856": {
+  "name": "ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ ΒΑΣΙΛΕΙΟΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΒΑΣΙΛΕΙΟΣ ΣΤΑΜΑΤΟΓΙΑΝΝΗΣ",
+   "Σταματόγιαννης Βασίλειος του Ιωάννη"
+  ],
+  "source": "17PAY002198631"
+ },
+ "044622622": {
+  "name": "ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΤΟΥ ΝΙΚΟΛΑΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΝΙΚΟΛΑΟΣ",
+  "spellings": [
+   "ΝΙΚΟΛΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ ΝΙΚΟΛΑΟΣ"
+  ],
+  "source": "24PROC014147862"
+ },
+ "044705095": {
+  "name": "ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΤΣΙΑΝΑΒΑΣ,,ΓΕΩΡΓΙΟΣ,ΙΩΑΝΝΗΣ"
+  ],
+  "source": "22SYMV011332276"
+ },
+ "045100239": {
+  "name": "ΚΑΛΟΥΤΣΑΣ ΑΡΤΕΜΙΟΣ ΤΟΥ ΦΩΤΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΑΛΟΥΤΣΑΣ ΑΡΤΕΜΙΟΣ ΦΩΤΙΟΣ",
+  "spellings": [
+   "ΚΑΛΟΥΤΣΑΣ ΑΡΤΕΜΙΟΣ ΤΟΥ ΦΩΤΙΟΥ"
+  ],
+  "source": "17PAY002361894"
+ },
+ "045497240": {
+  "name": "ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΒΛΑΣΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΒΛΑΣΙΟΣ",
+  "spellings": [
+   "ΛΑΜΠΙΡΗΣ ΓΕΩΡΓΙΟΣ ΒΛΑΣΙΟΣ"
+  ],
+  "source": "25PROC016237903"
+ },
+ "045780333": {
+  "name": "ΓΕΩΡΓΙΟΥ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΓΕΩΡΓΙΟΥ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "spellings": [
+   "ΓΕΩΡΓΙΟΥ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ"
+  ],
+  "source": "24AWRD014354371"
+ },
+ "045860542": {
+  "name": "ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ ΤΟΥ ΑΡΙΣΤΕΙΔΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ ΤΟΥ ΑΡΙΣΤΕΙΔΗ",
+  "spellings": [
+   "ΛΙΑΡΗ ΕΛΕΥΘΕΡΙΑ ΤΟΥ ΑΡΙΣΤΕΙΔΗ"
+  ],
+  "source": "24AWRD014347512"
+ },
+ "045958594": {
+  "name": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΛΑΓΚΑΔΙΝΟΣ ΙΩΑΝΝΗΣ ΓΕΩΡΓΙΟΣ"
+  ],
+  "source": "24AWRD014481210"
+ },
+ "046212303": {
+  "name": "ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΑΝΔΡΕΑ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΑΝΔΡΕΑΣ",
+  "spellings": [
+   "ΡΕΒΕΛΙΩΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΑΝΔΡΕΑΣ"
+  ],
+  "source": "22PROC011082770"
+ },
+ "062804310": {
+  "name": "ΧΑΜΑΡΙΑΣ ΗΛΙΑΣ ΤΟΥ ΣΩΚΡΑΤΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΧΑΜΑΡΙΑΣ ΗΛΙΑΣ ΣΩΚΡΑΤΗΣ",
+  "spellings": [
+   "ΗΛΙΑΣ Σ. ΧΑΜΑΡΙΑΣ"
+  ],
+  "source": "24AWRD015828247"
+ },
+ "066526621": {
+  "name": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ ΤΟΥ ΣΤΥΛΙΑΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ ΤΟΥ ΣΤΥΛΙΑΝΟΥ",
+  "spellings": [
+   "ΠΑΠΑΔΟΠΟΥΛΟΣ ΘΕΟΔΩΡΟΣ ΤΟΥ ΣΤΥΛΙΑΝΟΥ"
+  ],
+  "source": "24PROC014159061"
+ },
+ "073533221": {
+  "name": "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΓΕΩΡΓΙΟΣ",
+  "spellings": [
+   "ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+   "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ ΓΕΩΡΓΙΟΣ"
+  ],
+  "source": "23SYMV012992072"
+ },
+ "075195407": {
+  "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ",
+  "spellings": [
+   "ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ του ΚΩΝ/ΝΟΥ",
+   "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΚΩΝΣΤΑΝΤΙΝΟΣ"
+  ],
+  "source": "23SYMV012992072"
+ },
+ "077189760": {
+  "name": "ΑΝΔΡΙΤΣΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΑΝΔΡΙΤΣΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΚΩΝ/ΝΟΣ ΑΝΔΡΙΤΣΟΣ"
+  ],
+  "source": "21SYMV008886008"
+ },
+ "099190930": {
+  "name": "ΓΕΩΡΓΙΟΥ Δ. – ΦΟΥΚΑΣ Ν. & ΣΙΑ Ο.Ε.",
+  "basis": "the short name its own documents use (3×)",
+  "kind": "company",
+  "registered": "ΓΕΩΡΓΙΟΥ Δ.-ΦΟΥΚΑΣ Ν. ΚΑΙ ΣΙΑ Ο.Ε",
+  "spellings": [
+   "ΓΕΩΡΓΙΟΥ Δ.-ΦΟΥΚΑΣ Ν. ΚΑΙ ΣΙΑ Ο.Ε"
+  ],
+  "source": "23SYMV012895723"
+ },
+ "099361052": {
+  "name": "ΜΕΣΟΓΕΙΟΣ Α.Ε.",
+  "basis": "the δ.τ. its documents declare (2×)",
+  "kind": "company",
+  "registered": "ΜΕΣΟΓΕΙΟΣ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΤΑΙΡΙΑ",
+  "spellings": [
+   "ΜΕΣΟΓΕΙΟΣ ΑΝΩΝΥΜΗ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΚΤΗΜΑΤΙΚΗ ΕΤΑΙΡΙΑ"
+  ],
+  "source": "24AWRD014592135"
+ },
+ "102486448": {
+  "name": "ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΤΟΥ ΝΕΟΦΥΤΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΝΕΟΦΥΤΟΣ",
+  "spellings": [
+   "ΚΑΖΑΝΤΣΟΓΛΟΥ ΣΑΒΒΑΣ ΝΕΟΦΥΤΟΣ"
+  ],
+  "source": "23PROC012559184"
+ },
+ "110324970": {
+  "name": "ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ ΤΟΥ ΜΑΤΘΑΙΟΥ",
+  "basis": "document",
+  "kind": "person",
+  "registered": "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ — εργολήπτης δημοσίων έργων",
+  "spellings": [
+   "ΦΙΛΙΠΠΑΚΗΣ ΠΑΝΤΕΛΗΣ",
+   "ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ — εργολήπτης δημοσίων έργων"
+  ],
+  "source": "23SYMV012963738"
+ },
+ "113411710": {
+  "name": "ΓΚΑΡΓΚΑΝΙΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΛΑΜΠΡΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΓΚΑΡΓΚΑΝΙΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΛΑΜΠΡΟΣ",
+  "spellings": [
+   "ΓΚΑΡΓΚΑΝΙΤΗΣ ΠΑΝΑΓΙΩΤΗΣ"
+  ],
+  "source": "20SYMV007111624"
+ },
+ "122499275": {
+  "name": "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΑΘΑΝΑΣΙΟΥ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ ΑΘΑΝΑΣΙΟΣ",
+  "spellings": [
+   "ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΤΟΥ ΑΘΑΝΑΣΙΟΥ",
+   "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ ΑΘΑΝΑΣΙΟΣ"
+  ],
+  "source": "23SYMV012992072"
+ },
+ "137004661": {
+  "name": "ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΧΡΙΣΤΟΦΥΛΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΧΡΙΣΤΟΦΥΛΗ",
+  "spellings": [
+   "ΚΤΕΝΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΧΡΙΣΤΟΦΥΛΗ"
+  ],
+  "source": "24PROC014205053"
+ },
+ "301568506": {
+  "name": "ΜΑΡΟΥΔΗΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+  "basis": "document, spelled from the register",
+  "kind": "person",
+  "registered": "ΜΑΡΟΥΔΗΣ ΓΕΩΡΓΙΟΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΓΕΩΡΓΙΟΣ ΜΑΡΟΥΔΗΣ"
+  ],
+  "source": "18SYMV003394564"
+ },
+ "802456271": {
+  "name": "ΚΑΡΑΛΗ ΖΩΗ Ε.Ε.",
+  "basis": "the short name its own documents use (1×)",
+  "kind": "company",
+  "registered": "ΚΑΡΑΛΗ ΖΩΗ Ε.Ε.",
+  "spellings": [
+   "ΚΑΡΑΛΗ ΖΩΗ Ε.Ε."
+  ],
+  "source": "25AWRD016314503"
+ },
+ "996604110": {
+  "name": "Κ/Ξ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ - ΕΔΡΑΙΟΣ Α.Τ.Ε.",
+  "basis": "the name its own contract quotes (2×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ - ΕΔΡΑΙΟΣ ΑΤΕ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ - ΕΔΡΑΙΟΣ ΑΤΕ"
+  ],
+  "source": "22SYMV011632177"
+ },
+ "996813189": {
+  "name": "Κ/Ξ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ Α.Ε. – ΚΑΤΣΙΑΒΑΣ ΧΡ. – ΝΑΤΣΗΣ ΚΩΝ. Ο.Ε. – ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ",
+  "basis": "user decision",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ - ΚΑΤΣΙΑΒΑΣ ΧΡ. - ΝΑΤΣΗΣ ΚΩΝ ΟΕ - ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ",
+  "spellings": [
+   "ΚΟΙΝΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ - ΚΑΤΣΙΑΒΑΣ ΧΡ. - ΝΑΤΣΗΣ ΚΩΝ ΟΕ - ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ"
+  ],
+  "note": "Its own contracts quote the name with the marker inside it — «ΚΟΙΝΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ …» (22SYMV011470180), «ΚΟΙΝ/ΞΙΑ …» (23SYMV011953055) — so the marker moves to the front as «Κ/Ξ» and the three members keep their own names."
+ },
+ "996813233": {
+  "name": "Κ/Ξ ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "basis": "the name its own contract quotes (1×)",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ"
+  ],
+  "source": "22SYMV011593395"
+ },
+ "996870694": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ"
+  ]
+ },
+ "997080215": {
+  "name": "Κ/Ξ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ – ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ",
+  "basis": "no contract quotes it; registry spelling",
+  "kind": "venture",
+  "registered": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ",
+  "spellings": [
+   "ΚΟΙΝΟΠΡΑΞΙΑ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ – ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ"
+  ]
+ },
+ "997104555": {
+  "name": "Ε.Ε.ΣΥ.Π. Α.Ε.",
+  "basis": "no registered name; longest registry spelling",
+  "kind": "unknown",
+  "registered": null,
+  "spellings": [
+   "Ε.Ε.ΣΥ.Π. Α.Ε."
+  ]
+ },
+ "997471299": {
+  "name": "ΤΑΙΠΕΔ",
+  "basis": "user decision",
+  "kind": "unknown",
+  "registered": null,
+  "spellings": [
+   "ΤΑΜΕΙΟ ΑΞΙΟΠΟΙΗΣΗΣ ΙΔΙΩΤΙΚΗΣ ΠΕΡΙΟΥΣΙΑΣ ΤΟΥ ΔΗΜΟΣΙΟΥ Α.Ε.",
+   "ΤΑΙΠΕΔ",
+   "ΤΑΜΕΙΟ ΑΞΙΟΠΟΙΗΣΗΣ ΤΗΣ ΙΔΙΩΤΙΚΗΣ ΠΕΡΙΟΥΣΙΑΣ ΤΟΥ ΔΗΜΟΣΙΟΥ ΑΕ"
+  ],
+  "name_en": "HRADF",
+  "note": "Acronym of «Ταμείο Αξιοποίησης Ιδιωτικής Περιουσίας του Δημοσίου», which its own contract declares as the διακριτικός τίτλος (22SYMV010499028); in English the fund's own name, Hellenic Republic Asset Development Fund. The umbrella body, excluded from every aggregate."
+ },
+ "998669700": {
+  "name": "ΗΡΑΚΛΗΣ ΧΡ.ΤΣΟΚΟΣ & ΙΩΑΝΝΗΣ ΧΡ.ΤΣΟΚΟΣ Ο.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "ΗΡΑΚΛΗΣ ΧΡ ΤΣΟΚΟΣ ΚΑΙ ΙΩΑΝΝΗΣ ΧΡ ΤΣΟΚΟΣ ΟΕ",
+  "spellings": [
+   "ΗΡΑΚΛΗΣ ΧΡ. ΤΣΟΚΟΣ ΚΑΙ ΙΩΑΝΝΗΣ ΧΡ. ΤΣΟΚΟΣ ΟΕ",
+   "ΗΡΑΚΛΗΣ ΧΡ.ΤΣΟΚΟΣ και ΙΩΑΝΝΗΣ ΧΡ.ΤΣΟΚΟΣ Ο.Ε."
+  ]
+ },
+ "999448728": {
+  "name": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.",
+  "basis": "the short name its own documents use (6×)",
+  "kind": "company",
+  "registered": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.",
+  "spellings": [
+   "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε."
+  ],
+  "source": "22SYMV010551306"
+ },
+ "999501790": {
+  "name": "Κ.ΣΠΑΝΟΣ & ΣΙΑ Ε.Ε.",
+  "basis": "registered name, as the registry spells it",
+  "kind": "company",
+  "registered": "Κ.ΣΠΑΝΟΣ & ΣΙΑ ΕΕ",
+  "spellings": [
+   "Κ.ΣΠΑΝΟΣ & ΣΙΑ ΕΕ"
+  ]
+ }
+}

@@ -146,7 +146,7 @@ def cmd_fetch() -> None:
 
 TK_SPLIT = re.compile(r"(\d{3}\s?\d{2}|\d{2}\s\d{3})(?!\s?\d)")
 MAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
-PHONE_TOKEN = re.compile(r"(2\d{9})")
+PHONE_TOKEN = re.compile(r"(2\d{9})")
 
 
 def _cells(tr):

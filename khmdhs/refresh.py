@@ -32,7 +32,8 @@ import requests
 
 from khmdhs import (
     bodies_loader, document_kinds, categories_loader, chain_loader, completion_acts_loader,
-    consortium_loader, contract_corrections, details_loader, families_loader,
+    consortium_loader, contract_corrections, contractor_names_loader,
+    details_loader, families_loader,
     forest_loader, linked_acts_loader, municipalities_loader,
     payment_loader, region_loader, scope_loader, studies_loader,
 )
@@ -230,6 +231,11 @@ def main(argv: list[str] | None = None) -> int:
         # this only records the firms it is made of (DATA_DECISIONS 2026-08-20)
         print("\n-- consortium_loader ---------------------------------------")
         consortium_loader.main(db_argv)
+        # the display names ride on the memberships: a venture whose contract
+        # never quotes a name is written out of its members' own display names
+        # (DATA_DECISIONS 2026-08-20)
+        print("\n-- contractor_names_loader -------------------------------------")
+        contractor_names_loader.main(db_argv)
         print("\n-- families_loader ---------------------------------------------")
         families_loader.main(db_argv)
         print("\n-- document_kinds ----------------------------------------------")

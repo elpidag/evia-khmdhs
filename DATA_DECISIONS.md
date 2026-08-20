@@ -5685,3 +5685,95 @@ number ships from `/api/antinero/overview`, so the site's copy follows.
 takes a list), `atlas_api/queries_extra.contract_party_correction` (quotes one
 sentence for several parties), `tests/test_consortiums.py` (+1 real-DB guard) and
 6 real-DB pins in `tests/test_atlas_real_db.py`.*
+
+## 2026-08-20 · One name per contractor, and the documents decide it
+
+The same company reached the site under two names: the ΚΗΜΔΗΣ spelling in the
+ranking and the ΓΕΜΗ/VIES one on the map. For 43 ΑΦΜ those differ, and for some
+they are not variants at all — **998342580 is «Δ. ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ Ο.Ε.» in the
+registry and «ΒΙΟΣ Α.Ε.» in its own contracts**, €13,0M under a name the site
+never showed, and searching «BIODASOS» found the joint venture but not the firm
+that holds €3,92M of its own. So: **one canonical display name per ΑΦΜ**,
+curated in `khmdhs/data/contractor_display_names.json`, 195 entities.
+
+**The rule the user set, and the one correction to it that mattered:** a person
+is written ΕΠΩΝΥΜΟ ΟΝΟΜΑ ΤΟΥ ΠΑΤΡΩΝΥΜΟΥ — *«when the contract already holds
+that information or the combination with ΓΕΜΗ makes it provable. we should not
+invent»*. The first pass had declined the register's patronymic by rule; after
+the correction the patronymic is read from the signed documents
+(`scripts/extract_name_evidence.py` sweeps every cached contract, award, call
+and payment order for how each ΑΦΜ is written there — 195/195 appear, 4.523
+mentions) and **the register supplies only the SPELLING while the document
+supplies the proof**. That is what keeps «του ΚΩΝ/ΝΟΥ» from becoming a name and
+a mis-rendered 2018 PDF from writing «ΤΟΥ ΑΘΑΝΑΣΥΟΥ». 65 of 66 persons are
+documented; **ΓΚΑΡΓΚΑΝΙΤΗΣ ΛΑΜΠΡΟΣ prints without a patronymic** because no
+document holds his — and he is the reason the rule earns its keep, since
+113411710 is ΓΚΑΡΓΚΑΝΙΤΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΛΑΜΠΡΟΥ, his son.
+
+Traps found and encoded, each by a name that came out wrong:
+
+* the genitive is read only AFTER the surname — «β) **του** Ευάγγελο Μαναρίτσα
+  **του** Κωνσταντίνου» has a «του» on either side and the first is the article
+  of the given name (4 names were wrong: ΜΑΝΑΡΙΤΣΑΣ, ΑΓΓΕΛΑΤΟΣ, ΛΙΟΛΙΟΣ,
+  ΧΑΤΖΗΝΙΚΟΛΑΟΥ);
+* ΓΕΜΗ writes «ΦΙΛΙΠΠΑΚΗΣ Μ. ΠΑΝΤΕΛΗΣ», where Μ. is the patronymic's INITIAL and
+  ΠΑΝΤΕΛΗΣ the given name — the contract spells it out, «τον Παντελή Φιλιππάκη
+  **του Ματθαίου**»;
+* a register field that already sits behind «ΤΟΥ» is a genitive; declining it
+  again turned «ΤΟΥ ΣΠΥΡΙΔΩΝΟΣ» into «ΤΟΥ ΣΠΥΡΙΔΩΝΟΥ», and where the papers
+  spell it differently the papers win (they write ΤΟΥ ΣΠΥΡΙΔΩΝΑ);
+* a double given name is not a patronymic: «ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚ
+  ΚΩΝΣΤΑΝΤΙΝΟΣ» is ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ, του ΚΩΝΣΤΑΝΤΙΝΟΥ;
+* where register and documents disagree the row says CONFLICT and carries no
+  patronymic (0 in the live data).
+
+**Companies are written under the δ.τ. their own contracts declare** («…με
+διακριτικό τίτλο «ΕΛ.ΤΕ. Ε.Π.Ε.»», «με δ.τ. «P. & C. DEVELOPMENT S.A.»»), which
+reaches names no head-matching rule could — 20 of 63. A δ.τ. counts only if the
+company's own name is in it or the papers declare it more than once beside that
+ΑΦΜ: without that test ΓΑΙΟΣΤΑΤ borrowed «ΟΙΚΟΔΑΣΟΣ Ε.Π.Ε.» from the firm named
+two lines above it in the same contract. Where the δ.τ. differs from the name
+the programme uses, the user decided case by case: **ΕΛ.ΤΕ. Ε.Π.Ε.** and
+**P. & C. DEVELOPMENT S.A.** yes; **ΕΡΓΑ ΠΡΑΣΙΝΟΥ Α.Τ.Ε.** over the δ.τ.
+ΕΡΓΟΠΡΑΣΙΝΟ (35 mentions against 10); **ΤΕΧΝΟΟΜΟΙΟΣΤΑΣΗ Ε.Ε.** over ΓΟΥΝΑΡΗΣ Ν.
+- ΚΟΝΤΟΣ Κ.; **ΟΡΚΑ Α.Τ.Ε.Ε.**, because the papers spell the head both ways (25
+«ΟΡΚΑ» against 6 «ΟΡ.ΚΑ.»), ΓΕΜΗ registers ΟΡΚΑ, and reading the dots as
+ΟΡγάνωσης-ΚΑτασκευής is an inference no document states.
+
+**Joint ventures carry «Κ/Ξ » once, at the front** (the papers write the marker
+four ways and leave it out of 20 names), and a venture whose contract never
+quotes a name is **composed from its members' own display names** — «Κ/Ξ
+Γ.Ι.ΚΑΡΝΟΜΟΥΡΑΚΗΣ Α.Ε. – ΑΛΚΗ Ι.Κ.Ε.» — with the members' patronymics dropped
+inside the composition, since they sit one click away on their own pages. Every
+display name is unique: two ventures of the same two firms are told apart by
+the lot they were formed for («ΥΠΟΕΡΓΟ Β» against «ΥΠΟΕΡΓΟ Δ») or by the year.
+
+**One typography** (user): capitals, the legal form always dotted (Α.Ε., Ο.Ε.,
+Ε.Ε., Ι.Κ.Ε., Ε.Π.Ε., Α.Τ.Ε., Α.Τ.Ε.Ε., Α.Τ.Ε.Β.Ε.), «&» for «ΚΑΙ» between
+partners but never inside a company's object («ΞΕΝΟΔΟΧΕΙΑΚΗ ΚΑΙ ΕΚΜΕΤΑΛΛΕΥΣΕΩΣ»
+stays), a Greek form typed in Latin folded back («E.E.» → «Ε.Ε.») while a Latin
+name keeps its alphabet, and PDF homoglyphs repaired per letter-run
+(«ΠΑΠΑ∆ΟΠΟΥΛΟΣ» carried U+2206; «BIODASOS-ΤΕΧΝΗ» is legitimately two alphabets
+in one word). **ΤΑΙΠΕΔ** prints as its acronym, in English **HRADF**.
+
+**Presentation only.** `contractors.name` is never rewritten: every registry
+spelling stays in the database, stays searchable — `/api/antinero/contractors?q=`
+now matches the display name, the English name, the ΑΦΜ **and every spelling the
+registry holds**, so «ΚΑΦΕΤΖΗΣ» still finds ΒΙΟΣ Α.Ε. — and is printed on the
+contractor page under «In the registry as …». The money is untouched: the
+ranking still sums to **€622.534.181,72** over 151 contractors.
+
+*Affects `scripts/extract_name_evidence.py` (new) and
+`scripts/extract_contractor_names.py`, curated
+`khmdhs/data/contractor_display_names.json` (new, 195 entries),
+`khmdhs/contractor_names_loader.py` (new) + the `contractor_display_names`
+table, `khmdhs/refresh.py` (chain), `queries_extra.antinero_display_names` /
+`overlay_contractor_names` and the four surfaces it feeds (ranking, contractors
+list + search, contractor page, member-firm view),
+`atlas/src/routes/antinero/contractor/[vat]/`, and
+`tests/test_contractor_names.py` (15 units + 2 real-DB guards) + 1 Atlas pin.*
+
+*Housekeeping found on the way: two committed scripts carried a stray 0x08 in a
+regex (`extract_contractor_names.py`, `harvest_ypen_offices.py`) — a shell
+heredoc eating the backslash of «». Both cleaned; the lesson is to edit
+Python regexes with a file, never through a heredoc.*

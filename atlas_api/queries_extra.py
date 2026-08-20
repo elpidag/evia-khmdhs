@@ -1285,25 +1285,86 @@ def antinero_member_firms(kh: sqlite3.Connection,
                      or bool(kh.execute("SELECT 1 FROM consortiums WHERE "
                                         "vat_number = ?",
                                         (e["vat_number"],)).fetchone())})
+    overlay_contractor_names(kh, rows)
     rows.sort(key=lambda r: -r["total_eur"])
     return rows[:limit] if limit else rows
 
 
+def antinero_display_names(kh: sqlite3.Connection) -> dict[str, dict]:
+    """{ΑΦΜ → curated display name + its evidence} (DATA_DECISIONS 2026-08-20).
+
+    One canonical name per ΑΦΜ, read from the documents: a person as ΕΠΩΝΥΜΟ
+    ΟΝΟΜΑ ΤΟΥ ΠΑΤΡΩΝΥΜΟΥ where a signed act holds the patronymic, a company
+    under the δ.τ. its own contracts declare, a joint venture as «Κ/Ξ » plus
+    its members' own display names. The registry spellings are NEVER rewritten
+    — they stay in `contractors.name`, searchable, and ride along here as
+    `registry_name` so the page can show what it is presenting instead of.
+    """
+    if not kh.execute("SELECT 1 FROM sqlite_master WHERE type IN "
+                      "('table','view') AND name='contractor_display_names'"
+                      ).fetchone():
+        return {}
+    return {r["vat"]: {"el": r["display_el"], "en": r["display_en"],
+                       "kind": r["kind"], "basis": r["basis"],
+                       "source": r["source"], "registered": r["registered"]}
+            for r in kh.execute("SELECT * FROM contractor_display_names")}
+
+
+def overlay_contractor_names(kh: sqlite3.Connection, rows: list[dict],
+                             vat_key: str = "vat_number",
+                             name_key: str = "name") -> list[dict]:
+    """Swap the registry spelling for the curated display name, keeping the
+    original beside it. Degrades to the registry spelling when the layer is
+    absent — the site never blanks a name."""
+    names = antinero_display_names(kh)
+    if not names:
+        return rows
+    for r in rows:
+        d = names.get((r.get(vat_key) or "").strip())
+        if not d:
+            continue
+        if r.get(name_key) and r[name_key] != d["el"]:
+            r["registry_name"] = r[name_key]
+        r[name_key] = d["el"]
+        if d.get("en"):
+            r["name_en"] = d["en"]
+    return rows
+
+
 def antinero_top_contractors(kh: sqlite3.Connection, limit: int = 10) -> list[dict]:
     """The ranking, already even-split by the shared query."""
-    return q.top_contractors(kh, limit=limit)
+    return overlay_contractor_names(kh, q.top_contractors(kh, limit=limit))
 
 
 def antinero_contractors_list(kh: sqlite3.Connection, qterm: str | None = None,
                               sort: str = "total_eur") -> list[dict]:
-    """/antinero/contractors, already even-split by the shared query."""
-    return q.list_contractors(kh, q=qterm, sort=sort)
+    """/antinero/contractors, already even-split by the shared query.
+
+    A search runs over the curated display name as well as the registry
+    spellings: «BIODASOS» has to find the firm the registry calls «ΤΣΙΜΠΩΝΗ
+    ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε.», which is the reason the layer exists."""
+    rows = overlay_contractor_names(kh, q.list_contractors(kh, sort=sort))
+    if not qterm:
+        return rows
+    # EVERY registry spelling, not just the one the list happens to show: the
+    # firm now printed «ΒΙΟΣ Α.Ε.» is «Δ. ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ Ο.Ε.» in four of its
+    # own contracts, and a reader searching that name must find it
+    spellings: dict[str, list[str]] = {}
+    for r in kh.execute("SELECT DISTINCT vat_number, name FROM contractors"):
+        spellings.setdefault((r["vat_number"] or "").strip(), []).append(r["name"])
+    needle = q._search_norm(qterm)
+    fold = q._phonetic_fold(needle)
+    return [r for r in rows
+            if q._matches(needle, fold, r.get("name"), r.get("registry_name"),
+                          r.get("name_en"), r.get("vat_number"),
+                          *spellings.get((r.get("vat_number") or "").strip(), []))]
 
 
 def antinero_contractor_summary(kh: sqlite3.Connection, vat: str) -> dict | None:
     """The contractor page's totals and its per-contract shares, both from
     the shared query."""
-    return q.contractor_summary(kh, vat)
+    row = q.contractor_summary(kh, vat)
+    return overlay_contractor_names(kh, [row])[0] if row else row
 
 
 def _even_cents(total: int, n: int) -> list[int]:

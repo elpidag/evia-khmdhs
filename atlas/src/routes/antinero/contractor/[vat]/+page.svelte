@@ -14,13 +14,21 @@
 
 	let { data }: { data: PageData } = $props();
 	const b = $derived(data.b);
-	// GROUP_CONCAT gives every registry spelling in arbitrary order — prefer
-	// the curated legal name, else the longest (usually fullest) variant
+	// GROUP_CONCAT gives every registry spelling in arbitrary order. The
+	// curated display name wins (DATA_DECISIONS 2026-08-20) — one name per
+	// ΑΦΜ, read from the documents — and the spellings stay on the page as
+	// the evidence of what it is being shown instead of.
 	const variants = $derived(b.summary.names.split(','));
 	const name = $derived(
-		b.location?.legal_name ??
+		b.summary.name ??
+			b.location?.legal_name ??
 			[...variants].sort((a, b2) => b2.length - a.length)[0] ??
 			b.summary.vat_number
+	);
+	const alsoKnown = $derived(
+		[...new Set([...variants, b.location?.legal_name].filter(Boolean) as string[])].filter(
+			(v) => v.trim() && v.trim() !== name
+		)
 	);
 	const regionMap = $derived(new Map(b.map_data.regions.map((r) => [r.pe, r])));
 	const maxSplit = $derived(Math.max(...b.map_data.regions.map((r) => r.split_eur), 1));
@@ -50,12 +58,16 @@
 			· <a href={`https://publicity.businessportal.gr/company/${b.location.gemi}`} target="_blank"
 				rel="noopener">ΓΕΜΗ profile</a>
 		{/if}
+		{#if b.summary.name_en}· {b.summary.name_en}{/if}
 		{#if b.location?.gemi_status && b.location.gemi_status !== 'Ενεργή'}
 			· <span class="gone">{b.location.gemi_status}</span><Hint
 				text={registryStatusNote({ status: b.location.gemi_status })}
 			/>
 		{/if}
 	</p>
+	{#if alsoKnown.length}
+		<p class="also">In the registry as {alsoKnown.join(' · ')}</p>
+	{/if}
 </hgroup>
 
 <KpiRow>
@@ -246,5 +258,10 @@
 	td a:hover,
 	li a:hover {
 		text-decoration: underline;
+	}
+	.also {
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+		margin-top: 0.15rem;
 	}
 </style>
