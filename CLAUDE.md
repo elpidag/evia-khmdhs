@@ -333,7 +333,11 @@ refetching open contracts — prefer it for routine updates.
   LAST such in the act; never the «πρωτόκολλο εγκατάστασης αναδόχου» the
   recitals list first (105 of 283 acts carried the installation date
   until 2026-08-21) — (excerpt stored, `end_basis=protocol_date`), else a
-  «περαιώθηκαν … DD.MM.YYYY» sentence, else the act date. **ΥΠΕΝ keys the
+  «περαιώθηκαν … DD.MM.YYYY» sentence, else the act date (255 / 26 since
+  pass 5 of 2026-08-21 read the plural «τα από … πρωτόκολλα», a date
+  list — the LATEST —, a two-day protocol, «υπ’ αριθ. N/DATE πρωτόκολλο»,
+  «(με ημερομηνία …» and the month-name περαίωση forms; the date list must
+  stand IMMEDIATELY before «πρωτόκολλ…»). **ΥΠΕΝ keys the
   wrong ΑΔΑΜ in some subject lines** (lot 15Α's acts carried 15Γ's, lot
   4Α's carried 4Δ's): curated `data/completion_act_overrides.json` (ΑΔΑ →
   the contract the act concerns, evidence quoted) is applied at insert and
@@ -368,7 +372,7 @@ refetching open contracts — prefer it for routine updates.
   after the quoted title (`extract_scope`: study/stage/area/whole, the
   service phrase — also «για το Δασαρχείο Χ» — cut before «μέχρι/για N
   ημέρες/σύμφωνα»): a τμηματική παράταση extends ONE τμηματική προθεσμία
-  (area 204 · study 5 · stage 4 · whole 1 · unsaid 144 of 358), a plain one the συνολική προθεσμία (whole
+  (area 195 · study 24 · stage 4 · whole 1 · unsaid 134 of 358), a plain one the συνολική προθεσμία (whole
   16 · area 28 · stage 1 · unsaid 59 of 104) — DATA_DECISIONS 2026-08-21
   second entry. **`scope_auth`** = the registry services an area act names,
   resolved with forest_loader's Matcher (231/232; the pdftotext «ΑΔΑ: …»
@@ -405,8 +409,10 @@ refetching open contracts — prefer it for routine updates.
   moved the deadline in force forward, `per_area`, `ordinal`, `excerpt`; an
   act re-stating a record's new deadline merges into that step), the
   deadline in force is the running maximum; a FLAGGED act is no step; 439
-  steps over 160 in-scope chains (423 Diavgeia + 16 ΚΗΜΔΗΣ), pinned,
-  `/api/meta` prints them. ChainTimeline conventions (user, 2026-08-21): extension labels print the ORDINAL only («1st», «2nd»), a label closer than 14 units to the previous printed one is dropped (arc + hover title stay); the symbols carry NO outline — no halo on ✔ or €, no stroke on a dot, no outline on the hovered bar. The inventory that sized the
+  steps over 162 in-scope chains (423 Diavgeia + 12 ΚΗΜΔΗΣ), pinned,
+  `/api/meta` prints them (435 / 162 / 12 ΚΗΜΔΗΣ since the duration unit
+  is accent-folded — «Ημέρες».upper() kept its accent and 14 days read as
+  14 months, DATA_DECISIONS 2026-08-21 passes 3–5). ChainTimeline conventions (user, 2026-08-21): extension labels print the ORDINAL only («1st», «2nd»), a label closer than 14 units to the previous printed one is dropped (arc + hover title stay); the symbols carry NO outline — no halo on ✔ or €, no stroke on a dot, no outline on the hovered bar. The inventory that sized the
   layer (4,931 subject-citing acts; NO cancellation act exists) lives in
   the decision entry. Windows gotcha fixed in `diavgeia_loader.fetch_decision`:
   pdftotext reads its command line in the ANSI code page and writes ANSI

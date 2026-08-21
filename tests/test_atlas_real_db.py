@@ -1120,8 +1120,11 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     # deadline precedes their own date are no steps — 443 before that rule)
     # 162 chains since two acts whose subject keyed the wrong ΑΔΑΜ were
     # re-pointed to the contracts their own text names (curation pass 1)
-    assert (ext_chains, ext_steps) == (162, 439)
-    assert src == {"diavgeia": 423, "khmdhs": 16}
+    # 435 since the duration unit is folded («Ημέρες».upper() kept its
+    # accent, so 14 days read as 14 months and four supplementary approvals
+    # drew deadlines in 2027–2028 — pass 3, 2026-08-21)
+    assert (ext_chains, ext_steps) == (162, 435)
+    assert src == {"diavgeia": 423, "khmdhs": 12}
     # the deepest case: 15 months from the start of works, then one
     # «Παράταση προθεσμίας» — and the registry's own end date agrees to the
     # day (2026-01-21 against the document's 2026-01-22)
@@ -1134,7 +1137,7 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     # the counts the methodology prose prints come from /api/meta, not prose
     f = client.get("/api/meta").get_json()["facts"]
     assert f["kh_deadline_document"] == 242 and f["kh_deadline_document_season"] == 3
-    assert f["kh_deadline_ext_steps"] == 439      # 16 until the Diavgeia acts joined (2026-08-21)
+    assert f["kh_deadline_ext_steps"] == 435      # 16 until the Diavgeia acts joined (2026-08-21)
 
 
 def test_authority_evidence_is_quotable_greek(kh):

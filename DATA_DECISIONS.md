@@ -6467,3 +6467,74 @@ registry does not carry that directorate), ΨΨΕΩ4653Π8-90Π «Διεύθυν
 Δασών Έβρου» → Αλεξανδρούπολης + Σουφλίου (the contract's Έβρος services).
 No area act is left unresolved and none names a service outside its
 contract. Pinned in `tests/test_extension_acts.py`.
+
+## 2026-08-21 · Extension + completion layers, curation passes 3–5: the machine reading checked by eye, four rules widened, one bug
+
+Claude read, the user decides only on flags (the model set this morning).
+What was read: all 27 study/stage/whole acts, all 16 ΚΗΜΔΗΣ extension
+records against the acts of their chains, 40 random acts of the 411
+remaining area/unsaid ones (20 + 20), and the 47 completion acts the
+extractor had dated by the act's own date — plus the 23 per-area acts and
+the 5 off-contract acts of pass 1. **Error rate on dates: 0 of 60 sampled
+extension acts** (every extracted deadline matched the operative sentence);
+the findings were all on the SCOPE side and on two rules, and each one was
+turned into code and pinned, never hand-patched per act:
+
+* **Service lists with commas lost every service after the first** —
+  «Δασαρχείων Αταλάντης, Λαμίας και Σπερχειάδας» resolved to Αταλάντη only
+  (the service phrase refused commas). 12 acts gained their full list.
+* **«μελέτης» carries its accent** — the study test read «μελετ» only, so
+  «ως προς την υποβολή της προβλεπόμενης μελέτης» passed as an area act (12)
+  or as nothing (7); 24 study acts now, 5 before. The STAGE test runs before
+  the study test (a «Στάδιο 1 – Υποβολή Προμελέτης» is a stage).
+* **The grant's start**: the quoted project TITLE is the LONGEST top-level
+  «…» opening before the grant's first date — not the last «», » of the
+  sentence (a δ.τ. quoted later had hidden one grant; an ΕΣΥ passage quoted
+  after the grant must not win; an unclosed nested title — Ψ3ΟΟ — hands the
+  grant to the text after the last ΑΔΑΜ mention). 9Φ03 is honestly unscoped
+  now (its services were in the title, not the grant); 9Λ6Θ narrowed to the
+  one service its grant names. Scope table now: τμηματικές area 195 · study
+  24 · stage 4 · whole 1 · unsaid 134 of 358; plain area 28 · stage 1 ·
+  whole 16 · unsaid 59 of 104.
+* **A bug in the timeline, not the acts**: `contract_deadlines.announced()`
+  tested the ΚΗΜΔΗΣ duration unit with `.upper()` — «Ημέρες» became
+  «ΗΜΈΡΕΣ», the accent survived, «14 days» read as 14 MONTHS and four
+  supplementary approvals drew deadlines in 2027–2028. Folded; 435 steps /
+  162 chains (423 acts + 12 ΚΗΜΔΗΣ records). The 8 ΚΗΜΔΗΣ «Παράταση»
+  records that coincide with an act on the same date merge into it; the
+  other four sit a day off an act or carry a date the acts do not state —
+  both kept, honestly.
+* **Completion acts (pass 5)**: of the 47 dated only by their own date, 21
+  DO state the acceptance in forms the extractor had not read — «τα από
+  25.02.2025 πρωτόκολλα οριστικής παραλαβής» (plural), «τα από 27.11.2024
+  και 29.11.2024 πρωτόκολλα» (a list: the LATEST), «το από 19&21.12.2023 /
+  06-07.11.2023 πρωτόκολλο» (a two-day protocol: its second day),
+  «υπ’ αριθ. 566498/15.11.2024 πρωτόκολλο οριστικής παραλαβής», «πρωτόκολλο
+  οριστικής παραλαβής (με ημερομηνία 29.06.2023», and the περαίωση forms
+  «περί περαίωσης των εργασιών στις 11-07-2026», «περαιώθηκαν … την 9
+  Σεπτεμβρίου 2024», «η περαίωση … πραγματοποιήθηκε την 07η Οκτωβρίου 2024».
+  Rule kept — the LAST acceptance protocol, never an installation — read
+  more widely, and TIGHT: the date list must stand immediately before
+  «πρωτόκολλ…» (a transmittal letter's date 40 characters earlier had crept
+  in on two acts and was thrown out again). 255 protocol_date / 26
+  act_date; the 26 are βεβαιώσεις περαίωσης that date only the supervisor's
+  report, or nothing — kept at the act's date, said so.
+* **Pass 4, the 193 unscoped acts**: read as openings, they are genuinely
+  unscoped — «…», μέχρι τις DD.MM.YYYY, σύμφωνα με το Ν.4412/2016» after the
+  title, 74 phrasings, none naming an area, a study or a stage; 114 sit on
+  single-authority contracts where the question is moot. No rule was added;
+  they stay «area not stated» (drawn as a strip only beside other strips).
+
+* **Pass 6, coverage of the ΑΔΑΜ-in-subject search**: for 12 contracts
+  whose acts carry a lot code in the subject («Σύμβασης (16Δ)», «(22Β/2025)»)
+  Diavgeia was searched by the LOT CODE instead (1,214 hits, each search
+  capped at 100): every παράταση act found that cites no ΑΔΑΜ in its
+  subject was a different matter altogether (eleven «Παράταση χρόνου
+  υλοτομίας της συστάδας 4δ …» of municipal forests), and none cited an
+  ΑΔΑΜ of ours that the layer lacks. No evidence of a missed act; the probe
+  is a sample under a 100-hit cap, and the methodology says the layer is
+  built on the subject line.
+
+Pinned: scope table, area-act count 224, completion basis 255/26, timeline
+435/162/12. The acts' own errors found on the way are in the pass-1 entry
+(two subject ΑΔΑΜ typos, three deadline year typos, one refusal).

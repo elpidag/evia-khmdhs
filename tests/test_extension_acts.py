@@ -198,18 +198,19 @@ def test_real_db_counts(conn):
 
 def test_real_db_scope_of_the_grant(conn):
     """What each act extends, read from its grant clause: a τμηματική
-    παράταση is an extension of ONE τμηματική προθεσμία — an area's (199),
-    the studies' submission (5), a stage (4) — while a plain παράταση moves
-    the συνολική προθεσμία (16 say so; 28 name one area of a multi-area
-    contract). 208 acts say nothing either way and stay unscoped."""
+    παράταση is an extension of ONE τμηματική προθεσμία — an area's (195),
+    the studies' submission (24, since pass 3 read «μελέτης» with its accent
+    and the study clause before the title), a stage (4) — while a plain
+    παράταση moves the συνολική προθεσμία (16 say so; 28 name one area of a
+    multi-area contract). 193 acts say nothing either way and stay unscoped."""
     rows = {(k, s or "—"): n for k, s, n in conn.execute(
         "SELECT act_kind, scope, COUNT(*) FROM contract_extension_acts GROUP BY 1, 2")}
     assert rows == {
         ("extension", "area"): 28, ("extension", "stage"): 1, ("extension", "whole"): 16,
         ("extension", "—"): 59,
-        ("extension_partial", "area"): 204, ("extension_partial", "stage"): 4,
-        ("extension_partial", "study"): 5, ("extension_partial", "whole"): 1,
-        ("extension_partial", "—"): 144,
+        ("extension_partial", "area"): 195, ("extension_partial", "stage"): 4,
+        ("extension_partial", "study"): 24, ("extension_partial", "whole"): 1,
+        ("extension_partial", "—"): 134,
         ("extension_refused", "area"): 1,
     }
     # a scope_text never carries the grant's own words — the phrase stops
@@ -236,7 +237,7 @@ def test_real_db_area_acts_resolve_to_registry_authorities(conn):
     import json
     rows = conn.execute(
         "SELECT ada, scope_text, scope_auth FROM contract_extension_acts WHERE scope = 'area'").fetchall()
-    assert len(rows) == 233
+    assert len(rows) == 224
     # every area act resolves — the one naming a directorate the registry
     # lacks («Διεύθυνσης Δασών Φθιώτιδας») is curated to the contract's
     # Δασαρχεία under it (extension_act_curation.json)

@@ -2785,7 +2785,11 @@ def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
         base = _full_date(r["start_date"]) or _full_date(r["contract_signed_date"])
         if not n or not base:
             return None, None
-        u = (r["contract_duration_unit"] or "").upper()
+        # «Ημέρες».upper() is «ΗΜΈΡΕΣ» — the accent survives, so the unit
+        # test must fold it or 14 days read as 14 months (caught 2026-08-21:
+        # eight supplementary approvals drew deadlines in 2027–2028)
+        u = "".join(ch for ch in unicodedata.normalize("NFD", (r["contract_duration_unit"] or "").upper())
+                    if not unicodedata.combining(ch))
         days = n if u.startswith("ΗΜΕΡ") else n * 365 if u.startswith("ΕΤ") else round(n * 30.44)
         try:
             end = _dt.date.fromisoformat(base) + _dt.timedelta(days=int(days))

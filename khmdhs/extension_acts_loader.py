@@ -170,10 +170,45 @@ def _valid(d: int, mo: int, y: int) -> bool:
 _SERVICE = re.compile(
     r"(?:περιοχ\w*\s+αρμοδι\w*|για\s+τ\w+\s+περιοχ\w*|για\s+τ(?:ο|η|ην|ις|α|ου|ης|ων))\s+(?:τ\w+\s+)?"
     r"((?:Δασαρχεί\w*|Δ(?:ιε\w+|/νσ\w*)\s+Δασών|Διευθύνσεων\s+Δασών)"
-    r"(?:(?!\s(?:μέχρι|μέχρις|για|σύμφωνα|κατά|έως|ήτοι|χωρίς|και\s+μέχρι)\b)[^,.;()]){0,140})", re.I)
-_STUDY = re.compile(r"ως προς[^,.;]{0,80}?(?:μελετ|προμελετ)\w*[^,.;]{0,60}|(?:υποβολ\w*\s+(?:της|των)\s+(?:προβλεπόμεν\w+\s+)?(?:προ)?μελετ\w*)[^,.;]{0,60}", re.I)
+    r"(?:(?!\s(?:μέχρι|μέχρις|για|σύμφωνα|κατά|έως|ήτοι|χωρίς|ως\s+προς|και\s+μέχρι)\b)[^.;()«»]){0,140})", re.I)
+_STUDY = re.compile(r"ως προς[^,.;]{0,80}?(?:μελ[εέ]τ|προμελ[εέ]τ)\w*[^,.;]{0,60}|(?:υποβολ\w*\s+(?:της|των)\s+(?:προβλεπόμεν\w+\s+)?(?:προ)?μελ[εέ]τ\w*)[^,.;]{0,60}", re.I)
 _STAGE = re.compile(r"(?:ως προς\s+)?(?:το\s+)?(?:Στάδι\w*|Φάσ\w*)\s*[^,.;]{0,80}", re.I)
 _WHOLE = re.compile(r"συνολικ\w*\s+προθεσμ|όλες τις περιοχές|για όλα τα|του συνόλου", re.I)
+
+
+def _title_span(oper: str, limit: int | None = None) -> tuple[int, int]:
+    """(start, end) of the quoted project TITLE in the operative sentence:
+    the LONGEST top-level «…» — a δ.τ. («ΓΕΩΓΝΩΜΩΝ Ο.Ε.») or «με αναθεώρηση»
+    is short, and the contract's ΑΔΑΜ may come before or after the title.
+    An unclosed title (nested quote whose outer » never comes, Ψ3ΟΟ) returns
+    end = -1 with its start; (-1, -1) when the sentence quotes nothing."""
+    best = (-1, -1)
+    first = -1
+    depth = 0
+    start = -1
+    # the title precedes the grant's first date; a long ΕΣΥ passage quoted
+    # AFTER it («γεγονότα ανωτέρας βίας …») must not win — only quotes that
+    # open before `limit` are candidates
+    for k, ch in enumerate(oper):
+        if ch == "«":
+            if depth == 0:
+                if limit is not None and k >= limit:
+                    break
+                start = k
+                if first == -1:
+                    first = k
+            depth += 1
+        elif ch == "»" and depth > 0:
+            depth -= 1
+            if depth == 0 and start != -1:
+                if k - start > best[1] - best[0]:
+                    best = (start, k)
+                start = -1
+    if best[0] == -1:
+        # nothing closed at top level: an unclosed quote (Ψ3ΟΟ's nested
+        # title) is the title; else the first quote, whatever it was
+        return (start if start != -1 else first, -1)
+    return best
 
 
 def extract_scope(oper: str) -> tuple[str | None, str | None]:
@@ -187,18 +222,29 @@ def extract_scope(oper: str) -> tuple[str | None, str | None]:
     # fall inside the service phrase («Δασαρχείων ΑΔΑ: … 3 Αταλάντης») — strip
     # it before reading what the act names
     oper = _WATERMARK.sub(" ", oper)
-    i = oper.rfind("», ")
-    j = oper.find("μέχρι", i + 3) if i != -1 else -1
-    grant = oper[i + 3:] if i != -1 else oper
+    first_date = _UNTIL.search(oper)
+    i0, i = _title_span(oper, first_date.start() if first_date else None)
+    if i != -1:
+        grant = oper[i + 1:]
+    elif i0 != -1:
+        # an unclosed title: the grant follows the last ΑΔΑΜ mention (the
+        # title ends with it), never the title's own words
+        last = None
+        for last in re.finditer(r"\d{2}SYMV\d{9}(?:\s+\d+)?(?:\s+\d{4}-\d{2}-\d{2})?", oper):
+            pass
+        grant = oper[last.end():] if last and last.end() > i0 else oper[i0:]
+    else:
+        grant = oper
     # the clause before the title («Την έγκριση της 2ης παράτασης στη συνολική
     # προθεσμία περαίωσης …») decides «whole» for the plain acts
-    head = oper[:i] if i != -1 else ""
-    m = _STUDY.search(grant) or _STUDY.search(head[-260:])
-    if m:
-        return "study", m.group(0).strip(" ,;.")[:160]
+    head = oper[:i0] if i0 != -1 else ""  # the clause before the quoted title
     m = _STAGE.search(grant)
     if m and re.search(r"Στάδι|Φάσ", m.group(0)):
         return "stage", m.group(0).strip(" ,;.")[:160]
+    m = _STUDY.search(grant) or _STUDY.search(head[-260:])
+    if m:
+        # «υποβολής των μελετών «με αναθεώρηση» — the phrase ends at a quote
+        return "study", m.group(0).split("«")[0].strip(" ,;.»")[:160]
     areas = [re.sub(r"\s+(?:και|&)$", "", a.group(1).strip(" ,;.")) for a in _SERVICE.finditer(grant)]
     if areas:
         return "area", " · ".join(dict.fromkeys(areas))[:240]

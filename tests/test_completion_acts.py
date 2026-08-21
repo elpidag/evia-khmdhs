@@ -133,8 +133,11 @@ def test_real_db_counts(conn):
         "SELECT end_basis, COUNT(*) FROM contract_completion_acts "
         "GROUP BY end_basis"))
     # protocol_date counts only ACCEPTANCE protocols since 2026-08-21 (the
-    # first run had taken the «πρωτόκολλο εγκατάστασης» date on 105 acts)
-    assert basis == {"protocol_date": 234, "act_date": 47}
+    # first run had taken the «πρωτόκολλο εγκατάστασης» date on 105 acts);
+    # pass 5 of the same day read 21 more forms («τα από … πρωτόκολλα», a
+    # protocol number/date, a two-day protocol, «περαίωσης των εργασιών
+    # στις …», month-name dates) — 26 acts state no acceptance date at all
+    assert basis == {"protocol_date": 255, "act_date": 26}
     assert conn.execute(
         "SELECT COUNT(*) FROM contract_completion_acts "
         "WHERE end_excerpt LIKE '%εγκατάστασ%'").fetchone()[0] == 0

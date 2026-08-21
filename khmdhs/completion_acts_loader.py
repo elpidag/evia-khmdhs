@@ -145,9 +145,41 @@ _PROTOCOL_DATE = re.compile(
     r"το από\s+(\d{1,2})[./-](\d{1,2})[./-](\d{4})\s+πρωτ[οό]κολλ[οό]\s*(.{0,70})", re.I)
 _ACCEPTANCE_TAIL = re.compile(r"παραλαβ|περα[ιί]ωσ|περ[αά]τωσ|ολοκλ[ηή]ρωσ", re.I)
 _NOT_ACCEPTANCE_TAIL = re.compile(r"εγκατ[αά]στασ|παρ[αά]δοσης\s+(?:της\s+)?εργολ", re.I)
+# the acceptance/completion protocol, however it is introduced — «τα από
+# 25.02.2025 πρωτόκολλα οριστικής παραλαβής», «566498/15.11.2024 πρωτόκολλο
+# οριστικής παραλαβής», «το από 19&21.12.2023 πρωτόκολλο …» — its date is the
+# LAST one in the 70 characters before it (a two-day protocol ends on its
+# second day), or a «(με ημερομηνία DD.MM.YYYY» right after it
+_ACC_PROTO = re.compile(
+    r"πρωτ[οό]κολλ\w*\s+(?:(?:προσωριν\w+|μερικ\w+)\s+(?:&|και)\s+)?(?:οριστικ\w+\s+|προσωριν\w+\s+)?"
+    r"(?:παραλαβ|περα[ιί]ωσ|περ[αά]τωσ)\w*", re.I)
+_ANY_DATE = re.compile(r"(\d{1,2})\s*[./-]\s*(\d{1,2})\s*[./-]\s*(\d{4})")
+_MONTHS = {"ΙΑΝΟΥΑΡΙΟΥ": 1, "ΦΕΒΡΟΥΑΡΙΟΥ": 2, "ΜΑΡΤΙΟΥ": 3, "ΑΠΡΙΛΙΟΥ": 4, "ΜΑΪΟΥ": 5, "ΜΑΙΟΥ": 5,
+           "ΙΟΥΝΙΟΥ": 6, "ΙΟΥΛΙΟΥ": 7, "ΑΥΓΟΥΣΤΟΥ": 8, "ΣΕΠΤΕΜΒΡΙΟΥ": 9, "ΟΚΤΩΒΡΙΟΥ": 10,
+           "ΝΟΕΜΒΡΙΟΥ": 11, "ΔΕΚΕΜΒΡΙΟΥ": 12}
+_WORD_DATE = re.compile(r"(\d{1,2})\s*(?:η|ης|α|ας)?\s+([Α-Ωα-ωΐΰϊϋάέήίόύώ]+)\s+(\d{4})")
+# «… 08.01.2024 και 09.01.2024 » / «… 566498/15.11.2024 » / «… 19&21.12.2023 »
+# — a run of dates (with «,», «και», «&», a protocol number) ending the window
+_DATE_LIST_TAIL = re.compile(
+    r"(?:\d{1,2}\s*[&-]\s*)?(\d{1,2})\s*[./-]\s*(\d{1,2})\s*[./-]\s*(\d{4})"
+    r"(?:\s*(?:,|και|&)\s*(?:\d{1,2}\s*[&-]\s*)?(\d{1,2})\s*[./-]\s*(\d{1,2})\s*[./-]\s*(\d{4}))*\s*$")
 _DONE_DATE = re.compile(
-    r"(?:περαιώθηκ|ολοκληρώθηκ|περατώθηκ)\w*.{0,80}?"
+    r"(?:(?:περαιώθηκ|ολοκληρώθηκ|περατώθηκ|πραγματοποιήθηκε)\w*.{0,80}?"
+    r"|περα[ιί]ωσ\w*\s+(?:των\s+)?εργασιών\s+(?:του\s+εν\s+θέματι\s+έργου\s+)?(?:στις|την|τις)\s+)"
     r"(\d{1,2})[./-](\d{1,2})[./-](\d{4})", re.I | re.S)
+_DONE_WORD_DATE = re.compile(
+    r"(?:περαιώθηκ|ολοκληρώθηκ|περατώθηκ|πραγματοποιήθηκε)\w*.{0,60}?"
+    r"(\d{1,2})\s*(?:η|ης|α|ας)?\s+([Α-Ωα-ωΐΰϊϋάέήίόύώ]+)\s+(\d{4})", re.I | re.S)
+
+
+def _fold_upper(s: str) -> str:
+    import unicodedata
+    return "".join(ch for ch in unicodedata.normalize("NFD", s.upper()) if not unicodedata.combining(ch))
+
+
+def _word_date(m: re.Match) -> tuple[int, int, int] | None:
+    mo = _MONTHS.get(_fold_upper(m.group(2)))
+    return (int(m.group(1)), mo, int(m.group(3))) if mo else None
 
 
 def _valid(d: int, mo: int, y: int) -> bool:
@@ -171,10 +203,45 @@ def extract_end_date(text: str) -> tuple[str, str] | None:
                     flat[max(0, m.start() - 40): m.start() + len(m.group(0)) - len(tail) + 45].strip())
     if best:
         return best
+    # the same protocol introduced otherwise (plural, a list of dates, a
+    # protocol number/date, a two-day protocol, «με ημερομηνία …»)
+    for m in _ACC_PROTO.finditer(flat):
+        after = flat[m.end(): m.end() + 40]
+        if _NOT_ACCEPTANCE_TAIL.search(flat[m.start(): m.end() + 40]):
+            continue
+        found = None
+        mm = re.match(r"\s*\(?\s*με\s+ημερομηνία\s+" + _ANY_DATE.pattern, after, re.I)
+        if mm:
+            found = (int(mm.group(1)), int(mm.group(2)), int(mm.group(3)), m.start(), mm.end() + m.end())
+        else:
+            window = flat[max(0, m.start() - 90): m.start()]
+            if _NOT_ACCEPTANCE_TAIL.search(window[-35:]):
+                continue
+            # the date list must END right before the word «πρωτόκολλ…»
+            lm = _DATE_LIST_TAIL.search(window)
+            if not lm:
+                continue
+            dates = [(int(a), int(b), int(c)) for a, b, c in _ANY_DATE.findall(lm.group(0))]
+            dates = [x for x in dates if _valid(*x)]
+            if dates:
+                last = max(dates, key=lambda x: (x[2], x[1], x[0]))   # the LATEST protocol
+                found = (*last, max(0, m.start() - 90) + lm.start(), m.end())
+        if found and _valid(found[0], found[1], found[2]):
+            d, mo, y = found[0], found[1], found[2]
+            best = (f"{y:04d}-{mo:02d}-{d:02d}", flat[found[3]: found[4] + 30].strip())
+    if best:
+        return best
     m = _DONE_DATE.search(flat)
     if m:
         d, mo, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
         if _valid(d, mo, y):
+            lo = max(0, m.start() - 40)
+            return (f"{y:04d}-{mo:02d}-{d:02d}", flat[lo:m.end() + 40].strip())
+    m = _DONE_WORD_DATE.search(flat)
+    if m:
+        wd = _word_date(m)
+        if wd and _valid(*wd):
+            d, mo, y = wd
             lo = max(0, m.start() - 40)
             return (f"{y:04d}-{mo:02d}-{d:02d}", flat[lo:m.end() + 40].strip())
     return None
