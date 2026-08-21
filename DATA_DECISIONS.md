@@ -6559,3 +6559,37 @@ strip of its own («service not matched», none today). 79 acts on
 multi-area contracts are affected; the 114 unsaid acts on single-area
 contracts have only one area to extend. `scope` in the DB stays NULL —
 the database records what the act says, the drawing applies the rule.
+
+## 2026-08-21 · WHERE THE MONEY TRAVELS dressed like the allocation maps; thinner arrows, open heads, a cumulative year slider
+
+User, the same evening: the flow frame should behave like ALLOCATION OF
+FUNDING. So: the key is a strip ABOVE the map in the same `.mapkey` dress
+(the «0% · bar · 100%» ramp at rest; the solid line / dashed line / ringed
+dot entries when a unit is focused), MAP + ⓘ carry the instructions (the
+region card stopped saying «click to see its flows»), a «✕ <unit> · all of
+Greece» pill is the way out and Esc does the same, the place's card sits
+grey at the top-left in EVERY state (`splitTips`), an arrow's card black at
+the bottom-left — hover shows, click holds, ✕/Esc release (the ALLOCATION
+maps' gesture, `FlowArcs` pins through `ctx.showTip`). The arrows
+themselves: thinner (0.7–4 units by √€, was 1–8), the dash AND its gap
+grow with the stroke (a fixed 8/5 pattern on a wide line read as a
+misprint), and the arrowhead is an OPEN chevron at a fixed size, never a
+solid triangle. The year control is a CUMULATIVE slider — the focused
+flows signed up to and including the chosen year, summed per origin →
+destination pair from `flows_yearly`, the right end being all years — not
+a button per year (user: «I meant accumulative slider»). Same evening: the
+bars list EVERY destination (59 units, a scroll box the map's height),
+not the biggest twelve; their key is the same grey strip as the map's,
+rounded swatches like the sponsored-works legends, the «unresolved base»
+entry appears only if any € is unresolved (none today); the year slider is
+black, never the warm ink. The focus linking and the even-split numbers
+are untouched.
+
+**The lightbulb** (user, same evening, ALLOCATION OF FUNDING): the
+explanation that lived in a ⓘ beside the title is now behind an outline
+lightbulb LEFT of the title (`ChartFrame insight`); clicking fills the
+bulb and opens the text in the page's LEFT MARGIN beside the left map —
+the maps keep their width (a first version shrank them; rejected) — as
+wide as the margin allows (9–15 rem), and only below ~1500 CSS px does it
+flow above the charts. A bug on the way: a non-existent `--sp-5` token
+made the positioning rules invalid and the note sat over the toolbar.

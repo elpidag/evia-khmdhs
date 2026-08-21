@@ -17,13 +17,17 @@
 	let {
 		rows,
 		selected = null,
-		onSelect
+		onSelect,
+		showLegend = true
 	}: {
 		rows: OriginRow[];
 		/** the region the flow map is focused on — its bar is highlighted */
 		selected?: string | null;
 		/** click a bar → focus that region on the map beside it */
 		onSelect?: (pe: string) => void;
+		/** the key under the bars — off when the frame prints its own key
+		 *  strip above them, in the allocation maps' dress (user, 2026-08-21) */
+		showLegend?: boolean;
 	} = $props();
 </script>
 
@@ -45,11 +49,13 @@
 			<span class="oval">{eurShort(o.total_eur)}</span>
 		</button>
 	{/each}
-	<div class="olegend">
-		<span><i class="local"></i>local firms</span>
-		<span><i class="imported"></i>out-of-region firms</span>
-		<span><i class="unknown"></i>unresolved</span>
-	</div>
+	{#if showLegend}
+		<div class="olegend">
+			<span><i class="local"></i>local firms</span>
+			<span><i class="imported"></i>out-of-region firms</span>
+			<span><i class="unknown"></i>unresolved</span>
+		</div>
+	{/if}
 </div>
 
 <style>

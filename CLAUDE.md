@@ -1233,9 +1233,18 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   «only N% stays local» is computed live and sits in the subtitle); click a
   region → FlowArcs draws only ITS flows, direction-coded with arrowheads
   (solid black = firms elsewhere reaching in, dashed black = its firms
-  reaching out, white-ringed dot = stays-local €; fixed-size heads so the
-  stroke width alone carries the €; a year control replays one signature
-  year); plus hub-catchment small multiples — top-6 home regions by
+  reaching out, white-ringed dot = stays-local €; fixed-size OPEN chevron
+  heads so the stroke width alone carries the €; thin strokes 0.7–4 by
+  √€ with dash+gap proportional to the width; a CUMULATIVE year slider
+  sums the focused flows signed up to a year — DATA_DECISIONS 2026-08-21;
+  the frame wears the allocation maps' dress: `.mapkey` strip above the
+  map, MAP + ⓘ, «✕ unit · all of Greece» pill, Esc, grey place card
+  top-left in every state, black arc card bottom-left — hover shows, click
+  holds; the bars list EVERY destination in a scroll box with the same key
+  strip). **`ChartFrame insight`** (2026-08-21): an outline lightbulb left
+  of a frame's title opens its explanation in the page's LEFT MARGIN beside
+  the chart (9–15 rem, never shrinking the chart; flows above under ~1500
+  CSS px) — ALLOCATION OF FUNDING uses it instead of a title ⓘ; plus hub-catchment small multiples — top-6 home regions by
   exported €, one mini-map each on a shared scale, click→traces that hub.
   One-arrow-per-region "shift arrows" were REJECTED: only 19/56
   import-majority regions have a ≥50% dominant origin. **Every Atlas flow

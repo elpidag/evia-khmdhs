@@ -359,10 +359,10 @@
 {#if map}
 	<ChartFrame
 		title="ALLOCATION OF FUNDING"
-		hint="{grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the {grInt(
+		insight="{grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the {grInt(
 			map.contracts.length
 		)} contracts cover more than one regional unit, and the documents state no allocation of the money between the units a contract covers. So each contract's value is split equally between its regions and, for a jointly signed contract, between its partners. A region's figure is the sum of those equal shares, and the regions add up to the programme total."
-		caveat="Stated € excl. VAT. A contract covering several regional units, or signed by several firms, is split equally between them — the documents state no other allocation (ⓘ beside the title)."
+		caveat="Stated € excl. VAT. A contract covering several regional units, or signed by several firms, is split equally between them — the documents state no other allocation (the lightbulb beside the title explains)."
 		anchor="map"
 		methodology="even-split"
 	>
@@ -384,7 +384,7 @@
 	})()}
 	<ChartFrame
 		title="WHERE THE MONEY TRAVELS"
-		subtitle="Only {localPct}% of the money goes to firms based where the work is. Each region is coloured by the share of its works won by out-of-region firms — darker means more of the money leaves — and the bars beside the map split the biggest destinations’ € by the winner’s base. Click a region or a bar: solid black arrows show who reaches in, dashed black where its own firms reach out — width is the €, and the year buttons replay the focused flows one signature year at a time."
+		subtitle="Only {localPct}% of the money goes to firms based where the work is. Regions are coloured by the share of their works won by out-of-region firms; the bars split every destination’s € by the winner’s base. Click a region or a bar to see its flows."
 		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
 			net.coverage.total_eur
 		)} resolved. Same reading as the map above: a contract covering several regional units, or signed by several firms, is split equally between them, because the documents state no other allocation — every arrow carries the shares that connect a firm's base to a work region, and the flows add up to the programme total."
@@ -395,7 +395,7 @@
 			flows={net.flows}
 			flowsYearly={net.flows_yearly}
 			{centroids}
-			origins={net.origins.slice(0, 12)}
+			origins={net.origins}
 		/>
 	</ChartFrame>
 
