@@ -6,7 +6,10 @@
 	import type { AntineroMapPayload } from '$lib/api';
 	import DotLayer, { type DotPoint } from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
-	import { RAMP_WORKS, makeChoro, spreadOverlaps } from '$lib/maps/useGeo';
+	import { RAMP_WORKS, makeChoro, spreadOverlaps, loadPe } from '$lib/maps/useGeo';
+	import { geoContains } from 'd3-geo';
+	import { onMount } from 'svelte';
+	import type { FeatureCollection, MultiPolygon } from 'geojson';
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import Hint from '$lib/ui/Hint.svelte';
@@ -140,6 +143,17 @@
 	const SINGLE_FILL = '#6b6b6b';
 	const DRILL_STROKE = '#333333';
 
+	// the coarse Π.Ε. layer (the same memoised load PaperMap uses), so the
+	// de-overlap spread can keep every dot ON LAND — five seats share Λίμνη's
+	// waterfront point, nine share Μεγ. Αλεξάνδρου 27 in Καβάλα (user, 2026-08-21)
+	let land = $state.raw<FeatureCollection<MultiPolygon> | null>(null);
+	onMount(() => {
+		loadPe(fetch).then((fc) => (land = fc as unknown as FeatureCollection<MultiPolygon>));
+	});
+	const onLand = $derived((lat: number, lon: number): boolean =>
+		!land || land.features.some((f) => geoContains(f, [lon, lat]))
+	);
+
 	const contractDots = $derived.by(() => {
 		let pts = data.contract_points;
 		if (focus?.side === 'works') pts = pts.filter((p) => p.pe === focus.pe);
@@ -148,7 +162,8 @@
 		// the zoomed map needs far less de-overlap spread than country level
 		return spreadOverlaps(
 			pts as unknown as DotPoint[],
-			focus?.side === 'works' ? 0.012 : 0.034
+			focus?.side === 'works' ? 0.012 : 0.034,
+			onLand
 		);
 	});
 	const contractorDots = $derived(
@@ -160,17 +175,18 @@
 							drillContractors.some((c) => c.vat === p.vat)
 						)
 					: data.contractor_points.points) as unknown as DotPoint[],
-			focus?.side === 'home' ? 0.01 : 0.02
+			focus?.side === 'home' ? 0.01 : 0.02,
+			onLand
 		)
 	);
 	// how precisely the registered-office dots are placed: the street address,
 	// or — where the geocoder could not place the street — the centre of the
 	// municipality (drawn dashed and lighter, as the sponsored-works map does)
 	const whyCentre =
-		'The registered address of these contractors could not be placed on the map at ' +
-		'street level — it is a kilometre marker on a road, a rural locality or a street the ' +
-		'geocoder does not know — so the dot sits at the centre of the municipality the ' +
-		'address names, and is drawn dashed.';
+		'The registered office is read from each contractor\'s own signed contract. For these dots ' +
+		'the geocoder could not place the stated address on a street — it is a kilometre marker on ' +
+		'a road, a rural locality or field lot, or a street OpenStreetMap does not know — so the ' +
+		'dot sits at the centre of the settlement the document names, and is drawn dashed.';
 
 
 	const drillColors = $derived.by(() => {
@@ -420,9 +436,13 @@
 		>
 			{#snippet overlay(ctx)}
 				{#if view === 'points'}
+					<!-- at country level the dots are decorative: hovering shows the
+					     regional unit's card only (user, 2026-08-21); once a region
+					     is selected on either map, the dots carry their own cards -->
 					<DotLayer
 						{ctx}
 						points={contractorDots}
+						inert={!focus}
 						r={focus?.side === 'home' ? 6 : 4.5}
 						fillOf={(p) =>
 							hotVats.has(p.vat as string)

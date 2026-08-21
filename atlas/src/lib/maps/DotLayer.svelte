@@ -26,6 +26,10 @@
 		 *  as if hovered — the paired map pulls up the contractor's card when
 		 *  it lights the dot (user, 2026-08-20) */
 		pinTip?: (p: DotPoint) => boolean;
+		/** decorative only: no card, no link, no handlers, and the pointer
+		 *  passes through to whatever lies under the dot (the region polygon
+		 *  keeps its own card) */
+		inert?: boolean;
 		/** per-dot stroke-dasharray (e.g. approximate-location dots) */
 		dashOf?: (p: DotPoint) => string | undefined;
 		/** per-dot fill opacity override (approximate dots render lighter) */
@@ -46,6 +50,7 @@
 		onClick,
 		hotOf,
 		pinTip,
+		inert = false,
 		dashOf,
 		fillOpacityOf
 	}: Props = $props();
@@ -112,9 +117,22 @@
 </script>
 
 {#each placed as { p, x, y }, i (i)}
-	{@const href = hrefOf?.(p) ?? null}
+	{@const href = inert ? null : (hrefOf?.(p) ?? null)}
 	{@const hot = hotOf?.(p) ?? false}
-	{#if href}
+	{#if inert}
+		<circle
+			cx={x}
+			cy={y}
+			r={radius(p) * (hot ? 1.5 : 1)}
+			fill={fillOf(p)}
+			fill-opacity={fillOpacityOf?.(p)}
+			stroke={hot ? 'var(--ink)' : stroke}
+			stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
+			stroke-dasharray={dashOf?.(p)}
+			opacity={hot ? 1 : opacity}
+			style:pointer-events="none"
+		/>
+	{:else if href}
 		<a {href} aria-label={String(p.name ?? p.title ?? p.ref ?? href)}>
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<circle

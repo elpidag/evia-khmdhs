@@ -5906,3 +5906,199 @@ methodology's even-split paragraph was rewritten around the reason, and the
 authority page's «full exposure» compare figure became a plain contract
 count. The frozen webui keeps its full-exposure `/map` and `/origins` under
 the «maximum-exposure view» copy it has always carried.
+
+## 2026-08-21 · The municipality-centre dots: 52 of 61 DO hold a street — 16 re-placed, 45 stay honest
+
+The registered-office map drew 61 of the 151 in-scope contractors at the
+centre of their municipality (dashed). The user asked whether we actually
+lack those addresses. **We do not, mostly**: 52 of the 61 curated entries
+hold a registered street — 38 with a house number, 10 a street or locality
+without one, 4 a kilometre marker on a road — and only 9 hold no street at
+all. The first Nominatim pass (2026-07-25) failed on the registry's own
+spellings: abbreviations («ΜΕΓ ΑΛΕΞΑΝΔΡΟΥ 27», «Ρ ΦΕΡΑΙΟΥ», «ΑΘ ΔΙΑΚΟΥ»,
+«ΛΕΩΦ. ΚΗΦΙΣΙΑΣ 118Β»), a floor glued to the number («ΛΑΠΙΘΩΝ 1ΟΣ ΟΡΟΦΟΣ
+6»), a settlement written inside the street field («ΑΡΤΕΜΙΔΟΣ ΠΕΥΚΑ 14»),
+a one-σ spelling («ΝΑΡΚΙΣΩΝ»), and «Λεωφόρος» prefixes that the public
+instance resolves only in Latin without the word.
+
+**Decision: re-geocode those 52 with the abbreviations expanded, under the
+SAME acceptance gate as the layer (`geocode_loader._acceptable`: the hit's
+Τ.Κ. prefix must equal the stored one, or resolve to the curated Π.Ε.),
+plus a street-level requirement on the hit, and read every hit by eye
+before it enters the curated file.** Result: **16 moved to `address`** —
+6 to OSM's house-number point (Μεγάλου Αλεξάνδρου 27 Καβάλα ×2 —
+ΜΠΟΜΠΟΤΗ and ΚΑΦΕΤΖΗΣ share the address —, Κηφισίας 118 ×2 — Τ&Τ
+ΚΑΤΑΣΚΕΥΕΣ and its Κ/Ξ —, Γαλατσίου 45, Αγίου Δημητρίου 170) and 10 onto
+the named street where OSM knows the street but not the number (Πέτρου
+Ράλλη, Αθανασίου Διάκου, Καποδιστρίου Τρικάλων, Λαπιθών, Ρήγα Φεραίου
+Πατρών, Κωστή Παλαμά Καματερού, Ναρκίσσων Ν. Ηρακλείου, Θερμαϊκού
+Ευκαρπίας, Αρτέμιδος Πεύκων, Μεγάλου Αλεξάνδρου Ν. Μαγνησίας). Each entry
+records `geo_level: number|street` and a provenance sentence in `notes`
+(query, hit Τ.Κ., what OSM matched). Moves are 0,1–2 km except Πεύκα
+(Ασβεστοχώρι centre → the street, 4 km). In-scope precision is now
+106 address / 45 municipality (was 90 / 61).
+
+**Five hits were REJECTED although they passed the Τ.Κ.-prefix gate** —
+the gate alone is not enough once abbreviations are expanded loosely:
+«ΛΕΩΦΟΡΟΣ 5» matched Λεωφόρος Ροδοπόλεως in Δροσιά (the registry says
+Λεωφόρος Σταμάτας); «ΓΙΑΝΝΗ 23» matched Γιάννη Χαλκίδη (registry: Γιάννη
+Αγγέλου); «ΛΕΩΦΟΡΟΣ 118Β» matched Μεσογείων (registry: Κηφισίας — fixed
+by the Latin query above); «Σόλωνος» on Salamis matched the one in
+Αιάντειο, 10 km from Σαλαμίνα town; «Λεωφόρος Ηρακλείου 364» with city
+«ΗΡΑΚΛΕΙΟ» matched Crete. Rule kept from this: the matched street name
+must be the registry's street, not merely its first word.
+
+**Eleven stay at the centre with a reason the user may overrule** (their
+street exists in OSM but the registry's own Τ.Κ. disagrees with it, or OSM
+places the street in the neighbouring settlement): ΜΕΣΗΜΒΡΙΑΣ Καβάλα (OSM
+tags the street 564 04 — a transposition of 654 04 — while its county is
+Καβάλας); ΔΙΑΛΕΧΤΟΥ (the street is in Τρίκαλα town, 421 00; the registry
+Τ.Κ. 420 35 is Δήμος Μετεώρων); ΚΑΛΟΥΔΗ Ιωάννινα (453 32 vs 452 21, both
+the city); ΒΑΣ. ΣΟΦΙΑΣ 9 (OSM has no. 9 at Κολωνάκι 106 71; the registry
+Τ.Κ. 115 28 is Ιλίσια — number and Τ.Κ. contradict each other); ΔΗΜΑΡΧΟΥ
+ΓΕΩΡΓΙΑΔΟΥ 278 Βόλος ×2 (the street spans three Τ.Κ.; OSM returns the
+Ιωλκός/Ν. Ιωνία segments, not 382 22); Β. ΚΟΡΝΑΡΟΥ and ΦΡΑΝΤΖΗ ×2
+Θεσσαλονίκη (OSM's generic 541 10 vs 542 48 / 546 55 — same Ντεπώ
+neighbourhood); Μ. ΑΛΕΞΑΝΔΡΟΥ «Ιωνία» ×2 (the only such street with
+570 08 in OSM is Νέα Μαγνησία's, the adjacent village). The remaining 25
+have nothing OSM can place, or only the wrong street: kilometre markers («25ο χλμ ΕΟ
+Αθηνών-Κορίνθου», «15 ΧΛΜ ΘΕΣ/ΝΙΚΗΣ ΜΟΥΔΑΝΙΩΝ ΟΤ 1542 ΑΓΡ»), ΑΓΡ/Τ.Θ. lots,
+bare localities («ΗΡΑΚΛΕΙΟ Λαγκαδά», «ΣΙΣΑΝΙΟ», «ΚΑΛΛΙΦΥΤΟΣ ΝΕΟΧΩΡΙ»,
+«ΝΙΚΑΣΙ», «ΚΑΣΤΡΙΑ ΕΚΤΟΣ ΟΙΚΙΣΜΟΥ»), and streets OSM lacks (ΔΗΜ. ΣΚΟΥΡΑ
+Χαλκίδα ×3, ΠΡΟΕΚΤΑΣΗ ΟΛΥΜΠΙΑΔΟΣ Εύοσμος ×3, ΠΑΡΑΛΛΗΛΟΣ Γ. ΒΑΣΙΛΕΙΑΔΗ
+Καμ. Βούρλα ×2, ΜΕΓ. ΚΩΝΣΤΑΝΤΙΝΟΥ Σιάτιστα, 25ης ΜΑΡΤΙΟΥ Ν. Μαγνησία,
+ΛΕΩΦ. ΣΤΑΜΑΤΑΣ, ΓΙΑΝΝΗ ΑΓΓΕΛΟΥ, ΣΟΛΩΝΟΣ Σαλαμίνα, ΛΕΩΦ. ΗΡΑΚΛΕΙΟΥ 364
+Ν. Ηράκλειο).
+
+The legend's ⓘ on «centre of municipality used as location» says this
+honestly now: we hold the address; the geocoder could not place it on the
+street. Scratch tooling (not committed): `regeocode_municipal.py`,
+`probe_rejected.py`, `apply_regeocode.py`. Loaded with
+`khmdhs.contractor_loader`; pins unchanged (151/151 located).
+
+## 2026-08-21 · The registered office is read from the contract — a seat layer for all 151 contractors
+
+The user asked the question the morning's re-geocode should have started
+from: «do we not have the addresses in the contracts?» We do. **Every one
+of the 151 in-scope contractors' signed contracts states its seat in the
+party clause** («…που εδρεύει στ… επί της οδού …, αρ. …, Τ.Κ. …»): 151/151
+have the clause, 146 a Τ.Κ., 134 a street or locality, 98 a house number.
+The curated layer had been built from VIES/ΓΕΜΗ instead, with the
+registry's abbreviations («ΜΕΓ ΑΛΕΞΑΝΔΡΟΥ», «Ρ ΦΕΡΑΙΟΥ», «ΛΕΩΦ. ΚΗΦΙΣΙΑΣ
+118Β»), and in two cases a joint venture had been placed at a MEMBER's
+town.
+
+**Decision (user): the contract-stated seat is the primary source of the
+registered-office layer; VIES/ΓΕΜΗ are the cross-check; where today's
+register or the company's own website shows the firm has since moved, the
+CURRENT seat is drawn and the contract's seat is kept beside it.** A
+venture's seat is never inferred from a member's. Curated in
+`khmdhs/data/contractor_seats.json` — one entry per ΑΦΜ: city / street /
+number / Τ.Κ. transcribed by hand from the clause (every row read; the
+phase-II PDFs write each accent as a separate letter, so the transcription
+is the human's, the parser only proposed), the source ΑΔΑΜ, the verbatim
+sentence, the register's values, and `contract_seat` + `note` where the
+chosen seat is not the contract's. Merged into `contractor_locations.json`
+(address / postal_code / city / region_pe ← the seat; `seat_source`,
+`seat_ref`, `seat_excerpt`, `seat_note`, `geo_level`; `register_*` keep the
+old values) → `contractor_loader` → five new DB columns → the contractor
+page prints «registered office as stated in contract <ΑΔΑΜ>» with the
+quoted sentence, the methodology says so, the map legend ⓘ too.
+
+**Where the sources disagree (all checked against the register and the
+company's site, as the user asked):** ΥΛΗ — contract Μαυροματαίων 9, Αθήνα;
+forest.gr and ΓΕΜΗ/VIES today Λ. Ηρακλείου 364, 14122 (user-confirmed) →
+website. ΤΟΜΗ — its 2022–23 contracts Ερμού 25, Κηφισιά; its OWN 2025 contract
+(25SYMV016946591), ΓΕΜΗ and the ΕΒΕΑ directory 19ο χλμ Λ. Παιανίας–
+Μαρκοπούλου (the ΑΚΤΩΡ address) → the later contract (a cross-contract
+consistency check over the 62 contractors with several contracts found
+only Τ.Κ.-granularity differences otherwise). ΚΗΠΟΠΡΑΞΙΣ —
+contract Αγίου Παύλου 31, Περιστέρι; ΓΕΜΗ Αίμονος 64, Αθήνα; kipopraxis.gr
+publishes no address → register. ΦΙΛΑΝΤΑΡΑΚΗ — contract Πλουτάρχου 38,
+Ίλιον; VIES+ΓΕΜΗ Ανδρέα Παπανδρέου 308, Ίλιον → register. ΑΛΣΟΣ Ι.Κ.Ε. — the
+reverse: ΓΕΜΗ/VIES «Προέκταση Ολυμπιάδος, Εύοσμος», alsos.gr AND the 2022
+contract Νεοφύτου Δούκα 2, 544 54 (Πυλαία) → website. Τ&Τ ΚΑΤΑΣΚΕΥΕΣ — its
+contract names only the representative's residence, the register the same
+Κηφισίας 118Β → register. ΛΙΑΧΤΙΔΑ — the curated «Μοναστηρίου 93Α» (a
+Diavgeia reading) was stale: contract and ΓΕΜΗ agree on Γ. Φραντζή 1.
+**Flagged, not decided**: ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε. — ΓΕΜΗ/VIES «25ης Μαρτίου 4,
+Νέα Μαγνησία», its 2023 venture contracts and its own 2025 contract
+«Ορφανίδου 1, Θεσσαλονίκη», no website: the later document is drawn, the
+register kept; ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ — the contract seats him «στην Καλλιθέα
+Καλαμπάκας Τρικάλων, Διαλεκτού 14, ΤΚ 42100», ΓΕΜΗ in Δήμος Μετεώρων
+(42035): the village is the seat, drawn at its centre; Κ/Ξ ΜΠΟΜΠΟΤΗ–
+ΞΑΝΘΟΠΟΥΛΟΣ — the only contract stating no seat for the venture: Καβάλα
+without a street. The morning's own move of Κ/Ξ ΤΣΑΝΤΑΛΗ–ΒΕΛΩΝΗΣ to
+Μεγάλου Αλεξάνδρου, Νέα Μαγνησία (VIES) was wrong by its contract («Διαβατά,
+Βασ. Κωνσταντίνου 8») and is undone here. **Two regions change**, both
+ventures whose dot was inferred from a member: ΚΑΡΝΟΜΟΥΡΑΚΗΣ–ΑΛΚΗ (ΥΠΟΕΡΓΟ
+Β) Μαρούσι → Καβάλα, ΛΙΑΡΗ–ΓΚΙΚΑΣ Κόρινθος → Λίμνη Ευβοίας (the connections
+pin fell 259 → 257 flows as two home/work pairs merged). Nine contracts
+state no Τ.Κ.; the register's is used and the entry says so.
+
+**Geocoding, from the clean text** (`_acceptable` Τ.Κ./Π.Ε. gate + a
+street-level requirement; Greek, Latin without «Λεωφόρος», settlement
+centre): in-scope dots now **109 address (34 at the street number, 75 on
+the named street) / 42 settlement centre** — the morning's 106/45 and
+July's 90/61. Two traps the first run exposed, now rules: a "centre"
+must be a SETTLEMENT-type hit that names the settlement in its own
+place fields (the first run took the Μητροπολιτική Ενότητα centroid for
+«Θεσσαλονίκη», 19 km out); and a Τ.Κ.-prefix match in a DIFFERENT
+settlement is refused (OSM's only Σόλωνος on Salamis is in Αιάντειο, 10 km
+from the town — that venture stays at Σαλαμίνα's centre). A same-settlement
+street hit whose only fault is OSM's postcode tag (Θεσσαλονίκη's generic
+541 10 on Κορνάρου, Φραντζή, Ορφανίδου) is accepted as `gate: settlement`
+and was read by eye. Hand-placed: Μεσημβρίας Καβάλα (OSM's transposed
+564 04), Καλλιθέα Μετεώρων, Ομήρου Θεσσαλονίκη (OSM has none inside the
+city — centre), Νικάσι Καρύστου (not in OSM — Κάρυστος centre), Κηφισίας
+118 (number-level only via the Latin query). 14 dots moved more than 3 km,
+12 of them to the settlement the contract names (Μάκρη, Σισάνι, Βασιλική
+Γόρτυνας, Καινούργιο, Πυλαία …); the scratch tooling (`seat_audit.py`,
+`seat_parse.py`, `build_seats.py`, `geocode_seats.py`, `merge_seats.py`)
+is not committed. Pinned by `tests/test_contractor_seats.py`: every
+in-scope ΑΦΜ has a seat, every contract ref is a record of that
+contractor's own chain, every excerpt carries the ΑΦΜ, the locations file
+and the DB carry the seat, the two regions, the six divergent entries keep
+the contract seat beside them. The earlier entry of today (the 16 re-placed
+dots) is superseded by this layer — those 16 are all among the 109. A second look at the weak centres moved Καλούδη Ιωαννίνων and Μαυροματαίων 39 onto their streets and the two Δημ. Σκούρα ventures from an Αυλίδα railway station (the first run's «Χαλκίδα, 34100») to Χαλκίδα town — a centre must now be a town/village-type hit, preferred over postcode or municipality centroids.
+
+**The 13 «street OSM lacks» seats, asked of OpenStreetMap directly (user: «let's do
+these 13»):** Overpass (anonymous) queried for highway ways matching the
+street's stem within the settlement, each hit reverse-geocoded to confirm the
+settlement. Eight placed: Ομήρου 3 Θεσσαλονίκη at the NUMBER (OSM way tagged
+«Ομηρου 3» — Nominatim's search never returned it), Γιάννη Αγγέλου Χαριλάου,
+Κουντουριώτου Μυτιλήνη, Δημάρχου Σκούρα Χαλκίδα (×2, beside the ΔΟΥ as the
+register says), Γερασίμου Βασιλειάδη Καμένα Βούρλα (×2 — the contract names
+the PARALLEL street; the dot sits on the named one), the Αιαντείου avenue for
+ΖΙΤΑΚΑΤ. Five stay at the centre with the reason in `seat_note`: OSM's only
+Μακεδονομάχων is in Λαγκαδάς town, not the village Ηράκλειο; its only
+Σικελιανού is in Αμπελάκια, 3 km from Σαλαμίνα and without a Σόλωνος; and
+Καρπενησίου Καινούργιο, Μεγ. Κωνσταντίνου Σιάτιστα, Διαλεκτού Καλλιθέα exist
+in neither index. In-scope dots: **117 address (35 number / 82 street) / 34
+settlement centre** — 17 documents name only a settlement, 12 km markers/
+localities/lots, 5 streets no map knows.
+
+**Verdicts (user, same day):** ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε. — the contract's seat
+(Ορφανίδου 1, Θεσσαλονίκη); ΑΛΣΟΣ Ι.Κ.Ε. — the website + contract seat
+(Νεοφύτου Δούκα 2, Πυλαία); ΦΙΛΑΝΤΑΡΑΚΗ — the register's (Ανδρέα
+Παπανδρέου 308, Ίλιον). Recorded in the three entries' notes.
+
+**Dots in the sea — the de-overlap spread, not the geocode.** Asked why
+ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ's dot sat in the water: every one of the 151 points
+(and the July point) tests INSIDE the drawn Π.Ε. polygons on both Atlas
+layers (`pe.topo.json`, `pe_hires.topo.json`, d3 `geoContains`) — the seat
+itself is on land. What put it offshore is `spreadOverlaps`: seats sharing
+one point are fanned out on a sunflower spiral (0,02° ≈ 2 km steps at
+country level, 0,034° for contract dots) so all stay visible, and the
+spiral ignored the coast — Λίμνη's waterfront point is shared by FIVE seats
+(ΜΑΝΑΡΙΤΣΑΣ, his two ventures with ΑΓΓΕΛΑΤΟΣ, ΛΙΑΡΗ–ΜΑΝΑΡΙΤΣΑΣ, ΛΙΑΡΗ–ΓΚΙΚΑΣ
+at Καστριά), Μεγ. Αλεξάνδρου 27 in Καβάλα by nine, Σαλαμίνα town by four,
+Μπόνου 7 Βόλος by three, Χαλκίδα by four — all coastal, so the outer spiral
+slots fell in the sea. Fix: `spreadOverlaps(points, step, onLand?)` skips
+any spiral slot the predicate refuses and tries the next (40 slots, else
+the point stays put); `AntineroMap` passes `geoContains` over the same
+coarse Π.Ε. layer PaperMap draws (memoised load). Pinned by
+`atlas/src/lib/maps/spread.test.ts`, which spreads the real Λίμνη / Καβάλα /
+Σαλαμίνα groups over the real `pe.topo.json` and asserts every output on
+land. The dots now fan out ALONG the coast. The frozen webui `/overview`
+keeps its GeoCommon spiral.

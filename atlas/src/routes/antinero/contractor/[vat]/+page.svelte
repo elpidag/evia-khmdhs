@@ -1,6 +1,13 @@
 <script lang="ts">
 	import Hint from '$lib/ui/Hint.svelte';
 	import { registryStatusNote } from '$lib/transforms/registry';
+	/** how the map point was placed — never «exact» where OSM gave only the street */
+	function pointWording(l: { geo_precision?: string | null; geo_level?: string | null } | null) {
+		if (!l?.geo_precision) return '';
+		if (l.geo_precision === 'address')
+			return l.geo_level === 'number' ? 'map point at the street number' : 'map point on the named street';
+		return 'map point at the centre of the settlement named';
+	}
 	import { ruLabel } from '$lib/transforms/regions';
 	import YearBars from '$lib/charts/YearBars.svelte';
 	import ChoroLegend from '$lib/maps/ChoroLegend.svelte';
@@ -121,27 +128,49 @@
 						r={6}
 						fillOf={() => 'var(--c-dase-deep)'}
 						tipOf={() =>
-							`<strong>Registered HQ</strong><br>${b.location?.address ?? ''}, ${
+							`<strong>Registered office</strong><br>${b.location?.address ?? ''}, ${
 								b.map_data.home?.city ?? ''
-							}<br><span style="color:var(--ink-faint)">geocode precision: ${
-								b.map_data.home?.precision
-							}</span>`}
+							}<br><span style="color:var(--ink-faint)">${pointWording(b.location)}</span>`}
 					/>
 				{/if}
 			{/snippet}
 			{#snippet legend()}
 				<ChoroLegend ramp={RAMP_WORKS} max={maxSplit} title="€ of works (even-split)" />
-				<div style="margin-top:4px">● HQ{b.map_data.home ? '' : ' — not geocoded'}</div>
+				<div style="margin-top:4px">● registered office{b.map_data.home ? '' : ' — not geocoded'}</div>
 			{/snippet}
 		</PaperMap>
 		{#if b.location}
+			<!-- the registered office as the contractor's own signed contract states
+			     it (DATA_DECISIONS 2026-08-21); where today's register or the firm's
+			     own site shows a later move, that seat is drawn and the note says so -->
 			<p class="muted">
 				<small>
 					{b.location.address ?? ''}{b.location.postal_code ? `, ${b.location.postal_code}` : ''}
-					{b.location.city ?? ''} · source: {b.location.source ?? '—'}
-					{#if b.location.geo_precision}· precision: {b.location.geo_precision}{/if}
+					{b.location.city ?? ''}
+					{#if b.location.seat_source === 'contract' && b.location.seat_ref}
+						· registered office as stated in contract
+						<a href={`/antinero/contract/${b.location.seat_ref}`}>{b.location.seat_ref}</a>
+					{:else if b.location.seat_source === 'register'}
+						· registered seat in ΓΕΜΗ / VIES today
+					{:else if b.location.seat_source === 'website'}
+						· the address the company itself publishes
+					{:else}
+						· source: {b.location.source ?? '—'}
+					{/if}
+					{#if b.location.geo_precision}· {pointWording(b.location)}{/if}
 				</small>
 			</p>
+			{#if b.location.seat_excerpt}
+				<p class="muted quote">
+					<small
+						>{#if b.location.seat_source !== 'contract'}Seat as its contract states it:
+						{/if}«{b.location.seat_excerpt}»</small
+					>
+				</p>
+			{/if}
+			{#if b.location.seat_note}
+				<p class="muted"><small>{b.location.seat_note}</small></p>
+			{/if}
 		{:else}
 			<p class="muted"><small>Home location not resolved — honestly unlocated.</small></p>
 		{/if}

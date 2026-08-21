@@ -825,7 +825,10 @@ def test_connections_pins(client):
     assert all(len(f["year"]) == 4 for f in n["flows_yearly"])
     assert len(n["contractor_authority"]) == 476
     assert len(n["contractor_pe"]) == 378
-    assert len(n["flows"]) == 259
+    # 259 until 2026-08-21, when two ventures' HQ regions followed their own
+    # contracts (Μαρούσι→Καβάλα, Κόρινθος→Λίμνη Ευβοίας) and two (home, work)
+    # pairs merged into existing ones — DATA_DECISIONS 2026-08-21
+    assert len(n["flows"]) == 257
     assert len(n["contractor_signer"]) == 175
     # and with them the visible partnerships: a κοινοπραξία is ONE registry
     # party, so the only pairs left are the two contracts whose venture had no

@@ -164,10 +164,15 @@ export const loadCentroids = (fetch: Fetch): Promise<Record<string, [number, num
 };
 
 /** Deterministic sunflower-spiral de-overlap for co-located points
- *  (port of GeoCommon.spreadOverlaps — golden angle, no RNG). */
+ *  (port of GeoCommon.spreadOverlaps — golden angle, no RNG).
+ *  `onLand(lat, lon)` — when given, a spiral slot that fails it (the sea)
+ *  is skipped and the next slot tried, so a group of seats sharing one
+ *  waterfront point fans out along the coast, never into the water;
+ *  if no slot within the search window is on land the point stays put. */
 export function spreadOverlaps<T extends { lat: number; lon: number }>(
 	points: T[],
-	stepDeg = 0.028
+	stepDeg = 0.028,
+	onLand?: (lat: number, lon: number) => boolean
 ): (T & { lat2: number; lon2: number })[] {
 	const groups = new Map<string, T[]>();
 	for (const p of points) {
@@ -183,15 +188,26 @@ export function spreadOverlaps<T extends { lat: number; lon: number }>(
 			out.push({ ...g[0], lat2: g[0].lat, lon2: g[0].lon });
 			continue;
 		}
-		g.forEach((p, i) => {
-			const r = stepDeg * Math.sqrt(i + 0.5);
-			const a = i * GOLDEN;
-			out.push({
-				...p,
-				lat2: p.lat + r * Math.sin(a),
-				lon2: p.lon + (r * Math.cos(a)) / Math.cos((p.lat * Math.PI) / 180)
-			});
-		});
+		let slot = 0;
+		for (const p of g) {
+			const cand = (s: number): [number, number] => {
+				const r = stepDeg * Math.sqrt(s + 0.5);
+				const a = s * GOLDEN;
+				return [p.lat + r * Math.sin(a), p.lon + (r * Math.cos(a)) / Math.cos((p.lat * Math.PI) / 180)];
+			};
+			let pos = cand(slot);
+			if (onLand) {
+				let tries = 0;
+				while (!onLand(pos[0], pos[1]) && tries < 40) {
+					slot++;
+					tries++;
+					pos = cand(slot);
+				}
+				if (tries >= 40 && !onLand(pos[0], pos[1])) pos = [p.lat, p.lon];
+			}
+			out.push({ ...p, lat2: pos[0], lon2: pos[1] });
+			slot++;
+		}
 	}
 	return out;
 }

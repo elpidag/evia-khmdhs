@@ -57,6 +57,14 @@ export interface ContractorBundle {
 		lat: number | null;
 		lon: number | null;
 		geo_precision: string | null;
+		/** the seat layer of 2026-08-21: where the address comes from, the
+		 *  contract or URL, the verbatim seat sentence, a note where sources
+		 *  disagree, and number|street for an 'address' point */
+		seat_source?: 'contract' | 'register' | 'website' | null;
+		seat_ref?: string | null;
+		seat_excerpt?: string | null;
+		seat_note?: string | null;
+		geo_level?: 'number' | 'street' | null;
 	} | null;
 	map_data: {
 		home: { lat: number; lon: number; city: string | null; pe: string | null; precision: string } | null;

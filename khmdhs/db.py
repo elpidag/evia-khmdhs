@@ -481,6 +481,17 @@ def init_db(path: Path) -> sqlite3.Connection:
         # the register's legal form; «Κοινοπραξία» is what makes an
         # entity a joint venture, whatever its name happens to say
         ("contractor_locations", "gemi_legal_type", "TEXT"),
+        # the registered office as the contractor's own signed contract states
+        # it (DATA_DECISIONS 2026-08-21): where the address came from
+        # ('contract' | 'register' | 'website'), the document or URL, the
+        # verbatim seat sentence, a note where sources disagree, and how
+        # precisely the map point sits ('number' | 'street' when
+        # geo_precision is 'address')
+        ("contractor_locations", "seat_source", "TEXT"),
+        ("contractor_locations", "seat_ref", "TEXT"),
+        ("contractor_locations", "seat_excerpt", "TEXT"),
+        ("contractor_locations", "seat_note", "TEXT"),
+        ("contractor_locations", "geo_level", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")

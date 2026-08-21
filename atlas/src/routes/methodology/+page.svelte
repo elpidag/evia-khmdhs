@@ -282,11 +282,16 @@
 
 	<h2 id="geocoding">Contractor locations</h2>
 	<p>
-		Registered HQ addresses come from VIES first, the ΓΕΜΗ publicity registry for the rest, and
-		manual curation for the residue; coordinates from OSM Nominatim, accepted only when they
-		validate against the stored postcode or regional unit. Every point carries a precision flag
-		(address / municipality); unresolved contractors are counted and shown as such, never
-		fabricated.
+		Each contractor's registered office is read from the party clause of its own signed contract
+		(«…που εδρεύει στ… επί της οδού …, αρ. …, Τ.Κ. …»), chain-read across the contract's versions,
+		with the verbatim sentence kept as evidence on the contractor page; VIES and the ΓΕΜΗ
+		publicity registry are the cross-check, and where the register or the company's own site
+		shows a later move the current seat is drawn and the contract's seat is noted. A joint
+		venture's seat is never inferred from a member's. Coordinates come from OSM Nominatim,
+		accepted only when the hit validates against the stated postcode or regional unit and names
+		the street; every point says how it was placed (at the street number / on the named street /
+		at the centre of the settlement the document names) — kilometre markers, rural localities and
+		streets OSM lacks stay at the settlement centre, drawn dashed, never fabricated.
 	</p>
 
 	<h2 id="authorities">Forest authorities</h2>
