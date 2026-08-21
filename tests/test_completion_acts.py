@@ -121,11 +121,22 @@ def test_real_db_counts(conn):
     kinds = dict(conn.execute(
         "SELECT act_kind, COUNT(*) FROM contract_completion_acts "
         "GROUP BY act_kind"))
-    assert kinds == {"oristiki_paralavi": 228, "peraiosi": 55}
+    # 228/55 until 2026-08-21: a «Μερική έγκριση» and a «Τμηματική περαίωση»
+    # were rejected as endings, three acts whose subject keyed the wrong
+    # ΑΔΑΜ moved to their own contracts (DATA_DECISIONS 2026-08-21)
+    assert kinds == {"oristiki_paralavi": 227, "peraiosi": 54}
     assert conn.execute(
         "SELECT COUNT(DISTINCT attributed_ref) FROM contract_completion_acts"
-    ).fetchone()[0] == 155
+    ).fetchone()[0] == 156
     basis = dict(conn.execute(
         "SELECT end_basis, COUNT(*) FROM contract_completion_acts "
         "GROUP BY end_basis"))
-    assert basis == {"protocol_date": 251, "act_date": 32}
+    # protocol_date counts only ACCEPTANCE protocols since 2026-08-21 (the
+    # first run had taken the «πρωτόκολλο εγκατάστασης» date on 105 acts)
+    assert basis == {"protocol_date": 234, "act_date": 47}
+    assert conn.execute(
+        "SELECT COUNT(*) FROM contract_completion_acts "
+        "WHERE end_excerpt LIKE '%εγκατάστασ%'").fetchone()[0] == 0
+    # the two ΥΠΕΝ keying errors are on their own contracts now
+    assert conn.execute("SELECT attributed_ref FROM contract_completion_acts WHERE ada='6Χ884653Π8-ΒΙΗ'").fetchone()[0] == "23SYMV013019394"
+    assert conn.execute("SELECT attributed_ref FROM contract_completion_acts WHERE ada='68Μ34653Π8-ΞΗΛ'").fetchone()[0] == "23SYMV012946366"

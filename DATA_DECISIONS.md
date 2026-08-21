@@ -6102,3 +6102,61 @@ coarse Π.Ε. layer PaperMap draws (memoised load). Pinned by
 Σαλαμίνα groups over the real `pe.topo.json` and asserts every output on
 land. The dots now fan out ALONG the coast. The frozen webui `/overview`
 keeps its GeoCommon spiral.
+
+## 2026-08-21 · Completion acts: the ministry's subject line can key the wrong ΑΔΑΜ, a «Μερική έγκριση» is not an ending, and the end date must be the ACCEPTANCE protocol's
+
+Asked to inspect `/antinero/contract/23SYMV013019416` (lot 15Γ, Χαλκίδα/
+Αλιβέρι, ΤΡΙΑΝΤΑΦΥΛΛΟΥ): its page showed Δασαρχείο Ξάνθης and Διεύθυνση
+Δασών Ροδόπης as responsible services and a «Μερική έγκριση του Πρωτοκόλλου
+Παραλαβής … (15Α)» among its completion acts. Reading the acts: ΥΠΕΝ's two
+acceptance acts for lot **15Α** (Ξάνθη/Ροδόπη, ΛΙΑΠΟΠΟΥΛΟΥ — 23SYMV013019394)
+carry, in their SUBJECT line, lot 15Γ's ΑΔΑΜ 23SYMV013019416 — a keying
+error of the ministry — while their recital 14 cites the right contract
+(«Την από 04.07.2023 Σύμβαση Έργου (ΑΔΑΜ: 23SYMV013019394 2023-07-05)») and
+the title/lot/services are 15Α's. `completion_acts_loader` links by the
+subject's ΑΔΑΜ, so both acts landed on 15Γ, and `forest_loader`'s fourth
+source (the acts) then hung Ξάνθη/Ροδόπη on a Εύβοια contract. A screen of
+all 283 stored acts (subject ΑΔΑΜ vs the recital's «Σύμβαση … Έργου (ΑΔΑΜ:
+X)», same-chain citations ignored) found one more such family: lot **4Α**'s
+two acts (Καστοριά/Φλώρινα, 23SYMV012946366) carried lot 4Δ's ΑΔΑΜ
+23SYMV012946406 (Πιερία) — and a counter-example that forbids a blanket
+«recital wins» rule: Ψ8ΝΛ4653Π8-4Β6's recital cites a non-existent
+…014431925 for …014431915, the subject being right there.
+
+**Three fixes, all in `khmdhs/completion_acts_loader.py`:**
+1. **Curated overrides** — `khmdhs/data/completion_act_overrides.json` (ΑΔΑ
+   → the contract the act really concerns, with the act's own evidence
+   quoted): 6Χ884653Π8-ΒΙΗ and Ψ6ΩΞ4653Π8-ΗΟ4 → 15Α, 68Μ34653Π8-ΞΗΛ and
+   6ΩΓΖ4653Π8-7ΔΚ → 4Α. Applied at insert; the loader WARNs whenever the
+   subject ΑΔΑΜ and the recital ΑΔΑΜ name stored contracts of different
+   chains and no override exists — the candidate list, never an automatic
+   re-pointing. 15Α and 4Α now carry their acceptance acts; 15Γ and 4Δ
+   keep their own (the Ξάνθη/Ροδόπη and Καστοριά/Φλώρινα links fell away;
+   the connections pin went 476 → 474 contractor–authority pairs, /explore's
+   completed count 148 → 149).
+2. **«Μερική έγκριση» rejected** — a partial approval of a protocol is not
+   the project's ending (it joins τμηματικ/προσωρινή in `_REJECT`); the
+   same pass dropped a «Βεβαίωση Τμηματικής περαίωσης» the early harvest
+   had stored (acts 283 → 281).
+3. **The end date is the acceptance protocol's.** `extract_end_date` had
+   taken the FIRST «το από DD.MM.YYYY πρωτόκολλο …» in the act — and every
+   ΥΠΕΝ act lists the «πρωτόκολλο εγκατάστασης αναδόχου» (the contractor's
+   installation) in its recitals before the acceptance protocol: **105 of
+   283 acts carried the installation date as the project end** (e.g. 15Α's
+   «17.07.2023» — the day the works STARTED). Now only a protocol whose tail
+   says παραλαβής/περαίωσης/περάτωσης/ολοκλήρωσης counts, the LAST such in
+   the act wins, and «εγκατάστασης» is excluded; an act without one falls
+   back to a «περαιώθηκαν … DD.MM.YYYY» sentence, else its issue date.
+   137 end dates changed; `end_basis` is now protocol_date 234 / act_date
+   47 (was 251/32 — the 15 «protocol» dates that were installations are
+   honestly act dates now). `--reextract` recomputes kind / attribution /
+   end date for every stored act from the cached text, offline, and is what
+   applied all of this (then `forest_loader` rebuilt the links: 25 act-
+   sourced links on 13 contracts, one `|part`).
+
+Pinned in `tests/test_completion_acts.py` (kinds 227/54, 156 contracts,
+basis 234/47, zero «εγκατάστασης» excerpts, the two re-attributions) and
+the real-DB pins. Open question noted, not changed: an act «για την περιοχή
+αρμοδιότητας του Δασαρχείου Χ» accepts ONE service's part of a multi-service
+contract; the `|part` marker fires only on «για το τμήμα του έργου», so
+such acts still read as the contract's end on the timeline.

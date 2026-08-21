@@ -200,8 +200,10 @@ refetching open contracts — prefer it for routine updates.
   **Fourth source since 2026-08-19: the Diavgeia completion acts**, whose
   subject says «…για την περιοχή αρμοδιότητας των Δασαρχείων Πάρνηθας,
   Λαυρίου…» — 275 of 283 name a service, and for the region-scoped «άμεσης
-  διαχείρισης» contracts it is the ONLY such statement (28 links / 14
-  contracts, `source=completion_act:<ΑΔΑ>`; read last so it can only ADD).
+  διαχείρισης» contracts it is the ONLY such statement (25 links / 13
+  contracts since the 2026-08-21 re-attribution, `source=completion_act:<ΑΔΑ>`;
+  read last so it can only ADD — which is why a mis-keyed act's services
+  land on the wrong contract: the act layer must be right first).
   An act accepting «– για το τμήμα του έργου …» is marked
   `completion_act:<ΑΔΑ>|part` (1 of 29) and the contract page says so —
   one accepted part is not the contract's whole jurisdiction, which is why
@@ -325,9 +327,21 @@ refetching open contracts — prefer it for routine updates.
   ολοκλήρωσης; committee formations, παρατάσεις, ΑΠΕ, επιμετρήσεις,
   τμηματικές/προσωρινές παραλαβές rejected). Subjects saying only
   «Πρωτοκόλλου Παραλαβής» resolve from the PDF body (early acts omit
-  «οριστικής»). End date = the protocol date in «το από DD.MM.YYYY
-  πρωτόκολλο…» (excerpt stored, `end_basis=protocol_date`), else the
-  act date. Table `contract_completion_acts` (chain-tip `attributed_ref`
+  «οριστικής»); a «Μερική έγκριση» (partial approval) is rejected
+  (DATA_DECISIONS 2026-08-21). End date = the ACCEPTANCE protocol's date —
+  «το από DD.MM.YYYY πρωτόκολλο [οριστικής …] παραλαβής / περαίωσης», the
+  LAST such in the act; never the «πρωτόκολλο εγκατάστασης αναδόχου» the
+  recitals list first (105 of 283 acts carried the installation date
+  until 2026-08-21) — (excerpt stored, `end_basis=protocol_date`), else a
+  «περαιώθηκαν … DD.MM.YYYY» sentence, else the act date. **ΥΠΕΝ keys the
+  wrong ΑΔΑΜ in some subject lines** (lot 15Α's acts carried 15Γ's, lot
+  4Α's carried 4Δ's): curated `data/completion_act_overrides.json` (ΑΔΑ →
+  the contract the act concerns, evidence quoted) is applied at insert and
+  the loader WARNs when subject and recital name stored contracts of
+  different chains without an override — a recital can be the typo too
+  (Ψ8ΝΛ4653Π8-4Β6), so every verdict is read from the act. `--reextract`
+  recomputes kind / attribution / end date for every stored act offline.
+  Table `contract_completion_acts` (chain-tip `attributed_ref`
   like payments; FK CASCADE; in the refresh chain). Atlas timeline shows
   them as the closing act with `/pdf/diavgeia/<ΑΔΑ>` links.
 - `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
@@ -434,6 +448,7 @@ decisions land there FIRST, then get implemented.
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | 187 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` + **`gemi_status`** — what the register says TODAY, verbatim (147 swept by `scripts/harvest_gemi_status.py`: 122 Ενεργή / 21 Διαγραφή / 4 Λύση-Εκκαθάριση; 20 in-scope contractors are wound-up joint ventures, flagged with an ⓘ + ΓΕΜΗ link and never rewritten — they signed the contract). NO status date is stored: the API's `dateGemiRegistered` is the registration date (DATA_DECISIONS 2026-08-20). **The seat is read from the contract** (DATA_DECISIONS 2026-08-21, the second entry of that day): `contractor_seats.json` is the primary source — address/postal_code/city/region_pe are the CHOSEN seat, `seat_source` contract|register|website, `seat_ref` (ΑΔΑΜ or URL), `seat_excerpt` (verbatim clause), `seat_note`, `geo_level` number|street for an `address` point, `register_*` the old VIES/ΓΕΜΗ values. In-scope dots 117 address (35 number / 82 street) / 34 settlement centre (the last 8 via Overpass — OSM ways Nominatim's search did not return, reverse-geocoded into the named settlement; 17 documents name only a settlement, 12 km markers/localities, 5 streets no map knows). `geo_precision: address` means «on the named street», at the number where OSM has it; `municipality` = centre of the settlement the document names (km markers, localities, streets OSM lacks). Geocode gate = `_acceptable` + street-level + a centre must be a settlement-type hit naming the settlement in its own place fields + a Τ.Κ.-prefix match in another settlement is refused |
 | `contractor_seats.json` | **The registered office of every in-scope Anti-nero contractor, read from the party clause of its OWN signed contract** (DATA_DECISIONS 2026-08-21): 151 entries, each city / street / number / Τ.Κ. transcribed by hand from the chain-read cached text (every row read; the parser only proposed), the source ΑΔΑΜ, the verbatim sentence, the register's values; `seat_source` contract 146 / register 3 / website 2 — where ΓΕΜΗ/VIES or the firm's own site shows a later move the CURRENT seat is chosen and `contract_seat` keeps the contract's (ΥΛΗ, ΚΗΠΟΠΡΑΞΙΣ, ΦΙΛΑΝΤΑΡΑΚΗ, ΑΛΣΟΣ, Τ&Τ; ΤΟΜΗ's own 2025 contract states its current Παιανία seat); 3 `flag: register_disagrees` (ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε., ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ, Κ/Ξ ΜΠΟΜΠΟΤΗ–ΞΑΝΘΟΠΟΥΛΟΣ which states no seat); a venture's seat is never inferred from a member's (two regions changed: ΚΑΡΝΟΜΟΥΡΑΚΗΣ–ΑΛΚΗ ΥΠΟΕΡΓΟ Β → Καβάλα, ΛΙΑΡΗ–ΓΚΙΚΑΣ → Λίμνη Ευβοίας). Merged into `contractor_locations.json` (scratch `merge_seats.py`), loaded by `contractor_loader` into five `seat_*`/`geo_level` columns; the Atlas contractor page prints «registered office as stated in contract <ΑΔΑΜ>» + the quoted sentence. Pinned by `tests/test_contractor_seats.py` |
+| `completion_act_overrides.json` | Completion acts whose SUBJECT line keys the wrong contract ΑΔΑΜ (ΥΠΕΝ keying errors, DATA_DECISIONS 2026-08-21): 4 ΑΔΑ → the contract the act really concerns (lots 15Α and 4Α, whose acts carried lots 15Γ's and 4Δ's ΑΔΑΜ), evidence quoted from the act's recitals/lot/title. Applied by `completion_acts_loader` at insert and on `--reextract`; candidates come from the loader's WARN, but the recital can be the typo too — every verdict is read from the act |
 | `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 6 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts. Since 2026-08-17 each entry also carries an **`office` block** (street/Τ.Κ./city/phones/emails + geocoded lat/lon/geo_precision): basis = the ΥΠΕΝ επιθεωρήσεις contact tables (ypen.gov.gr, Akamai-blocked for bots — fetched via WINDOWED Playwright, `scripts/harvest_ypen_offices.py`, cache `ypen_offices_cache/`) corroborated by each authority's own Diavgeia letterheads (`scripts/harvest_office_letterheads.py`, unit uids under org 100015996; 90/102 Τ.Κ. confirmed, ΑΔΑ+excerpt kept; the Γουμένισσα ministry-page typo 63100→61300 caught this way). Differences documented per-entry in `office.note`; merge via `scripts/build_authority_offices.py`, geocode via `scripts/geocode_authority_offices.py` (Nominatim tiers + Τ.Κ.-prefix/≤35km gates → 41 street / 58 postcode / 1 city / 3 municipality-fallback). `forest_loader` prefers the office point over the municipality centroid (`seat_precision` column); /authority pages show the contact block. Περτουλίου is ΑΠΘ-run (no ΥΠΕΝ office data — centroid) |
 | `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid + **hand-curated `pe`** (the municipality's Π.Ε.; the ONLY complete municipality→Π.Ε. table — validated 4 ways by `scripts/build_pe_geojson.py`) (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
 | `pe_centroids.json` | 74 Π.Ε. → representative point (lat, lon), from the dissolved polygons; duplicated to `webui/static/` (`scripts/build_pe_geojson.py`) |

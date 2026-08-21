@@ -823,7 +823,10 @@ def test_connections_pins(client):
     assert sum(f["total_eur"] for f in n["flows_yearly"]) == pytest.approx(basis, abs=0.5)
     assert sum(o["total_eur"] for o in n["origins"]) == pytest.approx(basis, abs=0.5)
     assert all(len(f["year"]) == 4 for f in n["flows_yearly"])
-    assert len(n["contractor_authority"]) == 476
+    # 476 until 2026-08-21: two ΥΠΕΝ acts keyed lot 15Γ's ΑΔΑΜ for lot 15Α
+    # and had hung Ξάνθη/Ροδόπη on a Εύβοια contract (and Καστοριά/Φλώρινα on
+    # lot 4Δ) — re-attributed, the pairs fell away (DATA_DECISIONS 2026-08-21)
+    assert len(n["contractor_authority"]) == 474
     assert len(n["contractor_pe"]) == 378
     # 259 until 2026-08-21, when two ventures' HQ regions followed their own
     # contracts (Μαρούσι→Καβάλα, Κόρινθος→Λίμνη Ευβοίας) and two (home, work)
@@ -903,7 +906,8 @@ def test_explore_pins(client):
     # ΑΔΜΗΕ via the 9Ο0Λ παραλαβή, ΔΕΔΔΗΕ via its last μελέτη approval);
     # ΔΑΣΕ endings were never harvested
     kh_fin = [r["fin"] for r in e["rows"] if r["ds"] == "antinero"]
-    assert kh_fin.count(1) == 148 and kh_fin.count(0) == 97
+    # 148 until 2026-08-21: lot 15Α's acceptance act came back from lot 15Γ
+    assert kh_fin.count(1) == 149 and kh_fin.count(0) == 96
     an_fin = [r["fin"] for r in e["rows"] if r["ds"] == "anadohoi"]
     assert an_fin.count(1) == 16
     assert all(r["fin"] is None for r in e["rows"] if r["ds"] == "dase")

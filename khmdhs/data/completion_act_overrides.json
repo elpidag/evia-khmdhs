@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "description": "Completion acts whose SUBJECT line carries the wrong contract ΑΔΑΜ (ΥΠΕΝ keying errors): the act's own recitals, lot letter and project title show which contract it closes. Keyed by Diavgeia ΑΔΑ; `cited_ref` is the contract the act actually concerns (attribution follows the supersede chain as for every act). Read by khmdhs.completion_acts_loader at insert time and by --reextract. Candidates come from the loader's WARN «subject ΑΔΑΜ X, recital cites stored contract Y in another chain» — but a recital can be the typo too (Ψ8ΝΛ4653Π8-4Β6 cites a non-existent …925 for …915), so every verdict is read from the act.",
+    "decision": "DATA_DECISIONS 2026-08-21"
+  },
+  "6Χ884653Π8-ΒΙΗ": {
+    "cited_ref": "23SYMV013019394",
+    "subject_ref": "23SYMV013019416",
+    "reason": "Subject: «Έγκριση του Πρωτοκόλλου Παραλαβής εργασιών του έργου της Σύμβασης (15Α) με ΑΔΑΜ: 23SYMV013019416 … σε εκτάσεις ευθύνης Δασαρχείου Ξάνθης και Διεύθυνσης Δασών Ροδόπης» για την περιοχή αρμοδιότητας του Δασαρχείου Ξάνθης. 23SYMV013019416 is lot 15Γ (Χαλκίδα/Αλιβέρι, ΤΡΙΑΝΤΑΦΥΛΛΟΥ); lot 15Α — Ξάνθη/Ροδόπη, ΛΙΑΠΟΠΟΥΛΟΥ — is 23SYMV013019394, which the act's recital 14 cites («Την από 04.07.2023 Σύμβαση Έργου (ΑΔΑΜ: 23SYMV013019394 2023-07-05)»)."
+  },
+  "Ψ6ΩΞ4653Π8-ΗΟ4": {
+    "cited_ref": "23SYMV013019394",
+    "subject_ref": "23SYMV013019416",
+    "reason": "Subject: «Μερική έγκριση του Πρωτοκόλλου Παραλαβής εργασιών του έργου της Σύμβασης (15Α) με ΑΔΑΜ: 23SYMV013019416 …» για την περιοχή αρμοδιότητας της Δ/νσης Δασών Ροδόπης. Same keying error as 6Χ884653Π8-ΒΙΗ (lot 15Α = 23SYMV013019394, recital 14 and the Ροδόπη documents it lists). Note: a «Μερική έγκριση» is a PARTIAL approval of the protocol and is no longer accepted as a project ending (rejected by the classifier since 2026-08-21) — the override is kept so the attribution is on record should the rule change."
+  },
+  "68Μ34653Π8-ΞΗΛ": {
+    "cited_ref": "23SYMV012946366",
+    "subject_ref": "23SYMV012946406",
+    "reason": "Subject: «Έγκριση του Πρωτοκόλλου Παραλαβής εργασιών του έργου της Σύμβασης (4Α) με ΑΔΑΜ: 23SYMV012946406 … σε εκτάσεις ευθύνης Διεύθυνσης Δασών Καστοριάς και Φλώρινας». 23SYMV012946406 is lot 4Δ (Πιερία); lot 4Α — Καστοριά/Φλώρινα — is 23SYMV012946366, which recital 14 cites («Την από 22.06.2023 Σύμβαση Έργου (ΑΔΑΜ: 23SYMV012946366)») together with its ΑΠΕ approvals."
+  },
+  "6ΩΓΖ4653Π8-7ΔΚ": {
+    "cited_ref": "23SYMV012946366",
+    "subject_ref": "23SYMV012946406",
+    "reason": "Same act family as 68Μ34653Π8-ΞΗΛ: subject says (4Α) with lot 4Δ's ΑΔΑΜ, the project title is 4Α's (Καστοριά/Φλώρινα) and recital 14 cites 23SYMV012946366."
+  }
+}

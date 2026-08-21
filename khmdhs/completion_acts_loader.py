@@ -14,11 +14,21 @@ certify the ending:
 
 Everything else the search returns — committee formations, παρατάσεις,
 τροποποιήσεις, επιμετρήσεις, provisional-only παραλαβές, payment
-clearances — is rejected (logged with --verbose). The project END DATE is
-extracted from the signed PDF: the πρωτοκόλλου date in «το από DD.MM.YYYY
-πρωτόκολλο …» (`end_basis='protocol_date'`, excerpt stored), falling back
-to the act's own issue date (`'act_date'`). Acts attribute to the
-supersede-chain tip like payments.
+clearances, partial («Μερική») approvals — is rejected (logged with
+--verbose). The project END DATE is extracted from the signed PDF: the
+ACCEPTANCE protocol's date in «το από DD.MM.YYYY πρωτόκολλο [οριστικής …]
+παραλαβής / περαίωσης» — the LAST such in the act, never the «πρωτόκολλο
+εγκατάστασης αναδόχου» the recitals list first (`end_basis='protocol_date'`,
+excerpt stored), falling back to a «περαιώθηκαν … DD.MM.YYYY» sentence, else
+the act's own issue date (`'act_date'`). Acts attribute to the
+supersede-chain tip like payments. ΥΠΕΝ sometimes keys the WRONG ΑΔΑΜ in
+the subject line (lot 15Α's acts carried lot 15Γ's ΑΔΑΜ): curated
+`data/completion_act_overrides.json` (ΑΔΑ → the contract the act really
+concerns, read from its recitals/lot/title) is applied at insert, and the
+loader WARNs when the subject ΑΔΑΜ and the recital's «Σύμβαση … Έργου
+(ΑΔΑΜ: X)» name stored contracts of different chains without an override.
+`--reextract` recomputes kind / attribution / end date for every stored
+act from the cached text, offline (DATA_DECISIONS 2026-08-21).
 
 Query modes: the default `subject` mode searches `subject:"<ΑΔΑΜ>"` (the
 ΥΠΕΝ/Anti-nero convention). `--query-mode bare` searches the quoted ΑΔΑΜ
@@ -31,7 +41,7 @@ contracts so multi-hour runs survive interruption (the default — used by
 `khmdhs.refresh` — always re-searches, so newly posted acts are found).
 
 Usage: python -m khmdhs.completion_acts_loader [--limit N] [--refetch]
-           [--query-mode bare|subject] [--cache DIR] [--resume]
+           [--query-mode bare|subject] [--cache DIR] [--resume] [--reextract]
 """
 from __future__ import annotations
 
@@ -86,7 +96,10 @@ def _fold(s: str | None) -> str:
 # Checked before the accept rules — the search returns whole lifecycles.
 _REJECT = ("ΣΥΓΚΡΟΤΗΣ", "ΟΡΙΣΜΟΣ ΕΠΙΤΡΟΠ", "ΟΡΙΣΜΟΥ ΕΠΙΤΡΟΠ", "ΠΑΡΑΤΑΣ",
            "ΤΡΟΠΟΠΟΙ", "ΕΠΙΜΕΤΡΗΣ", "ΕΚΚΑΘΑΡΙΣ", "ΕΝΤΟΛΗ ΠΛΗΡΩΜ",
-           "ΧΡΗΜΑΤΙΚΟ ΕΝΤΑΛΜΑ", "ΕΓΓΥΗΤΙΚ", "ΤΜΗΜΑΤΙΚ")
+           "ΧΡΗΜΑΤΙΚΟ ΕΝΤΑΛΜΑ", "ΕΓΓΥΗΤΙΚ", "ΤΜΗΜΑΤΙΚ",
+           # «Μερική έγκριση του Πρωτοκόλλου Παραλαβής» approves PART of the
+           # protocol — not the project's ending (Ψ6ΩΞ4653Π8-ΗΟ4, 2026-08-21)
+           "ΜΕΡΙΚ")
 
 
 def classify(subject: str | None) -> str | None:
@@ -122,25 +135,87 @@ def resolve_paralavi(text: str) -> str | None:
     return None
 
 
+# «το από DD.MM.YYYY πρωτόκολλο …» — the tail decides WHICH protocol: only an
+# acceptance / completion protocol ends a project. The recitals of every
+# ΥΠΕΝ act list the «πρωτόκολλο εγκατάστασης αναδόχου» first, so the first
+# «το από … πρωτόκολλο» is the contractor's installation date, not the end
+# (105 of 283 stored acts carried it before 2026-08-21).
 _PROTOCOL_DATE = re.compile(
-    r"το από\s+(\d{1,2})[./-](\d{1,2})[./-](\d{4})\s+πρωτόκολλο", re.I)
+    r"το από\s+(\d{1,2})[./-](\d{1,2})[./-](\d{4})\s+πρωτ[οό]κολλ[οό]\s*(.{0,70})", re.I)
+_ACCEPTANCE_TAIL = re.compile(r"παραλαβ|περα[ιί]ωσ|περ[αά]τωσ|ολοκλ[ηή]ρωσ", re.I)
+_NOT_ACCEPTANCE_TAIL = re.compile(r"εγκατ[αά]στασ|παρ[αά]δοσης\s+(?:της\s+)?εργολ", re.I)
 _DONE_DATE = re.compile(
     r"(?:περαιώθηκ|ολοκληρώθηκ|περατώθηκ)\w*.{0,80}?"
     r"(\d{1,2})[./-](\d{1,2})[./-](\d{4})", re.I | re.S)
 
 
+def _valid(d: int, mo: int, y: int) -> bool:
+    return 1 <= d <= 31 and 1 <= mo <= 12 and 2015 < y < 2100
+
+
 def extract_end_date(text: str) -> tuple[str, str] | None:
-    """(iso_date, excerpt) from the PDF text, or None."""
+    """(iso_date, excerpt) from the PDF text, or None: the date of the LAST
+    acceptance/completion protocol the act names («πρωτόκολλο οριστικής
+    παραλαβής», «πρωτόκολλο περαίωσης» …), else a «περαιώθηκαν … DD.MM.YYYY»
+    sentence; a «πρωτόκολλο εγκατάστασης» is never an end."""
     flat = re.sub(r"\s+", " ", text)
-    for rx in (_PROTOCOL_DATE, _DONE_DATE):
-        m = rx.search(flat)
-        if m:
-            d, mo, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
-            if 1 <= d <= 31 and 1 <= mo <= 12 and 2015 < y < 2100:
-                lo = max(0, m.start() - 40)
-                return (f"{y:04d}-{mo:02d}-{d:02d}",
-                        flat[lo:m.end() + 40].strip())
+    best = None
+    for m in _PROTOCOL_DATE.finditer(flat):
+        tail = m.group(4)
+        if not _ACCEPTANCE_TAIL.search(tail) or _NOT_ACCEPTANCE_TAIL.search(tail):
+            continue
+        d, mo, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if _valid(d, mo, y):
+            best = (f"{y:04d}-{mo:02d}-{d:02d}",
+                    flat[max(0, m.start() - 40): m.start() + len(m.group(0)) - len(tail) + 45].strip())
+    if best:
+        return best
+    m = _DONE_DATE.search(flat)
+    if m:
+        d, mo, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if _valid(d, mo, y):
+            lo = max(0, m.start() - 40)
+            return (f"{y:04d}-{mo:02d}-{d:02d}", flat[lo:m.end() + 40].strip())
     return None
+
+
+# ---- the contract an act cites in its recitals -----------------------------------
+_RECITAL_CONTRACT = re.compile(
+    r"Σύμβαση\s+(?:Εκτέλεσης\s+)?Έργου\s*\(ΑΔΑΜ:\s*(\d{2}SYMV\d{9})", re.I)
+
+
+def recital_contract(text: str) -> str | None:
+    """The ΑΔΑΜ of «Την από … Σύμβαση (Εκτέλεσης) Έργου (ΑΔΑΜ: X)» in the
+    recitals — the act's own statement of the contract it closes, used as a
+    cross-check against the subject line's ΑΔΑΜ (both can carry a typo)."""
+    m = _RECITAL_CONTRACT.search(re.sub(r"\s+", " ", text or ""))
+    return m.group(1) if m else None
+
+
+OVERRIDES_FILE = Path(__file__).resolve().parent / "data" / "completion_act_overrides.json"
+
+
+def load_overrides(path: Path = OVERRIDES_FILE) -> dict[str, dict]:
+    """{ΑΔΑ: {cited_ref, reason, …}} — acts whose subject line keys the wrong
+    contract ΑΔΑΜ (curated from the act's recitals, lot and title)."""
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+
+def chain_key(conn: sqlite3.Connection) -> dict[str, str]:
+    """{ref: root-of-chain} over prev links, to tell «same chain» apart from
+    «another contract»."""
+    prev = dict(conn.execute(
+        "SELECT reference_number, prev_reference_no FROM contracts"))
+    root: dict[str, str] = {}
+    for ref in prev:
+        cur, seen = ref, {ref}
+        while prev.get(cur) and prev[cur] not in seen and prev[cur] in prev:
+            cur = prev[cur]; seen.add(cur)
+        root[ref] = cur
+    return root
 
 
 def _search_subject(session: requests.Session, phrase: str,
@@ -188,8 +263,10 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
 
     session = requests.Session()
     session.headers["User-Agent"] = "evia-khmdhs completion-acts (OSINT)"
+    overrides = load_overrides()
+    roots = chain_key(conn)
     stats = {"contracts": 0, "hits": 0, "accepted": 0, "rejected": 0,
-             "end_from_protocol": 0}
+             "end_from_protocol": 0, "overridden": 0, "recital_warn": 0}
     for i, ref in enumerate(refs, 1):
         stats["contracts"] += 1
         hits = _search_subject(session, ref, query_mode)
@@ -235,11 +312,27 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
                 end_date = time.strftime("%Y-%m-%d", time.gmtime(ts / 1000)) \
                     if isinstance(ts, (int, float)) else None
                 excerpt, basis = None, "act_date"
+            # the contract the act concerns: the subject's ΑΔΑΜ unless a
+            # curated override says the subject line keyed the wrong one
+            cited = ref
+            if ada in overrides:
+                cited = overrides[ada]["cited_ref"]
+                stats["overridden"] += 1
+            else:
+                rc = recital_contract(text or "")
+                if rc and rc != ref and rc in roots and ref in roots \
+                        and roots[rc] != roots[ref]:
+                    stats["recital_warn"] += 1
+                    logging.warning(
+                        "completion act %s: subject cites %s, recital cites "
+                        "stored contract %s of another chain — read the act, "
+                        "curate completion_act_overrides.json if the subject "
+                        "is the typo", ada, ref, rc)
             org = (hit.get("organization") or {}).get("label")
             conn.execute(
                 "INSERT OR REPLACE INTO contract_completion_acts "
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-                (ada, ref, resolve_attribution(ref, successors), kind,
+                (ada, cited, resolve_attribution(cited, successors), kind,
                  subject.strip(), meta.get("protocolNumber"),
                  time.strftime("%Y-%m-%d", time.gmtime(
                      meta["issueDate"] / 1000))
@@ -260,6 +353,73 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
     return stats
 
 
+def reextract(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
+              verbose: bool = False) -> dict:
+    """Recompute kind / attribution / end date for every STORED act from the
+    cached text — no network. Acts the classifier now rejects are deleted;
+    overrides re-point the contract; end dates follow the acceptance-protocol
+    rule. Returns the change counts."""
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
+    successors = supersede_map(conn)
+    overrides = load_overrides()
+    roots = chain_key(conn)
+    rows = conn.execute("SELECT * FROM contract_completion_acts").fetchall()
+    stats = {"acts": len(rows), "deleted": 0, "reattributed": 0,
+             "end_changed": 0, "kind_changed": 0, "no_cache": 0,
+             "recital_warn": 0}
+    for r in rows:
+        ada = r["ada"]
+        p = Path(cache) / f"{ada}.txt"
+        if not p.exists():
+            stats["no_cache"] += 1
+            continue
+        text = p.read_text(encoding="utf-8", errors="ignore")
+        kind = classify(r["subject"])
+        if kind == "paralavi_check":
+            kind = resolve_paralavi(text)
+        if kind is None:
+            conn.execute("DELETE FROM contract_completion_acts WHERE ada = ?", (ada,))
+            stats["deleted"] += 1
+            logging.info("reextract: %s rejected — %s", ada, (r["subject"] or "")[:90])
+            continue
+        if kind != r["act_kind"]:
+            stats["kind_changed"] += 1
+        cited = r["cited_ref"]
+        if ada in overrides and overrides[ada]["cited_ref"] != cited:
+            cited = overrides[ada]["cited_ref"]
+            stats["reattributed"] += 1
+            logging.info("reextract: %s re-attributed %s → %s", ada, r["cited_ref"], cited)
+        elif ada not in overrides:
+            rc = recital_contract(text)
+            if rc and rc != cited and rc in roots and cited in roots \
+                    and roots[rc] != roots[cited]:
+                stats["recital_warn"] += 1
+                logging.warning("completion act %s: subject cites %s, recital cites "
+                                "stored contract %s of another chain — read the act",
+                                ada, cited, rc)
+        found = extract_end_date(text)
+        if found:
+            end_date, excerpt, basis = found[0], found[1], "protocol_date"
+        else:
+            end_date, excerpt, basis = r["issue_date"], None, "act_date"
+        if end_date != r["end_date"] or basis != r["end_basis"]:
+            stats["end_changed"] += 1
+            if verbose:
+                logging.info("reextract: %s end %s (%s) → %s (%s)", ada,
+                             r["end_date"], r["end_basis"], end_date, basis)
+        conn.execute(
+            "UPDATE contract_completion_acts SET cited_ref=?, attributed_ref=?, "
+            "act_kind=?, end_date=?, end_basis=?, end_excerpt=? WHERE ada=?",
+            (cited, resolve_attribution(cited, successors), kind, end_date,
+             basis, excerpt, ada))
+    conn.commit()
+    conn.close()
+    logging.info("reextract: %s", json.dumps(stats))
+    return stats
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--db", type=Path, default=DEFAULT_DB)
@@ -271,8 +431,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
     ap.add_argument("--resume", action="store_true",
                     help="skip contracts already in completion_search_log")
+    ap.add_argument("--reextract", action="store_true",
+                    help="offline: recompute kind / attribution / end date "
+                         "for every stored act from the cached text")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    if args.reextract:
+        reextract(args.db, cache=args.cache, verbose=args.verbose)
+        return 0
     load(args.db, limit=args.limit, refetch=args.refetch,
          verbose=args.verbose, query_mode=args.query_mode, cache=args.cache,
          resume=args.resume)
