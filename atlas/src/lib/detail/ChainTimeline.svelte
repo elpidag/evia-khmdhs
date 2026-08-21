@@ -25,6 +25,8 @@
 	 * bar at the right, and that is the reading.
 	 */
 	import { dmy, eurShort } from '$lib/transforms/format';
+	import AreaLanes from './AreaLanes.svelte';
+	import type { Lane, LaneStepLike } from '$lib/transforms/lanes';
 
 	export interface ChainAct {
 		ref: string;
@@ -76,6 +78,8 @@
 		per_area?: boolean;
 		/** whether this step moved the deadline in force forward */
 		later?: boolean;
+		/** what the act extends: 'study' | 'stage' | 'area' | 'whole' | null */
+		scope?: string | null;
 	}
 	interface Props {
 		/** the contract's signature date (ISO) */
@@ -100,8 +104,13 @@
 			| 'duration'
 			| 'act'
 			| null;
-		/** deadline extensions, oldest first */
+		/** deadline extensions that belong on the CONTRACT bar, oldest first —
+		 *  with lanes, the area-scoped ones move to their lanes */
 		extensions?: ExtStep[];
+		/** one strip per forest service where the acts name areas (user,
+		 *  2026-08-21) — built by `transforms/lanes.buildLanes`; the bar's
+		 *  grey part is split into them instead of being drawn once */
+		lanes?: Lane<LaneStepLike>[];
 		/** current date (ISO) — the dashed «today» rule */
 		today: string;
 		/** the version chain, oldest first; [] when posted once */
@@ -127,6 +136,7 @@
 		deadline = null,
 		deadlineBasis = null,
 		extensions = [],
+		lanes = [],
 		today,
 		chain = [],
 		payments = [],
@@ -179,15 +189,28 @@
 
 	const W = 920;
 	const TOP = 16; // year-label band
-	const BASE = 46; // bar baseline
-	const BAR_H = 12;
-	const H = 66; // year band, the bar line, the arcs and their label row
+	const BAR_TOP = 34; // the bar's upper edge, fixed under the year band
+	// the per-area strips: the bar's grey (extended) part split into one
+	// strip per forest service, stacked from the bar's top — and the solid
+	// bar is as tall as all the strips together (user, 2026-08-21)
+	const STRIP_H = $derived(lanes.length ? Math.max(7, 12 / lanes.length) : 12);
+	const BAR_H = $derived(lanes.length ? lanes.length * STRIP_H : 12);
+	const BASE = $derived(BAR_TOP + BAR_H); // bar baseline
+	// the extension arcs and their ordinal row sit under the bar
+	const arcY = $derived(BASE);
+	const H = $derived(arcY + 20); // year band, the bar line, the arcs and their label row
+	const gridBottom = $derived(arcY + 4);
 
+	// with per-area strips the axis stops short of the right edge, so a
+	// service's name always has room at the end of its own grey bar — a name
+	// above the bar collided with the € row, a name inside it sat on the grey
+	// (user, 2026-08-21)
+	const NAME_PAD = $derived(lanes.length ? 96 : 0);
 	function x(d: string | null): number | null {
 		if (!d) return null;
 		const t = new Date(d).getTime();
 		if (Number.isNaN(t)) return null;
-		return 4 + ((W - 12) * (t - T0)) / (T1 - T0);
+		return 4 + ((W - 12 - NAME_PAD) * (t - T0)) / (T1 - T0);
 	}
 
 	const years = $derived.by(() => {
@@ -355,7 +378,7 @@
 			{@const gx = x(`${yr}-01-01`)}
 			{#if gx}
 				<text x={gx} y="10" class="axis">{yr}</text>
-				<line x1={gx} y1={TOP - 2} x2={gx} y2={BASE + 4} class="grid" />
+				<line x1={gx} y1={TOP - 2} x2={gx} y2={gridBottom} class="grid" />
 			{/if}
 		{/each}
 
@@ -454,11 +477,13 @@
 		<!-- payment orders, on the same line as the rest: the money's rhythm -->
 		{#each ticks as t (t.p.ref)}
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<!-- with per-area strips the bar is tall and striped: the € marks
+			     move up to the label line, where «call» is written (user, 2026-08-21) -->
 			<text
 				x={t.x}
-				y={BASE - BAR_H / 2 + 3.5}
+				y={lanes.length ? BAR_TOP - 4 : BASE - BAR_H / 2 + 3.5}
 				class="pay"
-				class:onbar={onBar(t.x)}
+				class:onbar={!lanes.length && onBar(t.x)}
 				class:hot={highlightRef !== null && t.p.ref === highlightRef}
 				text-anchor="middle"
 				onmouseenter={() => onActHover?.(t.p.ref)}
@@ -513,7 +538,7 @@
 				{#if en !== null && Math.abs(en - ex) > 8}
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
 					<path
-						d={`M ${ex} ${BASE + 1} Q ${(ex + en) / 2} ${BASE + 12}, ${en} ${BASE + 2}`}
+						d={`M ${ex} ${arcY + 1} Q ${(ex + en) / 2} ${arcY + 12}, ${en} ${arcY + 2}`}
 						class="extarrow"
 						class:hot={highlightRef !== null && e.ref === highlightRef}
 						marker-end="url(#chainextarrow)"
@@ -532,12 +557,13 @@
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<text
 					x={ex}
-					y={BASE + 18}
+					y={arcY + 18}
 					class="actlbl extlbl"
 					class:hot={highlightRef !== null && e.ref === highlightRef}
 					text-anchor="middle"
 					onmouseenter={() => onActHover?.(e.ref)}
-					onmouseleave={() => onActHover?.(null)}>{e.label ? ORDINAL(e.n) : ''}</text
+					onmouseleave={() => onActHover?.(null)}
+					>{e.label ? (e.scope === 'study' ? 'studies' : ORDINAL(e.n)) : ''}</text
 				>
 			{/if}
 		{/each}
@@ -552,9 +578,15 @@
 			{/if}
 		{/each}
 
+		<!-- the per-area strips: the grey part split by forest service, where
+		     the acts name areas (user, 2026-08-21) -->
+		{#if lanes.length}
+			<AreaLanes {lanes} {x} {xs} {xd} top={BAR_TOP} stripH={STRIP_H} w={W} {highlightRef} {onActHover} />
+		{/if}
+
 		<!-- today rule LAST so it stays visible over the bar; its lettering
 		     sits on the year line, where the axis is read (user, 2026-08-19) -->
-		<line x1={todayX} y1={TOP - 2} x2={todayX} y2={BASE + 4} class="today" />
+		<line x1={todayX} y1={TOP - 2} x2={todayX} y2={gridBottom} class="today" />
 		<text
 			x={todayFlip ? todayX - 4 : todayX + 4}
 			y="10"

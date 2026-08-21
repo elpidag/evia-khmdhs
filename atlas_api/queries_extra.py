@@ -2816,14 +2816,63 @@ def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
                 rest = [x for x in rest if x[0] != m]
                 break
 
-    extensions, cur, n = [], deadline, 0
+    # the ΚΗΜΔΗΣ records that moved the deadline («Παράταση προθεσμίας», and
+    # supplementary approvals carrying a later end date)
+    raw: list[dict] = []
+    cur = deadline
     for m, r, d, kind in rest:
         got, _b = announced(r)
         if got and cur and got > cur:
-            n += 1
-            extensions.append({"ref": m, "d": d, "deadline": got,
-                               "n": n, "kind": kind})
+            raw.append({"ref": m, "d": d, "deadline": got, "kind": kind,
+                        "source": "khmdhs"})
             cur = got
+    # the Diavgeia extension approvals (phase 1 of the lifecycle layer,
+    # 2026-08-21): every act of the chain that granted a new deadline is a
+    # step — its ΑΔΑ is the ref, so the DOCUMENT TRAIL row pairs with it; an
+    # act granting different dates per area says so; an act re-posting what
+    # a ΚΗΜΔΗΣ record already states (same new deadline) merges into that
+    # step rather than doubling it. A FLAGGED act is no step: a refusal
+    # grants nothing, and a deadline earlier than the act's own date is the
+    # document's typo, kept as written in the trail and never drawn
+    try:
+        acts = kh.execute("""
+            SELECT ada, act_kind, ordinal, issue_date, new_deadline, per_area,
+                   by_text, excerpt, scope, scope_text, scope_auth
+              FROM contract_extension_acts
+             WHERE new_deadline IS NOT NULL AND flag IS NULL
+               AND act_kind IN ('extension', 'extension_partial')
+               AND (cited_ref IN ({q}) OR attributed_ref IN ({q}))
+             ORDER BY issue_date, ada""".format(q=",".join("?" * len(seq))),
+            seq + seq).fetchall()
+    except sqlite3.OperationalError:
+        acts = []
+    for a in acts:
+        twin = next((s for s in raw if s["source"] == "khmdhs"
+                     and s["deadline"] == a["new_deadline"]), None)
+        # the services an area act names, resolved to the registry — the
+        # page draws such a step on that service's own lane (2026-08-21)
+        scope_auth = json.loads(a["scope_auth"] or "[]")
+        if twin is not None:
+            twin.update({"ada": a["ada"], "excerpt": a["excerpt"],
+                         "ordinal": a["ordinal"], "per_area": bool(a["per_area"]),
+                         "scope": a["scope"], "scope_text": a["scope_text"],
+                         "scope_auth": scope_auth})
+            continue
+        raw.append({"ref": a["ada"], "ada": a["ada"], "d": a["issue_date"],
+                    "deadline": a["new_deadline"],
+                    "kind": "extension_partial_act" if a["act_kind"] == "extension_partial"
+                            else "extension_act",
+                    "source": "diavgeia", "ordinal": a["ordinal"],
+                    "per_area": bool(a["per_area"]), "by_text": a["by_text"],
+                    "excerpt": a["excerpt"], "scope": a["scope"],
+                    "scope_text": a["scope_text"], "scope_auth": scope_auth})
+    raw.sort(key=lambda s: (s["d"] or "", s["deadline"] or ""))
+    extensions, in_force = [], deadline
+    for i, s in enumerate(raw, 1):
+        later = bool(s["deadline"] and (in_force is None or s["deadline"] > in_force))
+        if later:
+            in_force = s["deadline"]
+        extensions.append({**s, "n": i, "later": later, "in_force": in_force})
     return {
         "deadline": deadline,
         "basis": basis,
@@ -3452,8 +3501,7 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
     # Diavgeia completion acts (οριστική παραλαβή / περαίωση / ολοκλήρωση)
     try:
         for r in kh.execute("""
-            SELECT ada, act_kind, subject, issue_date, end_date, end_basis,
-                   end_excerpt
+            SELECT *
               FROM contract_completion_acts
              WHERE cited_ref = ? OR attributed_ref = ?""", (ref, ref)):
             out.append({
@@ -3463,6 +3511,40 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
                 "d": r["end_date"] or r["issue_date"],
                 "end_basis": r["end_basis"],
                 "end_excerpt": r["end_excerpt"],
+                # the ONE service whose part this act accepts, when it says
+                # so («για το τμήμα περιοχής ευθύνης Δασαρχείου Χ»); NULL =
+                # the whole contract — the lane view ends each area here
+                "part_auth": _col(r, "part_auth"),
+                "cancelled": 0, "in_db": False,
+            })
+    except sqlite3.OperationalError:
+        pass
+    # Diavgeia deadline-EXTENSION approvals (phase 1 of the lifecycle layer,
+    # DATA_DECISIONS 2026-08-21): the act's own date is the row's date, the
+    # deadline it grants rides beside it; an act the extractor could not read
+    # carries its flag and no deadline — never a guessed one
+    try:
+        for r in kh.execute("""
+            SELECT ada, act_kind, ordinal, subject, issue_date, new_deadline,
+                   per_area, by_text, excerpt, flag, scope, scope_text, scope_auth
+              FROM contract_extension_acts
+             WHERE cited_ref = ? OR attributed_ref = ?""", (ref, ref)):
+            out.append({
+                "adam": r["ada"], "kind": "extension",
+                "ckind": r["act_kind"],
+                "ordinal": r["ordinal"],
+                "title": (r["subject"] or "")[:160] or None,
+                "d": r["issue_date"],
+                "deadline": r["new_deadline"],
+                "per_area": bool(r["per_area"]),
+                "by_text": r["by_text"],
+                "excerpt": r["excerpt"],
+                "flag": r["flag"],
+                # what the act extends: a stage (the study's submission, a
+                # phase), an area (the named services), or the whole contract
+                "scope": r["scope"],
+                "scope_text": r["scope_text"],
+                "scope_auth": json.loads(r["scope_auth"] or "[]"),
                 "cancelled": 0, "in_db": False,
             })
     except sqlite3.OperationalError:

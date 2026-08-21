@@ -41,6 +41,15 @@ export function authEn(name: string | null | undefined): string {
 	return AUTH.get(fold(name)) ?? name;
 }
 
+/** The short form for tight labels — «Kalampaka F.S.O.», «Rodopi F.D.» —
+ *  the same English name with its generic tail abbreviated (user, 2026-08-21:
+ *  map labels and timeline strips). A name without that tail is unchanged. */
+export function authEnShort(name: string | null | undefined): string {
+	return authEn(name)
+		.replace(/ Forest Service Office$/, ' F.S.O.')
+		.replace(/ Forest Directorate$/, ' F.D.');
+}
+
 /** Awarding organization (exact registry string, fold-tolerant). */
 export function orgEn(name: string | null | undefined): string {
 	if (!name) return '';

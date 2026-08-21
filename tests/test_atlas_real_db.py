@@ -1093,6 +1093,7 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     vocabulary still carries them."""
     from collections import Counter
     seen = Counter()
+    src = Counter()
     ext_steps = ext_chains = 0
     for (ref,) in kh.execute(
             "SELECT reference_number FROM contract_scope WHERE in_scope = 1"):
@@ -1103,12 +1104,22 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
             ext_steps += len(dl["extensions"])
             # an extension only exists relative to a deadline already in force
             assert dl["deadline"] is not None, ref
-            assert all(e["deadline"] > dl["deadline"] for e in dl["extensions"]), ref
+            # a step that moved the deadline forward did move it; the others
+            # (per-area grants, re-statements) are flagged `later: False`
+            assert all((e["deadline"] > dl["deadline"]) or not e["later"]
+                       for e in dl["extensions"]), ref
+            for e in dl["extensions"]:
+                src[e["source"]] += 1
     assert seen == {"document": 242, "document_season": 3}
-    # 16 steps over 14 chains: 9 «Παράταση προθεσμίας» records and 7
-    # supplementary approvals that carried a later end date with them —
-    # both move the day the works were due, and the chart labels which
-    assert (ext_chains, ext_steps) == (14, 16)
+    # 16 steps over 14 chains until 2026-08-21 (9 «Παράταση προθεσμίας»
+    # records + 7 supplementary approvals with a later end date); since the
+    # Diavgeia extension approvals joined (phase 1 of the lifecycle layer,
+    # DATA_DECISIONS 2026-08-21): 439 steps over 160 chains — 423 from the
+    # acts, 16 ΚΗΜΔΗΣ records (an act re-stating a ΚΗΜΔΗΣ record's deadline
+    # merges into that step; the refusal and the three acts whose stated
+    # deadline precedes their own date are no steps — 443 before that rule)
+    assert (ext_chains, ext_steps) == (160, 439)
+    assert src == {"diavgeia": 423, "khmdhs": 16}
     # the deepest case: 15 months from the start of works, then one
     # «Παράταση προθεσμίας» — and the registry's own end date agrees to the
     # day (2026-01-21 against the document's 2026-01-22)
@@ -1121,7 +1132,7 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     # the counts the methodology prose prints come from /api/meta, not prose
     f = client.get("/api/meta").get_json()["facts"]
     assert f["kh_deadline_document"] == 242 and f["kh_deadline_document_season"] == 3
-    assert f["kh_deadline_ext_steps"] == 16
+    assert f["kh_deadline_ext_steps"] == 439      # 16 until the Diavgeia acts joined (2026-08-21)
 
 
 def test_authority_evidence_is_quotable_greek(kh):

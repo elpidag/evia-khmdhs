@@ -242,9 +242,12 @@
 	</p>
 	<p>
 		{show(f['kh_deadline_ext_chains'])} contracts had that deadline moved, in
-		{show(f['kh_deadline_ext_steps'])} steps — «Παράταση προθεσμίας» records and
-		supplementary approvals that carried a later end date with them; the chart
-		labels which. On the same line the timeline marks every later act on the
+		{show(f['kh_deadline_ext_steps'])} steps — the «Έγκριση (τμηματικής) παράτασης»
+		approvals ΥΠΕΝ publishes on Diavgeia (see below), the «Παράταση προθεσμίας»
+		records of ΚΗΜΔΗΣ and the supplementary approvals that carried a later end date
+		with them; an act re-stating a record's deadline is one step, not two, and an
+		act granting different dates per area is marked as such (the latest date is
+		drawn); the chart labels which. On the same line the timeline marks every later act on the
 		contract, every payment order (€), the acceptance of the works (✔) where a
 		Diavgeia act records one — {show(f['kh_done'])} contracts — and, before the
 		signature, the procurement that produced it: the primary request, the
@@ -292,6 +295,25 @@
 		the street; every point says how it was placed (at the street number / on the named street /
 		at the centre of the settlement the document names) — kilometre markers, rural localities and
 		streets OSM lacks stay at the settlement centre, drawn dashed, never fabricated.
+	</p>
+
+	<h2 id="lifecycle">Deadline extensions (Diavgeia)</h2>
+	<p>
+		ΚΗΜΔΗΣ carries a deadline extension only when ΥΠΕΝ re-posts it as a contract record; the
+		approvals themselves are published on Diavgeia with the contract ΑΔΑΜ in the subject. We
+		harvest every «Έγκριση (τμηματικής) παράτασης» act citing a stored contract and read the new
+		deadline from the act's operative part («Αποφασίζουμε … μέχρι τις DD.MM.YYYY»), keeping the
+		verbatim clause; an act granting different dates per area is flagged as such and all dates are
+		kept; an act the extractor cannot read is listed with its reason and no date, never a guessed
+		one. These rows appear in each contract's document trail. A «τμηματική παράταση» extends one
+		τμηματική προθεσμία — most often the works in one forest service's area — so where the acts
+		name the service, the contract's timeline splits the bar's extended (lighter) part into one
+		strip per service, named at its end, with the steps that name it and a ✔ only where ΥΠΕΝ
+		accepted that part on its own («για το τμήμα περιοχής ευθύνης Δασαρχείου …»); acts that name
+		no area, or a service the registry does not know, sit on a strip of their own and are never
+		assigned. The same inventory found no act
+		dissolving, terminating or cancelling an Anti-nero contract; revocation acts on Diavgeia revoke
+		an earlier approval, not a contract.
 	</p>
 
 	<h2 id="authorities">Forest authorities</h2>

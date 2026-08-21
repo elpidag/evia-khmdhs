@@ -8,7 +8,10 @@
 		k: number;
 		/** the ITEM card (bottom-left, black); `pinned` draws the white rule +
 		 *  ✕ and makes Esc / the ✕ call `onClose` (user, 2026-08-21) */
-		showTip: (html: string, opts?: { pinned?: boolean; onClose?: () => void }) => void;
+		showTip: (
+			html: string,
+			opts?: { pinned?: boolean; onClose?: () => void; corner?: 'bottom-left' | 'top-left' }
+		) => void;
 		hideTip: () => void;
 	}
 
@@ -413,15 +416,25 @@
 	// a pinned item card: white rule + ✕, Esc / ✕ release it through onClose
 	let tipPinned = $state(false);
 	let tipOnClose = $state<(() => void) | null>(null);
-	function showTip(html: string, opts?: { pinned?: boolean; onClose?: () => void }) {
+	// which corner the item card sits in: bottom-left by default; a caller
+	// may ask for the top-left so two kinds of card never share a corner
+	// (the contract map: authority seats top-left, δήμοι bottom-left — user,
+	// 2026-08-21)
+	let tipCorner = $state<'bottom-left' | 'top-left'>('bottom-left');
+	function showTip(
+		html: string,
+		opts?: { pinned?: boolean; onClose?: () => void; corner?: 'bottom-left' | 'top-left' }
+	) {
 		tipHtml = html;
 		tipPinned = !!opts?.pinned;
 		tipOnClose = opts?.onClose ?? null;
+		tipCorner = opts?.corner ?? 'bottom-left';
 	}
 	function hideTip() {
 		tipHtml = '';
 		tipPinned = false;
 		tipOnClose = null;
+		tipCorner = 'bottom-left';
 	}
 	function regionEnter(pe: string) {
 		if (!tipOf) return;
@@ -526,7 +539,7 @@
 		</div>
 	{/if}
 	{#if tipHtml}
-		<div class="tip item" class:pinned={tipPinned}>
+		<div class="tip item" class:pinned={tipPinned} class:topleft={tipCorner === 'top-left'}>
 			<!-- eslint-disable-next-line svelte/no-at-html-tags — tip HTML is built by our own code from DB values -->
 			{@html tipHtml}
 			{#if tipPinned}
@@ -660,6 +673,12 @@
 		top: var(--sp-2);
 		bottom: auto;
 		background: #5c5c5c;
+	}
+	/* an item card asked into the top-left corner (the contract map's
+	   authority seats, so the δήμοι keep the bottom-left) */
+	.tip.item.topleft {
+		top: var(--sp-2);
+		bottom: auto;
 	}
 	/* a held (clicked) card: white rule on top and a ✕ — hover cards have neither */
 	.tip.pinned {

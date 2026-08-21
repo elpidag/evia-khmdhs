@@ -66,13 +66,14 @@ def test_timeline_includes_completion_acts():
     conn.executescript(SCHEMA)
     add_contract(conn, "22SYMV000000001", title="ΕΡΓΟ", eur=1000.0)
     conn.execute(
-        "INSERT INTO contract_completion_acts VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO contract_completion_acts VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
         ("ΤΕΣΤ4653Π8-ΑΑΑ", "22SYMV000000001", "22SYMV000000001",
          "oristiki_paralavi", "Έγκριση Πρωτοκόλλου Οριστικής Παραλαβής",
          "ΥΠΕΝ/1", "2023-08-18", "2023-07-25", "protocol_date",
-         "το από 25.07.2023 πρωτόκολλο", "ΥΠΕΝ", "{}"))
+         "το από 25.07.2023 πρωτόκολλο", "ΥΠΕΝ", "{}", None))
     tl = queries_extra.contract_timeline(conn, "22SYMV000000001")
     comp = [t for t in tl if t["kind"] == "completion"]
+    assert comp[0]["part_auth"] is None
     assert len(comp) == 1
     assert comp[0]["d"] == "2023-07-25"
     assert comp[0]["ckind"] == "oristiki_paralavi"

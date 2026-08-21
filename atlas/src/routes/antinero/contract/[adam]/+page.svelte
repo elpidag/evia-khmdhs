@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { authEn, bodyEn, devGreek, orgEn } from '$lib/transforms/names';
+	import { authEn, authEnShort, bodyEn, devGreek, orgEn } from '$lib/transforms/names';
 	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
 	import { trailChip } from '$lib/transforms/exclusion';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
 	import ChainTimeline from '$lib/detail/ChainTimeline.svelte';
+	import { buildLanes } from '$lib/transforms/lanes';
 	import Fold from '$lib/ui/Fold.svelte';
 	import Hint from '$lib/ui/Hint.svelte';
 	import { registryStatusNote } from '$lib/transforms/registry';
@@ -16,7 +17,7 @@
 	import { dmy, eur, eurShort, grInt } from '$lib/transforms/format';
 	import { scopeLabel } from '$lib/transforms/scopes';
 	import { loadMunicipalities, type MuniProps } from '$lib/maps/useGeo';
-	import type { FeatureCollection } from 'geojson';
+	import type { FeatureCollection, MultiPolygon } from 'geojson';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -67,7 +68,8 @@
 		notice: 'Call / notice',
 		auction: 'Award',
 		contract: 'Contract',
-		completion: 'Completion'
+		completion: 'Completion',
+		extension: 'Deadline extension'
 	};
 	// a ΣΥΜΒ ΑΔΑΜ is not always a contract: ΥΠΕΝ posts amendments,
 	// supplementary contracts and ministry approvals under one too, and the
@@ -91,8 +93,17 @@
 		oloklirosi: 'Completion — statement'
 	};
 	const ORDER: Record<string, number> = {
-		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4, completion: 5
+		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4, extension: 4, completion: 5
 	};
+	// Diavgeia extension approvals (phase 1 of the lifecycle layer, 2026-08-21):
+	// the label says which kind, the title cell the deadline it grants
+	const EXTKIND: Record<string, string> = {
+		extension: 'Deadline extension',
+		extension_partial: 'Partial deadline extension',
+		extension_refused: 'Extension refused'
+	};
+	const ordinalEn = (n: number | null | undefined) =>
+		n ? `${n}${n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'} ` : '';
 
 	const timeline = $derived.by(() => {
 		const rows = c.timeline.map((t) => ({ ...t, self: false }));
@@ -138,6 +149,23 @@
 		return rows;
 	});
 	const completion = $derived(timeline.find((t) => t.kind === 'completion'));
+	// the per-area lanes (user, 2026-08-21): where the extension acts name
+	// forest services, each gets its own line under the contract bar — its
+	// steps, and its own part-acceptance where ΥΠΕΝ signed one
+	const partEnds = $derived(
+		timeline
+			.filter((t) => t.kind === 'completion' && t.part_auth && t.d)
+			.map((t) => ({ auth: t.part_auth!, d: t.d!, ref: t.adam }))
+	);
+	const laneData = $derived(
+		buildLanes(
+			(c.authorities ?? []).map((a) => a.name),
+			c.deadlines?.extensions ?? [],
+			partEnds,
+			completion?.d ? { d: completion.d, ref: completion.adam } : null,
+			(n) => authEnShort(n)
+		)
+	);
 	/** the acts that produced the contract — request, commitment approval,
 	 *  call, award — wherever the trail has them dated (user, 2026-08-19) */
 	const RUNUP_KINDS = ['request', 'approved_request', 'notice', 'auction'] as const;
@@ -151,7 +179,7 @@
 	);
 
 	const pdfHref = (t: (typeof timeline)[number]): string | null => {
-		if (t.kind === 'completion') return `/pdf/diavgeia/${t.adam}`;
+		if (t.kind === 'completion' || t.kind === 'extension') return `/pdf/diavgeia/${t.adam}`;
 		if (t.kind !== 'contract')
 			return `/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`;
 		return t.in_db ? `/pdf/contract/${t.adam}` : null;
@@ -190,11 +218,41 @@
 			type:
 				t.kind === 'completion'
 					? (CKIND[t.ckind ?? ''] ?? KIND.completion)
-					: (t.kind === 'contract'
-							? (DOCKIND[t.doc_kind ?? ''] ?? KIND.contract)
-							: (KIND[t.kind] ?? t.kind)) + (t.self ? ' — this document' : ''),
+					: t.kind === 'extension'
+						? ordinalEn(t.ordinal) + (EXTKIND[t.ckind ?? ''] ?? KIND.extension).toLowerCase().replace(/^./, (ch) => ch.toUpperCase())
+						: (t.kind === 'contract'
+								? (DOCKIND[t.doc_kind ?? ''] ?? KIND.contract)
+								: (KIND[t.kind] ?? t.kind)) + (t.self ? ' — this document' : ''),
 			code: t.adam,
-			title: t.title ?? null,
+			// an extension row says what it granted: «→ 27.01.2026» (the latest
+			// date, «per area» when the act grants several), or that the act
+			// could not be read — the subject stays as the title
+			title:
+				t.kind === 'extension'
+					? `${
+							t.ckind === 'extension_refused'
+								? 'the request was refused'
+								: t.deadline
+									? `→ ${t.deadline.split('-').reverse().join('.')}${t.per_area ? ' (per area)' : ''}${
+											// the act's own typo («05.02.2025» on an act of 23.12.2025):
+											// printed as written, said to be so, never drawn on the bar
+											t.flag === 'deadline_before_issue'
+												? ' — as written in the act, earlier than the act itself'
+												: ''
+										}`
+									: `deadline not read (${t.flag ?? 'no date'})`
+						}${
+							t.scope === 'study'
+								? ` · the study's submission${t.scope_text ? ` («${t.scope_text}»)` : ''}`
+								: t.scope === 'stage'
+									? ` · a stage${t.scope_text ? ` («${t.scope_text}»)` : ''}`
+									: t.scope === 'area'
+										? ` · for ${t.scope_text ?? 'the named area'}`
+										: t.scope === 'whole'
+											? ' · the whole contract'
+											: ''
+						}${t.by_text ? ` · ${t.by_text}` : ''} — ${t.title ?? ''}`
+					: (t.title ?? null),
 			pdf: pdfHref(t),
 			self: t.self,
 			// rows the registry never published: they are in the trail because
@@ -238,11 +296,17 @@
 			end_date: iso(c.end_date)
 		}
 	);
-	const extNote = $derived(
-		c.deadlines?.extensions?.length
-			? `, extended to ${dmy(c.deadlines.extensions[c.deadlines.extensions.length - 1].deadline)} by ${c.deadlines.extensions.map((e) => e.ref).join(', ')}`
-			: ''
-	);
+	const extNote = $derived.by(() => {
+		const ex = c.deadlines?.extensions ?? [];
+		if (!ex.length) return '';
+		// the latest date any step granted (a per-area act may follow one that
+		// already granted a later date for another area)
+		const last = ex.reduce<string | null>(
+			(m, e) => (e.deadline && (!m || e.deadline > m) ? e.deadline : m),
+			null
+		);
+		return `, extended to ${dmy(last)} by ${ex.map((e) => e.ref).join(', ')}`;
+	});
 
 	/** the δήμοι the documents place the works in, one level finer than the
 	 *  Π.Ε. layer; `outside_region` marks a δήμος whose Π.Ε. we never curated
@@ -554,6 +618,11 @@
 					]
 				: []),
 			'✔  the day the works were accepted, which may fall after the deadline',
+			...(laneData.lanes.length
+				? [
+						`▭  the grey part is split into one strip per forest service (${laneData.lanes.filter((l) => !l.unplaced).length}), hover a strip to read its name at its end: each piece of it (alternating tones) is one partial extension the acts grant for that area, and a ✔ appears only where ΥΠΕΝ accepted that part on its own${laneData.lanes.some((l) => l.unplaced) ? '; acts that name no area sit on the last strip' : ''}`
+					]
+				: []),
 			'€  a payment order',
 			'•  the grey dots before the signature — the procurement that produced the contract'
 		].join(String.fromCharCode(10))
@@ -745,7 +814,7 @@
 			</div>
 		{/if}
 		{#if hasFamily && view === 'family'}
-			<div class="famslot">
+			<div class="famslot" style:min-height="{mapH}px">
 				<ProcurementFamily
 					call={c.family!.call}
 					contracts={c.family!.contracts}
@@ -794,6 +863,7 @@
 						r={4}
 						fillOf={() => 'var(--c-antinero)'}
 						tipOf={(a) => `<strong>${authEn(String(a.name))}</strong><br>awarding forest authority seat`}
+						tipCorner="top-left"
 					/>
 				{/snippet}
 			</PaperMap>
@@ -817,7 +887,8 @@
 		endRef={completion?.adam ?? null}
 		deadline={c.deadlines?.deadline ?? null}
 		deadlineBasis={c.deadlines?.basis ?? null}
-		extensions={c.deadlines?.extensions ?? []}
+		extensions={laneData.main}
+		lanes={laneData.lanes}
 		today={todayIso}
 		{chain}
 		payments={payTicks}
@@ -1062,10 +1133,23 @@
 		text-decoration: underline;
 		cursor: pointer;
 	}
+	/* the diagram's shapes sit at the centre of the slot — the same box the
+	   map fills, as tall as the facts column — with the caption at its foot
+	   (user, 2026-08-21) */
 	.famslot {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		padding-bottom: 3.2rem;
+		box-sizing: border-box;
+	}
+	.famslot > p.muted {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: 0;
 	}
 	.crumb a {
 		text-decoration: none;

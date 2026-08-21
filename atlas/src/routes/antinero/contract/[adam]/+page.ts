@@ -168,7 +168,21 @@ export interface ContractDetail {
 			end_date: string | null;
 		} | null;
 		extensions: {
+			/** the ΚΗΜΔΗΣ record's ΑΔΑΜ, or the Diavgeia act's ΑΔΑ (2026-08-21) */
 			ref: string;
+			ada?: string | null;
+			source?: 'khmdhs' | 'diavgeia';
+			ordinal?: number | null;
+			per_area?: boolean;
+			by_text?: string | null;
+			excerpt?: string | null;
+			later?: boolean;
+			in_force?: string | null;
+			/** what the act extends, the verbatim object, and — for an area act —
+			 *  the registry's canonical service names it resolved to (the lanes) */
+			scope?: string | null;
+			scope_text?: string | null;
+			scope_auth?: string[];
 			d: string | null;
 			deadline: string | null;
 			n: number;
@@ -224,7 +238,7 @@ export interface ContractDetail {
 	}[];
 	timeline: {
 		adam: string;
-		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract' | 'completion';
+		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract' | 'completion' | 'extension';
 		title: string | null;
 		d: string | null;
 		cancelled: number;
@@ -244,9 +258,26 @@ export interface ContractDetail {
 		cited?: boolean;
 		role?: string;
 		/** completion acts only (Diavgeia) */
-		ckind?: 'oristiki_paralavi' | 'paralavi' | 'peraiosi' | 'oloklirosi';
+		ckind?: 'oristiki_paralavi' | 'paralavi' | 'peraiosi' | 'oloklirosi' | 'extension' | 'extension_partial' | 'extension_refused';
 		end_basis?: 'protocol_date' | 'act_date';
 		end_excerpt?: string | null;
+		/** the ONE service whose part this completion act accepts («για το τμήμα
+		 *  περιοχής ευθύνης Δασαρχείου Χ»), canonical; null = the whole */
+		part_auth?: string | null;
+		/** extension acts only (Diavgeia, 2026-08-21): the deadline the act
+		 *  grants, its ordinal, per-area flag, duration wording, the verbatim
+		 *  clause, and the extractor's flag when it could not read a date */
+		ordinal?: number | null;
+		deadline?: string | null;
+		per_area?: boolean;
+		by_text?: string | null;
+		excerpt?: string | null;
+		flag?: string | null;
+		/** what the act extends: 'study' | 'stage' | 'area' | 'whole' | null, and the
+		 *  verbatim object (the services named, or the stage phrase) */
+		scope?: string | null;
+		scope_text?: string | null;
+		scope_auth?: string[];
 	}[];
 }
 

@@ -99,9 +99,28 @@ def fetch_decision(session: requests.Session, cache: Path, ada: str) -> tuple[di
                 raise RuntimeError(f"{ada}: document is not a PDF")
             pdf_p.write_bytes(resp.content)
             time.sleep(0.25)
-        subprocess.run(["pdftotext", "-layout", str(pdf_p), str(txt_p)], check=True)
+        _pdftotext(pdf_p, txt_p)
     return (json.loads(meta_p.read_text(encoding="utf-8")),
             txt_p.read_text(encoding="utf-8", errors="replace"))
+
+
+def _pdftotext(pdf_p: Path, txt_p: Path) -> None:
+    """pdftotext through ASCII temp names: the xpdf Win32 build reads its
+    command line in the ANSI code page, so a Greek ΑΔΑ in the path reaches it
+    as «6???4653?8-?TO.pdf» and it cannot open the file (2026-08-21)."""
+    import shutil
+    tmp_pdf = pdf_p.with_name(f"_tmp_{abs(hash(pdf_p.name))}.pdf")
+    tmp_txt = tmp_pdf.with_suffix(".txt")
+    try:
+        shutil.copyfile(pdf_p, tmp_pdf)
+        # -enc UTF-8: the Win32 xpdf build otherwise writes the ANSI code page
+        # and every Greek letter becomes «?» (the payment validator always did this)
+        subprocess.run(["pdftotext", "-layout", "-enc", "UTF-8", str(tmp_pdf), str(tmp_txt)], check=True)
+        shutil.move(str(tmp_txt), str(txt_p))
+    finally:
+        for q in (tmp_pdf, tmp_txt):
+            if q.exists():
+                q.unlink()
 
 
 def resolve_contract(

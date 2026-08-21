@@ -32,6 +32,7 @@ import requests
 
 from khmdhs import (
     bodies_loader, document_kinds, categories_loader, chain_loader, completion_acts_loader,
+    extension_acts_loader,
     consortium_loader, contract_corrections, contractor_names_loader,
     details_loader, families_loader,
     forest_loader, linked_acts_loader, municipalities_loader,
@@ -250,6 +251,8 @@ def main(argv: list[str] | None = None) -> int:
         linked_acts_loader.main(db_argv)
         print("\n-- completion_acts_loader --------------------------------------")
         completion_acts_loader.main(db_argv)
+        print("\n-- extension_acts_loader ---------------------------------------")
+        extension_acts_loader.main(db_argv)
 
     conn = sqlite3.connect(args.db)
     todos = curation_todos(conn) if changed else []

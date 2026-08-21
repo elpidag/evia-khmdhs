@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS contract_completion_acts (
     end_basis      TEXT,            -- protocol_date | act_date
     end_excerpt    TEXT,
     org            TEXT,
-    raw_json       TEXT
+    raw_json       TEXT,
+    part_auth      TEXT             -- the ONE service whose part the act accepts («για το τμήμα περιοχής ευθύνης Δασαρχείου Χ»); NULL = the whole
 );
 CREATE INDEX IF NOT EXISTS idx_cca_ref ON contract_completion_acts(attributed_ref);
 CREATE TABLE IF NOT EXISTS completion_search_log (
@@ -240,6 +241,46 @@ def _search_subject(session: requests.Session, phrase: str,
     return (resp.json() or {}).get("decisions") or []
 
 
+def _migrate(conn: sqlite3.Connection) -> None:
+    """Columns added after the first harvest (CREATE TABLE IF NOT EXISTS
+    does not alter a deployed table)."""
+    try:
+        conn.execute("ALTER TABLE contract_completion_acts ADD COLUMN part_auth TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+
+_MATCHER = None
+
+
+def _matcher():
+    global _MATCHER
+    if _MATCHER is None:
+        from khmdhs.forest_loader import Matcher, load_registry
+        _MATCHER = Matcher(load_registry()[0])
+    return _MATCHER
+
+
+def part_authority(subject: str | None) -> str | None:
+    """When the act accepts ONE part of the contract — «… και για το τμήμα
+    περιοχής ευθύνης Δασαρχείου Σπερχειάδας (ΑΔΑΜ: …)» — the canonical name
+    of that service, via the registry matcher; None for a whole-contract
+    acceptance, or when the part is named by title rather than by service.
+    fold() maps Greek onto Latin homoglyphs, so the needles are folded too."""
+    from khmdhs.forest_loader import fold
+    src = subject or ""
+    folded = fold(src)
+    for needle in ("ΓΙΑ ΤΟ ΤΜΗΜΑ", "ΤΜΗΜΑΤΟΣ ΤΟΥ ΕΡΓΟΥ"):
+        i = folded.find(fold(needle))
+        if i == -1:
+            continue
+        tail_src = src if len(src) == len(folded) else folded
+        tail = tail_src[i + len(needle): i + len(needle) + 140]
+        found = _matcher().find(tail)
+        return found[0][0] if found else None
+    return None
+
+
 def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
          refetch: bool = False, verbose: bool = False,
          query_mode: str = "subject", cache: Path = DEFAULT_CACHE,
@@ -248,6 +289,7 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA)
+    _migrate(conn)
     successors = supersede_map(conn)
 
     refs = [r[0] for r in conn.execute(
@@ -331,14 +373,14 @@ def load(db_path: Path = DEFAULT_DB, limit: int | None = None,
             org = (hit.get("organization") or {}).get("label")
             conn.execute(
                 "INSERT OR REPLACE INTO contract_completion_acts "
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (ada, cited, resolve_attribution(cited, successors), kind,
                  subject.strip(), meta.get("protocolNumber"),
                  time.strftime("%Y-%m-%d", time.gmtime(
                      meta["issueDate"] / 1000))
                  if isinstance(meta.get("issueDate"), (int, float)) else None,
                  end_date, basis, excerpt, org,
-                 json.dumps(meta, ensure_ascii=False)))
+                 json.dumps(meta, ensure_ascii=False), part_authority(subject)))
             conn.commit()
             stored.add(ada)
             stats["accepted"] += 1
@@ -362,6 +404,7 @@ def reextract(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    _migrate(conn)
     successors = supersede_map(conn)
     overrides = load_overrides()
     roots = chain_key(conn)
@@ -411,9 +454,9 @@ def reextract(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
                              r["end_date"], r["end_basis"], end_date, basis)
         conn.execute(
             "UPDATE contract_completion_acts SET cited_ref=?, attributed_ref=?, "
-            "act_kind=?, end_date=?, end_basis=?, end_excerpt=? WHERE ada=?",
+            "act_kind=?, end_date=?, end_basis=?, end_excerpt=?, part_auth=? WHERE ada=?",
             (cited, resolve_attribution(cited, successors), kind, end_date,
-             basis, excerpt, ada))
+             basis, excerpt, part_authority(r["subject"]), ada))
     conn.commit()
     conn.close()
     logging.info("reextract: %s", json.dumps(stats))

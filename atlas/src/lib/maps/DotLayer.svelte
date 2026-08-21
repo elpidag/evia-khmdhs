@@ -36,6 +36,8 @@
 		dashOf?: (p: DotPoint) => string | undefined;
 		/** per-dot fill opacity override (approximate dots render lighter) */
 		fillOpacityOf?: (p: DotPoint) => number | undefined;
+		/** which corner the dot's card sits in (default bottom-left) */
+		tipCorner?: 'bottom-left' | 'top-left';
 	}
 
 	let {
@@ -55,7 +57,8 @@
 		inert = false,
 		onUnpin,
 		dashOf,
-		fillOpacityOf
+		fillOpacityOf,
+		tipCorner = 'bottom-left'
 	}: Props = $props();
 
 	// the pinned card: show the first pinned point's tip, hide it again when
@@ -86,12 +89,12 @@
 			pinned.length > MAX
 				? `${html}<hr class="tip-rule">+${pinned.length - MAX} more`
 				: html,
-			{ pinned: true, onClose: () => onUnpin?.() }
+			{ pinned: true, onClose: () => onUnpin?.(), corner: tipCorner }
 		);
 	});
 
 	function enter(p: DotPoint, e?: MouseEvent) {
-		if (tipOf) ctx.showTip(tipOf(p));
+		if (tipOf) ctx.showTip(tipOf(p), { corner: tipCorner });
 		onOver?.(p, e);
 	}
 	function leave(p: DotPoint) {

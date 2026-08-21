@@ -8,7 +8,7 @@
 	 *  table below the diagram stays as the accessible/tabular view. */
 	interface Act {
 		adam: string;
-		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract' | 'completion';
+		kind: 'request' | 'approved_request' | 'notice' | 'auction' | 'contract' | 'completion' | 'extension';
 		title: string | null;
 		d: string | null;
 		cancelled: number;

@@ -119,7 +119,7 @@ excluded from aggregates (`antinero_umbrella`) to avoid double counting.
 ## Pipeline (ETL modules in `khmdhs/`)
 
 **Run order after any contract change**:
-`chain_loader` → `contract_corrections` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `categories_loader` → `families_loader` → `bodies_loader` → `payment_loader` → `linked_acts_loader` → `completion_acts_loader`
+`chain_loader` → `contract_corrections` → `scope_loader` → `region_loader` → `forest_loader` → `studies_loader` → `categories_loader` → `families_loader` → `bodies_loader` → `payment_loader` → `linked_acts_loader` → `completion_acts_loader` → `extension_acts_loader`
 (→ `diavgeia_loader` when ingesting new Diavgeia decisions, then `payment_loader` again).
 **`python -m khmdhs.refresh` runs the whole sequence for you** after
 refetching open contracts — prefer it for routine updates.
@@ -344,6 +344,71 @@ refetching open contracts — prefer it for routine updates.
   Table `contract_completion_acts` (chain-tip `attributed_ref`
   like payments; FK CASCADE; in the refresh chain). Atlas timeline shows
   them as the closing act with `/pdf/diavgeia/<ΑΔΑ>` links.
+- `extension_acts_loader.py` — **deadline-EXTENSION approvals from Diavgeia**
+  (lifecycle layer, phase 1, DATA_DECISIONS 2026-08-21): one luminapi
+  `subject:"<ΑΔΑΜ>"` search per stored contract (or `--from-cache`), the
+  «Έγκριση (τμηματικής) παράτασης …» acts classified from the subject
+  (revocations and schedules approved «λόγω παράτασης» rejected), their PDFs
+  read for the NEW DEADLINE: the operative part starts at the LAST
+  «Αποφασίζουμε» (recitals list the previous extensions — anchor earlier and
+  you read the old deadline), every «μέχρι/έως (την|τις) DD.MM.YYYY» (also
+  «μέχρι τις και …», «με ημερομηνία περαίωσης την …», «έως την 28η Αυγούστου
+  2026») is kept in `dates`, the latest is `new_deadline`, several distinct
+  = `per_area`, «κατά N ημέρες» in `by_text`, verbatim `excerpt`, and an
+  unreadable act carries `flag` (no_operative / no_date / unreadable_font —
+  the substitution-cipher fonts) with NO deadline. Table
+  `contract_extension_acts` (FK CASCADE, chain-tip `attributed_ref`, same
+  overrides + lot-letter WARN as the completion layer; `--reextract`
+  offline). **463 acts / 167 contracts (159 in scope), all read: 459
+  grant a deadline (23 per-area), 3 state one EARLIER than their own date
+  (the act's year typo — kept as written, `flag=deadline_before_issue`,
+  never a timeline step) and 1 is `extension_refused` (an «Απόρριψη
+  αιτήματος … παράτασης»: no deadline, the refusing sentence as excerpt).**
+  `scope`/`scope_text` say WHAT the act extends, read from the grant clause
+  after the quoted title (`extract_scope`: study/stage/area/whole, the
+  service phrase cut before «μέχρι/για N ημέρες/σύμφωνα»): a τμηματική
+  παράταση extends ONE τμηματική προθεσμία (area 203 · study 5 · stage 4 ·
+  whole 1 · unsaid 145 of 358), a plain one the συνολική προθεσμία (whole
+  16 · area 28 · stage 1 · unsaid 59 of 104) — DATA_DECISIONS 2026-08-21
+  second entry. **`scope_auth`** = the registry services an area act names,
+  resolved with forest_loader's Matcher (231/232; the pdftotext «ΑΔΑ: …»
+  watermark is stripped from the phrase first), and the completion layer's
+  **`part_auth`** = the ONE service a part-acceptance accepts (23 acts) —
+  together they feed the contract page's PER-AREA LANES
+  (`transforms/lanes.buildLanes` + `detail/AreaLanes.svelte` inside the
+  ChainTimeline svg, DATA_DECISIONS 2026-08-21 third entry: the bar's grey
+  extended part is SPLIT into one strip per linked service where the acts
+  name areas — 72 in-scope contracts — each strip cut into SEGMENTS (one
+  piece per extension in ALTERNATING tones of the grey; no lines, ticks,
+  arrows or dots; the axis stops 96 units short of the right edge so a
+  name fits at its bar's end), the solid bar as tall as all
+  strips, a service with nothing to draw gets no strip, names at the right end of
+  their OWN strip ON HOVER (above the bar's end when there is no room; no
+  outline) in the short form
+  `names.authEnShort` «Kalampaka F.S.O.», a ✔ ONLY for that part's own
+  acceptance, an «area not stated» strip for the rest, € marks on the
+  label line; studies/stage/whole stay on the bar; the contract map's
+  authority names are a hover card at the TOP-LEFT corner (`PaperMap
+  showTip corner` / `DotLayer tipCorner`; δήμοι cards bottom-left), and
+  the DIAGRAM's shapes are centred on the map slot).
+  `contract_completion_acts` stays the ending layer untouched.
+  Atlas: `contract_timeline` rows of kind `extension` → DOCUMENT TRAIL
+  «(Nth) deadline extension» with «→ DD.MM.YYYY · for <service>» in the
+  title cell (a refusal: «the request was refused»; a flagged date: «as
+  written in the act, earlier than the act itself»); the
+  **ChainTimeline draws its extension steps from these acts as well** (same
+  day, user): `contract_deadlines` merges them with the ΚΗΜΔΗΣ «Παράταση
+  προθεσμίας» records — a step per act (`source` diavgeia|khmdhs, `later` =
+  moved the deadline in force forward, `per_area`, `ordinal`, `excerpt`; an
+  act re-stating a record's new deadline merges into that step), the
+  deadline in force is the running maximum; a FLAGGED act is no step; 439
+  steps over 160 in-scope chains (423 Diavgeia + 16 ΚΗΜΔΗΣ), pinned,
+  `/api/meta` prints them. ChainTimeline conventions (user, 2026-08-21): extension labels print the ORDINAL only («1st», «2nd»), a label closer than 14 units to the previous printed one is dropped (arc + hover title stay); the symbols carry NO outline — no halo on ✔ or €, no stroke on a dot, no outline on the hovered bar. The inventory that sized the
+  layer (4,931 subject-citing acts; NO cancellation act exists) lives in
+  the decision entry. Windows gotcha fixed in `diavgeia_loader.fetch_decision`:
+  pdftotext reads its command line in the ANSI code page and writes ANSI
+  without `-enc UTF-8` — Greek ΑΔΑ paths and Greek text both broke; the
+  helper now converts through ASCII temp names in UTF-8.
 - `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
   (end_date NULL or <90 days past), upserts only changed payloads (diff on
   lastUpdateDate/paymentRefNo/nextRefNo/cancelled), backs payloads up to
@@ -1119,7 +1184,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   exactly: country level = contract-count choropleth left + HQ dots right;
   works-drill = per-contract dots (OKLCH hues for multi-authority
   contracts, dashed all-pairs seat-links on hover incl. off-region seats);
-  home-drill = the co-ops' contracts' dots at country frame. **The de-overlap spread is land-aware** (DATA_DECISIONS 2026-08-21): `useGeo.spreadOverlaps(points, step, onLand?)` skips spiral slots the predicate refuses; AntineroMap passes `geoContains` over the coarse Π.Ε. layer, so seats sharing one waterfront point (five at Λίμνη, nine at Μεγ. Αλεξάνδρου 27 Καβάλα) fan out along the coast, never into the sea — pinned by `maps/spread.test.ts` on the real layer.
+  home-drill = the co-ops' contracts' dots at country frame. **The de-overlap spread is land-aware** (DATA_DECISIONS 2026-08-21): `useGeo.spreadOverlaps(points, step, onLand?)` skips spiral slots the predicate refuses; AntineroMap passes `geoContains` over the coarse Π.Ε. layer, so seats sharing one waterfront point (five at Λίμνη, nine at Μεγ. Αλεξάνδρου 27 Καβάλα) fan out along the coast, never into the sea — pinned by `maps/spread.test.ts` on the real layer. **Map cards** (user, 2026-08-21): TWO slots per map — the place's card grey at the top-left (`PaperMap splitTips`, region hover, on in every state on both maps), the item's card black at the bottom-left (dot hover); hover SHOWS, click HOLDS — a held card gets a white rule + ✕, Esc or ✕ releases (`ctx.showTip(html, {pinned, onClose})`, `DotLayer onUnpin`); cross-map hover highlights dots and links but pins NO cards (only the selected contract pins its card and its contractor's); cards are short — place · count · €, ΑΔΑΜ-as-link · authority · €, name-as-link · contracts · € — instructions live in the legend ⓘ. Round 2 the same day: the DrillPanel table below the maps is GONE (the cards carry its facts; a «✕ <unit> · all of Greece» pill beside MAP is the way out); the selection lives in the URL (`?sel=<ΑΔΑΜ>`, valid only while drilled and cleared by a new drill) so it survives the €/dots toggle and travels in a permalink; a click on bare map clears it (`PaperMap onEmptyClick`), Esc releases a held card and a second Esc resets the drill (`onEscape`); every contract dot is ONE grey (#6b6b6b, #333 stroke — the two-grey alternation is gone) and the legend swatches are the map's own colours (`.dot.work`, `.dot.sel` 14px black, `.dot.approx` dashed over a 55% fill); the € scale is the sqrt ramp (`makeChoro`, shared max on both maps) with the «0 · [white + eight swatches] · max» key — a classed/worded legend and sqrt ticks were both tried and rejected by the user on 2026-08-21 (DATA_DECISIONS); the drilled unit's outline is 1.6 (heavier than a hover, not thick), country-level registered-office dots are #555, the selected contract's dot turns black; a CONTRACTOR dot is SELECTED on click too (`?selv=<ΑΦΜ>`, one selection at a time with `sel`) — its card held, its contracts lit on the left — and its page is the card's link, not the dot (user, 2026-08-21). `DotLayer` paints hot dots (selected, or lit by a selection on the other map) LAST so they sit above their neighbours.
 - **Flow charts live on the Anti-nero page** since 2026-08-20 (user): the
   out-of-region choropleth (`$lib/sections/FlowMap.svelte`) and the
   local-vs-imported split (`OriginSplit.svelte`) are ONE frame since later

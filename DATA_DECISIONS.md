@@ -6160,3 +6160,262 @@ the real-DB pins. Open question noted, not changed: an act «για την πε�
 αρμοδιότητας του Δασαρχείου Χ» accepts ONE service's part of a multi-service
 contract; the `|part` marker fires only on «για το τμήμα του έργου», so
 such acts still read as the contract's end on the timeline.
+
+## 2026-08-21 · Map cards on the Anti-nero page: two slots, hover shows / click holds, short and factual
+
+Reviewing the card logic of the two map pairs (€ choropleths / Individual
+dots) with the user: one black card slot per map served region hover, dot
+hover and selection alike, so a dot's card replaced the region's and leaving
+the dot left no card; hovered and held cards looked the same; cross-map hover
+pinned stacks of cards on the other map; cards carried instructions; region
+cards were off on the drilled left map. **Decision (user, items 1–4 of the
+review):** (1) two slots — the place's card grey at the top-left, the item's
+black at the bottom-left, both on at once; (2) hover shows, click holds — a
+held card has a white rule and a ✕, Esc or ✕ releases it; cross-map hover
+highlights dots and seat links but pins no card (only the selected contract
+pins its own card and its contractor's on the other map); (3) cards are
+short — «place · N contracts · €», «ΑΔΑΜ · authority · €» with the ΑΔΑΜ as
+the link, «name · N contracts · €» with the name as the link — and every
+instruction lives in the legend ⓘ; (4) region cards on in every state on
+both maps. Implemented in `PaperMap` (`splitTips`, pinned item card with
+onClose, Esc), `DotLayer` (`onUnpin`), `AntineroMap`; the ΔΑΣΕ, sponsored
+and contractor-page maps keep the single slot. Items 5–6 followed the same day, with two more user decisions: the drill
+TABLE below the maps is removed («no one can read it with the maps; the cards
+hold its facts») — a «✕ <unit> · all of Greece» pill beside MAP steps out of
+the drill; the selection lives in the URL (`?sel=<ΑΔΑΜ>`), survives the €/dots
+toggle, is cleared by a new drill, by a click on bare map and by Esc (a second
+Esc resets the drill). Colour coding aligned with the legend: every contract
+dot is one grey (the two-grey alternation of multi-authority contracts was a
+leftover of the hue grouping and the legend could not show it), the legend's
+swatches are the map's own colours (contract dot, selected dot, settlement-
+centre dot with its dashed ring over a 55 % fill), and the € ramp key prints
+the values at the sqrt-scale boundaries the map uses, so a grey can be read
+back to a €-band; the white «none» swatch sits outside the scale.
+
+## 2026-08-21 · Lifecycle layer, phase 1: the deadline extensions ΥΠΕΝ publishes on Diavgeia, read by machine
+
+The user asked for the τμηματικές/προσωρινές εγκρίσεις in the document trail,
+then sharpened it: the data gets richer only through **changes of deadline,
+changes of amount and cancellations** — and asked whether I had read the
+documents (no: subjects only). An inventory of every Diavgeia act whose
+subject cites one of the 344 stored contracts (4,931 acts, metadata only)
+sized the question: 489 παρατάσεις, 378 Α.Π.Ε., 681 επιμετρήσεις, 644
+λογαριασμοί, 897 ημερολόγια, 553 χρονοδιαγράμματα, 251 αναστολές, 7
+τμηματικές/προσωρινές παραλαβές — and **no cancellation at all** (no
+διάλυση, έκπτωση, καταγγελία or ματαίωση; the 13 «ανάκληση/ακύρωση» acts
+revoke an earlier approval, never the contract). Only 23 of the 489
+extension subjects carry a date; the new deadline lives in the body.
+
+**Decision (user): phase 1 = the extensions, read from the PDFs by machine
+with verbatim evidence; the user reads only what the extractor flags.** A
+30-act pilot read 26 cleanly, 3 with several dates, 1 unreadable; the rules
+it fixed: the operative part starts at the LAST «Αποφασίζουμε» (the recitals
+list the previous extensions with their dates — anchoring earlier reads the
+OLD deadline as the new one), every «μέχρι/έως (την|τις) DD.MM.YYYY» in it is
+kept and the latest is the contract's new deadline, several distinct dates
+mean a per-area extension (flagged, all dates kept), «κατά N ημερολογιακές
+ημέρες» rides beside, and an act without an operative anchor or a date is
+stored with its flag and no deadline — never a guess. The full run
+(`khmdhs/extension_acts_loader.py`, table `contract_extension_acts`, FK
+CASCADE, chain-tip attribution, the same `completion_act_overrides.json` and
+lot-letter WARN as the completion layer): **463 extension approvals on 167
+contracts (159 in scope) — every one read, 23 per-area, 105 plain / 358
+τμηματικές**; 20 subject hits rejected as non-extensions (revocations,
+schedules approved «λόγω παράτασης»); three wordings added on the way
+(«μέχρι τις και 30.03.2026», «με ημερομηνία περαίωσης την 31-05-2026», «έως
+την 28η Αυγούστου 2026»). The one lot-letter WARN is the registry's own
+title error (ΚΗΜΔΗΣ titles two contracts «ΕΡΓΟΥ 16Δ»; the acts call the
+Ρέθυμνο one 16Ε with the right ΑΔΑΜ). The contract page's DOCUMENT TRAIL
+shows them as «(Nth) deadline extension» / «partial deadline extension»
+rows with «→ DD.MM.YYYY (per area) · κατά …» in the title cell and the
+Diavgeia PDF; the ChainTimeline's extension steps still come from the 16
+ΚΗΜΔΗΣ records (feeding them from these 463 is the next step). Nothing
+that read `contract_completion_acts` changed.
+
+**Same day, user: the timeline draws them.** `contract_deadlines` now merges
+the 463 acts with the 16 ΚΗΜΔΗΣ steps: a step per act (its ΑΔΑ is the ref,
+so the DOCUMENT TRAIL row pairs with the arc), the deadline in force is the
+running maximum, an act re-stating a record's deadline merges into that
+step, a per-area act is marked and its latest date drawn, and a step that
+did not move the deadline forward says so (`later: false`). Result: **443
+steps over 160 in-scope chains** (427 Diavgeia + 16 ΚΗΜΔΗΣ; 355 moved the
+deadline forward, 23 per-area) — the methodology prints the counts from
+`/api/meta`, the pins hold them.
+
+Toolchain: the Windows build of `pdftotext` could not open a Greek-named
+file (ANSI command line) and wrote «?» for every Greek letter without
+`-enc UTF-8` — `diavgeia_loader.fetch_decision` now converts through ASCII
+temp names in UTF-8 (the completion and payment layers share the helper).
+Pinned by `tests/test_extension_acts.py` (classifier, ordinal, extractor
+traps, 463/167/23 counts, the keying-error families on their own contracts).
+
+## 2026-08-21 · Anti-nero maps: the € scale stays the sqrt ramp with the «0 · bar · max» key
+
+Two attempts to make a grey readable as a € value were tried and withdrawn
+the same day: tick values at the sqrt-scale boundaries (they overlapped at
+the strip's width) and a classed scale with round thresholds and a worded
+legend (< 1M · 1–5M · … — the user rejected the look: «former ways were far
+nicer», and the worded pairs wrapped the strip). **Decision (user): the map
+keeps the sqrt ramp (`makeChoro`, shared max on both maps) and the legend
+the user approved on 2026-08-20 — 0 · [white + eight swatches in one
+hairline] · max.** Kept from the review: the drilled unit's outline is
+heavier than a hover but not thick (1.6), the country-level
+registered-office dots are one step lighter (#555) so they read over the
+darkest fills, every legend swatch is the map's own colour, and the
+selected contract's dot turns black (it had only gained an outline). A
+contractor dot on the right map is SELECTED on click as well (user, same
+day): its card held, its contracts lit on the left with their seat links,
+one selection at a time (`?selv=` beside `?sel=`), and its page is reached
+from the card's link rather than by the click that used to leave the map.
+Three more user decisions the same evening: the timeline's extension labels
+print the ordinal only («1st», «2nd» — the words overlapped when acts were
+days apart; a label closer than 14 units to the previous one is dropped,
+the arc and its hover title stay), the timeline's symbols carry no outline
+(no white halo on ✔ or €, no stroke on a dot, no outline on the hovered
+bar), and on the maps a hot dot — selected, or lit by a selection on the
+other map — is painted above its neighbours.
+
+## 2026-08-21 · Extension acts: what each one extends (scope), one refusal, three dates the acts got wrong
+
+Asked what the 463 acts «actually are», the layer was read once more and
+three things changed.
+
+**Scope of the grant.** A «τμηματική παράταση» is not a smaller extension
+— it is an extension of ONE τμηματική προθεσμία, a milestone the contract
+sets beside its συνολική προθεσμία: the works in one service's area, the
+studies' submission, a stage. The grant clause after the quoted project
+title says which, and `contract_extension_acts.scope`/`scope_text` now
+carry it verbatim (`extension_acts_loader.extract_scope`: study / stage /
+area / whole, the named-service phrase cut before the grant's own words
+«μέχρι … / για N ημέρες / σύμφωνα»). Of the 358 τμηματικές, 203 name an
+area («για την περιοχή αρμοδιότητας του Δασαρχείου Καλαμπάκας»), 5 the
+studies («ως προς την υποβολή των προβλεπόμενων μελετών»), 4 a stage, 1 the
+whole, 145 say nothing either way; of the 104 plain ones, 16 say «στη
+συνολική προθεσμία περαίωσης», 28 still name one area of a multi-area
+contract, 1 a stage, 59 say nothing. 260 of the 358 τμηματικές sit on
+multi-authority contracts; the plain ones split 62/42. The contract page
+prints the scope in the trail row («· for Δασαρχείου Καλαμπάκας», «· the
+study's submission (…)», «· the whole contract»).
+
+**One act is a refusal.** ΨΥΙ04653Π8-848 «Απόρριψη αιτήματος χορήγησης
+τέταρτης (4ης) παράτασης …» (25SYMV017073922, Δασαρχείο Σπάρτης) had been
+classified as an extension and the request's date read as its deadline.
+New `act_kind = extension_refused`: no deadline, the operative sentence
+(«Απορρίπτουμε το από 26.06.2026 αίτημα …») as the excerpt, the refused
+scope kept; it is a trail row («Extension refused · the request was
+refused · for Δασαρχείου Σπάρτης») and never a timeline step. The
+inventory holds no second refusal.
+
+**Three acts state a deadline earlier than their own date** — the act's
+own year typo, not ours: Κ4Χ04653Π8-7ΕΡ (26.01.2026) and ΨΧΗΛ4653Π8-5ΩΔ
+(23.12.2025) grant «μέχρι τις 05.02.2025» on a contract signed 24.06.2025
+(the recital asks for 07.02.2026), ΨΕ8Λ4653Π8-ΘΚΠ (16.01.2026) «μέχρι τις
+10.02.2025». **Rule: the date is kept AS WRITTEN, flagged
+`deadline_before_issue`, printed in the trail with the flag said in words,
+and never drawn as a step** — nobody here corrects a document. The
+timeline therefore counts 439 steps over 160 chains (423 acts + 16 ΚΗΜΔΗΣ
+records; 443 before this rule).
+
+Read alongside: of the 292 steps that follow an earlier known deadline,
+166 were approved AFTER that deadline had lapsed (the act is dated later
+than the deadline it extends — the usual practice, not an exception); a
+τμηματική step adds a median 30 days (p25 19 · p75 41), a plain one 37,5
+(31 · 90); measured against the contract's OWN deadline (duration from the
+start of works), the first τμηματική of a contract lands a median 57 days
+after it but a quarter of them 46+ days BEFORE it — they extend a
+milestone, not the end — while the first plain one lands 13–56 days after
+(median 40); 345 of 463 operative parts grant «με αναθεώρηση» (the delay is
+not charged to the contractor — ν.4412 άρθρο 147), the rest say nothing,
+none says «χωρίς αναθεώρηση». Pinned in `tests/test_extension_acts.py`
+(scope table, refusal, flags, the 12-act Καλαμπάκα chain) and the Atlas
+real-DB deadline pins.
+
+Tooling note (why the scope phrase first came out untrimmed): a regex
+`\b` written through a Bash heredoc reaches the file as a literal
+backspace (0x08) — the lookahead never matched. Write regex patches with
+the Write/Edit tools, or build the backslash as `chr(92)`.
+
+## 2026-08-21 · The contract timeline gets one lane per forest service where the acts name areas
+
+Asked whether a τμηματική παράταση can be told apart as studies / works /
+an area, and whether the bar should split by area, the answer from the
+documents was: the contract sets TWO clocks (the studies' submission «σε
+είκοσι (20) ημερολογιακές ημέρες από την υπογραφή», the works «σε τρεις (3)
+μήνες από την ημερομηνία έναρξης») and enumerates no τμηματικές προθεσμίες
+of its own (§7.2.1: «που προβλέπονται στο εγκεκριμένο Χρονοδιάγραμμα»), so
+the acts are the only statement of WHICH clock moved — and they say it: the
+5 study acts («ως προς την υποβολή των προβλεπόμενων μελετών») all fall
+16–24 days after signature, the area acts («για την περιοχή αρμοδιότητας
+του Δασαρχείου Χ») a median 174 days after it, 216 of the 358 name the
+works outright in the request recital, none extends both in one act. 53
+contracts' area acts name ≥2 services whose last deadlines diverge by a
+median 33 days (p75 130, max 510) — on one bar only the last area shows.
+
+**Decision (user: «let's try your suggestion»): one thin lane per forest
+service under the contract bar, only where the acts name areas.** Data:
+`contract_extension_acts.scope_auth` = the registry's canonical services
+an area act names, resolved by the SAME matcher forest_loader uses on
+titles (231 of 232 area acts; the one left names «Διεύθυνσης Δασών
+Φθιώτιδας», a directorate the registry does not carry, and is shown as
+«service not matched», never assigned); `contract_completion_acts.part_auth`
+= the ONE service whose part an acceptance act accepts («για το τμήμα
+περιοχής ευθύνης Δασαρχείου Σπερχειάδας», 23 of 24 such subjects; the 24th
+names the part by title). Two readings fixed on the way: the pdftotext page
+watermark («ΑΔΑ: 6ΘΑΩ4653Π8-0ΘΛ 3») could sit INSIDE the service phrase and
+break the match — stripped before reading the scope (4 acts gained a scope:
+area 203 / unsaid 145 of 358 now) — and two genitives the acts use were
+met: «Ρεθύμνης» joined the registry aliases of Δ/νση Δασών Ρεθύμνου, while
+«Φουρνά» is normalised to «Φουρνάς» inside the resolver only, because
+«ΦΟΥΡΝΑ» is the ΔΑΣΕ unit's curated spelling in dase_units.json and a test
+pins it OUT of this registry.
+
+Drawing (`transforms/lanes.buildLanes`, pure and pinned; `AreaLanes.svelte`
+inside the ChainTimeline svg) — first as one thin lane per service under
+the bar, then, the same day on review (user: «instead of duplicating the
+bar, split the grey part»), as **strips**: the solid bar is the promise,
+once; its lighter extended part is split into one strip per linked service
+in the contract's order (+ a service an act names but the contract does not
+link, starred), each running to the last date that service's own acts
+granted, a dot per act naming it (a step naming two services sits on both
+strips) with the arrow to the date it granted — the arrows the single bar
+always had — the service's name RIGHT-ALIGNED at the timeline's end — shown only while
+its strip (or one of its acts, from the trail) is hovered — in the
+short form «Kalampaka F.S.O.» / «Rodopi F.D.» (`names.authEnShort`), the
+solid bar as tall as all the strips together (7 units each), and **a ✔ only
+where ΥΠΕΝ accepted that part on its own** — an area without a part-acceptance carries no ✔ (the contract's
+single acceptance stays on the bar). Acts that name no area sit on one
+last strip «area not stated»; the studies, a stage, the whole stay on the
+contract bar (the study step is labelled «studies», not an ordinal), and
+the arcs and ordinal row move under the strips. 72 in-scope contracts draw
+strips; every other page is unchanged. Same round: the contract map prints
+every forest authority's name in plain black beside its seat dot (short
+form, no outline; of eight positions around the dot the one that lies inside
+the dot's own region — crossing neither a border nor the coast, tested with
+geoContains on the label box — and covers no other dot or label wins), and
+a service whose deadline was never extended and has no acceptance of its own
+draws no strip (an empty row read as an unbalanced bar), the arrows stand
+alone (the dot at the arrow's tail was redundant; no dot at all, even for a
+few days' extension), the hovered name carries no outline and sits at the right end of its OWN
+grey bar (final form; just above the bar's end when there is no room before the
+chart's edge — never on the grey), and the map names were tried always-on (plain black, then white on
+small black boxes) and withdrawn the same day — **the names are a hover
+card again, at the map's TOP-LEFT corner (`PaperMap showTip corner`,
+`DotLayer tipCorner`), the δήμοι cards keeping the bottom-left.** The
+arrows on the strips read poorly at density (a 6-unit strip cannot hold
+a dipping curve and a 6-unit head; chained extensions pile their heads at
+the end), so **each strip is cut into SEGMENTS: one piece per extension,
+from the deadline it found in force to the one it granted, a hair of white
+between, a thin dark tick where the approval was signed — mostly after
+the piece begins, which is the «approved after the lapse» fact made
+visible; a re-statement of a date already in force adds no piece, only
+its tick.** The white hair + black tick pair was still two marks too many on a 6-unit
+strip (user): **the pieces now alternate two tones of the bar's own grey
+(28 % / 42 %), no lines, no ticks** — the approval day lives in the
+piece's hover card and its trail row. And so a name always has room at the
+end of its own bar, **the axis stops 96 units short of the right edge
+when strips exist** (a name above the bar collided with the € row; one
+inside sat on the grey). Hover a piece → its trail row, and back, and on a striped bar the € payment
+marks move up to the label line where «call» is written, off the strips, and the procurement DIAGRAM's
+shapes are centred on the slot — the box the map fills, as tall as the
+facts column — with its caption at the foot. The legend ⓘ and the
+methodology say so.
