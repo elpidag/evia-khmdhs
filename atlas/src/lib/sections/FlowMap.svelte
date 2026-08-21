@@ -21,7 +21,6 @@
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import FlowArcs from '$lib/maps/FlowArcs.svelte';
 	import OriginSplit from '$lib/sections/OriginSplit.svelte';
-	import Hint from '$lib/ui/Hint.svelte';
 	import { RAMP_WORKS } from '$lib/maps/useGeo';
 	import { peEn } from '$lib/transforms/regions';
 	import { eurShort } from '$lib/transforms/format';
@@ -53,13 +52,6 @@
 
 	let flowFocus = $state<string | null>(null);
 	const short = (pe: string) => peEn(pe);
-
-	const howToRead =
-		'Each regional unit is coloured by the share of its works won by firms based elsewhere. ' +
-		'Click a unit, or a bar on the right, to see its flows: solid arrows are firms based ' +
-		'elsewhere reaching in, dashed arrows its own firms reaching out, the ringed dot the money ' +
-		'that stays; width is the €. Hover an arrow for its card, click to hold it; the slider ' +
-		'accumulates the flows signed up to a year; Esc or the pill go back to all of Greece.';
 
 	const allYears = $derived([...new Set(flowsYearly.map((f) => f.year))].sort());
 	// the CUMULATIVE year slider: index into allYears, the last = all years
@@ -145,7 +137,7 @@
 
 <div class="bar">
 	<div class="barleft">
-		<div class="maplabel">MAP<Hint text={howToRead} heading width="380px" /></div>
+		<div class="maplabel">MAP</div>
 		{#if flowFocus}
 			<button class="reset" onclick={() => focusRegion(null)} title="Back to all of Greece (Esc)">
 				✕ {peEn(flowFocus)} · all of Greece
@@ -169,7 +161,12 @@
 				</li>
 			{/if}
 		</ul>
+		<!-- the same frame as each ALLOCATION OF FUNDING map: 640×620, the same
+		     view, half the content width (user, 2026-08-21) -->
 		<PaperMap
+			width={640}
+			height={620}
+			view={{ center: [23.8305, 38.3566], k: 1.08 }}
 			colorOf={flowFocus
 				? (pe) => (pe === flowFocus ? '#e0e0e0' : 'var(--land-empty)')
 				: importChoro}
@@ -191,12 +188,15 @@
 		     the right-hand legend must match the maps') -->
 		<ul class="mapkey">
 			{#if flowFocus}
-				<li><i class="sq ink"></i>stays with {short(flowFocus)} firms</li>
-				<li><i class="sq grey"></i>firms based elsewhere → works in {short(flowFocus)}</li>
-				<li><i class="sq hollow"></i>{short(flowFocus)} firms → works elsewhere</li>
+				<!-- the same three symbols as the map's key, in the same order
+				     (user, 2026-08-21: the squares read as the opposite) -->
+				<li><i class="line solid"></i>firms based elsewhere → works in {short(flowFocus)}</li>
+				<li><i class="line dash"></i>{short(flowFocus)} firms → works elsewhere</li>
+				<li><i class="dot ring"></i>money that stays in {short(flowFocus)}</li>
 			{:else}
-				<li><i class="sq ink"></i>won by local firms</li>
-				<li><i class="sq grey"></i>won by out-of-region firms</li>
+				<!-- dark = out-of-region, exactly as the map's ramp reads (user) -->
+				<li><i class="sq ink"></i>won by out-of-region firms</li>
+				<li><i class="sq grey"></i>won by local firms</li>
 				{#if origins.some((o) => o.unknown_eur > 0)}
 					<!-- every in-scope contractor has a located base today (0 €
 					     unresolved); the entry returns only if that changes -->
@@ -204,13 +204,9 @@
 				{/if}
 			{/if}
 		</ul>
-		<h3>
-			{#if flowFocus}
-				{peEn(flowFocus)}
-			{:else}
-				Destinations — who takes the money
-			{/if}
-		</h3>
+		{#if flowFocus}
+			<h3>{peEn(flowFocus)}</h3>
+		{/if}
 		{#if flowFocus && allYears.length > 1}
 			<!-- the cumulative year slider: flows signed up to and including
 			     the chosen year; the right end is all years (user, 2026-08-21) -->
@@ -303,9 +299,11 @@
 		color: var(--ink);
 		border-color: var(--ink);
 	}
+	/* two equal columns, like the allocation maps' twin grid — the map is
+	   then exactly the size of each of those maps */
 	.flow-grid {
 		display: grid;
-		grid-template-columns: minmax(22rem, 1.4fr) 1fr;
+		grid-template-columns: 1fr 1fr;
 		gap: var(--sp-4);
 	}
 	@media (max-width: 900px) {
@@ -394,11 +392,6 @@
 	.mapkey i.sq.hatch {
 		background: repeating-linear-gradient(45deg, #ececec 0 3px, #f8f8f8 3px 6px);
 	}
-	.mapkey i.sq.hollow {
-		background: #ffffff;
-		border: 1.5px solid var(--ink);
-		box-sizing: border-box;
-	}
 	.mapkey i.dot.ring {
 		display: inline-block;
 		width: 0.6rem;
@@ -432,28 +425,28 @@
 		white-space: nowrap;
 		padding-left: var(--sp-2);
 	}
-	/* the row marker repeats the key's squares — the bars' own palette:
-	   black = stays with local firms, light grey = won by firms based
-	   elsewhere, hollow = the unit's own firms winning elsewhere (user,
-	   2026-08-21: the circles did not read, nor connect to the bars) */
+	/* the row marker is the map's own symbol for that flow — a solid
+	   stroke reaching in, a dashed stroke reaching out, the ringed dot for
+	   the money that stays (user, 2026-08-21: mirror the map's key) */
 	i.dir {
 		display: inline-block;
-		width: 0.6rem;
-		height: 0.6rem;
-		border-radius: 2px;
-		margin-right: 4px;
-		vertical-align: -1px;
-		box-sizing: border-box;
-	}
-	i.dir.local {
-		background: var(--ink);
-	}
-	i.dir.in {
-		background: #c9c9c9;
+		width: 1.1rem;
+		height: 0;
+		border-top: 1.5px solid #111111;
+		margin-right: 5px;
+		vertical-align: 3px;
 	}
 	i.dir.out {
+		border-top-style: dashed;
+	}
+	i.dir.local {
+		width: 0.6rem;
+		height: 0.6rem;
+		border: 1.2px solid #111111;
+		border-radius: 50%;
 		background: #ffffff;
-		border: 1.5px solid var(--ink);
+		vertical-align: -1px;
+		box-sizing: border-box;
 	}
 	.chip {
 		font-size: var(--fs-12);

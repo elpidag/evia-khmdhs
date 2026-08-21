@@ -42,8 +42,10 @@
 		>
 			<span class="olabel">{peEn(o.target_pe)}</span>
 			<div class="obar">
-				<div class="seg local" style:width={`${(100 * o.local_eur) / total}%`}></div>
+				<!-- the dark (out-of-region) share leads, the local share follows —
+				     the key reads in the same order (user, 2026-08-21) -->
 				<div class="seg imported" style:width={`${(100 * o.imported_eur) / total}%`}></div>
+				<div class="seg local" style:width={`${(100 * o.local_eur) / total}%`}></div>
 				<div class="seg unknown" style:width={`${(100 * o.unknown_eur) / total}%`}></div>
 			</div>
 			<span class="oval">{eurShort(o.total_eur)}</span>
@@ -95,11 +97,14 @@
 		overflow: hidden;
 		background: var(--paper-2);
 	}
+	/* dark = out-of-region firms, as on the map beside the bars (0 → 100%
+	   of a unit's works won by firms based elsewhere runs white → black);
+	   the bars said the opposite until 2026-08-21 (user) */
 	.seg.local {
-		background: var(--ink);
+		background: #c9c9c9;
 	}
 	.seg.imported {
-		background: #c9c9c9;
+		background: var(--ink);
 	}
 	.seg.unknown {
 		background: repeating-linear-gradient(45deg, #ececec 0 3px, #f8f8f8 3px 6px);
@@ -123,10 +128,10 @@
 		margin-right: 4px;
 	}
 	.olegend i.local {
-		background: var(--ink);
+		background: #c9c9c9;
 	}
 	.olegend i.imported {
-		background: #c9c9c9;
+		background: var(--ink);
 	}
 	.olegend i.unknown {
 		background: repeating-linear-gradient(45deg, #ececec 0 3px, #f8f8f8 3px 6px);

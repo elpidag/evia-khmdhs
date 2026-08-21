@@ -6593,3 +6593,11 @@ the maps keep their width (a first version shrank them; rejected) — as
 wide as the margin allows (9–15 rem), and only below ~1500 CSS px does it
 flow above the charts. A bug on the way: a non-existent `--sp-5` token
 made the positioning rules invalid and the note sat over the toolbar.
+WHERE THE MONEY TRAVELS took the same lightbulb (the user's own three
+sentences, the computed «only N%» inside them; no subtitle left), the
+list's focused key mirrors the map's key symbol for symbol (solid in,
+dashed out, ring stays — the squares had read as the opposite), the
+bars' palette was FLIPPED so dark = out-of-region as on the map's ramp
+(the bars said the reverse), the black share leads each bar, the map
+took the allocation maps' exact frame (640×620, two equal columns), the
+«Destinations» heading went.

@@ -384,7 +384,7 @@
 	})()}
 	<ChartFrame
 		title="WHERE THE MONEY TRAVELS"
-		subtitle="Only {localPct}% of the money goes to firms based where the work is. Regions are coloured by the share of their works won by out-of-region firms; the bars split every destination’s € by the winner’s base. Click a region or a bar to see its flows."
+		insight="Each regional unit is coloured according to the share of works carried out within it that are awarded to contractors based either within or outside its boundaries. The darker the regional unit, the larger the share of works awarded to companies based outside its boundaries. Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out."
 		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
 			net.coverage.total_eur
 		)} resolved. Same reading as the map above: a contract covering several regional units, or signed by several firms, is split equally between them, because the documents state no other allocation — every arrow carries the shares that connect a firm's base to a work region, and the flows add up to the programme total."
