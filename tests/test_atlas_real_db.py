@@ -1118,7 +1118,9 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     # acts, 16 ΚΗΜΔΗΣ records (an act re-stating a ΚΗΜΔΗΣ record's deadline
     # merges into that step; the refusal and the three acts whose stated
     # deadline precedes their own date are no steps — 443 before that rule)
-    assert (ext_chains, ext_steps) == (160, 439)
+    # 162 chains since two acts whose subject keyed the wrong ΑΔΑΜ were
+    # re-pointed to the contracts their own text names (curation pass 1)
+    assert (ext_chains, ext_steps) == (162, 439)
     assert src == {"diavgeia": 423, "khmdhs": 16}
     # the deepest case: 15 months from the start of works, then one
     # «Παράταση προθεσμίας» — and the registry's own end date agrees to the

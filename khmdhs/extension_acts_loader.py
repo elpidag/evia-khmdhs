@@ -81,7 +81,8 @@ CREATE TABLE IF NOT EXISTS contract_extension_acts (
     raw_json       TEXT,
     scope          TEXT,               -- what the act extends: study | stage | area | whole | NULL
     scope_text     TEXT,               -- verbatim: the services named, or the stage phrase
-    scope_auth     TEXT                -- JSON list: the canonical forest authorities an area act names
+    scope_auth     TEXT,               -- JSON list: the canonical forest authorities an area act names
+    area_dates     TEXT                -- JSON {service: date} when ONE act grants different dates per area (curated)
 );
 CREATE INDEX IF NOT EXISTS idx_cea_ref ON contract_extension_acts(attributed_ref);
 """
@@ -163,8 +164,11 @@ def _valid(d: int, mo: int, y: int) -> bool:
 
 # the services an act names — the phrase stops before the grant's own words
 # («… Δασαρχείου Καλαμπάκας μέχρι τις 31.12.2025» → «Δασαρχείου Καλαμπάκας»)
+# the service may also be named without «περιοχή αρμοδιότητας»: «μέχρι τις
+# 30.10.2024 για το Δασαρχείο Μουζακίου», «για τις Διευθύνσεις Δασών
+# Δωδεκανήσου και Λέσβου» (the per-area acts, 2026-08-21)
 _SERVICE = re.compile(
-    r"(?:περιοχ\w*\s+αρμοδι\w*|για\s+τ\w+\s+περιοχ\w*)\s+(?:τ\w+\s+)?"
+    r"(?:περιοχ\w*\s+αρμοδι\w*|για\s+τ\w+\s+περιοχ\w*|για\s+τ(?:ο|η|ην|ις|α|ου|ης|ων))\s+(?:τ\w+\s+)?"
     r"((?:Δασαρχεί\w*|Δ(?:ιε\w+|/νσ\w*)\s+Δασών|Διευθύνσεων\s+Δασών)"
     r"(?:(?!\s(?:μέχρι|μέχρις|για|σύμφωνα|κατά|έως|ήτοι|χωρίς|και\s+μέχρι)\b)[^,.;()]){0,140})", re.I)
 _STUDY = re.compile(r"ως προς[^,.;]{0,80}?(?:μελετ|προμελετ)\w*[^,.;]{0,60}|(?:υποβολ\w*\s+(?:της|των)\s+(?:προβλεπόμεν\w+\s+)?(?:προ)?μελετ\w*)[^,.;]{0,60}", re.I)
@@ -293,6 +297,51 @@ def resolve_scope_auth(scope: str | None, scope_text: str | None) -> list[str]:
     return [name for name, _ in _matcher().find(phrase)]
 
 
+CURATION_FILE = Path(__file__).resolve().parent / "data" / "extension_act_curation.json"
+
+
+def load_curation(path: Path = CURATION_FILE) -> dict[str, dict]:
+    """{ΑΔΑ: entry} — the hand-read corrections (DATA_DECISIONS 2026-08-21,
+    curation pass 1): per-area dates, scope_auth judgments, a deadline
+    override. Every service name must be a registry authority."""
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8")).get("acts", {})
+    from khmdhs.forest_loader import load_registry
+    known = set(load_registry()[0]["authorities"])
+    for ada, e in data.items():
+        for name in list((e.get("area_dates") or {}).keys()) + list(e.get("scope_auth") or []):
+            if name not in known:
+                raise SystemExit(f"extension_act_curation.json {ada}: unknown authority {name!r}")
+    return data
+
+
+def apply_curation(ada: str, ex: dict, scope_auth: list[str],
+                   curation: dict[str, dict]) -> tuple[dict, list[str], dict | None]:
+    """Overlay the curated reading on the machine's: (ex, scope_auth,
+    area_dates). A curated date must be one the act's operative part states
+    (else it is refused loudly) — the curation says WHICH service each date
+    belongs to, never a date the act does not carry."""
+    e = curation.get(ada)
+    if not e:
+        return ex, scope_auth, None
+    if e.get("new_deadline"):
+        if e["new_deadline"] not in ex["dates"]:
+            raise SystemExit(f"curation {ada}: new_deadline {e['new_deadline']} not among the act's dates {ex['dates']}")
+        ex["new_deadline"] = e["new_deadline"]
+        ex["per_area"] = int(e.get("per_area", ex["per_area"]))
+    if e.get("scope_auth"):
+        scope_auth = list(e["scope_auth"])
+        if ex.get("scope") != "area":
+            ex["scope"] = "area"
+    area_dates = e.get("area_dates") or None
+    if area_dates:
+        for name, d in area_dates.items():
+            if d not in ex["dates"]:
+                raise SystemExit(f"curation {ada}: {name} → {d} not among the act's dates {ex['dates']}")
+    return ex, scope_auth, area_dates
+
+
 def flag_against_issue(ex: dict, issue_date: str | None) -> dict:
     """An act cannot grant a deadline earlier than its own date. Three acts
     do — the document's own year typo («μέχρι τις 05.02.2025», signed
@@ -361,6 +410,7 @@ def load(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
     _migrate(conn)
     successors = supersede_map(conn)
     overrides = load_overrides()
+    curation = load_curation()
     roots = chain_key(conn)
     titles = dict(conn.execute("SELECT reference_number, title FROM contracts"))
     refs = [r[0] for r in conn.execute("SELECT reference_number FROM contracts ORDER BY 1")]
@@ -397,6 +447,8 @@ def load(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
                 logging.warning("extension act %s: subject says lot (%s), the cited contract %s is lot %s — read the act; curate completion_act_overrides.json if the subject keys the wrong ΑΔΑΜ", ada, sl, ref, tl)
         issue = _issue_date(meta_full)
         ex = flag_against_issue(extract_extension(text), issue)
+        ex, scope_auth, area_dates = apply_curation(
+            ada, ex, resolve_scope_auth(ex["scope"], ex["scope_text"]), curation)
         if ex["new_deadline"] and not ex["flag"]:
             stats["read"] += 1
             stats["per_area"] += ex["per_area"]
@@ -406,14 +458,15 @@ def load(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
                 logging.info("extension act %s: %s — %s", ada, ex["flag"], subject[:80])
         conn.execute(
             "INSERT OR REPLACE INTO contract_extension_acts VALUES "
-            "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (ada, cited, resolve_attribution(cited, successors), kind,
              ordinal_of(subject), subject.strip(), meta_full.get("protocolNumber"),
              issue, ex["new_deadline"], json.dumps(ex["dates"]),
              ex["per_area"], ex["by_text"], ex["excerpt"], ex["flag"],
              (meta.get("organization") or {}).get("label") if isinstance(meta.get("organization"), dict) else None,
              json.dumps(meta_full, ensure_ascii=False), ex["scope"], ex["scope_text"],
-             json.dumps(resolve_scope_auth(ex["scope"], ex["scope_text"]), ensure_ascii=False)))
+             json.dumps(scope_auth, ensure_ascii=False),
+             json.dumps(area_dates, ensure_ascii=False) if area_dates else None))
         stats["stored"] += 1
 
     if from_cache:
@@ -435,7 +488,8 @@ def load(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
 def _migrate(conn: sqlite3.Connection) -> None:
     """Columns added after the first harvest (CREATE TABLE IF NOT EXISTS
     does not alter a deployed table)."""
-    for col, decl in (("scope", "TEXT"), ("scope_text", "TEXT"), ("scope_auth", "TEXT")):
+    for col, decl in (("scope", "TEXT"), ("scope_text", "TEXT"), ("scope_auth", "TEXT"),
+                      ("area_dates", "TEXT")):
         try:
             conn.execute(f"ALTER TABLE contract_extension_acts ADD COLUMN {col} {decl}")
         except sqlite3.OperationalError:
@@ -448,9 +502,12 @@ def reextract(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     _migrate(conn)
+    curation = load_curation()
+    overrides = load_overrides()
+    successors = supersede_map(conn)
     rows = conn.execute(
-        "SELECT ada, subject, issue_date, act_kind, new_deadline, flag FROM contract_extension_acts").fetchall()
-    stats = {"acts": len(rows), "changed": 0, "read": 0, "flagged": 0, "deleted": 0}
+        "SELECT ada, subject, issue_date, act_kind, new_deadline, flag, cited_ref FROM contract_extension_acts").fetchall()
+    stats = {"acts": len(rows), "changed": 0, "read": 0, "flagged": 0, "deleted": 0, "reattributed": 0}
     for r in rows:
         kind = classify(r["subject"])
         if kind is None:
@@ -463,6 +520,8 @@ def reextract(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
             continue
         ex = flag_against_issue(
             extract_extension(p.read_text(encoding="utf-8", errors="replace")), r["issue_date"])
+        ex, scope_auth, area_dates = apply_curation(
+            r["ada"], ex, resolve_scope_auth(ex["scope"], ex["scope_text"]), curation)
         if ex["new_deadline"] and not ex["flag"]:
             stats["read"] += 1
         else:
@@ -473,13 +532,21 @@ def reextract(db_path: Path = DEFAULT_DB, cache: Path = DEFAULT_CACHE,
             if verbose:
                 logging.info("reextract %s: %s → %s (%s, %s)", r["ada"], r["new_deadline"],
                              ex["new_deadline"], ex["flag"], kind)
+        # a subject-ΑΔΑΜ keying error curated after the harvest re-points the act
+        cited = r["cited_ref"]
+        if r["ada"] in overrides and overrides[r["ada"]]["cited_ref"] != cited:
+            cited = overrides[r["ada"]]["cited_ref"]
+            stats["reattributed"] += 1
+            logging.info("reextract: %s re-attributed %s → %s", r["ada"], r["cited_ref"], cited)
         conn.execute(
             "UPDATE contract_extension_acts SET act_kind=?, new_deadline=?, dates=?, per_area=?, "
-            "by_text=?, excerpt=?, flag=?, scope=?, scope_text=?, scope_auth=? WHERE ada=?",
+            "by_text=?, excerpt=?, flag=?, scope=?, scope_text=?, scope_auth=?, area_dates=?, "
+            "cited_ref=?, attributed_ref=? WHERE ada=?",
             (kind, ex["new_deadline"], json.dumps(ex["dates"]), ex["per_area"], ex["by_text"],
              ex["excerpt"], ex["flag"], ex["scope"], ex["scope_text"],
-             json.dumps(resolve_scope_auth(ex["scope"], ex["scope_text"]), ensure_ascii=False),
-             r["ada"]))
+             json.dumps(scope_auth, ensure_ascii=False),
+             json.dumps(area_dates, ensure_ascii=False) if area_dates else None,
+             cited, resolve_attribution(cited, successors), r["ada"]))
     conn.commit()
     conn.close()
     logging.info("reextract: %s", json.dumps(stats))

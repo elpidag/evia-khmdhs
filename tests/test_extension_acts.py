@@ -170,16 +170,18 @@ def test_real_db_every_act_is_an_extension_on_a_stored_contract(conn):
 
 def test_real_db_counts(conn):
     """The first full run (DATA_DECISIONS 2026-08-21): 463 acts on 167
-    contracts (159 in scope), every one read — 459 grant a deadline (23
-    per-area), 3 state a deadline earlier than their own date (the act's
-    year typo, kept as written and flagged) and 1 REFUSES a request."""
+    contracts, every one read — 459 grant a deadline (22 per-area after the
+    hand-read pass: ΨΠΩΟ's second date is a condition, not an area), 3 state
+    a deadline earlier than their own date (the act's year typo, kept as
+    written and flagged) and 1 REFUSES a request; two acts whose SUBJECT
+    keyed the wrong ΑΔΑΜ are re-pointed by the overrides (169 contracts)."""
     assert conn.execute("SELECT COUNT(*) FROM contract_extension_acts").fetchone()[0] == 463
     assert conn.execute(
         "SELECT COUNT(*) FROM contract_extension_acts WHERE new_deadline IS NOT NULL AND flag IS NULL"
     ).fetchone()[0] == 459
-    assert conn.execute("SELECT COUNT(*) FROM contract_extension_acts WHERE per_area = 1").fetchone()[0] == 23
+    assert conn.execute("SELECT COUNT(*) FROM contract_extension_acts WHERE per_area = 1").fetchone()[0] == 22
     assert conn.execute(
-        "SELECT COUNT(DISTINCT attributed_ref) FROM contract_extension_acts").fetchone()[0] == 167
+        "SELECT COUNT(DISTINCT attributed_ref) FROM contract_extension_acts").fetchone()[0] == 169
     kinds = dict(conn.execute(
         "SELECT act_kind, COUNT(*) FROM contract_extension_acts GROUP BY act_kind"))
     assert kinds == {"extension": 104, "extension_partial": 358, "extension_refused": 1}
@@ -205,9 +207,9 @@ def test_real_db_scope_of_the_grant(conn):
     assert rows == {
         ("extension", "area"): 28, ("extension", "stage"): 1, ("extension", "whole"): 16,
         ("extension", "—"): 59,
-        ("extension_partial", "area"): 203, ("extension_partial", "stage"): 4,
+        ("extension_partial", "area"): 204, ("extension_partial", "stage"): 4,
         ("extension_partial", "study"): 5, ("extension_partial", "whole"): 1,
-        ("extension_partial", "—"): 145,
+        ("extension_partial", "—"): 144,
         ("extension_refused", "area"): 1,
     }
     # a scope_text never carries the grant's own words — the phrase stops
@@ -234,9 +236,28 @@ def test_real_db_area_acts_resolve_to_registry_authorities(conn):
     import json
     rows = conn.execute(
         "SELECT ada, scope_text, scope_auth FROM contract_extension_acts WHERE scope = 'area'").fetchall()
-    assert len(rows) == 232
+    assert len(rows) == 233
+    # every area act resolves — the one naming a directorate the registry
+    # lacks («Διεύθυνσης Δασών Φθιώτιδας») is curated to the contract's
+    # Δασαρχεία under it (extension_act_curation.json)
     unresolved = [(r[0], r[1]) for r in rows if not json.loads(r[2] or "[]")]
-    assert unresolved == [("ΕΩ564653Π8-1ΙΖ", "Διεύθυνσης Δασών Φθιώτιδας")]
+    assert unresolved == []
+    # the hand-read per-area dates: every per-area act that names areas has
+    # them, and a curated date is always one the act itself states
+    cur = conn.execute(
+        "SELECT ada, dates, area_dates, per_area FROM contract_extension_acts WHERE area_dates IS NOT NULL").fetchall()
+    assert len(cur) == 22
+    for ada, dates, ad, _ in cur:
+        assert set(json.loads(ad).values()) <= set(json.loads(dates)), ada
+    assert [r[0] for r in conn.execute(
+        "SELECT ada FROM contract_extension_acts WHERE per_area = 1 AND area_dates IS NULL")] == ["9Κ2Η4653Π8-ΟΩΨ"]
+    # the deadline override: the Stage-3 study act's grant is 04.10.2025
+    assert tuple(conn.execute(
+        "SELECT new_deadline, per_area, scope FROM contract_extension_acts WHERE ada = 'ΨΠΩΟ4653Π8-ΩΝΚ'"
+    ).fetchone()) == ("2025-10-04", 0, "stage")
+    # the two subject keying errors sit on the contracts their own text names
+    assert conn.execute("SELECT attributed_ref FROM contract_extension_acts WHERE ada = '9ΞΣΟ4653Π8-Ζ9Ο'").fetchone()[0] == "26SYMV018739467"
+    assert conn.execute("SELECT attributed_ref FROM contract_extension_acts WHERE ada = 'ΨΕΡΟ4653Π8-2Θ6'").fetchone()[0] == "22SYMV010856515"
     # no watermark ever survives inside a service phrase
     assert conn.execute(
         "SELECT COUNT(*) FROM contract_extension_acts WHERE scope_text LIKE '%ΑΔΑ:%'").fetchone()[0] == 0

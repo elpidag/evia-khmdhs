@@ -26,6 +26,8 @@ export interface LaneStepLike {
 	scope?: string | null;
 	scope_text?: string | null;
 	scope_auth?: string[];
+	/** one act, several dates: which service got which (hand-read) */
+	area_dates?: Record<string, string> | null;
 }
 
 export interface LaneEnd {
@@ -93,7 +95,11 @@ export function buildLanes<T extends LaneStepLike>(
 				key: auth,
 				label: labelOf(auth),
 				auth,
-				steps: named.filter((s) => (s.scope_auth ?? []).includes(auth)),
+				// a step naming several services sits on each of their strips —
+				// with ITS OWN date where the act granted different ones per area
+				steps: named
+					.filter((s) => (s.scope_auth ?? []).includes(auth))
+					.map((s) => (s.area_dates?.[auth] ? { ...s, deadline: s.area_dates[auth] } : s)),
 				end: own
 					? { d: own.d, ref: own.ref, shared: false }
 					: sharedEnd

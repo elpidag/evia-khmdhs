@@ -64,6 +64,29 @@ describe('buildLanes', () => {
 		expect(un.end).toBeNull();
 	});
 
+	it('a per-area act gives each service its own date, not the latest', () => {
+		const r = buildLanes(
+			['Διεύθυνση Δασών Ηρακλείου', 'Διεύθυνση Δασών Χανίων'],
+			[
+				{
+					ref: 'P1',
+					d: '2024-10-14',
+					deadline: '2024-11-30',
+					n: 1,
+					scope: 'area',
+					scope_auth: ['Διεύθυνση Δασών Ηρακλείου', 'Διεύθυνση Δασών Χανίων'],
+					area_dates: { 'Διεύθυνση Δασών Ηρακλείου': '2024-11-30', 'Διεύθυνση Δασών Χανίων': '2024-11-20' }
+				}
+			],
+			[],
+			null
+		);
+		expect(r.lanes.map((l) => [l.key, l.steps[0].deadline])).toEqual([
+			['Διεύθυνση Δασών Ηρακλείου', '2024-11-30'],
+			['Διεύθυνση Δασών Χανίων', '2024-11-20']
+		]);
+	});
+
 	it('a service with an own part-acceptance keeps its strip even without an act', () => {
 		const r = buildLanes(
 			['Δασαρχείο Λάρισας', 'Δασαρχείο Τρικάλων'],

@@ -6419,3 +6419,51 @@ marks move up to the label line where «call» is written, off the strips, and t
 shapes are centred on the slot — the box the map fills, as tall as the
 facts column — with its caption at the foot. The legend ⓘ and the
 methodology say so.
+
+## 2026-08-21 · Extension layer, curation pass 1: the per-area dates read by hand, two subject keying errors, two directorate judgments
+
+The model agreed this morning stands — the machine reads, Claude reads,
+the user decides only on what is flagged — and the first pass delivered
+its verdict list. What was read: every per-area act (23) and the five acts
+naming a service the contract is not linked to.
+
+**Defect fixed — which service got which date.** A per-area act grants
+different dates per service («μέχρι τις 30.11.2024 για … Ηρακλείου και
+μέχρι τις 20.11.2024 για … Χανίων») and the machine kept every date but
+not the mapping, so a strip took the act's latest date. The acts write the
+pairing in three orders (service-then-date, date-then-service, a general
+list then per-service dates), and a rule covering all of them reliably
+does not exist at this size — 23 acts — so the mapping is **hand-curated**
+in `khmdhs/data/extension_act_curation.json` (`area_dates`, the verbatim
+grant sentence per act; a curated date must be one the act's operative
+part states, a curated service must be a registry authority — the loader
+refuses otherwise). Stored in `contract_extension_acts.area_dates`, shipped
+on the steps, and `transforms/lanes.buildLanes` gives each strip its own
+date. 22 acts carry a mapping (21 area + the study act Ψ232 recorded for
+completeness); 9Κ2Η4653Π8-ΟΩΨ is not per area at all — its two dates split
+the WORKS («νέων εργασιών» 05.09 / «φύτευση πλατύφυλλων» 30.11) — and
+stays as read. The service phrase now also matches «για το Δασαρχείο Χ»
+without «περιοχή αρμοδιότητας» (area 204 / unsaid 144 of 358; 9ΥΒΦ gained
+Πεντέλης, Δωδεκανήσου, Λέσβου; ΕΧΞΝ its two services).
+
+**Two subject keying errors** (the subject's ΑΔΑΜ is not the contract the
+act is about; both re-pointed through `completion_act_overrides.json`, the
+shared file): 9ΞΣΟ4653Π8-Ζ9Ο keys 26SYMV018725481 (Ροδόπη/Κιλκίς) but its
+title, grant («Δασαρχείου Ελασσόνας»), body ΑΔΑΜ and recipients are
+26SYMV018739467 (Φωκίδα/Ελασσόνα); ΨΕΡΟ4653Π8-2Θ6 keys 22SYMV010585198
+(ΥΠΟΕΡΓΟ 4.Γ) but its title and operative are ΕΡΓΟ 2.Β's
+(«Ολυμπίας και Αμαλιάδας», body cites 22SYMV010473680 → tip
+22SYMV010856515). 169 contracts / 162 in-scope chains now carry steps.
+
+**One deadline override**: ΨΠΩΟ4653Π8-ΩΝΚ grants the Stage-3 study
+«μέχρι τις 04.10.2025»; the 30.10.2025 in the same sentence is a condition
+on the studies' approvals — the machine had taken the latest date and
+flagged the act per-area. 22 per-area acts remain.
+
+**Two judgments, user-reviewed**: an act naming a DIRECTORATE stands for
+the contract's Δασαρχεία under it — ΕΩ564653Π8-1ΙΖ «Διεύθυνσης Δασών
+Φθιώτιδας» → Αταλάντης + Σπερχειάδας (the two the act is notified to; the
+registry does not carry that directorate), ΨΨΕΩ4653Π8-90Π «Διεύθυνσης
+Δασών Έβρου» → Αλεξανδρούπολης + Σουφλίου (the contract's Έβρος services).
+No area act is left unresolved and none names a service outside its
+contract. Pinned in `tests/test_extension_acts.py`.

@@ -183,6 +183,7 @@ export interface ContractDetail {
 			scope?: string | null;
 			scope_text?: string | null;
 			scope_auth?: string[];
+			area_dates?: Record<string, string> | null;
 			d: string | null;
 			deadline: string | null;
 			n: number;
@@ -278,6 +279,7 @@ export interface ContractDetail {
 		scope?: string | null;
 		scope_text?: string | null;
 		scope_auth?: string[];
+		area_dates?: Record<string, string> | null;
 	}[];
 }
 

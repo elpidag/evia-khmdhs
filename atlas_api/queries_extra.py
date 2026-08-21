@@ -2837,7 +2837,7 @@ def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
     try:
         acts = kh.execute("""
             SELECT ada, act_kind, ordinal, issue_date, new_deadline, per_area,
-                   by_text, excerpt, scope, scope_text, scope_auth
+                   by_text, excerpt, scope, scope_text, scope_auth, area_dates
               FROM contract_extension_acts
              WHERE new_deadline IS NOT NULL AND flag IS NULL
                AND act_kind IN ('extension', 'extension_partial')
@@ -2852,11 +2852,13 @@ def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
         # the services an area act names, resolved to the registry — the
         # page draws such a step on that service's own lane (2026-08-21)
         scope_auth = json.loads(a["scope_auth"] or "[]")
+        # one act, several dates: which service got which (hand-read, pass 1)
+        area_dates = json.loads(a["area_dates"]) if a["area_dates"] else None
         if twin is not None:
             twin.update({"ada": a["ada"], "excerpt": a["excerpt"],
                          "ordinal": a["ordinal"], "per_area": bool(a["per_area"]),
                          "scope": a["scope"], "scope_text": a["scope_text"],
-                         "scope_auth": scope_auth})
+                         "scope_auth": scope_auth, "area_dates": area_dates})
             continue
         raw.append({"ref": a["ada"], "ada": a["ada"], "d": a["issue_date"],
                     "deadline": a["new_deadline"],
@@ -2865,7 +2867,8 @@ def contract_deadlines(kh: sqlite3.Connection, ref: str) -> dict:
                     "source": "diavgeia", "ordinal": a["ordinal"],
                     "per_area": bool(a["per_area"]), "by_text": a["by_text"],
                     "excerpt": a["excerpt"], "scope": a["scope"],
-                    "scope_text": a["scope_text"], "scope_auth": scope_auth})
+                    "scope_text": a["scope_text"], "scope_auth": scope_auth,
+                    "area_dates": area_dates})
     raw.sort(key=lambda s: (s["d"] or "", s["deadline"] or ""))
     extensions, in_force = [], deadline
     for i, s in enumerate(raw, 1):
@@ -3526,7 +3529,8 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
     try:
         for r in kh.execute("""
             SELECT ada, act_kind, ordinal, subject, issue_date, new_deadline,
-                   per_area, by_text, excerpt, flag, scope, scope_text, scope_auth
+                   per_area, by_text, excerpt, flag, scope, scope_text, scope_auth,
+                   area_dates
               FROM contract_extension_acts
              WHERE cited_ref = ? OR attributed_ref = ?""", (ref, ref)):
             out.append({
@@ -3545,6 +3549,7 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
                 "scope": r["scope"],
                 "scope_text": r["scope_text"],
                 "scope_auth": json.loads(r["scope_auth"] or "[]"),
+                "area_dates": json.loads(r["area_dates"]) if r["area_dates"] else None,
                 "cancelled": 0, "in_db": False,
             })
     except sqlite3.OperationalError:
