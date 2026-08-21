@@ -6622,3 +6622,18 @@ the computed counts inside; no subtitle), the «as contracted / by member
 firm» toggle alone on its own line under the title, left-aligned (a
 labelled bar and a title-line placement were both tried and rejected),
 caveat kept.
+
+## 2026-08-21 · CONTRACT VALUES follows the ranking; no subtitle, the ΔΑΣΕ note, no single-bid rings, 380 px
+
+User, same evening: the frame moves right after RANKING OF COMPANIES; its
+subtitle goes; the dots' side note is the ΔΑΣΕ wording («Every contract is
+one dot on a log scale (stated €, excl. VAT). Colours are assigned
+according to the year the contract was signed. Hover to inspect, click
+through to go to the contract’s page.»); the single-bid rings are NOT
+drawn («we haven't worked on that info almost at all» — the data stays in
+the payload); the canvas floor is 380 px with the dot radius grown in
+proportion (2.6 → 3.1; `BeeswarmCanvas minHeight/radius`, ΔΑΣΕ keeps the
+defaults) and the bracket view follows through `plotHeight`; the «most
+common bracket» sentence leaves the chart's corner for the brackets' side
+note, computed from the histogram payload; two ceiling labels closer than
+48 px print on either side of their lines instead of over each other.

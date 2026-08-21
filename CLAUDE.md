@@ -1228,10 +1228,14 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   ΔΑΣΕ merged frame one dataset over: dots/brackets toggle on ONE
   pure-doubling axis (`queries_extra.antinero_value_histogram`,
   `value_histogram` on `/api/antinero/overview`, pinned: Σ counts == 245),
-  BeeswarmCanvas parametrized (colors/ring/thresholds/linkBase — ΔΑΣΕ
-  call-sites untouched), greys by signature year (`yearColors.YEAR_GREYS`),
-  single-bid rings kept, ν.4782 ceiling lines kept in both modes, phase
-  colours gone from it; the old SVG `Beeswarm.svelte` is deleted.
+  BeeswarmCanvas parametrized (colors/ring/thresholds/linkBase/minHeight/
+  radius — ΔΑΣΕ call-sites untouched), greys by signature year
+  (`yearColors.YEAR_GREYS`), single-bid rings NOT drawn on Anti-nero since
+  2026-08-21 (user), 380 px floor with r 3.1, no subtitle, the ΔΑΣΕ note
+  wording, the modal-bracket sentence in the brackets' side note, ν.4782
+  ceiling lines kept in both modes (labels on either side when <48 px apart),
+  phase colours gone from it; the frame follows RANKING OF COMPANIES; the
+  old SVG `Beeswarm.svelte` is deleted.
 - **/connections flow design** (no default arc spaghetti): default map =
   LINEAR %-of-works-won-by-out-of-region-firms choropleth (the finding
   «only N% stays local» is computed live and sits in the subtitle); click a

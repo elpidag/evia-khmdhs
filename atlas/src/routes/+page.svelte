@@ -201,11 +201,21 @@
 				)
 			: []
 	);
-	const VALUE_NOTES: Record<'dots' | 'brackets', string> = {
-		dots: 'Every in-scope contract is one dot on a log scale (stated €, excl. VAT). Greys are the signature year — lighter is earlier. Ringed dots drew a single bid. Hover to inspect, click through to the contract’s page.',
+	// the most common bracket, said in the side note rather than printed in
+	// the chart's corner (user, 2026-08-21) — from the histogram payload
+	const modalBracket = $derived.by(() => {
+		const counts = o.value_histogram.counts as number[];
+		const labels = o.value_histogram.labels as string[];
+		let best = -1;
+		for (let i = 0; i < counts.length; i++) if (best < 0 || counts[i] > counts[best]) best = i;
+		return best >= 0 ? { label: labels[best], n: counts[best] } : null;
+	});
+	const VALUE_NOTES = $derived<Record<'dots' | 'brackets', string>>({
+		dots: 'Every contract is one dot on a log scale (stated €, excl. VAT). Colours are assigned according to the year the contract was signed. Hover to inspect, click through to go to the contract’s page.',
 		brackets:
-			'The same contracts counted into brackets, each one a doubling of value — which is why the bars sit on the same scale as the dots. Bar height is the number of contracts; within a bar the signature years stack in legend order, earliest at the bottom.'
-	};
+			'The same contracts counted into brackets, each one a doubling of value — which is why the bars sit on the same scale as the dots. Bar height is the number of contracts; within a bar the signature years stack in legend order, earliest at the bottom.' +
+			(modalBracket ? ` The most common bracket is ${modalBracket.label} € (${grInt(modalBracket.n)} contracts).` : '')
+	});
 
 	// the modal direct-award bin, for the finding title
 	const daModal = $derived.by(() => {
@@ -442,6 +452,68 @@
 	</div>
 </ChartFrame>
 
+<Defer height={340}>
+{#if swarm}
+	<ChartFrame
+		title="CONTRACT VALUES"
+		caveat="Both views draw the same contracts from one list, on one axis: every bracket spans a doubling of value, which makes the equal-width slots a logarithmic scale, and the dots sit on that same scale — so a value is at the same place in both, the median line included. Greys are the signature year in both. The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis; RRF emergency provisions allowed direct awards above them."
+		anchor="swarm"
+		methodology="stated-basis"
+	>
+		{#if swarmCols}
+			<div class="modes">
+				<div class="vlegend">
+					{#each swarmYears as y (y)}
+						<span><i style:background={YEAR_GREYS[y]}></i>{y}</span>
+					{/each}
+				</div>
+				<div class="mode" role="group" aria-label="Contract-value chart mode">
+					<button
+						type="button"
+						class:active={valueMode === 'dots'}
+						onclick={() => (valueMode = 'dots')}>Individual dots</button
+					>
+					<button
+						type="button"
+						class:active={valueMode === 'brackets'}
+						onclick={() => (valueMode = 'brackets')}>Value brackets</button
+					>
+				</div>
+			</div>
+			<SideNote note={VALUE_NOTES[valueMode]}>
+				{#if valueMode === 'dots'}
+					<BeeswarmCanvas
+						data={swarmCols}
+						edges={o.value_histogram.edges}
+						colors={yearGrey}
+						thresholds={miniThresholds}
+						linkBase="/antinero/contract/"
+						minHeight={380}
+						radius={3.1}
+						bind:plotHeight={dotsHeight}
+					/>
+				{:else}
+					<LogHistogram
+						labels={o.value_histogram.labels}
+						counts={o.value_histogram.counts}
+						edges={o.value_histogram.edges}
+						color="var(--c-antinero)"
+						median={o.value_histogram.median}
+						height={dotsHeight || 460}
+						note={false}
+						segments={yearSegments}
+						segColors={swarmYears.map((y) => YEAR_GREYS[y])}
+						thresholds={miniThresholds}
+					/>
+				{/if}
+			</SideNote>
+		{/if}
+	</ChartFrame>
+{:else}
+	<div class="skeleton" style="height: 320px"></div>
+{/if}
+</Defer>
+
 <Defer height={640}>
 {#if network}
 	<ChartFrame
@@ -499,69 +571,6 @@
 {:else}
 	<div class="skeleton" style="height: 480px"></div>
 	<div class="skeleton" style="height: 400px"></div>
-{/if}
-</Defer>
-
-<Defer height={340}>
-{#if swarm}
-	<ChartFrame
-		title="CONTRACT VALUES"
-		subtitle="All {grInt(
-			o.kpis.n_contracts
-		)} in-scope contracts on one log axis (stated €, excl. VAT) — almost all sit far above the direct-award ceilings. Ringed dots drew a single bid."
-		caveat="Both views draw the same contracts from one list, on one axis: every bracket spans a doubling of value, which makes the equal-width slots a logarithmic scale, and the dots sit on that same scale — so a value is at the same place in both, the median line included. Greys are the signature year in both. The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis; RRF emergency provisions allowed direct awards above them."
-		anchor="swarm"
-		methodology="stated-basis"
-	>
-		{#if swarmCols}
-			<div class="modes">
-				<div class="vlegend">
-					{#each swarmYears as y (y)}
-						<span><i style:background={YEAR_GREYS[y]}></i>{y}</span>
-					{/each}
-				</div>
-				<div class="mode" role="group" aria-label="Contract-value chart mode">
-					<button
-						type="button"
-						class:active={valueMode === 'dots'}
-						onclick={() => (valueMode = 'dots')}>Individual dots</button
-					>
-					<button
-						type="button"
-						class:active={valueMode === 'brackets'}
-						onclick={() => (valueMode = 'brackets')}>Value brackets</button
-					>
-				</div>
-			</div>
-			<SideNote note={VALUE_NOTES[valueMode]}>
-				{#if valueMode === 'dots'}
-					<BeeswarmCanvas
-						data={swarmCols}
-						edges={o.value_histogram.edges}
-						colors={yearGrey}
-						ring={swarmCols.ring}
-						thresholds={miniThresholds}
-						linkBase="/antinero/contract/"
-						bind:plotHeight={dotsHeight}
-					/>
-				{:else}
-					<LogHistogram
-						labels={o.value_histogram.labels}
-						counts={o.value_histogram.counts}
-						edges={o.value_histogram.edges}
-						color="var(--c-antinero)"
-						median={o.value_histogram.median}
-						height={dotsHeight || 460}
-						segments={yearSegments}
-						segColors={swarmYears.map((y) => YEAR_GREYS[y])}
-						thresholds={miniThresholds}
-					/>
-				{/if}
-			</SideNote>
-		{/if}
-	</ChartFrame>
-{:else}
-	<div class="skeleton" style="height: 320px"></div>
 {/if}
 </Defer>
 

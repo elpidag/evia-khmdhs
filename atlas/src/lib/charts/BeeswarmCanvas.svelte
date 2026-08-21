@@ -31,7 +31,9 @@
 		colors = yearColor,
 		ring,
 		thresholds = [],
-		linkBase = '/dase/contract/'
+		linkBase = '/dase/contract/',
+		minHeight = 320,
+		radius = 2.6
 	}: {
 		data: DaseSwarm;
 		edges: number[];
@@ -43,14 +45,19 @@
 		/** dashed reference lines on the shared axis (ν.4782 ceilings) */
 		thresholds?: { v: number; label: string }[];
 		linkBase?: string;
+		/** the canvas floor and the dot radius — the Anti-nero frame asks for
+		 *  380 px with dots grown to match (user, 2026-08-21); ΔΑΣΕ keeps the
+		 *  defaults */
+		minHeight?: number;
+		radius?: number;
 	} = $props();
 
 	// margins must match LogHistogram's exactly — the shared axis is defined
 	// in pixels, not just in value space
 	const M = { top: 26, right: 8, bottom: 34, left: 8 };
 	let width = $state(900);
-	const R = 2.6;
-	const MIN_H = 320;
+	const R = $derived(radius);
+	const MIN_H = $derived(minHeight);
 	const MAX_H = 560;
 
 	interface Dot {
@@ -210,9 +217,14 @@
 			<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
 			<text class="axis" x={x(t)} y={height - 12}>{eurShort(t)}</text>
 		{/each}
-		{#each thresholds as th (th.v)}
-			<line class="thresh" x1={x(th.v)} x2={x(th.v)} y1={M.top} y2={height - M.bottom} />
-			<text class="thresh-label" x={x(th.v) + 4} y={M.top + 10}>{th.label}</text>
+		{#each thresholds as th, i (th.v)}
+			{@const tx = x(th.v)}
+			{@const next = thresholds[i + 1]}
+			{@const left = next !== undefined && x(next.v) - tx < 48}
+			<line class="thresh" x1={tx} x2={tx} y1={M.top} y2={height - M.bottom} />
+			<!-- two ceilings a doubling apart (€30k, €60k) sit 40-odd px apart:
+			     the first label goes LEFT of its line, the next right (user) -->
+			<text class="thresh-label" x={left ? tx - 4 : tx + 4} y={M.top + 10} text-anchor={left ? 'end' : 'start'}>{th.label}</text>
 		{/each}
 		<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
 		<text class="median-label" x={x(median)} y={M.top - 8} text-anchor="middle">
