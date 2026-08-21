@@ -124,6 +124,23 @@ def test_sankey_reconciles(client):
     assert contractor_in == pytest.approx(622_534_181.72, abs=1.0)
 
 
+def test_unit_flow_reconciles(client):
+    """MONEY FLOW (2026-08-21): the ΥΠΕΝ unit that signed → contractors —
+    four units, top-10 + pooled, both columns the basis to the cent."""
+    u = client.get("/api/antinero/unit-flow").get_json()
+    left = [n for n in u["nodes"] if n["side"] == "l"]
+    right = [n for n in u["nodes"] if n["side"] == "r"]
+    assert len(left) == 4 and len(right) == 11
+    assert sum(n["eur"] for n in left) == pytest.approx(622_534_181.72, abs=1.0)
+    assert sum(n["eur"] for n in right) == pytest.approx(622_534_181.72, abs=1.0)
+    assert sum(l["eur"] for l in u["links"]) == pytest.approx(622_534_181.72, abs=1.0)
+    assert u["total_eur"] == pytest.approx(622_534_181.72, abs=1.0)
+    assert sum(n["n"] for n in left) == 245
+    # every link joins a unit to a contractor node that exists
+    ids = {n["id"] for n in u["nodes"]}
+    assert all(l["s"] in ids and l["t"] in ids for l in u["links"])
+
+
 def test_swarm_pins(client):
     sw = client.get("/api/antinero/swarm").get_json()
     assert len(sw) == 245

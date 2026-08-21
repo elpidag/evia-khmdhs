@@ -6637,3 +6637,43 @@ defaults) and the bracket view follows through `plotHeight`; the «most
 common bracket» sentence leaves the chart's corner for the brackets' side
 note, computed from the histogram payload; two ceiling labels closer than
 48 px print on either side of their lines instead of over each other.
+
+## 2026-08-21 · MONEY FLOW: the ΥΠΕΝ unit that signed → the contractors, two columns, no phase
+
+Asked whether MONEY FLOW should follow the ΔΑΣΕ AWARDING PROCESS (body →
+unit → contractor), the user dropped the programme phase as the middle
+column («it does not say much about the awarding process») and asked for
+a flow with NO middle column. The left column is therefore the ΥΠΕΝ unit
+that signed the contract — the registry carries it for all 245 and it is
+four units, not one: Γενική Διεύθυνση Δασών και Δασικού Περιβάλλοντος
+(209 contracts), Γενική Γραμματεία Δασών (19), ΓΔ Ανάπτυξης και
+Προστασίας Δασών και Αγροπεριβάλλοντος (11), Γραφείο Υφυπουργού (6) —
+English names from `unit_names_en.json`; the right column the ten
+biggest contractors (display names) and one pooled node. Drawn with the
+ΔΑΣΕ `KindFlow` (ribbons in the unit's grey, headings, bars' hover card
+with the contract count, contractor nodes linking to their pages), the
+explanation behind the lightbulb with the computed «X of €Y ends at those
+ten companies», no subtitle. `queries_extra.unit_flows` on
+`/api/antinero/unit-flow`, even split across partners, both columns the
+basis to the cent (pinned). The old ΥΠΕΝ → phase → contractor sankey
+(`sankey_flows`, `/api/antinero/sankey`) stays served but nothing on the
+site draws it. Same evening, on review: the plot is centred (equal
+margins), colliding side labels give way equally — the upper node up,
+the lower down, the NODE moving with its label and its ribbons following
+(`KindFlow` relaxation, 34 px breath on the left, 8 on the right, never
+above the plot's top) — and the fact that all four are the Ministry's is
+said by a BRACE in the left margin («Ministry of Environment & Energy —
+awarding body»; a Ministry node as a third column was tried and rejected
+on 2026-08-22). **Vocabulary, checked against the registry fields and
+the ΔΑΣΕ code**: `organization` = the awarding body (ν.4412's contracting
+authority), `unitsOperator` = the operating unit — the same two fields
+that build ΔΑΣΕ's first two columns; so the four are OPERATING UNITS and
+the Ministry is the awarding body, and the heading says so (a first
+«contracting authorities» heading on the units was wrong). Then, for
+comparability with the co-op diagram, the user asked for THREE columns
+after all: awarding body (the Ministry, one node) → operating units →
+contractors — the middle labels wrap (`KindFlow wrapMid`) and the
+relaxation now spaces the middle column's label-plus-node blocks too;
+the brace stays a `KindFlow` feature, unused. A note for the
+next discussion: the user sees faults in how TYPES OF WORK is
+represented.

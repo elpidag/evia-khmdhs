@@ -806,6 +806,82 @@ def sankey_flows(kh: sqlite3.Connection, top_n: int = 10) -> dict:
     return {"nodes": nodes, "links": links}
 
 
+def unit_flows(kh: sqlite3.Connection, top_n: int = 10) -> dict:
+    """MONEY FLOW (user, 2026-08-21): the ΥΠΕΝ UNIT that signed → the
+    contractors — two columns, no phase in between (it said nothing about
+    the awarding process) and no single ΥΠΕΝ node (every contract is ΥΠΕΝ's).
+    Stated € on the caller's basis, split evenly across a contract's
+    partners, so both columns reconcile to the programme total (pinned).
+    Nodes are shaped for `KindFlow` (side l/r, n, eur, href); units carry
+    the registry string — the page translates through `unitEn`."""
+    rows = kh.execute(f"""
+        SELECT k.reference_number, {q.effective_cost(kh, 'k')} AS eff,
+               k.units_operator_name AS unit, c.vat_number, c.name
+        FROM contracts k
+        JOIN contract_scope s ON s.reference_number = k.reference_number
+        JOIN contractors c ON c.reference_number = k.reference_number
+        WHERE s.in_scope = 1
+        ORDER BY k.reference_number, c.seq
+    """).fetchall()
+    by_contract: dict[str, list] = {}
+    for r in rows:
+        by_contract.setdefault(r["reference_number"], []).append(r)
+    names = antinero_display_names(kh)
+    unit_eur: dict[str, float] = {}
+    unit_n: dict[str, int] = {}
+    uc: dict[tuple[str, str], list[float]] = {}     # (unit, vat) -> [eur, n]
+    vat_eur: dict[str, float] = {}
+    vat_n: dict[str, int] = {}
+    vat_name: dict[str, str] = {}
+    for partners in by_contract.values():
+        eff = partners[0]["eff"] or 0.0
+        unit = (partners[0]["unit"] or "").strip() or "(unit not recorded)"
+        share = eff / len(partners)
+        unit_eur[unit] = unit_eur.get(unit, 0.0) + eff
+        unit_n[unit] = unit_n.get(unit, 0) + 1
+        for p in partners:
+            vat = p["vat_number"]
+            cell = uc.setdefault((unit, vat), [0.0, 0])
+            cell[0] += share
+            cell[1] += 1
+            vat_eur[vat] = vat_eur.get(vat, 0.0) + share
+            vat_n[vat] = vat_n.get(vat, 0) + 1
+            vat_name.setdefault(vat, (names.get(vat) or {}).get("el") or p["name"])
+    top = sorted(vat_eur, key=lambda v: -vat_eur[v])[:top_n]
+    top_set = set(top)
+    rest = [v for v in vat_eur if v not in top_set]
+    nodes = []
+    for unit in sorted(unit_eur, key=lambda u: -unit_eur[u]):
+        nodes.append({"id": "u:" + unit, "label": unit, "side": "l",
+                      "n": unit_n[unit], "eur": round(unit_eur[unit], 2)})
+    for vat in top:
+        nodes.append({"id": vat, "label": vat_name[vat], "side": "r",
+                      "n": vat_n[vat], "eur": round(vat_eur[vat], 2),
+                      "href": f"/antinero/contractor/{vat}"})
+    if rest:
+        nodes.append({"id": "rest", "label": f"{len(rest)} other contractors", "side": "r",
+                      "n": sum(vat_n[v] for v in rest),
+                      "eur": round(sum(vat_eur[v] for v in rest), 2)})
+    links = []
+    pooled: dict[str, list[float]] = {}
+    for (unit, vat), (eur, n) in uc.items():
+        if vat in top_set:
+            links.append({"s": "u:" + unit, "t": vat, "n": n, "eur": round(eur, 2)})
+        else:
+            cell = pooled.setdefault(unit, [0.0, 0])
+            cell[0] += eur
+            cell[1] += n
+    for unit, (eur, n) in pooled.items():
+        links.append({"s": "u:" + unit, "t": "rest", "n": n, "eur": round(eur, 2)})
+    return {
+        "nodes": nodes, "links": links,
+        "total_eur": round(sum(unit_eur.values()), 2),
+        "top_eur": round(sum(vat_eur[v] for v in top), 2),
+        "n_units": len(unit_eur), "n_top": len(top), "n_rest": len(rest),
+        "n_contractors": len(vat_eur),
+    }
+
+
 # ------------------------------------------------------------------- swarm
 
 def _proc_kind(procedure_type: str | None) -> str:

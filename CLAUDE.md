@@ -1211,6 +1211,15 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   its hub tiles link to `/#flows`. The computed findings («Only N% …») moved
   from the frame TITLES into the first sentence of the subtitles — titles are
   short caps like the ΔΑΣΕ page's (user: the sentence-titles read too big).
+  MONEY FLOW is a THREE-column KindFlow since 2026-08-22 (user, for
+  comparability with ΔΑΣΕ): awarding body (the Ministry, one node) →
+  operating units (4, `units_operator_name`, EN via `unitEn`) → top-10
+  contractors + pooled, `queries_extra.unit_flows` on
+  `/api/antinero/unit-flow` (even split, pinned to the basis); the phase
+  sankey endpoint stays but is undrawn; ribbons take the LEFT node's
+  colour when a graph has no middle column; `KindFlow` side/middle
+  labels relax so they never collide (the node moves with its label),
+  `wrapMid`/`leftGroup` (brace) props exist.
   RANKING OF COMPANIES sits right after the flow frame since 2026-08-21,
   its explanation behind a lightbulb and its «as contracted / by member
   firm» toggle alone on a line under the title, left; it matches the sponsored ranking (30 px

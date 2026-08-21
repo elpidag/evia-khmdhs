@@ -7,7 +7,8 @@
 	import type { DaseSwarm } from '$lib/api';
 	import DisbursementCurves from '$lib/charts/DisbursementCurves.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
-	import Sankey from '$lib/charts/Sankey.svelte';
+	import KindFlow from '$lib/charts/KindFlow.svelte';
+	import { unitEn } from '$lib/transforms/names';
 	import SmallMultiples from '$lib/charts/SmallMultiples.svelte';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
@@ -25,7 +26,6 @@
 		type AntineroMapPayload,
 		type PaymentsPayload,
 		type PeYearly,
-		type SankeyPayload,
 		type SwarmRow
 	} from '$lib/api';
 	import { eurShort, grInt, pct } from '$lib/transforms/format';
@@ -39,7 +39,18 @@
 	// $state.raw — immutable data must not pay deep-proxy overhead
 	let map = $state.raw<AntineroMapPayload | null>(null);
 	let payments = $state.raw<PaymentsPayload | null>(null);
-	let sankey = $state.raw<SankeyPayload | null>(null);
+	// MONEY FLOW: the ΥΠΕΝ unit that signed → the contractors (user, 2026-08-21)
+	interface UnitFlow {
+		nodes: { id: string; label: string; side: 'l' | 'r'; n: number; eur: number; href?: string }[];
+		links: { s: string; t: string; n: number; eur: number }[];
+		total_eur: number;
+		top_eur: number;
+		n_units: number;
+		n_top: number;
+		n_rest: number;
+		n_contractors: number;
+	}
+	let unitFlow = $state.raw<UnitFlow | null>(null);
 	let swarm = $state.raw<SwarmRow[] | null>(null);
 	let peYearly = $state.raw<PeYearly | null>(null);
 	let network = $state.raw<{
@@ -55,7 +66,7 @@
 		loadCentroids(fetch).then((c) => (centroids = c));
 		apiGetCached<AntineroMapPayload>(fetch, '/api/antinero/map').then((v) => (map = v));
 		apiGetCached<PaymentsPayload>(fetch, '/api/antinero/payments').then((v) => (payments = v));
-		apiGetCached<SankeyPayload>(fetch, '/api/antinero/sankey').then((v) => (sankey = v));
+		apiGetCached<UnitFlow>(fetch, '/api/antinero/unit-flow').then((v) => (unitFlow = v));
 		apiGetCached<SwarmRow[]>(fetch, '/api/antinero/swarm').then((v) => (swarm = v));
 		apiGetCached<PeYearly>(fetch, '/api/antinero/pe-yearly').then((v) => (peYearly = v));
 		apiGetCached<{
@@ -575,22 +586,56 @@
 </Defer>
 
 <Defer height={620}>
-{#if sankey}
-	{@const sk = sankey}
-	{@const nPhases = sk.nodes.filter((n) => n.kind === 'phase').length}
-	{@const nTop = sk.nodes.filter((n) => n.kind === 'contractor').length}
+{#if unitFlow}
+	{@const uf = unitFlow}
+	<!-- two columns, no phase (user, 2026-08-21): the ΥΠΕΝ unit that signed on
+	     the left, the ten biggest contractors + everyone else on the right;
+	     units in greys (ribbons take the unit's tone), the ΔΑΣΕ drawing -->
+	{@const UNIT_GREYS = ['#1f1f1f', '#5a5a5a', '#8a8a8a', '#b4b4b4', '#d0d0d0']}
+	<!-- three columns, as the forest co-op diagram (user, 2026-08-22, for
+	     comparability): the awarding body — the Ministry, one node — → its
+	     operating units → contractors -->
+	{@const unitNodes = uf.nodes.map((n, i) => ({
+		...n,
+		side: (n.side === 'l' ? 'm' : n.side) as 'l' | 'm' | 'r',
+		label: n.side === 'l' ? unitEn(n.label) : n.label,
+		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? '#9b9b9b' : '#3a3a3a'
+	}))}
+	{@const ufNodes = [
+		{
+			id: 'ministry',
+			label: 'Ministry of Environment & Energy',
+			side: 'l' as const,
+			n: uf.nodes.filter((n) => n.side === 'l').reduce((s, n) => s + n.n, 0),
+			eur: uf.total_eur,
+			color: '#111111'
+		},
+		...unitNodes
+	]}
+	{@const ufLinks = [
+		...uf.nodes.filter((n) => n.side === 'l').map((n) => ({ s: 'ministry', t: n.id, n: n.n, eur: n.eur })),
+		...uf.links
+	]}
 	<ChartFrame
 		title="MONEY FLOW"
-		subtitle="ΥΠΕΝ → programme phase → contractor (top {nTop} by stated €, everyone else aggregated) — {eurShort(
-			sk.links
-				.filter((l) => sk.nodes.find((n) => n.id === l.t)?.kind === 'contractor')
-				.reduce((s, l) => s + l.eur, 0)
-		)} of the {eurShort(o.kpis.total_eur)} ends at those {grInt(nTop)} companies."
-		caveat="Consortium values split evenly between partners here, so every column sums to the programme total."
+		insight="The awarding body of every Anti-nero contract is the Ministry of Environment and Energy; the operating units on the left are the {grInt(uf.n_units)} units of the Ministry that ran the contracts, as the registry records them. The ribbons carry each unit’s money to the {grInt(uf.n_top)} biggest contractors, everyone else pooled in one node — {eurShort(uf.top_eur)} of the {eurShort(uf.total_eur)} ends at those {grInt(uf.n_top)} companies ({grInt(uf.n_contractors)} contractors in all). Ribbon width is stated € excl. VAT; hover a bar for its contract count, click a contractor for its page. The forest co-op page draws the same three columns for its own awarding bodies."
+		caveat="Consortium values split evenly between partners here, so both columns sum to the programme total."
 		anchor="sankey"
 		methodology="even-split"
 	>
-		<Sankey data={sk} />
+		<!-- centred: equal margins either side; the unit names wrap at 34
+		     characters and the nodes are padded so a three-line name clears
+		     its neighbour -->
+		<KindFlow
+			nodes={ufNodes}
+			links={ufLinks}
+			height={620}
+			headings={['awarding body', 'operating units', 'contractors']}
+			marginLeft={170}
+			marginRight={330}
+			wrapLeft={18}
+			wrapMid={28}
+		/>
 	</ChartFrame>
 {:else}
 	<div class="skeleton" style="height: 560px"></div>

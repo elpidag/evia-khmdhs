@@ -35,6 +35,22 @@
 		note?: string;
 		/** href for the Methodology link closing the side note */
 		methodologyHref?: string;
+		/** geometry overrides for a TWO-column graph (the Anti-nero MONEY FLOW,
+		 *  user 2026-08-21): symmetric margins centre the plot, a wider left
+		 *  wrap and more node padding keep long unit names off each other;
+		 *  the ΔΑΣΕ three-column call keeps the defaults */
+		marginLeft?: number;
+		marginRight?: number;
+		wrapLeft?: number;
+		/** the middle column's labels sit ABOVE their nodes and do not wrap by
+		 *  default (ΔΑΣΕ's three kinds are short); the Anti-nero units are
+		 *  long names and wrap (user, 2026-08-22) */
+		wrapMid?: number;
+		nodePad?: number;
+		/** a BRACE in the left margin spanning the whole left column, with a
+		 *  name along it — «these all belong to …» said diagrammatically
+		 *  (user, 2026-08-22: the four ΥΠΕΝ units) */
+		leftGroup?: string;
 	}
 	// tall enough, and padded enough, that the two-line label of even a
 	// hairline node (a category worth 0,7% of the €) clears its neighbours
@@ -44,7 +60,13 @@
 		height = 460,
 		headings = [],
 		note = '',
-		methodologyHref = ''
+		methodologyHref = '',
+		marginLeft = 124,
+		marginRight = 356,
+		wrapLeft = 20,
+		wrapMid = 999,
+		nodePad = 30,
+		leftGroup = ''
 	}: Props = $props();
 
 	type NodeExtra = FlowNode;
@@ -57,10 +79,12 @@
 	// push the chart past a screenful.
 	const LINE = 14;
 	const NOWRAP = 999;
+	// the breath between two side-label blocks («again more», user 2026-08-22)
+	const LABEL_GAP = 34;
 	// 20 is the width that splits «decentralized administrations» while
 	// keeping «other public bodies» on one line — at 18 the latter wrapped
 	// into the value of the node above it
-	const WRAP: Record<FlowNode['side'], number> = { l: 20, m: NOWRAP, r: NOWRAP };
+	const WRAP = $derived<Record<FlowNode['side'], number>>({ l: wrapLeft, m: wrapMid, r: NOWRAP });
 
 	// the middle column's label rides above its node, so the top margin is
 	// exactly as deep as that label is tall
@@ -75,9 +99,9 @@
 		// off-centre to the left: the right column needs room for whole
 		// co-op names (widest measures 339px), the left column's wrapped
 		// labels need very little
-		right: 356,
+		right: marginRight,
 		bottom: 30,
-		left: 124
+		left: marginLeft
 	});
 
 	// d3-sankey throws «Invalid array length» on an empty graph, and
@@ -93,7 +117,7 @@
 			.nodeId((d) => d.id)
 			.nodeWidth(11)
 			// single-row labels (name + €) need ~28px; this clears them
-			.nodePadding(30)
+			.nodePadding(nodePad)
 			.nodeSort(null)
 			.linkSort(null)
 			.extent([
@@ -132,6 +156,53 @@
 			l.y0 = (l.y0 ?? 0) + (shift.get(depthOf(l.source)) ?? 0);
 			l.y1 = (l.y1 ?? 0) + (shift.get(depthOf(l.target)) ?? 0);
 		}
+		// Side labels never overprint: down each side column, two label
+		// blocks (name rows + value row) closer than LABEL_GAP give way
+		// EQUALLY — the upper node moves up, the lower down — and the NODE
+		// moves with its label, its ribbons following (user, 2026-08-21/22:
+		// the rectangle must stay centred on its text).
+		for (const side of ['l', 'm', 'r'] as const) {
+			const col = g.nodes.filter((n) => n.side === side).sort((a, b) => (a.y0 ?? 0) - (b.y0 ?? 0));
+			const blocks = col.map((n) => {
+				const rows = wrapLabel(n.label, WRAP[n.side]).length + 1;
+				if (side === 'm') {
+					// label ABOVE the node: the block is label + node together
+					const top = (n.y0 ?? 0) - 8 - rows * LINE;
+					return { n, top, top0: top, hgt: (n.y1 ?? 0) - top };
+				}
+				const hgt = (rows - 1) * LINE + 4;
+				const c = ((n.y0 ?? 0) + (n.y1 ?? 0)) / 2;
+				return { n, top: c - ((rows - 1) * LINE) / 2, top0: c - ((rows - 1) * LINE) / 2, hgt };
+			});
+			// the left column's few long names breathe by LABEL_GAP; the right
+			// column's many short rows only need not to touch (8 px) — and a
+			// block that would rise above the plot's top stays put, the one
+			// below it taking the whole overlap (the first two contractors
+			// overprinted when the top block was clamped afterwards)
+			const gap = side === 'l' ? LABEL_GAP : side === 'm' ? 12 : 8;
+			for (let pass = 0; pass < 10; pass++) {
+				for (let i = 1; i < blocks.length; i++) {
+					const a = blocks[i - 1];
+					const b = blocks[i];
+					const overlap = a.top + a.hgt + gap - b.top;
+					if (overlap > 0) {
+						const up = Math.min(overlap / 2, Math.max(0, a.top - M.top));
+						a.top -= up;
+						b.top += overlap - up;
+					}
+				}
+			}
+			for (const b of blocks) {
+				const dy = b.top - b.top0;
+				if (!dy) continue;
+				b.n.y0 = (b.n.y0 ?? 0) + dy;
+				b.n.y1 = (b.n.y1 ?? 0) + dy;
+				for (const l of g.links) {
+					if (l.source === b.n) l.y0 = (l.y0 ?? 0) + dy;
+					if (l.target === b.n) l.y1 = (l.y1 ?? 0) + dy;
+				}
+			}
+		}
 		return g;
 	});
 
@@ -148,6 +219,7 @@
 	let hot = $state<string | null>(null);
 	const nodeOf = (v: unknown) =>
 		v as FlowNode & { x0: number; x1: number; y0: number; y1: number; depth: number };
+
 	function wrapLabel(s: string, max: number): string[] {
 		if (s.length <= max) return [s];
 		const lines: string[] = [];
@@ -165,6 +237,28 @@
 		!!hot && nodeOf(l.source).id !== hot && nodeOf(l.target).id !== hot;
 
 	// one heading per column, centred on that column's coloured bar
+	// the brace: from the first left label's top to the last one's foot,
+	// just left of the widest label the column can wrap to
+	const CHAR_W = 6.6;
+	const brace = $derived.by(() => {
+		if (!graph || !leftGroup) return null;
+		const col = graph.nodes.filter((n) => n.side === 'l');
+		if (!col.length) return null;
+		let top = Infinity;
+		let bottom = -Infinity;
+		let x0 = Infinity;
+		for (const n of col) {
+			const rows = wrapLabel(n.label, WRAP.l).length + 1;
+			const c = ((n.y0 ?? 0) + (n.y1 ?? 0)) / 2;
+			const lt = c - ((rows - 2) * LINE) / 2 - LINE;
+			top = Math.min(top, lt);
+			bottom = Math.max(bottom, lt + rows * LINE);
+			x0 = Math.min(x0, n.x0 ?? 0);
+		}
+		const x = Math.max(14, x0 - 8 - Math.min(WRAP.l, 40) * CHAR_W - 16);
+		return { x, top, bottom, mid: (top + bottom) / 2 };
+	});
+
 	const headingXs = $derived.by(() => {
 		if (!graph || !headings.length) return [];
 		const xs = [...new Set(graph.nodes.map((n) => Math.round(n.x0 ?? 0)))].sort((a, b) => a - b);
@@ -201,7 +295,7 @@
 			<g class="lk" class:dim={dim(l)}>
 				<path
 					d={sankeyLinkHorizontal()(l) ?? ''}
-					stroke={s.side === 'm' ? s.color : t.color}
+					stroke={s.side === 'm' || (s.side === 'l' && t.side === 'r') ? s.color : t.color}
 					stroke-width={w}
 				/>
 			</g>
@@ -247,6 +341,21 @@
 				</text>
 			</g>
 		{/each}
+		{#if brace}
+			<!-- the brace: a thin line with two end hooks, the group's name
+			     written along it, rotated -->
+			<path
+				class="brace"
+				d={`M ${brace.x + 6} ${brace.top} L ${brace.x} ${brace.top} L ${brace.x} ${brace.bottom} L ${brace.x + 6} ${brace.bottom}`}
+			/>
+			<text
+				class="bracelbl"
+				x={brace.x - 6}
+				y={brace.mid}
+				text-anchor="middle"
+				transform={`rotate(-90 ${brace.x - 6} ${brace.mid})`}>{leftGroup}</text
+			>
+		{/if}
 		{#each headingXs as hd (hd.text)}
 			<text class="colhead" x={hd.x} y={headings.length ? 22 : 0} text-anchor="middle"
 				>{hd.text}</text
@@ -326,6 +435,19 @@
 	}
 	.label a:hover {
 		fill: var(--c-dase-deep, var(--accent));
+	}
+	.brace {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 1;
+	}
+	.bracelbl {
+		font-family: var(--font-display);
+		font-size: var(--fs-12);
+		font-weight: 900;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		fill: var(--ink);
 	}
 	.colhead {
 		font-family: var(--font-display);
