@@ -250,7 +250,9 @@
 										? ` · for ${t.scope_text ?? 'the named area'}`
 										: t.scope === 'whole'
 											? ' · the whole contract'
-											: ''
+											: t.ckind !== 'extension_refused' && t.deadline && (c.authorities?.length ?? 0) > 1
+												? ' · all areas (the act names no subset)'
+												: ''
 						}${t.by_text ? ` · ${t.by_text}` : ''} — ${t.title ?? ''}`
 					: (t.title ?? null),
 			pdf: pdfHref(t),
@@ -620,7 +622,7 @@
 			'✔  the day the works were accepted, which may fall after the deadline',
 			...(laneData.lanes.length
 				? [
-						`▭  the grey part is split into one strip per forest service (${laneData.lanes.filter((l) => !l.unplaced).length}), hover a strip to read its name at its end: each piece of it (alternating tones) is one partial extension the acts grant for that area, and a ✔ appears only where ΥΠΕΝ accepted that part on its own${laneData.lanes.some((l) => l.unplaced) ? '; acts that name no area sit on the last strip' : ''}`
+						`▭  the grey part is split into one strip per forest service (${laneData.lanes.filter((l) => !l.unplaced).length}), hover a strip to read its name at its end: each piece of it (alternating tones) is one partial extension the acts grant for that area, and a ✔ appears only where ΥΠΕΝ accepted that part on its own${laneData.lanes.some((l) => l.unplaced) ? '; an act naming a service the registry lacks sits on the last strip' : ''}; an act naming no area extends every strip`
 					]
 				: []),
 			'€  a payment order',

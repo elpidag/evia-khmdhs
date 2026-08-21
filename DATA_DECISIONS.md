@@ -6538,3 +6538,24 @@ turned into code and pinned, never hand-patched per act:
 Pinned: scope table, area-act count 224, completion basis 255/26, timeline
 435/162/12. The acts' own errors found on the way are in the pass-1 entry
 (two subject ΑΔΑΜ typos, three deadline year typos, one refusal).
+
+## 2026-08-21 · An extension act that names no area extends every area the contract's title names
+
+The user read 9Θ5Ψ4653Π8-Χ3Τ (25SYMV016495437): «Εγκρίνουμε την τμηματική
+παράταση … της Σύμβασης (10/2025) … «Έργα αντιπυρικής προστασίας …
+αρμοδιότητας των Δασαρχείων Αλεξανδρούπολης, Σουφλίου, Ξάνθης και
+Σταυρούπολης, καθώς και της Διεύθυνσης Δασών Ροδόπης …», μέχρι τις
+28.08.2025» — «so it does state the areas». The five services sit in the
+quoted TITLE (every act repeats it, including those that then grant a
+subset); the grant after the title names none. The machine's «area not
+stated» is literally true, and the user's reading is the right one:
+**an act that names no subset extends every area the title names.**
+Decision (user-confirmed): on the strips such a step sits on every linked
+service's strip (`buildLanes` flags it `all_areas`; hover says «all areas,
+as the title names them»), the trail row says «· all areas (the act names
+no subset)» on multi-area contracts, and the «area not stated» strip is
+gone — only an area act naming a service the registry lacks still gets a
+strip of its own («service not matched», none today). 79 acts on
+multi-area contracts are affected; the 114 unsaid acts on single-area
+contracts have only one area to extend. `scope` in the DB stays NULL —
+the database records what the act says, the drawing applies the rule.

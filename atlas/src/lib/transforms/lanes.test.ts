@@ -40,28 +40,22 @@ describe('buildLanes', () => {
 			{ d: '2026-07-01', ref: 'C0' },
 			(n) => n.replace('Δασαρχείο ', '')
 		);
-		// Λάρισα and Τρίκαλα have no act and no acceptance of their own: no strip
-		expect(r.lanes.map((l) => l.key)).toEqual([
-			'Δασαρχείο Καλαμπάκας',
-			'Δασαρχείο Μουζακίου',
-			'Δασαρχείο Σπερχειάδας',
-			'_unplaced'
-		]);
+		// the act that names no area (A4) extends EVERY area the contract
+		// covers (user rule, 2026-08-21), so every linked service has a strip
+		expect(r.lanes.map((l) => l.key)).toEqual(AUTHS);
 		expect(r.lanes[0].label).toBe('Καλαμπάκας');
-		expect(r.lanes[0].steps.map((s) => s.ref)).toEqual(['A3', 'A5']);
-		// a step naming two services sits on both lanes
-		expect(r.lanes[1].steps.map((s) => s.ref)).toEqual(['A2']);
-		expect(r.lanes[2].steps.map((s) => s.ref)).toEqual(['A2']);
+		expect(r.lanes[0].steps.map((s) => s.ref)).toEqual(['A3', 'A4', 'A5']);
+		// a step naming two services sits on both lanes; A4 on all of them
+		expect(r.lanes[2].steps.map((s) => s.ref)).toEqual(['A2', 'A4']);
+		expect(r.lanes[4].steps.map((s) => s.ref)).toEqual(['A2', 'A4']);
+		expect(r.lanes[1].steps.map((s) => s.ref)).toEqual(['A4']);
+		expect(r.lanes[1].steps[0].all_areas).toBe(true);
 		// its own acceptance where one exists, the contract's (shared) otherwise
-		expect(r.lanes[2].end).toEqual({ d: '2025-11-11', ref: 'C1', shared: false });
+		expect(r.lanes[4].end).toEqual({ d: '2025-11-11', ref: 'C1', shared: false });
 		expect(r.lanes[0].end).toEqual({ d: '2026-07-01', ref: 'C0', shared: true });
-		// the studies stay on the contract bar; the unstated act gets its own lane
+		// the studies stay on the contract bar; nothing is left unplaced
 		expect(r.main.map((s) => s.ref)).toEqual(['A1']);
-		const un = r.lanes[3];
-		expect(un.unplaced).toBe(true);
-		expect(un.label).toBe('area not stated');
-		expect(un.steps.map((s) => s.ref)).toEqual(['A4']);
-		expect(un.end).toBeNull();
+		expect(r.lanes.some((l) => l.unplaced)).toBe(false);
 	});
 
 	it('a per-area act gives each service its own date, not the latest', () => {
@@ -84,6 +78,22 @@ describe('buildLanes', () => {
 		expect(r.lanes.map((l) => [l.key, l.steps[0].deadline])).toEqual([
 			['Διεύθυνση Δασών Ηρακλείου', '2024-11-30'],
 			['Διεύθυνση Δασών Χανίων', '2024-11-20']
+		]);
+	});
+
+	it('an act naming no area never spills onto an extra (unlinked) strip', () => {
+		const r = buildLanes(
+			['Δασαρχείο Λάρισας'],
+			[
+				{ ref: 'B1', d: '2025-01-01', deadline: '2025-02-01', n: 1, scope: 'area', scope_auth: ['Δασαρχείο Ελασσόνας'] },
+				{ ref: 'B2', d: '2025-02-01', deadline: '2025-03-01', n: 2, scope: null, scope_auth: [] }
+			],
+			[],
+			null
+		);
+		expect(r.lanes.map((l) => [l.key, l.steps.map((s) => s.ref)])).toEqual([
+			['Δασαρχείο Λάρισας', ['B2']],
+			['Δασαρχείο Ελασσόνας', ['B1']]
 		]);
 	});
 

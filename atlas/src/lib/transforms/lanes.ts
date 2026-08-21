@@ -11,9 +11,11 @@
  * else the contract's shared acceptance, lighter.
  *
  * What stays on the contract bar: the studies' submission, a stage, the
- * whole — things that are not an area. What cannot be placed: acts whose
- * area is not stated, or names a service the registry lacks — they get one
- * honest lane of their own, never a guessed one.
+ * whole — things that are not an area. An act that names NO area extends
+ * every area the contract's title names (user rule, 2026-08-21: «no subset
+ * named = all the areas»), so it sits on every linked service's strip,
+ * flagged `all_areas`. What cannot be placed: an area act naming a service
+ * the registry lacks — one honest lane of its own, never a guessed one.
  *
  * Pure function; the numbers are the page's, the rule is pinned by tests.
  */
@@ -28,6 +30,9 @@ export interface LaneStepLike {
 	scope_auth?: string[];
 	/** one act, several dates: which service got which (hand-read) */
 	area_dates?: Record<string, string> | null;
+	/** set by buildLanes: the act names no subset, so it extends every
+	 *  area the contract's title names (user rule, 2026-08-21) */
+	all_areas?: boolean;
 }
 
 export interface LaneEnd {
@@ -45,7 +50,8 @@ export interface Lane<T extends LaneStepLike = LaneStepLike> {
 	label: string;
 	/** canonical Greek authority name, null for the unplaced lane */
 	auth: string | null;
-	steps: T[];
+	/** the steps on this strip — an unsaid act carries `all_areas` */
+	steps: (T & { all_areas?: boolean })[];
 	end: LaneEnd | null;
 	/** the service is named by an act but not linked to the contract */
 	extra?: boolean;
@@ -83,6 +89,8 @@ export function buildLanes<T extends LaneStepLike>(
 ): LaneResult<T> {
 	const named = steps.filter((s) => s.scope === 'area' && (s.scope_auth?.length ?? 0) > 0);
 	if (named.length === 0) return { lanes: [], main: steps };
+	// no subset named → every area the contract covers (its linked services)
+	const unstated = steps.filter((s) => !s.scope).map((s) => ({ ...s, all_areas: true }));
 
 	const order = [...authorities];
 	for (const s of named)
@@ -97,9 +105,12 @@ export function buildLanes<T extends LaneStepLike>(
 				auth,
 				// a step naming several services sits on each of their strips —
 				// with ITS OWN date where the act granted different ones per area
-				steps: named
-					.filter((s) => (s.scope_auth ?? []).includes(auth))
-					.map((s) => (s.area_dates?.[auth] ? { ...s, deadline: s.area_dates[auth] } : s)),
+				steps: [
+					...named
+						.filter((s) => (s.scope_auth ?? []).includes(auth))
+						.map((s) => (s.area_dates?.[auth] ? { ...s, deadline: s.area_dates[auth] } : s)),
+					...(authorities.includes(auth) ? unstated : [])
+				].sort((a, b) => a.n - b.n),
 				end: own
 					? { d: own.d, ref: own.ref, shared: false }
 					: sharedEnd
@@ -113,20 +124,13 @@ export function buildLanes<T extends LaneStepLike>(
 		// (user, 2026-08-21: an empty row read as an unbalanced bar)
 		.filter((l) => l.steps.length > 0 || (l.end !== null && !l.end.shared));
 
-	const unstated = steps.filter((s) => !s.scope);
 	const unmatched = steps.filter((s) => s.scope === 'area' && !(s.scope_auth?.length ?? 0));
-	if (unstated.length || unmatched.length) {
-		const label =
-			unstated.length && unmatched.length
-				? 'area not stated / not matched'
-				: unstated.length
-					? 'area not stated'
-					: 'service not matched';
+	if (unmatched.length) {
 		lanes.push({
 			key: '_unplaced',
-			label,
+			label: 'service not matched',
 			auth: null,
-			steps: [...unstated, ...unmatched].sort((a, b) => a.n - b.n),
+			steps: [...unmatched].sort((a, b) => a.n - b.n),
 			end: null,
 			unplaced: true
 		});

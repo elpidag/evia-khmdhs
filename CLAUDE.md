@@ -393,7 +393,10 @@ refetching open contracts — prefer it for routine updates.
   their OWN strip ON HOVER (above the bar's end when there is no room; no
   outline) in the short form
   `names.authEnShort` «Kalampaka F.S.O.», a ✔ ONLY for that part's own
-  acceptance, an «area not stated» strip for the rest, € marks on the
+  acceptance, an act that names NO area on every strip (user rule
+  2026-08-21: «no subset named = all the areas the title names»; only an
+  area act naming a service the registry lacks gets a «service not
+  matched» strip), € marks on the
   label line; studies/stage/whole stay on the bar; the contract map's
   authority names are a hover card at the TOP-LEFT corner (`PaperMap
   showTip corner` / `DotLayer tipCorner`; δήμοι cards bottom-left), and

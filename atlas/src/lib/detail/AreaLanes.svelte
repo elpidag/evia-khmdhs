@@ -14,9 +14,10 @@
 	 * the service's name at the right end of its own grey bar («Kalampaka
 	 * F.S.O.», on hover), and shows a ✔ ONLY where ΥΠΕΝ accepted that part on its own —
 	 * an area without a part-acceptance has no ✔ of its own (the contract's
-	 * single acceptance stays on the bar). Acts that name no area sit on a
-	 * last strip, said so. Same lettering, no-outline symbols, two-way hover
-	 * with the document trail.
+	 * single acceptance stays on the bar). An act that names no area extends
+	 * every area the title names, so it is on every strip (user rule,
+	 * 2026-08-21). Same lettering, no-outline symbols, two-way hover with the
+	 * document trail.
 	 */
 	import { dmy } from '$lib/transforms/format';
 	import type { Lane, LaneStepLike } from '$lib/transforms/lanes';
@@ -111,8 +112,10 @@
 		>
 			<title
 				>{ORDINAL(g.s.n)} partial extension — approved {dmy(g.s.d)} · {r.lane.unplaced
-					? 'area not stated in the act'
-					: r.lane.label} → {dmy(g.s.deadline)}</title
+					? 'service not matched'
+					: g.s.all_areas
+						? `all areas, as the title names them (${r.lane.label})`
+						: r.lane.label} → {dmy(g.s.deadline)}</title
 			>
 		</rect>
 	{/each}
