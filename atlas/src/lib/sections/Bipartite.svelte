@@ -25,10 +25,18 @@
 		contractors: Record<string, { name: string; home_pe: string | null; eur: number }>;
 		topContractors?: number;
 		topRegions?: number;
+		/** the selection, bindable — the flow frame shares it with its map
+		 *  lens (a focused region arrives selected here, a selected company's
+		 *  home region focuses the map) (user, 2026-08-21) */
+		selected?: { kind: 'vat' | 'pe'; id: string } | null;
 	}
-	let { edges, contractors, topContractors = 25, topRegions = 25 }: Props = $props();
-
-	let selected = $state<{ kind: 'vat' | 'pe'; id: string } | null>(null);
+	let {
+		edges,
+		contractors,
+		topContractors = 25,
+		topRegions = 25,
+		selected = $bindable(null)
+	}: Props = $props();
 
 	// ---- resting lists ----------------------------------------------------
 	const restingLeft = $derived(
@@ -127,7 +135,7 @@
 		<text class="col-title" x={M.left} y={16}>
 			Top contractors (of {grInt(Object.keys(contractors).length)})
 		</text>
-		<text class="col-title" x={colR} y={16}>Work regions</text>
+		<text class="col-title" x={colR} y={16}>Works in regional unit</text>
 
 		{#each activeEdges as e (e.vat + '→' + e.pe)}
 			{@const y1 = leftY.get(e.vat)}
@@ -179,8 +187,10 @@
 		{/each}
 	</svg>
 
-	<p class="hint">
-		{#if selected}
+	<!-- the resting instruction left for the frame's ⓘ (user, 2026-08-21);
+	     only the selection's own line remains -->
+	{#if selected}
+		<p class="hint">
 			{#if selected.kind === 'vat'}
 				<a href={`/antinero/contractor/${selected.id}`}>
 					{contractors[selected.id]?.name} →
@@ -191,12 +201,8 @@
 				{peEn(selected.id)}: {activeEdges.length} contractors,
 				{eurShort(activeEdges.reduce((s, e) => s + e.eur, 0))}. Click again to clear.
 			{/if}
-		{:else}
-			Click a contractor to light up every region it works in — regions below
-			the cut are shuffled into the list — or a region for everyone working
-			there. Edge width is the link's €.
-		{/if}
-	</p>
+		</p>
+	{/if}
 </div>
 
 <style>
@@ -204,10 +210,12 @@
 		display: block;
 		width: 100%;
 	}
+	/* the column titles in the legend strips' lettering — 14px, regular,
+	   black (user, 2026-08-21) */
 	.col-title {
-		font-size: 12px;
-		font-weight: 600;
-		fill: var(--ink-soft);
+		font-size: 14px;
+		font-weight: 400;
+		fill: #111111;
 	}
 	.edge {
 		fill: none;

@@ -18,9 +18,13 @@
 	 * hover shows, click holds — and the year control is a CUMULATIVE
 	 * slider: the focused flows signed up to a year, not one year at a time.
 	 */
+	import { page } from '$app/state';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import FlowArcs from '$lib/maps/FlowArcs.svelte';
 	import OriginSplit from '$lib/sections/OriginSplit.svelte';
+	import Bipartite from '$lib/sections/Bipartite.svelte';
+	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
+	import Hint from '$lib/ui/Hint.svelte';
 	import { RAMP_WORKS } from '$lib/maps/useGeo';
 	import { peEn } from '$lib/transforms/regions';
 	import { eurShort } from '$lib/transforms/format';
@@ -47,11 +51,40 @@
 		/** the same flows per signature year — powers the focused view's
 		 *  cumulative year slider (user, 2026-08-20 / 21) */
 		flowsYearly?: (Flow & { year: string })[];
+		/** the second LENS — «by company»: contractor ↔ work-region links
+		 *  (the former WHO REACHES WHERE frame, user 2026-08-21) */
+		edges?: { vat: string; pe: string; n: number; eur: number }[];
+		contractors?: Record<string, { name: string; home_pe: string | null; eur: number }>;
 	}
-	let { flows, centroids, origins = [], flowsYearly = [] }: Props = $props();
+	let { flows, centroids, origins = [], flowsYearly = [], edges = [], contractors = {} }: Props = $props();
 
 	let flowFocus = $state<string | null>(null);
 	const short = (pe: string) => peEn(pe);
+
+	// the lens: by region (map) or by company (the two lists) — a URL param
+	// like the allocation maps' view, so it travels in a permalink
+	const lens = $derived(page.url.searchParams.get('flows') === 'company' ? 'company' : 'region');
+	let bipSel = $state<{ kind: 'vat' | 'pe'; id: string } | null>(null);
+	// the focus is SHARED between the lenses: a unit focused on the map is the
+	// region selected in the lists, a company selected in the lists focuses
+	// the map on its home region (user, 2026-08-21)
+	let lastLens = $state<'region' | 'company'>('region');
+	$effect(() => {
+		if (lens === lastLens) return;
+		const from = lastLens;
+		lastLens = lens;
+		if (lens === 'company') {
+			if (flowFocus) bipSel = { kind: 'pe', id: flowFocus };
+		} else if (from === 'company' && bipSel) {
+			const pe = bipSel.kind === 'pe' ? bipSel.id : (contractors[bipSel.id]?.home_pe ?? null);
+			if (pe && centroids[pe]) focusRegion(pe);
+		}
+	});
+	// the company lens explains itself; its one instruction rides in the ⓘ
+	// beside COMPANIES (user, 2026-08-21)
+	const companiesHow =
+		'Click a contractor to light up every region it works in — regions below the cut are ' +
+		'shuffled into the list — or a region for everyone working there. Edge width is the link’s €.';
 
 	const allYears = $derived([...new Set(flowsYearly.map((f) => f.year))].sort());
 	// the CUMULATIVE year slider: index into allYears, the last = all years
@@ -137,15 +170,41 @@
 
 <div class="bar">
 	<div class="barleft">
-		<div class="maplabel">MAP</div>
-		{#if flowFocus}
+		<div class="maplabel">
+			{#if lens === 'company'}
+				COMPANIES<Hint text={companiesHow} heading width="380px" />
+			{:else}
+				MAP
+			{/if}
+		</div>
+		{#if lens === 'region' && flowFocus}
 			<button class="reset" onclick={() => focusRegion(null)} title="Back to all of Greece (Esc)">
 				✕ {peEn(flowFocus)} · all of Greece
 			</button>
+		{:else if lens === 'company' && bipSel}
+			<button class="reset" onclick={() => (bipSel = null)} title="Clear the selection">
+				✕ {bipSel.kind === 'pe' ? peEn(bipSel.id) : (contractors[bipSel.id]?.name ?? bipSel.id)} · all
+			</button>
 		{/if}
 	</div>
+	<SegmentToggle
+		param="flows"
+		fallback="region"
+		options={[
+			{ value: 'region', label: 'by region' },
+			{ value: 'company', label: 'by company' }
+		]}
+	/>
 </div>
 
+{#if lens === 'company'}
+	<!-- the company lens: the same even-split flows, broken down to the firms
+	     that carry them — two linked lists, capped to the map's height; no
+	     key strip (user: self-explanatory), the instruction in the ⓘ -->
+	<div class="bip">
+		<Bipartite {edges} {contractors} bind:selected={bipSel} />
+	</div>
+{:else}
 <div class="flow-grid">
 	<div class="panel">
 		<ul class="mapkey">
@@ -264,6 +323,7 @@
 		{/if}
 	</div>
 </div>
+{/if}
 
 <style>
 	.bar {
@@ -451,6 +511,12 @@
 	.chip {
 		font-size: var(--fs-12);
 		color: var(--ink-soft);
+	}
+	/* the company lens sits in the map's height and scrolls inside it */
+	.bip {
+		max-height: 720px;
+		overflow-y: auto;
+		padding-right: 4px;
 	}
 	/* the cumulative year slider */
 	.years {

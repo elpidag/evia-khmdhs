@@ -13,8 +13,7 @@
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import FlowMap from '$lib/sections/FlowMap.svelte';
-	import Bipartite from '$lib/sections/Bipartite.svelte';
-	import { loadCentroids } from '$lib/maps/useGeo';
+		import { loadCentroids } from '$lib/maps/useGeo';
 	import type { Connections } from './connections/+page';
 	import ContractNetwork from '$lib/charts/ContractNetwork.svelte';
 	import type { NetNode } from '$lib/transforms/network';
@@ -104,8 +103,8 @@
 	// company that SIGNED, and the firms behind it. A κοινοπραξία signs 54 of
 	// the contracts, so «as contracted» hides whoever is inside it.
 	const RANK_MODES = [
-		{ value: 'party', label: 'As contracted' },
-		{ value: 'firm', label: 'By member firm' }
+		{ value: 'party', label: 'as contracted' },
+		{ value: 'firm', label: 'by member firm' }
 	];
 	const rankMode = $derived(
 		o.member_firms ? (page.url.searchParams.get('rank') ?? 'party') : 'party'
@@ -373,6 +372,13 @@
 {/if}
 
 {#if net}
+	{@const maxReach = (() => {
+		const by = new Map<string, number>();
+		for (const e of net.contractor_pe) by.set(e.vat, (by.get(e.vat) ?? 0) + 1);
+		let top = { vat: '', n: 0 };
+		for (const [vat, n] of by) if (n > top.n) top = { vat, n };
+		return { n: top.n, name: net.contractors[top.vat]?.name ?? '—' };
+	})()}
 	{@const localPct = (() => {
 		let t = 0,
 			l = 0;
@@ -384,10 +390,10 @@
 	})()}
 	<ChartFrame
 		title="WHERE THE MONEY TRAVELS"
-		insight="Each regional unit is coloured according to the share of works carried out within it that are awarded to contractors based either within or outside its boundaries. The darker the regional unit, the larger the share of works awarded to companies based outside its boundaries. Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out."
+		insight="Each regional unit is coloured according to the share of works carried out within it that are awarded to contractors based either within or outside its boundaries. The darker the regional unit, the larger the share of works awarded to companies based outside its boundaries. Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out. Switch to «by company» for the same flows broken down to the firms that carry them: {grInt(net.contractor_pe.length)} contractor ↔ work-region links across {grInt(Object.keys(net.contractors).length)} contractors — {maxReach.name} alone works in {maxReach.n} regional units; a unit focused on the map arrives selected in the lists, and a company selected there focuses the map on its home region."
 		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
 			net.coverage.total_eur
-		)} resolved. Same reading as the map above: a contract covering several regional units, or signed by several firms, is split equally between them, because the documents state no other allocation — every arrow carries the shares that connect a firm's base to a work region, and the flows add up to the programme total."
+		)} resolved. Same reading as the map above: a contract covering several regional units, or signed by several firms, is split equally between them, because the documents state no other allocation — every arrow carries the shares that connect a firm's base to a work region, and the flows add up to the programme total. The company lens draws the same shares as contractor ↔ region links; at rest each column lists its biggest rows, selecting one reshuffles the other column to exactly its counterparts."
 		anchor="flows"
 		methodology="even-split"
 	>
@@ -396,30 +402,45 @@
 			flowsYearly={net.flows_yearly}
 			{centroids}
 			origins={net.origins}
+			edges={net.contractor_pe}
+			contractors={net.contractors}
 		/>
 	</ChartFrame>
-
-	{@const maxReach = (() => {
-		const by = new Map<string, number>();
-		for (const e of net.contractor_pe) by.set(e.vat, (by.get(e.vat) ?? 0) + 1);
-		let top = { vat: '', n: 0 };
-		for (const [vat, n] of by) if (n > top.n) top = { vat, n };
-		return { n: top.n, name: net.contractors[top.vat]?.name ?? '—' };
-	})()}
-	<ChartFrame
-		title="WHO REACHES WHERE"
-		subtitle="A handful of companies reach into many regions: {grInt(
-			net.contractor_pe.length
-		)} contractor ↔ work-region links across {grInt(
-			Object.keys(net.contractors).length
-		)} contractors — {maxReach.name} alone works in {maxReach.n} regional units."
-		caveat="Edge € even-split across a contract's partners and regions — the layer sums to the programme total. At rest each column lists its biggest rows; selecting a contractor or a region reshuffles the other column to exactly its counterparts, so every link is reachable."
-		anchor="bipartite"
-		methodology="even-split"
-	>
-		<Bipartite edges={net.contractor_pe} contractors={net.contractors} />
-	</ChartFrame>
 {/if}
+
+<ChartFrame
+	title="RANKING OF COMPANIES"
+	insight={rankMode === 'firm'
+		? `The same money attributed to the firms BEHIND the joint ventures — ${grInt(
+				o.consortiums.n_documented
+			)} of the ${grInt(o.consortiums.n)} ventures have members on record, ${grInt(
+				o.consortiums.n_firms
+			)} firms in all. A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
+				o.consortiums.eur_unsplit
+			)} sits identically in both views. Both views add up to the programme total.`
+		: `Companies ranked by the sums contracted to them through the programme — the top ${topRows.length} of ${grInt(
+				o.kpis.n_contractors
+			)} contractors, ${eurShort(o.kpis.total_eur)} in total. Each contract is counted once: a jointly signed one is split evenly between its partners, so the totals add up to the programme total. Switch to «by member firm» to attribute the money to the firms behind the joint ventures.`}
+	caveat={rankMode === 'firm'
+		? `A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
+				o.consortiums.eur_unsplit
+			)} sits identically in both views. Both add up to the programme total.`
+		: 'Each contract is counted once: a jointly signed one is split evenly between its partners, so these totals add up to the programme total.'}
+	anchor="top-contractors"
+	methodology={rankMode === 'firm' ? 'joint-contracts' : 'stated-basis'}
+>
+	<!-- the view toggle where the maps' bars put theirs — right-aligned on
+	     its own line under the title, no label (user, 2026-08-21) -->
+	<div class="rankbar">
+		<SegmentToggle param="rank" fallback="party" options={RANK_MODES} />
+	</div>
+	<!-- same measure and bar height as the sponsored-works ranking, so the
+	     two datasets' rankings read alike; the bars stay black, this
+	     dataset's colour (user, 2026-08-20) -->
+	<div class="rankw">
+		<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={30} />
+	</div>
+</ChartFrame>
 
 <Defer height={640}>
 {#if network}
@@ -613,36 +634,6 @@
 	<div class="skeleton" style="height: 380px"></div>
 {/if}
 </Defer>
-
-<ChartFrame
-	title="RANKING OF COMPANIES"
-	subtitle={rankMode === 'firm'
-		? `the same money attributed to the firms BEHIND the joint ventures — ${grInt(
-				o.consortiums.n_documented
-			)} of the ${grInt(o.consortiums.n)} ventures have members on record, ${grInt(
-				o.consortiums.n_firms
-			)} firms in all`
-		: `according to sums contracted via the programme — top ${topRows.length} of ${grInt(
-				o.kpis.n_contractors
-			)} contractors, ${eurShort(o.kpis.total_eur)} in total`}
-	caveat={rankMode === 'firm'
-		? `A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
-				o.consortiums.eur_unsplit
-			)} sits identically in both views. Both add up to the programme total.`
-		: 'Each contract is counted once: a jointly signed one is split evenly between its partners, so these totals add up to the programme total.'}
-	anchor="top-contractors"
-	methodology={rankMode === 'firm' ? 'joint-contracts' : 'stated-basis'}
->
-	<div class="netbar">
-		<SegmentToggle param="rank" fallback="party" options={RANK_MODES} />
-	</div>
-	<!-- same measure and bar height as the sponsored-works ranking, so the
-	     two datasets' rankings read alike; the bars stay black, this
-	     dataset's colour (user, 2026-08-20) -->
-	<div class="rankw">
-		<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={30} />
-	</div>
-</ChartFrame>
 
 <ChartFrame
 	title="STUDY COSTS"
@@ -1081,5 +1072,10 @@
 	}
 	.cd {
 		color: var(--ink-soft);
+	}
+	.rankbar {
+		display: flex;
+		justify-content: flex-start;
+		margin-bottom: var(--sp-2);
 	}
 </style>

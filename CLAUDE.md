@@ -1203,14 +1203,18 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   local-vs-imported split (`OriginSplit.svelte`) are ONE frame since later
   the same day — «WHERE THE MONEY TRAVELS», map left, the top-12 destination
   bars right, linked both ways (bar click focuses the map's arcs; while
-  focused the bars give way to that region's flow table) — followed by the
-  bipartite («WHO REACHES WHERE»); `/` fetches `/api/connections`
+  focused the bars give way to that region's flow table); since the same
+  evening the bipartite («WHO REACHES WHERE») is that frame's second LENS,
+  «by company» (`?flows=company`, shared focus, one lightbulb — the
+  standalone frame and its `#bipartite` anchor are gone); `/` fetches `/api/connections`
   post-hydration; /connections keeps hubs, signers and consortium pairs and
   its hub tiles link to `/#flows`. The computed findings («Only N% …») moved
   from the frame TITLES into the first sentence of the subtitles — titles are
   short caps like the ΔΑΣΕ page's (user: the sentence-titles read too big).
-  RANKING OF COMPANIES matches the sponsored ranking (30 px bars, 75%
-  measure, black); BarH clamps inside labels to two lines.
+  RANKING OF COMPANIES sits right after the flow frame since 2026-08-21,
+  its explanation behind a lightbulb and its «as contracted / by member
+  firm» toggle alone on a line under the title, left; it matches the sponsored ranking (30 px
+  bars, 75% measure, black); BarH clamps inside labels to two lines.
 - **The Anti-nero page is black-white-grayscale ONLY** (user, 2026-08-20):
   `useGeo.RAMP_WORKS` is an 8-step grey ramp (all its choropleths/legends),
   `scopes.SCOPE_COLORS` is an ordinal grey ramp light→dark down the phase

@@ -26,6 +26,9 @@
 		 *  the text in a column on the left of the frame's body instead of
 		 *  hiding it in a ⓘ (user, 2026-08-21, ALLOCATION OF FUNDING) */
 		insight?: string;
+		/** optional controls on the TITLE LINE, right-aligned — a view toggle
+		 *  (user, 2026-08-21, RANKING OF COMPANIES) */
+		controls?: Snippet;
 	}
 	let {
 		title = '',
@@ -37,7 +40,8 @@
 		footer,
 		titleColor = '',
 		hint = '',
-		insight = ''
+		insight = '',
+		controls
 	}: Props = $props();
 	const methodHref = $derived(`/methodology#${methodology || anchor}`);
 	let insightOpen = $state(false);
@@ -46,6 +50,7 @@
 <figure class="frame" id={anchor || undefined}>
 	<figcaption>
 		{#if title}
+			<div class="titlerow" class:withcontrols={!!controls}>
 			<h2 class="finding" style:color={titleColor || null}>
 				{#if insight}
 					<button
@@ -71,6 +76,8 @@
 				{title}{#if hint}<Hint text={hint} heading width="380px" />{/if}
 				{#if anchor}<a class="hash" href={`#${anchor}`} aria-label="Link to this chart">#</a>{/if}
 			</h2>
+			{#if controls}<div class="controls">{@render controls()}</div>{/if}
+			</div>
 		{/if}
 		{#if subtitle}<p class="topic">{subtitle}</p>{/if}
 	</figcaption>
@@ -102,6 +109,18 @@
 	.finding {
 		font-size: var(--fs-24);
 		margin-bottom: var(--sp-1);
+	}
+	/* a control on the title line sits at its right end */
+	.titlerow.withcontrols {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--sp-4);
+		/* room under the title line before the chart (no subtitle here) */
+		margin-bottom: var(--sp-4);
+	}
+	.controls {
+		flex: none;
 	}
 	.hash {
 		text-decoration: none;

@@ -6601,3 +6601,24 @@ bars' palette was FLIPPED so dark = out-of-region as on the map's ramp
 (the bars said the reverse), the black share leads each bar, the map
 took the allocation maps' exact frame (640×620, two equal columns), the
 «Destinations» heading went.
+
+## 2026-08-21 · WHO REACHES WHERE becomes the «by company» lens of WHERE THE MONEY TRAVELS
+
+Both frames answered one question at two grains — region → region on the
+map, company → region in the bipartite lists — over the SAME even-split
+flows. Decision (user, on my proposal): one frame, a SegmentToggle «by
+region / by company» (`?flows=company`, like the allocation maps' view),
+one lightbulb that explains both lenses (the computed reach fact — N links
+across M contractors, the widest-reaching firm and its count — moved into
+it), one caveat. The focus is SHARED: a unit focused on the map arrives
+selected in the lists, a company selected in the lists focuses the map on
+its home region when the lens flips back; the pill clears either. The
+company lens wears the key strip and scrolls inside the map's height
+(`Bipartite` gained a bindable `selected`; the standalone frame and its
+`#bipartite` anchor are gone — nothing linked to it).
+RANKING OF COMPANIES then moved to right after that frame and took the
+same dress: the view explanation behind the lightbulb (both views' text,
+the computed counts inside; no subtitle), the «as contracted / by member
+firm» toggle alone on its own line under the title, left-aligned (a
+labelled bar and a title-line placement were both tried and rejected),
+caveat kept.
