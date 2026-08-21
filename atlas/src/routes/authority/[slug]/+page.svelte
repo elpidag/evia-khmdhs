@@ -50,9 +50,7 @@
 	<StatPair
 		value={eurShort(a.antinero.total_eur)}
 		label="of Anti-nero works on its territory"
-		compare="{grInt(a.antinero.contracts.length)} contracts · full exposure {eurShort(
-			a.antinero.exposure_eur
-		)}"
+		compare="{grInt(a.antinero.contracts.length)} contracts name this service"
 		basis="stated € excl. VAT, even-split across each contract's authorities"
 		color="var(--c-antinero)"
 	/>

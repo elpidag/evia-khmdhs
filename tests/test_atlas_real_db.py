@@ -813,10 +813,15 @@ def test_connections_pins(client):
     # pairs, 277 → 258 flows, 181 → 174 signer pairs. Each rose by one the
     # same day, when ΓΕΩΓΝΩΜΩΝ Ο.Ε. was recorded as the second party of
     # 22SYMV010795606: one firm, one more contract, one more of each edge
-    # the focused map's year filter draws from flows_yearly — same
-    # full-exposure convention, so Σ over the years must equal the flows
-    assert sum(f["total_eur"] for f in n["flows_yearly"]) == pytest.approx(
-        sum(f["total_eur"] for f in n["flows"]), abs=0.05)
+    # every flow surface is on the EVEN SPLIT since 2026-08-20 (a contract is
+    # divided equally between its regions and its parties — the documents
+    # state no other allocation), so the flows, their per-year breakdown and
+    # the origins all reconcile to the programme total; the tolerance is the
+    # per-row rounding over 259 / 355 / 57 rows
+    basis = 622_534_181.72
+    assert sum(f["total_eur"] for f in n["flows"]) == pytest.approx(basis, abs=0.5)
+    assert sum(f["total_eur"] for f in n["flows_yearly"]) == pytest.approx(basis, abs=0.5)
+    assert sum(o["total_eur"] for o in n["origins"]) == pytest.approx(basis, abs=0.5)
     assert all(len(f["year"]) == 4 for f in n["flows_yearly"])
     assert len(n["contractor_authority"]) == 476
     assert len(n["contractor_pe"]) == 378

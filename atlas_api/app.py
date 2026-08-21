@@ -196,14 +196,30 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
     @app.route("/api/antinero/map")
     def api_antinero_map():
         conn = g.conn
-        return jsonify({
+        payload = {
             "work_regions": queries.money_by_project_region(conn),
             "home_regions": queries.money_by_contractor_region(conn),
             "coverage": queries.flow_coverage(conn),
             "contract_points": queries.contract_authority_points(conn),
             "contractor_points": queries.contractor_points(conn),
             "contracts": queries.overview_contracts(conn),
-        })
+        }
+        # curated display names on the HQ dots and the drill tables
+        # (DATA_DECISIONS 2026-08-20); the registry spelling rides along
+        names = queries_extra.antinero_display_names(conn)
+
+        def _dn(row, vat_key="vat"):
+            d = names.get((row.get(vat_key) or "").strip())
+            if d and row.get("name") != d["el"]:
+                row["registry_name"] = row.get("name")
+                row["name"] = d["el"]
+
+        for pt in payload["contractor_points"]["points"]:
+            _dn(pt)
+        for c in payload["contracts"]:
+            for ct in c.get("contractors") or []:
+                _dn(ct)
+        return jsonify(payload)
 
     def _trim_titles(rows: list[dict], n: int = 140) -> list[dict]:
         # list views never need multi-hundred-char titles — trimming them

@@ -18,8 +18,14 @@
 		opacity?: number;
 		onOver?: (p: DotPoint, e?: MouseEvent) => void;
 		onOut?: (p: DotPoint) => void;
+		/** click selects instead of navigating (no hrefOf then) */
+		onClick?: (p: DotPoint) => void;
 		/** externally-driven highlight (e.g. hovering the paired chart) */
 		hotOf?: (p: DotPoint) => boolean;
+		/** externally-driven CARD: while true for a point, its tooltip shows
+		 *  as if hovered — the paired map pulls up the contractor's card when
+		 *  it lights the dot (user, 2026-08-20) */
+		pinTip?: (p: DotPoint) => boolean;
 		/** per-dot stroke-dasharray (e.g. approximate-location dots) */
 		dashOf?: (p: DotPoint) => string | undefined;
 		/** per-dot fill opacity override (approximate dots render lighter) */
@@ -37,17 +43,54 @@
 		opacity = 0.85,
 		onOver,
 		onOut,
+		onClick,
 		hotOf,
+		pinTip,
 		dashOf,
 		fillOpacityOf
 	}: Props = $props();
+
+	// the pinned card: show the first pinned point's tip, hide it again when
+	// nothing is pinned any more (never touching a tip a real hover owns)
+	let pinnedKey = $state<string | null>(null);
+	$effect(() => {
+		if (!pinTip || !tipOf) return;
+		// one card per distinct entity (a multi-authority contract has several
+		// dots with the same ref — its card shows once), stacked when several
+		const seen = new Set<string>();
+		const pinned = points.filter((p) => {
+			if (!pinTip(p)) return false;
+			const k = String(p.ref ?? p.vat ?? p.name ?? '');
+			if (seen.has(k)) return false;
+			seen.add(k);
+			return true;
+		});
+		const key = pinned.length ? [...seen].sort().join('|') : null;
+		if (key === pinnedKey) return;
+		pinnedKey = key;
+		if (!pinned.length) {
+			ctx.hideTip();
+			return;
+		}
+		const MAX = 6;
+		const html = pinned.slice(0, MAX).map((p) => tipOf(p)).join('<hr class="tip-rule">');
+		ctx.showTip(
+			pinned.length > MAX
+				? `${html}<hr class="tip-rule">+${pinned.length - MAX} more`
+				: html
+		);
+	});
 
 	function enter(p: DotPoint, e?: MouseEvent) {
 		if (tipOf) ctx.showTip(tipOf(p));
 		onOver?.(p, e);
 	}
 	function leave(p: DotPoint) {
-		if (tipOf) ctx.hideTip();
+		if (tipOf) {
+			// a pinned card comes back when the pointer leaves another dot
+			if (pinTip && points.some((q) => pinTip(q))) pinnedKey = null;
+			else ctx.hideTip();
+		}
 		onOut?.(p);
 	}
 
@@ -89,7 +132,7 @@
 			/>
 		</a>
 	{:else}
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events -->
 		<circle
 			cx={x}
 			cy={y}
@@ -100,8 +143,10 @@
 			stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
 			stroke-dasharray={dashOf?.(p)}
 			opacity={hot ? 1 : opacity}
+			style:cursor={onClick ? 'pointer' : undefined}
 			onmouseenter={(e) => enter(p, e)}
 			onmouseleave={() => leave(p)}
+			onclick={onClick ? () => onClick(p) : undefined}
 		/>
 	{/if}
 {/each}

@@ -358,8 +358,11 @@
 
 {#if map}
 	<ChartFrame
-		title="MAP"
-		caveat="Contract values split evenly across a contract's regions (and partners), so both maps sum to the programme total; tooltips also show full exposure."
+		title="ALLOCATION OF FUNDING"
+		hint="{grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the {grInt(
+			map.contracts.length
+		)} contracts cover more than one regional unit, and the documents state no allocation of the money between the units a contract covers. So each contract's value is split equally between its regions and, for a jointly signed contract, between its partners. A region's figure is the sum of those equal shares, and the regions add up to the programme total."
+		caveat="Stated € excl. VAT. A contract covering several regional units, or signed by several firms, is split equally between them — the documents state no other allocation (ⓘ beside the title)."
 		anchor="map"
 		methodology="even-split"
 	>
@@ -384,7 +387,7 @@
 		subtitle="Only {localPct}% of the money goes to firms based where the work is. Each region is coloured by the share of its works won by out-of-region firms — darker means more of the money leaves — and the bars beside the map split the biggest destinations’ € by the winner’s base. Click a region or a bar: solid black arrows show who reaches in, dashed black where its own firms reach out — width is the €, and the year buttons replay the focused flows one signature year at a time."
 		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
 			net.coverage.total_eur
-		)} resolved. Full-exposure convention: a multi-region contract counts toward every region pair it touches; the within-region shares are unaffected."
+		)} resolved. Same reading as the map above: a contract covering several regional units, or signed by several firms, is split equally between them, because the documents state no other allocation — every arrow carries the shares that connect a firm's base to a work region, and the flows add up to the programme total."
 		anchor="flows"
 		methodology="even-split"
 	>
@@ -789,6 +792,22 @@
 		background: #f2f2f2;
 		border: none;
 		box-shadow: none;
+	}
+	/* map cards in grey, not black (user, 2026-08-20); several pinned
+	   cards stack with a hairline between them */
+	.antp :global(.map .tip) {
+		background: #5c5c5c;
+		color: #fff;
+		pointer-events: auto; /* the selected contract's card carries its link */
+	}
+	.antp :global(.map .tip a) {
+		color: #fff;
+		text-decoration: underline;
+	}
+	.antp :global(.map .tip .tip-rule) {
+		border: 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.35);
+		margin: 4px 0;
 	}
 	.hero {
 		display: grid;

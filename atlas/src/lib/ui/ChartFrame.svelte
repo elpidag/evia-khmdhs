@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import Hint from '$lib/ui/Hint.svelte';
 
 	interface Props {
 		/** the FINDING, written as a sentence — not the topic.
@@ -18,8 +19,11 @@
 		footer?: Snippet;
 		/** optional title colour (defaults to the heading ink) */
 		titleColor?: string;
+		/** optional ⓘ beside the title — the explanation a reader needs
+		 *  before the chart, on hover, as the TIMELINE does (user, 2026-08-20) */
+		hint?: string;
 	}
-	let { title = '', subtitle = '', caveat = '', anchor = '', methodology = '', children, footer, titleColor = '' }: Props = $props();
+	let { title = '', subtitle = '', caveat = '', anchor = '', methodology = '', children, footer, titleColor = '', hint = '' }: Props = $props();
 	const methodHref = $derived(`/methodology#${methodology || anchor}`);
 </script>
 
@@ -27,7 +31,7 @@
 	<figcaption>
 		{#if title}
 			<h2 class="finding" style:color={titleColor || null}>
-				{title}
+				{title}{#if hint}<Hint text={hint} heading width="380px" />{/if}
 				{#if anchor}<a class="hash" href={`#${anchor}`} aria-label="Link to this chart">#</a>{/if}
 			</h2>
 		{/if}

@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { ruLabel } from '$lib/transforms/regions';
+	import { peEn } from '$lib/transforms/regions';
+	import { authEn } from '$lib/transforms/names';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import type { AntineroMapPayload } from '$lib/api';
-	import ChoroLegend from '$lib/maps/ChoroLegend.svelte';
 	import DotLayer, { type DotPoint } from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import { RAMP_WORKS, makeChoro, spreadOverlaps } from '$lib/maps/useGeo';
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
+	import Hint from '$lib/ui/Hint.svelte';
 	import DrillPanel from './DrillPanel.svelte';
 
 	let { data }: { data: AntineroMapPayload } = $props();
@@ -22,11 +23,18 @@
 	});
 
 	function setFocus(side: 'works' | 'home', pe: string | null) {
+		selectedRef = null;
 		const url = new URL(page.url);
 		if (pe) url.searchParams.set('focus', `${side}:${pe}`);
 		else url.searchParams.delete('focus');
 		goto(url, { replaceState: true, keepFocus: true, noScroll: true });
 	}
+
+	// the MAP ⓘ (user's text, 2026-08-20); the split explanation sits on the
+	// frame title's own ⓘ
+	const howToRead =
+		'Click a regional unit to explore its contracts, the forest authorities ' +
+		'responsible for them and the contractors to which they were awarded.';
 
 	// ---- lookups -------------------------------------------------------
 	const vatHome = $derived(
@@ -155,6 +163,15 @@
 			focus?.side === 'home' ? 0.01 : 0.02
 		)
 	);
+	// how precisely the registered-office dots are placed: the street address,
+	// or — where the geocoder could not place the street — the centre of the
+	// municipality (drawn dashed and lighter, as the sponsored-works map does)
+	const whyCentre =
+		'The registered address of these contractors could not be placed on the map at ' +
+		'street level — it is a kilometre marker on a road, a rural locality or a street the ' +
+		'geocoder does not know — so the dot sits at the centre of the municipality the ' +
+		'address names, and is drawn dashed.';
+
 
 	const drillColors = $derived.by(() => {
 		if (focus?.side !== 'works') return null;
@@ -176,16 +193,65 @@
 	// at their true spots, so a line running off-frame means the contract
 	// spans beyond this Π.Ε.
 	let hoverRef = $state<string | null>(null);
+	// the SELECTED contract (click, user 2026-08-20): it keeps its links and
+	// its card, lights its contractor, and a multi-region one widens the map
+	// — nothing moves the map on hover any more
+	let selectedRef = $state<string | null>(null);
+	const activeRef = $derived(selectedRef ?? hoverRef);
+	// the two maps talk to each other (user, 2026-08-20): hovering a contract
+	// dot lights its contractor(s) on the right; hovering a contractor dot
+	// lights that firm's contracts on the left
+	let hoverVat = $state<string | null>(null);
+	const contractByRef = $derived(new Map(data.contracts.map((c) => [c.ref, c])));
+	const hotVats = $derived(
+		activeRef
+			? new Set((contractByRef.get(activeRef)?.contractors ?? []).map((ct) => ct.vat))
+			: new Set<string>()
+	);
+	const hotRefs = $derived(
+		hoverVat
+			? new Set(
+					data.contracts
+						.filter((c) => c.contractors.some((ct) => ct.vat === hoverVat))
+						.map((c) => c.ref)
+				)
+			: new Set<string>()
+	);
+	// a SELECTED multi-region contract refits the drilled map to every
+	// region it touches (its work regions + every authority seat); hover
+	// never moves the map
+	const fitLive = $derived.by(() => {
+		if (!selectedRef || !focus || focus.side !== 'works') return null;
+		const pes = new Set<string>([focus.pe]);
+		for (const r of contractByRef.get(selectedRef)?.regions ?? []) pes.add(r.pe);
+		for (const p of data.contract_points) if (p.ref === selectedRef) pes.add(p.pe);
+		return pes.size > 1 ? [...pes] : null;
+	});
+	function hoverContract(ref: string) {
+		hoverRef = ref;
+	}
+	function unhoverContract() {
+		hoverRef = null;
+	}
+	function clickContract(ref: string) {
+		selectedRef = selectedRef === ref ? null : ref;
+	}
+	// the dashed seat-links draw for the hovered contract — or, when the
+	// hover is on a contractor dot on the right, for every contract of that
+	// firm (the reverse direction, user 2026-08-20)
+	const linkRefs = $derived(activeRef ? new Set([activeRef]) : hotRefs);
 	const hoverSegments = $derived.by(() => {
-		if (!hoverRef || focus?.side !== 'works') return [];
-		const anchors: [number, number][] = [];
-		for (const p of contractDots)
-			if (p.ref === hoverRef) anchors.push([p.lat2 ?? p.lat, p.lon2 ?? p.lon]);
-		for (const p of data.contract_points)
-			if (p.ref === hoverRef && p.pe !== focus.pe) anchors.push([p.lat, p.lon]);
+		if (!linkRefs.size || focus?.side !== 'works') return [];
 		const segs: [[number, number], [number, number]][] = [];
-		for (let i = 0; i < anchors.length; i++)
-			for (let j = i + 1; j < anchors.length; j++) segs.push([anchors[i], anchors[j]]);
+		for (const ref of linkRefs) {
+			const anchors: [number, number][] = [];
+			for (const p of contractDots)
+				if (p.ref === ref) anchors.push([p.lat2 ?? p.lat, p.lon2 ?? p.lon]);
+			for (const p of data.contract_points)
+				if (p.ref === ref && p.pe !== focus.pe) anchors.push([p.lat, p.lon]);
+			for (let i = 0; i < anchors.length; i++)
+				for (let j = i + 1; j < anchors.length; j++) segs.push([anchors[i], anchors[j]]);
+		}
 		return segs;
 	});
 	const hoverColor = $derived(
@@ -195,33 +261,32 @@
 	// ---- tooltips ------------------------------------------------------
 	function workTip(pe: string): string {
 		const r = workBase.get(pe);
-		if (!r) return `<strong>${ruLabel(pe)}</strong><br>no Anti-nero works recorded`;
+		if (!r) return `<strong>${peEn(pe)}</strong><br>no Anti-nero works recorded`;
 		return (
-			`<strong>${ruLabel(pe)}</strong><br>${grInt(r.n_contracts)} contracts` +
-			`<br>${eur(r.split_eur)} even-split share` +
-			`<br><span style="color:var(--ink-faint)">${eurShort(r.exposure_eur)} full exposure</span>`
+			`<strong>${peEn(pe)}</strong><br>${grInt(r.n_contracts)} contracts` +
+			`<br>${eur(r.split_eur)} — its even share of the contracts covering it`
 		);
 	}
 	function countTip(pe: string): string {
 		const n = refsByPe.get(pe)?.size ?? 0;
-		if (!n) return `<strong>${ruLabel(pe)}</strong><br>no contracts under authorities seated here`;
+		if (!n) return `<strong>${peEn(pe)}</strong><br>no contracts under authorities seated here`;
 		return (
-			`<strong>${ruLabel(pe)}</strong><br>${grInt(n)} contract(s) under forest authorities seated here` +
+			`<strong>${peEn(pe)}</strong><br>${grInt(n)} contract(s) under forest authorities seated here` +
 			`<br><span style="color:var(--ink-faint)">click to see the individual works</span>`
 		);
 	}
 	function homeTip(pe: string): string {
 		const r = homeBase.get(pe);
-		if (!r) return `<strong>${ruLabel(pe)}</strong><br>no contractor HQs located here`;
+		if (!r) return `<strong>${peEn(pe)}</strong><br>no contractors' registered offices located here`;
 		return (
-			`<strong>${ruLabel(pe)}</strong><br>${grInt(r.n_contractors ?? 0)} contractors` +
-			`<br>${eur(r.split_eur)} even-split share` +
-			`<br><span style="color:var(--ink-faint)">${eurShort(r.exposure_eur)} full exposure</span>`
+			`<strong>${peEn(pe)}</strong><br>${grInt(r.n_contractors ?? 0)} contractors` +
+			`<br>${eur(r.split_eur)} — its even share of the contracts covering it`
 		);
 	}
 </script>
 
 <div class="bar">
+	<div class="maplabel">MAP<Hint text={howToRead} heading width="380px" /></div>
 	<SegmentToggle
 		param="view"
 		fallback="money"
@@ -230,15 +295,40 @@
 			{ value: 'points', label: 'Individual dots' }
 		]}
 	/>
-	<small class="muted">
-		{eurShort(data.coverage.resolved_eur)} of {eurShort(data.coverage.total_eur)} is
-		region-resolved · click a regional unit to drill
-	</small>
 </div>
 
 <div class="twin">
 	<div class="panel">
-		<h3>allocation of funding by location of contracts</h3>
+		<!-- this map's key, in the sponsored-works dress (user, 2026-08-20:
+		     one strip per map, right above it — never a box over the map);
+		     its first row names what the map is by -->
+		<ul class="mapkey">
+			<li class="lbl">by location of the contracts</li>
+			{#if view === 'money'}
+				<li class="ramp">
+					<span class="rampkey">
+						<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
+							>{eurShort(sharedMax)}</span
+						>
+					</span>
+					<span>€ of works — each contract's even share</span>
+				</li>
+			{:else if !focus}
+				<li class="ramp">
+					<span class="rampkey">
+						<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
+							>{grInt(maxRegionCount)}</span
+						>
+					</span>
+					<span>contracts under forest authorities seated there</span>
+				</li>
+			{:else if focus.side === 'works'}
+				<li><i class="dot"></i>one contract × forest authority in {peEn(focus.pe)}</li>
+				<li><i class="dash"></i>the seats of a selected contract</li>
+			{:else}
+				<li><i class="dot"></i>works of contractors based in {peEn(focus.pe)}</li>
+			{/if}
+		</ul>
 		<PaperMap
 			width={640}
 			height={620}
@@ -251,6 +341,7 @@
 			tipOf={view === 'money' ? workTip : focus ? undefined : countTip}
 			onRegionClick={(pe) => setFocus('works', focus?.side === 'works' && focus.pe === pe ? null : pe)}
 			focusPe={focus?.side === 'works' ? focus.pe : null}
+			fitPesLive={view === 'points' ? fitLive : null}
 		>
 			{#snippet overlay(ctx)}
 				{#if view === 'points' && focus}
@@ -280,38 +371,42 @@
 							: () => 'var(--ink)'}
 						stroke={focus.side === 'works' ? DRILL_STROKE : 'rgba(42,33,24,.45)'}
 						tipOf={(p) =>
-							`<strong>${p.title}</strong><br>${p.authority}<br>${eur(p.eff_eur as number)}` +
-							((authCount.get(p.ref as string) ?? 0) > 1
-								? '<br><span style="color:var(--ink-faint)">multi-authority contract — hover links its seats</span>'
-								: '')}
-						hrefOf={(p) => `/antinero/contract/${p.ref}`}
-						onOver={(p) => (hoverRef = p.ref as string)}
-						onOut={() => (hoverRef = null)}
+							`<strong>${p.ref}</strong><br>${authEn(p.authority as string)}<br>${eur(p.eff_eur as number)}` +
+							`<br><a href="/antinero/contract/${p.ref}">open the contract →</a>`}
+						hotOf={(p) => hotRefs.has(p.ref as string) || p.ref === selectedRef}
+						pinTip={(p) => hotRefs.has(p.ref as string) || p.ref === selectedRef}
+						onOver={(p) => hoverContract(p.ref as string)}
+						onOut={() => unhoverContract()}
+						onClick={(p) => clickContract(p.ref as string)}
 					/>
-				{/if}
-			{/snippet}
-			{#snippet legend()}
-				{#if view === 'money'}
-					<ChoroLegend ramp={RAMP_WORKS} max={sharedMax} title="€ of works (even-split)" />
-				{:else if !focus}
-					<ChoroLegend
-						ramp={RAMP_WORKS}
-						max={maxRegionCount}
-						title="contracts under authorities seated here"
-						fmt={grInt}
-					/>
-				{:else if focus.side === 'works'}
-					<div>one dot = one contract × authority in {ruLabel(focus.pe)}</div>
-					<div>colour groups multi-authority contracts · hover links their seats</div>
-				{:else}
-					<div>works of contractors based in {ruLabel(focus.pe)}</div>
 				{/if}
 			{/snippet}
 		</PaperMap>
 	</div>
 
 	<div class="panel">
-		<h3>allocation of funding by base-location of contractors</h3>
+		<ul class="mapkey">
+			<li class="lbl">by location of the contractors' registered offices</li>
+			{#if view === 'money'}
+				<li class="ramp">
+					<span class="rampkey">
+						<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
+							>{eurShort(sharedMax)}</span
+						>
+					</span>
+					<span>€ of works — each contract's even share</span>
+				</li>
+			{:else if !focus}
+				<li><i class="dot"></i>exact address</li>
+				<li><i class="dot approx"></i>centre of municipality used as location<Hint text={whyCentre} /></li>
+			{:else if focus.side === 'works'}
+				<li><i class="dot grey"></i>the registered offices of the contractors holding those contracts</li>
+				<li><i class="dot hot"></i>the registered office of the selected contract's contractor</li>
+			{:else}
+				<li><i class="dot"></i>exact address</li>
+				<li><i class="dot approx"></i>centre of municipality used as location<Hint text={whyCentre} /></li>
+			{/if}
+		</ul>
 		<PaperMap
 			width={640}
 			height={620}
@@ -329,22 +424,23 @@
 						{ctx}
 						points={contractorDots}
 						r={focus?.side === 'home' ? 6 : 4.5}
-						fillOf={() => '#2b2b2b'}
+						fillOf={(p) =>
+							hotVats.has(p.vat as string)
+								? '#111111'
+								: focus?.side === 'works'
+									? '#9a9a9a'
+									: '#2b2b2b'}
 						tipOf={(p) =>
-							`<strong>${p.name}</strong><br>${p.pe ?? ''} · ${p.precision}` +
+							`<strong>${p.name}</strong><br>${p.pe ? peEn(p.pe as string) : ''} · ${p.precision}` +
 							`<br>${grInt(p.n_contracts as number)} contracts · ${eur(p.total_eur as number)}`}
 						hrefOf={(p) => `/antinero/contractor/${p.vat}`}
+						dashOf={(p) => (p.precision === 'address' ? undefined : '2 2')}
+						fillOpacityOf={(p) => (p.precision === 'address' ? undefined : 0.55)}
+						hotOf={(p) => hotVats.has(p.vat as string)}
+						pinTip={(p) => hotVats.has(p.vat as string)}
+						onOver={(p) => (hoverVat = p.vat as string)}
+						onOut={() => (hoverVat = null)}
 					/>
-				{/if}
-			{/snippet}
-			{#snippet legend()}
-				{#if view === 'money'}
-					<ChoroLegend ramp={RAMP_WORKS} max={sharedMax} title="€ by contractor HQ (even-split)" />
-				{:else}
-					<div>
-						one dot = one contractor HQ ({grInt(contractorDots.length)} of
-						{grInt(data.contractor_points.coverage.n_total)} geocoded)
-					</div>
 				{/if}
 			{/snippet}
 		</PaperMap>
@@ -365,9 +461,106 @@
 	.bar {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		gap: var(--sp-4);
 		flex-wrap: wrap;
 		margin-bottom: var(--sp-3);
+	}
+	.maplabel {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		color: var(--c-antinero);
+	}
+	/* the key strip — the sponsored-works legend's dress (anadohoi .stkey) */
+	.mapkey {
+		list-style: none;
+		margin: 0 0 var(--sp-2);
+		/* FIXED height — exactly two rows of fs-14 at the page's 1.55 line
+		   height plus the padding — so the two map rectangles sit at the same
+		   level and never move on toggle or drill (user); the rows are
+		   centred in it, and the entries keep one measured gap */
+		height: 4.3rem;
+		/* NOT overflow:hidden — the ⓘ card in the strip is absolutely
+		   positioned and was being clipped by it; the height alone keeps
+		   the strip stable, and the entries fit in it */
+		overflow: visible;
+		position: relative;
+		z-index: 2; /* the card paints above the map that follows */
+		box-sizing: border-box;
+		padding: var(--sp-2) var(--sp-3);
+		background: #f2f2f2;
+		border-radius: 6px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		align-content: center;
+		gap: 4px var(--sp-6, 1.5rem);
+		/* the sponsored-works legend's lettering, exactly (anadohoi .stkey) */
+		font-size: var(--fs-14);
+		color: var(--ink-soft);
+	}
+	.mapkey li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	/* the inline ramp key: 0 · [white + eight swatches] · max — the same
+	   lettering as every other entry, ONE hairline around the whole bar in
+	   the legend's own text colour (user, 2026-08-20) */
+	.rampkey {
+		display: inline-flex;
+		align-items: center;
+		flex: none;
+		white-space: nowrap;
+		font-variant-numeric: tabular-nums;
+	}
+	.rampkey > span:not(.swatches) {
+		margin: 0 5px;
+	}
+	/* NOT «.bar» — that class is the toolbar above the maps, and its
+	   space-between/wrap rule is what flung the swatches to the corners */
+	.rampkey .swatches {
+		display: inline-flex;
+		flex: none;
+		border: 1px solid var(--ink-soft);
+	}
+	.rampkey i {
+		display: inline-block;
+		flex: none;
+		width: 13px;
+		height: 10px;
+	}
+	.rampkey i.empty {
+		background: var(--land-empty); /* the white of a unit with nothing */
+	}
+	.mapkey i.dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: #2b2b2b;
+		flex: none;
+	}
+	.mapkey li.lbl {
+		flex-basis: 100%; /* its own row; same lettering as every entry */
+	}
+	.mapkey i.dot.grey {
+		background: #9a9a9a;
+	}
+	.mapkey i.dot.approx {
+		background: transparent;
+		border: 1.5px dashed #2b2b2b;
+		box-sizing: border-box;
+	}
+	.mapkey i.dot.hot {
+		background: #111111;
+	}
+	.mapkey i.dash {
+		width: 18px;
+		height: 0;
+		border-top: 1.5px dashed #555;
+		flex: none;
 	}
 	.twin {
 		display: grid;
@@ -378,15 +571,5 @@
 		.twin {
 			grid-template-columns: 1fr;
 		}
-	}
-	.panel h3 {
-		font-family: var(--font-ui);
-		font-size: var(--fs-14);
-		font-weight: 600;
-		color: var(--ink-soft);
-		margin: 0 0 var(--sp-2);
-	}
-	.muted {
-		color: var(--ink-faint);
 	}
 </style>

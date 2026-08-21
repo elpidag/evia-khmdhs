@@ -2086,45 +2086,124 @@ def pipelines(kh: sqlite3.Connection, dase: sqlite3.Connection) -> dict:
 
 # -------------------------------------------------------------- connections
 
-def region_flows_yearly(kh: sqlite3.Connection) -> list[dict]:
-    """`q.region_flows` with a signature-year dimension, for the focused flow
-    map's year filter (user, 2026-08-20). Same conventions to the letter:
-    full-exposure attribution (a contract counts toward every home×work
-    region pair it touches — show shares, never sum as programme €), the
-    same exclusions, € = effective cost on the caller's connection. Rows are
-    re-aggregated AFTER canonical_pe so spelling aliases cannot split a
-    pair-year. Σ over the years reconciles to `q.region_flows` (pinned)."""
-    params: list = list(q.EXCLUDED_CONTRACTOR_VATS)
-    sql = f"""
-        SELECT cl.region_pe   AS source_pe,
-               cpr.region_pe  AS target_pe,
+def _flow_units(kh: sqlite3.Connection) -> list[dict]:
+    """One row per (contract, party, work region) with that cell's EVEN-SPLIT
+    share of the contract's €.
+
+    The convention behind every Anti-nero flow surface (user, 2026-08-20):
+    a contract that names k regional units and m signing parties is divided
+    into k×m equal shares — eff/(k·m) each — because the documents we hold
+    state NO allocation of the money between the regions a contract covers
+    (nor between partners). 100 of the 245 in-scope contracts cover more than
+    one regional unit, so this is not a corner case: it is how the maps must
+    be read. A party with no located seat keeps its share as UNRESOLVED —
+    nothing is reassigned to the located ones.
+    """
+    params = list(q.EXCLUDED_CONTRACTOR_VATS)
+    rows = kh.execute(f"""
+        SELECT co.reference_number AS ref,
+               {q.effective_cost(kh, 'co')} AS eff,
                substr(COALESCE(co.contract_signed_date, co.submission_date), 1, 4)
-                              AS year,
-               COUNT(DISTINCT co.reference_number)   AS n_contracts,
-               SUM({q.effective_cost(kh, 'co')})     AS total_eur
-        FROM contractors c
-        JOIN contractor_locations cl      ON cl.vat_number = c.vat_number
-        JOIN contracts co                 ON co.reference_number = c.reference_number
+                   AS year,
+               c.seq AS party_seq, cl.region_pe AS home_pe,
+               cpr.region_pe AS work_pe
+        FROM contracts co
+        JOIN contractors c                ON c.reference_number = co.reference_number
+        LEFT JOIN contractor_locations cl ON cl.vat_number = c.vat_number
         JOIN contract_project_regions cpr ON cpr.reference_number = co.reference_number
         WHERE c.vat_number NOT IN (?, ?)
-          AND cl.region_pe IS NOT NULL
           AND {q.scope_filter(kh, 'co.reference_number')}
-        GROUP BY cl.region_pe, cpr.region_pe, year
-    """
+    """, params).fetchall()
+    by_ref: dict[str, dict] = {}
+    for r in rows:
+        e = by_ref.setdefault(r["ref"], {"eff": r["eff"] or 0.0, "year": r["year"],
+                                          "parties": {}, "regions": set()})
+        e["parties"][r["party_seq"]] = (canonical_pe(r["home_pe"]) or r["home_pe"]
+                                         if r["home_pe"] else None)
+        e["regions"].add(canonical_pe(r["work_pe"]) or r["work_pe"])
+    units = []
+    for ref, e in by_ref.items():
+        k, m = len(e["regions"]), len(e["parties"])
+        if not k or not m:
+            continue
+        share = e["eff"] / (k * m)
+        for home in e["parties"].values():
+            for work in sorted(e["regions"]):
+                units.append({"ref": ref, "year": e["year"], "home_pe": home,
+                              "work_pe": work, "eur": share})
+    return units
+
+
+def antinero_region_flows(kh: sqlite3.Connection) -> list[dict]:
+    """home Π.Ε. → work Π.Ε. flows on the even split (see `_flow_units`):
+    the same shape as the frozen `q.region_flows`, whose full-exposure
+    attribution the Atlas no longer uses. Σ over all flows = the located
+    parties' share of the programme, never more."""
     agg: dict[tuple, dict] = {}
-    for r in kh.execute(sql, params):
-        src = canonical_pe(r["source_pe"]) or r["source_pe"]
-        tgt = canonical_pe(r["target_pe"]) or r["target_pe"]
-        key = (src, tgt, r["year"])
-        e = agg.setdefault(key, {"source_pe": src, "target_pe": tgt,
-                                 "year": r["year"], "n_contracts": 0,
+    refs: dict[tuple, set] = {}
+    for u in _flow_units(kh):
+        if not u["home_pe"]:
+            continue
+        key = (u["home_pe"], u["work_pe"])
+        a = agg.setdefault(key, {"source_pe": u["home_pe"], "target_pe": u["work_pe"],
+                                 "n_contracts": 0, "total_eur": 0.0})
+        a["total_eur"] += u["eur"]
+        refs.setdefault(key, set()).add(u["ref"])
+    out = []
+    for key, a in agg.items():
+        a["n_contracts"] = len(refs[key])
+        a["total_eur"] = round(a["total_eur"], 2)
+        out.append(a)
+    return sorted(out, key=lambda a: -a["total_eur"])
+
+
+def region_flows_yearly(kh: sqlite3.Connection) -> list[dict]:
+    """`antinero_region_flows` with the signature year — the focused flow
+    map's year filter. Σ over the years reconciles to the flows (pinned)."""
+    agg: dict[tuple, dict] = {}
+    refs: dict[tuple, set] = {}
+    for u in _flow_units(kh):
+        if not u["home_pe"]:
+            continue
+        key = (u["home_pe"], u["work_pe"], u["year"])
+        a = agg.setdefault(key, {"source_pe": u["home_pe"], "target_pe": u["work_pe"],
+                                 "year": u["year"], "n_contracts": 0,
                                  "total_eur": 0.0})
-        e["n_contracts"] += r["n_contracts"]
-        e["total_eur"] += r["total_eur"] or 0.0
-    out = sorted(agg.values(), key=lambda e: -e["total_eur"])
-    for e in out:
-        e["total_eur"] = round(e["total_eur"], 2)
-    return out
+        a["total_eur"] += u["eur"]
+        refs.setdefault(key, set()).add(u["ref"])
+    out = []
+    for key, a in agg.items():
+        a["n_contracts"] = len(refs[key])
+        a["total_eur"] = round(a["total_eur"], 2)
+        out.append(a)
+    return sorted(out, key=lambda a: -a["total_eur"])
+
+
+def antinero_region_origins(kh: sqlite3.Connection) -> list[dict]:
+    """Per work Π.Ε.: its even-split € by where the winning party is based —
+    local / imported / unknown (unlocated party). Same shape as the frozen
+    `q.project_region_origins`, on the split instead of the full value."""
+    agg: dict[str, dict] = {}
+    refs: dict[str, set] = {}
+    for u in _flow_units(kh):
+        a = agg.setdefault(u["work_pe"], {"target_pe": u["work_pe"], "n_contracts": 0,
+                                          "total_eur": 0.0, "local_eur": 0.0,
+                                          "imported_eur": 0.0, "unknown_eur": 0.0})
+        a["total_eur"] += u["eur"]
+        if u["home_pe"] is None:
+            a["unknown_eur"] += u["eur"]
+        elif u["home_pe"] == u["work_pe"]:
+            a["local_eur"] += u["eur"]
+        else:
+            a["imported_eur"] += u["eur"]
+        refs.setdefault(u["work_pe"], set()).add(u["ref"])
+    out = []
+    for pe, a in agg.items():
+        a["n_contracts"] = len(refs[pe])
+        for k in ("total_eur", "local_eur", "imported_eur", "unknown_eur"):
+            a[k] = round(a[k], 2)
+        out.append(a)
+    return sorted(out, key=lambda a: -a["total_eur"])
 
 
 def network_payload(kh: sqlite3.Connection) -> dict:
@@ -2216,10 +2295,12 @@ def network_payload(kh: sqlite3.Connection) -> dict:
         "contractor_authority": rnd(ca),
         "contractor_pe": rnd(cp),
         "contractor_signer": rnd(cs),
-        "flows": q.region_flows(kh),
-        # the focused map's year filter reads these; Σ over years == flows
-        "flows_yearly": region_flows_yearly(kh),
-        "origins": q.project_region_origins(kh),
+        # even-split attribution on every flow surface (user, 2026-08-20):
+        # the frozen full-exposure q.region_flows / q.project_region_origins
+        # stay webui's; the Atlas reads the split versions
+        "flows": antinero_region_flows(kh),
+        "flows_yearly": region_flows_yearly(kh),     # Σ over years == flows
+        "origins": antinero_region_origins(kh),
         "pairs": rnd(pairs),
         # curated display names on every surface (DATA_DECISIONS 2026-08-20)
         "contractors": {vat: {"name": (display.get(vat) or {}).get("el")

@@ -98,10 +98,15 @@
 
 	<h2 id="even-split">Even-split attribution</h2>
 	<p>
-		When a contract names several regions, authorities or consortium partners, its € are split
-		evenly across them for aggregate views — so maps, sankeys and per-region charts sum exactly
-		to the programme total with no double counting. Tooltips additionally show
-		<strong>full exposure</strong> (the whole contract value) where useful.
+		Many contracts cover more than one regional unit, and a contract may also name several
+		forest services or be signed by several firms. The documents we hold state
+		<strong>no allocation of the money</strong> between the units a contract covers — a
+		contract for works in three regional units states one price, not three — so for every
+		aggregate view its value is <strong>split equally</strong> between its regions (and its
+		authorities, and its partners). Maps, flow arrows, sankeys and per-region charts are sums
+		of those equal shares and add up exactly to the programme total, with nothing counted
+		twice. We do not show a «whole value per region» figure anywhere, because a contract's
+		whole value was not spent in each region it covers.
 	</p>
 
 	<h2 id="joint-contracts">Contracts signed by more than one party</h2>

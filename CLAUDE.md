@@ -1135,17 +1135,27 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   single-bid rings kept, ν.4782 ceiling lines kept in both modes, phase
   colours gone from it; the old SVG `Beeswarm.svelte` is deleted.
 - **/connections flow design** (no default arc spaghetti): default map =
-  LINEAR %-of-works-won-by-out-of-region-firms choropleth (title
-  auto-computes "only N% stays local" — 13%); click a region → FlowArcs
-  draws only ITS flows, direction-coded with arrowheads (red = firms
-  elsewhere reaching in, blue = its firms reaching out, green dot =
-  stays-local €); plus hub-catchment small multiples — top-6 home regions
-  by exported € (Κεντρ. Τομέας €139M, Θεσσαλονίκη €119M, **Τρίκαλα €87M**,
-  Β. Τομέας €82M, Καβάλα €67M, Ν. Τομέας €57M), one mini-map each on a
-  shared scale, click→traces that hub. One-arrow-per-region "shift arrows"
-  were REJECTED: only 19/56 import-majority regions have a ≥50% dominant
-  origin. `region_flows` € are FULL-EXPOSURE (a multi-region contract
-  counts per region pair, Σ≈€1.1B) — show shares, never sum as programme €.
+  LINEAR %-of-works-won-by-out-of-region-firms choropleth (the finding
+  «only N% stays local» is computed live and sits in the subtitle); click a
+  region → FlowArcs draws only ITS flows, direction-coded with arrowheads
+  (solid black = firms elsewhere reaching in, dashed black = its firms
+  reaching out, white-ringed dot = stays-local €; fixed-size heads so the
+  stroke width alone carries the €; a year control replays one signature
+  year); plus hub-catchment small multiples — top-6 home regions by
+  exported €, one mini-map each on a shared scale, click→traces that hub.
+  One-arrow-per-region "shift arrows" were REJECTED: only 19/56
+  import-majority regions have a ≥50% dominant origin. **Every Atlas flow
+  surface is on the EVEN SPLIT since 2026-08-20** (user: «full exposure is
+  not what is happening»): `queries_extra._flow_units` divides a contract
+  into k regions × m parties equal shares because the documents state no
+  allocation between the units a contract covers — 100 of 245 contracts are
+  multi-region — and `antinero_region_flows` / `region_flows_yearly` /
+  `antinero_region_origins` are sums of those shares, reconciling to
+  €622.534.181,72 (pinned). The frozen full-exposure `q.region_flows` /
+  `q.project_region_origins` stay webui's own (`/map`, `/origins`, which
+  say «maximum-exposure view» in their copy); no Atlas card prints a
+  «full exposure» figure any more and the MAP caveat explains the split
+  with the computed multi-region count.
 - **Stack**: Svelte 5 (runes) + TS + adapter-node (config lives inside
   `vite.config.ts`, no svelte.config file); plain CSS custom properties
   (`src/lib/styles/tokens.css` — white-paper palette since the 2026-08-12

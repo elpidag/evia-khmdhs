@@ -5876,3 +5876,33 @@ enters the top-5 (€15,25M through three ventures and her own work). One new
 ΑΦΜ enters the dataset (100287570 ΝΤΙΝΟΠΟΥΛΟΣ). The 11 that remain: 9 with
 a ΓΕΜΗ record that lists no member rows and 2 with no ΓΕΜΗ number at all —
 no reachable source names them.
+
+## 2026-08-20 · No «full exposure» on the Atlas — the maps split a contract equally between its regions, and say why
+
+The map cards printed an «even-split share» beside a «full exposure» figure
+(the contract's whole value counted toward every region it covers), and the
+flow arrows were drawn on that full-exposure attribution (Σ ≈ €1,1 bn for a
+€622,5 M programme). **User decision: drop full exposure everywhere on the
+Atlas — choropleths, cards and the arrow map — because it is not what
+happened; a contract's whole value was not spent in each region it covers.**
+What the reader needs instead is the explanation: **100 of the 245 in-scope
+contracts cover more than one regional unit**, and the documents we hold
+state NO allocation of the money between the units a contract covers (one
+price for works in three regional units, not three), so each contract is
+split equally between its regions — and, for a jointly signed contract,
+between its partners.
+
+Implemented as one convention behind every flow surface:
+`queries_extra._flow_units` divides each contract into k regions × m parties
+equal shares; `antinero_region_flows`, `region_flows_yearly` and
+`antinero_region_origins` are sums of those shares and reconcile to the
+programme total (€622.534.181,72, pinned within per-row rounding) — the
+stays-local share reads **16,7%** on the split (it read ~12% on full
+exposure, where multi-region contracts inflated the imported side). An
+unlocated party keeps its share as unresolved (none today: 151/151 located).
+The map cards lost the exposure line, the MAP caveat states the reading with
+the computed multi-region count, the flow frame's caveat says the same, the
+methodology's even-split paragraph was rewritten around the reason, and the
+authority page's «full exposure» compare figure became a plain contract
+count. The frozen webui keeps its full-exposure `/map` and `/origins` under
+the «maximum-exposure view» copy it has always carried.

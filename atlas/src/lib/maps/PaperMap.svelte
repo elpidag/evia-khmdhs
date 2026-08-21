@@ -60,6 +60,10 @@
 		 *  detail map should frame the regions it highlights rather than
 		 *  their centres — centres crop an island in half (user, 2026-08-19) */
 		fitPes?: string[] | null;
+		/** LIVE refit (animated) to these Π.Ε. wholes while set — used by the
+		 *  drilled map to show every region a hovered multi-region contract
+		 *  touches; clearing it returns to the focusPe zoom */
+		fitPesLive?: string[] | null;
 		/** margin around fitted points as a fraction of the frame (default 0.12) */
 		fitPad?: number;
 		/** initial framing, hand-tuned: centre lon/lat + zoom factor
@@ -88,6 +92,7 @@
 		fitPoints = null,
 		fitPad = 0.12,
 		fitPes = null,
+		fitPesLive = null,
 		view = null,
 		onViewChange,
 		overlay,
@@ -200,8 +205,15 @@
 	});
 
 	$effect(() => {
-		// re-run when focusPe or geometry readiness changes
+		// re-run when focusPe, the live fit or geometry readiness changes
 		if (!path || !svgEl) return;
+		if (fitPesLive && fitPesLive.length && coarse) {
+			const fs = coarse.features.filter((f) => fitPesLive!.includes(f.properties.pe));
+			if (fs.length) {
+				zoomToFeatures(fs as PeFeature[]);
+				return;
+			}
+		}
 		if (focusPe) {
 			const f = coarse?.features.find((f) => f.properties.pe === focusPe);
 			if (f) zoomToFeature(f);
@@ -266,6 +278,25 @@
 		if (!path) return;
 		const [[x0, y0], [x1, y1]] = boundsOf(f);
 		const k = Math.min(14, 0.82 / Math.max((x1 - x0) / width, (y1 - y0) / height));
+		applyTransform({
+			x: width / 2 - (k * (x0 + x1)) / 2,
+			y: height / 2 - (k * (y0 + y1)) / 2,
+			k
+		});
+	}
+
+	/** fit several Π.Ε. whole — the union of their bounds, a little looser
+	 *  than the single-region drill so off-region seats sit inside the frame */
+	function zoomToFeatures(fs: PeFeature[]) {
+		if (!path || !fs.length) return;
+		let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+		for (const f of fs) {
+			const [[bx0, by0], [bx1, by1]] = boundsOf(f);
+			x0 = Math.min(x0, bx0); y0 = Math.min(y0, by0);
+			x1 = Math.max(x1, bx1); y1 = Math.max(y1, by1);
+		}
+		if (x1 <= x0 || y1 <= y0) return;
+		const k = Math.max(1, Math.min(14, 0.78 / Math.max((x1 - x0) / width, (y1 - y0) / height)));
 		applyTransform({
 			x: width / 2 - (k * (x0 + x1)) / 2,
 			y: height / 2 - (k * (y0 + y1)) / 2,
