@@ -8,6 +8,11 @@
 	import DisbursementCurves from '$lib/charts/DisbursementCurves.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow from '$lib/charts/KindFlow.svelte';
+	import WorksMatrix from '$lib/charts/WorksMatrix.svelte';
+	import WorksBubbleGrid from '$lib/charts/WorksBubbleGrid.svelte';
+	import WorksBundles from '$lib/charts/WorksBundles.svelte';
+	import WorksByCategory from '$lib/charts/WorksByCategory.svelte';
+	import WorksPack from '$lib/charts/WorksPack.svelte';
 	import { unitEn } from '$lib/transforms/names';
 	import SmallMultiples from '$lib/charts/SmallMultiples.svelte';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
@@ -238,16 +243,138 @@
 	});
 	const firstPayYear = $derived((o.timeseries.months[0] ?? '').slice(0, 4));
 	// work-type category chart: stated € or contract counts, same bars
-	let catMode = $state<'eur' | 'n'>('eur');
+	// the TYPES OF WORK lens, a URL param like the other frames' toggles —
+	// «category» / «named» and, under trial (2026-08-22), «flow» / «matrix» /
+	// «pack»
+	const WORKS_LENSES = ['category', 'named', 'split', 'squares', 'bundles', 'grid', 'flow', 'matrix', 'pack'] as const;
+	type WorksLens = (typeof WORKS_LENSES)[number];
+	const worksLens = $derived<WorksLens>(
+		(WORKS_LENSES as readonly string[]).includes(page.url.searchParams.get('works') ?? '')
+			? (page.url.searchParams.get('works') as WorksLens)
+			: 'category'
+	);
+	// the flow: categories (left, € on the node) → works named (right, counts)
+	const CAT_GREYS = ['#1f1f1f', '#3c3c3c', '#595959', '#767676', '#8f8f8f', '#a8a8a8', '#bdbdbd', '#d0d0d0'];
+	const worksFlow = $derived.by(() => {
+		const cats = [...o.categories].sort((a, b) => b.eur - a.eur);
+		const nodes = [
+			...cats.map((c, i) => ({
+				id: 'c:' + c.key,
+				label: c.label_en ?? c.label,
+				side: 'l' as const,
+				n: c.n,
+				eur: c.n,
+				color: CAT_GREYS[Math.min(i, CAT_GREYS.length - 1)]
+			})),
+			...o.themes.themes.map((w) => ({ id: 'w:' + w.theme, label: w.label_en, side: 'r' as const, n: w.n, eur: w.n, color: '#3a3a3a' })),
+			...(o.themes.unspecified ? [{ id: 'w:none', label: 'no specific work named', side: 'r' as const, n: o.themes.unspecified, eur: o.themes.unspecified, color: '#9b9b9b' }] : [])
+		];
+		const links = [
+			...cats.flatMap((c) => (c.names ?? []).map((w) => ({ s: 'c:' + c.key, t: 'w:' + w.theme, n: w.n, eur: w.n }))),
+			...cats.filter((c) => c.n - (c.n_named ?? 0) > 0).map((c) => ({ s: 'c:' + c.key, t: 'w:none', n: c.n - (c.n_named ?? 0), eur: c.n - (c.n_named ?? 0) }))
+		];
+		return { nodes, links };
+	});
+	const matrixCats = $derived(
+		[...o.categories]
+			.sort((a, b) => b.eur - a.eur)
+			.map((c) => ({ key: c.key, label: c.label_en ?? c.label, n: c.n, eur: c.eur, n_named: c.n_named ?? 0, names: (c.names ?? []).map((w) => ({ theme: w.theme, n: w.n })) }))
+	);
+	const matrixWorks = $derived(o.themes.themes.map((w) => ({ theme: w.theme, label: w.label_en })));
+	// works as ROWS, each split by the main category of the contracts naming
+	// it (user, 2026-08-22: the work names are long, so they must be labels)
+	const catGrey = $derived.by(() => {
+		const m = new Map<string, string>();
+		[...o.categories]
+			.sort((a, b) => b.eur - a.eur)
+			.forEach((c, i) => m.set(c.key, CAT_GREYS[Math.min(i, CAT_GREYS.length - 1)]));
+		return m;
+	});
+	const catShort = $derived(
+		new Map(o.categories.map((c) => [c.key, (c.label_en ?? c.label).split(' — ')[0]]))
+	);
+	const worksSplit = $derived.by(() => {
+		const rows = o.themes.themes.map((w) => ({
+			theme: w.theme,
+			label: w.label_en,
+			n: w.n,
+			by: [...o.categories]
+				.map((c) => ({
+					key: c.key,
+					label: catShort.get(c.key) ?? c.key,
+					n: (c.names ?? []).find((x) => x.theme === w.theme)?.n ?? 0
+				}))
+				.filter((s) => s.n > 0)
+				.sort((a, b) => b.n - a.n)
+		}));
+		if (o.themes.unspecified)
+			rows.push({
+				theme: '_none',
+				label: 'no specific work named',
+				n: o.themes.unspecified,
+				by: [...o.categories]
+					.map((c) => ({
+						key: c.key,
+						label: catShort.get(c.key) ?? c.key,
+						n: c.n - (c.n_named ?? 0)
+					}))
+					.filter((s) => s.n > 0)
+					.sort((a, b) => b.n - a.n)
+			});
+		return rows;
+	});
 	const catRows = $derived(
 		[...o.categories]
-			.sort((a, b) => (catMode === 'eur' ? b.eur - a.eur : b.n - a.n))
+			.sort((a, b) => b.eur - a.eur)
 			.map((c) => ({
-				label: c.label,
-				value: catMode === 'eur' ? c.eur : c.n,
-				sublabel: catMode === 'eur' ? `${grInt(c.n)} contracts` : eurShort(c.eur)
+				label: c.label_en ?? c.label,
+				value: c.eur,
+				// the hover: the contract count and what this category's
+				// contracts NAME, from the themes layer
+				title:
+					`${c.label_en ?? c.label} — ${grInt(c.n)} contracts` +
+					(c.names?.length
+						? `. Works named: ${c.names.map((w) => `${w.label_en.toLowerCase()} ${grInt(w.n)}`).join(', ')}`
+						: '')
 			}))
 	);
+	// the reverse link: under each work, the main categories of the contracts
+	// that name it — from the categories' own `names` lists, inverted (user,
+	// 2026-08-22: the two lenses must show their connection both ways)
+	const themeCats = $derived.by(() => {
+		const m = new Map<string, { label: string; n: number }[]>();
+		for (const c of o.categories)
+			for (const w of c.names ?? []) {
+				const arr = m.get(w.theme) ?? [];
+				arr.push({ label: (c.label_en ?? c.label).split(' — ')[0], n: w.n });
+				m.set(w.theme, arr);
+			}
+		for (const arr of m.values()) arr.sort((a, b) => b.n - a.n);
+		return m;
+	});
+	const themeRows = $derived([
+		...o.themes.themes.map((w) => ({
+			label: w.label_en,
+			value: w.n,
+			title:
+				`${w.label_en} — ${grInt(w.n)} contracts name it` +
+				(themeCats.get(w.theme)?.length
+					? `. Main category of those contracts: ${themeCats
+							.get(w.theme)!
+							.map((c) => `${c.label.toLowerCase()} ${grInt(c.n)}`)
+							.join(', ')}`
+					: '')
+		})),
+		...(o.themes.unspecified
+			? [
+					{
+						label: 'fire protection — no specific work named',
+						value: o.themes.unspecified,
+						title: `${grInt(o.themes.unspecified)} contracts say only «αντιπυρική προστασία»`
+					}
+				]
+			: [])
+	]);
 	const topCat = $derived(
 		o.categories.reduce((a, b) => (b.eur > a.eur ? b : a), o.categories[0])
 	);
@@ -704,34 +831,100 @@
 </ChartFrame>
 
 {#if o.categories.length && topCat}
+	{@const works = o.themes}
+	<!-- two lenses (user, 2026-08-22): «main category» — one per contract,
+	     € or count, sums to the total, each bar saying which works its
+	     contracts name — / «works named» — the themes, counted in contracts,
+	     the unspecified ones as their own bar, no € -->
 	<ChartFrame
 		title="TYPES OF WORK"
-		subtitle="Every in-scope contract assigned one of {grInt(
-			o.categories.length
-		)} curated work-type categories from its signed PDF's project title — «{topCat.label}» dominates with {eurShort(
-			topCat.eur
-		)} across {grInt(topCat.n)} contracts ({pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme)."
-		caveat="One category per contract, curated from the signed PDF's descriptive project title with the contract's rarer CPV codes as tie-breaker, so the € columns sum to the programme's stated-net total."
+		insight={worksLens === 'named'
+			? `What the contracts say they do, read from the project title inside each signed PDF: one bar per kind of work, counted in contracts — a contract counts under every work its title names, so the bars overlap and carry no € (the documents state no price per work inside a bundled contract). ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work beyond «αντιπυρική προστασία» and stand as their own bar.`
+			: worksLens === 'split' || worksLens === 'squares'
+				? `One row per work the signed titles name — the works are what the contracts say they do — and each row split by the MAIN CATEGORY of the contracts naming it${worksLens === 'squares' ? ', one square per contract' : ''}: that is what the one-category-per-contract rule flattens, since a bundled title names several works. A contract appears on every row its title names, so the rows overlap; the contracts naming no specific work are the last row. Counts only — no price per work exists inside a bundled contract.`
+			: worksLens === 'bundles'
+				? `What the contracts actually do, as their titles say it: one bar per COMBINATION of works named — «firebreaks + clearing + forest roads» is the commonest — with dots underneath saying which works are in each bundle. This is what one category per contract has to flatten: ${grInt(works.n_contracts - works.unspecified - (works.bundles?.filter((b) => b.themes.length === 1).reduce((s, b) => s + b.n, 0) ?? 0))} of the ${grInt(works.n_contracts)} contracts name more than one work. Counts only — no price per work exists inside a bundled contract.`
+			: worksLens === 'grid'
+				? `One row per main category — one per contract, so its € is honest — one column per work the signed titles name, and a circle whose area is the number of contracts in that pair: the bundles are then the picture, a category’s row showing what its contracts actually do. A contract counts under every work it names, so the columns overlap; the contracts naming no specific work have their own column. Counts, not € — no price per work exists inside a bundled contract.`
+			: worksLens === 'flow'
+				? `The main category of each contract (left, one per contract, the count on the node) flowing into the works its title names (right): a ribbon’s width is the number of contracts of that category naming that work, so a bundled contract sends one ribbon per work it names; the contracts naming no specific work end in their own node. Counts, not € — no price per work exists inside a bundled contract.`
+				: worksLens === 'matrix'
+					? `One row per main category, one column per work the titles name, each cell the number of contracts — darker, more — with the contracts naming no specific work in their own column; the row’s count and stated € close it. Reads both ways: what a category’s contracts do, and where a work’s contracts were filed.`
+					: worksLens === 'pack'
+						? `Every in-scope contract is a circle, area ∝ its stated net €, packed into one bubble per main category, the bubbles packed together, biggest first — the programme chart’s arrangement regrouped by type of work. Hover a bubble for its name, count and €; click a circle for the contract.`
+						: `Every in-scope contract assigned ONE curated category from the project title inside its signed PDF (CPV codes only as tie-breaker), so the € columns sum to the programme’s stated-net total — «${topCat.label_en ?? topCat.label}» dominates with ${eurShort(topCat.eur)} across ${grInt(topCat.n)} contracts (${pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme). Hover a bar for the works its contracts actually name.`}
+		caveat={worksLens !== 'category' && worksLens !== 'pack'
+			? 'Works as named in the signed titles (twelve themes, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.'
+			: 'One category per contract, curated from the signed PDF’s descriptive project title with the contract’s rarer CPV codes as tie-breaker, so the € columns sum to the programme’s stated-net total.'}
 		anchor="categories"
 		methodology="categories"
 	>
-		<div class="mode" role="group" aria-label="Category metric">
-			<button
-				type="button"
-				class:active={catMode === 'eur'}
-				onclick={() => (catMode = 'eur')}>Stated €</button
-			>
-			<button type="button" class:active={catMode === 'n'} onclick={() => (catMode = 'n')}
-				>Contracts</button
-			>
+		<div class="rankbar">
+			<SegmentToggle
+				param="works"
+				fallback="category"
+				options={[
+					{ value: 'category', label: 'main category' },
+					{ value: 'named', label: 'works named' },
+					{ value: 'split', label: 'works × category' },
+					{ value: 'squares', label: 'works × category (squares)' },
+					{ value: 'bundles', label: 'bundles' },
+					{ value: 'grid', label: 'bubble grid' },
+					{ value: 'flow', label: 'flow' },
+					{ value: 'matrix', label: 'matrix' },
+					{ value: 'pack', label: 'pack' }
+				]}
+			/>
 		</div>
-		<BarH
-			rows={catRows}
-			color="#2b2b2b"
-			inside
-			barHeight={22}
-			fmt={catMode === 'eur' ? eurShort : grInt}
-		/>
+		<!-- the bars as before (label inside, value right); the connection
+		     between the two lenses rides in the HOVER of each bar — the works a
+		     category's contracts name, the categories a work's contracts fall
+		     in — not in printed sub-lines (user, 2026-08-22: too much text) -->
+		{#if worksLens === 'named'}
+			<BarH rows={themeRows} color="#2b2b2b" inside barHeight={22} fmt={grInt} />
+		{:else if worksLens === 'split' || worksLens === 'squares'}
+			<div class="catkey">
+				{#each [...o.categories].sort((a, b) => b.eur - a.eur) as c (c.key)}
+					<span><i style:background={catGrey.get(c.key)}></i>{catShort.get(c.key)}</span>
+				{/each}
+			</div>
+			<WorksByCategory
+				rows={worksSplit}
+				colorOf={(k) => catGrey.get(k) ?? '#9b9b9b'}
+				unit={worksLens === 'squares'}
+			/>
+		{:else if worksLens === 'bundles'}
+			<WorksBundles
+				combos={[
+					...(o.themes.bundles ?? []),
+					...(o.themes.unspecified ? [{ themes: [], n: o.themes.unspecified }] : [])
+				]}
+				works={o.themes.themes.map((w) => ({ theme: w.theme, label: w.label_en, n: w.n }))}
+			/>
+		{:else if worksLens === 'grid'}
+			<WorksBubbleGrid cats={matrixCats} works={matrixWorks} />
+		{:else if worksLens === 'flow'}
+			<KindFlow
+				nodes={worksFlow.nodes}
+				links={worksFlow.links}
+				height={620}
+				headings={['main category', 'works named']}
+				marginLeft={330}
+				marginRight={300}
+				wrapLeft={34}
+				fmt={(v) => `${grInt(v)} contracts`}
+			/>
+		{:else if worksLens === 'matrix'}
+			<WorksMatrix cats={matrixCats} works={matrixWorks} />
+		{:else if worksLens === 'pack'}
+			{#if swarm}
+				<WorksPack rows={swarm} cats={matrixCats} size={560} />
+			{:else}
+				<div class="skeleton" style="height: 560px"></div>
+			{/if}
+		{:else}
+			<BarH rows={catRows} color="#2b2b2b" inside barHeight={22} fmt={eurShort} />
+		{/if}
 	</ChartFrame>
 {/if}
 
@@ -1130,6 +1323,28 @@
 	.rankbar {
 		display: flex;
 		justify-content: flex-start;
+		align-items: center;
+		gap: var(--sp-4);
 		margin-bottom: var(--sp-2);
+	}
+	/* the category key of the works × category lenses */
+	.catkey {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px var(--sp-4);
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+		margin-bottom: var(--sp-3);
+	}
+	.catkey span {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.catkey i {
+		display: inline-block;
+		width: 12px;
+		height: 12px;
+		border-radius: 2px;
 	}
 </style>

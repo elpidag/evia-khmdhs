@@ -124,6 +124,26 @@ def test_sankey_reconciles(client):
     assert contractor_in == pytest.approx(622_534_181.72, abs=1.0)
 
 
+def test_types_of_work_lenses(client):
+    """TYPES OF WORK (2026-08-22): the categories ship their English label
+    and the works their contracts NAME; the themes lens counts contracts
+    under every work named (overlapping by design), 91 of 245 name none."""
+    o = client.get("/api/antinero/overview").get_json()
+    cats = {c["key"]: c for c in o["categories"]}
+    assert cats["dasotexnika"]["label_en"].startswith("General fire-prevention works")
+    top = {w["theme"]: w["n"] for w in cats["dasotexnika"]["names"]}
+    assert top["odiko_diktyo"] == 60 and top["katharismoi"] == 54 and top["antipyrikes_zones"] == 49
+    th = o["themes"]
+    assert th["n_contracts"] == 245 and th["n_named"] == 154 and th["unspecified"] == 91
+    assert {w["theme"]: w["n"] for w in th["themes"]} == {
+        "antipyrikes_zones": 84, "odiko_diktyo": 75, "katharismoi": 59, "miktes_zones": 37,
+        "arxaiologikoi": 17, "anadasoseis": 15, "meletes": 14, "antidiavrotika": 13,
+        "ylotomies": 7, "dasokomika": 6, "nero": 2}
+    # every theme bar carries an English label; the unused theme is absent
+    assert all(w["label_en"] and w["label_en"] != w["theme"] for w in th["themes"])
+    assert "perifraxi" not in {w["theme"] for w in th["themes"]}
+
+
 def test_unit_flow_reconciles(client):
     """MONEY FLOW (2026-08-21): the ΥΠΕΝ unit that signed → contractors —
     four units, top-10 + pooled, both columns the basis to the cent."""

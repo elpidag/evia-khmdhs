@@ -397,6 +397,7 @@ def antinero_overview(kh: sqlite3.Connection,
         "probable": probable_related(kh),
         "cpvs": antinero_cpvs(kh),
         "categories": antinero_categories(kh),
+        "themes": antinero_themes(kh),
         "document_kinds": antinero_document_kinds(kh),
     }
 
@@ -411,8 +412,9 @@ def antinero_categories(kh: sqlite3.Connection) -> list[dict]:
             "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') "
             "AND name='contract_categories'").fetchone():
         return []
-    rows = kh.execute("""
-        SELECT c.category AS key, l.label AS label,
+    en = ", l.label_en" if _column_exists(kh, "category_labels", "label_en") else ""
+    rows = kh.execute(f"""
+        SELECT c.category AS key, l.label AS label{en},
                COUNT(*) AS n, ROUND(SUM(k.total_cost_with_vat), 2) AS eur
         FROM contract_categories c
         JOIN contract_scope s ON s.reference_number = c.reference_number
@@ -422,8 +424,84 @@ def antinero_categories(kh: sqlite3.Connection) -> list[dict]:
         GROUP BY c.category
         ORDER BY eur DESC, c.category
     """).fetchall()
+    # which WORKS the contracts of each category name (the themes layer) —
+    # the specifics the one-category rule hides, printed under each bar
+    # (user, 2026-08-22); counts in contracts, a contract under every work
+    # its title names
+    names: dict[str, list[dict]] = {}
+    if _table(kh, "contract_work_themes"):
+        for r in kh.execute("""
+            SELECT c.category AS key, t.theme, MIN(l.label_en) AS label_en,
+                   MIN(l.label_el) AS label_el, COUNT(DISTINCT t.reference_number) AS n
+            FROM contract_categories c
+            JOIN contract_scope s ON s.reference_number = c.reference_number
+            JOIN contract_work_themes t ON t.reference_number = c.reference_number
+            LEFT JOIN work_theme_labels l ON l.theme = t.theme
+            WHERE s.in_scope = 1
+            GROUP BY c.category, t.theme
+            ORDER BY c.category, n DESC"""):
+            names.setdefault(r["key"], []).append(
+                {"theme": r["theme"], "label_en": r["label_en"] or r["theme"],
+                 "label_el": r["label_el"] or r["theme"], "n": r["n"]})
+    # how many of each category's contracts name at least one work — the
+    # rest name none («fire protection» and nothing more), drawn as such
+    named: dict[str, int] = {}
+    if _table(kh, "contract_work_themes"):
+        named = dict(kh.execute("""
+            SELECT c.category, COUNT(DISTINCT t.reference_number)
+            FROM contract_categories c
+            JOIN contract_scope s ON s.reference_number = c.reference_number
+            JOIN contract_work_themes t ON t.reference_number = c.reference_number
+            WHERE s.in_scope = 1 GROUP BY c.category""").fetchall())
     return [{"key": r["key"], "label": r["label"] or r["key"],
-             "n": r["n"], "eur": r["eur"] or 0.0} for r in rows]
+             "label_en": _col(r, "label_en") or r["label"] or r["key"],
+             "n": r["n"], "eur": r["eur"] or 0.0,
+             "n_named": named.get(r["key"], 0),
+             "names": names.get(r["key"], [])} for r in rows]
+
+
+def antinero_themes(kh: sqlite3.Connection) -> dict:
+    """The works the contracts NAME — the multi-label themes read from the
+    signed titles (12, DATA_DECISIONS 2026-08-19) — counted in in-scope
+    contracts, a contract under every work it names (so the bars overlap by
+    design and carry no €), plus the in-scope contracts naming NO specific
+    work («αντιπυρική προστασία» and nothing more) — the front page's second
+    lens of TYPES OF WORK (user, 2026-08-22)."""
+    if not q._has_scope_table(kh) or not _table(kh, "contract_work_themes"):
+        return {"themes": [], "unspecified": 0, "n_contracts": 0}
+    rows = kh.execute("""
+        SELECT t.theme, MIN(l.label_en) AS label_en, MIN(l.label_el) AS label_el,
+               COUNT(DISTINCT t.reference_number) AS n
+        FROM contract_work_themes t
+        JOIN contract_scope s ON s.reference_number = t.reference_number
+        LEFT JOIN work_theme_labels l ON l.theme = t.theme
+        WHERE s.in_scope = 1
+        GROUP BY t.theme ORDER BY n DESC, t.theme""").fetchall()
+    n_all = kh.execute("SELECT COUNT(*) FROM contract_scope WHERE in_scope = 1").fetchone()[0]
+    n_named = kh.execute("""
+        SELECT COUNT(DISTINCT t.reference_number) FROM contract_work_themes t
+        JOIN contract_scope s ON s.reference_number = t.reference_number
+        WHERE s.in_scope = 1""").fetchone()[0]
+    # the BUNDLES: the combination of works each title names, counted — the
+    # honest answer to «what do these contracts actually do?» (2026-08-22)
+    sets: dict[str, list[str]] = {}
+    for r in kh.execute("""
+        SELECT t.reference_number AS ref, t.theme
+        FROM contract_work_themes t
+        JOIN contract_scope s ON s.reference_number = t.reference_number
+        WHERE s.in_scope = 1"""):
+        sets.setdefault(r["ref"], []).append(r["theme"])
+    order = {r["theme"]: i for i, r in enumerate(rows)}
+    combos: dict[tuple[str, ...], int] = {}
+    for themes in sets.values():
+        key = tuple(sorted(set(themes), key=lambda k: order.get(k, 99)))
+        combos[key] = combos.get(key, 0) + 1
+    bundles = sorted(({"themes": list(k), "n": v} for k, v in combos.items()),
+                     key=lambda b: (-b["n"], b["themes"]))
+    return {"themes": [{"theme": r["theme"], "label_en": r["label_en"] or r["theme"],
+                        "label_el": r["label_el"] or r["theme"], "n": r["n"]} for r in rows],
+            "bundles": bundles,
+            "unspecified": n_all - n_named, "n_contracts": n_all, "n_named": n_named}
 
 
 def antinero_cpvs(kh: sqlite3.Connection) -> list[dict]:
@@ -905,7 +983,9 @@ def contract_swarm(kh: sqlite3.Connection) -> list[dict]:
                k.procedure_type, k.bids_submitted,
                (SELECT cpr.region_pe FROM contract_project_regions cpr
                 WHERE cpr.reference_number = k.reference_number
-                ORDER BY cpr.seq LIMIT 1) AS pe
+                ORDER BY cpr.seq LIMIT 1) AS pe,
+               (SELECT cc.category FROM contract_categories cc
+                WHERE cc.reference_number = k.reference_number) AS category
         FROM contracts k
         JOIN contract_scope s ON s.reference_number = k.reference_number
         WHERE s.in_scope = 1
@@ -919,6 +999,9 @@ def contract_swarm(kh: sqlite3.Connection) -> list[dict]:
             "t": t[:80] + ("…" if len(t) > 80 else ""),
             "eur": r["eff"],
             "scope": r["scope"],
+            # the curated work-type category — the packed TYPES OF WORK
+            # drawing groups the contracts by it (2026-08-22)
+            "category": _col(r, "category"),
             "year": d[:4] if d else None,
             "d": d,
             "proc": _proc_kind(r["procedure_type"]),

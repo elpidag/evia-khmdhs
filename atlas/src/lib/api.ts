@@ -165,6 +165,8 @@ export interface SwarmRow {
 	proc: 'direct' | 'open' | 'nego' | 'other';
 	single_bidder: 0 | 1;
 	pe: string | null;
+	/** the curated work-type category key (TYPES OF WORK pack drawing) */
+	category?: string | null;
 }
 
 export interface PeYearly {
@@ -425,7 +427,26 @@ export interface AntineroOverview {
 	cpvs: { code: string; desc: string; n: number }[];
 	/** curated work-type category per in-scope contract (ONE each, so the
 	 *  stated-net sums reconcile to the programme total) */
-	categories: { key: string; label: string; n: number; eur: number }[];
+	categories: {
+		key: string;
+		label: string;
+		/** English label + the works this category's contracts NAME (themes) */
+		label_en?: string;
+		n: number;
+		eur: number;
+		/** contracts of this category naming at least one work */
+		n_named?: number;
+		names?: { theme: string; label_en: string; label_el: string; n: number }[];
+	}[];
+	/** the works the contracts name — the multi-label themes, counted in contracts; the unspecified ones apart */
+	themes: {
+		themes: { theme: string; label_en: string; label_el: string; n: number }[];
+		/** the combination of works each title names, counted (the bundles) */
+		bundles?: { themes: string[]; n: number }[];
+		unspecified: number;
+		n_contracts: number;
+		n_named: number;
+	};
 	/** what KIND of σύμβαση each in-scope record is — all of them are
 	 *  συμβάσεις, the kind says which (original, revision of terms,
 	 *  supplementary contract or works, deadline extension) */

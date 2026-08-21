@@ -6,6 +6,8 @@
 		value: number;
 		href?: string;
 		sublabel?: string;
+		/** hover text for the row (inside layout); defaults to the label */
+		title?: string;
 	}
 
 	interface Props {
@@ -73,7 +75,7 @@
 					style:background={colorOf ? colorOf(r) : color}
 				>
 					{#if tier[i] < 2}
-						<span class="on" class:two={tier[i] === 1} title={r.label}>
+						<span class="on" class:two={tier[i] === 1} title={r.title ?? r.label}>
 							{#if r.href}<a href={r.href}>{r.label}</a>{:else}{r.label}{/if}
 						</span>
 					{/if}

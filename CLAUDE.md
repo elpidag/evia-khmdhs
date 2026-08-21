@@ -250,8 +250,15 @@ refetching open contracts — prefer it for routine updates.
   block (verbatim title, provenance link to the parent version when
   inherited) via `queries_extra.contract_category`;
   Σ stated net reconciles to the basis exactly (pinned). Atlas: TYPES OF
-  WORK BarH (€/count toggle) + CPV CODES list close the front page;
-  labels ship from `category_labels`, never hardcoded.
+  WORK is ONE frame with two lenses since 2026-08-22 (`?works=`): «main
+  category» BarH (€/count, English `label_en` — the catch-all reads
+  «General fire-prevention works — clearing, forest roads, firebreaks» —
+  each bar's sub-line listing the works its contracts NAME from the
+  themes) / «works named» (the 12 themes counted in contracts +
+  «fire protection — no specific work named» 91; no €);
+  `antinero_themes` + `names` on the overview, pinned; CPV CODES list
+  closes the front page; labels ship from `category_labels` /
+  `work_theme_labels`, never hardcoded.
 - `scripts/audit_contract_documents.py` — audits every in-scope contract
   against its own signed text, reading the **CHAIN** (tip → all ancestors),
   never the tip alone: 46 of 245 in-scope contracts are amendments whose own

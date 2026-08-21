@@ -6677,3 +6677,51 @@ relaxation now spaces the middle column's label-plus-node blocks too;
 the brace stays a `KindFlow` feature, unused. A note for the
 next discussion: the user sees faults in how TYPES OF WORK is
 represented.
+
+## 2026-08-22 · TYPES OF WORK: the catch-all named for what it is, and the works the contracts name shown beside the categories
+
+The user found the front-page chart «weird»: «Δασοτεχνικά έργα πρόληψης»
+is a catch-all (154 of 245 contracts, €358M) and «the specifics of the
+works we have checked and read are lost and mixed» in it. Cause: the
+one-category-per-contract rule (chosen so the € bars sum to the total)
+files every bundled title («καθαρισμοί, συντήρηση δασικού οδικού δικτύου
+και αντιπυρικών ζωνών» — 101 of 155 titles name two or more works) under
+one word. The specifics live in the THEMES layer (12 multi-label works
+read from the same titles) and were shown only on the contract page.
+
+Decision (user, wanting BOTH on the front page and the categories kept on
+the contract page): ONE frame, two lenses on a toggle «main category /
+works named» (`?works=`). «Main category» keeps the one-per-contract bars
+(€ or count, summing to the total) with the bars' ENGLISH labels (the
+payload now ships `label_en`; the bars had printed the Greek), the
+catch-all renamed in English to what it is — «General fire-prevention
+works — clearing, forest roads, firebreaks» (the Greek label in the
+curated file is unchanged) — and under each bar the works its contracts
+actually name, from the themes («names: forest road network 60 · clearing
+54 · firebreaks 49 · …»), so the € stays honest and the specifics show.
+«Works named» draws the themes counted in contracts — a contract under
+every work its title names, so the bars overlap by design and carry NO €
+(no price per work exists inside a bundled contract) — with the 91
+contracts naming no specific work as their own bar («fire protection — no
+specific work named»). `queries_extra.antinero_themes` + `names` on
+`antinero_categories`, both on `/api/antinero/overview`, pinned (84 · 75 ·
+59 · 37 · 17 · 15 · 14 · 13 · 7 · 6 · 2; 91 of 245 unspecified). The
+contract page's TYPE chip already printed `label_en`, so it now says the
+new name. Nothing in the curated verdicts changed.
+
+**Drawing trials, open (2026-08-22 evening).** The bars' cross-lens facts
+sit in each bar's HOVER (printed sub-lines were «too much text»). Beyond
+the two bar lenses, six drawings of the same two layers are live on the
+toggle for the user to choose from — nothing removed yet, the decision is
+tomorrow's: **flow** (categories → works, KindFlow, counts — «the most
+comprehensible», but it must not reuse MONEY FLOW's drawing), **works ×
+category** and **works × category (squares)** (the works as ROWS — the
+work names are long, which is what killed every column-headed drawing —
+each row split by the main category of the contracts naming it, as a
+stacked bar or one square per contract), **bundles** (an UpSet plot of the
+29 combinations a title names: firebreaks + clearing + forest roads 33,
+firebreaks + mixed zones 22 …; `antinero_themes.bundles`), **bubble
+grid** and **matrix** (categories × works — «incomprehensible … looks like
+matrix») and **pack** (every contract a circle, area ∝ €, one bubble per
+category; the swarm rows carry `category` for it). The API gained
+`themes.bundles` and `categories[].n_named`; `KindFlow` gained `fmt`.

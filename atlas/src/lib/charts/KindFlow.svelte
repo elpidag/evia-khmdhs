@@ -51,6 +51,9 @@
 		 *  name along it — «these all belong to …» said diagrammatically
 		 *  (user, 2026-08-22: the four ΥΠΕΝ units) */
 		leftGroup?: string;
+		/** how a node's value prints (default €) — a flow of COUNTS passes a
+		 *  count formatter */
+		fmt?: (v: number) => string;
 	}
 	// tall enough, and padded enough, that the two-line label of even a
 	// hairline node (a category worth 0,7% of the €) clears its neighbours
@@ -66,7 +69,8 @@
 		wrapLeft = 20,
 		wrapMid = 999,
 		nodePad = 30,
-		leftGroup = ''
+		leftGroup = '',
+		fmt = eurShort
 	}: Props = $props();
 
 	type NodeExtra = FlowNode;
@@ -337,7 +341,7 @@
 					{:else}
 						{#each lines as ln, i (i)}<tspan x={lx} y={y1 + i * LINE}>{ln}</tspan>{/each}
 					{/if}
-					<tspan class="value" x={lx} y={y1 + lines.length * LINE}>{eurShort(n.eur)}</tspan>
+					<tspan class="value" x={lx} y={y1 + lines.length * LINE}>{fmt(n.eur)}</tspan>
 				</text>
 			</g>
 		{/each}
