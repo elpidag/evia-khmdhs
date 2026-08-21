@@ -13,7 +13,6 @@
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import Hint from '$lib/ui/Hint.svelte';
-	import DrillPanel from './DrillPanel.svelte';
 
 	let { data }: { data: AntineroMapPayload } = $props();
 
@@ -25,11 +24,38 @@
 		return m ? { side: m[1] as 'works' | 'home', pe: m[2] } : null;
 	});
 
+	// the SELECTED contract (item 5, user 2026-08-21): a URL param like the
+	// drill, so it survives the € / dots toggle and travels in a permalink;
+	// it only counts while a map is drilled and the contract is known
+	const selRaw = $derived(page.url.searchParams.get('sel'));
+	// a selected CONTRACTOR (user, 2026-08-21: a click on a contractor dot
+	// selects it — its card held, its contracts lit on the left — instead of
+	// leaving for its page; the page is the card's link). One selection at a
+	// time: selecting one kind clears the other.
+	const selvRaw = $derived(page.url.searchParams.get('selv'));
+	function setSelected(ref: string | null) {
+		const url = new URL(page.url);
+		if (ref) url.searchParams.set('sel', ref);
+		else url.searchParams.delete('sel');
+		url.searchParams.delete('selv');
+		goto(url, { replaceState: true, keepFocus: true, noScroll: true });
+	}
+	function setSelectedVat(vat: string | null) {
+		const url = new URL(page.url);
+		if (vat) url.searchParams.set('selv', vat);
+		else url.searchParams.delete('selv');
+		url.searchParams.delete('sel');
+		goto(url, { replaceState: true, keepFocus: true, noScroll: true });
+	}
+	function clearSelection() {
+		if (selRaw || selvRaw) setSelected(null);
+	}
 	function setFocus(side: 'works' | 'home', pe: string | null) {
-		selectedRef = null;
 		const url = new URL(page.url);
 		if (pe) url.searchParams.set('focus', `${side}:${pe}`);
 		else url.searchParams.delete('focus');
+		url.searchParams.delete('sel'); // a new drill starts unselected
+		url.searchParams.delete('selv');
 		goto(url, { replaceState: true, keepFocus: true, noScroll: true });
 	}
 
@@ -45,12 +71,6 @@
 	);
 	const workBase = $derived(new Map(data.work_regions.map((r) => [r.pe, r])));
 	const homeBase = $derived(new Map(data.home_regions.map((r) => [r.pe, r])));
-	const sharedMax = $derived(
-		Math.max(
-			...data.work_regions.map((r) => r.split_eur),
-			...data.home_regions.map((r) => r.split_eur)
-		)
-	);
 
 	// contracts touching a work Π.Ε. / held by contractors homed in a Π.Ε.
 	const focusContracts = $derived.by(() => {
@@ -113,6 +133,14 @@
 		return m;
 	});
 
+	// ONE sqrt ramp on both maps, shared max (the classed scale of the same
+	// day was rejected by the user — «former ways were far nicer»)
+	const sharedMax = $derived(
+		Math.max(
+			...data.work_regions.map((r) => r.split_eur),
+			...data.home_regions.map((r) => r.split_eur)
+		)
+	);
 	const workChoro = $derived(makeChoro(RAMP_WORKS, sharedMax));
 	const homeChoro = $derived(makeChoro(RAMP_WORKS, sharedMax));
 
@@ -129,6 +157,7 @@
 		}
 		return m;
 	});
+
 	const maxRegionCount = $derived(
 		Math.max(...[...refsByPe.values()].map((s) => s.size), 1)
 	);
@@ -189,46 +218,50 @@
 		'dot sits at the centre of the settlement the document names, and is drawn dashed.';
 
 
-	const drillColors = $derived.by(() => {
-		if (focus?.side !== 'works') return null;
-		const multi = [...new Set(contractDots.map((p) => p.ref as string))]
-			.filter((r) => (authCount.get(r) ?? 0) > 1)
-			.sort();
-		// grayscale only (user, 2026-08-20): adjacent multi-authority
-		// contracts alternate between two greys, and which dots belong
-		// together is shown by the dashed hover links rather than by hue
-		const m = new Map<string, string>();
-		multi.forEach((ref, i) => {
-			m.set(ref, i % 2 ? '#9a9a9a' : '#3f3f3f');
-		});
-		return m;
-	});
+	// every contract dot is ONE grey (user, 2026-08-21 — the legend must show
+	// the colour the map uses); which dots belong to one contract is shown by
+	// the dashed seat links on hover and by the selection, never by hue
 
 	// Hovering a multi-authority contract's dot links ALL its authority
 	// seats with dashed lines in the contract's colour — off-region seats
 	// at their true spots, so a line running off-frame means the contract
 	// spans beyond this Π.Ε.
 	let hoverRef = $state<string | null>(null);
+	const contractByRef = $derived(new Map(data.contracts.map((c) => [c.ref, c])));
 	// the SELECTED contract (click, user 2026-08-20): it keeps its links and
 	// its card, lights its contractor, and a multi-region one widens the map
 	// — nothing moves the map on hover any more
-	let selectedRef = $state<string | null>(null);
+	const selectedRef = $derived(
+		selRaw && focus && contractByRef.has(selRaw) ? selRaw : null
+	);
 	const activeRef = $derived(selectedRef ?? hoverRef);
 	// the two maps talk to each other (user, 2026-08-20): hovering a contract
 	// dot lights its contractor(s) on the right; hovering a contractor dot
 	// lights that firm's contracts on the left
 	let hoverVat = $state<string | null>(null);
-	const contractByRef = $derived(new Map(data.contracts.map((c) => [c.ref, c])));
+	const selectedVat = $derived(
+		selvRaw && focus && data.contractor_points.points.some((p) => p.vat === selvRaw)
+			? selvRaw
+			: null
+	);
+	const activeVat = $derived(selectedVat ?? hoverVat);
 	const hotVats = $derived(
 		activeRef
 			? new Set((contractByRef.get(activeRef)?.contractors ?? []).map((ct) => ct.vat))
 			: new Set<string>()
 	);
+	// the selected contract's firm(s): the one card the right map HOLDS
+	// (hover highlights across the maps but pins nothing — user, 2026-08-21)
+	const selectedVats = $derived(
+		selectedRef
+			? new Set((contractByRef.get(selectedRef)?.contractors ?? []).map((ct) => ct.vat))
+			: new Set<string>()
+	);
 	const hotRefs = $derived(
-		hoverVat
+		activeVat
 			? new Set(
 					data.contracts
-						.filter((c) => c.contractors.some((ct) => ct.vat === hoverVat))
+						.filter((c) => c.contractors.some((ct) => ct.vat === activeVat))
 						.map((c) => c.ref)
 				)
 			: new Set<string>()
@@ -250,7 +283,7 @@
 		hoverRef = null;
 	}
 	function clickContract(ref: string) {
-		selectedRef = selectedRef === ref ? null : ref;
+		setSelected(selectedRef === ref ? null : ref);
 	}
 	// the dashed seat-links draw for the hovered contract — or, when the
 	// hover is on a contractor dot on the right, for every contract of that
@@ -270,39 +303,50 @@
 		}
 		return segs;
 	});
-	const hoverColor = $derived(
-		hoverRef ? (drillColors?.get(hoverRef) ?? SINGLE_FILL) : SINGLE_FILL
-	);
+	const hoverColor = SINGLE_FILL;
 
 	// ---- tooltips ------------------------------------------------------
+	// the € ramp's tick values at the boundaries of swatches 0/2/4/6/8 of the
+	// sqrt scale (makeChoro): v = max · (k/8)²
+
+	// region cards: place · count · € — short and factual; what the € means
+	// and what a click does is said once, in the legend and its ⓘ
 	function workTip(pe: string): string {
 		const r = workBase.get(pe);
-		if (!r) return `<strong>${peEn(pe)}</strong><br>no Anti-nero works recorded`;
-		return (
-			`<strong>${peEn(pe)}</strong><br>${grInt(r.n_contracts)} contracts` +
-			`<br>${eur(r.split_eur)} — its even share of the contracts covering it`
-		);
+		if (!r) return `<strong>${peEn(pe)}</strong><br>no works recorded`;
+		return `<strong>${peEn(pe)}</strong><br>${grInt(r.n_contracts)} contracts · ${eur(r.split_eur)}`;
 	}
 	function countTip(pe: string): string {
 		const n = refsByPe.get(pe)?.size ?? 0;
 		if (!n) return `<strong>${peEn(pe)}</strong><br>no contracts under authorities seated here`;
-		return (
-			`<strong>${peEn(pe)}</strong><br>${grInt(n)} contract(s) under forest authorities seated here` +
-			`<br><span style="color:var(--ink-faint)">click to see the individual works</span>`
-		);
+		return `<strong>${peEn(pe)}</strong><br>${grInt(n)} ${n === 1 ? 'contract' : 'contracts'} under authorities seated here`;
 	}
 	function homeTip(pe: string): string {
 		const r = homeBase.get(pe);
-		if (!r) return `<strong>${peEn(pe)}</strong><br>no contractors' registered offices located here`;
-		return (
-			`<strong>${peEn(pe)}</strong><br>${grInt(r.n_contractors ?? 0)} contractors` +
-			`<br>${eur(r.split_eur)} — its even share of the contracts covering it`
-		);
+		if (!r) return `<strong>${peEn(pe)}</strong><br>no registered offices located here`;
+		return `<strong>${peEn(pe)}</strong><br>${grInt(r.n_contractors ?? 0)} contractors · ${eur(r.split_eur)}`;
 	}
 </script>
 
+{#snippet rampKey(maxLabel: string)}
+	<!-- the inline ramp key the user approved: 0 · [white + eight swatches,
+	     one hairline round the whole bar] · max (2026-08-20) -->
+	<span class="rampkey">
+		<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
+			>{maxLabel}</span
+		>
+	</span>
+{/snippet}
+
 <div class="bar">
-	<div class="maplabel">MAP<Hint text={howToRead} heading width="380px" /></div>
+	<div class="barleft">
+		<div class="maplabel">MAP<Hint text={howToRead} heading width="380px" /></div>
+		{#if focus}
+			<button class="reset" onclick={() => setFocus(focus!.side, null)} title="Back to all of Greece (Esc)">
+				✕ {peEn(focus.pe)} · all of Greece
+			</button>
+		{/if}
+	</div>
 	<SegmentToggle
 		param="view"
 		fallback="money"
@@ -322,27 +366,20 @@
 			<li class="lbl">by location of the contracts</li>
 			{#if view === 'money'}
 				<li class="ramp">
-					<span class="rampkey">
-						<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
-							>{eurShort(sharedMax)}</span
-						>
-					</span>
+					{@render rampKey(eurShort(sharedMax))}
 					<span>€ of works — each contract's even share</span>
 				</li>
 			{:else if !focus}
 				<li class="ramp">
-					<span class="rampkey">
-						<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
-							>{grInt(maxRegionCount)}</span
-						>
-					</span>
+					{@render rampKey(grInt(maxRegionCount))}
 					<span>contracts under forest authorities seated there</span>
 				</li>
 			{:else if focus.side === 'works'}
-				<li><i class="dot"></i>one contract × forest authority in {peEn(focus.pe)}</li>
-				<li><i class="dash"></i>the seats of a selected contract</li>
+				<li><i class="dot work"></i>one contract × forest authority in {peEn(focus.pe)}</li>
+				<li><i class="dot sel"></i>the selected contract</li>
+				<li><i class="dash"></i>the seats of one contract, linked</li>
 			{:else}
-				<li><i class="dot"></i>works of contractors based in {peEn(focus.pe)}</li>
+				<li><i class="dot work"></i>works of contractors based in {peEn(focus.pe)}</li>
 			{/if}
 		</ul>
 		<PaperMap
@@ -354,7 +391,10 @@
 				: focus
 					? () => 'var(--land-empty)'
 					: (pe) => countChoro(refsByPe.get(pe)?.size ?? 0)}
-			tipOf={view === 'money' ? workTip : focus ? undefined : countTip}
+			tipOf={view === 'money' ? workTip : countTip}
+			splitTips
+			onEmptyClick={() => clearSelection()}
+			onEscape={() => focus && setFocus(focus.side, null)}
 			onRegionClick={(pe) => setFocus('works', focus?.side === 'works' && focus.pe === pe ? null : pe)}
 			focusPe={focus?.side === 'works' ? focus.pe : null}
 			fitPesLive={view === 'points' ? fitLive : null}
@@ -382,15 +422,15 @@
 						{ctx}
 						points={contractDots}
 						r={focus.side === 'works' ? 6 : 4.5}
-						fillOf={focus.side === 'works'
-							? (p) => drillColors?.get(p.ref as string) ?? SINGLE_FILL
-							: () => 'var(--ink)'}
-						stroke={focus.side === 'works' ? DRILL_STROKE : 'rgba(42,33,24,.45)'}
+						fillOf={(p) =>
+							hotRefs.has(p.ref as string) || p.ref === selectedRef ? '#111111' : SINGLE_FILL}
+						stroke={DRILL_STROKE}
 						tipOf={(p) =>
-							`<strong>${p.ref}</strong><br>${authEn(p.authority as string)}<br>${eur(p.eff_eur as number)}` +
-							`<br><a href="/antinero/contract/${p.ref}">open the contract →</a>`}
+							`<strong><a href="/antinero/contract/${p.ref}">${p.ref}</a></strong>` +
+							`<br>${authEn(p.authority as string)}<br>${eur(p.eff_eur as number)}`}
 						hotOf={(p) => hotRefs.has(p.ref as string) || p.ref === selectedRef}
-						pinTip={(p) => hotRefs.has(p.ref as string) || p.ref === selectedRef}
+						pinTip={(p) => p.ref === selectedRef}
+						onUnpin={() => clearSelection()}
 						onOver={(p) => hoverContract(p.ref as string)}
 						onOut={() => unhoverContract()}
 						onClick={(p) => clickContract(p.ref as string)}
@@ -405,11 +445,7 @@
 			<li class="lbl">by location of the contractors' registered offices</li>
 			{#if view === 'money'}
 				<li class="ramp">
-					<span class="rampkey">
-						<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
-							>{eurShort(sharedMax)}</span
-						>
-					</span>
+					{@render rampKey(eurShort(sharedMax))}
 					<span>€ of works — each contract's even share</span>
 				</li>
 			{:else if !focus}
@@ -417,7 +453,7 @@
 				<li><i class="dot approx"></i>centre of municipality used as location<Hint text={whyCentre} /></li>
 			{:else if focus.side === 'works'}
 				<li><i class="dot grey"></i>the registered offices of the contractors holding those contracts</li>
-				<li><i class="dot hot"></i>the registered office of the selected contract's contractor</li>
+				<li><i class="dot hot"></i>the selected contractor, or the selected contract's contractor</li>
 			{:else}
 				<li><i class="dot"></i>exact address</li>
 				<li><i class="dot approx"></i>centre of municipality used as location<Hint text={whyCentre} /></li>
@@ -431,6 +467,9 @@
 				? (pe) => homeChoro(homeValues.get(pe) ?? 0)
 				: () => 'var(--land-empty)'}
 			tipOf={homeTip}
+			splitTips
+			onEmptyClick={() => clearSelection()}
+			onEscape={() => focus && setFocus(focus.side, null)}
 			onRegionClick={(pe) => setFocus('home', focus?.side === 'home' && focus.pe === pe ? null : pe)}
 			focusPe={focus?.side === 'home' ? focus.pe : null}
 		>
@@ -445,21 +484,22 @@
 						inert={!focus}
 						r={focus?.side === 'home' ? 6 : 4.5}
 						fillOf={(p) =>
-							hotVats.has(p.vat as string)
+							hotVats.has(p.vat as string) || p.vat === selectedVat
 								? '#111111'
 								: focus?.side === 'works'
 									? '#9a9a9a'
-									: '#2b2b2b'}
+									: '#555555'}
 						tipOf={(p) =>
-							`<strong>${p.name}</strong><br>${p.pe ? peEn(p.pe as string) : ''} · ${p.precision}` +
-							`<br>${grInt(p.n_contracts as number)} contracts · ${eur(p.total_eur as number)}`}
-						hrefOf={(p) => `/antinero/contractor/${p.vat}`}
+							`<strong><a href="/antinero/contractor/${p.vat}">${p.name}</a></strong>` +
+							`<br>${grInt(p.n_contracts as number)} ${(p.n_contracts as number) === 1 ? 'contract' : 'contracts'} · ${eur(p.total_eur as number)}`}
 						dashOf={(p) => (p.precision === 'address' ? undefined : '2 2')}
 						fillOpacityOf={(p) => (p.precision === 'address' ? undefined : 0.55)}
-						hotOf={(p) => hotVats.has(p.vat as string)}
-						pinTip={(p) => hotVats.has(p.vat as string)}
+						hotOf={(p) => hotVats.has(p.vat as string) || p.vat === selectedVat}
+						pinTip={(p) => selectedVats.has(p.vat as string) || p.vat === selectedVat}
+						onUnpin={() => clearSelection()}
 						onOver={(p) => (hoverVat = p.vat as string)}
 						onOut={() => (hoverVat = null)}
+						onClick={(p) => setSelectedVat(selectedVat === p.vat ? null : (p.vat as string))}
 					/>
 				{/if}
 			{/snippet}
@@ -467,15 +507,6 @@
 	</div>
 </div>
 
-{#if focus}
-	<DrillPanel
-		pe={focus.pe}
-		side={focus.side}
-		contracts={focusContracts.map((c) => ({ ref: c.ref, title: c.title, eur: c.share }))}
-		contractors={drillContractors}
-		onReset={() => setFocus(focus!.side, null)}
-	/>
-{/if}
 
 <style>
 	.bar {
@@ -485,6 +516,26 @@
 		gap: var(--sp-4);
 		flex-wrap: wrap;
 		margin-bottom: var(--sp-3);
+	}
+	.barleft {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+	}
+	/* the drill's way out — the table below the maps is gone (user, 2026-08-21) */
+	.reset {
+		font: inherit;
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+		background: var(--paper);
+		border: 1px solid var(--ink-soft);
+		border-radius: 999px;
+		padding: 1px 10px;
+		cursor: pointer;
+	}
+	.reset:hover {
+		color: var(--ink);
+		border-color: var(--ink);
 	}
 	.maplabel {
 		font-family: var(--font-display);
@@ -529,6 +580,9 @@
 	/* the inline ramp key: 0 · [white + eight swatches] · max — the same
 	   lettering as every other entry, ONE hairline around the whole bar in
 	   the legend's own text colour (user, 2026-08-20) */
+	/* the inline ramp key: 0 · [white + eight swatches] · max — the same
+	   lettering as every other entry, ONE hairline around the whole bar in
+	   the legend's own text colour (user, 2026-08-20) */
 	.rampkey {
 		display: inline-flex;
 		align-items: center;
@@ -559,8 +613,22 @@
 		width: 10px;
 		height: 10px;
 		border-radius: 50%;
-		background: #2b2b2b;
+		background: #555555; /* the country-level registered-office dot */
 		flex: none;
+	}
+	/* the left map's contract dots: the map's own grey and stroke */
+	.mapkey i.dot.work {
+		background: #6b6b6b;
+		border: 1px solid #333333;
+		box-sizing: border-box;
+	}
+	/* the selected contract: black, enlarged, ink-stroked — as on the map */
+	.mapkey i.dot.sel {
+		width: 14px;
+		height: 14px;
+		background: #111111;
+		border: 1.5px solid var(--ink);
+		box-sizing: border-box;
 	}
 	.mapkey li.lbl {
 		flex-basis: 100%; /* its own row; same lettering as every entry */
@@ -568,9 +636,10 @@
 	.mapkey i.dot.grey {
 		background: #9a9a9a;
 	}
+	/* a settlement-centre dot: dashed ring over a 55 % fill — as drawn */
 	.mapkey i.dot.approx {
-		background: transparent;
-		border: 1.5px dashed #2b2b2b;
+		background: rgba(85, 85, 85, 0.55);
+		border: 1.5px dashed #555555;
 		box-sizing: border-box;
 	}
 	.mapkey i.dot.hot {

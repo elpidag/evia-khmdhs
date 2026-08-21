@@ -70,6 +70,12 @@
 		deadline: string | null;
 		/** 1-based, chronological */
 		n: number;
+		/** 'khmdhs' (a ΣΥΜΒ record) or 'diavgeia' (an extension approval act) */
+		source?: string | null;
+		/** the act granted different dates per area; the step carries the latest */
+		per_area?: boolean;
+		/** whether this step moved the deadline in force forward */
+		later?: boolean;
 	}
 	interface Props {
 		/** the contract's signature date (ISO) */
@@ -197,9 +203,27 @@
 	const xe = $derived(x(end));               // acceptance ✔, not a bar edge
 	const xd = $derived(x(deadline));          // the announced deadline
 	// the last deadline in force, after every extension
-	const xdLast = $derived(
-		x(extensions.length ? (extensions[extensions.length - 1].deadline ?? deadline) : deadline)
+	// the latest date any step granted — a per-area act may come AFTER one
+	// that already granted a later date for another area
+	const lastDeadline = $derived(
+		extensions.reduce<string | null>(
+			(m, e) => (e.deadline && (!m || e.deadline > m) ? e.deadline : m),
+			deadline
+		)
 	);
+	const xdLast = $derived(x(lastDeadline));
+	// the extension labels print the ordinal only («1st», «2nd»…, the word
+	// is the legend's), and a label closer than 14 units to the previous
+	// printed one is dropped — the arc and its hover title stay (user, 2026-08-21)
+	const extLabels = $derived.by(() => {
+		let last = -Infinity;
+		return extensions.map((e) => {
+			const ex = x(e.d);
+			const label = ex !== null && ex - last >= 14;
+			if (label) last = ex as number;
+			return { ...e, label };
+		});
+	});
 	const todayX = $derived(x(today) ?? 4);
 	const todayFlip = $derived(todayX > W - 110);
 	// nothing was announced: the Gantt's stub, never an invented span
@@ -482,7 +506,7 @@
 				<path d="M0,0 L6,3 L0,6 Z" class="extarrowfill" />
 			</marker>
 		</defs>
-		{#each extensions as e (e.n)}
+		{#each extLabels as e (e.n)}
 			{@const ex = x(e.d)}
 			{@const en = x(e.deadline)}
 			{#if ex !== null}
@@ -497,9 +521,11 @@
 						onmouseleave={() => onActHover?.(null)}
 					>
 						<title
-							>{ORDINAL(e.n)} {e.kind === 'approval_schedule_extension'
+							>{ORDINAL(e.n)} {e.kind === 'approval_schedule_extension' || e.kind === 'extension_act'
 								? 'extension'
-								: 'new deadline'} — signed {dmy(e.d)} · deadline moved to {dmy(e.deadline)}</title
+								: e.kind === 'extension_partial_act'
+									? 'partial extension'
+									: 'new deadline'}{e.per_area ? ' (per area — latest date shown)' : ''} — {e.source === 'diavgeia' ? 'approved' : 'signed'} {dmy(e.d)} · deadline {e.later ? 'moved to' : 'set at'} {dmy(e.deadline)}</title
 						>
 					</path>
 				{/if}
@@ -511,7 +537,7 @@
 					class:hot={highlightRef !== null && e.ref === highlightRef}
 					text-anchor="middle"
 					onmouseenter={() => onActHover?.(e.ref)}
-					onmouseleave={() => onActHover?.(null)}>{ORDINAL(e.n)} extension</text
+					onmouseleave={() => onActHover?.(null)}>{e.label ? ORDINAL(e.n) : ''}</text
 				>
 			{/if}
 		{/each}
@@ -579,13 +605,13 @@
 		fill: var(--ink);
 		font-weight: 600;
 	}
+	/* symbols carry NO outline — no halo on ✔ or €, no stroke on a dot, no
+	   outline on the bar (user, 2026-08-21) */
 	.mark {
 		font-size: 11px;
 		font-weight: 900;
 		fill: var(--ink);
-		paint-order: stroke;
-		stroke: var(--paper);
-		stroke-width: 2.5px;
+		stroke: none;
 	}
 	/* a dot ON the bar prints white with no outline; off the bar it prints
 	   in ink, or it would be a white dot on white paper (user, 2026-08-19) */
@@ -671,17 +697,14 @@
 		font-size: 9px;
 		font-weight: 700;
 		fill: var(--ink);
-		paint-order: stroke;
-		stroke: var(--paper);
-		stroke-width: 2.5px;
+		stroke: none;
 	}
 	.pay.onbar {
 		fill: #fff;
 		stroke: none;
 	}
 	.barhot {
-		stroke: var(--ink);
-		stroke-width: 1.5;
+		stroke: none;
 	}
 	.dline {
 		stroke: var(--c-antinero);

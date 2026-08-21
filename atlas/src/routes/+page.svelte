@@ -793,12 +793,10 @@
 		border: none;
 		box-shadow: none;
 	}
-	/* map cards in grey, not black (user, 2026-08-20); several pinned
-	   cards stack with a hairline between them */
-	.antp :global(.map .tip) {
-		background: #5c5c5c;
-		color: #fff;
-		pointer-events: auto; /* the selected contract's card carries its link */
+	/* two card slots (user, 2026-08-21): the place's card grey, top-left;
+	   the item's card black, bottom-left, carrying its link */
+	.antp :global(.map .tip.item) {
+		pointer-events: auto; /* the card carries the item's link */
 	}
 	.antp :global(.map .tip a) {
 		color: #fff;

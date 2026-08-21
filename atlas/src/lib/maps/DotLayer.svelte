@@ -30,6 +30,8 @@
 		 *  passes through to whatever lies under the dot (the region polygon
 		 *  keeps its own card) */
 		inert?: boolean;
+		/** called when the reader releases the pinned card (its ✕ or Esc) */
+		onUnpin?: () => void;
 		/** per-dot stroke-dasharray (e.g. approximate-location dots) */
 		dashOf?: (p: DotPoint) => string | undefined;
 		/** per-dot fill opacity override (approximate dots render lighter) */
@@ -51,6 +53,7 @@
 		hotOf,
 		pinTip,
 		inert = false,
+		onUnpin,
 		dashOf,
 		fillOpacityOf
 	}: Props = $props();
@@ -82,7 +85,8 @@
 		ctx.showTip(
 			pinned.length > MAX
 				? `${html}<hr class="tip-rule">+${pinned.length - MAX} more`
-				: html
+				: html,
+			{ pinned: true, onClose: () => onUnpin?.() }
 		);
 	});
 
@@ -99,24 +103,28 @@
 		onOut?.(p);
 	}
 
-	const placed = $derived(
-		points
-			.map((p) => {
+	const placed = $derived.by(() => {
+		const all = points
+			.map((p, idx) => {
 				const xy = ctx.projection([
 					(p.lon2 as number) ?? p.lon,
 					(p.lat2 as number) ?? p.lat
 				]);
-				return xy ? { p, x: xy[0], y: xy[1] } : null;
+				return xy ? { p, x: xy[0], y: xy[1], idx } : null;
 			})
-			.filter((d): d is { p: DotPoint; x: number; y: number } => d !== null)
-	);
+			.filter((d): d is { p: DotPoint; x: number; y: number; idx: number } => d !== null);
+		// a hot dot (selected, or lit by a selection on the other map) paints
+		// LAST, i.e. above its neighbours, so it is actually seen (user, 2026-08-21)
+		if (!hotOf) return all;
+		return [...all.filter((d) => !hotOf(d.p)), ...all.filter((d) => hotOf(d.p))];
+	});
 
 	function radius(p: DotPoint): number {
 		return (typeof r === 'function' ? r(p) : r) / ctx.k;
 	}
 </script>
 
-{#each placed as { p, x, y }, i (i)}
+{#each placed as { p, x, y, idx } (idx)}
 	{@const href = inert ? null : (hrefOf?.(p) ?? null)}
 	{@const hot = hotOf?.(p) ?? false}
 	{#if inert}

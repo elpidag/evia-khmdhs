@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import { feature } from 'topojson-client';
 import { geoContains } from 'd3-geo';
 import type { FeatureCollection, MultiPolygon } from 'geojson';
+import type { Topology } from 'topojson-specification';
+import peTopoRaw from '../../../static/geo/pe.topo.json';
 import { spreadOverlaps } from './useGeo';
 
 /** the drawn country layer — the same file PaperMap loads */
 function landLayer(): FeatureCollection<MultiPolygon> {
-	const topo = JSON.parse(readFileSync(resolve('static/geo/pe.topo.json'), 'utf8'));
+	const topo = peTopoRaw as unknown as Topology;
 	const key = Object.keys(topo.objects)[0];
 	return feature(topo, topo.objects[key]) as unknown as FeatureCollection<MultiPolygon>;
 }

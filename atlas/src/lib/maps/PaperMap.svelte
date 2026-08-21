@@ -6,7 +6,9 @@
 		projection: GeoProjection;
 		/** current zoom scale — divide radii by this to keep dots screen-sized */
 		k: number;
-		showTip: (html: string) => void;
+		/** the ITEM card (bottom-left, black); `pinned` draws the white rule +
+		 *  ✕ and makes Esc / the ✕ call `onClose` (user, 2026-08-21) */
+		showTip: (html: string, opts?: { pinned?: boolean; onClose?: () => void }) => void;
 		hideTip: () => void;
 	}
 
@@ -46,6 +48,14 @@
 		colorOf?: (pe: string) => string;
 		/** pinned-tooltip HTML on region hover (convenience only, never load-bearing) */
 		tipOf?: (pe: string) => string;
+		/** two card slots: the REGION card in its own grey top-left slot, so a
+		 *  dot's card (bottom-left, black) never replaces it (user, 2026-08-21) */
+		splitTips?: boolean;
+		/** a click on the bare map (no region, no dot) — the Anti-nero maps
+		 *  clear their selection with it (user, 2026-08-21) */
+		onEmptyClick?: () => void;
+		/** Escape with nothing pinned — the Anti-nero maps reset their drill */
+		onEscape?: () => void;
 		onRegionClick?: (pe: string) => void;
 		/** drilled Π.Ε. — zooms to it, swaps in hi-res + municipality borders */
 		focusPe?: string | null;
@@ -84,6 +94,9 @@
 	let {
 		colorOf = () => 'var(--land-empty)',
 		tipOf,
+		splitTips = false,
+		onEmptyClick,
+		onEscape,
 		onRegionClick,
 		focusPe = null,
 		interactive = true,
@@ -395,11 +408,30 @@
 		return muni.features.filter((f) => f.properties.pe === focusPe);
 	});
 
-	function showTip(html: string) {
+	// the region card's own slot when `splitTips` (grey, top-left)
+	let regionTipHtml = $state('');
+	// a pinned item card: white rule + ✕, Esc / ✕ release it through onClose
+	let tipPinned = $state(false);
+	let tipOnClose = $state<(() => void) | null>(null);
+	function showTip(html: string, opts?: { pinned?: boolean; onClose?: () => void }) {
 		tipHtml = html;
+		tipPinned = !!opts?.pinned;
+		tipOnClose = opts?.onClose ?? null;
 	}
 	function hideTip() {
 		tipHtml = '';
+		tipPinned = false;
+		tipOnClose = null;
+	}
+	function regionEnter(pe: string) {
+		if (!tipOf) return;
+		if (splitTips) regionTipHtml = tipOf(pe);
+		else tipHtml = tipOf(pe);
+	}
+	function regionLeave() {
+		if (!tipOf) return;
+		if (splitTips) regionTipHtml = '';
+		else tipHtml = '';
 	}
 	// k is quantised so overlays (dots, arcs) re-render at quarter-steps of
 	// the zoom, not per frame — pan doesn't touch them at all.
@@ -414,11 +446,15 @@
 </script>
 
 <div class="map" class:plate={!!relief} role="img" aria-label="Map of Greece by regional unit">
+	<!-- svelte-ignore a11y_no_static_element_interactions, a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 	<svg
 		bind:this={svgEl}
 		viewBox="0 0 {width} {height}"
 		preserveAspectRatio="xMidYMid meet"
 		class:interactive
+		onclick={(e) => {
+			if (e.target === e.currentTarget) onEmptyClick?.();
+		}}
 	>
 		{#if path}
 			<g transform="translate({transform.x},{transform.y}) scale({transform.k})">
@@ -452,8 +488,8 @@
 						d={dOf(f)}
 						fill={relief ? 'transparent' : colorOf(f.properties.pe)}
 						role={onRegionClick ? 'button' : undefined}
-						onmouseenter={tipOf ? () => (tipHtml = tipOf(f.properties.pe)) : undefined}
-						onmouseleave={tipOf ? () => (tipHtml = '') : undefined}
+						onmouseenter={tipOf ? () => regionEnter(f.properties.pe) : undefined}
+						onmouseleave={tipOf ? () => regionLeave() : undefined}
 						onclick={onRegionClick ? () => onRegionClick(f.properties.pe) : undefined}
 						onkeydown={onRegionClick
 							? (e) => e.key === 'Enter' && onRegionClick(f.properties.pe)
@@ -483,13 +519,30 @@
 		</div>
 	{/if}
 
+	{#if splitTips && regionTipHtml}
+		<div class="tip region">
+			<!-- eslint-disable-next-line svelte/no-at-html-tags — tip HTML is built by our own code from DB values -->
+			{@html regionTipHtml}
+		</div>
+	{/if}
 	{#if tipHtml}
-		<div class="tip">
+		<div class="tip item" class:pinned={tipPinned}>
 			<!-- eslint-disable-next-line svelte/no-at-html-tags — tip HTML is built by our own code from DB values -->
 			{@html tipHtml}
+			{#if tipPinned}
+				<button class="tip-close" onclick={() => tipOnClose?.()} title="Release (Esc)" aria-label="Release the selection">✕</button>
+			{/if}
 		</div>
 	{/if}
 </div>
+<svelte:window
+	onkeydown={(e) => {
+		if (e.key !== 'Escape') return;
+		// first Esc releases a held card; with nothing held it steps out of the drill
+		if (tipPinned) tipOnClose?.();
+		else onEscape?.();
+	}}
+/>
 
 <style>
 	.map {
@@ -530,9 +583,10 @@
 		stroke: var(--ink);
 		stroke-width: 1.4;
 	}
+	/* the drilled unit: a clearly heavier outline than a hover (user, 2026-08-21) */
 	.region.focused {
 		stroke: var(--ink);
-		stroke-width: 1.1;
+		stroke-width: 1.6;
 	}
 	.muni {
 		fill: none;
@@ -598,5 +652,31 @@
 		font-size: var(--fs-13);
 		font-variant-numeric: tabular-nums;
 		pointer-events: none;
+	}
+	/* two slots (user, 2026-08-21): the place's card grey at the top-left, the
+	   item's card black at the bottom-left — a dot's card never replaces the
+	   region's, and the two are told apart by colour and corner */
+	.tip.region {
+		top: var(--sp-2);
+		bottom: auto;
+		background: #5c5c5c;
+	}
+	/* a held (clicked) card: white rule on top and a ✕ — hover cards have neither */
+	.tip.pinned {
+		border-top: 2px solid #fff;
+		padding-right: 1.8rem;
+		pointer-events: auto;
+	}
+	.tip-close {
+		position: absolute;
+		top: 2px;
+		right: 4px;
+		background: none;
+		border: 0;
+		color: #fff;
+		font-size: var(--fs-12);
+		line-height: 1;
+		cursor: pointer;
+		padding: 2px 4px;
 	}
 </style>
