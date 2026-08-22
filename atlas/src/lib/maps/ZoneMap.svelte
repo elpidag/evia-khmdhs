@@ -276,7 +276,8 @@
 		height: auto;
 		display: block;
 		background: #f2f2f2;
-		border: none;
+		/* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
+		border: 1px solid var(--line);
 		border-radius: 4px;
 	}
 	.land {

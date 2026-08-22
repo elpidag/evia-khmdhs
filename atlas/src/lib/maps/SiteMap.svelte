@@ -382,9 +382,9 @@
 		     click-to-zoom must never strand the reader without a way back -->
 		{#if sites.length > 1 || scars.length > 0 || zoom.k > 1}
 			<div class="zoomctl">
-				<button onclick={zoomIn} title="Zoom in" aria-label="Zoom in">+</button>
-				<button onclick={zoomOut} title="Zoom out" aria-label="Zoom out">−</button>
-				<button onclick={home} title="Reset view" aria-label="Reset view">⌂</button>
+				<button onclick={zoomIn} title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M5 1h2v4h4v2H7v4H5V7H1V5h4z" fill="currentColor"/></svg></button>
+				<button onclick={zoomOut} title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M1 5h10v2H1z" fill="currentColor"/></svg></button>
+				<button onclick={home} title="Reset view" aria-label="Reset view"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M6 1l4.4 3.4V11H1.6V4.4z" fill="currentColor"/></svg></button>
 			</div>
 		{/if}
 		{#if shownTip}
@@ -409,7 +409,8 @@
 		height: auto;
 		display: block;
 		background: #f2f2f2;
-		border: none;
+		/* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
+		border: 1px solid var(--line);
 		border-radius: 4px;
 		touch-action: none;
 	}
@@ -473,23 +474,33 @@
 		right: var(--sp-2);
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
+		gap: 4px;
 	}
 	.zoomctl button {
 		font: inherit;
-		font-size: var(--fs-16);
-		line-height: 1;
-		width: 1.8rem;
-		height: 1.8rem;
-		border: 1px solid var(--line);
-		border-radius: 4px;
-		background: color-mix(in srgb, var(--paper) 92%, transparent);
-		color: var(--ink-soft);
+		line-height: 0;
+		width: 1.45rem;
+		height: 1.45rem;
+		padding: 0;
+		display: grid;
+		place-items: center;
+		border: none;
+		/* solid section-hue circles with white glyphs (user mock, 2026-08-22);
+		   each section sets --map-accent, black is the fallback */
+		border-radius: 50%;
+		background: var(--map-accent, var(--c-anadohoi));
+		color: #fff;
 		cursor: pointer;
 	}
 	.zoomctl button:hover {
-		color: var(--ink);
-		background: var(--paper);
+		opacity: 0.82;
+	}
+	/* the component's generic svg rule sizes maps to 100% — the button
+	   glyphs must keep their own 11px */
+	.zoomctl button svg {
+		width: 9.5px;
+		height: 9.5px;
+		display: block;
 	}
 	/* the fire card: black, white lettering, top-left — mirroring the
 	   zoom buttons in the opposite corner; the site card shares the look

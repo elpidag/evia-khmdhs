@@ -44,7 +44,7 @@
 	import { zoom as d3zoom, zoomIdentity, type D3ZoomEvent, type ZoomBehavior } from 'd3-zoom';
 	import type { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 	import type { Snippet } from 'svelte';
-	import { loadMuniBorders, loadPe, loadPeHires, type PeProps } from './useGeo';
+	import { loadMuniBorders, loadPe, loadPeHires, type PeProps, loadNeighbours, type NeighbourProps } from './useGeo';
 
 	interface Props {
 		/** polygon fill by Π.Ε. name; default = empty land */
@@ -92,6 +92,10 @@
 		/** baked shaded-relief underlay (frame-aligned AVIF, multiply-blended
 		 *  over the region fills; `hi` swaps in past k≥2, never on narrow) */
 		relief?: { lo: string; hi?: string } | null;
+		/** draw the land around Greece (neighbouring countries + Athos) —
+		 *  scenery, on by default; a map that must show Greece alone sets
+		 *  `context={false}` */
+		context?: boolean;
 	}
 
 	let {
@@ -113,7 +117,8 @@
 		onViewChange,
 		overlay,
 		legend,
-		relief = null
+		relief = null,
+		context = true
 	}: Props = $props();
 
 	type PeFeature = Feature<MultiPolygon, PeProps>;
@@ -124,6 +129,11 @@
 	let coarse = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
 	let hires = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
 	let muni = $state.raw<FeatureCollection<GeoJSON.MultiLineString, { pe: string }> | null>(null);
+	// the land around Greece — scenery, drawn first and never interactive
+	let land = $state.raw<FeatureCollection<
+		GeoJSON.MultiPolygon | GeoJSON.Polygon | GeoJSON.MultiLineString,
+		NeighbourProps
+	> | null>(null);
 	let tipHtml = $state('');
 	let transform = $state({ x: 0, y: 0, k: 1 });
 	let svgEl = $state<SVGSVGElement | null>(null);
@@ -177,6 +187,12 @@
 	// keep multi-MB geometry out of the HTML payload).
 	$effect(() => {
 		loadPe(fetch).then((fc) => (coarse = fc));
+	});
+	// the context land (neighbours + Athos): 51 KB, fetched with the map so
+	// the sea is never briefly empty (user, 2026-08-22)
+	$effect(() => {
+		if (!context) return;
+		loadNeighbours(fetch).then((fc) => (land = fc));
 	});
 
 	// Prefetch the hi-res + municipality layers during browser idle time and
@@ -292,7 +308,19 @@
 
 	function zoomToFeature(f: PeFeature) {
 		if (!path) return;
-		const [[x0, y0], [x1, y1]] = boundsOf(f);
+		let [[x0, y0], [x1, y1]] = boundsOf(f);
+		// Χαλκιδική's third leg is Athos, which no administrative layer
+		// carries — drilling into the unit would cut it off mid-peninsula,
+		// so the FRAME (display only, never the data) takes it in too
+		// (user, 2026-08-22)
+		if (f.properties.pe === 'Π.Ε. Χαλκιδικής' && land && path) {
+			const a = land.features.find((g) => g.properties.kind === 'athos');
+			if (a) {
+				const [[ax0, ay0], [ax1, ay1]] = path.bounds(a);
+				x0 = Math.min(x0, ax0); y0 = Math.min(y0, ay0);
+				x1 = Math.max(x1, ax1); y1 = Math.max(y1, ay1);
+			}
+		}
 		const k = Math.min(14, 0.82 / Math.max((x1 - x0) / width, (y1 - y0) / height));
 		applyTransform({
 			x: width / 2 - (k * (x0 + x1)) / 2,
@@ -338,9 +366,11 @@
 		zoomBehavior = d3zoom<SVGSVGElement, unknown>()
 			.scaleExtent([1, 14])
 			.wheelDelta((ev) => (-ev.deltaY * (ev.deltaMode === 1 ? 0.05 : ev.deltaMode ? 1 : 0.002)) * 0.18)
+			// pan/zoom can never show past the fitted frame — beyond it the
+			// context layer's clip box would come into view (user, 2026-08-22)
 			.translateExtent([
-				[-width * 0.25, -height * 0.25],
-				[width * 1.25, height * 1.25]
+				[0, 0],
+				[width, height]
 			])
 			.filter((ev) => {
 				if (ev.type === 'wheel') return wheelArmed;
@@ -471,6 +501,18 @@
 	>
 		{#if path}
 			<g transform="translate({transform.x},{transform.y}) scale({transform.k})">
+				{#if land}
+					<!-- context land: the neighbouring countries and the Athos
+					     peninsula (which no administrative layer carries — Άγιον
+					     Όρος is not a municipality). Drawn FIRST, so the Greek
+					     polygons paint over the little the tuck-buffer overlaps;
+					     inert, nameless scenery (user, 2026-08-22). -->
+					{#each land.features as f, i (i)}
+						{#if f.properties.kind !== 'border'}
+							<path class="context" class:athos={f.properties.kind === 'athos'} d={path(f) ?? ''} />
+						{/if}
+					{/each}
+				{/if}
 				{#if relief}
 					<!-- baked relief plate, drawn UNDER the (transparent-filled)
 					     polygons; the .map.plate background carries the same plate
@@ -513,6 +555,17 @@
 				{#each muniFeatures as f, i (i)}
 					<path class="muni" d={dOf(f)} />
 				{/each}
+				{#if land}
+					<!-- the LAND BORDER, dashed black over the fills: with the
+					     neighbours in white, this line is what says where Greece
+					     ends (user, 2026-08-22). Cut from our own Π.Ε. outline,
+					     so it hugs the drawn polygons exactly. -->
+					{#each land.features as f, i (i)}
+						{#if f.properties.kind === 'border'}
+							<path class="gr-border" d={path(f) ?? ''} />
+						{/if}
+					{/each}
+				{/if}
 				{#if overlay && projection}
 					{@render overlay(ctx)}
 				{/if}
@@ -526,9 +579,9 @@
 
 	{#if interactive && !narrow}
 		<div class="zoomctl">
-			<button onclick={() => zoomBy(1.08)} title="Zoom in" aria-label="Zoom in">+</button>
-			<button onclick={() => zoomBy(1 / 1.08)} title="Zoom out" aria-label="Zoom out">−</button>
-			<button onclick={resetZoom} title="Reset view" aria-label="Reset view">⌂</button>
+			<button onclick={() => zoomBy(1.08)} title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M5 1h2v4h4v2H7v4H5V7H1V5h4z" fill="currentColor"/></svg></button>
+			<button onclick={() => zoomBy(1 / 1.08)} title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M1 5h10v2H1z" fill="currentColor"/></svg></button>
+			<button onclick={resetZoom} title="Reset view" aria-label="Reset view"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M6 1l4.4 3.4V11H1.6V4.4z" fill="currentColor"/></svg></button>
 		</div>
 	{/if}
 
@@ -558,9 +611,39 @@
 />
 
 <style>
+	/* the land around Greece: one flat tone, a hairline coast, no
+	   interaction — it must never compete with the data (user, 2026-08-22) */
+	.context {
+		fill: var(--land-context, #ffffff);
+		stroke: var(--land-context-line, #c4c4c4);
+		stroke-width: 0.5;
+		vector-effect: non-scaling-stroke;
+		pointer-events: none;
+	}
+	/* where Greece ends on land: dashed black over the fills (user,
+	   2026-08-22 — white neighbours need the border said explicitly) */
+	.gr-border {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 0.9;
+		stroke-dasharray: 4 3;
+		stroke-linecap: butt;
+		vector-effect: non-scaling-stroke;
+		pointer-events: none;
+	}
+	/* Athos is Greek land — it is only not a MUNICIPALITY, which is why no
+	   administrative layer carries it — so it is drawn in Greece's own land
+	   colour and coastline, at the Greek layers' accuracy (user, 2026-08-22);
+	   it stays inert: it holds no contract and answers no click */
+	.context.athos {
+		fill: var(--land-athos, var(--land-context, #e4e4e4));
+		stroke: var(--line);
+		stroke-width: 0.6;
+	}
 	.map {
 		position: relative;
 		background: linear-gradient(180deg, #f9f6ec, #f3ecdb);
+		/* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		box-shadow: var(--shadow-paper);
@@ -633,23 +716,33 @@
 		right: var(--sp-2);
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
+		gap: 4px;
 	}
 	.zoomctl button {
 		font: inherit;
-		font-size: var(--fs-16);
-		line-height: 1;
-		width: 1.8rem;
-		height: 1.8rem;
-		border: 1px solid var(--line-strong);
-		border-radius: var(--radius);
-		background: color-mix(in srgb, var(--paper) 92%, transparent);
-		color: var(--ink-soft);
+		line-height: 0;
+		width: 1.45rem;
+		height: 1.45rem;
+		padding: 0;
+		display: grid;
+		place-items: center;
+		border: none;
+		/* solid section-hue circles with white glyphs (user mock, 2026-08-22);
+		   each section sets --map-accent, black is the fallback */
+		border-radius: 50%;
+		background: var(--map-accent, var(--ink));
+		color: #fff;
 		cursor: pointer;
 	}
 	.zoomctl button:hover {
-		color: var(--ink);
-		background: var(--paper);
+		opacity: 0.82;
+	}
+	/* the component's generic svg rule sizes maps to 100% — the button
+	   glyphs must keep their own 11px */
+	.zoomctl button svg {
+		width: 9.5px;
+		height: 9.5px;
+		display: block;
 	}
 	/* the same black card the sponsored-works maps use (user, 2026-08-19) —
 	   one hover-label look across every map on the site */

@@ -88,3 +88,6 @@ atlas/static/contract_details_curator.html
 atlas/static/municipality_curator.html
 data/processed/contractor_names_review.json
 data/processed/name_evidence.json
+
+# neighbour/Athos source downloads (rebuildable: scripts/build_neighbours.py)
+data/processed/geo_cache/

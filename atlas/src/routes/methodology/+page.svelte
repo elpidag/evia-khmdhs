@@ -275,6 +275,24 @@
 		relationship.
 	</p>
 
+	<h2 id="map-layers">What the maps are drawn from</h2>
+	<p>
+		Greek boundaries are the geodata.gov.gr «Όρια Δήμων Καλλικράτη» municipality layer (CC-BY),
+		dissolved into the 74 regional units. The land AROUND Greece is scenery — it carries no data
+		and cannot be clicked — from the Eurostat GISCO 1:1M country boundaries («© EuroGeographics
+		for the administrative boundaries»). The Athos peninsula is drawn from the official «Άθως»
+		polygon of the same geodata.gov.gr Kallikratis layer (CC-BY), whose coastline is refined
+		with OpenStreetMap («© OpenStreetMap contributors») because the official outline is a
+		63-point generalisation up to 734 m from the shore. Άγιον Όρος is a self-governed monastic
+		state and belongs to no municipality, which is why it is missing from the dissolved regional
+		units — and from Eurostat's own «Chalkidiki» — so it carries no data and is drawn as land
+		outside the programme's units. The dashed line on the northern maps is Greece's land
+		border, cut from the same dissolved regional-unit outline — the stretch that runs along a
+		neighbour rather than along the sea.
+		Burn scars are EFFIS (© European Union, Copernicus EMS) and the shaded relief on the fires
+		map is Copernicus WorldDEM-30, both credited in their own frames.
+	</p>
+
 	<h2 id="pe-vocabulary">Regions (Π.Ε.)</h2>
 	<p>
 		All geography keys on the 74 Kallikratis regional units (περιφερειακές ενότητες), with

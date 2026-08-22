@@ -6732,3 +6732,67 @@ grid** and **matrix** (categories × works — «incomprehensible … looks like
 matrix») and **pack** (every contract a circle, area ∝ €, one bubble per
 category; the swarm rows carry `category` for it). The API gained
 `themes.bundles` and `categories[].n_named`; `KindFlow` gained `fmt`.
+
+## 2026-08-22 · Context land on every map: the neighbours, and the Athos peninsula that no administrative layer carries
+
+The user: every map draws Greece alone, «as if it were floating in water»,
+and Chalkidiki has no third leg. The second is not a simplification bug —
+**Άγιον Όρος is not a municipality**: it is a self-governed monastic state
+outside the Kallikratis δήμοι, so it is absent from the geodata.gov.gr
+layer our Π.Ε. are dissolved from, and (verified) from Eurostat's own
+NUTS-3 «Chalkidiki», whose polygon likewise stops at lon 24.021.
+
+Decision (user): draw one inert CONTEXT LAND layer under every map —
+nameless, no data, no hover, no clicks — with **Athos as context land**
+too (never merged into Π.Ε. Χαλκιδικής: no Anti-nero contract can be
+there, and the merge would imply one could). Source, after weighing
+Natural Earth against Eurostat: **Eurostat GISCO countries 1:1M** for the
+neighbours (finer than Natural Earth's 1:10m, which matters because the
+contract maps zoom; same family as the Greek NUTS file already in
+data/raw; attribution «© EuroGeographics for the administrative
+boundaries») and, for Athos, the **official «Άθως» polygon of the
+Kallikratis layer** (geodata.gov.gr, CC-BY — the FireWatch copy in
+`data/raw/firewatch_municipalities.geojson` carries it as feature 326 with
+NO ΥΠΕΣ code, which is exactly why our municipality→Π.Ε. curation never saw
+it) refined with the **OSM coastline**: the official outline is a 63-point
+generalisation wandering up to 734 m from the shore, so the official
+polygon gives the EXTENT (its 676 m land border at the neck makes the cut)
+and OSM gives the SHAPE (user, 2026-08-22: «use the official polygon and
+refine it so we can also attribute the source»). Three honest measurements
+of the same peninsula sit within ±0.5 % — official as shipped 337.1,
+published 335.6, ours 334.2 — and the OSM admin relation of the monastic
+state (1 340 km², four times the peninsula: it includes the territorial
+waters) is kept only as the sanity net that trims the mainland away before
+the cut. `scripts/build_neighbours.py` clips to the frame, tucks the
+land 400 m outward with a mitred buffer so it hides UNDER the Greek layer
+(no sea sliver along a land border), simplifies in EPSG:3035 — 500 m for
+the countries, 120 m for Athos, which is drawn beside Greek land on a
+drilled map — drops islets under 4 km² and rounds to 4 decimals:
+`atlas/static/geo/neighbours.geojson`, 92 KB, 9 features (the 8 land
+shapes + the border line).
+`PaperMap` draws it first (under the relief image and the Π.Ε.), with a
+`context={false}` escape for any map that must show Greece alone. Tones,
+settled over three user rounds the same day: a grey context land
+(#dcdcdc) was tried first and REJECTED — the Anti-nero maps are a grey
+ramp, so a grey country reads as a data value — and the context land is
+**white with a #c4c4c4 coastline** on the #f2f2f2 sea, Athos white too
+(Greek coastline stroke, `--line`); what says where Greece ends is a
+**dashed black land border** (`.gr-border`, `--ink`, 0.9 @ 4-3 dashes),
+drawn ABOVE the region fills. That line is cut from OUR OWN Π.Ε. outline
+— the part of the dissolved coarse layer's boundary that runs along a
+neighbour rather than along the sea; the GISCO countries (buffered 1 km)
+only say WHICH stretch, so the dashes hug the drawn polygons exactly.
+Measured 1 189 km against Greece's ~1 180 km of land borders; the build
+guards 900–1 500. The Chalkidiki drill frame takes Athos in as well
+(framing only, never data), since the administrative unit stops at the
+neck. Same evening, map chrome to match: pan/zoom is CLAMPED to the
+fitted frame (`translateExtent` was ±25% — panning could expose the
+context layer's clip box), every map frame carries a **1px `--line`
+hairline** (the pages' `border: none` overrides were the reason a frame
+never showed; the tone matched to the zoom buttons' old outline after
+`--ink` and `--ink-soft` both read too dark), and the +/−/⌂ zoom
+buttons are **solid circles in the section's hue** (user mock:
+`--map-accent` set per section — Anti-nero black, ΔΑΣΕ #52b788,
+sponsored #2d6a4f — white inline-SVG glyphs centred by construction,
+1.45rem; the text glyphs sat on font metrics and never centred). The
+sources are named in /methodology#map-layers.

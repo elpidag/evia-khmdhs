@@ -612,7 +612,8 @@
 	   proportional circles carry the data */
 	.dasep :global(.map) {
 		background: #f2f2f2;
-		border: none;
+		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
+		--map-accent: var(--c-dase); /* the zoom buttons' circle hue */
 		box-shadow: none;
 	}
 	.dasep :global(.region) {

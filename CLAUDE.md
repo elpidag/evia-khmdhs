@@ -616,7 +616,22 @@ of home + project regions + money-per-year paid/stated chart),
 `/pdf/<kind>/<adam>`, plus the ΔΑΣΕ section (`/dase*`, `/compare` — own
 module `dase_queries.py`, second lazy read-only connection; see the
 ΔΑΣΕ dataset section below). Shared paper-map helpers in
-`webui/static/geo_common.js`. **All maps draw the 74 Π.Ε. polygons** in two
+`webui/static/geo_common.js`. (The Atlas maps also draw a CONTEXT LAND
+layer under everything — `atlas/static/geo/neighbours.geojson`, 66 KB,
+built by `scripts/build_neighbours.py`: the seven neighbouring countries
+from Eurostat GISCO 1:1M plus the **Athos peninsula**, whose EXTENT comes
+from the official Kallikratis «Άθως» polygon — a feature with no ΥΠΕΣ code,
+which is why the municipality→Π.Ε. curation never saw it and why the third
+leg of Χαλκιδική was missing — and whose SHAPE comes from the OSM
+coastline. The context land is WHITE like Greek land (a grey context read
+as a value on the Anti-nero grey ramps); where Greece ends on land a
+dashed black border says so — cut from our own Π.Ε. outline (the stretch
+along a neighbour, GISCO-selected, 1 189 km, guarded), drawn above the
+fills. Pan/zoom is clamped to the fitted frame, every map frame has a 1px
+`--line` hairline (set in the pages' `.map` overrides — the base border
+is overridden there), and the +/−/⌂ buttons are solid circles in the
+section hue via `--map-accent`. `PaperMap context={false}` switches the
+scenery off; see DATA_DECISIONS 2026-08-22.) **All maps draw the 74 Π.Ε. polygons** in two
 detail levels built from the full-resolution EPSG:2100 Kallikratis
 shapefile (`data/raw/oria_dhmwn_kallikraths/`) via GEOS
 **`coverage_simplify`** (topology-preserving: shared borders identical on

@@ -54,6 +54,14 @@
 	--ramp-home-6: #2258a5;
 	--ramp-home-7: #0d366b;
 	--land-empty: #ffffff;
+	/* the land AROUND Greece on every map — scenery, never data */
+	/* Three tones, distinct on every map (user, 2026-08-22): the sea is
+	   #f2f2f2, Greek land with no data is white, and the land outside the
+	   programme's units — the neighbouring countries and Athos — is darker
+	   than both, so neither reads as a hole nor as sea */
+	--land-context: #ffffff;
+	--land-context-line: #c4c4c4;
+	--land-athos: #ffffff;
 
 	/* type (Adobe Fonts kit drh1gfl):
 	   body/UI = Futura 100 Greek Book (the light text cut; Regular/Bold

@@ -1030,7 +1030,8 @@
 	/* the two paper maps take the sponsored-works ground */
 	.antp :global(.map) {
 		background: #f2f2f2;
-		border: none;
+		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
+		--map-accent: var(--c-antinero); /* the zoom buttons' circle hue */
 		box-shadow: none;
 	}
 	/* two card slots (user, 2026-08-21): the place's card grey, top-left;

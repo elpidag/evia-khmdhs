@@ -146,6 +146,35 @@ export const loadMunicipalities = (
 	>;
 };
 
+/** CONTEXT LAND: the neighbouring countries and the Athos peninsula — the
+ *  land around the frame, so Greece is not drawn floating in an empty sea
+ *  (user, 2026-08-22). Inert scenery: no data, no hover, no clicks.
+ *  Built by `scripts/build_neighbours.py` (Eurostat GISCO 1:1M + OSM). */
+export const loadNeighbours = (
+	fetch: Fetch
+): Promise<FeatureCollection<GeoJSON.MultiPolygon | GeoJSON.Polygon | GeoJSON.MultiLineString, NeighbourProps>> => {
+	const url = '/geo/neighbours.geojson';
+	if (!cache.has(url)) {
+		cache.set(
+			url,
+			fetch(url).then((r) => {
+				if (!r.ok) throw new Error(`${url}: ${r.status}`);
+				return r.json();
+			})
+		);
+	}
+	return cache.get(url) as Promise<
+		FeatureCollection<GeoJSON.MultiPolygon | GeoJSON.Polygon | GeoJSON.MultiLineString, NeighbourProps>
+	>;
+};
+
+export interface NeighbourProps {
+	/** 'neighbour' (a country) | 'athos' (the monastic state) |
+	 *  'border' (the dashed Greek land border, a MultiLineString) */
+	kind: string;
+	id: string;
+}
+
 export interface MuniProps {
 	code: string;
 	name: string;

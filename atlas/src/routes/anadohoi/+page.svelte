@@ -1230,11 +1230,13 @@
 	   fill attribute) */
 	.map-wrap :global(.map:not(.plate)) {
 		background: #f2f2f2;
-		border: none;
+		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
+		--map-accent: var(--c-anadohoi); /* the zoom buttons' circle hue */
 		box-shadow: none;
 	}
 	.map-wrap :global(.map.plate) {
-		border: none;
+		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
+		--map-accent: var(--c-anadohoi); /* the zoom buttons' circle hue */
 		box-shadow: none;
 	}
 	.map-wrap :global(.map:not(.plate) .region) {
