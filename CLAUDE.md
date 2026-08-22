@@ -1267,7 +1267,8 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
 - **Flow charts live on the Anti-nero page** since 2026-08-20 (user): the
   out-of-region choropleth (`$lib/sections/FlowMap.svelte`) and the
   local-vs-imported split (`OriginSplit.svelte`) are ONE frame since later
-  the same day — «WHERE THE MONEY TRAVELS», map left, the top-12 destination
+  the same day — «FLOWS OF MONEY» (named «WHERE THE MONEY TRAVELS» until
+  2026-08-22), map left, the top-12 destination
   bars right, linked both ways (bar click focuses the map's arcs; while
   focused the bars give way to that region's flow table); since the same
   evening the bipartite («WHO REACHES WHERE») is that frame's second LENS,
@@ -1290,7 +1291,16 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `wrapMid`/`leftGroup` (brace)/`columnX` props exist — `columnX` places
   each column's centre by hand (fraction of the width or absolute x), the
   ribbons and headings following; both AWARDING PROCESS frames set it.
-  RANKING OF COMPANIES sits right after the flow frame since 2026-08-21,
+  **Front-page order since 2026-08-22 (user):** ALLOCATION OF FUNDING ·
+  FLOWS OF MONEY · AWARDING PROCESS · DIRECT AWARDS + AWARD PROCEDURES ·
+  RANKING OF COMPANIES · CONTRACT VALUES · CONTRACT SCOPE + CONTRACT
+  TYPE · then MONEY PER YEAR
+  (€ contracted / € paid toggle, `?money=`) beside the year-vs-year-ONLY
+  CUMULATIVE DISBURSEMENT (half width, fire season in the payments
+  timeline's accent; the phase-stacked mode is deleted), then the rest in
+  their old order (programme chart, payments timeline, region-per-year,
+  study costs, TYPES OF WORKS, CPV).
+  RANKING OF COMPANIES sat right after the flow frame on 2026-08-21;
   its explanation behind a lightbulb and its «as contracted / by member
   firm» toggle alone on a line under the title, left; it matches the sponsored ranking (30 px
   bars, 75% measure, black); BarH clamps inside labels to two lines.

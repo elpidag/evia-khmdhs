@@ -7080,3 +7080,33 @@ inside the frame — and the scope bar's top meets the SECOND type bar
 (the number line takes the first row's 41 px). The two type taxonomies stay their own (3-value
 sponsored, 8-category Anti-nero): the programmes buy different things and
 one vocabulary would be false comparability — SCOPE is the shared layer.
+
+## 2026-08-22 · «FLOWS OF MONEY», and the front page reordered
+
+The flow frame is renamed «FLOWS OF MONEY» (was «WHERE THE MONEY
+TRAVELS»; anchor `#flows` unchanged) and the Anti-nero front page reads
+in the user's order: ALLOCATION OF FUNDING · FLOWS OF MONEY · AWARDING
+PROCESS · DIRECT AWARDS + AWARD PROCEDURES · RANKING OF COMPANIES ·
+CONTRACT VALUES · CONTRACT SCOPE + CONTRACT TYPE · then the remainder
+unchanged (programme chart, payments timeline, cumulative disbursement,
+money by region per year, study costs, TYPES OF WORKS, CPV codes). The
+SCOPE+TYPE pair was split out of the categories block so it could move
+up while TYPES OF WORKS stays with the tail; every anchor and permalink
+is untouched.
+
+## 2026-08-22 · MONEY PER YEAR beside a year-vs-year-only CUMULATIVE DISBURSEMENT
+
+(user) CUMULATIVE DISBURSEMENT keeps ONLY the year-vs-year mode — the
+stacked-by-phase view and its mode buttons are deleted from
+`DisbursementCurves` — and moves after CONTRACT SCOPE + CONTRACT TYPE at
+half width, its fire-season band now wearing the payments timeline's
+colour (`var(--accent)` at 0.06 with the accent label, exactly
+StripTimeline's band). On its left, the new **MONEY PER YEAR** frame:
+one bar per signature year with a «€ contracted / € paid» toggle
+(`?money=`) — € contracted is the stated net of the in-scope contracts
+signed that year, aggregated client-side from the swarm list so the
+years sum to the basis by construction (30,88 + 71,47 + 248,40 + 193,57
++ 78,20 = €622,53M); € paid is `antinero_yearly`'s per-year payment
+orders, and its five values equal the cumulative chart's year-end labels
+to the cent — the two charts cross-validate on screen. The y-axis left
+margin widened 52→84 so «150,00 M €» ticks stop clipping.

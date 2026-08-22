@@ -245,6 +245,35 @@
 	// «category» / «named» and, under trial (2026-08-22), «flow» / «matrix» /
 	// «pack»
 	const WORKS_LENSES = ['named', 'split'] as const;
+	// MONEY PER YEAR measures: € contracted (stated net, by signature
+	// year, from the swarm list so it reconciles to the basis) or € paid
+	// (payment orders by payment year) — ?money=
+	const MONEY_LENSES = ['contracted', 'paid'] as const;
+	type MoneyLens = (typeof MONEY_LENSES)[number];
+	const moneyLens = $derived<MoneyLens>(
+		(MONEY_LENSES as readonly string[]).includes(page.url.searchParams.get('money') ?? '')
+			? (page.url.searchParams.get('money') as MoneyLens)
+			: 'contracted'
+	);
+	const yearMoneyRows = $derived.by(() => {
+		if (moneyLens === 'paid')
+			return o.yearly
+				.filter((y) => y.paid_eur > 0)
+				.map((y) => ({ label: y.year, value: y.paid_eur }));
+		if (!swarm) return [];
+		const by = new Map<string, { eur: number; n: number }>();
+		for (const r of swarm) {
+			const y = r.year ?? '—';
+			const b = by.get(y) ?? { eur: 0, n: 0 };
+			b.eur += r.eur;
+			b.n += 1;
+			by.set(y, b);
+		}
+		return [...by.entries()]
+			.sort((a, b) => a[0].localeCompare(b[0]))
+			.map(([y, b]) => ({ label: y, value: b.eur, sublabel: `${grInt(b.n)} contracts` }));
+	});
+
 	// CONTRACT TYPE measures: stated net € or number of contracts (?ct=)
 	const CT_LENSES = ['eur', 'n'] as const;
 	type CtLens = (typeof CT_LENSES)[number];
@@ -535,7 +564,7 @@
 		return t ? Math.round((100 * l) / t) : 0;
 	})()}
 	<ChartFrame
-		title="WHERE THE MONEY TRAVELS"
+		title="FLOWS OF MONEY"
 		insight="Each regional unit is coloured according to the share of works carried out within it that are awarded to contractors based either within or outside its boundaries. The darker the regional unit, the larger the share of works awarded to companies based outside its boundaries. Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out. Switch to «by company» for the same flows broken down to the firms that carry them: {grInt(net.contractor_pe.length)} contractor ↔ work-region links across {grInt(Object.keys(net.contractors).length)} contractors — {maxReach.name} alone works in {maxReach.n} regional units; a unit focused on the map arrives selected in the lists, and a company selected there focuses the map on its home region."
 		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
 			net.coverage.total_eur
@@ -553,6 +582,92 @@
 		/>
 	</ChartFrame>
 {/if}
+
+<Defer height={620}>
+{#if unitFlow}
+	{@const uf = unitFlow}
+	<!-- two columns, no phase (user, 2026-08-21): the ΥΠΕΝ unit that signed on
+	     the left, the ten biggest contractors + everyone else on the right;
+	     units in greys (ribbons take the unit's tone), the ΔΑΣΕ drawing -->
+	{@const UNIT_GREYS = ['#1f1f1f', '#5a5a5a', '#8a8a8a', '#b4b4b4', '#d0d0d0']}
+	<!-- three columns, as the forest co-op diagram (user, 2026-08-22, for
+	     comparability): the awarding body — the Ministry, one node — → its
+	     operating units → contractors -->
+	{@const unitNodes = uf.nodes.map((n, i) => ({
+		...n,
+		side: (n.side === 'l' ? 'm' : n.side) as 'l' | 'm' | 'r',
+		label: n.side === 'l' ? unitEn(n.label) : n.label,
+		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? '#9b9b9b' : '#3a3a3a'
+	}))}
+	{@const ufNodes = [
+		{
+			id: 'ministry',
+			label: 'Ministry of Environment & Energy',
+			side: 'l' as const,
+			n: uf.nodes.filter((n) => n.side === 'l').reduce((s, n) => s + n.n, 0),
+			eur: uf.total_eur,
+			color: '#111111'
+		},
+		...unitNodes
+	]}
+	{@const ufLinks = [
+		...uf.nodes.filter((n) => n.side === 'l').map((n) => ({ s: 'ministry', t: n.id, n: n.n, eur: n.eur })),
+		...uf.links
+	]}
+	<ChartFrame
+		title="AWARDING PROCESS"
+		insight="The awarding body of every Anti-nero contract is the Ministry of Environment and Energy; the operating units on the left are the {grInt(uf.n_units)} units of the Ministry that ran the contracts, as the registry records them. The ribbons carry each unit’s money to the {grInt(uf.n_top)} biggest contractors, everyone else pooled in one node — {eurShort(uf.top_eur)} of the {eurShort(uf.total_eur)} ends at those {grInt(uf.n_top)} companies ({grInt(uf.n_contractors)} contractors in all). Ribbon width is stated € excl. VAT; hover a bar for its contract count, click a contractor for its page. The forest co-op page draws the same three columns for its own awarding bodies."
+		caveat="Consortium values split evenly between partners here, so both columns sum to the programme total."
+		anchor="sankey"
+		methodology="even-split"
+	>
+		<!-- centred: equal margins either side; the unit names wrap at 34
+		     characters and the nodes are padded so a three-line name clears
+		     its neighbour -->
+		<KindFlow
+			nodes={ufNodes}
+			links={ufLinks}
+			height={620}
+			headings={['awarding body', 'operating units', 'contractors']}
+			marginLeft={50}
+			marginRight={420}
+			columnX={[0.09, 0.40, 0.76]}
+			wrapLeft={18}
+			wrapMid={28}
+		/>
+	</ChartFrame>
+{:else}
+	<div class="skeleton" style="height: 560px"></div>
+{/if}
+</Defer>
+
+<div class="pair">
+	<ChartFrame
+		title="DIRECT AWARDS"
+		subtitle="{grInt(
+			o.direct_awards.n as number
+		)} direct-award contracts by stated value (excl. VAT) — they pile up around €{daModal}, far beyond the ν.4782/2021 ceilings."
+		caveat="The statutory ceilings and these values are both excl. VAT; RRF emergency provisions allowed direct awards above the ceilings."
+		anchor="direct-awards"
+		methodology="procedures"
+	>
+		<LogHistogram
+			labels={o.direct_awards.labels as string[]}
+			counts={o.direct_awards.counts as number[]}
+			edges={o.direct_awards.edges as number[]}
+			color="var(--c-antinero)"
+			thresholds={miniThresholds}
+		/>
+	</ChartFrame>
+
+	<ChartFrame
+		title="AWARD PROCEDURES"
+		subtitle="Stated € by award procedure — open procedures are the exception, not the rule."
+		anchor="procedures"
+	>
+		<BarH rows={procRows} color="var(--c-antinero)" highlight={(r) => r.label.includes('Απευθείας')} />
+	</ChartFrame>
+</div>
 
 <ChartFrame
 	title="RANKING OF COMPANIES"
@@ -650,191 +765,7 @@
 {/if}
 </Defer>
 
-<Defer height={620}>
-{#if unitFlow}
-	{@const uf = unitFlow}
-	<!-- two columns, no phase (user, 2026-08-21): the ΥΠΕΝ unit that signed on
-	     the left, the ten biggest contractors + everyone else on the right;
-	     units in greys (ribbons take the unit's tone), the ΔΑΣΕ drawing -->
-	{@const UNIT_GREYS = ['#1f1f1f', '#5a5a5a', '#8a8a8a', '#b4b4b4', '#d0d0d0']}
-	<!-- three columns, as the forest co-op diagram (user, 2026-08-22, for
-	     comparability): the awarding body — the Ministry, one node — → its
-	     operating units → contractors -->
-	{@const unitNodes = uf.nodes.map((n, i) => ({
-		...n,
-		side: (n.side === 'l' ? 'm' : n.side) as 'l' | 'm' | 'r',
-		label: n.side === 'l' ? unitEn(n.label) : n.label,
-		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? '#9b9b9b' : '#3a3a3a'
-	}))}
-	{@const ufNodes = [
-		{
-			id: 'ministry',
-			label: 'Ministry of Environment & Energy',
-			side: 'l' as const,
-			n: uf.nodes.filter((n) => n.side === 'l').reduce((s, n) => s + n.n, 0),
-			eur: uf.total_eur,
-			color: '#111111'
-		},
-		...unitNodes
-	]}
-	{@const ufLinks = [
-		...uf.nodes.filter((n) => n.side === 'l').map((n) => ({ s: 'ministry', t: n.id, n: n.n, eur: n.eur })),
-		...uf.links
-	]}
-	<ChartFrame
-		title="AWARDING PROCESS"
-		insight="The awarding body of every Anti-nero contract is the Ministry of Environment and Energy; the operating units on the left are the {grInt(uf.n_units)} units of the Ministry that ran the contracts, as the registry records them. The ribbons carry each unit’s money to the {grInt(uf.n_top)} biggest contractors, everyone else pooled in one node — {eurShort(uf.top_eur)} of the {eurShort(uf.total_eur)} ends at those {grInt(uf.n_top)} companies ({grInt(uf.n_contractors)} contractors in all). Ribbon width is stated € excl. VAT; hover a bar for its contract count, click a contractor for its page. The forest co-op page draws the same three columns for its own awarding bodies."
-		caveat="Consortium values split evenly between partners here, so both columns sum to the programme total."
-		anchor="sankey"
-		methodology="even-split"
-	>
-		<!-- centred: equal margins either side; the unit names wrap at 34
-		     characters and the nodes are padded so a three-line name clears
-		     its neighbour -->
-		<KindFlow
-			nodes={ufNodes}
-			links={ufLinks}
-			height={620}
-			headings={['awarding body', 'operating units', 'contractors']}
-			marginLeft={50}
-			marginRight={420}
-			columnX={[0.09, 0.40, 0.76]}
-			wrapLeft={18}
-			wrapMid={28}
-		/>
-	</ChartFrame>
-{:else}
-	<div class="skeleton" style="height: 560px"></div>
-{/if}
-</Defer>
-
-<Defer height={640}>
-{#if network}
-	<ChartFrame
-		title={netCopy.title}
-		subtitle={netCopy.subtitle}
-		caveat="{netCopy.caveat} Circle area is the contract's stated value excl. VAT, on one scale in every arrangement; a call is the πρόσκληση the contract cites in its own signed text ({grInt(
-			network.stats.n_calls
-		)} resolved this way). Every layout is deterministic, not a force simulation."
-		anchor="network"
-		methodology="procurement-families"
-	>
-		<div class="netbar">
-			<SegmentToggle param="net" fallback="time" options={NET_MODES} />
-		</div>
-		<ContractNetwork
-			nodes={network.nodes}
-			stats={network.stats}
-			mode={netMode}
-			season={network.fire_season}
-		/>
-	</ChartFrame>
-{:else}
-	<div class="skeleton" id="network" style="height: 620px"></div>
-{/if}
-</Defer>
-
-<Defer height={900}>
-{#if payments}
-	<ChartFrame
-		title="PAYMENTS TIMELINE"
-		subtitle="One tick per payment order ({grInt(payments.events.length)}), height ∝ √€, by programme phase — the biggest single month was {peak.m} ({eurShort(
-			peak.eur
-		)}). Hover for the order, click through to the contract."
-		caveat="{grInt(
-			payments.fallback
-		)} of {grInt(payments.events.length)} orders carry no signature date — the registry submission date is shown for those{payments
-			.undated.n
-			? `; ${grInt(payments.undated.n)} remain undated (${eurShort(payments.undated.eur)})`
-			: ''}."
-		anchor="payments"
-		methodology="payment-dates"
-	>
-		<StripTimeline data={payments} />
-	</ChartFrame>
-
-	<ChartFrame
-		title="CUMULATIVE DISBURSEMENT"
-		subtitle="Cumulative € of payment orders since {firstPayYear} — stacked by phase, or same-point-in-year comparison."
-		caveat="Payment orders attributed to a contract's final version; registry net-of-ΦΠΑ amounts."
-		anchor="disbursement"
-		methodology="stated-basis"
-	>
-		<DisbursementCurves timeseries={o.timeseries} {payments} />
-	</ChartFrame>
-{:else}
-	<div class="skeleton" style="height: 480px"></div>
-	<div class="skeleton" style="height: 400px"></div>
-{/if}
-</Defer>
-
-<div class="pair">
-	<ChartFrame
-		title="DIRECT AWARDS"
-		subtitle="{grInt(
-			o.direct_awards.n as number
-		)} direct-award contracts by stated value (excl. VAT) — they pile up around €{daModal}, far beyond the ν.4782/2021 ceilings."
-		caveat="The statutory ceilings and these values are both excl. VAT; RRF emergency provisions allowed direct awards above the ceilings."
-		anchor="direct-awards"
-		methodology="procedures"
-	>
-		<LogHistogram
-			labels={o.direct_awards.labels as string[]}
-			counts={o.direct_awards.counts as number[]}
-			edges={o.direct_awards.edges as number[]}
-			color="var(--c-antinero)"
-			thresholds={miniThresholds}
-		/>
-	</ChartFrame>
-
-	<ChartFrame
-		title="AWARD PROCEDURES"
-		subtitle="Stated € by award procedure — open procedures are the exception, not the rule."
-		anchor="procedures"
-	>
-		<BarH rows={procRows} color="var(--c-antinero)" highlight={(r) => r.label.includes('Απευθείας')} />
-	</ChartFrame>
-</div>
-
-<Defer height={400}>
-{#if peYearly}
-	<ChartFrame
-		title="MONEY BY REGION PER YEAR"
-		subtitle="Yearly stated € per regional unit (top {Math.min(
-			20,
-			peYearly.pes.length
-		)}, same scale). Click a facet to drill into it on the map."
-		caveat="Even-split attribution; stated € at signature year."
-		anchor="pe-yearly"
-		methodology="even-split"
-	>
-		<SmallMultiples data={peYearly} hrefOf={(pe) => `/?focus=works:${encodeURIComponent(pe)}#map`} />
-	</ChartFrame>
-{:else}
-	<div class="skeleton" style="height: 380px"></div>
-{/if}
-</Defer>
-
-<ChartFrame
-	title="STUDY COSTS"
-	subtitle="The ten largest study (μελέτη) costs extracted from the signed PDFs — the median is {pct(
-		(o.studies.summary.median_share as number) * 100
-	)} of a contract's net value; {grInt(o.studies.summary.n_with)} of {grInt(
-		o.studies.summary.n_in_scope
-	)} contracts state one, {eurShort(o.studies.summary.total_eur)} in total."
-	caveat="ΕΣΑ design-build contracts bundle the study into the works price and honestly state none."
-	anchor="studies"
-	methodology="study-costs"
->
-	<BarH rows={studyRows} color="#8f8f8f" />
-</ChartFrame>
-
 {#if o.categories.length && topCat}
-	{@const works = o.themes}
-	<!-- two lenses (user, 2026-08-22): «main category» — one per contract,
-	     € or count, sums to the total, each bar saying which works its
-	     contracts name — / «works named» — the themes, counted in contracts,
-	     the unspecified ones as their own bar, no € -->
 	<div class="scopetype">
 		<ChartFrame
 			title="CONTRACT SCOPE"
@@ -884,6 +815,135 @@
 			/>
 		</ChartFrame>
 	</div>
+{/if}
+
+<div class="pair">
+	<ChartFrame
+		title="MONEY PER YEAR"
+		caveat="€ contracted: the stated value (excl. VAT) of the in-scope contracts signed that year — the years sum to the programme total. € paid: non-cancelled payment orders by payment year; payments run behind contracting by design."
+		anchor="money-per-year"
+		methodology="stated-basis"
+	>
+		{#snippet controls()}
+			<SegmentToggle
+				param="money"
+				fallback="contracted"
+				options={[
+					{ value: 'contracted', label: '€ contracted' },
+					{ value: 'paid', label: '€ paid' }
+				]}
+			/>
+		{/snippet}
+		{#if yearMoneyRows.length}
+			<BarH rows={yearMoneyRows} color="var(--c-antinero)" inside barHeight={35} valuesRight />
+		{:else}
+			<div class="skeleton" style="height: 240px"></div>
+		{/if}
+	</ChartFrame>
+
+	<ChartFrame
+		title="CUMULATIVE DISBURSEMENT"
+		subtitle="Cumulative € of payment orders within each year, day by day — the same point in the year comparable across years."
+		anchor="disbursement"
+		methodology="payments"
+	>
+		{#if payments}
+			<DisbursementCurves {payments} />
+		{:else}
+			<div class="skeleton" style="height: 340px"></div>
+		{/if}
+	</ChartFrame>
+</div>
+
+<Defer height={640}>
+{#if network}
+	<ChartFrame
+		title={netCopy.title}
+		subtitle={netCopy.subtitle}
+		caveat="{netCopy.caveat} Circle area is the contract's stated value excl. VAT, on one scale in every arrangement; a call is the πρόσκληση the contract cites in its own signed text ({grInt(
+			network.stats.n_calls
+		)} resolved this way). Every layout is deterministic, not a force simulation."
+		anchor="network"
+		methodology="procurement-families"
+	>
+		<div class="netbar">
+			<SegmentToggle param="net" fallback="time" options={NET_MODES} />
+		</div>
+		<ContractNetwork
+			nodes={network.nodes}
+			stats={network.stats}
+			mode={netMode}
+			season={network.fire_season}
+		/>
+	</ChartFrame>
+{:else}
+	<div class="skeleton" id="network" style="height: 620px"></div>
+{/if}
+</Defer>
+
+<Defer height={900}>
+{#if payments}
+	<ChartFrame
+		title="PAYMENTS TIMELINE"
+		subtitle="One tick per payment order ({grInt(payments.events.length)}), height ∝ √€, by programme phase — the biggest single month was {peak.m} ({eurShort(
+			peak.eur
+		)}). Hover for the order, click through to the contract."
+		caveat="{grInt(
+			payments.fallback
+		)} of {grInt(payments.events.length)} orders carry no signature date — the registry submission date is shown for those{payments
+			.undated.n
+			? `; ${grInt(payments.undated.n)} remain undated (${eurShort(payments.undated.eur)})`
+			: ''}."
+		anchor="payments"
+		methodology="payment-dates"
+	>
+		<StripTimeline data={payments} />
+	</ChartFrame>
+
+{:else}
+	<div class="skeleton" style="height: 480px"></div>
+{/if}
+</Defer>
+
+<Defer height={400}>
+{#if peYearly}
+	<ChartFrame
+		title="MONEY BY REGION PER YEAR"
+		subtitle="Yearly stated € per regional unit (top {Math.min(
+			20,
+			peYearly.pes.length
+		)}, same scale). Click a facet to drill into it on the map."
+		caveat="Even-split attribution; stated € at signature year."
+		anchor="pe-yearly"
+		methodology="even-split"
+	>
+		<SmallMultiples data={peYearly} hrefOf={(pe) => `/?focus=works:${encodeURIComponent(pe)}#map`} />
+	</ChartFrame>
+{:else}
+	<div class="skeleton" style="height: 380px"></div>
+{/if}
+</Defer>
+
+<ChartFrame
+	title="STUDY COSTS"
+	subtitle="The ten largest study (μελέτη) costs extracted from the signed PDFs — the median is {pct(
+		(o.studies.summary.median_share as number) * 100
+	)} of a contract's net value; {grInt(o.studies.summary.n_with)} of {grInt(
+		o.studies.summary.n_in_scope
+	)} contracts state one, {eurShort(o.studies.summary.total_eur)} in total."
+	caveat="ΕΣΑ design-build contracts bundle the study into the works price and honestly state none."
+	anchor="studies"
+	methodology="study-costs"
+>
+	<BarH rows={studyRows} color="#8f8f8f" />
+</ChartFrame>
+
+{#if o.categories.length && topCat}
+	{@const works = o.themes}
+	<!-- two lenses (user, 2026-08-22): «main category» — one per contract,
+	     € or count, sums to the total, each bar saying which works its
+	     contracts name — / «works named» — the themes, counted in contracts,
+	     the unspecified ones as their own bar, no € -->
 
 	<ChartFrame
 		title="TYPES OF WORKS"
