@@ -7110,3 +7110,20 @@ years sum to the basis by construction (30,88 + 71,47 + 248,40 + 193,57
 orders, and its five values equal the cumulative chart's year-end labels
 to the cent — the two charts cross-validate on screen. The y-axis left
 margin widened 52→84 so «150,00 M €» ticks stop clipping.
+
+## 2026-08-22 · The years as a film strip of maps inside ALLOCATION OF FUNDING
+
+(user, choosing the geographic question over the per-region trend) The
+MONEY BY REGION PER YEAR facets frame is RETIRED (`SmallMultiples.svelte`
+deleted) and its data now draws as **five mini choropleths — 2022–2026 —
+inside the ALLOCATION OF FUNDING frame**, under the two big maps: one
+`PaperMap interactive={false}` per year (the /connections hub-catchment
+precedent), on ONE shared sqrt grey ramp (`makeChoro(RAMP_WORKS, max)`
+over every year-region value), each head carrying the year and its total.
+Small multiples over a year slider, per the doctrine: a slider would show
+one year at a time and force the ramp to either rescale per year
+(colours no longer comparable) or wash out the small years. The strip
+keeps the old `#pe-yearly` anchor; its five totals equal MONEY PER
+YEAR's contracted bars (30,88 / 71,47 / 248,40 / 193,57 / 78,20 M €) —
+the two surfaces cross-validate. A note under the strip states the
+shared scale and the even-split signature-year basis.

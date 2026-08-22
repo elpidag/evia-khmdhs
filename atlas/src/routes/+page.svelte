@@ -11,7 +11,6 @@
 	import KindFlow from '$lib/charts/KindFlow.svelte';
 	import WorksByCategory from '$lib/charts/WorksByCategory.svelte';
 	import { unitEn } from '$lib/transforms/names';
-	import SmallMultiples from '$lib/charts/SmallMultiples.svelte';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
@@ -22,6 +21,8 @@
 	import type { NetNode } from '$lib/transforms/network';
 	import { NET_MODES, type NetMode } from '$lib/transforms/networkScene';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
+	import PaperMap from '$lib/maps/PaperMap.svelte';
+	import { makeChoro, RAMP_WORKS } from '$lib/maps/useGeo';
 	import Defer from '$lib/ui/Defer.svelte';
 	import {
 		apiGetCached,
@@ -245,6 +246,26 @@
 	// «category» / «named» and, under trial (2026-08-22), «flow» / «matrix» /
 	// «pack»
 	const WORKS_LENSES = ['named', 'split'] as const;
+	// the five-year-maps strip (user, 2026-08-22, replacing the MONEY BY
+	// REGION PER YEAR facets): per-year per-region € on ONE shared scale —
+	// the same sqrt grey ramp as the big allocation maps above it
+	const yearCells = $derived.by(() => {
+		const py = peYearly;
+		if (!py) return null;
+		const per = py.years.map((y) => {
+			const cells = new Map<string, number>();
+			let total = 0;
+			for (const f of py.pes) {
+				const v = f.years[y] ?? 0;
+				if (v > 0) cells.set(f.pe, v);
+				total += v;
+			}
+			return { year: y, cells, total };
+		});
+		const max = Math.max(...per.flatMap((p) => [...p.cells.values()]), 1);
+		return { per, choro: makeChoro(RAMP_WORKS, max) };
+	});
+
 	// MONEY PER YEAR measures: € contracted (stated net, by signature
 	// year, from the swarm list so it reconciles to the basis) or € paid
 	// (payment orders by payment year) — ?money=
@@ -535,12 +556,35 @@
 		title="ALLOCATION OF FUNDING"
 		insight="{grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the {grInt(
 			map.contracts.length
-		)} contracts cover more than one regional unit, and the documents state no allocation of the money between the units a contract covers. So each contract's value is split equally between its regions and, for a jointly signed contract, between its partners. A region's figure is the sum of those equal shares, and the regions add up to the programme total."
+		)} contracts cover more than one regional unit, and the documents state no allocation of the money between the units a contract covers. So each contract's value is split equally between its regions and, for a jointly signed contract, between its partners. A region's figure is the sum of those equal shares, and the regions add up to the programme total. The «individual dots» lens colours by a different measure — how many contracts TOUCH each region: there a contract whose authorities sit in three regions appears in all three regions' counts, so counts overlap across regions where euros never do."
 		caveat="Stated € excl. VAT. A contract covering several regional units, or signed by several firms, is split equally between them — the documents state no other allocation (the lightbulb beside the title explains)."
 		anchor="map"
 		methodology="even-split"
 	>
 		<AntineroMap data={map} />
+		{#if yearCells}
+			<!-- the years as a film strip, one mini choropleth each, ONE
+			     shared scale (small multiples over a year slider — the
+			     doctrine); replaces the MONEY BY REGION PER YEAR facets -->
+			<div class="yearmaps" id="pe-yearly">
+				{#each yearCells.per as ym (ym.year)}
+					<div class="ym">
+						<div class="ym-head">
+							<strong>{ym.year}</strong>
+							<span>{eurShort(ym.total)}</span>
+						</div>
+						<PaperMap
+							interactive={false}
+							colorOf={(pe) => yearCells.choro(ym.cells.get(pe) ?? 0)}
+						/>
+					</div>
+				{/each}
+			</div>
+			<p class="ym-note">
+				Stated € by work region at each contract's signature year, even-split — the five maps
+				share one colour scale, so a region's tone is comparable across years.
+			</p>
+		{/if}
 	</ChartFrame>
 {:else}
 	<div class="skeleton" id="map" style="height: 560px"></div>
@@ -902,25 +946,6 @@
 
 {:else}
 	<div class="skeleton" style="height: 480px"></div>
-{/if}
-</Defer>
-
-<Defer height={400}>
-{#if peYearly}
-	<ChartFrame
-		title="MONEY BY REGION PER YEAR"
-		subtitle="Yearly stated € per regional unit (top {Math.min(
-			20,
-			peYearly.pes.length
-		)}, same scale). Click a facet to drill into it on the map."
-		caveat="Even-split attribution; stated € at signature year."
-		anchor="pe-yearly"
-		methodology="even-split"
-	>
-		<SmallMultiples data={peYearly} hrefOf={(pe) => `/?focus=works:${encodeURIComponent(pe)}#map`} />
-	</ChartFrame>
-{:else}
-	<div class="skeleton" style="height: 380px"></div>
 {/if}
 </Defer>
 
@@ -1419,6 +1444,39 @@
 		width: auto;
 		max-width: 40rem;
 		margin-bottom: var(--sp-4);
+	}
+	/* the five year maps under the allocation maps: a film strip on one
+	   shared scale (user, 2026-08-22) */
+	.yearmaps {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: var(--sp-4);
+		margin-top: var(--sp-5);
+	}
+	@media (max-width: 1000px) {
+		.yearmaps {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	.ym-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		margin-bottom: var(--sp-1);
+		font-size: var(--fs-13);
+	}
+	.ym-head strong {
+		font-size: var(--fs-14);
+	}
+	.ym-head span {
+		color: var(--ink-soft);
+		font-variant-numeric: tabular-nums;
+	}
+	.ym-note {
+		margin: var(--sp-3) 0 0;
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+		max-width: 60rem;
 	}
 	.catkey {
 		display: flex;

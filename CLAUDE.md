@@ -1298,8 +1298,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (€ contracted / € paid toggle, `?money=`) beside the year-vs-year-ONLY
   CUMULATIVE DISBURSEMENT (half width, fire season in the payments
   timeline's accent; the phase-stacked mode is deleted), then the rest in
-  their old order (programme chart, payments timeline, region-per-year,
-  study costs, TYPES OF WORKS, CPV).
+  their old order (programme chart, payments timeline, study costs,
+  TYPES OF WORKS, CPV). MONEY BY REGION PER YEAR is retired: its data
+  draws as FIVE MINI YEAR MAPS (2022–2026, one shared sqrt ramp, totals
+  in the heads, `#pe-yearly`) inside ALLOCATION OF FUNDING under the big
+  maps — small multiples over a year slider, per the doctrine.
   RANKING OF COMPANIES sat right after the flow frame on 2026-08-21;
   its explanation behind a lightbulb and its «as contracted / by member
   firm» toggle alone on a line under the title, left; it matches the sponsored ranking (30 px
