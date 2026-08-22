@@ -80,7 +80,7 @@ def test_antinero_overview_shape(client):
                 "categories"):
         assert key in body, key
     assert body["kpis"]["n_contracts"] == 1
-    assert set(body["studies"]) == {"summary", "top"}
+    assert set(body["studies"]) == {"summary", "top", "points", "classes"}
 
 
 def test_antinero_map_shape(client):

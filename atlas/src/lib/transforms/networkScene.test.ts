@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bridgeSegments, scene, NET_MODES, type BandCopy } from './networkScene';
+import { type NetMode, bridgeSegments, scene, type BandCopy } from './networkScene';
 import type { NetNode, Placed } from './network';
 
 const copy: BandCopy = {
@@ -28,9 +28,13 @@ const P = (ref: string, x: number, y: number): Placed => ({
 	hub: true
 });
 
+// NET_MODES became the COLOUR lenses (2026-08-22); the arrangements are
+// the scenes themselves — the parked «pack» stays tested so it can return
+const ARRANGEMENTS: NetMode[] = ['time', 'pack'];
+
 describe('scene', () => {
 	it('draws every contract exactly once in every arrangement', () => {
-		for (const m of NET_MODES) {
+		for (const m of ARRANGEMENTS.map((value) => ({ value }))) {
 			const sc = scene(m.value, nodes, 1000, copy);
 			expect(sc.marks.map((n) => n.ref).sort(), m.value).toEqual([
 				'A',
@@ -45,7 +49,7 @@ describe('scene', () => {
 	});
 
 	it('is deterministic per mode — the same data draws the same scene', () => {
-		for (const m of NET_MODES)
+		for (const m of ARRANGEMENTS.map((value) => ({ value })))
 			expect(JSON.stringify(scene(m.value, nodes, 1000, copy))).toBe(
 				JSON.stringify(scene(m.value, nodes, 1000, copy))
 			);

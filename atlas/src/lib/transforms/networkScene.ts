@@ -28,9 +28,12 @@ export type NetMode = 'time' | 'call' | 'pack';
 /** The arrangements OFFERED. `call` (the star field) is built and tested but
  *  off the site by user decision 2026-08-18 — it may come back, so the scene
  *  and its units stay; only this list decides what the toggle shows. */
-export const NET_MODES: { value: NetMode; label: string }[] = [
-	{ value: 'time', label: 'When it was signed' },
-	{ value: 'pack', label: 'Nested by call' }
+// «Nested by call» (pack) is PARKED since 2026-08-22 (user) — its scene
+// stays below, ready to return; the toggle now switches the COLOUR lens
+// over the one timeline: the contract's scope or its curated type.
+export const NET_MODES: { value: string; label: string }[] = [
+	{ value: 'scope', label: 'By contract scope' },
+	{ value: 'type', label: 'By contract type' }
 ];
 
 export interface Seg {
@@ -43,6 +46,11 @@ export interface Seg {
 	who?: string[];
 	vats?: string[];
 }
+/** a call id readable by people: a ΚΗΜΔΗΣ ΑΔΑΜ stays itself; the nine
+ *  ΤΑΙΠΕΔ date-only calls print as the date they are known by */
+export const callText = (id: string): string =>
+	id.startsWith('date:') ? `πρόσκληση ${id.slice(5).split('-').reverse().join('.')}` : id;
+
 export interface Label {
 	key: string;
 	x: number;
@@ -150,10 +158,10 @@ function callScene(nodes: NetNode[], width: number, copy: BandCopy): Scene {
 	for (const c of field.clusters) {
 		labels.push({ key: `v:${c.call}`, x: c.cx, y: c.bottom, text: copy.eurShort(c.eur), cls: 'val' });
 		if (!want.has(c.call)) continue;
-		const half = (c.call.length * CHAR) / 2;
+		const half = (callText(c.call).length * CHAR) / 2;
 		if (c.cx - half < (rightOf.get(c.rowTop) ?? -Infinity) + 8) continue;
 		rightOf.set(c.rowTop, c.cx + half);
-		labels.push({ key: `a:${c.call}`, x: c.cx, y: c.rowTop - 3, text: c.call, cls: 'adam' });
+		labels.push({ key: `a:${c.call}`, x: c.cx, y: c.rowTop - 3, text: callText(c.call), cls: 'adam' });
 	}
 
 	const HEAD = 30;
@@ -210,11 +218,11 @@ function timeScene(nodes: NetNode[], width: number, season?: Season, box = NET_H
 		rules: t.ticks.filter((k) => k.rule).map((k) => ({ key: k.label, x: k.x })),
 		labels: t.ticks.map((k) => ({
 			key: `y:${k.label}`,
-			x: k.x + 4,
+			x: k.x,
 			y: t.height + 15,
 			text: k.label,
 			cls: 'year' as const,
-			anchor: 'start' as const
+			anchor: 'middle' as const
 		}))
 	};
 }
@@ -238,7 +246,7 @@ function packScene(nodes: NetNode[], width: number, box: number, copy: BandCopy)
 			arcs.push({
 				key: g.key,
 				d: `M${(g.x - rr).toFixed(1)} ${g.y.toFixed(1)}A${rr.toFixed(1)} ${rr.toFixed(1)} 0 0 1 ${(g.x + rr).toFixed(1)} ${g.y.toFixed(1)}`,
-				text: g.key,
+				text: callText(g.key),
 				size,
 				phase: g.phase
 			});

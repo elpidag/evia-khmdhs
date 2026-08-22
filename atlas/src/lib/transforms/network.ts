@@ -22,7 +22,7 @@
  */
 import { packEnclose, packSiblings } from 'd3-hierarchy';
 
-import { dodgeVariable } from './beeswarm';
+import { dodgeChains } from './beeswarm';
 
 export interface NetNode {
 	ref: string;
@@ -34,6 +34,11 @@ export interface NetNode {
 	auth?: string | null;
 	cat?: string | null;
 	phase?: string | null;
+	/** deliverables kind — works / study_and_works / study — the colour
+	 *  since 2026-08-22 (phases are funding envelopes and say little) */
+	dk?: string | null;
+	/** the call is known by DATE ONLY (ΤΑΙΠΕΔ, no ΚΗΜΔΗΣ record) */
+	udc?: boolean;
 	/** signature date, ISO — the timeline arrangement's x */
 	d?: string | null;
 	title?: string | null;
@@ -382,7 +387,9 @@ export function timeline(nodes: NetNode[], width = 1120, opts: TimeOpts = {}): T
 		.filter((n) => n.d)
 		.sort((a, b) => (a.d as string).localeCompare(b.d as string) || byEur(a, b));
 	const ts = dated.map((n) => Date.parse(n.d as string));
-	const t0 = Math.min(...ts);
+	// the axis starts on 1 January of the first year, so every year label
+	// sits ON its own new-year rule (user, 2026-08-22)
+	const t0 = Date.UTC(new Date(Math.min(...ts)).getUTCFullYear(), 0, 1);
 	const t1 = Math.max(...ts);
 	const x0 = pad;
 	const x1 = width - pad;
@@ -394,15 +401,44 @@ export function timeline(nodes: NetNode[], width = 1120, opts: TimeOpts = {}): T
 	// whichever arrangement is showing), the DOTS shrink to fit — a dodge
 	// that overflows its box would just overplot, which is the one thing a
 	// beeswarm exists to avoid. Area ∝ € still holds: the scale is uniform.
+	// lots of one call signed together are a RIGID touching run (user,
+	// 2026-08-22): dodged one by one they interleave with strangers and
+	// the join line zig-zags illegibly across the swarm. "Together" is a
+	// ≤7-day window — 23PROC012860295 signed four lots on 07.07 and one on
+	// 06.07, a sub-pixel day that must not exile the fifth — and a member
+	// keeps its true x, so a day-apart lot joins the run on a slant.
+	const CHAIN_WINDOW = 7 * 86_400_000;
+	const chains: number[][] = [];
+	{
+		const last = new Map<string, { ci: number; t: number }>();
+		dated.forEach((n, i) => {
+			const prev = n.call ? last.get(n.call) : undefined;
+			if (prev && ts[i] - prev.t <= CHAIN_WINDOW) {
+				chains[prev.ci].push(i);
+				prev.t = ts[i];
+			} else {
+				if (n.call) last.set(n.call, { ci: chains.length, t: ts[i] });
+				chains.push([i]);
+			}
+		});
+	}
+	const place = (rr: number[]) => {
+		const per = dodgeChains(
+			chains.map((m) => ({ xs: m.map((i) => xs[i]), rs: m.map((i) => rr[i]) }))
+		);
+		const out = new Array<number>(dated.length).fill(0);
+		chains.forEach((m, c) => m.forEach((i, k) => (out[i] = per[c][k])));
+		return out;
+	};
 	let scale = 1;
 	let rs = dated.map((n) => rOf(n.eur, maxR));
-	let ys = dodgeVariable(xs, rs);
+	let ys = place(rs);
 	let half = Math.max(...ys.map((y, i) => Math.abs(y) + rs[i]), 0);
 	if (fixed) {
 		for (let i = 0; i < 6 && half * 2 + 16 > fixed; i++) {
 			scale *= Math.max(0.5, (fixed - 16) / (half * 2));
 			rs = dated.map((n) => rOf(n.eur, maxR * scale));
-			ys = dodgeVariable(xs, rs);
+			ys = place(rs);
 			half = Math.max(...ys.map((y, i) => Math.abs(y) + rs[i]), 0);
 		}
 	}
@@ -428,14 +464,13 @@ export function timeline(nodes: NetNode[], width = 1120, opts: TimeOpts = {}): T
 			pts: [...m].sort((p, q) => p.x - q.x || p.y - q.y).map((p) => ({ x: p.x, y: p.y }))
 		}));
 
-	// one rule per calendar year inside the domain; the first year usually
-	// starts mid-way through, so it gets its label at the frame edge without
-	// a rule — an unlabelled leading stretch reads as "no data before this"
+	// one rule per 1 January inside the domain, its year label ON it —
+	// the domain starts on a 1 January by construction, so every year has
+	// its rule (user, 2026-08-22)
 	const ticks: { x: number; label: string; rule: boolean }[] = [];
 	for (let y = new Date(t0).getUTCFullYear(); y <= new Date(t1).getUTCFullYear(); y++) {
 		const t = Date.UTC(y, 0, 1);
 		if (t >= t0 && t <= t1) ticks.push({ x: xOf(t), label: String(y), rule: true });
-		else if (t < t0) ticks.push({ x: x0, label: String(y), rule: false });
 	}
 	// one shaded stripe per year of the season, clipped to the domain
 	const seasons: { key: string; x0: number; x1: number }[] = [];

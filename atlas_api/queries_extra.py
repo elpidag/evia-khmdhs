@@ -376,6 +376,30 @@ def antinero_overview(kh: sqlite3.Connection,
     pconn = pay if pay is not None else kh
     studies = q.study_costs(kh)
     top_studies = sorted(studies["rows"], key=lambda r: r["eur"], reverse=True)[:10]
+    # the scatter (2026-08-22): every stated study fee against its
+    # contract's value (the share's own denominator), compact
+    study_points = [
+        {"ref": r["ref"], "s": r["eur"],
+         "c": round(r["eur"] / r["share"], 2) if r["share"] else None,
+         "share": r["share"],
+         "t": (r["title"] or "")[:90]}
+        for r in studies["rows"]]
+    # the four honest classes over the 245 (deliverables × stated fee):
+    # stated (96 design-build + 3 works) / design-build unstated /
+    # works-only with no study to draft / the contract IS the study
+    stated_refs = {r["ref"] for r in studies["rows"]}
+    dk_of = {r[0]: r[1] for r in kh.execute(
+        """SELECT d.reference_number, d.kind FROM contract_deliverables d
+           JOIN contract_scope s ON s.reference_number = d.reference_number
+           WHERE s.in_scope = 1""")} if _table(kh, "contract_deliverables") else {}
+    study_classes = {
+        "stated": len(stated_refs),
+        "db_unstated": sum(1 for ref, k in dk_of.items()
+                           if k == "study_and_works" and ref not in stated_refs),
+        "works_none": sum(1 for ref, k in dk_of.items()
+                          if k == "works" and ref not in stated_refs),
+        "study_only": sum(1 for ref, k in dk_of.items() if k == "study"),
+    }
     return {
         "kpis": antinero_kpis(kh, pconn),
         "procedures": q.procedure_mix(kh),
@@ -386,7 +410,8 @@ def antinero_overview(kh: sqlite3.Connection,
         "direct_awards": q.direct_award_distribution(kh),
         "timeseries": q.disbursement_timeseries(pconn),
         "yearly": q.antinero_yearly(pconn),
-        "studies": {"summary": studies["summary"], "top": top_studies},
+        "studies": {"summary": studies["summary"], "top": top_studies,
+                    "points": study_points, "classes": study_classes},
         "top_contractors": antinero_top_contractors(kh, limit=10),
         # the same money attributed to the firms behind the joint
         # ventures — the second view of the ranking (2026-08-20)
@@ -802,20 +827,50 @@ def payment_events(kh: sqlite3.Connection) -> dict:
         refs.add(r["attributed_ref"])
 
     contracts: dict[str, dict] = {}
+    sig_date: dict[str, str] = {}
     if refs:
         marks = ",".join("?" * len(refs))
         for r in kh.execute(
-            f"SELECT reference_number, title FROM contracts "
+            f"SELECT reference_number, title, contract_signed_date, "
+            f"submission_date FROM contracts "
             f"WHERE reference_number IN ({marks})", sorted(refs)):
             t = (r["title"] or r["reference_number"]).strip()
+            sd = _full_date(r["contract_signed_date"]) or _full_date(
+                r["submission_date"])
+            if sd:
+                sig_date[r["reference_number"]] = sd
             contracts[r["reference_number"]] = {
-                "t": t[:80] + ("…" if len(t) > 80 else "")}
+                "t": t[:80] + ("…" if len(t) > 80 else ""),
+                # the signature YEAR — the strip colours its ticks by the
+                # contract's cohort (user, 2026-08-22)
+                "y": sd[:4] if sd else None}
         for r in kh.execute(
             f"SELECT reference_number, vat_number FROM contractors "
             f"WHERE reference_number IN ({marks}) ORDER BY seq", sorted(refs)):
             contracts[r["reference_number"]].setdefault("vats", []).append(
                 r["vat_number"])
-    return {"events": events, "contracts": contracts,
+    # the lag story (user, 2026-08-22): how long after signing the money
+    # actually flows — medians over every dated pair, computed here so the
+    # page never derives them from display-rounded values
+    import datetime as _t
+    import statistics as _st
+    lags: list[int] = []
+    first: dict[str, int] = {}
+    for e in events:
+        sd = sig_date.get(e["ref"])
+        if not e["d"] or not sd:
+            continue
+        days = (_t.date.fromisoformat(e["d"]) - _t.date.fromisoformat(sd)).days
+        lags.append(days)
+        if e["ref"] not in first or days < first[e["ref"]]:
+            first[e["ref"]] = days
+    lag = {
+        "n": len(lags),
+        "median_days": int(_st.median(lags)) if lags else None,
+        "median_first_days": int(_st.median(first.values())) if first else None,
+        "n_contracts": len(first),
+    }
+    return {"events": events, "contracts": contracts, "lag": lag,
             "undated": {"n": undated_n, "eur": round(undated_eur, 2)},
             "fallback": fallback}
 
@@ -1110,15 +1165,31 @@ def antinero_network(kh: sqlite3.Connection) -> dict:
                (SELECT a.authority_name FROM contract_forest_authorities a
                  WHERE a.reference_number = k.reference_number
                  ORDER BY a.seq LIMIT 1) AS auth,
-               cat.category AS cat, s.scope AS phase
+               cat.category AS cat, s.scope AS phase,
+               dl.kind AS dk
           FROM contracts k
           JOIN contract_scope s ON s.reference_number = k.reference_number
                                AND s.in_scope = 1
           LEFT JOIN contract_categories cat
                  ON cat.reference_number = k.reference_number
+          LEFT JOIN contract_deliverables dl
+                 ON dl.reference_number = k.reference_number
          ORDER BY k.total_cost_without_vat DESC""").fetchall()
     nodes = [dict(r) for r in rows]
+    # the nine ΤΑΙΠΕΔ procurements whose πρόσκληση is cited by DATE ONLY
+    # (undocumented_calls.json, DATA_DECISIONS 2026-08-22): the chart can
+    # now group their lots — the 04.03.2022 call produced three of our
+    # contracts — instead of filing them under «no call at all». Their
+    # pseudo-id is `date:<iso>`, flagged `udc` so the chart draws the tie
+    # dotted and labels it honestly.
+    undoc = _undocumented_calls()
+    for n in nodes:
+        u = undoc.get(n["ref"])
+        if u and not n["call"]:
+            n["call"] = "date:" + u["call_date"]
+            n["udc"] = True
     n_call = len({n["call"] for n in nodes if n["call"]})
+    n_date_calls = len({n["call"] for n in nodes if n.get("udc")})
     # a call/contractor shared by 2+ contracts is what draws an edge
     from collections import Counter
     calls = Counter(n["call"] for n in nodes if n["call"])
@@ -1159,6 +1230,9 @@ def antinero_network(kh: sqlite3.Connection) -> dict:
             # a split call whose every lot was signed on ONE day — the
             # timeline arrangement prints this, so it is computed here
             "n_same_day_calls": sum(1 for v in days.values() if len(v) == 1),
+            # the date-only ΤΑΙΠΕΔ calls, separately: the methodology's
+            # families numbers count ΚΗΜΔΗΣ ΑΔΑΜ only
+            "n_date_calls": n_date_calls,
             "total_eur": round(sum(n["eur"] or 0 for n in nodes), 2),
         },
     }
@@ -3788,7 +3862,7 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
     if uc:
         out.append({
             "adam": None, "kind": "notice",
-            "title": ("cited in the contract by date only — ΤΑΙΠΕΔ-run "
+            "title": ("cited in the contract by date only — HRADF-run "
                       "procurement; no ΚΗΜΔΗΣ record exists to link"
                       if uc.get("taiped") else
                       "cited in the contract by date only — no ΚΗΜΔΗΣ record"),

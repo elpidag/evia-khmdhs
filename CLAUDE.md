@@ -243,8 +243,9 @@ refetching open contracts — prefer it for routine updates.
   title evidence + source pdf/inherited:<ref>) → `categories_loader.py` →
   `contract_categories` + `category_labels` (in refresh chain; WARNs on
   uncovered in-scope contracts, `curation_todos` lists them). 8 keys:
-  dasotexnika 154 / miktes_zones 33 / arxaiologikoi 17 / meletes 14 /
-  antidiavrotika 12 / anadasoseis 8 / ylotomies 6 / ydatodexamenes 1
+  dasotexnika 154 / miktes_zones 33 / arxaiologikoi 16 / meletes 14 /
+  antidiavrotika 13 / anadasoseis 8 / ylotomies 6 / ydatodexamenes 1
+  (counts re-verified against the DB 2026-08-22)
   (post-audit, DATA_DECISIONS 2026-08-14 second entry); /antinero
   contract pages show the category chip + a «Type of work» evidence
   block (verbatim title, provenance link to the parent version when
@@ -255,7 +256,13 @@ refetching open contracts — prefer it for routine updates.
   **CONTRACT TYPE** is its own half-width frame beside CONTRACT SCOPE
   (the category € bars, English `label_en`; the works its contracts name
   ride in the bar's HOVER, never as printed sub-lines) and **TYPES OF
-  WORKS** has two lenses (`?works=named|split`): «works named» (the 14
+  WORKS** has three lenses (`?works=category|named|split`), default
+  **«by main category»** (user, 2026-08-22, the Flourish
+  «Company ownership» form: `CategoryDots.svelte` — ONE EQUAL dot per
+  contract in phyllotaxis discs bottom-aligned per category, count+name
+  under each, colours = `charts/catColors.ts` CAT_COLORS shared with
+  the PROCUREMENT TIMELINE type lens; counts only, € lives in CONTRACT
+  TYPE) / «works named» (the 14
   themes counted in contracts + «no specific work named» 44; no €) /
   **«works × category»** (`WorksByCategory.svelte`: one ROW per work —
   the names are long, so they must be row labels, which is what killed
@@ -1417,8 +1424,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (biggest lot at the centre, siblings on spokes), then two labelled
   bands for the calls that produced exactly one contract and for the
   contracts with no call at all. Area ∝ stated net € on ONE scale across
-  field and bands, colour = programme phase (`transforms/scopes`
-  ramp), each star labelled with its Σ € on a row-shared baseline and the
+  field and bands, colour = the SCOPE kind since 2026-08-22 (works/
+  study & works/study only, CONTRACT SCOPE's tones; `dk` on the payload —
+  phases are funding envelopes and the x-axis already carries time), each star labelled with its Σ € on a row-shared baseline and the
   six richest named by ΑΔΑΜ. Calls sharing a contractor are packed as one
   block so their dashed bridge stays inside a row; collinear bridges are
   lifted 3,5u apart (two dashed lines on one axis read as one solid rule).
@@ -1446,7 +1454,18 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   one keyed list, so a contract keeps its DOM node and animates between
   arrangements; chart text is `pointer-events: none` (a label used to
   swallow the hover of the mark it names). The hover card is identity
-  only: ΑΔΑΜ + amount. **Both arrangements draw in the same
+  only: ΑΔΑΜ + amount. Since the second 2026-08-22 round the frame is
+  titled **PROCUREMENT TIMELINE**, `NET_MODES` are COLOUR LENSES over the
+  one time arrangement (`?net=scope|type`: deliverables scope
+  black/grey/white-ring vs the 8 curated categories in site colours, key
+  in the MAP legend's dress), «Nested by call» is parked (scene + tests
+  stay), lots of one call signed within 7 DAYS are a RIGID touching run
+  (`beeswarm.dodgeChains`, per-member x — a day-apart lot joins on a
+  slant at its true date; adjacency is the join; dodged singly they
+  interleaved with strangers), the axis starts on 1 January of the first
+  year so every year label sits ON its new-year rule, and the nine
+  date-only-call contracts wear a dashed ring labelled **HRADF** (the
+  trail row says «HRADF-run procurement» too). **Both arrangements draw in the same
   `NET_HEIGHT = 400` box** (user, 2026-08-18) so the frame never jumps on
   toggle: the timeline's viewBox IS the box (`0 0 1120 400`, one unit =
   one px) and the swarm SHRINKS ITS DOTS to fit rather than overflowing;

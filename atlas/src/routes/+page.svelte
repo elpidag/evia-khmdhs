@@ -1,6 +1,7 @@
 <script lang="ts">
 	import BarH from '$lib/charts/BarH.svelte';
 	import StackedShareBar from '$lib/charts/StackedShareBar.svelte';
+	import StudyScatter from '$lib/charts/StudyScatter.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import SideNote from '$lib/ui/SideNote.svelte';
 	import { YEAR_GREYS, yearGrey } from '$lib/charts/yearColors';
@@ -10,6 +11,7 @@
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow from '$lib/charts/KindFlow.svelte';
 	import WorksByCategory from '$lib/charts/WorksByCategory.svelte';
+	import CategoryDots from '$lib/charts/CategoryDots.svelte';
 	import { unitEn } from '$lib/transforms/names';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
@@ -19,7 +21,7 @@
 	import type { Connections } from './connections/+page';
 	import ContractNetwork from '$lib/charts/ContractNetwork.svelte';
 	import type { NetNode } from '$lib/transforms/network';
-	import { NET_MODES, type NetMode } from '$lib/transforms/networkScene';
+	import { NET_MODES } from '$lib/transforms/networkScene';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import { makeChoro, RAMP_WORKS } from '$lib/maps/useGeo';
@@ -83,31 +85,24 @@
 	// the programme chart is one population under three arrangements, and
 	// each arrangement has a different honest headline — every number in
 	// them comes from the payload's own stats
+	// the ?net= lens: colour by scope (default) or by curated type; the
+	// «nested by call» arrangement is parked (its scene stays), so the
+	// drawn arrangement is always the timeline
 	const netMode = $derived(
-		(NET_MODES.find((m) => m.value === page.url.searchParams.get('net'))?.value ??
-			'time') as NetMode
+		NET_MODES.find((m) => m.value === page.url.searchParams.get('net'))?.value ?? 'scope'
 	);
 	const netCopy = $derived.by(() => {
 		const st = network?.stats ?? {};
-		if (netMode === 'call')
+		if (netMode === 'type')
 			return {
-				title: `THE PROGRAMME WAS BOUGHT IN ${grInt(st.n_calls)} SEPARATE PROCUREMENTS, MOST OF THEM ONE CONTRACT LONG`,
-				subtitle:
-					'Each star is one call: the biggest lot at its centre, the others around it. Below, the calls that produced a single contract, and the awards made with no call at all.',
-				caveat: 'The dashed lines join two calls won by the same contractor.'
-			};
-		if (netMode === 'pack')
-			return {
-				title: `${grInt(st.n_single_call)} OF THE ${grInt(st.n_calls)} CALLS BOUGHT EXACTLY ONE CONTRACT`,
-				subtitle:
-					'The contracts nested inside the call that bought them: the split procurements hold the middle, and every contract bought on its own rings them. Bubble area is the money.',
+				title: 'PROCUREMENT TIMELINE',
+				subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day. The colour is the contract's curated TYPE: the special forestry works are the grey mass, and the specialised strands — mixed firebreaks, reforestation, flood protection, archaeological sites — arrive in campaigns.`,
 				caveat:
-					'A bubble is one πρόσκληση and the circles inside it are its lots; a bare circle is a contract with no sibling, dashed when no call was published at all.'
+					'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
 			};
 		return {
-			title: `${grInt(st.n_same_day_calls)} OF THE ${grInt(st.n_multi_calls)} SPLIT PROCUREMENTS SIGNED EVERY LOT ON ONE DAY`,
-			subtitle:
-				'Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined.',
+			title: 'PROCUREMENT TIMELINE',
+			subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day. The colour is the contract's SCOPE: the 2022 era bought works only, the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
 			caveat:
 				'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
 		};
@@ -153,14 +148,7 @@
 			sublabel: `${p.n_contracts} contracts`
 		}))
 	);
-	const studyRows = $derived(
-		o.studies.top.map((s) => ({
-			label: String(s.title).slice(0, 90),
-			value: Number(s.eur),
-			href: `/antinero/contract/${s.ref}`,
-			sublabel: `${((s.share as number) * 100).toFixed(1)}% of the contract's net value`
-		}))
-	);
+
 
 	// auto-note: the single biggest payment month
 	const peak = $derived.by(() => {
@@ -245,7 +233,7 @@
 	// the TYPES OF WORKS lens, a URL param like the other frames' toggles —
 	// «category» / «named» and, under trial (2026-08-22), «flow» / «matrix» /
 	// «pack»
-	const WORKS_LENSES = ['named', 'split'] as const;
+	const WORKS_LENSES = ['category', 'named', 'split'] as const;
 	// the five-year-maps strip (user, 2026-08-22, replacing the MONEY BY
 	// REGION PER YEAR facets): per-year per-region € on ONE shared scale —
 	// the same sqrt grey ramp as the big allocation maps above it
@@ -307,7 +295,7 @@
 	const worksLens = $derived<WorksLens>(
 		(WORKS_LENSES as readonly string[]).includes(page.url.searchParams.get('works') ?? '')
 			? (page.url.searchParams.get('works') as WorksLens)
-			: 'named'
+			: 'category'
 	);
 	// works as ROWS, each split by the main category of the contracts naming
 	// it (user, 2026-08-22: the work names are long, so they must be labels)
@@ -903,20 +891,22 @@
 {#if network}
 	<ChartFrame
 		title={netCopy.title}
-		subtitle={netCopy.subtitle}
+		insight={netCopy.subtitle}
 		caveat="{netCopy.caveat} Circle area is the contract's stated value excl. VAT, on one scale in every arrangement; a call is the πρόσκληση the contract cites in its own signed text ({grInt(
 			network.stats.n_calls
 		)} resolved this way). Every layout is deterministic, not a force simulation."
 		anchor="network"
 		methodology="procurement-families"
 	>
-		<div class="netbar">
-			<SegmentToggle param="net" fallback="time" options={NET_MODES} />
-		</div>
+		{#snippet controls()}
+			<SegmentToggle param="net" fallback="scope" options={NET_MODES} />
+		{/snippet}
 		<ContractNetwork
-			nodes={network.nodes}
+			nodes={network.nodes.map((n) => ({ ...n, phase: n.dk }))}
 			stats={network.stats}
-			mode={netMode}
+			mode="time"
+			lens={netMode === 'type' ? 'type' : 'scope'}
+			catLabels={Object.fromEntries(o.categories.map((c) => [c.key, catShort.get(c.key) ?? c.key]))}
 			season={network.fire_season}
 		/>
 	</ChartFrame>
@@ -929,7 +919,7 @@
 {#if payments}
 	<ChartFrame
 		title="PAYMENTS TIMELINE"
-		subtitle="One tick per payment order ({grInt(payments.events.length)}), height ∝ √€, by programme phase — the biggest single month was {peak.m} ({eurShort(
+		insight="One tick per payment order ({grInt(payments.events.length)}), height ∝ √€, coloured by the YEAR THE CONTRACT WAS SIGNED — so the tails are visible: {payments.lag?.median_days != null ? `the median payment order arrives ${grInt(payments.lag.median_days)} days after the contract's signature, the first payment after ${grInt(payments.lag.median_first_days ?? 0)} days (over ${grInt(payments.lag.n_contracts)} contracts), and early cohorts' greys stretch years past their signing` : ''}. The biggest single month was {peak.m} ({eurShort(
 			peak.eur
 		)}). Hover for the order, click through to the contract."
 		caveat="{grInt(
@@ -951,16 +941,26 @@
 
 <ChartFrame
 	title="STUDY COSTS"
-	subtitle="The ten largest study (μελέτη) costs extracted from the signed PDFs — the median is {pct(
-		(o.studies.summary.median_share as number) * 100
-	)} of a contract's net value; {grInt(o.studies.summary.n_with)} of {grInt(
-		o.studies.summary.n_in_scope
-	)} contracts state one, {eurShort(o.studies.summary.total_eur)} in total."
-	caveat="ΕΣΑ design-build contracts bundle the study into the works price and honestly state none."
+	insight={`What the studies cost is visible for only part of the programme: ${grInt(o.studies.summary.n_with)} of ${grInt(o.studies.summary.n_in_scope)} contracts state a μελέτη cost in their signed PDF (${eurShort(o.studies.summary.total_eur)} in total, median ${pct((o.studies.summary.median_share as number) * 100)} of the contract's net value). Nearly all of those are design-build contracts itemising the fee for the studies their contractor drafts; the rest of the ${grInt(o.deliverables?.study_and_works ?? 0)} design-build contracts bundle that fee into the works price unstated. The ${grInt(o.deliverables?.works ?? 0)} works-only contracts draft no study — theirs existed before the contract — and honestly state none, while the ${grInt(o.deliverables?.study ?? 0)} study-only contracts are study money in their entirety (${eurShort(o.categories.find((c) => c.key === 'meletes')?.eur ?? 0)}). Each dot below is one stated fee against its contract's value; the diagonals are fixed shares.`}
+	caveat="Stated «Κόστος εκπόνησης μελετών (ΣΑΥ-ΦΑΥ)» figures, net of ΦΠΑ, extracted from the signed PDFs and hand-verified; a design-build contract states none and is honestly absent."
 	anchor="studies"
 	methodology="study-costs"
 >
-	<BarH rows={studyRows} color="#8f8f8f" />
+	<div class="studybar">
+		<StackedShareBar
+			height={30}
+			segments={[
+				{ value: o.studies.classes?.stated ?? 0, label: 'fee itemised', color: '#1d1d1d' },
+				{ value: o.studies.classes?.db_unstated ?? 0, label: 'fee unstated', color: '#6c6c6c' },
+				{ value: o.studies.classes?.works_none ?? 0, label: 'no study to draft', color: '#a8a8a8' },
+				{ value: o.studies.classes?.study_only ?? 0, label: 'the study itself', color: '#d6d6d6', labelColor: '#6c6c6c' }
+			]}
+		/>
+	</div>
+	<StudyScatter
+		points={o.studies.points ?? []}
+		medianShare={o.studies.summary.median_share as number}
+	/>
 </ChartFrame>
 
 {#if o.categories.length && topCat}
@@ -974,7 +974,9 @@
 		title="TYPES OF WORKS"
 		insight={worksLens === 'split'
 			? `One row per work the signed titles name — the works are what the contracts say they do — and each row split by the MAIN CATEGORY of the contracts naming it: that is what the one-category-per-contract rule flattens, since a bundled title names several works. A contract appears on every row its title names, so the rows overlap; the contracts naming no specific work are the last row. Counts only — no price per work exists inside a bundled contract.`
-			: `What the contracts say they do, read from the project title inside each signed PDF — or, where the title names nothing, from the call’s own description of the lot: one bar per kind of work, counted in contracts. A contract counts under every work it names, so the bars overlap and carry no € (the documents state no price per work inside a bundled contract); ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work anywhere and stand as their own bar.`}
+			: worksLens === 'named'
+				? `What the contracts say they do, read from the project title inside each signed PDF — or, where the title names nothing, from the call’s own description of the lot: one bar per kind of work, counted in contracts. A contract counts under every work it names, so the bars overlap and carry no € (the documents state no price per work inside a bundled contract); ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work anywhere and stand as their own bar.`
+				: `One equal dot per contract — ${grInt(network?.nodes.length ?? 0)} in all — grouped by its curated main category, the one each signed PDF’s project title assigns. The dots are equal on purpose: this view counts contracts, and the money already stands in the CONTRACT TYPE bars above. Click a dot for its contract.`}
 		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
 		anchor="works"
 		methodology="categories"
@@ -982,8 +984,9 @@
 		<div class="rankbar">
 			<SegmentToggle
 				param="works"
-				fallback="named"
+				fallback="category"
 				options={[
+					{ value: 'category', label: 'by main category' },
 					{ value: 'named', label: 'works named' },
 					{ value: 'split', label: 'works × category' }
 				]}
@@ -996,10 +999,15 @@
 				{/each}
 			</div>
 			<WorksByCategory rows={worksSplit} colorOf={(k) => catGrey.get(k) ?? '#9b9b9b'} />
-		{:else}
+		{:else if worksLens === 'named'}
 			<div class="rankw">
 				<BarH rows={lowerRows(themeRows)} color="#2b2b2b" inside barHeight={35} fmt={grInt} />
 			</div>
+		{:else if network}
+			<CategoryDots
+				nodes={network.nodes}
+				labels={Object.fromEntries(o.categories.map((c) => [c.key, catShort.get(c.key) ?? c.key]))}
+			/>
 		{/if}
 	</ChartFrame>
 {/if}
@@ -1080,11 +1088,6 @@
 		border-radius: 50%;
 		margin-right: 4px;
 		vertical-align: -1px;
-	}
-	.netbar {
-		display: flex;
-		justify-content: flex-end;
-		margin-bottom: var(--sp-2);
 	}
 	/* black-white-grayscale only on this page (user, 2026-08-20): the
 	   reference-line ink follows */
@@ -1444,6 +1447,10 @@
 		width: auto;
 		max-width: 40rem;
 		margin-bottom: var(--sp-4);
+	}
+	.studybar {
+		max-width: 720px;
+		margin-bottom: var(--sp-5);
 	}
 	/* the five year maps under the allocation maps: a film strip on one
 	   shared scale (user, 2026-08-22) */

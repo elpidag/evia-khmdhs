@@ -111,6 +111,14 @@ def test_categories_pins(client):
 def test_payments_pins(client):
     p = client.get("/api/antinero/payments").get_json()
     assert len(p["events"]) == 863
+    # the lag story (2026-08-22): medians computed server-side
+    assert p["lag"]["median_days"] == 247
+    assert p["lag"]["median_first_days"] == 170
+    assert p["lag"]["n"] == 863 and p["lag"]["n_contracts"] == 226
+    # every dated event's contract carries its cohort year for the strip
+    assert all(
+        p["contracts"][e["ref"]].get("y")
+        for e in p["events"] if e["d"])
     assert p["undated"]["n"] == 0          # submission-date fallback covers all
     assert p["fallback"] == 180
     assert sum(e["eur"] for e in p["events"]) == pytest.approx(440_019_108.41)
@@ -183,11 +191,24 @@ def test_deliverables_and_undocumented_calls(client):
     assert "εκπονηθεί από τον Ανάδοχο" in d["deliverables"]["excerpt"]
     rows = [t for t in d["timeline"] if t.get("undocumented")]
     assert len(rows) == 1 and rows[0]["adam"] is None
-    assert rows[0]["d"] == "2023-05-22" and "ΤΑΙΠΕΔ" in rows[0]["title"]
+    assert rows[0]["d"] == "2023-05-22" and "HRADF" in rows[0]["title"]
     kh = sqlite3.connect(DEFAULT_DB)
     n = kh.execute("SELECT COUNT(*) FROM contract_deliverables").fetchone()[0]
     kh.close()
     assert n == 245
+
+
+def test_study_scatter_and_classes(client):
+    """STUDY COSTS (2026-08-22): the four classes partition the 245 and the
+    scatter's points are the chain-attributed stated fees."""
+    o = client.get("/api/antinero/overview").get_json()
+    cl = o["studies"]["classes"]
+    assert cl == {"stated": 105, "db_unstated": 20, "works_none": 106,
+                  "study_only": 14}
+    assert sum(cl.values()) == 245
+    pts = o["studies"]["points"]
+    assert len(pts) == o["studies"]["summary"]["n_with"] == 105
+    assert all(p["c"] and p["s"] > 0 for p in pts)
 
 
 def test_unit_flow_reconciles(client):
@@ -271,18 +292,23 @@ def test_network_pins(client):
     net = client.get("/api/antinero/network").get_json()
     st = net["stats"]
     assert st["n_contracts"] == len(net["nodes"]) == 245
-    assert st["n_calls"] == 134
+    # 134 ΚΗΜΔΗΣ ΑΔΑΜ + the 4 ΤΑΙΠΕΔ calls known by date only
+    # (undocumented_calls.json, DATA_DECISIONS 2026-08-22)
+    assert st["n_calls"] == 138 and st["n_date_calls"] == 4
     # the three bands the chart draws, and nothing left over
     assert st["n_in_multi_calls"] + st["n_single_call"] + st["n_no_call"] == 245
-    assert (st["n_in_multi_calls"], st["n_multi_calls"]) == (136, 51)
-    assert (st["n_single_call"], st["n_no_call"]) == (83, 26)
+    assert (st["n_in_multi_calls"], st["n_multi_calls"]) == (144, 54)
+    assert (st["n_single_call"], st["n_no_call"]) == (84, 17)
     # a call with no sibling is not a cluster, and a bridge needs two calls
-    # 28 since the duplicate-ΑΦΜ merge of 2026-08-18: two companies were
-    # hidden behind a whitespace-split key and did not read as bridges
-    assert st["n_bridge_multi"] <= st["n_bridge_contractors"] == 28
+    # 30 since the date-calls joined: two contractors bridge through them
+    assert st["n_bridge_multi"] <= st["n_bridge_contractors"] == 30
     assert st["total_eur"] == pytest.approx(622_534_181.72, abs=1.0)
-    # the timeline arrangement prints this and places every dot by it
-    assert st["n_same_day_calls"] == 35
+    # the timeline arrangement prints this and places every dot by it —
+    # 37 since the date-call trios (04.03.2022, 22.05.2023) sign same-day
+    assert st["n_same_day_calls"] == 37
+    # every date-only call node is flagged and every node carries its scope
+    assert sum(1 for n in net["nodes"] if n.get("udc")) == 9
+    assert all(n["dk"] in ("works", "study_and_works", "study") for n in net["nodes"])
     # the fire season travels WITH its count, so the shaded stripes and the
     # sentence next to them cannot drift apart
     fs = net["fire_season"]
@@ -295,10 +321,14 @@ def test_network_pins(client):
     assert all(n["phase"] for n in net["nodes"])
     assert all(n["eur"] is not None for n in net["nodes"])
     assert all(re.fullmatch(r"\d{4}-\d\d-\d\d", n["d"] or "") for n in net["nodes"])
-    # the calls the chart names are ΚΗΜΔΗΣ πρόσκληση ΑΔΑΜ, never invented
+    # the calls the chart names are ΚΗΜΔΗΣ πρόσκληση ΑΔΑΜ — plus the four
+    # date ids of the ΤΑΙΠΕΔ calls, curated with verbatim evidence
     calls = {n["call"] for n in net["nodes"] if n["call"]}
-    assert len(calls) == 134
-    assert all(re.fullmatch(r"\d\dPROC\d{9}", c) for c in calls)
+    assert len(calls) == 138
+    assert sum(1 for c in calls if c.startswith("date:")) == 4
+    assert all(
+        re.fullmatch(r"\d\dPROC\d{9}", c) or re.fullmatch(r"date:\d{4}-\d\d-\d\d", c)
+        for c in calls)
 
 
 def test_meta_family_facts_match_the_network(client):
@@ -306,8 +336,10 @@ def test_meta_family_facts_match_the_network(client):
     shows, or the page explains a picture it is not drawing."""
     f = client.get("/api/meta").get_json()["facts"]
     st = client.get("/api/antinero/network").get_json()["stats"]
-    assert f["kh_family_calls"] == st["n_calls"]
-    assert f["kh_family_none"] == st["n_no_call"]
+    # meta counts ΚΗΜΔΗΣ-ΑΔΑΜ families only; the chart adds the four
+    # date-only ΤΑΙΠΕΔ calls (their nine contracts leave the no-call band)
+    assert f["kh_family_calls"] == st["n_calls"] - st["n_date_calls"]
+    assert f["kh_family_none"] == st["n_no_call"] + 9
     assert f["kh_family_contracts"] + f["kh_family_none"] == 245
     # the registry's own chain declares far less than the texts do
     assert f["kh_family_declared"] == 77

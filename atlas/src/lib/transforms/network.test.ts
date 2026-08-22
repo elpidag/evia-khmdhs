@@ -166,16 +166,65 @@ describe('timeline', () => {
 		expect(f.ties[0].pts).toHaveLength(2);
 	});
 
-	it('labels every calendar year, ruling only the ones that start in range', () => {
+	it('rules every 1 January and labels sit ON the rule', () => {
 		const t = timeline(nodes, 1000).ticks;
 		expect(t.map((k) => k.label)).toEqual(['2022', '2023', '2024', '2025', '2026']);
-		expect(t.every((k) => k.rule)).toBe(true); // this fixture starts on 1 Jan
-		// a mid-year start labels the first year at the frame edge, unruled
+		expect(t.every((k) => k.rule)).toBe(true);
+		// a mid-year start still rules its year: the axis starts on 1 Jan
+		// of the first year by construction (user, 2026-08-22)
 		const mid = timeline(
 			nodes.map((n) => (n.ref === 'A' || n.ref === 'B' ? { ...n, d: '2022-04-13' } : n)),
 			1000
-		).ticks;
-		expect(mid[0]).toEqual({ x: mid[0].x, label: '2022', rule: false });
+		);
+		expect(mid.ticks[0].label).toBe('2022');
+		expect(mid.ticks[0].rule).toBe(true);
+		expect(mid.ticks[0].x).toBe(mid.x0);
+	});
+
+	it('keeps same-day lots of one call adjacent — one touching vertical run', () => {
+		// five lots of one call signed on one day, among same-day strangers
+		const busy: NetNode[] = [
+			...['L1', 'L2', 'L3', 'L4', 'L5'].map((r, i) =>
+				({ ref: r, eur: 40 - i * 5, call: 'C9', d: '2024-06-30' }) as NetNode
+			),
+			{ ref: 'S1', eur: 60, d: '2024-06-30' },
+			{ ref: 'S2', eur: 30, d: '2024-06-30' },
+			{ ref: 'A', eur: 100, d: '2022-01-01' },
+			{ ref: 'Z', eur: 10, d: '2026-01-01' }
+		];
+		const f = timeline(busy, 1000);
+		const run = f.nodes.filter((n) => n.call === 'C9').sort((a, b) => a.y - b.y);
+		expect(new Set(run.map((n) => n.x)).size).toBe(1);
+		for (let i = 1; i < run.length; i++)
+			expect(run[i].y - run[i - 1].y).toBeCloseTo(run[i].r + run[i - 1].r, 3);
+		// and no stranger overlaps the run
+		for (const s of f.nodes.filter((n) => n.ref.startsWith('S')))
+			for (const m of run)
+				expect(Math.hypot(s.x - m.x, s.y - m.y)).toBeGreaterThanOrEqual(s.r + m.r - 1e-6);
+	});
+
+	it('absorbs a day-apart lot into the run, touching on a slant', () => {
+		// 23PROC012860295 signed four lots on 07.07.2023 and ONE on 06.07 —
+		// the sub-pixel day must not exile it (user, 2026-08-22)
+		const busy: NetNode[] = [
+			{ ref: 'L1', eur: 40, call: 'C9', d: '2024-06-30' },
+			{ ref: 'L2', eur: 30, call: 'C9', d: '2024-06-30' },
+			{ ref: 'E', eur: 35, call: 'C9', d: '2024-06-29' },
+			{ ref: 'A', eur: 100, d: '2024-01-01' },
+			{ ref: 'Z', eur: 10, d: '2024-12-31' }
+		];
+		const f = timeline(busy, 1000);
+		const run = f.nodes.filter((n) => n.call === 'C9').sort((a, b) => a.y - b.y);
+		// every consecutive pair of the run TOUCHES (distance == r sum)
+		for (let i = 1; i < run.length; i++)
+			expect(Math.hypot(run[i].x - run[i - 1].x, run[i].y - run[i - 1].y)).toBeCloseTo(
+				run[i].r + run[i - 1].r,
+				3
+			);
+		// the early lot keeps its own date on the axis
+		const e = f.nodes.find((n) => n.ref === 'E')!;
+		const l = f.nodes.find((n) => n.ref === 'L1')!;
+		expect(e.x).toBeLessThan(l.x);
 	});
 
 	it('is deterministic and order-independent', () => {

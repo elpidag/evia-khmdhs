@@ -1,18 +1,36 @@
 <script lang="ts">
 	import type { PaymentsPayload, PaymentEvent } from '$lib/api';
-	import { eur } from '$lib/transforms/format';
-	import { orderScopes, scopeColor, scopeLabel } from '$lib/transforms/scopes';
+	import { eur, eurShort } from '$lib/transforms/format';
 	import { scaleTime } from 'd3-scale';
 
+	/**
+	 * One tick per payment order, in LANES BY SIGNATURE COHORT (user,
+	 * 2026-08-22, round 2): asking 1.6-px lines to carry five greys was
+	 * illegible, so each lane holds the payments of the contracts SIGNED
+	 * in one year, all ticks one ink — the payment tail is the lane's
+	 * horizontal reach, not a colour to decode. The «signed 2022» lane
+	 * visibly runs deep into 2024.
+	 */
 	let { data }: { data: PaymentsPayload } = $props();
 
 	let width = $state(900);
-	const LANE_H = 56;
-	const M = { top: 8, right: 12, bottom: 24, left: 128 };
+	const LANE_H = 52;
+	const M = { top: 8, right: 12, bottom: 24, left: 92 };
 
 	const dated = $derived(data.events.filter((e): e is PaymentEvent & { d: string } => !!e.d));
-	const lanes = $derived(orderScopes(dated.map((e) => e.scope)));
+	const cohortOf = (e: PaymentEvent) => data.contracts[e.ref]?.y ?? null;
+	const lanes = $derived(
+		[...new Set(dated.map(cohortOf).filter((y): y is string => !!y))].sort()
+	);
 	const height = $derived(M.top + lanes.length * LANE_H + M.bottom);
+	const laneEur = $derived.by(() => {
+		const m = new Map<string, number>();
+		for (const e of dated) {
+			const y = cohortOf(e);
+			if (y) m.set(y, (m.get(y) ?? 0) + (e.eur || 0));
+		}
+		return m;
+	});
 
 	const x = $derived.by(() => {
 		const ds = dated.map((e) => new Date(e.d).getTime());
@@ -24,7 +42,7 @@
 	});
 
 	const maxEur = $derived(Math.max(...dated.map((e) => e.eur || 0)));
-	const tickH = (e: PaymentEvent) => 6 + 40 * Math.sqrt((e.eur || 0) / maxEur);
+	const tickH = (e: PaymentEvent) => 5 + (LANE_H - 14) * Math.sqrt((e.eur || 0) / maxEur);
 
 	const years = $derived.by(() => {
 		const [min, max] = x.domain();
@@ -33,13 +51,11 @@
 		return ys;
 	});
 
-	// fire-season (May–August) bands per year
+	// the statutory αντιπυρική περίοδος, 1 May – 31 October — the same
+	// band every timeline on the site shades
 	const seasons = $derived(
 		years
-			.map((y) => ({
-				x0: x(new Date(y, 4, 1)),
-				x1: x(new Date(y, 8, 1))
-			}))
+			.map((y) => ({ x0: x(new Date(y, 4, 1)), x1: x(new Date(y, 10, 1)) }))
 			.filter((s) => s.x1 > M.left && s.x0 < width - M.right)
 	);
 
@@ -49,7 +65,7 @@
 		return (
 			`<strong>${eur(e.eur)}</strong> · ${e.d}` +
 			`<br>${c?.t ?? e.ref}` +
-			`<br><span style="color:var(--ink-faint)">${scopeLabel(e.scope)} · order ${e.pay}</span>`
+			`<br><span style="color:var(--ink-faint)">contract signed ${c?.y ?? '—'} · order ${e.pay}</span>`
 		);
 	}
 </script>
@@ -68,25 +84,24 @@
 		{/each}
 		{#if seasons.length}
 			<text class="season-label" x={Math.max(seasons[0].x0, M.left) + 4} y={M.top + 10}>
-				fire season (May–Aug)
+				fire season (May–Oct)
 			</text>
 		{/if}
 
 		{#each lanes as lane, li (lane)}
-			{@const yBase = M.top + (li + 1) * LANE_H - 8}
+			{@const yBase = M.top + (li + 1) * LANE_H - 6}
 			<line class="lane" x1={M.left} x2={width - M.right} y1={yBase} y2={yBase} />
-			<text class="lane-label" x={M.left - 8} y={yBase - 4}>{scopeLabel(lane)}</text>
-			{#each dated.filter((e) => e.scope === lane) as e (e.pay)}
+			<text class="lane-label" x={M.left - 8} y={yBase - 16}>signed {lane}</text>
+			<text class="lane-eur" x={M.left - 8} y={yBase - 4}>{eurShort(laneEur.get(lane) ?? 0)}</text>
+			{#each dated.filter((e) => cohortOf(e) === lane) as e (e.pay)}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<a href={`/antinero/contract/${e.ref}`} aria-label={`${e.d}: ${eur(e.eur)}`}>
 					<line
 						class="tick"
-						class:credit={e.credit === 1}
-						x1={x(new Date(e.d!))}
-						x2={x(new Date(e.d!))}
+						x1={x(new Date(e.d))}
+						x2={x(new Date(e.d))}
 						y1={yBase}
 						y2={yBase - tickH(e)}
-						stroke={scopeColor(lane)}
 						onmouseenter={() => (tip = { html: tipFor(e) })}
 						onmouseleave={() => (tip = null)}
 					/>
@@ -125,7 +140,13 @@
 	}
 	.lane-label {
 		font-size: 11px;
+		font-weight: 700;
 		fill: var(--ink-soft);
+		text-anchor: end;
+	}
+	.lane-eur {
+		font-size: 10px;
+		fill: var(--ink-faint);
 		text-anchor: end;
 	}
 	.season-label {
@@ -134,16 +155,14 @@
 		opacity: 0.75;
 	}
 	.tick {
-		stroke-width: 1.6;
-		opacity: 0.75;
+		stroke: var(--ink);
+		stroke-width: 1.4;
+		opacity: 0.55;
 		cursor: pointer;
 	}
 	.tick:hover {
 		stroke-width: 3;
 		opacity: 1;
-	}
-	.tick.credit {
-		stroke: var(--c-flag-red);
 	}
 	.year {
 		stroke: var(--line);

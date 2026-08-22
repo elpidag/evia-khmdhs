@@ -144,7 +144,16 @@ export interface PaymentEvent {
 
 export interface PaymentsPayload {
 	events: PaymentEvent[];
-	contracts: Record<string, { t: string; vats?: string[] }>;
+	/** t = trimmed title; y = the contract's signature YEAR (the strip's
+	 *  cohort colour, 2026-08-22) */
+	contracts: Record<string, { t: string; vats?: string[]; y?: string | null }>;
+	/** signature→payment lag medians, computed server-side */
+	lag?: {
+		n: number;
+		median_days: number | null;
+		median_first_days: number | null;
+		n_contracts: number;
+	};
 	undated: { n: number; eur: number };
 	fallback: number;
 }
@@ -393,6 +402,10 @@ export interface AntineroOverview {
 			eff_eur: number;
 			share: number;
 		}[];
+		/** every stated fee against its contract's value (the scatter) */
+		points?: { ref: string; s: number; c: number | null; share: number | null; t: string }[];
+		/** the four honest classes over the 245 (2026-08-22) */
+		classes?: { stated: number; db_unstated: number; works_none: number; study_only: number };
 	};
 	top_contractors: TopContractor[];
 	/** the same money attributed to the firms BEHIND the joint ventures

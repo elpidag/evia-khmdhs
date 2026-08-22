@@ -7127,3 +7127,142 @@ keeps the old `#pe-yearly` anchor; its five totals equal MONEY PER
 YEAR's contracted bars (30,88 / 71,47 / 248,40 / 193,57 / 78,20 M €) —
 the two surfaces cross-validate. A note under the strip states the
 shared scale and the even-split signature-year basis.
+
+## 2026-08-22 · The phases leave the front page: scope colours the programme chart, cohorts colour the payments, the lag medians said
+
+**Premise (user): «Anti-nero I/II/III/IV/2026 do not say much»** — they
+are funding-envelope labels, and in the timeline arrangement they are
+doubly redundant: phases ARE eras and the x-axis already carries time.
+The page had been de-phasing already (year-greys on the beeswarm, the
+phase-stacked cumulative deleted); this round finishes it.
+
+- **Programme chart:** colour = the SCOPE kind (works only #3d3d3d /
+  study & works #6c6c6c / study only #b5b5b5 — CONTRACT SCOPE's own
+  tones, one meaning site-wide; `dk` on the network payload). The nine
+  ΤΑΙΠΕΔ date-only calls now GROUP their lots (pseudo-id `date:<iso>`,
+  dotted ties, «call known by date only (ΤΑΙΠΕΔ) — no ΚΗΜΔΗΣ record» in
+  the key, labels print «πρόσκληση DD.MM.YYYY»): split calls 51→54,
+  same-day 35→37, no-call 26→17, n_calls 138 (134 ΚΗΜΔΗΣ + 4 date; the
+  meta/methodology numbers stay ΚΗΜΔΗΣ-only, the pin relates them).
+  Fire-season stripe now the page's accent band (was #f0e5d8); toggle on
+  the title line; the explanation behind the bulb.
+- **Payments timeline REWRITTEN:** the phase lanes are gone — one strip,
+  each tick in the grey of its CONTRACT'S SIGNATURE YEAR (the CONTRACT
+  VALUES year-greys), which makes the payment TAILS visible: 2022-grey
+  ticks stretch deep into 2024. The payload ships each contract's cohort
+  (`contracts[ref].y`) and the LAG medians computed server-side: median
+  247 days from signature to a payment order, 170 days to the first
+  payment, over 226 contracts / 863 dated pairs — pinned. The bulb says
+  it. The strip's season band fixed May–Aug → the statutory May–Oct.
+- **Study costs:** the bulb now tells the truth the deliverables layer
+  measured — and the first draft had it BACKWARDS, caught by verifying
+  before shipping: of the 99 contracts stating a μελέτη cost, **96 are
+  design-build** (the ΣΑΥ-ΦΑΥ line is exactly their itemised fee for the
+  studies the contractor drafts) and 3 works-only; the other 25
+  design-build contracts bundle the fee unstated; the 110 works-only
+  contracts draft no study (theirs pre-existed — «με εγκεκριμένες
+  μελέτες») and honestly state none; the 14 study-only contracts are
+  study money entirely. The stale «ΕΣΑ design-build» caveat replaced;
+  bars restyled to the page's 35px/inside/right-values language, the
+  share % on hover.
+
+## 2026-08-22 · Round 2 on the three frames: legible scope colours, cohort lanes, the study scatter
+
+(user: the scope greys were indistinguishable, the cohort tick-greys
+illegible, the top-10 unreadable) —
+- **Programme chart**: retitled «HOW THE PROGRAMME WAS BOUGHT» (the
+  computed findings moved into the lede/bulb); the scope trio stretched
+  for 6-px dots — works only near-black #1d1d1d, study & works light
+  #a8a8a8, study only WHITE with a dark ring — and a fill bug fixed
+  along the way (the marks read `phase`, which still held the funding
+  phase, so every dot fell back to one grey; the page now hands `dk`
+  in the phase slot). The 2022-all-black → 2024-mostly-light flip now
+  reads at a glance (measured: 2022 = 20/20 works-only; design-build
+  arrives 2023 at 20 vs 28 and dominates 2024–26).
+- **Payments timeline, round 2**: LANES BY SIGNATURE COHORT — «signed
+  2022…2026», one ink, each lane's Σ € printed (29,52 / 66,53 / 207,55 /
+  122,67 / 13,75 M € — the €440M paid basis decomposed); the tail is the
+  lane's horizontal reach, not a colour to decode. The «credit (negative)
+  order» key REMOVED: zero credit orders exist in the whole payments
+  table — the key documented a registry possibility, not our data.
+- **Study costs**: the top-10 Greek-title bars replaced by (a) a
+  four-segment share bar over the 245 — fee itemised 105 / design-build
+  fee unstated 20 / works-only, no study to draft 106 / the study itself
+  14 (chain-attributed, matching `n_with`; the raw-table split was
+  96+3 before tip inheritance) — and (b) a log–log SCATTER of every
+  stated fee against its contract's value with fixed-share diagonals and
+  the median (1,1%) drawn solid: the «what studies cost» claim is now
+  the picture, no labels needed. `o.studies` ships `points` + `classes`,
+  pinned.
+
+## 2026-08-22 · The programme chart's toggle becomes the two lenses; «nested by call» parked
+
+(user) The «Nested by call» pack arrangement is PARKED — like the star
+field before it, its scene and tests stay (`networkScene` still builds
+and pins it) and only `NET_MODES` decides what shows. The toggle now
+switches the COLOUR of the one timeline: **«By contract scope»**
+(works-only black / design-build light / study-only white-ring) and
+**«By contract type»** — the 8 curated categories in the SITE'S OWN
+colours, semantic where possible: the catch-all special forestry works
+as the grey mass, mixed firebreaks black, reforestation #52b788,
+logging #2d6a4f, flood protection the ΔΑΣΕ deep blue #0d366b,
+archaeological the accent #b33a1a, studies amber #b07d1e, water #43a276.
+The type lens shows the CAMPAIGNS: 2022–23 all grey, then the 2024
+mixed-firebreak black column, the green reforestation waves, the blue
+flood works after the 2023 Έβρος fires. The key wears the MAP legend's
+dress (the grey rounded `.mapkey` panel), so the page's keys read as one
+family. Title provisionally «PROCUREMENT TIMELINE» pending the user's
+pick.
+
+## 2026-08-22 · PROCUREMENT TIMELINE: the title kept, same-day runs made rigid, the HRADF marker on the dots
+
+(user) The frame keeps the title **PROCUREMENT TIMELINE**. Reading fixes,
+all presentation — no data change:
+- **Same-day lots of one call are a RIGID touching run**: dodged one by
+  one they interleaved with strangers and the join line zig-zagged
+  illegibly across the swarm. `beeswarm.dodgeChains` places each
+  same-(call, date) group as one vertical run of touching circles and
+  dodges the run as a unit (a single circle is a chain of one);
+  adjacency now IS the join for same-day lots, the line only shows where
+  a call's lots span days. Unit-pinned (touching distances exact, no
+  stranger overlap, determinism kept).
+- **Year labels centred in their year**: a label on the January-1st rule
+  reads as belonging to either side; each year's label now sits at the
+  midpoint of the stretch of that year the domain shows (`ticks[].lx`),
+  the boundary rules unchanged.
+- **The date-only call marker moved onto the DOTS**: the touching runs
+  cover the tie line, so the nine contracts wear a dashed ring
+  (grey on light fills, light on dark) and the key shows a dashed
+  circle; the tie itself stays dashed for the spanning case. And the
+  wording is **HRADF** wherever English is spoken — the key and the
+  DOCUMENT TRAIL row («HRADF-run procurement») — per the site's
+  ΤΑΙΠΕΔ→HRADF naming convention.
+- The two JOIN swatches in the key are line samples now, not 12px boxes
+  with a coloured top border nobody could see.
+
+## 2026-08-22 · Timeline corrections + TYPES OF WORKS grouped dots (user round)
+
+Corrections to the previous entry, both user-caught:
+- **The chain window is ≤7 days, with per-member x** — 23PROC012860295
+  signed four lots on 07.07.2023 and ONE on 06.07: an exact same-day rule
+  exiled the fifth to its own dodge, a long line away (the user saw it).
+  `dodgeChains` now takes per-member x and the members touch given their
+  horizontal gap, so a day-apart lot joins the run on a slant at its true
+  date. Verified in the DOM: all five lots consecutive at distance ==
+  radius sum.
+- **Year labels ON the 1st of January** (user: «obviously») — not centred
+  in the year as the previous pass did. The axis now STARTS on 1 January
+  of the first year, so every year owns a real rule and its label sits on
+  it, anchored middle.
+
+**TYPES OF WORKS gains a third lens, the new default: «by main
+category»** — the Flourish «Company ownership» form the user picked from
+the gallery: ONE EQUAL dot per contract (245), clustered by its curated
+category in phyllotaxis discs, bottom-aligned, count + name under each,
+CAT_COLORS shared with the PROCUREMENT TIMELINE's type lens
+(`charts/catColors.ts` — one colour per category across the page). Dots
+equal on purpose: this face counts contracts, the € stands in CONTRACT
+TYPE. Cluster counts verified against the DB — dasotexnika 154 /
+miktes_zones 33 / arxaiologikoi 16 / meletes 14 / antidiavrotika 13 /
+anadasoseis 8 / ylotomies 6 / ydatodexamenes 1 (CLAUDE.md's 2026-08-14
+table said 17/12 — stale, corrected).
