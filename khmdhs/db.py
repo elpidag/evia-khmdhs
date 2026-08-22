@@ -291,6 +291,19 @@ CREATE TABLE IF NOT EXISTS contract_durations (
     FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
 );
 
+-- What the contract DELIVERS: study / works / study_and_works — the
+-- user's 1-2-3 model (DATA_DECISIONS 2026-08-22). The design-build
+-- generation states the contractor drafts the studies first; the clause
+-- is quoted verbatim. Deliberately NOT a work theme.
+CREATE TABLE IF NOT EXISTS contract_deliverables (
+    reference_number TEXT PRIMARY KEY,
+    kind             TEXT NOT NULL,      -- study | works | study_and_works
+    excerpt          TEXT,               -- verbatim design-build clause
+    source           TEXT,               -- pdf | call:<ΑΔΑΜ> | category
+    curated_at       TEXT NOT NULL,
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+
 -- WHICH ΔΗΜΟΣ each contract worked in — one level finer than the Π.Ε.
 -- layer, read from the contract's own placement sentence or from the
 -- πρόσκληση it cites: «εντός των Δήμων Χαϊδαρίου και Ασπροπύργου,

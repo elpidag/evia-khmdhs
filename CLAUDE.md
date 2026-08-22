@@ -249,16 +249,34 @@ refetching open contracts — prefer it for routine updates.
   contract pages show the category chip + a «Type of work» evidence
   block (verbatim title, provenance link to the parent version when
   inherited) via `queries_extra.contract_category`;
-  Σ stated net reconciles to the basis exactly (pinned). Atlas: TYPES OF
-  WORK is ONE frame with two lenses since 2026-08-22 (`?works=`): «main
+  Σ stated net reconciles to the basis exactly (pinned). Atlas: **TYPES OF
+  WORKS** is ONE frame with THREE lenses (`?works=`, user 2026-08-22 after
+  six further drawings were tried and rejected — flow, bundles/UpSet,
+  bubble grid, matrix, pack, unit squares — all deleted): «main
   category» BarH (€/count, English `label_en` — the catch-all reads
-  «General fire-prevention works — clearing, forest roads, firebreaks» —
-  each bar's sub-line listing the works its contracts NAME from the
-  themes) / «works named» (the 12 themes counted in contracts +
-  «fire protection — no specific work named» 91; no €);
+  «General fire-prevention works — clearing, forest roads, firebreaks»;
+  the works its contracts name ride in the bar's HOVER, never as printed
+  sub-lines) / «works named» (the 14 themes counted in contracts +
+  «fire protection — no specific work named» 44; no €) / **«works ×
+  category»** (`WorksByCategory.svelte`: one ROW per work — the names are
+  long, so they must be row labels, which is what killed every
+  column-headed drawing — each bar split by the MAIN CATEGORY of the
+  contracts naming it, greys from the category ramp, counts only);
   `antinero_themes` + `names` on the overview, pinned; CPV CODES list
   closes the front page; labels ship from `category_labels` /
   `work_theme_labels`, never hardcoded.
+- Deliverables layer (DATA_DECISIONS 2026-08-22): **study 14 /
+  study_and_works 121 / works 110** — the 1-2-3 model mirroring the
+  sponsored `deliverables`. `scripts/extract_deliverables.py` (design-build
+  clause found in the contract's own text 63 / its call 58, verbatim via a
+  1:1 fold) → curated `data/contract_deliverables.json` (`_overrides` per
+  ΑΔΑΜ) → `details_loader` → `contract_deliverables`. Deliberately NOT the
+  «Μελέτες» theme (it would flood 14 → ~115 — the clause is the post-2024
+  template, 72/135 calls). Contract page SCOPE row prints it + the quoted
+  clause; overview ships the counts, pinned. **Nine contracts cite their
+  πρόσκληση by DATE ONLY (no ΑΔΑΜ; all ΤΑΙΠΕΔ-run, evidence quoted)** —
+  curated `data/undocumented_calls.json` → `contract_timeline` merges an
+  unlinked trail row per contract («cited by date only … no ΚΗΜΔΗΣ record»).
 - `scripts/audit_contract_documents.py` — audits every in-scope contract
   against its own signed text, reading the **CHAIN** (tip → all ancestors),
   never the tip alone: 46 of 245 in-scope contracts are amendments whose own
@@ -476,13 +494,34 @@ refetching open contracts — prefer it for routine updates.
   loaded**): `scripts/extract_contract_details.py` reads every in-scope
   contract's cached text once and emits `data/processed/
   contract_details_review.json` (gitignored) + the committed
-  `contract_details_curator.html`. (a) `khmdhs/work_themes.py` — TWELVE
-  multi-label themes from the contract's own descriptive project title
-  (155 contracts name ≥1, **101 name ≥2** — one category per contract is
-  lossy; 91 say nothing beyond «αντιπυρική προστασία» and stay so), each
-  hit carrying the verbatim clause; CPV is a SCREEN not a source (9 marker
-  codes → 56 questions; «συντήρησης οδών» 130/246 and «χαρτογράφησης»
-  119/246 are deliberately NOT markers). The «Αντικείμενο της Σύμβασης»
+  `contract_details_curator.html`. (a) `khmdhs/work_themes.py` — FOURTEEN
+  multi-label themes from the contract's own descriptive project title —
+  or, since the same day's second decision, from the CALL's lot-specific
+  works enumeration where the title names nothing (`CALL_PATTERNS` +
+  `read_call`, its own dialect: «αποκατάσταση βατότητας» is road work,
+  «στεγασμένων» lacks the Ε-, «καθαρισμός ζωνών» is zone maintenance,
+  ΒΛΑΣΤΗΣ never fires the silvicultural theme there; source
+  `call:<PROC>`, labelled apart on every surface; the call's programme
+  MENU stays banned — only the enumeration is admitted, and the 43
+  contracts whose 2024 calls delegate works to the unpublished Τεύχος 3
+  stay empty). 201 contracts name ≥1 (158 title + 43 call), 105 name ≥2;
+  44 say nothing anywhere and stay so; each
+  hit carries the verbatim clause; four firebreak kinds since the same
+  day's third verdict (συντήρηση / μικτές / εστεγασμένες / ψιλές); CPV is a SCREEN not a source (8 marker
+  codes; «συντήρησης οδών» 130/246 and «χαρτογράφησης»
+  119/246 are deliberately NOT markers). **Vocabulary corrected
+  2026-08-22** (DATA_DECISIONS): firebreaks are THREE disjoint themes —
+  συντήρηση / δημιουργία μικτών / δημιουργία εστεγασμένων — because the
+  old generic «ΑΝΤΙΠΥΡΙΚ ΖΩΝ» stem double-counted every μικτή contract
+  and no title names two kinds; the roads theme is «Συντήρηση δασικού
+  οδικού δικτύου» and requires the verb («σε δασικούς δρόμους» is the
+  zones' LOCATION — 15 old links died); «ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ» is an
+  input, never the studies theme, while «Κατάρτιση Σχεδίου» is (the old
+  stem missed all 6); «διαχείριση υπολειμμάτων υλοτομίας» is its own
+  theme apart from υλοτομίες; 0-link perifraxi dropped. Tempered
+  patterns + fixed-width lookbehinds; one `_overrides` entry
+  (23SYMV013201961, side-clearing of zones under formation →
+  συντήρηση ζωνών by hand verdict). The «Αντικείμενο της Σύμβασης»
   article and the πρόσκληση were tested and rejected — boilerplate and
   whole-programme menu respectively. (b) `khmdhs/contract_durations.py` —
   the «συνολική προθεσμία … ορίζεται σε …» clause, chain-read: **246/246**
@@ -501,9 +540,11 @@ refetching open contracts — prefer it for routine updates.
   Verdicts (rules, user-approved 2026-08-19: show every theme · say so when
   the title states none · CPV is only ever a note · document over registry)
   live in curated `data/contract_work_themes.json` + `data/contract_durations.json`
-  (both with `_overrides`, merged by `--curate`) → `khmdhs/details_loader.py`
-  → `contract_work_themes` (330 links / 155 contracts) + `work_theme_labels`
-  + `contract_cpv_notes` (56) + `contract_durations` (246); in the refresh
+  (both with `_overrides`, merged by `--curate` — the LOADER ignores
+  `_overrides`, so after editing them `extract_contract_details.py
+  --curate` must run before `details_loader`) → `khmdhs/details_loader.py`
+  → `contract_work_themes` (380 links / 201 contracts, 43 via their call) + `work_theme_labels`
+  + `contract_cpv_notes` (108 rows / 55 contracts) + `contract_durations` (245); in the refresh
   chain after categories_loader. **`queries_extra.contract_deadlines` now
   reads the curated duration FIRST** — every in-scope contract has a drawn
   bar (243 document + 3 season, was 155 stubs) and extensions rose to 14

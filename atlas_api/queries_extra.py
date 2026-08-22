@@ -9,6 +9,7 @@ refactor fails loudly here.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import math
 import re
 import datetime as _dt
@@ -398,6 +399,12 @@ def antinero_overview(kh: sqlite3.Connection,
         "cpvs": antinero_cpvs(kh),
         "categories": antinero_categories(kh),
         "themes": antinero_themes(kh),
+        # study 14 / works 110 / study_and_works 121 — never hardcode
+        "deliverables": {r["kind"]: r["n"] for r in kh.execute(
+            """SELECT d.kind, COUNT(*) n FROM contract_deliverables d
+               JOIN contract_scope s ON s.reference_number = d.reference_number
+               WHERE s.in_scope = 1 GROUP BY d.kind""")}
+        if _table(kh, "contract_deliverables") else {},
         "document_kinds": antinero_document_kinds(kh),
     }
 
@@ -632,6 +639,18 @@ def contract_category(kh: sqlite3.Connection, ref: str) -> dict | None:
     return {"key": r["key"], "label": r["label"] or r["key"],
             "label_en": _col(r, "label_en") or r["label"] or r["key"],
             "note": r["note"], "title": r["title"], "source": r["source"]}
+
+
+def contract_deliverables(kh: sqlite3.Connection, ref: str) -> dict | None:
+    """study / works / study_and_works — the user's 1-2-3 model
+    (DATA_DECISIONS 2026-08-22). study_and_works quotes the design-build
+    clause from the contract's own text or its call."""
+    if not _table(kh, "contract_deliverables"):
+        return None
+    r = kh.execute(
+        "SELECT kind, excerpt, source FROM contract_deliverables"
+        " WHERE reference_number = ?", (ref,)).fetchone()
+    return dict(r) if r else None
 
 
 def contract_work_themes(kh: sqlite3.Connection, ref: str) -> dict:
@@ -3592,6 +3611,23 @@ def _chain_refs(kh: sqlite3.Connection, ref: str) -> set[str]:
     return set(seq) if seq else {ref}
 
 
+_UNDOC_CALLS: dict | None = None
+
+
+def _undocumented_calls() -> dict:
+    """Curated: contracts whose signed text cites the πρόσκληση by date
+    only (khmdhs/data/undocumented_calls.json) — all ΤΑΙΠΕΔ-run."""
+    global _UNDOC_CALLS
+    if _UNDOC_CALLS is None:
+        f = Path(__file__).resolve().parents[1] / "khmdhs" / "data" / "undocumented_calls.json"
+        try:
+            _UNDOC_CALLS = {k: v for k, v in json.loads(
+                f.read_text(encoding="utf-8")).items() if not k.startswith("_")}
+        except OSError:
+            _UNDOC_CALLS = {}
+    return _UNDOC_CALLS
+
+
 def contract_timeline(kh: sqlite3.Connection, ref: str,
                       own_records_only: bool = False) -> list[dict]:
     """The contract's full procurement family (αίτημα → πρόσκληση →
@@ -3742,6 +3778,24 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
             })
     except sqlite3.OperationalError:            # table not built yet
         pass
+
+    # Calls cited by DATE ONLY (no ΑΔΑΜ anywhere in the signed text):
+    # nine ΤΑΙΠΕΔ-run procurements whose πρόσκληση most likely never got a
+    # ΚΗΜΔΗΣ record — the trail acknowledges the document without inventing
+    # a link (user, 2026-08-22; curated undocumented_calls.json, verbatim
+    # evidence per contract)
+    uc = _undocumented_calls().get(ref)
+    if uc:
+        out.append({
+            "adam": None, "kind": "notice",
+            "title": ("cited in the contract by date only — ΤΑΙΠΕΔ-run "
+                      "procurement; no ΚΗΜΔΗΣ record exists to link"
+                      if uc.get("taiped") else
+                      "cited in the contract by date only — no ΚΗΜΔΗΣ record"),
+            "d": uc["call_date"], "cancelled": 0, "in_db": False,
+            "cited": True, "undocumented": True,
+            "excerpt": uc["excerpt"],
+        })
 
     # The twin of a re-posted record. ΚΗΜΔΗΣ cancels a record and posts the
     # contract again with NO link between the two — no prev/next, no

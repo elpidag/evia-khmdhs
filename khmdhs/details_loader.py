@@ -36,6 +36,7 @@ from khmdhs.config import DEFAULT_DB
 
 THEMES_FILE = Path(__file__).parent / "data" / "contract_work_themes.json"
 DURATIONS_FILE = Path(__file__).parent / "data" / "contract_durations.json"
+DELIVERABLES_FILE = Path(__file__).parent / "data" / "contract_deliverables.json"
 
 log = logging.getLogger(__name__)
 
@@ -130,6 +131,29 @@ def write_db(conn: sqlite3.Connection, themes: dict, durations: dict) -> tuple[i
           e["source_ref"], (e.get("registry") or {}).get("n"),
           (e.get("registry") or {}).get("unit"), today)
          for ref, e in _entries(durations).items()])
+
+    # the deliverables split — study / works / study_and_works, the user's
+    # 1-2-3 model (DATA_DECISIONS 2026-08-22). study_and_works must quote
+    # the design-build clause; the other kinds are category / absence.
+    if DELIVERABLES_FILE.exists():
+        dl = json.loads(DELIVERABLES_FILE.read_text(encoding="utf-8"))
+        kinds = set(dl.get("_kinds") or ())
+        rows_dl = []
+        for ref, e in _entries(dl).items():
+            if e.get("kind") not in kinds:
+                raise SystemExit(f"contract_deliverables.json: {ref} has "
+                                 f"unknown kind {e.get('kind')!r}")
+            if e["kind"] == "study_and_works" and not e.get("excerpt"):
+                raise SystemExit(f"contract_deliverables.json: {ref} is "
+                                 "study_and_works with no evidence excerpt")
+            rows_dl.append((ref, e["kind"], e.get("excerpt"),
+                            e.get("source"), today))
+        conn.execute("DELETE FROM contract_deliverables")
+        conn.executemany(
+            "INSERT INTO contract_deliverables (reference_number, kind, "
+            "excerpt, source, curated_at) VALUES (?,?,?,?,?)", rows_dl)
+        from collections import Counter
+        log.info("deliverables: %s", dict(Counter(r[1] for r in rows_dl)))
     conn.commit()
 
     has_scope = conn.execute(

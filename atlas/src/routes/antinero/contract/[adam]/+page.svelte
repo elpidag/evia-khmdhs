@@ -179,6 +179,7 @@
 	);
 
 	const pdfHref = (t: (typeof timeline)[number]): string | null => {
+		if (!t.adam) return null; // a call cited by date only has no record
 		if (t.kind === 'completion' || t.kind === 'extension') return `/pdf/diavgeia/${t.adam}`;
 		if (t.kind !== 'contract')
 			return `/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`;
@@ -223,7 +224,7 @@
 						: (t.kind === 'contract'
 								? (DOCKIND[t.doc_kind ?? ''] ?? KIND.contract)
 								: (KIND[t.kind] ?? t.kind)) + (t.self ? ' — this document' : ''),
-			code: t.adam,
+			code: t.adam ?? '(no ΑΔΑΜ)',
 			// an extension row says what it granted: «→ 27.01.2026» (the latest
 			// date, «per area» when the act grants several), or that the act
 			// could not be read — the subject stays as the title
@@ -500,21 +501,46 @@
 							: '.')
 				};
 			}),
-		// WHERE the type chips come from: the contract's own project title,
-		// one quoted clause per theme (user, 2026-08-19)
-		...themes.map((t) => ({
-			label: `Type of work — ${t.en}`,
-			text: t.excerpt,
-			code: c.work_themes?.source?.startsWith('inherited:')
-				? c.work_themes.source.slice(10)
-				: c.reference_number,
-			href: `/pdf/contract/${
-				c.work_themes?.source?.startsWith('inherited:')
-					? c.work_themes.source.slice(10)
-					: c.reference_number
-			}`,
-			note: null
-		})),
+		// WHERE the type chips come from: the contract's own project title —
+		// or, where the title names no work, the CALL's works enumeration
+		// (source `call:<PROC>`, DATA_DECISIONS 2026-08-22) — one quoted
+		// clause per theme (user, 2026-08-19)
+		...themes.map((t) => {
+			const src = c.work_themes?.source ?? '';
+			const fromCall = src.startsWith('call:');
+			const doc = fromCall
+				? src.slice(5)
+				: src.startsWith('inherited:')
+					? src.slice(10)
+					: c.reference_number;
+			return {
+				label: `Type of work — ${t.en}${fromCall ? ' (from the call)' : ''}`,
+				text: t.excerpt,
+				code: doc,
+				href: `/pdf/${fromCall ? 'notice' : 'contract'}/${doc}`,
+				note: fromCall
+					? 'The signed title names no specific work; the works are quoted from the call’s own description of this lot.'
+					: null
+			};
+		}),
+		// WHERE the SCOPE row comes from, when it is design-build: the clause
+		// stating the contractor drafts the studies (user's 1-2-3 model,
+		// DATA_DECISIONS 2026-08-22)
+		...(c.deliverables?.kind === 'study_and_works' && c.deliverables.excerpt
+			? [
+					{
+						label: 'Scope — study and works (design-build)',
+						text: c.deliverables.excerpt,
+						code: c.deliverables.source?.startsWith('call:')
+							? c.deliverables.source.slice(5)
+							: c.reference_number,
+						href: c.deliverables.source?.startsWith('call:')
+							? `/pdf/notice/${c.deliverables.source.slice(5)}`
+							: `/pdf/contract/${c.reference_number}`,
+						note: null
+					}
+				]
+			: []),
 		// WHERE the duration comes from: the contract's own sentence, with
 		// the ΚΗΜΔΗΣ field named beside it where it disagrees
 		...(c.stated_duration?.excerpt
@@ -717,7 +743,15 @@
 				>{#if typeDetail}<Hint text={typeDetail} />{/if}{:else}—{/if}
 		</dd>
 		<dt>Scope</dt>
-		<dd>{c.category?.key === 'meletes' ? 'study' : 'works'}</dd>
+		<dd>
+			{c.deliverables?.kind === 'study'
+				? 'study'
+				: c.deliverables?.kind === 'study_and_works'
+					? 'study and works'
+					: 'works'}{#if c.deliverables?.kind === 'study_and_works'}<Hint
+					text="Design-build: the contract includes the drafting of the studies by the contractor, and the execution of the works those studies define — the clause is quoted in the extracts below."
+				/>{/if}
+		</dd>
 		<dt>Budget <small class="muted">(excl. VAT)</small></dt>
 		<dd>
 			{eurShort(c.total_cost_without_vat ?? 0)}

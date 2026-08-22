@@ -129,9 +129,99 @@ def test_the_generic_title_states_no_theme():
 def test_the_theme_excerpt_is_verbatim_from_the_title():
     title = ("Εργασίες για τη δημιουργία εστεγασμένων αντιπυρικών ζωνών "
              "στην Π.Ε. Ηλείας")
-    hit = next(h for h in wt.read_title(title) if h.key == "miktes_zones")
+    hit = next(h for h in wt.read_title(title) if h.key == "estegasmenes_zones")
     core = hit.excerpt.strip("… ")
     assert core in title
+
+
+# --- the corrected vocabulary (DATA_DECISIONS 2026-08-22) -----------------
+
+def test_firebreaks_are_three_disjoint_themes():
+    """The generic «ΑΝΤΙΠΥΡΙΚ ΖΩΝ» theme is retired: each mention lands on
+    exactly one of συντήρηση / μικτές / εστεγασμένες, by its own verb."""
+    maint = wt.read_title(
+        "Εργασίες για τον καθαρισμό των δασών και δασικών εκτάσεων καθώς και "
+        "για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών "
+        "ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων Μεγάρων και Πάρνηθας")
+    keys = {h.key for h in maint}
+    assert "syntirisi_zonon" in keys and "odiko_diktyo" in keys
+    assert "miktes_zones" not in keys and "estegasmenes_zones" not in keys
+
+    mixed = {h.key for h in wt.read_title(
+        "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της "
+        "Π.Ε. Δυτικής Αττικής αρμοδιότητας Δασαρχείου Αιγάλεω")}
+    assert mixed == {"miktes_zones"}
+
+    sheltered = {h.key for h in wt.read_title(
+        "Εργασίες για τη δημιουργία εστεγασμένων αντιπυρικών ζωνών, σε "
+        "εκτάσεις ευθύνης των Δασαρχείων Λαμίας και Αταλάντης")}
+    assert sheltered == {"estegasmenes_zones"}
+
+
+def test_the_maintenance_verb_never_reaches_across_a_creation_clause():
+    """«συντήρηση του οδικού δικτύου ΚΑΙ ΤΗ ΔΗΜΙΟΥΡΓΙΑ μικτών ζωνών» — the
+    συντήρηση governs the roads only; the tempered guard stops it."""
+    keys = {h.key for h in wt.read_title(
+        "Εργασίες για τη συντήρηση του δασικού οδικού δικτύου και τη "
+        "δημιουργία μικτών αντιπυρικών ζωνών της Π.Ε. Εύβοιας")}
+    assert keys == {"odiko_diktyo", "miktes_zones"}
+
+
+def test_roads_as_location_are_not_road_work():
+    """«σε δασικούς δρόμους» names WHERE the zones go; 15 of the old 75
+    road links were that (DATA_DECISIONS 2026-08-22)."""
+    keys = {h.key for h in wt.read_title(
+        "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της "
+        "Π.Ε. Εύβοιας, αρμοδιότητας Δασαρχείου Χαλκίδας")}
+    assert keys == {"miktes_zones"}
+    # …and πλευρικός καθαρισμός along roads is clearing, not road work
+    keys = {h.key for h in wt.read_title(
+        "Έργα αντιπυρικής προστασίας σε δημόσιους δασικούς δρόμους και "
+        "δασικές εκτάσεις, αρμοδιότητας των Δασαρχείων Μεσολογγίου")}
+    assert keys == set()
+
+
+def test_approved_studies_are_an_input_not_a_deliverable():
+    """«ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ» = works under already-approved studies —
+    never the studies theme; «Κατάρτιση Σχεδίου» IS study work."""
+    keys = {h.key for h in wt.read_title(
+        "ΕΡΓΑΣΙΕΣ ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ "
+        "ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ")}
+    assert "meletes" not in keys
+    assert {"odiko_diktyo", "syntirisi_zonon"} <= keys
+
+    keys = {h.key for h in wt.read_title(
+        "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές ευθύνης του "
+        "Δασαρχείου Σουφλίου")}
+    assert keys == {"meletes"}
+
+
+def test_bare_firebreak_creation_is_the_fourth_kind():
+    """«δημιουργία/διάνοιξη ψιλής αντιπυρικής ζώνης» (user, 2026-08-22) —
+    the guards keep the mixed/sheltered creations out, and «υπό διαμόρφωση»
+    stays the hand-verdict maintenance case."""
+    assert any(h.key == "psiles_zones" for h in wt.read_call(
+        "δημιουργία ψιλής αντιπυρικής ζώνης έκτασης 65,00 στρ."))
+    assert any(h.key == "psiles_zones" for h in wt.read_title(
+        "εργασίες συντήρησης και διάνοιξης δασικού οδικού δικτύου και "
+        "αντιπυρικών ζωνών, σε εκτάσεις ευθύνης Δασαρχείου Καλαμπάκας"))
+    for s in ("Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς",
+              "για τη δημιουργία εστεγασμένων αντιπυρικών ζωνών"):
+        assert not any(h.key == "psiles_zones" for h in wt.read_title(s))
+
+
+def test_logging_residues_are_their_own_theme():
+    """«διαχείριση υπολειμμάτων υλοτομίας» manages the debris of PAST
+    logging — the genitive is not felling (user verdict 1a)."""
+    keys = {h.key for h in wt.read_title(
+        "Εργασίες για τον καθαρισμό δασών καθώς και τη διαχείριση "
+        "υπολειμμάτων υλοτομίας, σε εκτάσεις ευθύνης των Δασαρχείων Λαγκαδά")}
+    assert "ypoleimmata" in keys and "ylotomies" not in keys
+    # real felling still reads as υλοτομίες
+    keys = {h.key for h in wt.read_title(
+        "Επείγουσες υλοτομικές εργασίες και δασοκομικοί χειρισμοί ξερών και "
+        "προσβεβλημένων ιστάμενων δένδρων")}
+    assert "ylotomies" in keys and "dasokomika" in keys and "ypoleimmata" not in keys
 
 
 def test_cpv_only_asks_where_the_title_is_silent():

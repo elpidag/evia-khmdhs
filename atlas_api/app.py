@@ -273,6 +273,8 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         # and the deadline the contract itself states (DATA_DECISIONS
         # 2026-08-19) — the registry duration rides along as the crosscheck
         d["work_themes"] = queries_extra.contract_work_themes(g.conn, adam)
+        # study / works / study and works — the 1-2-3 model (2026-08-22)
+        d["deliverables"] = queries_extra.contract_deliverables(g.conn, adam)
         d["stated_duration"] = queries_extra.contract_stated_duration(g.conn, adam)
         # the δήμοι its documents place the works in — one level finer than
         # the Π.Ε. layer (DATA_DECISIONS 2026-08-19)

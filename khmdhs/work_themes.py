@@ -54,41 +54,109 @@ THEMES: tuple[Theme, ...] = (
     Theme("katharismoi", "Καθαρισμοί δασών & δασικών εκτάσεων",
           "Clearing of forests and forest land",
           r"ΚΑΘΑΡΙΣΜ"),
-    Theme("odiko_diktyo", "Δασικό οδικό δίκτυο",
-          "Forest road network",
-          r"ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ|ΔΑΣΙΚ\w*\s+ΔΡΟΜ|ΔΑΣΟΔΡΟΜ|ΟΔΟΠΟΙΙΑΣ"),
-    Theme("antipyrikes_zones", "Αντιπυρικές ζώνες",
-          "Firebreaks",
+    # the road mention must be GOVERNED by a maintenance/improvement verb —
+    # «δημιουργία μικτών ζωνών ΣΕ δασικούς δρόμους» names the location of
+    # the zones, not road work (15 of the old 75 links were that;
+    # DATA_DECISIONS 2026-08-22). The tempered guard stops the verb from
+    # reaching across a «δημιουργία» clause.
+    Theme("odiko_diktyo", "Συντήρηση δασικού οδικού δικτύου",
+          "Maintenance of forest road network",
+          r"(?:ΣΥΝΤΗΡΗΣ|ΒΕΛΤΙΩΣ)\w*(?:(?!ΔΗΜΙΟΥΡΓ).){0,100}?"
+          r"(?:ΟΔΙΚΟΥ\s+ΔΙΚΤΥΟΥ|ΔΑΣΙΚ\w*\s+ΔΡΟΜ|ΔΑΣΟΔΡΟΜ|ΟΔΟΠΟΙΙΑΣ)"),
+    # firebreaks are THREE different works and the titles always say which
+    # (DATA_DECISIONS 2026-08-22; no title names two kinds — verified):
+    # maintenance of existing zones, creation of mixed zones, creation of
+    # sheltered zones. The old generic «ΑΝΤΙΠΥΡΙΚ ΖΩΝ» theme double-counted
+    # every μικτή/εστεγασμένη contract.
+    Theme("syntirisi_zonon", "Συντήρηση αντιπυρικών ζωνών",
+          "Maintenance of firebreaks",
+          r"ΣΥΝΤΗΡΗΣ(?:(?!ΔΗΜΙΟΥΡΓ).){0,120}?ΑΝΤΙΠΥΡΙΚ\w*\s+ΖΩΝ"),
+    Theme("miktes_zones", "Δημιουργία μικτών αντιπυρικών ζωνών",
+          "Creation of mixed firebreaks",
+          r"ΜΙΚΤ\w*\s+ΑΝΤΙΠΥΡΙΚ|ΜΙΚΤ\w*\s+ΖΩΝ"),
+    Theme("estegasmenes_zones", "Δημιουργία εστεγασμένων αντιπυρικών ζωνών",
+          "Creation of sheltered firebreaks",
+          r"ΕΣΤΕΓΑΣΜΕΝ"),
+    # the FOURTH firebreak kind (user, 2026-08-22): new plain (ψιλές)
+    # zones opened by δημιουργία/διάνοιξη — stated only in call texts so
+    # far; the guards keep the mixed/sheltered creations out, and
+    # ΔΙΑΜΟΡΦΩΣ is deliberately NOT a creation verb here (the
+    # 23SYMV013201961 title's «υπό διαμόρφωση ζωνών» is maintenance by
+    # hand verdict)
+    Theme("psiles_zones", "Δημιουργία ψιλών αντιπυρικών ζωνών",
+          "Creation of bare firebreaks",
+          r"(?:ΔΗΜΙΟΥΡΓ|ΔΙΑΝΟΙΞ)\w*(?:(?!ΜΙΚΤ|ΣΤΕΓΑΣΜΕΝ).){0,60}?"
           r"ΑΝΤΙΠΥΡΙΚ\w*\s+ΖΩΝ"),
-    Theme("miktes_zones", "Μικτές / εστεγασμένες αντιπυρικές ζώνες",
-          "Mixed and sheltered firebreaks",
-          r"ΕΣΤΕΓΑΣΜΕΝ|ΜΙΚΤ\w*\s+ΑΝΤΙΠΥΡΙΚ|ΜΙΚΤ\w*\s+ΖΩΝ"),
     Theme("nero", "Υδατοδεξαμενές & σημεία υδροληψίας",
           "Water tanks and water points",
           r"ΥΔΑΤΟΔΕΞΑΜΕΝ|ΔΕΞΑΜΕΝ|ΥΔΡΟΛΗΨΙ|ΠΥΡΟΣΒΕΣΤΙΚ\w*\s+ΚΡΟΥΝ"),
+    # «διαχείριση υπολειμμάτων υλοτομίας» manages the debris of PAST
+    # logging — the genitive names where the residues came from, not the
+    # work — so it is its own theme and the lookbehind keeps it out of
+    # υλοτομίες (user verdict 1a, DATA_DECISIONS 2026-08-22)
+    Theme("ypoleimmata", "Διαχείριση υπολειμμάτων υλοτομίας",
+          "Management of logging residues",
+          r"ΥΠΟΛΕΙΜΜΑΤ\w*\s+ΥΛΟΤΟΜ"),
     Theme("ylotomies", "Υλοτομίες & απομάκρυνση ξηρών",
           "Logging and removal of dead stands",
-          r"ΥΛΟΤΟΜ|ΞΗΡΩΝ ΙΣΤΑΜΕΝ|ΝΕΚΡΩΝ ΔΕΝΔΡ|ΑΠΟΛΗΨΗ"),
+          r"(?<!ΥΠΟΛΕΙΜΜΑΤΩΝ )ΥΛΟΤΟΜ|ΞΗΡΩΝ ΙΣΤΑΜΕΝ|ΝΕΚΡΩΝ ΔΕΝΔΡ|ΑΠΟΛΗΨΗ"),
     Theme("anadasoseis", "Αναδασώσεις, φυτεύσεις & φυτώρια",
           "Reforestation, planting and nurseries",
           r"ΑΝΑΔΑΣΩ|ΦΥΤΩΡΙ|ΦΥΤΕΥΣ|ΑΝΑΔΑΣΩΤΕ"),
     Theme("antidiavrotika", "Αντιδιαβρωτικά & αντιπλημμυρικά έργα",
           "Anti-erosion and flood-protection works",
           r"ΑΝΤΙΔΙΑΒΡΩΤΙΚ|ΑΝΤΙΠΛΗΜΜΥΡΙΚ|ΔΙΑΒΡΩΣ|ΚΟΡΜΟΔΕΜΑΤ|ΚΛΑΔΟΠΛΕΓΜΑΤ"),
+    # «ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ» is works executed under already-approved
+    # studies — an input, never a deliverable (6 false positives removed);
+    # «Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας» IS study work the old
+    # ΣΧΕΔΙΑΣΜ stem could not see (6 missed; DATA_DECISIONS 2026-08-22)
     Theme("meletes", "Μελέτες, σχεδιασμός & χαρτογράφηση",
           "Studies, planning and mapping",
-          r"ΜΕΛΕΤ|ΧΑΡΤΟΓΡΑΦ|ΣΧΕΔΙΑΣΜ"),
+          r"(?<!ΕΓΚΕΚΡΙΜΕΝΕΣ )ΜΕΛΕΤ|ΧΑΡΤΟΓΡΑΦ|ΣΧΕΔΙΑΣΜ|ΚΑΤΑΡΤΙΣΗ\s+ΣΧΕΔΙ"),
     Theme("arxaiologikoi", "Αρχαιολογικοί χώροι, μονές & αισθητικά δάση",
           "Archaeological sites, monasteries and aesthetic forests",
           r"ΑΡΧΑΙΟΛΟΓΙΚ|ΙΕΡ\w*\s+ΜΟΝ|ΑΙΣΘΗΤΙΚ"),
-    Theme("perifraxi", "Περιφράξεις & σήμανση",
-          "Fencing and signage",
-          r"ΠΕΡΙΦΡΑΞ|ΣΗΜΑΝΣ|ΠΙΝΑΚΙΔ"),
+    # «Περιφράξεις & σήμανση» was dropped 2026-08-22: no in-scope title
+    # ever named it (0 links); it can return the day one does
     Theme("dasokomika", "Αραιώσεις & δασοκομικοί χειρισμοί",
           "Thinning and silvicultural treatment",
           r"ΑΡΑΙΩΣ|ΔΑΣΟΚΟΜΙΚ|ΚΛΑΔΕΥΣ|ΥΠΟΚΑΘΑΡΙΣΜ|ΒΛΑΣΤΗΣ"),
 )
 BY_KEY = {t.key: t for t in THEMES}
+
+# The CALL dialect (DATA_DECISIONS 2026-08-22, second entry): where a
+# title-silent contract's themes are read from the πρόσκληση's works
+# enumeration, the phrasing differs from the titles' and these patterns
+# REPLACE the title ones for that reading only:
+# «αποκατάσταση βατότητας» is road work the titles never say; the calls
+# write «στεγασμένων» without the Ε-; «καθαρισμός αντιπυρικών ζωνών» is
+# zone MAINTENANCE (the user's 23SYMV013201961 verdict applied as a
+# rule); and «καθαρισμός δασικής βλάστησης» is CLEARING — the ΒΛΑΣΤΗΣ
+# stem must not fire the silvicultural theme there.
+CALL_PATTERNS: dict[str, str] = {
+    "odiko_diktyo": (r"(?:ΣΥΝΤΗΡΗΣ|ΒΕΛΤΙΩΣ)\w*(?:(?!ΔΗΜΙΟΥΡΓ).){0,100}?"
+                     r"(?:ΟΔΙΚΟΥ\s+ΔΙΚΤΥΟΥ|ΔΑΣΙΚ\w*\s+ΔΡΟΜ|ΔΑΣΟΔΡΟΜ|ΟΔΟΠΟΙΙΑΣ)"
+                     r"|ΑΠΟΚΑΤΑΣΤΑΣ\w*\s+ΒΑΤΟΤΗΤΑΣ"),
+    "estegasmenes_zones": r"ΣΤΕΓΑΣΜΕΝ",
+    "syntirisi_zonon": (r"(?:ΣΥΝΤΗΡΗΣ|ΚΑΘΑΡΙΣΜ)\w*"
+                        r"(?:(?!ΔΗΜΙΟΥΡΓ|ΒΛΑΣΤΗΣ).){0,120}?ΑΝΤΙΠΥΡΙΚ\w*\s+ΖΩΝ"),
+    "dasokomika": r"ΑΡΑΙΩΣ|ΔΑΣΟΚΟΜΙΚ|ΚΛΑΔΕΥΣ|ΥΠΟΚΑΘΑΡΙΣΜ",
+}
+
+
+def read_call(text: str) -> "list[ThemeHit]":
+    """Themes stated by a CALL's works enumeration (its dialect)."""
+    if not text:
+        return []
+    up = fold(text)
+    same = len(up) == len(text)
+    out: list[ThemeHit] = []
+    for t in THEMES:
+        m = re.search(CALL_PATTERNS.get(t.key, t.pattern), up)
+        if m is None:
+            continue
+        out.append(ThemeHit(t.key, _excerpt(text if same else up, m.start())))
+    return out
 
 # CPV codes that MARK a kind of work. Used only to ask a question: «this
 # contract's CPV list names water tanks, its title names no water works —
@@ -105,7 +173,8 @@ CPV_MARKERS: dict[str, str] = {
     "45247270-3": "nero",           # Κατασκευή δεξαμενών (10)
     "77231600-4": "anadasoseis",    # Υπηρεσίες δάσωσης (6)
     "77211400-6": "ylotomies",      # Υπηρεσίες κοπής δένδρων (6)
-    "45342000-6": "perifraxi",      # Τοποθέτηση περιφράξεων
+    # 45342000-6 (Τοποθέτηση περιφράξεων) left with the perifraxi theme
+    # (DATA_DECISIONS 2026-08-22)
     "45112700-2": "anadasoseis",    # Εργασίες διαμόρφωσης τοπίου
     # NOT markers, though they name work: «Εργασίες συντήρησης οδών»
     # (45233141-9) rides on 130 of 246 contracts and «Υπηρεσίες ψηφιακής

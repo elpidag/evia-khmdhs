@@ -403,7 +403,7 @@
 				onclick={isCall ? () => onCallClick?.() : undefined}
 			>
 				<title
-					>{dmy(m.a.d)} — {RUNUP[m.a.kind] ?? 'act'} ({m.a.ref}){isCall
+					>{dmy(m.a.d)} — {RUNUP[m.a.kind] ?? 'act'}{m.a.ref ? ` (${m.a.ref})` : ' (no ΚΗΜΔΗΣ record)'}{isCall
 						? ` · ${callInfo!.lots} contracts under this call, ${eurShort(callInfo!.total)} in total — click for the diagram`
 						: ''}</title
 				>

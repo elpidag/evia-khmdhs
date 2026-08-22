@@ -6,20 +6,32 @@
    "en": "Clearing of forests and forest land"
   },
   "odiko_diktyo": {
-   "el": "Δασικό οδικό δίκτυο",
-   "en": "Forest road network"
+   "el": "Συντήρηση δασικού οδικού δικτύου",
+   "en": "Maintenance of forest road network"
   },
-  "antipyrikes_zones": {
-   "el": "Αντιπυρικές ζώνες",
-   "en": "Firebreaks"
+  "syntirisi_zonon": {
+   "el": "Συντήρηση αντιπυρικών ζωνών",
+   "en": "Maintenance of firebreaks"
   },
   "miktes_zones": {
-   "el": "Μικτές / εστεγασμένες αντιπυρικές ζώνες",
-   "en": "Mixed and sheltered firebreaks"
+   "el": "Δημιουργία μικτών αντιπυρικών ζωνών",
+   "en": "Creation of mixed firebreaks"
+  },
+  "estegasmenes_zones": {
+   "el": "Δημιουργία εστεγασμένων αντιπυρικών ζωνών",
+   "en": "Creation of sheltered firebreaks"
+  },
+  "psiles_zones": {
+   "el": "Δημιουργία ψιλών αντιπυρικών ζωνών",
+   "en": "Creation of bare firebreaks"
   },
   "nero": {
    "el": "Υδατοδεξαμενές & σημεία υδροληψίας",
    "en": "Water tanks and water points"
+  },
+  "ypoleimmata": {
+   "el": "Διαχείριση υπολειμμάτων υλοτομίας",
+   "en": "Management of logging residues"
   },
   "ylotomies": {
    "el": "Υλοτομίες & απομάκρυνση ξηρών",
@@ -41,16 +53,692 @@
    "el": "Αρχαιολογικοί χώροι, μονές & αισθητικά δάση",
    "en": "Archaeological sites, monasteries and aesthetic forests"
   },
-  "perifraxi": {
-   "el": "Περιφράξεις & σήμανση",
-   "en": "Fencing and signage"
-  },
   "dasokomika": {
    "el": "Αραιώσεις & δασοκομικοί χειρισμοί",
    "en": "Thinning and silvicultural treatment"
   }
  },
- "_overrides": {},
+ "_overrides": {
+  "23SYMV013201961": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… 998/1979 για τον πλευρικό καθαρισμό των υπό διαμόρφωση αντιπυρικών ζωνών κατά μήκος …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… πλευρικό καθαρισμό των υπό διαμόρφωση αντιπυρικών ζωνών κατά μήκος κεντρικών δασικών δρόμων …"
+    }
+   ],
+   "note": "Hand verdict 2026-08-22: the side-clearing keeps the zones under formation functional, so the contract states firebreak MAINTENANCE work; the roads are only the location («κατά μήκος κεντρικών δασικών δρόμων») — no road theme. The needle reads only καθαρισμοί here because no συντήρηση verb appears."
+  },
+  "23SYMV012946440": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "«Μελέτη Αντιπυρικής προστασίας (καθαρισμοί-κλαδεύσεις-θαμνεύσεις και απομάκρυνση των υπολειμμάτων καθαρισμού) κατά μήκος κεντρικών δασικών δρόμων … περιοχής Δασαρχείου Χαλκίδας»"
+    },
+    {
+     "key": "dasokomika",
+     "excerpt": "«… (καθαρισμοί-κλαδεύσεις-θαμνεύσεις και απομάκρυνση των υπολειμμάτων καθαρισμού) …»"
+    }
+   ],
+   "source": "call:23PROC012559184",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "23SYMV013530639": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… μέσω συγκεκριμένων επεμβάσεων καθαρισμού των δασών και δασικών εκτάσεων, επί των δασικών οικοσυστημάτων των περιοχών ευθύνης του Δασαρχείου Πύργου και της Διεύθυνσης Δασών Σάμου …"
+    }
+   ],
+   "source": "call:23PROC013231560",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "23SYMV013530680": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… μέσω συγκεκριμένων επεμβάσεων καθαρισμού των δασών και δασικών εκτάσεων, επί των δασικών οικοσυστημάτων των περιοχών ευθύνης του Δασαρχείου Πύργου και της Διεύθυνσης Δασών Σάμου …"
+    }
+   ],
+   "source": "call:23PROC013231560",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016398005": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… καύσιμης ύλης μέσω εργασιών καθαρισμού βλάστησης σε εκτάσεις εντός δασικών …"
+    },
+    {
+     "key": "dasokomika",
+     "excerpt": "… αφορούν σε προληπτικές δασοκομικές εργασίες μετριάσεως της καύσιμης ύλης μέσω …"
+    }
+   ],
+   "source": "call:25PROC016237903",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016491944": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 3.830,00 στρ., σε καθαρισμούς αντιπυρικών ζωνών έκτασης 75 στρ. και σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "εργασίες αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 3.830,00 στρ., …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… έκτασης 3.830,00 στρ., σε καθαρισμούς αντιπυρικών ζωνών έκτασης 75 στρ. και σε …"
+    },
+    {
+     "key": "estegasmenes_zones",
+     "excerpt": "… για τη δημιουργία στεγασμένων αντιπυρικών ζωνών συνολικής έκτασης 3.673,00 …"
+    }
+   ],
+   "source": "call:25PROC016274900",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016495437": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκστασης 1.247,24 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.004,37 στρ. του …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… έκτασης 5.371,23 στρ., συντήρηση αντιπυρικών ζωνών έκστασης 1.247,24 στρ. και …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… στο χώρο εγκατάστασης των υδατοδεξαμενών έκστασης 1,60 στρ. της Διεύθυνσης Δασών …"
+    }
+   ],
+   "source": "call:25PROC016340960",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016570021": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… 1.000,00 στρ. και εργασίες καθαρισμού δασικής βλάστησης καθώς και εργασίες …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+    },
+    {
+     "key": "estegasmenes_zones",
+     "excerpt": "… για την δημιουργία εστεγασμένων αντιπυρικών ζωνών, συνολικής έκτασης 760,00 …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου και αντιπυρικών ζωνών συνολικής έκτασης 716,70 στρ. του Δασαρχείου Πειραιά …"
+    }
+   ],
+   "source": "call:25PROC016314600",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016658903": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "ii) εργασίες καθαρισμού δασικής βλάστησης έκτασης 3.400,00 στρ. του …"
+    }
+   ],
+   "source": "call:25PROC016349019",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016670155": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… και διευθέτηση ρέματος) και καθαρισμούς δασικής βλάστησης έκτασης 72,00 στρ. του …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) συντήρηση-βελτίωση δασικού οδικού δικτύου με έργα …"
+    }
+   ],
+   "source": "call:25PROC016306915",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016712403": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 700,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.895,00 στρ. του …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "εργασίες αφορούν σε αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+    }
+   ],
+   "source": "call:25PROC016428942",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016722680": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης έκτασης 715 στρ. της …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… και iii) εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+    }
+   ],
+   "source": "call:25PROC016392208",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016723758": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… 1.495,00 στρ. και εργασίες καθαρισμού δασικής βλάστησης έκτασης 85,00 στρ. …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+    }
+   ],
+   "source": "call:25PROC016392208",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016737061": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 69,59 στρ και καθαρισμούς δασικής βλάστησης και αντιπυρικών ζωνών …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… Βυτίνας αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 446,97 στρ., …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… καθαρισμούς δασικής βλάστησης και αντιπυρικών ζωνών έκτασης 944,80 στρ. …"
+    }
+   ],
+   "source": "call:25PROC016473147",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016737084": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… Πειραιά αφορούν σε καθαρισμούς δασικής βλάστησης για δημιουργία στεγασμένων …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… Δασαρχείου Πόρου αφορούν σε συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… Δασαρχείου Πόρου αφορούν σε συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών …"
+    },
+    {
+     "key": "estegasmenes_zones",
+     "excerpt": "… βλάστησης για δημιουργία στεγασμένων αντιπυρικών ζωνών έκτασης 355,35 στρ. ΤΕΥΧΟΣ …"
+    }
+   ],
+   "source": "call:25PROC016473147",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016762267": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 1.513,97 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 2.909,60 στρ. σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "εργασίες αφορούν σε αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… έκτασης 2.088,56 στρ., συντήρηση ψιλών αντιπυρικών ζωνών έκτασης 162,23 στρ., …"
+    },
+    {
+     "key": "estegasmenes_zones",
+     "excerpt": "… 162,23 στρ., δημιουργία στεγασμένων αντιπυρικών ζωνών έκτασης 1.513,97 στρ. και …"
+    }
+   ],
+   "source": "call:25PROC016510866",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016769821": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… Δασών Ζακύνθου, και σε καθαρισμούς δασικής βλάστησης έκτασης 3.200,00 στρ. σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "εργασίες αφορούν σε αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+    }
+   ],
+   "source": "call:25PROC016437477",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016782219": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 2.183,70 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 92,00 στρ. του …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+    }
+   ],
+   "source": "call:25PROC016392196",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016921666": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 19,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 2.120,00 στρ., σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) συντήρηση δασικού οδικού δικτύου έκτασης 19,00 στρ. και …"
+    }
+   ],
+   "source": "call:25PROC016596906",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016921696": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 250,00 στρ. και καθαρισμούς δασικής βλάστησης για δημιουργία παρόδιων …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) συντήρηση δασικού οδικού δικτύου έκτασης 250,00 στρ. και …"
+    },
+    {
+     "key": "estegasmenes_zones",
+     "excerpt": "… για δημιουργία παρόδιων στεγασμένων αντιπυρικών ζωνών έκτασης 450,00 στρ., σε …"
+    }
+   ],
+   "source": "call:25PROC016596906",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016946591": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 1.808,50 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 670,00 στρ. Τα …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… Άμφισσας αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 1.808,50 στρ. …"
+    }
+   ],
+   "source": "call:25PROC016709625",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016959652": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… δασικού οδικού δικτύου με καθαρισμούς και αντικατάσταση οχετών, κατασκευή τοίχων …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) αποκατάσταση βατότητας δασικού οδικού δικτύου με …"
+    }
+   ],
+   "source": "call:25PROC016718138",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016991804": {
+   "themes": [
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "Για το Τμήμα Α: εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης 7,75 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.550,00 στρ. σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών Χίου."
+    },
+    {
+     "key": "katharismoi",
+     "excerpt": "… καθαρισμούς δασικής βλάστησης έκτασης 1.550,00 στρ. σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών Χίου."
+    }
+   ],
+   "source": "call:25PROC016588127",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV016992710": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… 290,25 στρ. και εργασίες καθαρισμού δασικής βλάστησης έκτασης 409,00 στρ. σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "Για το Τμήμα Β: εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+    }
+   ],
+   "source": "call:25PROC016588127",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV017004972": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) καθαρισμούς παρόδιας βλάστησης έκτασης 308,40 στρ., …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… έκτασης 308,40 στρ., αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… έκτασης 1.418,04 στρ. και καθαρισμό και αποψίλωση αντιπυρικών ζωνών έκτασης 494,00 …"
+    },
+    {
+     "key": "psiles_zones",
+     "excerpt": "… καθαρισμό-διάνοιξη αντιπυρικών ζωνών έκτασης 143,47 στρ., σε περιοχές αρμοδιότητας του Δασαρχείου Θήβας …"
+    }
+   ],
+   "source": "call:25PROC016703059",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV017107164": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 1.247,90 στρ. κα καθαρισμούς δασικής βλάστησης έκτασης 227,80 στρ."
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… Ελασσόνας αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 95,18 στρ. και …"
+    },
+    {
+     "key": "miktes_zones",
+     "excerpt": "… 95,18 στρ. και δημιουργία μικτών αντιπυρικών ζωνών έκτασης 369,23 στρ. Τα …"
+    }
+   ],
+   "source": "call:25PROC016709625",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV017153341": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 2.850,00 στρ., σε …"
+    },
+    {
+     "key": "ylotomies",
+     "excerpt": "… Δασαρχείου Δράμας και ii) υλοτομία δένδρων για δημιουργία ψιλής αντιπυρικής ζώνης …"
+    },
+    {
+     "key": "psiles_zones",
+     "excerpt": "… υλοτομία δένδρων για δημιουργία ψιλής αντιπυρικής ζώνης έκτασης 8,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 433,00 στρ., σε περιοχές αρμοδιότητας του Δασαρχείου Σερρών …"
+    }
+   ],
+   "source": "call:25PROC016921461",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV017212395": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 886,00 στρ. σε …"
+    }
+   ],
+   "source": "call:25PROC017023425",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV017232753": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 2.632,00 στρ. σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… στρ., καθώς και εργασίες συντήρησης του δασικού οδικού δικτύου με την κατασκευή …"
+    }
+   ],
+   "source": "call:25PROC017013706",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV017232810": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 3.388,67 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 300,00 στρ., σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) συντήρηση δασικού οδικού δικτύου έκτασης 213,13 στρ. σε …"
+    }
+   ],
+   "source": "call:25PROC017032643",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "25SYMV017250427": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… έκτασης 1.500,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.000,00 στρ., σε …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "i) εργασίες συντήρησης του δασικού οδικού δικτύου έκτασης 1.500,00 …"
+    }
+   ],
+   "source": "call:25PROC017023359",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018599431": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… συντήρηση πυροφυλακίου και δεξαμενών υδροληψίας οχημάτων και ελικοπτέρων, καθώς και …"
+    },
+    {
+     "key": "ylotomies",
+     "excerpt": "… έκτασης 682,00 στρ., υλοτομία καμένων ιστάμενων και πεσμένων δένδρων συνολικής …"
+    }
+   ],
+   "source": "call:26PROC018460137",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018607958": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… και τοποθέτηση μεταλλικής δεξαμενής σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών …"
+    }
+   ],
+   "source": "call:26PROC018445264",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018638816": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσια δάση, συνολικής …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… οκτώ (8) τσιμεντένιων υδατοδεξαμενών, σε περιοχές αρμοδιότητας του Δασαρχείου …"
+    },
+    {
+     "key": "psiles_zones",
+     "excerpt": "… δημιουργία ψιλής αντιπυρικής ζώνης έκτασης 65,00 στρ. καθώς και κατασκευή οκτώ (8) τσιμεντένιων υδατοδεξαμενών, σε περιοχές αρμοδιότητας του Δασαρχείου Λίμνης …"
+    }
+   ],
+   "source": "call:26PROC018467844",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018639407": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… Μουζακίου iii) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… έξι (6) υφιστάμενων υδατοδεξαμενών σε περιοχές αρμοδιότητας του Δασαρχείου …"
+    }
+   ],
+   "source": "call:26PROC018474630",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018670757": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές εκτάσεις …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… δώδεκα (12) μεταλλικών υδατοδεξαμενών ανοιχτού τύπου, σε περιοχές αρμοδιότητας …"
+    }
+   ],
+   "source": "call:26PROC018481742",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018680228": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… εγκατάστασης δύο (2) υδατοδεξαμενών ανοιχτού τύπου και δύο (2) κλειστού τύπου, …"
+    }
+   ],
+   "source": "call:26PROC018505789",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018725481": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 285,93 στρ. σε …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… και κατασκευή τριών (3) υδατοδεξαμενών και δύο (2) πυροφυλακιών σε περιοχές …"
+    }
+   ],
+   "source": "call:26PROC018521122",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018739467": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "… Δασών Φωκίδας ii) καθαρισμούς δασικής βλάστησης έκτασης 847,70 στρ. σε …"
+    },
+    {
+     "key": "miktes_zones",
+     "excerpt": "… και iii) δημιουργία μικτών αντιπυρικών ζωνών έκτασης 806,00 στρ. σε περιοχές …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… επτά (7) μεταλλικών δεξαμενών πυροπροστασίας σε διάφορες θέσεις αρμοδιότητας …"
+    }
+   ],
+   "source": "call:26PROC018521122",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018756094": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "Για το Τμήμα Γ: καθαρισμούς δασικής βλάστησης έκτασης 1.208,00 στρ. σε …"
+    }
+   ],
+   "source": "call:26PROC018521122",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV018779399": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσια δάση και δασικές …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… εγκατάστασης δώδεκα (12) υδατοδεξαμενών, σε περιοχές αρμοδιότητας του Δασαρχείου …"
+    }
+   ],
+   "source": "call:26PROC018519540",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "26SYMV019471687": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+    },
+    {
+     "key": "nero",
+     "excerpt": "… και τοποθέτηση μεταλλικής δεξαμενής σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών …"
+    }
+   ],
+   "source": "call:26PROC018445264",
+   "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+  },
+  "23SYMV013039380": {
+   "themes": [
+    {
+     "key": "katharismoi",
+     "excerpt": "Το αντικείμενο του έργου περιλαμβάνει εργασίες καθαρισμών δασικών εκτάσεων, την δημιουργία στεγασμένων αντιπυρικών ζωνών – καθαρισμούς κατά μήκος δασικών δρόμων, βελτίωση βατότητας των δασικών δρόμων, στην ευρύτερη περιοχή του Δήμου Αγίου Βασιλείου, Π.Ε. Ρεθύμνου."
+    },
+    {
+     "key": "estegasmenes_zones",
+     "excerpt": "… την δημιουργία στεγασμένων αντιπυρικών ζωνών – καθαρισμούς κατά μήκος δασικών δρόμων …"
+    },
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "… βελτίωση βατότητας των δασικών δρόμων, στην ευρύτερη περιοχή του Δήμου Αγίου Βασιλείου, Π.Ε. Ρεθύμνου."
+    }
+   ],
+   "source": "call:23PROC012860295",
+   "note": "Title names no specific work; the 5-lot call embeds each lot's own Τεχνική Περιγραφή — §3.2.9 is the Ρεθύμνου lot's (user verdict 2026-08-22, pointing at the section)."
+  },
+  "26SYMV018977660": {
+   "themes": [
+    {
+     "key": "odiko_diktyo",
+     "excerpt": "εργασίες αφορούν σε συντήρηση-βελτίωση του δασικού οδικού δικτύου συνολικής έκτασης 4.150,30 στρ., …"
+    },
+    {
+     "key": "katharismoi",
+     "excerpt": "… σε καθαρισμούς βλάστησης δασικών εκτάσεων συνολικής έκτασης 1.709,51 στρ. …"
+    },
+    {
+     "key": "syntirisi_zonon",
+     "excerpt": "… και στη συντήρηση-διαμόρφωση αντιπυρικής ζώνης συνολικής έκτασης 216,00 στρ. της Διεύθυνσης Δασών Πιερίας."
+    }
+   ],
+   "source": "call:25PROC016230587",
+   "note": "Title names no specific work; the call was missing from the cache and was fetched 2026-08-22 — its enumeration names the three works for the single Πιερίας lot."
+  }
+ },
  "22SYMV010806317": {
   "themes": [
    {
@@ -59,11 +747,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010447496",
@@ -78,11 +766,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010447493",
@@ -97,11 +785,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης του Δασαρχείου …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010488925",
@@ -116,11 +804,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010473680",
@@ -135,11 +823,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010473683",
@@ -154,11 +842,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010473685",
@@ -173,11 +861,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010489083",
@@ -192,11 +880,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010473684",
@@ -211,11 +899,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010551306",
@@ -230,11 +918,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010551364",
@@ -249,11 +937,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010584641",
@@ -268,11 +956,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010584904",
@@ -287,11 +975,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:22SYMV010585198",
@@ -306,7 +994,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου περιοχής όρους Υμηττού και για τον …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου περιοχής όρους …"
    }
   ],
   "source": "inherited:22SYMV010635347",
@@ -321,11 +1009,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -340,11 +1028,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -359,11 +1047,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -378,11 +1066,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου, τη συντήρηση των αντιπυρικών ζωνών και …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου, τη συντήρηση των …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… δικτύου, τη συντήρηση των αντιπυρικών ζωνών και τον καθαρισμό δασών και δασικών …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου, τη συντήρηση των …"
    }
   ],
   "source": "pdf",
@@ -397,11 +1085,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου, τη συντήρηση των αντιπυρικών ζωνών και …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου, τη συντήρηση των …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… δικτύου, τη συντήρηση των αντιπυρικών ζωνών και τον καθαρισμό δασών και δασικών …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου, τη συντήρηση των …"
    }
   ],
   "source": "pdf",
@@ -416,11 +1104,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -435,11 +1123,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων ζωνων, σε εκτασείς …"
+    "excerpt": "… εκτασεων καθως καί γία τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδίκου δίκτυου καί των αντίπυρίκων ζωνων, σε εκτασείς ευθυνης Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτασεων καθως καί γία τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων …"
    }
   ],
   "source": "inherited:23SYMV012820428",
@@ -454,11 +1142,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων ζωνων, σε εκτασείς …"
+    "excerpt": "… εκτασεων καθως καί γία τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδίκου δίκτυου καί των αντίπυρίκων ζωνων, σε εκτασείς ευθυνης Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτασεων καθως καί γία τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων …"
    }
   ],
   "source": "inherited:23SYMV012820531",
@@ -473,11 +1161,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων ζωνων, σε εκτασείς …"
+    "excerpt": "… εκτασεων καθως καί γία τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδίκου δίκτυου καί των αντίπυρίκων ζωνων, σε εκτασείς ευθυνης Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτασεων καθως καί γία τη συντηρηση του δασίκου οδίκου δίκτυου καί των αντίπυρίκων …"
    }
   ],
   "source": "inherited:23SYMV012820640",
@@ -492,11 +1180,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -511,11 +1199,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:23SYMV012833668",
@@ -530,11 +1218,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "inherited:23SYMV012834009",
@@ -549,15 +1237,15 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη σύντηρηση τού δασίκού οδίκού δίκτύού καί των αντίπύρίκων ζωνων, καθως καί γία …"
+    "excerpt": "… εκτασεων, καθως καί γία τη σύντηρηση τού δασίκού οδίκού δίκτύού καί των αντίπύρίκων …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδίκού δίκτύού καί των αντίπύρίκων ζωνων, καθως καί γία τον χείρίσμο …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτασεων, καθως καί γία τη σύντηρηση τού δασίκού οδίκού δίκτύού καί των αντίπύρίκων …"
    },
    {
-    "key": "ylotomies",
-    "excerpt": "… τον χείρίσμο ύπολείμματων ύλοτομίας σε εκτασείς εύθύνης Δασαρχείων Χαλκίδας καί …"
+    "key": "ypoleimmata",
+    "excerpt": "… καθως καί γία τον χείρίσμο ύπολείμματων ύλοτομίας σε εκτασείς εύθύνης Δασαρχείων …"
    }
   ],
   "source": "pdf",
@@ -572,15 +1260,15 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη σύντηρηση τού δασίκού οδίκού δίκτύού καί των αντίπύρίκων ζωνων, καθως καί γία …"
+    "excerpt": "… εκτασεων, καθως καί γία τη σύντηρηση τού δασίκού οδίκού δίκτύού καί των αντίπύρίκων …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδίκού δίκτύού καί των αντίπύρίκων ζωνων, καθως καί γία τον χείρίσμο …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτασεων, καθως καί γία τη σύντηρηση τού δασίκού οδίκού δίκτύού καί των αντίπύρίκων …"
    },
    {
-    "key": "ylotomies",
-    "excerpt": "… τον χείρίσμο ύπολείμματων ύλοτομίας σε εκτασείς εύθύνης Δασαρχείων Χαλκίδας καί …"
+    "key": "ypoleimmata",
+    "excerpt": "… καθως καί γία τον χείρίσμο ύπολείμματων ύλοτομίας σε εκτασείς εύθύνης Δασαρχείων …"
    }
   ],
   "source": "pdf",
@@ -595,11 +1283,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης του Δασαρχείου …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -610,7 +1298,7 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και εργασίες αντιπυρικής προστασίας, σε …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και εργασίες …"
    }
   ],
   "source": "pdf",
@@ -625,11 +1313,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης της Διεύθυνσης …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -666,14 +1354,10 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις αρμοδιότητας Δασαρχείου Πόρου"
+    "excerpt": "… αντιπυρικών ζωνών και τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… τη δημιουργία εστεγασμένων αντιπυρικών ζωνών και τη συντήρηση του δασικού οδικού …"
-   },
-   {
-    "key": "miktes_zones",
+    "key": "estegasmenes_zones",
     "excerpt": "… 998/1979 για τη δημιουργία εστεγασμένων αντιπυρικών ζωνών και τη συντήρηση του …"
    }
   ],
@@ -688,11 +1372,7 @@
     "excerpt": "… αντιπυρικών ζωνών και τον καθαρισμό δασών και δασικών εκτάσεων, σε εκτάσεις …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… τη δημιουργία εστεγασμένων αντιπυρικών ζωνών και τον καθαρισμό δασών και δασικών …"
-   },
-   {
-    "key": "miktes_zones",
+    "key": "estegasmenes_zones",
     "excerpt": "… 998/1979 για τη δημιουργία εστεγασμένων αντιπυρικών ζωνών και τον καθαρισμό δασών …"
    }
   ],
@@ -707,11 +1387,7 @@
     "excerpt": "… 5 του ν. 998/1979 για τον καθαρισμό των δασών και δασικών εκτάσεων, αρχαιολογικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… τη δημιουργία εστεγασμένων αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
-   },
-   {
-    "key": "miktes_zones",
+    "key": "estegasmenes_zones",
     "excerpt": "… καθώς και για τη δημιουργία εστεγασμένων αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των …"
    },
    {
@@ -736,11 +1412,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -750,8 +1426,8 @@
  "23SYMV013201917": {
   "themes": [
    {
-    "key": "ylotomies",
-    "excerpt": "… τη διαχείριση υπολειμμάτων υλοτομίας σε εκτάσεις ευθύνης του δασαρχείου Θεσσαλονίκης"
+    "key": "ypoleimmata",
+    "excerpt": "… 998/1979 για τη διαχείριση υπολειμμάτων υλοτομίας σε εκτάσεις ευθύνης του δασαρχείου …"
    }
   ],
   "source": "pdf",
@@ -762,7 +1438,7 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και για την αντιπυρική προστασία …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και για την …"
    },
    {
     "key": "anadasoseis",
@@ -777,11 +1453,11 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών σε εκτάσεις …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών σε εκτάσεις ευθύνης Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -802,11 +1478,7 @@
  "23SYMV012972686": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… τη δημιουργία εστεγασμένων αντιπυρικών ζωνών και την αντιπυρική προστασία δημόσιων …"
-   },
-   {
-    "key": "miktes_zones",
+    "key": "estegasmenes_zones",
     "excerpt": "… 998/1979 για τη δημιουργία εστεγασμένων αντιπυρικών ζωνών και την αντιπυρική …"
    }
   ],
@@ -827,11 +1499,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… του δασικού - αντιπυρικού οδικού δικτύου, των αντιπυρικών ζωνών, καθώς και για την …"
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού - αντιπυρικού οδικού δικτύου, των …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου, των αντιπυρικών ζωνών, καθώς και για την αντιπυρική προστασία …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού - αντιπυρικού οδικού δικτύου, των …"
    },
    {
     "key": "anadasoseis",
@@ -854,7 +1526,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου σε εκτάσεις ευθύνης του Δασαρχείου …"
+    "excerpt": "… εκτάσεων, καθώς και τη συντήρηση του δασικού οδικού δικτύου σε εκτάσεις ευθύνης …"
    }
   ],
   "source": "pdf",
@@ -868,17 +1540,14 @@
     "excerpt": "… 998/1979 για τον πλευρικό καθαρισμό των υπό διαμόρφωση αντιπυρικών ζωνών κατά μήκος …"
    },
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… ζωνών κατά μήκος κεντρικών δασικών δρόμων, σε εκτάσεις ευθύνης Δασαρχείου Χαλκίδας"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "… των υπό διαμόρφωση αντιπυρικών ζωνών κατά μήκος κεντρικών δασικών δρόμων, σε …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… πλευρικό καθαρισμό των υπό διαμόρφωση αντιπυρικών ζωνών κατά μήκος κεντρικών δασικών δρόμων …"
    }
   ],
   "source": "pdf",
   "title": "Εργασίες ειδικών δασοτεχνικών έργων του άρθρου 16 παρ. 5 του ν. 998/1979 για τον πλευρικό καθαρισμό των υπό διαμόρφωση αντιπυρικών ζωνών κατά μήκος κεντρικών δασικών δρόμων, σε εκτάσεις ευθύνης Δασαρχείου Χαλκίδας",
-  "cpv_notes": []
+  "cpv_notes": [],
+  "note": "Hand verdict 2026-08-22: the side-clearing keeps the zones under formation functional, so the contract states firebreak MAINTENANCE work; the roads are only the location («κατά μήκος κεντρικών δασικών δρόμων») — no road theme. The needle reads only καθαρισμοί here because no συντήρηση verb appears."
  },
  "23SYMV012992145": {
   "themes": [
@@ -888,7 +1557,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης των Διευθύνσεων Δασών …"
+    "excerpt": "… εκτάσεων καθώς και τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης …"
    },
    {
     "key": "arxaiologikoi",
@@ -907,11 +1576,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης Δασαρχείου …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… δασικών εκτάσεων, για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -937,7 +1606,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "excerpt": "… εκτάσεων, καθώς και τη συντήρηση του δασικού οδικού δικτύου σε εκτάσεις ευθύνης …"
    }
   ],
   "source": "pdf",
@@ -952,7 +1621,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης Δασαρχείου Αμαλιάδας"
+    "excerpt": "… δασικών εκτάσεων και τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης …"
    }
   ],
   "source": "pdf",
@@ -967,7 +1636,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών λωρίδων, σε εκτάσεις …"
+    "excerpt": "… χώρων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
     "key": "arxaiologikoi",
@@ -986,7 +1655,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης των Δασαρχείων Σερρών …"
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης …"
    }
   ],
   "source": "pdf",
@@ -1001,7 +1670,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης των Δασαρχείων Κ. …"
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης …"
    }
   ],
   "source": "pdf",
@@ -1016,7 +1685,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… για τη συντήρηση δασικού οδικού δικτύου σε εκτάσεις ευθύνης του Δασαρχείου Ξάνθης …"
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση δασικού οδικού δικτύου σε εκτάσεις ευθύνης του …"
    }
   ],
   "source": "pdf",
@@ -1031,11 +1700,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις …"
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων, καθώς και για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -1046,11 +1715,11 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, σε περιοχές …"
+    "excerpt": "… 1 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, σε περιοχές ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… 1 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -1061,7 +1730,7 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… της βατότητας του δασικού οδικού δικτύου, σε εκτάσεις ευθύνης του Δασαρχείου …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση και τη βελτίωση της βατότητας του δασικού …"
    }
   ],
   "source": "pdf",
@@ -1072,15 +1741,15 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών, καθώς και τη …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών, καθώς και τη διαχείριση υπολειμμάτων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "ylotomies",
-    "excerpt": "… τη διαχείριση υπολειμμάτων υλοτομίας, σε εκτάσεις ευθύνης των Δασαρχείων Λαγκαδά, …"
+    "key": "ypoleimmata",
+    "excerpt": "… καθώς και τη διαχείριση υπολειμμάτων υλοτομίας, σε εκτάσεις ευθύνης των …"
    }
   ],
   "source": "pdf",
@@ -1091,11 +1760,11 @@
   "themes": [
    {
     "key": "odiko_diktyo",
-    "excerpt": "… της βατότητας του δασικού οδικού δικτύου και αντιπυρικών ζωνών, σε εκτάσεις ευθύνης …"
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση και τη βελτίωση της βατότητας του δασικού …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… δασικού οδικού δικτύου και αντιπυρικών ζωνών, σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… 5 του ν. 998/1979 για τη συντήρηση και τη βελτίωση της βατότητας του δασικού …"
    }
   ],
   "source": "pdf",
@@ -1110,11 +1779,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών σε εκτάσεις …"
+    "excerpt": "… εκτάσεων, καθώς και τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων, καθώς και τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    }
   ],
   "source": "pdf",
@@ -1140,11 +1809,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών ζωνών σε εκτάσεις …"
+    "excerpt": "… χώρων, καθώς και τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… οδικού δικτύου και των αντιπυρικών ζωνών σε εκτάσεις ευθύνης των Δασαρχείων …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… χώρων, καθώς και τη συντήρηση του δασικού οδικού δικτύου και των αντιπυρικών …"
    },
    {
     "key": "arxaiologikoi",
@@ -1196,10 +1865,6 @@
  "24SYMV014192289": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… Δημιουργίας Μικτής Αντιπυρικής Ζώνης στην Π.Ε. Ηλείας αρμοδιότητας …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "… Πρόγραμμα Δημιουργίας Μικτής Αντιπυρικής Ζώνης στην Π.Ε. Ηλείας αρμοδιότητας …"
    }
@@ -1210,10 +1875,6 @@
  },
  "24SYMV014192335": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1226,10 +1887,6 @@
  "24SYMV014217832": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των …"
    }
@@ -1240,10 +1897,6 @@
  },
  "24SYMV014217833": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1256,10 +1909,6 @@
  "24SYMV014244175": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των …"
    }
@@ -1271,10 +1920,6 @@
  "24SYMV014251057": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των …"
    }
@@ -1285,10 +1930,6 @@
  },
  "24SYMV014265153": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1312,10 +1953,6 @@
  "24SYMV014279455": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -1326,10 +1963,6 @@
  },
  "24SYMV014279460": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. Ρόδου …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1342,10 +1975,6 @@
  "24SYMV014286587": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -1357,10 +1986,6 @@
  "24SYMV014316183": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -1371,10 +1996,6 @@
  },
  "24SYMV014316187": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1409,10 +2030,6 @@
  "24SYMV014333324": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -1423,10 +2040,6 @@
  },
  "24SYMV014354915": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1461,10 +2074,6 @@
  "24SYMV014392253": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -1475,10 +2084,6 @@
  },
  "24SYMV014415665": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1491,10 +2096,6 @@
  "24SYMV014415876": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -1506,10 +2107,6 @@
  "24SYMV014431913": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -1520,10 +2117,6 @@
  },
  "24SYMV014431915": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους της …"
@@ -1782,11 +2375,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… συντήρησης δασικού οδικού δικτύου και αντιπυρικών ζωνών, συντήρησης και …"
+    "excerpt": "… προστασίας καθαρισμού, βελτίωσης και καλλιέργειας δασών και δασικών εκτάσεων, …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… δασικού οδικού δικτύου και αντιπυρικών ζωνών, συντήρησης και αποκατάστασης …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… δασών και δασικών εκτάσεων, συντήρησης δασικού οδικού δικτύου και αντιπυρικών ζωνών, …"
    },
    {
     "key": "nero",
@@ -1805,11 +2398,15 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… και διάνοιξης δασικού οδικού δικτύου και αντιπυρικών ζωνών αρμοδιότητας των …"
+    "excerpt": "… δασών και δασικών εκτάσεων, συντήρησης και διάνοιξης δασικού οδικού δικτύου και …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… δασικού οδικού δικτύου και αντιπυρικών ζωνών αρμοδιότητας των Δασαρχείων Αταλάντης, …"
+    "key": "syntirisi_zonon",
+    "excerpt": "… δασών και δασικών εκτάσεων, συντήρησης και διάνοιξης δασικού οδικού δικτύου και …"
+   },
+   {
+    "key": "psiles_zones",
+    "excerpt": "… εκτάσεων, συντήρησης και διάνοιξης δασικού οδικού δικτύου και αντιπυρικών ζωνών …"
    }
   ],
   "source": "pdf",
@@ -1879,15 +2476,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ …"
+    "excerpt": "… ΕΚΤΑΣΕΩΝ ΚΑΘΩΣ ΚΑΙ ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ"
-   },
-   {
-    "key": "meletes",
-    "excerpt": "… ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ"
+    "key": "syntirisi_zonon",
+    "excerpt": "… ΕΚΤΑΣΕΩΝ ΚΑΘΩΣ ΚΑΙ ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ …"
    }
   ],
   "source": "pdf",
@@ -1902,15 +2495,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ …"
+    "excerpt": "… ΕΚΤΑΣΕΩΝ ΚΑΘΩΣ ΚΑΙ ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ"
-   },
-   {
-    "key": "meletes",
-    "excerpt": "… ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ"
+    "key": "syntirisi_zonon",
+    "excerpt": "… ΕΚΤΑΣΕΩΝ ΚΑΘΩΣ ΚΑΙ ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ …"
    }
   ],
   "source": "pdf",
@@ -1925,15 +2514,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ …"
+    "excerpt": "… ΕΚΤΑΣΕΩΝ ΚΑΘΩΣ ΚΑΙ ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ"
-   },
-   {
-    "key": "meletes",
-    "excerpt": "… ΖΩΝΩΝ ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ"
+    "key": "syntirisi_zonon",
+    "excerpt": "… ΕΚΤΑΣΕΩΝ ΚΑΘΩΣ ΚΑΙ ΓΙΑ ΤΗ ΣΥΝΤΗΡΗΣΗ ΔΑΣΙΚΟΥ ΟΔΙΚΟΥ ΔΙΚΤΥΟΥ ΚΑΙ ΑΝΤΙΠΥΡΙΚΩΝ ΖΩΝΩΝ ΜΕ …"
    }
   ],
   "source": "pdf",
@@ -1949,6 +2534,39 @@
   ],
   "source": "pdf",
   "title": "Εργασίες ειδικών δασοτεχνικών έργων του αρ.16 παρ.5 του ν. 998/1979 για την εκτέλεση έργων αντιδιαβρωτικής προστασίας, σύμφωνα με το άρθρο 32 του ν. 4412/2016, σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών Ροδόπης",
+  "cpv_notes": []
+ },
+ "24SYMV015170080": {
+  "themes": [
+   {
+    "key": "meletes",
+    "excerpt": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές …"
+   }
+  ],
+  "source": "pdf",
+  "title": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές ευθύνης των Δασαρχείων Αταλάντης, Χαλκίδας, Λίμνης, Ιστιαίας, Αλιβερίου και Θηβών",
+  "cpv_notes": []
+ },
+ "24SYMV015170089": {
+  "themes": [
+   {
+    "key": "meletes",
+    "excerpt": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές …"
+   }
+  ],
+  "source": "pdf",
+  "title": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές ευθύνης των Δασαρχείων Πεντέλης, Καπανδριτίου, Λαυρίου, Πάρνηθας, Μεγάρων, Πειραιώς και Πόρου",
+  "cpv_notes": []
+ },
+ "24SYMV015170098": {
+  "themes": [
+   {
+    "key": "meletes",
+    "excerpt": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές …"
+   }
+  ],
+  "source": "pdf",
+  "title": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές ευθύνης του Δασαρχείου Σουφλίου",
   "cpv_notes": []
  },
  "24SYMV015185915": {
@@ -1980,14 +2598,6 @@
  "24SYMV015544651": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους των Π.Ε. Εύβοιας, Έβρου, Μεσσηνίας και …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους των Π.Ε. Εύβοιας, …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους των Π.Ε. …"
    }
@@ -1998,14 +2608,6 @@
  },
  "24SYMV015889080": {
   "themes": [
-   {
-    "key": "odiko_diktyo",
-    "excerpt": "… μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, αρμοδιότητας …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. …"
@@ -2018,14 +2620,6 @@
  "24SYMV015889443": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, αρμοδιότητας …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. …"
    }
@@ -2036,14 +2630,6 @@
  },
  "24SYMV015889446": {
   "themes": [
-   {
-    "key": "odiko_diktyo",
-    "excerpt": "… μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, αρμοδιότητας …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. …"
@@ -2056,14 +2642,6 @@
  "24SYMV015889457": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, αρμοδιότητας …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Εύβοιας, …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. …"
    }
@@ -2074,14 +2652,6 @@
  },
  "24SYMV015889466": {
   "themes": [
-   {
-    "key": "odiko_diktyo",
-    "excerpt": "… μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Έβρου, αρμοδιότητας Δασαρχείου …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Έβρου, …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. …"
@@ -2094,10 +2664,6 @@
  "24SYMV015889478": {
   "themes": [
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε οικισμούς και δρόμους της Π.E. …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε οικισμούς και δρόμους της …"
    }
@@ -2109,20 +2675,45 @@
  "24SYMV015889484": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Μεσσηνίας, αρμοδιότητας …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Μεσσηνίας, …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. …"
    }
   ],
   "source": "pdf",
   "title": "Δημιουργία μικτών αντιπυρικών ζωνών σε δασικούς δρόμους της Π.E. Μεσσηνίας, αρμοδιότητας Δασαρχείου Κυπαρισσίας σύμφωνα με τις διατάξεις του αρ.16 παρ.5 του ν.998/1979",
+  "cpv_notes": []
+ },
+ "24SYMV016017961": {
+  "themes": [
+   {
+    "key": "meletes",
+    "excerpt": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές …"
+   }
+  ],
+  "source": "pdf",
+  "title": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές ευθύνης του Δασαρχείου Αιγάλεω",
+  "cpv_notes": []
+ },
+ "24SYMV016018102": {
+  "themes": [
+   {
+    "key": "meletes",
+    "excerpt": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές …"
+   }
+  ],
+  "source": "pdf",
+  "title": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές ευθύνης του Δασαρχείου Αλμυρού",
+  "cpv_notes": []
+ },
+ "24SYMV016018183": {
+  "themes": [
+   {
+    "key": "meletes",
+    "excerpt": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές …"
+   }
+  ],
+  "source": "pdf",
+  "title": "Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας σε περιοχές ευθύνης της Διεύθυνσης Δασών Κεφαλληνίας",
   "cpv_notes": []
  },
  "26SYMV019488987": {
@@ -2197,11 +2788,7 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… εκτάσεων κατά μήκος δασικού οδικού δικτύου και βελτίωσης δασικού οδικού δικτύου του …"
-   },
-   {
-    "key": "meletes",
-    "excerpt": "… 2025-02-27 εγκεκριμένες μελέτες, σε περιοχές ευθύνης των ΔΧ Δράμας και ΔΧ …"
+    "excerpt": "… δασικού οδικού δικτύου και βελτίωσης δασικού οδικού δικτύου του αρ.16 του ν. …"
    }
   ],
   "source": "pdf",
@@ -2236,8 +2823,25 @@
   ]
  },
  "25SYMV016495437": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκστασης 1.247,24 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.004,37 στρ. του …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… έκτασης 5.371,23 στρ., συντήρηση αντιπυρικών ζωνών έκστασης 1.247,24 στρ. και …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… στο χώρο εγκατάστασης των υδατοδεξαμενών έκστασης 1,60 στρ. της Διεύθυνσης Δασών …"
+   }
+  ],
+  "source": "call:25PROC016340960",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, αρμοδιότητας των Δασαρχείων Αλεξανδρούπολης, Σουφλίου, Ξάνθης και Σταυρούπολης, καθώς και της Διεύθυνσης Δασών Ροδόπης, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2260,7 +2864,8 @@
     "cpv": "50514200-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "25SYMV016569184": {
   "themes": [],
@@ -2274,19 +2879,50 @@
   ]
  },
  "26SYMV018977660": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "εργασίες αφορούν σε συντήρηση-βελτίωση του δασικού οδικού δικτύου συνολικής έκτασης 4.150,30 στρ., …"
+   },
+   {
+    "key": "katharismoi",
+    "excerpt": "… σε καθαρισμούς βλάστησης δασικών εκτάσεων συνολικής έκτασης 1.709,51 στρ. …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… και στη συντήρηση-διαμόρφωση αντιπυρικής ζώνης συνολικής έκτασης 216,00 στρ. της Διεύθυνσης Δασών Πιερίας."
+   }
+  ],
+  "source": "call:25PROC016230587",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, αρμοδιότητας της Διεύθυνσης Δασών Πιερίας, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
     "cpv": "45221230-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; the call was missing from the cache and was fetched 2026-08-22 — its enumeration names the three works for the single Πιερίας lot."
  },
  "25SYMV016570021": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… 1.000,00 στρ. και εργασίες καθαρισμού δασικής βλάστησης καθώς και εργασίες …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+   },
+   {
+    "key": "estegasmenes_zones",
+    "excerpt": "… για την δημιουργία εστεγασμένων αντιπυρικών ζωνών, συνολικής έκτασης 760,00 …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου και αντιπυρικών ζωνών συνολικής έκτασης 716,70 στρ. του Δασαρχείου Πειραιά …"
+   }
+  ],
+  "source": "call:25PROC016314600",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, αρμοδιότητας των Δασαρχείων Αιγάλεω, Μεγάρων, Πειραιά, Λαυρίου και Πόρου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2301,7 +2937,8 @@
     "cpv": "44611500-1",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "25SYMV016658565": {
   "themes": [
@@ -2317,14 +2954,6 @@
  "25SYMV016657242": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Χαλκιδικής αρμοδιότητας …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Χαλκιδικής …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. …"
    }
@@ -2332,30 +2961,6 @@
   "source": "pdf",
   "title": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Χαλκιδικής αρμοδιότητας Δασαρχείου Πολύγυρου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": []
- },
- "25SYMV016659302": {
-  "themes": [
-   {
-    "key": "arxaiologikoi",
-    "excerpt": "… καθώς και περιμετρικά αρχαιολογικών χώρων, αρμοδιότητας των Δασαρχείων …"
-   }
-  ],
-  "source": "pdf",
-  "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, καθώς και περιμετρικά αρχαιολογικών χώρων, αρμοδιότητας των Δασαρχείων Διδυμότειχου και Σταυρούπολης και της Διεύθυνσης Δασών Ροδόπης, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
-  "cpv_notes": [
-   {
-    "cpv": "50514200-3",
-    "theme": "nero"
-   },
-   {
-    "cpv": "44611500-1",
-    "theme": "nero"
-   },
-   {
-    "cpv": "51810000-3",
-    "theme": "nero"
-   }
-  ]
  },
  "25SYMV017779215": {
   "themes": [
@@ -2393,8 +2998,17 @@
   "cpv_notes": []
  },
  "25SYMV016712403": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 700,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.895,00 στρ. του …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "εργασίες αφορούν σε αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+   }
+  ],
+  "source": "call:25PROC016428942",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις εντός των νήσων Σκιάθου, Σκοπέλου και Αλοννήσου, αρμοδιότητας Δασαρχείου Σκοπέλου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2409,14 +3023,11 @@
     "cpv": "45247270-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "25SYMV016745074": {
   "themes": [
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των Π.Ε. …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε οικισμούς και δρόμους των …"
@@ -2427,8 +3038,25 @@
   "cpv_notes": []
  },
  "25SYMV016762267": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 1.513,97 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 2.909,60 στρ. σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "εργασίες αφορούν σε αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… έκτασης 2.088,56 στρ., συντήρηση ψιλών αντιπυρικών ζωνών έκτασης 162,23 στρ., …"
+   },
+   {
+    "key": "estegasmenes_zones",
+    "excerpt": "… 162,23 στρ., δημιουργία στεγασμένων αντιπυρικών ζωνών έκτασης 1.513,97 στρ. και …"
+   }
+  ],
+  "source": "call:25PROC016510866",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσια δάση και δασικές εκτάσεις αρμοδιότητας της Διεύθυνσης Δασών Λέσβου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2447,18 +3075,11 @@
     "cpv": "45247270-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "25SYMV016782286": {
   "themes": [
-   {
-    "key": "odiko_diktyo",
-    "excerpt": "… Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Σάμου αρμοδιότητας Διεύθυνσης …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Σάμου …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. …"
@@ -2471,14 +3092,6 @@
  "25SYMV016782526": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Πέλλας αρμοδιότητας Δασαρχείου …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Πέλλας …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. …"
    }
@@ -2489,14 +3102,6 @@
  },
  "25SYMV016782541": {
   "themes": [
-   {
-    "key": "odiko_diktyo",
-    "excerpt": "… Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους και οικισμούς της Π.Ε. Τρικάλων …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους και οικισμούς της …"
-   },
    {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους και …"
@@ -2509,31 +3114,12 @@
  "25SYMV016791030": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Σποράδων αρμοδιότητας του …"
-   },
-   {
-    "key": "antipyrikes_zones",
-    "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Σποράδων …"
-   },
-   {
     "key": "miktes_zones",
     "excerpt": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. …"
    }
   ],
   "source": "pdf",
   "title": "Δημιουργία Μικτών Αντιπυρικών Ζωνών σε δασικούς δρόμους της Π.Ε. Σποράδων αρμοδιότητας του Δασαρχείου Σκοπέλου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
-  "cpv_notes": []
- },
- "25SYMV016959652": {
-  "themes": [
-   {
-    "key": "odiko_diktyo",
-    "excerpt": "… προστασίας σε δημόσιους δασικούς δρόμους και δασικές εκτάσεις, αρμοδιότητας των …"
-   }
-  ],
-  "source": "pdf",
-  "title": "Έργα αντιπυρικής προστασίας σε δημόσιους δασικούς δρόμους και δασικές εκτάσεις, αρμοδιότητας των Δασαρχείων Μεσολογγίου, Αμφιλοχίας και Αγρινίου καθώς και της Διεύθυνσης Δασών Λευκάδας, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": []
  },
  "25SYMV017026153": {
@@ -2595,11 +3181,19 @@
  "25SYMV017153341": {
   "themes": [
    {
-    "key": "odiko_diktyo",
-    "excerpt": "… προστασίας σε δημόσιους δασικούς δρόμους και δασικές εκτάσεις αρμοδιότητας των …"
+    "key": "katharismoi",
+    "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 2.850,00 στρ., σε …"
+   },
+   {
+    "key": "ylotomies",
+    "excerpt": "… Δασαρχείου Δράμας και ii) υλοτομία δένδρων για δημιουργία ψιλής αντιπυρικής ζώνης …"
+   },
+   {
+    "key": "psiles_zones",
+    "excerpt": "… υλοτομία δένδρων για δημιουργία ψιλής αντιπυρικής ζώνης έκτασης 8,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 433,00 στρ., σε περιοχές αρμοδιότητας του Δασαρχείου Σερρών …"
    }
   ],
-  "source": "pdf",
+  "source": "call:25PROC016921461",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιους δασικούς δρόμους και δασικές εκτάσεις αρμοδιότητας των Δασαρχείων Δράμας και Σερρών, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2610,7 +3204,8 @@
     "cpv": "51810000-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "25SYMV017177853": {
   "themes": [
@@ -2643,8 +3238,17 @@
   ]
  },
  "25SYMV017250427": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 1.500,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.000,00 στρ., σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) εργασίες συντήρησης του δασικού οδικού δικτύου έκτασης 1.500,00 …"
+   }
+  ],
+  "source": "call:25PROC017023359",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, αρμοδιότητας των Δασαρχείων Κασσάνδρας και Πολύγυρου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2663,7 +3267,8 @@
     "cpv": "45247270-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "25SYMV017458228": {
   "themes": [
@@ -2673,15 +3278,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… για τη συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών με εγκεκριμένες …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών με …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… δασικού οδικού δικτύου και αντιπυρικών ζωνών με εγκεκριμένες μελέτες, σε περιοχές …"
-   },
-   {
-    "key": "meletes",
-    "excerpt": "… ζωνών με εγκεκριμένες μελέτες, σε περιοχές της Π.Ε. Ευβοίας"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών με …"
    }
   ],
   "source": "pdf",
@@ -2696,15 +3297,11 @@
    },
    {
     "key": "odiko_diktyo",
-    "excerpt": "… για τη συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών με εγκεκριμένες …"
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών με …"
    },
    {
-    "key": "antipyrikes_zones",
-    "excerpt": "… δασικού οδικού δικτύου και αντιπυρικών ζωνών με εγκεκριμένες μελέτες, σε περιοχές …"
-   },
-   {
-    "key": "meletes",
-    "excerpt": "… ζωνών με εγκεκριμένες μελέτες, σε περιοχές της Π.Ε. Ευβοίας"
+    "key": "syntirisi_zonon",
+    "excerpt": "… εκτάσεων καθώς και για τη συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών με …"
    }
   ],
   "source": "pdf",
@@ -2812,8 +3409,21 @@
   "cpv_notes": []
  },
  "26SYMV018599431": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… συντήρηση πυροφυλακίου και δεξαμενών υδροληψίας οχημάτων και ελικοπτέρων, καθώς και …"
+   },
+   {
+    "key": "ylotomies",
+    "excerpt": "… έκτασης 682,00 στρ., υλοτομία καμένων ιστάμενων και πεσμένων δένδρων συνολικής …"
+   }
+  ],
+  "source": "call:26PROC018460137",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις και δάση, αρμοδιότητας των Δασαρχείων Αιγάλεω, Μεγάρων, Πειραιά, και Πεντέλης, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2828,7 +3438,8 @@
     "cpv": "51810000-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018599446": {
   "themes": [
@@ -2851,8 +3462,17 @@
   ]
  },
  "26SYMV018607958": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… και τοποθέτηση μεταλλικής δεξαμενής σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών …"
+   }
+  ],
+  "source": "call:26PROC018445264",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, αρμοδιότητας των Διευθύνσεων Δασών Δωδεκανήσου, Λέσβου, Σάμου και Χίου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2867,7 +3487,8 @@
     "cpv": "50514200-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV019098206": {
   "themes": [
@@ -2914,8 +3535,21 @@
   ]
  },
  "26SYMV018638816": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσια δάση, συνολικής …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… οκτώ (8) τσιμεντένιων υδατοδεξαμενών, σε περιοχές αρμοδιότητας του Δασαρχείου …"
+   },
+   {
+    "key": "psiles_zones",
+    "excerpt": "… δημιουργία ψιλής αντιπυρικής ζώνης έκτασης 65,00 στρ. καθώς και κατασκευή οκτώ (8) τσιμεντένιων υδατοδεξαμενών, σε περιοχές αρμοδιότητας του Δασαρχείου Λίμνης …"
+   }
+  ],
+  "source": "call:26PROC018467844",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσια δάση και δασικές εκτάσεις, σε περιοχές αρμοδιότητας των Δασαρχείων Ιστιαίας και Λίμνης, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2926,7 +3560,8 @@
     "cpv": "44611500-1",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018639041": {
   "themes": [
@@ -2940,8 +3575,17 @@
   "cpv_notes": []
  },
  "26SYMV018639407": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… Μουζακίου iii) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… έξι (6) υφιστάμενων υδατοδεξαμενών σε περιοχές αρμοδιότητας του Δασαρχείου …"
+   }
+  ],
+  "source": "call:26PROC018474630",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, σε περιοχές αρμοδιότητας των Δασαρχείων Καλαμπάκας, Μουζακίου, Τρικάλων και Καρπενησίου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -2956,7 +3600,8 @@
     "cpv": "51810000-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018642772": {
   "themes": [
@@ -3005,8 +3650,17 @@
   "cpv_notes": []
  },
  "26SYMV018670757": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές εκτάσεις …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… δώδεκα (12) μεταλλικών υδατοδεξαμενών ανοιχτού τύπου, σε περιοχές αρμοδιότητας …"
+   }
+  ],
+  "source": "call:26PROC018481742",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, δασικά συμπλέγματα και δάση, σε περιοχές αρμοδιότητας των Δασαρχείων Αιγίου, Βυτίνας και Πατρών, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -3017,11 +3671,21 @@
     "cpv": "44611500-1",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018680228": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… εγκατάστασης δύο (2) υδατοδεξαμενών ανοιχτού τύπου και δύο (2) κλειστού τύπου, …"
+   }
+  ],
+  "source": "call:26PROC018505789",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσια δάση και δασικές εκτάσεις, αρμοδιότητας των Δασαρχείων Νιγρίτας, Πολυγύρου, Σερρών και Σιδηροκάστρου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -3032,7 +3696,8 @@
     "cpv": "44611500-1",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018718889": {
   "themes": [
@@ -3059,8 +3724,17 @@
   ]
  },
  "26SYMV018725481": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 285,93 στρ. σε …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… και κατασκευή τριών (3) υδατοδεξαμενών και δύο (2) πυροφυλακιών σε περιοχές …"
+   }
+  ],
+  "source": "call:26PROC018521122",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσια δάση και δασικές εκτάσεις, αρμοδιότητας της Διεύθυνσης Δασών Ροδόπης και του Δασαρχείου Κιλκίς, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -3075,11 +3749,25 @@
     "cpv": "50514200-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018739467": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… Δασών Φωκίδας ii) καθαρισμούς δασικής βλάστησης έκτασης 847,70 στρ. σε …"
+   },
+   {
+    "key": "miktes_zones",
+    "excerpt": "… και iii) δημιουργία μικτών αντιπυρικών ζωνών έκτασης 806,00 στρ. σε περιοχές …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… επτά (7) μεταλλικών δεξαμενών πυροπροστασίας σε διάφορες θέσεις αρμοδιότητας …"
+   }
+  ],
+  "source": "call:26PROC018521122",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσια δάση και δασικές εκτάσεις, αρμοδιότητας της Διεύθυνσης Δασών Φωκίδας και του Δασαρχείου Ελασσόνας, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -3094,7 +3782,8 @@
     "cpv": "50514200-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018755812": {
   "themes": [
@@ -3121,8 +3810,13 @@
   ]
  },
  "26SYMV018756094": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "Για το Τμήμα Γ: καθαρισμούς δασικής βλάστησης έκτασης 1.208,00 στρ. σε …"
+   }
+  ],
+  "source": "call:26PROC018521122",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, αρμοδιότητας του Δασαρχείου Ολυμπίας, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -3137,11 +3831,21 @@
     "cpv": "50514200-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV018779399": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσια δάση και δασικές …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… εγκατάστασης δώδεκα (12) υδατοδεξαμενών, σε περιοχές αρμοδιότητας του Δασαρχείου …"
+   }
+  ],
+  "source": "call:26PROC018519540",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσια δάση και δασικές εκτάσεις, αρμοδιότητας των Δασαρχείων Αριδαίας και Αρναίας και της Διεύθυνσης Δασών Πιερίας, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -3152,7 +3856,8 @@
     "cpv": "51810000-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
  },
  "26SYMV019250208": {
   "themes": [
@@ -3166,8 +3871,17 @@
   "cpv_notes": []
  },
  "26SYMV019471687": {
-  "themes": [],
-  "source": "pdf",
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης σε δημόσιες δασικές …"
+   },
+   {
+    "key": "nero",
+    "excerpt": "… και τοποθέτηση μεταλλικής δεξαμενής σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών …"
+   }
+  ],
+  "source": "call:26PROC018445264",
   "title": "Έργα αντιπυρικής προστασίας σε δημόσιες δασικές εκτάσεις, αρμοδιότητας των Διευθύνσεων Δασών Δωδεκανήσου, Λέσβου, Σάμου και Χίου, σύμφωνα με τις διατάξεις του αρ. 16 παρ. 5 του ν. 998/1979",
   "cpv_notes": [
    {
@@ -3182,6 +3896,381 @@
     "cpv": "51810000-3",
     "theme": "nero"
    }
-  ]
+  ],
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "23SYMV012946440": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "«Μελέτη Αντιπυρικής προστασίας (καθαρισμοί-κλαδεύσεις-θαμνεύσεις και απομάκρυνση των υπολειμμάτων καθαρισμού) κατά μήκος κεντρικών δασικών δρόμων … περιοχής Δασαρχείου Χαλκίδας»"
+   },
+   {
+    "key": "dasokomika",
+    "excerpt": "«… (καθαρισμοί-κλαδεύσεις-θαμνεύσεις και απομάκρυνση των υπολειμμάτων καθαρισμού) …»"
+   }
+  ],
+  "source": "call:23PROC012559184",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "23SYMV013530639": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… μέσω συγκεκριμένων επεμβάσεων καθαρισμού των δασών και δασικών εκτάσεων, επί των δασικών οικοσυστημάτων των περιοχών ευθύνης του Δασαρχείου Πύργου και της Διεύθυνσης Δασών Σάμου …"
+   }
+  ],
+  "source": "call:23PROC013231560",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "23SYMV013530680": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… μέσω συγκεκριμένων επεμβάσεων καθαρισμού των δασών και δασικών εκτάσεων, επί των δασικών οικοσυστημάτων των περιοχών ευθύνης του Δασαρχείου Πύργου και της Διεύθυνσης Δασών Σάμου …"
+   }
+  ],
+  "source": "call:23PROC013231560",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016398005": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… καύσιμης ύλης μέσω εργασιών καθαρισμού βλάστησης σε εκτάσεις εντός δασικών …"
+   },
+   {
+    "key": "dasokomika",
+    "excerpt": "… αφορούν σε προληπτικές δασοκομικές εργασίες μετριάσεως της καύσιμης ύλης μέσω …"
+   }
+  ],
+  "source": "call:25PROC016237903",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016491944": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 3.830,00 στρ., σε καθαρισμούς αντιπυρικών ζωνών έκτασης 75 στρ. και σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "εργασίες αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 3.830,00 στρ., …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… έκτασης 3.830,00 στρ., σε καθαρισμούς αντιπυρικών ζωνών έκτασης 75 στρ. και σε …"
+   },
+   {
+    "key": "estegasmenes_zones",
+    "excerpt": "… για τη δημιουργία στεγασμένων αντιπυρικών ζωνών συνολικής έκτασης 3.673,00 …"
+   }
+  ],
+  "source": "call:25PROC016274900",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016658903": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "ii) εργασίες καθαρισμού δασικής βλάστησης έκτασης 3.400,00 στρ. του …"
+   }
+  ],
+  "source": "call:25PROC016349019",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016670155": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… και διευθέτηση ρέματος) και καθαρισμούς δασικής βλάστησης έκτασης 72,00 στρ. του …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) συντήρηση-βελτίωση δασικού οδικού δικτύου με έργα …"
+   }
+  ],
+  "source": "call:25PROC016306915",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016722680": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) εργασίες καθαρισμού δασικής βλάστησης έκτασης 715 στρ. της …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… και iii) εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+   }
+  ],
+  "source": "call:25PROC016392208",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016723758": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… 1.495,00 στρ. και εργασίες καθαρισμού δασικής βλάστησης έκτασης 85,00 στρ. …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+   }
+  ],
+  "source": "call:25PROC016392208",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016737061": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 69,59 στρ και καθαρισμούς δασικής βλάστησης και αντιπυρικών ζωνών …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… Βυτίνας αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 446,97 στρ., …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… καθαρισμούς δασικής βλάστησης και αντιπυρικών ζωνών έκτασης 944,80 στρ. …"
+   }
+  ],
+  "source": "call:25PROC016473147",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016737084": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… Πειραιά αφορούν σε καθαρισμούς δασικής βλάστησης για δημιουργία στεγασμένων …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… Δασαρχείου Πόρου αφορούν σε συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… Δασαρχείου Πόρου αφορούν σε συντήρηση δασικού οδικού δικτύου και αντιπυρικών ζωνών …"
+   },
+   {
+    "key": "estegasmenes_zones",
+    "excerpt": "… βλάστησης για δημιουργία στεγασμένων αντιπυρικών ζωνών έκτασης 355,35 στρ. ΤΕΥΧΟΣ …"
+   }
+  ],
+  "source": "call:25PROC016473147",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016769821": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… Δασών Ζακύνθου, και σε καθαρισμούς δασικής βλάστησης έκτασης 3.200,00 στρ. σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "εργασίες αφορούν σε αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+   }
+  ],
+  "source": "call:25PROC016437477",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016782219": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 2.183,70 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 92,00 στρ. του …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+   }
+  ],
+  "source": "call:25PROC016392196",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016921666": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 19,00 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 2.120,00 στρ., σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) συντήρηση δασικού οδικού δικτύου έκτασης 19,00 στρ. και …"
+   }
+  ],
+  "source": "call:25PROC016596906",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016921696": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 250,00 στρ. και καθαρισμούς δασικής βλάστησης για δημιουργία παρόδιων …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) συντήρηση δασικού οδικού δικτύου έκτασης 250,00 στρ. και …"
+   },
+   {
+    "key": "estegasmenes_zones",
+    "excerpt": "… για δημιουργία παρόδιων στεγασμένων αντιπυρικών ζωνών έκτασης 450,00 στρ., σε …"
+   }
+  ],
+  "source": "call:25PROC016596906",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016946591": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 1.808,50 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 670,00 στρ. Τα …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… Άμφισσας αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 1.808,50 στρ. …"
+   }
+  ],
+  "source": "call:25PROC016709625",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016959652": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… δασικού οδικού δικτύου με καθαρισμούς και αντικατάσταση οχετών, κατασκευή τοίχων …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) αποκατάσταση βατότητας δασικού οδικού δικτύου με …"
+   }
+  ],
+  "source": "call:25PROC016718138",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016991804": {
+  "themes": [
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "Για το Τμήμα Α: εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης 7,75 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 1.550,00 στρ. σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών Χίου."
+   },
+   {
+    "key": "katharismoi",
+    "excerpt": "… καθαρισμούς δασικής βλάστησης έκτασης 1.550,00 στρ. σε περιοχές αρμοδιότητας της Διεύθυνσης Δασών Χίου."
+   }
+  ],
+  "source": "call:25PROC016588127",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV016992710": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… 290,25 στρ. και εργασίες καθαρισμού δασικής βλάστησης έκτασης 409,00 στρ. σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "Για το Τμήμα Β: εργασίες αποκατάστασης βατότητας δασικού οδικού δικτύου έκτασης …"
+   }
+  ],
+  "source": "call:25PROC016588127",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV017004972": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) καθαρισμούς παρόδιας βλάστησης έκτασης 308,40 στρ., …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… έκτασης 308,40 στρ., αποκατάσταση βατότητας δασικού οδικού δικτύου έκτασης …"
+   },
+   {
+    "key": "syntirisi_zonon",
+    "excerpt": "… έκτασης 1.418,04 στρ. και καθαρισμό και αποψίλωση αντιπυρικών ζωνών έκτασης 494,00 …"
+   },
+   {
+    "key": "psiles_zones",
+    "excerpt": "… καθαρισμό-διάνοιξη αντιπυρικών ζωνών έκτασης 143,47 στρ., σε περιοχές αρμοδιότητας του Δασαρχείου Θήβας …"
+   }
+  ],
+  "source": "call:25PROC016703059",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV017107164": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 1.247,90 στρ. κα καθαρισμούς δασικής βλάστησης έκτασης 227,80 στρ."
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… Ελασσόνας αφορούν σε συντήρηση δασικού οδικού δικτύου έκτασης 95,18 στρ. και …"
+   },
+   {
+    "key": "miktes_zones",
+    "excerpt": "… 95,18 στρ. και δημιουργία μικτών αντιπυρικών ζωνών έκτασης 369,23 στρ. Τα …"
+   }
+  ],
+  "source": "call:25PROC016709625",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV017212395": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 886,00 στρ. σε …"
+   }
+  ],
+  "source": "call:25PROC017023425",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV017232753": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "i) καθαρισμούς δασικής βλάστησης έκτασης 2.632,00 στρ. σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… στρ., καθώς και εργασίες συντήρησης του δασικού οδικού δικτύου με την κατασκευή …"
+   }
+  ],
+  "source": "call:25PROC017013706",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "25SYMV017232810": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "… έκτασης 3.388,67 στρ. και καθαρισμούς δασικής βλάστησης έκτασης 300,00 στρ., σε …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "i) συντήρηση δασικού οδικού δικτύου έκτασης 213,13 στρ. σε …"
+   }
+  ],
+  "source": "call:25PROC017032643",
+  "note": "Title names no specific work; themes read from the call's works enumeration (lot-specific), DATA_DECISIONS 2026-08-22. Every proposal reviewed."
+ },
+ "23SYMV013039380": {
+  "themes": [
+   {
+    "key": "katharismoi",
+    "excerpt": "Το αντικείμενο του έργου περιλαμβάνει εργασίες καθαρισμών δασικών εκτάσεων, την δημιουργία στεγασμένων αντιπυρικών ζωνών – καθαρισμούς κατά μήκος δασικών δρόμων, βελτίωση βατότητας των δασικών δρόμων, στην ευρύτερη περιοχή του Δήμου Αγίου Βασιλείου, Π.Ε. Ρεθύμνου."
+   },
+   {
+    "key": "estegasmenes_zones",
+    "excerpt": "… την δημιουργία στεγασμένων αντιπυρικών ζωνών – καθαρισμούς κατά μήκος δασικών δρόμων …"
+   },
+   {
+    "key": "odiko_diktyo",
+    "excerpt": "… βελτίωση βατότητας των δασικών δρόμων, στην ευρύτερη περιοχή του Δήμου Αγίου Βασιλείου, Π.Ε. Ρεθύμνου."
+   }
+  ],
+  "source": "call:23PROC012860295",
+  "note": "Title names no specific work; the 5-lot call embeds each lot's own Τεχνική Περιγραφή — §3.2.9 is the Ρεθύμνου lot's (user verdict 2026-08-22, pointing at the section)."
  }
 }

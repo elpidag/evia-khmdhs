@@ -1,15 +1,13 @@
 <script lang="ts">
 	/**
-	 * TYPES OF WORK: the works as ROWS, each bar split by the main category
-	 * of the contracts naming it (user, 2026-08-22 — the work names are long,
-	 * so they must be row labels; every column-headed drawing failed).
+	 * TYPES OF WORKS, the «works × category» lens: the works as ROWS, each
+	 * bar split by the main category of the contracts naming it (user,
+	 * 2026-08-22 — the work names are long, so they must be row labels;
+	 * every column-headed drawing failed and was deleted).
 	 *
-	 * Two modes of the same row: `unit = false` a stacked bar (one segment per
-	 * category, greys), `unit = true` one small square per contract coloured
-	 * by its category — the same numbers, counted or measured. Both say in
-	 * one picture what the one-category-per-contract rule flattens: the
-	 * contracts naming «firebreaks» sit in general prevention AND in mixed
-	 * firebreaks AND in archaeological protection.
+	 * It says in one picture what the one-category-per-contract rule
+	 * flattens: the contracts naming «firebreaks» sit in general prevention
+	 * AND in mixed firebreaks AND in archaeological protection.
 	 *
 	 * Counts only — no price per work exists inside a bundled contract.
 	 */

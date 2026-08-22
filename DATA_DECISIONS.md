@@ -6733,6 +6733,21 @@ matrix») and **pack** (every contract a circle, area ∝ €, one bubble per
 category; the swarm rows carry `category` for it). The API gained
 `themes.bundles` and `categories[].n_named`; `KindFlow` gained `fmt`.
 
+**Verdict, same day (user).** Six further drawings were built and shown
+side by side on the toggle — a two-column flow (categories → works), an
+UpSet-style bundle plot, a bubble grid, a matrix, a `packSiblings` pack
+and unit squares. The user kept **three lenses** and the frame was
+renamed **TYPES OF WORKS**: «main category» (the € bars, one per
+contract, summing to the basis), «works named» (the 12 themes, counted
+in contracts, no €) and «works × category» (one row per work, each bar
+split by the main category of the contracts naming it — the drawing
+that says in one picture what the one-category rule flattens). The other
+six components are DELETED, not parked: the finding that decided it is
+that the work names are long sentences, so they can only be ROW labels —
+every drawing that needed them as column heads (matrix, grid, flow,
+bundles) was rejected for that reason, and repeating the experiment
+costs more than rebuilding one file.
+
 ## 2026-08-22 · Context land on every map: the neighbours, and the Athos peninsula that no administrative layer carries
 
 The user: every map draws Greece alone, «as if it were floating in water»,
@@ -6796,3 +6811,214 @@ buttons are **solid circles in the section's hue** (user mock:
 sponsored #2d6a4f — white inline-SVG glyphs centred by construction,
 1.45rem; the text glyphs sat on font metrics and never centred). The
 sources are named in /methodology#map-layers.
+
+## 2026-08-22 · The works-named vocabulary corrected: three firebreak kinds, honest roads, real studies, residues apart
+
+**Decision (user, after reviewing the label-review page):** the themes
+layer conflated different works, and the vocabulary is revised. Verdicts:
+(1a) «διαχείριση υπολειμμάτων υλοτομίας» becomes its own theme; (2) the
+«ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ ΜΕΛΕΤΕΣ» contracts leave the studies theme — the study
+is the input the works follow, not work bought; (3) the 0-link
+«Περιφράξεις & σήμανση» theme is dropped (its CPV marker 45342000-6 with
+it); (4) the roads theme is renamed «Συντήρηση δασικού οδικού δικτύου» /
+"Maintenance of forest road network" — συντήρηση and βελτίωση are close,
+the one βελτίωση contract stays inside; and firebreaks split into THREE
+disjoint themes — δημιουργία μικτών / δημιουργία εστεγασμένων / συντήρηση
+αντιπυρικών ζωνών — the generic «Αντιπυρικές ζώνες» theme retiring.
+
+**Evidence (all measured on the DB before the change):**
+- The needle `ΑΝΤΙΠΥΡΙΚ\w*\s+ΖΩΝ` fired on every mention regardless of
+  verb: of 84 links, 46 συντήρηση, 32 δημιουργία μικτών, 4 δημιουργία
+  εστεγασμένων, 2 hand-read. ALL 37 μικτές/εστεγασμένες contracts also
+  carried the generic theme — the same clause counted twice. No title
+  names two firebreak kinds (23SYMV013156825's «συντήρηση» governs the
+  road network, checked), so the three new themes are disjoint.
+- Roads: 15 of 75 links were LOCATION, not work — «δημιουργία μικτών
+  ζωνών ΣΕ δασικούς δρόμους» (14) and «καθαρισμός ΚΑΤΑ ΜΗΚΟΣ κεντρικών
+  δασικών δρόμων» (1). Of the true 60: 59 συντήρηση, 1 βελτίωση
+  (25SYMV016392306).
+- Studies were wrong both ways: 6 of 14 were «…ζωνών ΜΕ ΕΓΚΕΚΡΙΜΕΝΕΣ
+  ΜΕΛΕΤΕΣ» false positives, and 6 real study contracts were missed —
+  «Κατάρτιση Σχεδίου Αντιπυρικής Προστασίας» ×6 (the stem ΣΧΕΔΙΑΣΜ never
+  matches ΣΧΕΔΙΟΥ). Separately 99 in-scope contracts state a ΣΑΥ-ΦΑΥ
+  μελέτη cost — the theme means «the title names drafting a μελέτη/Σχέδιο
+  as work», never «the contract involves a study».
+- Υλοτομίες: 4 of 7 were «διαχείριση/χειρισμός υπολειμμάτων υλοτομίας» —
+  the genitive names where the debris came from, not the work.
+
+**Hand-read verdicts:** 24SYMV014192289 «Πιλοτικό Πρόγραμμα Δημιουργίας
+Μικτής Αντιπυρικής Ζώνης στην Π.Ε. Ηλείας» → μικτές. 23SYMV013201961
+«πλευρικός καθαρισμός των υπό διαμόρφωση αντιπυρικών ζωνών κατά μήκος
+κεντρικών δασικών δρόμων» → συντήρηση αντιπυρικών ζωνών (side-clearing
+keeps the zone functional; the roads are the location — no road theme).
+25SYMV016392306 «βελτίωσης δασικού οδικού δικτύου» → roads.
+
+**New vocabulary (13 themes; was 12):** katharismoi · odiko_diktyo
+(relabelled maintenance) · syntirisi_zonon (NEW) · miktes_zones
+(narrowed) · estegasmenes_zones (NEW) · ypoleimmata (NEW) · ylotomies
+(narrowed) · dasokomika · nero · anadasoseis · antidiavrotika · meletes
+(fixed both ways) · arxaiologikoi. Needle technique: tempered patterns
+(`ΣΥΝΤΗΡΗΣ(?:(?!ΔΗΜΙΟΥΡΓ).){0,120}?ΑΝΤΙΠΥΡΙΚ\w*\s+ΖΩΝ`) and fixed-width
+lookbehinds (`(?<!ΕΓΚΕΚΡΙΜΕΝΕΣ )ΜΕΛΕΤ`, `(?<!ΥΠΟΛΕΙΜΜΑΤΩΝ )ΥΛΟΤΟΜ`).
+Curation path unchanged: extract_contract_details.py
+proposals → _overrides → details_loader.
+
+**Measured after the re-extraction (loaded, pinned in
+`test_atlas_real_db.test_types_of_work_lenses` and 5 new unit cases in
+`test_contract_details.py`):** 277 links / 158 named / 87 name nothing
+(was 330 / 154 / 91 — +6 Σχέδια gained a theme, the two «Έργα
+αντιπυρικής προστασίας ΣΕ δημόσιους δασικούς δρόμους» contracts
+(25SYMV016959652, 25SYMV017153341) honestly lost their only theme: the
+roads were the location). odiko_diktyo 60 · katharismoi 59 ·
+syntirisi_zonon 47 (46 needle + the 23SYMV013201961 override) ·
+miktes_zones 33 · arxaiologikoi 17 · anadasoseis 15 · meletes 14 ·
+antidiavrotika 13 · dasokomika 6 · ypoleimmata 4 · estegasmenes_zones 4 ·
+ylotomies 3 · nero 2. The three firebreak themes share NO contract
+(SQL-pinned). The durations file lost its one stale entry
+(25SYMV016659302, the registry-cancelled record out of scope since
+2026-08-19) → 245.
+
+## 2026-08-22 · Where the title is silent, the πρόσκληση's works enumeration speaks: a second, labelled evidence tier for the works-named layer
+
+**Decision (user, same day as the vocabulary correction):** for the 87
+in-scope contracts whose descriptive title names no specific work, the
+work themes may be read from the CALL's lot-specific works enumeration —
+the «Συνοπτική περιγραφή αντικειμένου» sentence of the πρόσκληση («Οι ως
+άνω εργασίες αφορούν σε: i) … ii) …», itemised per Δασαρχείο) — stored
+with `source = call:<PROC ΑΔΑΜ>` and the verbatim sentence, and labelled
+apart on every surface. The user found it on 25SYMV016959652: the signed
+contract is pure boilerplate (καθαρισμός/βλάστηση never occur in it),
+while its call 25PROC016718138 states «καθαρισμούς δασικής βλάστησης»
+with per-Δασαρχείο στρέμματα.
+
+**This NARROWS, not reverses, the 2026-08-19 rejection of the πρόσκληση
+as evidence.** What was rejected — and stays rejected — is the call's
+programme MENU (4–10 themes per call, the whole shopping list). What is
+admitted is only the lot-specific enumeration, only where the title says
+nothing, and for multi-lot calls only the items naming the contract's own
+Δασαρχεία (the enumeration is itemised per service, and the forest layer
+says which services are the contract's). A call that carries only the
+menu leaves its contract honestly empty.
+
+**Feasibility, measured before building:** of the 87 title-silent
+contracts, 86 cite a πρόσκληση and 85 of those call texts are already
+cached; 39 sit on a single-lot call (the description IS the contract's
+work), 47 on multi-lot calls (40 of them two-lot); 51 calls carry the
+standard «οι εργασίες αφορούν σε» anchor. Proposals from
+`scripts/extract_call_themes.py`; every proposal read (Claude), the
+flagged ones decided by the user; verdicts live in
+`contract_work_themes.json` `_overrides` (which survives regeneration by
+design — NOTE: the loader does not read `_overrides`; they merge into the
+top-level entries when `extract_contract_details.py --curate` regenerates
+the file, so that step must run after editing them).
+
+**Measured and loaded:** 41 call-derived entries → the layer is now
+**370 links / 199 named (158 title + 41 call) / 46 honestly unnamed**
+(was 87). Per theme: katharismoi 100 · odiko_diktyo 83 · syntirisi_zonon
+54 · miktes_zones 35 · arxaiologikoi 17 · anadasoseis 15 · meletes 14 ·
+nero 13 · antidiavrotika 13 · estegasmenes_zones 9 · dasokomika 8 ·
+ylotomies 5 · ypoleimmata 4. The call dialect needed its own patterns
+(`work_themes.CALL_PATTERNS` + `read_call`): «αποκατάσταση βατότητας» is
+road work titles never say, the calls write «στεγασμένων» without the Ε-,
+«καθαρισμός αντιπυρικών ζωνών» is zone maintenance (the 23SYMV013201961
+verdict as a rule), and «καθαρισμός δασικής βλάστησης» must not fire the
+silvicultural theme. Hand corrections on the read: one CPV-list bleed
+(25SYMV016398005, the kept window ran into «Υπηρεσίες σχετιζόμενες με την
+υλοτομία»), two «…και αντιπυρικών ζωνών» clauses the ΒΛΑΣΤΗΣ guard
+blocked (25SYMV016570021, 25SYMV016737061), the ΕΣΑ ΥΠΟΕΡΓΟ Α study
+title read by hand (23SYMV012946440 → καθαρισμοί + κλαδεύσεις — NOT the
+studies theme: the study is approved input), the two-lot 2023 collective
+clause naming one work accepted for both lots (23SYMV013530639/680 →
+καθαρισμοί), and the Τμήμα Α Χίου lot resolved by hand (25SYMV016991804 —
+the toponym stem was too short to match). **Title-sourced firebreak
+themes stay disjoint; 4 call enumerations honestly name two firebreak
+kinds** (συντήρηση ψιλών + δημιουργία στεγασμένων) — the pin narrows to
+title-sourced rows. The 43 contracts whose 2024-generation calls delegate
+the works to the unpublished «Τεύχος 3 — Τεχνική Περιγραφή» stay honestly
+empty, as do the txt-missing and no-call ones. **Both held questions answered by the user the same day:**
+(a) 23SYMV013039380 — the 5-lot call embeds each lot's own Τεχνική
+Περιγραφή, and the user pointed at §3.2.9, the Ρεθύμνου lot's: «εργασίες
+καθαρισμών δασικών εκτάσεων, την δημιουργία στεγασμένων αντιπυρικών
+ζωνών – καθαρισμούς κατά μήκος δασικών δρόμων, βελτίωση βατότητας των
+δασικών δρόμων» → καθαρισμοί + εστεγασμένες + οδικό. (b) the plain-zone
+creations get a FOURTH firebreak theme, **psiles_zones «Δημιουργία ψιλών
+αντιπυρικών ζωνών» / "Creation of bare firebreaks"** (pattern
+ΔΗΜΙΟΥΡΓ|ΔΙΑΝΟΙΞ tempered against ΜΙΚΤ/ΣΤΕΓΑΣΜΕΝ; ΔΙΑΜΟΡΦΩΣ deliberately
+NOT a creation verb — «υπό διαμόρφωση ζωνών» stays the hand-verdict
+maintenance case). It landed on 4 contracts: the three call-derived ones
+AND one TITLE — 24SYMV014809263 «…συντήρησης και διάνοιξης δασικού
+οδικού δικτύου και αντιπυρικών ζωνών…», the one title naming two
+firebreak kinds legitimately (maintenance + opening), so the
+disjointness claim stays exact for the original trio. **Final layer: 14
+themes, 380 links / 201 named (158 title + 43 call) / 44 honestly
+unnamed.** katharismoi 102 · odiko_diktyo 85 · syntirisi_zonon 55 ·
+miktes_zones 35 · arxaiologikoi 17 · anadasoseis 15 · meletes 14 ·
+antidiavrotika 13 · nero 13 · estegasmenes_zones 10 · dasokomika 8 ·
+ylotomies 5 · psiles_zones 4 · ypoleimmata 4.
+
+**The last sweep of the unnamed (user questions, same day):**
+26SYMV018977660's call 25PROC016230587 was missing from the cache — it
+was FETCHED (472 KB, tracked txt) and its single-lot enumeration names
+συντήρηση-βελτίωση οδικού 4.150,30 στρ. + καθαρισμοί βλάστησης 1.709,51
+στρ. + συντήρηση-διαμόρφωση αντιπυρικής ζώνης 216,00 στρ. → all three
+recorded. 23SYMV012972469 (Πάρνηθας) cites its call only by DATE («η από
+22.5.2023 Πρόσκληση» — no ΑΔΑΜ, which is why the families layer has no
+row): its Ορισμοί prove it is Υποέργο Β of the call whose title names
+καθαρισμοί δασών/αρχαιολογικών + δημιουργία εστεγασμένων ζωνών over four
+services (the sibling Υποέργο Α, 23SYMV012963827, carries that full title
+as its own and is themed accordingly), but the lot's own Τεχνική
+Περιγραφή is Παράρτημα VII of the unpublished call and the contract is
+design-build («Μελέτη: … που θα εκπονηθεί από τον Ανάδοχο») — three
+works over four services is not attributable to the Πάρνηθας lot, so it
+stays honestly empty. **The «εκπόνηση μελετών» design-build clause is NOT
+the 43's peculiarity:** 72 of the 135 cached calls carry it — 101
+in-scope contracts (47×2024, 30×2025, 24×2026), of which 80 already have
+themes from their title or their call's enumeration, and 51 repeat the
+clause in their own contract text. Recording «μελέτες» on it would flood
+the studies theme (14 → ~115) with every design-build job that drafts
+its own study — the theme stays reserved for contracts whose OBJECT is a
+study/plan, and the design-build structure is a fact about the
+procurement model, not a named work.
+
+## 2026-08-22 · The deliverables split (study / works / study and works) and the nine calls that exist only as a date
+
+**Deliverables (user):** the contract page's SCOPE row said «study» for
+the 14 μελέτες contracts and «works» for everything else — the user asked
+for the real 1-2-3 model, mirroring the sponsored-works `deliverables`
+curation: (1) **study** — the object is drafting μελέτες/Σχέδια (the 14
+category-meletes contracts); (2) **study and works** — the design-build
+generation, whose own text or call states the contractor first drafts
+the studies and then executes what they define; (3) **works** — neither.
+Measured over the 245: **study 14 · study_and_works 121 · works 110**
+(evidence: 63 in the contract's own text, 58 in its call only, every
+clause quoted verbatim). This was chosen over folding the clause into
+the «Μελέτες» work theme, which it would have flooded 14 → ~115: the
+design-build structure is the post-2024 procurement TEMPLATE (72 of 135
+cached calls), a fact about the mode, not a named work — the works-named
+layer stays physical, the deliverables layer says the mode. Generated by
+`scripts/extract_deliverables.py` (deterministic, `_overrides` per ΑΔΑΜ,
+1:1 fold so excerpts stay verbatim) → curated
+`khmdhs/data/contract_deliverables.json` → `details_loader` →
+`contract_deliverables`; the SCOPE row now prints the three-way kind
+with the clause in the extracts, `/api/antinero/overview` ships the
+counts, pinned.
+
+**The nine date-only calls (user: «I do want to acknowledge this»):**
+nine in-scope contracts cite their πρόσκληση by DATE ONLY — «η από
+04.3.2022 / 23.03.2022 / 21.04.2023 / 22.5.2023 Πρόσκληση» — with no
+ΑΔΑΜ anywhere in the signed text, so neither the registry chain nor the
+families ΑΔΑΜ-scan can link them (5 of 2022, 4 of 2023; they surfaced
+when the user asked why 23SYMV012963827/23SYMV012972469 show no call in
+their trail). All nine are **ΤΑΙΠΕΔ-run procurements** — their recitals
+cite ΤΑΙΠΕΔ board approvals, quoted per contract — and ΤΑΙΠΕΔ published
+its tenders through its own channels, so the calls most likely never
+received a ΚΗΜΔΗΣ record; nothing resembling them exists among the 147
+stored upstream acts, and without an ΑΔΑΜ the registry cannot be asked.
+Curated `khmdhs/data/undocumented_calls.json` (call date ISO, the
+verbatim citation, the ΤΑΙΠΕΔ recital excerpt); `contract_timeline`
+merges an UNLINKED row per contract — kind notice, no ΑΔΑΜ, title
+«cited in the contract by date only — ΤΑΙΠΕΔ-run procurement; no ΚΗΜΔΗΣ
+record exists to link», the «cited in this contract» chip — and the
+run-up call diamond draws at the cited date with «(no ΚΗΜΔΗΣ record)»
+on hover. The claim is made ONLY for these nine, each carrying its own
+evidence.

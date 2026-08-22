@@ -165,7 +165,7 @@ export interface SwarmRow {
 	proc: 'direct' | 'open' | 'nego' | 'other';
 	single_bidder: 0 | 1;
 	pe: string | null;
-	/** the curated work-type category key (TYPES OF WORK pack drawing) */
+	/** the curated work-type category key */
 	category?: string | null;
 }
 

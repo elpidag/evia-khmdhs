@@ -125,23 +125,69 @@ def test_sankey_reconciles(client):
 
 
 def test_types_of_work_lenses(client):
-    """TYPES OF WORK (2026-08-22): the categories ship their English label
-    and the works their contracts NAME; the themes lens counts contracts
-    under every work named (overlapping by design), 91 of 245 name none."""
+    """TYPES OF WORKS (vocabulary corrected 2026-08-22): the categories ship
+    their English label and the works their contracts NAME; the themes lens
+    counts contracts under every work named (overlapping by design), 87 of
+    245 name none. Firebreaks are THREE disjoint themes — μικτές /
+    εστεγασμένες / συντήρηση — and the generic one is retired, as are the
+    0-link perifraxi and the «με εγκεκριμένες μελέτες» false positives."""
     o = client.get("/api/antinero/overview").get_json()
     cats = {c["key"]: c for c in o["categories"]}
-    assert cats["dasotexnika"]["label_en"].startswith("General fire-prevention works")
+    # the English NAME is curation and may be reworded (it was, 2026-08-22) —
+    # pin that every category ships one, never its exact words
+    assert all(c["label_en"] and c["label_en"] != c["key"] for c in o["categories"])
     top = {w["theme"]: w["n"] for w in cats["dasotexnika"]["names"]}
-    assert top["odiko_diktyo"] == 60 and top["katharismoi"] == 54 and top["antipyrikes_zones"] == 49
+    assert top["katharismoi"] > top["odiko_diktyo"] > top["syntirisi_zonon"] > 40
     th = o["themes"]
-    assert th["n_contracts"] == 245 and th["n_named"] == 154 and th["unspecified"] == 91
+    # 158 titles name a work; 43 more title-silent contracts got theirs from
+    # the CALL's works enumeration (DATA_DECISIONS 2026-08-22, second entry)
+    assert th["n_contracts"] == 245 and th["n_named"] == 201 and th["unspecified"] == 44
     assert {w["theme"]: w["n"] for w in th["themes"]} == {
-        "antipyrikes_zones": 84, "odiko_diktyo": 75, "katharismoi": 59, "miktes_zones": 37,
-        "arxaiologikoi": 17, "anadasoseis": 15, "meletes": 14, "antidiavrotika": 13,
-        "ylotomies": 7, "dasokomika": 6, "nero": 2}
-    # every theme bar carries an English label; the unused theme is absent
+        "katharismoi": 102, "odiko_diktyo": 85, "syntirisi_zonon": 55,
+        "miktes_zones": 35, "arxaiologikoi": 17, "anadasoseis": 15, "meletes": 14,
+        "nero": 13, "antidiavrotika": 13, "estegasmenes_zones": 10, "dasokomika": 8,
+        "ylotomies": 5, "psiles_zones": 4, "ypoleimmata": 4}
+    # every theme bar carries an English label; retired themes are absent
     assert all(w["label_en"] and w["label_en"] != w["theme"] for w in th["themes"])
-    assert "perifraxi" not in {w["theme"] for w in th["themes"]}
+    keys = {w["theme"] for w in th["themes"]}
+    assert "perifraxi" not in keys and "antipyrikes_zones" not in keys
+    # TITLE-sourced firebreak themes are DISJOINT — no title names two kinds
+    # (verified on every title); a CALL enumeration may honestly name two
+    # (e.g. Λέσβου: συντήρηση ψιλών ζωνών AND δημιουργία στεγασμένων)
+    kh = sqlite3.connect(DEFAULT_DB)
+    two = kh.execute(
+        """SELECT COUNT(*) FROM contract_work_themes a
+             JOIN contract_work_themes b
+               ON a.reference_number = b.reference_number AND a.theme < b.theme
+            WHERE a.theme IN ('syntirisi_zonon','miktes_zones','estegasmenes_zones')
+              AND b.theme IN ('syntirisi_zonon','miktes_zones','estegasmenes_zones')
+              AND a.source NOT LIKE 'call:%'"""
+    ).fetchone()[0]
+    ncall = kh.execute(
+        "SELECT COUNT(DISTINCT reference_number) FROM contract_work_themes"
+        " WHERE source LIKE 'call:%'").fetchone()[0]
+    kh.close()
+    assert two == 0
+    assert ncall == 43
+
+
+def test_deliverables_and_undocumented_calls(client):
+    """The 1-2-3 model (DATA_DECISIONS 2026-08-22): study 14 /
+    study_and_works 121 / works 110; the design-build clause is quoted;
+    the nine date-only ΤΑΙΠΕΔ calls appear in the trail unlinked."""
+    o = client.get("/api/antinero/overview").get_json()
+    assert o["deliverables"] == {"study": 14, "study_and_works": 121,
+                                 "works": 110}
+    d = client.get("/api/antinero/contract/23SYMV012972469").get_json()
+    assert d["deliverables"]["kind"] == "study_and_works"
+    assert "εκπονηθεί από τον Ανάδοχο" in d["deliverables"]["excerpt"]
+    rows = [t for t in d["timeline"] if t.get("undocumented")]
+    assert len(rows) == 1 and rows[0]["adam"] is None
+    assert rows[0]["d"] == "2023-05-22" and "ΤΑΙΠΕΔ" in rows[0]["title"]
+    kh = sqlite3.connect(DEFAULT_DB)
+    n = kh.execute("SELECT COUNT(*) FROM contract_deliverables").fetchone()[0]
+    kh.close()
+    assert n == 245
 
 
 def test_unit_flow_reconciles(client):

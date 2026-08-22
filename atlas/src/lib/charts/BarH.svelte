@@ -51,7 +51,15 @@
 		rows.map((r, i) => {
 			const bar = Math.max(0, trackW - RESERVE) * (r.value / maxV);
 			if ((labelW[i] ?? Infinity) + 14 <= bar) return 0;
-			if (barHeight >= 26 && (wordW[i] ?? Infinity) + 14 <= bar) return 1;
+			// two lines only if the whole label fits in two — the longest word
+			// fitting is necessary, not sufficient, and a label that needs a
+			// third line was being clipped with an ellipsis (user, 2026-08-22)
+			if (
+				barHeight >= 26 &&
+				(wordW[i] ?? Infinity) + 14 <= bar &&
+				(labelW[i] ?? Infinity) / 2 + 14 <= bar
+			)
+				return 1;
 			return 2;
 		})
 	);
@@ -132,6 +140,7 @@
 		display: flex;
 		align-items: center;
 		gap: 6px;
+		min-width: 0;
 	}
 	.irow .bar {
 		display: flex;
@@ -165,7 +174,11 @@
 	}
 	.off {
 		font-size: var(--fs-13);
-		white-space: nowrap;
+		/* a label too long for its bar sits beside it — it may wrap, but it
+		   must not push the value off the row (a category name is a whole
+		   sentence since the 2026-08-22 curation) */
+		min-width: 0;
+		line-height: 1.2;
 	}
 	.off a {
 		text-decoration: none;
@@ -206,5 +219,6 @@
 		font-size: var(--fs-13);
 		color: var(--ink-soft);
 		white-space: nowrap;
+		flex: none;
 	}
 </style>

@@ -127,6 +127,9 @@ export interface ContractDetail {
 	/** what the contract's own title says the works ARE — multi-label, with
 	 *  the verbatim clause each theme comes from; `cpv_notes` are codes that
 	 *  name work the title does not (a note, never a theme) */
+	/** study / works / study_and_works — the 1-2-3 model (2026-08-22);
+	 *  study_and_works quotes the design-build clause verbatim */
+	deliverables?: { kind: string; excerpt: string | null; source: string | null } | null;
 	work_themes?: {
 		themes: { key: string; el: string; en: string; excerpt: string }[];
 		cpv_notes: { cpv: string; key: string; el: string; en: string }[];
