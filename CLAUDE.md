@@ -249,19 +249,18 @@ refetching open contracts — prefer it for routine updates.
   contract pages show the category chip + a «Type of work» evidence
   block (verbatim title, provenance link to the parent version when
   inherited) via `queries_extra.contract_category`;
-  Σ stated net reconciles to the basis exactly (pinned). Atlas: **TYPES OF
-  WORKS** is ONE frame with THREE lenses (`?works=`, user 2026-08-22 after
-  six further drawings were tried and rejected — flow, bundles/UpSet,
-  bubble grid, matrix, pack, unit squares — all deleted): «main
-  category» BarH (€/count, English `label_en` — the catch-all reads
-  «General fire-prevention works — clearing, forest roads, firebreaks»;
-  the works its contracts name ride in the bar's HOVER, never as printed
-  sub-lines) / «works named» (the 14 themes counted in contracts +
-  «fire protection — no specific work named» 44; no €) / **«works ×
-  category»** (`WorksByCategory.svelte`: one ROW per work — the names are
-  long, so they must be row labels, which is what killed every
-  column-headed drawing — each bar split by the MAIN CATEGORY of the
-  contracts naming it, greys from the category ramp, counts only);
+  Σ stated net reconciles to the basis exactly (pinned). Atlas (final layout, user
+  2026-08-22, after six further drawings were tried and rejected — flow,
+  bundles/UpSet, bubble grid, matrix, pack, unit squares — all deleted):
+  **CONTRACT TYPE** is its own half-width frame beside CONTRACT SCOPE
+  (the category € bars, English `label_en`; the works its contracts name
+  ride in the bar's HOVER, never as printed sub-lines) and **TYPES OF
+  WORKS** has two lenses (`?works=named|split`): «works named» (the 14
+  themes counted in contracts + «no specific work named» 44; no €) /
+  **«works × category»** (`WorksByCategory.svelte`: one ROW per work —
+  the names are long, so they must be row labels, which is what killed
+  every column-headed drawing — each bar split by the MAIN CATEGORY of
+  the contracts naming it, greys from the category ramp, counts only);
   `antinero_themes` + `names` on the overview, pinned; CPV CODES list
   closes the front page; labels ship from `category_labels` /
   `work_theme_labels`, never hardcoded.
@@ -273,7 +272,11 @@ refetching open contracts — prefer it for routine updates.
   ΑΔΑΜ) → `details_loader` → `contract_deliverables`. Deliberately NOT the
   «Μελέτες» theme (it would flood 14 → ~115 — the clause is the post-2024
   template, 72/135 calls). Contract page SCOPE row prints it + the quoted
-  clause; overview ships the counts, pinned. **Nine contracts cite their
+  clause; overview ships the counts, pinned. **One scope wording on every
+  surface of both datasets** (user, same day): «study only / study & works
+  / works only»; the Anti-nero front page's CONTRACT SCOPE frame mirrors
+  the sponsored PROJECT SCOPE StackedShareBar (`#scope`, before TYPES OF
+  WORKS); the type taxonomies deliberately stay per-dataset. **Nine contracts cite their
   πρόσκληση by DATE ONLY (no ΑΔΑΜ; all ΤΑΙΠΕΔ-run, evidence quoted)** —
   curated `data/undocumented_calls.json` → `contract_timeline` merges an
   unlinked trail row per contract («cited by date only … no ΚΗΜΔΗΣ record»).

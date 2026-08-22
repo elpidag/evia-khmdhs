@@ -439,6 +439,8 @@ export interface AntineroOverview {
 		names?: { theme: string; label_en: string; label_el: string; n: number }[];
 	}[];
 	/** the works the contracts name — the multi-label themes, counted in contracts; the unspecified ones apart */
+	/** study / study_and_works / works — the 1-2-3 scope model (2026-08-22) */
+	deliverables?: { study?: number; study_and_works?: number; works?: number };
 	themes: {
 		themes: { theme: string; label_en: string; label_el: string; n: number }[];
 		/** the combination of works each title names, counted (the bundles) */

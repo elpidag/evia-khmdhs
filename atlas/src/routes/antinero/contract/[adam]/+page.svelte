@@ -359,7 +359,7 @@
 		return parts.join('; ');
 	});
 	/** «a, b and c» — a list a reader can say out loud. Items that contain
-	 *  «and» themselves («clearing of forests and forest land») get
+	 *  «and» themselves («clearing of forests and forested areas») get
 	 *  semicolons instead, or the sentence reads as one run-on. */
 	const list = (xs: string[]): string => {
 		if (xs.length <= 1) return xs[0] ?? '';
@@ -745,10 +745,10 @@
 		<dt>Scope</dt>
 		<dd>
 			{c.deliverables?.kind === 'study'
-				? 'study'
+				? 'study only'
 				: c.deliverables?.kind === 'study_and_works'
-					? 'study and works'
-					: 'works'}{#if c.deliverables?.kind === 'study_and_works'}<Hint
+					? 'study & works'
+					: 'works only'}{#if c.deliverables?.kind === 'study_and_works'}<Hint
 					text="Design-build: the contract includes the drafting of the studies by the contractor, and the execution of the works those studies define — the clause is quoted in the extracts below."
 				/>{/if}
 		</dd>

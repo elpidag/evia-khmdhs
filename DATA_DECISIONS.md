@@ -7022,3 +7022,61 @@ record exists to link», the «cited in this contract» chip — and the
 run-up call diamond draws at the cited date with «(no ΚΗΜΔΗΣ record)»
 on hover. The claim is made ONLY for these nine, each carrying its own
 evidence.
+
+## 2026-08-22 · One scope vocabulary across the datasets, and the CONTRACT SCOPE frame
+
+**Decision (user, approving proposals A and B of the type/scope
+comparison; C — the ΔΑΣΕ «Type» row — deliberately untouched, D pending):**
+the scope trio prints with ONE wording on every surface of both datasets —
+**«study only» / «study & works» / «works only»** (it was "execution of
+works / study & works / study" on the sponsored project page, "works /
+study and works / study" on the Anti-nero contract page, and the sponsored
+chart's wording, which won). Both Scope rows carry a ⓘ naming their
+evidence: the sponsored one the operative «Ορίζουμε … με σκοπό …»
+sentence, the Anti-nero one the design-build clause. The Anti-nero front
+page gains **CONTRACT SCOPE** — the sponsored PROJECT SCOPE frame's
+StackedShareBar in the same greyscale ramp (14 / 121 / 110 from
+`o.deliverables`, computed subtitle, the design-build finding), anchor
+`#scope` — so TYPE says what the work is and SCOPE says what the
+contractor was engaged to deliver, on both datasets, comparably. **Layout
+(user, same day):** the pairs mirror each other — sponsored PROJECT SCOPE
+| PROJECT TYPE side by side at equal halves (they were stacked), and
+Anti-nero CONTRACT SCOPE | **CONTRACT TYPE** side by side (the curated
+category € bars, pulled out of TYPES OF WORKS into their own half-width
+frame, keeping the `#categories` anchor); TYPES OF WORKS keeps the
+works-named chart (now the default lens, full width) and works × category
+(`?works=named|split`). BarH's value reserve widened 60→78 px so
+«357,59 M €» fits beside a full-width bar at half-page width. Round 2
+(user, same day): the sponsored PROJECT TYPE became the same BarH drawing
+as CONTRACT TYPE (counts, biggest first — the share bar kept only for the
+two SCOPE frames); CONTRACT TYPE gained a «stated net € / number of
+contracts» toggle (`?ct=eur|n`, sort follows the shown measure); the
+scope bars sit at 34 px beside the 30 px BarH rows, align with their
+titles (StackedShareBar gained the `edge-l` clamp so a tiny first
+segment's label pins to the left edge instead of overflowing), and inside
+the half-width pair the lightbulb note flows ABOVE the chart (the page's
+left margin is the neighbouring frame); CONTRACT SCOPE's finding moved
+from subtitle to bulb. Round 3 (user, same day): **ONE uniform gap
+site-wide between a frame's head and its chart** — ChartFrame's
+figcaption carries a single sp-4 margin and the per-element margins
+(title, subtitle, toolbar row) are zero, so every frame measures the
+same 16 px (verified across the whole front page); the pair charts
+share BarH's corners (StackedShareBar radius 10→2) and lettering
+(inside fs-12 / spill fs-13, the page face — the fit rule measures in
+the same letters); the sponsored SCOPE/TYPE pair wears the page's green
+and transparencies of it (#2d6a4f · 0.62 · 0.30, the palest segment's
+label in full-green ink via the new `labelColor`), PROJECT TYPE's bars
+the same green; both pairs' chart tops align (the share bar's badge
+headroom removed inside the pair). Rounds 4–5 (user, same day): bars at
+35 px, two-line names; CONTRACT TYPE and PROJECT TYPE values
+right-aligned table-style (`BarH valuesRight`); the two long category
+names shortened with an ⓘ carrying the trimmed tail (`BarH` rows take
+`hint`; rule: the text after a «:» or a trailing parenthetical — so
+«special forestry works» ⓘ and «reforestation and forest nurseries» ⓘ);
+StackedShareBar REWRITTEN to its final scope-bar form — plain numbers
+always visible above each segment (the hover pills are gone), every
+label on one line under the bar at its segment, edge labels pinned
+inside the frame — and the scope bar's top meets the SECOND type bar
+(the number line takes the first row's 41 px). The two type taxonomies stay their own (3-value
+sponsored, 8-category Anti-nero): the programmes buy different things and
+one vocabulary would be false comparability — SCOPE is the shared layer.

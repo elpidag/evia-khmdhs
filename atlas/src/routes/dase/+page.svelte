@@ -581,7 +581,7 @@
 	methodology="canonical-vat"
 >
 	<div class="rankw">
-		<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={30} />
+		<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={35} />
 	</div>
 </ChartFrame>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import BarH from '$lib/charts/BarH.svelte';
+	import StackedShareBar from '$lib/charts/StackedShareBar.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import SideNote from '$lib/ui/SideNote.svelte';
 	import { YEAR_GREYS, yearGrey } from '$lib/charts/yearColors';
@@ -243,12 +244,20 @@
 	// the TYPES OF WORKS lens, a URL param like the other frames' toggles —
 	// «category» / «named» and, under trial (2026-08-22), «flow» / «matrix» /
 	// «pack»
-	const WORKS_LENSES = ['category', 'split'] as const;
+	const WORKS_LENSES = ['named', 'split'] as const;
+	// CONTRACT TYPE measures: stated net € or number of contracts (?ct=)
+	const CT_LENSES = ['eur', 'n'] as const;
+	type CtLens = (typeof CT_LENSES)[number];
+	const ctLens = $derived<CtLens>(
+		(CT_LENSES as readonly string[]).includes(page.url.searchParams.get('ct') ?? '')
+			? (page.url.searchParams.get('ct') as CtLens)
+			: 'eur'
+	);
 	type WorksLens = (typeof WORKS_LENSES)[number];
 	const worksLens = $derived<WorksLens>(
 		(WORKS_LENSES as readonly string[]).includes(page.url.searchParams.get('works') ?? '')
 			? (page.url.searchParams.get('works') as WorksLens)
-			: 'category'
+			: 'named'
 	);
 	// works as ROWS, each split by the main category of the contracts naming
 	// it (user, 2026-08-22: the work names are long, so they must be labels)
@@ -302,12 +311,22 @@
 	// letter is dropped, so proper nouns («National Reforestation Plan») stay
 	const lowerRows = <T extends { label: string }>(rows: T[]): T[] =>
 		rows.map((r) => ({ ...r, label: r.label.charAt(0).toLowerCase() + r.label.slice(1) }));
+	// a category name's explanatory tail — after a «:», or a trailing
+	// parenthetical — moves into an i beside the short name (user, 2026-08-22)
+	const splitHint = (s: string): { label: string; hint?: string } => {
+		const colon = s.indexOf(':');
+		if (colon > 0)
+			return { label: s.slice(0, colon).trim(), hint: `including ${s.slice(colon + 1).trim()}` };
+		const paren = s.match(/^(.*\S)\s+\((.+)\)$/);
+		if (paren) return { label: paren[1], hint: paren[2] };
+		return { label: s };
+	};
 	const catRows = $derived(
 		[...o.categories]
-			.sort((a, b) => b.eur - a.eur)
+			.sort((a, b) => (ctLens === 'eur' ? b.eur - a.eur : b.n - a.n))
 			.map((c) => ({
 				label: c.label_en ?? c.label,
-				value: c.eur,
+				value: ctLens === 'eur' ? c.eur : c.n,
 				// the hover: the contract count and what this category's
 				// contracts NAME, from the themes layer
 				title:
@@ -565,7 +584,7 @@
 	     two datasets' rankings read alike; the bars stay black, this
 	     dataset's colour (user, 2026-08-20) -->
 	<div class="rankw">
-		<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={30} />
+		<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={35} />
 	</div>
 </ChartFrame>
 
@@ -816,31 +835,75 @@
 	     € or count, sums to the total, each bar saying which works its
 	     contracts name — / «works named» — the themes, counted in contracts,
 	     the unspecified ones as their own bar, no € -->
+	<div class="scopetype">
+		<ChartFrame
+			title="CONTRACT SCOPE"
+			insight={`${grInt(o.deliverables?.study_and_works ?? 0)} of ${grInt(
+				o.kpis.n_contracts
+			)} contracts are design-build — the contractor first drafts the studies, then executes the works they define.`}
+			caveat="What each contract was engaged to deliver, read from its own signed text or its call: «study & works» is the design-build clause («η εκπόνηση από τον ανάδοχο … μελετών»), quoted verbatim on each contract page; «study only» are the contracts whose object is the studies. The same trio, with the same wording, classifies the sponsored-works projects."
+			anchor="scope"
+			methodology="categories"
+		>
+			<div>
+				<StackedShareBar
+					height={34}
+					segments={[
+						{ value: o.deliverables?.study ?? 0, label: 'study only', color: '#b5b5b5', badge: 'outleft' },
+						{ value: o.deliverables?.study_and_works ?? 0, label: 'study & works', color: '#6c6c6c', badge: 'above' },
+						{ value: o.deliverables?.works ?? 0, label: 'works only', color: '#3d3d3d', badge: 'above' }
+					]}
+				/>
+			</div>
+		</ChartFrame>
+
+		<ChartFrame
+			title="CONTRACT TYPE"
+			insight={`Every in-scope contract carries ONE curated category, read from the project title inside its signed PDF (CPV codes only as tie-breaker), so the € bars sum to the programme’s stated-net total — «${topCat.label_en ?? topCat.label}» dominates with ${eurShort(topCat.eur)} across ${grInt(topCat.n)} contracts (${pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme). Hover a bar for the works its contracts actually name.`}
+			caveat="One category per contract, curated from the signed PDF’s descriptive project title, so the € bars sum to the programme’s stated-net total. The works the titles actually name are counted in TYPES OF WORKS below."
+			anchor="categories"
+			methodology="categories"
+		>
+			{#snippet controls()}
+				<SegmentToggle
+					param="ct"
+					fallback="eur"
+					options={[
+						{ value: 'eur', label: 'stated net €' },
+						{ value: 'n', label: 'number of contracts' }
+					]}
+				/>
+			{/snippet}
+			<BarH
+				rows={lowerRows(catRows).map((r) => ({ ...r, ...splitHint(r.label) }))}
+				color="#2b2b2b"
+				inside
+				barHeight={35}
+				fmt={ctLens === 'eur' ? eurShort : grInt}
+				valuesRight
+			/>
+		</ChartFrame>
+	</div>
+
 	<ChartFrame
 		title="TYPES OF WORKS"
 		insight={worksLens === 'split'
 			? `One row per work the signed titles name — the works are what the contracts say they do — and each row split by the MAIN CATEGORY of the contracts naming it: that is what the one-category-per-contract rule flattens, since a bundled title names several works. A contract appears on every row its title names, so the rows overlap; the contracts naming no specific work are the last row. Counts only — no price per work exists inside a bundled contract.`
-			: `Left, the money: every in-scope contract carries ONE curated category read from the project title inside its signed PDF (CPV codes only as tie-breaker), so the € bars sum to the programme’s stated-net total — «${topCat.label_en ?? topCat.label}» dominates with ${eurShort(topCat.eur)} across ${grInt(topCat.n)} contracts (${pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme). Right, what those contracts actually say they do: the works named in the same titles, counted in contracts — a contract counts under every work it names, so the bars overlap and carry no €, and ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work beyond «αντιπυρική προστασία». Hover a bar on either side for its counterpart on the other.`}
-		caveat={worksLens === 'split'
-			? `Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`
-			: `Categories: one per contract, curated from the signed PDF’s descriptive project title with the contract’s rarer CPV codes as tie-breaker, so the € bars sum to the programme’s stated-net total. Works: the ${grInt(o.themes.themes.length)} kinds named in the same titles — or, for a title that names none, in the call’s own description of the lot — verbatim clause kept per contract; a contract counts under every work it names, so those counts sum to more than the number of contracts and no € is attributed per work.`}
-		anchor="categories"
+			: `What the contracts say they do, read from the project title inside each signed PDF — or, where the title names nothing, from the call’s own description of the lot: one bar per kind of work, counted in contracts. A contract counts under every work it names, so the bars overlap and carry no € (the documents state no price per work inside a bundled contract); ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work anywhere and stand as their own bar.`}
+		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
+		anchor="works"
 		methodology="categories"
 	>
 		<div class="rankbar">
 			<SegmentToggle
 				param="works"
-				fallback="category"
+				fallback="named"
 				options={[
-					{ value: 'category', label: 'categories and works' },
+					{ value: 'named', label: 'works named' },
 					{ value: 'split', label: 'works × category' }
 				]}
 			/>
 		</div>
-		<!-- the bars as before (label inside, value right); the connection
-		     between the two lenses rides in the HOVER of each bar — the works a
-		     category's contracts name, the categories a work's contracts fall
-		     in — not in printed sub-lines (user, 2026-08-22: too much text) -->
 		{#if worksLens === 'split'}
 			<div class="catkey">
 				{#each [...o.categories].sort((a, b) => b.eur - a.eur) as c (c.key)}
@@ -849,19 +912,8 @@
 			</div>
 			<WorksByCategory rows={worksSplit} colorOf={(k) => catGrey.get(k) ?? '#9b9b9b'} />
 		{:else}
-			<!-- the two readings of the same contracts, side by side at half
-			     the width each (user, 2026-08-22): the money by category on
-			     the left, what the titles say the work IS on the right; the
-			     link between them rides in each bar's hover -->
-			<div class="workspair">
-				<div>
-					<h4>by main category <small>stated net €</small></h4>
-					<BarH rows={lowerRows(catRows)} color="#2b2b2b" inside barHeight={30} fmt={eurShort} />
-				</div>
-				<div>
-					<h4>works named <small>contracts naming it</small></h4>
-					<BarH rows={lowerRows(themeRows)} color="#2b2b2b" inside barHeight={30} fmt={grInt} />
-				</div>
+			<div class="rankw">
+				<BarH rows={lowerRows(themeRows)} color="#2b2b2b" inside barHeight={35} fmt={grInt} />
 			</div>
 		{/if}
 	</ChartFrame>
@@ -1268,28 +1320,45 @@
 		margin-bottom: var(--sp-2);
 	}
 	/* the category key of the works × category lenses */
-	/* the two lenses of TYPES OF WORKS, side by side (user, 2026-08-22) */
-	.workspair {
+	/* CONTRACT SCOPE | CONTRACT TYPE side by side, equal halves (user,
+	   2026-08-22), mirroring the sponsored PROJECT SCOPE | PROJECT TYPE */
+	.scopetype {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: var(--sp-6);
+		gap: var(--sp-7, 2.5rem);
+		align-items: start;
 	}
 	@media (max-width: 900px) {
-		.workspair {
+		.scopetype {
 			grid-template-columns: 1fr;
-			gap: var(--sp-5);
 		}
 	}
-	.workspair h4 {
-		margin: 0 0 var(--sp-3);
-		font-size: var(--fs-13);
-		font-weight: 700;
-		color: var(--ink);
+	/* inside the half-width pair the page's left margin is another frame:
+	   the lightbulb note flows ABOVE the chart instead (user, 2026-08-22 —
+	   it overlapped the neighbour's graph) */
+	/* the number line takes the height of the neighbour's FIRST bar row
+	   (35px bar + 6px gap), so the scope bar's top meets the SECOND type
+	   bar (user, 2026-08-22) */
+	.scopetype :global(.nums) {
+		height: 41px;
 	}
-	.workspair h4 small {
-		font-weight: 400;
-		font-size: var(--fs-12);
-		color: var(--ink-soft);
+	/* the numbers sit on the SAME line as the neighbour's first-row value
+	   (user, 2026-08-22): centred on the 35px first bar row */
+	.scopetype :global(.nums span) {
+		bottom: 13.5px;
+	}
+	/* both title rows the same height, toggle or not, so the two charts
+	   start at the same y (user, 2026-08-22) */
+	.scopetype :global(.titlerow) {
+		display: flex;
+		align-items: center;
+		min-height: 2.25rem;
+	}
+	.scopetype :global(.insight) {
+		position: static;
+		width: auto;
+		max-width: 40rem;
+		margin-bottom: var(--sp-4);
 	}
 	.catkey {
 		display: flex;

@@ -52,7 +52,7 @@ class Theme:
 # abbreviate («ΚΑΘΑΡΙΣΜΟ», «ΚΑΘΑΡΙΣΜΩΝ», «ΔΑΣΟΔΡΟΜΩΝ»).
 THEMES: tuple[Theme, ...] = (
     Theme("katharismoi", "Καθαρισμοί δασών & δασικών εκτάσεων",
-          "Clearing of forests and forest land",
+          "Clearing of forests and forested areas",
           r"ΚΑΘΑΡΙΣΜ"),
     # the road mention must be GOVERNED by a maintenance/improvement verb —
     # «δημιουργία μικτών ζωνών ΣΕ δασικούς δρόμους» names the location of

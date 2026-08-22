@@ -108,7 +108,17 @@
 	}
 	.finding {
 		font-size: var(--fs-24);
-		margin-bottom: var(--sp-1);
+		margin-bottom: 0;
+	}
+	/* ONE uniform gap between the head (title, or subtitle when there is
+	   one) and whatever follows — chart, toolbar or legend (user,
+	   2026-08-22: the old per-element margins left sometimes too much
+	   room, sometimes too little) */
+	figcaption {
+		margin-bottom: var(--sp-4);
+	}
+	figcaption:not(:has(h2)):not(:has(p)) {
+		margin-bottom: 0;
 	}
 	/* a control on the title line sits at its right end */
 	.titlerow.withcontrols {
@@ -116,8 +126,6 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--sp-4);
-		/* room under the title line before the chart (no subtitle here) */
-		margin-bottom: var(--sp-4);
 	}
 	.controls {
 		flex: none;
@@ -137,7 +145,8 @@
 	.topic {
 		color: var(--ink-soft);
 		font-size: var(--fs-14);
-		margin-bottom: var(--sp-4);
+		margin-top: var(--sp-1);
+		margin-bottom: 0;
 	}
 	.body {
 		margin-bottom: var(--sp-2);

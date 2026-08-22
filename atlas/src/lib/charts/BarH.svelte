@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { eurShort } from '$lib/transforms/format';
+	import Hint from '$lib/ui/Hint.svelte';
 
 	export interface BarRow {
 		label: string;
@@ -8,6 +9,9 @@
 		sublabel?: string;
 		/** hover text for the row (inside layout); defaults to the label */
 		title?: string;
+		/** an i beside the label carrying the name's trimmed tail (user,
+		 *  2026-08-22: «special forestry works» + the works in the i) */
+		hint?: string;
 	}
 
 	interface Props {
@@ -25,6 +29,9 @@
 		inside?: boolean;
 		/** bar thickness in px */
 		barHeight?: number;
+		/** align every value to the row's right edge, table-style (user,
+		 *  2026-08-22 — the CONTRACT TYPE amounts) */
+		valuesRight?: boolean;
 	}
 	let {
 		rows,
@@ -34,7 +41,8 @@
 		highlight,
 		colorOf,
 		inside = false,
-		barHeight = 14
+		barHeight = 14,
+		valuesRight = false
 	}: Props = $props();
 
 	const maxV = $derived(max ?? Math.max(...rows.map((r) => r.value), 1));
@@ -43,14 +51,15 @@
 	let trackW = $state(0);
 	let labelW = $state<number[]>([]);
 	let wordW = $state<number[]>([]);
-	const RESERVE = 60; // px kept free at the row's end for the value
+	const RESERVE = 78; // px kept free at the row's end for the value («357,59 M €» must fit at half-page width)
 	const longestWord = (s: string) =>
 		s.split(' ').reduce((a, b) => (b.length > a.length ? b : a), '');
 	/** 0 = one line · 1 = wrapped to two lines (tall bars) · 2 = outside */
 	const tier = $derived(
 		rows.map((r, i) => {
 			const bar = Math.max(0, trackW - RESERVE) * (r.value / maxV);
-			if ((labelW[i] ?? Infinity) + 14 <= bar) return 0;
+			const extra = r.hint ? 20 : 0;
+			if ((labelW[i] ?? Infinity) + extra + 14 <= bar) return 0;
 			// two lines only if the whole label fits in two — the longest word
 			// fitting is necessary, not sufficient, and a label that needs a
 			// third line was being clipped with an ellipsis (user, 2026-08-22)
@@ -86,14 +95,20 @@
 						<span class="on" class:two={tier[i] === 1} title={r.title ?? r.label}>
 							{#if r.href}<a href={r.href}>{r.label}</a>{:else}{r.label}{/if}
 						</span>
+						<!-- the i sits BESIDE the clipped label span, inside the
+						     bar, so its popup card is not cut off (user,
+						     2026-08-22: same popup as the outside i) -->
+						{#if r.hint && tier[i] === 0}<span class="onhint"><Hint text={r.hint} /></span>{/if}
 					{/if}
 				</div>
 				{#if tier[i] === 2}
 					<span class="off">
-						{#if r.href}<a href={r.href}>{r.label}</a>{:else}{r.label}{/if}
+						{#if r.href}<a href={r.href}>{r.label}</a>{:else}{r.label}{/if}{#if r.hint}<Hint
+								text={r.hint}
+							/>{/if}
 					</span>
 				{/if}
-				<span class="value">{fmt(r.value)}</span>
+				<span class="value" class:right={valuesRight}>{fmt(r.value)}</span>
 			</div>
 		{/each}
 	</div>
@@ -131,7 +146,8 @@
 		height: 0;
 		overflow: hidden;
 		white-space: nowrap;
-		font-size: var(--fs-12);
+		/* must equal .on — the fit rule measures in the rendered letters */
+		font-size: var(--fs-13);
 	}
 	.measure span {
 		display: inline-block;
@@ -149,7 +165,7 @@
 	}
 	.on {
 		color: #fff;
-		font-size: var(--fs-12);
+		font-size: var(--fs-13);
 		padding: 0 6px;
 		white-space: nowrap;
 		overflow: hidden;
@@ -220,5 +236,23 @@
 		color: var(--ink-soft);
 		white-space: nowrap;
 		flex: none;
+	}
+	/* table-style: every value at the row's right edge */
+	.value.right {
+		margin-left: auto;
+	}
+	/* the i inside a dark bar: transparent circle, white ring and letter
+	   (the component's paper background read as a solid blob); it lives
+	   beside the label span, outside its overflow clip, so the popup card
+	   opens whole */
+	.onhint {
+		flex: none;
+		margin-right: 6px;
+		line-height: 0;
+	}
+	.onhint :global(.hint button) {
+		background: transparent;
+		color: #fff;
+		border-color: #fff;
 	}
 </style>

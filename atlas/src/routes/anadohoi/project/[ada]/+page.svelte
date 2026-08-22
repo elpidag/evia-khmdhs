@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
+	import Hint from '$lib/ui/Hint.svelte';
 	import ActTimelineBar from '$lib/detail/ActTimelineBar.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
@@ -20,10 +21,12 @@
 		apokatastasi: 'restoration',
 		both: 'restoration & reforestation'
 	};
+	// ONE wording for the scope trio across both datasets (user,
+	// 2026-08-22): the same values print on the Anti-nero contract page
 	const DELIVERABLES: Record<string, string> = {
-		works: 'execution of works',
+		works: 'works only',
 		study_and_works: 'study & works',
-		study: 'study'
+		study: 'study only'
 	};
 	const STATUS: Record<string, string> = {
 		completed: 'completed',
@@ -338,7 +341,11 @@
 			<dt>Type</dt>
 			<dd>{WORKS[p.works_kind ?? ''] ?? '—'}</dd>
 			<dt>Scope</dt>
-			<dd>{DELIVERABLES[p.deliverables ?? ''] ?? '—'}</dd>
+			<dd>
+				{DELIVERABLES[p.deliverables ?? ''] ?? '—'}<Hint
+					text="What the appointment covers, read from the designation act's operative «Ορίζουμε … με σκοπό …» sentence — the quoted evidence is in the extracts below."
+				/>
+			</dd>
 			<dt class="gap"></dt>
 			<dd class="gap"></dd>
 			<dt>Budget</dt>

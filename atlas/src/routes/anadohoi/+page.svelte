@@ -165,11 +165,12 @@
 
 	// deliverables / works-kind waffles: same folded population as the
 	// status waffle (superseded acts folded into their successors)
-	// greyscale ramp per the approved mock; light → dark, small first
+	// the page's green and transparencies of it (user, 2026-08-22);
+	// light → dark, small first
 	const DELIV_META: [string, string, string][] = [
-		['study', 'study only', '#b5b5b5'],
-		['study_and_works', 'study & works', '#6c6c6c'],
-		['works', 'works only', '#3d3d3d']
+		['study', 'study only', 'rgba(45, 106, 79, 0.3)'],
+		['study_and_works', 'study & works', 'rgba(45, 106, 79, 0.62)'],
+		['works', 'works only', '#2d6a4f']
 	];
 	const KIND_META: [string, string, string][] = [
 		['anadasosi', 'reforestation', '#b5b5b5'],
@@ -641,7 +642,7 @@
 		methodology="anadohoi"
 	>
 		<div class="rankw">
-			<BarH rows={sponsorRows} color="#52b788" inside barHeight={30} />
+			<BarH rows={sponsorRows} color="#52b788" inside barHeight={35} />
 		</div>
 		{#if topRaise}
 			<p class="muted note-inline">
@@ -655,28 +656,28 @@
 <div class="scopetype">
 <ChartFrame title="PROJECT SCOPE" titleColor="#000" anchor="deliverables" methodology="anadohoi">
 	<StackedShareBar
+		height={34}
 		segments={delivGroups.map((g) => ({
 			label: g.label,
 			value: g.count,
 			color: g.color,
+			// the palest segment's spill label prints in the full green
+			labelColor: g.key === 'study' ? '#2d6a4f' : undefined,
 			badge: g.key === 'study' ? ('outleft' as const) : ('above' as const)
 		}))}
 	/>
 </ChartFrame>
 
 <ChartFrame title="PROJECT TYPE" titleColor="#000" anchor="works-kind" methodology="anadohoi">
-	<StackedShareBar
-		segments={kindGroups.map((g) => ({
-			label: g.label,
-			value: g.count,
-			color: g.color,
-			badge:
-				g.key === 'anadasosi'
-					? ('outleft' as const)
-					: g.key === ''
-						? ('outright' as const)
-						: ('above' as const)
-		}))}
+	<!-- the same drawing as the Anti-nero CONTRACT TYPE (user, 2026-08-22):
+	     one bar per kind, counted in projects, biggest first -->
+	<BarH
+		rows={[...kindGroups].sort((a, b) => b.count - a.count).map((g) => ({ label: g.label, value: g.count }))}
+		color="#2d6a4f"
+		inside
+		barHeight={35}
+		fmt={grInt}
+		valuesRight
 	/>
 </ChartFrame>
 </div>
@@ -1007,22 +1008,34 @@
 			max-width: none;
 		}
 	}
-	/* the two share bars sit close together */
-	.scopetype :global(.frame:first-child) {
-		margin-bottom: var(--sp-8, 2rem);
+	/* PROJECT SCOPE | PROJECT TYPE side by side, equal halves (user,
+	   2026-08-22); one column again on narrow screens */
+	.scopetype {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--sp-7, 2.5rem);
+		align-items: start;
 	}
-	/* the bars match the ranking's 3/4 width — text room on the right */
 	.scopetype :global(.ssbwrap) {
-		flex: 0 0 75%;
-		/* titles hug their bars; hover badges may overflow upward */
-		padding-top: 2px;
+		flex: 1 1 auto;
+	}
+	/* the number line takes the height of the neighbour's FIRST bar row
+	   (35px bar + 6px gap), so the scope bar's top meets the SECOND type
+	   bar (user, 2026-08-22) */
+	.scopetype :global(.nums) {
+		height: 41px;
+	}
+	/* the numbers sit on the SAME line as the neighbour's first-row value
+	   (user, 2026-08-22): centred on the 35px first bar row */
+	.scopetype :global(.nums span) {
+		bottom: 13.5px;
 	}
 	.scopetype :global(.frame .finding) {
 		margin-bottom: 2px;
 	}
 	@media (max-width: 900px) {
-		.scopetype :global(.ssbwrap) {
-			flex: 1 1 auto;
+		.scopetype {
+			grid-template-columns: 1fr;
 		}
 	}
 	/* sponsor → executing co-op linkage list */

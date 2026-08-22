@@ -1,31 +1,37 @@
 <script lang="ts">
-	/** One 100%-stacked horizontal bar. Category labels sit inside their
-	 *  segments (white, Futura 100 GRK Book); each count pops out as a
-	 *  black circular badge straddling the bar's top edge over its
-	 *  segment's centre. A segment too narrow for its label lists it
-	 *  after the bar in the segment's colour. */
 	import { grInt } from '$lib/transforms/format';
 
+	/**
+	 * ONE horizontal bar whose segments share a total — the SCOPE charts
+	 * (Anti-nero CONTRACT SCOPE, sponsored PROJECT SCOPE), which is all
+	 * this component draws since PROJECT TYPE became a BarH (2026-08-22).
+	 *
+	 * Redesigned per the user the same day: the counts print as PLAIN
+	 * NUMBERS always visible above each segment (the hover pills are
+	 * gone), and EVERY label sits on one line under the bar at its
+	 * segment's position — «study only», «study & works» and «works only»
+	 * read together. Edge labels pin to the frame so nothing overflows.
+	 */
 	export interface ShareSeg {
 		label: string;
 		value: number;
 		color: string;
-		/** hover-badge spot: floating slightly above the bar (default), or
-		 *  outside the bar at its vertical middle, left or right of it */
+		/** label ink where the segment colour is too pale to read;
+		 *  defaults to the segment colour */
+		labelColor?: string;
+		/** kept for call-site compatibility; the numbers are always shown */
 		badge?: 'above' | 'outleft' | 'outright';
 	}
 	interface Props {
 		segments: ShareSeg[];
 		/** bar height in px */
 		height?: number;
-		/** badge/tooltip value formatter (default: Greek-formatted integer) */
+		/** number formatter (default: Greek-formatted integer) */
 		fmt?: (v: number) => string;
-		/** list labels too narrow to sit inside their segment underneath the
-		 *  bar (default). Turn OFF when the chart carries its own legend —
-		 *  with many small segments the spill labels would overlap. */
+		/** kept for call-site compatibility; labels always show below */
 		outside?: boolean;
 	}
-	let { segments, height = 50, fmt = grInt, outside: showOutside = true }: Props = $props();
+	let { segments, height = 34, fmt = grInt }: Props = $props();
 
 	const segs = $derived(segments.filter((s) => s.value > 0));
 	const total = $derived(Math.max(1, segs.reduce((s, x) => s + x.value, 0)));
@@ -38,87 +44,46 @@
 			return out;
 		});
 	});
-
-	// fit rule: the label goes inside when the segment can hold its
-	// longest word (multi-word labels may wrap onto two lines)
-	let barW = $state(0);
-	let wordW = $state<number[]>([]);
-	const longestWord = (s: string) =>
-		s.split(' ').reduce((a, b) => (b.length > a.length ? b : a), '');
-	const fits = $derived(
-		segs.map((s, i) => {
-			const px = (barW * s.value) / total;
-			return (wordW[i] ?? Infinity) + 12 <= px;
-		})
-	);
-	const outside = $derived(placed.filter((_, i) => !fits[i]));
-	// count badges show on hover only, at their fixed spots
-	let hot = $state<number | null>(null);
 </script>
 
 <div class="row">
 	<div class="ssbwrap">
-		<div class="ssb" bind:clientWidth={barW} style:height={`${height}px`}>
-			<div class="measure" aria-hidden="true">
-				{#each segs as s, i (s.label)}
-					<span bind:clientWidth={wordW[i]}>{longestWord(s.label)}</span>
-				{/each}
-			</div>
-			{#each placed as p, i (p.s.label)}
-				<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<!-- the numbers: plain, always on, above their segments -->
+		<div class="nums" aria-hidden="true">
+			{#each placed as p (p.s.label)}
+				{#if p.center < 3}
+					<span class="edge-l">{fmt(p.s.value)}</span>
+				{:else if p.center > 97}
+					<span class="edge-r">{fmt(p.s.value)}</span>
+				{:else}
+					<span class="mid" style:left={`${p.center}%`}>{fmt(p.s.value)}</span>
+				{/if}
+			{/each}
+		</div>
+		<div class="ssb" style:height={`${height}px`}>
+			{#each placed as p (p.s.label)}
 				<div
 					class="seg"
 					style:width={`${p.w}%`}
 					style:background={p.s.color}
 					title={`${p.s.label}: ${fmt(p.s.value)}`}
-					onmouseenter={() => (hot = i)}
-					onmouseleave={() => (hot = null)}
-				>
-					{#if fits[i]}<span class="lab">{p.s.label}</span>{/if}
-				</div>
+				></div>
 			{/each}
 		</div>
-		<div class="badges" aria-hidden="true">
-			{#each placed as p, i (p.s.label)}
-				{#if p.s.badge === 'outleft'}
-					<span
-						class="badge"
-						class:show={hot === i}
-						style:left={`-19px`}
-						style:top={`${2 + height / 2 - 13}px`}>{fmt(p.s.value)}</span
-					>
-				{:else if p.s.badge === 'outright'}
-					<span
-						class="badge"
-						class:show={hot === i}
-						style:left={`calc(100% + 19px)`}
-						style:top={`${2 + height / 2 - 13}px`}>{fmt(p.s.value)}</span
-					>
+		<!-- every label on ONE line under the bar, at its segment -->
+		<div class="out">
+			{#each placed as p (p.s.label)}
+				{#if p.center > 92}
+					<span class="edge-r" style:color={p.s.labelColor ?? p.s.color}>{p.s.label}</span>
+				{:else if p.center < 8}
+					<span class="edge-l" style:color={p.s.labelColor ?? p.s.color}>{p.s.label}</span>
 				{:else}
-					<span
-						class="badge"
-						class:show={hot === i}
-						style:left={`${p.center}%`}
-						style:top={`-25px`}>{fmt(p.s.value)}</span
+					<span class="mid" style:left={`${p.center}%`} style:color={p.s.labelColor ?? p.s.color}
+						>{p.s.label}</span
 					>
 				{/if}
 			{/each}
 		</div>
-		{#if showOutside && outside.length}
-			<div class="out">
-				{#each outside as p (p.s.label)}
-					{#if p.center > 92}
-						<span class="edge-r" style:color={p.s.color}>{p.s.label}</span>
-					{:else}
-						<span
-							style:left={`${p.center}%`}
-							style:color={p.s.color}
-							class="mid">{p.s.label}</span
-						>
-					{/if}
-				{/each}
-			</div>
-		{/if}
 	</div>
 </div>
 
@@ -132,74 +97,30 @@
 		position: relative;
 		flex: 1;
 		min-width: 0;
-		/* headroom for the badges straddling the top edge */
-		padding-top: 15px;
+	}
+	/* the number line above the bar; pages may give it extra height to
+	   align the bar with a neighbouring chart's rows */
+	.nums {
+		position: relative;
+		height: 20px;
+	}
+	.nums span {
+		position: absolute;
+		bottom: 3px;
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
 	}
 	.ssb {
 		display: flex;
-		border-radius: 10px;
+		border-radius: 2px; /* matches BarH — the pair charts share corners */
 		overflow: hidden;
-	}
-	.measure {
-		position: absolute;
-		visibility: hidden;
-		height: 0;
-		overflow: hidden;
-		white-space: nowrap;
-		font-family: 'futura-100-greek-book', 'futura-100-greek', 'Sofia Sans', sans-serif;
-		font-size: var(--fs-16);
-	}
-	.measure span {
-		display: inline-block;
 	}
 	.seg {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0 9px;
-		overflow: hidden;
-		text-align: center;
+		display: block;
+		height: 100%;
 	}
-	.lab,
-	.out span {
-		font-family: 'futura-100-greek-book', 'futura-100-greek', 'Sofia Sans', sans-serif;
-		font-weight: 400;
-		font-size: var(--fs-16);
-		line-height: 1.12;
-	}
-	.lab {
-		color: #fff;
-	}
-	.badges {
-		position: absolute;
-		inset: 0;
-		pointer-events: none;
-	}
-	.badge {
-		position: absolute;
-		transform: translateX(-50%);
-		/* circle for short counts, stretching into a pill for longer
-		   values (€ shorts, 4-digit counts) */
-		min-width: 26px;
-		width: max-content;
-		padding: 0 6px;
-		height: 26px;
-		border-radius: 13px;
-		background: #000;
-		color: #fff;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-family: 'futura-100-greek', 'futura-100-greek-book', 'Sofia Sans', sans-serif;
-		font-size: var(--fs-13);
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
-		opacity: 0;
-		transition: opacity 0.12s;
-	}
-	.badge.show {
-		opacity: 1;
-	}
-	/* labels that don't fit sit BELOW the bar, near their segment */
 	.out {
 		position: relative;
 		height: 1.5em;
@@ -207,13 +128,21 @@
 	}
 	.out span {
 		position: absolute;
-		top: 0;
+		font-weight: 400;
+		font-size: var(--fs-13);
+		line-height: 1.12;
 		white-space: nowrap;
 	}
+	.nums span.mid,
 	.out span.mid {
 		transform: translateX(-50%);
 	}
+	.nums span.edge-r,
 	.out span.edge-r {
 		right: 0;
+	}
+	.nums span.edge-l,
+	.out span.edge-l {
+		left: 0;
 	}
 </style>
