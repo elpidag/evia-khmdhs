@@ -1176,6 +1176,19 @@ def antinero_network(kh: sqlite3.Connection) -> dict:
                  ON dl.reference_number = k.reference_number
          ORDER BY k.total_cost_without_vat DESC""").fetchall()
     nodes = [dict(r) for r in rows]
+    # the works each contract NAMES (work-theme layer, multi-label) ride
+    # on the node as `wk`, so TYPES OF WORKS can group the same dots by
+    # work and colour them by category (user, 2026-08-22) — 380 links,
+    # a node naming none keeps an empty list
+    wk_map: dict[str, list] = {}
+    for ref, theme in kh.execute(
+        """SELECT t.reference_number, t.theme FROM contract_work_themes t
+           JOIN contract_scope s ON s.reference_number = t.reference_number
+                                AND s.in_scope = 1
+           ORDER BY t.reference_number, t.seq"""):
+        wk_map.setdefault(ref, []).append(theme)
+    for n in nodes:
+        n["wk"] = wk_map.get(n["ref"], [])
     # the nine ΤΑΙΠΕΔ procurements whose πρόσκληση is cited by DATE ONLY
     # (undocumented_calls.json, DATA_DECISIONS 2026-08-22): the chart can
     # now group their lots — the 04.03.2022 call produced three of our

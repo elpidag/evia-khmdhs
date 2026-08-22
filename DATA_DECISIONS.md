@@ -7266,3 +7266,32 @@ TYPE. Cluster counts verified against the DB — dasotexnika 154 /
 miktes_zones 33 / arxaiologikoi 16 / meletes 14 / antidiavrotika 13 /
 anadasoseis 8 / ylotomies 6 / ydatodexamenes 1 (CLAUDE.md's 2026-08-14
 table said 17/12 — stale, corrected).
+
+## 2026-08-22 · TYPES OF WORKS: the dots regroup by the WORKS, coloured by category
+
+(user round) The grouped-dots diagram was meant for the WORKS NAMED, not
+the categories — and the user asked for an interactive form CONNECTING
+the 8 categories to the works. One diagram does both
+(`WorkDots.svelte`, replacing BOTH the day-old «by main category» lens
+and the works-named bars; `CategoryDots.svelte` deleted):
+- one equal dot per contract under EVERY work its signed title (or call)
+  names — 14 work clusters sorted by count, «no specific work named»
+  (44) always last, phyllotaxis discs greedy-wrapped into rows,
+  count + name under each;
+- each dot COLOURED by its contract's curated main category
+  (`catColors.ts`, the palette the PROCUREMENT TIMELINE type lens uses)
+  — the colour composition of a cluster IS the category↔work bridge
+  (mixed-firebreak creation solid black, clearing/roads/firebreak
+  maintenance near-pure grey, the reforestation cluster visibly split
+  between the reforestation and logging categories);
+- interactive both ways: hovering a dot lights the SAME contract in
+  every cluster it appears in (card: ΑΔΑΜ · category · names N works ·
+  €, click → contract page); hovering a category chip in the key (MAP
+  legend dress) lights that category across all clusters.
+The network payload's nodes now carry `wk` (the work themes each
+contract names) — 380 links / 44 empty pinned in the real-DB network
+test. The lens toggle is back to «works named» (default, the dots) /
+«works × category» (the rows stay as the accessible view).
+Also: the fire-season count the deleted lede carried — «120 of 245
+signed inside a fire season» — now lives in the frame's lightbulb,
+computed (`network.fire_season.n_contracts` of `stats.n_contracts`).

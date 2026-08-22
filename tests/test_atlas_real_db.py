@@ -322,6 +322,17 @@ def test_network_pins(client):
     assert all(n["eur"] is not None for n in net["nodes"])
     assert all(re.fullmatch(r"\d{4}-\d\d-\d\d", n["d"] or "") for n in net["nodes"])
     # the calls the chart names are ΚΗΜΔΗΣ πρόσκληση ΑΔΑΜ — plus the four
+    # the works ride on the nodes (TYPES OF WORKS dots, 2026-08-22):
+    # 380 theme links over 201 contracts, 44 naming none — the layer's
+    # own pinned numbers
+    links = sum(len(n["wk"]) for n in net["nodes"])
+    assert links == 380
+    assert sum(1 for n in net["nodes"] if not n["wk"]) == 44
+    assert {t for n in net["nodes"] for t in n["wk"]} <= {
+        "katharismoi", "odiko_diktyo", "syntirisi_zonon", "miktes_zones",
+        "estegasmenes_zones", "psiles_zones", "ypoleimmata", "ylotomies",
+        "dasokomika", "nero", "anadasoseis", "antidiavrotika", "meletes",
+        "arxaiologikoi"}
     # date ids of the ΤΑΙΠΕΔ calls, curated with verbatim evidence
     calls = {n["call"] for n in net["nodes"] if n["call"]}
     assert len(calls) == 138

@@ -37,6 +37,8 @@ export interface NetNode {
 	/** deliverables kind — works / study_and_works / study — the colour
 	 *  since 2026-08-22 (phases are funding envelopes and say little) */
 	dk?: string | null;
+	/** the work themes the contract's own title/call names (multi-label) */
+	wk?: string[];
 	/** the call is known by DATE ONLY (ΤΑΙΠΕΔ, no ΚΗΜΔΗΣ record) */
 	udc?: boolean;
 	/** signature date, ISO — the timeline arrangement's x */

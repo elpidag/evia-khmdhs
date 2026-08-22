@@ -11,7 +11,7 @@
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow from '$lib/charts/KindFlow.svelte';
 	import WorksByCategory from '$lib/charts/WorksByCategory.svelte';
-	import CategoryDots from '$lib/charts/CategoryDots.svelte';
+	import WorkDots from '$lib/charts/WorkDots.svelte';
 	import { unitEn } from '$lib/transforms/names';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
@@ -96,13 +96,13 @@
 		if (netMode === 'type')
 			return {
 				title: 'PROCUREMENT TIMELINE',
-				subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day. The colour is the contract's curated TYPE: the special forestry works are the grey mass, and the specialised strands — mixed firebreaks, reforestation, flood protection, archaeological sites — arrive in campaigns.`,
+				subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season, the shaded stripes. The colour is the contract's curated TYPE: the special forestry works are the grey mass, and the specialised strands — mixed firebreaks, reforestation, flood protection, archaeological sites — arrive in campaigns.`,
 				caveat:
 					'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
 			};
 		return {
 			title: 'PROCUREMENT TIMELINE',
-			subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day. The colour is the contract's SCOPE: the 2022 era bought works only, the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
+			subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season, the shaded stripes. The colour is the contract's SCOPE: the 2022 era bought works only, the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
 			caveat:
 				'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
 		};
@@ -974,9 +974,7 @@
 		title="TYPES OF WORKS"
 		insight={worksLens === 'split'
 			? `One row per work the signed titles name — the works are what the contracts say they do — and each row split by the MAIN CATEGORY of the contracts naming it: that is what the one-category-per-contract rule flattens, since a bundled title names several works. A contract appears on every row its title names, so the rows overlap; the contracts naming no specific work are the last row. Counts only — no price per work exists inside a bundled contract.`
-			: worksLens === 'named'
-				? `What the contracts say they do, read from the project title inside each signed PDF — or, where the title names nothing, from the call’s own description of the lot: one bar per kind of work, counted in contracts. A contract counts under every work it names, so the bars overlap and carry no € (the documents state no price per work inside a bundled contract); ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work anywhere and stand as their own bar.`
-				: `One equal dot per contract — ${grInt(network?.nodes.length ?? 0)} in all — grouped by its curated main category, the one each signed PDF’s project title assigns. The dots are equal on purpose: this view counts contracts, and the money already stands in the CONTRACT TYPE bars above. Click a dot for its contract.`}
+			: `One equal dot per contract under EVERY work its signed title names — read from the project title inside each PDF, or from the call’s own description where the title names nothing — coloured by the contract’s curated main category: the colours are the bridge between the ${grInt(o.categories.length)} categories and the works. A contract naming several works appears in each of those clusters, and hovering any of its dots lights all of them; hovering a category in the key lights that category everywhere; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work anywhere and stand as the last cluster. Counts only — no price per work exists inside a bundled contract.`}
 		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
 		anchor="works"
 		methodology="categories"
@@ -984,9 +982,8 @@
 		<div class="rankbar">
 			<SegmentToggle
 				param="works"
-				fallback="category"
+				fallback="named"
 				options={[
-					{ value: 'category', label: 'by main category' },
 					{ value: 'named', label: 'works named' },
 					{ value: 'split', label: 'works × category' }
 				]}
@@ -999,14 +996,14 @@
 				{/each}
 			</div>
 			<WorksByCategory rows={worksSplit} colorOf={(k) => catGrey.get(k) ?? '#9b9b9b'} />
-		{:else if worksLens === 'named'}
-			<div class="rankw">
-				<BarH rows={lowerRows(themeRows)} color="#2b2b2b" inside barHeight={35} fmt={grInt} />
-			</div>
 		{:else if network}
-			<CategoryDots
+			<WorkDots
 				nodes={network.nodes}
-				labels={Object.fromEntries(o.categories.map((c) => [c.key, catShort.get(c.key) ?? c.key]))}
+				themes={[...o.themes.themes]
+					.sort((a, b) => b.n - a.n)
+					.map((w) => ({ theme: w.theme, label: w.label_en }))}
+				catLabels={Object.fromEntries(o.categories.map((c) => [c.key, catShort.get(c.key) ?? c.key]))}
+				noneLabel="no specific work named"
 			/>
 		{/if}
 	</ChartFrame>

@@ -256,14 +256,17 @@ refetching open contracts — prefer it for routine updates.
   **CONTRACT TYPE** is its own half-width frame beside CONTRACT SCOPE
   (the category € bars, English `label_en`; the works its contracts name
   ride in the bar's HOVER, never as printed sub-lines) and **TYPES OF
-  WORKS** has three lenses (`?works=category|named|split`), default
-  **«by main category»** (user, 2026-08-22, the Flourish
-  «Company ownership» form: `CategoryDots.svelte` — ONE EQUAL dot per
-  contract in phyllotaxis discs bottom-aligned per category, count+name
-  under each, colours = `charts/catColors.ts` CAT_COLORS shared with
-  the PROCUREMENT TIMELINE type lens; counts only, € lives in CONTRACT
-  TYPE) / «works named» (the 14
-  themes counted in contracts + «no specific work named» 44; no €) /
+  WORKS** has two lenses (`?works=named|split`), default **«works
+  named»** = `WorkDots.svelte` (user, 2026-08-22, the Flourish «Company
+  ownership» form, third round): ONE EQUAL dot per contract under EVERY
+  work its title/call names — 14 phyllotaxis clusters sorted by count +
+  «no specific work named» (44) last, greedy row wrap, count+name under
+  each — each dot COLOURED by the contract's main category
+  (`charts/catColors.ts` CAT_COLORS, shared with the PROCUREMENT
+  TIMELINE type lens): the colours are the category↔works bridge, and
+  hover lights the same contract across clusters / a key chip lights
+  its category (key in the MAP legend dress; counts only, € lives in
+  CONTRACT TYPE; network nodes carry `wk`, 380 links pinned) /
   **«works × category»** (`WorksByCategory.svelte`: one ROW per work —
   the names are long, so they must be row labels, which is what killed
   every column-headed drawing — each bar split by the MAIN CATEGORY of
