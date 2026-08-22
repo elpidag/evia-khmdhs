@@ -6674,7 +6674,14 @@ comparability with the co-op diagram, the user asked for THREE columns
 after all: awarding body (the Ministry, one node) → operating units →
 contractors — the middle labels wrap (`KindFlow wrapMid`) and the
 relaxation now spaces the middle column's label-plus-node blocks too;
-the brace stays a `KindFlow` feature, unused. A note for the
+the brace stays a `KindFlow` feature, unused. The frame is renamed
+AWARDING PROCESS on 2026-08-22 — the ΔΑΣΕ frame's own name, the two now
+being the same diagram over the two datasets — and moved after CONTRACT
+VALUES. Column placement became a prop the same day (`columnX`: each
+column's centre as a fraction of the width or an absolute x, ribbons and
+headings following), after «centre the middle column» and «the space
+between the three columns is not well balanced»: the user set the
+positions by hand on both pages. A note for the
 next discussion: the user sees faults in how TYPES OF WORK is
 represented.
 

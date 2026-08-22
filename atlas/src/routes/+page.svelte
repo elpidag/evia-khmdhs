@@ -44,7 +44,8 @@
 	// $state.raw — immutable data must not pay deep-proxy overhead
 	let map = $state.raw<AntineroMapPayload | null>(null);
 	let payments = $state.raw<PaymentsPayload | null>(null);
-	// MONEY FLOW: the ΥΠΕΝ unit that signed → the contractors (user, 2026-08-21)
+	// AWARDING PROCESS (named MONEY FLOW until 2026-08-22): the awarding body
+	// → its operating units → the contractors
 	interface UnitFlow {
 		nodes: { id: string; label: string; side: 'l' | 'r'; n: number; eur: number; href?: string }[];
 		links: { s: string; t: string; n: number; eur: number }[];
@@ -652,6 +653,64 @@
 {/if}
 </Defer>
 
+<Defer height={620}>
+{#if unitFlow}
+	{@const uf = unitFlow}
+	<!-- two columns, no phase (user, 2026-08-21): the ΥΠΕΝ unit that signed on
+	     the left, the ten biggest contractors + everyone else on the right;
+	     units in greys (ribbons take the unit's tone), the ΔΑΣΕ drawing -->
+	{@const UNIT_GREYS = ['#1f1f1f', '#5a5a5a', '#8a8a8a', '#b4b4b4', '#d0d0d0']}
+	<!-- three columns, as the forest co-op diagram (user, 2026-08-22, for
+	     comparability): the awarding body — the Ministry, one node — → its
+	     operating units → contractors -->
+	{@const unitNodes = uf.nodes.map((n, i) => ({
+		...n,
+		side: (n.side === 'l' ? 'm' : n.side) as 'l' | 'm' | 'r',
+		label: n.side === 'l' ? unitEn(n.label) : n.label,
+		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? '#9b9b9b' : '#3a3a3a'
+	}))}
+	{@const ufNodes = [
+		{
+			id: 'ministry',
+			label: 'Ministry of Environment & Energy',
+			side: 'l' as const,
+			n: uf.nodes.filter((n) => n.side === 'l').reduce((s, n) => s + n.n, 0),
+			eur: uf.total_eur,
+			color: '#111111'
+		},
+		...unitNodes
+	]}
+	{@const ufLinks = [
+		...uf.nodes.filter((n) => n.side === 'l').map((n) => ({ s: 'ministry', t: n.id, n: n.n, eur: n.eur })),
+		...uf.links
+	]}
+	<ChartFrame
+		title="AWARDING PROCESS"
+		insight="The awarding body of every Anti-nero contract is the Ministry of Environment and Energy; the operating units on the left are the {grInt(uf.n_units)} units of the Ministry that ran the contracts, as the registry records them. The ribbons carry each unit’s money to the {grInt(uf.n_top)} biggest contractors, everyone else pooled in one node — {eurShort(uf.top_eur)} of the {eurShort(uf.total_eur)} ends at those {grInt(uf.n_top)} companies ({grInt(uf.n_contractors)} contractors in all). Ribbon width is stated € excl. VAT; hover a bar for its contract count, click a contractor for its page. The forest co-op page draws the same three columns for its own awarding bodies."
+		caveat="Consortium values split evenly between partners here, so both columns sum to the programme total."
+		anchor="sankey"
+		methodology="even-split"
+	>
+		<!-- centred: equal margins either side; the unit names wrap at 34
+		     characters and the nodes are padded so a three-line name clears
+		     its neighbour -->
+		<KindFlow
+			nodes={ufNodes}
+			links={ufLinks}
+			height={620}
+			headings={['awarding body', 'operating units', 'contractors']}
+			marginLeft={50}
+			marginRight={420}
+			columnX={[0.09, 0.40, 0.76]}
+			wrapLeft={18}
+			wrapMid={28}
+		/>
+	</ChartFrame>
+{:else}
+	<div class="skeleton" style="height: 560px"></div>
+{/if}
+</Defer>
+
 <Defer height={640}>
 {#if network}
 	<ChartFrame
@@ -709,63 +768,6 @@
 {:else}
 	<div class="skeleton" style="height: 480px"></div>
 	<div class="skeleton" style="height: 400px"></div>
-{/if}
-</Defer>
-
-<Defer height={620}>
-{#if unitFlow}
-	{@const uf = unitFlow}
-	<!-- two columns, no phase (user, 2026-08-21): the ΥΠΕΝ unit that signed on
-	     the left, the ten biggest contractors + everyone else on the right;
-	     units in greys (ribbons take the unit's tone), the ΔΑΣΕ drawing -->
-	{@const UNIT_GREYS = ['#1f1f1f', '#5a5a5a', '#8a8a8a', '#b4b4b4', '#d0d0d0']}
-	<!-- three columns, as the forest co-op diagram (user, 2026-08-22, for
-	     comparability): the awarding body — the Ministry, one node — → its
-	     operating units → contractors -->
-	{@const unitNodes = uf.nodes.map((n, i) => ({
-		...n,
-		side: (n.side === 'l' ? 'm' : n.side) as 'l' | 'm' | 'r',
-		label: n.side === 'l' ? unitEn(n.label) : n.label,
-		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? '#9b9b9b' : '#3a3a3a'
-	}))}
-	{@const ufNodes = [
-		{
-			id: 'ministry',
-			label: 'Ministry of Environment & Energy',
-			side: 'l' as const,
-			n: uf.nodes.filter((n) => n.side === 'l').reduce((s, n) => s + n.n, 0),
-			eur: uf.total_eur,
-			color: '#111111'
-		},
-		...unitNodes
-	]}
-	{@const ufLinks = [
-		...uf.nodes.filter((n) => n.side === 'l').map((n) => ({ s: 'ministry', t: n.id, n: n.n, eur: n.eur })),
-		...uf.links
-	]}
-	<ChartFrame
-		title="MONEY FLOW"
-		insight="The awarding body of every Anti-nero contract is the Ministry of Environment and Energy; the operating units on the left are the {grInt(uf.n_units)} units of the Ministry that ran the contracts, as the registry records them. The ribbons carry each unit’s money to the {grInt(uf.n_top)} biggest contractors, everyone else pooled in one node — {eurShort(uf.top_eur)} of the {eurShort(uf.total_eur)} ends at those {grInt(uf.n_top)} companies ({grInt(uf.n_contractors)} contractors in all). Ribbon width is stated € excl. VAT; hover a bar for its contract count, click a contractor for its page. The forest co-op page draws the same three columns for its own awarding bodies."
-		caveat="Consortium values split evenly between partners here, so both columns sum to the programme total."
-		anchor="sankey"
-		methodology="even-split"
-	>
-		<!-- centred: equal margins either side; the unit names wrap at 34
-		     characters and the nodes are padded so a three-line name clears
-		     its neighbour -->
-		<KindFlow
-			nodes={ufNodes}
-			links={ufLinks}
-			height={620}
-			headings={['awarding body', 'operating units', 'contractors']}
-			marginLeft={170}
-			marginRight={330}
-			wrapLeft={18}
-			wrapMid={28}
-		/>
-	</ChartFrame>
-{:else}
-	<div class="skeleton" style="height: 560px"></div>
 {/if}
 </Defer>
 

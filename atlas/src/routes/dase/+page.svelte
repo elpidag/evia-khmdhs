@@ -497,11 +497,16 @@
 	anchor="dase-delegation"
 	methodology="org-names"
 >
+	<!-- equal outer margins: the three columns are then evenly spaced AND the
+	     middle one sits on the drawing's centre (user, 2026-08-22) -->
 	<KindFlow
 		nodes={flowNodes}
 		links={flowLinks}
 		height={660}
 		headings={['awarding bodies', 'operating units', 'contractors']}
+		marginLeft={340}
+		marginRight={340}
+		columnX={[0.10, 0.45, 0.78]}
 	/>
 </ChartFrame>
 

@@ -54,6 +54,12 @@
 		/** how a node's value prints (default €) — a flow of COUNTS passes a
 		 *  count formatter */
 		fmt?: (v: number) => string;
+		/** WHERE each column stands, left → right: the centre of column i as a
+		 *  fraction of the drawing's width (0–1) or an absolute x in drawing
+		 *  units (>1); `null` leaves that column where d3 put it. Set it to
+		 *  place the columns by hand — e.g. `columnX={[0.16, 0.5, 0.84]}`
+		 *  (user, 2026-08-22). The ribbons and the headings follow. */
+		columnX?: (number | null)[] | null;
 	}
 	// tall enough, and padded enough, that the two-line label of even a
 	// hairline node (a category worth 0,7% of the €) clears its neighbours
@@ -70,7 +76,8 @@
 		wrapMid = 999,
 		nodePad = 30,
 		leftGroup = '',
-		fmt = eurShort
+		fmt = eurShort,
+		columnX = null
 	}: Props = $props();
 
 	type NodeExtra = FlowNode;
@@ -160,6 +167,36 @@
 			l.y0 = (l.y0 ?? 0) + (shift.get(depthOf(l.source)) ?? 0);
 			l.y1 = (l.y1 ?? 0) + (shift.get(depthOf(l.target)) ?? 0);
 		}
+		// The MIDDLE column sits at the CENTRE of the drawing (user, 2026-08-22).
+		// With EQUAL outer margins d3's own even spacing already puts it there
+		// and this is a no-op; it only corrects a call-site whose label margins
+		// differ, and then the ribbons follow (`sankeyLinkHorizontal` reads the
+		// nodes' own x0/x1) as do the headings (derived from x0). The two gaps
+		// stay equal as long as the margins are.
+		const depths = [...new Set(g.nodes.map(depthOf))].sort((a, b) => a - b);
+		const nodeW = g.nodes.reduce((w, n) => Math.max(w, (n.x1 ?? 0) - (n.x0 ?? 0)), 0);
+		// where each column stands: `columnX` if the caller placed them by
+		// hand, else the middle of three on the drawing's centre (with equal
+		// outer margins d3 already puts it there and this is a no-op)
+		const centres = depths.map((d, i) => {
+			const given = columnX?.[i];
+			if (given !== null && given !== undefined)
+				return given <= 1 ? given * width : given;
+			return depths.length === 3 && i === 1 ? width / 2 : null;
+		});
+		depths.forEach((d, i) => {
+			const c = centres[i];
+			if (c === null) return;
+			const have = Math.min(...g.nodes.filter((n) => depthOf(n) === d).map((n) => n.x0 ?? 0));
+			const dx = c - nodeW / 2 - have;
+			if (!dx) return;
+			for (const n of g.nodes)
+				if (depthOf(n) === d) {
+					n.x0 = (n.x0 ?? 0) + dx;
+					n.x1 = (n.x1 ?? 0) + dx;
+				}
+		});
+
 		// Side labels never overprint: down each side column, two label
 		// blocks (name rows + value row) closer than LABEL_GAP give way
 		// EQUALLY — the upper node moves up, the lower down — and the NODE
