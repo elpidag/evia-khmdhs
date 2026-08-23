@@ -403,7 +403,7 @@ export interface AntineroOverview {
 			share: number;
 		}[];
 		/** every stated fee against its contract's value (the scatter) */
-		points?: { ref: string; s: number; c: number | null; share: number | null; t: string }[];
+		points?: { ref: string; s: number; c: number | null; share: number | null; t: string; cat?: string | null }[];
 		/** the four honest classes over the 245 (2026-08-22) */
 		classes?: { stated: number; db_unstated: number; works_none: number; study_only: number };
 	};

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import BarH from '$lib/charts/BarH.svelte';
 	import StackedShareBar from '$lib/charts/StackedShareBar.svelte';
-	import StudyScatter from '$lib/charts/StudyScatter.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import SideNote from '$lib/ui/SideNote.svelte';
 	import { YEAR_GREYS, yearGrey } from '$lib/charts/yearColors';
@@ -104,6 +103,9 @@
 	);
 	const netCopy = $derived.by(() => {
 		const st = network?.stats ?? {};
+		// the 2022 era by scope, counted from the nodes themselves
+		const n22 = (network?.nodes ?? []).filter((n) => (n.d ?? '').startsWith('2022'));
+		const y22 = { n: n22.length, works: n22.filter((n) => n.dk === 'works').length };
 		if (netMode === 'type')
 			return {
 				title: 'PROCUREMENT TIMELINE',
@@ -113,7 +115,7 @@
 			};
 		return {
 			title: 'PROCUREMENT TIMELINE',
-			subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season, the shaded stripes. The colour is the contract's SCOPE: the 2022 era bought works only, the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
+			subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season, the shaded stripes. The colour is the contract's SCOPE: ${y22.works} of the ${y22.n} contracts of 2022 bought works only, and the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
 			caveat:
 				'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
 		};
@@ -980,29 +982,10 @@
 {/if}
 </Defer>
 
-<ChartFrame
-	title="STUDY COSTS"
-	insight={`What the studies cost is visible for only part of the programme: ${grInt(o.studies.summary.n_with)} of ${grInt(o.studies.summary.n_in_scope)} contracts state a μελέτη cost in their signed PDF (${eurShort(o.studies.summary.total_eur)} in total, median ${pct((o.studies.summary.median_share as number) * 100)} of the contract's net value). Nearly all of those are design-build contracts itemising the fee for the studies their contractor drafts; the rest of the ${grInt(o.deliverables?.study_and_works ?? 0)} design-build contracts bundle that fee into the works price unstated. The ${grInt(o.deliverables?.works ?? 0)} works-only contracts draft no study — theirs existed before the contract — and honestly state none, while the ${grInt(o.deliverables?.study ?? 0)} study-only contracts are study money in their entirety (${eurShort(o.categories.find((c) => c.key === 'meletes')?.eur ?? 0)}). Each dot below is one stated fee against its contract's value; the diagonals are fixed shares.`}
-	caveat="Stated «Κόστος εκπόνησης μελετών (ΣΑΥ-ΦΑΥ)» figures, net of ΦΠΑ, extracted from the signed PDFs and hand-verified; a design-build contract states none and is honestly absent."
-	anchor="studies"
-	methodology="study-costs"
->
-	<div class="studybar">
-		<StackedShareBar
-			height={30}
-			segments={[
-				{ value: o.studies.classes?.stated ?? 0, label: 'fee itemised', color: '#1d1d1d' },
-				{ value: o.studies.classes?.db_unstated ?? 0, label: 'fee unstated', color: '#6c6c6c' },
-				{ value: o.studies.classes?.works_none ?? 0, label: 'no study to draft', color: '#a8a8a8' },
-				{ value: o.studies.classes?.study_only ?? 0, label: 'the study itself', color: '#d6d6d6', labelColor: '#6c6c6c' }
-			]}
-		/>
-	</div>
-	<StudyScatter
-		points={o.studies.points ?? []}
-		medianShare={o.studies.summary.median_share as number}
-	/>
-</ChartFrame>
+<!-- STUDY COSTS is PARKED (user, 2026-08-23): the study-fee curation has
+     a wrong amount, a double count and an eleven-contract coverage hole
+     (DATA_DECISIONS) — StudyScatter.svelte and the studies payload stay,
+     the frame is off the page until the data is trusted -->
 
 {#if o.cpvs.length}
 	{@const topCpv = o.cpvs[0]}
@@ -1458,10 +1441,6 @@
 		display: flex;
 		align-items: center;
 		min-height: 2.25rem;
-	}
-	.studybar {
-		max-width: 720px;
-		margin-bottom: var(--sp-5);
 	}
 	/* the five year maps under the allocation maps: a film strip on one
 	   shared scale (user, 2026-08-22) */

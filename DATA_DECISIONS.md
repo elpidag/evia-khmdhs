@@ -7551,3 +7551,78 @@ itself — inside those containers the note ALWAYS flows above the chart,
 at any viewport — so no page can forget it; the front page's own
 `.scopetype` override went away as redundant. Verified at 1900 px with
 every bulb open on /, /dase, /anadohoi: no note overlaps any frame.
+
+## 2026-08-23 · STUDY COSTS: the dots wear their contract's main category
+
+(user: «the dots all print in the same colour») The 105 stated-fee dots
+were one grey because they are one class; they now carry the contract's
+main category in the page's shared palette (`catColors.ts`, the same
+colour a category has on the chord and the timeline's type lens), with
+a key in the MAP legend's dress and the category named on the hover
+card. `study_points` gained `cat` (pinned present on every point). The
+picture gained a reading: the anti-erosion contracts' fees sit at the
+top right, 2–5 % of the biggest contract values.
+
+## 2026-08-23 · STUDY COSTS parked — the study-fee layer is not trusted enough to show
+
+**Decision (user).** The frame comes off the front page; `StudyScatter.svelte`,
+the curated `study_costs.json`, the `contract_study_costs` table and the
+`studies` payload stay as they are (pinned), so nothing downstream moves
+— but nothing is presented until the layer is cleaned. What the audit of
+2026-08-23 found, recorded here for whoever picks it up:
+- **one wrong amount that is also a double count**: 26SYMV019471687
+  stores €85,350.38 — its own sentence reads «66.232,82 το κόστος
+  εκπόνησης μελετών, 85.350,38€ για ρήτρα πρόσθετης καταβολής»; and it
+  is an additive supplementary whose in-scope parent 26SYMV018607958
+  already carries the €66,232.82 — the entry should go;
+- **a coverage hole of eleven design-build contracts** whose text states
+  the fee but which have no entry — five 2023 phase-II PDFs with mangled
+  accents («Ποσοό υόψους … (18.424,12), που αφορά το κόστος εκπόνησης
+  μελετών…»: 23SYMV012992073 18,424.12 · 23SYMV012992145 8,251.09 ·
+  23SYMV012992150 26,537.00 · 23SYMV013039379 8,166.90 · 23SYMV013530639
+  8,659.17) and six 2024 table layouts with the amount inside the label
+  («Κόστος εκπόνησης μελετών 22.995,60 συμπεριλαμβανομένων …»:
+  24SYMV014217832 22,995.60 · 24SYMV014223991 16,732.11 · 24SYMV014224066
+  13,780.36 · 24SYMV014251057 34,000.06 · 24SYMV014274380 16,920.11 ·
+  24SYMV014274589 23,512.35) — the «24 bundle it unstated» claim was
+  overstated by half;
+- **a stray entry**: 22SYMV010741336 €6,451,612.90 is a programme
+  allocation line («Σύμβαση 2: Μελέτες Κατάρτισης Σχεδίων …»), not a
+  contract's fee — invisible only because the record is an umbrella;
+- what held: 111/120 excerpts are the «κόστος εκπόνησης μελέτης
+  συμπεριλαμβανομένων των φακέλων ΣΑΥ-ΦΑΥ» line (the study fee, not
+  safety paperwork), every amount is verbatim in its excerpt, no fee is
+  attributed to two tips, shares are against the chain's largest net.
+**Spill-over still to act on**: the three «works only» contracts that
+state a fee are 2022 ΤΑΙΠΕΔ contracts whose definitions make them
+design-build («Έργο: οποιαδήποτε μελετητική και δασοτεχνική εργασία»,
+«Μελέτη: η Μελέτη που θα εκπονηθεί και εγκριθεί πριν την έναρξη») —
+22SYMV010795597, 22SYMV010795606, 22SYMV010864314 (via 22SYMV010635347);
+the other 17 of 2022 define the Έργο as «οποιαδήποτε εργασία» with
+«Μελέτες που έχουν εκπονηθεί» and stay works only; 27 of the 2023 works
+carry only a boilerplate «πρόγραμμα μελετητικών και δασοτεχνικών
+εργασιών» with no study defined. Not applied yet (the user parked the
+frame rather than work on it); the deliverables layer would read 129 /
+102 if it were.
+
+## 2026-08-23 · Deliverables, second correction: the 2022 ΤΑΙΠΕΔ template — 3 more «works only» become «study & works»
+
+(user: «if it influences another graph it has to be resolved») The
+three 2022 contracts that itemise a study fee — 22SYMV010795597,
+22SYMV010795606 and 22SYMV010864314 (via its predecessor
+22SYMV010635347) — define in their own Άρθρο 1 «Έργο: οποιαδήποτε
+μελετητική και δασοτεχνική εργασία … θα παρασχεθεί από τον Ανάδοχο» and
+«Μελέτη: είναι η Μελέτη που θα εκπονηθεί και εγκριθεί πριν την έναρξη
+εκτέλεσης των εργασιών», and their Χρονοδιάγραμμα is «το πρόγραμμα
+εκπόνησης της μελέτης και εκτέλεσης εργασιών»: design-build in the
+2022 wording. The extractor gains that marker («ΜΕΛΕΤΗ ΠΟΥ ΘΑ ΕΚΠΟΝΗΘΕΙ
+ΚΑΙ ΕΓΚΡΙΘΕΙ»); regenerated and loaded, exactly the three move — the
+other 17 of 2022 define the Έργο as «οποιαδήποτε εργασία» with «Μελέτες
+που έχουν εκπονηθεί» and stay works only, and the 27 contracts of 2023
+that carry only the boilerplate «πρόγραμμα μελετητικών και δασοτεχνικών
+εργασιών» (no study defined) stay works only. Counts: study 14 / study &
+works **129** / works **102**; pinned, with a pin that 17 of the 20
+contracts of 2022 are works only. The PROCUREMENT TIMELINE's scope bulb
+now prints that ratio from the nodes instead of claiming «the 2022 era
+bought works only». Surfaces moved: CONTRACT SCOPE, the timeline's
+scope lens, both scope views of the chord, the three contract pages.

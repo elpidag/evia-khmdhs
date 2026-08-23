@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { eurShort } from '$lib/transforms/format';
 	import { scaleLog } from 'd3-scale';
+	import { CAT_COLORS, CAT_ORDER } from './catColors';
 
 	/**
 	 * Every stated study fee against its contract's value, log–log (user,
@@ -17,13 +18,22 @@
 		c: number | null;
 		share: number | null;
 		t: string;
+		/** the contract's main category — the dot's colour */
+		cat?: string | null;
 	}
 	interface Props {
 		points: StudyPoint[];
 		/** the median share, e.g. 0.014 — the emphasized diagonal */
 		medianShare?: number | null;
+		/** category key → short label, for the key and the card */
+		catLabels?: Record<string, string>;
 	}
-	let { points, medianShare = null }: Props = $props();
+	let { points, medianShare = null, catLabels = {} }: Props = $props();
+	// the dots wear their contract's main category in the page's shared
+	// palette (user, 2026-08-23) — the same colour a category has on the
+	// chord and the timeline's type lens
+	const cats = $derived(CAT_ORDER.filter((k) => points.some((p) => p.cat === k)));
+	const hue = (c?: string | null) => CAT_COLORS[c ?? ''] ?? '#9b9b9b';
 
 	let width = $state(900);
 	const height = 420;
@@ -65,11 +75,19 @@
 	const show = (p: StudyPoint) => {
 		tip =
 			`<strong>${eurShort(p.s)}</strong> study fee — ${p.share != null ? (p.share * 100).toFixed(1) + '% of ' : ''}${eurShort(p.c ?? 0)}` +
+			(p.cat ? `<br><span style="color:var(--ink-faint)">${catLabels[p.cat] ?? p.cat}</span>` : '') +
 			`<br>${p.t}`;
 	};
 </script>
 
 <div class="wrap" bind:clientWidth={width}>
+	{#if cats.length}
+		<ul class="key">
+			{#each cats as c (c)}
+				<li><i style:background={hue(c)}></i>{catLabels[c] ?? c}</li>
+			{/each}
+		</ul>
+	{/if}
 	<svg viewBox="0 0 {width} {height}" style:height="{height}px" role="img" aria-label="Stated study fees against contract values">
 		{#each ticksOf(x.domain() as [number, number]) as t (t)}
 			<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
@@ -102,7 +120,8 @@
 					class="pt"
 					cx={x(p.c!)}
 					cy={y(p.s)}
-					r="4"
+					r="4.5"
+					fill={hue(p.cat)}
 					onmouseenter={() => show(p)}
 					onmouseleave={() => (tip = null)}
 				/>
@@ -159,12 +178,40 @@
 		fill: var(--ink);
 	}
 	.pt {
-		fill: #2b2b2b;
-		opacity: 0.55;
+		opacity: 0.78;
+		stroke: var(--paper);
+		stroke-width: 0.6;
 		cursor: pointer;
 	}
 	.pt:hover {
 		opacity: 1;
+		stroke: #000;
+	}
+	/* the MAP legend's dress, as on the other category keys */
+	.key {
+		list-style: none;
+		margin: 0 0 var(--sp-2);
+		box-sizing: border-box;
+		padding: var(--sp-2) var(--sp-3);
+		background: #f2f2f2;
+		border-radius: 6px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px var(--sp-6, 1.5rem);
+		font-size: var(--fs-14);
+		color: var(--ink-soft);
+	}
+	.key li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.key li i {
+		width: 12px;
+		height: 12px;
+		border-radius: 3px;
+		flex: none;
 	}
 	.tip {
 		position: absolute;

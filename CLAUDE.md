@@ -304,10 +304,13 @@ refetching open contracts — prefer it for routine updates.
   closes the front page; labels ship from `category_labels` /
   `work_theme_labels`, never hardcoded.
 - Deliverables layer (DATA_DECISIONS 2026-08-22): **study 14 /
-  study_and_works 126 / works 105** (126/105 since 2026-08-23: the ΕΣΑ
+  study_and_works 129 / works 102** (since 2026-08-23: the ΕΣΑ
   reforestation lots state «Ο Ανάδοχος αναλαμβάνει την εκπόνηση όλων
-  των μελετών …» — a dialect the extractor missed — and one water-tank
-  chain tip's predecessor carries the template clause; user-caught) —
+  των μελετών …», one water-tank chain tip's predecessor carries the
+  template clause, and three 2022 ΤΑΙΠΕΔ contracts define «η Μελέτη που
+  θα εκπονηθεί και εγκριθεί πριν την έναρξη» — three dialects the
+  extractor missed; user-caught; 17 of the 20 contracts of 2022 stay
+  works only, pinned) —
   the 1-2-3 model mirroring the sponsored `deliverables`.
   `scripts/extract_deliverables.py` (design-build clause found in the
   contract's own text or its CHAIN 86 / its call 40, verbatim via a 1:1
@@ -1342,7 +1345,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (€ contracted / € paid toggle, `?money=`) beside the year-vs-year-ONLY
   CUMULATIVE DISBURSEMENT (half width, fire season in the payments
   timeline's accent; the phase-stacked mode is deleted) · PAYMENTS
-  TIMELINE · STUDY COSTS · CPV CODES. MONEY BY REGION PER YEAR is retired: its data
+  TIMELINE · CPV CODES — STUDY COSTS is PARKED since 2026-08-23 (user:
+  the study-fee curation has a wrong amount, a double count and an
+  eleven-contract coverage hole, DATA_DECISIONS; `StudyScatter.svelte`,
+  `study_costs.json` and the `studies` payload stay, pinned, off the
+  page). MONEY BY REGION PER YEAR is retired: its data
   draws as FIVE MINI YEAR MAPS (2022–2026, one shared sqrt ramp, totals
   in the heads, `#pe-yearly`) inside ALLOCATION OF FUNDING under the big
   maps — small multiples over a year slider, per the doctrine.

@@ -181,13 +181,20 @@ def test_types_of_work_lenses(client):
 
 def test_deliverables_and_undocumented_calls(client):
     """The 1-2-3 model (DATA_DECISIONS 2026-08-22): study 14 /
-    study_and_works 126 / works 105 — 126 since 2026-08-23, when the ΕΣΑ
-    design clause and the chain were read (DATA_DECISIONS); the
+    study_and_works 129 / works 102 — since 2026-08-23, when the ΕΣΑ
+    design clause, the chain and the 2022 template were read
+    (DATA_DECISIONS); the
     design-build clause is quoted; the nine date-only ΤΑΙΠΕΔ calls appear
     in the trail unlinked."""
     o = client.get("/api/antinero/overview").get_json()
-    assert o["deliverables"] == {"study": 14, "study_and_works": 126,
-                                 "works": 105}
+    assert o["deliverables"] == {"study": 14, "study_and_works": 129,
+                                 "works": 102}
+    # the 2022 ΤΑΙΠΕΔ template («η Μελέτη που θα εκπονηθεί και εγκριθεί»):
+    # 3 of the 20 contracts of 2022 are design-build, 17 works only
+    net = client.get("/api/antinero/network").get_json()
+    y22 = [n for n in net["nodes"] if (n.get("d") or "").startswith("2022")]
+    assert len(y22) == 20
+    assert sum(1 for n in y22 if n["dk"] == "works") == 17
     d = client.get("/api/antinero/contract/23SYMV012972469").get_json()
     assert d["deliverables"]["kind"] == "study_and_works"
     assert "εκπονηθεί από τον Ανάδοχο" in d["deliverables"]["excerpt"]
@@ -208,6 +215,8 @@ def test_study_scatter_and_classes(client):
     # 24 / 102 since the 2026-08-23 deliverables correction (5 works → s&w)
     assert cl == {"stated": 105, "db_unstated": 24, "works_none": 102,
                   "study_only": 14}
+    # every point carries its contract's main category (the dot's colour)
+    assert all(p.get("cat") for p in o["studies"]["points"])
     assert sum(cl.values()) == 245
     pts = o["studies"]["points"]
     assert len(pts) == o["studies"]["summary"]["n_with"] == 105

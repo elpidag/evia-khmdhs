@@ -378,11 +378,16 @@ def antinero_overview(kh: sqlite3.Connection,
     top_studies = sorted(studies["rows"], key=lambda r: r["eur"], reverse=True)[:10]
     # the scatter (2026-08-22): every stated study fee against its
     # contract's value (the share's own denominator), compact
+    # each point carries its contract's main category, so the scatter can
+    # colour by it (user, 2026-08-23: one grey said nothing)
+    cat_of = dict(kh.execute(
+        "SELECT reference_number, category FROM contract_categories"))         if _table(kh, "contract_categories") else {}
     study_points = [
         {"ref": r["ref"], "s": r["eur"],
          "c": round(r["eur"] / r["share"], 2) if r["share"] else None,
          "share": r["share"],
-         "t": (r["title"] or "")[:90]}
+         "t": (r["title"] or "")[:90],
+         "cat": cat_of.get(r["ref"])}
         for r in studies["rows"]]
     # the four honest classes over the 245 (deliverables × stated fee):
     # stated (96 design-build + 3 works) / design-build unstated /
