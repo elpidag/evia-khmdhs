@@ -10,6 +10,7 @@
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow from '$lib/charts/KindFlow.svelte';
 	import CatWorkChord from '$lib/charts/CatWorkChord.svelte';
+	import AreaYears from '$lib/charts/AreaYears.svelte';
 	import { procedureEn } from '$lib/transforms/procedures';
 	import {
 		CHORD_PAIRS,
@@ -20,7 +21,7 @@
 		sidesOf,
 		type ChordPair
 	} from '$lib/transforms/chordSides';
-	import { SCOPE_COLORS, SCOPE_LABELS } from '$lib/charts/scopeColors';
+	import { SCOPE_COLORS, SCOPE_LABELS, SCOPE_ORDER } from '$lib/charts/scopeColors';
 	import { unitEn } from '$lib/transforms/names';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
@@ -331,6 +332,21 @@
 		else url.searchParams.set('chord', next);
 		goto(url, { replaceState: true, keepFocus: true, noScroll: true });
 	}
+	// CONTRACT SCOPE per signature year (user, 2026-08-23, the sponsored
+	// page's per-year form): counted from the contract nodes themselves —
+	// every year from the first signature to the last, one line per scope
+	const todayIso = new Date().toISOString().slice(0, 10);
+	const scopeYears = $derived.by(() => {
+		const ns = network?.nodes ?? [];
+		const ys = ns.map((n) => +(n.d ?? '').slice(0, 4)).filter((y) => y > 0);
+		if (!ys.length) return null;
+		const y0 = Math.min(...ys);
+		const y1 = Math.max(...ys);
+		const years = Array.from({ length: y1 - y0 + 1 }, (_, i) => y0 + i);
+		const count = (kind: string) =>
+			years.map((yr) => ns.filter((n) => n.dk === kind && +(n.d ?? '').slice(0, 4) === yr).length);
+		return { years, series: SCOPE_ORDER.map((k) => ({ key: k, values: count(k) })) };
+	});
 	const catItems = $derived(
 		o.categories.map((c) => ({ key: c.key, label: splitHint(c.label_en ?? c.label).label, n: c.n }))
 	);
@@ -816,6 +832,27 @@
 					]}
 				/>
 			</div>
+			{#if scopeYears}
+				<!-- the sponsored page's per-year form (user, 2026-08-23): contracts
+				     signed per year, one line per scope, in the scope tones -->
+				<div class="sublabel peryear">CONTRACTS BY SCOPE PER YEAR</div>
+				<AreaYears
+					years={scopeYears.years}
+					width={520}
+					height={168}
+					janRules
+					dots
+					today={todayIso}
+					legend={false}
+					series={scopeYears.series.map((s) => ({
+						label: SCOPE_LABELS[s.key],
+						color: SCOPE_COLORS[s.key],
+						values: s.values,
+						kind: 'line' as const,
+						dash: false
+					}))}
+				/>
+			{/if}
 		</ChartFrame>
 
 		<ChartFrame
@@ -1400,6 +1437,18 @@
 		background: var(--ink);
 		color: var(--paper);
 	}
+	/* the MAP-label dress for a sub-heading inside a frame */
+	.sublabel {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		color: var(--c-antinero);
+		margin-bottom: var(--sp-2);
+	}
+	.sublabel.peryear {
+		margin-top: var(--sp-4, 1rem);
+	}
 	.rankbar {
 		display: flex;
 		justify-content: flex-start;
@@ -1414,7 +1463,17 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: var(--sp-7, 2.5rem);
-		align-items: start;
+		/* the two frames take ONE height and put their caveats on one
+		   baseline — the shorter side keeps its slack above its caveat
+		   (user, 2026-08-23: the columns ended at different lines) */
+		align-items: stretch;
+	}
+	.scopetype :global(figure.frame) {
+		display: flex;
+		flex-direction: column;
+	}
+	.scopetype :global(figure.frame > .foot) {
+		margin-top: auto;
 	}
 	@media (max-width: 900px) {
 		.scopetype {

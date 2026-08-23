@@ -7626,3 +7626,31 @@ contracts of 2022 are works only. The PROCUREMENT TIMELINE's scope bulb
 now prints that ratio from the nodes instead of claiming «the 2022 era
 bought works only». Surfaces moved: CONTRACT SCOPE, the timeline's
 scope lens, both scope views of the chord, the three contract pages.
+
+## 2026-08-23 · CONTRACT SCOPE gains «CONTRACTS BY SCOPE PER YEAR»
+
+(user: «a simple graph like DESIGNATIONS / COMPLETIONS PER YEAR in
+sponsored works, below the contract scope, the number of each scope per
+year with a line») Under the CONTRACT SCOPE share bar, the sponsored
+page's `AreaYears` form: contracts signed per calendar year, one SOLID
+line per scope in CONTRACT SCOPE's three greys (`AreaYears` gained a
+`dash:false` option for that), years from the first to the last
+signature, counted from the contract nodes' `d` and `dk` — the same
+fields the timeline's scope lens and the 17-of-20 pin read. Sub-label
+in the MAP-label dress.
+(same day, second round) The verticals stand on 1 JANUARY of each year,
+labelled on the rule as every timeline on the site, with an unlabelled
+rule on the 1 January after the last year; a year's count sits at the
+MIDDLE of its span as a DOT (so the point each line starts from — and
+every value — is explicit), and a dashed «today» rule shows the open
+year as partial. `AreaYears` gained `janRules` / `dots` / `today`
+options; the sponsored chart keeps its category axis.
+(same day, third round — user: the two columns ended at different
+heights) The left body (bar + per-year chart) was 117 px taller than
+CONTRACT TYPE's. Closed by design: the chart's own legend went (the
+share bar right above names the same three series in the same tones —
+`AreaYears legend={false}`), the gap before the sub-label halved, the
+chart 168 px tall in its viewBox; measured bodies 323 / 322 px. And as
+the safety net, the `.scopetype` pair stretches both frames to ONE
+height with each caveat anchored to its frame's bottom, so the pair
+always ends on one line whatever the contents.

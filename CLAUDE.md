@@ -322,7 +322,8 @@ refetching open contracts — prefer it for routine updates.
   surface of both datasets** (user, same day): «study only / study & works
   / works only»; the Anti-nero front page's CONTRACT SCOPE frame mirrors
   the sponsored PROJECT SCOPE StackedShareBar (`#scope`, before TYPES OF
-  WORKS); the type taxonomies deliberately stay per-dataset. **Nine contracts cite their
+  WORKS; since 2026-08-23 with «CONTRACTS BY SCOPE PER YEAR» under it —
+  `AreaYears` solid lines per scope from the network nodes' d/dk); the type taxonomies deliberately stay per-dataset. **Nine contracts cite their
   πρόσκληση by DATE ONLY (no ΑΔΑΜ; all ΤΑΙΠΕΔ-run, evidence quoted)** —
   curated `data/undocumented_calls.json` → `contract_timeline` merges an
   unlinked trail row per contract («cited by date only … no ΚΗΜΔΗΣ record»).
