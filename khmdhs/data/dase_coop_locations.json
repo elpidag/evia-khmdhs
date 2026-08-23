@@ -1,0 +1,5931 @@
+{
+ "_doc": "Registered office of every forest co-operative in the ΔΑΣΕ dataset (DATA_DECISIONS 2026-08-24). `register` = the VIES record (the co-op's village, its Τ.Κ. and the reference town); `contract_seat` = the verbatim party clause of one of its own signed contracts, where one states a seat; `contract_pes` = the Π.Ε. of its contracts, used to validate a geocode, never as a stated seat. ΓΕΜΗ knows no forest co-op — they register in the ΥΠΕΝ Μητρώο Δασικών Συνεταιριστικών Οργανώσεων, which has no public API. Geocodes are added by scripts/geocode_dase_coop_seats.py.",
+ "_source": {
+  "register": "VIES REST (EL)",
+  "contracts": "dase_pdf_cache txt sidecars"
+ },
+ "coops": {
+  "090023568": {
+   "vat": "090023568",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΠΗΛΙΟΥ",
+    "ΔΑ.Σ.Ε. Πηλίου",
+    "ΔΑΣΕ ΠΗΛΙΟΥ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΠΗΛΙΟΥ ΕΥΒΟΙΑΣ",
+    "settlement": "ΠΗΛΙ",
+    "postal_code": "34004",
+    "city": "ΜΑΝΤΟΥΔΙ",
+    "address_raw": "ΠΗΛΙ 0         34004 - ΜΑΝΤΟΥΔΙ"
+   },
+   "lat": 38.755161,
+   "lon": 23.583214,
+   "geo_precision": "municipality"
+  },
+  "096033500": {
+   "vat": "096033500",
+   "registry_names": [
+    "ΔΑΣΕ ΦΩΤΕΙΝΩΝ",
+    "ΔΑΣΕ ΦΩΤΕΙΝΩΝ ΠΙΕΡΙΑΣ"
+   ],
+   "n_contracts": 16,
+   "contract_pes": [
+    "Π.Ε. Πιερίας",
+    "Π.Ε. Ρόδου",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ  ΦΩΤΕΙΝΩΝ",
+    "settlement": "ΦΩΤΕΙΝΑ",
+    "postal_code": "60100",
+    "city": "ΚΑΤΕΡΙΝΗ",
+    "address_raw": "ΦΩΤΕΙΝΑ 0         60100 - ΚΑΤΕΡΙΝΗ"
+   },
+   "lat": 40.219797,
+   "lon": 22.312303,
+   "geo_precision": "municipality"
+  },
+  "096033548": {
+   "vat": "096033548",
+   "registry_names": [
+    "ΔΑΣΕ ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ",
+    "ΔΑΣΕ ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ ΠΙΕΡΙΑΣ"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Πιερίας",
+    "Π.Ε. Ρόδου",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ  ΠΙΕΡΙΑΣ",
+    "settlement": "ΑΓ ΔΗΜΗΤΡΙΟΣ ΠΙΕΡΙΑΣ",
+    "postal_code": "60100",
+    "city": "ΚΑΤΕΡΙΝΗ",
+    "address_raw": "ΑΓ ΔΗΜΗΤΡΙΟΣ ΠΙΕΡΙΑΣ 0         60100 - ΚΑΤΕΡΙΝΗ"
+   },
+   "lat": 40.156293,
+   "lon": 22.23156,
+   "geo_precision": "municipality"
+  },
+  "096033689": {
+   "vat": "096033689",
+   "registry_names": [
+    "ΔΑΣΕ ΣΟΥΦΛΙΟΥ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΟΥΦΛΙΟΥ",
+    "settlement": "ΣΟΥΦΛΙ",
+    "postal_code": "68400",
+    "city": "ΣΟΥΦΛΙ",
+    "address_raw": "ΣΟΥΦΛΙ 0         68400 - ΣΟΥΦΛΙ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV013649804",
+    "date": "2023-10-23",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟ ΣΟΥΦΛΙ, ΤΚ: 68400"
+   },
+   "lat": 41.194168,
+   "lon": 26.302313,
+   "geo_precision": "municipality"
+  },
+  "096033690": {
+   "vat": "096033690",
+   "registry_names": [
+    "ΔΑΣΕ ΜΕΓΑΛΟΥ ΔΕΡΕΙΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΕΓΑΛΟΥ ΔΕΡΕΙΟΥ"
+   ],
+   "n_contracts": 67,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΕΓΑΛΟΥ ΔΕΡΕΙΟΥ",
+    "settlement": "ΜΕΓΑΛΟ ΔΕΡΕΙΟ",
+    "postal_code": "68005",
+    "city": "ΜΙΚΡΟ ΔΕΡΕΙΟ",
+    "address_raw": "ΜΕΓΑΛΟ ΔΕΡΕΙΟ 0         68005 - ΜΙΚΡΟ ΔΕΡΕΙΟ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV013572093",
+    "date": "2023-10-12",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟ ΜΕΓΑΛΟ ΔΕΡΕΙΟ ΟΡΦΕΑ ΔΙΔΥΜΟΤΕΙΧΟΥ, ΤΚ: 68005"
+   },
+   "lat": 41.233873,
+   "lon": 26.024832,
+   "geo_precision": "municipality"
+  },
+  "096033733": {
+   "vat": "096033733",
+   "registry_names": [
+    "ΔΑΣΕ ΣΙΔΗΡΟΥ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΥ",
+    "settlement": "ΣΙΔΗΡΟ ΣΟΥΦΛΙΟΥ",
+    "postal_code": "68400",
+    "city": "ΣΟΥΦΛΙ",
+    "address_raw": "ΣΙΔΗΡΟ ΣΟΥΦΛΙΟΥ 0         68400 - ΣΟΥΦΛΙ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV013650054",
+    "date": "2023-10-23",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟ ΣΙΔΗΡΩ, ΤΚ: 68400"
+   },
+   "lat": 41.195231,
+   "lon": 26.26035,
+   "geo_precision": "municipality"
+  },
+  "096033929": {
+   "vat": "096033929",
+   "registry_names": [
+    "ΔΑΣΕ \"ΩΡΑΙΟΥ\"",
+    "ΔΑΣΕ ΩΡΑΙΟΥ",
+    "ΔΑΣΕ\"ΩΡΑΙΟΥ\"",
+    "ΔΑΣΕ: \"ΩΡΑΙΟΥ\"",
+    "ΔΑΣΕ: ΩΡΑΙΟΥ"
+   ],
+   "n_contracts": 25,
+   "contract_pes": [
+    "Π.Ε. Ξάνθης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΩΡΑΙΟΥ",
+    "settlement": "ΩΡΑΙΟΝ",
+    "postal_code": "67150",
+    "city": "ΞΑΝΘΗ",
+    "address_raw": "ΩΡΑΙΟΝ 0         67150 - ΞΑΝΘΗ"
+   },
+   "lat": 41.085476,
+   "lon": 24.793,
+   "geo_precision": "municipality"
+  },
+  "096033966": {
+   "vat": "096033966",
+   "registry_names": [
+    "ΔΑΣΕ ΒΟΡΕΙΟΣ   ΗΠΕΙΡΟΣ",
+    "ΔΑΣΕ ΒΟΡΕΙΟΣ ΗΠΕΙΡΟΣ",
+    "ΔΑΣΕ: ΒΟΡΕΙΟΣ\"ΗΠΕΙΡΟΣ\"",
+    "ΔΑΣΕ:ΒΟΡΕΙΟΣ\"ΗΠΕΙΡΟΣ\""
+   ],
+   "n_contracts": 21,
+   "contract_pes": [
+    "Π.Ε. Ξάνθης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΞΑΝΘΗΣ   ΒΟΡΕΙΟΣ  ΗΠΕΙΡΟΣ",
+    "settlement": "ΜΙΧΑΗΛ ΚΑΡΑΟΛΗ 79",
+    "postal_code": "67100",
+    "city": "ΞΑΝΘΗ",
+    "address_raw": "ΜΙΧΑΗΛ ΚΑΡΑΟΛΗ 79        67100 - ΞΑΝΘΗ"
+   },
+   "lat": 41.137423,
+   "lon": 24.889888,
+   "geo_precision": "municipality"
+  },
+  "096034164": {
+   "vat": "096034164",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΡΙΤΣΑΣ ΚΑΡΔΙΤΣΑΣ-ΜΟΥΧΑΣ-ΚΑΣΤΑΝΙΑΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Καρδίτσας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΙΤΣΑΣ ΚΑΡΔΙΤΣΑΣ ΜΟΥΧΑΣ ΚΑΣΤΑΝΙΑΣ",
+    "settlement": "ΚΑΡΙΤΣΑ",
+    "postal_code": "43067",
+    "city": "ΜΕΣΕΝΙΚΟΛΑΣ",
+    "address_raw": "ΚΑΡΙΤΣΑ 0         43067 - ΜΕΣΕΝΙΚΟΛΑΣ"
+   },
+   "lat": 39.258679,
+   "lon": 21.696621,
+   "geo_precision": "municipality"
+  },
+  "096034348": {
+   "vat": "096034348",
+   "registry_names": [
+    "ΔΑ.ΣΕ. ΑΝΑΒΡΥΤΟΥ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΑΒΡΥΤΟΥ",
+    "settlement": "ΑΝΑΒΡΥΤΟ",
+    "postal_code": "61100",
+    "city": "ΚΙΛΚΙΣ",
+    "address_raw": "ΑΝΑΒΡΥΤΟ 0         61100 - ΚΙΛΚΙΣ"
+   },
+   "lat": 41.049508,
+   "lon": 23.050228,
+   "geo_precision": "municipality"
+  },
+  "096034373": {
+   "vat": "096034373",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΣΤΑΝΟΧΩΡΙΟΥ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΣΤΑΝΟΧΩΡΙΟΥ",
+    "settlement": "ΚΑΣΤΑΝΟΧΩΡΙ",
+    "postal_code": "62200",
+    "city": "ΝΙΓΡΙΤΑ",
+    "address_raw": "ΚΑΣΤΑΝΟΧΩΡΙ 0         62200 - ΝΙΓΡΙΤΑ"
+   },
+   "lat": 40.853798,
+   "lon": 23.676593,
+   "geo_precision": "municipality"
+  },
+  "096034397": {
+   "vat": "096034397",
+   "registry_names": [
+    "ΔΑΣΕ ΛΑΓΚΑΔΙΟΥ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΛΑΓΚΑΔΙΟΥ",
+    "settlement": "ΛΑΓΚΑΔΙ",
+    "postal_code": "62200",
+    "city": "ΝΙΓΡΙΤΑ",
+    "address_raw": "ΛΑΓΚΑΔΙ 0         62200 - ΝΙΓΡΙΤΑ"
+   },
+   "lat": 40.849882,
+   "lon": 23.559625,
+   "geo_precision": "municipality"
+  },
+  "096034625": {
+   "vat": "096034625",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΛΙΘΟΤΟΠΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΛΙΘΟΤΟΠΟΥ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΛΙΘΟΤΟΠΟΥ",
+    "settlement": "ΛΙΘΟΤΟΠΟΣ",
+    "postal_code": "62400",
+    "city": "ΗΡΑΚΛΕΙΑ",
+    "address_raw": "ΛΙΘΟΤΟΠΟΣ 0         62400 - ΗΡΑΚΛΕΙΑ"
+   },
+   "lat": 41.134499,
+   "lon": 23.220332,
+   "geo_precision": "municipality"
+  },
+  "096034649": {
+   "vat": "096034649",
+   "registry_names": [
+    "ΔΑΣΕ ΠΟΛΥΓΥΡΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΟΛΥΓΥΡΟΥ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΟΛΥΓΥΡΟΥ",
+    "settlement": "ΠΟΛΥΓΥΡΟΣ",
+    "postal_code": "63100",
+    "city": "ΠΟΛΥΓΥΡΟΣ",
+    "address_raw": "ΠΟΛΥΓΥΡΟΣ 0         63100 - ΠΟΛΥΓΥΡΟΣ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV016635078",
+    "date": "2025-04-10",
+    "excerpt": "ΜΕ ΕΔΡΑ:ΠΟΛΥΓΥΡΟΣ ΤΚ: 63100"
+   },
+   "lat": 40.37804,
+   "lon": 23.442549,
+   "geo_precision": "municipality"
+  },
+  "096034729": {
+   "vat": "096034729",
+   "registry_names": [
+    "ΔΑΣΕ ΑΙΣΥΜΗΣ Α",
+    "ΔΑΣΕ ΑΙΣΥΜΗΣ Α΄",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΙΣΥΜΗΣ Α"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΙΣΥΜΗΣ Α",
+    "settlement": "ΑΙΣΥΜΗ",
+    "postal_code": "68011",
+    "city": "ΑΙΣΥΜΗ",
+    "address_raw": "ΑΙΣΥΜΗ 0         68011 - ΑΙΣΥΜΗ"
+   },
+   "lat": 41.017112,
+   "lon": 25.955741,
+   "geo_precision": "municipality"
+  },
+  "096034730": {
+   "vat": "096034730",
+   "registry_names": [
+    "ΔΑΣΕ ΑΙΣΥΜΗΣ Β",
+    "ΔΑΣΕ ΑΙΣΥΜΗΣ Β΄",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΙΣΥΜΗΣ Β"
+   ],
+   "n_contracts": 12,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΙΣΥΜΗΣ Β",
+    "settlement": "ΑΙΣΥΜΗ",
+    "postal_code": "68011",
+    "city": "ΑΙΣΥΜΗ",
+    "address_raw": "ΑΙΣΥΜΗ 0         68011 - ΑΙΣΥΜΗ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV016098620",
+    "date": "2024-10-30",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΑΙΣΥΜΗ, Ν. ΕΒΡΟΥ, Τ.Κ.:68011, ΚΑΙ"
+   },
+   "lat": 41.017112,
+   "lon": 25.955741,
+   "geo_precision": "municipality"
+  },
+  "096034791": {
+   "vat": "096034791",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Γοματίου",
+    "ΔΑΣΕ ΓΟΜΑΤΙΟΥ",
+    "ΔΑΣΕ Γοματίου"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΓΟΜΑΤΙΟΥ",
+    "settlement": "ΓΟΜΑΤΙ",
+    "postal_code": "63075",
+    "city": "ΙΕΡΙΣΣΟΣ",
+    "address_raw": "ΓΟΜΑΤΙ 0         63075 - ΙΕΡΙΣΣΟΣ"
+   },
+   "lat": 40.395403,
+   "lon": 23.794974,
+   "geo_precision": "municipality"
+  },
+  "096034895": {
+   "vat": "096034895",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΑΡΙΣΤΟΤΕΛΗΣ",
+    "ΔΑ.Σ.Ε Αρναίας Χαλκιδικής ‘Ο ΑΡΙΣΤΟΤΕΛΗΣ’",
+    "ΔΑΣΕ ΑΡΙΣΤΟΤΕΛΗ",
+    "ΔΑΣΕ ΑΡΙΣΤΟΤΕΛΗΣ",
+    "ΔΑΣΕ Αριστοτέλης"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΡΙΣΤΟΤΕΛΗ",
+    "settlement": "ΑΡΝΑΙΑ",
+    "postal_code": "63074",
+    "city": "ΑΡΝΑΙΑ",
+    "address_raw": "ΑΡΝΑΙΑ 0         63074 - ΑΡΝΑΙΑ"
+   },
+   "lat": 40.486294,
+   "lon": 23.595059,
+   "geo_precision": "municipality"
+  },
+  "096034902": {
+   "vat": "096034902",
+   "registry_names": [
+    "ΔΑΣΕ ΣΤΡΑΤΟΝΙΚΗΣ",
+    "ΔΑΣΕ Στρατονίκης"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΤΡΑΤΟΝΙΚΗΣ",
+    "settlement": "ΣΤΡΑΤΟΝΙΚΗ",
+    "postal_code": "63083",
+    "city": "ΣΤΡΑΤΩΝΙΚΗ",
+    "address_raw": "ΣΤΡΑΤΟΝΙΚΗ 0         63083 - ΣΤΡΑΤΩΝΙΚΗ"
+   },
+   "lat": 40.527425,
+   "lon": 23.762404,
+   "geo_precision": "municipality"
+  },
+  "096034987": {
+   "vat": "096034987",
+   "registry_names": [
+    "ΔΑΣΕ ΚΡΥΟΝΕΡΙΟΥ",
+    "ΔΑΣΕ ΚΡΥΟΝΕΡΙΟΥ ΛΑΓΚΑΔΑ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Ηλείας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΡΥΟΝΕΡΙΟΥ",
+    "settlement": "ΚΡΥΟΝΕΡΙ",
+    "postal_code": "57002",
+    "city": "ΣΟΧΟΣ",
+    "address_raw": "ΚΡΥΟΝΕΡΙ 0         57002 - ΣΟΧΟΣ"
+   },
+   "lat": 40.815547,
+   "lon": 23.280639,
+   "geo_precision": "municipality"
+  },
+  "096034999": {
+   "vat": "096034999",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. \"Η ΕΝΩΣΗ\" ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \" Η ΕΝΩΣΗ \" ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \" Η ΕΝΩΣΗ\" ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \"Η ΕΝΩΣΗ \"ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \"Η ΕΝΩΣΗ ΣΤΑΥΡΟΥ\"",
+    "ΔΑΣΕ \"Η ΕΝΩΣΗ\" ΚΑΤΩ ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \"Η ΕΝΩΣΗ\" ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ «Η ΕΝΩΣΗ ΣΤΑΥΡΟΥ»",
+    "ΔΑΣΕ Η ΕΝΩΣΗ ΣΤΑΥΡΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ (ΔΑ.Σ.Ε.) Η ΕΝΩΣΗ ΣΤΑΥΡΟΥ",
+    "Δασικός Συνεταιρισμός «Ένωση » Σταυρού",
+    "Δασικός Συνεταιρισμός Σταυρού Ή ΕΝΩΣΗ¨"
+   ],
+   "n_contracts": 19,
+   "contract_pes": [
+    "Π.Ε. Θεσσαλονίκης",
+    "Π.Ε. Ηλείας",
+    "Π.Ε. Αρκαδίας",
+    "Π.Ε. Χαλκιδικής",
+    "Π.Ε. Ρόδου",
+    "Π.Ε. Καβάλας",
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ Η ΕΝΩΣΗ ΣΤΑΥΡΟΥ",
+    "settlement": "ΣΤΑΥΡΟΣ",
+    "postal_code": "57014",
+    "city": "ΣΤΑΥΡΟΣ",
+    "address_raw": "ΣΤΑΥΡΟΣ 0         57014 - ΣΤΑΥΡΟΣ"
+   },
+   "lat": 40.663877,
+   "lon": 23.700547,
+   "geo_precision": "municipality"
+  },
+  "096035007": {
+   "vat": "096035007",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Στεφανινών Θεσσαλονίκης"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΣΤΕΦΑΝΙΝΩΝ",
+    "settlement": "ΣΤΕΦΑΝΙΝΑ",
+    "postal_code": "57021",
+    "city": "ΑΣΠΡΟΒΑΛΤΑ",
+    "address_raw": "ΣΤΕΦΑΝΙΝΑ 0         57021 - ΑΣΠΡΟΒΑΛΤΑ"
+   },
+   "lat": 40.760677,
+   "lon": 23.589572,
+   "geo_precision": "municipality"
+  },
+  "096035019": {
+   "vat": "096035019",
+   "registry_names": [
+    "090273987",
+    "ΔΑ.Σ.Ε. Σοχού Θεσσαλονίκης ‘Η ΔΡΥΣ’",
+    "ΔΑΣΕ ΣΟΧΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΣΟΧΟΥ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Θεσσαλονίκης",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΣΟΧΟΥ",
+    "settlement": "ΡΑΛΛΗ 2",
+    "postal_code": "57002",
+    "city": "ΣΟΧΟΣ",
+    "address_raw": "ΡΑΛΛΗ 2         57002 - ΣΟΧΟΣ"
+   },
+   "lat": 40.773542,
+   "lon": 23.396961,
+   "geo_precision": "municipality"
+  },
+  "096035032": {
+   "vat": "096035032",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Άνω Σταυρού Θεσ/νίκης ΄΄ΠΡΟΟΔΟΣ΄΄",
+    "ΔΑ.Σ.Ε. ΑΝΩ ΣΤΑΥΡΟΥ",
+    "ΔΑ.Σ.Ε. Η ΠΡΟΟΔΟΣ ΑΝΩ ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \"Η ΠΡΟΟΔΟΣ \" Α.ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \"Η ΠΡΟΟΔΟΣ \" ΑΝΩ ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ \"Η ΠΡΟΟΔΟΣ\" ΑΝΩ ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ ΑΝΩ ΣΤΑΥΡΟΥ",
+    "ΔΑΣΕ ΑΝΩ ΣΤΑΥΡΟΥ \"Η ΠΡΟΟΔΟΣ\"",
+    "ΔΑΣΕ ΑΝΩ ΣΤΑΥΡΟΥ Η ΠΡΟΟΔΟΣ",
+    "ΔΑΣΕ Η ΠΡΟΟΔΟΣ ΑΝΩ ΣΤΑΥΡΟΥ"
+   ],
+   "n_contracts": 20,
+   "contract_pes": [
+    "Π.Ε. Θεσσαλονίκης",
+    "Π.Ε. Ηλείας",
+    "Π.Ε. Ευβοίας",
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  Η ΠΡΟΟΔΟΣ ΑΝΩ ΣΤΑΥΡΟΥ",
+    "settlement": "ΑΝΩ ΣΤΑΥΡΟΣ",
+    "postal_code": "57014",
+    "city": "ΣΤΑΥΡΟΣ",
+    "address_raw": "ΑΝΩ ΣΤΑΥΡΟΣ 0         57014 - ΣΤΑΥΡΟΣ"
+   },
+   "lat": 40.65437,
+   "lon": 23.699141,
+   "geo_precision": "municipality"
+  },
+  "096035695": {
+   "vat": "096035695",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Αθαμανίας Τρικάλων"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΘΑΜΑΝΙΑΣ ΤΡΙΚΑΛΩΝ",
+    "settlement": "ΑΘΑΜΑΝΙΑ",
+    "postal_code": "42037",
+    "city": "ΜΕΣΟΧΩΡΑ",
+    "address_raw": "ΑΘΑΜΑΝΙΑ 0         42037 - ΜΕΣΟΧΩΡΑ"
+   },
+   "lat": 39.527601,
+   "lon": 21.250816,
+   "geo_precision": "municipality"
+  },
+  "096035738": {
+   "vat": "096035738",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΣΤΟΥΡΝΑΡΕΙΚΩΝ",
+    "ΔΑ.Σ.Ε. ΣΤΟΥΡΝΑΡΑΙΙΚΩΝ",
+    "ΔΑ.Σ.Ε. ΣΤΟΥΡΝΑΡΕΙΚΩΝ",
+    "ΔΑ.Σ.Ε. Στουρναρέικων Τρικάλων",
+    "ΔΑ.Σ.Ε. Στουρναρέϊκα Τρικάλων",
+    "ΔΑΣΕ ΣΤΟΥΡΝΑΡΕΙΚΩΝ",
+    "ΔΑΣΕ ΣΤΟΥΡΝΑΡΕΪΚΩΝ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΤΟΥΡΝΑΡΕΙΚΩΝ ΤΡΙΚΑΛΩΝ",
+    "settlement": "ΣΤΟΥΡΝΑΡΕΙΚΑ",
+    "postal_code": "42032",
+    "city": "ΠΥΛΗ",
+    "address_raw": "ΣΤΟΥΡΝΑΡΕΙΚΑ 0         42032 - ΠΥΛΗ"
+   },
+   "lat": 39.473691,
+   "lon": 21.520601,
+   "geo_precision": "municipality"
+  },
+  "096035900": {
+   "vat": "096035900",
+   "registry_names": [
+    "ΔΑΣΕ ΑΝΩ ΓΡΑΜΜΑΤΙΚΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΓΡΑΜΜΑΤΙΚΟΥ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΓΡΑΜΜΑΤΙΚΟΥ",
+    "settlement": "ΑΝΩ ΓΡΑΜΜΑΤΙΚΟ",
+    "postal_code": "58002",
+    "city": "ΑΡΝΙΣΣΑ",
+    "address_raw": "ΑΝΩ ΓΡΑΜΜΑΤΙΚΟ 0         58002 - ΑΡΝΙΣΣΑ"
+   },
+   "lat": 40.696407,
+   "lon": 21.937103,
+   "geo_precision": "municipality"
+  },
+  "096036194": {
+   "vat": "096036194",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Ν. ΠΕΤΡΙΤΣΙΟΥ",
+    "ΔΑ.Σ.Ε. ΝΕΟΥ ΠΕΤΡΙΤΣΙΟΥ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΥ ΠΕΤΡΙΤΣΙΟΥ",
+    "settlement": "ΝΕΟ ΠΕΤΡΙΤΣΙ",
+    "postal_code": "62043",
+    "city": "Ν ΠΕΤΡΙΤΣΙ",
+    "address_raw": "ΝΕΟ ΠΕΤΡΙΤΣΙ 0         62043 - Ν ΠΕΤΡΙΤΣΙ"
+   },
+   "lat": 41.275937,
+   "lon": 23.294308,
+   "geo_precision": "municipality"
+  },
+  "096038648": {
+   "vat": "096038648",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Τσαπουρνιάς"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΤΣΑΠΟΥΡΝΙΑΣ",
+    "settlement": "ΤΣΑΠΟΥΡΝΙΑ",
+    "postal_code": "34200",
+    "city": "ΙΣΤΙΑΙΑ",
+    "address_raw": "ΤΣΑΠΟΥΡΝΙΑ 0         34200 - ΙΣΤΙΑΙΑ"
+   },
+   "lat": 38.977123,
+   "lon": 23.312675,
+   "geo_precision": "municipality"
+  },
+  "096040320": {
+   "vat": "096040320",
+   "registry_names": [
+    "ΔΑΣΕ ΧΡΥΣΔΟΥΠΟΛΗΣ",
+    "ΔΑΣΕ ΧΡΥΣΟΥΠΟΛΗΣ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Καβάλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΧΡΥΣΟΥΠΟΛΗΣ",
+    "settlement": "ΧΡΥΣΟΥΠΟΛΗ",
+    "postal_code": "64200",
+    "city": "ΧΡΥΣΟΥΠΟΛΗ",
+    "address_raw": "ΧΡΥΣΟΥΠΟΛΗ 0         64200 - ΧΡΥΣΟΥΠΟΛΗ"
+   },
+   "lat": 40.984699,
+   "lon": 24.702579,
+   "geo_precision": "municipality"
+  },
+  "096040750": {
+   "vat": "096040750",
+   "registry_names": [
+    "ΔΑΣΕ ΒΡΑΧΑΣ"
+   ],
+   "n_contracts": 14,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΡΑΧΑΣ",
+    "settlement": "ΒΡΑΧΑ",
+    "postal_code": "36080",
+    "city": "ΦΟΥΡΝΑ",
+    "address_raw": "ΒΡΑΧΑ 0         36080 - ΦΟΥΡΝΑ"
+   },
+   "lat": 39.065649,
+   "lon": 21.800949,
+   "geo_precision": "municipality"
+  },
+  "096040994": {
+   "vat": "096040994",
+   "registry_names": [
+    "ΔΑΣΕ ΔΑΔΙΑΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΔΙΑΣ",
+    "settlement": "ΔΑΔΙΑ ΣΟΥΦΛΙΟΥ",
+    "postal_code": "68400",
+    "city": "ΣΟΥΦΛΙ",
+    "address_raw": "ΔΑΔΙΑ ΣΟΥΦΛΙΟΥ 0         68400 - ΣΟΥΦΛΙ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV013649973",
+    "date": "2023-10-23",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΗ ΔΑΔΙΑ, ΤΚ: 68400"
+   },
+   "lat": 41.195231,
+   "lon": 26.26035,
+   "geo_precision": "municipality"
+  },
+  "096047960": {
+   "vat": "096047960",
+   "registry_names": [
+    "ΔΑΣΕ \"ΤΟ ΠΕΡΤΟΥΛΙ\"",
+    "ΔΑΣΕ ΠΕΡΤΟΥΛΙΟΥ ''ΤΟ ΠΕΡΤΟΥΛΙ''"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΡΤΟΥΛΙΟΥ ΤΡΙΚΑΛΩΝ",
+    "settlement": "ΠΕΡΤΟΥΛΙ",
+    "postal_code": "42032",
+    "city": "ΠΥΛΗ",
+    "address_raw": "ΠΕΡΤΟΥΛΙ 0         42032 - ΠΥΛΗ"
+   },
+   "lat": 39.541089,
+   "lon": 21.466158,
+   "geo_precision": "municipality"
+  },
+  "096053559": {
+   "vat": "096053559",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ ΠΕΛΛΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ ΠΕΛΛΑΣ",
+    "settlement": "ΒΟΡΕΙΝΟ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΒΟΡΕΙΝΟ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.028851,
+   "lon": 22.081864,
+   "geo_precision": "municipality"
+  },
+  "096053584": {
+   "vat": "096053584",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΟΛΙΑΝΩΝ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΟΛΙΑΝΩΝ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΔΟΛΙΑΝΑ",
+    "postal_code": "42036",
+    "city": "ΚΑΣΤΑΝΙΑ",
+    "address_raw": "ΔΟΛΙΑΝΑ 0         42036 - ΚΑΣΤΑΝΙΑ"
+   },
+   "contract_seat": {
+    "ref": "26SYMV019072951",
+    "date": "2026-05-22",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΑ ΔΟΛΙΑΝΑ ΚΑΛΑΜΠΑΚΑΣ - Τ.Κ. 42200"
+   },
+   "lat": 39.636495,
+   "lon": 21.347952,
+   "geo_precision": "municipality"
+  },
+  "096053688": {
+   "vat": "096053688",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΦΕΛΛΙΟΥ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Γρεβενών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΕΛΛΙΟΥ",
+    "settlement": "ΦΕΛΛΙ",
+    "postal_code": "51100",
+    "city": "ΓΡΕΒΕΝΑ",
+    "address_raw": "ΦΕΛΛΙ 0         51100 - ΓΡΕΒΕΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017476335",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΦΕΛΛΙΟΥ Π.Ε. ΓΡΕΒΕΝΩΝ ΚΑΙ"
+   },
+   "lat": 40.023345,
+   "lon": 21.533443,
+   "geo_precision": "municipality"
+  },
+  "096061560": {
+   "vat": "096061560",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Ελάφου Αγιάς Λάρισας",
+    "ΔΑ.ΣΕ. ΕΛΑΦΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΕ ΕΛΑΦΟΣ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΕ ΕΛΑΦΟΥ",
+    "ΔΑΣΕ ΕΛΑΦΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ"
+   ],
+   "n_contracts": 11,
+   "contract_pes": [
+    "Π.Ε. Λάρισας",
+    "Π.Ε. Ευβοίας",
+    "Π.Ε. Ηλείας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ  ΕΡΓΑΣΙΑΣ  ΕΛΑΦΟΣ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+    "settlement": "ΕΛΑΦΟΣ",
+    "postal_code": "40003",
+    "city": "ΑΓΙΑ",
+    "address_raw": "ΕΛΑΦΟΣ 0         40003 - ΑΓΙΑ"
+   },
+   "lat": 39.579246,
+   "lon": 22.783678,
+   "geo_precision": "municipality"
+  },
+  "096064168": {
+   "vat": "096064168",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΥΚΟΦΥΤΟΥ ΝΕΣΤΟΡΙΟΥ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΥΚΟΦΥΤΟΥ ΝΕΣΤΟΡΙΟΥ",
+    "settlement": "ΠΕΥΚΟΦΥΤΟ",
+    "postal_code": "50007",
+    "city": "ΠΕΝΤΑΛΟΦΟΣ",
+    "address_raw": "ΠΕΥΚΟΦΥΤΟ 0         50007 - ΠΕΝΤΑΛΟΦΟΣ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015532758",
+    "date": "2024-10-03",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΠΕΥΚΟΦΥΤΟ ΚΑΙ"
+   },
+   "lat": 40.295747,
+   "lon": 20.959149,
+   "geo_precision": "municipality"
+  },
+  "096064297": {
+   "vat": "096064297",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΒΑΘΗΣ",
+    "ΔΑ.Σ.Ε. ΒΑΘΗΣ1026,48",
+    "ΔΑΣΕ ΒΑΘΗΣ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 41.14505,
+   "lon": 22.970745,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΒΑΘΗ",
+    "city": "ΚΙΛΚΙΣ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑ.Σ.Ε. ΒΑΘΗΣ» — Βάθη, δήμος Κιλκίς· Δασαρχείο Κιλκίς"
+   }
+  },
+  "096064304": {
+   "vat": "096064304",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΕΛΛΗΝΙΚΟΥ",
+    "ΔΑ.ΣΕ. ΕΛΛΗΝΙΚΟΥ",
+    "ΔΑΣΕ ΕΛΛΗΝΙΚΟΥ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΕΛΛΗΝΙΚΟΥ",
+    "settlement": "ΕΛΛΗΝΙΚΟ",
+    "postal_code": "57017",
+    "city": "ΞΥΛΟΠΟΛΗ",
+    "address_raw": "ΕΛΛΗΝΙΚΟ 0         57017 - ΞΥΛΟΠΟΛΗ"
+   },
+   "lat": 41.001287,
+   "lon": 23.106376,
+   "geo_precision": "municipality"
+  },
+  "096064365": {
+   "vat": "096064365",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΠΟΝΤΟΚΕΡΑΣΙΑΣ",
+    "ΔΑ.ΣΕ. ΠΟΝΤΟΚΕΡΑΣΙΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΟΝΤΟΚΕΡΑΣΙΑΣ",
+    "settlement": "ΠΟΝΤΟΚΕΡΑΣΙΑ",
+    "postal_code": "61100",
+    "city": "ΚΙΛΚΙΣ",
+    "address_raw": "ΠΟΝΤΟΚΕΡΑΣΙΑ 0         61100 - ΚΙΛΚΙΣ"
+   },
+   "lat": 41.089105,
+   "lon": 23.129758,
+   "geo_precision": "municipality"
+  },
+  "096064734": {
+   "vat": "096064734",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΝΤΑΛΟΦΟΥ ΖΩΝΗΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑ ΣΕ  ΠΕΝΤΑΛΟΦΟΥ ΖΩΝΗΣ ΒΟΙΟΥ Π Ε ΚΟΖΑΝΗΣ",
+    "settlement": "ΠΕΝΤΑΛΟΦΟΣ",
+    "postal_code": "50007",
+    "city": "ΠΕΝΤΑΛΟΦΟΣ",
+    "address_raw": "ΠΕΝΤΑΛΟΦΟΣ 0         50007 - ΠΕΝΤΑΛΟΦΟΣ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017540590",
+    "date": "2025-09-11",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠΙΚΗ ΚΟΙΝΟΤΗΤΑ ΠΕΝΤΑΛΟΦΟΥ ΤΟΥ ΔΗΜΟΥ ΒΟΙΟΥ, Π.Ε. ΚΟΖΑΝΗΣ ΚΑΙ"
+   },
+   "lat": 40.195186,
+   "lon": 21.141786,
+   "geo_precision": "municipality"
+  },
+  "096064863": {
+   "vat": "096064863",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΑΓΙΩΝ ΘΕΟΔΩΡΩΝ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Γρεβενών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΙΩΝ ΘΕΟΔΩΡΩΝ",
+    "settlement": "ΑΓ ΘΕΟΔΩΡΟΙ",
+    "postal_code": "51100",
+    "city": "ΓΡΕΒΕΝΑ",
+    "address_raw": "ΑΓ ΘΕΟΔΩΡΟΙ 0         51100 - ΓΡΕΒΕΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017475704",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΑΓΙΩΝ ΘΕΟΔΩΡΩΝ Π.Ε. ΓΡΕΒΕΝΩΝ ΚΑΙ"
+   },
+   "lat": 40.067181,
+   "lon": 21.436815,
+   "geo_precision": "municipality"
+  },
+  "096065800": {
+   "vat": "096065800",
+   "registry_names": [
+    "ΔΑΣΕ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ"
+   ],
+   "n_contracts": 12,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ",
+    "settlement": "ΑΓ ΦΩΤΕΙΝΗ",
+    "postal_code": "58200",
+    "city": "ΕΔΕΣΣΑ",
+    "address_raw": "ΑΓ ΦΩΤΕΙΝΗ 0         58200 - ΕΔΕΣΣΑ"
+   },
+   "lat": 40.69885,
+   "lon": 22.023758,
+   "geo_precision": "municipality"
+  },
+  "096066346": {
+   "vat": "096066346",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Βαρβάρας Χαλκιδικής",
+    "ΔΑΣΕ  ΒΑΡΒΑΑΡΑΣ",
+    "ΔΑΣΕ ΒΑΡΒΑΡΑΣ",
+    "ΔΑΣΕ ΒΑΡΒΑΡΑΣ ΧΑΛΚΙΔΙΚΗΣ",
+    "ΔΑΣΕ Βαρβάρας",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΒΑΡΒΑΡΑΣ"
+   ],
+   "n_contracts": 19,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής",
+    "Π.Ε. Ηλείας",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΒΑΡΒΑΡΑΣ",
+    "settlement": "ΒΑΡΒΑΡΑ",
+    "postal_code": "63074",
+    "city": "ΑΡΝΑΙΑ",
+    "address_raw": "ΒΑΡΒΑΡΑ 0         63074 - ΑΡΝΑΙΑ"
+   },
+   "lat": 40.56873,
+   "lon": 23.65834,
+   "geo_precision": "municipality"
+  },
+  "096066790": {
+   "vat": "096066790",
+   "registry_names": [
+    "ΔΑΣΕ ΜΙΚΡΟΚΛΕΙΣΟΥΡΑΣ",
+    "ΜΙΚΡΟΚΛΕΙΣΟΥΡΑΣ"
+   ],
+   "n_contracts": 32,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΚΡΟΚΛΕΙΣΟΥΡΑΣ",
+    "settlement": "ΜΙΚΡΟΚΛΕΙΣΟΥΡΑ",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΜΙΚΡΟΚΛΕΙΣΟΥΡΑ 0         66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.386467,
+   "lon": 24.057566,
+   "geo_precision": "municipality"
+  },
+  "096067226": {
+   "vat": "096067226",
+   "registry_names": [
+    "ΔΑΣΕ ΣΙΔΗΡΟΧΩΡΙΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΧΩΡΙΟΥ"
+   ],
+   "n_contracts": 14,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΧΩΡΙΟΥ",
+    "settlement": "ΣΙΔΗΡΟΧΩΡΙ",
+    "postal_code": "68400",
+    "city": "ΣΟΥΦΛΙ",
+    "address_raw": "ΣΙΔΗΡΟΧΩΡΙ 0         68400 - ΣΟΥΦΛΙ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV013426290",
+    "date": "2023-09-15",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΣΙΔΗΡΟΧΩΡΙ ΕΒΡΟΥ, ΣΟΥΦΛΙ, ΤΚ:68400"
+   },
+   "lat": 41.195231,
+   "lon": 26.26035,
+   "geo_precision": "municipality"
+  },
+  "096067380": {
+   "vat": "096067380",
+   "registry_names": [
+    "ΔΑΣΕ ΛΕΚΑΝΗΣ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Καβάλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΕΡΓΑΣΙΑΣ ΛΕΚΑΝΗΣ",
+    "settlement": "ΛΕΚΑΝΗ",
+    "postal_code": "64009",
+    "city": "ΚΕΧΡΟΚΑΜΠΟΣ",
+    "address_raw": "ΛΕΚΑΝΗ 0         64009 - ΚΕΧΡΟΚΑΜΠΟΣ"
+   },
+   "lat": 41.159456,
+   "lon": 24.549563,
+   "geo_precision": "municipality"
+  },
+  "096067681": {
+   "vat": "096067681",
+   "registry_names": [
+    "ΔΑΣΕ ΡΕΥΜΑΤΟΣ ΩΡΑΙΟΥ",
+    "ΔΑΣΕ ΡΕΥΜΑΤΟΣ\"ΩΡΑΙΟΥ\"",
+    "ΔΑΣΕ ΡΕΥΜΑΥΟΣ ΩΡΑΙΟΥ",
+    "ΔΑΣΕ:ΡΕΥΜΑΤΟΣ\"ΩΡΑΙΟΥ\""
+   ],
+   "n_contracts": 24,
+   "contract_pes": [
+    "Π.Ε. Ξάνθης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΡΕΥΜΑΤΟΣ ΩΡΑΙΟΥ",
+    "settlement": "ΡΕΥΜΑ",
+    "postal_code": "67100",
+    "city": "ΞΑΝΘΗ",
+    "address_raw": "ΡΕΥΜΑ 0         67100 - ΞΑΝΘΗ"
+   },
+   "lat": 41.28918,
+   "lon": 24.797028,
+   "geo_precision": "municipality"
+  },
+  "096068432": {
+   "vat": "096068432",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΚΕΡΚΙΝΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΕΡΚΙΝΗΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΚΕΡΚΙΝΗΣ",
+    "settlement": "ΚΕΡΚΙΝΗ ΣΕΡΡΩΝ",
+    "postal_code": "62055",
+    "city": "Κ ΠΟΡΟΙΑ",
+    "address_raw": "ΚΕΡΚΙΝΗ ΣΕΡΡΩΝ 0         62055 - Κ ΠΟΡΟΙΑ"
+   },
+   "lat": 41.258248,
+   "lon": 22.951875,
+   "geo_precision": "municipality"
+  },
+  "096071203": {
+   "vat": "096071203",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. <<ΟΡΕΙΝΗΣ>>",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΡΕΙΝΗΣ"
+   ],
+   "n_contracts": 17,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΡΕΙΝΗΣ",
+    "settlement": "ΟΡΕΙΝΗ",
+    "postal_code": "62100",
+    "city": "ΣΕΡΡΕΣ",
+    "address_raw": "ΟΡΕΙΝΗ 0         62100 - ΣΕΡΡΕΣ"
+   },
+   "lat": 41.197144,
+   "lon": 23.591399,
+   "geo_precision": "municipality"
+  },
+  "096071288": {
+   "vat": "096071288",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. <<ΧΕΙΜΑΡΡΟΥ>>",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΕΙΜΑΡΡΟΥ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΕΙΜΑΡΡΟΥ",
+    "settlement": "ΧΕΙΜΑΡΡΟΣ",
+    "postal_code": "62054",
+    "city": "ΣΤΡΥΜΩΝΙΚΟ",
+    "address_raw": "ΧΕΙΜΑΡΡΟΣ 0         62054 - ΣΤΡΥΜΩΝΙΚΟ"
+   },
+   "lat": 41.047906,
+   "lon": 23.801112,
+   "geo_precision": "municipality"
+  },
+  "096073988": {
+   "vat": "096073988",
+   "registry_names": [
+    "ΔΑΣΕ ΜΕΤΣΟΒΟΥ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΕΤΣΟΒΟΥ",
+    "settlement": "ΜΕΤΣΟΒΟ",
+    "postal_code": "44200",
+    "city": "ΜΕΤΣΟΒΟ",
+    "address_raw": "ΜΕΤΣΟΒΟ 0         44200 - ΜΕΤΣΟΒΟ"
+   },
+   "lat": 39.769301,
+   "lon": 21.183048,
+   "geo_precision": "municipality"
+  },
+  "096077490": {
+   "vat": "096077490",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ",
+    "settlement": "ΠΕΥΚΟ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΠΕΥΚΟ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015522390",
+    "date": "2024-10-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΠΕΥΚΟ ΚΑΙ"
+   },
+   "lat": 40.421566,
+   "lon": 21.011251,
+   "geo_precision": "municipality"
+  },
+  "096077521": {
+   "vat": "096077521",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Μεγάλη Παναγία Χαλκιδικής",
+    "ΔΑΣΕ Μ. ΠΑΝΑΓΙΑΣ",
+    "ΔΑΣΕ Μ. Παναγίας"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ Μ ΠΑΝΑΓΙΑΣ ΔΑΣΕ",
+    "settlement": "ΜΕΓ ΠΑΝΑΓΙΑ",
+    "postal_code": "63076",
+    "city": "ΜΕΓ ΠΑΝΑΓΙΑ",
+    "address_raw": "ΜΕΓ ΠΑΝΑΓΙΑ 0         63076 - ΜΕΓ ΠΑΝΑΓΙΑ"
+   },
+   "lat": 40.464945,
+   "lon": 23.749379,
+   "geo_precision": "municipality"
+  },
+  "096081510": {
+   "vat": "096081510",
+   "registry_names": [
+    "ΔΑΣΕ ΛΙΒΑΔΙΟΥ"
+   ],
+   "n_contracts": 20,
+   "contract_pes": [
+    "Π.Ε. Πιερίας",
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΛΙΒΑΔΙΟΥ",
+    "settlement": "ΛΙΒΑΔΙ",
+    "postal_code": "40002",
+    "city": "ΛΙΒΑΔΙ",
+    "address_raw": "ΛΙΒΑΔΙ 0         40002 - ΛΙΒΑΔΙ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV013877496",
+    "date": "2023-12-01",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟ ΛΙΒΑΔΙ ΕΛΑΣΣΟΝΑΣ, Τ.Κ. 40002"
+   },
+   "lat": 40.126158,
+   "lon": 22.156774,
+   "geo_precision": "municipality"
+  },
+  "096081522": {
+   "vat": "096081522",
+   "registry_names": [
+    "ΔΑΣΕ ΒΕΡΔΙΚΟΥΣΙΑΣ"
+   ],
+   "n_contracts": 18,
+   "contract_pes": [
+    "Π.Ε. Λάρισας",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΕΡΔΙΚΟΥΣΙΑΣ",
+    "settlement": "ΒΕΡΔΙΚΟΥΣΙΑ",
+    "postal_code": "40005",
+    "city": "ΒΕΡΔΙΚΟΥΣΣΑ",
+    "address_raw": "ΒΕΡΔΙΚΟΥΣΙΑ 0         40005 - ΒΕΡΔΙΚΟΥΣΣΑ"
+   },
+   "lat": 39.758807,
+   "lon": 21.986622,
+   "geo_precision": "municipality"
+  },
+  "096085810": {
+   "vat": "096085810",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Ο 10ος ΔΑΣΙΚΟΣ ΑΛΜΩΠΙΑΣ Ν. ΠΕΛΛΑΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ 0 10 0Σ ΔΑΣΙΚΟΣ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "settlement": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "096085834": {
+   "vat": "096085834",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ 9ος"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ 9 0Σ",
+    "settlement": "ΠΡΟΜΑΧΟΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.024974,
+   "lon": 22.004465,
+   "geo_precision": "municipality"
+  },
+  "096085846": {
+   "vat": "096085846",
+   "registry_names": [
+    "ΔΑΣΕ 7ος ΠΡΟΜΑΧΩΝ",
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ 7ος ΑΛΜΩΠΙΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΡΟΜΑΧΩΝ 7ο"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 41.024974,
+   "lon": 22.004465,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΠΡΟΜΑΧΟΙ",
+    "city": "ΑΡΙΔΑΙΑ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑΣΕ 7ος ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ» — Προμαχοί, δήμος Αλμωπίας· Δασαρχείο Έδεσσας"
+   }
+  },
+  "096085871": {
+   "vat": "096085871",
+   "registry_names": [
+    "ΔΑΣΕ ΝΟΤΙΑΣ Η ΤΖΕΝΑ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΟΤΙΑΣ Η ΤΖΕΝΑ",
+    "settlement": "ΝΟΤΙΑ",
+    "postal_code": "58003",
+    "city": "ΦΟΥΣΤΑΝΗ",
+    "address_raw": "ΝΟΤΙΑ 0         58003 - ΦΟΥΣΤΑΝΗ"
+   },
+   "lat": 41.102028,
+   "lon": 22.209236,
+   "geo_precision": "municipality"
+  },
+  "096085902": {
+   "vat": "096085902",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ 12ος"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ 12 ΟΣ",
+    "settlement": "ΠΡΟΜΑΧΟΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.024974,
+   "lon": 22.004465,
+   "geo_precision": "municipality"
+  },
+  "096085938": {
+   "vat": "096085938",
+   "registry_names": [
+    "ΔΑΣΕ ΕΛΕΥΕΘΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ Ν. ΠΕΛΛΑΣ",
+    "ΔΑΣΕ ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ  Ν ΠΕΛΛΑΣ",
+    "ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ Ν. ΠΕΛΛΑΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΧΩΡΙΟΥ ΑΛΜΩΠΙΑΣ Ν  ΠΕΛΛΑΣ",
+    "settlement": "ΝΕΟΧΩΡΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΝΕΟΧΩΡΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.027838,
+   "lon": 22.098336,
+   "geo_precision": "municipality"
+  },
+  "096086019": {
+   "vat": "096086019",
+   "registry_names": [
+    "ΔΑΣΕ ΔΕΥΤΕΡΟΣ ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΕΥΤΕΡΟΣ ΠΕΥΚΩΤΟΥ ΑΛΜΩΠΙΑΣ",
+    "settlement": "ΒΟΡΕΙΝΟ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΒΟΡΕΙΝΟ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.028851,
+   "lon": 22.081864,
+   "geo_precision": "municipality"
+  },
+  "096086093": {
+   "vat": "096086093",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ",
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Νέα Γενιά ΑΛΜΩΠΙΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ ΝΕΑ ΓΕΝΙΑ ΑΛΜΩΠΙΑΣ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ  ΝΕΑ ΓΕΝΙΑ ΑΛΜΩΠΙΑΣ",
+    "settlement": "ΠΡΟΜΑΧΟΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.024974,
+   "lon": 22.004465,
+   "geo_precision": "municipality"
+  },
+  "096086216": {
+   "vat": "096086216",
+   "registry_names": [
+    "ΔΑΣΕ ΟΡΜΑΣ \" ΜΕΓΑΣ ΑΛΕΞΑΝΔΡΟΣ\"",
+    "ΔΑΣΕ ΟΡΜΑΣ \" Μέγας Αλέξανδρος\"",
+    "ΔΑΣΕ ΟΡΜΑΣ \"ΜΕΓΑΣ ΑΛΕΞΑΝΔΡΟΣ\""
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΡΜΑΣ ΜΕΓΑΣ ΑΛΕΞΑΝΔΡΟΣ",
+    "settlement": "ΟΡΜΑ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΟΡΜΑ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.951841,
+   "lon": 21.926431,
+   "geo_precision": "municipality"
+  },
+  "096086230": {
+   "vat": "096086230",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Ο 4ος"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ Ο 4 0Σ",
+    "settlement": "ΠΡΟΜΑΧΟΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.024974,
+   "lon": 22.004465,
+   "geo_precision": "municipality"
+  },
+  "096086321": {
+   "vat": "096086321",
+   "registry_names": [
+    "ΔΑΣΕ ΑΡΙΔΑΙΑΣ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΡΙΔΑΙΑΣ",
+    "settlement": "ΑΡΙΔΑΙΑ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΑΡΙΔΑΙΑ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.975594,
+   "lon": 22.061373,
+   "geo_precision": "municipality"
+  },
+  "096088013": {
+   "vat": "096088013",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΤΑΛΩΝΙΩΝ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Πιερίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΤΑΛΩΝΙΩΝ",
+    "settlement": "ΚΑΤΑΛΩΝΙΑ ΠΙΕΡΙΑΣ",
+    "postal_code": "60100",
+    "city": "ΚΑΤΕΡΙΝΗ",
+    "address_raw": "ΚΑΤΑΛΩΝΙΑ ΠΙΕΡΙΑΣ 0         60100 - ΚΑΤΕΡΙΝΗ"
+   },
+   "lat": 40.352784,
+   "lon": 22.365799,
+   "geo_precision": "municipality"
+  },
+  "096093508": {
+   "vat": "096093508",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΦΗΤΗ ΗΛΙΑ ΣΥΝ.ΠΕ."
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΦΗΤΗ ΗΛΙΑ ΑΝΟΙΞΙΑΤΙΚΟΥ ΣΥΝ Π Ε",
+    "settlement": "ΠΡΟΦΗΤΗΣ ΗΛΙΑΣ ΠΡΩΗΝ ΠΛΑΚΩΤΗ",
+    "postal_code": "30500",
+    "city": "ΑΜΦΙΛΟΧΙΑ",
+    "address_raw": "ΠΡΟΦΗΤΗΣ ΗΛΙΑΣ ΠΡΩΗΝ ΠΛΑΚΩΤΗ 0         30500 - ΑΜΦΙΛΟΧΙΑ"
+   },
+   "lat": 38.904261,
+   "lon": 21.189681,
+   "geo_precision": "municipality"
+  },
+  "096095618": {
+   "vat": "096095618",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ \"Η ΕΛΑΤΙΑ\"",
+    "ΔΑΣΕ ΔΡΑΜΑΣ Η ΕΛΑΤΙΑ",
+    "ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ ΕΛΑΤΙΑ",
+    "ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ Η ΕΛΑΤΙΑ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΝΕΡΟΥ",
+    "settlement": "ΣΙΔΗΡΟΝΕΡΟ",
+    "postal_code": "66038",
+    "city": "ΣΙΔΗΡΟΝΕΡΟ",
+    "address_raw": "ΣΙΔΗΡΟΝΕΡΟ 0         66038 - ΣΙΔΗΡΟΝΕΡΟ"
+   },
+   "lat": 41.368582,
+   "lon": 24.23237,
+   "geo_precision": "municipality"
+  },
+  "096095620": {
+   "vat": "096095620",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΝΙΚΗΦΟΡΟΥ \"Η ΠΡΟΟΔΟΣ\"",
+    "ΔΑΣΕ ΝΙΚΗΦΟΡΟΣ Η ΠΡΟΟΔΟΣ",
+    "ΔΑΣΕ ΝΙΚΗΦΟΡΟΥ Η ΠΡΟΟΔΟΣ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΙΚΗΦΟΡΟΥ",
+    "settlement": "ΝΙΚΗΦΟΡΟΣ",
+    "postal_code": "66037",
+    "city": "ΝΙΚΗΦΟΡΟΣ",
+    "address_raw": "ΝΙΚΗΦΟΡΟΣ 0         66037 - ΝΙΚΗΦΟΡΟΣ"
+   },
+   "lat": 41.166943,
+   "lon": 24.311454,
+   "geo_precision": "municipality"
+  },
+  "096095643": {
+   "vat": "096095643",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΠΛΑΤΑΝΙΑΣ",
+    "ΔΑΣΕ ΠΛΑΤΑΝΙΑΣ"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΛΑΤΑΝΙΑΣ",
+    "settlement": "ΠΛΑΤΑΝΙΑ",
+    "postal_code": "66037",
+    "city": "ΝΙΚΗΦΟΡΟΣ",
+    "address_raw": "ΠΛΑΤΑΝΙΑ 0         66037 - ΝΙΚΗΦΟΡΟΣ"
+   },
+   "lat": 41.186179,
+   "lon": 24.409771,
+   "geo_precision": "municipality"
+  },
+  "096098227": {
+   "vat": "096098227",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΑΓ. ΚΥΡΙΑΚΗΣ - ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ - ΕΛΑΤΗΣ",
+    "ΔΑ.Σ.Ε. ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
+    "ΔΑ.ΣΕ. ΑΓΙΑΣ ΚΥΡΙΑΚΗΣ, ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ, ΕΛΑΤΗΣ",
+    "ΔΑΣΕ ΑΓ.ΚΥΡΙΑΚΗΣ -ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
+    "ΔΑΣΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΕΡΓΑΣΙΑΣ ΑΓΙΑΣ",
+    "ΔΑΣΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΕΡΓΑΣΙΑΣ ΑΓΙΑΣ ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ-ΕΛΑΤΗΣ",
+    "ΔΑΣΙΚΟΣ ΑΓΡΟΤΙΚΟΣ ΣΥΝ/ΣΜΟΣ ΑΓ. ΚΥΡΙΑΚΗΣ-ΠΑΛΑΙΟΓΡΑΤΣΑΝΟΥ -ΕΛΑΤΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΑΙΤΕΡΙΣΜΟΣ ΑΓΙΑΣ ΚΥΡΙΑΚΗΣ",
+    "Δασικός Συνεταιρισμός Εργασίας Αγίας Κυριακής Παλαιογρατσάνου Ελάτης",
+    "Δασικός Συνεταιρισμός Εργασίας Αγίας Κυριακής –Παλαιογρατσάνου-Ελάτης"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑ ΣΕ ΑΓΙΑΣ ΚΥΡΙΑΚΗΣ ΠΑΛΑΙΟΓΡΑΤΑΝΟΥ ΕΛΑΤΗΣ",
+    "settlement": "ΒΕΛΒΕΝΤΟ",
+    "postal_code": "50400",
+    "city": "ΒΕΛΒΕΝΤΟΣ",
+    "address_raw": "ΒΕΛΒΕΝΤΟ 0         50400 - ΒΕΛΒΕΝΤΟΣ"
+   },
+   "contract_seat": {
+    "ref": "26SYMV019062225",
+    "date": "2026-05-21",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΒΕΛΒΕΝΤΟ"
+   },
+   "lat": 40.273094,
+   "lon": 22.11656,
+   "geo_precision": "municipality"
+  },
+  "096099390": {
+   "vat": "096099390",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Κυπαρισσίου-Σήμιας"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΥΠΑΡΙΣΣΙΟΥ ΣΙΜΙΑΣ",
+    "settlement": "ΚΥΠΑΡΙΣΣΙ",
+    "postal_code": "34200",
+    "city": "ΙΣΤΙΑΙΑ",
+    "address_raw": "ΚΥΠΑΡΙΣΣΙ 0         34200 - ΙΣΤΙΑΙΑ"
+   },
+   "lat": 38.901104,
+   "lon": 23.214003,
+   "geo_precision": "municipality"
+  },
+  "096099678": {
+   "vat": "096099678",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΝΤΑΛΟΦΟΥ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΝΤΑΛΟΦΟΥ",
+    "settlement": "ΠΕΝΤΑΛΟΦΟΣ",
+    "postal_code": "68007",
+    "city": "ΔΙΚΑΙΑ",
+    "address_raw": "ΠΕΝΤΑΛΟΦΟΣ 0         68007 - ΔΙΚΑΙΑ"
+   },
+   "lat": 41.645571,
+   "lon": 26.181228,
+   "geo_precision": "municipality"
+  },
+  "096115609": {
+   "vat": "096115609",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΡΟΒΙΩΝ ΕΥΒΟΙΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΡΟΒΙΩΝ ΕΥΒΟΙΑΣ",
+    "settlement": "ΡΟΒΙΕΣ",
+    "postal_code": "34005",
+    "city": "ΛΙΜΝΗ",
+    "address_raw": "ΡΟΒΙΕΣ 0         34005 - ΛΙΜΝΗ"
+   },
+   "lat": 38.811894,
+   "lon": 23.227881,
+   "geo_precision": "municipality"
+  },
+  "096115714": {
+   "vat": "096115714",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΥΡΚΟΥΛΩΝ ΕΥΒΟΙΑΣ",
+    "settlement": "ΚΟΥΡΚΟΥΛΟΙ",
+    "postal_code": "34005",
+    "city": "ΛΙΜΝΗ",
+    "address_raw": "ΚΟΥΡΚΟΥΛΟΙ 0         34005 - ΛΙΜΝΗ"
+   },
+   "lat": 38.832993,
+   "lon": 23.340848,
+   "geo_precision": "municipality"
+  },
+  "096115923": {
+   "vat": "096115923",
+   "registry_names": [
+    "ΔΑΣΕ ΑΝΘΗΡΟΥ ΚΑΡΟΠΛΕΣΙΟΥ",
+    "ΔΑΣΕ ΑΝΘΗΡΟΥ ΚΑΡΟΠΛΕΣΙΟΥ ΚΑΡΔΙΤΣΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΘΗΡΟΥ ΚΑΡΟΠΛΕΣΙΟΥ ΚΑΡΔΙΤΣΑΣ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Καρδίτσας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΘΗΡΟΥ ΚΑΡΟΠΛΕΣΙΟΥ  ΚΑΡΔΙΤΣΑΣ",
+    "settlement": "ΑΝΘΗΡΟ",
+    "postal_code": "43100",
+    "city": "ΚΑΡΔΙΤΣΑ",
+    "address_raw": "ΑΝΘΗΡΟ 0         43100 - ΚΑΡΔΙΤΣΑ"
+   },
+   "lat": 39.200254,
+   "lon": 21.753384,
+   "geo_precision": "municipality"
+  },
+  "096121014": {
+   "vat": "096121014",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΤΡΟΛΟΦΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΤΡΟΛΟΦΟΥ"
+   ],
+   "n_contracts": 9,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΤΡΟΛΟΦΟΥ",
+    "settlement": "ΠΕΤΡΟΛΟΦΟΣ  ΕΒΡΟΥ",
+    "postal_code": "68005",
+    "city": "ΜΙΚΡΟ ΔΕΡΕΙΟ",
+    "address_raw": "ΠΕΤΡΟΛΟΦΟΣ  ΕΒΡΟΥ 0         68005 - ΜΙΚΡΟ ΔΕΡΕΙΟ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV013425731",
+    "date": "2023-09-15",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟΝ ΠΕΤΡΟΛΟΦΟ ΕΒΡΟΥ, ΜΙΚΡΟ ΔΕΡΕΙΟ, ΤΚ:68005"
+   },
+   "lat": 41.26565,
+   "lon": 26.000062,
+   "geo_precision": "municipality"
+  },
+  "096133603": {
+   "vat": "096133603",
+   "registry_names": [
+    "ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΙΔΗΡΟΝΕΡΟΥ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΝΕΡΟΥ",
+    "settlement": "ΣΙΔΗΡΟΝΕΡΟ ΔΡΑΜΑΣ",
+    "postal_code": "66038",
+    "city": "ΣΙΔΗΡΟΝΕΡΟ",
+    "address_raw": "ΣΙΔΗΡΟΝΕΡΟ ΔΡΑΜΑΣ 0         66038 - ΣΙΔΗΡΟΝΕΡΟ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017805546",
+    "date": "2025-09-11",
+    "excerpt": "ΜΕ ΕΔΡΑ ΣΙΔΗΡΟΝΕΡΟ ΔΡΑΜΑΣ - ("
+   },
+   "lat": 41.360047,
+   "lon": 24.230017,
+   "geo_precision": "municipality"
+  },
+  "096133615": {
+   "vat": "096133615",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΛΙΒΑΔΕΡΟΥ",
+    "ΔΑΣΕ ΛΙΒΑΔΕΡΟΥ"
+   ],
+   "n_contracts": 12,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΛΙΒΑΔΕΡΟΥ",
+    "settlement": "ΛΕΙΒΑΔΕΡΟ",
+    "postal_code": "66038",
+    "city": "ΣΙΔΗΡΟΝΕΡΟ",
+    "address_raw": "ΛΕΙΒΑΔΕΡΟ 0         66038 - ΣΙΔΗΡΟΝΕΡΟ"
+   },
+   "lat": 41.360047,
+   "lon": 24.230017,
+   "geo_precision": "municipality"
+  },
+  "096133640": {
+   "vat": "096133640",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΘΟΛΟΥ",
+    "ΔΑΣΕ ΘΟΛΟΥ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΘΟΛΟΥ",
+    "settlement": "ΘΟΛΟΣ",
+    "postal_code": "66035",
+    "city": "ΠΑΡΑΝΕΣΤΙ",
+    "address_raw": "ΘΟΛΟΣ 0         66035 - ΠΑΡΑΝΕΣΤΙ"
+   },
+   "lat": 41.296215,
+   "lon": 24.520778,
+   "geo_precision": "municipality"
+  },
+  "096133664": {
+   "vat": "096133664",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΔΡΑΜΑΣ \"Η ΕΛΑΤΙΑ\"",
+    "ΔΑΣΕ ΔΡΑΜΑΣ Η ΕΛΑΤΙΑ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΡΑΜΑΣ Η ΕΛΑΤΙΑ",
+    "settlement": "3 ΧΙΛ ΔΡΑΜΑΣ ΣΕΡΡΩΝ",
+    "postal_code": "66100",
+    "city": "ΔΡΑΜΑ",
+    "address_raw": "3 ΧΙΛ ΔΡΑΜΑΣ ΣΕΡΡΩΝ 0         66100 - ΔΡΑΜΑ"
+   },
+   "lat": 41.148787,
+   "lon": 24.144082,
+   "geo_precision": "municipality"
+  },
+  "096133793": {
+   "vat": "096133793",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΜΑΥΡΟΒΑΤΟΥ",
+    "ΔΑΣΕ ΜΑΥΡΟΒΑΤΟΥ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΑΥΡΟΒΑΤΟΥ ΔΡΑΜΑΣ",
+    "settlement": "ΜΑΥΡΟΒΑΤΟΣ",
+    "postal_code": "66100",
+    "city": "ΔΡΑΜΑ",
+    "address_raw": "ΜΑΥΡΟΒΑΤΟΣ 0         66100 - ΔΡΑΜΑ"
+   },
+   "lat": 41.111389,
+   "lon": 24.144321,
+   "geo_precision": "municipality"
+  },
+  "096134114": {
+   "vat": "096134114",
+   "registry_names": [
+    "ΔΑΣΕ ΑΓ. ΦΩΤΕΙΝΗΣ",
+    "ΔΑΣΕ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ \"Η ΜΑΚΕΔΟΝΙΑ\"",
+    "ΔΑΣΕ ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ \" Η ΜΑΚΕΔΟΝΙΑ\"",
+    "ΔΑΣΕ ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ \" Η ΜΑΚΕΔΟΝΙΑ\"",
+    "ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΓ ΦΩΤΕΙΝΗΣ",
+    "ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΓ. ΦΩΤΕΙΝΗΣ",
+    "ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ \" Η ΜΑΚΕΔΟΝΙΑ\"",
+    "ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΓΙΑΣ ΦΩΤΕΙΝΗΣ Η ΜΑΚΕΔΟΝΙΑ",
+    "ΔΑΣΕΡΦΑΤΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΓ ΦΩΤΕΙΝΗΣ",
+    "Δασεργατικός Συνεταιρισμός  Αγ. Φωτεινής “ Η Μακεδονία»"
+   ],
+   "n_contracts": 24,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΕΡΓΑΤΙΚΟΣ ΣΥΝΣΜΟΣ ΑΓ ΦΩΤΕΙΝΗΣ",
+    "settlement": "ΑΓ ΦΩΤΕΙΝΗ",
+    "postal_code": "58200",
+    "city": "ΕΔΕΣΣΑ",
+    "address_raw": "ΑΓ ΦΩΤΕΙΝΗ 0         58200 - ΕΔΕΣΣΑ"
+   },
+   "lat": 40.69885,
+   "lon": 22.023758,
+   "geo_precision": "municipality"
+  },
+  "096134126": {
+   "vat": "096134126",
+   "registry_names": [
+    "ΔΑΣΕ ΦΛΑΜΟΥΡΙΑΣ",
+    "ΔΑΣΙΚΟΣ ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΑΜΟΥΡΙΑΣ"
+   ],
+   "n_contracts": 12,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΑΜΟΥΡΙΑΣ",
+    "settlement": "ΦΛΑΜΟΥΡΙΑ",
+    "postal_code": "58200",
+    "city": "ΕΔΕΣΣΑ",
+    "address_raw": "ΦΛΑΜΟΥΡΙΑ 0         58200 - ΕΔΕΣΣΑ"
+   },
+   "lat": 40.752848,
+   "lon": 22.016291,
+   "geo_precision": "municipality"
+  },
+  "096135196": {
+   "vat": "096135196",
+   "registry_names": [
+    "ΔΑΣΕ ΑΓ. ΝΙΚΟΛΑΟΥ"
+   ],
+   "n_contracts": 14,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ",
+    "settlement": "ΑΓΙΟΣ ΝΙΚΟΛΑΟΣ",
+    "postal_code": "36100",
+    "city": "ΚΑΡΠΕΝΗΣΙ",
+    "address_raw": "ΑΓΙΟΣ ΝΙΚΟΛΑΟΣ 0         36100 - ΚΑΡΠΕΝΗΣΙ"
+   },
+   "lat": 38.894571,
+   "lon": 21.865107,
+   "geo_precision": "municipality"
+  },
+  "096135290": {
+   "vat": "096135290",
+   "registry_names": [
+    "ΔΑΣΕ ΕΠΙΝΙΑΝΩΝ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΕΠΙΝΙΑΝΩΝ",
+    "settlement": "ΕΠΑΙΝΙΑΝΑ",
+    "postal_code": "36073",
+    "city": "ΑΓΡΑΦΑ",
+    "address_raw": "ΕΠΑΙΝΙΑΝΑ 0         36073 - ΑΓΡΑΦΑ"
+   },
+   "lat": 39.176986,
+   "lon": 21.635102,
+   "geo_precision": "municipality"
+  },
+  "096135319": {
+   "vat": "096135319",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Καρπενησίου",
+    "ΔΑΣΕ ΚΑΡΠΕΝΗΣΙΟΥ",
+    "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ  ΕΡΓΑΣΙΑΣ ΚΑΡΠΕΝΗΣΙΟΥ"
+   ],
+   "n_contracts": 32,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΠΕΝΗΣΙΟΥ",
+    "settlement": "ΚΑΡΠΕΝΗΣΙ",
+    "postal_code": "36100",
+    "city": "ΚΑΡΠΕΝΗΣΙ",
+    "address_raw": "ΚΑΡΠΕΝΗΣΙ 0         36100 - ΚΑΡΠΕΝΗΣΙ"
+   },
+   "lat": 38.915243,
+   "lon": 21.794349,
+   "geo_precision": "municipality"
+  },
+  "096135356": {
+   "vat": "096135356",
+   "registry_names": [
+    "ΔΑΣΕ ΚΛΕΙΣΤΟΥ",
+    "ΔΑΣΕ ΚΛΕΙΤΣΟΥ"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΛΕΙΣΤΟΥ",
+    "settlement": "ΚΛΕΙΣΤΟΣ",
+    "postal_code": "36080",
+    "city": "ΦΟΥΡΝΑ",
+    "address_raw": "ΚΛΕΙΣΤΟΣ 0         36080 - ΦΟΥΡΝΑ"
+   },
+   "lat": 39.062654,
+   "lon": 21.836082,
+   "geo_precision": "municipality"
+  },
+  "096135368": {
+   "vat": "096135368",
+   "registry_names": [
+    "ΔΑΣΕ ΚΟΡΥΣΧΑΔΩΝ"
+   ],
+   "n_contracts": 24,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΡΥΣΧΑΔΩΝ",
+    "settlement": "ΚΟΡΥΣΧΑΔΕΣ",
+    "postal_code": "36100",
+    "city": "ΚΑΡΠΕΝΗΣΙ",
+    "address_raw": "ΚΟΡΥΣΧΑΔΕΣ 0         36100 - ΚΑΡΠΕΝΗΣΙ"
+   },
+   "lat": 38.903025,
+   "lon": 21.759566,
+   "geo_precision": "municipality"
+  },
+  "096135556": {
+   "vat": "096135556",
+   "registry_names": [
+    "ΔΑΣΕ ΑΜΠΛΙΑΝΗΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 38.756566,
+   "lon": 21.907216,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΑΜΠΛΙΑΝΗ",
+    "city": "ΚΑΡΠΕΝΗΣΙ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑΣΕ ΑΜΠΛΙΑΝΗΣ» — Αμπλιανή Ευρυτανίας· Δασαρχείο Καρπενησίου"
+   }
+  },
+  "096135565": {
+   "vat": "096135565",
+   "registry_names": [
+    "ΔΑΣΕ ΑΜΠΛΙΑΝΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΜΠΛΙΑΝΗΣ"
+   ],
+   "n_contracts": 21,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΜΠΛΙΑΝΗΣ",
+    "settlement": "ΑΜΠΛΙΑΝΗ",
+    "postal_code": "36076",
+    "city": "ΚΡΙΚΕΛΛΟ",
+    "address_raw": "ΑΜΠΛΙΑΝΗ 0         36076 - ΚΡΙΚΕΛΛΟ"
+   },
+   "lat": 38.756566,
+   "lon": 21.907216,
+   "geo_precision": "municipality"
+  },
+  "096135610": {
+   "vat": "096135610",
+   "registry_names": [
+    "ΔΑΣΕ ΦΟΥΡΝΑΣ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΟΥΡΝΑ",
+    "settlement": "ΦΟΥΡΝΑ",
+    "postal_code": "36080",
+    "city": "ΦΟΥΡΝΑ",
+    "address_raw": "ΦΟΥΡΝΑ 0         36080 - ΦΟΥΡΝΑ"
+   },
+   "lat": 39.060437,
+   "lon": 21.876469,
+   "geo_precision": "municipality"
+  },
+  "096135633": {
+   "vat": "096135633",
+   "registry_names": [
+    "ΔΑΣΕ ΧΡΥΣΩΣ"
+   ],
+   "n_contracts": 9,
+   "contract_pes": [
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΩΣ",
+    "settlement": "ΧΡΥΣΩ",
+    "postal_code": "36071",
+    "city": "ΚΕΡΑΣΟΧΩΡΙ",
+    "address_raw": "ΧΡΥΣΩ 0         36071 - ΚΕΡΑΣΟΧΩΡΙ"
+   },
+   "lat": 39.039755,
+   "lon": 21.672567,
+   "geo_precision": "municipality"
+  },
+  "096136410": {
+   "vat": "096136410",
+   "registry_names": [
+    "ΔΑΣΕ ΕΠΤΑΧΩΡΙΟΥ ΝΕΣΤΟΡΙΟΥ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΕ ΔΑΣ ΑΓΡΟΤΙΚΟΣ ΣΥΝ ΕΠΤΑΧΩΡΙΟΥ",
+    "settlement": "ΕΠΤΑΧΩΡΙ",
+    "postal_code": "50007",
+    "city": "ΠΕΝΤΑΛΟΦΟΣ",
+    "address_raw": "ΕΠΤΑΧΩΡΙ 0         50007 - ΠΕΝΤΑΛΟΦΟΣ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017471640",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΕΠΤΑΧΩΡΙ ΚΑΙ"
+   },
+   "lat": 40.222065,
+   "lon": 21.021774,
+   "geo_precision": "municipality"
+  },
+  "096136421": {
+   "vat": "096136421",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΟΞΥΑΣ",
+    "ΔΑΣΕ ΟΞΥΑΣ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΞΥΑΣ ΚΑΣΤΟΡΙΑΣ",
+    "settlement": "ΟΞΥΑ",
+    "postal_code": "52059",
+    "city": "ΒΙΤΣΙ",
+    "address_raw": "ΟΞΥΑ 0         52059 - ΒΙΤΣΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017662392",
+    "date": "2025-10-02",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΟΞΥΑ ΚΑΙ"
+   },
+   "lat": 40.610344,
+   "lon": 21.348481,
+   "geo_precision": "municipality"
+  },
+  "096136598": {
+   "vat": "096136598",
+   "registry_names": [
+    "ΔΑΣΕ ΖΟΥΖΟΥΛΗΣ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΖΟΥΖΟΥΛΗΣ ΔΗΜΟΥ ΝΕΣΤΟΡΙΟΥ ΚΑΣΤΟΡΙΑΣ",
+    "settlement": "ΖΟΥΖΟΥΛΗ",
+    "postal_code": "50007",
+    "city": "ΠΕΝΤΑΛΟΦΟΣ",
+    "address_raw": "ΖΟΥΖΟΥΛΗ 0         50007 - ΠΕΝΤΑΛΟΦΟΣ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017512574",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΖΟΥΖΟΥΛΗ ΚΑΙ"
+   },
+   "lat": 40.175728,
+   "lon": 21.029491,
+   "geo_precision": "municipality"
+  },
+  "096136863": {
+   "vat": "096136863",
+   "registry_names": [
+    "ΔΑΣΕ ΛΕΥΚΟΓΕΙΩΝ"
+   ],
+   "n_contracts": 42,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑ Σ Ε  ΛΕΥΚΟΓΕΙΩΝ",
+    "settlement": "ΛΕΥΚΟΓΕΙΑ",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΛΕΥΚΟΓΕΙΑ 0         66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.405361,
+   "lon": 23.895216,
+   "geo_precision": "municipality"
+  },
+  "096136918": {
+   "vat": "096136918",
+   "registry_names": [
+    "ΑΧΛΑΔΙΑΣ \"Ο ΠΛΟΥΤΟΣ",
+    "ΔΑΣΕ ΑΧΛΑΔΙΑΣ \"Ο ΠΛΟΥΤΟΣ\"",
+    "ΔΑΣΕ ΑΧΛΑΔΙΑΣ Ο ΠΛΟΥΤΟΣ",
+    "ΔΑΣΕ ΑΧΛΑΔΙΑΣ ΠΛΟΥΤΟΣ"
+   ],
+   "n_contracts": 53,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΧΛΑΔΙΑΣ Ο ΠΛΟΥΤΟΣ",
+    "settlement": "ΑΧΛΑΔΙΑ 21",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΑΧΛΑΔΙΑ 21        66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.397597,
+   "lon": 24.010408,
+   "geo_precision": "municipality"
+  },
+  "096139122": {
+   "vat": "096139122",
+   "registry_names": [
+    "ΔΑΣΕ ΣΚΡΑ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΚΡΑ",
+    "settlement": "ΣΚΡΑ",
+    "postal_code": "61005",
+    "city": "ΕΙΔΟΜΕΝΗ",
+    "address_raw": "ΣΚΡΑ 0         61005 - ΕΙΔΟΜΕΝΗ"
+   },
+   "lat": 41.093626,
+   "lon": 22.382876,
+   "geo_precision": "municipality"
+  },
+  "096139226": {
+   "vat": "096139226",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΡΠΗΣ"
+   ],
+   "n_contracts": 20,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΠΗΣ",
+    "settlement": "ΚΑΡΠΗ",
+    "postal_code": "61300",
+    "city": "ΓΟΥΜΕΝΙΣΣΑ",
+    "address_raw": "ΚΑΡΠΗ 00        61300 - ΓΟΥΜΕΝΙΣΣΑ"
+   },
+   "lat": 40.984199,
+   "lon": 22.420144,
+   "geo_precision": "municipality"
+  },
+  "096139238": {
+   "vat": "096139238",
+   "registry_names": [
+    "ΔΑΣΕ ΓΡΙΒΑΣ ΠΑΙΟΝΙΑΣ & ΠΕΡΙΧΩΡΩΝ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 40.954548,
+   "lon": 22.409964,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΓΡΙΒΑ",
+    "city": "ΓΟΥΜΕΝΙΣΣΑ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑΣΕ ΓΡΙΒΑΣ ΠΑΙΟΝΙΑΣ & ΠΕΡΙΧΩΡΩΝ» — Γρίβα, δήμος Παιονίας· Δασαρχείο Γουμένισσας"
+   }
+  },
+  "096139275": {
+   "vat": "096139275",
+   "registry_names": [
+    "ΔΑΣΕ ΠΗΓΗΣ ΦΑΝΟΥ"
+   ],
+   "n_contracts": 19,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΗΓΗΣ ΦΑΝΟΥ",
+    "settlement": "ΠΗΓΗ",
+    "postal_code": "61400",
+    "city": "ΑΞΙΟΥΠΟΛΗ",
+    "address_raw": "ΠΗΓΗ 0         61400 - ΑΞΙΟΥΠΟΛΗ"
+   },
+   "lat": 41.010505,
+   "lon": 22.498725,
+   "geo_precision": "municipality"
+  },
+  "096147195": {
+   "vat": "096147195",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΚΑΡΥΟΦΥΤΟΥ",
+    "ΔΑΣΕ ΚΑΡΥΟΦΥΤΟΥ",
+    "ΔΑΣΕ ΚΑΡΥΟΦΥΤΟΥ \"ΞΥΛΟΚΟΠΟΣ\"",
+    "ΔΑΣΕ ΚΑΡΥΟΦΥΤΟΥ ΞΥΛΟΚΟΠΟΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΥΟΦΥΤΟΥ «ΞΥΛΟΚΟΠΟΣ»"
+   ],
+   "n_contracts": 26,
+   "contract_pes": [
+    "Π.Ε. Ξάνθης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΥΟΦΥΤΟΥ ΞΥΛΟΚΟΠΟΣ",
+    "settlement": "ΚΑΡΥΟΦΥΤΟ",
+    "postal_code": "67062",
+    "city": "ΣΤΑΥΡΟΥΠΟΛΗ",
+    "address_raw": "ΚΑΡΥΟΦΥΤΟ 0         67062 - ΣΤΑΥΡΟΥΠΟΛΗ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV014830231",
+    "date": "2024-05-27",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟ ΚΑΡΥΟΦΥΤΟ ΞΑΝΘΗΣ, ("
+   },
+   "lat": 41.260627,
+   "lon": 24.663994,
+   "geo_precision": "municipality"
+  },
+  "096156917": {
+   "vat": "096156917",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ \"Η ΡΟΔΟΠΗ\"",
+    "ΔΑ.Σ.Ε.Σιδηρόνερου Δράμας η “Ροδόπη”",
+    "ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ Η ΡΟΔΟΠΗ"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Δράμας",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΝΕΡΟΥ Η ΡΟΔΟΠΗ",
+    "settlement": "ΣΙΔΗΡΟΝΕΡΟ",
+    "postal_code": "66038",
+    "city": "ΣΙΔΗΡΟΝΕΡΟ",
+    "address_raw": "ΣΙΔΗΡΟΝΕΡΟ 0         66038 - ΣΙΔΗΡΟΝΕΡΟ"
+   },
+   "lat": 41.368582,
+   "lon": 24.23237,
+   "geo_precision": "municipality"
+  },
+  "096157650": {
+   "vat": "096157650",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΙΣΩΜΑΤΟΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΙΣΩΜΑΤΟΣ",
+    "settlement": "ΙΣΩΜΑ",
+    "postal_code": "57017",
+    "city": "ΞΥΛΟΠΟΛΗ",
+    "address_raw": "ΙΣΩΜΑ 0         57017 - ΞΥΛΟΠΟΛΗ"
+   },
+   "lat": 40.987174,
+   "lon": 23.163017,
+   "geo_precision": "municipality"
+  },
+  "096157662": {
+   "vat": "096157662",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΑΓΙΟΣ ΑΝΤΩΝΙΟΣ",
+    "ΔΑ.Σ.Ε. ΑΓΙΟΥ ΑΝΤΩΝΙΟΥ",
+    "ΔΑ.Σ.Ε. ΑΓΙΟΥ ΑΝΤΩΝΙΟΥ168",
+    "ΔΑΣΕ ΑΓΙΟΥ ΑΝΤΩΝΙΟΥ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΑΓΙΟΥ ΑΝΤΩΝΙΟΥ",
+    "settlement": "ΑΓΙΟΣ ΜΑΡΚΟΣ",
+    "postal_code": "61100",
+    "city": "ΚΙΛΚΙΣ",
+    "address_raw": "ΑΓΙΟΣ ΜΑΡΚΟΣ 0         61100 - ΚΙΛΚΙΣ"
+   },
+   "lat": 41.136566,
+   "lon": 23.062588,
+   "geo_precision": "municipality"
+  },
+  "096160377": {
+   "vat": "096160377",
+   "registry_names": [
+    "ΔΑΣΕ ΒΕΡΤΙΣΚΟΥ-ΟΣΣΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΒΕΡΤΙΣΚΟΥ - ΟΣΣΑΣ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Θεσσαλονίκης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΒΕΡΤΙΣΚΟΥ ΟΣΣΑΣ",
+    "settlement": "ΒΕΡΤΙΣΚΟΣ",
+    "postal_code": "57017",
+    "city": "ΞΥΛΟΠΟΛΗ",
+    "address_raw": "ΒΕΡΤΙΣΚΟΣ 0         57017 - ΞΥΛΟΠΟΛΗ"
+   },
+   "lat": 40.883582,
+   "lon": 23.228308,
+   "geo_precision": "municipality"
+  },
+  "096178412": {
+   "vat": "096178412",
+   "registry_names": [
+    "ΑΦΜ ΔΑΣΕ ΚΕΧΡΟΥ",
+    "ΔΑΣΕ ΚΕΧΡΟΥ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Ροδόπης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΕΧΡΟΥ Ν ΡΟΔΟΠΗΣ",
+    "settlement": "ΚΕΧΡΟΣ",
+    "postal_code": "69300",
+    "city": "ΣΑΠΕΣ",
+    "address_raw": "ΚΕΧΡΟΣ 0         69300 - ΣΑΠΕΣ"
+   },
+   "lat": 41.234339,
+   "lon": 25.854177,
+   "geo_precision": "municipality"
+  },
+  "096178448": {
+   "vat": "096178448",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΧΑΡΑΔΡΑΣ",
+    "ΔΑΣΕ ΧΑΡΑΔΡΑΣ",
+    "ΔΑΣΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΕΡΓΑΣΙΑΣ ΧΑΡΑΔΡΑΣ ΚΕΧΡΟΥ ΠΕ ΡΟΔΟΠΗΣ"
+   ],
+   "n_contracts": 9,
+   "contract_pes": [
+    "Π.Ε. Ροδόπης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΑΡΑΔΡΑΣ ΚΕΧΡΟΥ ΠΕ ΡΟΔΟΠΗΣ",
+    "settlement": "ΧΑΡΑΔΡΑ ΚΕΧΡΟΥ ΣΑΠΩΝ",
+    "postal_code": "69300",
+    "city": "ΣΑΠΕΣ",
+    "address_raw": "ΧΑΡΑΔΡΑ ΚΕΧΡΟΥ ΣΑΠΩΝ 0         69300 - ΣΑΠΕΣ"
+   },
+   "lat": 41.026731,
+   "lon": 25.701367,
+   "geo_precision": "municipality"
+  },
+  "096194018": {
+   "vat": "096194018",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. \"ΟΙ ΛΕΟΝΤΕΣ ΤΟΥ ΜΠΕΛΛΕΣ\"",
+    "ΔΑ.Σ.Ε. ΟΙ ΛΕΟΝΤΕΣ ΤΟΥ ΜΠΕΛΛΕΣ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΑΓΡΟΤΙΚΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΑ ΚΡΟΥΣΙΑ",
+    "settlement": "ΡΟΔΟΠΟΛΗ",
+    "postal_code": "62053",
+    "city": "ΡΟΔΟΠΟΛΗ",
+    "address_raw": "ΡΟΔΟΠΟΛΗ 0         62053 - ΡΟΔΟΠΟΛΗ"
+   },
+   "lat": 41.260044,
+   "lon": 22.999623,
+   "geo_precision": "municipality"
+  },
+  "096203333": {
+   "vat": "096203333",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΡΔΑΜΟΥ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Ροδόπης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑ Σ Ε  ΚΑΡΔΑΜΟΥ",
+    "settlement": "ΚΑΡΔΑΜΟΣ",
+    "postal_code": "69100",
+    "city": "ΚΟΜΟΤΗΝΗ",
+    "address_raw": "ΚΑΡΔΑΜΟΣ 0         69100 - ΚΟΜΟΤΗΝΗ"
+   },
+   "lat": 41.115695,
+   "lon": 25.40634,
+   "geo_precision": "municipality"
+  },
+  "096240840": {
+   "vat": "096240840",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝ/ΣΜΟΣ ΣΚΟΤΙΝΑΣ Ν.Π.Ι.Δ.",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΚΟΤΙΝΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΚΟΤΙΝΑΣ (ΔΑΣΕ)"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Πιερίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΚΟΤΙΝΑΣ",
+    "settlement": "ΣΚΟΤΙΝΑ",
+    "postal_code": "60063",
+    "city": "ΛΕΠΤΟΚΑΡΥΑ",
+    "address_raw": "ΣΚΟΤΙΝΑ 0         60063 - ΛΕΠΤΟΚΑΡΥΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV016858999",
+    "date": "2025-05-21",
+    "excerpt": "ΜΕ ΕΔΡΑ ΣΤΗ ΣΚΟΤΙΝΑ ΠΙΕΡΙΑΣ"
+   },
+   "lat": 40.014718,
+   "lon": 22.551502,
+   "geo_precision": "municipality"
+  },
+  "099207976": {
+   "vat": "099207976",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ¨Η ΕΡΥΘΡΟΕΛΑΤΗ¨ ΒΥΡΩΝΕΙΑΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 41.265214,
+   "lon": 23.253218,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΒΥΡΩΝΕΙΑ",
+    "city": "ΣΙΔΗΡΟΚΑΣΤΡΟ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑ.Σ.Ε. Η ΕΡΥΘΡΟΕΛΑΤΗ ΒΥΡΩΝΕΙΑΣ» — Βυρώνεια, δήμος Σιντικής· Δασαρχείο Σιδηροκάστρου"
+   }
+  },
+  "099240506": {
+   "vat": "099240506",
+   "registry_names": [
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ \"ΔΡΥΣ\"",
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ \"ΔΡΥΣ¨",
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ ΔΡΥΣ",
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ ΣΡΥΣ",
+    "ΔΣΑΕ ΠΟΤΑΜΩΝ \"ΔΡΥΣ\"",
+    "ΠΟΤΑΜΩΝ \"ΔΡΥΣ\""
+   ],
+   "n_contracts": 29,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΟΤΑΜΩΝ ΔΡΥΣ",
+    "settlement": "ΠΑΤΑΜΟΙ",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΠΑΤΑΜΟΙ 0         66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.351684,
+   "lon": 23.902615,
+   "geo_precision": "municipality"
+  },
+  "099240543": {
+   "vat": "099240543",
+   "registry_names": [
+    "ΔΑΣΕ Κ. ΝΕΥΡΟΚΟΠΙΟΥ",
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ \"ΑΕΤΟΣ\"",
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ \"Ο ΑΕΤΟΣ\"",
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ ΑΕΤΟΣ",
+    "ΔΑΣΕ ΠΟΤΑΜΩΝ Ο ΑΕΤΟΣ",
+    "ΠΟΤΑΜΩΝ \"ΔΡΥΣ\""
+   ],
+   "n_contracts": 32,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΟΤΑΜΩΝ",
+    "settlement": "ΠΟΤΑΜΟΙ",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΠΟΤΑΜΟΙ 0         66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.394699,
+   "lon": 24.098996,
+   "geo_precision": "municipality"
+  },
+  "099240635": {
+   "vat": "099240635",
+   "registry_names": [
+    "2.\tΔΑ.Σ.Ε Κ.ΝΕΥΡΟΚΟΠΙΟΥ ΔΡΑΜΑΣ",
+    "ΔΑΣΕ Κ ΝΕΥΡΟΚΟΠΙΟΥ",
+    "ΔΑΣΕ Κ. ΝΕΥΡΙΚΟΠΙΟΥ",
+    "ΔΑΣΕ Κ. ΝΕΥΡΟΚΟΠΙΟΥ",
+    "ΔΑΣΕ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ",
+    "ΔΑΣΕ ΝΕΥΡΟΚΟΠΙΟΥ"
+   ],
+   "n_contracts": 28,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΤΩ ΝΕΥΡΟΚΟΠΙΟΥ",
+    "settlement": "ΝΕΟΣ ΣΥΝΟΙΚΙΣΜΟΣ",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΝΕΟΣ ΣΥΝΟΙΚΙΣΜΟΣ 0         66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.351684,
+   "lon": 23.902615,
+   "geo_precision": "municipality"
+  },
+  "099243730": {
+   "vat": "099243730",
+   "registry_names": [
+    "ΔΑΣΕ ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ \"ΚΑΤΟΥΝΙΤΣΑ\"",
+    "ΔΑΣΕ ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ ΚΑΤΟΥΝΙΤΣΑ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ ΚΑΤΟΥΝΙΤΣΑ",
+    "settlement": "ΛΟΥΤΡΑΚΙ ΑΛΜΩΠΙΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΛΟΥΤΡΑΚΙ ΑΛΜΩΠΙΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.971188,
+   "lon": 21.947298,
+   "geo_precision": "municipality"
+  },
+  "099244241": {
+   "vat": "099244241",
+   "registry_names": [
+    "ΔΑΣΕ ΛΟΥΤΡΑΚΙΟΥ ΠΡΩΤΟΣ ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΛΟΥΤΡΑΚΙΟΥ ΠΡΩΤΟΣ ΛΟΥΤΡΑΚΙΟΥ ΑΛΜΩΠΙΑΣ",
+    "settlement": "ΛΟΥΤΡΑΚΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΛΟΥΤΡΑΚΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.971188,
+   "lon": 21.947298,
+   "geo_precision": "municipality"
+  },
+  "099244449": {
+   "vat": "099244449",
+   "registry_names": [
+    "1 ΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ",
+    "1ΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ",
+    "1ος ΔΑΣΕ ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ",
+    "1ος ΔΑΣΕ ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ ΠΕΛΛΑΣ",
+    "1ος ΔΑΣΕ ΝΟΤΙΑΣ-ΑΛΜΩΠΙΑΣ",
+    "ΔΑΣΕ 1ος ΔΑΣΕ ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "1 ΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΟΤΙΑΣ ΑΛΜΩΠΙΑΣ",
+    "settlement": "ΝΟΤΙΑ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΝΟΤΙΑ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "contract_seat": {
+    "ref": "21SYMV009175016",
+    "date": "2021-08-31",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗ ΝΟΤΙΑ ΚΑΙ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "099422688": {
+   "vat": "099422688",
+   "registry_names": [
+    "ΑΓΡΟΤΙΚΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΙΚΟΣ ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΛΑΡΙΣΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΑΓΡΟΤΙΚΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΛΑΡΙΣΑΣ",
+    "settlement": "ΧΑΤΖΗΜΙΧΑΛΗ 81",
+    "postal_code": "41334",
+    "city": "ΛΑΡΙΣΑ",
+    "address_raw": "ΧΑΤΖΗΜΙΧΑΛΗ 81        41334 - ΛΑΡΙΣΑ"
+   },
+   "contract_seat": {
+    "ref": "21SYMV009532772",
+    "date": "2021-11-15",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΛΑΡΙΣΑ ΚΑΙ"
+   },
+   "lat": 39.62431,
+   "lon": 22.399018,
+   "geo_precision": "municipality"
+  },
+  "099689971": {
+   "vat": "099689971",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. «ΑΚΡΙΤΑΣ» ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 40.845666,
+   "lon": 25.877881,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΑΛΕΞΑΝΔΡΟΥΠΟΛΗ",
+    "city": "ΑΛΕΞΑΝΔΡΟΥΠΟΛΗ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑ.Σ.Ε. ΑΚΡΙΤΑΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ» — the name states the town; Π.Ε. Έβρου"
+   }
+  },
+  "099694608": {
+   "vat": "099694608",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΒΙΤΣΙΟΥ - ΚΛΕΙΣΟΥΡΑΣ",
+    "ΔΑΣΕ ΒΙΤΣΙΟΥ ΚΛΕΙΣΟΥΡΑΣ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΙΤΣΙΟΥ - ΚΛΕΙΣΟΥΡΑΣ ΚΑΣΤΟΡΙΑΣ",
+    "settlement": "ΤΟΙΧΙΟ   ΚΑΣΤΟΡΙΑΣ",
+    "postal_code": "52059",
+    "city": "ΒΙΤΣΙ",
+    "address_raw": "ΤΟΙΧΙΟ   ΚΑΣΤΟΡΙΑΣ 0         52059 - ΒΙΤΣΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017746699",
+    "date": "2025-10-16",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΤΟΙΧΙΟ ΚΑΙ"
+   },
+   "lat": 40.569434,
+   "lon": 21.319855,
+   "geo_precision": "municipality"
+  },
+  "099714593": {
+   "vat": "099714593",
+   "registry_names": [
+    "Α.ΔΑ.Σ.Ε.ΚΑΣΤΑΝΙΑΣ & ΑΜΠΕΛΙΩΝ ΚΛΕΙΝΟΥ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΑΝΑΠΤΥΞΙΑΚΟΣ ΔΑΣΙΚΟΣ ΣΥΝETAIΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΚΑΣΤΑΝΙΑΣ ΑΜΠΕΛΙΩΝ ΚΛΕΙΝΟΥ",
+    "settlement": "ΚΑΣΤΑΝΕΑ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΚΑΣΤΑΝΕΑ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.696825,
+   "lon": 21.579006,
+   "geo_precision": "municipality"
+  },
+  "099714998": {
+   "vat": "099714998",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Χρυσομηλιάς Καλαμπάκας",
+    "ΟΔΑΣΕ ΧΡΥΣΟΜΗΛΙΑΣ",
+    "ΟΡΕΙΝΟΣ ΔΑΣΙΚΟΣ ΣΥΝ.ΧΡΥΣΟΜΗΛΙΑΣ",
+    "Ορεινού ΔΑ.Σ.Ε. Χρυσομηλιάς Καλαμπάκας"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΟΡΕΙΝΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΧΡΥΣΟΜΗΛΙΑ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΧΡΥΣΟΜΗΛΙΑ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.607437,
+   "lon": 21.499747,
+   "geo_precision": "municipality"
+  },
+  "099715160": {
+   "vat": "099715160",
+   "registry_names": [
+    "5ος  ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ",
+    "5ος ΕΔΑΣΕ ΧΡΥΣΟΜΗΛΙΑΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "5 ΟΣ ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΧΡΥΣΟΜΗΛΙΑ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΧΡΥΣΟΜΗΛΙΑ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.607437,
+   "lon": 21.499747,
+   "geo_precision": "municipality"
+  },
+  "099715610": {
+   "vat": "099715610",
+   "registry_names": [
+    "ΟΔΑΣΕ ΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΟΡΕΙΝΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΜΗΛΙΑ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΜΗΛΙΑ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.696825,
+   "lon": 21.579006,
+   "geo_precision": "municipality"
+  },
+  "099718353": {
+   "vat": "099718353",
+   "registry_names": [
+    "ΔΑΣΕ ΕΛΑΦΟΥ \"Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\"",
+    "ΔΑΣΕ ΕΛΑΦΟΥ Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ",
+    "ΔΑΣΕ ΕΛΑΦΟΥ\" Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\""
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 39.579246,
+   "lon": 22.783678,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΕΛΑΦΟΣ",
+    "city": "ΑΓΙΑ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑΣΕ ΕΛΑΦΟΥ Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ» — Έλαφος, δήμος Αγιάς· Δασαρχείο Αγιάς"
+   }
+  },
+  "099742870": {
+   "vat": "099742870",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΣΚΑΛΩΤΗΣ \"Η ΠΡΟΟΔΟΣ\"",
+    "ΔΑΣΕ ΣΚΑΛΩΤΗΣ Η ΠΡΟΟΔΟΣ",
+    "Νέος ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ Εργασίας Σκαλωτής ‘’Η Πρόοδος’’"
+   ],
+   "n_contracts": 15,
+   "contract_pes": [
+    "Π.Ε. Δράμας",
+    "Π.Ε. Θεσσαλονίκης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΝΕΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΚΑΛΩΤΗΣ",
+    "settlement": "ΣΚΑΛΩΤΗ",
+    "postal_code": "66038",
+    "city": "ΣΙΔΗΡΟΝΕΡΟ",
+    "address_raw": "ΣΚΑΛΩΤΗ 0         66038 - ΣΙΔΗΡΟΝΕΡΟ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV012769417",
+    "date": "2023-05-26",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΗ ΣΚΑΛΩΤΗ ΔΡΑΜΑΣ, ΤΚ 66038"
+   },
+   "lat": 41.411173,
+   "lon": 24.28289,
+   "geo_precision": "municipality"
+  },
+  "099922148": {
+   "vat": "099922148",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΦΛΕΓΚΑ ΠΕΡΙΒΟΛΙΟΥ",
+    "ΔΑ.Σ.Ε. ΦΛΕΓΚΑ ΠΕΡΙΒΟΛΙΟΥ",
+    "ΔΑΣΕ ΦΛΕΓΚΑ ΓΡΕΒΕΝΩΝ",
+    "ΔΑΣΕ ΦΛΕΓΚΑ ΠΕΡΙΒΟΛΙΟΥ ΓΡΕΒΕΝΩΝ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Γρεβενών",
+    "Π.Ε. Ηλείας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΦΛΕΓΚΑ ΠΕΡΙΒΟΛΙΟΥ",
+    "settlement": "ΠΕΡΙΒΟΛΙ",
+    "postal_code": "51100",
+    "city": "ΓΡΕΒΕΝΑ",
+    "address_raw": "ΠΕΡΙΒΟΛΙ 0         51100 - ΓΡΕΒΕΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017474281",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΠΕΡΙΒΟΛΙΟΥ Π.Ε. ΓΡΕΒΕΝΩΝ ΚΑΙ"
+   },
+   "lat": 40.067181,
+   "lon": 21.436815,
+   "geo_precision": "municipality"
+  },
+  "129346925": {
+   "vat": "129346925",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΜΟΥΧΑΣ \"Ο ΑΓΙΟΣ ΤΡΥΦΩΝ\""
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Καρδίτσας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΜΠΟΛΤΣΗ ΠΑΥΛΙΤΣΑ ΣΕΡΑΦΕΙΜ",
+    "settlement": "ΦΡΑΓΜΑ ΛΙΜΝΗΣ Ν ΠΛΑΣΤΗΡΑ  ΜΟΥΧΑ",
+    "postal_code": "43067",
+    "city": "ΜΕΣΕΝΙΚΟΛΑΣ",
+    "address_raw": "ΦΡΑΓΜΑ ΛΙΜΝΗΣ Ν ΠΛΑΣΤΗΡΑ  ΜΟΥΧΑ 0         43067 - ΜΕΣΕΝΙΚΟΛΑΣ"
+   },
+   "lat": 39.291224,
+   "lon": 21.723649,
+   "geo_precision": "municipality"
+  },
+  "800255232": {
+   "vat": "800255232",
+   "registry_names": [
+    "ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ <<ΖΩΟΔΟΧΟΥ ΠΗΓΗΣ>>",
+    "ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ <<ΖΩΟΔΟΧΟΥ ΠΗΓΗΣ>>>>"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΤΟΥΡΙΣΤΙΚΟΣ ΔΑΣΙΚΟΣ ΥΛΟΤΟΜΙΚΟΣ ΣΥΝΕΤΕΡΙΣΜΟΣ ΝΕΣΤΟΡΙΟΥ - ΚΟΤΥΛΗΣ ΚΑΣΤΟΡΙΑΣ",
+    "settlement": "ΚΟΤΥΛΗ ΝΕΣΤΟΡΙΟΥ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΚΟΤΥΛΗ ΝΕΣΤΟΡΙΟΥ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017471608",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΚΟΤΥΛΗ ΚΑΙ"
+   },
+   "lat": 40.32757,
+   "lon": 20.996433,
+   "geo_precision": "municipality"
+  },
+  "800255256": {
+   "vat": "800255256",
+   "registry_names": [
+    "ΔΑΣΕ ΧΡΥΣΗ ΓΡΑΜΜΟΣ ΣΥΝ/ΣΜΟΣ",
+    "ΔΑΣΕ ΧΡΥΣΗΣ",
+    "ΔΑΣΕ ΧΡΥΣΗΣ ΓΡΑΜΜΟΣ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΗΣ ΔΗΜΟΥ ΝΕΣΤΟΡΙΟΥ",
+    "settlement": "ΧΡΥΣΗ",
+    "postal_code": "50007",
+    "city": "ΠΕΝΤΑΛΟΦΟΣ",
+    "address_raw": "ΧΡΥΣΗ 0         50007 - ΠΕΝΤΑΛΟΦΟΣ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015533339",
+    "date": "2024-10-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΧΡΥΣΗ ΚΑΙ"
+   },
+   "earlier_seat": {
+    "ref": "23SYMV013491060",
+    "date": "2023-09-28",
+    "excerpt": "ΜΕ ΕΔΡΑ ΚΑΣΤΟΡΙΑ"
+   },
+   "lat": 40.274648,
+   "lon": 20.9754,
+   "geo_precision": "municipality",
+   "seat_note": "Its 2023 contract 23SYMV013491060 says «ΜΕ ΕΔΡΑ ΚΑΣΤΟΡΙΑ» — the town — while its 2022 and 2024 contracts and VIES all say ΧΡΥΣΗ (a village of Π.Ε. Καστοριάς, reference town Πεντάλοφος): the 2023 wording names the wider place, it is not a different seat. The village is used; the 2023 clause is kept in `earlier_seat`."
+  },
+  "800255650": {
+   "vat": "800255650",
+   "registry_names": [
+    "ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ <<Ο ΠΥΡΓΟΣ>",
+    "ΔΑΣΕ ΚΟΤΥΛΗΣ ΝΕΣΤΟΡΙΟΥ <<Ο ΠΥΡΓΟΣ>>"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΤΥΛΗΣ  ΝΕΣΤΟΡΙΟΥ Ο ΠΥΡΓΟΣ",
+    "settlement": "ΚΟΤΥΛΗ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΚΟΤΥΛΗ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017481153",
+    "date": "2025-09-03",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΚΟΤΥΛΗ ΚΑΙ"
+   },
+   "lat": 40.343441,
+   "lon": 21.031089,
+   "geo_precision": "municipality"
+  },
+  "800282129": {
+   "vat": "800282129",
+   "registry_names": [
+    "Β' ΔΑΣΕ Κερασιάς",
+    "Β΄ΔΑΣΕ ΚΕΡΑΣΙΑΣ",
+    "ΔΑΣΕ ΚΕΡΑΣΙΑΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Ροδόπης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "Β ΔΑΣΕ ΚΕΡΑΣΙΑΣ ΚΕΧΡΟΥ",
+    "settlement": "ΚΕΧΡΟΣ",
+    "postal_code": "69300",
+    "city": "ΣΑΠΕΣ",
+    "address_raw": "ΚΕΧΡΟΣ 0         69300 - ΣΑΠΕΣ"
+   },
+   "lat": 41.234339,
+   "lon": 25.854177,
+   "geo_precision": "municipality"
+  },
+  "800282142": {
+   "vat": "800282142",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΜΠΟΥ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Ροδόπης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΜΠΟΥ ΚΕΧΡΟΥ ΝΟΜΟΥ ΡΟΔΟΠΗΣ",
+    "settlement": "ΚΑΜΠΟΣ",
+    "postal_code": "69300",
+    "city": "ΣΑΠΕΣ",
+    "address_raw": "ΚΑΜΠΟΣ 0         69300 - ΣΑΠΕΣ"
+   },
+   "lat": 41.184289,
+   "lon": 25.86866,
+   "geo_precision": "municipality"
+  },
+  "996509733": {
+   "vat": "996509733",
+   "registry_names": [
+    "ΔΑΣΕ ΣΤΟΜΙΟΥ ΛΑΡΙΣΑΣ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ - ΣΤΟΜΙΟΥ ΛΑΡΙΣΑΣ",
+    "settlement": "ΕΥΡΥΜΕΝΩΝ",
+    "postal_code": "40007",
+    "city": "ΠΥΡΓΕΤΟΣ",
+    "address_raw": "ΕΥΡΥΜΕΝΩΝ 0         40007 - ΠΥΡΓΕΤΟΣ"
+   },
+   "lat": 39.865684,
+   "lon": 22.704733,
+   "geo_precision": "municipality"
+  },
+  "996511267": {
+   "vat": "996511267",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΆΤΛΑΣ ΑΛΕΞ/ΠΟΛΗΣ ΕΒΡΟΥ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΤΛΑΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ ΕΒΡΟΥ",
+    "settlement": "ΛΑΜΠΡΑΚΗ ΓΡΗΓΟΡΙΟΥ 2",
+    "postal_code": "68100",
+    "city": "ΑΛΕΞΑΝΔΡΟΥΠΟΛΗ",
+    "address_raw": "ΛΑΜΠΡΑΚΗ ΓΡΗΓΟΡΙΟΥ 2         68100 - ΑΛΕΞΑΝΔΡΟΥΠΟΛΗ"
+   },
+   "lat": 40.852061,
+   "lon": 25.872772,
+   "geo_precision": "municipality"
+  },
+  "996514048": {
+   "vat": "996514048",
+   "registry_names": [
+    "ΔΑΣΕ ΠΟΛΥΘΕΑΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΟΛΥΘΕΑΣ ΜΕΤΕΩΡΩΝ",
+    "settlement": "ΠΟΛΥΘΕΑ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΠΟΛΥΘΕΑ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.696825,
+   "lon": 21.579006,
+   "geo_precision": "municipality"
+  },
+  "996514050": {
+   "vat": "996514050",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΛΟΓΡΙΑΝΗΣ ΚΑΛΑΜΠΑΚΑΣ",
+    "ΕΔΑΣΕ ΚΑΛΟΓΡΙΑΝΗΣ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Ρόδου",
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΛΟΓΡΙΑΝΗΣ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΚΑΛΟΓΡΙΑΝΗ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΚΑΛΟΓΡΙΑΝΗ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.648036,
+   "lon": 21.487394,
+   "geo_precision": "municipality"
+  },
+  "996535228": {
+   "vat": "996535228",
+   "registry_names": [
+    "ΔΑΣΕ ΒΡΥΑ ΡΗΤΙΝΗΣ",
+    "ΔΑΣΕ ΒΡΥΑΣ ΡΗΤΙΝΗΣ",
+    "Δασικός Συνεταιρισμός «Βρύας Ρητίνης»"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Ρόδου",
+    "Π.Ε. Πιερίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΡΙΑΣ-ΡΗΤΙΝΗΣ ΠΙΕΡΙΑΣ",
+    "settlement": "ΒΡΙΑ ΠΙΕΡΙΑΣ",
+    "postal_code": "60100",
+    "city": "ΚΑΤΕΡΙΝΗ",
+    "address_raw": "ΒΡΙΑ ΠΙΕΡΙΑΣ 0         60100 - ΚΑΤΕΡΙΝΗ"
+   },
+   "lat": 40.273527,
+   "lon": 22.323632,
+   "geo_precision": "municipality"
+  },
+  "996622521": {
+   "vat": "996622521",
+   "registry_names": [
+    "ΔΑΣΕ ΗΛΙΟΧΩΡΙΟΥ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΗΛΙΟΧΩΡΙΟΥ",
+    "settlement": "ΗΛΙΟΧΩΡΙ",
+    "postal_code": "44010",
+    "city": "ΤΣΕΠΕΛΟΒΟ",
+    "address_raw": "ΗΛΙΟΧΩΡΙ 0         44010 - ΤΣΕΠΕΛΟΒΟ"
+   },
+   "lat": 39.98048,
+   "lon": 20.910457,
+   "geo_precision": "municipality"
+  },
+  "996631923": {
+   "vat": "996631923",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΒΟΪΟΥ ΚΟΖΑΝΗΣ",
+    "ΔΑΣΕ ΒΟΙΟΥ ΚΟΖΑΝΗΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΪΟΥ ΚΟΖΑΝΗΣ",
+    "settlement": "ΖΩΝΗ",
+    "postal_code": "50002",
+    "city": "ΤΣΟΤΥΛΙ",
+    "address_raw": "ΖΩΝΗ 0         50002 - ΤΣΟΤΥΛΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017585783",
+    "date": "2025-09-19",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠΙΚΗ ΚΟΙΝΟΤΗΤΑ ΖΩΝΗΣ, ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ, Π.Ε. ΚΟΖΑΝΗΣ ΚΑΙ"
+   },
+   "lat": 40.308182,
+   "lon": 21.129412,
+   "geo_precision": "municipality"
+  },
+  "996631935": {
+   "vat": "996631935",
+   "registry_names": [
+    "ΔΑΣΕ ΑΝΩ ΒΟΙΟΥ Η ΑΓ. ΠΑΡΑΣΚΕΥΗ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΒΟΪΟΥ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "settlement": "ΔΑΒΑΚΗ 36",
+    "postal_code": "50002",
+    "city": "ΤΣΟΤΥΛΙ",
+    "address_raw": "ΔΑΒΑΚΗ 36        50002 - ΤΣΟΤΥΛΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017535726",
+    "date": "2025-09-11",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΔΗΜΟΤΙΚΗ ΚΟΙΝΟΤΗΤΑ ΤΣΟΤΥΛΙΟΥ ΤΟΥ ΔΗΜΟΥ ΒΟΙΟΥ,Π.Ε. ΚΟΖΑΝΗΣ ΚΑΙ"
+   },
+   "lat": 40.266321,
+   "lon": 21.248416,
+   "geo_precision": "municipality"
+  },
+  "996632249": {
+   "vat": "996632249",
+   "registry_names": [
+    "ΔΑΣΕ ΝΕΑΠΟΛΗΣ ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΑΠΟΛΗΣ ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ",
+    "settlement": "ΝΕΑΠΟΛΗ",
+    "postal_code": "50001",
+    "city": "ΝΕΑΠΟΛΗ",
+    "address_raw": "ΝΕΑΠΟΛΗ 0         50001 - ΝΕΑΠΟΛΗ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017542198",
+    "date": "2025-09-12",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗ ΔΗΜΟΤΙΚΗ ΕΝΟΤΗΤΑ ΝΕΑΠΟΛΗΣ, ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ, Π.Ε. ΚΟΖΑΝΗΣ ΚΑΙ"
+   },
+   "lat": 40.312845,
+   "lon": 21.387369,
+   "geo_precision": "municipality"
+  },
+  "996700503": {
+   "vat": "996700503",
+   "registry_names": [
+    "Δ.Α.Σ.Ε. ΦΛΩΡΙΝΑΣ  «ΝΕΟΣ»",
+    "ΔΑ.Σ.Ε. Φλώρινας «ΝΕΟΣ»",
+    "ΔΑ.Σ.Ε. Φλώρινας «Νέος»",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΩΡΙΝΑΣ -ΝΕΟΣ"
+   ],
+   "n_contracts": 14,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΩΡΙΝΑΣ ΝΕΟΣ",
+    "settlement": "ΑΛΩΝΑ",
+    "postal_code": "53100",
+    "city": "ΦΛΩΡΙΝΑ",
+    "address_raw": "ΑΛΩΝΑ 0         53100 - ΦΛΩΡΙΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017496402",
+    "date": "2025-09-04",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠ. ΚΟΙΝ. ΑΛΩΝΩΝ Π.Ε. ΦΛΩΡΙΝΑΣ ΚΑΙ"
+   },
+   "lat": 40.777068,
+   "lon": 21.30307,
+   "geo_precision": "municipality"
+  },
+  "996700700": {
+   "vat": "996700700",
+   "registry_names": [
+    "Δ.Α.Σ.Ε. ΤΟΠΙΚΩΝ ΚΟΙΝΟΤΗΤΩΝ ΑΝΩ ΥΔΡΟΥΣΑΣ, ΑΤΡΑΠΟΥ, ΠΟΛΥΠΟΤΑΜΟΥ ΚΑΙ ΣΥΝΟΙΚΙΣΜΟΥ ΣΙΜΟΥ ΙΩΑΝΝΙΔΗ, ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ Π.Ε. ΦΛΩΡΙΝΑΣ «Η ΕΝΟΤΗΤΑ»",
+    "ΔΑ.Σ.Ε. Τοπικών Κοινοτήτων Άνω Υδρούσας, Ατραπού, Πολυποτάμου & Συνοικισμού Σίμου Ιωαννίδη Δήμου Φλώρινας Π.Ε. Φλώρινας «Η ΕΝΟΤΗΤΑ»"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΟΠΙΚΩΝ ΚΟΙΝΟΤΗΤΩΝ ΑΝΩ ΥΔΡΟΥΣΑΣ ΑΤΡΑΠΟΥ ΠΟΛΥΠΟΤΑΜΟΥ ΚΑΙ ΣΥΝΟΙΚΙΣΜΟΥ ΣΙΜΟΥ ΙΩΑΝΝΙΔΗ ΔΗΜΟΥ",
+    "settlement": "ΠΟΛΥΠΟΤΑΜΟΣ",
+    "postal_code": "53100",
+    "city": "ΦΛΩΡΙΝΑ",
+    "address_raw": "ΠΟΛΥΠΟΤΑΜΟΣ 0         53100 - ΦΛΩΡΙΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017485781",
+    "date": "2025-09-03",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠ. ΚΟΙΝ. ΠΟΛΥΠΟΤΑΜΟΥ Π.Ε. ΦΛΩΡΙΝΑΣ ΚΑΙ"
+   },
+   "lat": 40.791393,
+   "lon": 21.422649,
+   "geo_precision": "municipality"
+  },
+  "996700890": {
+   "vat": "996700890",
+   "registry_names": [
+    "Δ.Α.Σ.Ε.  ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΠΟΛΥΠΟΤΑΜΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ  «ΟΙ ΥΛΟΤΟΜΟΙ»"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΠΟΛΥΠΟΤΑΜΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ ΟΙ ΥΛΟΤΟΜΟΙ",
+    "settlement": "ΠΟΛΥΠΟΤΑΜΟΣ",
+    "postal_code": "53100",
+    "city": "ΦΛΩΡΙΝΑ",
+    "address_raw": "ΠΟΛΥΠΟΤΑΜΟΣ 0         53100 - ΦΛΩΡΙΝΑ"
+   },
+   "lat": 40.791393,
+   "lon": 21.422649,
+   "geo_precision": "municipality"
+  },
+  "996712631": {
+   "vat": "996712631",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΚΑΛΟΧΩΡΙΟΥ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΛΟΧΩΡΙΟΥ ΚΑΛΟΧΩΡΙ",
+    "settlement": "ΚΑΛΟΧΩΡΙ",
+    "postal_code": "62055",
+    "city": "Κ ΠΟΡΟΙΑ",
+    "address_raw": "ΚΑΛΟΧΩΡΙ 0         62055 - Κ ΠΟΡΟΙΑ"
+   },
+   "lat": 41.283947,
+   "lon": 22.931482,
+   "geo_precision": "municipality"
+  },
+  "996713431": {
+   "vat": "996713431",
+   "registry_names": [
+    "ΔΑΣΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΕΣ ΒΥΡΩΝΕΙΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΙ ΑΚΡΙΤΕΣ ΒΥΡΩΝΕΙΑΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΙ ΑΚΡΙΤΕΣ ΒΥΡΩΝΕΙΑΣ",
+    "settlement": "ΒΥΡΩΝΕΙΑ",
+    "postal_code": "62043",
+    "city": "Ν ΠΕΤΡΙΤΣΙ",
+    "address_raw": "ΒΥΡΩΝΕΙΑ 0         62043 - Ν ΠΕΤΡΙΤΣΙ"
+   },
+   "lat": 41.265214,
+   "lon": 23.253218,
+   "geo_precision": "municipality"
+  },
+  "996713836": {
+   "vat": "996713836",
+   "registry_names": [
+    "ΔΑΣΕ ΑΚΡΙΤΟΧΩΡΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ ΠΕΡΤΟΥΛΙ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  Δ Α Σ Ε ΑΚΡΙΤΟΧΩΡΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ ΠΕΡΤΟΥΛΙ",
+    "settlement": "ΑΚΡΙΤΟΧΩΡΙ",
+    "postal_code": "62300",
+    "city": "ΣΙΔΗΡΟΚΑΣΤΡΟ",
+    "address_raw": "ΑΚΡΙΤΟΧΩΡΙ 0         62300 - ΣΙΔΗΡΟΚΑΣΤΡΟ"
+   },
+   "lat": 41.248913,
+   "lon": 23.395403,
+   "geo_precision": "municipality"
+  },
+  "996730685": {
+   "vat": "996730685",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΔΗΜΟΥ ΝΟΤΙΟΥ ΠΗΛΙΟΥ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Μαγνησίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΗΜΟΥ ΝΟΤΙΟΥ ΠΗΛΙΟΥ",
+    "settlement": "ΠΙΝΑΚΑΤΕΣ",
+    "postal_code": "37010",
+    "city": "ΜΗΛΙΕΣ",
+    "address_raw": "ΠΙΝΑΚΑΤΕΣ 0         37010 - ΜΗΛΙΕΣ"
+   },
+   "contract_seat": {
+    "ref": "23SYMV012239508",
+    "date": "2023-03-06",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΙΣ ΠΙΝΑΚΑΤΕΣ ΜΑΓΝΗΣΙΑΣ ΤΟΥ ΔΗΜΟΥ ΝΟΤΙΟΥ ΠΗΛΙΟΥ ("
+   },
+   "lat": 39.336407,
+   "lon": 23.117402,
+   "geo_precision": "municipality"
+  },
+  "996775144": {
+   "vat": "996775144",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΣΩΤΗΡΙΤΣΑΣ ΛΑΡΙΣΑΣ \"Ο ΚΙΣΣΑΒΟΣ\"",
+    "ΔΑ.Σ.Ε. ΣΩΤΗΡΙΤΣΑΣ ΛΑΡΙΣΑΣ - “Ο ΚΙΣΣΑΒΟΣ",
+    "ΔΑΣΕ ΣΩΤΗΡΙΤΣΑΣ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΕ ΣΩΤΗΡΙΤΣΑΣ ΛΑΡΙΣΑΣ \"Ο ΚΙΣΣΑΒΟΣ\"",
+    "ΔΑΣΕ ΣΩΤΗΡΙΤΣΑΣ Ο ΚΙΣΣΑΒΟΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΣΩΤΗΡΙΤΣΑΣ ΛΑΡΙΣΑΣ \"Ο ΚΙΣΑΒΟΣ\""
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΩΤΗΡΙΤΣΑΣ ΛΑΡΙΣΑΣ Ο ΚΙΣΣΑΒΟΣ",
+    "settlement": "ΣΩΤΗΡΙΤΣΑ  ΜΕΛΙΒΟΙΑΣ",
+    "postal_code": "40003",
+    "city": "ΑΓΙΑ",
+    "address_raw": "ΣΩΤΗΡΙΤΣΑ  ΜΕΛΙΒΟΙΑΣ 0         40003 - ΑΓΙΑ"
+   },
+   "contract_seat": {
+    "ref": "22SYMV010241271",
+    "date": "2022-03-21",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΣΩΤΗΡΙΤΣΑ ΑΓΙΑΣ -ΛΑΡΙΣΑΣ"
+   },
+   "lat": 39.694966,
+   "lon": 22.769921,
+   "geo_precision": "municipality"
+  },
+  "996777703": {
+   "vat": "996777703",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Αγιοκάμπου Λάρισας",
+    "ΔΑΣΕ  ΑΓΙΟΚΑΜΠΟΥ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΕ ΑΓΙΟΚΑΜΠΟΣ",
+    "ΔΑΣΕ ΑΓΙΟΚΑΜΠΟΣ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΕ ΑΓΙΟΚΑΜΠΟΥ",
+    "ΔΑΣΕ ΑΓΙΟΚΑΜΠΟΥ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΕ ΑΓΙΟΚΑΜΠΟΥ ΛΑΡΙΣΗΣ",
+    "Δασικός Συνεταιρισμός «Αγιόκαμπου Λαρίσης"
+   ],
+   "n_contracts": 16,
+   "contract_pes": [
+    "Π.Ε. Λάρισας",
+    "Π.Ε. Ηλείας",
+    "Π.Ε. Ρόδου",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΙΟΚΑΜΠΟΥ ΛΑΡΙΣΑΣ",
+    "settlement": "ΣΚΗΤΗ ΑΓΙΟΚΑΜΠΟΥ",
+    "postal_code": "40003",
+    "city": "ΑΓΙΑ",
+    "address_raw": "ΣΚΗΤΗ ΑΓΙΟΚΑΜΠΟΥ 0         40003 - ΑΓΙΑ"
+   },
+   "lat": 39.694966,
+   "lon": 22.769921,
+   "geo_precision": "municipality"
+  },
+  "996811473": {
+   "vat": "996811473",
+   "registry_names": [
+    "ΕΔΑΣΕ ΓΑΡΔΙΚΙΟΥ",
+    "ΕΔΑΣΕ ΓΑΡΔΙΚΙΟΥ ΤΡΙΚΑΛΩΝ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΓΑΡΔΙΚΙΟΥ ΤΡΙΚΑΛΩΝ",
+    "settlement": "ΓΑΡΔΙΚΙ",
+    "postal_code": "42032",
+    "city": "ΠΥΛΗ",
+    "address_raw": "ΓΑΡΔΙΚΙ 0         42032 - ΠΥΛΗ"
+   },
+   "lat": 39.541367,
+   "lon": 21.258065,
+   "geo_precision": "municipality"
+  },
+  "996811504": {
+   "vat": "996811504",
+   "registry_names": [
+    "ΕΔΑΣΕ ΦΛΑΜΠΟΥΡΕΣΙΟΥ - ΤΥΜΦΑΙΩΝ",
+    "ΕΔΑΣΕ ΦΛΑΜΠΟΥΡΕΣΙΟΥ ΤΥΜΦΑΙΩΝ",
+    "ΕΔΑΣΕ ΦΛΑΜΠΟΥΡΕΣΙΟΥ ΤΥΜΦΑΙΩΝ ΚΑΛΑΜΠΑΚΑΣ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΑΜΠΟΥΡΕΣΙΟΥ  ΤΥΜΦΑΙΩΝ   ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΦΛΑΜΠΟΥΡΕΣΙ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΦΛΑΜΠΟΥΡΕΣΙ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.696825,
+   "lon": 21.579006,
+   "geo_precision": "municipality"
+  },
+  "996811553": {
+   "vat": "996811553",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Αμαράντου-Κλεινού Καλαμπάκας",
+    "ΟΔΑΣΕ ΑΜΑΡΑΝΤΟΥ ΚΑΙ ΚΛΕΙΝΟΥ",
+    "Ορεινός ΔΑ.Σ.Ε. Αμαράντου και Κλείνου Καλαμπάκας"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΟΡΕΙΝΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΜΑΡΑΝΤΟΥ ΚΑΙ ΚΛΕΙΝΟΥ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΑΜΑΡΑΝΤΟΣ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΑΜΑΡΑΝΤΟΣ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.696825,
+   "lon": 21.579006,
+   "geo_precision": "municipality"
+  },
+  "996838737": {
+   "vat": "996838737",
+   "registry_names": [
+    "ΔΑΣΕ ΦΛΑΜΠΟΥΡΑΡΙΟΥ ΖΑΓΟΡΙΟΥ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΑΜΠΟΥΡΑΡΙΟΥ ΖΑΓΟΡΙΟΥ",
+    "settlement": "ΦΛΑΜΠΟΥΡΑΡΙ",
+    "postal_code": "44014",
+    "city": "ΓΡΕΒΕΝΙΤΙ",
+    "address_raw": "ΦΛΑΜΠΟΥΡΑΡΙ 0         44014 - ΓΡΕΒΕΝΙΤΙ"
+   },
+   "lat": 39.854934,
+   "lon": 20.990866,
+   "geo_precision": "municipality"
+  },
+  "996838749": {
+   "vat": "996838749",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΒΟΥΣΑΣ Ο ΑΩΟΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΒΟΥΣΑΣ Ο ΑΩΟΣ",
+    "settlement": "ΒΟΒΟΥΣΑ",
+    "postal_code": "44014",
+    "city": "ΓΡΕΒΕΝΙΤΙ",
+    "address_raw": "ΒΟΒΟΥΣΑ 0         44014 - ΓΡΕΒΕΝΙΤΙ"
+   },
+   "lat": 39.937778,
+   "lon": 21.049851,
+   "geo_precision": "municipality"
+  },
+  "996838774": {
+   "vat": "996838774",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΙΣΤΡΑΤΟΥ Ο ΣΜΟΛΙΚΑΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πρέβεζας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΙΣΤΡΑΤΟΥ Ο ΣΜΟΛΙΚΑΣ",
+    "settlement": "ΔΙΣΤΡΑΤΟ",
+    "postal_code": "44019",
+    "city": "ΠΑΛΑΙΟΣΕΛΙ",
+    "address_raw": "ΔΙΣΤΡΑΤΟ 0         44019 - ΠΑΛΑΙΟΣΕΛΙ"
+   },
+   "lat": 40.027392,
+   "lon": 21.017604,
+   "geo_precision": "municipality"
+  },
+  "996838829": {
+   "vat": "996838829",
+   "registry_names": [
+    "ΔΑΣΕ ΑΝΗΛΙΟΥ \"Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ\"",
+    "ΔΑΣΕ ΑΝΗΛΙΟΥ ¨Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ¨",
+    "ΔΑΣΕ ΑΝΗΛΙΟΥ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΗΛΙΟΥ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "settlement": "ΑΝΗΛΙΟ",
+    "postal_code": "44200",
+    "city": "ΜΕΤΣΟΒΟ",
+    "address_raw": "ΑΝΗΛΙΟ 0         44200 - ΜΕΤΣΟΒΟ"
+   },
+   "lat": 39.759337,
+   "lon": 21.187747,
+   "geo_precision": "municipality"
+  },
+  "996838842": {
+   "vat": "996838842",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΒΟΒΟΥΣΑΣ ΤΟ ΑΡΚΟΥΔΟΡΕΜΑ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΒΟΥΣΑΣ ΤΟ ΑΡΚΟΥΔΟΡΕΜΑ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΒΟΥΣΑΣ ΤΟ ΑΡΚΟΥΔΟΡΕΜΑ",
+    "settlement": "ΒΟΒΟΥΣΑ",
+    "postal_code": "44014",
+    "city": "ΓΡΕΒΕΝΙΤΙ",
+    "address_raw": "ΒΟΒΟΥΣΑ 0         44014 - ΓΡΕΒΕΝΙΤΙ"
+   },
+   "lat": 39.937778,
+   "lon": 21.049851,
+   "geo_precision": "municipality"
+  },
+  "996838878": {
+   "vat": "996838878",
+   "registry_names": [
+    "ΔΑΣΕ ΠΩΓΩΝΙΟΥ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΩΓΩΝΙΟΥ",
+    "settlement": "ΒΗΣΣΑΝΗ",
+    "postal_code": "44002",
+    "city": "ΔΕΛΒΙΝΑΚΙ",
+    "address_raw": "ΒΗΣΣΑΝΗ 0         44002 - ΔΕΛΒΙΝΑΚΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017578861",
+    "date": "2025-09-17",
+    "excerpt": "ΜΕ ΕΔΡΑ ΒΗΣΑΝΝΗ ΚΑΙ"
+   },
+   "lat": 39.94593,
+   "lon": 20.533402,
+   "geo_precision": "municipality"
+  },
+  "996838891": {
+   "vat": "996838891",
+   "registry_names": [
+    "ΔΑΣΕ ΤΥΜΦΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΥΜΦΗΣ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΥΜΦΗΣ",
+    "settlement": "ΤΣΕΠΕΛΟΒΟ",
+    "postal_code": "44010",
+    "city": "ΤΣΕΠΕΛΟΒΟ",
+    "address_raw": "ΤΣΕΠΕΛΟΒΟ 0         44010 - ΤΣΕΠΕΛΟΒΟ"
+   },
+   "lat": 39.905634,
+   "lon": 20.819792,
+   "geo_precision": "municipality"
+  },
+  "996840038": {
+   "vat": "996840038",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΦΛΑΜΠΟΥΡΑΡΙΟΥ ΤΣΟΥΚΑ ΡΟΣΑ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΦΛΑΜΠΟΥΡΑΡΙΟΥ ΤΣΟΥΚΑ ΡΟΣΑ",
+    "settlement": "ΦΛΑΜΠΟΥΡΑΡΙ",
+    "postal_code": "44014",
+    "city": "ΓΡΕΒΕΝΙΤΙ",
+    "address_raw": "ΦΛΑΜΠΟΥΡΑΡΙ 0         44014 - ΓΡΕΒΕΝΙΤΙ"
+   },
+   "lat": 39.854934,
+   "lon": 20.990866,
+   "geo_precision": "municipality"
+  },
+  "996840296": {
+   "vat": "996840296",
+   "registry_names": [
+    "ΔΑΣΕ ΜΕΤΣΟΒΟΥ ¨Ο ΠΕΛΕΚΥΣ¨",
+    "ΔΑΣΕ ΜΕΤΣΟΒΟΥ Ο ΠΕΛΕΚΥΣ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΕΤΣΟΒΟΥ Ο ΠΕΛΕΚΥΣ",
+    "settlement": "ΜΕΤΣΟΒΟ ΑΝΩΝΥΜΟΣ",
+    "postal_code": "44200",
+    "city": "ΜΕΤΣΟΒΟ",
+    "address_raw": "ΜΕΤΣΟΒΟ ΑΝΩΝΥΜΟΣ 0         44200 - ΜΕΤΣΟΒΟ"
+   },
+   "lat": 39.717684,
+   "lon": 21.21374,
+   "geo_precision": "municipality"
+  },
+  "996848036": {
+   "vat": "996848036",
+   "registry_names": [
+    "ΔΑ.Σ.Ε Ελεύθερου Δασικού Συνεταιρισμού Εργασίας Αγριδίου"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΡΙΔΙΟΥ",
+    "settlement": "ΑΓΡΙΔΙ",
+    "postal_code": "30017",
+    "city": "ΕΜΠΕΣΟΣ",
+    "address_raw": "ΑΓΡΙΔΙ 0         30017 - ΕΜΠΕΣΟΣ"
+   },
+   "lat": 39.042487,
+   "lon": 21.282017,
+   "geo_precision": "municipality"
+  },
+  "996851495": {
+   "vat": "996851495",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΦΗΤΗΣ ΗΛΙΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΟΛΟΧΑΣ ΚΑΡΔΙΤΣΑΣ «Ο ΠΡΟΦΗΤΗΣ ΗΛΙΑΣ»"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Φθιώτιδας",
+    "Π.Ε. Ευρυτανίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΟΛΟΧΑΣ ΚΑΡΔΙΤΣΑΣ Ο ΠΡΟΦΗΤΗΣ ΗΛΙΑΣ",
+    "settlement": "ΖΑΧΑΡΙΑ ΠΑΠΑΝΤΩΝΙΟΥ 1",
+    "postal_code": "43100",
+    "city": "ΚΑΡΔΙΤΣΑ",
+    "address_raw": "ΖΑΧΑΡΙΑ ΠΑΠΑΝΤΩΝΙΟΥ 10        43100 - ΚΑΡΔΙΤΣΑ"
+   },
+   "lat": 39.357003,
+   "lon": 21.918664,
+   "geo_precision": "municipality"
+  },
+  "996853532": {
+   "vat": "996853532",
+   "registry_names": [
+    "996853532",
+    "ΔΑΣΕ ΓΑΡΕΦΙΟΥ \"ΑΝΑΓΕΝΝΗΣΗ\"",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΓΑΡΕΦΕΙΟΥ-ΑΝΑΓΕΝΝΗΣΗ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Πέλλας",
+    "Π.Ε. Θεσσαλονίκης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΓΑΡΕΦΕΙΟΥ ΑΝΑΓΕΝΝΗΣΗ",
+    "settlement": "ΓΑΡΕΦΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΓΑΡΕΦΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV014883341",
+    "date": "2024-06-05",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΓΑΡΕΦΙ ΚΑΙ"
+   },
+   "lat": 41.031965,
+   "lon": 22.043934,
+   "geo_precision": "municipality"
+  },
+  "996853998": {
+   "vat": "996853998",
+   "registry_names": [
+    "ΔΑΣΕ ΘΕΟΔΩΡΑΚΕΙΟΥ \" ΚΙΝΗΜΑ ΑΛΛΑΓΗΣ\"",
+    "ΔΑΣΕ ΘΕΟΔΩΡΑΚΕΙΟΥ - ΚΙΝΗΜΑ ΑΛΛΑΓΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΘΕΟΔΩΡΑΚΕΙΟΥ - ΚΙΝΗΜΑ ΑΛΛΑΓΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΘΕΟΔΩΡΑΚΕΙΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΘΕΟΔΩΡΑΚΕΙΟΥ - ΚΙΝΗΜΑ ΑΛΛΑΓΗΣ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΘΕΟΔΩΡΑΚΕΙΟΥ - ΚΙΝΗΜΑ ΑΛΛΑΓΗΣ",
+    "settlement": "ΘΕΟΔΩΡΑΚΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΘΕΟΔΩΡΑΚΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV014748920",
+    "date": "2024-05-14",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΘΕΟΔΩΡΑΚΙ ΚΑΙ"
+   },
+   "lat": 40.949674,
+   "lon": 22.191681,
+   "geo_precision": "municipality"
+  },
+  "996854290": {
+   "vat": "996854290",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ \" Ο ΕΛΛΗΝ\""
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΡΟΜΑΧΩΝ  Ο ΕΛΛΗΝ",
+    "settlement": "ΠΡΟΜΑΧΟΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.024974,
+   "lon": 22.004465,
+   "geo_precision": "municipality"
+  },
+  "996854516": {
+   "vat": "996854516",
+   "registry_names": [
+    "«ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΡΕΙΝΟΥ ΑΛΜΩΠΙΑΣ «ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ»"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΟΡΕΙΝΟΥ ΑΛΜΩΠΙΑΣ ΤΟ ΠΑΛΙΟ ΠΕΥΚΩΤΟ",
+    "settlement": "ΚΑΤΩ ΓΑΡΕΦΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΚΑΤΩ ΓΑΡΕΦΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "contract_seat": {
+    "ref": "26SYMV019333598",
+    "date": "2026-06-29",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟ ΚΑΤΩ ΓΑΡΕΦΙ Ν. ΠΕΛΛΗΣ ("
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "996875014": {
+   "vat": "996875014",
+   "registry_names": [
+    "ΔΑΣ ΚΥΡΙΑΚΟΧΩΡΙΟΥ ΚΑΙ ΔΥΤΙΚΗΣ ΦΘΙΩΤΙΔΑΣ",
+    "ΔΑΣΕ ΚΥΡΙΑΚΟΧΩΡΙΟΥ & ΔΥΤΙΚΗΣ ΦΘΙΩΤΙΔΑΣ",
+    "ΔΑΣΕ ΚΥΡΙΑΚΟΧΩΡΙΟΥ ΚΑΙ ΔΥΤΙΚΗΣ ΦΘΙΩΤΙΔΑΣ"
+   ],
+   "n_contracts": 24,
+   "contract_pes": [
+    "Π.Ε. Φθιώτιδας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΚΥΡΙΑΚΟΧΩΡΙΟΥ ΚΑΙ ΔΥΤΙΚΗΣ ΦΘΙΩΤΙΔΑΣ",
+    "settlement": "ΚΥΡΙΑΚΟΧΩΡΙ",
+    "postal_code": "35003",
+    "city": "ΣΠΕΡΧΕΙΑΔΑ",
+    "address_raw": "ΚΥΡΙΑΚΟΧΩΡΙ 0         35003 - ΣΠΕΡΧΕΙΑΔΑ"
+   },
+   "lat": 38.823566,
+   "lon": 22.013389,
+   "geo_precision": "municipality"
+  },
+  "996875099": {
+   "vat": "996875099",
+   "registry_names": [
+    "ΔΑΣΕ ΚΥΡΙΑΚΟΧΩΡΙΟΥ & ΔΥΤΙΚΗΣ ΦΘΙΩΤΙΔΑΣ",
+    "ΔΑΣΕ ΠΥΡΓΟΥ - ΣΠΕΡΧΕΙΟΥ ΝΟΜΟΥ ΦΘΙΩΤΙΔΑΣ"
+   ],
+   "n_contracts": 29,
+   "contract_pes": [
+    "Π.Ε. Φθιώτιδας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΥΡΓΟΥ  ΣΠΕΡΧΕΙΟΥ  ΝΟΜΟΥ ΦΘΙΩΤΙΔΟΣ",
+    "settlement": "ΠΙΤΣΙΩΤΑ",
+    "postal_code": "35017",
+    "city": "ΑΓ ΓΕΩΡΓΙΟΣ",
+    "address_raw": "ΠΙΤΣΙΩΤΑ 0         35017 - ΑΓ ΓΕΩΡΓΙΟΣ"
+   },
+   "lat": 39.017717,
+   "lon": 21.908195,
+   "geo_precision": "municipality"
+  },
+  "996879302": {
+   "vat": "996879302",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΚΑΜΒΟΥΝΙΩΝ ΛΙΒΑΔΕΡΟΥ",
+    "ΔΑΣΕ ΚΑΜΒΟΥΝΙΩΝ ΛΙΒΑΔΕΡΟΥ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΜΒΟΥΝΙΩΝ ΛΙΒΑΔΕΡΟΥ",
+    "settlement": "ΕΛΑΤΗ",
+    "postal_code": "50500",
+    "city": "ΣΕΡΒΙΑ",
+    "address_raw": "ΕΛΑΤΗ 0         50500 - ΣΕΡΒΙΑ"
+   },
+   "lat": 39.980061,
+   "lon": 21.821908,
+   "geo_precision": "municipality"
+  },
+  "996889971": {
+   "vat": "996889971",
+   "registry_names": [
+    "ΔΑΣΕ ΑΚΡΙΤΑΣ",
+    "ΔΑΣΕ ΑΚΡΙΤΑΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΑΣ ΑΛΕΞΑΝΔΡΟΎΠΟΛΗΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΑΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ"
+   ],
+   "n_contracts": 16,
+   "contract_pes": [
+    "Π.Ε. Έβρου"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΑΣ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ",
+    "settlement": "ΑΒΑΝΤΑΣ ΕΝΤΟΣ ΟΙΚΙΣΜΟΥ ΤΘ 907",
+    "postal_code": "68100",
+    "city": "ΑΛΕΞΑΝΔΡΟΥΠΟΛΗ",
+    "address_raw": "ΑΒΑΝΤΑΣ ΕΝΤΟΣ ΟΙΚΙΣΜΟΥ ΤΘ 907 0         68100 - ΑΛΕΞΑΝΔΡΟΥΠΟΛΗ"
+   },
+   "lat": 40.852061,
+   "lon": 25.872772,
+   "geo_precision": "municipality"
+  },
+  "996895246": {
+   "vat": "996895246",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΜΙΣΤΡΟΥ",
+    "ΔΑ.Σ.Ε. ΜΙΣΤΡΟΥ \"ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ\"",
+    "ΔΑ.Σ.Ε. Μίστρου “Άγιος Κυπριανός”",
+    "ΔΑ.ΣΕ",
+    "ΔΑ.ΣΕ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ",
+    "ΔΑΣΕ ΜΙΣΤΡΟΥ",
+    "ΔΑΣΕ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ",
+    "ΔΑΣΕ Μίστρου “ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ”",
+    "ΔΑΣΙΚΟ ΣΥΝ/ΣΜΟ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝ/ΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ\"",
+    "ΔΑΣΙΚΟΣ ΣΥΝ/ΣΜΟΣ ΕΡΓΑΣΙΑΣΣ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ-ΑΓ.ΚΥΠΡΙΑΝΟΣ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΕΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ",
+    "Συν/σμος Εργασίας ΜΙΣΤΡΟΣ-ΑΓ.ΚΥΠΡΙΑΝΟΣ"
+   ],
+   "n_contracts": 29,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΜΙΣΤΡΟΥ ΑΓΙΟΣ ΚΥΠΡΙΑΝΟΣ",
+    "settlement": "ΜΙΣΤΡΟΣ",
+    "postal_code": "34014",
+    "city": "ΣΤΕΝΗ",
+    "address_raw": "ΜΙΣΤΡΟΣ 0         34014 - ΣΤΕΝΗ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015574939",
+    "date": "2024-10-09",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΗΝ Τ.Κ. ΜΙΣΤΡΟΥ ΤΗΣ Δ.Ε. ΔΙΡΦΥΩΝ ΤΟΥ ΔΗΜΟΥ ΔΙΡΦΥΩΝ - ΜΕΣΣΑΠΙΩΝ ΚΑΤΟΧΟ ΤΟΥ ΜΕ ΑΡΙΘΜ."
+   },
+   "lat": 38.520699,
+   "lon": 23.838376,
+   "geo_precision": "municipality"
+  },
+  "996957935": {
+   "vat": "996957935",
+   "registry_names": [
+    "ΔΑΣΕ ΑΝΑΤΟΛΙΚΟΥ ΟΛΥΜΠΟΥ ΚΑΡΥΑΣ ΚΟΚΚΙΝΟΠΗΛΟΥ",
+    "ΔΑΣΕ ΑΝΑΤΟΛΙΚΟΥ ΟΛΥΜΠΟΥ ΚΑΡΥΑΣ-ΚΟΚΚΙΝΟΠΗΛΟΥ",
+    "ΔΑΣΕ ΑΝΑΤΟΛΙΚΟΥ ΟΛΥΜΠΟΥ-ΚΑΡΥΑΣ-ΚΟΚΚΙΝΟΠΗΛΟΥ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΑΤΟΛΙΚΟΥ ΟΛΥΜΠΟΥ ΚΑΡΥΑΣ ΚΟΚΚΙΝΟΠΗΛΟΥ",
+    "settlement": "ΚΟΚΚΙΝΟΠΗΛΟΣ",
+    "postal_code": "40200",
+    "city": "ΕΛΑΣΣΟΝΑ",
+    "address_raw": "ΚΟΚΚΙΝΟΠΗΛΟΣ 0         40200 - ΕΛΑΣΣΟΝΑ"
+   },
+   "lat": 40.096882,
+   "lon": 22.252709,
+   "geo_precision": "municipality"
+  },
+  "996963038": {
+   "vat": "996963038",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ Η ΣΠΑΝΗ ΠΕΤΡΑ",
+    "ΔΑ.Σ.Ε. Ν. ΠΕΤΡΙΤΣΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ  \"Η ΣΠΑΝΗ ΠΕΤΡΑ\"",
+    "ΔΑ.Σ.Ε. Ν. ΠΕΤΡΙΤΣΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ \"Η ΣΠΑΝΗ ΠΕΤΡΑ\"",
+    "ΔΑ.Σ.Ε. ΝΕΟΥ ΠΕΤΡΙΤΣΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ  \"Η ΣΠΑΝΗ ΠΕΤΡΑ\"",
+    "ΔΑΣΕ ΝΕΟΥ ΠΕΤΡΙΤΣΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ ΣΠΑΝΗ ΠΕΤΡΑ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ ΣΠΑΝΗ ΠΕΤΡΑ"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΥ  ΠΕΤΡΙΤΣΙΟΥ ΣΙΝΤΙΚΗΣ ΣΕΡΡΩΝ Η ΣΠΑΝΗ ΠΕΤΡΑ",
+    "settlement": "ΝΕΟ ΠΕΤΡΙΤΣΙ",
+    "postal_code": "62043",
+    "city": "Ν ΠΕΤΡΙΤΣΙ",
+    "address_raw": "ΝΕΟ ΠΕΤΡΙΤΣΙ 0         62043 - Ν ΠΕΤΡΙΤΣΙ"
+   },
+   "lat": 41.275937,
+   "lon": 23.294308,
+   "geo_precision": "municipality"
+  },
+  "996963284": {
+   "vat": "996963284",
+   "registry_names": [
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΤΡΥΜΩΝΑ ΣΕΡΡΩΝ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΤΡΥΜΩΝΑ ΣΕΡΡΩΝ",
+    "settlement": "ΛΙΒΑΔΟΧΩΡΙ ΣΕΡΡΩΝ",
+    "postal_code": "62054",
+    "city": "ΣΤΡΥΜΩΝΙΚΟ",
+    "address_raw": "ΛΙΒΑΔΟΧΩΡΙ ΣΕΡΡΩΝ 00        62054 - ΣΤΡΥΜΩΝΙΚΟ"
+   },
+   "lat": 41.024838,
+   "lon": 23.361896,
+   "geo_precision": "municipality"
+  },
+  "996972477": {
+   "vat": "996972477",
+   "registry_names": [
+    "ΔΑΣΕ ΑΧΛΑΔΙΑΣ \"Η ΠΡΟΟΔΟΣ\""
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΧΛΑΔΙΑΣ - Η ΠΡΟΟΔΟΣ",
+    "settlement": "ΑΧΛΑΔΙΑ",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΑΧΛΑΔΙΑ 0         66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.397597,
+   "lon": 24.010408,
+   "geo_precision": "municipality"
+  },
+  "996972533": {
+   "vat": "996972533",
+   "registry_names": [
+    "ΔΑΣΕ ΠΑΡΑΝΕΣΤΙΟΥ ΔΡΑΜΑΣ ΤΟ ΦΡΑΚΤΟ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΑΡΑΝΕΣΤΙΟΥ ΔΡΑΜΑΣ - ΤΟ ΦΡΑΚΤΟ",
+    "settlement": "ΠΑΡΑΝΕΣΤΙ",
+    "postal_code": "66035",
+    "city": "ΠΑΡΑΝΕΣΤΙ",
+    "address_raw": "ΠΑΡΑΝΕΣΤΙ 0         66035 - ΠΑΡΑΝΕΣΤΙ"
+   },
+   "lat": 41.266615,
+   "lon": 24.500296,
+   "geo_precision": "municipality"
+  },
+  "997105908": {
+   "vat": "997105908",
+   "registry_names": [
+    "ΔΑΣΕ ΝΕΣΤΩΡ ΝΕΣΤΟΡΙΟΥ",
+    "ΔΑΣΙΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΣΤΩΡ ΝΕΣΤΟΡΙΟΥ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΣΤΩΡ ΝΕΣΤΟΡΙΟΥ",
+    "settlement": "ΝΕΣΤΟΡΙΟ ΠΛΑΤΕΙΑ ΚΑΤΩ ΝΕΣΤΟΡΙΟΥ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΝΕΣΤΟΡΙΟ ΠΛΑΤΕΙΑ ΚΑΤΩ ΝΕΣΤΟΡΙΟΥ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015530659",
+    "date": "2024-10-03",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΝΕΣΤΟΡΙΟ ΚΑΙ"
+   },
+   "lat": 40.421566,
+   "lon": 21.011251,
+   "geo_precision": "municipality"
+  },
+  "997106512": {
+   "vat": "997106512",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ \"ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ\"",
+    "ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ <<ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ>>",
+    "ΔΑΣΕ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΥΚΟΥ ΝΕΣΤΟΡΙΟΥ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "settlement": "ΠΕΥΚΟ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΠΕΥΚΟ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017823600",
+    "date": "2025-10-30",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΠΕΥΚΟ ΚΑΙ"
+   },
+   "lat": 40.421566,
+   "lon": 21.011251,
+   "geo_precision": "municipality"
+  },
+  "997106524": {
+   "vat": "997106524",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΕΠΤΑΧΩΡΙΟΥ \"ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ\""
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΕΠΤΑΧΩΡΙΟΥ ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "settlement": "ΕΠΤΑΧΩΡΙ ΚΑΣΤΟΡΙΑΣ",
+    "postal_code": "50007",
+    "city": "ΠΕΝΤΑΛΟΦΟΣ",
+    "address_raw": "ΕΠΤΑΧΩΡΙ ΚΑΣΤΟΡΙΑΣ 0         50007 - ΠΕΝΤΑΛΟΦΟΣ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015533254",
+    "date": "2024-10-03",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΕΠΤΑΧΩΡΙ ΚΑΙ"
+   },
+   "lat": 40.222065,
+   "lon": 21.021774,
+   "geo_precision": "municipality"
+  },
+  "997106813": {
+   "vat": "997106813",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΝΕΟΥ ΟΙΚΙΣΜΟΥ ΚΟΡΕΣΤΕΙΩΝ",
+    "ΔΑΣΕ ΝΕΟΥ ΟΙΚΙΣΜΟΥ ΚΟΡΕΣΤΕΙΩΝ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΟΥ ΟΙΚΙΣΜΟΥ ΚΟΡΕΣΤΕΙΩΝ ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ",
+    "settlement": "ΟΙΚΙΣΜΟΣ ΓΑΒΡΟΥ",
+    "postal_code": "52055",
+    "city": "ΜΑΚΡΟΧΩΡΙ",
+    "address_raw": "ΟΙΚΙΣΜΟΣ ΓΑΒΡΟΥ 0         52055 - ΜΑΚΡΟΧΩΡΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017726679",
+    "date": "2025-10-13",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟΝ ΓΑΒΡΟ ΚΑΙ"
+   },
+   "lat": 40.652255,
+   "lon": 21.237511,
+   "geo_precision": "municipality"
+  },
+  "997106874": {
+   "vat": "997106874",
+   "registry_names": [
+    "ΔΑΣΕ Ο.Υ.Κ. ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΜΑΔΑΣ ΥΛΟΤΟΜΩΝ ΚΑΣΤΟΡΙΑΣ ΔΗΜΟΥ ΚΑΣΤΟΡΙΑΣ",
+    "settlement": "ΣΙΔΗΡΟΧΩΡΙ ΚΑΣΤΟΡΙΑΣ",
+    "postal_code": "52059",
+    "city": "ΒΙΤΣΙ",
+    "address_raw": "ΣΙΔΗΡΟΧΩΡΙ ΚΑΣΤΟΡΙΑΣ 0         52059 - ΒΙΤΣΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017595826",
+    "date": "2025-09-23",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΣΙΔΗΡΟΧΩΡΙ ΚΑΙ"
+   },
+   "lat": 40.586593,
+   "lon": 21.320539,
+   "geo_precision": "municipality"
+  },
+  "997106930": {
+   "vat": "997106930",
+   "registry_names": [
+    "ΔΑΣΕ ΟΙΚΙΣΜΟΥ ΚΥΨΕΛΗΣ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΟΙΚΙΣΜΟΥ ΚΥΨΕΛΗΣ ΔΗΜΟΥ ΝΕΣΤΟΡΙΟΥ",
+    "settlement": "ΚΥΨΕΛΗ ΚΑΣΤΟΡΙΑΣ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΚΥΨΕΛΗ ΚΑΣΤΟΡΙΑΣ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017523114",
+    "date": "2025-09-09",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΚΥΨΕΛΗ ΚΑΙ"
+   },
+   "lat": 40.288759,
+   "lon": 21.029413,
+   "geo_precision": "municipality"
+  },
+  "997107232": {
+   "vat": "997107232",
+   "registry_names": [
+    "ΔΑΣΕ ΝΕΣΤΟΡΙΟΥ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΣΤΟΡΙΟΥ ΚΑΣΤΟΡΙΑΣ - ΤΟ ΚΑΣΤΡΟ",
+    "settlement": "ΝΕΣΤΟΡΙΟ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΝΕΣΤΟΡΙΟ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015517114",
+    "date": "2024-10-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ ΝΕΣΤΟΡΙΟ ΚΑΙ"
+   },
+   "lat": 40.4168,
+   "lon": 21.057327,
+   "geo_precision": "municipality"
+  },
+  "997107397": {
+   "vat": "997107397",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΣΤΟΡΙΑΣ ΑΓΙΟΣ ΠΑΝΤΕΛΕΗΜΟΝΑΣ",
+    "ΤΣΟΥΛΟΥΦΑΣ ΙΩΑΝΝΗΣ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΣΤΟΡΙΑΣ - Ο ΑΓΙΟΣ ΠΑΝΤΕΛΕΗΜΟΝΑΣ",
+    "settlement": "ΠΕΡΟΧΗ ΦΟΥΝΤΟΥΚΛΗ ΑΝΘΡΑΚΙΤΗ Μ",
+    "postal_code": "52100",
+    "city": "ΚΑΣΤΟΡΙΑ",
+    "address_raw": "ΠΕΡΟΧΗ ΦΟΥΝΤΟΥΚΛΗ ΑΝΘΡΑΚΙΤΗ Μ 0         52100 - ΚΑΣΤΟΡΙΑ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015531002",
+    "date": "2024-10-03",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΚΑΣΤΟΡΙΑ ΚΑΙ"
+   },
+   "lat": 40.527827,
+   "lon": 21.261808,
+   "geo_precision": "municipality"
+  },
+  "997129709": {
+   "vat": "997129709",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Περτουλίου «ΤΖΙΑΤΖΙΑΣ»",
+    "ΔΑ.Σ.Ε. Περτουλίου Τρικάλων",
+    "ΔΑΣΙΚΟΣ ΣΥΝ/ΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΡΤΟΥΛΙΟΥ - ΤΖΙΑΤΖΙΑΣ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας",
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΡΤΟΥΛΙΟΥ",
+    "settlement": "ΠΕΡΤΟΥΛΙ",
+    "postal_code": "42032",
+    "city": "ΠΥΛΗ",
+    "address_raw": "ΠΕΡΤΟΥΛΙ 0         42032 - ΠΥΛΗ"
+   },
+   "lat": 39.541089,
+   "lon": 21.466158,
+   "geo_precision": "municipality"
+  },
+  "997171856": {
+   "vat": "997171856",
+   "registry_names": [
+    "ΔΑΣΕ ΜΟΔΙΟΥ",
+    "Δασικός Συνεταιρισμός ΔΑΣΕ ΜΟΔΙΟΥ"
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Καβάλας",
+    "Π.Ε. Θεσσαλονίκης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΜΟΔΙΟΥ",
+    "settlement": "ΜΟΔΙ",
+    "postal_code": "57014",
+    "city": "ΣΤΑΥΡΟΣ",
+    "address_raw": "ΜΟΔΙ 0         57014 - ΣΤΑΥΡΟΣ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV016885520",
+    "date": "2025-05-23",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟ ΜΟΔΙ ΣΤΑΥΡΟΥ, ΝΟΜΟΥ ΘΕΣΣΑΛΟΝΙΚΗΣ ΤΚ 57014"
+   },
+   "lat": 40.626466,
+   "lon": 23.609907,
+   "geo_precision": "municipality"
+  },
+  "997172910": {
+   "vat": "997172910",
+   "registry_names": [
+    "ΔΑΣΙΚΟ ΣΥΝΕΤΑΙΡΙΣΜΟ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΚΡΥΟΝΕΡΙΟΥ-ΕΝΩΣΗ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Θεσσαλονίκης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΑΣΕ ΚΡΥΟΝΕΡΙΟΥ ΕΝΩΣΗ",
+    "settlement": "ΚΡΥΟΝΕΡΙ",
+    "postal_code": "57002",
+    "city": "ΣΟΧΟΣ",
+    "address_raw": "ΚΡΥΟΝΕΡΙ 0         57002 - ΣΟΧΟΣ"
+   },
+   "lat": 40.815547,
+   "lon": 23.280639,
+   "geo_precision": "municipality"
+  },
+  "997175401": {
+   "vat": "997175401",
+   "registry_names": [
+    "ΔΑ.ΣΕ. ΚΑΡΙΤΣΑΣ \"Ο ΣΤΑΥΡΟΣ\"",
+    "ΔΑΣΕ ΚΑΡΙΤΣΑΣ \"Ο ΣΤΑΥΡΟΣ\"",
+    "ΔΑΣΕ ΚΑΡΙΤΣΑΣ \"Ο ΣΤΑΥΡΟΣ''",
+    "ΔΑΣΕ ΚΑΡΙΤΣΑΣ Ο ΣΤΑΥΡΟΣ",
+    "ΔΑΣΕ ΚΑΡΙΤΣΑΣ\"Ο ΣΤΑΥΡΟΣ\""
+   ],
+   "n_contracts": 18,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΙΤΣΑΣ  Ο ΣΤΑΥΡΟΣ",
+    "settlement": "ΚΑΡΙΤΣΑ",
+    "postal_code": "40007",
+    "city": "ΠΥΡΓΕΤΟΣ",
+    "address_raw": "ΚΑΡΙΤΣΑ 0         40007 - ΠΥΡΓΕΤΟΣ"
+   },
+   "lat": 39.843102,
+   "lon": 22.762665,
+   "geo_precision": "municipality"
+  },
+  "997175425": {
+   "vat": "997175425",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Καλλιπεύκης ΄΄Η ΠΑΤΩΜΕΝΗ΄΄",
+    "ΔΑ.ΣΕ ΚΑΛΛΙΠΕΥΚΗΣ \"Η ΠΑΤΩΜΕΝΗ\"",
+    "ΔΑΣΕ ΚΑΛΛΙΠΕΥΚΗΣ \"Η ΠΑΤΩΜΕΝΗ\"",
+    "ΔΑΣΕ ΚΑΛΛΙΠΕΥΚΗΣ Η ΠΑΤΩΜΕΝΗ"
+   ],
+   "n_contracts": 19,
+   "contract_pes": [
+    "Π.Ε. Λάρισας",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΚΑΛΛΙΠΕΥΚΗΣ Η ΠΑΤΩΜΕΝΗ",
+    "settlement": "ΚΑΛΛΙΠΕΥΚΗ ΓΟΝΝΩΝ",
+    "postal_code": "40004",
+    "city": "ΓΟΝΝΟΙ",
+    "address_raw": "ΚΑΛΛΙΠΕΥΚΗ ΓΟΝΝΩΝ 0         40004 - ΓΟΝΝΟΙ"
+   },
+   "lat": 39.865604,
+   "lon": 22.486453,
+   "geo_precision": "municipality"
+  },
+  "997183530": {
+   "vat": "997183530",
+   "registry_names": [
+    "ΔΑ.ΣΕ. ΕΛΑΦΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ \"Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\"",
+    "ΔΑΣΕ ΕΛΑΦΟΥ ΑΓΙΑΣ \"Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\"",
+    "ΔΑΣΕ ΕΛΑΦΟΥ ΑΓΙΑΣ Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ",
+    "ΔΑΣΕ ΕΛΑΦΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ \"Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ\""
+   ],
+   "n_contracts": 9,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΕΛΑΦΟΥ ΑΓΙΑΣ ΛΑΡΙΣΑΣ Η ΠΑΝΑΓΙΑ ΚΑΜΠΑΝΑ",
+    "settlement": "ΕΛΑΦΟΣ",
+    "postal_code": "40003",
+    "city": "ΑΓΙΑ",
+    "address_raw": "ΕΛΑΦΟΣ 0         40003 - ΑΓΙΑ"
+   },
+   "lat": 39.579246,
+   "lon": 22.783678,
+   "geo_precision": "municipality"
+  },
+  "997208737": {
+   "vat": "997208737",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΣΤΑΝΙΑΣ",
+    "ΔΑΣΕ ΚΑΣΤΑΝΙΑΣ ΚΑΡΔΙΤΣΑΣ ''ΤΟ ΦΡΑΓΜΑ''",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΣΤΑΝΙΑΣ ΚΑΡΔΙΤΣΑΣ ''ΤΟ ΦΡΑΓΜΑ''"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Καρδίτσας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΣΤΑΝΙΑΣ ΚΑΡΔΙΤΣΑΣ ΤΟ ΦΡΑΓΜΑ",
+    "settlement": "ΚΑΣΤΑΝΙΑ",
+    "postal_code": "43100",
+    "city": "ΚΑΡΔΙΤΣΑ",
+    "address_raw": "ΚΑΣΤΑΝΙΑ 0         43100 - ΚΑΡΔΙΤΣΑ"
+   },
+   "lat": 39.23764,
+   "lon": 21.798235,
+   "geo_precision": "municipality"
+  },
+  "997225027": {
+   "vat": "997225027",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΕΠΤΑΛΟΦΟΥ",
+    "ΔΑ.ΣΕ. ΕΠΤΑΛΟΦΟΥ",
+    "ΔΑΣΕ ΕΠΤΑΛΟΦΟΥ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΕΠΤΑΛΟΦΟΥ ΚΙΛΚΙΣ",
+    "settlement": "ΕΠΤΑΛΟΦΟΣ",
+    "postal_code": "61100",
+    "city": "ΚΙΛΚΙΣ",
+    "address_raw": "ΕΠΤΑΛΟΦΟΣ 0         61100 - ΚΙΛΚΙΣ"
+   },
+   "lat": 41.009515,
+   "lon": 23.013997,
+   "geo_precision": "municipality"
+  },
+  "997225390": {
+   "vat": "997225390",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΝΤΑΛΟΦΟ - ΟΜΑΛΟΥ",
+    "ΔΑΣΕ ΠΕΝΤΑΛΟΦΟΥ ΟΜΑΛΟΥ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΝΤΑΛΟΦΟΥ ΟΜΑΛΟΥ",
+    "settlement": "ΠΕΝΤΑΛΟΦΟΣ",
+    "postal_code": "61300",
+    "city": "ΓΟΥΜΕΝΙΣΣΑ",
+    "address_raw": "ΠΕΝΤΑΛΟΦΟΣ 0         61300 - ΓΟΥΜΕΝΙΣΣΑ"
+   },
+   "lat": 40.940843,
+   "lon": 22.439063,
+   "geo_precision": "municipality"
+  },
+  "997225617": {
+   "vat": "997225617",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΚΙΛΚΙΣ \"ΟΙ ΜΑΚΕΔΟΝΕΣ\"",
+    "ΔΑ.Σ.Ε. ΟΙ ΜΑΚΕΔΟΝΕΣ ΚΙΛΚΙΣ",
+    "ΔΑ.ΣΕ. ΟΙ ΜΑΚΕΔΟΝΕΣ ΚΙΛΚΙΣ",
+    "ΔΑΣΕ \"ΟΙ ΜΑΚΕΔΟΝΕΣ\" ΚΙΛΚΙΣ",
+    "ΔΑΣΕ ΚΙΛΚΙΣ ΟΙ ΜΑΚΕΔΟΝΕΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΙΛΚΙΣ ΟΙ ΜΑΚΕΔΟΝΕΣ",
+    "settlement": "Β ΡΩΤΑ 24",
+    "postal_code": "61100",
+    "city": "ΚΙΛΚΙΣ",
+    "address_raw": "Β ΡΩΤΑ 24        61100 - ΚΙΛΚΙΣ"
+   },
+   "lat": 40.99237,
+   "lon": 22.87667,
+   "geo_precision": "municipality"
+  },
+  "997225666": {
+   "vat": "997225666",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΚΡΟΥΣΣΩΝ",
+    "ΔΑΣΕ ΚΡΟΥΣΣΩΝ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΡΟΥΣΣΩΝ",
+    "settlement": "ΕΠΤΑΛΟΦΟΣ",
+    "postal_code": "61100",
+    "city": "ΚΙΛΚΙΣ",
+    "address_raw": "ΕΠΤΑΛΟΦΟΣ 0         61100 - ΚΙΛΚΙΣ"
+   },
+   "lat": 41.009515,
+   "lon": 23.013997,
+   "geo_precision": "municipality"
+  },
+  "997309155": {
+   "vat": "997309155",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΑΥΓΕΡΙΝΟΥ -ΝΕΑΠΟΛΗΣ \"Η ΦΛΟΓΑ\"",
+    "ΔΑ.Σ.Ε. ΑΥΓΕΡΙΝΟΥ-ΝΕΑΠΟΛΗΣ «Η ΦΛΟΓΑ»",
+    "ΔΑΣΕ ΑΥΓΕΡΙΝΟΥ ΝΕΑΠΟΛΗΣ \"ΦΛΟΓΑ\""
+   ],
+   "n_contracts": 10,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΥΓΕΡΙΝΟΥ ΝΕΑΠΟΛΗΣ ΦΛΟΓΑ",
+    "settlement": "ΑΝΑΣΕΛΙΤΣΗΣ 6",
+    "postal_code": "50001",
+    "city": "ΝΕΑΠΟΛΗ",
+    "address_raw": "ΑΝΑΣΕΛΙΤΣΗΣ 6         50001 - ΝΕΑΠΟΛΗ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017565851",
+    "date": "2025-09-17",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗ ΔΗΜΟΤΙΚΗ ΕΝΟΤΗΤΑ ΝΕΑΠΟΛΗΣ, ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ, Π.Ε. ΚΟΖΑΝΗΣ ΚΑΙ"
+   },
+   "earlier_seat": {
+    "ref": "24SYMV015529708",
+    "date": "2024-09-24",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠ. ΚΟΙΝ. ΑΥΓΕΡΙΝΟΥ ΔΗΜΟΥ ΒΟΙΟΥ Π.Ε. ΚΟΖΑΝΗΣ ΚΑΙ"
+   },
+   "lat": 40.313487,
+   "lon": 21.371516,
+   "geo_precision": "municipality",
+   "seat_note": "The seat was RESTATED between 2024 and 2025 and the register agrees with the co-operative's own latest contracts: its five contracts of September 2024 (Δασαρχείο Τσοτυλίου) say «ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠ. ΚΟΙΝ. ΑΥΓΕΡΙΝΟΥ ΔΗΜΟΥ ΒΟΙΟΥ Π.Ε. ΚΟΖΑΝΗΣ», its two of September 2025 (Δασαρχείο Κοζάνης) say «ΜΕ ΕΔΡΑ ΤΗ ΔΗΜΟΤΙΚΗ ΕΝΟΤΗΤΑ ΝΕΑΠΟΛΗΣ, ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ», and VIES registers ΑΝΑΣΕΛΙΤΣΗΣ 6, 50001 ΝΕΑΠΟΛΗ. Same president throughout, same ΑΦΜ, same Δ.Ο.Υ. Κοζάνης; Αυγερινός and Νεάπολη are both communities of Δήμος Βοΐου, Π.Ε. Κοζάνης, ~15 km apart, so no region moves. The CURRENT seat (Νεάπολη) is used and the 2024 wording is kept in `earlier_seat` (user decision, DATA_DECISIONS 2026-08-24)."
+  },
+  "997309339": {
+   "vat": "997309339",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΠΟΛΥΚΑΣΤΑΝΟΥ ΑΥΓΕΡΙΝΟΥ \"Ο ΚΛΕΨΙΟΣ\"",
+    "ΔΑΣΕ ΠΟΛΥΚΑΣΤΑΝΟΥ ΑΥΓΕΡΙΝΟΥ Ο ΚΛΕΨΙΟΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Κοζάνης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΠΟΛΥΚΑΣΤΑΝΟΥ ΑΥΓΕΡΙΝΟΥ  Ο ΚΛΕΨΙΟΣ",
+    "settlement": "ΠΟΛΥΚΑΣΤΑΝΟ",
+    "postal_code": "50002",
+    "city": "ΤΣΟΤΥΛΙ",
+    "address_raw": "ΠΟΛΥΚΑΣΤΑΝΟ 0         50002 - ΤΣΟΤΥΛΙ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017540174",
+    "date": "2025-09-11",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠΙΚΗ ΚΟΙΝΟΤΗΤΑ ΠΟΛΥΚΑΣΤΑΝΟΥ ΤΟΥ ΔΗΜΟΥ ΒΟΙΟΥ, Π.Ε. ΚΟΖΑΝΗΣ ΚΑΙ"
+   },
+   "lat": 40.293808,
+   "lon": 21.137361,
+   "geo_precision": "municipality"
+  },
+  "997357780": {
+   "vat": "997357780",
+   "registry_names": [
+    "ΔΑ.ΣΕ ΚΑΤΩ ΣΩΤΗΡΙΤΤΣΑΣ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+    "ΔΑΣΕ ΚΑΤΩ ΣΩΤΗΡΙΤΣΑΣ",
+    "ΔΑΣΕ ΚΑΤΩ ΣΩΤΗΡΙΤΣΑΣ ΑΓΙΑΣ ΛΑΡΙΣΑΣ"
+   ],
+   "n_contracts": 25,
+   "contract_pes": [
+    "Π.Ε. Λάρισας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΚΑΤΩ ΣΩΤΗΡΙΤΣΑΣ ΑΓΙΑΣ ΛΑΡΙΣΑΣ",
+    "settlement": "ΚΑΤΩ ΣΩΤΗΡΙΤΣΑ ΑΓΙΑΣ",
+    "postal_code": "40003",
+    "city": "ΑΓΙΑ",
+    "address_raw": "ΚΑΤΩ ΣΩΤΗΡΙΤΣΑ ΑΓΙΑΣ 00        40003 - ΑΓΙΑ"
+   },
+   "lat": 39.728072,
+   "lon": 22.863029,
+   "geo_precision": "municipality"
+  },
+  "997454162": {
+   "vat": "997454162",
+   "registry_names": [
+    "ΔΑΣΕ ΓΑΡΕΦΕΙΟΥ \" ΤΑ ΤΣΕΚΟΥΡΙΑ\""
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΓΑΡΕΦΕΙΟΥ  ΤΑ ΤΣΕΚΟΥΡΙΑ",
+    "settlement": "ΓΑΡΕΦΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΓΑΡΕΦΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.031965,
+   "lon": 22.043934,
+   "geo_precision": "municipality"
+  },
+  "997455552": {
+   "vat": "997455552",
+   "registry_names": [
+    "ΔΑΣΕ ΠΕΡΙΚΛΕΙΑΣ ΟΙ ΜΑΧΗΤΕΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΕΡΙΚΛΕΙΑΣ ΟΙ ΜΑΧΗΤΕΣ",
+    "settlement": "ΠΕΡΙΚΛΕΙΑ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΕΡΙΚΛΕΙΑ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "997456026": {
+   "vat": "997456026",
+   "registry_names": [
+    "Δ.Α.Σ.Ε. ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΒΡΟΝΤΕΡΟΥ ΔΗΜΟΥ ΠΡΕΣΠΩΝ «Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ»",
+    "ΔΑ.Σ.Ε. Τ.Κ. Βροντερού Δήμου Πρεσπών «Η Αγία Παρασκευή»",
+    "ΔΑ.Σ.Ε. Τοπικής Κοινοτήτας Βροντερού Δήμου Πρεσπών «Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ»",
+    "ΔΑ.Σ.Ε. Τοπικής Κοινότητας Βροντερού Δήμου Πρεσπών «Η Αγία Παρασκευή»"
+   ],
+   "n_contracts": 16,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΒΡΟΝΤΕΡΟΥ ΔΗΜΟΥ ΠΡΕΣΠΩΝ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "settlement": "ΒΡΟΝΤΕΡΟ",
+    "postal_code": "53077",
+    "city": "ΑΓ ΓΕΡΜΑΝΟΣ",
+    "address_raw": "ΒΡΟΝΤΕΡΟ 0         53077 - ΑΓ ΓΕΡΜΑΝΟΣ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017484988",
+    "date": "2025-09-03",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠ. ΚΟΙΝ. ΒΡΟΝΤΕΡΟΥ Π.Ε. ΦΛΩΡΙΝΑΣ ΚΑΙ"
+   },
+   "lat": 40.74177,
+   "lon": 21.017719,
+   "geo_precision": "municipality"
+  },
+  "997456155": {
+   "vat": "997456155",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Τ.Κ. Αγίου Γερμανού Δήμου Πρεσπών «Ο Κότσιφας»",
+    "ΔΑ.Σ.Ε. Τοπικής Κοινότητας Αγίου Γερμανού Δήμου Πρεσπών «Ο Κότσιφας»"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ  ΑΓ ΓΕΡΜΑΝΟΥ ΔΗΜΟΥ ΠΡΕΣΠΩΝ Ο ΚΟΤΣΙΦΑΣ",
+    "settlement": "ΑΓ ΓΕΡΜΑΝΟΣ",
+    "postal_code": "53077",
+    "city": "ΑΓ ΓΕΡΜΑΝΟΣ",
+    "address_raw": "ΑΓ ΓΕΡΜΑΝΟΣ 0         53077 - ΑΓ ΓΕΡΜΑΝΟΣ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015146804",
+    "date": "2024-07-16",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΑΓΙΟΥ ΓΕΡΜΑΝΟΥ ΚΑΙ"
+   },
+   "lat": 40.824865,
+   "lon": 21.167084,
+   "geo_precision": "municipality"
+  },
+  "997456769": {
+   "vat": "997456769",
+   "registry_names": [
+    "Δ.Α.Σ.Ε. ΤΟΠΙΚΩΝ ΚΟΙΝΟΤΗΤΩΝ  ΑΚΡΙΤΑ, ΑΛΩΝΩΝ, ΦΛΑΜΠΟΥΡΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΟΠΙΚΩΝ ΚΟΙΝΟΤΗΤΩΝ ΑΚΡΙΤΑ ΑΛΩΝΩΝ ΦΛΑΜΠΟΥΡΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ",
+    "settlement": "ΑΚΤΙΤΑΣ",
+    "postal_code": "53100",
+    "city": "ΦΛΩΡΙΝΑ",
+    "address_raw": "ΑΚΤΙΤΑΣ 0         53100 - ΦΛΩΡΙΝΑ"
+   },
+   "lat": 40.791393,
+   "lon": 21.422649,
+   "geo_precision": "municipality"
+  },
+  "997458622": {
+   "vat": "997458622",
+   "registry_names": [
+    "Δ.Α.Σ.Ε. ΞΙΝΟΥ ΝΕΡΟΥ ΔΗΜΟΥ ΑΜΥΝΤΑΙΟΥ  «ΤΟ ΡΑΝΤΟΣΙ»",
+    "ΔΑΣΕ ΞΙΝΟΥ ΝΕΡΟΥ \"ΤΟ ΡΑΝΤΟΣΙ\"",
+    "του ΔΑ.Σ.Ε. Ξινού Νερού «Το Ραντόσι»"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΞΙΝΟΥ ΝΕΡΟΥ",
+    "settlement": "ΞΙΝΟ ΝΕΡΟ",
+    "postal_code": "53200",
+    "city": "ΑΜΥΝΤΑΙΟ",
+    "address_raw": "ΞΙΝΟ ΝΕΡΟ 0         53200 - ΑΜΥΝΤΑΙΟ"
+   },
+   "contract_seat": {
+    "ref": "24SYMV015261080",
+    "date": "2024-08-07",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠ. ΚΟΙΝ. ΞΙΝΟΥ ΝΕΡΟΥ Π.Ε. ΦΛΩΡΙΝΑΣ ΚΑΙ"
+   },
+   "lat": 40.547385,
+   "lon": 22.199303,
+   "geo_precision": "municipality"
+  },
+  "997600354": {
+   "vat": "997600354",
+   "registry_names": [
+    "ΔΑΣΕ ΑΡΧΑΓΓΕΛΟΥ \" Αγία Παρασκευή\"",
+    "ΔΑΣΕ ΓΑΡΕΦΕΙΟΥ \" Αγία Παρασκευή\""
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣ ΑΡΧΑΓΓΕΛΟΥ ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "settlement": "ΑΡΧΑΓΓΕΛΟΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΑΡΧΑΓΓΕΛΟΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "997600378": {
+   "vat": "997600378",
+   "registry_names": [
+    "ΔΑΣΕ ΑΡΧΑΓΓΕΛΟΥ \" ΤΟ ΠΑΪΚΟ\"",
+    "ΔΑΣΕ ΑΡΧΑΓΓΕΛΟΥ ΤΟ ΠΑΙΚΟ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΑΡΧΑΓΓΕΛΟΥ ΤΟ ΠΑΙΚΟ",
+    "settlement": "ΑΡΧΑΓΓΕΛΟΣ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΑΡΧΑΓΓΕΛΟΣ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "997600446": {
+   "vat": "997600446",
+   "registry_names": [
+    "ΔΑΣΕ ΣΩΣΑΝΔΡΑΣ \" ΤΑ ΕΛΑΤΗΡΙΑ\""
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΩΣΑΝΔΡΑΣ ΤΑ ΕΛΑΤΗΡΙΑ",
+    "settlement": "Δ Δ ΣΩΣΑΝΔΡΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "Δ Δ ΣΩΣΑΝΔΡΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "997650702": {
+   "vat": "997650702",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΝΕΡΑΪΔΑΣ «ΟΜΕΓΔΟΒΑΣ»",
+    "ΔΑ.Σ.Ε. Νεράϊδας Καρδίτσας ‘Ο ΜΕΓΔΟΒΑΣ’",
+    "ΔΑΣΕ ΝΕΡΑΙΔΑΣ ΚΑΡΔΙΤΣΑΣ ''Ο ΜΕΓΔΟΒΑΣ''",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ \"ΜΕΓΔΟΒΑ\"",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΡΑΙΔΑΣ ΚΑΡΔΙΤΣΑΣ ''Ο ΜΕΓΔΟΒΑΣ''",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΡΑΪΔΑΣ ''ΜΕΓΔΟΒΑΣ''"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Καρδίτσας",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΝΕΡΑΙΔΑΣ ΚΑΡΔΙΤΣΑΣ  ΜΕΓΔΟΒΑΣ",
+    "settlement": "ΝΕΡΑΙΔΑ ΙΤΑΜΟΥ",
+    "postal_code": "43100",
+    "city": "ΚΑΡΔΙΤΣΑ",
+    "address_raw": "ΝΕΡΑΙΔΑ ΙΤΑΜΟΥ 0         43100 - ΚΑΡΔΙΤΣΑ"
+   },
+   "lat": 39.357003,
+   "lon": 21.918664,
+   "geo_precision": "municipality"
+  },
+  "997841856": {
+   "vat": "997841856",
+   "registry_names": [
+    "«Δ.Α.Σ.Ε.ΚΥΨΕΛΗΣ  ‘’Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ  »",
+    "Δ.Α.Σ.Ε ΚΥΨΕΛΗΣ",
+    "Δ.Α.Σ.Ε. ΚΥΨΕΛΗΣ \"Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ\"",
+    "ΔΑΣΕ ΚΥΨΕΛΗΣ <<ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ>>",
+    "ΔΑΣΕ ΚΥΨΕΛΗΣ ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "ΔΑΣΕ ΚΥΨΕΛΗΣ-Η Αγία Παρασκευή"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Καστοριάς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΥΨΕΛΗΣ Η ΑΓΙΑ ΠΑΡΑΣΚΕΥΗ",
+    "settlement": "ΚΥΨΕΛΗ",
+    "postal_code": "52051",
+    "city": "ΝΕΣΤΟΡΙΟ",
+    "address_raw": "ΚΥΨΕΛΗ 0         52051 - ΝΕΣΤΟΡΙΟ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV018018778",
+    "date": "2025-11-27",
+    "excerpt": "ΜΕ ΕΔΡΑ ΚΥΨΕΛΗ Ν. ΚΑΣΤΟΡΙΑΣ"
+   },
+   "lat": 40.288759,
+   "lon": 21.029413,
+   "geo_precision": "municipality"
+  },
+  "997922367": {
+   "vat": "997922367",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΓΟΡΓΙΑΝΗΣ",
+    "ΔΑ.Σ.Ε. ΓΟΡΓΙΑΝΗΣ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Γρεβενών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΓΟΡΓΙΑΝΗΣ",
+    "settlement": "ΚΗΠΟΥΡΕΙΟ",
+    "postal_code": "51100",
+    "city": "ΓΡΕΒΕΝΑ",
+    "address_raw": "ΚΗΠΟΥΡΕΙΟ 0         51100 - ΓΡΕΒΕΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017474900",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΚΗΠΟΥΡΕΙΟ Π.Ε. ΓΡΕΒΕΝΩΝ ΚΑΙ"
+   },
+   "lat": 40.067181,
+   "lon": 21.436815,
+   "geo_precision": "municipality"
+  },
+  "997922945": {
+   "vat": "997922945",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΔΕΣΚΑΤΗΣ Η ΒΟΥΝΑΣΙΑ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Γρεβενών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΔΕΣΚΑΤΗΣ Η ΒΟΥΝΑΣΙΑ",
+    "settlement": "ΔΑΣΟΧΩΡΙ",
+    "postal_code": "51200",
+    "city": "ΔΕΣΚΑΤΗ",
+    "address_raw": "ΔΑΣΟΧΩΡΙ 0         51200 - ΔΕΣΚΑΤΗ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017476200",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΔΑΣΟΧΩΡΙΟΥ ΔΕΣΚΑΤΗΣ Π.Ε. ΓΡΕΒΕΝΩΝ ΚΑΙ"
+   },
+   "lat": 39.880792,
+   "lon": 21.817658,
+   "geo_precision": "municipality"
+  },
+  "997961590": {
+   "vat": "997961590",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΔΙΒΟΥΝΟΥ",
+    "ΔΑΣΕ ΔΙΒΟΥΝΟΥ"
+   ],
+   "n_contracts": 5,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΙΒΟΥΝΟΥ",
+    "settlement": "ΔΙΒΟΥΝΟ",
+    "postal_code": "61100",
+    "city": "ΚΙΛΚΙΣ",
+    "address_raw": "ΔΙΒΟΥΝΟ 0         61100 - ΚΙΛΚΙΣ"
+   },
+   "lat": 40.99237,
+   "lon": 22.87667,
+   "geo_precision": "municipality"
+  },
+  "997962709": {
+   "vat": "997962709",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΠΑΙΚΟ ΠΑΙΟΝΙΑΣ",
+    "ΔΑ.Σ.Ε. ΠΑΙΚΟΥ ΠΑΙΟΝΙΑΣ",
+    "ΔΑΣΕ ΠΑΙΚΟ ΠΑΙΟΝΙΑΣ",
+    "ΔΑΣΕ ΠΑΙΚΟΥ ΠΑΙΟΝΙΑΣ",
+    "ΔΑΣΕ ΠΑΪΚΟ ΠΑΙΟΝΙΑΣ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Κιλκίς"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ  ΠΑΙΚΟΥ ΠΑΙΟΝΙΑΣ",
+    "settlement": "ΓΡΙΒΑ",
+    "postal_code": "61300",
+    "city": "ΓΟΥΜΕΝΙΣΣΑ",
+    "address_raw": "ΓΡΙΒΑ 0         61300 - ΓΟΥΜΕΝΙΣΣΑ"
+   },
+   "lat": 40.954548,
+   "lon": 22.409964,
+   "geo_precision": "municipality"
+  },
+  "998121076": {
+   "vat": "998121076",
+   "registry_names": [
+    "ΔΑΣΕ ΚΑΡΟΠΛΕΣΙΟΥ ΚΑΡΔΙΤΣΑΣ ''ΔΟΛΟΠΕΣ - ΣΑΙΚΑ''"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Καρδίτσας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΑΡΟΠΛΕΣΙΟΥ ΚΑΡΔΙΤΣΑΣ ΟΙ ΔΟΛΟΠΕΣ ΣΑΙΚΑ",
+    "settlement": "ΚΑΡΟΠΛΕΣΙ",
+    "postal_code": "43100",
+    "city": "ΚΑΡΔΙΤΣΑ",
+    "address_raw": "ΚΑΡΟΠΛΕΣΙ 0         43100 - ΚΑΡΔΙΤΣΑ"
+   },
+   "lat": 39.173242,
+   "lon": 21.756818,
+   "geo_precision": "municipality"
+  },
+  "998155971": {
+   "vat": "998155971",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΒΩΛΑΚΑ \"ΑΓ. ΠΑΥΛΟΣ\"",
+    "ΔΑΣΕ ΒΩΛΑΚΑ ΑΓ. ΠΑΥΛΟΣ",
+    "ΔΑΣΕ ΒΩΛΑΚΑ ΑΓΙΟΣ ΠΑΥΛΟΣ",
+    "ΔΑΣΕ ΒΩΛΑΚΑΣ ΑΓΙΟΣ ΠΑΥΛΟΣ"
+   ],
+   "n_contracts": 23,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΒΩΛΑΚΑ ΑΓΙΟΣ ΠΑΥΛΟΣ",
+    "settlement": "ΒΩΛΑΚΑΣ",
+    "postal_code": "66033",
+    "city": "Κ ΝΕΥΡΟΚΟΠΙ",
+    "address_raw": "ΒΩΛΑΚΑΣ 0         66033 - Κ ΝΕΥΡΟΚΟΠΙ"
+   },
+   "lat": 41.316455,
+   "lon": 24.002888,
+   "geo_precision": "municipality"
+  },
+  "998494225": {
+   "vat": "998494225",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. Προμάχων Αλμωπίας «Νέα Δύναμη»",
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ \" ΝΕΑ ΔΥΝΑΜΗ\""
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Πέλλας",
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ ΑΛΜΩΠΙΑΣ ΝΕΑ ΔΥΝΑΜΗ",
+    "settlement": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν  ΠΕΛΛΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν  ΠΕΛΛΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "998494796": {
+   "vat": "998494796",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ \"Τα Μακεδονικά Αλυσοπρίονα\"",
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Τα Μακεδονικά Αλυσοπρίονα",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΡΟΜΑΧΩΝ ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΑΛΥΣΟΠΡΙΟΝΑ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Πέλλας",
+    "Π.Ε. Θεσσαλονίκης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΠΡΟΜΑΧΩΝ ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΑΛΥΣΟΠΡΙΟΝΑ",
+    "settlement": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017100550",
+    "date": "2025-06-26",
+    "excerpt": "ΠΟΥ ΕΔΡΕΥΕΙ ΣΤΟΥΣ ΠΡΟΜΑΧΟΥΣ ΑΛΜΩΠΙΑΣ ΤΟΥ Ν. ΠΕΛΛΑΣ, ΤΚ 58400 ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "998495117": {
+   "vat": "998495117",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΤΣΕΚΟΥΡΙΑ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ ΤΑ ΜΑΚΕΔΟΝΙΚΑ ΤΣΕΚΟΥΡΙΑ",
+    "settlement": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "998638016": {
+   "vat": "998638016",
+   "registry_names": [
+    "ΔΑΣΕ ΣΚΑΛΩΤΗΣ ΑΓ. ΙΩΑΝΝΗΣ",
+    "ΔΑΣΕ ΣΚΑΛΩΤΗΣ ΑΓΙΟΣ ΙΩΑΝΝΗΣ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓ ΙΩΑΝΝΗΣ ΣΚΑΛΩΤΗΣ",
+    "settlement": "ΣΚΑΛΩΤΗ",
+    "postal_code": "66038",
+    "city": "ΣΙΔΗΡΟΝΕΡΟ",
+    "address_raw": "ΣΚΑΛΩΤΗ 0         66038 - ΣΙΔΗΡΟΝΕΡΟ"
+   },
+   "contract_seat": {
+    "ref": "26SYMV018882122",
+    "date": "2026-04-23",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΟ 66038 ΣΙΔΗΡΟΝΕΡΟ, (ΟΔΟΣ: ΣΚΑΛΩΤΗ, ΤΗΛ.: 6937215795,EMAIL:DASESKALAGIWANNIS@GMAIL.COM)"
+   },
+   "lat": 41.411173,
+   "lon": 24.28289,
+   "geo_precision": "municipality"
+  },
+  "998736267": {
+   "vat": "998736267",
+   "registry_names": [
+    "ΔΑΣΕ ΒΟΡΕΙΟΣ ΗΠΕΙΡΟΣ",
+    "ΔΑΣΕ ΡΕΥΜΑΤΟΣ \"Η ΧΑΙΝΤΟΥ\"",
+    "ΔΑΣΕ ΡΕΥΜΑΤΟΣ Η ΧΑΪΝΤΟΥ",
+    "ΔΑΣΕ ΡΕΥΜΑΤΟΣ\"Η ΧΑΪΝΤΟΥ\"",
+    "ΔΑΣΕ: ΡΕΥΜΑΤΟΣ\"Η ΧΑΪΝΤΟΥ\"",
+    "ΔΑΣΕ:ΡΕΥΜΑΤΟΣ\"Η ΧΑΪΝΤΟΥ\"",
+    "ΔΑΣΕ:ΡΕΥΜΑΤΟΣ¨Η ΧΑΪΝΤΟΥ¨\""
+   ],
+   "n_contracts": 37,
+   "contract_pes": [
+    "Π.Ε. Ξάνθης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΡΕΥΜΑΤΟΣ Η ΧΑΪΝΤΟΥ",
+    "settlement": "ΡΕΥΜΑ",
+    "postal_code": "67100",
+    "city": "ΞΑΝΘΗ",
+    "address_raw": "ΡΕΥΜΑ 0         67100 - ΞΑΝΘΗ"
+   },
+   "lat": 41.28918,
+   "lon": 24.797028,
+   "geo_precision": "municipality"
+  },
+  "998743209": {
+   "vat": "998743209",
+   "registry_names": [
+    "ΔΑΣΕ ΑΓΙΑ ΒΑΡΒΑΡΑ",
+    "ΔΑΣΕ ΑΓΙΑΣ ΒΑΡΒΑΡΑΣ",
+    "ΔΑΣΕ Αγία Βαρβάρα"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Χαλκιδικής",
+    "Π.Ε. Ευβοίας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΒΑΡΒΑΡΑΣ Η ΑΓΙΑ ΒΑΡΒΑΡΑ ΔΑΣΕ",
+    "settlement": "ΒΑΡΒΑΡΑ",
+    "postal_code": "63074",
+    "city": "ΑΡΝΑΙΑ",
+    "address_raw": "ΒΑΡΒΑΡΑ 0         63074 - ΑΡΝΑΙΑ"
+   },
+   "lat": 40.56873,
+   "lon": 23.65834,
+   "geo_precision": "municipality"
+  },
+  "998752347": {
+   "vat": "998752347",
+   "registry_names": [
+    "ΣΤ ΄ΕΔΑΣΕ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΙ ΠΑΛΑΙΟΧΩΡΙΟΥ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΣΤ ΕΛΕΥΘΕΡΟΣ ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΙ ΠΑΛΑΙΟΧΩΡΙΟΥ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΜΑΝΔΑΛΟΥ 24",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΜΑΝΔΑΛΟΥ 24        42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.706824,
+   "lon": 21.616982,
+   "geo_precision": "municipality"
+  },
+  "998752716": {
+   "vat": "998752716",
+   "registry_names": [
+    "ΔΑ.Σ.Ε Πρότυπος Χρυσομηλιάς Καλαμπάκας",
+    "ΔΑ.Σ.Ε. Πρότυπος Χρυσομηλιάς Καλαμπάκας",
+    "ΠΔΑΣΕ ΧΡΥΣΟΜΗΛΙΑΣ",
+    "ΠΡΟΤΥΠΟΣ .ΔΑ.ΣΕ ΧΡΥΣΟΜΗΛΙΑΣ",
+    "ΠΡΟΤΥΠΟΣ ΔΑ.Σ.Ε. Χρυσομηλιάς Καλαμπάκας",
+    "ΠΡΩΤΥΠΟΣ ΔΑΣΕ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ"
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Ευβοίας",
+    "Π.Ε. Τρικάλων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΠΡΟΤΥΠΟΣ  ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΧΡΥΣΟΜΗΛΙΑΣ ΚΑΛΑΜΠΑΚΑΣ",
+    "settlement": "ΧΡΥΣΟΜΗΛΙΑ",
+    "postal_code": "42200",
+    "city": "ΚΑΛΑΜΠΑΚΑ",
+    "address_raw": "ΧΡΥΣΟΜΗΛΙΑ 0         42200 - ΚΑΛΑΜΠΑΚΑ"
+   },
+   "lat": 39.607437,
+   "lon": 21.499747,
+   "geo_precision": "municipality"
+  },
+  "998977284": {
+   "vat": "998977284",
+   "registry_names": [
+    "ΔΑ.Σ.Ε.ΑΝΩ ΒΡΟΝΤΟΥΣ <<ΑΓΙΟΣ ΔΗΜΗΤΡΙΟΣ>>",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΒΡΟΝΤΟΥΣ ΑΓΙΟΣ ΔΗΜΗΤΡΙΟΣ"
+   ],
+   "n_contracts": 18,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΒΡΟΝΤΟΥΣ ΑΓΙΟΣ ΔΗΜΗΤΡΙΟΣ",
+    "settlement": "ΑΝΩ ΒΡΟΝΤΟΥ",
+    "postal_code": "62100",
+    "city": "ΣΕΡΡΕΣ",
+    "address_raw": "ΑΝΩ ΒΡΟΝΤΟΥ 0         62100 - ΣΕΡΡΕΣ"
+   },
+   "lat": 41.294558,
+   "lon": 23.686819,
+   "geo_precision": "municipality"
+  },
+  "999156732": {
+   "vat": "999156732",
+   "registry_names": [
+    "ΔΑ.Σ.Ε ΚΡΑΝΙΑΣ ΓΡΕΒΕΝΩΝ Η ΤΟΥΡΓΙΑ",
+    "ΔΑ.Σ.Ε. ΚΡΑΝΙΑΣ ΓΡΕΒΕΝΩΝ \"Η ΤΟΥΡΓΙΑ\""
+   ],
+   "n_contracts": 6,
+   "contract_pes": [
+    "Π.Ε. Γρεβενών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΡΑΝΙΑΣ ΓΡΕΒΕΝΩΝ Η ΤΟΥΡΓΙΑ",
+    "settlement": "ΚΡΑΝΙΑ",
+    "postal_code": "51100",
+    "city": "ΓΡΕΒΕΝΑ",
+    "address_raw": "ΚΡΑΝΙΑ 0         51100 - ΓΡΕΒΕΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017475042",
+    "date": "2025-09-01",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΚΡΑΝΙΑ Π.Ε. ΓΡΕΒΕΝΩΝ ΚΑΙ"
+   },
+   "lat": 40.067181,
+   "lon": 21.436815,
+   "geo_precision": "municipality"
+  },
+  "999418712": {
+   "vat": "999418712",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΑΝΩ ΠΟΡΟΙΩΝ «ΠΕΛΕΚΑΝΟΣ»"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΝΩ ΠΟΡΟΙΩΝ ΠΕΛΕΚΑΝΟΣ",
+    "settlement": "ΑΝΩ ΠΟΡΟΙΑ",
+    "postal_code": "62055",
+    "city": "Κ ΠΟΡΟΙΑ",
+    "address_raw": "ΑΝΩ ΠΟΡΟΙΑ 0         62055 - Κ ΠΟΡΟΙΑ"
+   },
+   "lat": 41.287088,
+   "lon": 23.035067,
+   "geo_precision": "municipality"
+  },
+  "999419942": {
+   "vat": "999419942",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΑΚΡΙΤΟΧΩΡΙΟΥ \"Η ΟΣΤΡΙΑ\"",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΚΡΙΤΟΧΩΡΙΟΥ Η ΟΣΤΡΙΑ"
+   ],
+   "n_contracts": 7,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ   ΔΑ Σ Ε    ΑΚΡΙΤΟΧΩΡΙΟΥ    Η ΟΣΤΡΙΑ",
+    "settlement": "ΑΚΡΙΤΟΧΩΡΙ",
+    "postal_code": "62043",
+    "city": "Ν ΠΕΤΡΙΤΣΙ",
+    "address_raw": "ΑΚΡΙΤΟΧΩΡΙ 0         62043 - Ν ΠΕΤΡΙΤΣΙ"
+   },
+   "lat": 41.27053,
+   "lon": 23.17804,
+   "geo_precision": "municipality"
+  },
+  "999420351": {
+   "vat": "999420351",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΑΓΚΙΣΤΡΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΑΓΚΙΣΤΡΟΥ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΚΙΣΤΡΟΥ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Σερρών"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΑΓΚΙΣΤΡΟΥ",
+    "settlement": "ΑΓΚΙΣΤΡΟ",
+    "postal_code": "62300",
+    "city": "ΣΙΔΗΡΟΚΑΣΤΡΟ",
+    "address_raw": "ΑΓΚΙΣΤΡΟ 0         62300 - ΣΙΔΗΡΟΚΑΣΤΡΟ"
+   },
+   "lat": 41.374988,
+   "lon": 23.4424,
+   "geo_precision": "municipality"
+  },
+  "999425788": {
+   "vat": "999425788",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΕΛΑΤΟΧΩΡΙΟΥ Η ΟΞΙΑ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΕΛΑΤΟΧΩΡΙΟΥ Η ΟΞΙΑ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Ιωαννίνων"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΕΛΑΤΟΧΩΡΙΟΥ Η ΟΞΙΑ",
+    "settlement": "ΕΛΑΤΟΧΩΡΙ",
+    "postal_code": "44014",
+    "city": "ΓΡΕΒΕΝΙΤΙ",
+    "address_raw": "ΕΛΑΤΟΧΩΡΙ 0         44014 - ΓΡΕΒΕΝΙΤΙ"
+   },
+   "lat": 39.871757,
+   "lon": 20.979809,
+   "geo_precision": "municipality"
+  },
+  "999520915": {
+   "vat": "999520915",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΤΑΞΙΑΡΧΩΝ \"Η ΟΜΟΝΟΙΑ\"",
+    "ΔΑΣΕ ΤΑΞΙΑΡΧΩΝ Η ΟΜΟΝΟΙΑ"
+   ],
+   "n_contracts": 8,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΑΞΙΑΡΧΩΝ Η ΟΜΟΝΟΙΑ",
+    "settlement": "ΤΑΞΙΑΡΧΑΙ",
+    "postal_code": "66100",
+    "city": "ΔΡΑΜΑ",
+    "address_raw": "ΤΑΞΙΑΡΧΑΙ 0         66100 - ΔΡΑΜΑ"
+   },
+   "lat": 41.148787,
+   "lon": 24.144082,
+   "geo_precision": "municipality"
+  },
+  "999522306": {
+   "vat": "999522306",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ \"Η ΕΝΟΤΗΤΑ\"",
+    "ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ Η ΕΝΟΤΗΤΑ"
+   ],
+   "n_contracts": 2,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "error": "invalid"
+   },
+   "lat": 41.368582,
+   "lon": 24.23237,
+   "geo_precision": "municipality",
+   "curated": {
+    "source": "name_inference",
+    "settlement": "ΣΙΔΗΡΟΝΕΡΟ",
+    "city": "ΔΡΑΜΑ",
+    "postal_code": null,
+    "note": "VIES does not answer for this ΑΦΜ. Seat settlement read from the co-operative's own registered name, accepted because it lies in the Π.Ε. of its contracts and the awarding forest service administers it: «ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ Η ΕΝΟΤΗΤΑ» — Σιδηρόνερο, δήμος Δράμας· Δασαρχείο Δράμας"
+   }
+  },
+  "999669304": {
+   "vat": "999669304",
+   "registry_names": [
+    "Δ.Α.Σ.Ε. ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΠΟΛΥΠΟΤΑΜΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ  «ΟΙ ΞΥΛΟΚΟΠΟΙ»",
+    "ΔΑ.Σ.Ε. Τοπικής Κοινοτήτας  Πολυποτάμου Δήμου Φλώρινας «ΟΙ ΞΥΛΟΚΟΠΟΙ»",
+    "ΔΑ.Σ.Ε. Τοπικής Κοινότητας Πολυποτάμου Δήμου Φλώρινας «Οι Ξυλοκόποι»"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Φλώρινας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ  ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΤΟΠΙΚΗΣ ΚΟΙΝΟΤΗΤΑΣ ΠΟΛΥΠΟΤΑΜΟΥ ΔΗΜΟΥ ΦΛΩΡΙΝΑΣ ΟΙ ΞΥΛΟΚΟΠΟΙ",
+    "settlement": "ΠΟΛΥΠΟΤΑΜΟΣ",
+    "postal_code": "53100",
+    "city": "ΦΛΩΡΙΝΑ",
+    "address_raw": "ΠΟΛΥΠΟΤΑΜΟΣ 0         53100 - ΦΛΩΡΙΝΑ"
+   },
+   "contract_seat": {
+    "ref": "25SYMV017439209",
+    "date": "2025-08-25",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΗΝ Τ.Κ. ΠΟΛΥΠΟΤΑΜΟΥ ΚΑΙ"
+   },
+   "lat": 40.791393,
+   "lon": 21.422649,
+   "geo_precision": "municipality"
+  },
+  "999729317": {
+   "vat": "999729317",
+   "registry_names": [
+    "Β' ΔΑΣΕ ΚΑΡΔΑΜΟΥ",
+    "Β΄ΔΑΣΕ ΚΑΡΔΑΜΟΥ",
+    "ΔΑΣΕ ΚΑΡΔΑΜΟΥ"
+   ],
+   "n_contracts": 4,
+   "contract_pes": [
+    "Π.Ε. Ροδόπης"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "Β ΔΑΣΕ ΚΑΡΔΑΜΟΥ",
+    "settlement": "ΚΑΡΔΑΜΟΣ",
+    "postal_code": "69500",
+    "city": "ΟΡΓΑΝΗ",
+    "address_raw": "ΚΑΡΔΑΜΟΣ 0         69500 - ΟΡΓΑΝΗ"
+   },
+   "lat": 41.279767,
+   "lon": 25.625323,
+   "geo_precision": "municipality"
+  },
+  "999745016": {
+   "vat": "999745016",
+   "registry_names": [
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Ο ΝΕΟΣ ΔΑΣΙΚΟΣ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "ΔΑΣΕ ΠΡΟΜΑΧΩΝ Ο ΝΕΟΣ ΔΑΣΙΚΟΣ ΑΛΜΩΠΙΑΣ Ν. ΠΕΛΛΑΣ"
+   ],
+   "n_contracts": 3,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΠΡΟΜΑΧΩΝ Ο ΝΕΟΣ ΔΑΣΙΚΟΣ ΑΛΜΩΠΙΑΣ Ν ΠΕΛΛΑΣ",
+    "settlement": "ΠΡΟΜΑΧΟΙ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΠΡΟΜΑΧΟΙ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 41.024974,
+   "lon": 22.004465,
+   "geo_precision": "municipality"
+  },
+  "999748006": {
+   "vat": "999748006",
+   "registry_names": [
+    "ΔΑΣΕ ΚΟΡΥΦΗΣ"
+   ],
+   "n_contracts": 1,
+   "contract_pes": [
+    "Π.Ε. Πέλλας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΚΟΡΥΦΗΣ",
+    "settlement": "ΚΟΡΥΦΗ ΑΛΜΩΠΙΑΣ Ν  ΠΕΛΛΑΣ",
+    "postal_code": "58400",
+    "city": "ΑΡΙΔΑΙΑ",
+    "address_raw": "ΚΟΡΥΦΗ ΑΛΜΩΠΙΑΣ Ν  ΠΕΛΛΑΣ 0         58400 - ΑΡΙΔΑΙΑ"
+   },
+   "lat": 40.980615,
+   "lon": 22.045979,
+   "geo_precision": "municipality"
+  },
+  "999886267": {
+   "vat": "999886267",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΔΙΠΟΤΑΜΩΝ",
+    "ΔΑ.ΣΕ. ΔΙΠΟΤΑΜΩΝ",
+    "ΔΑΣΕ ΔΙΠΟΤΑΜΩΝ",
+    "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΙΠΟΤΑΜΩΝ"
+   ],
+   "n_contracts": 17,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΔΙΠΟΤΑΜΩΝ",
+    "settlement": "ΔΙΠΟΤΑΜΑ",
+    "postal_code": "66035",
+    "city": "ΠΑΡΑΝΕΣΤΙ",
+    "address_raw": "ΔΙΠΟΤΑΜΑ 0         66035 - ΠΑΡΑΝΕΣΤΙ"
+   },
+   "contract_seat": {
+    "ref": "26SYMV018528641",
+    "date": "2026-02-24",
+    "excerpt": "ΜΕ ΕΔΡΑ ΤΑ ΔΙΠΟΤΑΜΑ ΠΑΡΑΝΕΣΤΙΟΥ (Τ.Κ. 66035 ΔΙΠΟΤΑΜΑ ΠΑΡΑΝΕΣΤΙ)"
+   },
+   "lat": 41.361694,
+   "lon": 24.615536,
+   "geo_precision": "municipality"
+  },
+  "999886519": {
+   "vat": "999886519",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΣΙΛΛΗΣ \"Η ΠΡΑΣΙΝΑΔΑ\"",
+    "ΔΑΣΕ ΣΙΛΛΗΣ Η ΠΡΑΣΙΝΑΔΑ",
+    "ΔΑΣΕ ΣΙΛΛΗΣ ΠΡΑΣΙΝΑΔΑ"
+   ],
+   "n_contracts": 13,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΛΛΗΣ Η ΠΡΑΣΙΝΑΔΑ",
+    "settlement": "ΣΙΛΛΗ",
+    "postal_code": "66035",
+    "city": "ΠΑΡΑΝΕΣΤΙ",
+    "address_raw": "ΣΙΛΛΗ 0         66035 - ΠΑΡΑΝΕΣΤΙ"
+   },
+   "lat": 41.353017,
+   "lon": 24.528508,
+   "geo_precision": "municipality"
+  },
+  "999888341": {
+   "vat": "999888341",
+   "registry_names": [
+    "ΔΑ.Σ.Ε. ΣΙΔΗΡΟΝΕΡΟΥ \"Η ΟΜΟΝΟΙΑ\"",
+    "ΔΑΣΕ ΣΙΔΗΡΟΝΕΡΟΥ Η ΟΜΟΝΟΙΑ"
+   ],
+   "n_contracts": 25,
+   "contract_pes": [
+    "Π.Ε. Δράμας"
+   ],
+   "register": {
+    "source": "vies",
+    "name": "ΔΑΣΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΕΡΓΑΣΙΑΣ ΣΙΔΗΡΟΝΕΡΟΥ",
+    "settlement": "ΣΙΔΗΡΟΝΕΡΟ",
+    "postal_code": "66038",
+    "city": "ΣΙΔΗΡΟΝΕΡΟ",
+    "address_raw": "ΣΙΔΗΡΟΝΕΡΟ 0         66038 - ΣΙΔΗΡΟΝΕΡΟ"
+   },
+   "lat": 41.368582,
+   "lon": 24.23237,
+   "geo_precision": "municipality"
+  }
+ }
+}

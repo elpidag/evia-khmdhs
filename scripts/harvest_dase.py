@@ -315,6 +315,10 @@ def cmd_load() -> None:
     from khmdhs.dase_details_loader import load_curated, write_db as write_details
     n_cat, n_ctx, n_dl = write_details(conn, *load_curated())
     print(f"-- loaded {n_cat} categories, {n_ctx} fire contexts, {n_dl} deadlines")
+    # the co-operatives' registered offices (DATA_DECISIONS 2026-08-24)
+    from khmdhs.dase_locations_loader import load as load_locations
+    n_loc = load_locations(conn)
+    print(f"-- loaded {n_loc} co-op registered offices")
     n = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()[0]
     print(f"-- loaded {loaded} contracts into {DB_PATH} (table now {n})")
     conn.close()

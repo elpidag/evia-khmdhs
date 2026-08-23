@@ -8212,3 +8212,106 @@ computed bulbs, the dase doubling-edge axis), payload
 (n / Σ / median / n_above_30k / n_above_60k computed, pinned), and the
 legal context lives in /methodology#dase-award-basis, drafted for the
 user to edit and place.
+
+## 2026-08-24 · ΔΑΣΕ co-op registered offices: found, organised, stored (data layer only — user)
+
+**Decision (user):** build the registered-office layer for the ~246 forest
+co-ops — find, organise, store; what the site does with it is decided
+separately. **Sources probed first:** VIES answered 26/26 test lookups with
+settlement + Τ.Κ. + reference town («ΣΤΑΥΡΟΣ 0 · 57014 - ΣΤΑΥΡΟΣ») — the
+primary register source; ΓΕΜΗ does NOT know forest co-ops (tested,
+not_found — under ν.4423/2016 they register in the ΥΠΕΝ Μητρώο Δασικών
+Συνεταιριστικών Οργανώσεων, which has no public API); the signed contracts
+state a party seat for only a minority of co-ops (the ΔΑΣΕ συμφωνητικά
+skip party seats) — kept as corroborating verbatim evidence where present,
+anchored on the CO-OP party, never the awarder's «εδρεύει».
+
+**Method (the Anti-nero contractor-seat pattern one dataset over):**
+`scripts/build_dase_coop_seats.py` sweeps every canonical co-op ΑΦΜ
+through VIES (throttled, cached in data/processed/, resumable) and reads
+each co-op's contracts for a seat sentence; results land in curated
+`khmdhs/data/dase_coop_locations.json` (per-ΑΦΜ: VIES name/settlement/
+Τ.Κ./reference town, contract evidence ref+excerpt where found, the
+co-op's own contracts' Π.Ε. as validator). Geocoding: Nominatim with the
+Anti-nero tiers (structured → freeform → Greek→Latin transliteration →
+settlement centre) and the same acceptance gates — Τ.Κ. prefix match or
+resolution into the co-op's Π.Ε.; co-op seats are villages without
+streets, so points are honestly settlement-centre precision
+(`geo_precision: municipality`), never street points. Loaded by
+`khmdhs/dase_locations_loader.py` into dase.sqlite's `contractor_locations`
+(the shared-schema table, empty until now; hooked at the end of
+`harvest_dase.py load`). No UI or API surface in this entry. Results
+appended below once the runs complete.
+
+**Result (the layer as stored).** 246 co-operatives — the live population's
+own — every one with a seat and a point:
+
+- **238 from VIES** (97%): the register answers with the co-op's village,
+  its Τ.Κ. and the reference town («ΣΙΔΗΡΟΧΩΡΙ 0 · 68400 - ΣΟΥΦΛΙ»).
+- **8 by labelled inference** (`seat_source: name_inference`): VIES does not
+  answer for them, so the settlement is read from the co-operative's OWN
+  registered name and accepted only because it lies in the Π.Ε. of its
+  contracts AND the awarding forest service administers that village —
+  ΒΑΘΗ/Κιλκίς, ΠΡΟΜΑΧΟΙ/Αλμωπίας, ΑΜΠΛΙΑΝΗ/Καρπενησίου, ΓΡΙΒΑ/Παιονίας,
+  ΒΥΡΩΝΕΙΑ/Σιντικής, ΑΛΕΞΑΝΔΡΟΥΠΟΛΗ, ΕΛΑΦΟΣ/Αγιάς, ΣΙΔΗΡΟΝΕΡΟ/Δράμας. Each
+  carries its reasoning in `note`; no postcode is invented.
+- **64 with contract evidence**: a verbatim party clause from one of the
+  co-op's own signed contracts. The reader anchors on the co-op's ΑΦΜ, reads
+  BACKWARDS and requires a co-op name as the clause's subject — every ΔΑΣΕ
+  contract states the AWARDING service's seat first, and a first pass
+  wrongly captured «ΜΕ ΕΔΡΑ ΤΗΝ ΛΑΡΙΣΑ» (the Region's) for a co-op. Pinned
+  by unit tests both ways.
+- **246 geocoded, 0 failures**, all at `municipality` precision — the centre
+  of the named settlement, the honest level for a village seat with no
+  street. **The gate held perfectly: 238/238 register points fall inside the
+  Π.Ε. their own postcode implies (0 misses).**
+
+**Finding the layer exposes:** **36 co-operatives work outside their seat's
+Π.Ε.** — a Τρίκαλα co-op logging in Εύβοια after the 2021 fires, a
+Θεσσαλονίκη one in Ηλεία, two Θεσσαλία ones in Ρόδος. Travelling co-ops are
+a finding, not an error: the test pins the postcode invariant, never
+«seat == work region».
+
+Stored in dase.sqlite's `contractor_locations` (the shared schema's table,
+empty until now) by `khmdhs/dase_locations_loader.py`, hooked at the end of
+`harvest_dase.py load`; curated file `khmdhs/data/dase_coop_locations.json`,
+VIES responses cached in `data/processed/dase_vies_cache.json` (gitignored).
+Pinned by `tests/test_dase_coop_seats.py`. **No UI or API surface yet — the
+user decides what the site does with it.**
+
+**Independent verification of the seats (same day).** The postcode gate is a
+regression guard, not proof — it re-tests what the geocoder's own acceptance
+rule already required. The independent check is the register against the
+DOCUMENTS: of the 64 co-ops that have both a VIES record and a
+contract-stated seat, **63 agree** (after Greek case/abbreviation
+normalisation — «ΞΙΝΟ ΝΕΡΟ» ≡ «ΞΙΝΟΥ ΝΕΡΟΥ», «ΑΓ ΓΕΡΜΑΝΟΣ» ≡ «ΑΓΙΟΥ
+ΓΕΡΜΑΝΟΥ», «ΒΗΣΣΑΝΗ» ≡ the contract's «ΒΗΣΑΝΝΗ»). **The one apparent
+divergence turned out to be a RESTATEMENT, not a contradiction** (evidence
+read out at the user's request, verdict theirs): 997309155
+«ΔΑ.Σ.Ε. ΑΥΓΕΡΙΝΟΥ-ΝΕΑΠΟΛΗΣ Η ΦΛΟΓΑ» — its five contracts of September 2024
+(Δασαρχείο Τσοτυλίου) say «ΜΕ ΕΔΡΑ ΤΗΝ ΤΟΠ. ΚΟΙΝ. ΑΥΓΕΡΙΝΟΥ ΔΗΜΟΥ ΒΟΙΟΥ Π.Ε.
+ΚΟΖΑΝΗΣ», its two of September 2025 (Δασαρχείο Κοζάνης) say «ΜΕ ΕΔΡΑ ΤΗ
+ΔΗΜΟΤΙΚΗ ΕΝΟΤΗΤΑ ΝΕΑΠΟΛΗΣ, ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ», and VIES registers
+ΑΝΑΣΕΛΙΤΣΗΣ 6, 50001 ΝΕΑΠΟΛΗ — the register agrees with the co-op's OWN
+latest contracts. Same president, ΑΦΜ and Δ.Ο.Υ. throughout; both communities
+belong to Δήμος Βοΐου, Π.Ε. Κοζάνης, ~15 km apart, so no region moves. **So
+the register is confirmed by the documents in all 64 comparable cases.**
+
+**Two rule changes it forced (user-approved, same day).** (1) The reader
+stores the seat clause of each co-op's **LATEST** contract, not the first it
+finds — the divergence was an artifact of quoting a 2024 statement against
+today's register — and any earlier DIFFERENT statement is kept as
+`earlier_seat` with its date and ΑΔΑΜ, never dropped; the loader folds it
+into `seat_note` so a seat that changed can never read as an unchanging
+fact. (2) `997309155` loses `flag: register_disagrees` and carries the
+restatement note instead. Comparing seats needs the FIRST toponym of a
+clause, not its whole text — «ΑΥΓΕΡΙΝΟΥ ΔΗΜΟΥ ΒΟΙΟΥ Π.Ε. ΚΟΖΑΝΗΣ» and
+«ΝΕΑΠΟΛΗΣ, ΔΗΜΟΥ ΒΟΙΟΥ ΚΟΖΑΝΗΣ» share the prefecture's name — and Ω in the
+stemmer's ending list, because pdftotext writes «ΑΛΩΝΩ,Ν» for «ΑΛΩΝΩΝ».
+**Two co-ops carry an `earlier_seat`**: this one, and 800255256, whose 2023
+contract says «ΜΕ ΕΔΡΑ ΚΑΣΤΟΡΙΑ» (the town) where its 2022, 2024 and the
+register all say the village ΧΡΥΣΗ — the wider place named, not another
+seat; noted per entry. Pinned by `tests/test_dase_coop_seats.py`.
+
+For the other 182 co-ops no contract states a seat, so the register stands
+unchallenged — the layer's honest limit.
