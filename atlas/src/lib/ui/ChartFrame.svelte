@@ -180,6 +180,19 @@
 			margin-bottom: var(--sp-4);
 		}
 	}
+	/* a frame that shares its row with another (the half-width pairs, the
+	   scope/type pairs, the full-bleed bands) has no page margin of its own
+	   on the left — its neighbour is there — so its note ALWAYS flows above
+	   the chart, at any width (user, 2026-08-23: the AWARD PROCEDURES note
+	   fell on DIRECT AWARDS). Kept here, in the frame, so no page can forget. */
+	:global(.pair) .insight,
+	:global(.scopetype) .insight,
+	:global(.firesband) .insight {
+		position: static;
+		width: auto;
+		max-width: 40rem;
+		margin-bottom: var(--sp-4);
+	}
 	.content {
 		min-width: 0;
 	}

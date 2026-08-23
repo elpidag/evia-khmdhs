@@ -37,10 +37,16 @@ from khmdhs.config import DEFAULT_DB  # noqa: E402
 CACHE = ROOT / "data" / "processed" / "pdf_cache"
 OUT = ROOT / "khmdhs" / "data" / "contract_deliverables.json"
 
+# the post-2024 template («η εκπόνηση από τον ανάδοχο … μελετών») AND the
+# ΕΣΑ dialect of the 2024 reforestation lots («Ο Ανάδοχος αναλαμβάνει την
+# εκπόνηση όλων των μελετών … να εκπονήσει το σύνολο των μελετών
+# εφαρμογής» — DATA_DECISIONS 2026-08-23, user-caught)
 MARKER = re.compile(
     r"ΕΚΠΟΝΗΣΗ\s+ΑΠΟ\s+ΤΟΝ\s+ΑΝΑΔΟΧΟ|ΝΟΕΙΤΑΙ\s+ΕΚΑΣΤΗ\s+ΜΕΛΕΤΗ"
     r"|ΘΑ\s+ΕΚΠΟΝΗΘΕΙ\s+ΑΠΟ\s+ΤΟΝ\s+ΑΝΑΔΟΧΟ"
-    r"|ΕΚΠΟΝΗΣΗ\s+ΚΑΙ\s+ΥΠΟΒΟΛΗ\s+ΑΠΟ\s+ΤΟΝ\s+ΑΝΑΔΟΧΟ")
+    r"|ΕΚΠΟΝΗΣΗ\s+ΚΑΙ\s+ΥΠΟΒΟΛΗ\s+ΑΠΟ\s+ΤΟΝ\s+ΑΝΑΔΟΧΟ"
+    r"|ΕΚΠΟΝΗΣΗ\s+ΟΛΩΝ\s+ΤΩΝ\s+ΜΕΛΕΤΩΝ"
+    r"|ΝΑ\s+ΕΚΠΟΝΗΣΕΙ\s+ΤΟ\s+ΣΥΝΟΛΟ\s+ΤΩΝ\s+ΜΕΛΕΤΩΝ")
 
 
 def fold(s: str) -> str:
@@ -104,8 +110,21 @@ def main() -> int:
                      "excerpt": None,
                      "note": "the curated category: the object is the studies"}
         else:
+            # the CHAIN, not the tip alone: an amendment's own PDF is a cover
+            # note and the clause lives in its predecessor (2026-08-23)
             ex = find_marker(CACHE / f"{ref}.txt")
             src = "pdf"
+            cur, seen = ref, {ref}
+            while ex is None:
+                row = kh.execute("SELECT prev_reference_no FROM contracts"
+                                 " WHERE reference_number=?", (cur,)).fetchone()
+                cur = row[0] if row else None
+                if not cur or cur in seen:
+                    break
+                seen.add(cur)
+                ex = find_marker(CACHE / f"{cur}.txt")
+                if ex:
+                    src = f"pdf:{cur}"
             if ex is None:
                 for r in kh.execute(
                         "SELECT DISTINCT adam FROM contract_families"

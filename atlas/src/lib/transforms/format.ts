@@ -57,3 +57,21 @@ export function dmy(d: string | null | undefined): string {
 	const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d);
 	return m ? `${m[3]}.${m[2]}.${m[1]}` : d;
 }
+
+/**
+ * A histogram bracket label made readable (presentation only): the API's
+ * «2000–5000k» is «2–5M», «500–1000k» is «500k–1M», «0–10k» and «>10M»
+ * stay as they are. The unit suffix of the API label applies to both ends.
+ */
+export function bracket(label: string): string {
+	const m = label.match(/^(\d+)–(\d+)([kM])$/);
+	if (!m) return label;
+	const [, lo, hi, unit] = m;
+	if (unit !== 'k') return label;
+	const a = Number(lo);
+	const b = Number(hi);
+	const side = (v: number) => (v >= 1000 ? `${v / 1000}M` : `${v}k`);
+	if (a >= 1000 && b >= 1000) return `${a / 1000}–${b / 1000}M`;
+	if (b >= 1000) return `${side(a)}–${side(b)}`;
+	return label;
+}

@@ -11,6 +11,7 @@
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow from '$lib/charts/KindFlow.svelte';
 	import CatWorkChord from '$lib/charts/CatWorkChord.svelte';
+	import { procedureEn } from '$lib/transforms/procedures';
 	import {
 		CHORD_PAIRS,
 		catScope,
@@ -42,7 +43,7 @@
 		type PeYearly,
 		type SwarmRow
 	} from '$lib/api';
-	import { eurShort, grInt, pct } from '$lib/transforms/format';
+	import { bracket, eurShort, grInt, pct } from '$lib/transforms/format';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
@@ -151,13 +152,19 @@
 				: `${c.n_contracts} contracts`
 		}));
 	});
+	// AWARD PROCEDURES in the Directive's English (the registry strings are
+	// Greek); the direct-award row is the one to point at
 	const procRows = $derived(
 		o.procedures.map((p) => ({
-			label: p.label,
+			label: procedureEn(p.label),
 			value: p.eur,
-			sublabel: `${p.n_contracts} contracts`
+			sublabel: `${grInt(p.n_contracts)} contracts`,
+			direct: p.label.includes('Απευθείας')
 		}))
 	);
+	const procTotalEur = $derived(o.procedures.reduce((s, p) => s + p.eur, 0));
+	const procTotalN = $derived(o.procedures.reduce((s, p) => s + p.n_contracts, 0));
+	const directN = $derived(o.procedures.find((p) => p.label.includes('Απευθείας'))?.n_contracts ?? 0);
 
 
 	// auto-note: the single biggest payment month
@@ -236,7 +243,7 @@
 		const labels = o.direct_awards.labels as string[];
 		let best = 0;
 		for (let i = 1; i < counts.length; i++) if (counts[i] > counts[best]) best = i;
-		return labels[best] ?? '';
+		return bracket(labels[best] ?? '');
 	});
 	const firstPayYear = $derived((o.timeseries.months[0] ?? '').slice(0, 4));
 	// work-type category chart: stated € or contract counts, same bars
@@ -602,6 +609,40 @@
 	</ChartFrame>
 {/if}
 
+<ChartFrame
+	title="RANKING OF COMPANIES"
+	insight={rankMode === 'firm'
+		? `The same money attributed to the firms BEHIND the joint ventures — ${grInt(
+				o.consortiums.n_documented
+			)} of the ${grInt(o.consortiums.n)} ventures have members on record, ${grInt(
+				o.consortiums.n_firms
+			)} firms in all. A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
+				o.consortiums.eur_unsplit
+			)} sits identically in both views. Both views add up to the programme total.`
+		: `Companies ranked by the sums contracted to them through the programme — the top ${topRows.length} of ${grInt(
+				o.kpis.n_contractors
+			)} contractors, ${eurShort(o.kpis.total_eur)} in total. Each contract is counted once: a jointly signed one is split evenly between its partners, so the totals add up to the programme total. Switch to «by member firm» to attribute the money to the firms behind the joint ventures.`}
+	caveat={rankMode === 'firm'
+		? `A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
+				o.consortiums.eur_unsplit
+			)} sits identically in both views. Both add up to the programme total.`
+		: 'Each contract is counted once: a jointly signed one is split evenly between its partners, so these totals add up to the programme total.'}
+	anchor="top-contractors"
+	methodology={rankMode === 'firm' ? 'joint-contracts' : 'stated-basis'}
+>
+	<!-- the view toggle where the maps' bars put theirs — right-aligned on
+	     its own line under the title, no label (user, 2026-08-21) -->
+	<div class="rankbar">
+		<SegmentToggle param="rank" fallback="party" options={RANK_MODES} />
+	</div>
+	<!-- same measure and bar height as the sponsored-works ranking, so the
+	     two datasets' rankings read alike; the bars stay black, this
+	     dataset's colour (user, 2026-08-20) -->
+	<div class="rankw">
+		<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={35} />
+	</div>
+</ChartFrame>
+
 <Defer height={620}>
 {#if unitFlow}
 	{@const uf = unitFlow}
@@ -663,15 +704,13 @@
 <div class="pair">
 	<ChartFrame
 		title="DIRECT AWARDS"
-		subtitle="{grInt(
-			o.direct_awards.n as number
-		)} direct-award contracts by stated value (excl. VAT) — they pile up around €{daModal}, far beyond the ν.4782/2021 ceilings."
+		insight={`The ${grInt(o.direct_awards.n as number)} direct-award contracts by stated value (excl. VAT), one bar per value bracket, each bracket a doubling: they pile up around €${daModal}, far beyond the ν.4782/2021 ceilings for direct awards — the two dashed lines at €30k and €60k. The darkest bar is the most common bracket.`}
 		caveat="The statutory ceilings and these values are both excl. VAT; RRF emergency provisions allowed direct awards above the ceilings."
 		anchor="direct-awards"
 		methodology="procedures"
 	>
 		<LogHistogram
-			labels={o.direct_awards.labels as string[]}
+			labels={(o.direct_awards.labels as string[]).map(bracket)}
 			counts={o.direct_awards.counts as number[]}
 			edges={o.direct_awards.edges as number[]}
 			color="var(--c-antinero)"
@@ -681,46 +720,16 @@
 
 	<ChartFrame
 		title="AWARD PROCEDURES"
-		subtitle="Stated € by award procedure — open procedures are the exception, not the rule."
+		insight={`Stated € (excl. VAT) by the procedure ΚΗΜΔΗΣ records for each contract, named in the wording of Directive 2014/24/EU: ${grInt(directN)} of the ${grInt(procTotalN)} contracts — ${pct((directEur / procTotalEur) * 100, 0)} of the money — went by direct award; open procedures are the exception, not the rule.`}
+		caveat="«Direct award» is the ν.4412/2016 άρθρο 118 route, which has no Directive equivalent; the other procedures carry the Directive's own names. Procedures as recorded in ΚΗΜΔΗΣ."
 		anchor="procedures"
+		methodology="procedures"
 	>
-		<BarH rows={procRows} color="var(--c-antinero)" highlight={(r) => r.label.includes('Απευθείας')} />
+		<div class="rankw">
+			<BarH rows={procRows} color="var(--c-antinero)" inside barHeight={35} highlight={(r) => !!(r as { direct?: boolean }).direct} />
+		</div>
 	</ChartFrame>
 </div>
-
-<ChartFrame
-	title="RANKING OF COMPANIES"
-	insight={rankMode === 'firm'
-		? `The same money attributed to the firms BEHIND the joint ventures — ${grInt(
-				o.consortiums.n_documented
-			)} of the ${grInt(o.consortiums.n)} ventures have members on record, ${grInt(
-				o.consortiums.n_firms
-			)} firms in all. A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
-				o.consortiums.eur_unsplit
-			)} sits identically in both views. Both views add up to the programme total.`
-		: `Companies ranked by the sums contracted to them through the programme — the top ${topRows.length} of ${grInt(
-				o.kpis.n_contractors
-			)} contractors, ${eurShort(o.kpis.total_eur)} in total. Each contract is counted once: a jointly signed one is split evenly between its partners, so the totals add up to the programme total. Switch to «by member firm» to attribute the money to the firms behind the joint ventures.`}
-	caveat={rankMode === 'firm'
-		? `A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
-				o.consortiums.eur_unsplit
-			)} sits identically in both views. Both add up to the programme total.`
-		: 'Each contract is counted once: a jointly signed one is split evenly between its partners, so these totals add up to the programme total.'}
-	anchor="top-contractors"
-	methodology={rankMode === 'firm' ? 'joint-contracts' : 'stated-basis'}
->
-	<!-- the view toggle where the maps' bars put theirs — right-aligned on
-	     its own line under the title, no label (user, 2026-08-21) -->
-	<div class="rankbar">
-		<SegmentToggle param="rank" fallback="party" options={RANK_MODES} />
-	</div>
-	<!-- same measure and bar height as the sponsored-works ranking, so the
-	     two datasets' rankings read alike; the bars stay black, this
-	     dataset's colour (user, 2026-08-20) -->
-	<div class="rankw">
-		<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={35} />
-	</div>
-</ChartFrame>
 
 <Defer height={340}>
 {#if swarm}
@@ -836,6 +845,79 @@
 	</div>
 {/if}
 
+{#if o.categories.length && topCat}
+	{@const works = o.themes}
+	<!-- the chord alone (user, 2026-08-23): the dots and the works × category
+	     rows are PARKED — WorkDots.svelte / WorksByCategory.svelte stay, off
+	     the page -->
+
+	{#snippet leftPick()}
+		<div class="cpick" role="group">
+			<button
+				class:active={chordSides.left === 'works'}
+				onclick={() => setChordPair(pairFor(chordPair, 'left', 'works'))}>works named</button
+			>
+			<button
+				class:active={chordSides.left === 'scope'}
+				onclick={() => setChordPair(pairFor(chordPair, 'left', 'scope'))}>contract scope</button
+			>
+		</div>
+	{/snippet}
+	{#snippet rightPick()}
+		<div class="cpick" role="group">
+			<button
+				class:active={chordSides.right === 'category'}
+				onclick={() => setChordPair(pairFor(chordPair, 'right', 'category'))}>main category</button
+			>
+			<button
+				class:active={chordSides.right === 'scope'}
+				onclick={() => setChordPair(pairFor(chordPair, 'right', 'scope'))}>contract scope</button
+			>
+		</div>
+	{/snippet}
+	<ChartFrame
+		title="TYPES OF WORKS"
+		insight={chordPair === 'cat-scope'
+			? `Every contract is flagged twice here — ONE main category, curated from its title, and ONE contract scope (what it was engaged to deliver: study only, study & works, works only). Both halves are one per contract, so every arc and every ribbon is a plain contract count over the ${grInt(works.n_contracts)} contracts — ${grInt(o.deliverables?.study ?? 0)} study only, ${grInt(o.deliverables?.study_and_works ?? 0)} study & works, ${grInt(o.deliverables?.works ?? 0)} works only — and a ribbon joins a category to a scope as wide as the contracts carrying both, in the category’s colour. Hover an arc to trace its ribbons, a ribbon for its count.`
+			: chordPair === 'scope-works'
+				? `Every contract is flagged twice here — ONE contract scope (study only, study & works, works only) and EVERY work its signed title names. The right half is the scope, in CONTRACT SCOPE’s tones; the grey arcs of the left half are the works named (several per contract). A ribbon joins a scope to a work, as wide as the number of contracts of that scope naming that work. A contract naming several works lies under several ribbons, so a scope’s arc measures mentions, not contracts — the hover card counts contracts. ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc.`
+				: `Every contract is flagged twice — ONE main category, curated from its title, and EVERY work that title names — and the circle keeps the two apart: the filled, coloured arcs of the right half are the ${grInt(o.categories.length)} main categories (one per contract), the grey arcs of the left half are the works named (several per contract). A ribbon joins a category to a work, as wide as the number of that category’s contracts naming that work, fading from the category’s colour to grey at the work end. A contract naming several works lies under several ribbons, so a category’s arc measures mentions, not contracts. Hover an arc to trace its ribbons, a ribbon for its count; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc. The toggles under the headings swap either half for the contract scope.`}
+		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
+		anchor="works"
+		methodology="categories"
+	>
+		<CatWorkChord data={chordData} leftControl={leftPick} rightControl={rightPick} />
+	</ChartFrame>
+{/if}
+
+<Defer height={640}>
+{#if network}
+	<ChartFrame
+		title={netCopy.title}
+		insight={netCopy.subtitle}
+		caveat="{netCopy.caveat} Circle area is the contract's stated value excl. VAT, on one scale in every arrangement; a call is the πρόσκληση the contract cites in its own signed text ({grInt(
+			network.stats.n_calls
+		)} resolved this way). Every layout is deterministic, not a force simulation."
+		anchor="network"
+		methodology="procurement-families"
+	>
+		{#snippet controls()}
+			<SegmentToggle param="net" fallback="scope" options={NET_MODES} />
+		{/snippet}
+		<ContractNetwork
+			nodes={network.nodes.map((n) => ({ ...n, phase: n.dk }))}
+			stats={network.stats}
+			mode="time"
+			lens={netMode === 'type' ? 'type' : 'scope'}
+			catLabels={Object.fromEntries(o.categories.map((c) => [c.key, catShort.get(c.key) ?? c.key]))}
+			season={network.fire_season}
+		/>
+	</ChartFrame>
+{:else}
+	<div class="skeleton" id="network" style="height: 620px"></div>
+{/if}
+</Defer>
+
 <div class="pair">
 	<ChartFrame
 		title="MONEY PER YEAR"
@@ -873,34 +955,6 @@
 		{/if}
 	</ChartFrame>
 </div>
-
-<Defer height={640}>
-{#if network}
-	<ChartFrame
-		title={netCopy.title}
-		insight={netCopy.subtitle}
-		caveat="{netCopy.caveat} Circle area is the contract's stated value excl. VAT, on one scale in every arrangement; a call is the πρόσκληση the contract cites in its own signed text ({grInt(
-			network.stats.n_calls
-		)} resolved this way). Every layout is deterministic, not a force simulation."
-		anchor="network"
-		methodology="procurement-families"
-	>
-		{#snippet controls()}
-			<SegmentToggle param="net" fallback="scope" options={NET_MODES} />
-		{/snippet}
-		<ContractNetwork
-			nodes={network.nodes.map((n) => ({ ...n, phase: n.dk }))}
-			stats={network.stats}
-			mode="time"
-			lens={netMode === 'type' ? 'type' : 'scope'}
-			catLabels={Object.fromEntries(o.categories.map((c) => [c.key, catShort.get(c.key) ?? c.key]))}
-			season={network.fire_season}
-		/>
-	</ChartFrame>
-{:else}
-	<div class="skeleton" id="network" style="height: 620px"></div>
-{/if}
-</Defer>
 
 <Defer height={900}>
 {#if payments}
@@ -949,51 +1003,6 @@
 		medianShare={o.studies.summary.median_share as number}
 	/>
 </ChartFrame>
-
-{#if o.categories.length && topCat}
-	{@const works = o.themes}
-	<!-- the chord alone (user, 2026-08-23): the dots and the works × category
-	     rows are PARKED — WorkDots.svelte / WorksByCategory.svelte stay, off
-	     the page -->
-
-	{#snippet leftPick()}
-		<div class="cpick" role="group">
-			<button
-				class:active={chordSides.left === 'works'}
-				onclick={() => setChordPair(pairFor(chordPair, 'left', 'works'))}>works named</button
-			>
-			<button
-				class:active={chordSides.left === 'scope'}
-				onclick={() => setChordPair(pairFor(chordPair, 'left', 'scope'))}>contract scope</button
-			>
-		</div>
-	{/snippet}
-	{#snippet rightPick()}
-		<div class="cpick" role="group">
-			<button
-				class:active={chordSides.right === 'category'}
-				onclick={() => setChordPair(pairFor(chordPair, 'right', 'category'))}>main category</button
-			>
-			<button
-				class:active={chordSides.right === 'scope'}
-				onclick={() => setChordPair(pairFor(chordPair, 'right', 'scope'))}>contract scope</button
-			>
-		</div>
-	{/snippet}
-	<ChartFrame
-		title="TYPES OF WORKS"
-		insight={chordPair === 'cat-scope'
-			? `Every contract is flagged twice here — ONE main category, curated from its title, and ONE contract scope (what it was engaged to deliver: study only, study & works, works only). Both halves are one per contract, so every arc and every ribbon is a plain contract count over the ${grInt(works.n_contracts)} contracts — ${grInt(o.deliverables?.study ?? 0)} study only, ${grInt(o.deliverables?.study_and_works ?? 0)} study & works, ${grInt(o.deliverables?.works ?? 0)} works only — and a ribbon joins a category to a scope as wide as the contracts carrying both, in the category’s colour. Hover an arc to trace its ribbons, a ribbon for its count.`
-			: chordPair === 'scope-works'
-				? `Every contract is flagged twice here — ONE contract scope (study only, study & works, works only) and EVERY work its signed title names. The right half is the scope, in CONTRACT SCOPE’s tones; the grey arcs of the left half are the works named (several per contract). A ribbon joins a scope to a work, as wide as the number of contracts of that scope naming that work. A contract naming several works lies under several ribbons, so a scope’s arc measures mentions, not contracts — the hover card counts contracts. ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc.`
-				: `Every contract is flagged twice — ONE main category, curated from its title, and EVERY work that title names — and the circle keeps the two apart: the filled, coloured arcs of the right half are the ${grInt(o.categories.length)} main categories (one per contract), the grey arcs of the left half are the works named (several per contract). A ribbon joins a category to a work, as wide as the number of that category’s contracts naming that work, fading from the category’s colour to grey at the work end. A contract naming several works lies under several ribbons, so a category’s arc measures mentions, not contracts. Hover an arc to trace its ribbons, a ribbon for its count; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc. The toggles under the headings swap either half for the contract scope.`}
-		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
-		anchor="works"
-		methodology="categories"
-	>
-		<CatWorkChord data={chordData} leftControl={leftPick} rightControl={rightPick} />
-	</ChartFrame>
-{/if}
 
 {#if o.cpvs.length}
 	{@const topCpv = o.cpvs[0]}
@@ -1449,12 +1458,6 @@
 		display: flex;
 		align-items: center;
 		min-height: 2.25rem;
-	}
-	.scopetype :global(.insight) {
-		position: static;
-		width: auto;
-		max-width: 40rem;
-		margin-bottom: var(--sp-4);
 	}
 	.studybar {
 		max-width: 720px;

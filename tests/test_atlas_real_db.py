@@ -181,11 +181,13 @@ def test_types_of_work_lenses(client):
 
 def test_deliverables_and_undocumented_calls(client):
     """The 1-2-3 model (DATA_DECISIONS 2026-08-22): study 14 /
-    study_and_works 121 / works 110; the design-build clause is quoted;
-    the nine date-only ΤΑΙΠΕΔ calls appear in the trail unlinked."""
+    study_and_works 126 / works 105 — 126 since 2026-08-23, when the ΕΣΑ
+    design clause and the chain were read (DATA_DECISIONS); the
+    design-build clause is quoted; the nine date-only ΤΑΙΠΕΔ calls appear
+    in the trail unlinked."""
     o = client.get("/api/antinero/overview").get_json()
-    assert o["deliverables"] == {"study": 14, "study_and_works": 121,
-                                 "works": 110}
+    assert o["deliverables"] == {"study": 14, "study_and_works": 126,
+                                 "works": 105}
     d = client.get("/api/antinero/contract/23SYMV012972469").get_json()
     assert d["deliverables"]["kind"] == "study_and_works"
     assert "εκπονηθεί από τον Ανάδοχο" in d["deliverables"]["excerpt"]
@@ -203,7 +205,8 @@ def test_study_scatter_and_classes(client):
     scatter's points are the chain-attributed stated fees."""
     o = client.get("/api/antinero/overview").get_json()
     cl = o["studies"]["classes"]
-    assert cl == {"stated": 105, "db_unstated": 20, "works_none": 106,
+    # 24 / 102 since the 2026-08-23 deliverables correction (5 works → s&w)
+    assert cl == {"stated": 105, "db_unstated": 24, "works_none": 102,
                   "study_only": 14}
     assert sum(cl.values()) == 245
     pts = o["studies"]["points"]

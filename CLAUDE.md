@@ -304,10 +304,14 @@ refetching open contracts — prefer it for routine updates.
   closes the front page; labels ship from `category_labels` /
   `work_theme_labels`, never hardcoded.
 - Deliverables layer (DATA_DECISIONS 2026-08-22): **study 14 /
-  study_and_works 121 / works 110** — the 1-2-3 model mirroring the
-  sponsored `deliverables`. `scripts/extract_deliverables.py` (design-build
-  clause found in the contract's own text 63 / its call 58, verbatim via a
-  1:1 fold) → curated `data/contract_deliverables.json` (`_overrides` per
+  study_and_works 126 / works 105** (126/105 since 2026-08-23: the ΕΣΑ
+  reforestation lots state «Ο Ανάδοχος αναλαμβάνει την εκπόνηση όλων
+  των μελετών …» — a dialect the extractor missed — and one water-tank
+  chain tip's predecessor carries the template clause; user-caught) —
+  the 1-2-3 model mirroring the sponsored `deliverables`.
+  `scripts/extract_deliverables.py` (design-build clause found in the
+  contract's own text or its CHAIN 86 / its call 40, verbatim via a 1:1
+  fold; reads the chain since 2026-08-23) → curated `data/contract_deliverables.json` (`_overrides` per
   ΑΔΑΜ) → `details_loader` → `contract_deliverables`. Deliberately NOT the
   «Μελέτες» theme (it would flood 14 → ~115 — the clause is the post-2024
   template, 72/135 calls). Contract page SCOPE row prints it + the quoted
@@ -1330,15 +1334,15 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `wrapMid`/`leftGroup` (brace)/`columnX` props exist — `columnX` places
   each column's centre by hand (fraction of the width or absolute x), the
   ribbons and headings following; both AWARDING PROCESS frames set it.
-  **Front-page order since 2026-08-22 (user):** ALLOCATION OF FUNDING ·
-  FLOWS OF MONEY · AWARDING PROCESS · DIRECT AWARDS + AWARD PROCEDURES ·
-  RANKING OF COMPANIES · CONTRACT VALUES · CONTRACT SCOPE + CONTRACT
-  TYPE · then MONEY PER YEAR
+  **Front-page order since 2026-08-23 (user):** ALLOCATION OF FUNDING ·
+  FLOWS OF MONEY · RANKING OF COMPANIES · AWARDING PROCESS · DIRECT
+  AWARDS + AWARD PROCEDURES (procedure names via `procedureEn`, bulbs,
+  `format.bracket` «€2–5M» labels) · CONTRACT VALUES · CONTRACT SCOPE +
+  CONTRACT TYPE · TYPES OF WORKS · PROCUREMENT TIMELINE · MONEY PER YEAR
   (€ contracted / € paid toggle, `?money=`) beside the year-vs-year-ONLY
   CUMULATIVE DISBURSEMENT (half width, fire season in the payments
-  timeline's accent; the phase-stacked mode is deleted), then the rest in
-  their old order (programme chart, payments timeline, study costs,
-  TYPES OF WORKS, CPV). MONEY BY REGION PER YEAR is retired: its data
+  timeline's accent; the phase-stacked mode is deleted) · PAYMENTS
+  TIMELINE · STUDY COSTS · CPV CODES. MONEY BY REGION PER YEAR is retired: its data
   draws as FIVE MINI YEAR MAPS (2022–2026, one shared sqrt ramp, totals
   in the heads, `#pe-yearly`) inside ALLOCATION OF FUNDING under the big
   maps — small multiples over a year slider, per the doctrine.
@@ -1383,7 +1387,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   strip). **`ChartFrame insight`** (2026-08-21): an outline lightbulb left
   of a frame's title opens its explanation in the page's LEFT MARGIN beside
   the chart (9–15 rem, never shrinking the chart; flows above under ~1500
-  CSS px) — ALLOCATION OF FUNDING uses it instead of a title ⓘ; plus hub-catchment small multiples — top-6 home regions by
+  CSS px — and ALWAYS above inside `.pair` / `.scopetype` / `.firesband`,
+  a rule kept in ChartFrame itself since 2026-08-23 because a half-width
+  frame's left neighbour sits where the margin would be) — ALLOCATION OF FUNDING uses it instead of a title ⓘ; plus hub-catchment small multiples — top-6 home regions by
   exported €, one mini-map each on a shared scale, click→traces that hub.
   One-arrow-per-region "shift arrows" were REJECTED: only 19/56
   import-majority regions have a ≥50% dominant origin. **Every Atlas flow

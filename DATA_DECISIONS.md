@@ -7496,3 +7496,58 @@ into `charts/scopeColors.ts` (solid greys — they work as arcs and as
 ribbons, which the timeline's white-with-ring study mark cannot) and
 the CONTRACT SCOPE share bar reads them from there. The component is
 now generic (`data: ChordData`, `leftControl`/`rightControl` snippets).
+
+## 2026-08-23 · Deliverables: the ΕΣΑ design clause and the chain — 5 «works only» become «study & works»
+
+**Decision.** The user looked at the category ↔ scope chord and asked
+whether the reforestation contracts are really works only. They are
+not, 4 of 8: the ΕΣΑ lots 24SYMV014843550 / 24SYMV014844210 /
+24SYMV014844359 / 24SYMV014844409 state, in their Άρθρο 4, «Ο Ανάδοχος
+αναλαμβάνει την εκπόνηση όλων των μελετών που απαιτούνται για την
+εκτέλεση του Έργου. Συγκεκριμένα, ο Ανάδοχος υποχρεούται να εκπονήσει
+το σύνολο των μελετών εφαρμογής …» — and two of them name their
+μελετητής (ENCODIA, ΟΛΥΜΠΟΣ ΕΤΑΙΡΙΑ ΜΕΛΕΤΩΝ) in the recitals. The
+extractor (`scripts/extract_deliverables.py`) knew only the post-2024
+template («η εκπόνηση από τον ανάδοχο … μελετών») and read each
+contract's OWN text, so these defaulted to works. A chain-walk audit of
+all 110 works-kind contracts (own text → every predecessor) found
+exactly one more: 26SYMV019250208 (the single firefighting-water
+contract), a cover note whose predecessor 25SYMV017471484 carries the
+template clause verbatim. The other reforestation contracts — Ε1 black
+pine 24SYMV014844450, the Αλίαρτος nurseries 23SYMV013600200 and their
+two supplementaries — name no study anywhere (accent-folded search)
+and stay works only.
+**Fix.** The extractor gains the ΕΣΑ needles («ΕΚΠΟΝΗΣΗ ΟΛΩΝ ΤΩΝ
+ΜΕΛΕΤΩΝ», «ΝΑ ΕΚΠΟΝΗΣΕΙ ΤΟ ΣΥΝΟΛΟ ΤΩΝ ΜΕΛΕΤΩΝ») and reads the CHAIN
+(own text, then each predecessor — source `pdf:<ancestor>`), then the
+call; regenerated and loaded. Counts: study 14 / study & works **126**
+(was 121) / works **105** (was 110); pins updated. No `_overrides`
+needed — the documents say it, the reader just had to look.
+
+## 2026-08-23 · Front page re-ordered; DIRECT AWARDS + AWARD PROCEDURES in English, bulbs, readable brackets
+
+(user) Order: ALLOCATION OF FUNDING · FLOWS OF MONEY · RANKING OF
+COMPANIES · AWARDING PROCESS · DIRECT AWARDS + AWARD PROCEDURES ·
+CONTRACT VALUES · CONTRACT SCOPE + CONTRACT TYPE · TYPES OF WORKS ·
+PROCUREMENT TIMELINE · MONEY PER YEAR + CUMULATIVE DISBURSEMENT ·
+PAYMENTS TIMELINE · STUDY COSTS · CPV CODES. The awards pair: the
+procedure names print in the Directive's English (`procedureEn`, the
+contract card's rule — «Direct award», «Open procedure», «Negotiated
+procedure without prior publication»), the direct-award row highlighted
+by a flag not a Greek substring, bars in the ranking's dress (35 px,
+inside labels); both subtitles became lightbulbs with computed facts
+(direct awards: N of M contracts, X% of the money) and AWARD PROCEDURES
+gained a caveat + methodology link; the € brackets read «€2–5M» and
+«500k–1M» instead of «2000–5000k» (`format.bracket`, presentation only,
+unit-pinned) in the axis, the modal note and the bulb.
+
+## 2026-08-23 · A lightbulb note never falls on a neighbouring frame
+
+(user: the AWARD PROCEDURES note fell on DIRECT AWARDS) The margin
+note assumes the page's left margin is free; a frame sharing its row
+(the `.pair` halves, the `.scopetype` pairs, the full-bleed `.firesband`)
+has its neighbour there instead. The rule now lives in `ChartFrame`
+itself — inside those containers the note ALWAYS flows above the chart,
+at any viewport — so no page can forget it; the front page's own
+`.scopetype` override went away as redundant. Verified at 1900 px with
+every bulb open on /, /dase, /anadohoi: no note overlaps any frame.
