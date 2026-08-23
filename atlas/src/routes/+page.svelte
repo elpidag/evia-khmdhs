@@ -11,6 +11,16 @@
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow from '$lib/charts/KindFlow.svelte';
 	import CatWorkChord from '$lib/charts/CatWorkChord.svelte';
+	import {
+		CHORD_PAIRS,
+		catScope,
+		catWorks,
+		pairFor,
+		scopeWorks,
+		sidesOf,
+		type ChordPair
+	} from '$lib/transforms/chordSides';
+	import { SCOPE_COLORS, SCOPE_LABELS } from '$lib/charts/scopeColors';
 	import { unitEn } from '$lib/transforms/names';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
@@ -34,6 +44,7 @@
 	} from '$lib/api';
 	import { eurShort, grInt, pct } from '$lib/transforms/format';
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -296,6 +307,35 @@
 			o.categories.map((c) => [c.key, (c.label_en ?? c.label).split(/\s+[—–]\s+|:\s+/)[0]])
 		)
 	);
+	// the chord's PAIR of flaggings (user, 2026-08-23): category ↔ works,
+	// category ↔ scope, scope ↔ works — a toggle under each heading, with
+	// the rule that both halves cannot be the scope
+	const chordPair = $derived<ChordPair>(
+		(CHORD_PAIRS as string[]).includes(page.url.searchParams.get('chord') ?? '')
+			? (page.url.searchParams.get('chord') as ChordPair)
+			: 'cat-works'
+	);
+	const chordSides = $derived(sidesOf(chordPair));
+	function setChordPair(next: ChordPair) {
+		const url = new URL(page.url);
+		if (next === 'cat-works') url.searchParams.delete('chord');
+		else url.searchParams.set('chord', next);
+		goto(url, { replaceState: true, keepFocus: true, noScroll: true });
+	}
+	const catItems = $derived(
+		o.categories.map((c) => ({ key: c.key, label: splitHint(c.label_en ?? c.label).label, n: c.n }))
+	);
+	const chordData = $derived.by(() => {
+		const none = 'no specific work named';
+		if (chordPair === 'cat-scope' && network) return catScope(network.nodes, catItems);
+		if (chordPair === 'scope-works' && network)
+			return scopeWorks(
+				network.nodes,
+				o.themes.themes.map((w) => ({ theme: w.theme, label: w.label_en })),
+				none
+			);
+		return catWorks(worksSplit, catItems, none);
+	});
 	const worksSplit = $derived.by(() => {
 		const rows = o.themes.themes.map((w) => ({
 			theme: w.theme,
@@ -759,9 +799,9 @@
 				<StackedShareBar
 					height={34}
 					segments={[
-						{ value: o.deliverables?.study ?? 0, label: 'study only', color: '#b5b5b5', badge: 'outleft' },
-						{ value: o.deliverables?.study_and_works ?? 0, label: 'study & works', color: '#6c6c6c', badge: 'above' },
-						{ value: o.deliverables?.works ?? 0, label: 'works only', color: '#3d3d3d', badge: 'above' }
+						{ value: o.deliverables?.study ?? 0, label: SCOPE_LABELS.study, color: SCOPE_COLORS.study, badge: 'outleft' },
+						{ value: o.deliverables?.study_and_works ?? 0, label: SCOPE_LABELS.study_and_works, color: SCOPE_COLORS.study_and_works, badge: 'above' },
+						{ value: o.deliverables?.works ?? 0, label: SCOPE_LABELS.works, color: SCOPE_COLORS.works, badge: 'above' }
 					]}
 				/>
 			</div>
@@ -916,19 +956,42 @@
 	     rows are PARKED — WorkDots.svelte / WorksByCategory.svelte stay, off
 	     the page -->
 
+	{#snippet leftPick()}
+		<div class="cpick" role="group">
+			<button
+				class:active={chordSides.left === 'works'}
+				onclick={() => setChordPair(pairFor(chordPair, 'left', 'works'))}>works named</button
+			>
+			<button
+				class:active={chordSides.left === 'scope'}
+				onclick={() => setChordPair(pairFor(chordPair, 'left', 'scope'))}>contract scope</button
+			>
+		</div>
+	{/snippet}
+	{#snippet rightPick()}
+		<div class="cpick" role="group">
+			<button
+				class:active={chordSides.right === 'category'}
+				onclick={() => setChordPair(pairFor(chordPair, 'right', 'category'))}>main category</button
+			>
+			<button
+				class:active={chordSides.right === 'scope'}
+				onclick={() => setChordPair(pairFor(chordPair, 'right', 'scope'))}>contract scope</button
+			>
+		</div>
+	{/snippet}
 	<ChartFrame
 		title="TYPES OF WORKS"
-		insight={`Every contract is flagged twice — ONE main category, curated from its title, and EVERY work that title names — and the circle keeps the two apart: the filled, coloured arcs of the right half are the ${grInt(o.categories.length)} main categories (one per contract), the grey arcs of the left half are the works named (several per contract). A ribbon joins a category to a work, as wide as the number of that category’s contracts naming that work, fading from the category’s colour to grey at the work end. A contract naming several works lies under several ribbons, so a category’s arc measures mentions, not contracts. Hover an arc to trace its ribbons, a ribbon for its count; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc.`}
+		insight={chordPair === 'cat-scope'
+			? `Every contract is flagged twice here — ONE main category, curated from its title, and ONE contract scope (what it was engaged to deliver: study only, study & works, works only). Both halves are one per contract, so every arc and every ribbon is a plain contract count over the ${grInt(works.n_contracts)} contracts — ${grInt(o.deliverables?.study ?? 0)} study only, ${grInt(o.deliverables?.study_and_works ?? 0)} study & works, ${grInt(o.deliverables?.works ?? 0)} works only — and a ribbon joins a category to a scope as wide as the contracts carrying both, in the category’s colour. Hover an arc to trace its ribbons, a ribbon for its count.`
+			: chordPair === 'scope-works'
+				? `Every contract is flagged twice here — ONE contract scope (study only, study & works, works only) and EVERY work its signed title names. The right half is the scope, in CONTRACT SCOPE’s tones; the grey arcs of the left half are the works named (several per contract). A ribbon joins a scope to a work, as wide as the number of contracts of that scope naming that work. A contract naming several works lies under several ribbons, so a scope’s arc measures mentions, not contracts — the hover card counts contracts. ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc.`
+				: `Every contract is flagged twice — ONE main category, curated from its title, and EVERY work that title names — and the circle keeps the two apart: the filled, coloured arcs of the right half are the ${grInt(o.categories.length)} main categories (one per contract), the grey arcs of the left half are the works named (several per contract). A ribbon joins a category to a work, as wide as the number of that category’s contracts naming that work, fading from the category’s colour to grey at the work end. A contract naming several works lies under several ribbons, so a category’s arc measures mentions, not contracts. Hover an arc to trace its ribbons, a ribbon for its count; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc. The toggles under the headings swap either half for the contract scope.`}
 		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
 		anchor="works"
 		methodology="categories"
 	>
-		<CatWorkChord
-			rows={worksSplit}
-			cats={[...o.categories]
-				.sort((a, b) => b.n - a.n)
-				.map((c) => ({ key: c.key, label: splitHint(c.label_en ?? c.label).label, n: c.n }))}
-		/>
+		<CatWorkChord data={chordData} leftControl={leftPick} rightControl={rightPick} />
 	</ChartFrame>
 {/if}
 
@@ -1319,6 +1382,31 @@
 	}
 	.cd {
 		color: var(--ink-soft);
+	}
+	/* the chord's per-heading toggles: SegmentToggle's dress, one size
+	   smaller, pointer events on (the heading block around them is inert) */
+	.cpick {
+		display: inline-flex;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		overflow: hidden;
+		pointer-events: auto;
+	}
+	.cpick button {
+		font: inherit;
+		font-size: 11px;
+		padding: 2px 8px;
+		border: 0;
+		background: var(--paper);
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.cpick button + button {
+		border-left: 1px solid var(--line);
+	}
+	.cpick button.active {
+		background: var(--ink);
+		color: var(--paper);
 	}
 	.rankbar {
 		display: flex;

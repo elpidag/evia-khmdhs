@@ -7469,3 +7469,30 @@ passed as `cats[].n`); that the arc is drawn to mentions is said once,
 in the bulb.
 (same day, later) …and just the number: «N contracts», nothing else —
 the names are already lit on the chart when you hover.
+
+## 2026-08-23 · The chord's halves are toggles: category ↔ works, category ↔ scope, scope ↔ works
+
+(user: «a toggle in the MAIN CATEGORY and the WORKS NAMED IN THE TITLE
+where the user could turn this to the contract scope» — rules agreed)
+Every contract is flagged three ways — main category (one), contract
+scope (one: study only / study & works / works only) and the works its
+title names (several) — and the chord pairs two of them. A toggle sits
+under each side heading: left «works named | contract scope», right
+«main category | contract scope», with the RULE that both halves cannot
+be the scope (the same variable on both sides is meaningless): setting
+one half to scope snaps the other back to its default
+(`chordSides.pairFor`, unit-pinned). Three pictures, `?chord=`:
+- **cat-works** (default): the server-pinned per-category counts;
+- **cat-scope**: both halves one per contract, so every arc and ribbon
+  is a plain contract count (245), ribbons in the category colours, the
+  scope arcs in CONTRACT SCOPE's three greys;
+- **scope-works**: the scope on the right in those greys, ribbons
+  scope-grey → works-grey; the scope arcs measure mentions like the
+  category arcs do (bulb says so).
+The matrices for the scope pairs are built client-side from the network
+payload's per-contract `cat` / `dk` / `wk` (`transforms/chordSides.ts`,
+tests on synthetic nodes). CONTRACT SCOPE's tones and wording moved
+into `charts/scopeColors.ts` (solid greys — they work as arcs and as
+ribbons, which the timeline's white-with-ring study mark cannot) and
+the CONTRACT SCOPE share bar reads them from there. The component is
+now generic (`data: ChordData`, `leftControl`/`rightControl` snippets).

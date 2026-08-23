@@ -1,72 +1,58 @@
 <script lang="ts">
 	/**
-	 * The category ↔ works connection as a CHORD diagram (user trial,
-	 * 2026-08-23, several rounds): the 8 main categories hold the RIGHT
-	 * half of the circle, the works named the LEFT half, a ribbon per
-	 * (category, work) pair as wide as the number of contracts of that
-	 * category naming that work. A bipartite chord — the square matrix is
-	 * symmetric, so every ribbon runs from a category arc to a work arc.
+	 * TYPES OF WORKS as a CHORD diagram (user, 2026-08-23, many rounds):
+	 * two flaggings of the same 245 contracts, one per half of the circle,
+	 * a ribbon per pair as wide as the number of contracts carrying both.
+	 * The halves come in as DATA (`$lib/transforms/chordSides`): the right
+	 * half is the coloured, one-per-contract flagging (main category, or
+	 * the contract scope), the left half the works named (grey arcs — the
+	 * light grey the ribbons fade to) or the scope; the matrix counts
+	 * contracts. A bipartite chord — the square matrix is symmetric, so
+	 * every ribbon runs from a right arc to a left arc.
 	 *
-	 * The two halves must READ as two different flaggings of one contract:
-	 * the category half is FILLED in the category colours under the
-	 * heading «MAIN CATEGORY · one per contract», the works half is the
-	 * LIGHT GREY the ribbons fade to (user, 2026-08-23 — the hollow white
-	 * arcs read oddly) under «WORKS NAMED IN THE TITLE · several per
-	 * contract», the seams between them are wide (at the two poles —
-	 * the circle is divided top to bottom), and every ribbon fades from
-	 * its category's colour to a neutral grey at the work end.
-	 *
-	 * Labels are RADIAL (the user rejected a horizontal column) at the
-	 * sizes the user approved; a name longer than the room at its angle
-	 * wraps to TWO rows (user, 2026-08-23), so the circle stays big and the
-	 * frame fits a screen without scrolling.
+	 * The circle is divided top to bottom: wide seams at the two poles,
+	 * the headings at the SIDES level with the centre (each heading carries
+	 * the half's toggle), short dashed stubs marking the seam. Labels are
+	 * RADIAL at 11.5 px, wrapping to up to three rows where the room at
+	 * their angle runs out; adaptive spacer groups between neighbouring
+	 * arcs keep every label ON its arc; the frame's height hugs the labels'
+	 * measured reach. The hover card, top-right, says only «N contracts».
 	 */
+	import type { Snippet } from 'svelte';
 	import { chord, ribbon } from 'd3-chord';
 	import { arc } from 'd3-shape';
-	import { CAT_COLORS, CAT_ORDER } from './catColors';
+	import type { ChordData } from '$lib/transforms/chordSides';
 	import { grInt } from '$lib/transforms/format';
 
-	export interface CWRow {
-		theme: string;
-		label: string;
-		n: number;
-		by: { key: string; label: string; n: number }[];
-	}
 	interface Props {
-		rows: CWRow[];
-		/** the categories with their CONTRACT counts — the card prints
-		 *  contracts, never the arc's mentions (user, 2026-08-23) */
-		cats: { key: string; label: string; n: number }[];
+		data: ChordData;
+		/** the toggles rendered under each heading */
+		leftControl?: Snippet;
+		rightControl?: Snippet;
 	}
-	let { rows, cats }: Props = $props();
+	let { data, leftControl, rightControl }: Props = $props();
 
 	const W = 1120;
 	const R = 200;
 	const PAD = 0.022;
-	/** zero-value spacer groups: d3-chord pads every group, so a spacer
-	 *  between two arcs doubles their gap (room for two-row labels) and
-	 *  three at each seam open the seam wide */
+	/** zero-value spacer groups: d3-chord pads every group, so spacers
+	 *  between two arcs open their gap; three at each seam open the seam */
 	const SEAM_SPACERS = 3;
 	const CX = W / 2;
 	const LABEL_R = R + 26;
 	const CHAR_PX = 4.9; // the display face at 11.5px, MEASURED (4.84 regular / 4.73 bold)
 	/** the vertical budget a label may reach beyond LABEL_R — more at the
-	 *  top, where the small arcs of both halves fan out, than at the bottom
-	 *  — what fixes the frame's height */
+	 *  top, where the small arcs of both halves fan out, than at the bottom */
 	const V_TOP = 125;
 	const V_BOT = 105;
 	const ROW_PX = 13.5; // one row of 11.5px text, perpendicular to the radius
-	/** the headings sit at the SIDES, level with the centre (user,
-	 *  2026-08-23), so nothing but the labels' own reach sits above the
-	 *  circle — the whole graph fits a screen */
 	const HEAD_ROOM = 6;
-	const SEAM_STUB = 34; // the dashed seam marks are short stubs
+	const SEAM_STUB = 34;
 	const RIB_END = '#c9c9c9';
-
-	/** greedy word wrap into at most MAX_ROWS rows (three, for the one
-	 *  sentence-long category name — user, 2026-08-23); a name that still
-	 *  overflows is cut with «…» (full text on hover) */
 	const MAX_ROWS = 3;
+
+	/** greedy word wrap into at most MAX_ROWS rows; a name that still
+	 *  overflows is cut with «…» (full text on hover) */
 	const wrapRows = (s: string, perLine: number): string[] => {
 		const lines: string[] = [];
 		let cur = '';
@@ -79,28 +65,10 @@
 		if (cur) lines.push(cur);
 		if (lines.length > MAX_ROWS) {
 			const rest = lines.slice(MAX_ROWS - 1).join(' ');
-			return [
-				...lines.slice(0, MAX_ROWS - 1),
-				rest.slice(0, Math.max(4, perLine - 1)).trimEnd() + '…'
-			];
+			return [...lines.slice(0, MAX_ROWS - 1), rest.slice(0, Math.max(4, perLine - 1)).trimEnd() + '…'];
 		}
 		return lines;
 	};
-	/** no caps in the names (user): only the opening letter is dropped,
-	 *  so a proper noun inside a name would stay */
-	const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
-	/** the works in READING order up the left half (user, 2026-08-23):
-	 *  the two big clearing/road works run on from the bottom seam, the four
-	 *  firebreak works sit side by side, then the rest by count, «no
-	 *  specific work named» last at the top seam */
-	const WORK_ORDER = [
-		'katharismoi',
-		'odiko_diktyo',
-		'syntirisi_zonon',
-		'miktes_zones',
-		'estegasmenes_zones',
-		'psiles_zones'
-	];
 
 	const polar = (a: number, r: number) => ({ x: r * Math.sin(a), y: -r * Math.cos(a) });
 	const arcPath = (r: number, a0: number, a1: number) => {
@@ -110,52 +78,51 @@
 		return `M${p0.x.toFixed(2)} ${p0.y.toFixed(2)}A${r} ${r} 0 ${large} 1 ${p1.x.toFixed(2)} ${p1.y.toFixed(2)}`;
 	};
 
+	type Ent = { id: string; label: string; side: 'right' | 'left' | 'gap'; key: string; n: number; color: string };
+
 	const sc = $derived.by(() => {
-		const rankW = (k: string) => {
-			const i = WORK_ORDER.indexOf(k);
-			return i >= 0 ? i : k === '_none' ? 1e6 : 1e3;
-		};
-		const rankC = (k: string) => {
-			const i = CAT_ORDER.indexOf(k);
-			return i >= 0 ? i : 1e3;
-		};
-		const orderedW = [...rows].sort((a, b) => rankW(a.theme) - rankW(b.theme) || b.n - a.n);
-		const orderedC = cats
-			.filter((c) => rows.some((r) => r.by.some((b) => b.key === c.key && b.n > 0)))
-			.sort((a, b) => rankC(a.key) - rankC(b.key));
-		type Ent = { id: string; label: string; kind: 'cat' | 'work' | 'gap'; key: string };
-		const catEnts: Ent[] = orderedC.map((c) => ({ id: `c:${c.key}`, label: c.label, kind: 'cat', key: c.key }));
-		const workEnts: Ent[] = orderedW.map((r) => ({
-			id: `w:${r.theme}`,
-			label: lower(r.label),
-			kind: 'work',
-			key: r.theme
+		const rightEnts: Ent[] = data.right.items.map((it) => ({
+			id: `r:${it.key}`,
+			label: it.label,
+			side: 'right',
+			key: it.key,
+			n: it.n,
+			color: it.color ?? '#9b9b9b'
+		}));
+		const leftEnts: Ent[] = data.left.items.map((it) => ({
+			id: `l:${it.key}`,
+			label: it.label,
+			side: 'left',
+			key: it.key,
+			n: it.n,
+			color: it.color ?? RIB_END
 		}));
 		/** the layout for a given number of spacer groups between each pair of
 		 *  neighbouring arcs (keyed `a|b`); one spacer is the floor */
 		const build = (extra: Record<string, number>) => {
 			let gi = 0;
-			const gap = (): Ent => ({ id: `g:${gi++}`, label: '', kind: 'gap', key: '' });
+			const gap = (): Ent => ({ id: `g:${gi++}`, label: '', side: 'gap', key: '', n: 0, color: '' });
 			const spaced = (es: Ent[]) =>
 				es.flatMap((e, k) =>
 					k ? [...Array.from({ length: 1 + (extra[`${es[k - 1].id}|${e.id}`] ?? 0) }, gap), e] : [e]
 				);
 			const names: Ent[] = [
-				...spaced(catEnts),
+				...spaced(rightEnts),
 				...Array.from({ length: SEAM_SPACERS }, gap),
-				...spaced(workEnts),
+				...spaced(leftEnts),
 				...Array.from({ length: SEAM_SPACERS }, gap)
 			];
 			const n = names.length;
 			const idx = new Map(names.map((e, i) => [e.id, i]));
 			const M: number[][] = Array.from({ length: n }, () => new Array(n).fill(0));
-			for (const r of rows)
-				for (const b of r.by) {
-					const i = idx.get(`c:${b.key}`);
-					const j = idx.get(`w:${r.theme}`);
-					if (i == null || j == null) continue;
-					M[i][j] = b.n;
-					M[j][i] = b.n;
+			for (const r of rightEnts)
+				for (const l of leftEnts) {
+					const v = data.matrix[`${r.key}|${l.key}`] ?? 0;
+					if (!v) continue;
+					const i = idx.get(r.id)!;
+					const j = idx.get(l.id)!;
+					M[i][j] = v;
+					M[j][i] = v;
 				}
 			return { names, lay: chord().padAngle(PAD)(M) };
 		};
@@ -165,7 +132,7 @@
 		// the rows a label needs at a given pointing angle: the room is the
 		// frame's side horizontally and the vertical budget towards top or
 		// bottom; a name longer than one row wraps
-		const linesAt = (label: string, kind: string, a: number) => {
+		const linesAt = (label: string, a: number) => {
 			const sin = Math.abs(Math.sin(a));
 			const cos = Math.abs(Math.cos(a));
 			const vb = Math.cos(a) > 0 ? V_TOP : V_BOT;
@@ -174,13 +141,12 @@
 					sin > 1e-6 ? (CX - 10 - LABEL_R) / sin : Infinity,
 					cos > 1e-6 ? vb / cos : Infinity
 				) - 8;
-			const px = kind === 'cat' ? CHAR_PX : CHAR_PX; // bold is wider
-			const chars = Math.max(10, Math.floor(room / px));
+			const chars = Math.max(10, Math.floor(room / CHAR_PX));
 			return label.length <= chars ? [label] : wrapRows(label, chars);
 		};
 		const groupsOf = (names: Ent[], lay: ReturnType<ReturnType<typeof chord>>) =>
 			lay.groups
-				.filter((g) => names[g.index].kind !== 'gap')
+				.filter((g) => names[g.index].side !== 'gap')
 				.map((g) => {
 					const e = names[g.index];
 					const mid = (g.startAngle + g.endAngle) / 2;
@@ -191,25 +157,23 @@
 						a1: g.endAngle,
 						d: ringArc({ startAngle: g.startAngle, endAngle: g.endAngle }) ?? '',
 						value: g.value,
-						/** the arc's own middle */
 						angle: mid,
 						/** where the label points — slides off `angle` only when a
 						 *  neighbour's label is still too close (then a tick leads back) */
 						la: mid,
-						lines: linesAt(e.label, e.kind, mid),
+						lines: linesAt(e.label, mid),
 						flip: mid > Math.PI
 					};
 				});
-		// ADAPTIVE SPACERS (user, 2026-08-23: as few connector ticks as
-		// possible): a first layout tells how many rows each label needs at
-		// its arc; where two neighbouring arcs sit closer than their labels'
-		// rows need, spacer groups are inserted between them so the arcs
-		// themselves move apart and the labels can stay ON their arcs
+		// ADAPTIVE SPACERS: a first layout tells how many rows each label needs
+		// at its arc; where two neighbouring arcs sit closer than their
+		// labels' rows need, spacer groups are inserted between them so the
+		// arcs themselves move apart and the labels can stay ON their arcs
 		const first = build({});
 		const probe = groupsOf(first.names, first.lay);
 		const extra: Record<string, number> = {};
-		for (const kind of ['cat', 'work'] as const) {
-			const col = probe.filter((g) => g.kind === kind).sort((a, b) => a.angle - b.angle);
+		for (const side of ['right', 'left'] as const) {
+			const col = probe.filter((g) => g.side === side).sort((a, b) => a.angle - b.angle);
 			for (let k = 1; k < col.length; k++) {
 				const a = col[k - 1];
 				const b = col[k];
@@ -220,13 +184,10 @@
 		}
 		const { names, lay } = build(extra);
 		const groups = groupsOf(names, lay);
-		// de-collide the label ANGLES within each half: two radial labels need
-		// their rows' worth of perpendicular room at LABEL_R; a forward pass
-		// pushes clockwise, a backward pass pulls back inside the half — then
-		// the rows are recomputed at the new angles and the pass repeats once
+		// the safety net: de-collide the label ANGLES within each half
 		const decollide = () => {
-			for (const kind of ['cat', 'work'] as const) {
-				const col = groups.filter((g) => g.kind === kind).sort((a, b) => a.la - b.la);
+			for (const side of ['right', 'left'] as const) {
+				const col = groups.filter((g) => g.side === side).sort((a, b) => a.la - b.la);
 				if (!col.length) continue;
 				const need = (a: (typeof col)[number], b: (typeof col)[number]) =>
 					(((a.lines.length + b.lines.length) / 2) * ROW_PX + 5) / LABEL_R;
@@ -239,17 +200,15 @@
 				}
 			}
 			for (const g of groups) {
-				g.lines = linesAt(g.label, g.kind, g.la);
+				g.lines = linesAt(g.label, g.la);
 				g.flip = g.la > Math.PI;
 			}
 		};
 		decollide();
 		decollide();
 		// the frame hugs the labels' ACTUAL reach above and below the centre
-		// (the budgets are only the cap), so no slack sits over the circle
 		const reachOf = (g: (typeof groups)[number]) => {
-			const px = g.kind === 'cat' ? CHAR_PX : CHAR_PX;
-			const len = Math.max(...g.lines.map((l) => l.length)) * px + 8;
+			const len = Math.max(...g.lines.map((l) => l.length)) * CHAR_PX + 8;
 			const along = (LABEL_R + len) * Math.abs(Math.cos(g.la));
 			const across = ((g.lines.length * ROW_PX) / 2) * Math.abs(Math.sin(g.la));
 			return { up: Math.cos(g.la) > 0 ? along + across : 0, down: Math.cos(g.la) < 0 ? along + across : 0 };
@@ -263,29 +222,26 @@
 		const chords = lay.map((c) => {
 			const s = names[c.source.index];
 			const t = names[c.target.index];
-			const catEnd = s.kind === 'cat' ? c.source : c.target;
-			const workEnd = s.kind === 'cat' ? c.target : c.source;
-			const cat = s.kind === 'cat' ? s : t;
-			const work = s.kind === 'cat' ? t : s;
-			const p0 = polar((catEnd.startAngle + catEnd.endAngle) / 2, R);
-			const p1 = polar((workEnd.startAngle + workEnd.endAngle) / 2, R);
+			const rEnd = s.side === 'right' ? c.source : c.target;
+			const lEnd = s.side === 'right' ? c.target : c.source;
+			const rightEnt = s.side === 'right' ? s : t;
+			const p0 = polar((rEnd.startAngle + rEnd.endAngle) / 2, R);
+			const p1 = polar((lEnd.startAngle + lEnd.endAngle) / 2, R);
 			return {
 				key: `${c.source.index}-${c.target.index}`,
 				d: rib(c as never) as unknown as string,
-				catKey: cat.key,
+				color: rightEnt.color,
 				si: c.source.index,
 				ti: c.target.index,
 				n: c.source.value,
-				catLabel: cat.label,
-				workLabel: work.label,
 				grad: { x1: p0.x, y1: p0.y, x2: p1.x, y2: p1.y }
 			};
 		});
-		const half = (kind: 'cat' | 'work') => {
-			const gs = groups.filter((g) => g.kind === kind);
+		const half = (side: 'right' | 'left') => {
+			const gs = groups.filter((g) => g.side === side);
 			return arcPath(R + 19, Math.min(...gs.map((g) => g.a0)), Math.max(...gs.map((g) => g.a1)));
 		};
-		return { groups, chords, catBracket: half('cat'), workBracket: half('work'), CY, H };
+		return { groups, chords, rightBracket: half('right'), leftBracket: half('left'), CY, H };
 	});
 
 	let hotGroup = $state<number | null>(null);
@@ -300,10 +256,16 @@
 				: g.i === hotGroup ||
 					sc.chords.some((c) => (c.si === hotGroup && c.ti === g.i) || (c.ti === hotGroup && c.si === g.i));
 	const deg = (a: number) => (a * 180) / Math.PI - 90;
+	const hotCount = $derived.by(() => {
+		if (hotChord) return hotChord.n;
+		if (hotGroup == null) return null;
+		const g = sc.groups.find((x) => x.i === hotGroup);
+		return g ? g.n : null;
+	});
 </script>
 
 <figure class="cw">
-	<svg viewBox="0 0 {W} {sc.H}" role="img" aria-label="Main categories and the works their contracts name, as a chord diagram">
+	<svg viewBox="0 0 {W} {sc.H}" role="img" aria-label="{data.right.heading} and {data.left.heading}, as a chord diagram">
 		<defs>
 			{#each sc.chords as c (c.key)}
 				<linearGradient
@@ -314,17 +276,11 @@
 					x2={c.grad.x2}
 					y2={c.grad.y2}
 				>
-					<stop offset="0.15" stop-color={CAT_COLORS[c.catKey] ?? '#9b9b9b'} />
+					<stop offset="0.15" stop-color={c.color} />
 					<stop offset="0.85" stop-color={RIB_END} />
 				</linearGradient>
 			{/each}
 		</defs>
-		<!-- the headings, at the sides, level with the centre; the seam is
-		     marked by short dashed stubs beyond the ring -->
-		<text class="head" x="8" y={sc.CY - 4} text-anchor="start">WORKS NAMED IN THE TITLE</text>
-		<text class="head sub" x="8" y={sc.CY + 12} text-anchor="start">several per contract</text>
-		<text class="head" x={W - 8} y={sc.CY - 4} text-anchor="end">MAIN CATEGORY</text>
-		<text class="head sub" x={W - 8} y={sc.CY + 12} text-anchor="end">one per contract</text>
 		<line class="seam" x1={CX} y1={sc.CY - R - 24 - SEAM_STUB} x2={CX} y2={sc.CY - R - 24} />
 		<line class="seam" x1={CX} y1={sc.CY + R + 24} x2={CX} y2={sc.CY + R + 24 + SEAM_STUB} />
 		<g transform="translate({CX} {sc.CY})">
@@ -344,8 +300,7 @@
 				<path
 					d={g.d}
 					class="grp"
-					class:work={g.kind === 'work'}
-					fill={g.kind === 'cat' ? (CAT_COLORS[g.key] ?? '#9b9b9b') : RIB_END}
+					fill={g.color}
 					opacity={groupLit(g) ? 1 : 0.25}
 					onmouseenter={() => (hotGroup = g.i)}
 					onmouseleave={() => (hotGroup = null)}
@@ -357,36 +312,36 @@
 				{/if}
 				<text
 					class="lbl"
-					class:cat={g.kind === 'cat'}
+					class:strong={g.side === 'right'}
 					transform={`rotate(${deg(g.la)}) translate(${LABEL_R} 0) ${g.flip ? 'rotate(180)' : ''}`}
 					text-anchor={g.flip ? 'end' : 'start'}
 					opacity={groupLit(g) ? 1 : 0.3}
-					><title>{g.label} — {grInt(g.value)}</title>{#each g.lines as ln, k (k)}<tspan
+					><title>{g.label} — {grInt(g.n)} contracts</title>{#each g.lines as ln, k (k)}<tspan
 							x="0"
 							dy={k === 0 ? `${(0.35 - 0.55 * (g.lines.length - 1)).toFixed(2)}em` : '1.1em'}>{ln}</tspan
 						>{/each}</text
 				>
 			{/each}
-			<path d={sc.catBracket} class="bracket" />
-			<path d={sc.workBracket} class="bracket" />
+			<path d={sc.rightBracket} class="bracket" />
+			<path d={sc.leftBracket} class="bracket" />
 		</g>
 	</svg>
-	<!-- every card says CONTRACTS and nothing else (user, 2026-08-23): a
-	     ribbon = the contracts of that category naming that work; a work
-	     arc = the contracts naming it; a category arc = its contracts (the
-	     arc itself is drawn to mentions — the bulb says so once) -->
-	<!-- …and just the number (user): the names are already lit on the chart -->
-	{#if hotChord}
-		<div class="card"><strong>{grInt(hotChord.n)} contracts</strong></div>
-	{:else if hotGroup != null}
-		{@const g = sc.groups.find((x) => x.i === hotGroup)}
-		{#if g}
-			<div class="card">
-				<strong
-					>{grInt(g.kind === 'cat' ? (cats.find((c) => c.key === g.key)?.n ?? 0) : g.value)} contracts</strong
-				>
-			</div>
-		{/if}
+
+	<!-- the headings, at the sides level with the centre, each with the
+	     half's toggle under it -->
+	<div class="head left" style:top={`${(sc.CY / sc.H) * 100}%`}>
+		<strong>{data.left.heading}</strong>
+		<span>{data.left.sub}</span>
+		{#if leftControl}{@render leftControl()}{/if}
+	</div>
+	<div class="head right" style:top={`${(sc.CY / sc.H) * 100}%`}>
+		<strong>{data.right.heading}</strong>
+		<span>{data.right.sub}</span>
+		{#if rightControl}{@render rightControl()}{/if}
+	</div>
+
+	{#if hotCount != null}
+		<div class="card"><strong>{grInt(hotCount)} contracts</strong></div>
 	{/if}
 </figure>
 
@@ -418,18 +373,6 @@
 		stroke: var(--line-strong);
 		stroke-width: 1;
 	}
-	.head {
-		font-size: 11px;
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		fill: var(--ink);
-		pointer-events: none;
-	}
-	.head.sub {
-		font-weight: 400;
-		letter-spacing: 0;
-		fill: var(--ink-soft);
-	}
 	.tick {
 		stroke: var(--line-strong);
 		stroke-width: 0.8;
@@ -444,22 +387,49 @@
 		fill: var(--ink-soft);
 		pointer-events: none;
 	}
-	.lbl.cat {
+	.lbl.strong {
 		fill: var(--ink);
 		font-weight: 700;
 	}
+	.head {
+		position: absolute;
+		transform: translateY(-50%);
+		display: grid;
+		gap: 2px;
+		font-size: 11px;
+		line-height: 1.25;
+		pointer-events: none;
+	}
+	.head.left {
+		left: 8px;
+		text-align: left;
+		justify-items: start;
+	}
+	.head.right {
+		right: 8px;
+		text-align: right;
+		justify-items: end;
+	}
+	.head strong {
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		color: var(--ink);
+	}
+	.head span {
+		color: var(--ink-soft);
+	}
+	.head :global(.toggle) {
+		margin-top: 6px;
+		pointer-events: auto;
+	}
 	.card {
-		/* the hover card sits at the TOP-RIGHT corner (user, 2026-08-23) */
 		position: absolute;
 		right: 0;
 		top: 0;
 		background: #000;
 		color: #fff;
 		padding: 8px 10px;
-		display: grid;
-		gap: 2px;
 		font-size: var(--fs-12);
 		pointer-events: none;
-		max-width: 22rem;
 	}
 </style>

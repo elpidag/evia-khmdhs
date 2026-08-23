@@ -258,7 +258,13 @@ refetching open contracts — prefer it for routine updates.
   ride in the bar's HOVER, never as printed sub-lines) and **TYPES OF
   WORKS** is the CHORD alone since 2026-08-23 (user; `WorkDots.svelte`
   and `WorksByCategory.svelte` are PARKED — in the repo, off the page,
-  no `?works=` param): `CatWorkChord.svelte`, d3-chord bipartite divided TOP TO BOTTOM —
+  no `?works=` param): `CatWorkChord.svelte`, d3-chord bipartite over
+  `transforms/chordSides.ts` data — THREE pairs of flaggings under
+  per-heading toggles (`?chord=cat-works|cat-scope|scope-works`; a half
+  toggles works↔scope on the left, category↔scope on the right, never
+  scope↔scope — `pairFor` pinned; the scope pairs are built client-side
+  from the network nodes' cat/dk/wk, scope tones from
+  `charts/scopeColors.ts` which CONTRACT SCOPE's bar shares) — divided TOP TO BOTTOM —
   works left in READING order (`WORK_ORDER`: clearing, roads, the four
   firebreak works side by side, the rest by count, «no specific work
   named» last), categories right top-to-bottom in `CAT_ORDER` FILLED in
