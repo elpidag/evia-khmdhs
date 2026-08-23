@@ -30,7 +30,7 @@
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import FlowMap from '$lib/sections/FlowMap.svelte';
 		import { loadCentroids } from '$lib/maps/useGeo';
-	import type { Connections } from './connections/+page';
+	import type { Connections } from '$lib/api';
 	import ContractNetwork from '$lib/charts/ContractNetwork.svelte';
 	import type { NetNode } from '$lib/transforms/network';
 	import { NET_MODES } from '$lib/transforms/networkScene';
@@ -77,7 +77,8 @@
 		stats: Record<string, number>;
 		fire_season: { from: string; to: string; n_contracts: number };
 	} | null>(null);
-	/** the flow layer, moved here from /connections (user, 2026-08-20) */
+	/** the flow layer, moved here from the old /connections page (user,
+	 *  2026-08-20; that page left the site on 2026-08-23) */
 	let net = $state.raw<Connections | null>(null);
 	let centroids = $state.raw<Record<string, [number, number]>>({});
 	$effect(() => {

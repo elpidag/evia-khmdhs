@@ -26,7 +26,7 @@
 	<div class="cols-head">
 		<span></span>
 		<span class="antinero">Anti-nero — % of its total</span>
-		<span class="dase">ΔΑΣΕ — % of its total</span>
+		<span class="dase">forest co-ops — % of its total</span>
 	</div>
 	{#each shown as r (r.pe)}
 		{@const pa = r.antinero_eur / antineroTotal}
@@ -43,10 +43,6 @@
 			</div>
 		</div>
 	{/each}
-	<p class="note">
-		Bars show each programme's own share of its total (absolute € printed) — comparable shape,
-		honest scale.
-	</p>
 </div>
 
 <style>
@@ -54,8 +50,10 @@
 		display: grid;
 		grid-template-columns: 9rem 1fr 1fr;
 		gap: var(--sp-2);
-		font-size: var(--fs-12);
-		margin-bottom: var(--sp-2);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-13);
+		margin-bottom: var(--sp-3);
 	}
 	.cols-head .antinero {
 		color: var(--c-antinero);
@@ -88,7 +86,7 @@
 		justify-content: flex-end;
 	}
 	.bar {
-		height: 13px;
+		height: 14px;
 		border-radius: 2px;
 		min-width: 1px;
 	}
@@ -99,14 +97,8 @@
 		background: var(--c-dase);
 	}
 	.val {
-		font-size: var(--fs-12);
+		font-size: var(--fs-13);
 		color: var(--ink-soft);
 		white-space: nowrap;
-	}
-	.note {
-		font-size: var(--fs-12);
-		color: var(--ink-faint);
-		font-style: italic;
-		margin-top: var(--sp-2);
 	}
 </style>

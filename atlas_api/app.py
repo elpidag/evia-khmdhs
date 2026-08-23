@@ -11,8 +11,8 @@ from pathlib import Path
 
 from flask import Flask, Response, abort, g, jsonify, request
 
-from khmdhs.config import (ANADOHOI_DB, ANADOHOI_PDF_CACHE, AROGI_CACHE,
-                           AROGI_DB, DASE_DB, DEFAULT_DB, PDF_CACHE_DIR)
+from khmdhs.config import (ANADOHOI_DB, ANADOHOI_PDF_CACHE, DASE_DB,
+                           DEFAULT_DB, PDF_CACHE_DIR)
 from webui import dase_queries, queries
 
 from atlas_api import pdf_proxy, queries_extra
@@ -21,8 +21,7 @@ from atlas_api import pdf_proxy, queries_extra
 def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
                pdf_cache_dir: Path | None = None,
                anadohoi_db_path: Path | None = None,
-               anadohoi_pdf_cache: Path | None = None,
-               arogi_db_path: Path | None = None) -> Flask:
+               anadohoi_pdf_cache: Path | None = None) -> Flask:
     app = Flask(__name__, template_folder="templates", static_folder=None)
     app.config["DB_PATH"] = Path(db_path) if db_path else DEFAULT_DB
     app.config["DASE_DB_PATH"] = Path(dase_db_path) if dase_db_path else DASE_DB
@@ -35,9 +34,9 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
     app.config["ANADOHOI_PDF_CACHE"] = (
         Path(anadohoi_pdf_cache) if anadohoi_pdf_cache else ANADOHOI_PDF_CACHE
     )
-    app.config["AROGI_DB_PATH"] = Path(arogi_db_path) if arogi_db_path \
-        else AROGI_DB
-    app.config["AROGI_CACHE"] = AROGI_CACHE
+    # The Αρωγή dataset (data/processed/arogi.sqlite) is NOT served: its
+    # pages and endpoints left the site on 2026-08-23 (user); the data, the
+    # harvest and `queries_extra.arogi_*` stay in the repository.
     app.json.ensure_ascii = False
     app.register_blueprint(pdf_proxy.bp)
 
@@ -49,8 +48,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
 
     def _db_stamp() -> tuple:
         out = []
-        for key in ("DB_PATH", "DASE_DB_PATH", "ANADOHOI_DB_PATH",
-                    "AROGI_DB_PATH"):
+        for key in ("DB_PATH", "DASE_DB_PATH", "ANADOHOI_DB_PATH"):
             p = app.config[key]
             try:
                 out.append(p.stat().st_mtime_ns)
@@ -111,18 +109,12 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             g.anadohoi_conn = queries.open_ro(app.config["ANADOHOI_DB_PATH"])
         return g.anadohoi_conn
 
-    def _arogi_conn():
-        """Lazy fourth connection (Αρωγή πυροπλήκτων dataset)."""
-        if "arogi_conn" not in g:
-            g.arogi_conn = queries.open_ro(app.config["AROGI_DB_PATH"])
-        return g.arogi_conn
-
     @app.teardown_request
     def _close_db(exc) -> None:
         conn = g.pop("conn", None)
         if conn is not None:
             conn.close()
-        for key in ("pay_conn", "dase_conn", "anadohoi_conn", "arogi_conn"):
+        for key in ("pay_conn", "dase_conn", "anadohoi_conn"):
             extra = g.pop(key, None)
             if extra is not None:
                 extra.close()
@@ -161,11 +153,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             ana = _anadohoi_conn()
         except Exception:
             ana = None
-        try:
-            ar = _arogi_conn()
-        except Exception:
-            ar = None
-        return jsonify(queries_extra.meta(g.conn, dase, ana, _pay_conn(), ar))
+        return jsonify(queries_extra.meta(g.conn, dase, ana, _pay_conn()))
 
     # -------------------------------------------------------- Anti-nero
 
@@ -434,29 +422,6 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             abort(404)
         queries_extra.overlay_executor_names(p.get("executors"), _dase_names())
         return jsonify(p)
-
-    # ------------------------------------------------------------- arogi
-
-    def _arogi_or_404():
-        try:
-            return _arogi_conn()
-        except Exception:
-            abort(404)          # dataset not built — degrade honestly
-
-    @app.route("/api/arogi/explore")
-    def api_arogi_explore():
-        return jsonify(queries_extra.arogi_explore(_arogi_or_404()))
-
-    @app.route("/api/arogi/case/<path:key>")
-    def api_arogi_case(key: str):
-        c = queries_extra.arogi_case(_arogi_or_404(), key)
-        if c is None:
-            abort(404)
-        return jsonify(c)
-
-    @app.route("/api/arogi/summary")
-    def api_arogi_summary():
-        return jsonify(queries_extra.arogi_summary(_arogi_or_404()))
 
     # ----------------------------------------------------------- explore
 

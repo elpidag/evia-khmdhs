@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ComparePayload } from '$lib/api';
-	import { eurShort } from '$lib/transforms/format';
+	import { eurShort, grInt } from '$lib/transforms/format';
 
 	let { hist }: { hist: ComparePayload['hist'] } = $props();
 
@@ -64,12 +64,12 @@
 		<line class="median d" x1={xOf(hist.dase_median)} x2={xOf(hist.dase_median)}
 			y1={M.top - 4} y2={height - M.bottom} />
 		<text class="median-label d" x={xOf(hist.dase_median) + 5} y={M.top - 8}>
-			ΔΑΣΕ median {eurShort(hist.dase_median)}
+			co-op median {eurShort(hist.dase_median)}
 		</text>
 	</svg>
 	<div class="legend">
-		<span><i class="a"></i>Anti-nero ({hist.antinero_n} contracts)</span>
-		<span><i class="d"></i>ΔΑΣΕ ({hist.dase_n})</span>
+		<span><i class="a"></i>Anti-nero ({grInt(hist.antinero_n)} contracts)</span>
+		<span><i class="d"></i>forest co-ops ({grInt(hist.dase_n)} contracts)</span>
 		<span class="faint">y-axis: % of each programme's own contracts</span>
 	</div>
 </div>
@@ -88,13 +88,13 @@
 		opacity: 0.85;
 	}
 	.bin {
-		font-size: 10px;
-		fill: var(--ink-faint);
+		font-size: 11px;
+		fill: var(--ink-soft);
 		text-anchor: middle;
 	}
 	.axis {
 		font-size: 11px;
-		fill: var(--ink-faint);
+		fill: var(--ink-soft);
 	}
 	.median {
 		stroke-dasharray: 4 3;
@@ -107,7 +107,8 @@
 		stroke: var(--c-dase);
 	}
 	.median-label {
-		font-size: 11px;
+		font-size: var(--fs-12);
+		font-weight: 700;
 	}
 	.median-label.a {
 		fill: var(--c-antinero);
@@ -119,9 +120,9 @@
 		display: flex;
 		gap: var(--sp-4);
 		flex-wrap: wrap;
-		font-size: var(--fs-12);
+		font-size: var(--fs-13);
 		color: var(--ink-soft);
-		margin-top: var(--sp-1);
+		margin-top: var(--sp-2);
 	}
 	.legend i {
 		display: inline-block;
@@ -136,6 +137,6 @@
 		background: var(--c-dase);
 	}
 	.faint {
-		color: var(--ink-faint);
+		color: var(--ink-soft);
 	}
 </style>

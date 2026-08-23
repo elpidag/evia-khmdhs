@@ -110,11 +110,6 @@ def diavgeia_pdf(ada: str):
     cache_dir = Path(current_app.config["ANADOHOI_PDF_CACHE"])
     path = cache_dir / f"{ada}.pdf"
     if not path.exists():
-        # the arogi harvest pre-fetches its acts into its own cache
-        arogi = Path(current_app.config.get("AROGI_CACHE", "")) / f"{ada}.pdf"
-        if arogi.exists():
-            path = arogi
-    if not path.exists():
         try:
             resp = requests.get(f"https://diavgeia.gov.gr/doc/{ada}",
                                 timeout=60)

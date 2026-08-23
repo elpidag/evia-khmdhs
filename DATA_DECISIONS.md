@@ -7786,3 +7786,66 @@ sentence above a split division is gone — the split group carries its
 identity where every column does, on the number line («CPV 77 · 233
 contracts») and in its whole name in bold beneath, with only «✕ close»
 at the top right.
+
+## 2026-08-23 · The menu loses CONNECTIONS and ΑΡΩΓΗ; COMPARE becomes KEY FINDINGS, dressed like the dataset pages
+
+**Decision (user).** «I do not need the pages CONNECTIONS and ΑΡΩΓΗ to
+appear in the website any more. The page that is now compare should be
+named KEY FINDINGS, and you should try to adjust its aesthetics,
+lettering and presentation to the sponsored works, antinero works and
+forest co-op works pages. The colour selection of the graphs looks good,
+I mainly refer to the lettering sizing etc.»
+
+**What changed.** The header MENU ▾ now holds KEY FINDINGS · AUTHORITIES
+· METHODOLOGY. `/connections` and `/arogi*` stay as routes (their code,
+endpoints and tests are untouched) but no link on the site reaches them —
+the Connections flow maps already moved to the Anti-nero page on
+2026-08-20, and the methodology's Αρωγή section now opens by saying the
+pages are not presented. The route `/compare` keeps its URL; the page was
+rewritten in the three dataset pages' dress: the hero is the cards grid
+(Anti-nero black, forest co-ops green, two grey cards for the gap ratio
+and the zero shared companies) beside the KEY FINDINGS kicker, one
+paragraph, and the page's basis said ONCE; the frames carry short capital
+titles (SHARED COMPANIES · CONTRACT SIZES · WHERE BOTH FLOWS LAND ·
+REGION BY REGION · MONEY PER YEAR), each finding computed into its
+lightbulb (the top shared unit, the co-op-heaviest unit, the peak years,
+the medians, the entity counts), each caveat one clause of method and
+source; the per-year pair is the ranking's 35 px bars, each side in its
+hue, a year without contracts printing «—». Inside the charts: the
+hover cards are the site's black plate; the lettering follows the other
+pages (names and legends 13 px, labels 12 px, ticks 11 px, no italics);
+«ΔΑΣΕ» in chart labels reads «forest co-ops» as on the cards; the
+pipelines box is as tall as its columns (the fixed 560 px left a void
+under the dots); the ministry prints its English name; power-of-ten
+ticks read «10 M €»; the scatter's outlier labels are nudged apart when
+they land within a row of each other; the «Anti-nero only» gutter label
+sits above the gutter row, off the dots; the paired bars' italic
+how-to-read note is gone (the column heads say it). No number on the
+page is typed — every figure in cards, bulbs and caveats comes from
+`/api/compare`.
+
+**Same day, second step (user: «I do not want you to delete any of their
+data, but I do not want them to appear on the website or be searchable,
+or appear on the METHODOLOGY»).** Assessed first: the only thing on the
+site that depended on either page was the Anti-nero FLOWS OF MONEY
+frame's use of the `/api/connections` ENDPOINT and one TypeScript type;
+the site's own search (/explore, contractor search) never covered them;
+there is no sitemap, robots allows all — a deleted route simply 404s and
+drops out of any index. Done: `atlas/src/routes/arogi/` (list, case,
+summary) and `atlas/src/routes/connections/` deleted; the `Connections`
+interface moved to `$lib/api.ts`; the methodology's Αρωγή section
+deleted; the Atlas API no longer knows the dataset — no `AROGI_*` config,
+no lazy connection, no `/api/arogi/{explore,summary,case}` (404), no
+`arogi` key in `/api/meta`, no arogi_cache fallback in the Diavgeia PDF
+proxy (the proxy fetches from Diavgeia when a PDF is not in the sponsor
+cache, so reachability is unchanged). `/api/connections` stays. Kept,
+untouched: `data/processed/arogi.sqlite`, `khmdhs/arogi.py`,
+`khmdhs/arogi_loader.py`, `scripts/harvest_arogi.py`, the curated
+`arogi_fires.json` / `arogi_press_totals.json` /
+`elga_fire_compensation.json`, `arogi_cache`, `tests/test_arogi.py`, and
+`queries_extra.arogi_*` — `test_atlas_real_db.py::test_arogi_pins` now
+pins those functions directly against the committed DB (956 cases, the
+2021 fire unit on top, a case's act trail) AND asserts the API serves
+nothing (404s, no meta key). The CLAUDE.md Αρωγή section records the
+state; the privacy rule (owner names never stored or displayed) is
+unchanged by the cut.

@@ -1111,20 +1111,34 @@ def test_executor_display_name_pins(client):
 
 
 def test_arogi_pins(client):
+    """The Αρωγή dataset left the SITE on 2026-08-23 (user): no page, no
+    endpoint, no key in /api/meta — but the data and its query layer stay,
+    so the pins now run against the committed DB through `queries_extra`
+    directly (same numbers as the endpoints used to serve)."""
+    from khmdhs.config import AROGI_DB
+    if not AROGI_DB.exists():
+        pytest.skip("arogi.sqlite not built here")
     m = client.get("/api/meta").get_json()
-    assert m["arogi"]["n_cases"] == 956 and m["arogi"]["n_fires"] == 10
-    assert m["arogi"]["approved_eur"] == pytest.approx(20_059_683.94)
-    e = client.get("/api/arogi/explore").get_json()
-    assert len(e["rows"]) == 956
-    s = client.get("/api/arogi/summary").get_json()
-    active = [f for f in s["fires"] if f["n_cases"]]
-    assert sum(f["approved_eur"] for f in active) > 0
-    top = max(active, key=lambda f: f["approved_eur"])
-    assert top["fire_id"] == "fires-2021-0708"
-    # a case detail resolves with its act trail
-    row = next(r for r in e["rows"] if r["n"] > 1)
-    c = client.get(f"/api/arogi/case/{row['id']}").get_json()
-    assert c["acts"] and all("ada" in a for a in c["acts"])
+    assert "arogi" not in m
+    for path in ("/api/arogi/explore", "/api/arogi/summary",
+                 "/api/arogi/case/x"):
+        assert client.get(path).status_code == 404
+    ar = sqlite3.connect(f"file:{AROGI_DB}?mode=ro", uri=True)
+    ar.row_factory = sqlite3.Row
+    try:
+        e = qx.arogi_explore(ar)
+        assert len(e["rows"]) == 956
+        s = qx.arogi_summary(ar)
+        active = [f for f in s["fires"] if f["n_cases"]]
+        assert sum(f["approved_eur"] for f in active) > 0
+        top = max(active, key=lambda f: f["approved_eur"])
+        assert top["fire_id"] == "fires-2021-0708"
+        # a case detail resolves with its act trail
+        row = next(r for r in e["rows"] if r["n"] > 1)
+        c = qx.arogi_case(ar, row["id"])
+        assert c["acts"] and all("ada" in a for a in c["acts"])
+    finally:
+        ar.close()
 
 
 def test_contract_chain_pins(client):

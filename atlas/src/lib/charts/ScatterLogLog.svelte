@@ -26,20 +26,36 @@
 	const x = $derived(scaleLog(xDom, [M.left + GUTTER, width - M.right]).nice());
 	const y = $derived(scaleLog(yDom, [height - M.bottom - GUTTER, M.top]).nice());
 
-	// label the outliers by combined €, printed in place
-	const labelled = $derived(
-		[...both].sort((a, b) => b.antinero_eur + b.dase_eur - (a.antinero_eur + a.dase_eur)).slice(0, 8)
-	);
+	// label the outliers by combined €, printed in place — a label landing
+	// within a row of the previous one (and beside it) is nudged down a row
+	const labelled = $derived.by(() => {
+		const top = [...both]
+			.sort((a, b) => b.antinero_eur + b.dase_eur - (a.antinero_eur + a.dase_eur))
+			.slice(0, 8)
+			.map((r) => ({ r, lx: x(r.antinero_eur) + 8, ly: y(r.dase_eur) + 3 }))
+			.sort((a, b) => a.ly - b.ly);
+		for (let i = 1; i < top.length; i++) {
+			for (let j = 0; j < i; j++) {
+				const o = top[j];
+				if (Math.abs(top[i].ly - o.ly) < 12 && Math.abs(top[i].lx - o.lx) < 90) {
+					top[i].ly = o.ly + 12;
+				}
+			}
+		}
+		return top;
+	});
 
 	let tip = $state<string | null>(null);
 	function show(r: ComparePayload['by_pe'][0]) {
 		tip =
 			`<strong>${ruLabel(r.pe)}</strong>` +
 			`<br>Anti-nero: ${eurShort(r.antinero_eur)} · ${r.antinero_n} contracts` +
-			`<br>ΔΑΣΕ: ${eurShort(r.dase_eur)} · ${r.dase_n} contracts`;
+			`<br>forest co-ops: ${eurShort(r.dase_eur)} · ${r.dase_n} contracts`;
 	}
 	const ticksOf = (dom: [number, number]) =>
 		[1e4, 1e5, 1e6, 1e7, 1e8].filter((v) => v >= dom[0] && v <= dom[1]);
+	/** a power-of-ten tick reads «10 M €», not «10,00 M €» */
+	const tick = (v: number) => (v >= 1e6 ? `${v / 1e6} M €` : `${v / 1e3} K €`);
 </script>
 
 <div class="wrap" bind:clientWidth={width}>
@@ -47,18 +63,18 @@
 		{#each ticksOf(x.domain() as [number, number]) as t (t)}
 			<line class="grid" x1={x(t)} x2={x(t)} y1={M.top} y2={height - M.bottom} />
 			<text class="axis" x={x(t)} y={height - M.bottom + 16} text-anchor="middle">
-				{eurShort(t)}
+				{tick(t)}
 			</text>
 		{/each}
 		{#each ticksOf(y.domain() as [number, number]) as t (t)}
 			<line class="grid" x1={M.left} x2={width - M.right} y1={y(t)} y2={y(t)} />
-			<text class="axis" x={M.left - 6} y={y(t) + 3} text-anchor="end">{eurShort(t)}</text>
+			<text class="axis" x={M.left - 6} y={y(t) + 3} text-anchor="end">{tick(t)}</text>
 		{/each}
 
 		<text class="axis-title" x={width - M.right} y={height - 8} text-anchor="end">
 			Anti-nero € in the regional unit →
 		</text>
-		<text class="axis-title" x={12} y={M.top - 8}>ΔΑΣΕ € ↑</text>
+		<text class="axis-title" x={12} y={M.top - 8}>forest co-op € ↑</text>
 
 		{#each both as r (r.pe)}
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -94,16 +110,14 @@
 			/>
 		{/each}
 
-		<text class="gutter-label" x={width - M.right} y={height - M.bottom - GUTTER / 2 + 3}
-			text-anchor="end">Anti-nero only ({onlyA.length} R.U.)</text>
+		<text class="gutter-label" x={width - M.right} y={height - M.bottom - GUTTER - 5}
+			text-anchor="end">Anti-nero only ({onlyA.length} R.U.) ↓</text>
 		<text class="gutter-label" x={M.left + GUTTER / 2 + 8} y={M.top + 12}>
-			ΔΑΣΕ only ({onlyD.length} R.U.)
+			co-ops only ({onlyD.length} R.U.)
 		</text>
 
-		{#each labelled as r (r.pe)}
-			<text class="pe-label" x={x(r.antinero_eur) + 8} y={y(r.dase_eur) + 3}>
-				{peEn(r.pe)}
-			</text>
+		{#each labelled as l (l.r.pe)}
+			<text class="pe-label" x={l.lx} y={l.ly}>{peEn(l.r.pe)}</text>
 		{/each}
 	</svg>
 
@@ -128,11 +142,11 @@
 	}
 	.axis {
 		font-size: 11px;
-		fill: var(--ink-faint);
+		fill: var(--ink-soft);
 	}
 	.axis-title {
-		font-size: 12px;
-		fill: var(--ink-soft);
+		font-size: var(--fs-12);
+		fill: var(--ink);
 	}
 	.dot {
 		fill: var(--ink);
@@ -148,24 +162,29 @@
 		fill: var(--c-dase);
 	}
 	.gutter-label {
-		font-size: 10px;
-		fill: var(--ink-faint);
-		font-style: italic;
+		font-size: 11px;
+		fill: var(--ink-soft);
 	}
 	.pe-label {
-		font-size: 11px;
+		font-size: var(--fs-12);
 		fill: var(--ink);
 	}
+	/* hover card — black plate, white lettering, like the map cards */
 	.tip {
 		position: absolute;
+		z-index: 3;
+		pointer-events: none;
+		padding: 7px 10px;
+		border-radius: 4px;
+		background: #000;
+		color: #fff;
+		font-size: var(--fs-12);
+		line-height: 1.3;
+		white-space: nowrap;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	}
+	.tip {
 		top: 0;
 		right: 0;
-		background: color-mix(in srgb, var(--paper) 94%, transparent);
-		border: 1px solid var(--line-strong);
-		border-radius: var(--radius);
-		padding: var(--sp-2) var(--sp-3);
-		font-size: var(--fs-13);
-		pointer-events: none;
-		box-shadow: var(--shadow-paper);
 	}
 </style>

@@ -1,19 +1,25 @@
 <script lang="ts">
+	/**
+	 * KEY FINDINGS (named so by the user, 2026-08-23; the route stays
+	 * /compare): Anti-nero beside the forest co-op contracts, in the dress of
+	 * the three dataset pages — the hero with KPI cards and a kicker, short
+	 * capital titles, findings in the lightbulbs, method and source in the
+	 * caveats, the page's basis said once.
+	 */
 	import { peEn } from '$lib/transforms/regions';
+	import BarH from '$lib/charts/BarH.svelte';
 	import CompareHist from '$lib/charts/CompareHist.svelte';
 	import PairedBars from '$lib/charts/PairedBars.svelte';
 	import ParallelPipelines from '$lib/charts/ParallelPipelines.svelte';
 	import ScatterLogLog from '$lib/charts/ScatterLogLog.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
-	import KpiRow from '$lib/ui/KpiRow.svelte';
-	import StatPair from '$lib/ui/StatPair.svelte';
-	import { eur, eurShort, grInt, pct } from '$lib/transforms/format';
+	import { eur, eurShort, grInt, grNumber } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const c = $derived(data.cmp);
 
-	// finding-title inputs — computed, never hardcoded
+	// finding inputs — computed, never hardcoded
 	const topShared = $derived.by(() => {
 		let best = null as null | { pe: string; v: number };
 		for (const r of c.by_pe) {
@@ -28,60 +34,66 @@
 			if (!best || r.dase_eur > best.v) best = { pe: r.pe, v: r.dase_eur };
 		return peEn(best?.pe) || '';
 	});
-
-	const yearMax = $derived(Math.max(...c.yearly.antinero, ...c.yearly.dase.map(() => 0), 1));
-	const daseYearMax = $derived(Math.max(...c.yearly.dase, 1));
+	/** a year with no contracts prints «—», not «0,00 €» */
+	const dash = (v: number) => (v ? eurShort(v) : '—');
+	const yearRows = (vals: number[]) =>
+		c.years.map((y, i) => ({ label: String(y), value: vals[i] || 0 }));
+	const peakYear = (vals: number[]) => {
+		let bi = 0;
+		vals.forEach((v, i) => {
+			if (v > vals[bi]) bi = i;
+		});
+		return { year: c.years[bi], eur: vals[bi] || 0 };
+	};
 </script>
 
 <svelte:head>
-	<title>Anti-nero vs ΔΑΣΕ — two money pipelines for the same forests</title>
+	<title>Key findings — Anti-nero beside the forest co-ops</title>
 	<meta
 		name="description"
-		content="Comparing Greece's Anti-nero contractor programme with the money that reached forest labour co-operatives — all € excl. VAT."
+		content="Greece's Anti-nero contractor programme beside the money that reached forest labour co-operatives — all € excl. VAT."
 	/>
 </svelte:head>
 
-<hgroup class="lede">
-	<h1>Two money pipelines for the same forests</h1>
-	<p class="standfirst">
-		The Anti-nero programme pays construction and technical companies. Forest labour
-		co-operatives (ΔΑΣΕ) do woodland work for a living. The two flows run through the same
-		ministry, into the same regions — and never touch.
-	</p>
-</hgroup>
-
-<KpiRow>
-	<StatPair
-		value={eurShort(c.antinero.total_eur)}
-		label="Anti-nero, {grInt(c.antinero.n_contracts)} contracts"
-		compare="median contract {eurShort(c.antinero.median_eur)}"
-		basis="stated € excl. VAT"
-		color="var(--c-antinero)"
-	/>
-	<StatPair
-		value={eurShort(c.dase.total_eur)}
-		label="ΔΑΣΕ co-ops, {grInt(c.dase.n_contracts)} contracts"
-		compare="median contract {eur(c.dase.median_eur)}"
-		basis="stated € excl. VAT · payments cover only part of the population"
-		color="var(--c-dase)"
-	/>
-	<StatPair
-		value="{c.ratio}×"
-		label="the size of the gap"
-		compare="≈{Math.round(c.antinero.median_eur / c.dase.median_eur)}× at the median"
-	/>
-	<StatPair
-		value={grInt(c.pipelines.vat_overlap.length)}
-		label="companies in both datasets"
-		compare="{grInt(c.pipelines.antinero.n_vats + c.pipelines.dase.n_vats)} entities, zero shared ΑΦΜ"
-	/>
-</KpiRow>
+<section class="hero">
+	<div class="cards">
+		<div class="card antinero">
+			<div class="num">{eurShort(c.antinero.total_eur).toLowerCase()}</div>
+			<div class="lbl">Anti-nero — {grInt(c.antinero.n_contracts)} contracts, median {eurShort(c.antinero.median_eur).toLowerCase()}</div>
+		</div>
+		<div class="card dase">
+			<div class="num">{eurShort(c.dase.total_eur).toLowerCase()}</div>
+			<div class="lbl">forest co-ops — {grInt(c.dase.n_contracts)} contracts, median {eur(c.dase.median_eur)}</div>
+		</div>
+		<div class="card grey">
+			<div class="num">{grNumber(c.ratio, 1)}×</div>
+			<div class="lbl">the size of the gap, stated to stated — ≈{grInt(Math.round(c.antinero.median_eur / c.dase.median_eur))}× at the median</div>
+		</div>
+		<div class="card grey">
+			<div class="num">{grInt(c.pipelines.vat_overlap.length)}</div>
+			<div class="lbl">companies in both datasets — {grInt(c.pipelines.antinero.n_vats + c.pipelines.dase.n_vats)} entities, no shared ΑΦΜ</div>
+		</div>
+	</div>
+	<div class="about">
+		<div class="kicker">KEY FINDINGS</div>
+		<p>
+			The Anti-nero programme pays construction and technical companies. Forest labour
+			co-operatives (ΔΑΣΕ) do woodland work for a living. The two flows run through the same
+			ministry, into the same regions — and never touch. This page sets them side by side.
+		</p>
+		<p class="basis">
+			Both sides are stated contract values excl. VAT (the co-op side deduplicated across
+			amendment versions); payments are a separate layer on each dataset's own page. Anti-nero
+			is one programme; the co-op dataset is every public contract won by a forest co-operative
+			anywhere in the state since September 2021 —
+			<a href="/methodology#compare-bases">basis</a> · <a href="/methodology#zero-overlap">overlap</a>.
+		</p>
+	</div>
+</section>
 
 <ChartFrame
-	title="Same ministry, same forests — zero shared companies"
-	subtitle="Every Anti-nero contractor (left) and every ΔΑΣΕ entity (right), sized by €. {grInt(
-		c.pipelines.dase_n_coops
-	)} of the {grInt(c.pipelines.dase.n_vats)} ΔΑΣΕ entities are curated co-operatives."
+	title="SHARED COMPANIES"
+	insight={`Same ministry, same forests — zero shared companies: ${grInt(c.pipelines.antinero.n_vats)} Anti-nero contractors on the left, ${grInt(c.pipelines.dase.n_vats)} co-op-side entities on the right (${grInt(c.pipelines.dase_n_coops)} of them curated co-operatives), sized by €, and not one ΑΦΜ appears on both sides.`}
 	caveat="Contract € split evenly across partners so each column sums to its programme total; ΑΦΜ compared canonicalised on both sides; awarders matched by name, never VAT (090273987 is shared by two bodies)."
 	anchor="pipelines"
 	methodology="zero-overlap"
@@ -90,11 +102,9 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Different universes: medians of {eurShort(c.hist.antinero_median)} vs {eur(
-		c.hist.dase_median
-	)}"
-	subtitle="Contract-size distribution on shared log₂ bins, as % of each programme's own contracts."
-	caveat="Both programmes on the same basis: stated contract values, excl. VAT."
+	title="CONTRACT SIZES"
+	insight={`Different universes: the median Anti-nero contract is ${eurShort(c.hist.antinero_median)}, the median co-op contract ${eur(c.hist.dase_median)} — the two distributions barely overlap.`}
+	caveat="Contract-size distribution on shared log₂ brackets, each programme as % of its own contracts; both on stated values excl. VAT."
 	anchor="distributions"
 	methodology="compare-bases"
 >
@@ -102,8 +112,9 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Where both flows land: {topShared} gets millions from each — {topDase} is co-op country"
-	subtitle="Each regional unit by its € from both programmes (log–log). Colour-coded gutters hold the one-sided regional units."
+	title="WHERE BOTH FLOWS LAND"
+	insight={`${topShared} gets millions from each programme; ${topDase} is co-op country. Each regional unit sits by its € from both programmes, log–log; the coloured gutters hold the units that see only one of them.`}
+	caveat="Anti-nero regions curated per contract from its signed text, the co-op side derived from the awarding forest unit; a contract covering several units or signed by several firms is split equally."
 	anchor="pe-scatter"
 	methodology="even-split"
 >
@@ -111,135 +122,126 @@
 </ChartFrame>
 
 <ChartFrame
-	title="Region by region, the programmes weight differently"
-	subtitle="Top {Math.min(15, c.by_pe.length)} regional units — each programme's own share of its total, absolute € printed."
-	caveat="ΔΑΣΕ side omits {grInt(c.dase_unresolved.n)} multi-regional-unit contracts ({eurShort(
-		c.dase_unresolved.eur
-	)}, honestly unresolved)."
+	title="REGION BY REGION"
+	insight={`The programmes weight the regions differently — the top ${grInt(Math.min(15, c.by_pe.length))} regional units, each programme's own share of its total beside the other's, absolute € printed.`}
+	caveat={`The co-op side omits ${grInt(c.dase_unresolved.n)} multi-unit contracts (${eurShort(c.dase_unresolved.eur)}), honestly unresolved.`}
 	anchor="pe-paired"
 	methodology="dase-regions"
 >
-	<PairedBars
-		rows={c.by_pe}
-		antineroTotal={c.antinero.total_eur}
-		daseTotal={c.dase.total_eur}
-	/>
+	<PairedBars rows={c.by_pe} antineroTotal={c.antinero.total_eur} daseTotal={c.dase.total_eur} />
 </ChartFrame>
 
 <ChartFrame
-	title="Anti-nero ramps up while ΔΑΣΕ money drifts down"
-	subtitle="Yearly € — each programme on its own scale (a shared axis would erase the ΔΑΣΕ bars entirely)."
+	title="MONEY PER YEAR"
+	insight={`Anti-nero ramps up while the co-op money drifts down: Anti-nero peaked in ${peakYear(c.yearly.antinero).year} (${eurShort(peakYear(c.yearly.antinero).eur)}), the co-ops in ${peakYear(c.yearly.dase).year} (${eurShort(peakYear(c.yearly.dase).eur)}). Each programme on its own scale — a shared axis would erase the co-op bars entirely.`}
+	caveat="Stated € excl. VAT by signature year, each side on its own scale."
 	anchor="yearly"
 	methodology="compare-bases"
 >
 	<div class="years">
 		<div>
-			<h3 class="antinero">Anti-nero (stated €, net)</h3>
-			{#each c.years as y, i (y)}
-				<div class="yrow">
-					<span class="ylabel">{y}</span>
-					<div class="ybar antinero" style:width={`${(88 * c.yearly.antinero[i]) / yearMax}%`}></div>
-					<span class="yval">{c.yearly.antinero[i] ? eurShort(c.yearly.antinero[i]) : '—'}</span>
-				</div>
-			{/each}
+			<div class="sublabel antinero">ANTI-NERO</div>
+			<BarH rows={yearRows(c.yearly.antinero)} color="var(--c-antinero)" inside barHeight={35} fmt={dash} />
 		</div>
 		<div>
-			<h3 class="dase">ΔΑΣΕ (stated €, net)</h3>
-			{#each c.years as y, i (y)}
-				<div class="yrow">
-					<span class="ylabel">{y}</span>
-					<div class="ybar dase" style:width={`${(88 * c.yearly.dase[i]) / daseYearMax}%`}></div>
-					<span class="yval">{c.yearly.dase[i] ? eurShort(c.yearly.dase[i]) : '—'}</span>
-				</div>
-			{/each}
+			<div class="sublabel dase">FOREST CO-OPS</div>
+			<BarH rows={yearRows(c.yearly.dase)} color="var(--c-dase)" inside barHeight={35} fmt={dash} />
 		</div>
 	</div>
 </ChartFrame>
 
-<section class="notes">
-	<h2>Reading this page honestly</h2>
-	<ul>
-		<li>
-			<strong>Same value basis.</strong> Both sides show stated contract values, excl. VAT
-			(ΔΑΣΕ deduplicated across amendment versions). Payments are a separate layer on each
-			dataset's own pages. The {c.ratio}× headline is stated-vs-stated.
-		</li>
-		<li>
-			<strong>Different populations.</strong> Anti-nero is one programme; the ΔΑΣΕ dataset is
-			every public contract won by a forest co-op anywhere in the state since 2021-09.
-		</li>
-		<li>
-			<strong>Regional-unit (Π.Ε.) derivation differs.</strong> Anti-nero regions are hand-curated per contract;
-			ΔΑΣΕ regions derive from the awarding forest unit.
-		</li>
-		<li>
-			Full definitions on the <a href="/methodology">methodology page</a>.
-		</li>
-	</ul>
-</section>
-
 <style>
-	.lede {
+	/* the hero, in the dataset pages' geometry: cards left, the kicker and
+	   the page's two paragraphs right */
+	.hero {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: var(--sp-6) var(--sp-12);
+		margin: var(--sp-6) 0 var(--sp-12);
+	}
+	.cards {
+		display: grid;
+		grid-template-columns: 268px 268px;
+		grid-auto-rows: 1fr;
+		gap: var(--sp-4);
+		max-width: 100%;
+	}
+	.card {
+		color: #fff;
+		padding: var(--sp-4);
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-4);
+	}
+	.card.antinero {
+		background: var(--c-antinero);
+	}
+	.card.dase {
+		background: var(--c-dase);
+	}
+	.card.grey {
+		background: #6c6c6c;
+	}
+	.card .num {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: clamp(28px, 3.2vw, 36px);
+		line-height: 0.95;
+	}
+	.card .lbl {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: var(--fs-13);
+		line-height: 1.2;
+	}
+	.about .kicker {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		margin-bottom: var(--sp-3);
+		color: var(--ink);
+	}
+	.about p {
+		margin: 0;
 		max-width: var(--prose-w);
 	}
-	.standfirst {
-		font-size: var(--fs-18);
+	.about p.basis {
+		margin-top: var(--sp-3);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+		line-height: 1.5;
+	}
+	.about p.basis a {
 		color: var(--ink-soft);
 	}
+	/* the per-year pair: the ranking's bars, each side in its own hue */
 	.years {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: var(--sp-8);
 	}
+	.sublabel {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		margin-bottom: var(--sp-2);
+	}
+	.sublabel.antinero {
+		color: var(--c-antinero);
+	}
+	.sublabel.dase {
+		color: var(--c-dase);
+	}
 	@media (max-width: 900px) {
+		.hero,
 		.years {
 			grid-template-columns: 1fr;
 		}
-	}
-	.years h3 {
-		font-family: var(--font-ui);
-		font-size: var(--fs-14);
-	}
-	.years h3.antinero {
-		color: var(--c-antinero);
-	}
-	.years h3.dase {
-		color: var(--c-dase);
-	}
-	.yrow {
-		display: flex;
-		align-items: center;
-		gap: var(--sp-2);
-		margin-bottom: 4px;
-	}
-	.ylabel {
-		width: 3rem;
-		font-size: var(--fs-13);
-		color: var(--ink-soft);
-	}
-	.ybar {
-		height: 14px;
-		border-radius: 2px;
-		min-width: 1px;
-	}
-	.ybar.antinero {
-		background: var(--c-antinero);
-	}
-	.ybar.dase {
-		background: var(--c-dase);
-	}
-	.yval {
-		font-size: var(--fs-12);
-		color: var(--ink-soft);
-		white-space: nowrap;
-	}
-	.notes {
-		max-width: var(--prose-w);
-		border-top: 2px solid var(--line-strong);
-		padding-top: var(--sp-4);
-	}
-	.notes li {
-		margin-bottom: var(--sp-2);
-		font-size: var(--fs-14);
+		.cards {
+			grid-template-columns: 1fr 1fr;
+		}
 	}
 </style>

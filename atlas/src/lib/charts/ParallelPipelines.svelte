@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Pipelines } from '$lib/api';
 	import { eur, eurShort, grInt } from '$lib/transforms/format';
+	import { orgEn } from '$lib/transforms/names';
 
 	let { data }: { data: Pipelines } = $props();
 
 	let width = $state(900);
-	const height = 560;
 	const COL_W = 230;
 	const TOP = 96;
 
@@ -38,6 +38,13 @@
 	const right = $derived(pack(data.dase.entities, maxEur));
 	const leftX = $derived(width / 2 - COL_W - 110);
 	const rightX = $derived(width / 2 + 110);
+	/** the box is as tall as its taller column — the old fixed 560 left a
+	 *  void under the dots (2026-08-23) */
+	const colBottom = $derived(
+		10 + Math.max(TOP, ...left.map((d) => d.y + d.r), ...right.map((d) => d.y + d.r))
+	);
+	const height = $derived(Math.max(colBottom + 16, TOP + 150));
+	const voidY = $derived(TOP + 10 + (colBottom - TOP - 10) / 2);
 
 	let tip = $state<string | null>(null);
 	const ministry = $derived(data.shared_awarders[0]);
@@ -58,7 +65,7 @@
 				d="M {mx + 40} 34 C {rightX + COL_W / 2} 34, {rightX + COL_W / 2} 50, {rightX +
 					COL_W / 2} {TOP - 14}"
 			/>
-			<text class="ministry" x={mx} y={26}>{ministry.name}</text>
+			<text class="ministry" x={mx} y={26}>{orgEn(ministry.name)}</text>
 			<text class="ministry-sub" x={leftX + COL_W / 2} y={TOP - 22}>
 				{grInt(ministry.antinero_n)} contracts
 			</text>
@@ -72,7 +79,7 @@
 			{grInt(data.antinero.n_vats)} Anti-nero contractors · {eurShort(data.antinero.total_eur)}
 		</text>
 		<text class="col-head dase" x={rightX + COL_W / 2} y={TOP - 4}>
-			{grInt(data.dase.n_vats)} ΔΑΣΕ entities · {eurShort(data.dase.total_eur)}
+			{grInt(data.dase.n_vats)} co-op-side entities · {eurShort(data.dase.total_eur)}
 		</text>
 
 		<g transform="translate({leftX},10)">
@@ -84,7 +91,7 @@
 						cy={d.y}
 						r={d.r}
 						class="dot antinero"
-						onmouseenter={() => (tip = `<strong>${d.e.name}</strong><br>${eur(d.e.eur)} (even-split)`)}
+						onmouseenter={() => (tip = `<strong>${d.e.name}</strong><br>${eur(d.e.eur)} · even split`)}
 						onmouseleave={() => (tip = null)}
 					/>
 				</a>
@@ -99,7 +106,7 @@
 						cy={d.y}
 						r={d.r}
 						class="dot dase"
-						onmouseenter={() => (tip = `<strong>${d.e.name}</strong><br>${eur(d.e.eur)} (even-split)`)}
+						onmouseenter={() => (tip = `<strong>${d.e.name}</strong><br>${eur(d.e.eur)} · even split`)}
 						onmouseleave={() => (tip = null)}
 					/>
 				</a>
@@ -107,7 +114,7 @@
 		</g>
 
 		<!-- the void in the middle: the finding, printed -->
-		<g class="void" transform="translate({width / 2},{height / 2 + 30})">
+		<g class="void" transform="translate({width / 2},{voidY})">
 			<text class="void-zero" y="-10">0</text>
 			<text class="void-line" y="14">companies appear in both datasets</text>
 			<text class="void-line faint" y="32">
@@ -159,19 +166,20 @@
 		stroke: var(--c-dase);
 	}
 	.ministry {
-		font-size: 13px;
+		font-size: var(--fs-13);
 		font-weight: 700;
 		text-anchor: middle;
 		fill: var(--ink);
 	}
 	.ministry-sub {
-		font-size: 11px;
+		font-size: var(--fs-12);
 		text-anchor: middle;
-		fill: var(--ink-faint);
+		fill: var(--ink-soft);
 	}
 	.col-head {
-		font-size: 12px;
-		font-weight: 600;
+		font-family: var(--font-display);
+		font-size: var(--fs-13);
+		font-weight: 700;
 		text-anchor: middle;
 	}
 	.col-head.antinero {
@@ -184,30 +192,35 @@
 		text-anchor: middle;
 	}
 	.void-zero {
-		font-family: var(--font-serif);
+		font-family: var(--font-display);
 		font-size: 64px;
-		font-weight: 700;
+		font-weight: 900;
 		fill: var(--ink);
 	}
 	.void-line {
-		font-size: 14px;
+		font-size: var(--fs-14);
 		fill: var(--ink);
 	}
 	.void-line.faint {
-		font-size: 12px;
-		fill: var(--ink-faint);
+		font-size: var(--fs-12);
+		fill: var(--ink-soft);
 	}
+	/* hover card — black plate, white lettering, like the map cards */
 	.tip {
 		position: absolute;
-		bottom: var(--sp-2);
-		left: var(--sp-2);
-		max-width: 24rem;
-		background: color-mix(in srgb, var(--paper) 94%, transparent);
-		border: 1px solid var(--line-strong);
-		border-radius: var(--radius);
-		padding: var(--sp-2) var(--sp-3);
-		font-size: var(--fs-13);
+		z-index: 3;
 		pointer-events: none;
-		box-shadow: var(--shadow-paper);
+		padding: 7px 10px;
+		border-radius: 4px;
+		background: #000;
+		color: #fff;
+		font-size: var(--fs-12);
+		line-height: 1.3;
+		white-space: nowrap;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	}
+	.tip {
+		bottom: var(--sp-2);
+		left: 0;
 	}
 </style>

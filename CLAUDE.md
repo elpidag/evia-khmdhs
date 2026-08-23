@@ -1208,9 +1208,13 @@ announcements, VERBATIM quotes + URLs/Wayback; the 2021 series ends
 €731,409/162 with no final total; NO totals for any 2025 fire) +
 `elga_fire_compensation.json` (per-year, report-page evidence).
 **Privacy hard rule: owner names are NEVER stored or displayed.**
-Atlas: `/arogi` (case table), `/arogi/case/[key]` (act trail + PDFs via
-/pdf/diavgeia, arogi_cache fallback), `/arogi/summary` (bases side by
-side, mismatches highlighted, never merged).
+**Not on the site since 2026-08-23 (user; DATA_DECISIONS):** the Atlas
+pages (`/arogi`, `/arogi/case/[key]`, `/arogi/summary`), the
+`/api/arogi/*` endpoints, the `arogi` key of `/api/meta`, the proxy's
+arogi_cache fallback and the methodology section were DELETED; the DB,
+`khmdhs/arogi*.py`, the harvest, the curated JSONs, `tests/test_arogi.py`
+and `queries_extra.arogi_*` (pinned against the DB by
+`test_atlas_real_db.py::test_arogi_pins`) stay, so the dataset can return.
 
 ## Atlas (second web UI: `atlas/` SvelteKit + `atlas_api/` Flask JSON API)
 
@@ -1254,9 +1258,16 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   BLACK, `--c-dase` green `#52b788`; sticky compacting header (base.css
   `scroll-padding-top` keeps `#anchors` clear). Nav is 4 primary tabs +
   a MENU ▾ dropdown: SPONSORED WORKS (/anadohoi) · ANTINERO WORKS (/) ·
-  FOREST CO-OP WORKS (/dase) · EXPLORE, then ΑΡΩΓΗ · Compare ·
-  Connections · Authorities · Methodology in the menu; active tab renders
-  in its dataset hue. Fonts are now **Adobe Typekit loaded from
+  FOREST CO-OP WORKS (/dase) · EXPLORE, then KEY FINDINGS (`/compare`,
+  renamed and redressed 2026-08-23 — hero cards + kicker + basis once,
+  caps frame titles, computed bulbs, method/source caveats, black hover
+  cards, «forest co-ops» in chart labels) · Authorities · Methodology in
+  the menu; active tab renders in its dataset hue. **ΑΡΩΓΗ and
+  CONNECTIONS left the SITE on 2026-08-23** (user): the route folders
+  `routes/arogi/` and `routes/connections/` are deleted (404), the
+  `Connections` type lives in `$lib/api.ts`, `/api/connections` STAYS
+  (the front page's FLOWS OF MONEY reads it), `/api/arogi/*` is gone; the
+  data is untouched. Fonts are now **Adobe Typekit loaded from
   use.typekit.net in app.html** (futura-100-greek UI + obviously display;
   domain-locked kit, external CDN — the old self-hosted doctrine no
   longer holds; Sofia Sans woff2 stays as fallback, Literata is unused).
@@ -1324,8 +1335,8 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   evening the bipartite («WHO REACHES WHERE») is that frame's second LENS,
   «by company» (`?flows=company`, shared focus, one lightbulb — the
   standalone frame and its `#bipartite` anchor are gone); `/` fetches `/api/connections`
-  post-hydration; /connections keeps hubs, signers and consortium pairs and
-  its hub tiles link to `/#flows`. The computed findings («Only N% …») moved
+  post-hydration; the /connections page (hubs, signers, consortium pairs,
+  hub tiles) was DELETED on 2026-08-23 — the endpoint stays. The computed findings («Only N% …») moved
   from the frame TITLES into the first sentence of the subtitles — titles are
   short caps like the ΔΑΣΕ page's (user: the sentence-titles read too big).
   AWARDING PROCESS (MONEY FLOW until 2026-08-22, renamed to match the ΔΑΣΕ
@@ -1394,7 +1405,8 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   ceiling lines kept in both modes (labels on either side when <48 px apart),
   phase colours gone from it; the frame follows RANKING OF COMPANIES; the
   old SVG `Beeswarm.svelte` is deleted.
-- **/connections flow design** (no default arc spaghetti): default map =
+- **Flow design** (born on the deleted /connections page, now the front
+  page's FLOWS OF MONEY; no default arc spaghetti): default map =
   LINEAR %-of-works-won-by-out-of-region-firms choropleth (the finding
   «only N% stays local» is computed live and sits in the subtitle); click a
   region → FlowArcs draws only ITS flows, direction-coded with arrowheads
@@ -1478,7 +1490,8 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   has not said them (one clause, or none), with the Methodology link.
   Findings pinned in `test_front_page_findings`.
 - **API endpoints** under `/api/{meta,antinero/*,dase/*,anadohoi/*,explore,
-  compare,connections,authorities,authority/<slug>}` — JSON gets
+  compare,connections,authorities,authority/<slug>}` (no `arogi` since
+  2026-08-23) — JSON gets
   `Cache-Control: max-age=300`, `app.json.ensure_ascii = False`. `/api/meta`
   degrades honestly (no `dase`/`anadohoi` key) when a DB is absent;
   `/api/antinero/*` never opens the other two (isolation tests mirror

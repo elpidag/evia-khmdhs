@@ -530,3 +530,38 @@ export interface ExplorePayload {
 	rows: ExploreRow[];
 	counts: Record<string, number>;
 }
+
+/** `/api/connections` — the Anti-nero flow layer (region→region flows, the
+ *  local-vs-imported split, hubs, signers, consortium pairs). Fetched by the
+ *  front page's FLOWS OF MONEY frame post-hydration; the old /connections
+ *  page that first carried it left the site on 2026-08-23. */
+export interface Connections {
+	contractor_authority: { vat: string; auth: string; n: number; eur: number }[];
+	contractor_pe: { vat: string; pe: string; n: number; eur: number }[];
+	contractor_signer: { vat: string; signer: string; n: number; eur: number }[];
+	flows: { source_pe: string; target_pe: string; n_contracts: number; total_eur: number }[];
+	/** the same flows with a signature-year dimension — Σ over years == flows */
+	flows_yearly: {
+		source_pe: string;
+		target_pe: string;
+		year: string;
+		n_contracts: number;
+		total_eur: number;
+	}[];
+	origins: {
+		target_pe: string;
+		n_contracts: number;
+		total_eur: number;
+		local_eur: number;
+		imported_eur: number;
+		unknown_eur: number;
+	}[];
+	pairs: { a: string; b: string; refs: string[]; eur: number }[];
+	contractors: Record<string, { name: string; home_pe: string | null; eur: number }>;
+	authorities: Record<string, { pe: string; kind: string; lat: number; lon: number }>;
+	coverage: {
+		resolved_eur: number;
+		unresolved_eur: number;
+		total_eur: number;
+	};
+}

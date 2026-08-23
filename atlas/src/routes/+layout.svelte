@@ -15,11 +15,11 @@
 		{ href: '/dase', label: 'FOREST CO-OP WORKS', color: 'var(--c-dase)' },
 		{ href: '/explore', label: 'EXPLORE', color: 'var(--c-antinero)' }
 	];
-	// secondary pages under the MENU dropdown (ΑΡΩΓΗ kept reachable here)
+	// secondary pages under the MENU dropdown. ΑΡΩΓΗ and CONNECTIONS left
+	// the site on 2026-08-23 (user): routes, endpoints and methodology
+	// section deleted; the data and its harvest stay in the repository.
 	const MENU = [
-		{ href: '/arogi', label: 'ΑΡΩΓΗ' },
-		{ href: '/compare', label: 'COMPARE' },
-		{ href: '/connections', label: 'CONNECTIONS' },
+		{ href: '/compare', label: 'KEY FINDINGS' },
 		{ href: '/authorities', label: 'AUTHORITIES' },
 		{ href: '/methodology', label: 'METHODOLOGY' }
 	];

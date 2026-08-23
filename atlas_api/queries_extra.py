@@ -164,8 +164,7 @@ def _full_date(s: str | None) -> str | None:
 
 def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
          ana: sqlite3.Connection | None = None,
-         pay: sqlite3.Connection | None = None,
-         ar: sqlite3.Connection | None = None) -> dict:
+         pay: sqlite3.Connection | None = None) -> dict:
     """Footer/OG numbers for all datasets + data freshness. `kh` is the
     stated-basis connection (total = Σ stated net); `pay` sees real
     payments for the n_payments count."""
@@ -195,13 +194,6 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "budget_current)), 2) FROM projects "
             "WHERE status != 'superseded'").fetchone()
         out["anadohoi"] = {"n_projects": n, "stated_eur": tot}
-
-    if ar is not None:
-        n_fires, n_cases, appr = ar.execute(
-            "SELECT (SELECT COUNT(*) FROM fires WHERE in_scope = 1),"
-            " COUNT(*), ROUND(SUM(approved_eur), 2) FROM cases").fetchone()
-        out["arogi"] = {"n_fires": n_fires, "n_cases": n_cases,
-                        "approved_eur": appr}
 
     # dataset-state counts the prose pages (methodology) cite — computed,
     # never hardcoded, so a refresh cannot leave stale numbers in copy
@@ -4016,6 +4008,9 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
 
 
 # ------------------------------------------------- arogi (state fire aid)
+# NOT served by the API since 2026-08-23 (user: the Αρωγή pages left the
+# site); kept as the dataset's query layer, pinned by
+# tests/test_atlas_real_db.py::test_arogi_pins against the committed DB.
 
 def arogi_explore(ar: sqlite3.Connection) -> dict:
     """Compact rows for the /arogi client-filtered table: aid CASES plus
