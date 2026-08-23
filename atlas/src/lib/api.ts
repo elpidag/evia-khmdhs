@@ -438,6 +438,26 @@ export interface AntineroOverview {
 	 *  description, distinct-contract count) — no € per code: contracts
 	 *  declare several codes each */
 	cpvs: { code: string; desc: string; n: number }[];
+	/** the declared codes rolled up the CPV tree: division → class → code,
+	 *  distinct-contract counts that OVERLAP (2026-08-23) */
+	cpv_tree?: {
+		divisions: {
+			code: string;
+			name_en: string;
+			name_el: string;
+			n: number;
+			classes: {
+				code: string;
+				name_en: string;
+				name_el: string;
+				n: number;
+				codes: { code: string; name_en: string; name_el: string; n: number }[];
+			}[];
+		}[];
+		n_contracts: number;
+		n_codes: number;
+		codes_per_contract: number;
+	};
 	/** curated work-type category per in-scope contract (ONE each, so the
 	 *  stated-net sums reconcile to the programme total) */
 	categories: {

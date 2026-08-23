@@ -163,6 +163,20 @@
 		finding, not a claim of illegality.
 	</p>
 
+	<h2 id="cpv">CPV codes</h2>
+	<p>
+		The codes are those each contract declares in ΚΗΜΔΗΣ, with the registry's Greek
+		descriptions kept per contract. On the front page they are rolled up the vocabulary's own
+		tree — the Common Procurement Vocabulary (Regulation (EC) 2195/2002 as amended by
+		213/2008) is hierarchical: the first two digits name the division, three the group, four
+		the class, five the category, the 8-digit code the leaf — and every node is named from the
+		official EU CPV 2008 workbook (TED, EN and EL), built once into
+		<code>cpv_nodes.json</code> for exactly the nodes the contracts touch. A count under a node
+		is the number of distinct contracts declaring at least one code beneath it; a contract
+		declares many codes, so counts overlap across nodes and are never summed, and no € is
+		attributed per code.
+	</p>
+
 	<h2 id="study-costs">Μελέτη (study) costs</h2>
 	<p>
 		Extracted from the signed PDFs at the «Κόστος εκπόνησης μελετών (ΣΑΥ-ΦΑΥ)» anchor, net of

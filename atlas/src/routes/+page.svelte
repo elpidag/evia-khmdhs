@@ -11,6 +11,7 @@
 	import KindFlow from '$lib/charts/KindFlow.svelte';
 	import CatWorkChord from '$lib/charts/CatWorkChord.svelte';
 	import AreaYears from '$lib/charts/AreaYears.svelte';
+	import CpvColumns from '$lib/charts/CpvColumns.svelte';
 	import { procedureEn } from '$lib/transforms/procedures';
 	import {
 		CHORD_PAIRS,
@@ -1101,25 +1102,22 @@
 
 {#if o.cpvs.length}
 	{@const topCpv = o.cpvs[0]}
+	{@const tree = o.cpv_tree}
+	{@const div77 = tree?.divisions.find((d) => d.code.startsWith('77'))}
+	{@const div45 = tree?.divisions.find((d) => d.code.startsWith('45'))}
+	{@const topCode = tree?.divisions.flatMap((d) => d.classes.flatMap((k) => k.codes)).sort((a, b) => b.n - a.n)[0]}
 	<ChartFrame
 		title="CPV CODES"
-		insight="{grInt(o.cpvs.length)} procurement-vocabulary (CPV) codes across the {grInt(
-			o.kpis.n_contracts
-		)} contracts — the most common, «{topCpv.desc}», appears on {grInt(topCpv.n)} of them ({pct(
-			(topCpv.n / o.kpis.n_contracts) * 100
-		)})."
-		caveat="Codes and descriptions as declared in ΚΗΜΔΗΣ; a contract declares several, so counts exceed the number of contracts."
+		insight={tree
+			? `The ${grInt(tree.n_codes)} codes the ${grInt(tree.n_contracts)} contracts declare — ${grInt(tree.codes_per_contract)} per contract on average — fall into ${grInt(tree.divisions.length)} of the vocabulary’s divisions: ${div77 ? `${grInt(div77.n)} contracts declare a code of «${div77.name_en}»` : ''}${div45 ? ` and ${grInt(div45.n)} a code of «${div45.name_en}»` : ''} — the same contracts filed as services and as works at once. The most common single code, «${topCode?.name_en ?? topCpv.desc}», appears on ${grInt(topCode?.n ?? topCpv.n)} (${pct(((topCode?.n ?? topCpv.n) / o.kpis.n_contracts) * 100)}).`
+			: ''}
+		caveat="Codes as declared in ΚΗΜΔΗΣ, named from the EU CPV 2008 vocabulary (division → class → code); a contract declares several, so the counts overlap and are never summed."
 		anchor="cpvs"
+		methodology="cpv"
 	>
-		<div class="cpvlist">
-			{#each o.cpvs as c (c.code)}
-				<div class="cpvrow">
-					<span class="cn">{grInt(c.n)}</span>
-					<span class="cc">{c.code}</span>
-					<span class="cd">{c.desc}</span>
-				</div>
-			{/each}
-		</div>
+		{#if tree}
+			<CpvColumns divisions={tree.divisions} total={o.kpis.n_contracts} />
+		{/if}
 	</ChartFrame>
 {/if}
 
@@ -1458,34 +1456,6 @@
 	.mode button.active {
 		background: var(--ink);
 		color: var(--paper);
-	}
-	.cpvlist {
-		columns: 3 300px;
-		column-gap: var(--sp-6);
-		font-size: var(--fs-13);
-	}
-	.cpvrow {
-		display: flex;
-		gap: 0.5em;
-		align-items: baseline;
-		break-inside: avoid;
-		padding: 2px 0;
-		border-bottom: 1px solid var(--paper-3);
-	}
-	.cn {
-		min-width: 2.2em;
-		text-align: right;
-		font-weight: 700;
-		font-variant-numeric: tabular-nums;
-	}
-	.cc {
-		color: var(--ink-faint);
-		font-size: var(--fs-12);
-		font-variant-numeric: tabular-nums;
-		white-space: nowrap;
-	}
-	.cd {
-		color: var(--ink-soft);
 	}
 	/* the chord's per-heading toggles: SegmentToggle's dress, one size
 	   smaller, pointer events on (the heading block around them is inert) */

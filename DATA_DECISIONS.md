@@ -7692,3 +7692,97 @@ applied in one pass:
 The new findings are pinned (`test_front_page_findings`: East Attica
 11,9 % and 7 of 59 units hold half; the directorate 77,6 %; median
 €2,12 M with every contract above €60k; the top 10 hold 26,6 %).
+
+## 2026-08-23 · CPV CODES rolled up the vocabulary's own tree, named from the official EU workbook
+
+(user: «are there larger categories the list can be divided into, like
+the EU protocols? the way we show them is not optimal») The CPV
+(Regulation (EC) 2195/2002 as amended by 213/2008) is a five-level tree
+— division (2 digits) · group (3) · class (4) · category (5) · code (8);
+a prefix's own code is the prefix padded with zeros, so every ancestor of
+a declared code is itself a CPV code with an official name. The 145
+declared codes roll up into **13 divisions, 26 groups, 43 classes, 53
+categories**; the flat list of 145 was the leaf level of that tree.
+**Source of the names**: the TED/SIMAP workbook `cpv_2008_ver_2013.xlsx`
+(https://ted.europa.eu/documents/d/ted/cpv_2008_xls; all EU languages),
+kept in `data/raw/`; `scripts/build_cpv_nodes.py` writes
+`khmdhs/data/cpv_nodes.json` — EN + EL names for exactly the 238 nodes
+the in-scope contracts touch, each at its TRUE level (a declared
+77200000 is the group, not a leaf under it; 0 missing). The API
+(`queries_extra.antinero_cpv_tree`, `cpv_tree` on the overview) rolls
+the declared codes up as division → class → code — a declared code
+shallower than class files as its own class — with **distinct-contract
+counts at every node** (a contract declares 16,0 codes on average —
+3,910 code rows over 245 contracts — so counts overlap across nodes and
+are never summed or drawn as a partition). Front page: `CpvTree.svelte`
+— one bar per division in the ranking's dress, opening into its classes,
+each into its codes, EN name with the Greek beneath; the bulb states the
+finding (233 of 245 contracts declare a forestry-services code and 197 a
+construction-work code — the same contracts filed as services and as
+works at once; the most common code on 91,8 %), the caveat the source
+and the overlap rule; a `/methodology#cpv` section explains. Pinned in
+`test_cpv_tree` (13 divisions; 77 → 233, 45 → 197, 90 → 130; 145 codes;
+every node named).
+
+## 2026-08-23 · (reverted the same hour) CONTRACTS BY SCOPE PER YEAR as stacked columns — the user meant the CPV bars, the lines stay
+
+(user, after the Common Wealth «Complaints have tripled» form) The
+three lines became stacked columns — `StackedYears.svelte`: one column
+per year in its span between the 1-January rules, the total on top,
+segments in the scope tones (works only at the bottom), counts printed
+where a segment is tall enough, the «today» rule on the open year. The
+rule that goes with the form: stacking only where the breakdown
+PARTITIONS the contracts (scope, category — one per contract), never for
+the CPV divisions or the works named, where a contract sits under
+several rows. `AreaYears` keeps the time-axis options it gained today
+(unused on this page now; the sponsored chart is unchanged).
+
+## 2026-08-23 · CPV CODES: the divisions as vertical columns, the chosen one's classes beneath
+
+(user, after the Common Wealth dashboard's column charts) The division
+bars became COLUMNS — `CpvColumns.svelte`: one column per division, the
+distinct-contract count on top, the division's number and short name
+(the name's head clause, wrapped) underneath; the columns are tabs — the
+chosen division turns black and `CpvTree` (classes-only mode) lists its
+classes with bars and counts, each opening into its codes with the EN
+and EL names. Never stacked or summed: the counts overlap. The
+per-year scope LINES stay as they were (a stacked-columns version was
+built on a misreading and reverted within the hour; `StackedYears.svelte`
+is parked).
+(same day, later — user) English only (the Greek names stay in the data
+for the Greek edition); the code NUMBERS set apart from the counts («CPV
+77» muted, the classes' four digits under their columns, the counts bold
+on top) and both axes named; and the chosen column SPLITS IN PLACE into
+its classes — its slot widens (44 px a class, ≥ 180 px, ≤ 60 % of the
+plot), the other divisions compress and grey, a bracket above carries
+the division's own count, and the key under the chart names the classes
+(two columns), each opening into its codes (the opened class lit in the
+accent on the chart). `CpvTree.svelte` stays in the repo unused.
+(same day, third round — user) The click now DRILLS: the other divisions
+leave and the chosen division's classes take the whole width as columns
+of their own, with a breadcrumb at the top («← all divisions · CPV 77
+Agricultural, forestry, … · 233 contracts») carrying the division's full
+name and the way back — the in-bar bracket lettering is gone; the
+counts print white inside a bar tall enough, in ink above it otherwise;
+the hover wash (a fill the site uses nowhere else) is gone — a hovered
+bar darkens instead; the key under the chart keeps the class list and
+opens the codes, the opened class lit on the chart.
+(same day, fourth round — user: «I didn't mean the rest should
+disappear every time, only when there is not enough space; keep the
+subcategories thinner, keep grey vs black») Back to the SPLIT IN PLACE:
+the chosen division's slot widens to hold its classes as thinner black
+columns (36 px a class, ≥ 180 px), the other divisions stay in grey and
+first COMPRESS (down to 66 px, where a number and a short name still
+fit) — only when even that is not enough do the smallest step aside,
+and the axis says how many («the 5 smallest step aside while CPV 45 is
+open»; CPV 77's split keeps all twelve). Counts white inside tall bars
+for classes and divisions alike; the crumb line keeps the full name and
+«✕ close».
+(same day, fifth round — user) The division names print WHOLE under
+their columns, wrapped on words to the slot (the label band is as tall
+as the tallest name on show); the lettering follows the site's charts —
+names and counts 13 px, CPV numbers 11 px, ticks 10 px; the long
+sentence above a split division is gone — the split group carries its
+identity where every column does, on the number line («CPV 77 · 233
+contracts») and in its whole name in bold beneath, with only «✕ close»
+at the top right.

@@ -1527,3 +1527,24 @@ def test_front_page_findings(client):
     o = client.get("/api/antinero/overview").get_json()
     top10 = sorted((c["total_eur"] for c in o["top_contractors"]), reverse=True)[:10]
     assert round(100 * sum(top10) / o["kpis"]["total_eur"], 1) == 26.6
+
+
+def test_cpv_tree(client):
+    """The declared CPV codes rolled up the vocabulary's tree (DATA_DECISIONS
+    2026-08-23): 13 divisions over the 145 codes, distinct-contract counts
+    that overlap, every node named from the official CPV 2008 workbook."""
+    o = client.get("/api/antinero/overview").get_json()
+    tr = o["cpv_tree"]
+    assert (tr["n_contracts"], tr["n_codes"], len(tr["divisions"])) == (245, 145, 13)
+    assert tr["codes_per_contract"] == 16.0
+    by = {d["code"][:2]: d for d in tr["divisions"]}
+    assert by["77"]["n"] == 233 and by["45"]["n"] == 197 and by["90"]["n"] == 130
+    assert by["77"]["name_en"].startswith("Agricultural, forestry")
+    assert sum(len(k["codes"]) for d in tr["divisions"] for k in d["classes"]) == 145
+    # every node carries an official EN and EL name
+    for d in tr["divisions"]:
+        assert d["name_en"] and d["name_el"]
+        for k in d["classes"]:
+            assert k["name_en"] and k["name_el"]
+            for c in k["codes"]:
+                assert c["name_en"] and c["name_el"]

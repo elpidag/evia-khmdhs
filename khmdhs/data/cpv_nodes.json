@@ -1,0 +1,1677 @@
+{
+ "_doc": "Official EU CPV 2008 names, EN + EL, for every node the in-scope Anti-nero contracts touch (leaf codes and their division/group/class/category ancestors). Built by scripts/build_cpv_nodes.py from the TED workbook in data/raw/ — names are the vocabulary's, never typed.",
+ "_source": {
+  "url": "https://ted.europa.eu/documents/d/ted/cpv_2008_xls",
+  "file": "cpv_2008_ver_2013.xlsx",
+  "built": "2026-08-23"
+ },
+ "_missing": [],
+ "nodes": {
+  "14000000": {
+   "code": "14000000-1",
+   "level": "division",
+   "name_en": "Mining, basic metals and related products",
+   "name_el": "Εξορυκτικά προϊόντα, βασικά μέταλλα και συναφή προϊόντα",
+   "parent": null
+  },
+  "14600000": {
+   "code": "14600000-7",
+   "level": "group",
+   "name_en": "Metal ores and alloys",
+   "name_el": "Μεταλλεύματα και μέταλλα",
+   "parent": "14000000"
+  },
+  "14620000": {
+   "code": "14620000-3",
+   "level": "class",
+   "name_en": "Alloys",
+   "name_el": "Κράματα",
+   "parent": "14600000"
+  },
+  "14622000": {
+   "code": "14622000-7",
+   "level": "category",
+   "name_en": "Steel",
+   "name_el": "Χάλυβας",
+   "parent": "14620000"
+  },
+  "16000000": {
+   "code": "16000000-5",
+   "level": "division",
+   "name_en": "Agricultural machinery",
+   "name_el": "Γεωργικά μηχανήματα",
+   "parent": null
+  },
+  "16700000": {
+   "code": "16700000-2",
+   "level": "group",
+   "name_en": "Tractors",
+   "name_el": "Ελκυστήρες",
+   "parent": "16000000"
+  },
+  "34000000": {
+   "code": "34000000-7",
+   "level": "division",
+   "name_en": "Transport equipment and auxiliary products to transportation",
+   "name_el": "Εξοπλισμός μεταφοράς και βοηθητικά μέσα μεταφοράς",
+   "parent": null
+  },
+  "34900000": {
+   "code": "34900000-6",
+   "level": "group",
+   "name_en": "Miscellaneous transport equipment and spare parts",
+   "name_el": "Ποικίλος εξοπλισμός μεταφοράς και ανταλλακτικά",
+   "parent": "34000000"
+  },
+  "34920000": {
+   "code": "34920000-2",
+   "level": "class",
+   "name_en": "Road equipment",
+   "name_el": "Οδικός εξοπλισμός",
+   "parent": "34900000"
+  },
+  "34928000": {
+   "code": "34928000-8",
+   "level": "category",
+   "name_en": "Road furniture",
+   "name_el": "Εξοπλισμός οδικού δικτύου",
+   "parent": "34920000"
+  },
+  "34928200": {
+   "code": "34928200-0",
+   "level": "code",
+   "name_en": "Fences",
+   "name_el": "Περιφράξεις",
+   "parent": "34928000"
+  },
+  "34928410": {
+   "code": "34928410-5",
+   "level": "code",
+   "name_en": "Marker posts",
+   "name_el": "Πάσσαλοι οριοθέτησης",
+   "parent": "34928000"
+  },
+  "35000000": {
+   "code": "35000000-4",
+   "level": "division",
+   "name_en": "Security, fire-fighting, police and defence equipment",
+   "name_el": "Εξοπλισμός ασφαλείας και πυρόσβεσης, αστυνομικός και αμυντικός εξοπλισμός",
+   "parent": null
+  },
+  "35100000": {
+   "code": "35100000-5",
+   "level": "group",
+   "name_en": "Emergency and security equipment",
+   "name_el": "Εξοπλισμός εκτάκτου ανάγκης και ασφαλείας",
+   "parent": "35000000"
+  },
+  "35110000": {
+   "code": "35110000-8",
+   "level": "class",
+   "name_en": "Firefighting, rescue and safety equipment",
+   "name_el": "Εξοπλισμός πυρόσβεσης, διάσωσης και ασφαλείας",
+   "parent": "35100000"
+  },
+  "35111000": {
+   "code": "35111000-5",
+   "level": "category",
+   "name_en": "Firefighting equipment",
+   "name_el": "Πυροσβεστικός εξοπλισμός",
+   "parent": "35110000"
+  },
+  "44000000": {
+   "code": "44000000-0",
+   "level": "division",
+   "name_en": "Construction structures and materials; auxiliary products to construction (except electric apparatus)",
+   "name_el": "Δομές και υλικά κατασκευαστικών έργων· βοηθήματα κατασκευαστικών έργων (εκτός από ηλεκτρικές συσκευές)",
+   "parent": null
+  },
+  "44100000": {
+   "code": "44100000-1",
+   "level": "group",
+   "name_en": "Construction materials and associated items",
+   "name_el": "Κατασκευαστικά υλικά και παρόμοια είδη",
+   "parent": "44000000"
+  },
+  "44110000": {
+   "code": "44110000-4",
+   "level": "class",
+   "name_en": "Construction materials",
+   "name_el": "Κατασκευαστικά υλικά",
+   "parent": "44100000"
+  },
+  "44114000": {
+   "code": "44114000-2",
+   "level": "category",
+   "name_en": "Concrete",
+   "name_el": "Σκυρόδεμα",
+   "parent": "44110000"
+  },
+  "44114200": {
+   "code": "44114200-4",
+   "level": "code",
+   "name_en": "Concrete products",
+   "name_el": "Προϊόντα σκυροδέματος",
+   "parent": "44114000"
+  },
+  "44140000": {
+   "code": "44140000-3",
+   "level": "class",
+   "name_en": "Products related to construction materials",
+   "name_el": "Προϊόντα σε σχέση με κατασκευαστικά υλικά",
+   "parent": "44100000"
+  },
+  "44141000": {
+   "code": "44141000-0",
+   "level": "category",
+   "name_en": "Conduit",
+   "name_el": "Αγωγοί",
+   "parent": "44140000"
+  },
+  "44170000": {
+   "code": "44170000-2",
+   "level": "class",
+   "name_en": "Plates, sheets, strip and foil related to construction materials",
+   "name_el": "Πλάκες, φύλλα, ταινίες και λεπτά φύλλα σε σχέση με κατασκευαστικά υλικά",
+   "parent": "44100000"
+  },
+  "44175000": {
+   "code": "44175000-7",
+   "level": "category",
+   "name_en": "Panels",
+   "name_el": "Φατνώματα",
+   "parent": "44170000"
+  },
+  "44200000": {
+   "code": "44200000-2",
+   "level": "group",
+   "name_en": "Structural products",
+   "name_el": "Δομικά υλικά",
+   "parent": "44000000"
+  },
+  "44210000": {
+   "code": "44210000-5",
+   "level": "class",
+   "name_en": "Structures and parts of structures",
+   "name_el": "Κατασκευές και μέρη κατασκευών",
+   "parent": "44200000"
+  },
+  "44211000": {
+   "code": "44211000-2",
+   "level": "category",
+   "name_en": "Prefabricated buildings",
+   "name_el": "Προκατασκευασμένα κτίρια",
+   "parent": "44210000"
+  },
+  "44230000": {
+   "code": "44230000-1",
+   "level": "class",
+   "name_en": "Builders' carpentry",
+   "name_el": "Δομικά στοιχεία για χρήση σε οικοδομικές εργασίες",
+   "parent": "44200000"
+  },
+  "44233000": {
+   "code": "44233000-2",
+   "level": "category",
+   "name_en": "Staircases",
+   "name_el": "Κλίμακες",
+   "parent": "44230000"
+  },
+  "44400000": {
+   "code": "44400000-4",
+   "level": "group",
+   "name_en": "Miscellaneous fabricated products and related items",
+   "name_el": "Διάφορα κατασκευασμένα προϊόντα και συναφή είδη",
+   "parent": "44000000"
+  },
+  "44410000": {
+   "code": "44410000-7",
+   "level": "class",
+   "name_en": "Articles for the bathroom and kitchen",
+   "name_el": "Είδη μπάνιου και κουζίνας",
+   "parent": "44400000"
+  },
+  "44411000": {
+   "code": "44411000-4",
+   "level": "category",
+   "name_en": "Sanitary ware",
+   "name_el": "Είδη εγκαταστάσεων υγιεινής",
+   "parent": "44410000"
+  },
+  "44411100": {
+   "code": "44411100-5",
+   "level": "code",
+   "name_en": "Taps",
+   "name_el": "Κρουνοί",
+   "parent": "44411000"
+  },
+  "44480000": {
+   "code": "44480000-8",
+   "level": "class",
+   "name_en": "Miscellaneous fire-protection equipment",
+   "name_el": "Ποικίλος εξοπλισμός πυροπροστασίας",
+   "parent": "44400000"
+  },
+  "44482000": {
+   "code": "44482000-2",
+   "level": "category",
+   "name_en": "Fire-protection devices",
+   "name_el": "Συσκευές πυροπροστασίας",
+   "parent": "44480000"
+  },
+  "44482200": {
+   "code": "44482200-4",
+   "level": "code",
+   "name_en": "Fire hydrants",
+   "name_el": "Κρουνοί υδροληψίας για πυρόσβεση",
+   "parent": "44482000"
+  },
+  "44600000": {
+   "code": "44600000-6",
+   "level": "group",
+   "name_en": "Tanks, reservoirs and containers; central-heating radiators and boilers",
+   "name_el": "Δεξαμενές, ταμιευτήρες και δοχεία· σώματα καλοριφέρ και λέβητες",
+   "parent": "44000000"
+  },
+  "44610000": {
+   "code": "44610000-9",
+   "level": "class",
+   "name_en": "Tanks, reservoirs, containers and pressure vessels",
+   "name_el": "Δεξαμενές, ταμιευτήρες, δοχεία και δοχεία υπό πίεση",
+   "parent": "44600000"
+  },
+  "44611000": {
+   "code": "44611000-6",
+   "level": "category",
+   "name_en": "Tanks",
+   "name_el": "Δεξαμενές",
+   "parent": "44610000"
+  },
+  "44611500": {
+   "code": "44611500-1",
+   "level": "code",
+   "name_en": "Water tanks",
+   "name_el": "Δεξαμενές νερού",
+   "parent": "44611000"
+  },
+  "44900000": {
+   "code": "44900000-9",
+   "level": "group",
+   "name_en": "Stone for construction, limestone, gypsum and slate",
+   "name_el": "Λίθοι για κατασκευές, ασβεστόλιθος, γύψος και σχιστόλιθος",
+   "parent": "44000000"
+  },
+  "44910000": {
+   "code": "44910000-2",
+   "level": "class",
+   "name_en": "Stone for construction",
+   "name_el": "Λίθοι για κατασκευές",
+   "parent": "44900000"
+  },
+  "45000000": {
+   "code": "45000000-7",
+   "level": "division",
+   "name_en": "Construction work",
+   "name_el": "Κατασκευαστικές εργασίες",
+   "parent": null
+  },
+  "45100000": {
+   "code": "45100000-8",
+   "level": "group",
+   "name_en": "Site preparation work",
+   "name_el": "Εργασίες προπαρασκευής εργοταξίων",
+   "parent": "45000000"
+  },
+  "45110000": {
+   "code": "45110000-1",
+   "level": "class",
+   "name_en": "Building demolition and wrecking work and earthmoving work",
+   "name_el": "Εργασίες κατεδάφισης και αποξήλωσης εγκαταστάσεων κτιρίων και εργασίες μετακίνησης γαιών",
+   "parent": "45100000"
+  },
+  "45111000": {
+   "code": "45111000-8",
+   "level": "category",
+   "name_en": "Demolition, site preparation and clearance work",
+   "name_el": "Εργασίες κατεδάφισης, διευθέτησης και εκκαθάρισης εργοταξίου",
+   "parent": "45110000"
+  },
+  "45111210": {
+   "code": "45111210-3",
+   "level": "code",
+   "name_en": "Blasting and associated rock-removal work",
+   "name_el": "Εργασίες ανατίναξης και εκβραχισμού",
+   "parent": "45111000"
+  },
+  "45111212": {
+   "code": "45111212-7",
+   "level": "code",
+   "name_en": "Rock-removal work",
+   "name_el": "Εργασίες εκβραχισμού",
+   "parent": "45111000"
+  },
+  "45111220": {
+   "code": "45111220-6",
+   "level": "code",
+   "name_en": "Scrub-removal work",
+   "name_el": "Εργασίες απομάκρυνσης μπάζων",
+   "parent": "45111000"
+  },
+  "45111230": {
+   "code": "45111230-9",
+   "level": "code",
+   "name_en": "Ground-stabilisation work",
+   "name_el": "Εργασίες σταθεροποίησης εδάφους",
+   "parent": "45111000"
+  },
+  "45111240": {
+   "code": "45111240-2",
+   "level": "code",
+   "name_en": "Ground-drainage work",
+   "name_el": "Εργασίες αποστράγγισης εδάφους",
+   "parent": "45111000"
+  },
+  "45112000": {
+   "code": "45112000-5",
+   "level": "category",
+   "name_en": "Excavating and earthmoving work",
+   "name_el": "Εργασίες εκσκαφών και μετακίνησης γαιών",
+   "parent": "45110000"
+  },
+  "45112100": {
+   "code": "45112100-6",
+   "level": "code",
+   "name_en": "Trench-digging work",
+   "name_el": "Εργασίες διάνοιξης τάφρων",
+   "parent": "45112000"
+  },
+  "45112320": {
+   "code": "45112320-4",
+   "level": "code",
+   "name_en": "Land-reclamation work",
+   "name_el": "Εργασίες αποκατάστασης εκτάσεων γης",
+   "parent": "45112000"
+  },
+  "45112330": {
+   "code": "45112330-7",
+   "level": "code",
+   "name_en": "Site-reclamation work",
+   "name_el": "Εργασίες αποκατάστασης περιοχής",
+   "parent": "45112000"
+  },
+  "45112400": {
+   "code": "45112400-9",
+   "level": "code",
+   "name_en": "Excavating work",
+   "name_el": "Εργασίες εκσκαφών",
+   "parent": "45112000"
+  },
+  "45112420": {
+   "code": "45112420-5",
+   "level": "code",
+   "name_en": "Basement excavation work",
+   "name_el": "Εργασίες εκσκαφής θεμελίων",
+   "parent": "45112000"
+  },
+  "45112500": {
+   "code": "45112500-0",
+   "level": "code",
+   "name_en": "Earthmoving work",
+   "name_el": "Εργασίες μετακίνησης γαιών",
+   "parent": "45112000"
+  },
+  "45112600": {
+   "code": "45112600-1",
+   "level": "code",
+   "name_en": "Cut and fill",
+   "name_el": "Εργασίες αφαίρεσης και πλήρωσης γαιών",
+   "parent": "45112000"
+  },
+  "45112700": {
+   "code": "45112700-2",
+   "level": "code",
+   "name_en": "Landscaping work",
+   "name_el": "Εργασίες διαμόρφωσης τοπίου",
+   "parent": "45112000"
+  },
+  "45200000": {
+   "code": "45200000-9",
+   "level": "group",
+   "name_en": "Works for complete or part construction and civil engineering work",
+   "name_el": "Εργασίες για ολόκληρες κατασκευές ή μέρη κατασκευών και έργα πολιτικού μηχανικού",
+   "parent": "45000000"
+  },
+  "45210000": {
+   "code": "45210000-2",
+   "level": "class",
+   "name_en": "Building construction work",
+   "name_el": "Εργασίες κατασκευής κτιρίων",
+   "parent": "45200000"
+  },
+  "45213000": {
+   "code": "45213000-3",
+   "level": "category",
+   "name_en": "Construction work for commercial buildings, warehouses and industrial buildings, buildings relating to transport",
+   "name_el": "Κατασκευαστικές εργασίες για εμπορικά κτίρια, αποθήκες και βιομηχανικά κτίρια, για κτίρια σχετιζόμενα με τις μεταφορές",
+   "parent": "45210000"
+  },
+  "45213316": {
+   "code": "45213316-1",
+   "level": "code",
+   "name_en": "Installation works of walkways",
+   "name_el": "Κατασκευαστικές εργασίες για διαδρόμους",
+   "parent": "45213000"
+  },
+  "45220000": {
+   "code": "45220000-5",
+   "level": "class",
+   "name_en": "Engineering works and construction works",
+   "name_el": "Εργασίες μηχανικού και δομικές εργασίες",
+   "parent": "45200000"
+  },
+  "45221000": {
+   "code": "45221000-2",
+   "level": "category",
+   "name_en": "Construction work for bridges and tunnels, shafts and subways",
+   "name_el": "Κατασκευαστικές εργασίες για γέφυρες και σήραγγες, φρέατα και υπόγειες διαβάσεις",
+   "parent": "45220000"
+  },
+  "45221220": {
+   "code": "45221220-0",
+   "level": "code",
+   "name_en": "Culverts",
+   "name_el": "Οχετός",
+   "parent": "45221000"
+  },
+  "45221230": {
+   "code": "45221230-3",
+   "level": "code",
+   "name_en": "Shafts",
+   "name_el": "Φρέατα",
+   "parent": "45221000"
+  },
+  "45223000": {
+   "code": "45223000-6",
+   "level": "category",
+   "name_en": "Structures construction work",
+   "name_el": "Κατασκευαστικές εργασίες για δομικές κατασκευές",
+   "parent": "45220000"
+  },
+  "45223100": {
+   "code": "45223100-7",
+   "level": "code",
+   "name_en": "Assembly of metal structures",
+   "name_el": "Συναρμολόγηση μεταλλικών δομικών κατασκευών",
+   "parent": "45223000"
+  },
+  "45223110": {
+   "code": "45223110-0",
+   "level": "code",
+   "name_en": "Installation of metal structures",
+   "name_el": "Τοποθέτηση μεταλλικών δομικών κατασκευών",
+   "parent": "45223000"
+  },
+  "45223500": {
+   "code": "45223500-1",
+   "level": "code",
+   "name_en": "Reinforced-concrete structures",
+   "name_el": "Κατασκευές από οπλισμένο σκυρόδεμα",
+   "parent": "45223000"
+  },
+  "45230000": {
+   "code": "45230000-8",
+   "level": "class",
+   "name_en": "Construction work for pipelines, communication and power lines, for highways, roads, airfields and railways; flatwork",
+   "name_el": "Κατασκευαστικές εργασίες για αγωγούς μεγάλων αποστάσεων, καλώδια επικοινωνιών και μεταφοράς ενέργειας, αυτοκινητόδρομους, οδούς, αεροδρόμια και σιδηρόδρομους· εργασίες διάστρωσης",
+   "parent": "45200000"
+  },
+  "45231000": {
+   "code": "45231000-5",
+   "level": "category",
+   "name_en": "Construction work for pipelines, communication and power lines",
+   "name_el": "Κατασκευαστικές εργασίες για αγωγούς μεγάλων αποστάσεων, καλώδια επικοινωνιών και μεταφοράς ενέργειας",
+   "parent": "45230000"
+  },
+  "45231110": {
+   "code": "45231110-9",
+   "level": "code",
+   "name_en": "Pipelaying construction work",
+   "name_el": "Κατασκευαστικές εργασίες για τοποθέτηση αγωγών",
+   "parent": "45231000"
+  },
+  "45231300": {
+   "code": "45231300-8",
+   "level": "code",
+   "name_en": "Construction work for water and sewage pipelines",
+   "name_el": "Κατασκευαστικές εργασίες για αγωγούς ύδρευσης και αποχέτευσης",
+   "parent": "45231000"
+  },
+  "45232000": {
+   "code": "45232000-2",
+   "level": "category",
+   "name_en": "Ancillary works for pipelines and cables",
+   "name_el": "Επικουρικά έργα για αγωγούς μεγάλων αποστάσων και καλωδιώσεις",
+   "parent": "45230000"
+  },
+  "45232120": {
+   "code": "45232120-9",
+   "level": "code",
+   "name_en": "Irrigation works",
+   "name_el": "Αρδευτικά έργα",
+   "parent": "45232000"
+  },
+  "45232130": {
+   "code": "45232130-2",
+   "level": "code",
+   "name_en": "Storm-water piping construction work",
+   "name_el": "Κατασκευαστικές εργασίες για σωληνώσεις ομβρίων υδάτων",
+   "parent": "45232000"
+  },
+  "45232150": {
+   "code": "45232150-8",
+   "level": "code",
+   "name_en": "Works related to water-distribution pipelines",
+   "name_el": "Εργασίες σχετιζόμενες με τους αγωγούς διανομής νερού",
+   "parent": "45232000"
+  },
+  "45232152": {
+   "code": "45232152-2",
+   "level": "code",
+   "name_en": "Pumping station construction work",
+   "name_el": "Κατασκευαστικές εργασίες για αντλιοστάσια",
+   "parent": "45232000"
+  },
+  "45232400": {
+   "code": "45232400-6",
+   "level": "code",
+   "name_en": "Sewer construction work",
+   "name_el": "Έργα κατασκευής αποχετεύσεων",
+   "parent": "45232000"
+  },
+  "45232452": {
+   "code": "45232452-5",
+   "level": "code",
+   "name_en": "Drainage works",
+   "name_el": "Εργασίες αποστράγγισης",
+   "parent": "45232000"
+  },
+  "45232454": {
+   "code": "45232454-9",
+   "level": "code",
+   "name_en": "Rain-water basin construction work",
+   "name_el": "Κατασκευαστικές εργασίες για λεκάνες συλλογής ομβρίων υδάτων",
+   "parent": "45232000"
+  },
+  "45233000": {
+   "code": "45233000-9",
+   "level": "category",
+   "name_en": "Construction, foundation and surface works for highways, roads",
+   "name_el": "Κατασκευαστικά έργα, έργα θεμελίωσης και επιφανειακά έργα σε αυτοκινητοδρόμους και οδούς",
+   "parent": "45230000"
+  },
+  "45233120": {
+   "code": "45233120-6",
+   "level": "code",
+   "name_en": "Road construction works",
+   "name_el": "Έργα οδοποιίας",
+   "parent": "45233000"
+  },
+  "45233141": {
+   "code": "45233141-9",
+   "level": "code",
+   "name_en": "Road-maintenance works",
+   "name_el": "Εργασίες συντήρησης οδών",
+   "parent": "45233000"
+  },
+  "45233142": {
+   "code": "45233142-6",
+   "level": "code",
+   "name_en": "Road-repair works",
+   "name_el": "Εργασίες επισκευής οδών",
+   "parent": "45233000"
+  },
+  "45233160": {
+   "code": "45233160-8",
+   "level": "code",
+   "name_en": "Paths and other metalled surfaces",
+   "name_el": "Δίοδοι προσπέλασης και λοιπές μη ασφαλτοστρωμένες επιφάνειες",
+   "parent": "45233000"
+  },
+  "45233161": {
+   "code": "45233161-5",
+   "level": "code",
+   "name_en": "Footpath construction work",
+   "name_el": "Κατασκευαστικές εργασίες για διόδους προσπέλασης",
+   "parent": "45233000"
+  },
+  "45233200": {
+   "code": "45233200-1",
+   "level": "code",
+   "name_en": "Various surface works",
+   "name_el": "Διάφορες εργασίες επικάλυψης του οδοστρώματος",
+   "parent": "45233000"
+  },
+  "45233220": {
+   "code": "45233220-7",
+   "level": "code",
+   "name_en": "Surface work for roads",
+   "name_el": "Επιφανειακές εργασίες οδοστρώματος οδών",
+   "parent": "45233000"
+  },
+  "45233222": {
+   "code": "45233222-1",
+   "level": "code",
+   "name_en": "Paving and asphalting works",
+   "name_el": "Κατασκευαστικές εργασίες για έργα οδοστρωσίας και ασφαλτόστρωσης",
+   "parent": "45233000"
+  },
+  "45233250": {
+   "code": "45233250-6",
+   "level": "code",
+   "name_en": "Surfacing work except for roads",
+   "name_el": "Εργασίες επίστρωσης εκτός από οδοστρώσεις",
+   "parent": "45233000"
+  },
+  "45233251": {
+   "code": "45233251-3",
+   "level": "code",
+   "name_en": "Resurfacing works",
+   "name_el": "Εργασίες επαναδιάστρωσης",
+   "parent": "45233000"
+  },
+  "45233290": {
+   "code": "45233290-8",
+   "level": "code",
+   "name_en": "Installation of road signs",
+   "name_el": "Εγκατάσταση οδικών πινακίδων",
+   "parent": "45233000"
+  },
+  "45233291": {
+   "code": "45233291-5",
+   "level": "code",
+   "name_en": "Installation of bollards",
+   "name_el": "Εγκατάσταση μικρών οδικών στύλων",
+   "parent": "45233000"
+  },
+  "45233294": {
+   "code": "45233294-6",
+   "level": "code",
+   "name_en": "Installation of road signals",
+   "name_el": "Εγκατάσταση οδικών σημάτων",
+   "parent": "45233000"
+  },
+  "45234000": {
+   "code": "45234000-6",
+   "level": "category",
+   "name_en": "Construction work for railways and cable transport systems",
+   "name_el": "Κατασκευαστικές εργασίες για σιδηρόδρομους και συστήματα καλωδιακής έλξης",
+   "parent": "45230000"
+  },
+  "45234140": {
+   "code": "45234140-9",
+   "level": "code",
+   "name_en": "Level crossing construction works",
+   "name_el": "Κατασκευαστικές εργασίες για ισόπεδες διαβάσεις",
+   "parent": "45234000"
+  },
+  "45236000": {
+   "code": "45236000-0",
+   "level": "category",
+   "name_en": "Flatwork",
+   "name_el": "Εργασίες διάστρωσης",
+   "parent": "45230000"
+  },
+  "45240000": {
+   "code": "45240000-1",
+   "level": "class",
+   "name_en": "Construction work for water projects",
+   "name_el": "Κατασκευαστικές εργασίες για υδραυλικά έργα",
+   "parent": "45200000"
+  },
+  "45243000": {
+   "code": "45243000-2",
+   "level": "category",
+   "name_en": "Coastal-defence works",
+   "name_el": "Παράκτια αμυντικά έργα",
+   "parent": "45240000"
+  },
+  "45243510": {
+   "code": "45243510-0",
+   "level": "code",
+   "name_en": "Embankment works",
+   "name_el": "Εργασίες επιχωμάτωσης",
+   "parent": "45243000"
+  },
+  "45246000": {
+   "code": "45246000-3",
+   "level": "category",
+   "name_en": "River regulation and flood control works",
+   "name_el": "Έργα ρύθμισης ροής ποταμού και αντιπλημμυρικά έργα",
+   "parent": "45240000"
+  },
+  "45246400": {
+   "code": "45246400-7",
+   "level": "code",
+   "name_en": "Flood-prevention works",
+   "name_el": "Αντιπλημμυρικά έργα",
+   "parent": "45246000"
+  },
+  "45246410": {
+   "code": "45246410-0",
+   "level": "code",
+   "name_en": "Flood-defences maintenance works",
+   "name_el": "Συντήρηση αντιπλημμυρικών έργων",
+   "parent": "45246000"
+  },
+  "45247000": {
+   "code": "45247000-0",
+   "level": "category",
+   "name_en": "Construction work for dams, canals, irrigation channels and aqueducts",
+   "name_el": "Κατασκευαστικές εργασίες φραγμάτων, διωρύγων, αρδευτικών καναλιών και υδραγωγείων",
+   "parent": "45240000"
+  },
+  "45247130": {
+   "code": "45247130-0",
+   "level": "code",
+   "name_en": "Aqueduct construction work",
+   "name_el": "Κατασκευαστικές εργασίες για υδραγωγεία",
+   "parent": "45247000"
+  },
+  "45247200": {
+   "code": "45247200-2",
+   "level": "code",
+   "name_en": "Construction work for dams and similar fixed structures",
+   "name_el": "Κατασκευαστικές εργασίες φραγμάτων και παρόμοιων μόνιμων κατασκευών",
+   "parent": "45247000"
+  },
+  "45247210": {
+   "code": "45247210-5",
+   "level": "code",
+   "name_en": "Dam construction work",
+   "name_el": "Κατασκευαστικές εργασίες για φράγματα",
+   "parent": "45247000"
+  },
+  "45247211": {
+   "code": "45247211-2",
+   "level": "code",
+   "name_en": "Dam wall construction work",
+   "name_el": "Κατασκευαστικές εργασίες για τοίχους φραγμάτων",
+   "parent": "45247000"
+  },
+  "45247212": {
+   "code": "45247212-9",
+   "level": "code",
+   "name_en": "Dam-reinforcement works",
+   "name_el": "Εργασίες ενίσχυσης φράγματος",
+   "parent": "45247000"
+  },
+  "45247220": {
+   "code": "45247220-8",
+   "level": "code",
+   "name_en": "Weir construction work",
+   "name_el": "Κατασκευαστικές εργασίες για μικρά ποτάμια φράγματα",
+   "parent": "45247000"
+  },
+  "45247230": {
+   "code": "45247230-1",
+   "level": "code",
+   "name_en": "Dyke construction work",
+   "name_el": "Κατασκευαστικές εργασίες για αντιπλημμυρικά αναχώματα",
+   "parent": "45247000"
+  },
+  "45247240": {
+   "code": "45247240-4",
+   "level": "code",
+   "name_en": "Static barrage construction work",
+   "name_el": "Κατασκευαστικές εργασίες για στατικά φράγματα",
+   "parent": "45247000"
+  },
+  "45247270": {
+   "code": "45247270-3",
+   "level": "code",
+   "name_en": "Reservoir construction works",
+   "name_el": "Κατασκευαστικές εργασίες δεξαμενής",
+   "parent": "45247000"
+  },
+  "45248000": {
+   "code": "45248000-7",
+   "level": "category",
+   "name_en": "Construction work for hydro-mechanical structures",
+   "name_el": "Κατασκευαστικές εργασίες υδραυλικών-μηχανολογικών κατασκευών",
+   "parent": "45240000"
+  },
+  "45250000": {
+   "code": "45250000-4",
+   "level": "class",
+   "name_en": "Construction works for plants, mining and manufacturing and for buildings relating to the oil and gas industry",
+   "name_el": "Κατασκευαστικές εργασίες για μονάδες ηλεκτροπαραγωγής, καθώς και για τον εξορυκτικό και μεταποιητικό τομέα και για κτίρια βιομηχανίας πετρελαίου και αερίου",
+   "parent": "45200000"
+  },
+  "45259000": {
+   "code": "45259000-7",
+   "level": "category",
+   "name_en": "Repair and maintenance of plant",
+   "name_el": "Επισκευή και συντήρηση εγκαταστάσεων",
+   "parent": "45250000"
+  },
+  "45260000": {
+   "code": "45260000-7",
+   "level": "class",
+   "name_en": "Roof works and other special trade construction works",
+   "name_el": "Στεγαστικές εργασίες και άλλες κατασκευαστικές εργασίες ειδικής φύσης",
+   "parent": "45200000"
+  },
+  "45261000": {
+   "code": "45261000-4",
+   "level": "category",
+   "name_en": "Erection and related works of roof frames and coverings",
+   "name_el": "Οικοδομικές και συναφείς εργασίες επικάλυψης στεγών και κατασκευής διαχωριστικών πλαισίων",
+   "parent": "45260000"
+  },
+  "45261100": {
+   "code": "45261100-5",
+   "level": "code",
+   "name_en": "Roof-framing work",
+   "name_el": "Εργασίες κατασκευής πλαισίων στεγών",
+   "parent": "45261000"
+  },
+  "45261210": {
+   "code": "45261210-9",
+   "level": "code",
+   "name_en": "Roof-covering work",
+   "name_el": "Εργασίες κάλυψης στέγης",
+   "parent": "45261000"
+  },
+  "45261410": {
+   "code": "45261410-1",
+   "level": "code",
+   "name_en": "Roof insulation work",
+   "name_el": "Εργασίες μόνωσης στέγης",
+   "parent": "45261000"
+  },
+  "45262000": {
+   "code": "45262000-1",
+   "level": "category",
+   "name_en": "Special trade construction works other than roof works",
+   "name_el": "Κατασκευαστικές εργασίες ειδικής φύσης εκτός από εργασίες στέγης",
+   "parent": "45260000"
+  },
+  "45262100": {
+   "code": "45262100-2",
+   "level": "code",
+   "name_en": "Scaffolding work",
+   "name_el": "Εργασίες ικριωμάτων",
+   "parent": "45262000"
+  },
+  "45262210": {
+   "code": "45262210-6",
+   "level": "code",
+   "name_en": "Foundation work",
+   "name_el": "Εργασίες θεμελιώσεων",
+   "parent": "45262000"
+  },
+  "45262300": {
+   "code": "45262300-4",
+   "level": "code",
+   "name_en": "Concrete work",
+   "name_el": "Εργασίες σκυροδέματος",
+   "parent": "45262000"
+  },
+  "45262311": {
+   "code": "45262311-4",
+   "level": "code",
+   "name_en": "Concrete carcassing work",
+   "name_el": "Εργασίες καλουπώματος για την έγχυση σκυροδέματος",
+   "parent": "45262000"
+  },
+  "45262320": {
+   "code": "45262320-0",
+   "level": "code",
+   "name_en": "Screed works",
+   "name_el": "Εργασίες επικάλυψης δαπέδων",
+   "parent": "45262000"
+  },
+  "45262330": {
+   "code": "45262330-3",
+   "level": "code",
+   "name_en": "Concrete repair work",
+   "name_el": "Εργασίες επισκευής κατασκευών σκυροδέματος",
+   "parent": "45262000"
+  },
+  "45262350": {
+   "code": "45262350-9",
+   "level": "code",
+   "name_en": "Unreinforced-concrete work",
+   "name_el": "Εργασίες μη οπλισμένου σκυροδέματος",
+   "parent": "45262000"
+  },
+  "45262360": {
+   "code": "45262360-2",
+   "level": "code",
+   "name_en": "Cementing work",
+   "name_el": "Εργασίες με τσιμεντοκονίαμα",
+   "parent": "45262000"
+  },
+  "45262370": {
+   "code": "45262370-5",
+   "level": "code",
+   "name_en": "Concrete-coating work",
+   "name_el": "Εργασίες επίχρισης σκυροδέματος",
+   "parent": "45262000"
+  },
+  "45262420": {
+   "code": "45262420-1",
+   "level": "code",
+   "name_en": "Structural steel erection work for structures",
+   "name_el": "Εργασίες ανέγερσης χαλύβδινων δομικών μερών για κατασκευές",
+   "parent": "45262000"
+  },
+  "45262510": {
+   "code": "45262510-9",
+   "level": "code",
+   "name_en": "Stonework",
+   "name_el": "Λιθοκατασκευές",
+   "parent": "45262000"
+  },
+  "45262522": {
+   "code": "45262522-6",
+   "level": "code",
+   "name_en": "Masonry work",
+   "name_el": "Εργασίες τοιχοποιίας",
+   "parent": "45262000"
+  },
+  "45262640": {
+   "code": "45262640-9",
+   "level": "code",
+   "name_en": "Environmental improvement works",
+   "name_el": "Έργα αναβάθμισης περιβάλλοντος",
+   "parent": "45262000"
+  },
+  "45300000": {
+   "code": "45300000-0",
+   "level": "group",
+   "name_en": "Building installation work",
+   "name_el": "Εργασίες κτιριακών εγκαταστάσεων",
+   "parent": "45000000"
+  },
+  "45310000": {
+   "code": "45310000-3",
+   "level": "class",
+   "name_en": "Electrical installation work",
+   "name_el": "Εργασίες ηλεκτρολογικών εγκαταστάσεων",
+   "parent": "45300000"
+  },
+  "45312000": {
+   "code": "45312000-7",
+   "level": "category",
+   "name_en": "Alarm system and antenna installation work",
+   "name_el": "Εργασίες εγκατάστασης συστημάτων συναγερμού και κεραιών",
+   "parent": "45310000"
+  },
+  "45312311": {
+   "code": "45312311-0",
+   "level": "code",
+   "name_en": "Lightning-conductor installation work",
+   "name_el": "Εργασίες εγκατάστασης αλεξικέραυνου",
+   "parent": "45312000"
+  },
+  "45320000": {
+   "code": "45320000-6",
+   "level": "class",
+   "name_en": "Insulation work",
+   "name_el": "Εργασίες μόνωσης",
+   "parent": "45300000"
+  },
+  "45340000": {
+   "code": "45340000-2",
+   "level": "class",
+   "name_en": "Fencing, railing and safety equipment installation work",
+   "name_el": "Εργασίες τοποθέτησης περιφράξεων, κιγκλιδωμάτων και εξοπλισμού ασφαλείας",
+   "parent": "45300000"
+  },
+  "45341000": {
+   "code": "45341000-9",
+   "level": "category",
+   "name_en": "Erection of railings",
+   "name_el": "Τοποθέτηση κιγκλιδωμάτων",
+   "parent": "45340000"
+  },
+  "45343000": {
+   "code": "45343000-3",
+   "level": "category",
+   "name_en": "Fire-prevention installation works",
+   "name_el": "Εργασίες εγκαταστάσεων πρόληψης πυρκαγιάς",
+   "parent": "45340000"
+  },
+  "45343100": {
+   "code": "45343100-4",
+   "level": "code",
+   "name_en": "Fireproofing work",
+   "name_el": "Εργασίες πυροπροστασίας",
+   "parent": "45343000"
+  },
+  "45400000": {
+   "code": "45400000-1",
+   "level": "group",
+   "name_en": "Building completion work",
+   "name_el": "Εργασίες αποπεράτωσης κτιρίων",
+   "parent": "45000000"
+  },
+  "45420000": {
+   "code": "45420000-7",
+   "level": "class",
+   "name_en": "Joinery and carpentry installation work",
+   "name_el": "Εργασίες τοποθέτησης στοιχείων από ξύλο",
+   "parent": "45400000"
+  },
+  "45421000": {
+   "code": "45421000-4",
+   "level": "category",
+   "name_en": "Joinery work",
+   "name_el": "Εργασίες ξυλουργικής",
+   "parent": "45420000"
+  },
+  "45421100": {
+   "code": "45421100-5",
+   "level": "code",
+   "name_en": "Installation of doors and windows and related components",
+   "name_el": "Τοποθέτηση θυρών, παραθύρων και συναφών στοιχείων",
+   "parent": "45421000"
+  },
+  "45430000": {
+   "code": "45430000-0",
+   "level": "class",
+   "name_en": "Floor and wall covering work",
+   "name_el": "Εργασίες επένδυσης δαπέδων και τοίχων",
+   "parent": "45400000"
+  },
+  "45432000": {
+   "code": "45432000-4",
+   "level": "category",
+   "name_en": "Floor-laying and covering, wall-covering and wall-papering work",
+   "name_el": "Εργασίες διάστρωσης και επένδυσης δαπέδων, επένδυσης τοίχων και τοποθέτησης χαρτιού ταπετσαρίας",
+   "parent": "45430000"
+  },
+  "45432114": {
+   "code": "45432114-6",
+   "level": "code",
+   "name_en": "Wood flooring work",
+   "name_el": "Τοποθέτηση ξύλινων δαπέδων",
+   "parent": "45432000"
+  },
+  "45440000": {
+   "code": "45440000-3",
+   "level": "class",
+   "name_en": "Painting and glazing work",
+   "name_el": "Εργασίες χρωματισμών και υαλοτεχνικές εργασίες",
+   "parent": "45400000"
+  },
+  "45441000": {
+   "code": "45441000-0",
+   "level": "category",
+   "name_en": "Glazing work",
+   "name_el": "Υαλοτεχνικές εργασίες",
+   "parent": "45440000"
+  },
+  "45442000": {
+   "code": "45442000-7",
+   "level": "category",
+   "name_en": "Application work of protective coatings",
+   "name_el": "Εργασίες εφαρμογής προστατευτικών επικαλύψεων",
+   "parent": "45440000"
+  },
+  "45442100": {
+   "code": "45442100-8",
+   "level": "code",
+   "name_en": "Painting work",
+   "name_el": "Εργασίες βαφής",
+   "parent": "45442000"
+  },
+  "45442120": {
+   "code": "45442120-4",
+   "level": "code",
+   "name_en": "Painting and protective-coating work of structures",
+   "name_el": "Εργασίες βαφής και προστατευτικής επικάλυψης τεχνικών κατασκευών",
+   "parent": "45442000"
+  },
+  "45450000": {
+   "code": "45450000-6",
+   "level": "class",
+   "name_en": "Other building completion work",
+   "name_el": "Άλλες εργασίες αποπεράτωσης κτιρίων",
+   "parent": "45400000"
+  },
+  "45453000": {
+   "code": "45453000-7",
+   "level": "category",
+   "name_en": "Overhaul and refurbishment work",
+   "name_el": "Εργασίες γενικής επισκευής και ανακαίνισης",
+   "parent": "45450000"
+  },
+  "45453100": {
+   "code": "45453100-8",
+   "level": "code",
+   "name_en": "Refurbishment work",
+   "name_el": "Εργασίες αποκατάστασης",
+   "parent": "45453000"
+  },
+  "50000000": {
+   "code": "50000000-5",
+   "level": "division",
+   "name_en": "Repair and maintenance services",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης",
+   "parent": null
+  },
+  "50400000": {
+   "code": "50400000-9",
+   "level": "group",
+   "name_en": "Repair and maintenance services of medical and precision equipment",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης ιατρικού εξοπλισμού και εξοπλισμού ακριβείας",
+   "parent": "50000000"
+  },
+  "50410000": {
+   "code": "50410000-2",
+   "level": "class",
+   "name_en": "Repair and maintenance services of measuring, testing and checking apparatus",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης συσκευών μέτρησης, δοκιμών και ελέγχου",
+   "parent": "50400000"
+  },
+  "50413000": {
+   "code": "50413000-3",
+   "level": "category",
+   "name_en": "Repair and maintenance services of checking apparatus",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης συσκευών ελέγχου",
+   "parent": "50410000"
+  },
+  "50413200": {
+   "code": "50413200-5",
+   "level": "code",
+   "name_en": "Repair and maintenance services of firefighting equipment",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης εξοπλισμού πυρόσβεσης",
+   "parent": "50413000"
+  },
+  "50500000": {
+   "code": "50500000-0",
+   "level": "group",
+   "name_en": "Repair and maintenance services for pumps, valves, taps and metal containers and machinery",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης αντλιών, δικλείδων, στροφίγγων, μεταλλικών δοχείων και μηχανημάτων",
+   "parent": "50000000"
+  },
+  "50510000": {
+   "code": "50510000-3",
+   "level": "class",
+   "name_en": "Repair and maintenance services of pumps, valves, taps and metal containers",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης αντλιών, δικλείδων, στροφίγγων και μεταλλικών δοχείων",
+   "parent": "50500000"
+  },
+  "50511000": {
+   "code": "50511000-0",
+   "level": "category",
+   "name_en": "Repair and maintenance services of pumps",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης αντλιών",
+   "parent": "50510000"
+  },
+  "50512000": {
+   "code": "50512000-7",
+   "level": "category",
+   "name_en": "Repair and maintenance services of valves",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης δικλείδων",
+   "parent": "50510000"
+  },
+  "50513000": {
+   "code": "50513000-4",
+   "level": "category",
+   "name_en": "Repair and maintenance services of taps",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης στροφίγγων",
+   "parent": "50510000"
+  },
+  "50514000": {
+   "code": "50514000-1",
+   "level": "category",
+   "name_en": "Repair and maintenance services of metal containers",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης μεταλλικών δοχείων",
+   "parent": "50510000"
+  },
+  "50514200": {
+   "code": "50514200-3",
+   "level": "code",
+   "name_en": "Repair and maintenance services of reservoirs",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης δεξαμενών",
+   "parent": "50514000"
+  },
+  "50514300": {
+   "code": "50514300-4",
+   "level": "code",
+   "name_en": "Sleeving repair services",
+   "name_el": "Υπηρεσίες επισκευής περιβλήματος σωληνώσεων",
+   "parent": "50514000"
+  },
+  "50700000": {
+   "code": "50700000-2",
+   "level": "group",
+   "name_en": "Repair and maintenance services of building installations",
+   "name_el": "Υπηρεσίες επισκευής και συντήρησης εγκαταστάσεων κτιρίου",
+   "parent": "50000000"
+  },
+  "51000000": {
+   "code": "51000000-9",
+   "level": "division",
+   "name_en": "Installation services (except software)",
+   "name_el": "Υπηρεσίες εγκατάστασης (εκτός από υπηρεσίες εγκατάστασης λογισμικού)",
+   "parent": null
+  },
+  "51800000": {
+   "code": "51800000-0",
+   "level": "group",
+   "name_en": "Installation services of metal containers",
+   "name_el": "Υπηρεσίες εγκατάστασης μεταλλικών δοχείων",
+   "parent": "51000000"
+  },
+  "51810000": {
+   "code": "51810000-3",
+   "level": "class",
+   "name_en": "Installation services of tanks",
+   "name_el": "Υπηρεσίες εγκατάστασης δεξαμενών",
+   "parent": "51800000"
+  },
+  "71000000": {
+   "code": "71000000-8",
+   "level": "division",
+   "name_en": "Architectural, construction, engineering and inspection services",
+   "name_el": "Υπηρεσίες αρχιτεκτονικής, κατασκευαστικών έργων, έργων πολιτικού μηχανικού και επίβλεψης",
+   "parent": null
+  },
+  "71300000": {
+   "code": "71300000-1",
+   "level": "group",
+   "name_en": "Engineering services",
+   "name_el": "Υπηρεσίες μηχανικού",
+   "parent": "71000000"
+  },
+  "71320000": {
+   "code": "71320000-7",
+   "level": "class",
+   "name_en": "Engineering design services",
+   "name_el": "Υπηρεσίες εκπόνησης τεχνικών μελετών",
+   "parent": "71300000"
+  },
+  "71330000": {
+   "code": "71330000-0",
+   "level": "class",
+   "name_en": "Miscellaneous engineering services",
+   "name_el": "Διάφορες υπηρεσίες μηχανικού",
+   "parent": "71300000"
+  },
+  "71335000": {
+   "code": "71335000-5",
+   "level": "category",
+   "name_en": "Engineering studies",
+   "name_el": "Τεχνικές μελέτες",
+   "parent": "71330000"
+  },
+  "71350000": {
+   "code": "71350000-6",
+   "level": "class",
+   "name_en": "Engineering-related scientific and technical services",
+   "name_el": "Επιστημονικές και τεχνικές υπηρεσίες που αφορούν τεχνικά έργα",
+   "parent": "71300000"
+  },
+  "71351000": {
+   "code": "71351000-3",
+   "level": "category",
+   "name_en": "Geological, geophysical and other scientific prospecting services",
+   "name_el": "Γεωλογικές, γεωφυσικές και άλλες επιστημονικές υπηρεσίες ερευνών",
+   "parent": "71350000"
+  },
+  "71351914": {
+   "code": "71351914-3",
+   "level": "code",
+   "name_en": "Archaeological services",
+   "name_el": "Αρχαιολογικές υπηρεσίες",
+   "parent": "71351000"
+  },
+  "71354000": {
+   "code": "71354000-4",
+   "level": "category",
+   "name_en": "Map-making services",
+   "name_el": "Υπηρεσίες χαρτογράφησης",
+   "parent": "71350000"
+  },
+  "71354100": {
+   "code": "71354100-5",
+   "level": "code",
+   "name_en": "Digital mapping services",
+   "name_el": "Υπηρεσίες ψηφιακής χαρτογράφησης",
+   "parent": "71354000"
+  },
+  "72000000": {
+   "code": "72000000-5",
+   "level": "division",
+   "name_en": "IT services: consulting, software development, Internet and support",
+   "name_el": "Υπηρεσίες τεχνολογίας των πληροφοριών: παροχή συμβουλών, ανάπτυξη λογισμικού, Διαδίκτυο και υποστήριξη",
+   "parent": null
+  },
+  "72200000": {
+   "code": "72200000-7",
+   "level": "group",
+   "name_en": "Software programming and consultancy services",
+   "name_el": "Υπηρεσίες προγραμματισμού λογισμικού και παροχής συμβουλών",
+   "parent": "72000000"
+  },
+  "72210000": {
+   "code": "72210000-0",
+   "level": "class",
+   "name_en": "Programming services of packaged software products",
+   "name_el": "Υπηρεσίες προγραμματισμού πακέτων λογισμικού",
+   "parent": "72200000"
+  },
+  "72212000": {
+   "code": "72212000-4",
+   "level": "category",
+   "name_en": "Programming services of application software",
+   "name_el": "Υπηρεσίες προγραμματισμού λογισμικού εφαρμογών",
+   "parent": "72210000"
+  },
+  "72212326": {
+   "code": "72212326-0",
+   "level": "code",
+   "name_en": "Mapping software development services",
+   "name_el": "Υπηρεσίες ανάπτυξης λογισμικού χαρτογράφησης",
+   "parent": "72212000"
+  },
+  "77000000": {
+   "code": "77000000-0",
+   "level": "division",
+   "name_en": "Agricultural, forestry, horticultural, aquacultural and apicultural services",
+   "name_el": "Υπηρεσίες γεωργίας, δασοκομίας, φυτοκομίας, υδατοκαλλιέργειας και μελισσοκομίας",
+   "parent": null
+  },
+  "77200000": {
+   "code": "77200000-2",
+   "level": "group",
+   "name_en": "Forestry services",
+   "name_el": "Υπηρεσίες δασοκομίας",
+   "parent": "77000000"
+  },
+  "77210000": {
+   "code": "77210000-5",
+   "level": "class",
+   "name_en": "Logging services",
+   "name_el": "Υπηρεσίες υλοτομίας",
+   "parent": "77200000"
+  },
+  "77211000": {
+   "code": "77211000-2",
+   "level": "category",
+   "name_en": "Services incidental to logging",
+   "name_el": "Υπηρεσίες σχετιζόμενες με την υλοτομία",
+   "parent": "77210000"
+  },
+  "77211100": {
+   "code": "77211100-3",
+   "level": "code",
+   "name_en": "Timber harvesting services",
+   "name_el": "Υπηρεσίες περισυλλογής ξυλείας",
+   "parent": "77211000"
+  },
+  "77211200": {
+   "code": "77211200-4",
+   "level": "code",
+   "name_en": "Transport of logs within the forest",
+   "name_el": "Μεταφορά κορμών δένδρων στο εσωτερικό δάσους",
+   "parent": "77211000"
+  },
+  "77211300": {
+   "code": "77211300-5",
+   "level": "code",
+   "name_en": "Tree-clearing services",
+   "name_el": "Υπηρεσίες υλοτόμισης",
+   "parent": "77211000"
+  },
+  "77211400": {
+   "code": "77211400-6",
+   "level": "code",
+   "name_en": "Tree-cutting services",
+   "name_el": "Υπηρεσίες κοπής δένδρων",
+   "parent": "77211000"
+  },
+  "77211500": {
+   "code": "77211500-7",
+   "level": "code",
+   "name_en": "Tree-maintenance services",
+   "name_el": "Υπηρεσίες φροντίδας δένδρων",
+   "parent": "77211000"
+  },
+  "77230000": {
+   "code": "77230000-1",
+   "level": "class",
+   "name_en": "Services incidental to forestry",
+   "name_el": "Υπηρεσίες σχετιζόμενες με τη δασοκομία",
+   "parent": "77200000"
+  },
+  "77231000": {
+   "code": "77231000-8",
+   "level": "category",
+   "name_en": "Forestry management services",
+   "name_el": "Υπηρεσίες διαχείρισης δασοκομίας",
+   "parent": "77230000"
+  },
+  "77231300": {
+   "code": "77231300-1",
+   "level": "code",
+   "name_en": "Forest administration services",
+   "name_el": "Υπηρεσίες διαχείρισης δασών",
+   "parent": "77231000"
+  },
+  "77231600": {
+   "code": "77231600-4",
+   "level": "code",
+   "name_en": "Afforestation services",
+   "name_el": "Υπηρεσίες αναδάσωσης",
+   "parent": "77231000"
+  },
+  "77231800": {
+   "code": "77231800-6",
+   "level": "code",
+   "name_en": "Forest nursery management services",
+   "name_el": "Υπηρεσίες διαχείρισης φυτωρίων δασικών δέντρων",
+   "parent": "77231000"
+  },
+  "77231900": {
+   "code": "77231900-7",
+   "level": "code",
+   "name_en": "Forest sectoral planning services",
+   "name_el": "Υπηρεσίες δασικού τομεακού σχεδιασμού",
+   "parent": "77231000"
+  },
+  "77300000": {
+   "code": "77300000-3",
+   "level": "group",
+   "name_en": "Horticultural services",
+   "name_el": "Υπηρεσίες φυτοκομίας",
+   "parent": "77000000"
+  },
+  "77310000": {
+   "code": "77310000-6",
+   "level": "class",
+   "name_en": "Planting and maintenance services of green areas",
+   "name_el": "Φύτευση και συντήρηση χώρων πρασίνου",
+   "parent": "77300000"
+  },
+  "77312000": {
+   "code": "77312000-0",
+   "level": "category",
+   "name_en": "Weed-clearance services",
+   "name_el": "Υπηρεσίες εκκαθάρισης από αγριόχορτα",
+   "parent": "77310000"
+  },
+  "77312100": {
+   "code": "77312100-1",
+   "level": "code",
+   "name_en": "Weed-killing services",
+   "name_el": "Υπηρεσίες εξόντωσης ζιζανίων",
+   "parent": "77312000"
+  },
+  "77340000": {
+   "code": "77340000-5",
+   "level": "class",
+   "name_en": "Tree pruning and hedge trimming",
+   "name_el": "Κλάδεμα δένδρων και θάμνων",
+   "parent": "77300000"
+  },
+  "79000000": {
+   "code": "79000000-4",
+   "level": "division",
+   "name_en": "Business services: law, marketing, consulting, recruitment, printing and security",
+   "name_el": "Επιχειρηματικές υπηρεσίες: νομικές, μάρκετινγκ, παροχής συμβουλών, πρόσληψης, εκτύπωσης και ασφάλειας",
+   "parent": null
+  },
+  "79400000": {
+   "code": "79400000-8",
+   "level": "group",
+   "name_en": "Business and management consultancy and related services",
+   "name_el": "Υπηρεσίες παροχής γενικών επιχειρηματικών συμβουλών και συμβουλών σε θέματα διαχείρισης",
+   "parent": "79000000"
+  },
+  "79420000": {
+   "code": "79420000-4",
+   "level": "class",
+   "name_en": "Management-related services",
+   "name_el": "Υπηρεσίες που σχετίζονται με τη διαχείριση",
+   "parent": "79400000"
+  },
+  "79421000": {
+   "code": "79421000-1",
+   "level": "category",
+   "name_en": "Project-management services other than for construction work",
+   "name_el": "Υπηρεσίες διαχείρισης έργων, εκτός από εργασίες κατασκευής",
+   "parent": "79420000"
+  },
+  "79421200": {
+   "code": "79421200-3",
+   "level": "code",
+   "name_en": "Project-design services other than for construction work",
+   "name_el": "Υπηρεσίες μελέτης έργων, εκτός από εργασίες κατασκευής",
+   "parent": "79421000"
+  },
+  "79900000": {
+   "code": "79900000-3",
+   "level": "group",
+   "name_en": "Miscellaneous business and business-related services",
+   "name_el": "Διάφορες επιχειρηματικές και συναφείς υπηρεσίες",
+   "parent": "79000000"
+  },
+  "79930000": {
+   "code": "79930000-2",
+   "level": "class",
+   "name_en": "Specialty design services",
+   "name_el": "Ειδικές υπηρεσίες μελετών",
+   "parent": "79900000"
+  },
+  "90000000": {
+   "code": "90000000-7",
+   "level": "division",
+   "name_en": "Sewage, refuse, cleaning and environmental services",
+   "name_el": "Υπηρεσίες λυμάτων, απορριμμάτων, καθαρισμού και περιβαλλοντικές υπηρεσίες",
+   "parent": null
+  },
+  "90500000": {
+   "code": "90500000-2",
+   "level": "group",
+   "name_en": "Refuse and waste related services",
+   "name_el": "Υπηρεσίες σχετιζόμενες με απορρίμματα και απόβλητα",
+   "parent": "90000000"
+  },
+  "90510000": {
+   "code": "90510000-5",
+   "level": "class",
+   "name_en": "Refuse disposal and treatment",
+   "name_el": "Διάθεση και επεξεργασία απορριμμάτων",
+   "parent": "90500000"
+  },
+  "90513000": {
+   "code": "90513000-6",
+   "level": "category",
+   "name_en": "Non-hazardous refuse and waste treatment and disposal services",
+   "name_el": "Υπηρεσίες επεξεργασίας και διάθεσης μη επικίνδυνων απορριμμάτων και αποβλήτων",
+   "parent": "90510000"
+  },
+  "90520000": {
+   "code": "90520000-8",
+   "level": "class",
+   "name_en": "Radioactive-, toxic-, medical- and hazardous waste services",
+   "name_el": "Υπηρεσίες ραδιενεργών, τοξικών, ιατρικών και επικίνδυνων αποβλήτων",
+   "parent": "90500000"
+  },
+  "90522000": {
+   "code": "90522000-2",
+   "level": "category",
+   "name_en": "Services relating to contaminated soil",
+   "name_el": "Υπηρεσίες σχετιζόμενες με μολυσμένο έδαφος",
+   "parent": "90520000"
+  },
+  "90522400": {
+   "code": "90522400-6",
+   "level": "code",
+   "name_en": "Cleaning and treatment of soil",
+   "name_el": "Καθαρισμός και επεξεργασία εδάφους",
+   "parent": "90522000"
+  },
+  "90700000": {
+   "code": "90700000-4",
+   "level": "group",
+   "name_en": "Environmental services",
+   "name_el": "Περιβαλλοντικές υπηρεσίες",
+   "parent": "90000000"
+  },
+  "90710000": {
+   "code": "90710000-7",
+   "level": "class",
+   "name_en": "Environmental management",
+   "name_el": "Διαχείριση περιβάλλοντος",
+   "parent": "90700000"
+  },
+  "90712000": {
+   "code": "90712000-1",
+   "level": "category",
+   "name_en": "Environmental planning",
+   "name_el": "Περιβαλλοντικός σχεδιασμός",
+   "parent": "90710000"
+  },
+  "90712200": {
+   "code": "90712200-3",
+   "level": "code",
+   "name_en": "Forest conservation strategy planning",
+   "name_el": "Στρατηγικός σχεδιασμός διατήρησης δασών",
+   "parent": "90712000"
+  },
+  "90900000": {
+   "code": "90900000-6",
+   "level": "group",
+   "name_en": "Cleaning and sanitation services",
+   "name_el": "Υπηρεσίες καθαρισμού και απολύμανσης",
+   "parent": "90000000"
+  },
+  "90910000": {
+   "code": "90910000-9",
+   "level": "class",
+   "name_en": "Cleaning services",
+   "name_el": "Υπηρεσίες καθαρισμού",
+   "parent": "90900000"
+  },
+  "90913000": {
+   "code": "90913000-0",
+   "level": "category",
+   "name_en": "Tank and reservoir cleaning services",
+   "name_el": "Υπηρεσίες καθαρισμού βυτίων και δεξαμενών",
+   "parent": "90910000"
+  },
+  "90913200": {
+   "code": "90913200-2",
+   "level": "code",
+   "name_en": "Reservoir cleaning services",
+   "name_el": "Υπηρεσία καθαρισμού δεξαμενών",
+   "parent": "90913000"
+  }
+ }
+}

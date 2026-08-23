@@ -427,6 +427,7 @@ def antinero_overview(kh: sqlite3.Connection,
         "coverage": q.flow_coverage(kh),
         "probable": probable_related(kh),
         "cpvs": antinero_cpvs(kh),
+        "cpv_tree": antinero_cpv_tree(kh),
         "categories": antinero_categories(kh),
         "themes": antinero_themes(kh),
         # study 14 / works 110 / study_and_works 121 — never hardcode
@@ -560,6 +561,91 @@ def antinero_cpvs(kh: sqlite3.Connection) -> list[dict]:
     """).fetchall()
     return [{"code": r["code"], "desc": (r["desc"] or "").strip(), "n": r["n"]}
             for r in rows]
+
+
+_CPV_NODES: dict | None = None
+
+
+def _cpv_nodes() -> dict:
+    """The official EU CPV 2008 names (EN + EL) for every node the in-scope
+    contracts touch, at its true level, with its parent —
+    khmdhs/data/cpv_nodes.json, built by scripts/build_cpv_nodes.py from
+    the TED workbook (DATA_DECISIONS 2026-08-23)."""
+    global _CPV_NODES
+    if _CPV_NODES is None:
+        f = Path(__file__).resolve().parents[1] / "khmdhs" / "data" / "cpv_nodes.json"
+        try:
+            _CPV_NODES = json.loads(f.read_text(encoding="utf-8")).get("nodes", {})
+        except OSError:
+            _CPV_NODES = {}
+    return _CPV_NODES
+
+
+def antinero_cpv_tree(kh: sqlite3.Connection) -> dict:
+    """The declared CPV codes rolled up the vocabulary's own tree: one
+    DIVISION (first two digits) per row, each holding its CLASSES (four
+    digits — or the declared code itself when it sits shallower), each
+    holding its codes. Every count is DISTINCT in-scope contracts declaring
+    at least one code under the node, so a division's n is honest — and
+    the counts overlap across nodes (a contract declares ~16 codes), which
+    is why nothing here is ever summed or drawn as a partition."""
+    if not q._has_scope_table(kh):
+        return {"divisions": [], "n_contracts": 0, "n_codes": 0, "codes_per_contract": 0.0}
+    nodes = _cpv_nodes()
+    rows = kh.execute("""
+        SELECT c.reference_number AS ref, c.cpv_code AS code,
+               MIN(c.cpv_description) AS desc
+        FROM contract_cpvs c
+        JOIN contract_scope s ON s.reference_number = c.reference_number
+        WHERE s.in_scope = 1
+        GROUP BY c.reference_number, c.cpv_code
+    """).fetchall()
+    pref = lambda c8, n: c8[:n].ljust(8, "0")  # noqa: E731
+
+    def true_level(c8: str) -> int:
+        return next((n for n in (2, 3, 4, 5) if pref(c8, n) == c8), 8)
+
+    def cls_of(c8: str) -> str:
+        # the class the code files under — itself when it is a division,
+        # group or class code already
+        return c8 if true_level(c8) <= 4 else pref(c8, 4)
+
+    def name(c8: str, fallback: str = "") -> dict:
+        nd = nodes.get(c8)
+        return {"name_en": nd["name_en"] if nd else fallback,
+                "name_el": nd["name_el"] if nd else fallback,
+                "code": nd["code"] if nd else c8}
+
+    div_refs: dict[str, set] = {}
+    cls_refs: dict[tuple, set] = {}
+    code_refs: dict[tuple, set] = {}
+    desc_of: dict[str, str] = {}
+    refs_all: set = set()
+    for r in rows:
+        c8 = r["code"].split("-")[0]
+        d, k = pref(c8, 2), cls_of(c8)
+        div_refs.setdefault(d, set()).add(r["ref"])
+        cls_refs.setdefault((d, k), set()).add(r["ref"])
+        code_refs.setdefault((d, k, c8), set()).add(r["ref"])
+        desc_of[c8] = (r["desc"] or "").strip()
+        refs_all.add(r["ref"])
+    divisions = []
+    for d, drefs in sorted(div_refs.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+        classes = []
+        for (dd, k), krefs in sorted(((x, v) for x, v in cls_refs.items() if x[0] == d),
+                                     key=lambda kv: (-len(kv[1]), kv[0][1])):
+            codes = [{**name(c8, desc_of.get(c8, "")), "n": len(v)}
+                     for (_, _, c8), v in sorted(((x, v) for x, v in code_refs.items()
+                                                   if x[0] == d and x[1] == k),
+                                                  key=lambda kv: (-len(kv[1]), kv[0][2]))]
+            classes.append({**name(k, desc_of.get(k, "")), "n": len(krefs), "codes": codes})
+        divisions.append({**name(d), "n": len(drefs), "classes": classes})
+    return {
+        "divisions": divisions,
+        "n_contracts": len(refs_all),
+        "n_codes": len({r["code"] for r in rows}),
+        "codes_per_contract": round(len(rows) / len(refs_all), 1) if refs_all else 0.0,
+    }
 
 
 def contractor_registry_status(kh: sqlite3.Connection,
