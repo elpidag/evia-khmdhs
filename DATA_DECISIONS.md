@@ -8115,3 +8115,53 @@ tables (`contract_categories`, `contract_fire_context`,
 `/api/dase/contract/<adam>` payload keeps `category` / `fire_context` /
 `stated_duration` / `deadlines`, so the layer can return the day it is
 independently verified. Nothing was deleted.
+
+## 2026-08-24 · /dase front page: ranking, money per year and the CPV mix adjusted to the Anti-nero frames (user)
+
+- **RANKING OF CO-OPERATIVES** — the Anti-nero ranking's dress: short caps
+  title, a computed lightbulb (the top-10 co-ops' share of the stated basis,
+  out of all co-ops), the canonical-ΑΦΜ merge and the even split of jointly
+  signed contracts compressed to a one-clause caveat with the methodology
+  link; the same 35 px inside-label bars.
+- **MONEY PER YEAR** — the Anti-nero frame's form (values at the right,
+  computed biggest-year lightbulb, no subtitle). Deliberately **no «€ paid»
+  lens**: ΔΑΣΕ payment coverage is structurally partial (893 of 1,998
+  contracts; 2022–23 near-blank as registry practice, DATA_DECISIONS
+  2026-07-27) — a paid-per-year series would chart registry practice, not
+  disbursement. The caveat says so; the paid figure stays a KPI.
+- **CPV CODES** (was CPV MIX) — the declared codes rolled up the EU CPV 2008
+  tree in the same CpvColumns as the Anti-nero front page:
+  `queries_extra.dase_cpv_tree` over the live population, the rollup shared
+  with `antinero_cpv_tree` via one `_cpv_rollup` helper;
+  `khmdhs/data/cpv_nodes.json` and `scripts/build_cpv_nodes.py` now cover
+  BOTH datasets' declared codes (the ΔΑΣΕ live rows added). The ΕΦΚΑ
+  insurance code 66519300-4 shows as its own division, carried with the
+  documented 2026-08-17 caveat (state-borne contributions itemised in the
+  awards, never procured insurance); counts are distinct contracts per node,
+  overlap across nodes, and are never summed.
+
+*Verification note (same day):* the CPV CODES lightbulb says the whole
+insurance division (386 contracts) is the ΕΦΚΑ tag. Beside the pinned
+66519300-4 (378 live contracts), 8 contracts carry 66500000-5 — all 8
+verified to hold an «ΕΦΚΑ εργοδότη / εισφορές ΕΦΚΑ» object line, so the
+division-wide claim holds. The axis tick step of `CpvColumns` now scales
+to the dataset (the fixed 25/50 pair smeared 40 ticks at n=1,998; Anti-nero
+still lands on 50), and a class-column count too wide for its bar prints
+above it («1.406» overflowed the 36 px slot).
+
+*Colour (same day, user):* the /dase CPV columns were the page's one black
+chart — `CpvColumns` now takes the hosting page's ink (`--cpv-ink`; the
+hover/faded states are that ink mixed toward the paper, landing on the
+exact greys the rules used to hardcode, so Anti-nero is pixel-identical)
+and the ChartFrame lightbulb follows the page accent (`--frame-accent`);
+the /dase wrapper sets both to the dataset green.
+
+*Layout (same day, user):* MONEY PER YEAR and RANKING OF CO-OPERATIVES
+share one row at equal width (the page's `.pair` grid). The ranking's
+75% `.rankw` measure — right for the full-width footprint — squeezed
+the bars inside the half-width column until the last name fell outside
+its bar, so on this page the pair column IS the measure (`max-width:
+none`): every name, «ΔΑ.Σ.Ε. ΑΜΑΡΑΝΤΟΥ-ΚΛΕΙΝΟΥ» included, now sits
+inside the green, wrapped to two lines where needed; the columns stayed
+equal, and the ranking's amounts align RIGHT like MONEY PER YEAR's
+(`valuesRight`, user).

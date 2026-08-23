@@ -204,13 +204,15 @@
 		padding: 0;
 		border: 0;
 		background: none;
-		color: var(--ink);
+		/* the bulb follows the hosting page's accent (ΔΑΣΕ green via
+		   --frame-accent, 2026-08-24); Anti-nero keeps its ink */
+		color: var(--frame-accent, var(--ink));
 		cursor: pointer;
 		line-height: 0;
 	}
 	.bulb:hover,
 	.bulb.on {
-		color: var(--c-antinero, var(--ink));
+		color: var(--frame-accent, var(--c-antinero, var(--ink)));
 	}
 	.foot {
 		border-top: 1px solid var(--line);

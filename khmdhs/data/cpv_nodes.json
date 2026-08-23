@@ -1,12 +1,54 @@
 {
- "_doc": "Official EU CPV 2008 names, EN + EL, for every node the in-scope Anti-nero contracts touch (leaf codes and their division/group/class/category ancestors). Built by scripts/build_cpv_nodes.py from the TED workbook in data/raw/ — names are the vocabulary's, never typed.",
+ "_doc": "Official EU CPV 2008 names, EN + EL, for every node the in-scope Anti-nero contracts and the live ΔΑΣΕ contracts touch (leaf codes and their division/group/class/category ancestors). Built by scripts/build_cpv_nodes.py from the TED workbook in data/raw/ — names are the vocabulary's, never typed.",
  "_source": {
   "url": "https://ted.europa.eu/documents/d/ted/cpv_2008_xls",
   "file": "cpv_2008_ver_2013.xlsx",
-  "built": "2026-08-23"
+  "built": "2026-08-24"
  },
  "_missing": [],
  "nodes": {
+  "03000000": {
+   "code": "03000000-1",
+   "level": "division",
+   "name_en": "Agricultural, farming, fishing, forestry and related products",
+   "name_el": "Προϊόντα γεωργίας, κτηνοτροφίας, αλιείας, δασοκομίας και συναφή προϊόντα",
+   "parent": null
+  },
+  "03400000": {
+   "code": "03400000-4",
+   "level": "group",
+   "name_en": "Forestry and logging products",
+   "name_el": "Δασοκομικά και υλοτομικά προϊόντα",
+   "parent": "03000000"
+  },
+  "03410000": {
+   "code": "03410000-7",
+   "level": "class",
+   "name_en": "Wood",
+   "name_el": "Ξύλο",
+   "parent": "03400000"
+  },
+  "03413000": {
+   "code": "03413000-8",
+   "level": "category",
+   "name_en": "Fuel wood",
+   "name_el": "Καυσόξυλα",
+   "parent": "03410000"
+  },
+  "03419000": {
+   "code": "03419000-0",
+   "level": "category",
+   "name_en": "Timber",
+   "name_el": "Ξυλεία",
+   "parent": "03410000"
+  },
+  "03440000": {
+   "code": "03440000-6",
+   "level": "class",
+   "name_en": "Forestry products",
+   "name_el": "Δασοκομικά προϊόντα",
+   "parent": "03400000"
+  },
   "14000000": {
    "code": "14000000-1",
    "level": "division",
@@ -34,6 +76,34 @@
    "name_en": "Steel",
    "name_el": "Χάλυβας",
    "parent": "14620000"
+  },
+  "15000000": {
+   "code": "15000000-8",
+   "level": "division",
+   "name_en": "Food, beverages, tobacco and related products",
+   "name_el": "Τρόφιμα, ποτά, καπνός και συναφή προϊόντα",
+   "parent": null
+  },
+  "15300000": {
+   "code": "15300000-1",
+   "level": "group",
+   "name_en": "Fruit, vegetables and related products",
+   "name_el": "Φρούτα, λαχανικά και συναφή προϊόντα",
+   "parent": "15000000"
+  },
+  "15330000": {
+   "code": "15330000-0",
+   "level": "class",
+   "name_en": "Processed fruit and vegetables",
+   "name_el": "Επεξεργασμένα φρούτα και λαχανικά",
+   "parent": "15300000"
+  },
+  "15333000": {
+   "code": "15333000-1",
+   "level": "category",
+   "name_en": "Vegetable by-products",
+   "name_el": "Φυτικά υποπροϊόντα",
+   "parent": "15330000"
   },
   "16000000": {
    "code": "16000000-5",
@@ -432,6 +502,13 @@
    "level": "code",
    "name_en": "Landscaping work",
    "name_el": "Εργασίες διαμόρφωσης τοπίου",
+   "parent": "45112000"
+  },
+  "45112710": {
+   "code": "45112710-5",
+   "level": "code",
+   "name_en": "Landscaping work for green areas",
+   "name_el": "Εργασίες διαμόρφωσης τοπίου για χώρους πρασίνου",
    "parent": "45112000"
   },
   "45200000": {
@@ -1155,6 +1232,20 @@
    "name_el": "Εργασίες αποκατάστασης",
    "parent": "45453000"
   },
+  "45500000": {
+   "code": "45500000-2",
+   "level": "group",
+   "name_en": "Hire of construction and civil engineering machinery and equipment with operator",
+   "name_el": "Ενοικίαση κατασκευαστικών μηχανημάτων και εξοπλισμού για έργα πολιτικού μηχανικού με χειριστή",
+   "parent": "45000000"
+  },
+  "45510000": {
+   "code": "45510000-5",
+   "level": "class",
+   "name_en": "Hire of cranes with operator",
+   "name_el": "Ενοικίαση γερανών με χειριστή",
+   "parent": "45500000"
+  },
   "50000000": {
    "code": "50000000-5",
    "level": "division",
@@ -1274,6 +1365,41 @@
    "name_el": "Υπηρεσίες εγκατάστασης δεξαμενών",
    "parent": "51800000"
   },
+  "66000000": {
+   "code": "66000000-0",
+   "level": "division",
+   "name_en": "Financial and insurance services",
+   "name_el": "Χρηματοπιστωτικές και ασφαλιστικές υπηρεσίες",
+   "parent": null
+  },
+  "66500000": {
+   "code": "66500000-5",
+   "level": "group",
+   "name_en": "Insurance and pension services",
+   "name_el": "Υπηρεσίες ασφάλισης και συνταξιοδότησης",
+   "parent": "66000000"
+  },
+  "66510000": {
+   "code": "66510000-8",
+   "level": "class",
+   "name_en": "Insurance services",
+   "name_el": "Υπηρεσίες ασφάλισης",
+   "parent": "66500000"
+  },
+  "66519000": {
+   "code": "66519000-1",
+   "level": "category",
+   "name_en": "Engineering, auxiliary, average, loss, actuarial and salvage insurance services",
+   "name_el": "Υπηρεσίες ασφάλισης τεχνικών εγκαταστάσεων, επικουρικές ασφαλιστικές υπηρεσίες, υπηρεσίες ασφάλισης αβαριών, υπηρεσίες ασφάλισης έναντι ζημιών, υπηρεσίες εμπειρογνωμόνων ασφαλίσεων και υπηρεσίες ασφάλισης διάσωσης",
+   "parent": "66510000"
+  },
+  "66519300": {
+   "code": "66519300-4",
+   "level": "code",
+   "name_en": "Auxiliary insurance services",
+   "name_el": "Επικουρικές ασφαλιστικές υπηρεσίες",
+   "parent": "66519000"
+  },
   "71000000": {
    "code": "71000000-8",
    "level": "division",
@@ -1379,6 +1505,55 @@
    "name_el": "Υπηρεσίες ανάπτυξης λογισμικού χαρτογράφησης",
    "parent": "72212000"
   },
+  "75000000": {
+   "code": "75000000-6",
+   "level": "division",
+   "name_en": "Administration, defence and social security services",
+   "name_el": "Υπηρεσίες δημόσιας διοίκησης, άμυνας και κοινωνικής ασφάλισης",
+   "parent": null
+  },
+  "75100000": {
+   "code": "75100000-7",
+   "level": "group",
+   "name_en": "Administration services",
+   "name_el": "Υπηρεσίες διοίκησης",
+   "parent": "75000000"
+  },
+  "75130000": {
+   "code": "75130000-6",
+   "level": "class",
+   "name_en": "Supporting services for the government",
+   "name_el": "Βοηθητικές κρατικές υπηρεσίες",
+   "parent": "75100000"
+  },
+  "75200000": {
+   "code": "75200000-8",
+   "level": "group",
+   "name_en": "Provision of services to the community",
+   "name_el": "Παροχή υπηρεσιών στο κοινωνικό σύνολο",
+   "parent": "75000000"
+  },
+  "75250000": {
+   "code": "75250000-3",
+   "level": "class",
+   "name_en": "Fire-brigade and rescue services",
+   "name_el": "Πυροσβεστικές υπηρεσίες και υπηρεσίες διάσωσης",
+   "parent": "75200000"
+  },
+  "75251000": {
+   "code": "75251000-0",
+   "level": "category",
+   "name_en": "Fire-brigade services",
+   "name_el": "Πυροσβεστικές υπηρεσίες",
+   "parent": "75250000"
+  },
+  "75251110": {
+   "code": "75251110-4",
+   "level": "code",
+   "name_en": "Fire-prevention services",
+   "name_el": "Υπηρεσίες πρόληψης πυρκαγιών",
+   "parent": "75251000"
+  },
   "77000000": {
    "code": "77000000-0",
    "level": "division",
@@ -1456,6 +1631,13 @@
    "name_el": "Υπηρεσίες διαχείρισης δασοκομίας",
    "parent": "77230000"
   },
+  "77231100": {
+   "code": "77231100-9",
+   "level": "code",
+   "name_en": "Forest resources management services",
+   "name_el": "Υπηρεσίες διαχείρισης δασικών πόρων",
+   "parent": "77231000"
+  },
   "77231300": {
    "code": "77231300-1",
    "level": "code",
@@ -1512,12 +1694,26 @@
    "name_el": "Υπηρεσίες εξόντωσης ζιζανίων",
    "parent": "77312000"
   },
+  "77313000": {
+   "code": "77313000-7",
+   "level": "category",
+   "name_en": "Parks maintenance services",
+   "name_el": "Υπηρεσίες συντήρησης πάρκων",
+   "parent": "77310000"
+  },
   "77340000": {
    "code": "77340000-5",
    "level": "class",
    "name_en": "Tree pruning and hedge trimming",
    "name_el": "Κλάδεμα δένδρων και θάμνων",
    "parent": "77300000"
+  },
+  "77341000": {
+   "code": "77341000-2",
+   "level": "category",
+   "name_en": "Tree pruning",
+   "name_el": "Κλάδεμα δένδρων",
+   "parent": "77340000"
   },
   "79000000": {
    "code": "79000000-4",
@@ -1596,6 +1792,13 @@
    "name_el": "Υπηρεσίες επεξεργασίας και διάθεσης μη επικίνδυνων απορριμμάτων και αποβλήτων",
    "parent": "90510000"
   },
+  "90514000": {
+   "code": "90514000-3",
+   "level": "category",
+   "name_en": "Refuse recycling services",
+   "name_el": "Υπηρεσίες ανακύκλωσης απορριμμάτων",
+   "parent": "90510000"
+  },
   "90520000": {
    "code": "90520000-8",
    "level": "class",
@@ -1616,6 +1819,27 @@
    "name_en": "Cleaning and treatment of soil",
    "name_el": "Καθαρισμός και επεξεργασία εδάφους",
    "parent": "90522000"
+  },
+  "90600000": {
+   "code": "90600000-3",
+   "level": "group",
+   "name_en": "Cleaning and sanitation services in urban or rural areas, and related services",
+   "name_el": "Υπηρεσίες καθαριότητας και εξυγίανσης σε αστικές ή αγροτικές ζώνες, καθώς και συναφείς υπηρεσίες",
+   "parent": "90000000"
+  },
+  "90610000": {
+   "code": "90610000-6",
+   "level": "class",
+   "name_en": "Street-cleaning and sweeping services",
+   "name_el": "Υπηρεσίες καθαρισμού και σάρωσης οδών",
+   "parent": "90600000"
+  },
+  "90620000": {
+   "code": "90620000-9",
+   "level": "class",
+   "name_en": "Snow-clearing services",
+   "name_el": "Υπηρεσίες εκχιονισμού",
+   "parent": "90600000"
   },
   "90700000": {
    "code": "90700000-4",
@@ -1672,6 +1896,48 @@
    "name_en": "Reservoir cleaning services",
    "name_el": "Υπηρεσία καθαρισμού δεξαμενών",
    "parent": "90913000"
+  },
+  "92000000": {
+   "code": "92000000-1",
+   "level": "division",
+   "name_en": "Recreational, cultural and sporting services",
+   "name_el": "Ψυχαγωγικές, πολιτιστικές και αθλητικές υπηρεσίες",
+   "parent": null
+  },
+  "92500000": {
+   "code": "92500000-6",
+   "level": "group",
+   "name_en": "Library, archives, museums and other cultural services",
+   "name_el": "Υπηρεσίες βιβλιοθηκών, αρχείων, μουσείων και άλλες πολιτιστικές υπηρεσίες",
+   "parent": "92000000"
+  },
+  "92520000": {
+   "code": "92520000-2",
+   "level": "class",
+   "name_en": "Museum services and preservation services of historical sites and buildings",
+   "name_el": "Υπηρεσίες μουσείων και συναφείς υπηρεσίες",
+   "parent": "92500000"
+  },
+  "92522000": {
+   "code": "92522000-6",
+   "level": "category",
+   "name_en": "Preservation services of historical sites and buildings",
+   "name_el": "Υπηρεσίες συντήρησης ιστορικών χώρων και κτιρίων",
+   "parent": "92520000"
+  },
+  "92530000": {
+   "code": "92530000-5",
+   "level": "class",
+   "name_en": "Botanical and zoological garden services and nature reserve services",
+   "name_el": "Υπηρεσίες βοτανικών και ζωολογικών κήπων και προστατευόμενων φυσικών βιοτόπων",
+   "parent": "92500000"
+  },
+  "92534000": {
+   "code": "92534000-3",
+   "level": "category",
+   "name_en": "Wildlife preservation services",
+   "name_el": "Υπηρεσίες διατήρησης συνθηκών φυσικού περιβάλλοντος",
+   "parent": "92530000"
   }
  }
 }

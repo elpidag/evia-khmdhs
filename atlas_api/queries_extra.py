@@ -573,25 +573,16 @@ def _cpv_nodes() -> dict:
     return _CPV_NODES
 
 
-def antinero_cpv_tree(kh: sqlite3.Connection) -> dict:
-    """The declared CPV codes rolled up the vocabulary's own tree: one
-    DIVISION (first two digits) per row, each holding its CLASSES (four
-    digits — or the declared code itself when it sits shallower), each
-    holding its codes. Every count is DISTINCT in-scope contracts declaring
-    at least one code under the node, so a division's n is honest — and
-    the counts overlap across nodes (a contract declares ~16 codes), which
-    is why nothing here is ever summed or drawn as a partition."""
-    if not q._has_scope_table(kh):
-        return {"divisions": [], "n_contracts": 0, "n_codes": 0, "codes_per_contract": 0.0}
+def _cpv_rollup(rows) -> dict:
+    """Shared rollup behind both datasets' CPV CODES frames: rows of
+    (ref, code, desc) folded up the vocabulary's own tree — one DIVISION
+    (first two digits) per row, each holding its CLASSES (four digits — or
+    the declared code itself when it sits shallower), each holding its
+    codes. Every count is DISTINCT contracts declaring at least one code
+    under the node, so a division's n is honest — and the counts overlap
+    across nodes (a contract declares several codes), which is why nothing
+    here is ever summed or drawn as a partition."""
     nodes = _cpv_nodes()
-    rows = kh.execute("""
-        SELECT c.reference_number AS ref, c.cpv_code AS code,
-               MIN(c.cpv_description) AS desc
-        FROM contract_cpvs c
-        JOIN contract_scope s ON s.reference_number = c.reference_number
-        WHERE s.in_scope = 1
-        GROUP BY c.reference_number, c.cpv_code
-    """).fetchall()
     pref = lambda c8, n: c8[:n].ljust(8, "0")  # noqa: E731
 
     def true_level(c8: str) -> int:
@@ -638,6 +629,40 @@ def antinero_cpv_tree(kh: sqlite3.Connection) -> dict:
         "n_codes": len({r["code"] for r in rows}),
         "codes_per_contract": round(len(rows) / len(refs_all), 1) if refs_all else 0.0,
     }
+
+
+def antinero_cpv_tree(kh: sqlite3.Connection) -> dict:
+    """The in-scope contracts' declared CPV codes rolled up the tree
+    (DATA_DECISIONS 2026-08-23); see _cpv_rollup for the conventions."""
+    if not q._has_scope_table(kh):
+        return {"divisions": [], "n_contracts": 0, "n_codes": 0, "codes_per_contract": 0.0}
+    rows = kh.execute("""
+        SELECT c.reference_number AS ref, c.cpv_code AS code,
+               MIN(c.cpv_description) AS desc
+        FROM contract_cpvs c
+        JOIN contract_scope s ON s.reference_number = c.reference_number
+        WHERE s.in_scope = 1
+        GROUP BY c.reference_number, c.cpv_code
+    """).fetchall()
+    return _cpv_rollup(rows)
+
+
+def dase_cpv_tree(dase: sqlite3.Connection) -> dict:
+    """The live ΔΑΣΕ contracts' declared codes rolled up the same tree
+    (DATA_DECISIONS 2026-08-24 — the /dase CPV CODES frame in the Anti-nero
+    form). cpv_nodes.json covers both datasets since the same day; the
+    insurance code 66519300-4 rides with the documented ΕΦΚΑ caveat
+    (state-borne contributions itemised in the awards, never procured
+    insurance — DATA_DECISIONS 2026-08-17)."""
+    rows = dase.execute(f"""
+        SELECT c.reference_number AS ref, c.cpv_code AS code,
+               MIN(c.cpv_description) AS desc
+        FROM contract_cpvs c
+        JOIN contracts co ON co.reference_number = c.reference_number
+        WHERE {dq.live_filter('co')}
+        GROUP BY c.reference_number, c.cpv_code
+    """).fetchall()
+    return _cpv_rollup(rows)
 
 
 def contractor_registry_status(kh: sqlite3.Connection,
@@ -1901,6 +1926,7 @@ def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
         "procedures": dq.procedure_mix(dase),
         "types": dq.type_mix(dase),
         "cpvs": dq.cpv_mix(dase, limit=10),
+        "cpv_tree": dase_cpv_tree(dase),
         "histogram": dase_value_histogram(dase),
         "by_pe": dq.money_by_pe(dase),
     }

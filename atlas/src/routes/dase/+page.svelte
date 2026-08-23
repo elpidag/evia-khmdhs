@@ -11,6 +11,7 @@
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import CpvColumns from '$lib/charts/CpvColumns.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
 	import SideNote from '$lib/ui/SideNote.svelte';
 	import {
@@ -143,6 +144,21 @@
 		return `<strong>${p.yr}</strong> · ${grInt(p.ha)} ha${p.name ? ` · ${p.name}` : ''}`;
 	}
 
+	// computed findings for the three harmonised frames (2026-08-24) —
+	// every number from the payload, never typed
+	const rankTop = $derived(o.top_coops.reduce((s, c) => s + c.total_eur, 0));
+	const moneyFacts = $derived.by(() => {
+		if (!o.yearly.length) return null;
+		return o.yearly.reduce((m, y) => (y.eur > m.eur ? y : m), o.yearly[0]);
+	});
+	const cpvTree = $derived(o.cpv_tree ?? null);
+	const cpvDiv77 = $derived(cpvTree?.divisions.find((d) => d.code.startsWith('77')) ?? null);
+	const cpvDiv66 = $derived(cpvTree?.divisions.find((d) => d.code.startsWith('66')) ?? null);
+	const cpvTopCode = $derived(
+		cpvTree?.divisions
+			.flatMap((d) => d.classes.flatMap((k) => k.codes))
+			.sort((a, b) => b.n - a.n)[0] ?? null
+	);
 	const coopRows = $derived(
 		o.top_coops.map((c) => ({
 			label: c.name,
@@ -562,42 +578,60 @@
 {/if}
 </Defer>
 
-<!-- MONEY PER YEAR keeps the half-width column it had when the size
-     histogram sat beside it -->
+<!-- MONEY PER YEAR and the RANKING share one row at equal width
+     (user, 2026-08-24) -->
 <div class="pair">
 	<ChartFrame
 		title="MONEY PER YEAR"
-		subtitle="Stated € and contract counts per signature year"
+		insight={moneyFacts
+			? `${moneyFacts.year} was the biggest contracting year: ${eurShort(moneyFacts.eur)} over ${grInt(moneyFacts.n)} contracts — ${pct((moneyFacts.eur / o.kpis.total_eur) * 100)} of the dataset's stated total.`
+			: ''}
+		caveat="Stated value (net) by signature year. No €-paid series is drawn — payment orders exist for only part of the contracts as registry practice, so a paid bar would chart the registry, not disbursement."
 		anchor="dase-yearly"
+		methodology="dase-dedup"
 	>
-		<BarH rows={yearRows} color="var(--c-dase)" />
+		<BarH rows={yearRows} color="var(--c-dase)" inside barHeight={35} valuesRight />
+	</ChartFrame>
+
+	<ChartFrame
+		title="RANKING OF CO-OPERATIVES"
+		insight={`The top ${grInt(o.top_coops.length)} co-ops hold ${pct((rankTop / o.kpis.total_eur) * 100)} of the dataset (${eurShort(rankTop)} of ${eurShort(o.kpis.total_eur)}), out of ${grInt(o.kpis.n_coops)} co-operatives in all.`}
+		caveat="Registry spellings of one co-op merge on its canonical ΑΦΜ; a contract signed by several co-ops jointly ({grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)}) is split evenly between them, so no euro is counted twice."
+		anchor="top-coops"
+		methodology="canonical-vat"
+	>
+		<div class="rankw">
+			<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={35} valuesRight />
+		</div>
 	</ChartFrame>
 </div>
 
 <ChartFrame
-	title="TOP FOREST WORKERS’ CO-OPS BY CONTRACTED VALUE"
-	caveat="Registry spellings of one co-op are merged on its canonical ΑΦΜ. Contracts signed by several co-ops jointly ({grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)}) are split evenly between the partners — neither the registry nor the signed document records who took what — so no euro is counted twice and these totals sum to the dataset's stated total."
-	anchor="top-coops"
-	methodology="canonical-vat"
->
-	<div class="rankw">
-		<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={35} />
-	</div>
-</ChartFrame>
-
-<ChartFrame
-	title="CPV MIX"
-	subtitle="Top CPV codes by contract count — υλοτομία dominates."
-	caveat="{grInt(cpvNoiseN)} υλοτομικά rows carry the insurance CPV 66519300-4: it tags the state-funded ΕΦΚΑ contributions for the δασεργάτες itemised in the awards — not procured insurance."
+	title="CPV CODES"
+	insight={cpvTree
+		? `The ${grInt(cpvTree.n_codes)} codes the ${grInt(cpvTree.n_contracts)} contracts declare fall into ${grInt(cpvTree.divisions.length)} of the vocabulary’s divisions${cpvDiv77 ? `: ${grInt(cpvDiv77.n)} contracts declare a code of «${cpvDiv77.name_en}»` : ''}${cpvDiv66 ? `, while the ${grInt(cpvDiv66.n)} under «${cpvDiv66.name_en}» are the ΕΦΚΑ tag on υλοτομικά contracts, not insurance procurement` : ''}. The most common single code, «${cpvTopCode?.name_en ?? ''}», appears on ${grInt(cpvTopCode?.n ?? 0)} (${pct(((cpvTopCode?.n ?? 0) / o.kpis.n_contracts) * 100)}).`
+		: ''}
+	caveat="Codes as declared in ΚΗΜΔΗΣ, named from the EU CPV 2008 vocabulary (division → class → code); a contract may declare several, so the counts overlap and are never summed. The insurance CPV 66519300-4 on {grInt(cpvNoiseN)} υλοτομικά rows tags the state-funded ΕΦΚΑ contributions itemised in the awards — not procured insurance."
 	anchor="dase-cpvs"
 	methodology="dase-cpv-noise"
 >
-	<BarH rows={cpvRows} color="var(--c-dase)" fmt={(v) => `${grInt(v)} contracts`} />
+	{#if cpvTree}
+		<CpvColumns divisions={cpvTree.divisions} total={o.kpis.n_contracts} />
+	{:else}
+		<BarH rows={cpvRows} color="var(--c-dase)" fmt={(v) => `${grInt(v)} contracts`} />
+	{/if}
 </ChartFrame>
 
 </div>
 
 <style>
+	/* the whole page speaks the dataset colour: frame titles, the
+	   lightbulbs and the CPV columns' ink all take the green
+	   (--frame-accent / --cpv-ink inherit into the components) */
+	.dasep {
+		--frame-accent: var(--c-dase);
+		--cpv-ink: var(--c-dase);
+	}
 	/* every section title follows the sponsored-works kicker, in the
 	   ΔΑΣΕ dataset colour (green) */
 	.dasep :global(.frame .finding) {
@@ -1020,12 +1054,10 @@
 		max-width: 44rem;
 	}
 	/* same footprint as the sponsored-works RANKING OF COMPANIES */
+	/* inside the half-width pair the full-width 75% measure would squeeze
+	   the bars until names fall outside the green — the pair column IS the
+	   measure now (user, 2026-08-24) */
 	.rankw {
-		max-width: 75%;
-	}
-	@media (max-width: 900px) {
-		.rankw {
-			max-width: none;
-		}
+		max-width: none;
 	}
 </style>

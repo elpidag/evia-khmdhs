@@ -44,7 +44,14 @@
 	const CLS_SLOT = 36; // a class column's slot inside the split
 	const CHAR = 5.6; // the display face at 13px, per character
 	const ROW = 15; // a row of the 13px names
-	const step = $derived(total > 200 ? 50 : 25);
+	// ~5 labelled ticks whatever the dataset's size — the fixed 25/50 pair
+	// smeared 40 ticks onto the axis when the ΔΑΣΕ page (total 1.998) took
+	// this chart (2026-08-24); Anti-nero (245) still lands on 50
+	const step = $derived.by(() => {
+		for (const s of [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000])
+			if (total / s <= 5.5) return s;
+		return 25000;
+	});
 	const yTop = $derived(Math.ceil(total / step) * step);
 	const ticks = $derived(Array.from({ length: yTop / step + 1 }, (_, i) => i * step));
 	const y = (v: number) => PAD.t + PLOT_H - (PLOT_H * v) / yTop;
@@ -87,8 +94,11 @@
 		return { slots, hidden: others.length - shown };
 	});
 	const colW = (slotW: number) => Math.min(64, slotW * 0.6);
-	/** a count prints WHITE inside its bar when the bar is tall enough */
-	const inside = (n: number) => y(0) - y(n) >= 20;
+	/** a count prints WHITE inside its bar when the bar is tall enough —
+	 *  and, for the thin class columns, only when it is also WIDE enough
+	 *  («1.406» overflowed the 36px slot when the ΔΑΣΕ page took this
+	 *  chart, 2026-08-24) */
+	const inside = (n: number, w = Infinity) => y(0) - y(n) >= 20 && grInt(n).length * 7 + 6 <= w;
 
 	/** the name under a column, WHOLE (user, 2026-08-23): wrapped on words
 	 *  to the slot's width, as many rows as it takes */
@@ -179,7 +189,7 @@
 								<title>{c.name_en}: {grInt(c.n)} contracts</title>
 							</rect>
 						</g>
-						{#if inside(c.n)}
+						{#if inside(c.n, cw)}
 							<text x={cx + cw / 2} y={y(c.n) + 12} class="ctotal in">{grInt(c.n)}</text>
 						{:else}
 							<text x={cx + cw / 2} y={y(c.n) - 4} class="ctotal">{grInt(c.n)}</text>
@@ -268,28 +278,33 @@
 	.hit {
 		fill: transparent;
 	}
+	/* the bars take the hosting page's ink (— the ΔΑΣΕ page passes its
+	   green via --cpv-ink, 2026-08-24); the hover/dim states are the same
+	   ink mixed toward the paper, so every page gets its own colour's
+	   «transparencies» — on Anti-nero the mixes land on the exact greys
+	   these rules used to hardcode (#3a3a3a / #bdbdbd / #9b9b9b) */
 	.bar {
-		fill: var(--c-antinero);
+		fill: var(--cpv-ink, var(--c-antinero));
 	}
 	.col:hover .bar {
-		fill: #3a3a3a;
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 77%, #fff);
 	}
-	/* the other divisions, grey while one is split open */
+	/* the other divisions, faded while one is split open */
 	.col.dim .bar {
-		fill: #bdbdbd;
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 26%, #fff);
 	}
 	.col.dim:hover .bar {
-		fill: #9b9b9b;
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 39%, #fff);
 	}
 	.bar.cls {
-		fill: var(--c-antinero);
+		fill: var(--cpv-ink, var(--c-antinero));
 		cursor: pointer;
 	}
 	.col.on:hover .bar.cls {
-		fill: var(--c-antinero);
+		fill: var(--cpv-ink, var(--c-antinero));
 	}
 	.bar.cls:hover {
-		fill: #3a3a3a;
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 77%, #fff);
 	}
 	.bar.cls.lit {
 		fill: var(--accent);

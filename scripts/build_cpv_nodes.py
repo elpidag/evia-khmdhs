@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """Build khmdhs/data/cpv_nodes.json — the official EU CPV 2008 names (EN +
-EL) for exactly the nodes the in-scope Anti-nero contracts touch, at every
-level of the vocabulary's tree (DATA_DECISIONS 2026-08-23).
+EL) for exactly the nodes the in-scope Anti-nero contracts AND the live
+ΔΑΣΕ contracts touch, at every level of the vocabulary's tree
+(DATA_DECISIONS 2026-08-23; ΔΑΣΕ codes added 2026-08-24 for the /dase
+CPV CODES frame).
 
 Source: the TED/SIMAP workbook «cpv_2008_ver_2013.xlsx» (sheet «CPV codes»,
 one row per code with its name in every EU language), downloaded from
@@ -27,6 +29,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 XLSX = ROOT / "data" / "raw" / "cpv_2008_ver_2013.xlsx"
 DB = ROOT / "data" / "processed" / "khmdhs.sqlite"
+DASE_DB = ROOT / "data" / "processed" / "dase.sqlite"
 OUT = ROOT / "khmdhs" / "data" / "cpv_nodes.json"
 SOURCE_URL = "https://ted.europa.eu/documents/d/ted/cpv_2008_xls"
 
@@ -78,6 +81,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--xlsx", type=Path, default=XLSX)
     ap.add_argument("--db", type=Path, default=DB)
+    ap.add_argument("--dase-db", type=Path, default=DASE_DB)
     args = ap.parse_args()
 
     vocab = load_vocab(args.xlsx)
@@ -86,6 +90,18 @@ def main() -> int:
         """SELECT DISTINCT c.cpv_code FROM contract_cpvs c
            JOIN contract_scope s ON s.reference_number = c.reference_number
                                 AND s.in_scope = 1""")]
+    # the ΔΑΣΕ dataset's live population (cancelled=0, not superseded
+    # in-DB — dase_queries.live_filter's condition, restated here so the
+    # one-off builder needs no webui import)
+    if args.dase_db.exists():
+        dase = sqlite3.connect(args.dase_db)
+        declared += [r[0] for r in dase.execute(
+            """SELECT DISTINCT c.cpv_code FROM contract_cpvs c
+               JOIN contracts co ON co.reference_number = c.reference_number
+               WHERE co.cancelled = 0 AND NOT EXISTS (
+                     SELECT 1 FROM contracts nx
+                     WHERE nx.reference_number = co.next_reference_no)""")]
+        dase.close()
     nodes: dict[str, dict] = {}
     missing: list[str] = []
     for raw in declared:
@@ -103,10 +119,10 @@ def main() -> int:
                           "parent": parent_of(key)}
     out = {
         "_doc": ("Official EU CPV 2008 names, EN + EL, for every node the in-scope "
-                 "Anti-nero contracts touch (leaf codes and their division/group/"
-                 "class/category ancestors). Built by scripts/build_cpv_nodes.py "
-                 "from the TED workbook in data/raw/ — names are the vocabulary's, "
-                 "never typed."),
+                 "Anti-nero contracts and the live ΔΑΣΕ contracts touch (leaf "
+                 "codes and their division/group/class/category ancestors). Built "
+                 "by scripts/build_cpv_nodes.py from the TED workbook in data/raw/ "
+                 "— names are the vocabulary's, never typed."),
         "_source": {"url": SOURCE_URL, "file": args.xlsx.name, "built": date.today().isoformat()},
         "_missing": sorted(set(missing)),
         "nodes": dict(sorted(nodes.items())),

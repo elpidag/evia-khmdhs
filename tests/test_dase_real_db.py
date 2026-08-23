@@ -285,3 +285,25 @@ def test_next_reference_column_matches_raw_json(conn):
         if len(vals) > 1:
             bad += 1          # multi-successor would break the NOT EXISTS rule
     assert bad == 0
+
+
+def test_cpv_tree_pins(conn):
+    """The /dase CPV CODES frame (2026-08-24): the live population's declared
+    codes rolled up the CPV 2008 tree — every node carries an official name
+    (cpv_nodes.json covers BOTH datasets since the same day), every live
+    contract declares at least one code, and the documented ΕΦΚΑ count
+    (DATA_DECISIONS 2026-08-17: 386 insurance-code rows) is the insurance
+    division's contract count."""
+    from atlas_api import queries_extra as qe
+
+    tree = qe.dase_cpv_tree(conn)
+    assert tree["n_contracts"] == 1998        # every live contract has a code
+    assert tree["divisions"], "empty tree"
+    for d in tree["divisions"]:
+        assert d["name_en"], f"unnamed division {d['code']}"
+        for k in d["classes"]:
+            assert k["name_en"], f"unnamed class {k['code']} in {d['code']}"
+    top = tree["divisions"][0]
+    assert top["code"].startswith("77")       # forestry leads
+    div66 = next(d for d in tree["divisions"] if d["code"].startswith("66"))
+    assert div66["n"] == 386                  # the ΕΦΚΑ tag, pinned 2026-08-17

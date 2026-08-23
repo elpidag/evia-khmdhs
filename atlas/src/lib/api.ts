@@ -220,6 +220,9 @@ export interface DaseKpis {
 export interface DaseOverview {
 	kpis: DaseKpis;
 	yearly: { year: string; n: number; eur: number }[];
+	/** the declared codes rolled up the CPV tree — same shape and
+	 *  conventions as the Anti-nero front page's (2026-08-24) */
+	cpv_tree?: AntineroOverview['cpv_tree'];
 	top_coops: {
 		vat: string;
 		name: string;
