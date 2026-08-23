@@ -1499,3 +1499,31 @@ def test_value_histogram_covers_every_contract_on_doubling_edges(client):
     sw = client.get("/api/antinero/swarm").get_json()
     assert len(sw) == 245
     assert all(r["d"] for r in sw)          # the tooltip's signature date
+
+
+def test_front_page_findings(client):
+    """The bulbs state FINDINGS computed from the payloads (copy pass,
+    DATA_DECISIONS 2026-08-23); the load-bearing ones are pinned here the
+    way the page computes them."""
+    m = client.get("/api/antinero/map").get_json()
+    rs = sorted(m["work_regions"], key=lambda r: -r["split_eur"])
+    total = sum(r["split_eur"] for r in rs)
+    assert rs[0]["pe"] == "Π.Ε. Ανατολικής Αττικής"
+    assert round(100 * rs[0]["split_eur"] / total, 1) == 11.9
+    acc, n_half = 0.0, 0
+    for r in rs:
+        acc += r["split_eur"]; n_half += 1
+        if acc >= total / 2:
+            break
+    assert (n_half, len(rs)) == (7, 59)
+    uf = client.get("/api/antinero/unit-flow").get_json()
+    units = sorted((n for n in uf["nodes"] if n["id"].startswith("u:")),
+                   key=lambda n: -n["eur"])
+    assert round(100 * units[0]["eur"] / uf["total_eur"], 1) == 77.6
+    sw = client.get("/api/antinero/swarm").get_json()
+    vs = sorted(r["eur"] for r in sw)
+    assert len(vs) == 245 and vs[0] > 60_000          # every contract clears the ceiling
+    assert round(vs[len(vs) // 2] / 1e6, 2) == 2.12    # the median
+    o = client.get("/api/antinero/overview").get_json()
+    top10 = sorted((c["total_eur"] for c in o["top_contractors"]), reverse=True)[:10]
+    assert round(100 * sum(top10) / o["kpis"]["total_eur"], 1) == 26.6

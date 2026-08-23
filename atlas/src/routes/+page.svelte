@@ -23,6 +23,7 @@
 	} from '$lib/transforms/chordSides';
 	import { SCOPE_COLORS, SCOPE_LABELS, SCOPE_ORDER } from '$lib/charts/scopeColors';
 	import { unitEn } from '$lib/transforms/names';
+	import { ruLabel } from '$lib/transforms/regions';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
@@ -110,19 +111,82 @@
 		if (netMode === 'type')
 			return {
 				title: 'PROCUREMENT TIMELINE',
-				subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season, the shaded stripes. The colour is the contract's curated TYPE: the special forestry works are the grey mass, and the specialised strands — mixed firebreaks, reforestation, flood protection, archaeological sites — arrive in campaigns.`,
-				caveat:
-					'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
+				subtitle: `${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season. By type, the special forestry works are the grey mass and the specialised strands — mixed firebreaks, reforestation, flood protection, archaeological sites — arrive in campaigns.`,
+				caveat: ''
 			};
 		return {
 			title: 'PROCUREMENT TIMELINE',
-			subtitle: `Every in-scope contract on the date it was signed, dodged so none hides another; contracts bought under the same call are joined — ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season, the shaded stripes. The colour is the contract's SCOPE: ${y22.works} of the ${y22.n} contracts of 2022 bought works only, and the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
-			caveat:
-				'Vertical position carries no meaning here — it is packing, not a value axis. The shaded stripes are the fire season, 1 May to 31 October.'
+			subtitle: `${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season. By scope, ${y22.works} of the ${y22.n} contracts of 2022 bought works only, and the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
+			caveat: ''
 		};
 	});
 
 	const directEur = $derived(o.procedures.find((p) => p.label.includes('Απευθείας'))?.eur ?? 0);
+	// ---- findings for the bulbs, computed from the payloads (copy pass
+	// 2026-08-23: a bulb states findings and author context, never how to
+	// read — that is the chart's and the legend's job) ----
+	const allocFacts = $derived.by(() => {
+		const rs = [...(map?.work_regions ?? [])].sort((a, b) => b.split_eur - a.split_eur);
+		if (!rs.length) return null;
+		const total = rs.reduce((s, r) => s + r.split_eur, 0);
+		let acc = 0;
+		let nHalf = 0;
+		for (const r of rs) {
+			acc += r.split_eur;
+			nHalf += 1;
+			if (acc >= total / 2) break;
+		}
+		return { top: rs[0], topShare: (rs[0].split_eur / total) * 100, nHalf, n: rs.length };
+	});
+	const rankFacts = $derived.by(() => {
+		const top = topRows.reduce((s, r) => s + (r.value ?? 0), 0);
+		return { top, share: o.kpis.total_eur ? (top / o.kpis.total_eur) * 100 : 0, n: topRows.length };
+	});
+	const unitFacts = $derived.by(() => {
+		const us = (unitFlow?.nodes ?? []).filter((n) => n.id.startsWith('u:')).sort((a, b) => b.eur - a.eur);
+		if (!us.length || !unitFlow) return null;
+		return { label: unitEn(us[0].label), eur: us[0].eur, share: (us[0].eur / unitFlow.total_eur) * 100 };
+	});
+	const valueFacts = $derived.by(() => {
+		if (!swarm?.length) return null;
+		const vs = [...swarm.map((r) => r.eur)].sort((a, b) => a - b);
+		const median = vs[Math.floor(vs.length / 2)];
+		return { n: vs.length, median, above: vs.filter((v) => v > 60_000).length, min: vs[0], max: vs[vs.length - 1] };
+	});
+	const moneyFacts = $derived.by(() => {
+		const byYear = new Map<string, number>();
+		for (const r of swarm ?? []) byYear.set(r.year ?? '—', (byYear.get(r.year ?? '—') ?? 0) + r.eur);
+		const c = [...byYear.entries()].sort((a, b) => b[1] - a[1])[0];
+		const pd = [...o.yearly].sort((a, b) => b.paid_eur - a.paid_eur)[0];
+		return c ? { year: c[0], eur: c[1], payYear: pd?.year, payEur: pd?.paid_eur ?? 0 } : null;
+	});
+	const paidFacts = $derived.by(() => {
+		const byYear = new Map<string, number>();
+		const events = (payments?.events ?? []).filter((e) => !!e.d);
+		for (const e of events) byYear.set(e.d!.slice(0, 4), (byYear.get(e.d!.slice(0, 4)) ?? 0) + (e.eur || 0));
+		const years = [...byYear.keys()].sort();
+		if (!years.length) return null;
+		const heaviest = [...byYear.entries()].sort((a, b) => b[1] - a[1])[0];
+		// the chart's point: the SAME day of the year across years — the
+		// last year so far against the previous year up to the same day
+		const last = years.at(-1)!;
+		const prev = years.length > 1 ? years.at(-2)! : null;
+		const lastDay = events.filter((e) => e.d!.startsWith(last)).map((e) => e.d!.slice(5)).sort().at(-1) ?? '12-31';
+		const upTo = (y: string) => events.filter((e) => e.d!.startsWith(y) && e.d!.slice(5) <= lastDay).reduce((s, e) => s + (e.eur || 0), 0);
+		return { year: heaviest[0], eur: heaviest[1], last, lastEur: byYear.get(last) ?? 0, prev, prevSameDay: prev ? upTo(prev) : 0 };
+	});
+	// the chord's finding: for the two biggest right-hand arcs, the left
+	// arc they reach most, with counts
+	const chordFacts = $derived.by(() => {
+		const d = chordData;
+		const rights = [...d.right.items].sort((a, b) => b.n - a.n).slice(0, 2);
+		return rights.map((r) => {
+			const best = [...d.left.items]
+				.map((l) => ({ l, n: d.matrix[`${r.key}|${l.key}`] ?? 0 }))
+				.sort((a, b) => b.n - a.n)[0];
+			return { right: r, left: best?.l, n: best?.n ?? 0 };
+		});
+	});
 	// the ranking has two views of the same money (user, 2026-08-20): the
 	// company that SIGNED, and the firms behind it. A κοινοπραξία signs 54 of
 	// the contracts, so «as contracted» hides whoever is inside it.
@@ -515,6 +579,15 @@
 			)} contracts drew exactly one bid. This page follows what actually got paid, to whom,
 			and where — <a href="/methodology#antinero">methodology</a>.
 		</p>
+		<!-- the BASIS, said once for the whole page (copy pass 2026-08-23): the
+		     frames below no longer repeat it -->
+		<p class="basis">
+			All amounts are the contracts' stated values excl. VAT, from the ΚΗΜΔΗΣ records and the
+			signed contract PDFs; a contract signed by several firms or covering several regional
+			units is split equally between them — the documents state no other allocation; payments
+			(ΚΗΜΔΗΣ and Διαύγεια) are a separate layer —
+			<a href="/methodology#stated-basis">basis</a> · <a href="/methodology#even-split">split</a>.
+		</p>
 		{#if dk && dk.n_kinds > 0}
 			<p class="kinds">
 				All {grInt(dk.total)} are συμβάσεις, which is what the registry files them as; the
@@ -554,10 +627,10 @@
 {#if map}
 	<ChartFrame
 		title="ALLOCATION OF FUNDING"
-		insight="{grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the {grInt(
-			map.contracts.length
-		)} contracts cover more than one regional unit, and the documents state no allocation of the money between the units a contract covers. So each contract's value is split equally between its regions and, for a jointly signed contract, between its partners. A region's figure is the sum of those equal shares, and the regions add up to the programme total. The «individual dots» lens colours by a different measure — how many contracts TOUCH each region: there a contract whose authorities sit in three regions appears in all three regions' counts, so counts overlap across regions where euros never do."
-		caveat="Stated € excl. VAT. A contract covering several regional units, or signed by several firms, is split equally between them — the documents state no other allocation (the lightbulb beside the title explains)."
+		insight={allocFacts
+			? `${ruLabel(allocFacts.top.pe)} holds the most money — ${pct(allocFacts.topShare)} of the programme — and ${grInt(allocFacts.nHalf)} of the ${grInt(allocFacts.n)} regional units with Anti-nero works hold half of it. ${grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the ${grInt(map.contracts.length)} contracts cover more than one regional unit; on the «individual dots» lens such a contract is counted in every region it touches, so counts overlap across regions where euros never do.`
+			: ''}
+		caveat="Work regions as named in each signed contract; contractor seats as stated in the contract's party clause, geocoded."
 		anchor="map"
 		methodology="even-split"
 	>
@@ -609,10 +682,7 @@
 	})()}
 	<ChartFrame
 		title="FLOWS OF MONEY"
-		insight="Each regional unit is coloured according to the share of works carried out within it that are awarded to contractors based either within or outside its boundaries. The darker the regional unit, the larger the share of works awarded to companies based outside its boundaries. Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out. Switch to «by company» for the same flows broken down to the firms that carry them: {grInt(net.contractor_pe.length)} contractor ↔ work-region links across {grInt(Object.keys(net.contractors).length)} contractors — {maxReach.name} alone works in {maxReach.n} regional units; a unit focused on the map arrives selected in the lists, and a company selected there focuses the map on its home region."
-		caveat="Geocoded contractors only — {eurShort(net.coverage.resolved_eur)} of {eurShort(
-			net.coverage.total_eur
-		)} resolved. Same reading as the map above: a contract covering several regional units, or signed by several firms, is split equally between them, because the documents state no other allocation — every arrow carries the shares that connect a firm's base to a work region, and the flows add up to the programme total. The company lens draws the same shares as contractor ↔ region links; at rest each column lists its biggest rows, selecting one reshuffles the other column to exactly its counterparts."
+		insight="Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out. {maxReach.name} alone works in {maxReach.n} regional units; the «by company» lens breaks the same flows down to the {grInt(Object.keys(net.contractors).length)} firms that carry them."
 		anchor="flows"
 		methodology="even-split"
 	>
@@ -634,17 +704,11 @@
 				o.consortiums.n_documented
 			)} of the ${grInt(o.consortiums.n)} ventures have members on record, ${grInt(
 				o.consortiums.n_firms
-			)} firms in all. A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
+			)} firms in all: a venture with members on record is replaced by them, one whose members no document names keeps its own row, so ${eurShort(
 				o.consortiums.eur_unsplit
-			)} sits identically in both views. Both views add up to the programme total.`
-		: `Companies ranked by the sums contracted to them through the programme — the top ${topRows.length} of ${grInt(
-				o.kpis.n_contractors
-			)} contractors, ${eurShort(o.kpis.total_eur)} in total. Each contract is counted once: a jointly signed one is split evenly between its partners, so the totals add up to the programme total. Switch to «by member firm» to attribute the money to the firms behind the joint ventures.`}
-	caveat={rankMode === 'firm'
-		? `A joint venture whose members are on record is replaced by them and its € split evenly; one whose members no document names keeps its own row, so ${eurShort(
-				o.consortiums.eur_unsplit
-			)} sits identically in both views. Both add up to the programme total.`
-		: 'Each contract is counted once: a jointly signed one is split evenly between its partners, so these totals add up to the programme total.'}
+			)} sits identically in both views.`
+		: `The top ${grInt(rankFacts.n)} contractors hold ${pct(rankFacts.share)} of the programme (${eurShort(rankFacts.top)} of ${eurShort(o.kpis.total_eur)}), out of ${grInt(o.kpis.n_contractors)} in all. Switch to «by member firm» to attribute the money to the firms behind the joint ventures.`}
+	caveat={rankMode === 'firm' ? 'Venture members from the ΓΕΜΗ register and the signed contracts.' : ''}
 	anchor="top-contractors"
 	methodology={rankMode === 'firm' ? 'joint-contracts' : 'stated-basis'}
 >
@@ -694,8 +758,8 @@
 	]}
 	<ChartFrame
 		title="AWARDING PROCESS"
-		insight="The awarding body of every Anti-nero contract is the Ministry of Environment and Energy; the operating units on the left are the {grInt(uf.n_units)} units of the Ministry that ran the contracts, as the registry records them. The ribbons carry each unit’s money to the {grInt(uf.n_top)} biggest contractors, everyone else pooled in one node — {eurShort(uf.top_eur)} of the {eurShort(uf.total_eur)} ends at those {grInt(uf.n_top)} companies ({grInt(uf.n_contractors)} contractors in all). Ribbon width is stated € excl. VAT; hover a bar for its contract count, click a contractor for its page. The forest co-op page draws the same three columns for its own awarding bodies."
-		caveat="Consortium values split evenly between partners here, so both columns sum to the programme total."
+		insight={`The awarding body of every Anti-nero contract is the Ministry of Environment and Energy, acting through ${grInt(uf.n_units)} operating units${unitFacts ? ` — the ${unitFacts.label} alone handled ${pct(unitFacts.share)} of the money (${eurShort(unitFacts.eur)})` : ''}; the ${grInt(uf.n_top)} biggest contractors take ${eurShort(uf.top_eur)} of the ${eurShort(uf.total_eur)} (${grInt(uf.n_contractors)} contractors in all).`}
+		caveat="Awarding body and operating units as recorded in ΚΗΜΔΗΣ."
 		anchor="sankey"
 		methodology="even-split"
 	>
@@ -721,9 +785,21 @@
 
 <div class="pair">
 	<ChartFrame
+		title="AWARD PROCEDURES"
+		insight={`${grInt(directN)} of the ${grInt(procTotalN)} contracts — ${pct((directEur / procTotalEur) * 100, 0)} of the money — went by direct award; open procedures are the exception, not the rule.`}
+		caveat="Procedures as recorded in ΚΗΜΔΗΣ, named in the wording of Directive 2014/24/EU; «Direct award» is the ν.4412/2016 άρθρο 118 route, which has no Directive equivalent."
+		anchor="procedures"
+		methodology="procedures"
+	>
+		<div class="rankw">
+			<BarH rows={procRows} color="var(--c-antinero)" inside barHeight={35} highlight={(r) => !!(r as { direct?: boolean }).direct} />
+		</div>
+	</ChartFrame>
+
+	<ChartFrame
 		title="DIRECT AWARDS"
-		insight={`The ${grInt(o.direct_awards.n as number)} direct-award contracts by stated value (excl. VAT), one bar per value bracket, each bracket a doubling: they pile up around €${daModal}, far beyond the ν.4782/2021 ceilings for direct awards — the two dashed lines at €30k and €60k. The darkest bar is the most common bracket.`}
-		caveat="The statutory ceilings and these values are both excl. VAT; RRF emergency provisions allowed direct awards above the ceilings."
+		insight={`The ${grInt(o.direct_awards.n as number)} direct-award contracts pile up around €${daModal}, far beyond the ν.4782/2021 ceilings for direct awards (€30k and €60k, the dashed lines): the RRF emergency provisions allowed awards above them.`}
+		caveat="Ceilings: ν.4782/2021 on άρθρο 118 ν.4412/2016, defined excl. VAT."
 		anchor="direct-awards"
 		methodology="procedures"
 	>
@@ -735,25 +811,15 @@
 			thresholds={miniThresholds}
 		/>
 	</ChartFrame>
-
-	<ChartFrame
-		title="AWARD PROCEDURES"
-		insight={`Stated € (excl. VAT) by the procedure ΚΗΜΔΗΣ records for each contract, named in the wording of Directive 2014/24/EU: ${grInt(directN)} of the ${grInt(procTotalN)} contracts — ${pct((directEur / procTotalEur) * 100, 0)} of the money — went by direct award; open procedures are the exception, not the rule.`}
-		caveat="«Direct award» is the ν.4412/2016 άρθρο 118 route, which has no Directive equivalent; the other procedures carry the Directive's own names. Procedures as recorded in ΚΗΜΔΗΣ."
-		anchor="procedures"
-		methodology="procedures"
-	>
-		<div class="rankw">
-			<BarH rows={procRows} color="var(--c-antinero)" inside barHeight={35} highlight={(r) => !!(r as { direct?: boolean }).direct} />
-		</div>
-	</ChartFrame>
 </div>
 
 <Defer height={340}>
 {#if swarm}
 	<ChartFrame
 		title="CONTRACT VALUES"
-		caveat="Both views draw the same contracts from one list, on one axis: every bracket spans a doubling of value, which makes the equal-width slots a logarithmic scale, and the dots sit on that same scale — so a value is at the same place in both, the median line included. Greys are the signature year in both. The ν.4782/2021 ceilings are defined on the excl-VAT estimated value — the same basis; RRF emergency provisions allowed direct awards above them."
+		insight={valueFacts
+			? `The median contract is worth ${eurShort(valueFacts.median)}, the largest ${eurShort(valueFacts.max)}; ${valueFacts.above === valueFacts.n ? `every one of the ${grInt(valueFacts.n)} — the smallest at ${eurShort(valueFacts.min)} —` : `${grInt(valueFacts.above)} of the ${grInt(valueFacts.n)}`} lies above the €60k direct-award ceiling.`
+			: ''}
 		anchor="swarm"
 		methodology="stated-basis"
 	>
@@ -818,7 +884,7 @@
 			insight={`${grInt(o.deliverables?.study_and_works ?? 0)} of ${grInt(
 				o.kpis.n_contracts
 			)} contracts are design-build — the contractor first drafts the studies, then executes the works they define.`}
-			caveat="What each contract was engaged to deliver, read from its own signed text or its call: «study & works» is the design-build clause («η εκπόνηση από τον ανάδοχο … μελετών»), quoted verbatim on each contract page; «study only» are the contracts whose object is the studies. The same trio, with the same wording, classifies the sponsored-works projects."
+			caveat="Read from each contract's own signed text or its call; «study & works» is the design-build clause, quoted verbatim on the contract page; «study only» are the contracts whose object is the studies."
 			anchor="scope"
 			methodology="categories"
 		>
@@ -857,8 +923,8 @@
 
 		<ChartFrame
 			title="CONTRACT TYPE"
-			insight={`Every in-scope contract carries ONE curated category, read from the project title inside its signed PDF (CPV codes only as tie-breaker), so the € bars sum to the programme’s stated-net total — «${topCat.label_en ?? topCat.label}» dominates with ${eurShort(topCat.eur)} across ${grInt(topCat.n)} contracts (${pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme). Hover a bar for the works its contracts actually name.`}
-			caveat="One category per contract, curated from the signed PDF’s descriptive project title, so the € bars sum to the programme’s stated-net total. The works the titles actually name are counted in TYPES OF WORKS below."
+			insight={`«${catShort.get(topCat.key) ?? topCat.label_en ?? topCat.label}» dominates with ${eurShort(topCat.eur)} across ${grInt(topCat.n)} contracts — ${pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme.`}
+			caveat="One category per contract, curated from the project title in the signed PDF (CPV codes only as tie-breaker)."
 			anchor="categories"
 			methodology="categories"
 		>
@@ -916,12 +982,15 @@
 	{/snippet}
 	<ChartFrame
 		title="TYPES OF WORKS"
-		insight={chordPair === 'cat-scope'
-			? `Every contract is flagged twice here — ONE main category, curated from its title, and ONE contract scope (what it was engaged to deliver: study only, study & works, works only). Both halves are one per contract, so every arc and every ribbon is a plain contract count over the ${grInt(works.n_contracts)} contracts — ${grInt(o.deliverables?.study ?? 0)} study only, ${grInt(o.deliverables?.study_and_works ?? 0)} study & works, ${grInt(o.deliverables?.works ?? 0)} works only — and a ribbon joins a category to a scope as wide as the contracts carrying both, in the category’s colour. Hover an arc to trace its ribbons, a ribbon for its count.`
-			: chordPair === 'scope-works'
-				? `Every contract is flagged twice here — ONE contract scope (study only, study & works, works only) and EVERY work its signed title names. The right half is the scope, in CONTRACT SCOPE’s tones; the grey arcs of the left half are the works named (several per contract). A ribbon joins a scope to a work, as wide as the number of contracts of that scope naming that work. A contract naming several works lies under several ribbons, so a scope’s arc measures mentions, not contracts — the hover card counts contracts. ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc.`
-				: `Every contract is flagged twice — ONE main category, curated from its title, and EVERY work that title names — and the circle keeps the two apart: the filled, coloured arcs of the right half are the ${grInt(o.categories.length)} main categories (one per contract), the grey arcs of the left half are the works named (several per contract). A ribbon joins a category to a work, as wide as the number of that category’s contracts naming that work, fading from the category’s colour to grey at the work end. A contract naming several works lies under several ribbons, so a category’s arc measures mentions, not contracts. Hover an arc to trace its ribbons, a ribbon for its count; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc. The toggles under the headings swap either half for the contract scope.`}
-		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
+		insight={`${chordFacts
+			.map((f) =>
+				f.left
+					? `${f.right.label}: ${grInt(f.n)} of its ${grInt(f.right.n)} contracts ${chordSides.left === 'works' ? 'name' : 'are'} «${f.left.label}»`
+					: ''
+			)
+			.filter(Boolean)
+			.join('; ')}${chordSides.left === 'works' || chordSides.right === 'works' ? `; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work` : ''}. ${chordPair === 'cat-scope' ? 'Both halves are one per contract, so every arc and ribbon is a plain contract count.' : 'A contract naming several works lies under several ribbons, so an arc on the one-per-contract half measures mentions; the hover card counts contracts.'}`}
+		caveat={`Works as named in the signed titles or, where a title names none, in the call’s description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names. Categories and scope: one per contract, from the same documents.`}
 		anchor="works"
 		methodology="categories"
 	>
@@ -934,9 +1003,9 @@
 	<ChartFrame
 		title={netCopy.title}
 		insight={netCopy.subtitle}
-		caveat="{netCopy.caveat} Circle area is the contract's stated value excl. VAT, on one scale in every arrangement; a call is the πρόσκληση the contract cites in its own signed text ({grInt(
+		caveat="A call is the πρόσκληση the contract cites in its own signed text ({grInt(
 			network.stats.n_calls
-		)} resolved this way). Every layout is deterministic, not a force simulation."
+		)} resolved this way); the fire season is the statutory 1 May – 31 October."
 		anchor="network"
 		methodology="procurement-families"
 	>
@@ -960,7 +1029,10 @@
 <div class="pair">
 	<ChartFrame
 		title="MONEY PER YEAR"
-		caveat="€ contracted: the stated value (excl. VAT) of the in-scope contracts signed that year — the years sum to the programme total. € paid: non-cancelled payment orders by payment year; payments run behind contracting by design."
+		insight={moneyFacts
+			? `${moneyFacts.year} was the biggest contracting year (${eurShort(moneyFacts.eur)}); payments peaked in ${moneyFacts.payYear} (${eurShort(moneyFacts.payEur)}) — they run behind contracting by design.`
+			: ''}
+		caveat="€ contracted: stated value by signature year; € paid: payment orders by payment year."
 		anchor="money-per-year"
 		methodology="stated-basis"
 	>
@@ -983,7 +1055,10 @@
 
 	<ChartFrame
 		title="CUMULATIVE DISBURSEMENT"
-		subtitle="Cumulative € of payment orders within each year, day by day — the same point in the year comparable across years."
+		insight={paidFacts
+			? `${paidFacts.last} stands at ${eurShort(paidFacts.lastEur)} so far${paidFacts.prev ? `, ${paidFacts.lastEur >= paidFacts.prevSameDay ? 'ahead of' : 'behind'} ${paidFacts.prev}'s ${eurShort(paidFacts.prevSameDay)} by the same day of that year` : ''}; ${paidFacts.year} was the heaviest full year (${eurShort(paidFacts.eur)}).`
+			: ''}
+		caveat="Payment orders (ΚΗΜΔΗΣ and Διαύγεια) cumulated within each calendar year, day by day."
 		anchor="disbursement"
 		methodology="payments"
 	>
@@ -999,10 +1074,10 @@
 {#if payments}
 	<ChartFrame
 		title="PAYMENTS TIMELINE"
-		insight="One tick per payment order ({grInt(payments.events.length)}), height ∝ √€, coloured by the YEAR THE CONTRACT WAS SIGNED — so the tails are visible: {payments.lag?.median_days != null ? `the median payment order arrives ${grInt(payments.lag.median_days)} days after the contract's signature, the first payment after ${grInt(payments.lag.median_first_days ?? 0)} days (over ${grInt(payments.lag.n_contracts)} contracts), and early cohorts' greys stretch years past their signing` : ''}. The biggest single month was {peak.m} ({eurShort(
+		insight="{payments.lag?.median_days != null ? `The median payment order arrives ${grInt(payments.lag.median_days)} days after the contract's signature, the first payment after ${grInt(payments.lag.median_first_days ?? 0)} days (over ${grInt(payments.lag.n_contracts)} contracts); the early cohorts' payments stretch years past their signing. ` : ''}The biggest single month was {peak.m} ({eurShort(
 			peak.eur
-		)}). Hover for the order, click through to the contract."
-		caveat="{grInt(
+		)})."
+		caveat="Payment orders from ΚΗΜΔΗΣ, the rest from Διαύγεια; {grInt(
 			payments.fallback
 		)} of {grInt(payments.events.length)} orders carry no signature date — the registry submission date is shown for those{payments
 			.undated.n
@@ -1028,12 +1103,12 @@
 	{@const topCpv = o.cpvs[0]}
 	<ChartFrame
 		title="CPV CODES"
-		subtitle="All {grInt(o.cpvs.length)} procurement-vocabulary (CPV) codes declared across the {grInt(
+		insight="{grInt(o.cpvs.length)} procurement-vocabulary (CPV) codes across the {grInt(
 			o.kpis.n_contracts
-		)} in-scope contracts, sorted by reach — the most common, «{topCpv.desc}», appears on {grInt(
-			topCpv.n
-		)} of them ({pct((topCpv.n / o.kpis.n_contracts) * 100)})."
-		caveat="Codes and descriptions as declared in ΚΗΜΔΗΣ. Contracts declare several codes each, so counts sum to more than the number of contracts — and for the same reason no € is attributed per code."
+		)} contracts — the most common, «{topCpv.desc}», appears on {grInt(topCpv.n)} of them ({pct(
+			(topCpv.n / o.kpis.n_contracts) * 100
+		)})."
+		caveat="Codes and descriptions as declared in ΚΗΜΔΗΣ; a contract declares several, so counts exceed the number of contracts."
 		anchor="cpvs"
 	>
 		<div class="cpvlist">
@@ -1448,6 +1523,16 @@
 	}
 	.sublabel.peryear {
 		margin-top: var(--sp-4, 1rem);
+	}
+	/* the page's one BASIS line under the programme paragraph */
+	.basis {
+		margin-top: var(--sp-3);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+		line-height: 1.5;
+	}
+	.basis a {
+		color: var(--ink-soft);
 	}
 	.rankbar {
 		display: flex;

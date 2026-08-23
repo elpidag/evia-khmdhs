@@ -7654,3 +7654,41 @@ chart 168 px tall in its viewBox; measured bodies 323 / 322 px. And as
 the safety net, the `.scopetype` pair stretches both frames to ONE
 height with each caveat anchored to its frame's bottom, so the pair
 always ends on one line whatever the contents.
+
+## 2026-08-23 · AWARD PROCEDURES left, DIRECT AWARDS right
+
+(user) The two half-width frames swap places: the procedures bar first,
+the direct-award histogram beside it.
+
+## 2026-08-23 · The front page's copy doctrine: basis once, bulbs for findings, caveats for method and source
+
+(user) Reviewing the lines under the charts: ~600 words, half of them
+the same three facts repeated (excl. VAT, the even split, counts that
+exceed contracts) or how-to-read that the chart and its legend should
+carry — the caveat rule («every chart carries its own honesty line»)
+predates the lightbulb and was never slimmed after it. New doctrine,
+applied in one pass:
+- **the basis is said once** for the page, under the programme
+  paragraph («stated values excl. VAT, from ΚΗΜΔΗΣ and the signed
+  PDFs; the even split; payments a separate layer», linked to the
+  methodology) — eight frames dropped those sentences;
+- **the bulb states FINDINGS and author context only**, computed from
+  the payloads, never how to read: ALLOCATION (the top unit and how
+  many units hold half), FLOWS (the local share), RANKING (the top-10
+  share), AWARDING PROCESS (the directorate's share), AWARD PROCEDURES,
+  DIRECT AWARDS (+ the RRF context), CONTRACT VALUES (median, every
+  contract above the €60k ceiling — a bulb it lacked), CONTRACT SCOPE,
+  CONTRACT TYPE, TYPES OF WORKS (the biggest arcs' strongest ribbon,
+  from the matrix), PROCUREMENT TIMELINE, MONEY PER YEAR (peak years —
+  new bulb), CUMULATIVE (the same-day comparison — subtitle → bulb),
+  PAYMENTS TIMELINE (lag medians), CPV (subtitle → bulb);
+- **the caveat is the frame's specific method and source** where the
+  page has not said them — one clause, or none (FLOWS, RANKING party
+  view, CONTRACT VALUES have none); every chart keeps its Methodology
+  link where a caveat remains;
+- **how-to-read lives in the chart**: the only two judged worth keeping
+  («circle area = stated value · vertical position = packing only»)
+  moved into the PROCUREMENT TIMELINE's key.
+The new findings are pinned (`test_front_page_findings`: East Attica
+11,9 % and 7 of 59 units hold half; the directorate 77,6 %; median
+€2,12 M with every contract above €60k; the top 10 hold 26,6 %).

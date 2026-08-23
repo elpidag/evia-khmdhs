@@ -104,6 +104,9 @@
 		{/if}
 		<li class="sep"><i class="season"></i>fire season, 1 May – 31 October</li>
 		<li><i class="tie"></i>joined: lots of the same call</li>
+		<!-- the two readings a beeswarm needs, in the key where reading lives
+		     (copy pass 2026-08-23) -->
+		<li class="note">circle area = stated value · vertical position = packing only</li>
 		{#if hasUdc}
 			<li><i class="udcnode"></i>call known by date only (HRADF) — no ΚΗΜΔΗΣ record</li>
 		{/if}
@@ -359,6 +362,9 @@
 		border-top: 2px solid #cfccc6;
 		border-radius: 0;
 		background: none;
+	}
+	.key li.note {
+		color: var(--ink-faint);
 	}
 	.key li i.season {
 		background: color-mix(in srgb, var(--accent) 12%, white);

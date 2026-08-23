@@ -1339,8 +1339,8 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   each column's centre by hand (fraction of the width or absolute x), the
   ribbons and headings following; both AWARDING PROCESS frames set it.
   **Front-page order since 2026-08-23 (user):** ALLOCATION OF FUNDING ·
-  FLOWS OF MONEY · RANKING OF COMPANIES · AWARDING PROCESS · DIRECT
-  AWARDS + AWARD PROCEDURES (procedure names via `procedureEn`, bulbs,
+  FLOWS OF MONEY · RANKING OF COMPANIES · AWARDING PROCESS · AWARD
+  PROCEDURES + DIRECT AWARDS (swapped 2026-08-23; procedure names via `procedureEn`, bulbs,
   `format.bracket` «€2–5M» labels) · CONTRACT VALUES · CONTRACT SCOPE +
   CONTRACT TYPE · TYPES OF WORKS · PROCUREMENT TIMELINE · MONEY PER YEAR
   (€ contracted / € paid toggle, `?money=`) beside the year-vs-year-ONLY
@@ -1452,9 +1452,16 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   under COPERNICUS by the European Union and ESA; all rights reserved».
 - **Design doctrine** (Tse/ProPublica): chart titles are findings, not
   topics; annotations printed on the chart; tooltips never carry
-  load-bearing info; every chart has a caveat line anchored to
-  `/methodology`; pair every change view with a level view; small multiples
-  over filterable charts. SVG ≤1k marks, canvas above (2,018 ΔΑΣΕ dots).
+  load-bearing info; pair every change view with a level view; small
+  multiples over filterable charts. SVG ≤1k marks, canvas above (2,018
+  ΔΑΣΕ dots). **Copy doctrine since 2026-08-23 (user)**: the page says
+  its BASIS once (the `.basis` line under the programme paragraph:
+  stated € excl. VAT, the even split, payments a separate layer); a
+  frame's LIGHTBULB states findings and author context computed from the
+  payloads — never how to read, that is the chart's and the legend's
+  job; a frame's CAVEAT is its specific method and source where the page
+  has not said them (one clause, or none), with the Methodology link.
+  Findings pinned in `test_front_page_findings`.
 - **API endpoints** under `/api/{meta,antinero/*,dase/*,anadohoi/*,explore,
   compare,connections,authorities,authority/<slug>}` — JSON gets
   `Cache-Control: max-age=300`, `app.json.ensure_ascii = False`. `/api/meta`
