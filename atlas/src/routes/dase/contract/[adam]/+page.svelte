@@ -1,11 +1,26 @@
 <script lang="ts">
+	/**
+	 * The ΔΑΣΕ contract page on the Anti-nero skeleton (user, DATA_DECISIONS
+	 * 2026-08-23): the facts list where the data exists, the map with the
+	 * procurement DIAGRAM behind a switch, the TIMELINE (signature, run-up
+	 * acts and € payment marks — NO deadline bar), the DOCUMENT TRAIL with
+	 * the payment orders in it, and the three folds — procurement details,
+	 * extracted quotes, CPV. The curated TYPE / FIRE CONTEXT / document
+	 * DURATION layers are loaded in the DB and shipped in the payload but
+	 * NOT presented (user, same day): their certainty is below the site's
+	 * bar until independently verified — DATA_DECISIONS 2026-08-23.
+	 */
 	import { bodyEn, devGreek, orgEn } from '$lib/transforms/names';
-	import { ruLabel } from '$lib/transforms/regions';
+	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
 	import { isOutOfScope, trailChip } from '$lib/transforms/exclusion';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
+	import ChainTimeline from '$lib/detail/ChainTimeline.svelte';
 	import FamilyTree from '$lib/charts/FamilyTree.svelte';
+	import Fold from '$lib/ui/Fold.svelte';
+	import Hint from '$lib/ui/Hint.svelte';
+	import { procedureEn } from '$lib/transforms/procedures';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import { dmy, eur, eurShort, grInt } from '$lib/transforms/format';
@@ -19,6 +34,25 @@
 	// the curated correction, '' when no in-scope sibling exists)
 	const outOfScope = $derived(isOutOfScope(c));
 
+	/** the registry's date formats ('03/11/2023', '2026-07-24T00:00:00') */
+	const iso = (v: string | null | undefined): string | null => {
+		if (!v) return null;
+		const s = v.trim();
+		if (s.length >= 10 && s[2] === '/' && s[5] === '/')
+			return `${s.slice(6, 10)}-${s.slice(3, 5)}-${s.slice(0, 2)}`;
+		if (s.length >= 10 && s[4] === '-' && s[7] === '-') return s.slice(0, 10);
+		return null;
+	};
+	const todayIso = new Date().toLocaleDateString('en-CA');
+	let cpvAll = $state(false);
+	// hover binds the timeline's act dots to the trail's rows, both ways
+	let hoverAct = $state<string | null>(null);
+	let hoverRow = $state<string | null>(null);
+	const chain = $derived(c.chain ?? []);
+	const payTicks = $derived(
+		live.map((p) => ({ ref: p.payment_ref, d: p.d ?? iso(p.signed_date), eur: p.amount_without_vat }))
+	);
+
 	// English document-type labels (user template, 2026-08-17)
 	const KIND: Record<string, string> = {
 		request: 'Primary request',
@@ -31,27 +65,56 @@
 	const ORDER: Record<string, number> = {
 		request: 0, approved_request: 1, notice: 2, auction: 3, contract: 4, completion: 5
 	};
-	// the FamilyTree keeps the Greek registry vocabulary — it matches acts
-	// against registry names; the trail table below is the English view
-	const TREE_KIND: Record<string, string> = {
-		request: 'Πρωτογενές αίτημα',
-		approved_request: 'Ανάληψη υποχρέωσης',
-		notice: 'Διακήρυξη / πρόσκληση',
-		auction: 'Κατακύρωση / ανάθεση',
-		contract: 'Σύμβαση',
-		completion: 'Ολοκλήρωση'
-	};
 
-	/** the trail table: this contract's own records. The other lots of the
-	 *  same procurement live in the family diagram below, as on the
-	 *  Anti-nero pages (user, 2026-08-19). */
-	const timeline = $derived.by(() => rowsOf(c.timeline ?? []));
+	// the registry's chain returns the awards of EVERY lot of a multi-lot
+	// procurement; the trail keeps only the award that names THIS co-op (the
+	// FamilyTree's own name-verified pairing), the diagram keeps them all
+	const fold = (s: string | null | undefined): string =>
+		(s ?? '').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\p{L}\p{N}]/gu, '');
+	const whoCore = (s: string | null | undefined): string =>
+		fold(s).replace(/^(ΕΔΑΣΕ|ΑΔΣΕ|ΔΑΣΕ|ΔΑΣΙΚΟΣΣΥΝΕΤΑΙΡΙΣΜΟΣ(ΕΡΓΑΣΙΑΣ)?)/u, '');
+	const ownAward = (title: string | null, awards: number): boolean => {
+		if (awards <= 1) return true;
+		const f = fold(title);
+		return c.contractors.some((ct) =>
+			[fold(ct.name), whoCore(ct.name)].some((w) => w.length >= 5 && f.includes(w))
+		);
+	};
+	/** the trail table: this contract's own records; the other lots of the
+	 *  same procurement — and their awards — live in the family diagram
+	 *  (user, 2026-08-19) */
+	const timeline = $derived.by(() => {
+		const src = c.timeline ?? [];
+		const nAwards = src.filter((t) => t.kind === 'auction').length;
+		const rows = rowsOf(src.filter((t) => t.kind !== 'auction' || ownAward(t.title, nAwards)));
+		// the contract's own later versions — the registry's prev/next links
+		const seen = new Set(rows.map((t) => t.adam));
+		for (const a of chain) {
+			if (a.self || seen.has(a.ref)) continue;
+			seen.add(a.ref);
+			rows.push({
+				adam: a.ref, kind: 'contract' as const, title: a.title, d: a.d,
+				cancelled: 0, duplicate_of: null, related_to: null, in_db: true,
+				who: null, self: false, version: true
+			});
+		}
+		rows.sort((a, b) =>
+			`${a.d ?? '9999'}${ORDER[a.kind]}`.localeCompare(`${b.d ?? '9999'}${ORDER[b.kind]}`)
+		);
+		return rows;
+	});
 	/** the diagram: the whole family the registry's chain returns */
 	const familyActs = $derived(rowsOf(c.family_acts ?? c.timeline ?? []));
+	const hasFamily = $derived(familyActs.length > 1);
+	const siblingContracts = $derived(familyActs.filter((a) => a.kind === 'contract').length);
+	let view = $state<'map' | 'family'>('map');
+	const showDiagram = () => {
+		view = 'family';
+		document.querySelector('.detailmap, .famslot')?.scrollIntoView({ block: 'center' });
+	};
 
 	function rowsOf(src: NonNullable<typeof c.timeline>) {
-		if (!src.length) return [];
-		const rows = src.map((t) => ({ ...t, self: false }));
+		const rows = src.map((t) => ({ ...t, self: false, version: false }));
 		rows.push({
 			adam: c.reference_number,
 			kind: 'contract' as const,
@@ -62,64 +125,109 @@
 			related_to: c.related_to ?? null,
 			in_db: true,
 			who: c.contractors[0]?.name ?? null,
-			self: true
+			self: true,
+			version: false
 		});
 		rows.sort((a, b) =>
 			`${a.d ?? '9999'}${ORDER[a.kind]}`.localeCompare(`${b.d ?? '9999'}${ORDER[b.kind]}`)
 		);
 		return rows;
 	}
+	/** the acts that produced the contract — request, commitment approval,
+	 *  call, award — wherever the trail has them dated */
+	const RUNUP_KINDS = ['request', 'approved_request', 'notice', 'auction'] as const;
+	const runUpActs = $derived(
+		timeline
+			.filter(
+				(t): t is (typeof timeline)[number] & { kind: (typeof RUNUP_KINDS)[number] } =>
+					(RUNUP_KINDS as readonly string[]).includes(t.kind) && !t.cancelled
+			)
+			.map((t) => ({ ref: t.adam, d: t.d, kind: t.kind }))
+	);
 
 	const pdfHref = (t: (typeof timeline)[number]): string | null => {
 		if (t.kind !== 'contract')
 			return `/pdf/${t.kind === 'approved_request' ? 'request' : t.kind}/${t.adam}`;
 		return t.in_db ? `/pdf/contract/${t.adam}` : null;
 	};
-	const trailRows = $derived<TrailRow[]>(
-		timeline.map((t) => ({
-			d: t.d,
-			type: (KIND[t.kind] ?? t.kind) + (t.self ? ' — this document' : ''),
-			code: t.adam,
-			title: t.title ?? null,
-			pdf: pdfHref(t),
-			self: t.self,
-			...trailChip(t)
+	/** the payment orders belong in the trail (user, 2026-08-19): documents
+	 *  of this contract with a date, a code and a PDF */
+	const payRows = $derived<TrailRow[]>(
+		c.payments.map((p) => ({
+			d: p.d ?? iso(p.signed_date),
+			type: 'Payment order',
+			code: p.payment_ref,
+			title: eur(p.amount_without_vat ?? p.amount_with_vat),
+			pdf: `/pdf/payment/${p.payment_ref}`,
+			...(p.cancelled
+				? { chip: 'cancelled', chipBad: true }
+				: p.credit
+					? { chip: 'credit', chipBad: false }
+					: p.correction_note
+						? { chip: 'corrected', chipBad: false }
+						: {})
 		}))
+	);
+	const trailRows = $derived<TrailRow[]>(
+		[
+			...payRows,
+			...timeline.map((t) => ({
+				d: t.d,
+				type:
+					(t.kind === 'contract' ? (t.version ? 'Later version' : KIND.contract) : (KIND[t.kind] ?? t.kind)) +
+					(t.self ? ' — this document' : ''),
+				code: t.adam,
+				title: t.title ?? null,
+				pdf: pdfHref(t),
+				self: t.self,
+				...trailChip(t)
+			}))
+		].sort((a, b) => `${a.d ?? '9999'}`.localeCompare(`${b.d ?? '9999'}`))
+	);
+
+	/** the chart's legend — the symbols and nothing else */
+	const barNote = $derived.by(() =>
+		[
+			'●  the contract, at its signature date — no deadline bar is drawn: the deadlines the signed texts state are not yet verified to the site’s bar',
+			'€  a payment order',
+			'•  the grey dots before the signature — the procurement that produced the contract',
+			'no ✔ is ever drawn: the awarding bodies publish no completion act that cites the contract'
+		].join(String.fromCharCode(10))
 	);
 
 	const quotes = $derived<Quote[]>([
 		...(c.correction_note
-			? [
-					{
-						label: 'Curated correction',
-						text: c.correction_note,
-						code: c.reference_number,
-						href: `/pdf/contract/${c.reference_number}`
-					}
-				]
-			: [])
+			? [{
+					label: 'Stated value — curated correction',
+					text: c.correction_note,
+					code: c.reference_number,
+					href: `/pdf/contract/${c.reference_number}`,
+					note: 'The value shown above is the one the signed contract states, not the registry figure.'
+				}]
+			: []),
 	]);
 
 	const pe = $derived(c.geo?.pe ?? null);
 	const seat = $derived(c.geo?.unit_seat ?? null);
+	let leftH = $state(0);
+	let mapW = $state(0);
+	const mapH = $derived(Math.max(420, Math.round(leftH)));
 	const CAVEAT =
-		'The regional unit is derived from the awarding operator unit; the map marks the ' +
-		"unit's seat where the registry knows it. Named work sites are not recorded for " +
-		'forest co-op contracts.';
+		'On the map: the regional unit derived from the awarding unit is shaded and the dot is the ' +
+		"unit's seat where the registry knows it. Named work sites are not recorded for forest co-op contracts.";
 </script>
 
 <svelte:head>
-	<title>{c.title ?? c.reference_number} — ΔΑΣΕ</title>
+	<title>{c.title ?? c.reference_number} — forest co-ops</title>
 	<meta property="og:title" content={c.title ?? c.reference_number} />
 	<meta
 		property="og:description"
-		content="ΔΑΣΕ contract {c.reference_number}: {eurShort(
-			c.total_cost_without_vat ?? 0
-		)} stated (excl. VAT)"
+		content="Forest co-op contract {c.reference_number}: {eurShort(c.total_cost_without_vat ?? 0)} stated (excl. VAT)"
 	/>
 </svelte:head>
 
-<p class="crumb"><a href="/dase/contracts">← ΔΑΣΕ contracts</a></p>
+<div class="dasep">
+<p class="crumb"><a href="/dase/contracts">← Forest co-op contracts</a></p>
 
 {#if c.duplicate_of}
 	<div class="dupbanner">
@@ -128,9 +236,6 @@
 		<a href={`/dase/contract/${c.duplicate_of}`} class="tabular">{c.duplicate_of}</a>.
 	</div>
 {:else if outOfScope}
-	<!-- a valid, uncancelled contract that simply is not a co-op contract:
-	     the registry listed a co-op among its contractors, the signed PDF
-	     names someone else. Saying «cancelled» here would be a lie. -->
 	<div class="dupbanner">
 		<strong>Related contract, outside this dataset.</strong> The signed contract names no forest
 		co-operative as a party, so it is shown for reference and excluded from every calculation.
@@ -143,17 +248,14 @@
 {#if c.duplicates?.length}
 	<p class="muted dupnote">
 		Also posted in the registry as
-		{#each c.duplicates as dref, i (dref)}{i ? ', ' : ''}<a
-				href={`/dase/contract/${dref}`}
-				class="tabular">{dref}</a
-			>{/each}
+		{#each c.duplicates as dref, i (dref)}{i ? ', ' : ''}<a href={`/dase/contract/${dref}`} class="tabular">{dref}</a>{/each}
 		— duplicate upload{c.duplicates.length > 1 ? 's' : ''}, excluded from the calculations.
 	</p>
 {/if}
 
-<FactsHeader caveat={CAVEAT}>
+<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
 	{#snippet facts()}
-		<dt class="id">Contract (ΑΔΑΜ)</dt>
+		<dt class="id">Contract</dt>
 		<dd class="id">
 			{c.reference_number}
 			{#if outOfScope}<span class="chip">outside the dataset</span>
@@ -166,262 +268,370 @@
 			{#each c.contractors as ct, i (ct.vat_number)}
 				{#if i}{', '}{/if}<a href={`/dase/coop/${ct.vat_number}`}>{ct.display_el ?? ct.name}</a>
 			{/each}
-			{#if c.contractors.some((x) => x.display_el)}
-				<br /><small class="muted"
-					>in the registry: {c.contractors.map((x) => x.name).join(', ')}</small
-				>
-			{/if}
-		</dd>
-		<dt>Procedure</dt>
-		<dd>
-			{c.procedure_type ?? '—'}
-			{#if c.bids_submitted === 1}<span class="chip warn">single bidder</span>{/if}
+			{#if c.contractors.some((x) => x.display_el && x.display_el !== x.name)}<Hint
+					text={`in the registry as ${c.contractors.map((x) => x.name).join(', ')}`}
+				/>{/if}
+			{#if c.contractors.length > 1}<Hint
+					text="signed by more than one co-operative; each co-op's own page counts its even share, so no euro is counted twice"
+				/>{/if}
 		</dd>
 		<dt>Budget <small class="muted">(excl. VAT)</small></dt>
+		<dd>{eurShort(c.total_cost_without_vat ?? 0)}</dd>
+		<dt>Awarding procedure</dt>
 		<dd>
-			{eurShort(c.total_cost_without_vat ?? 0)}
-
+			<span title={devGreek(c.procedure_type ?? '')}>{procedureEn(c.procedure_type)}</span>
+			{#if c.bids_submitted === 1}<Hint text="one bid was submitted for this contract" />{/if}
 		</dd>
-		<dt>Type</dt>
-		<dd>{c.contract_type ?? '—'}</dd>
+		<dt>Contracting authority</dt>
+		<dd><span title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</span></dd>
 		<dt>Awarding unit</dt>
+		<dd><span title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</span></dd>
+		<dt>Areas of intervention</dt>
 		<dd>
-			<span title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</span>
-			<br /><small class="muted" title={devGreek(c.organization_name)}
-				>{orgEn(c.organization_name)}</small
-			>
+			{#if pe}<span class="lead">Regional Unit:</span> {peEn(pe)}<Hint
+					text="derived from the awarding unit's seat — forest co-op contracts name no municipality in a curated layer"
+				/>{:else}—<Hint text="the awarding unit spans several regional units (e.g. a power-line operator); no single unit is assigned" />{/if}
 		</dd>
-		<dt class="gap"></dt>
-		<dd class="gap"></dd>
-		<dt>Work region</dt>
-		<dd>{pe ? ruLabel(pe) : '—'}</dd>
-		<dt>Duration</dt>
-		<dd>
-			{c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'}
-			<small class="muted">{dmy(c.start_date) || '—'} → {c.end_date ? dmy(c.end_date) : 'open'}</small
-			>
-		</dd>
-		<dt>Amendments to initial contract</dt>
-		<dd>
-			{#if c.prev_reference_no || c.next_reference_no}
-				yes
-				{#if c.prev_reference_no}
-					<small class="muted"
-						>· previous <a class="tabular" href={`/dase/contract/${c.prev_reference_no}`}
-							>{c.prev_reference_no}</a
-						></small
-					>
-				{/if}
-				{#if c.next_reference_no}
-					<small class="muted"
-						>· next <a class="tabular" href={`/dase/contract/${c.next_reference_no}`}
-							>{c.next_reference_no}</a
-						></small
-					>
-				{/if}
-			{:else}
-				no
-			{/if}
-		</dd>
+		<dt>Amendments to original contract</dt>
+		<dd>{chain.length > 1 || c.prev_reference_no || c.next_reference_no ? 'yes' : 'no'}</dd>
 		<dt>Status</dt>
 		<dd>
 			{#if outOfScope}
 				outside the dataset
-				<small class="muted">— no forest co-operative is a party to this contract</small>
 			{:else if c.cancelled}
 				cancelled
 			{:else}
-				no completion record trackable
-				<small class="muted"
-					>— municipal awarders publish no citable completion acts (methodology)</small
-				>
+				completion unknown: no record of the works’ completion was found in ΚΗΜΔΗΣ or Διαύγεια
 			{/if}
 		</dd>
 	{/snippet}
 	{#snippet map()}
-		<div class="detailmap">
-			<PaperMap
-				interactive={false}
-				colorOf={(p) => (p === pe ? 'color-mix(in srgb, var(--c-dase) 30%, #fff)' : '#fff')}
-				tipOf={(p) => `<strong>${ruLabel(p)}</strong>`}
-			>
-				{#snippet overlay(ctx)}
-					{#if seat}
-						<DotLayer
-							{ctx}
-							points={[{ lat: seat.lat, lon: seat.lon, name: seat.name }]}
-							r={4.5}
-							fillOf={() => 'var(--c-dase)'}
-							tipOf={() => `<strong>${bodyEn(seat.name)}</strong><br>awarding unit seat`}
-						/>
-					{/if}
-				{/snippet}
-			</PaperMap>
-		</div>
+		{#if hasFamily}
+			<div class="viewsw" role="group" aria-label="Map or procurement diagram">
+				<button class="sw" class:on={view === 'map'} onclick={() => (view = 'map')}>Map</button>
+				<button class="sw" class:on={view === 'family'} onclick={() => (view = 'family')}>Diagram</button>
+			</div>
+		{/if}
+		{#if hasFamily && view === 'family'}
+			<div class="famslot" style:min-height="{mapH}px">
+				<FamilyTree
+					acts={familyActs}
+					kindLabel={{ ...KIND, payment: 'Payments' }}
+					fit
+					payments={live.length ? { n: live.length, eur: eurShort(c.paid_without_vat ?? 0) } : null}
+				/>
+				<p class="muted">
+					<small>The ΚΗΜΔΗΣ family — request → call → award → contracts; this contract's trail in green,
+						sibling acts of the same procedure in grey. An award connects to a contract only when it
+						names that contract's co-op.</small>
+				</p>
+			</div>
+		{:else}
+			<div class="detailmap" bind:clientWidth={mapW}>
+				<PaperMap
+					width={mapW || 460}
+					height={mapH}
+					interactive={false}
+					fitPes={pe ? [pe] : undefined}
+					fitPoints={seat ? [[seat.lon, seat.lat]] : null}
+					fitPad={0.26}
+					colorOf={(p) => (p === pe ? 'color-mix(in srgb, var(--c-dase) 30%, #fff)' : '#fff')}
+					tipOf={(p) => `<strong>${ruLabel(p)}</strong>`}
+				>
+					{#snippet overlay(ctx)}
+						{#if seat}
+							<DotLayer
+								{ctx}
+								points={[{ lat: seat.lat, lon: seat.lon, name: seat.name }]}
+								r={4.5}
+								fillOf={() => 'var(--c-dase)'}
+								tipOf={() => `<strong>${bodyEn(seat.name)}</strong><br>awarding unit seat`}
+								tipCorner="top-left"
+							/>
+						{/if}
+					{/snippet}
+				</PaperMap>
+			</div>
+		{/if}
 	{/snippet}
 </FactsHeader>
 
-<p>
-	<a class="pdf" href={`/pdf/contract/${c.reference_number}`} target="_blank" rel="noopener">
-		📄 View the signed contract PDF
-	</a>
-	<small class="muted">fetched from KHMDHS once, then served from the local cache</small>
-</p>
-
-<DocTrail rows={trailRows} />
-{#if !timeline.length}
-	<p class="muted">
-		ΚΗΜΔΗΣ links no upstream acts to this contract — the registry's chain returns none.
-	</p>
-{/if}
-
-{#if familyActs.length > 1}
-	<section class="tplsec">
-		<h2>Procurement family</h2>
-		<p class="muted">
-			The full ΚΗΜΔΗΣ family — αίτημα → πρόσκληση → κατακύρωση → συμβάσεις. This contract's
-			trail is drawn in green; grey boxes are sibling acts of the same procedure. An award
-			connects to a contract only when it names that contract's co-op.
-		</p>
-		<FamilyTree
-			acts={familyActs}
-			kindLabel={TREE_KIND}
-			payments={live.length ? { n: live.length, eur: eurShort(c.paid_without_vat ?? 0) } : null}
+<section class="plain">
+	<h2 class="withhint">
+		Timeline<Hint text={barNote} width="21rem" up heading />
+		<a class="mth" href="/methodology#contract-timeline">Methodology</a>
+	</h2>
+	<div class="tlrow">
+		<ChainTimeline
+			signed={chain[0]?.d ?? iso(c.contract_signed_date)}
+			signedRef={chain[0]?.ref ?? c.reference_number}
+			end={null}
+			deadline={null}
+			deadlineBasis={null}
+			today={todayIso}
+			{chain}
+			payments={payTicks}
+			runUp={runUpActs}
+			highlightRef={hoverRow}
+			onActHover={(ref) => (hoverAct = ref)}
+			ink="var(--c-dase)"
+			axisStart="2021-09-01"
+			stubDot
 		/>
-	</section>
-{/if}
-
-<section class="tplsec">
-	<h2>Procurement details of {c.reference_number}</h2>
-	<div class="scrollx">
-		<table class="listing">
-			<thead>
-				<tr>
-					<th>date</th>
-					<th>type of document</th>
-					<th>document code (ΑΔΑΜ)</th>
-					<th>title</th>
-					<th>contracting authority</th>
-					<th>operating unit</th>
-					<th>signer</th>
-					<th>funding</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="tabular nowrap">{dmy(c.contract_signed_date) || '—'}</td>
-					<td>Contract</td>
-					<td class="tabular nowrap">{c.reference_number}</td>
-					<td>{c.title ?? '—'}</td>
-					<td title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</td>
-					<td title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</td>
-					<td>{c.signer_name ?? '—'}</td>
-					<td class="tabular">{c.public_funding_ref ?? '—'}</td>
-				</tr>
-			</tbody>
-		</table>
 	</div>
-	<dl class="facts more">
-		<div><dt>Registry type</dt><dd>{c.contract_type ?? '—'}</dd></div>
-		<div><dt>Legal framework</dt><dd>{c.legal_context ?? '—'}</dd></div>
-		<div><dt>Bids</dt><dd>{c.bids_submitted ?? '—'}</dd></div>
-	</dl>
-	{#if c.objects.length}
-		<h3>Items</h3>
-		{#each c.objects as o, i (i)}
-			<p class="muted">
-				<small>
-					{#if o.quantity}{o.quantity} {o.unit_type ?? ''} ·{/if}
-					{#if o.cost_without_vat}{eurShort(o.cost_without_vat)} net ·{/if}
-					{o.short_description ?? ''}
-				</small>
-			</p>
-		{/each}
-	{/if}
-	{#if c.cpvs.length}
-		<h3>CPV</h3>
-		<ul>
-			{#each c.cpvs as cpv, i (i)}
-				<li>
-					<span class="tabular">{cpv.cpv_code}</span>
-					{cpv.cpv_description ?? ''}
-					{#if cpv.cpv_code === '66519300-4'}<span
-							class="chip"
-							title="The insurance CPV tags the ΕΦΚΑ employer contributions for the δασεργάτες that the award funds on top of the works — not procured insurance services."
-							>ΕΦΚΑ contributions, not insurance</span
-						>{/if}
-				</li>
-			{/each}
-		</ul>
-	{/if}
 </section>
 
-{#if c.payments.length}
-	<section class="tplsec" id="payments">
-		<h2>Payment orders</h2>
-		<table>
-			<thead>
-				<tr
-					><th>date</th><th>order</th><th class="num">amount (net)</th><th></th></tr
-				>
-			</thead>
-			<tbody>
-				{#each c.payments as p (p.payment_ref)}
-					<tr class:dead={p.cancelled === 1}>
-						<td class="tabular muted">{dmy(p.signed_date) || '—'}</td>
-						<td>
-							<span class="tabular">{p.payment_ref}</span>
-							{#if p.credit}<span class="chip">credit</span>{/if}
-							{#if p.cancelled}<span class="chip bad">cancelled</span>{/if}
-							{#if p.correction_note}<span class="chip warn" title={p.correction_note}
-									>corrected</span
-								>{/if}
-						</td>
-						<td class="num">{eur(p.amount_without_vat ?? p.amount_with_vat)}</td>
-						<td>
-							<a href={`/pdf/payment/${p.payment_ref}`} target="_blank" rel="noopener">PDF</a>
-						</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
+<section class="plain">
+	<h2>Document trail</h2>
+	<DocTrail
+		heading={null}
+		rows={trailRows}
+		highlight={hoverAct ?? hoverRow}
+		onRowHover={(code) => (hoverRow = code)}
+	/>
+	{#if hasFamily && siblingContracts > 1}
 		<p class="muted">
 			<small
-				>{grInt(live.length)} live orders{c.paid_without_vat !== null
-					? ` · ${eurShort(c.paid_without_vat)} paid net`
+				>One of {grInt(siblingContracts)} contracts the registry files under the same procurement —
+				<button class="linkish" onclick={showDiagram}>see the diagram</button></small
+			>
+		</p>
+	{/if}
+	{#if live.length}
+		<p class="muted">
+			<small
+				>{grInt(live.length)} live payment orders{c.paid_without_vat !== null
+					? ` · ${eurShort(c.paid_without_vat)} paid`
 					: ''}</small
 			>
 		</p>
-	</section>
-{/if}
+	{/if}
+	{#if !timeline.some((t) => t.kind !== 'contract')}
+		<p class="muted">
+			<small>ΚΗΜΔΗΣ links no upstream acts (αίτημα, διακήρυξη, κατακύρωση) to this contract — the registry's chain returns none.</small>
+		</p>
+	{/if}
+</section>
 
-<QuoteList {quotes} />
+<Fold title="Procurement details of {c.reference_number}">
+	<div class="tplsec">
+		<div class="scrollx">
+			<table class="listing">
+				<thead>
+					<tr>
+						<th>date</th>
+						<th>type of document</th>
+						<th>document code (ΑΔΑΜ)</th>
+						<th>title</th>
+						<th>contracting authority</th>
+						<th>operating unit</th>
+						<th>signer</th>
+						<th>funding</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="tabular nowrap">{dmy(c.contract_signed_date) || '—'}</td>
+						<td>Contract</td>
+						<td class="tabular nowrap">{c.reference_number}</td>
+						<td>{c.title ?? '—'}</td>
+						<td title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</td>
+						<td title={devGreek(c.units_operator_name)}>{bodyEn(c.units_operator_name) || '—'}</td>
+						<td>{c.signer_name ?? '—'}</td>
+						<td class="tabular">{c.public_funding_ref ?? '—'}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<dl class="facts more">
+			<div><dt>Registry type</dt><dd>{c.contract_type ?? '—'}</dd></div>
+			<div><dt>Legal framework</dt><dd>{c.legal_context ?? '—'}</dd></div>
+			<div><dt>Bids</dt><dd>{c.bids_submitted ?? '—'}</dd></div>
+			<div><dt>Registry duration</dt><dd>{c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'} <small class="muted">{dmy(c.start_date) || '—'} → {c.end_date ? dmy(c.end_date) : 'open'}</small></dd></div>
+		</dl>
+		{#if c.objects.length}
+			<h3>Items</h3>
+			<table>
+				<thead><tr><th>item</th><th class="num">quantity</th><th class="num">net €</th></tr></thead>
+				<tbody>
+					{#each c.objects as o, i (i)}
+						<tr>
+							<td>{o.short_description ?? ''}</td>
+							<td class="num">{o.quantity ? `${o.quantity} ${o.unit_type ?? ''}` : '—'}</td>
+							<td class="num">{o.cost_without_vat ? eurShort(o.cost_without_vat) : '—'}</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		{/if}
+	</div>
+</Fold>
+
+<div class="refcols">
+	<Fold title="Extracted quotes from documents">
+		<QuoteList heading={null} {quotes} />
+	</Fold>
+	{#if c.cpvs.length}
+		<Fold title="CPV codes">
+			<ul class="cpvlist">
+				{#each c.cpvs.slice(0, cpvAll ? c.cpvs.length : 12) as cpv, i (i)}
+					<li>
+						<span class="tabular">{cpv.cpv_code}</span>
+						{cpv.cpv_description ?? ''}
+						{#if cpv.cpv_code === '66519300-4'}<span
+								class="chip"
+								title="The insurance CPV tags the ΕΦΚΑ employer contributions for the δασεργάτες that the award funds on top of the works — not procured insurance services."
+								>ΕΦΚΑ contributions, not insurance</span
+							>{/if}
+					</li>
+				{/each}
+			</ul>
+			{#if c.cpvs.length > 12}
+				<button class="linkish" onclick={() => (cpvAll = !cpvAll)}
+					>{cpvAll ? 'show fewer' : `… ${grInt(c.cpvs.length - 12)} more`}</button
+				>
+			{/if}
+		</Fold>
+	{/if}
+</div>
+</div>
 
 <style>
+	/* the page wears the dataset's hue: folds, the timeline's ink, the map's
+	   zoom buttons — the Anti-nero page's skeleton in green */
+	.dasep {
+		--fold-accent: var(--c-dase);
+	}
 	.crumb a {
 		text-decoration: none;
 		color: var(--ink-soft);
 	}
-	/* template map look — same as the sponsored-works maps:
-	   grey sea, no border, no paper shadow */
+	/* the page's two spine sections carry no fold: the timeline and the
+	   trail are what the page IS (user, 2026-08-19) */
+	.plain {
+		margin-top: var(--sp-8);
+	}
+	.plain h2 {
+		font-family: var(--font-display);
+		font-weight: 900;
+		text-transform: uppercase;
+		font-size: var(--fs-18);
+		letter-spacing: 0.01em;
+		margin: 0 0 var(--sp-3);
+	}
+	.lead {
+		font-weight: 600;
+	}
+	.withhint {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+	.tlrow {
+		position: relative;
+	}
+	.mth {
+		margin-left: auto;
+		font-family: var(--font-ui);
+		font-weight: 400;
+		text-transform: none;
+		letter-spacing: normal;
+		font-size: var(--fs-12);
+		color: var(--ink-soft);
+	}
+	/* the switch rides ON the frame's top-right corner */
+	.viewsw {
+		position: absolute;
+		top: 4px;
+		right: 4px;
+		z-index: 2;
+		display: flex;
+		gap: 3px;
+	}
+	.sw {
+		font: inherit;
+		font-size: 10px;
+		font-family: var(--font-display);
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+		padding: 2px 7px;
+		border: 1px solid var(--line-strong);
+		border-radius: 999px;
+		background: var(--paper);
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.sw.on {
+		background: var(--c-dase);
+		border-color: var(--c-dase);
+		color: var(--paper);
+	}
+	.famslot {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-bottom: 3.2rem;
+		box-sizing: border-box;
+	}
+	.famslot > p.muted {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: 0;
+	}
+	/* evidence left, codes right — two reference blocks, one row */
+	.refcols {
+		display: grid;
+		grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+		gap: var(--sp-6);
+		align-items: start;
+	}
+	@media (max-width: 900px) {
+		.refcols {
+			grid-template-columns: 1fr;
+		}
+	}
+	.cpvlist {
+		margin: 0;
+		padding-left: 1.1em;
+		font-size: var(--fs-14);
+	}
+	.cpvlist li {
+		margin-bottom: 2px;
+	}
+	.linkish {
+		font: inherit;
+		font-size: var(--fs-12);
+		background: none;
+		border: none;
+		padding: 0;
+		color: var(--ink-soft);
+		text-decoration: underline;
+		cursor: pointer;
+	}
+	/* template map look — same as the sponsored-works maps */
 	.detailmap :global(.map) {
 		background: #f2f2f2;
-		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
-		--map-accent: var(--c-dase); /* the zoom buttons' circle hue */
+		border: 1px solid var(--line);
+		--map-accent: var(--c-dase);
 		box-shadow: none;
 		border-radius: 4px;
 	}
 	.detailmap :global(.map .region) {
 		stroke: #8f8f8f;
 	}
-	.tplsec h2 {
-		font-family: var(--font-display);
-		font-weight: 900;
-		text-transform: uppercase;
-		font-size: var(--fs-18);
-	}
 	.tplsec {
-		margin-top: var(--sp-8);
+		margin-top: var(--sp-2);
+	}
+	.tplsec h3 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-13);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		margin: var(--sp-4) 0 var(--sp-2);
 	}
 	.scrollx {
 		overflow-x: auto;
@@ -464,9 +674,6 @@
 	.nowrap {
 		white-space: nowrap;
 	}
-	.dead td {
-		color: var(--ink-faint);
-	}
 	.dupbanner {
 		border: 1.5px solid var(--c-dase);
 		border-radius: 8px;
@@ -479,8 +686,5 @@
 	}
 	.muted {
 		color: var(--ink-soft);
-	}
-	.pdf {
-		font-weight: 700;
 	}
 </style>

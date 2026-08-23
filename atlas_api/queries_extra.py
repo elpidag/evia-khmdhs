@@ -4007,6 +4007,101 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
     return out
 
 
+# -------------------------------------------------- ΔΑΣΕ contract page layers
+
+def contract_fire_context(conn: sqlite3.Connection, ref: str) -> dict | None:
+    """WHY a ΔΑΣΕ contract's work is done — «prevention» / «post_fire» — read
+    from the same words as its category (DATA_DECISIONS 2026-08-23); None
+    when the text states no fire purpose. A separate attribute on purpose."""
+    if not _table(conn, "contract_fire_context"):
+        return None
+    r = conn.execute("""
+        SELECT c.context AS key, l.label, l.label_en, c.excerpt, c.source
+          FROM contract_fire_context c
+          LEFT JOIN fire_context_labels l ON l.context = c.context
+         WHERE c.reference_number = ?""", (ref,)).fetchone()
+    return dict(r) if r else None
+
+
+def dase_contract_chain(conn: sqlite3.Connection, ref: str) -> list[dict]:
+    """The ΔΑΣΕ version chain, oldest → newest, from the registry's own
+    prev/next links (the ΔΑΣΕ DB has no scope table). [] when posted once."""
+    def known(m):
+        return bool(m) and conn.execute(
+            "SELECT 1 FROM contracts WHERE reference_number = ?", (m,)).fetchone() is not None
+
+    def link(m, col):
+        return conn.execute(f"SELECT {col} FROM contracts WHERE reference_number = ?",
+                            (m,)).fetchone()[0]
+    seq, cur, seen = [], ref, set()
+    while cur and cur not in seen and known(cur):
+        seen.add(cur)
+        seq.append(cur)
+        cur = link(cur, "prev_reference_no")
+    seq.reverse()
+    cur = link(ref, "next_reference_no")
+    while cur and cur not in seen and known(cur):
+        seen.add(cur)
+        seq.append(cur)
+        cur = link(cur, "next_reference_no")
+    if len(seq) < 2:
+        return []
+    out = []
+    for m in seq:
+        r = conn.execute(
+            "SELECT title, contract_signed_date, submission_date, total_cost_without_vat"
+            " FROM contracts WHERE reference_number = ?", (m,)).fetchone()
+        out.append({
+            "ref": m,
+            "d": _full_date(r["contract_signed_date"]) or _full_date(r["submission_date"]),
+            "d_basis": "signed",
+            "kind": None,
+            "eur": (round(r["total_cost_without_vat"], 2)
+                    if r["total_cost_without_vat"] is not None else None),
+            "title": (r["title"] or "")[:160] or None,
+            "self": m == ref,
+        })
+    return out
+
+
+def dase_contract_deadlines(conn: sqlite3.Connection, ref: str) -> dict:
+    """What the ΔΑΣΕ contract PROMISED — DOCUMENT-STATED ONLY (user decision,
+    DATA_DECISIONS 2026-08-23): a date the text names, or a duration counted
+    from the signature (the works' start where the clause says so), else
+    nothing; the registry's end date is never the bar. No extensions layer
+    exists for ΔΑΣΕ; `extensions` is always empty."""
+    empty = {"deadline": None, "basis": None, "source_ref": None, "duration": None,
+             "unit": None, "assumed": False, "kind": None, "extensions": [], "fields": None}
+    if not _table(conn, "contract_durations"):
+        return empty
+    r = conn.execute("SELECT * FROM contract_durations WHERE reference_number = ?",
+                     (ref,)).fetchone()
+    rec = conn.execute("SELECT contract_signed_date, start_date, end_date, contract_duration,"
+                       " contract_duration_unit FROM contracts WHERE reference_number = ?",
+                       (ref,)).fetchone()
+    fields = ({"ref": ref, "duration": rec["contract_duration"], "unit": rec["contract_duration_unit"],
+               "start_date": _full_date(rec["start_date"]), "end_date": _full_date(rec["end_date"])}
+              if rec else None)
+    if r is None:
+        return {**empty, "fields": fields}
+    kind = _col(r, "kind")
+    if kind == "date" and _col(r, "deadline_date"):
+        return {**empty, "deadline": r["deadline_date"], "basis": "document_date",
+                "source_ref": r["source_ref"], "kind": kind, "fields": fields}
+    if kind == "duration" and r["days"] and rec:
+        base = ((_full_date(rec["start_date"]) if r["basis"] == "works_start" else None)
+                or _full_date(rec["contract_signed_date"]) or _full_date(rec["start_date"]))
+        if base:
+            try:
+                end = (_dt.date.fromisoformat(base) + _dt.timedelta(days=int(r["days"]))).isoformat()
+            except ValueError:
+                end = None
+            if end:
+                return {**empty, "deadline": end, "basis": "document", "source_ref": r["source_ref"],
+                        "duration": r["n"], "unit": r["unit"], "kind": kind, "fields": fields}
+    return {**empty, "kind": kind, "source_ref": r["source_ref"], "fields": fields}
+
+
 # ------------------------------------------------- arogi (state fire aid)
 # NOT served by the API since 2026-08-23 (user: the Αρωγή pages left the
 # site); kept as the dataset's query layer, pinned by

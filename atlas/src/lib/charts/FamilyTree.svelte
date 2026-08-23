@@ -25,13 +25,17 @@
 		/** payments summary for the trail's terminal node */
 		payments?: { n: number; eur: string } | null;
 		kindLabel: Record<string, string>;
+		/** scale the drawing down to the box it sits in (the header slot of
+		 *  the contract page) instead of drawing at its natural width */
+		fit?: boolean;
 	}
 	let {
 		acts,
 		accent = 'var(--c-dase)',
 		contractHref = (a) => `/dase/contract/${a}`,
 		payments = null,
-		kindLabel
+		kindLabel,
+		fit = false
 	}: Props = $props();
 
 	// ---- text folding for the name-verified award↔contract pairing
@@ -138,7 +142,7 @@
 
 {#if acts.length > 1}
 	<div class="treewrap">
-		<svg viewBox={`0 0 ${width} ${height}`} style:width={`${width}px`} class="tree">
+		<svg viewBox={`0 0 ${width} ${height}`} style:width={fit ? '100%' : `${width}px`} style:max-width={`${width}px`} class="tree">
 			<!-- trunk: funding acts, vertically chained, centred -->
 			{#each trunk as t, i (t.adam)}
 				{@const y = i * (NH + 18)}
@@ -199,14 +203,14 @@
 				{#if c.self}
 					<g class="node self" transform={`translate(${x - NW / 2}, ${yContract})`}>
 						<rect width={NW} height={NH} rx="6" />
-						<text class="k" x="8" y="16">σύμβαση · {c.d ?? ''}</text>
+						<text class="k" x="8" y="16">{kindLabel.contract ?? 'σύμβαση'} · {c.d ?? ''}</text>
 						<text class="t strong" x="8" y="32">this contract</text>
 					</g>
 				{:else if c.in_db}
 					<a href={contractHref(c.adam)}>
 						<g class="node" transform={`translate(${x - NW / 2}, ${yContract})`}>
 							<rect width={NW} height={NH} rx="6" />
-							<text class="k" x="8" y="16">σύμβαση · {c.d ?? ''}</text>
+							<text class="k" x="8" y="16">{kindLabel.contract ?? 'σύμβαση'} · {c.d ?? ''}</text>
 							<text class="t">
 								<tspan x="8" y="32">{short(c.who ?? c.adam, 17)}</tspan>
 							</text>
@@ -216,7 +220,7 @@
 					<a href={pdfHref(c)} target="_blank" rel="noopener">
 						<g class="node faint" transform={`translate(${x - NW / 2}, ${yContract})`}>
 							<rect width={NW} height={NH} rx="6" />
-							<text class="k" x="8" y="16">σύμβαση · {c.d ?? ''}</text>
+							<text class="k" x="8" y="16">{kindLabel.contract ?? 'σύμβαση'} · {c.d ?? ''}</text>
 							<text class="t" x="8" y="32">εκτός dataset</text>
 						</g>
 					</a>
@@ -230,7 +234,7 @@
 					<g class="node trail" transform={`translate(${x - NW / 2}, ${yPay})`}>
 						<rect width={NW} height={NH} rx="6" />
 						{#if payments}
-							<text class="k" x="8" y="16">πληρωμές</text>
+							<text class="k" x="8" y="16">{kindLabel.payment ?? 'πληρωμές'}</text>
 							<text class="t" x="8" y="32">{payments.n} · {payments.eur}</text>
 						{:else}
 							<text class="k" x="8" y="16">{kindLabel.completion ?? 'ολοκλήρωση'}</text>

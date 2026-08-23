@@ -391,6 +391,22 @@
 		contracts span multiple units and stay honestly unresolved.
 	</p>
 
+	<h2 id="dase-work-types">ΔΑΣΕ contract pages: what is shown, what is withheld</h2>
+	<p>
+		A forest co-op contract page shows only registry facts and user-audited curation: the parties
+		(under their curated display names, the registry spelling kept as evidence), the stated value with
+		its documented corrections, the awarding body and unit, the regional unit derived from the unit's
+		seat, the procurement family, the payment orders, and the CPV codes. Its timeline draws the
+		contract as a <strong>dot at its signature date</strong> — with the procurement acts before it and
+		the payment orders after it — and <strong>no deadline bar</strong>: the deadlines the signed texts
+		state were extracted but are not yet independently verified, the registry's own end-date field is
+		unreliable against the documents, and no completion act citing a contract ΑΔΑΜ exists in
+		ΚΗΜΔΗΣ or Διαύγεια — so every status line reads «completion unknown» and no ✔ is ever
+		drawn. A work-type and fire-context reading of all 2,164 signed PDFs was carried out and is kept
+		in the repository, but it is deliberately not presented: part of it rests on single-reader
+		by-eye passes over scanned and cipher-font documents, below the certainty this site requires.
+	</p>
+
 	<h2 id="dase-cpv-noise">The insurance CPV on logging contracts</h2>
 	<p>
 		{show(f['dase_cpv_noise'])} live ΔΑΣΕ logging contracts carry the insurance CPV 66519300-4

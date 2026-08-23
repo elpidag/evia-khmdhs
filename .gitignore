@@ -79,6 +79,7 @@ data/processed/municipality_review.json
 # work-theme + duration proposals (the curator page carries the data)
 data/processed/contract_details_review.json
 data/processed/call_themes_review.json
+data/processed/dase_details_review.json
 # joint-venture membership: the proposals and the ΓΕΜΗ name cache are
 # rebuildable; the curated verdicts live in khmdhs/data/
 data/processed/consortium_members_review.json

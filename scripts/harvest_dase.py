@@ -310,6 +310,11 @@ def cmd_load() -> None:
     from khmdhs.bodies_loader import load_bodies
     n_bodies = load_bodies(conn)
     print(f"-- loaded {n_bodies} public bodies (registry)")
+    # the curated work-type categories, fire contexts and document-stated
+    # deadlines (DATA_DECISIONS 2026-08-23) — CASCADE-wiped by the upserts
+    from khmdhs.dase_details_loader import load_curated, write_db as write_details
+    n_cat, n_ctx, n_dl = write_details(conn, *load_curated())
+    print(f"-- loaded {n_cat} categories, {n_ctx} fire contexts, {n_dl} deadlines")
     n = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()[0]
     print(f"-- loaded {loaded} contracts into {DB_PATH} (table now {n})")
     conn.close()

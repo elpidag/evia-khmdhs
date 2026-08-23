@@ -371,6 +371,18 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             disp = names.get(dase_queries.canonical_vat(ct["vat_number"]) or "")
             if disp:
                 ct["display_el"], ct["display_en"] = disp["el"], disp["en"]
+        # the page mirrors the Anti-nero one (DATA_DECISIONS 2026-08-23): the
+        # curated work-type category + its fire context, the version chain
+        # from the registry links, the document-stated deadline (and only
+        # that), and a date for every payment tick
+        d["category"] = queries_extra.contract_category(conn, adam)
+        d["fire_context"] = queries_extra.contract_fire_context(conn, adam)
+        d["chain"] = queries_extra.dase_contract_chain(conn, adam)
+        d["stated_duration"] = queries_extra.contract_stated_duration(conn, adam)
+        d["deadlines"] = queries_extra.dase_contract_deadlines(conn, adam)
+        pdates = queries_extra.payment_dates(conn, adam)
+        for p in d.get("payments") or []:
+            p["d"] = pdates.get(p["payment_ref"])
         return jsonify(d)
 
     @app.route("/api/dase/coops")

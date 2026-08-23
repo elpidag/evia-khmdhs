@@ -99,6 +99,7 @@
 		 *  end date, stated duration, or a later act of the chain */
 		deadlineBasis?:
 			| 'document'
+			| 'document_date'
 			| 'document_season'
 			| 'end_date'
 			| 'duration'
@@ -127,6 +128,15 @@
 		highlightRef?: string | null;
 		/** act-dot hover in/out — the page highlights the trail row */
 		onActHover?: (ref: string | null) => void;
+		/** the bar's ink — the dataset's own hue (the ΔΑΣΕ page passes green;
+		 *  Anti-nero keeps the default) */
+		ink?: string;
+		/** the axis origin (ISO) — Anti-nero's programme year by default */
+		axisStart?: string;
+		/** draw a DOT at the signature instead of the stub bar — the ΔΑΣΕ
+		 *  page, where no verified deadline layer exists and a bar would
+		 *  promise what the data cannot (user, 2026-08-24) */
+		stubDot?: boolean;
 	}
 	let {
 		signed,
@@ -144,7 +154,10 @@
 		callInfo = null,
 		onCallClick,
 		highlightRef = null,
-		onActHover
+		onActHover,
+		ink = 'var(--c-antinero)',
+		axisStart = '2022-01-01',
+		stubDot = false
 	}: Props = $props();
 
 	// what each later record is, in the words the site settled on 2026-08-18
@@ -161,7 +174,7 @@
 	// extended stretch — the same convention, so the two read alike
 	// the extension is the SAME ink as the bar, thinned (user, 2026-08-19) —
 	// the sponsor pages' green said «other dataset» on an Anti-nero page
-	const EXT_FILL = 'var(--c-antinero)';
+	const EXT_FILL = 'var(--tl-ink, var(--c-antinero))';
 	const EXT_OPACITY = 0.3;
 	const ORDINAL = (n: number): string =>
 		n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`;
@@ -175,8 +188,9 @@
 	};
 
 	// Anti-nero's own programme axis: the first in-scope signature is
-	// 2022-04-13 and the ΥΠΕΝ↔ΤΑΙΠΕΔ framework 07.02.2022, so the year opens it
-	const T0 = new Date('2022-01-01').getTime();
+	// 2022-04-13 and the ΥΠΕΝ↔ΤΑΙΠΕΔ framework 07.02.2022, so the year opens it;
+	// the ΔΑΣΕ page passes its own start (its dataset opens in September 2021)
+	const T0 = $derived(new Date(axisStart).getTime());
 	const T1 = $derived.by(() => {
 		let m = new Date(today).getTime();
 		for (const d of [signed, end, ...chain.map((a) => a.d), ...payments.map((p) => p.d)])
@@ -373,7 +387,7 @@
 </script>
 
 {#if xs !== null}
-	<svg viewBox="0 0 {W} {H}" class="chainbar" role="img" aria-label="Timeline of this contract">
+	<svg viewBox="0 0 {W} {H}" class="chainbar" role="img" aria-label="Timeline of this contract" style="--tl-ink: {ink}">
 		{#each years as yr (yr)}
 			{@const gx = x(`${yr}-01-01`)}
 			{#if gx}
@@ -422,13 +436,24 @@
 		{/each}
 
 		<!-- what the contract promised: signature → announced deadline -->
-		{#if stub}
+		{#if stub && stubDot}
+			<circle
+				cx={xs}
+				cy={BASE - BAR_H / 2}
+				r={barHot ? 5.5 : 4}
+				fill="var(--tl-ink, var(--c-antinero))"
+				opacity={barHot ? 1 : 0.85}
+				class:barhot={barHot}
+			>
+				<title>{dmy(signed)} — the contract, at its signature date</title>
+			</circle>
+		{:else if stub}
 			<rect
 				x={xs}
 				y={BASE - BAR_H}
 				width="7"
 				height={BAR_H}
-				fill="var(--c-antinero)"
+				fill="var(--tl-ink, var(--c-antinero))"
 				opacity={barHot ? 1 : 0.85}
 				class:barhot={barHot}
 			>
@@ -440,7 +465,7 @@
 				y={BASE - BAR_H}
 				width={(xd ?? 0) - xs}
 				height={BAR_H}
-				fill="var(--c-antinero)"
+				fill="var(--tl-ink, var(--c-antinero))"
 				opacity={barHot ? 1 : 0.85}
 				class:barhot={barHot}
 			>
@@ -448,7 +473,7 @@
 					>{dmy(signed)} → {dmy(deadline)} — the deadline the contract announced{deadlineBasis ===
 					'duration'
 						? ' (ΚΗΜΔΗΣ duration)'
-						: deadlineBasis === 'document'
+						: deadlineBasis === 'document' || deadlineBasis === 'document_date'
 							? ' (as the contract states it)'
 							: deadlineBasis === 'document_season'
 								? ' (the fire season, 1 May – 31 October)'
@@ -701,7 +726,7 @@
 		font-weight: 700;
 	}
 	.calllbl:hover {
-		fill: var(--c-antinero);
+		fill: var(--tl-ink, var(--c-antinero));
 	}
 	.pay,
 	.mark,
@@ -712,18 +737,18 @@
 	.pay.hot,
 	.mark.hot {
 		font-size: 12px;
-		fill: var(--c-antinero);
+		fill: var(--tl-ink, var(--c-antinero));
 	}
 	.extlbl.hot {
-		fill: var(--c-antinero);
+		fill: var(--tl-ink, var(--c-antinero));
 	}
 	.extarrow.hot {
-		stroke: var(--c-antinero);
+		stroke: var(--tl-ink, var(--c-antinero));
 		stroke-width: 1.6;
 	}
 	.act.hot,
 	.pre.hot {
-		fill: var(--c-antinero);
+		fill: var(--tl-ink, var(--c-antinero));
 	}
 	.pay {
 		font-size: 9px;
@@ -739,7 +764,7 @@
 		stroke: none;
 	}
 	.dline {
-		stroke: var(--c-antinero);
+		stroke: var(--tl-ink, var(--c-antinero));
 		stroke-width: 1.3;
 	}
 	.extarrow {

@@ -149,6 +149,21 @@ export interface ContractDetail {
 		source_ref: string;
 		registry_n: number | null;
 		registry_unit: string | null;
+		/** ΔΑΣΕ only (DATA_DECISIONS 2026-08-23): what kind of statement the
+		 *  text makes — a date, a duration, or an open end — and the date */
+		kind?: 'date' | 'duration' | 'open_ended' | null;
+		deadline_date?: string | null;
+		note?: string | null;
+	} | null;
+	/** ΔΑΣΕ only: WHY the work is done — wildfire prevention / post-fire
+	 *  restoration — read from the same words as the category; null when the
+	 *  text states no fire purpose */
+	fire_context?: {
+		key: 'prevention' | 'post_fire';
+		label: string;
+		label_en: string;
+		excerpt: string | null;
+		source: string | null;
 	} | null;
 	/** what the contract PROMISED: the deadline it announced and the acts
 	 *  that moved it — the timeline bar draws this, not the paperwork */
@@ -157,7 +172,9 @@ export interface ContractDetail {
 		/** where the deadline came from: the contract's own sentence
 		 *  ('document'), its fire season ('document_season'), or — only when
 		 *  no curated reading exists — the registry's own fields */
-		basis: 'document' | 'document_season' | 'end_date' | 'duration' | 'act' | null;
+		basis: 'document' | 'document_date' | 'document_season' | 'end_date' | 'duration' | 'act' | null;
+		/** ΔΑΣΕ only: the kind of statement behind the deadline */
+		kind?: string | null;
 		source_ref: string | null;
 		duration: number | null;
 		unit: string | null;

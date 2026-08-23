@@ -803,6 +803,49 @@ PDF/txt cache: **complete** (2026-08-14) — all 2,164 contract PDFs in
 gitignored ~918MB, the 2,164 .txt sidecars ~7.6MB tracked — user
 decision 2026-08-14; refetch via `scripts/fetch_contract_pdfs.py --db
 data/processed/dase.sqlite --cache data/processed/dase_pdf_cache`);
+**ΔΑΣΕ work-type + fire-context + deadline layers (DATA_DECISIONS
+2026-08-23, three entries; user rules) — loaded but OFF the pages since
+the same day** (user: only 100%-certain information on the site; 133
+by-eye category verdicts single-read, 34 two-works flags unruled, 28
+known missed deadlines, 182 unreadable bodies unread — parked like STUDY
+COSTS, the verification plan priced ~5–6 h and set aside; DB tables,
+curated JSONs, loader, API payload fields and pins all stay): ONE
+category per contract from
+the contract's OWN words — `khmdhs/dase_details.py` reads the PDF's
+heading, its quoted title and the sentence describing the work, in that
+order (never the registry title, never funding/legal recitals, never CPV;
+the `_NEED` statement-of-need clause is read for the FIRE CONTEXT only) —
+ten keys `kafsoxyla` (firewood for local needs, π.δ. 126/86 art. 8; 1,463
+live) / `ylotomia` (timber harvesting, 139) / `kalliergitikes`
+(silvicultural tending, 193) / `katharismoi` (vegetation clearing, 46) /
+`antipyrikes_zones` (firebreaks, 3) / `dentra` (tree felling & pruning,
+49) / `antidiavrotika` (flood & erosion-control works, 89) / `anadasosi`
+(reforestation, planting & seed collection, 3) / `promitheia` (supply of
+timber & firewood, 3) / `loipa` (other, 10); **fire context as a SEPARATE
+attribute** `prevention` 24 / `post_fire` 92 (an umbrella over different
+works, never a category); **deadline document-stated only** — a date, a
+duration or an open end, 290 live (179/100/11), the registry end date
+never the bar. Text-layer repairs inside the reader: homoglyphs, the
+«΢»-font family (429 texts; Σ/Τ/Υ cycle + lowercase pairs, LINE-LOCAL
+because headings and letterheads mix fonts), Θ-for-Η and Ω→Ψ variants by
+word, `learn_cipher` for true cipher fonts (kept, rarely decisive);
+`text_state` scan | unreadable_font → by-eye pass. `scripts/
+extract_dase_details.py` → `data/processed/dase_details_review.json`
+(gitignored) + `dase_details_curator.html` → `--curate` →
+`khmdhs/data/dase_categories.json` (`_categories`/`_contexts` meta,
+`_overrides` = 205 by-eye/review verdicts with source «eye» / «pdf:review»)
++ `dase_durations.json` → `khmdhs/dase_details_loader.py` (hooked at the
+end of `harvest_dase.py load`) → `contract_categories` + `category_labels`
+(label_en) + `contract_fire_context` + `fire_context_labels` +
+`contract_durations` (new cols `deadline_date`, `kind`, `note`). Pinned by
+`tests/test_dase_details.py`. Rules settled in review: a harvesting
+PROTOCOL whose table says «Είδος υλοτομίας: Καλλιεργητική» is harvesting;
+«ΣΥΝΤΗΡΗΣΗΣ & ΒΕΛΤΙΩΣΗΣ ΔΑΣΩΝ (ΚΑΛΛΙΕΡΓΗΤΙΚΩΝ ΥΛΟΤΟΜΙΩΝ)» is tending;
+«ΔΕΣΜΕΥΣΗΣ ΚΑΥΣΟΞΥΛΩΝ … ΚΑΙ ΕΚΤΕΛΕΣΗΣ ΕΡΓΑΣΙΩΝ ΣΥΝΤΗΡΗΣΗΣ» files under
+firewood (two works flagged); ΑΔΜΗΕ corridor / port-zone fellings are
+tree work; non-forestry contracts won by co-ops (olive-fly spraying,
+election sacks, furniture repair, a ΔΕΘ stand) are «other» with the
+reason noted.
 `scripts/validate_contract_values.py` screens every stored stated value
 against the extracted text (statuses ok/ok_net_only/near_match/
 `decimal_shift_suspect`/mismatch/no_pdf/unreadable; direct ÷10 ÷100 ×10
@@ -1022,12 +1065,28 @@ hiding it. `LogHistogram`'s `height`/`segments`/`segColors` are
 defaulted, so the Anti-nero direct-award histogram is untouched (it
 gained only the fix that reference-line labels now get their own row
 above the bar counts — median and count labels used to overprint).
-MONEY PER YEAR keeps its half-width column. /dase contract pages draw the ΚΗΜΔΗΣ family as a
-FamilyTree diagram (trunk → award fan → contracts, viewed contract's
-trail green, payments terminal; award↔contract edges only on
+MONEY PER YEAR keeps its half-width column. **/dase contract pages are
+the Anti-nero page's skeleton since 2026-08-23** (user; DATA_DECISIONS
+two entries that day): the same facts rows where the data exists
+(Greek co-op display name, EN procedure/body names, Areas of intervention
+= the R.U. derived from the unit, said so — the TYPE / FIRE CONTEXT /
+document-DURATION rows came OFF the same day, user: certainty below the
+bar until independently verified, DATA_DECISIONS third entry; the payload
+keeps the fields), the map cropped to the unit's region with the
+FamilyTree behind the Map/Diagram switch (English labels, `fit` scales it
+to the slot; trunk → award fan → contracts, award↔contract edges only on
 name-verified pairs — `contract_timeline` ships `who` for in-db
-siblings; the table below stays the accessible view). webui /dase keeps
-its frozen choropleth. All SQL in
+siblings), the TIMELINE as `ChainTimeline` in green (`ink`, `axisStart`
+2021-09-01) drawing NO deadline bar — signature, run-up acts and € marks
+only, all registry facts (never a ✔ — no completion acts exist), the
+DOCUMENT TRAIL with the payment
+orders in it and only the award that names THIS co-op (the other lots'
+awards stay in the diagram), and the three folds (PROCUREMENT DETAILS with
+the registry duration and the items table / EXTRACTED QUOTES / CPV CODES
+with the ΕΦΚΑ chip). Endpoint additions: `category`, `fire_context`,
+`chain` (`dase_contract_chain`, from prev/next links), `stated_duration`,
+`deadlines` (`dase_contract_deadlines`, document only), payment `d`. webui
+/dase keeps its frozen choropleth. All SQL in
 `webui/dase_queries.py` (imports search/bin
 helpers from queries.py; `queries.antinero_yearly` is the one
 khmdhs-side addition). Second sqlite is opened by a **lazy
@@ -1711,7 +1770,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 528 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 105 frontend units)
+## Tests (`tests/`, 582 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 126 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

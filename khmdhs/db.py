@@ -293,6 +293,27 @@ CREATE TABLE IF NOT EXISTS contract_durations (
 
 -- What the contract DELIVERS: study / works / study_and_works — the
 -- user's 1-2-3 model (DATA_DECISIONS 2026-08-22). The design-build
+-- The FIRE CONTEXT of a ΔΑΣΕ contract (DATA_DECISIONS 2026-08-23): WHY
+-- the work is done, read from the same title / work sentence / statement
+-- of need as the category — «prevention» (για αντιπυρικούς σκοπούς, πρόληψη
+-- πυρκαγιών, πυροπροστασία) or «post_fire» (καμένες εκτάσεις, πληγείσες
+-- από τις πυρκαγιές, μετά την πυρκαγιά). A separate attribute on purpose:
+-- post-fire restoration and fire prevention are umbrellas over different
+-- works and must not swallow the category. Absent = the text states none.
+CREATE TABLE IF NOT EXISTS contract_fire_context (
+    reference_number TEXT PRIMARY KEY,
+    context          TEXT NOT NULL,      -- prevention | post_fire
+    excerpt          TEXT,               -- the verbatim words
+    source           TEXT,               -- pdf:<field> | eye | inherited:<ref>
+    curated_at       TEXT NOT NULL,
+    FOREIGN KEY (reference_number) REFERENCES contracts(reference_number) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS fire_context_labels (
+    context  TEXT PRIMARY KEY,
+    label    TEXT NOT NULL,
+    label_en TEXT NOT NULL
+);
+
 -- generation states the contractor drafts the studies first; the clause
 -- is quoted verbatim. Deliberately NOT a work theme.
 CREATE TABLE IF NOT EXISTS contract_deliverables (
@@ -505,6 +526,13 @@ def init_db(path: Path) -> sqlite3.Connection:
         ("contractor_locations", "seat_excerpt", "TEXT"),
         ("contractor_locations", "seat_note", "TEXT"),
         ("contractor_locations", "geo_level", "TEXT"),
+        # a deadline the ΔΑΣΕ texts state as a DATE («Προθεσμία εκτελέσεως
+        # μέχρι 31-12-2021»), not a count of months; and what KIND of
+        # statement it is (date | duration | open_ended) — DATA_DECISIONS
+        # 2026-08-23. The Anti-nero rows leave both NULL.
+        ("contract_durations", "deadline_date", "TEXT"),
+        ("contract_durations", "kind", "TEXT"),
+        ("contract_durations", "note", "TEXT"),
     ):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")

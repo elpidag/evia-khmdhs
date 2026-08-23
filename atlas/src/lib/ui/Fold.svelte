@@ -62,7 +62,7 @@
 		transform: rotate(90deg);
 	}
 	summary:hover h2 {
-		color: var(--c-antinero);
+		color: var(--fold-accent, var(--c-antinero));
 	}
 	.body {
 		margin-top: var(--sp-3);

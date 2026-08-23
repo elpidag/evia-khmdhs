@@ -7849,3 +7849,269 @@ pins those functions directly against the committed DB (956 cases, the
 nothing (404s, no meta key). The CLAUDE.md Αρωγή section records the
 state; the privacy rule (owner names never stored or displayed) is
 unchanged by the cut.
+
+## 2026-08-23 · The ΔΑΣΕ contract page is to mirror the Anti-nero one — two new ΔΑΣΕ layers decided first: deadlines read from the signed text, a work-type taxonomy with a separate fire-context attribute
+
+**Request (user).** «Adjust the list of the information included, the
+language, the timeline and procurement diagram, the document trail,
+procurement details, extracted quotes from documents and CPV codes, the
+aesthetics, the lettering (heights and style) of the contracts of DASE to
+the ones of antinero.» Questions were asked first; the answers, in order:
+
+1. **TIMELINE bar — «Read the 2,164 PDFs first», then «Document-stated
+   only».** The Anti-nero bar comes from the signed text's duration clause;
+   the ΔΑΣΕ registry states an end date for 682 of 1,998 live contracts and
+   a duration for 265. The texts were probed before building: the ΔΑΣΕ
+   corpus is not one template. 1,271 of 1,998 live contracts (64 %) are the
+   forest services' «ΣΥΜΦΩΝΗΤΙΚΟ ΔΕΣΜΕΥΣΗΣ ΚΑΥΣΟΞΥΛΩΝ ΓΙΑ ΤΗΝ ΚΑΛΥΨΗ
+   ΑΤΟΜΙΚΩΝ ΑΝΑΓΚΩΝ (άρθρο 8 π.δ. 126/1986)» — price-per-χ.κ.μ. agreements
+   that state NO deadline (826 cite a «διαχειριστικό έτος» only in their
+   recitals; the registry holds an end date for 330 of them). Of the other
+   727, the Anti-nero reader already reads 74 and ≈ 317 carry ΔΑΣΕ-dialect
+   deadlines — «Προθεσμία εκτελέσεως μέχρι 31-12-2021», «η υλοτομία θα
+   αρχίσει από της υπογραφής του παρόντος … λήγουσα ανυπερθέτως στις
+   31-12-2021», «η διάρκεια της σύμβασης ισχύει έως 31/12/2022», «ορίζεται
+   από την υπογραφή της και μέχρι 31/12/2024», «έχει διάρκεια ενός (1)
+   μηνός», «η περαίωσή τους την 30/11/2021», «ορίζεται μέχρι τις 20
+   Οκτωβρίου 2021»; open-ended «μέχρι εξαντλήσεως του ποσού» / «λήγει με
+   την ολοκλήρωση των εργασιών» = no deadline; 44 are scans. Offered:
+   document-first with the registry end date as a labelled fallback; the
+   management year read as 31.12; document-stated only. **User: document-
+   stated only** — a deadline the signed text states draws the bar (≈ 22 %
+   of contracts); no registry fallback; everything else is the stub; no ✔
+   ever (no ΔΑΣΕ completion acts exist, DATA_DECISIONS 2026-08-03).
+2. **PROCUREMENT DIAGRAM — FamilyTree behind the Map/Diagram switch.** The
+   Anti-nero circles need every lot's € and come from the families layer
+   read from the signed texts; ΔΑΣΕ has no such layer, and its registry
+   siblings are often non-co-op lots outside the dataset with no € stored.
+   The trunk → award fan → contracts tree stays (it IS what ΚΗΜΔΗΣ
+   declares), moved into the header slot in the Anti-nero dress, English
+   labels; the trail line «one of N contracts in the same procurement —
+   see the diagram» as on Anti-nero.
+3. **FACTS rows — the Anti-nero list with what ΔΑΣΕ has, PLUS a curated
+   Type.** Contract · Date · Contractor · Type · Budget · Awarding
+   procedure (EN) · Contracting authority (EN) · Awarding unit (EN) · Areas
+   of intervention = the Regional Unit derived from the unit (said so) ·
+   Duration (document-stated, else «not stated») · Amendments · Status
+   «no completion record trackable». No Scope row (no deliverables layer).
+4. **CONTRACTOR name — the Greek display name** as the link, «in the
+   registry as …» beneath; English stays on the /dase overview surfaces.
+
+**The ΔΑΣΕ work-type taxonomy (decided after three rounds).** The first
+proposal grouped by document family; the user asked for a closer look at
+fire protection and prevention, and for the reading to be stated rule by
+rule. Findings: declared fire-PREVENTION purpose in ≈ 20 contracts
+(≈ €0.4 M: «διαχείριση βλάστησης … για αντιπυρικούς σκοπούς»,
+«δημιουργία περιμετρικών αντιπυρικών ζωνών», «ζώνες πυρασφάλειας»,
+«υλοτομικές εργασίες πρόληψης δασικών πυρκαγιών», «δράσεις πρόληψης
+πυρκαγιών … καθαρισμοί»); POST-FIRE restoration in ≈ 100 contracts
+(≈ €15.2 M — half of the ΔΑΣΕ basis: the 2021 Εύβοια and Ηλεία
+αντιπλημμυρικά/αντιδιαβρωτικά έργα, salvage logging in Ιστιαία, «κοπές και
+καθαρισμός οδοποιίας από καμμένα δέντρα», Αμαλιάδα 2025–26); the
+August-2021 emergency law (ΠΝΠ 05/13-08-2021, ν.4824/2021) cited as the
+LEGAL BASIS of 64 ordinary logging/tending contracts — procedure, not
+purpose; no fire-watch contracts at all; the firewood agreements mention
+fire only in force-majeure boilerplate. **User rules:** (i) the category
+comes from the contract's OWN words — the PDF's title (the heading after
+the letterhead, or the quoted title «με τίτλο: «…»») and the sentence that
+describes the work («αναλαμβάνει την εκτέλεση των εργασιών …», «Είδος
+ανατιθέμενων εργασιών: …», «θα δεσμεύσει … τις παρακάτω ποσότητες
+καυσόξυλων») — NEVER funding recitals, legal-basis recitals, boilerplate
+or CPV; the registry title is not a source (the 44 scans are read by eye,
+the precedent of the 2026-08-18 awardee review, and carry that as their
+source); (ii) WHAT is done is one category, WHY is a separate attribute
+— «post-fire restoration» and «fire prevention» are umbrellas over
+different works and must not swallow them; (iii) firewood for local needs
+stays apart from timber harvesting (the document's own title tells them
+apart; the villages' annual right is not a sale); (iv) firebreak zones are
+their own key; (v) the planting key is named with reforestation.
+**Keys (one per contract):** firewood for local needs · timber harvesting
+· silvicultural tending · vegetation clearing · firebreak zones · tree
+felling & pruning · flood & erosion-control works · reforestation,
+planting & seed collection · supply of timber & firewood · other forestry
+services. **Fire context (attribute, may be empty):** wildfire prevention
+· post-fire restoration, read from the same title/sentence («για
+αντιπυρικούς σκοπούς», «πρόληψη (δασικών) πυρκαγιών», «ζώνες
+πυρασφάλειας», «πυροπροστασία», «αντιπυρική προστασία» / «καμένων
+εκτάσεων-δέντρων-ξυλείας», «πληγείσες από τις πυρκαγιές», «αποκατάσταση …
+πυρκαγιά», «πυρόπληκτες»); a contract whose text states no purpose gets
+none — nothing is inferred from the season or the funding.
+Implementation follows in the next entries (reader, curation, loaders,
+API, page).
+
+## 2026-08-23 · ΔΑΣΕ contract page — the two layers built, curated and loaded; the page redressed on the Anti-nero skeleton
+
+**What was built (same day, after the decisions above).**
+
+*Reader* — `khmdhs/dase_details.py`: `read_title()` takes the PDF's own
+heading (the first line after the letterhead that IS the document's name —
+«ΣΥΜΦΩΝΗΤΙΚΟ …», «ΣΥΜΒΑΣΗ …», «ΠΡΩΤΟΚΟΛΛΟ ΕΓΚΑΤΑΣΤΑΣΗΣ» — letter-spaced
+headings closed up, the block cut at the first recital or the opening
+sentence), the quoted title («με τίτλο: «…»», «της υπηρεσίας «…»» — never
+one standing inside a funding, decision or legal recital) and the work
+sentence («Είδος ανατιθέμενων εργασιών: …», «αναλαμβάνει την …»,
+«ΑΝΑΘΕΤΕΙ … την …», «Αντικείμενο …», «θα δεσμεύσει … καυσόξυλων», «οι
+εργασίες συνίστανται στα …», «αφορά …»), plus — for the FIRE CONTEXT only —
+the contract's own statement of need («Την ανάγκη άμεσης εκτέλεσης έργων
+αντιπλημμυρικής προστασίας στις καμένες περιοχές του Δασαρχείου
+Ιστιαίας …», the last «έχοντας υπόψη» item before «ΑΝΑΘΕΤΕΙ»: the
+contract's words, not a citation — without it the 45 Εύβοια flood-works
+contracts, whose titles name the basin and not the fire, would carry no
+context although their own justification does). `read_category()` tests
+ten ordered rules on the heading, then the quoted title, then the work
+sentence — the first field that names a work decides; every family that
+fires is listed and a field naming two different works (beyond the
+compatible pairs firewood+logging, tending+logging) is flagged for
+review; `read_deadline()` reads a DATE («Προθεσμία εκτελέσεως μέχρι
+31-12-2021», «λήγουσα ανυπερθέτως στις …», «ισχύει έως …», «ορίζεται
+μέχρι τις 20 Οκτωβρίου 2021», «περαίωσή τους την …», «εντός του
+προκαθορισμένου χρόνου (έως …)», «θα εκτελεσθεί … μέχρι τις …»), else the
+Anti-nero duration clause, else the ΔΑΣΕ duration dialect («έχει διάρκεια
+ενός (1) μηνός», «θα είναι (1) ένας μήνας», «για ένα έτος»), else an open
+end («μέχρι εξαντλήσεως», «αορίστου διάρκειας», «λήγει με την ολοκλήρωση
+των εργασιών»); a date before the signature or more than four years after
+it is flagged, never dropped. **The text layers needed repairing first:**
+(a) homoglyphs («∆» U+2206, Latin capitals in Greek words); (b) the
+«΢»-font family — 429 texts whose ToUnicode maps Σ→«΢» (U+03A2), Τ→«Σ»,
+Υ→«Τ» in capitals and swaps/shifts the lowercase (σ↔ς, η→θ, έ→ζ, ώ→ϊ,
+ύ→φ, with θ/κ and ή/ι merged) — undone LINE BY LINE where the line shows
+the signature, because the same PDF mixes a ΢-font letterhead with a
+clean-font heading and a global decode turned «ΣΥΜΦΩΝΗΤΙΚΟ» into
+«ΤΥΜΦΩΝΗΥΙΚΟ»; the lossy lowercase pairs only inside the words the
+readers need («προθεσμία», «καθαρισμ», «αναθέτει», «λήγει»,
+«ολοκλήρωση», the έ-words); (c) a capital Θ-for-Η variant and the Φουρνά
+Ω→Ψ/Ψ→Χ variant, repaired in named words only («ΨΝ» ends no Greek word);
+(d) the true substitution-cipher fonts (Σπερχειάδα, Φουρνά bodies,
+Ξάνθη, Δωδεκάνησα, Αλεξανδρούπολη 2025: Δ→«Γ», Ε→«Δ», Η→«Ζ», Ι→«Η» …) —
+a capitals table learnt from each document's own phrases by cryptogram
+pattern was tried and kept as code (`learn_cipher`/`decode_cipher`,
+accepted only when the decoded text then reads like a contract) but the
+documents that need it are mostly clean-heading/cipher-body, so in
+practice the clean heading classifies them and their body (work sentence,
+deadline) is read by eye; a text naming none of twenty ordinary contract
+words is `unreadable_font`, a text under 1,500 characters or under 50 %
+Greek letters is `scan`, and both go to the by-eye pass.
+
+*Extraction + curation* — `scripts/extract_dase_details.py` reads all
+2,164 contracts (an amendment's cover note through its predecessor,
+`inherited:<ref>`), writes `data/processed/dase_details_review.json`
+(gitignored) + the committed `dase_details_curator.html`, and `--curate`
+writes `khmdhs/data/dase_categories.json` + `dase_durations.json` with
+`_overrides` merged on top. Machine coverage after the repairs: 1,842 of
+1,998 live contracts categorised, 44 with no rule fired, 80 cipher-font,
+47 scans, 31 two-works flags. **Review:** every non-firewood proposal read
+against its quoted evidence (≈ 560 lines); three corrected (24SYMV014452314
+«αποψιλωτική υλοτομία» is a clear-cut → harvesting; 26SYMV018882122 poplar
+harvest + clearing → harvesting; 23SYMV012461845 clearing + de-branching →
+clearing), three «ΣΥΜΦΩΝΗΤΙΚΟ ΚΑΛΛΙΕΡΓΕΙΑΣ» and one «καλλιέργεια
+νεοφυτειών» → tending, the ΑΔΜΗΕ «κοπή, τεμαχισμός και στοίβαξη δέντρων»
+→ tree work; **the by-eye pass: 197 PDFs (scans, cipher fonts, no rule)
+rendered as contact sheets of the first page's top half and read** —
+205 `_overrides` written with the verbatim heading as evidence and the
+source «eye» (Σπερχειάδα 52 firewood, Δωδεκάνησα 12 post-fire
+erosion-control works, Σταυρούπολη/Ξάνθη/Μέτσοβο logging protocols with
+their table dates, Ροδόπη 7 «υλοτομικών εργασιών πρόληψης δασικών
+πυρκαγιών», Δοξάτο/Αλμωπία/Κιλελέρ tree work, and the odd ones out: a
+ΔΕΘ fair-stand lease, furniture repair for a forest office, office-
+equipment maintenance, sacks for the 2023 election, three olive-fly
+spraying contracts of €532,937 / €400,308 / €126,779 won by the Ένωση
+Δασικών Συνεταιρισμών Εύβοιας, a snow-clearing road opening — all
+«Other forestry services» with the reason noted; 19 deadlines read by
+eye from the protocols' «Προθεσμία εκτελέσεως»). Two rules settled on the
+way: a harvesting PROTOCOL whose table says «Είδος υλοτομίας:
+Καλλιεργητική» is harvesting (the work named is the harvest, the tending
+is the cut's type), while «ΣΥΜΦΩΝΗΤΙΚΟ ΕΡΓΑΣΙΩΝ ΣΥΝΤΗΡΗΣΗΣ & ΒΕΛΤΙΩΣΗΣ
+ΔΑΣΩΝ (ΚΑΛΛΙΕΡΓΗΤΙΚΩΝ ΥΛΟΤΟΜΙΩΝ)» is tending; and «ΔΕΣΜΕΥΣΗΣ ΚΑΥΣΟΞΥΛΩΝ
+… ΚΑΙ ΕΚΤΕΛΕΣΗΣ ΕΡΓΑΣΙΩΝ ΣΥΝΤΗΡΗΣΗΣ & ΒΕΛΤΙΩΣΗΣ» (Έβρος 2025, 17
+contracts) files under firewood, the work named first, flagged as two
+works.
+
+*Result (live 1,998):* firewood for local needs 1,463 · silvicultural
+tending 193 · timber harvesting 139 · flood & erosion-control works 89 ·
+tree felling & pruning 49 · vegetation clearing 46 · other 10 · supply 3 ·
+firebreak zones 3 · reforestation/seed collection 3. Fire context:
+post-fire restoration 92 (spanning flood works, clearing of burnt trees
+along roads, the ΟΣΕ burnt-tree felling, the Μαντούδι storm-and-fire road
+service) · wildfire prevention 24 (firebreaks, preventive clearing,
+fuel-reduction logging in Έβρος and Ροδόπη). Deadlines: 290 contracts
+state one — 179 as a date, 100 as a duration, 11 open-ended; 1,708 state
+none and draw the stub. Loaded by `khmdhs/dase_details_loader.py`
+(hooked at the end of `harvest_dase.py load`) into `contract_categories`
++ `category_labels` (with `label_en`), the new `contract_fire_context` +
+`fire_context_labels`, and `contract_durations` (two new columns
+`deadline_date`, `kind`, plus `note`; the Anti-nero rows leave them NULL).
+
+*API* — `/api/dase/contract/<adam>` now ships `category`, `fire_context`,
+`chain` (from the registry's prev/next links — the ΔΑΣΕ DB has no scope
+table), `stated_duration`, `deadlines` (`queries_extra.dase_contract_deadlines`:
+document-stated only, `basis` document | document_date, never the
+registry's end date, `extensions` always empty) and a `d` on every payment.
+
+*Page* — `atlas/src/routes/dase/contract/[adam]/+page.svelte` rewritten on
+the Anti-nero skeleton: the facts list (Contract · Date · Contractor — the
+Greek display name, registry spelling in a hint · Type · Fire context ·
+Budget · Awarding procedure (EN) · Contracting authority (EN) · Awarding
+unit (EN) · Areas of intervention = the Regional Unit derived from the
+unit, said so · Duration — the document's statement or «not stated in the
+signed text», the registry field in the hint · Amendments · Status); the
+map cropped to the unit's region with the FamilyTree behind the
+Map/Diagram switch (English labels, scaled to the slot — `FamilyTree fit`);
+the TIMELINE as `ChainTimeline` in the dataset's green (`ink`) on an axis
+opening 2021-09-01 (`axisStart`) — the bar from the signature to the
+document-stated deadline or the stub, the run-up acts, the € marks, no ✔
+ever; the DOCUMENT TRAIL with the payment orders in it and only the
+award that names THIS co-op (the registry's chain returns every lot's
+award — the FamilyTree's own name-verified pairing is applied to the
+trail, the diagram keeps them all); the three folds PROCUREMENT DETAILS
+(the registry duration and the items table inside) / EXTRACTED QUOTES
+(value correction, the category's verbatim title, the fire-context
+words, the duration sentence) / CPV CODES (the ΕΦΚΑ chip kept); the
+Anti-nero lettering and spacing, `Fold` hover in the dataset hue
+(`--fold-accent`). Pinned by `tests/test_dase_details.py` (reader units
+incl. «recitals never decide the category» and the line-local ΢ repair;
+real-DB counts; the endpoint never serving the registry end date).
+
+*For the user's eye (not decided here):* 25SYMV017455982 (Αλμωπία «ΟΜΑΔΑ Β:
+προληπτικός καθαρισμός της βλάστησης για τη μείωση του κινδύνου») carries
+the prevention context from its body («για λόγους πυροπροστασίας»), as do
+its siblings; the three Αλμωπία «ΟΜΑΔΑ …» lots and the Σιδηρόνερο
+«πρόληψης και αντιπυρικής προστασίας» contract are clearing; the ΑΔΜΗΕ
+power-line corridor fellings and the port-zone fellings are tree work, not
+harvesting; the 17 Έβρος two-work agreements sit under firewood.
+
+## 2026-08-23 · The ΔΑΣΕ interpretive layers leave the contract page — certainty below the bar (user)
+
+**Decision (user).** The three layers extracted from the signed texts earlier
+today — work-type category, fire context, document-stated deadline — are NOT
+presented on the /dase contract pages. The verification plan (firewood
+evidence sweep, heading-vs-body concordance, OCR second reader over the 182
+unreadable bodies, verification page, 60-contract sample audit; ~5–6 h) was
+priced and set aside; only 100%-certain information stays on the pages.
+What is not 100%:
+
+- **TYPE** — 133 live verdicts rest on a single by-eye read (scans + cipher
+  fonts, no second reader), 34 two-works flags carry no user verdict, and
+  heading-vs-body agreement was never measured for the 1,781 heading reads.
+- **FIRE CONTEXT** — the 116 positives are verbatim quotes but
+  single-reviewed; the «—» absence claim cannot be verified while 182
+  document bodies stay unread.
+- **DEADLINE** — 28 known missed sentences (the Ροδόπη «εντός του
+  προκαθορισμένου χρόνου (έως …)» cipher-lowercase family and the Δίρφυς
+  «λύεται … ήτοι …» family), 19 by-eye dates, and the same 182 unread
+  bodies behind every «states none» stub.
+
+**What changed on the page.** Only registry- or user-audited facts remain:
+the TYPE, FIRE CONTEXT and DURATION rows are gone, their EXTRACTED QUOTES
+entries with them, and the TIMELINE draws NO deadline bar — signature,
+run-up acts and € payment marks only, all registry facts. The registry
+duration stays visible inside PROCUREMENT DETAILS, labelled as registry
+data.
+
+**What stays in the repo (parked — the STUDY COSTS precedent).** The curated
+JSONs (`dase_categories.json` 2,164 entries, `dase_durations.json` 326), the
+reader (`khmdhs/dase_details.py`), the extractor/curator, the loader, the DB
+tables (`contract_categories`, `contract_fire_context`,
+`contract_durations`) and their pins in `tests/test_dase_details.py`; the
+`/api/dase/contract/<adam>` payload keeps `category` / `fire_context` /
+`stated_duration` / `deadlines`, so the layer can return the day it is
+independently verified. Nothing was deleted.
