@@ -1880,6 +1880,48 @@ def dase_value_histogram(dase: sqlite3.Connection) -> dict:
     return h
 
 
+def dase_direct_award_distribution(dase: sqlite3.Connection) -> dict:
+    """Histogram of the live ΔΑΣΕ direct-award contracts' stated values, on
+    the SAME pure-doubling axis convention as dase_value_histogram (edges
+    derived from this population's own range, anchored on €1.000).
+
+    Deliberately ships NO `thresholds` (DATA_DECISIONS 2026-08-24): the
+    recital audit of all 1,917 texts showed the mass rests on the
+    forest-code assignment regime (ν.δ. 86/1969, π.δ. 126/1986, the
+    «τιμές ανάθεσης» ΚΥΑ) and the works above €60k on the 13.08.2021
+    ΠΝΠ (ν.4824/2021), «κατά παρέκκλιση … του ν. 4412/2016» — the
+    άρθρο 118 ceilings do not govern either population, so drawing them
+    would assert a rule that does not apply. n_above_30k / n_above_60k are
+    computed here so the page's copy never hardcodes them."""
+    values = [r[0] or 0.0 for r in dase.execute(f"""
+        SELECT co.total_cost_with_vat FROM contracts co
+        WHERE {dq.live_filter()}
+          AND co.procedure_type LIKE 'Απευθείας%'
+    """)]
+    live = [v for v in values if v > 0]
+    lo, hi = (min(live), max(live)) if live else (1_000.0, 1_000.0)
+    ANCHOR = 1_000.0
+    k_lo = math.floor(math.log2(lo / ANCHOR))
+    k_hi = math.ceil(math.log2(hi / ANCHOR))
+    if ANCHOR * 2 ** k_hi <= hi:
+        k_hi += 1
+    edges = [0.0] + [ANCHOR * 2 ** k for k in range(k_lo, k_hi + 1)]
+    h = q._bin_values(values, tuple(edges))
+    values.sort()
+    h["labels"] = (
+        [f"≤{_doubling_label(edges[1])}"]
+        + [f"{_doubling_label(edges[i])}–{_doubling_label(edges[i + 1])}"
+           for i in range(1, len(edges) - 1)]
+        + [f"≥{_doubling_label(edges[-1])}"]
+    )
+    h["n"] = len(values)
+    h["total_eur"] = round(sum(values), 2)
+    h["median"] = values[len(values) // 2] if values else 0
+    h["n_above_30k"] = sum(1 for v in values if v > 30_000)
+    h["n_above_60k"] = sum(1 for v in values if v > 60_000)
+    return h
+
+
 def antinero_value_histogram(kh: sqlite3.Connection) -> dict:
     """Value brackets for the Anti-nero CONTRACT VALUES chart — the ΔΑΣΕ
     convention, one dataset over (user, 2026-08-20): every bracket is exactly
@@ -1927,6 +1969,7 @@ def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
         "types": dq.type_mix(dase),
         "cpvs": dq.cpv_mix(dase, limit=10),
         "cpv_tree": dase_cpv_tree(dase),
+        "direct_awards": dase_direct_award_distribution(dase),
         "histogram": dase_value_histogram(dase),
         "by_pe": dq.money_by_pe(dase),
     }

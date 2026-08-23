@@ -391,6 +391,36 @@
 		contracts span multiple units and stay honestly unresolved.
 	</p>
 
+	<h2 id="dase-award-basis">How forest co-op contracts are awarded</h2>
+	<p>
+		Nearly every contract in the forest co-op dataset is recorded in ΚΗΜΔΗΣ as a «direct
+		award» — a label that must not be read through ordinary public-procurement law. Under
+		ν.4412/2016, Greece's transposition of Directive 2014/24/EU, a direct award (άρθρο 118) is a
+		below-threshold exception, capped since ν.4782/2021 at €30,000 for services and €60,000 for
+		works. Forest work assigned to forest workers' co-operatives runs on a different, older
+		regime: the Forest Code (ν.δ. 86/1969, notably άρθρο 137) and π.δ. 126/1986 have the forest
+		services assign harvesting, tending and firewood work in public forests to the local
+		co-operatives <strong>directly, at prices fixed each year by ministerial decision</strong>
+		(the «τιμές ανάθεσης»); ν.4423/2016 defines the co-operatives themselves. Direct
+		assignment is that regime's design — there is no competition to hold and no value ceiling to
+		observe. The contracts confirm it: in a 2026-08-24 audit of all 1,917 direct-award contract
+		texts, 1,482 cite the Forest Code in their own recitals, 1,351 cite π.δ. 126/1986 and 1,097
+		the τιμές-ανάθεσης decisions, while only 46 cite ν.4412's άρθρο 118 at all — the
+		registry's «(αρ.118/αρ. 328)» suffix is the filing platform's dropdown label, not the
+		contracts' stated basis.
+	</p>
+	<p>
+		The direct awards above €60,000 are a separate phenomenon: 76 of the 77 cite the Act of
+		13.08.2021 (ratified as ν.4824/2021) — flood- and erosion-control works in the burnt basins
+		of Β. Εύβοια and the Peloponnese in 2021–22, and the 2025 Έβρος works — awarded «για
+		λόγους κατεπείγουσας ανάγκης» after a state-of-emergency declaration. That Act's άρθρο
+		τέταρτο expressly sets these δασοτεχνικά works «κατά παρέκκλιση οιασδήποτε γενικής ή
+		ειδικής διάταξης του ν. 4412/2016, πλην των διατάξεων ενωσιακής προέλευσης», with no
+		value limit. For these reasons the DIRECT AWARDS chart of the forest co-op page draws no
+		ceiling lines: the άρθρο 118 ceilings belong to a law that does not govern these contracts.
+		On the Anti-nero page the same lines stay — those contracts are ν.4412 procurements.
+	</p>
+
 	<h2 id="dase-work-types">ΔΑΣΕ contract pages: what is shown, what is withheld</h2>
 	<p>
 		A forest co-op contract page shows only registry facts and user-audited curation: the parties

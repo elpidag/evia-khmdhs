@@ -20,7 +20,8 @@
 		type DaseMapPayload,
 		type DaseSwarm
 	} from '$lib/api';
-	import { eur, eurShort, grInt, pct } from '$lib/transforms/format';
+	import { bracket, eur, eurShort, grInt, pct } from '$lib/transforms/format';
+	import { procedureEn } from '$lib/transforms/procedures';
 	import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 	import type { PageData } from './$types';
 
@@ -159,6 +160,28 @@
 			.flatMap((d) => d.classes.flatMap((k) => k.codes))
 			.sort((a, b) => b.n - a.n)[0] ?? null
 	);
+	// AWARD PROCEDURES + DIRECT AWARDS (2026-08-24): the Anti-nero pair's
+	// dress, but NO ceiling lines — the recital audit showed the mass rests
+	// on the forest-code assignment regime and the >€60k cohort on the
+	// 13.08.2021 ΠΝΠ derogation (DATA_DECISIONS); every number computed
+	const procRows = $derived(
+		o.procedures.map((pr) => ({
+			label: procedureEn(pr.label),
+			value: pr.eur,
+			sublabel: `${grInt(pr.n_contracts)} contracts`,
+			direct: pr.label.includes('Απευθείας')
+		}))
+	);
+	const procTotalEur = $derived(o.procedures.reduce((s, pr) => s + pr.eur, 0));
+	const procTotalN = $derived(o.procedures.reduce((s, pr) => s + pr.n_contracts, 0));
+	const directRow = $derived(o.procedures.find((pr) => pr.label.includes('Απευθείας')));
+	const da = $derived(o.direct_awards ?? null);
+	const daModal = $derived.by(() => {
+		if (!da) return '';
+		let best = 0;
+		for (let i = 1; i < da.counts.length; i++) if (da.counts[i] > da.counts[best]) best = i;
+		return bracket(da.labels[best] ?? '');
+	});
 	const coopRows = $derived(
 		o.top_coops.map((c) => ({
 			label: c.name,
@@ -525,6 +548,40 @@
 		columnX={[0.10, 0.45, 0.78]}
 	/>
 </ChartFrame>
+
+<!-- the Anti-nero AWARD PROCEDURES + DIRECT AWARDS pair, one dataset over
+     (DATA_DECISIONS 2026-08-24): same dress, NO ceiling lines — the
+     άρθρο 118 ceilings do not govern the forest-code or ΠΝΠ regimes -->
+<div class="pair">
+	<ChartFrame
+		title="AWARD PROCEDURES"
+		insight={`${grInt(directRow?.n_contracts ?? 0)} of the ${grInt(procTotalN)} contracts — ${pct(((directRow?.eur ?? 0) / procTotalEur) * 100, 0)} of the money — went by direct award: assignment of forest work to the local co-operatives at State-set prices («τιμές ανάθεσης») is the forest code's own default, not a below-threshold exception.`}
+		caveat="Procedures as recorded in ΚΗΜΔΗΣ, named in the wording of Directive 2014/24/EU. The registry files most assignments under «Απευθείας ανάθεση (αρ.118/αρ. 328)», but the contracts' own recitals rest on the forest-code regime (ν.δ. 86/1969, π.δ. 126/1986)."
+		anchor="dase-procedures"
+		methodology="dase-award-basis"
+	>
+		<div class="rankw">
+			<BarH rows={procRows} color="var(--c-dase)" inside barHeight={35} valuesRight highlight={(r) => !!(r as { direct?: boolean }).direct} />
+		</div>
+	</ChartFrame>
+
+	{#if da}
+		<ChartFrame
+			title="DIRECT AWARDS"
+			insight={`The ${grInt(da.n)} direct-award contracts pile up around €${daModal} — small assignments at the State-set prices. The ${grInt(da.n_above_60k)} above €60k are the post-fire emergency works of the 13.08.2021 ΠΝΠ (ν.4824/2021), awarded «κατά παρέκκλιση» of the national procurement rules — no ceiling lines are drawn because none apply here.`}
+			caveat="Stated net values of the «Απευθείας ανάθεση» contracts; the ν.4782/2021 ceilings (€30k/€60k) belong to the ν.4412 άρθρο 118 route, which is not these contracts' stated basis."
+			anchor="dase-direct-awards"
+			methodology="dase-award-basis"
+		>
+			<LogHistogram
+				labels={da.labels.map(bracket)}
+				counts={da.counts}
+				edges={da.edges}
+				color="var(--c-dase)"
+			/>
+		</ChartFrame>
+	{/if}
+</div>
 
 <Defer height={400}>
 {#if swarm}

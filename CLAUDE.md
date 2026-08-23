@@ -1086,7 +1086,22 @@ class count ABOVE its bar when too wide to fit inside, and takes the
 page ink via `--cpv-ink` (hover/dim = the ink mixed toward paper —
 Anti-nero pixel-identical); the ChartFrame LIGHTBULB follows
 `--frame-accent`; the .dasep wrapper sets both to the green.
-**/dase contract pages are
+**AWARD PROCEDURES + DIRECT AWARDS since 2026-08-24** (the Anti-nero
+pair one dataset over; DATA_DECISIONS that day): a `.pair` after AWARDING
+PROCESS — procedures BarH (procedureEn names incl. the mechanical
+«ν.4412/2016 article 128 procedure» dropdown, direct row highlighted,
+computed bulb) beside the direct-award LogHistogram on the dase doubling
+axis (`queries_extra.dase_direct_award_distribution` → `direct_awards`
+on the overview payload: n/Σ/median/n_above_30k/n_above_60k computed,
+pinned) — **deliberately NO ceiling lines**: the recital audit of all
+1,917 direct-award texts (the DATA_DECISIONS entry holds the table)
+showed the mass rests on the forest-code assignment regime (ν.δ. 86/1969
+/ π.δ. 126/1986 / τιμές ανάθεσης — only 46 cite άρθρο 118) and the
+77 contracts >€60k on the 13.08.2021 ΠΝΠ/ν.4824/2021 άρθρο-τέταρτο
+derogation from ν.4412 — the άρθρο 118 ceilings govern neither
+population (Anti-nero keeps its lines: those ARE ν.4412 procurements).
+The legal context lives in /methodology#dase-award-basis (drafted for
+the user to edit/place). **/dase contract pages are
 the Anti-nero page's skeleton since 2026-08-23** (user; DATA_DECISIONS
 two entries that day): the same facts rows where the data exists
 (Greek co-op display name, EN procedure/body names, Areas of intervention

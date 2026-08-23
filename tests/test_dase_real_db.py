@@ -307,3 +307,29 @@ def test_cpv_tree_pins(conn):
     assert top["code"].startswith("77")       # forestry leads
     div66 = next(d for d in tree["divisions"] if d["code"].startswith("66"))
     assert div66["n"] == 386                  # the ΕΦΚΑ tag, pinned 2026-08-17
+
+
+def test_direct_award_distribution_pins():
+    """The /dase DIRECT AWARDS frame (DATA_DECISIONS 2026-08-24): the live
+    direct-award population on the doubling axis — and deliberately NO
+    thresholds key: the recital audit showed neither the forest-code mass
+    nor the ΠΝΠ-13.08.2021 emergency cohort is governed by the ν.4412
+    άρθρο 118 ceilings, so the chart must not draw them."""
+    from atlas_api import queries_extra as qe
+
+    if not DB.exists():
+        pytest.skip('committed dase.sqlite not present')
+    # own connection: apply_net_basis installs TEMP views, which must not
+    # leak into the shared module fixture
+    c = queries.open_ro(DB)
+    try:
+        qe.apply_net_basis(c)
+        h = qe.dase_direct_award_distribution(c)
+    finally:
+        c.close()
+    assert h["n"] == 1917
+    assert sum(h["counts"]) == h["n"]
+    assert h["n_above_30k"] == 109
+    assert h["n_above_60k"] == 77          # the ΠΝΠ emergency cohort
+    assert h["median"] == pytest.approx(5766.13, abs=0.01)
+    assert "thresholds" not in h           # no ceiling lines, by decision

@@ -223,6 +223,19 @@ export interface DaseOverview {
 	/** the declared codes rolled up the CPV tree — same shape and
 	 *  conventions as the Anti-nero front page's (2026-08-24) */
 	cpv_tree?: AntineroOverview['cpv_tree'];
+	/** the live direct-award contracts' stated values on the doubling axis;
+	 *  NO thresholds by design — the άρθρο 118 ceilings do not govern the
+	 *  forest-code / ΠΝΠ regimes (DATA_DECISIONS 2026-08-24) */
+	direct_awards?: {
+		labels: string[];
+		counts: number[];
+		edges: number[];
+		n: number;
+		total_eur: number;
+		median: number;
+		n_above_30k: number;
+		n_above_60k: number;
+	};
 	top_coops: {
 		vat: string;
 		name: string;

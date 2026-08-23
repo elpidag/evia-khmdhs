@@ -8165,3 +8165,50 @@ none`): every name, «ΔΑ.Σ.Ε. ΑΜΑΡΑΝΤΟΥ-ΚΛΕΙΝΟΥ» included, 
 inside the green, wrapped to two lines where needed; the columns stayed
 equal, and the ranking's amounts align RIGHT like MONEY PER YEAR's
 (`valuesRight`, user).
+
+## 2026-08-24 · The ΔΑΣΕ award-procedure frames and the legal basis of the «direct awards» (audit + user decision)
+
+**Audit (all 1,917 live direct-award contract texts read for their cited
+legal basis; the cached sidecars, fold-tolerant regex over the recitals):**
+
+| basis cited in the contract's own text | all 1,917 | the 77 > €60k net |
+|---|---|---|
+| ν.δ. 86/1969 (Δασικός Κώδικας) | 1,482 | 8 |
+| π.δ. 126/1986 | 1,351 | 1 |
+| «τιμές ανάθεσης» ΚΥΑ | 1,097 | 2 |
+| ν.4423/2016 | 154 | 69 |
+| ν.4412/2016 (any mention) | 239 | 75 |
+| — άρθρο 118 specifically | 46 | 6 |
+| 13.08.2021 ΠΝΠ / ν.4824/2021 | — | 76 |
+| «κατεπείγουσα ανάγκη» | 79 | 75 |
+| κήρυξη έκτακτης ανάγκης | — | 67 |
+
+The live direct-award population: 1,917 of 1,998 contracts (Σ net
+€26,738,507.21, median €5,766.13, max €253,739.13); 109 above €30k, 77
+above €60k. The >€60k cohort: ΑΠΔ Θεσσαλίας-Στερεάς 39 / ΑΠΔ
+Πελοποννήσου-ΔΕ-Ιονίου 20 / ΥΠΕΝ 18; years 2021 ×34, 2022 ×35, 2025 ×8 —
+the post-fire flood/erosion works of Β. Εύβοια and the Peloponnese and
+the 2025 Έβρος works. Verified against the statute (e-nomothesia, ΦΕΚ Α΄
+143/13-08-2021): the ΠΝΠ's άρθρο τέταρτο («Επίσπευση ειδικών
+δασοτεχνικών έργων») operates «κατά παρέκκλιση οιασδήποτε γενικής ή
+ειδικής διάταξης του ν. 4412/2016, πλην των διατάξεων ενωσιακής
+προέλευσης», with no value ceiling; the 05+13.08.2021 ΠΝΠ pair is
+ratified by ν.4824/2021. The 54 «Διαδικασία άρθρου 128 του ν.4412/16»
+rows are ΑΠΔ Μακεδονίας-Θράκης firewood commitments filed under that
+dropdown — rendered mechanically in English, never interpreted.
+
+**Conclusion (the two-regimes reading, user-approved):** the ΔΑΣΕ
+«direct awards» are two populations and NEITHER is governed by the
+ν.4782/2021 άρθρο 118 ceilings — the mass runs on the forest-code
+assignment regime (direct assignment at State-set prices is its design,
+not a below-threshold exception; the registry's «(αρ.118/αρ.328)» suffix
+is the platform's dropdown label, not the contracts' stated basis), and
+the >€60k cohort on the ΠΝΠ derogation. **Therefore the /dase DIRECT
+AWARDS histogram draws NO ceiling lines** (on Anti-nero they stay — those
+contracts are ν.4412 procurements); the two frames AWARD PROCEDURES +
+DIRECT AWARDS mirror the Anti-nero pair otherwise (procedureEn names,
+computed bulbs, the dase doubling-edge axis), payload
+`direct_awards` = `queries_extra.dase_direct_award_distribution`
+(n / Σ / median / n_above_30k / n_above_60k computed, pinned), and the
+legal context lives in /methodology#dase-award-basis, drafted for the
+user to edit and place.

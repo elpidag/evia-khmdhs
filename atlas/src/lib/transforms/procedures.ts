@@ -27,6 +27,9 @@ const RULES: [RegExp, string][] = [
 	[/ΔΙΑΠΡΑΓΜΑΤΕΥΣΗ.*ΧΩΡΙΣ/, 'Negotiated procedure without prior publication'],
 	[/ΔΙΑΠΡΑΓΜΑΤΕΥΣΗ/, 'Negotiated procedure'],
 	[/ΑΠΕΥΘΕΙΑΣ ΑΝΑΘΕΣΗ/, 'Direct award'],
+	// the ΔΑΣΕ registry's «Διαδικασία άρθρου 128 του ν.4412/16» dropdown — the
+	// article number is kept as an identifier, never interpreted (2026-08-24)
+	[/ΔΙΑΔΙΚΑΣΙΑ ΑΡΘΡΟΥ 128/, 'ν.4412/2016 article 128 procedure'],
 	[/ΣΥΝΟΠΤΙΚΟΣ ΔΙΑΓΩΝΙΣΜΟΣ/, 'Simplified competition'],
 	[/ΚΑΤΕΠΕΙΓΟΥΣΑ ΑΝΑΓΚΗ/, 'Extreme urgency brought about by events unforeseeable by the contracting authority']
 ];
