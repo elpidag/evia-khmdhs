@@ -10,8 +10,7 @@
 	import DisbursementCurves from '$lib/charts/DisbursementCurves.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
 	import KindFlow from '$lib/charts/KindFlow.svelte';
-	import WorksByCategory from '$lib/charts/WorksByCategory.svelte';
-	import WorkDots from '$lib/charts/WorkDots.svelte';
+	import CatWorkChord from '$lib/charts/CatWorkChord.svelte';
 	import { unitEn } from '$lib/transforms/names';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
@@ -230,10 +229,6 @@
 	});
 	const firstPayYear = $derived((o.timeseries.months[0] ?? '').slice(0, 4));
 	// work-type category chart: stated € or contract counts, same bars
-	// the TYPES OF WORKS lens, a URL param like the other frames' toggles —
-	// «category» / «named» and, under trial (2026-08-22), «flow» / «matrix» /
-	// «pack»
-	const WORKS_LENSES = ['category', 'named', 'split'] as const;
 	// the five-year-maps strip (user, 2026-08-22, replacing the MONEY BY
 	// REGION PER YEAR facets): per-year per-region € on ONE shared scale —
 	// the same sqrt grey ramp as the big allocation maps above it
@@ -291,22 +286,8 @@
 			? (page.url.searchParams.get('ct') as CtLens)
 			: 'eur'
 	);
-	type WorksLens = (typeof WORKS_LENSES)[number];
-	const worksLens = $derived<WorksLens>(
-		(WORKS_LENSES as readonly string[]).includes(page.url.searchParams.get('works') ?? '')
-			? (page.url.searchParams.get('works') as WorksLens)
-			: 'category'
-	);
 	// works as ROWS, each split by the main category of the contracts naming
 	// it (user, 2026-08-22: the work names are long, so they must be labels)
-	const CAT_GREYS = ['#1f1f1f', '#3c3c3c', '#595959', '#767676', '#8f8f8f', '#a8a8a8', '#bdbdbd', '#d0d0d0'];
-	const catGrey = $derived.by(() => {
-		const m = new Map<string, string>();
-		[...o.categories]
-			.sort((a, b) => b.eur - a.eur)
-			.forEach((c, i) => m.set(c.key, CAT_GREYS[Math.min(i, CAT_GREYS.length - 1)]));
-		return m;
-	});
 	// the key/legend form of a category name: the head clause, cut at
 	// whichever separator the curation used ('—' or ':') — the names are
 	// sentences and the swatch row cannot carry them whole
@@ -377,40 +358,6 @@
 	// the reverse link: under each work, the main categories of the contracts
 	// that name it — from the categories' own `names` lists, inverted (user,
 	// 2026-08-22: the two lenses must show their connection both ways)
-	const themeCats = $derived.by(() => {
-		const m = new Map<string, { label: string; n: number }[]>();
-		for (const c of o.categories)
-			for (const w of c.names ?? []) {
-				const arr = m.get(w.theme) ?? [];
-				arr.push({ label: (c.label_en ?? c.label).split(' — ')[0], n: w.n });
-				m.set(w.theme, arr);
-			}
-		for (const arr of m.values()) arr.sort((a, b) => b.n - a.n);
-		return m;
-	});
-	const themeRows = $derived([
-		...o.themes.themes.map((w) => ({
-			label: w.label_en,
-			value: w.n,
-			title:
-				`${w.label_en} — ${grInt(w.n)} contracts name it` +
-				(themeCats.get(w.theme)?.length
-					? `. Main category of those contracts: ${themeCats
-							.get(w.theme)!
-							.map((c) => `${c.label.toLowerCase()} ${grInt(c.n)}`)
-							.join(', ')}`
-					: '')
-		})),
-		...(o.themes.unspecified
-			? [
-					{
-						label: 'fire protection — no specific work named',
-						value: o.themes.unspecified,
-						title: `${grInt(o.themes.unspecified)} contracts say only «αντιπυρική προστασία»`
-					}
-				]
-			: [])
-	].sort((a, b) => b.value - a.value));
 	const topCat = $derived(
 		o.categories.reduce((a, b) => (b.eur > a.eur ? b : a), o.categories[0])
 	);
@@ -965,47 +912,23 @@
 
 {#if o.categories.length && topCat}
 	{@const works = o.themes}
-	<!-- two lenses (user, 2026-08-22): «main category» — one per contract,
-	     € or count, sums to the total, each bar saying which works its
-	     contracts name — / «works named» — the themes, counted in contracts,
-	     the unspecified ones as their own bar, no € -->
+	<!-- the chord alone (user, 2026-08-23): the dots and the works × category
+	     rows are PARKED — WorkDots.svelte / WorksByCategory.svelte stay, off
+	     the page -->
 
 	<ChartFrame
 		title="TYPES OF WORKS"
-		insight={worksLens === 'split'
-			? `One row per work the signed titles name — the works are what the contracts say they do — and each row split by the MAIN CATEGORY of the contracts naming it: that is what the one-category-per-contract rule flattens, since a bundled title names several works. A contract appears on every row its title names, so the rows overlap; the contracts naming no specific work are the last row. Counts only — no price per work exists inside a bundled contract.`
-			: `One equal dot per contract under EVERY work its signed title names — read from the project title inside each PDF, or from the call’s own description where the title names nothing — coloured by the contract’s curated main category: the colours are the bridge between the ${grInt(o.categories.length)} categories and the works. A contract naming several works appears in each of those clusters, and hovering any of its dots lights all of them; hovering a category in the key lights that category everywhere; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work anywhere and stand as the last cluster. Counts only — no price per work exists inside a bundled contract.`}
+		insight={`Every contract is flagged twice — ONE main category, curated from its title, and EVERY work that title names — and the circle keeps the two apart: the filled, coloured arcs of the right half are the ${grInt(o.categories.length)} main categories (one per contract), the grey arcs of the left half are the works named (several per contract). A ribbon joins a category to a work, as wide as the number of that category’s contracts naming that work, fading from the category’s colour to grey at the work end. A contract naming several works lies under several ribbons, so a category’s arc measures mentions, not contracts. Hover an arc to trace its ribbons, a ribbon for its count; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work and are the last grey arc.`}
 		caveat={`Works as named in the signed titles — or, for a title that names none, in the call’s own description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names, so counts sum to more than the number of contracts and no € is attributed per work. Categories: one per contract, curated from the same titles.`}
 		anchor="works"
 		methodology="categories"
 	>
-		<div class="rankbar">
-			<SegmentToggle
-				param="works"
-				fallback="named"
-				options={[
-					{ value: 'named', label: 'works named' },
-					{ value: 'split', label: 'works × category' }
-				]}
-			/>
-		</div>
-		{#if worksLens === 'split'}
-			<div class="catkey">
-				{#each [...o.categories].sort((a, b) => b.eur - a.eur) as c (c.key)}
-					<span><i style:background={catGrey.get(c.key)}></i>{catShort.get(c.key)}</span>
-				{/each}
-			</div>
-			<WorksByCategory rows={worksSplit} colorOf={(k) => catGrey.get(k) ?? '#9b9b9b'} />
-		{:else if network}
-			<WorkDots
-				nodes={network.nodes}
-				themes={[...o.themes.themes]
-					.sort((a, b) => b.n - a.n)
-					.map((w) => ({ theme: w.theme, label: w.label_en }))}
-				catLabels={Object.fromEntries(o.categories.map((c) => [c.key, catShort.get(c.key) ?? c.key]))}
-				noneLabel="no specific work named"
-			/>
-		{/if}
+		<CatWorkChord
+			rows={worksSplit}
+			cats={[...o.categories]
+				.sort((a, b) => b.n - a.n)
+				.map((c) => ({ key: c.key, label: splitHint(c.label_en ?? c.label).label, n: c.n }))}
+		/>
 	</ChartFrame>
 {/if}
 
@@ -1481,24 +1404,5 @@
 		font-size: var(--fs-12);
 		color: var(--ink-soft);
 		max-width: 60rem;
-	}
-	.catkey {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px var(--sp-4);
-		font-size: var(--fs-12);
-		color: var(--ink-soft);
-		margin-bottom: var(--sp-3);
-	}
-	.catkey span {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-	}
-	.catkey i {
-		display: inline-block;
-		width: 12px;
-		height: 12px;
-		border-radius: 2px;
 	}
 </style>

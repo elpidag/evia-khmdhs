@@ -7295,3 +7295,177 @@ test. The lens toggle is back to «works named» (default, the dots) /
 Also: the fire-season count the deleted lede carried — «120 of 245
 signed inside a fire season» — now lives in the frame's lightbulb,
 computed (`network.fire_season.n_contracts` of `stats.n_contracts`).
+
+## 2026-08-23 · TYPES OF WORKS: chord and sunburst offered as trial lenses
+
+(user: «try this connection with a chord diagram and then a sunburst»)
+Two more lenses on the same category↔works data, beside the dots and
+the rows (`?works=chord|sunburst`, pending the user's verdict):
+- **Chord** (`CatWorkChord.svelte`, d3-chord, bipartite on a symmetric
+  matrix from the same per-category `names` counts the rows use): the
+  8 categories hold one half of the circle, the works the other, a
+  ribbon per (category, work) as wide as the contracts of that category
+  naming that work, in the category's colour. A category's arc is its
+  contract–WORK MENTIONS, not its contracts (a contract naming three
+  works lies under three ribbons) — said in the bulb. Rotated a quarter
+  turn so the run of tiny work arcs lands on the right equator (340 px
+  of radial-label room) instead of the pole (110 px); labels truncate
+  per angle to what the frame holds, full text on hover.
+- **Sunburst** (`CatWorkSunburst.svelte`, hand-rolled partition): inner
+  ring = categories sized by CONTRACTS, outer = the works each names in
+  tints of the category colour; a contract naming k works gives 1/k of
+  its arc to each (the site's even-split convention), so the inner ring
+  sums to 245 exactly and the geometry never double counts — the hover
+  card prints whole-contract counts. Labels ride arcs long enough to
+  hold them (bottom-half text paths reversed to stay upright).
+
+## 2026-08-23 · Sunburst dropped; the chord redrawn so the two flaggings read apart
+
+(user) The sunburst «is not helping understand» — deleted
+(`CatWorkSunburst.svelte` removed, lens gone). The chord stays as a
+trial but had mixed its two sides into one look: a reader could not
+tell that every contract is flagged TWICE — one main category, several
+works named. Redrawn so the halves are two different things: the
+category half FILLED in the category colours under a bracket headed
+«MAIN CATEGORY · one per contract», the works half HOLLOW (white arcs,
+dark outline) under «WORKS NAMED IN THE TITLE · several per contract»,
+wide seams between the halves (zero-value spacer groups — d3-chord pads
+every group), and every ribbon a gradient from its category's colour to
+neutral grey at the work end, so the direction category → work is in
+the ink. The bulb says the same in words. TYPES OF WORKS lenses now:
+works named (dots, default) / chord / works × category.
+
+## 2026-08-23 · The chord divided top to bottom, works in reading order, horizontal labels
+
+(user round 3 on the chord) The circle is now divided by a VERTICAL
+seam — works on the left half (from the bottom seam up), categories on
+the right (from the top seam down) — with the two headings either side
+of the top seam. The works follow a READING order, not the count order:
+clearing of forests and road maintenance run on from the bottom seam,
+then the four firebreak works side by side (maintenance · mixed ·
+sheltered · bare), then the rest by count, «no specific work named»
+last at the top (`WORK_ORDER` in the component — a presentation order
+of curated keys, labels still from the data). Labels are HORIZONTAL in
+a column either side, each led to its arc by an elbow leader and
+de-collided at a 15 px pitch — the radial labels at the poles had
+truncated the long category names and the bottom heading sat on its
+bracket line. Lettering: arc labels 11.5 px (categories bold), headings
+11 px. Ribbon gradients fixed (they were drawn in the wrong coordinate
+space once the centre moved and had gone grey).
+
+## 2026-08-23 · Chord round 4: radial labels back, categories top-to-bottom in colour FAMILIES
+
+(user) The horizontal label columns were rejected («I do not like the
+switch to horizontal labels») — labels are RADIAL again at the approved
+sizes (11.5 px / 11 px headings), the two headings stay horizontal. The
+cramped category names are solved not by lettering but by GEOMETRY and
+ORDER: the frame's height is now computed from the labels' own reach
+(every radial name drawn whole, the only cut a 54-character cap on the
+sentence-long ones, full text on hover), and the categories run TOP TO
+BOTTOM on the right half in the user's order, which puts the seven
+small ones at the top with room to fan.
+**The category palette is now four colour FAMILIES** (`catColors.ts`,
+shared — dots and the timeline type lens follow): blue anti-erosion
+#0d366b · amber studies #b07d1e · greens: reforestation #2d6a4f
+(darkest), logging #52b788 · the red ramp of the fire-prevention works:
+mixed firebreaks #b33a1a, firefighting water #c8715a, fire protection
+around archaeological sites #d99c8c, special forestry works #ebccc3
+(each a step lighter). The user's list named logging and firefighting
+water twice; read as the four families above — flagged for correction.
+`CAT_ORDER` carries the reading order.
+
+## 2026-08-23 · Chord round 5: big circle, two-row radial labels, fixed height
+
+(user: «the circle bigger and the long titles in two rows; the previous
+size was better because you didn't have to scroll») R back to 224 in a
+FIXED frame (878 px, was 1053): a radial label wraps to TWO rows when
+its single line would overrun the room at its angle (the frame's side
+horizontally; a vertical budget of 200 px at the top, where the small
+arcs of both halves fan, 120 px at the bottom), a name still longer is
+cut with «…» (hover has it). A zero-value spacer sits between every two
+arcs (d3-chord pads every group) so two-row labels never collide, and
+the categories print in their SHORT names — the same split CONTRACT
+TYPE uses (`splitHint`: before «:», parenthetical dropped). One name
+cannot fit whole anywhere: the archaeological category's sentence-long
+label — the user's call whether a shorter curated name is wanted.
+
+## 2026-08-23 · Chord round 6: three rows for the longest name, lower-case names, label angles de-collided
+
+(user) Up to THREE rows for a name (the sentence-long archaeological
+category), the work names lose their opening capital (the page's
+`lower` convention — proper nouns would keep theirs), and the frame is
+trimmed to 794 px (R 212, vertical budgets 145 top / 115 bottom) so
+more names wrap rather than the reader scrolling. Wrapping at the small
+arcs' pitch made the blocks collide, so the label ANGLES are now
+de-collided per half: a label keeps pointing radially but slides off
+its arc's middle when a neighbour's rows need the room (forward pass
+clockwise, backward pass back inside the half, rows recomputed at the
+new angle, repeated once), and a thin tick leads from the arc to a
+label that moved. The headings stay in capitals (they are headings, not
+names). The height floor of a radial-label chord is the circle plus
+the two labels pointing straight up and down — each 10 px of radius is
+20 px of height, so ~650 px would mean R ≈ 165.
+
+## 2026-08-23 · TYPES OF WORKS is the chord alone; the dots and the rows parked
+
+(user: «keep only the chord and park the other two options somewhere, I
+do not need them at the website») The frame shows `CatWorkChord` with
+no toggle; `WorkDots.svelte` (one dot per contract-naming-a-work,
+coloured by category) and `WorksByCategory.svelte` (the works × category
+rows) stay in the repo, off the page — the `?works=` lens param is gone,
+the network payload keeps `wk` (pinned). The chord's bulb text is the
+frame's insight, the caveat unchanged.
+
+## 2026-08-23 · Chord round 7: headings at the sides, seam stubs, the frame hugs the labels
+
+(user: «move the titles to the sides, make the dashed lines smaller so
+you can move the circle up; I do not want the user to scroll») The two
+headings now sit at the SIDES level with the centre («WORKS NAMED IN
+THE TITLE / several per contract» left, «MAIN CATEGORY / one per
+contract» right, two rows each), the dashed seam marks are 34 px stubs
+beyond the ring, and the frame's height is computed from the labels'
+ACTUAL reach above and below the centre (the vertical budgets 125/105
+remain only the cap), with the glyph width MEASURED in the browser
+(4.84 px/char regular, 4.73 bold at 11.5 px — the estimate of 5.9 had
+left slack). R 200. Chart 683 px, frame 776 with title and caveat
+(was 878 → 794 → 710). Each 10 px of radius is ~20 px of height if it
+must shrink further.
+
+## 2026-08-23 · Chord round 8: adaptive spacers (no connector ticks), order by name length
+
+(user: «firefighting water infrastructure in one line… alter the order
+of appearance to not use that many of the small lines») Two changes:
+- **Adaptive spacers**: a first layout tells how many rows each label
+  needs at its own arc; where two neighbouring arcs sit closer than
+  their labels' rows need, zero-value spacer groups are inserted between
+  them (d3-chord pads every group) so the ARCS move apart and every
+  label stays on its arc — the angle de-collision is kept only as a
+  safety net. Result: 0 ticks on the page.
+- **Category order**: the families stay together but their sequence
+  puts the SHORT names at the steep top of the right half and the long
+  ones lower, where a radial label has room — greens (reforestation,
+  logging), blue (anti-erosion), amber (studies), then the red ramp
+  (mixed firebreaks → firefighting water, now one line → the
+  archaeological fire protection, whole in three rows → special
+  forestry works). `CAT_ORDER` updated; the palette itself unchanged.
+
+## 2026-08-23 · Chord round 9: the works arcs filled light grey
+
+(user: «the white fill with black outline is a bit weird») The works
+half's arcs are filled with the light grey the ribbons fade to at the
+work end (#c9c9c9), no outline — one grey for «the work end of things»;
+the category half keeps its colours. Bulb wording «hollow» → «grey».
+
+## 2026-08-23 · Chord round 10: the hover card at the top-right, and it counts contracts only
+
+(user) The black card moved to the frame's top-right corner. Its
+content was confusing where it printed «contract–work mentions» for a
+category arc (the arc's geometry — special forestry works: 154
+contracts, 318 mentions, because a contract naming three works lies
+under three ribbons). Every card now says CONTRACTS and nothing else:
+a ribbon «N contracts — category → work», a work arc «N contracts
+name: work», a category arc «N contracts — category» (the true count,
+passed as `cats[].n`); that the arc is drawn to mentions is said once,
+in the bulb.
+(same day, later) …and just the number: «N contracts», nothing else —
+the names are already lit on the chart when you hover.

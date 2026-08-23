@@ -256,18 +256,41 @@ refetching open contracts — prefer it for routine updates.
   **CONTRACT TYPE** is its own half-width frame beside CONTRACT SCOPE
   (the category € bars, English `label_en`; the works its contracts name
   ride in the bar's HOVER, never as printed sub-lines) and **TYPES OF
-  WORKS** has two lenses (`?works=named|split`), default **«works
+  WORKS** is the CHORD alone since 2026-08-23 (user; `WorkDots.svelte`
+  and `WorksByCategory.svelte` are PARKED — in the repo, off the page,
+  no `?works=` param): `CatWorkChord.svelte`, d3-chord bipartite divided TOP TO BOTTOM —
+  works left in READING order (`WORK_ORDER`: clearing, roads, the four
+  firebreak works side by side, the rest by count, «no specific work
+  named» last), categories right top-to-bottom in `CAT_ORDER` FILLED in
+  CAT_COLORS (four colour FAMILIES since 2026-08-23: blue flood / amber
+  studies / greens reforestation→logging / the red ramp mixed
+  firebreaks→water→archaeological→special forestry works), works arcs the ribbons' light grey #c9c9c9 (no outline),
+  RADIAL labels 11.5 px wrapping to up to THREE rows where the room at
+  their angle runs out (R 200, V_TOP 125 / V_BOT 105 caps, the frame
+  height computed from the labels' actual reach with the glyph width
+  MEASURED at 4.9 px/char, chart ≈ 683 px; short category names via
+  `splitHint`, work names lower-cased), ADAPTIVE spacer groups between
+  neighbouring arcs sized from the labels' rows (so labels stay ON their
+  arcs — 0 ticks; the angle de-collision with a tick back to the arc
+  stays as a safety net) + spacer-group seams marked by 34 px dashed
+  stubs, `CAT_ORDER` greens → blue → amber → red ramp (short names at
+  the steep top), ribbons
+  fading category-colour → grey at the work end, the two headings at
+  the SIDES level with the centre («WORKS NAMED IN THE TITLE / several
+  per contract», «MAIN CATEGORY / one per contract»); the sunburst was tried and
+  dropped the same day. The PARKED **«works
   named»** = `WorkDots.svelte` (user, 2026-08-22, the Flourish «Company
   ownership» form, third round): ONE EQUAL dot per contract under EVERY
   work its title/call names — 14 phyllotaxis clusters sorted by count +
   «no specific work named» (44) last, greedy row wrap, count+name under
   each — each dot COLOURED by the contract's main category
-  (`charts/catColors.ts` CAT_COLORS, shared with the PROCUREMENT
-  TIMELINE type lens): the colours are the category↔works bridge, and
+  (`charts/catColors.ts` CAT_COLORS — the colour-FAMILY palette since
+  2026-08-23 — shared with the PROCUREMENT TIMELINE type lens): the
+  colours are the category↔works bridge, and
   hover lights the same contract across clusters / a key chip lights
   its category (key in the MAP legend dress; counts only, € lives in
-  CONTRACT TYPE; network nodes carry `wk`, 380 links pinned) /
-  **«works × category»** (`WorksByCategory.svelte`: one ROW per work —
+  CONTRACT TYPE; network nodes carry `wk`, 380 links pinned) and the
+  PARKED **«works × category»** (`WorksByCategory.svelte`: one ROW per work —
   the names are long, so they must be row labels, which is what killed
   every column-headed drawing — each bar split by the MAIN CATEGORY of
   the contracts naming it, greys from the category ramp, counts only);

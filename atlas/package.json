@@ -20,6 +20,7 @@
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@types/d3-array": "^3.2.2",
+		"@types/d3-chord": "^3.0.6",
 		"@types/d3-geo": "^3.1.0",
 		"@types/d3-hierarchy": "^3.1.7",
 		"@types/d3-interpolate": "^3.0.4",
@@ -42,6 +43,7 @@
 	},
 	"dependencies": {
 		"d3-array": "^3.2.4",
+		"d3-chord": "^3.0.1",
 		"d3-geo": "^3.1.1",
 		"d3-hierarchy": "^3.1.2",
 		"d3-interpolate": "^3.0.1",
