@@ -1775,8 +1775,13 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   acts draw their named watercourses from
   `context_rivers.geojson` (OSM Overpass courses, ~50 m simplify,
   per-feature curated `projects` application — never name-matched;
-  `scripts/build_river_layer.py`, copies pinned by
-  `tests/test_river_layer.py`; «© OpenStreetMap contributors» in the
+  **3 rivers since 2026-08-24**, when Σπερχειός joined for ΨΖ3Ψ4653Π8-5Β2
+  («στην περιοχή του Σπερχειού ποταμού (Κομποτάδες, Ζηλευτό κ.α.)» — the
+  river IS that project's extent), its bbox pinning the Φθιώτιδα valley
+  and a test pinning that the drawn course passes the two localities the
+  act names, so a rebuild catching a namesake elsewhere fails instead of
+  drawing the wrong valley; `scripts/build_river_layer.py`, copies pinned
+  by `tests/test_river_layer.py`; «© OpenStreetMap contributors» in the
   caveat). Site pins are ONE colour; hovering a pin shows a black
   bottom-left card with the site's name («κατά προσέγγιση» flagged
   there); the caveat states the dot-placement method explicitly.

@@ -8456,3 +8456,53 @@ is the finding made visible: Εύβοια's 32 dots scatter from Θεσσαλί�
 pairs, each region's pairs summing to its own € — pinned); the SEAT drill
 keeps its choropleth, because a work location in this dataset is an area,
 not a point.
+
+## 2026-08-24 · Σπερχειός added to the context-rivers layer (user)
+
+The ALFA WOOD plane-disease sanitation project **ΨΖ3Ψ4653Π8-5Β2** is scoped
+by its designation act to «Ανάδοχο Αποκατάστασης **στην περιοχή του
+Σπερχειού ποταμού** (Κομποτάδες, Ζηλευτό κ.α.), Περιφέρειας Στερεάς
+Ελλάδας, στα όρια ευθύνης του Δασαρχείου Λαμίας» — the river IS the
+project's extent, exactly as the Καλαμάς and Αχέροντας are for
+6Φ454653Π8-Ξ1Ζ, so the card must draw it (user).
+
+Added to `scripts/build_river_layer.py`'s curated set — name regex
+«Σπερχει», bbox (38.70, 21.75, 39.10, 22.75): the Φθιώτιδα valley from the
+Τυμφρηστός headwaters to the Μαλιακός delta, which is what pins the right
+namesake — and the layer rebuilt from OSM Overpass: 4 parts, 192 points,
+both copies byte-identical (17 KB). **Verified as the right course**: it
+runs lon 21,88→22,56 and passes 0,6 km from Κομποτάδες and 2,0 km from
+Ζηλευτό, the two localities the act itself names — pinned by
+`tests/test_river_layer.py::test_sperchios_passes_the_projects_work_sites`,
+so a future rebuild that caught a namesake elsewhere would fail rather than
+draw a river in the wrong valley. Nothing else changed: the project page
+already filters the layer by its own ΑΔΑ and already prints the mandatory
+«© OpenStreetMap contributors, approximate» in its caveat when a river is
+drawn.
+
+**The drawn line came out broken, and the user asked whether that was the
+data or a bug. It was mostly the bug** — two causes, both now fixed in
+`build_river_layer.py`:
+
+1. **`waterway=river` is not the river.** The builder filtered
+   `way["waterway"="river"]`, but OSM tags a **4,1 km stretch of the upper
+   Σπερχειός as `waterway=stream`** while still NAMING it — dropped, and
+   that was the visible 3,5 km hole. The filter now takes **river OR
+   stream**: the NAME pins the watercourse, the size class must not. (The
+   Καλαμάς and Αχέροντας gained the same way — 133,2 and 69,4 km.)
+2. **OSM leaves connecting stretches of the same course unnamed**, so a
+   name-filtered query can never be continuous. The two river ways that
+   carry the Σπερχειός between named stretches (27105313, 265629822) are
+   now curated by OSM way id in `extra_ways`, each verified to meet its
+   neighbours end to end (0,00/0,13 km and 0,24 km) — curation in the open,
+   like every other judgment in this project.
+
+Result: **86,0 km instead of 76,5**, and the two holes of 3,5 and 2,55 km
+close to 0,13 and 0,24 km — invisible at card scale. **One ~1,15 km break
+remains west of Λαμία and is the DATA**: OSM's two named ways there do not
+meet (27105312 ends 1,15 km east of where 265627829 begins, in a
+channelised, inconsistently mapped reach) and no way bridges them. Pinned
+by `test_sperchios_course_is_continuous`, which fails if the length drops
+or a bigger hole reopens. The fetch also gained retries — the public
+Overpass mirrors 500/504 at random and a rebuild should not fail on a
+passing cloud.
