@@ -418,7 +418,10 @@ def test_dase_pins(client):
     assert d["kpis"]["n_paid_contracts"] == 893
     assert d["kpis"]["n_payments"] == 953
     assert len(d["by_pe"]["regions"]) == 27
-    assert d["by_pe"]["unresolved"]["n"] == 4
+    # 4 → 2 on 2026-08-24: two of the four ΑΔΜΗΕ contracts name their own
+    # ground (Δασαρχείου Αρναίας → Χαλκιδικής, «δάσος Γραμματικού» → Πέλλας);
+    # the two transmission-corridor ones stay unresolved by decision
+    assert d["by_pe"]["unresolved"]["n"] == 2
     sw = client.get("/api/dase/swarm").get_json()
     assert len(sw["ref"]) == 1998
     # full ISO date rides along for the tooltip's DD.MM.YYYY
@@ -691,9 +694,13 @@ def test_dase_map_pins(client):
     assert len(idents) == len(set(idents)), sorted(
         i for i in idents if idents.count(i) > 1)
     # per-Π.Ε. non-forest circles, split municipal/regional vs other bodies
-    assert len(m["other"]) == 25
+    # (26 since 2026-08-24: placing the ΑΔΜΗΕ «δάσος Γραμματικού» contract
+    # added a misc circle in Π.Ε. Πέλλας; the Δασαρχείου Αρναίας one joined
+    # the misc circle Π.Ε. Χαλκιδικής already had)
+    assert len(m["other"]) == 26
     assert {g["kind"] for g in m["other"]} == {"muni", "misc"}
-    assert m["unresolved"]["n"] == 4
+    # only the two ΑΔΜΗΕ transmission-corridor contracts stay off the map
+    assert m["unresolved"]["n"] == 2
     total = (sum(u["eur"] for u in m["units"])
              + sum(g["eur"] for g in m["other"])
              + m["unresolved"]["eur"])

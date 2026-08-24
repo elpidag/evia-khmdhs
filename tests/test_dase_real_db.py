@@ -1,5 +1,6 @@
 """Pins on the committed data/processed/dase.sqlite — fail loudly when a
 re-harvest changes the dedup arithmetic or region coverage regresses."""
+import json
 from pathlib import Path
 
 import pytest
@@ -74,9 +75,47 @@ def test_region_coverage(conn):
     total, = conn.execute("SELECT COUNT(*) FROM contracts").fetchone()
     covered, = conn.execute(
         "SELECT COUNT(*) FROM dase_contract_regions").fetchone()
-    # 2,160/2,164 resolved (only ΑΔΜΗΕ multi-Π.Ε. line works stay out).
+    # 2,162/2,164 resolved since the 2026-08-24 verdicts; only the two ΑΔΜΗΕ
+    # transmission-corridor contracts stay out (see the test below).
     assert covered >= 2150
     assert total - covered <= 10
+
+
+def test_the_two_unresolved_are_the_admie_corridor_contracts(conn):
+    """1.996 of 1.998 live contracts carry a Regional Unit. The two that do
+    not are 25SYMV016639591 / 25SYMV017124601, whose work is sited by an
+    unpublished ΑΔΜΗΕ drawing on two transmission corridors: they name no
+    region, and the ~0,75 ha actually cut is one patch under the conductors,
+    so an even split across the lines' regions would assert work we have no
+    evidence for (user decision, DATA_DECISIONS 2026-08-24)."""
+    unresolved = {ref for ref, in conn.execute(f"""
+        SELECT co.reference_number FROM contracts co
+         LEFT JOIN dase_contract_regions r ON r.reference_number = co.reference_number
+         WHERE {dq.live_filter()} AND r.region_pe IS NULL""")}
+    assert unresolved == {"25SYMV016639591", "25SYMV017124601"}
+    notes = json.loads(
+        (Path(__file__).resolve().parent.parent / "khmdhs" / "data"
+         / "dase_units.json").read_text(encoding="utf-8")).get("_unresolved_notes", {})
+    for ref in unresolved:                    # each says what the documents DO say
+        assert "ΣΧΕΔΙΟ" in notes.get(ref, ""), ref
+
+
+def test_the_curated_region_verdicts_pin(conn):
+    """The 2026-08-24 verdicts: the Δωδεκάνησα programme is the July 2023
+    Rhodes fire restoration (EFFIS 18.678 ha on Ρόδος vs 9 ha on Κως), and
+    the two ΑΔΜΗΕ contracts that name their ground are placed by it."""
+    rhodes = conn.execute(f"""
+        SELECT COUNT(*) FROM contracts co
+          JOIN dase_contract_regions r ON r.reference_number = co.reference_number
+         WHERE {dq.live_filter()} AND r.region_pe = 'Π.Ε. Ρόδου'""").fetchone()[0]
+    assert rhodes == 12
+    for ref, want in (("26SYMV019253854", "Π.Ε. Χαλκιδικής"),
+                      ("25SYMV017288629", "Π.Ε. Πέλλας")):
+        got = conn.execute(
+            "SELECT region_pe, source FROM dase_contract_regions WHERE reference_number = ?",
+            (ref,)).fetchone()
+        assert got is not None and got[0] == want, (ref, got)
+        assert got[1] == "override"
 
 
 def test_regions_are_canonical_vocabulary(conn):

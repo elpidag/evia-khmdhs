@@ -8315,3 +8315,60 @@ seat; noted per entry. Pinned by `tests/test_dase_coop_seats.py`.
 
 For the other 182 co-ops no contract states a seat, so the register stands
 unchallenged — the layer's honest limit.
+
+## 2026-08-24 · The last unresolved ΔΑΣΕ work regions closed — 1.996 of 1.998 (user verdicts)
+
+**The question asked:** are we safe stating the Regional Unit of the works
+for every ΔΑΣΕ contract? **Audit:** the Π.Ε. is derived from the AWARDING
+UNIT, which is administratively sound — a forest service's competence IS its
+territory, it can only assign work in the forests it administers (1.836 of
+1.998 live contracts come from a Δασαρχείο/ΔΔ; 151 curated non-forest
+awarders; 7 overrides). **Independent check against the documents: where a
+contract names a δήμος we can resolve, the document's municipality lies in
+the assigned Π.Ε. in 139 of 139 cases.** Eleven apparent disagreements were
+all artifacts of the probe's own regex — «ΔΗΜΟΥ ΒΟΛΒΗΣ» is the CO-OP's
+address (a Θεσσαλονίκη co-op working in Ηλεία) and «ΔΗΜΟΥ ΓΕΩΡΓΙΟΣ» is a
+PERSON, the president Δήμου Γεώργιος.
+
+**Two soft spots found and closed by user verdict:**
+
+**(a) The 12 Δωδεκανήσου contracts → Π.Ε. Ρόδου.** Δ/νση Δασών Δωδεκανήσου
+is the only cross-Π.Ε. forest service that awards ΔΑΣΕ contracts (it covers
+Π.Ε. Ρόδου, its seat, AND Π.Ε. Κω). Their texts scope the works to «καμένων
+εκτάσεων περιοχής ευθύνης Δ/νσης Δασών Δωδεκανήσων» and NO island is named —
+not in the 12 contracts, their 4 requests, 12 notices, 12 auctions or any
+payment order (the only «ΡΟΔΟΣ» is the letterhead; an apparent «ΚΩΣ» was
+«ΔΑΣΙΚΟΣ ΚΩΔΙΚΑΣ»). Decided on the fire evidence: EFFIS records **18.678 ha
+burnt on Ρόδος in 2023** against 9 ha on Κως, whose only comparable fire
+(557 ha) came in 2024 — after Ζώνη 1 was already in procurement. The
+programme (€2.483.498,56 net, zones 1/2/3/6 with υποέργα, ΣΑ ΝΑ875 «Ειδικό
+Πρόγραμμα Φυσικών Καταστροφών») is the restoration of the July 2023 Rhodes
+fire. **INFERRED, not stated** — each of the 18 `contract_overrides` rows
+(12 live + their 6 superseded versions) carries that reasoning verbatim.
+
+**(b) The 4 ΑΔΜΗΕ contracts.** Their ΚΗΜΔΗΣ nutsCode EL306 «Δυτική Αττική» is
+the company's OWN head office (Δυρραχίου 89, Αθήνα) and never the work site.
+Two resolve on the documents' own words and are now assigned:
+26SYMV019253854 → **Π.Ε. Χαλκιδικής** («σε περιοχές αρμοδιότητας του
+Δασαρχείου Αρναίας», Γ.Μ. Θεσσαλονίκη–Στάγειρα, Τμήμα ΘΣ162-171 & ΘΣ186-212Ν)
+and 25SYMV017288629 → **Π.Ε. Πέλλας** («στο τμήμα που ανήκει στο δημόσιο
+διακατεχόμενο, διαχειριζόμενο ως συνιδιόκτητο δάσος Γραμματικού» — the
+contracting co-op's own community forest, seat ΑΝΩ ΓΡΑΜΜΑΤΙΚΟ/Άρνισσα).
+
+**The remaining 2 stay honestly unresolved, by decision.** 25SYMV016639591
+and 25SYMV017124601 site their work by an unpublished ΑΔΜΗΕ drawing
+(«σύμφωνα με το ΣΧΕΔΙΟ ΤΜΓΜ 2301 / 2301A») on the Γ.Μ. 150kV
+ΛΑΜΙΑ–ΠΤΟΛΕΜΑΪΔΑ and ΣΧΗΜΑΤΑΡΙ–ΑΓΡΑΣ corridors. **The even split of a
+multi-region contract was considered and REJECTED here** (user, after the
+reasoning): Anti-nero splits a contract across the Π.Ε. its own text NAMES —
+only the allocation is missing — whereas these name none, so the region list
+would have to be traced from the lines' routes, i.e. invented; and the work
+is «συνολικής έκτασης περίπου 7.360 / 7.760 m²» — 0,74 and 0,78 HECTARES, one
+or two patches under the conductors, not work spread along 300 km. A split
+would assert work in places we have no evidence for. Instead
+`dase_units.json._unresolved_notes` records what the documents DO say (the
+corridors, the area, the drawing) so the page states a fact, not a gap.
+
+**Result: 1.996 of 1.998 live contracts carry a Regional Unit**, and the two
+exceptions are documented multi-corridor cases rather than blanks. Pinned by
+`tests/test_dase_regions.py`.

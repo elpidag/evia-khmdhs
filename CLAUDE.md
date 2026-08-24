@@ -960,8 +960,27 @@ forest_authorities.json aliases (1,982 contracts) + curated
 `khmdhs/data/dase_units.json` (org→unit keys, exact strings incl.
 Latin-homoglyph «TMHMA»/«OIKONOMIKO»; per-contract `contract_overrides`
 for supra-regional awarders ΟΣΕ/ΓΕΑ/ΑΠΘ/ΕΠΙΘΕΩΡΗΣΗ Μ-Θ, evidence note
-required) → `dase_contract_regions` (2,160/2,164 = 99.8%; the 4 ΑΔΜΗΕ
-power-line contracts span multiple Π.Ε. — honestly unresolved).
+required) → `dase_contract_regions` (**2,162/2,164 = 99.9%; 1,996 of the 1,998
+live** since the 2026-08-24 verdicts). **Audited that day**: the Π.Ε. is
+derived from the AWARDING UNIT, which is sound because a forest service's
+competence IS its territory — and where a contract names a δήμος we can
+resolve, it lies in the assigned Π.Ε. **139/139** (the 11 apparent misses
+were the probe's regex catching the CO-OP's own address or a person,
+«ΔΗΜΟΥ ΓΕΩΡΓΙΟΣ» = the president Δήμου Γεώργιος). Two soft spots closed by
+user verdict: the **12 Δωδεκανήσου** contracts (the only cross-Π.Ε. service
+awarding here — seat Ρόδου, also covers Κω; no island named anywhere in the
+chain) → **Π.Ε. Ρόδου** on the fire evidence (EFFIS 18.678 ha burnt on
+Ρόδος 2023 vs 9 ha on Κως), INFERRED and said so in every override note;
+and of the 4 ΑΔΜΗΕ contracts (whose nutsCode EL306 is the company's OWN
+Athens seat, never the work site) **26SYMV019253854 → Π.Ε. Χαλκιδικής**
+(«περιοχές αρμοδιότητας του Δασαρχείου Αρναίας») and **25SYMV017288629 →
+Π.Ε. Πέλλας** («συνιδιόκτητο δάσος Γραμματικού», the co-op's own community
+forest). The last **2 stay honestly unresolved**: they site the work by an
+unpublished ΑΔΜΗΕ drawing on two 150kV corridors, and the even split was
+CONSIDERED AND REJECTED — Anti-nero splits across the Π.Ε. a contract
+NAMES, these name none, and the ~0,75 ha actually cut is one patch under
+the conductors; `_unresolved_notes` records the corridors, area and drawing
+instead.
 ΔΑΣΑΡΧΕΙΟ ΦΟΥΡΝΑ lives in dase_units.json, NOT forest_authorities.json
 (that registry feeds the Anti-nero matcher). `nuts_code` is cross-check
 only (~20% coarse; EL611/EL531 span two Π.Ε.).
