@@ -1085,6 +1085,38 @@ hiding it. `LogHistogram`'s `height`/`segments`/`segColors` are
 defaulted, so the Anti-nero direct-award histogram is untouched (it
 gained only the fix that reference-line labels now get their own row
 above the bar counts — median and count labels used to overprint).
+**ALLOCATION OF FUNDING on /dase since 2026-08-24** (user; the Anti-nero
+duo one dataset over, opening the page above MAP): two choropleths on ONE
+shared scale in a ΔΑΣΕ green ramp — «WHERE THE WORK IS» (the awarding
+forest service's Π.Ε.) beside «WHERE THE CO-OPERATIVES ARE» (their
+registered offices, the layer built the same morning) — both reconciling
+to the basis €29.920.558,46 to the cent (work side + the €31.047,20 of the
+two ΑΔΜΗΕ corridor contracts; seat side in full). **Both DRILL, either
+way**: clicking a work Π.Ε. answers on the seat map with **one DOT per
+co-operative that worked there**, at its registered office, area ∝ the €
+it earned in that region (`coop_points` + `region_coops`, pinned; the
+Anti-nero convention — a colour cannot say WHICH co-op came, a dot can,
+and it links to its page); clicking a seat Π.Ε. paints the work map with
+where those co-ops worked (a choropleth there, because a work location in
+this dataset is an area, not a point), `?focus=works:…|seats:…` permalink, a «✕ … ·
+all of Greece» pill, Esc, and a computed sentence under the maps. **No headings of our own**: as on the Anti-nero maps the LEGEND does the
+work — a key strip above each map whose first row names what it is BY
+(«by the area of the forest service that awarded the contract» / «by the
+registered office of the co-operative that signed it», each with a ⓘ) and
+whose ramp row states the measure and follows the drill; the MAP label +
+how-to-read ⓘ and the reset pill sit above both, and the map's hairline is
+the section's own `.dasep :global(.map)` rule (a wrapper border double-drew
+it). The
+drill deliberately does NOT zoom — `PaperMap focusZoom={false}` marks the
+drilled unit with its heavier outline but keeps the country, because this
+drill reveals no sub-region marks and the context is worth more (Anti-nero
+keeps the zoom by default). Payload `queries_extra.dase_allocation` →
+`/api/dase/allocation` (work_regions/seat_regions/flows/away_share, every
+figure computed; pinned by `test_dase_allocation_pins`). The finding it
+states: **37,4% of the money — €11,18M — is earned by co-ops working
+outside their own Π.Ε.**, fire-driven (Εύβοια imported 64% of its €9,47M,
+Ηλεία 83%, Ρόδος 68%; biggest flow Τρίκαλα → Εύβοια €1,74M).
+
 **Three /dase frames in the Anti-nero front page's dress since
 2026-08-24 (user):** MONEY PER YEAR wears
 the Anti-nero form (sharing one equal-width .pair row with the RANKING

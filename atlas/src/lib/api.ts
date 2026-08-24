@@ -217,6 +217,28 @@ export interface DaseKpis {
 	n_superseded: number;
 }
 
+/** /api/dase/allocation — the works/seats choropleth duo (2026-08-24):
+ *  the same money by where the work is and by where the co-op is seated,
+ *  both reconciling to the stated-net basis on the even split */
+export interface DaseAllocation {
+	work_regions: { pe: string; n: number; eur: number; imported_eur: number }[];
+	seat_regions: { pe: string; n_coops: number; eur: number; exported_eur: number }[];
+	/** every (seat Π.Ε. → work Π.Ε.) pair; from === to is money that stayed home */
+	flows: { from: string; to: string; n: number; eur: number }[];
+	unresolved: { n: number; eur: number };
+	total_eur: number;
+	n_contracts: number;
+	n_coops: number;
+	away_eur: number;
+	local_eur: number;
+	away_share: number;
+	n_coops_away: number;
+	/** one point per located co-operative — the drill's dots */
+	coop_points: { vat: string; lat: number; lon: number; pe: string | null; precision: string | null; place: string | null; name: string | null }[];
+	/** which co-operatives worked in each work Π.Ε., and for how much */
+	region_coops: { pe: string; vat: string; n: number; eur: number }[];
+}
+
 export interface DaseOverview {
 	kpis: DaseKpis;
 	yearly: { year: string; n: number; eur: number }[];

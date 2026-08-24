@@ -62,6 +62,11 @@
 		onRegionClick?: (pe: string) => void;
 		/** drilled Π.Ε. — zooms to it, swaps in hi-res + municipality borders */
 		focusPe?: string | null;
+		/** set false to MARK the drilled Π.Ε. (the heavier outline) without
+		 *  zooming to it — a map whose drill reveals no sub-region marks
+		 *  loses the country context for nothing (the /dase allocation duo,
+		 *  2026-08-24). Anti-nero keeps the default. */
+		focusZoom?: boolean;
 		interactive?: boolean;
 		/** viewBox aspect (Greece is portrait-ish) */
 		width?: number;
@@ -106,6 +111,7 @@
 		onEscape,
 		onRegionClick,
 		focusPe = null,
+		focusZoom = true,
 		interactive = true,
 		width = 600,
 		height = 620,
@@ -231,7 +237,7 @@
 
 	// Fallback for non-interactive maps that get drilled via props.
 	$effect(() => {
-		if (!focusPe || narrow) return;
+		if (!focusPe || !focusZoom || narrow) return;
 		if (!hires) loadPeHires(fetch).then((fc) => (hires = fc));
 		if (!muni) loadMuniBorders(fetch).then((fc) => (muni = fc));
 	});
@@ -246,10 +252,10 @@
 				return;
 			}
 		}
-		if (focusPe) {
+		if (focusPe && focusZoom) {
 			const f = coarse?.features.find((f) => f.properties.pe === focusPe);
 			if (f) zoomToFeature(f);
-		} else {
+		} else if (!focusPe) {
 			resetZoom();
 		}
 	});
@@ -259,7 +265,7 @@
 	let appliedViewKey = $state('');
 	let homeT: { x: number; y: number; k: number } | null = null;
 	$effect(() => {
-		if (!projection || !path || focusPe) return;
+		if (!projection || !path || (focusPe && focusZoom)) return;
 		const key = JSON.stringify(view ?? [fitPoints, fitPes, coarse ? 1 : 0]);
 		if (!key || key === 'null' || key === appliedViewKey) return;
 		if (view) {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { bodyEn, devGreek } from '$lib/transforms/names';
-	import { ruLabel } from '$lib/transforms/regions';
+	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
@@ -12,10 +12,12 @@
 	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import CpvColumns from '$lib/charts/CpvColumns.svelte';
+	import DaseMap from '$lib/sections/DaseMap.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
 	import SideNote from '$lib/ui/SideNote.svelte';
 	import {
 		apiGetCached,
+		type DaseAllocation,
 		type DaseMapContract,
 		type DaseMapPayload,
 		type DaseSwarm
@@ -30,10 +32,12 @@
 
 	let swarm = $state.raw<DaseSwarm | null>(null);
 	let dmap = $state.raw<DaseMapPayload | null>(null);
+	let alloc = $state.raw<DaseAllocation | null>(null);
 	let firesFc = $state.raw<FeatureCollection<Polygon | MultiPolygon, FireProps> | null>(null);
 	$effect(() => {
 		apiGetCached<DaseSwarm>(fetch, '/api/dase/swarm').then((v) => (swarm = v));
 		apiGetCached<DaseMapPayload>(fetch, '/api/dase/map').then((v) => (dmap = v));
+		apiGetCached<DaseAllocation>(fetch, '/api/dase/allocation').then((v) => (alloc = v));
 		loadEffisFires(fetch).then((v) => (firesFc = v));
 	});
 
@@ -396,6 +400,22 @@
 		</p>
 	</div>
 </section>
+
+<!-- the works/seats duo, the Anti-nero ALLOCATION OF FUNDING one dataset
+     over (user, DATA_DECISIONS 2026-08-24) -->
+{#if alloc}
+	{@const topWork = alloc.work_regions[0]}
+	{@const topFlow = alloc.flows.find((f) => f.from !== f.to)}
+	<ChartFrame
+		title="ALLOCATION OF FUNDING"
+		insight={`${pct(alloc.away_share, 0)} of the money — ${eurShort(alloc.away_eur)} — is earned by co-operatives working OUTSIDE their own regional unit, and it follows the fires: ${peEn(topWork.pe)} received ${eurShort(topWork.eur)} of work and ${pct((topWork.imported_eur / topWork.eur) * 100, 0)} of it went to co-operatives from elsewhere${topFlow ? `; the largest single flow is ${peEn(topFlow.from)} → ${peEn(topFlow.to)}, ${eurShort(topFlow.eur)}` : ''}. The everyday firewood work stays home, which is why the other ${pct(100 - alloc.away_share, 0)} never crosses a border.`}
+		caveat="A contract signed by several co-operatives is split evenly between them; {eurShort(alloc.unresolved.eur)} on {grInt(alloc.unresolved.n)} transmission-corridor contracts has no work region and is off both maps."
+		anchor="dase-allocation"
+		methodology="dase-award-basis"
+	>
+		<DaseMap data={alloc} />
+	</ChartFrame>
+{/if}
 
 {#if dmap}
 	<ChartFrame

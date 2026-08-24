@@ -1975,6 +1975,132 @@ def dase_overview(dase: sqlite3.Connection, kh: sqlite3.Connection) -> dict:
     }
 
 
+def dase_allocation(dase: sqlite3.Connection) -> dict:
+    """The /dase ALLOCATION OF FUNDING duo (DATA_DECISIONS 2026-08-24): the
+    same money seen twice — by WHERE THE WORK IS (the awarding forest
+    service's Regional Unit, `dase_contract_regions`) and by WHERE THE
+    CO-OPERATIVE IS SEATED (its registered office's Π.Ε.,
+    `contractor_locations`).
+
+    Both sides reconcile to the stated-net basis on the shared even-split
+    convention: a contract signed by several co-ops divides equally between
+    them (the registry records no shares and the documents state none), and
+    a ΔΑΣΕ contract belongs to exactly ONE work region, so the work side
+    needs no regional split — only the two ΑΔΜΗΕ transmission-corridor
+    contracts carry no region and sit in `unresolved`.
+
+    `flows` carries every (seat Π.Ε. → work Π.Ε.) pair with € and contract
+    count, so the page can drill both ways without a second request; a pair
+    whose two sides are equal is the money that stayed home."""
+    has_loc = _table(dase, "contractor_locations")
+    loc = {r["vat_number"]: r for r in dase.execute(
+        "SELECT vat_number, region_pe, lat, lon, geo_precision, city, address"
+        " FROM contractor_locations")} if has_loc else {}
+    seats = {v: r["region_pe"] for v, r in loc.items()}
+    names = dase_display_names(dase)
+
+    rows = dase.execute(f"""
+        SELECT co.reference_number AS ref, co.total_cost_with_vat AS eur,
+               COALESCE(co.contract_signed_date, co.submission_date) AS d,
+               r.region_pe AS work_pe
+          FROM contracts co
+          LEFT JOIN dase_contract_regions r ON r.reference_number = co.reference_number
+         WHERE {dq.live_filter()}""").fetchall()
+    parties: dict[str, set] = {}
+    for ref, vat in dase.execute(f"""
+        SELECT c.reference_number, c.vat_number FROM contractors c
+          JOIN contracts co ON co.reference_number = c.reference_number
+         WHERE {dq.live_filter()}"""):
+        cv = dq.canonical_vat(vat)
+        if cv:
+            parties.setdefault(ref, set()).add(cv)
+
+    work: dict[str, dict] = {}
+    seat: dict[str, dict] = {}
+    flows: dict[tuple, dict] = {}
+    # (work Π.Ε. → co-op) — what the drill draws as dots at the seats
+    per_coop: dict[tuple, dict] = {}
+    unresolved = {"n": 0, "eur": 0.0}
+    n_local = n_away = 0
+    eur_local = eur_away = 0.0
+
+    for r in rows:
+        eur = r["eur"] or 0.0
+        vats = parties.get(r["ref"]) or set()
+        wpe = r["work_pe"]
+        if wpe:
+            w = work.setdefault(wpe, {"pe": wpe, "n": 0, "eur": 0.0, "imported_eur": 0.0})
+            w["n"] += 1
+            w["eur"] += eur
+        else:
+            unresolved["n"] += 1
+            unresolved["eur"] += eur
+        if not vats:
+            continue
+        share = eur / len(vats)
+        for v in vats:
+            spe = seats.get(v)
+            if spe:
+                s = seat.setdefault(spe, {"pe": spe, "n_coops": set(), "eur": 0.0,
+                                          "exported_eur": 0.0})
+                s["n_coops"].add(v)
+                s["eur"] += share
+            if wpe:
+                pc = per_coop.setdefault((wpe, v), {"pe": wpe, "vat": v, "n": 0, "eur": 0.0})
+                pc["n"] += 1
+                pc["eur"] += share
+            if wpe and spe:
+                f = flows.setdefault((spe, wpe), {"from": spe, "to": wpe, "n": 0, "eur": 0.0})
+                f["n"] += 1
+                f["eur"] += share
+                if spe == wpe:
+                    n_local += 1
+                    eur_local += share
+                else:
+                    n_away += 1
+                    eur_away += share
+                    work[wpe]["imported_eur"] += share
+                    seat[spe]["exported_eur"] += share
+
+    for s in seat.values():
+        s["n_coops"] = len(s["n_coops"])
+    rnd = lambda x: round(x, 2)  # noqa: E731
+    for d0 in list(work.values()) + list(seat.values()):
+        for k in ("eur", "imported_eur", "exported_eur"):
+            if k in d0:
+                d0[k] = rnd(d0[k])
+    total = rnd(sum(r["eur"] or 0.0 for r in rows))
+    return {
+        "work_regions": sorted(work.values(), key=lambda x: -x["eur"]),
+        "seat_regions": sorted(seat.values(), key=lambda x: -x["eur"]),
+        "flows": sorted(({**f, "eur": rnd(f["eur"])} for f in flows.values()),
+                        key=lambda x: -x["eur"]),
+        "unresolved": {"n": unresolved["n"], "eur": rnd(unresolved["eur"])},
+        "total_eur": total,
+        "n_contracts": len(rows),
+        "n_coops": len({v for vs in parties.values() for v in vs}),
+        # the finding the frame exists to state, computed here so no page
+        # copy can drift from it
+        "away_eur": rnd(eur_away),
+        "local_eur": rnd(eur_local),
+        "away_share": round(eur_away / (eur_away + eur_local) * 100, 1) if (eur_away + eur_local) else 0.0,
+        "n_coops_away": len({f["from"] for f in flows.values() if f["from"] != f["to"]}),
+        # one point per located co-operative — the drill's dots
+        "coop_points": [
+            {"vat": v, "lat": r["lat"], "lon": r["lon"], "pe": r["region_pe"],
+             "precision": r["geo_precision"],
+             "place": r["address"] or r["city"],
+             "name": (names.get(v) or {}).get("el")}
+            for v, r in sorted(loc.items())
+            if r["lat"] is not None
+            and v in {x for vs in parties.values() for x in vs}
+        ],
+        # which co-operatives worked in each work Π.Ε., and for how much
+        "region_coops": sorted(({**p, "eur": rnd(p["eur"])} for p in per_coop.values()),
+                               key=lambda x: -x["eur"]),
+    }
+
+
 def dase_excluded_hits(dase: sqlite3.Connection, q: str) -> list[dict]:
     """Curated exclusions matching a contracts search — registry
     double-postings (DATA_DECISIONS 2026-08-14) and the contracts whose

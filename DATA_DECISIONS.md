@@ -8372,3 +8372,87 @@ corridors, the area, the drawing) so the page states a fact, not a gap.
 **Result: 1.996 of 1.998 live contracts carry a Regional Unit**, and the two
 exceptions are documented multi-corridor cases rather than blanks. Pinned by
 `tests/test_dase_regions.py`.
+
+## 2026-08-24 · /dase ALLOCATION OF FUNDING — the works/seats choropleth duo (user)
+
+The Anti-nero front page's paired maps, one dataset over, now that both sides
+exist: the WORK side is `dase_contract_regions` (the awarding forest
+service's area — 1.996 of 1.998 live contracts since the verdicts above) and
+the SEAT side is `contractor_locations` (the co-operatives' registered
+offices, built the same day; 246/246 with a point). **Both reconcile to the
+stated-net basis €29.920.558,46 to the cent** — the work side as
+€29.889.511,26 + €31.047,20 in the two ΑΔΜΗΕ corridor contracts that carry no
+region, the seat side in full — on the shared even-split convention (a
+contract signed by several co-ops divides equally between them).
+
+**The finding the duo exists to show: 37,4% of the money — €11.181.051,82 —
+is earned by co-operatives working OUTSIDE their own Regional Unit**, and it
+is fire-driven: Εύβοια received €9,47M of work and imported €6,06M of it
+(64%), Ηλεία €3,40M / €2,83M (83%), Ρόδος €2,48M / €1,68M (68%) — the three
+big burnt regions of 2021 and 2023 could not do their own restoration. The
+largest single flow is Τρίκαλα → Εύβοια €1,74M, then Θεσσαλονίκη → Ηλεία
+€1,21M, Λάρισα → Εύβοια €0,95M, Πιερία → Ρόδος €0,80M. The everyday firewood
+work stays home, which is why 62,6% never crosses a border.
+
+**Implementation:** `queries_extra.dase_allocation` → `/api/dase/allocation`
+(work_regions / seat_regions / flows / contracts-per-region, every figure
+computed, pinned); `$lib/sections/DaseMap.svelte` draws the pair on ONE
+shared scale in the dataset's green ramp, click-to-drill both ways
+(clicking a work Π.Ε. shows which regions' co-ops earned there and vice
+versa, `?focus=works:…|seats:…` permalink, «✕ … · all of Greece» pill, Esc),
+the place card grey top-left and the item card black bottom-left as the
+Anti-nero maps do.
+
+**Dress corrected the same day (user): the LEGEND does the work, not
+headings.** The invented captions «WHERE THE WORK IS» / «WHERE THE
+CO-OPERATIVES ARE» were removed — the Anti-nero maps carry no headings at
+all; each map has a key STRIP above it whose first row names what the map
+is BY, in plain lowercase («by the area of the forest service that awarded
+the contract» · «by the registered office of the co-operative that signed
+it», each with a ⓘ), and the ramp row states the measure and changes with
+the drill («€ of contracts» → «€ earned in Evia»). Above both sits the MAP
+label with the how-to-read ⓘ and the reset pill, exactly as on the
+Anti-nero page. The strip is the shared fixed 4,3rem height so the two map
+rectangles never move on drill. The map wrapper's own border was dropped:
+`.dasep :global(.map)` already gives every map in this section its hairline
+and green zoom buttons, and a second one round the wrapper drew a double
+edge. With the legend carrying the method, the frame's caveat is trimmed to
+what nothing else says — the even split and the €31.047,20 off both maps.
+
+**Two layout bugs found by the user in the same review and fixed:** the
+pair sat glued together, maps and key strips alike, because the gap was
+written `var(--sp-5)` and **there is no `--sp-5` in the token scale**
+(1/2/3/4/6/8/12) — an unknown custom property makes `gap` invalid and the
+grid falls back to zero; it now uses the Anti-nero `.twin`'s own
+`var(--sp-4)`. And the two maps centred and zoomed differently from the
+MAP frame below because they passed no `view`: both now take the section's
+shared frame `{center: [23.8305, 38.3566], k: 1.08}`, the same one the
+/dase MAP and the Anti-nero duo use, so every map on the page crops Greece
+identically.
+
+**A third bug the user caught: the scale was recomputed on drill**, so
+clicking a region on the seat map RECOLOURED that same map although its
+data had not changed (the max fell from the work side's €9,47M to the seat
+side's €3,73M and every region darkened). The scale is now ONE constant —
+the max across both sides at rest — in every state, which is what «one
+shared scale» promised: a tone means the same amount everywhere, and a
+drilled flow reads pale BECAUSE it is a fraction of the whole. **And the
+drill now always speaks**: the sentence under the maps is written for the
+empty cases too — «All of it went to co-operatives seated there — none
+came from another regional unit» (Δράμα, whose 413 contracts are entirely
+local), «No forest co-operatives in this dataset are seated in Chania» —
+because a blank map beside a silent caption reads as a broken chart.
+
+**The works drill answers with DOTS, not a colour (user, 2026-08-24).**
+Choosing a region on the LEFT map now puts one dot on the right map per
+co-operative that worked there, at its registered office, area ∝ the € it
+earned in that region — the Anti-nero convention, whose right map likewise
+carries the contractors' seats. A region's colour cannot say WHICH
+co-operative came; a dot at the seat can, it links to the co-op's page, and
+its card names the co-op, its € and its contract count there. The contrast
+is the finding made visible: Εύβοια's 32 dots scatter from Θεσσαλία to
+Μακεδονία, Δράμα's 25 sit on top of Δράμα. Payload additions
+`coop_points` (246, every one geocoded) + `region_coops` (292 region×co-op
+pairs, each region's pairs summing to its own € — pinned); the SEAT drill
+keeps its choropleth, because a work location in this dataset is an area,
+not a point.

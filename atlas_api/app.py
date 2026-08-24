@@ -316,6 +316,11 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
     def api_dase_overview():
         return jsonify(queries_extra.dase_overview(_dase_conn(), g.conn))
 
+    @app.route("/api/dase/allocation")
+    def api_dase_allocation():
+        # the works/seats choropleth duo (DATA_DECISIONS 2026-08-24)
+        return jsonify(queries_extra.dase_allocation(_dase_conn()))
+
     @app.route("/api/dase/map")
     def api_dase_map():
         return jsonify(queries_extra.dase_map(_dase_conn(), g.conn))

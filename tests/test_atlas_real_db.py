@@ -1569,3 +1569,39 @@ def test_cpv_tree(client):
             assert k["name_en"] and k["name_el"]
             for c in k["codes"]:
                 assert c["name_en"] and c["name_el"]
+
+
+def test_dase_allocation_pins(client):
+    """The /dase ALLOCATION OF FUNDING duo (DATA_DECISIONS 2026-08-24): the
+    same money seen by work region and by co-op seat. BOTH sides must
+    reconcile to the stated-net basis — the work side with the two
+    corridor contracts that carry no region, the seat side in full — or the
+    two maps would be showing different money on one shared scale."""
+    a = client.get("/api/dase/allocation").get_json()
+    basis = 29_920_558.46
+    assert a["total_eur"] == pytest.approx(basis, abs=0.01)
+    work = sum(r["eur"] for r in a["work_regions"])
+    assert work + a["unresolved"]["eur"] == pytest.approx(basis, abs=0.01)
+    assert a["unresolved"]["n"] == 2          # the ΑΔΜΗΕ corridors
+    seat = sum(r["eur"] for r in a["seat_regions"])
+    assert seat == pytest.approx(basis, abs=0.01)   # every co-op has a seat
+    # the finding the frame states, computed server-side so the copy cannot drift
+    assert a["local_eur"] + a["away_eur"] == pytest.approx(work, abs=0.01)
+    assert a["away_share"] == pytest.approx(37.4, abs=0.1)
+    # the flows are the drill's data: every pair reconciles to the work side
+    assert sum(f["eur"] for f in a["flows"]) == pytest.approx(work, abs=0.01)
+    top = a["work_regions"][0]
+    assert top["pe"] == "Π.Ε. Ευβοίας" and top["imported_eur"] > 6_000_000
+
+    # the drill's dots (user, 2026-08-24): one per co-operative that worked
+    # in the chosen region, at its registered office — so every pair must
+    # have a point to sit on, and a region's pairs must sum to its own €
+    assert len(a["coop_points"]) == 246
+    for pt in a["coop_points"]:
+        assert pt["lat"] is not None and pt["lon"] is not None
+    placed = {p["vat"] for p in a["coop_points"]}
+    for r in a["region_coops"]:
+        assert r["vat"] in placed, r["vat"]
+    evia = [r for r in a["region_coops"] if r["pe"] == "Π.Ε. Ευβοίας"]
+    assert len(evia) == 32                      # the co-ops that worked there
+    assert sum(r["eur"] for r in evia) == pytest.approx(top["eur"], abs=0.01)
