@@ -8526,3 +8526,218 @@ template's em dash, which would have doubled the punctuation. Curated JSON
 and the committed sqlite both updated — the latter IN PLACE, as this
 dataset's curated fields always are, because its harvest JSON lives only
 on the build machine.
+
+## 2026-08-24 · Two /anadohoi frames rebuilt: WHO DID THE WORK, FROM FIRE TO SPONSOR (user)
+
+**WHO DID THE WORK** (was «The sponsors sign, forest co-ops dig: 13 of 68 act
+trails name their executing crew»). The title carried the finding, against
+the convention the rest of the site now follows — short caps, findings in
+the lightbulb — and the frame ran to **922 px** for 13 rows because each
+project was a two-line block. Now: the title is the plain caps one, the
+numbers move into a computed bulb (13 of 68 trails, 18 co-operatives, and
+the co-op that turns up under the most different sponsors — computed, not
+typed), and the rows are **grouped by SPONSOR**, one dense line each. ΔΕΗ
+alone held four blocks; grouped, 13 project rows become 8 sponsor rows and
+the frame is **408 px — 56% less**, with nothing dropped: the co-op chips
+still link to their ΔΑΣΕ profiles, and each project is a small numbered
+link beside its region (the places are deduplicated — «R.U. Evia» printed
+four times was the noise that made the row wrap).
+
+**WHO DID THE WORK became a MAP the same day (user).** Asked whether a map
+would serve better, the honest first answer was «only at Regional-Unit
+precision» — because just 9 of the 23 links have a geocoded work site. The
+user pushed back («for the 13 projects, we have the exact locations»), and
+they were right: **every project carries a precise footprint once all three
+of its sources are read** — the θέσεις its acts name (9 links), else the
+digitised Β. Εύβοια works zone (6: the ΔΕΗ basins), else the EFFIS scar of
+the fire it repairs (6: Χίος, Ρόδος). A Π.Ε. fallback is never needed. Read
+one source only — as the first pass did — and the answer looks four times
+worse than the data is. **21 of the 23 links draw**; the two that do not
+are the co-operatives with no canonical ΑΦΜ, hence no seat, named in the
+caveat rather than guessed at.
+
+So the frame is now an arc map — each crew's registered seat (the ΔΑΣΕ
+seat layer built the same morning) joined to the ground it worked, in the
+FLOWS OF MONEY idiom, hovering a sponsor keeping only its crews — beside
+the identity list the old table carried, **ranked by distance**, the two
+columns ending together. **636 px against the original 922** (the map alone
+at full frame width was 1.055 px: Greece is portrait, and the column width
+is what sets the height).
+
+The finding it exists to state, which no list could: **the crews travel.**
+Median journey **273 km**, 15 of 21 links over 150 km, and ΔΑ.Σ.Ε. Αγίου
+Δημητρίου Πιερίας crossed **672 km** to repair Rhodes — for two different
+sponsors. It is the sponsored scheme showing the same pattern the /dase
+duo measured that morning (37,4% of co-op money earned outside the home
+region): a handful of mountain co-operatives serving the whole country.
+Pinned by `test_crew_flows_pins`, including the anchor-source mix, so a
+regression that silently drops the zones (which happened once — the layer
+keys on `zone`, not `id`) fails instead of quietly coarsening the map.
+
+**FROM FIRE TO SPONSOR** (was «Each big fire triggers a wave of corporate
+sponsorship within weeks»). **The old title was not supported by the data.**
+Measured against the EFFIS burn dates already linked to the projects, the
+wait from fire to first designation act has a **median of 64 days** and runs
+from **24 to 574**; only **9 of 18** fires drew a sponsor inside two months.
+The bar-per-month strip it replaces could say nothing about that — it only
+showed that acts cluster in autumn.
+
+The new chart is one lane per fire event (18), sorted by burn date: the fire
+as a maroon dot whose **area ∝ hectares burnt**, the **designation acts as
+dots** where they fall, a dotted line for the **wait** between them, the
+**fire season (1 May – 31 Oct) shaded per year** as the Anti-nero
+procurement timeline shades it, and the lag in days in its own right-hand
+column (printed beside the first act, the labels collided with the acts that
+followed). Every act dot links to its project. The finding it states,
+computed: **the wait tracks the fire's size** — Έβρος (96.610 ha) drew its
+first sponsor in 26 days, ΒΑ Αττική in 24, Ρόδος in 29, while Κερατέα (546
+ha) waited 574 and the 2021–22 Attica cluster 449.
+
+Payload: `anadohoi_overview`'s `fires` entries gained `burn_date`, `burn_ha`,
+`lag_days` and `acts[]`, the burn facts read from the EFFIS display layer the
+maps already ship (`_effis_dates`, cached). Caveats stated on the frame: the
+dates and areas are **EFFIS satellite estimates, not οριοθετήσεις**, and the
+5 projects with no fire at all (plane-disease sanitation, salvage logging)
+have no lane. Pinned by `test_fire_response_pins`, which asserts the median,
+the range and that the biggest fire is among the fastest — so a re-harvest
+that changed the story would fail rather than leave stale copy.
+
+*Dress corrected the same day (user):* the crew map now wears the STATUS
+map's own frame — the 640×620 crop with the shared MAP_VIEW, white regions
+with the #8f8f8f stroke on the #f2f2f2 sea, the section hairline and zoom
+hue — and **the EFFIS burnt areas are drawn under the arcs** (the same
+`FiresLayer` the status map shows): every one of these works repairs a
+fire, and the work dots now sit visibly ON their scars. Red therefore
+belongs to the fires alone — the work dots turned ink (#333) — and the
+mandatory EFFIS attribution joined the caveat. The legend lost its
+explanatory first row («from each crew's registered seat …»): the entries
+name the marks, the ⓘ and the caveat carry the method.
+
+*Interaction corrected the same day (user, two notes):* the ranked journey
+list and the sponsor chip bar are GONE — the identity appears when a dot is
+chosen, in the site's own card convention (hover shows, click HOLDS with
+the white rule + ✕, Esc or bare-map click releases; while a card is held
+only that dot's journeys stay lit). A seat's card names the co-operative
+(linked to its ΔΑΣΕ page — the page is the card's link, never the dot) and
+the sponsors it worked for; a work dot's card names the sponsor and its
+crews. And the per-journey kilometres are NOT written on the cards — the
+arcs carry the distance visually, and the aggregate finding (median 273 km,
+the 672 km Πιερία→Ρόδος journey) lives once, in the lightbulb.
+
+*Third review round (user, five notes, all applied):* the region hover
+cards are GONE (a Π.Ε. name says nothing on this map — `colorOf` only, no
+`tipOf`); the map is the STATUS map's exact 640×620 frame in a
+640px+panel grid; **the chosen dot's details print in a PANEL beside the
+map** instead of a floating card (CO-OPERATIVE / seat / WORKED FOR with
+region and year, or SPONSORED WORKS / EXECUTED BY — links to the co-op and
+project pages live there); **no pan at the resting zoom** — a new PaperMap
+`panAtRest={false}` prop refuses drags while k is at the applied view's
+rest value, re-arming as soon as the reader zooms (default unchanged, no
+other map affected); and a **YEAR slider** on the right walks the map
+through time — burnt areas with yr ≤ the chosen year and projects whose
+first designation act is ≤ it (the links carry `year` from the page's own
+projects), the rest state showing everything. Colours: the projects turned
+the section's dark green — all of them are completed works — and the
+co-operatives' seats black; the legend swatches follow.
+
+*Fourth note (user): the slider now DRIVES the zoom.* While it sits on a
+year, the map fits the regions where that year's projects appear
+(`PaperMap fitPesLive` — the Anti-nero drill's animated live refit, no new
+machinery): 2021 lands on Β. Εύβοια and the Attica fires, 2024 on Ρόδος
+(this map holds only the 13 executor-named projects, and ΒΑ Αττική 2024
+names no crew). The display stays cumulative — everything up to the year —
+only the CROP follows the period's new work; releasing the slider to its
+right end returns to the country, and a year whose fires have no
+executor-named project yet (2018–2020) keeps the country view, since there
+is nothing to fit.
+
+*Fifth round — the frame became EPISODES (user's brief: the reader must see
+when the fires happened, how soon the projects appeared, and from where
+the ΔΑΣΕ came; the right list must carry fire date · designation-act date
+· sponsor · crew; cumulative dots while reframing confused; no panning;
+«maybe a slider by day?»).* The day slider was considered and rejected:
+fires are DISCRETE events, and 1.900 days of slider are almost all empty —
+the honest navigator is the episode list itself, which IS the list the
+user specified. One row per project, chronological by fire: the fire date
+with its name (maroon), the act date with the wait printed («+44 d»,
+green) and the sponsor, the crew names (black, linked to their ΔΑΣΕ
+pages). Hovering a row previews it (the rest fades); CHOOSING it isolates
+the episode — only its scar, its ground and its crews' journeys remain on
+the map, hidden not dimmed — and the map refits to the episode's own
+extent (ground + seats + scar bbox through PaperMap's reactive
+`fitPoints`; view=null while chosen, the STATUS frame at rest). **The map
+takes no gestures at all** (`interactive={false}`): the list is the only
+wheel, which also retires the pan question. The rest state now draws only
+the scars LINKED to these projects (each link ships its `scars` ids), not
+every Greek fire since 2018 — the payload rows also gained `fire`,
+`fire_date` (earliest linked EFFIS scar), `act_date` and per-project
+`lag_days`, all computed. The year slider, the hover cards and the
+`fitPesLive` wiring of the previous round are gone; PaperMap keeps the
+`panAtRest` prop for any future interactive map that wants it.
+
+*Sixth round (user, five notes, all applied):* **every fire since 2021
+stays on the map** — the scars a project repairs in the deep maroon, the
+rest a step lighter (#d8b6ba; two plain tones drawn directly, the
+year-gradient FiresLayer left to the other maps), and while an episode is
+held only ITS scar keeps the deep tone; the journeys are **thicker and
+DASHED** (1.8→2.4 px, 6-4 dash — a route, not a border); the dots grew to
+r5/6.5 and **lost the white outline** (the no-outline symbol rule); and
+the episode rows are **LABELLED** — FIRE / SPONSOR APPOINTED / WORKS
+EXECUTED BY in small caps with the marks' own swatches, the wait written
+out («44 days after the fire») — so a reader who has never seen the page
+can decode every line.
+
+*Seventh round (user, four notes):* SPONSOR and its name moved to their own
+labelled row (linking to the project page); the dots came down a step
+(r 4 / 5,5 chosen) and the dashes thinned (1,4 / 2 px); the chosen
+episode's journeys END IN AN OPEN CHEVRON pointing at the work — the FLOWS
+OF MONEY arrowhead, `refX` pulled clear of the work dot so it never hides
+under it — drawn, like the lines themselves, ABOVE the fire's fill; and
+the MAP selects too: the ground dots, the seats (cycling through a seat's
+episodes) and the dark scars (cycling through a scar's projects — the two
+Rhodes projects share one) all answer to hover and click, mirroring the
+list.
+
+*Eighth round (user):* while an episode is chosen the journeys are a step
+thicker (2,6px) and fully OPAQUE, and the chevron came down to the line's
+own proportion with its point ON the work dot's rim. One rendering trap
+recorded: `markerUnits="strokeWidth"` does not render at all on
+`vector-effect: non-scaling-stroke` paths in Chromium — the marker is
+sized in user units instead, divided by the zoom (screen-constant ~8px)
+with a viewBox, `refX` pulling the tip back exactly the dot's radius.
+
+*Ninth round (user):* the journey line thinned to nothing whenever the
+crew's seat and the project were close — **the stroke was being divided by
+the zoom while `vector-effect: non-scaling-stroke` already keeps it in
+screen units**, so a tight pair (ΔΑ.Σ.Ε. Ακρίτα Αλεξανδρούπολης → ΔΕΠΑ,
+10 km) fitted to a high k and left a hairline. The division is gone: the
+line is a constant 1,4 px, 2,6 px while an episode is chosen, at every
+zoom. Line and arrowhead are now #111 black in every state, and the
+episode labels (FIRE / SPONSOR APPOINTED / SPONSOR / WORKS EXECUTED BY)
+print black at weight 700 instead of faint at 900.
+
+*Tenth round (user): the Κρυονέρι–Δροσοπηγή fire could not be seen when
+selected.* The scar is present and correct (id 275494, 2025, **275 ha**) —
+it is simply small, and the frame must also hold a crew's seat 273 km
+away, so it projected to a few pixels. The SiteMap's own convention is
+ported: a dark scar whose projected bounds fall under ~9px gets a
+minimum-size maroon RING at its centroid, itself selectable — so a small
+burnt area is never invisible. Two scars qualify at rest (Κρυονέρι 275 ha
+and Κορινθία/Φενεός). Test note: clicking an episode row's centre lands on
+the sponsor LINK and navigates, which is intended behaviour, not a bug —
+the row's labels and dates are the neutral hit area.
+
+*Eleventh round (user, five notes):* the minimum-size rings are gone —
+instead **an episode whose burnt area is tiny becomes ZOOMABLE when
+chosen** (`interactive={tinyScar}`, the scar's geographic span under 6% of
+the fitted frame), with a line under the key saying «This burnt area is
+small — click the map, then scroll to zoom into it»; every other episode
+stays a still picture. The legend moved into the RIGHT column above the
+list, two rows of two, reworded to «burnt areas connected with sponsored
+works» / «sponsored works» / «other fires since 2021» / «forest workers'
+co-op base», with the journey entry dropped; the map's own size is
+untouched. The list now **follows the selection** — choosing an episode
+anywhere (row, dot or scar) scrolls its row into view. A PaperMap bug the
+zoom exposed: the `panAtRest` filter read the reactive `transform`, so the
+zoom `$effect` re-ran on every zoom and re-attached the behaviour,
+swallowing the +/− buttons; it now reads d3's own `zoomTransform(svgEl)`.

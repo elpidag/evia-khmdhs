@@ -41,7 +41,13 @@
 	import { geoMercator, geoPath } from 'd3-geo';
 	import { select } from 'd3-selection';
 	import 'd3-transition';
-	import { zoom as d3zoom, zoomIdentity, type D3ZoomEvent, type ZoomBehavior } from 'd3-zoom';
+	import {
+		zoom as d3zoom,
+		zoomIdentity,
+		zoomTransform,
+		type D3ZoomEvent,
+		type ZoomBehavior
+	} from 'd3-zoom';
 	import type { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 	import type { Snippet } from 'svelte';
 	import { loadMuniBorders, loadPe, loadPeHires, type PeProps, loadNeighbours, type NeighbourProps } from './useGeo';
@@ -101,6 +107,11 @@
 		 *  scenery, on by default; a map that must show Greece alone sets
 		 *  `context={false}` */
 		context?: boolean;
+		/** allow drag-panning at the resting zoom (default). The crew map
+		 *  turns it off: at rest the whole frame is already in view, so a
+		 *  drag can only dislodge the crop (user, 2026-08-24); panning
+		 *  re-arms as soon as the reader zooms in */
+		panAtRest?: boolean;
 	}
 
 	let {
@@ -124,7 +135,8 @@
 		overlay,
 		legend,
 		relief = null,
-		context = true
+		context = true,
+		panAtRest = true
 	}: Props = $props();
 
 	type PeFeature = Feature<MultiPolygon, PeProps>;
@@ -380,6 +392,14 @@
 			])
 			.filter((ev) => {
 				if (ev.type === 'wheel') return wheelArmed;
+				// a drag at the resting zoom only dislodges the crop. The scale
+				// is read from d3's own state, NOT the reactive `transform`:
+				// touching that here made this effect re-run on every zoom and
+				// re-attach the behaviour, which swallowed the +/− buttons
+				// (2026-08-24)
+				if (!panAtRest && ev.type !== 'dblclick' && svgEl &&
+					zoomTransform(svgEl).k <= (homeT?.k ?? 1) * 1.02)
+					return false;
 				return !ev.ctrlKey && !ev.button;
 			})
 			.on('start', () => (zooming = true))

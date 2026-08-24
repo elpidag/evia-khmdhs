@@ -57,6 +57,12 @@ export interface AnadohoiOverview {
 		completed: number;
 		budget: number;
 		first_start: string | null;
+		/** when it burnt and how big, from the EFFIS scars linked to the
+		 *  projects, and every designation act that followed (2026-08-24) */
+		burn_date: string | null;
+		burn_ha: number;
+		lag_days: number | null;
+		acts: { d: string; ada: string }[];
 	}[];
 	sponsors: { company: string; n: number; budget: number; unstated: number }[];
 	monthly: { m: string; n: number }[];

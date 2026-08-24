@@ -1076,6 +1076,33 @@ def test_anadohoi_overview_pins(client):
     assert top["company"] == "ΔΕΗ" and top["n"] == 6
 
 
+def test_fire_response_pins(client):
+    """FROM FIRE TO SPONSOR (DATA_DECISIONS 2026-08-24): each fire event
+    carries WHEN it burnt, HOW BIG it was and every act that followed, so
+    the frame can state the wait instead of asserting «within weeks» —
+    which the data does not support (median 64 days, 24 → 574)."""
+    import statistics
+
+    o = client.get("/api/anadohoi/overview").get_json()
+    lanes = [f for f in o["fires"]
+             if f["fire"] != "εκτός πυρκαγιάς" and f["burn_date"] and f["acts"]]
+    assert len(lanes) == 18
+    for f in lanes:
+        assert f["burn_ha"] > 0, f["fire"]
+        assert f["lag_days"] is not None and f["lag_days"] > 0, f["fire"]
+        # every act of the lane is dated, and the first one IS first_start
+        assert f["acts"][0]["d"] == f["first_start"]
+        assert all(a["d"] for a in f["acts"])
+        assert len(f["acts"]) == f["n"]
+    lags = [f["lag_days"] for f in lanes]
+    assert statistics.median(lags) == 64          # NOT «within weeks»
+    assert min(lags) == 24 and max(lags) == 574
+    assert sum(1 for x in lags if x <= 60) == 9   # half of them, not all
+    # the contrast the frame states: the biggest fire is among the fastest
+    biggest = max(lanes, key=lambda f: f["burn_ha"])
+    assert biggest["fire"].startswith("Έβρος") and biggest["lag_days"] == 26
+
+
 def test_meta_anadohoi_pin(client):
     m = client.get("/api/meta").get_json()
     assert m["anadohoi"] == {"n_projects": 68, "stated_eur": 41_784_256.85}
@@ -1605,3 +1632,33 @@ def test_dase_allocation_pins(client):
     evia = [r for r in a["region_coops"] if r["pe"] == "Π.Ε. Ευβοίας"]
     assert len(evia) == 32                      # the co-ops that worked there
     assert sum(r["eur"] for r in evia) == pytest.approx(top["eur"], abs=0.01)
+
+
+def test_crew_flows_pins(client):
+    """WHO DID THE WORK as geography (DATA_DECISIONS 2026-08-24): every
+    sponsor→co-operative link the acts record, seat → the ground worked.
+
+    The work end is placed as precisely as the project allows — the θέσεις
+    its acts name, else the digitised Β. Εύβοια zone, else the EFFIS scar —
+    which is what lets 21 of the 23 links be drawn at all: only 9 projects
+    have geocoded sites, and a Regional-Unit fallback would have thrown the
+    precision away."""
+    f = client.get("/api/anadohoi/crew-flows").get_json()
+    assert len(f["links"]) == 21
+    # the two without a seat are the co-ops with no canonical ΑΦΜ
+    assert len(f["unplaced"]) == 2
+    assert all(u["why"] == "no seat on record" for u in f["unplaced"])
+    kinds = {}
+    for l in f["links"]:
+        kinds[l["work_kind"]] = kinds.get(l["work_kind"], 0) + 1
+        for key in ("seat_lat", "seat_lon", "work_lat", "work_lon"):
+            assert l[key] is not None, (l["coop"], key)
+        assert l["km"] >= 0
+    # all three anchor sources are in use — losing the zones sent the ΔΕΗ
+    # basins down to the whole-Εύβοια scar and blunted the map
+    assert kinds == {"site": 9, "zone": 6, "scar": 6}
+    # the finding the frame states
+    assert f["median_km"] == 273
+    assert f["far_150"] == 15
+    top = f["links"][0]
+    assert top["km"] == 672 and "ΠΙΕΡΙΑΣ" in top["coop"]

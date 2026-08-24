@@ -14,12 +14,15 @@ import math
 import re
 import datetime as _dt
 import sqlite3
+from functools import lru_cache
 import unicodedata
 
 from khmdhs.config import PDF_CACHE_DIR
 from khmdhs.greek_regions import PE_CENTROIDS, canonical_pe
 from webui import dase_queries as dq
 from webui import queries as q
+
+_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _fold_upper(s: str) -> str:
@@ -3710,6 +3713,23 @@ def _sponsor_group(company: str) -> str:
     return company
 
 
+@lru_cache(maxsize=1)
+def _effis_dates() -> dict:
+    """scar id → its EFFIS start date, from the display layer the maps
+    already ship (built by scripts/build_effis_layer.py, which puts the
+    date on every feature)."""
+    path = _ROOT / "atlas" / "static" / "geo" / "effis_fires.geojson"
+    if not path.exists():
+        return {}
+    fc = json.loads(path.read_text(encoding="utf-8"))
+    return {f["properties"]["id"]: f["properties"].get("d")
+            for f in fc.get("features", []) if f["properties"].get("id") is not None}
+
+
+def _effis_date(scar_id) -> str | None:
+    return _effis_dates().get(scar_id)
+
+
 def anadohoi_overview(ana: sqlite3.Connection) -> dict:
     """Everything the /anadohoi analysis page needs (69 projects — small
     enough to ship whole)."""
@@ -3738,6 +3758,7 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             "deliverables": r["deliverables"],
             "area": r["area_stremmata"], "pe": r["pe"],
             "fire": r["fire_event"], "budget": budget,
+            "scars": (json.loads(r["effis_scars"]) if r["effis_scars"] else None),
             "budget_stated": r["budget_eur"],
             "vat_basis": r["budget_vat_basis"],
             "start": r["start_date"],
@@ -3774,16 +3795,44 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             m = p["start"][:7]
             monthly[m] = monthly.get(m, 0) + 1
 
+    # Each fire event with WHEN it burnt, HOW BIG it was and WHEN each of
+    # its designation acts was signed — the FROM FIRE TO SPONSOR chart
+    # (DATA_DECISIONS 2026-08-24). The burn date and area come from the
+    # EFFIS scars already linked to the projects (satellite estimates, said
+    # so on the frame); `lag_days` is fire → first act, the thing the chart
+    # is about. A project with no fire (plane disease, salvage logging)
+    # joins no lane and is counted in `n_no_fire`.
     fires: dict[str, dict] = {}
     for p in live:
         f = fires.setdefault(p["fire"] or "—", {
             "fire": p["fire"] or "—", "n": 0, "completed": 0,
-            "budget": 0.0, "first_start": p["start"]})
+            "budget": 0.0, "first_start": p["start"],
+            "acts": [], "burn_date": None, "burn_ha": 0.0, "_scars": set()})
         f["n"] += 1
         f["completed"] += p["status"] == "completed"
         f["budget"] += p["budget"] or 0
         if p["start"] and (f["first_start"] or "9") > p["start"]:
             f["first_start"] = p["start"]
+        if p["start"]:
+            f["acts"].append({"d": p["start"], "ada": p["ada"]})
+        for s in (p["scars"] or []):
+            sid = s.get("id") if isinstance(s, dict) else s
+            if sid in f["_scars"]:
+                continue
+            f["_scars"].add(sid)
+            if isinstance(s, dict):
+                f["burn_ha"] += s.get("ha") or 0
+                d = _effis_date(s.get("id"))
+                if d and (f["burn_date"] is None or d < f["burn_date"]):
+                    f["burn_date"] = d
+    for f in fires.values():
+        f.pop("_scars", None)
+        f["acts"].sort(key=lambda a: a["d"])
+        f["burn_ha"] = round(f["burn_ha"], 1)
+        f["lag_days"] = (
+            (_dt.date.fromisoformat(f["first_start"])
+             - _dt.date.fromisoformat(f["burn_date"])).days
+            if f["burn_date"] and f["first_start"] else None)
 
     sponsors: dict[str, dict] = {}
     for p in live:
@@ -3819,6 +3868,137 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
         "fires": sorted(fires.values(), key=lambda f: f["first_start"] or ""),
         "sponsors": sorted(sponsors.values(), key=lambda s: -s["budget"]),
         "monthly": [{"m": m, "n": n} for m, n in sorted(monthly.items())],
+    }
+
+
+@lru_cache(maxsize=1)
+def _geo_centroids() -> tuple[dict, dict]:
+    """Centroids of the two display layers the sponsor maps already ship:
+    the digitised Β. Εύβοια works zones and the EFFIS burn scars. They are
+    what lets a project without a geocoded θέση still be placed precisely —
+    a ΔΕΗ act names a hydrological basin, not an address."""
+    def cent(geom):
+        pts: list = []
+
+        def walk(c):
+            if c and isinstance(c[0], (int, float)):
+                pts.append(c)
+            else:
+                for x in c:
+                    walk(x)
+        walk(geom["coordinates"])
+        return (round(sum(p[1] for p in pts) / len(pts), 5),
+                round(sum(p[0] for p in pts) / len(pts), 5)) if pts else None
+
+    def load(name, key):
+        path = _ROOT / "atlas" / "static" / "geo" / name
+        if not path.exists():
+            return {}
+        fc = json.loads(path.read_text(encoding="utf-8"))
+        out = {}
+        for f in fc.get("features", []):
+            k = f["properties"].get(key)
+            if k is None:
+                continue
+            # the zone layer already carries the centroid the map draws
+            # its dots at ([lon, lat]) — use it rather than re-deriving
+            pre = f["properties"].get("centroid")
+            c = (round(pre[1], 5), round(pre[0], 5)) if pre else cent(f["geometry"])
+            if c:
+                out[k] = c
+        return out
+    # the zones key on «zone», not «id» — reading the wrong property sent
+    # the ΔΕΗ basins down to the whole-Εύβοια scar (2026-08-24)
+    return load("evia_works_zones.geojson", "zone"), load("effis_fires.geojson", "id")
+
+
+def anadohoi_crew_flows(ana: sqlite3.Connection,
+                        dase: sqlite3.Connection | None) -> dict:
+    """WHO DID THE WORK, as geography (DATA_DECISIONS 2026-08-24): every
+    sponsor → co-operative link the acts record, drawn from the crew's
+    registered seat to the ground it worked.
+
+    The work anchor is taken as precisely as the project allows, in this
+    order — the geocoded θέσεις the acts name, else the digitised Β. Εύβοια
+    works zone, else the EFFIS scar of the fire it repairs. Only after all
+    three fail would a Regional Unit be used, and no project needs that.
+    The seat is the co-operative's registered office from the ΔΑΣΕ layer;
+    a co-op with no canonical ΑΦΜ has no seat and is returned in
+    `unplaced` rather than guessed at."""
+    zones, scars = _geo_centroids()
+    seats = {}
+    if dase is not None and _table(dase, "contractor_locations"):
+        seats = {r["vat_number"]: r for r in dase.execute(
+            "SELECT vat_number, region_pe, lat, lon, city, address"
+            "  FROM contractor_locations WHERE lat IS NOT NULL")}
+    names = dase_display_names(dase) if dase is not None else {}
+
+    def mean(pts):
+        return (round(sum(p[0] for p in pts) / len(pts), 5),
+                round(sum(p[1] for p in pts) / len(pts), 5))
+
+    links, unplaced = [], []
+    for r in ana.execute("""SELECT root_ada, company, pe, work_sites, works_zones,
+                                   effis_scars, executors, location_text,
+                                   fire_event, start_date
+                              FROM projects
+                             WHERE executors IS NOT NULL AND superseded_by IS NULL"""):
+        sites = [s for s in (json.loads(r["work_sites"]) if r["work_sites"] else [])
+                 if s.get("lat") is not None]
+        anchor = kind = None
+        if sites:
+            anchor, kind = mean([(s["lat"], s["lon"]) for s in sites]), "site"
+        elif r["works_zones"]:
+            zs = [zones[z] for z in json.loads(r["works_zones"]) if z in zones]
+            if zs:
+                anchor, kind = mean(zs), "zone"
+        if anchor is None and r["effis_scars"]:
+            ss = [scars[s["id"]] for s in json.loads(r["effis_scars"])
+                  if isinstance(s, dict) and s.get("id") in scars]
+            if ss:
+                anchor, kind = mean(ss), "scar"
+        # the episode facts the reader asked for (user, 2026-08-24): when
+        # the fire burnt (the earliest linked EFFIS scar), when the sponsor
+        # was appointed, and the scar ids so the map can draw THIS fire
+        scar_ids = [s["id"] for s in (json.loads(r["effis_scars"]) if r["effis_scars"] else [])
+                    if isinstance(s, dict) and s.get("id") is not None]
+        fire_dates = [d for d in (_effis_date(sid) for sid in scar_ids) if d]
+        fire_date = min(fire_dates) if fire_dates else None
+        act_date = r["start_date"]
+        lag_days = ((_dt.date.fromisoformat(act_date)
+                     - _dt.date.fromisoformat(fire_date)).days
+                    if act_date and fire_date else None)
+        for e in json.loads(r["executors"]):
+            vat = e.get("dase_vat")
+            seat = seats.get(vat) if vat else None
+            row = {"ada": r["root_ada"], "company": _sponsor_group(r["company"]),
+                   "coop": (names.get(vat) or {}).get("el") or e["name"],
+                   "vat": vat, "pe": r["pe"],
+                   "fire": r["fire_event"], "fire_date": fire_date,
+                   "act_date": act_date, "lag_days": lag_days,
+                   "scars": scar_ids}
+            if anchor is None or seat is None:
+                unplaced.append({**row, "why": "no seat on record" if seat is None
+                                 else "no work location on record"})
+                continue
+            links.append({
+                **row,
+                "seat_lat": seat["lat"], "seat_lon": seat["lon"],
+                "seat_pe": seat["region_pe"],
+                "seat_place": seat["address"] or seat["city"],
+                "work_lat": anchor[0], "work_lon": anchor[1], "work_kind": kind,
+                "km": round(math.hypot((anchor[1] - seat["lon"]) * 88,
+                                       (anchor[0] - seat["lat"]) * 111)),
+            })
+    links.sort(key=lambda x: -x["km"])
+    dist = sorted(x["km"] for x in links)
+    return {
+        "links": links,
+        "unplaced": unplaced,
+        "n_projects": len({x["ada"] for x in links} | {x["ada"] for x in unplaced}),
+        "n_coops": len({x["vat"] or x["coop"] for x in links + unplaced}),
+        "median_km": dist[len(dist) // 2] if dist else 0,
+        "far_150": sum(1 for k in dist if k > 150),
     }
 
 

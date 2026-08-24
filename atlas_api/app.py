@@ -432,6 +432,16 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             queries_extra.overlay_executor_names(p.get("executors"), names)
         return jsonify(out)
 
+    @app.route("/api/anadohoi/crew-flows")
+    def api_anadohoi_crew_flows():
+        # WHO DID THE WORK as geography (DATA_DECISIONS 2026-08-24): the
+        # seats come from the ΔΑΣΕ layer, so degrade honestly without it
+        try:
+            dase = _dase_conn()
+        except Exception:
+            dase = None
+        return jsonify(queries_extra.anadohoi_crew_flows(_anadohoi_conn(), dase))
+
     @app.route("/api/anadohoi/project/<ada>")
     def api_anadohoi_project(ada: str):
         p = queries_extra.anadohoi_project(_anadohoi_conn(), ada)

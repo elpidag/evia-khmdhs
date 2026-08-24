@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { ruLabel } from '$lib/transforms/regions';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import FireResponse from '$lib/charts/FireResponse.svelte';
+	import CrewMap, { type CrewLink } from '$lib/sections/CrewMap.svelte';
+	import { apiGetCached } from '$lib/api';
 	import Defer from '$lib/ui/Defer.svelte';
 	import BarH from '$lib/charts/BarH.svelte';
 	import PromiseGantt from '$lib/charts/PromiseGantt.svelte';
@@ -213,6 +216,87 @@
 	const nExecCoops = $derived(
 		new Set(execRows.flatMap((r) => r.executors.map((e) => e.dase_vat ?? e.name))).size
 	);
+	/** the same links GROUPED BY SPONSOR (user, 2026-08-24): ΔΕΗ held four
+	 *  separate blocks in the old table, which is most of why the frame ran
+	 *  to 922px. One line per sponsor, its projects as small place links. */
+	const execBySponsor = $derived.by(() => {
+		type Row = (typeof execRows)[number];
+		const by = new Map<string, { company: string; projects: Row[];
+			coops: Map<string, Executor> }>();
+		for (const r of execRows) {
+			const g = by.get(r.company) ?? {
+				company: r.company, projects: [] as Row[], coops: new Map<string, Executor>()
+			};
+			g.projects.push(r);
+			for (const e of r.executors) g.coops.set(e.dase_vat ?? e.name, e);
+			by.set(r.company, g);
+		}
+		return [...by.values()]
+			.map((g) => ({
+				...g,
+				coopList: [...g.coops.values()],
+				// ΔΕΗ holds four Evia projects, so the old row printed «R.U.
+				// Evia» four times and wrapped: name each PLACE once, and
+				// number the projects only where there is more than one
+				places: [...new Set(g.projects.map((p) => p.where))]
+			}))
+			.sort((a, b) => b.coopList.length - a.coopList.length
+				|| a.company.localeCompare(b.company, 'el'));
+	});
+	/** the co-op that turns up under the most different sponsors — the one
+	 *  fact a flat list of names cannot show */
+	const execRepeat = $derived.by(() => {
+		const by = new Map<string, { name: string; sponsors: Set<string> }>();
+		for (const r of execRows)
+			for (const e of r.executors) {
+				const k = e.dase_vat ?? e.name;
+				const g = by.get(k) ?? { name: e.name, sponsors: new Set<string>() };
+				g.sponsors.add(r.company);
+				by.set(k, g);
+			}
+		return [...by.values()].sort((a, b) => b.sponsors.size - a.sponsors.size)[0] ?? null;
+	});
+	/** the fire lanes and what they say — every figure computed here, so
+	 *  the frame's copy cannot drift from the data (2026-08-24) */
+	const fireLanes = $derived(
+		(o.fires ?? []).filter(
+			(f) => f.fire !== 'εκτός πυρκαγιάς' && f.burn_date && f.acts?.length
+		)
+	);
+	const fireFacts = $derived.by(() => {
+		const withLag = fireLanes.filter((f) => f.lag_days != null);
+		if (!withLag.length) return null;
+		const lags = withLag.map((f) => f.lag_days as number).sort((a, b) => a - b);
+		const mid = Math.floor(lags.length / 2);
+		const median = lags.length % 2 ? lags[mid] : Math.round((lags[mid - 1] + lags[mid]) / 2);
+		// the contrast the chart exists to show: the biggest fire against the
+		// longest wait
+		const biggest = [...withLag].sort((a, b) => b.burn_ha - a.burn_ha)[0];
+		const slowest = [...withLag].sort((a, b) => (b.lag_days as number) - (a.lag_days as number))[0];
+		return {
+			median,
+			n: withLag.length,
+			within60: lags.filter((l) => l <= 60).length,
+			fastest: biggest,
+			slowest,
+			noFire: (o.fires ?? [])
+				.filter((f) => f.fire === 'εκτός πυρκαγιάς')
+				.reduce((s, f) => s + f.n, 0)
+		};
+	});
+	// WHO DID THE WORK as geography — fetched post-hydration like the
+	// other big payloads (user, 2026-08-24)
+	let crew = $state.raw<{
+		links: CrewLink[];
+		unplaced: { coop: string; company: string; why: string }[];
+		median_km: number;
+		far_150: number;
+		n_projects: number;
+		n_coops: number;
+	} | null>(null);
+	$effect(() => {
+		apiGetCached<typeof crew>(fetch, '/api/anadohoi/crew-flows').then((v) => (crew = v));
+	});
 	const kindGroups = $derived.by(() => {
 		const s = countBy('works_kind');
 		return KIND_META.map(([key, label, color]) => ({ key, label, color, count: s[key] ?? 0 }));
@@ -363,27 +447,6 @@
 		)
 	);
 
-	// timeline strip: months 2021-08 … status_as_of, with fire markers
-	const strip = $derived.by(() => {
-		const byM = new Map(o.monthly.map((x) => [x.m, x.n]));
-		const months: { m: string; n: number }[] = [];
-		const end = (k.status_as_of ?? '2026-08').slice(0, 7);
-		let cur = '2021-08';
-		while (cur <= end) {
-			months.push({ m: cur, n: byM.get(cur) ?? 0 });
-			const [y, mo] = cur.split('-').map(Number);
-			cur = mo === 12 ? `${y + 1}-01` : `${y}-${String(mo + 1).padStart(2, '0')}`;
-		}
-		const maxN = Math.max(...months.map((x) => x.n), 1);
-		const fires = o.fires
-			.filter((f) => f.fire !== 'εκτός πυρκαγιάς' && f.first_start)
-			.map((f) => ({
-				...f,
-				idx: months.findIndex((x) => x.m === (f.first_start as string).slice(0, 7))
-			}))
-			.filter((f) => f.idx >= 0);
-		return { months, maxN, fires };
-	});
 </script>
 
 <svelte:head>
@@ -770,72 +833,36 @@
 
 {#if execRows.length}
 	<ChartFrame
-		title={`The sponsors sign, forest co-ops dig: ${grInt(execRows.length)} of ${grInt(k.n_projects)} act trails name their executing crew`}
-		subtitle="{grInt(nExecCoops)} distinct co-ops (ΔΑ.Σ.Ε., ν.4423/2016) named as φορείς υλοποίησης or works contractors"
-		caveat="Only what the acts themselves record — most trails never name who held the chainsaw. Green co-ops link to their public-contracts profile in the ΔΑΣΕ dataset; the rest never won a public contract in its harvest window, or the act's wording doesn't pin one registry entry."
+		title="WHO DID THE WORK"
+		insight={crew
+			? `The crews travel. Of the ${grInt(crew.links.length)} sponsor–co-operative links the acts record, ${grInt(crew.far_150)} cross more than 150 km, and the median journey is ${grInt(crew.median_km)} km — ${crew.links[0].coop} went ${grInt(crew.links[0].km)} km from ${crew.links[0].seat_pe ? ruLabel(crew.links[0].seat_pe) : 'home'} to work for ${crew.links[0].company}. Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew at all; the rest record who paid and who approved, never who cut.`
+			: `Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew that did the digging — ${grInt(nExecCoops)} forest co-operatives in all.`}
+		caveat="Only what the acts themselves record. The work end is placed as precisely as each project allows — the θέσεις its acts name, else the digitised Β. Εύβοια works zone, else the EFFIS scar of the fire it repairs; the seat is the co-operative's registered office. Burn scars: © European Union, Copernicus Emergency Management Service — EFFIS; satellite estimates, not official οριοθετήσεις. {crew?.unplaced.length ? `${grInt(crew.unplaced.length)} crews have no seat on record and are off the map (${crew.unplaced.map((u) => u.coop).join(', ')}).` : ''}"
 		anchor="executors"
 		methodology="anadohoi"
 	>
-		<div class="exectable">
-			{#each execRows as r (r.ada)}
-				<div class="execitem">
-					<div class="execproj">
-						<a href={`/anadohoi/project/${r.ada}`}>{r.company}</a>
-						{#if r.where}<small class="muted">{r.where}</small>{/if}
-					</div>
-					<div class="execcoops">
-						{#each r.executors as e (e.name)}
-							{#if e.dase_vat}
-								<a class="coop linked" href={`/dase/coop/${e.dase_vat}`} title={e.excerpt}
-									>{e.name}</a
-								>
-							{:else}
-								<span class="coop" title={e.note ?? e.excerpt}>{e.name}</span>
-							{/if}
-						{/each}
-					</div>
-				</div>
-			{/each}
-		</div>
+		{#if crew}
+			<CrewMap
+				links={crew.links}
+				fires={firesShown.filter((f) => f.properties.yr >= 2021)}
+			/>
+		{:else}
+			<div class="skeleton" style="height: 460px"></div>
+		{/if}
 	</ChartFrame>
 {/if}
 
 <Defer height={300}>
 	<ChartFrame
-		title="Each big fire triggers a wave of corporate sponsorship within weeks"
-		subtitle="designation acts per month since the scheme began (Aug 2021) · ▲ = first designation after each fire"
+		title="FROM FIRE TO SPONSOR"
+		insight={fireFacts
+			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireFacts.fastest.fire} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireFacts.slowest.fire} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
+			: ''}
+		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
 		anchor="pulse"
 		methodology="anadohoi"
 	>
-		<svg viewBox="0 0 920 170" class="strip" role="img" aria-label="Appointments per month">
-			{#each strip.months as mo, i (mo.m)}
-				{@const h = (110 * mo.n) / strip.maxN}
-				<rect
-					x={20 + i * ((880 - 20) / strip.months.length)}
-					y={130 - h}
-					width={(880 - 20) / strip.months.length - 2}
-					height={h}
-					fill="var(--c-anadohoi)"
-					opacity="0.8"
-				>
-					<title>{mo.m}: {mo.n}</title>
-				</rect>
-				{#if mo.m.endsWith('-01')}
-					<text x={20 + i * ((880 - 20) / strip.months.length)} y="145" class="axis"
-						>{mo.m.slice(0, 4)}</text
-					>
-				{/if}
-			{/each}
-			{#each strip.fires as f (f.fire)}
-				<text
-					x={20 + f.idx * ((880 - 20) / strip.months.length)}
-					y="160"
-					class="fire-mark"
-				>
-					▲<title>{f.fire}: first designation act {dmy(f.first_start)}</title>
-				</text>
-			{/each}
-		</svg>
+		<FireResponse fires={fireLanes} today={k.status_as_of ?? '2026-08-24'} />
 	</ChartFrame>
 </Defer>
 
@@ -1039,54 +1066,6 @@
 		}
 	}
 	/* sponsor → executing co-op linkage list */
-	.exectable {
-		display: grid;
-		gap: var(--sp-2);
-	}
-	.execitem {
-		display: grid;
-		grid-template-columns: minmax(220px, 3fr) 9fr;
-		gap: var(--sp-1) var(--sp-6);
-		align-items: baseline;
-		border-top: 1px solid var(--line);
-		padding-top: var(--sp-2);
-	}
-	.execproj a {
-		text-decoration: none;
-		font-weight: 600;
-	}
-	.execproj a:hover {
-		text-decoration: underline;
-	}
-	.execproj small {
-		display: block;
-	}
-	.execcoops {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--sp-1) var(--sp-2);
-	}
-	.coop {
-		font-size: var(--fs-13);
-		border: 1px solid var(--line-strong);
-		border-radius: 999px;
-		padding: 1px 10px;
-		white-space: nowrap;
-		color: var(--ink-soft);
-	}
-	.coop.linked {
-		color: var(--c-dase);
-		border-color: var(--c-dase);
-		text-decoration: none;
-	}
-	.coop.linked:hover {
-		background: color-mix(in srgb, var(--c-dase) 10%, transparent);
-	}
-	@media (max-width: 900px) {
-		.execitem {
-			grid-template-columns: 1fr;
-		}
-	}
 	/* one legend for waffle + map, in the timeline legend's dress: the
 	   tinted strip right under the section title */
 	.stkey {
@@ -1258,18 +1237,6 @@
 	}
 	.map-wrap :global(.map.plate .region) {
 		stroke: #8f8f8f;
-	}
-	.strip {
-		width: 100%;
-		height: auto;
-	}
-	.axis {
-		font-size: 10px;
-		fill: var(--ink-faint);
-	}
-	.fire-mark {
-		font-size: 11px;
-		fill: var(--c-antinero);
 	}
 	.muted {
 		color: var(--ink-soft);
