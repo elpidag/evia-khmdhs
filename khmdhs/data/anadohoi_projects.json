@@ -742,7 +742,8 @@
      "dase_vat": null,
      "ada": "ΨΕΘΘ4653Π8-Ε1Γ",
      "excerpt": "υλοποιήθηκε από τους Δασικούς Συνεταιρισμούς ΔΑΣΕ «Τα Μακεδονικά Αλυσοπρίονα» και ΔΑΣΕ «Παντουρέ Δάσος Τρικάλων».",
-     "note": "not in the ΔΑΣΕ dataset registry (no public contract in the harvest window)"
+     "note": "(mentioned in the completion act but it wasn’t possible to match it with a canonical Α.Φ.Μ.).",
+     "curation_note": "VAT-less: named only in the completion act, with no contract in the ΔΑΣΕ harvest window to pin a canonical ΑΦΜ to. Visible wording set by the user 2026-08-24; the previous note read: not in the ΔΑΣΕ dataset registry (no public contract in the harvest window)."
     }
    ],
    "work_sites": [
@@ -2671,7 +2672,8 @@
      "dase_vat": null,
      "ada": "ΩΔΥΜΟΡ10-1ΝΟ",
      "excerpt": "Τα από 11/10/2021 Πρωτόκολλα εγκατάστασης των ΔΑ.Σ.Ε. Μίστρου, ΔΑ.Σ.Ε. Σιδηρόνερου ‘Η Ροδόπη’, ΔΑ.Σ.Ε. Σταυρού Θεσ/νίκης ‘Η Ένωση’ ως φορέων υλοποίησης του προαναφερόμενου έργου. 15.Το από 14/10/2021 Πρωτόκολλο εγκατάστασης του ΔΑ.Σ.Ε. Πωγωνίου ως φορέα υλοποίησης του προαναφερόμενου έργου. 16.Το από 19/11/2021 Πρωτόκολλο εγκατάστασης του ΔΑ.Σ.Ε. Παπάδων ως φορέα υλοποίησης του προαναφερόμενου έργου.",
-     "note": "not in the ΔΑΣΕ dataset registry (no public contract in the harvest window)"
+     "note": "(mentioned in the completion act but it wasn’t possible to match it with a canonical Α.Φ.Μ.).",
+     "curation_note": "VAT-less: named only in the completion act, with no contract in the ΔΑΣΕ harvest window to pin a canonical ΑΦΜ to. Visible wording set by the user 2026-08-24; the previous note read: not in the ΔΑΣΕ dataset registry (no public contract in the harvest window)."
     }
    ],
    "effis_scars": [

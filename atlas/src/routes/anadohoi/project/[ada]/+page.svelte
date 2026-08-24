@@ -396,7 +396,11 @@
 							{:else}
 								{e.name}
 							{/if}
-							{#if e.note}<small class="muted">— {e.note}</small>{/if}
+							<!-- a note that is already parenthetical sets itself off; the
+							     em dash would only double the punctuation -->
+							{#if e.note}<small class="muted"
+									>{e.note.startsWith('(') ? '' : '— '}{e.note}</small
+								>{/if}
 						</div>
 					{/each}
 				</dd>

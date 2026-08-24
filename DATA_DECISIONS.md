@@ -8506,3 +8506,23 @@ by `test_sperchios_course_is_continuous`, which fails if the length drops
 or a bigger hole reopens. The fetch also gained retries — the public
 Overpass mirrors 500/504 at random and a rebuild should not fail on a
 passing cloud.
+
+## 2026-08-24 · The VAT-less executors' note rewritten (user)
+
+The two executing co-operatives that carry no canonical ΑΦΜ — ΔΑΣΕ
+«Παντουρέ Δάσος Τρικάλων» (6Ι4Σ4653Π8-ΖΟΡ) and ΔΑ.Σ.Ε. Παπάδων
+(9Κ9Τ4653Π8-Δ0Ο) — read «not in the ΔΑΣΕ dataset registry (no public
+contract in the harvest window)», which described OUR harvest rather than
+what the reader needs to know. The user's wording replaces it:
+**«(mentioned in the completion act but it wasn't possible to match it
+with a canonical Α.Φ.Μ.).»** Applied to BOTH rows, not only the page the
+user was looking at: it is the same sentence about the same situation, and
+both source acts are verified `oloklirosi` (completion) acts —
+ΨΕΘΘ4653Π8-Ε1Γ and ΩΔΥΜΟΡ10-1ΝΟ — so the new wording is factually true of
+each. The old technical detail is not lost: it moves to `curation_note`,
+the audit-only field that is never rendered on a card (the 2026-08-16
+rule). Rendering: a note that already opens with «(» no longer takes the
+template's em dash, which would have doubled the punctuation. Curated JSON
+and the committed sqlite both updated — the latter IN PLACE, as this
+dataset's curated fields always are, because its harvest JSON lives only
+on the build machine.
