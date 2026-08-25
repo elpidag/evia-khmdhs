@@ -1142,6 +1142,35 @@ def test_sponsor_groups_pins(client):
     assert sum(g["unstated"] for g in sg["groups"]) == 25
 
 
+def test_location_names_en_pins():
+    """anadohoi_locations_en.json (DATA_DECISIONS 2026-08-25): every
+    location_text in the anadohoi DB has a curated English value, the
+    values carry no Greek script (the point of the layer), and the atlas
+    copy is byte-identical."""
+    import json
+    import re
+    import sqlite3
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    a = (root / "khmdhs" / "data" / "anadohoi_locations_en.json").read_text(encoding="utf-8")
+    b = (root / "atlas" / "src" / "lib" / "data" /
+         "anadohoi_locations_en.json").read_text(encoding="utf-8")
+    assert a == b
+    data = {k: v for k, v in json.loads(a).items() if k != "_comment"}
+    assert all(v.strip() for v in data.values())
+    assert not any(re.search(r"[Ͱ-Ͽἀ-῿]", v)
+                   for v in data.values())
+    db = root / "data" / "processed" / "anadohoi.sqlite"
+    if not db.exists():
+        return
+    conn = sqlite3.connect(db)
+    stated = {r[0] for r in conn.execute(
+        "SELECT DISTINCT location_text FROM projects"
+        " WHERE location_text IS NOT NULL")}
+    assert stated <= set(data), sorted(stated - set(data))[:3]
+
+
 def test_fire_names_en_pins(client):
     """The two curated English-name layers of DATA_DECISIONS 2026-08-25.
 
@@ -1734,6 +1763,26 @@ def test_cpv_tree(client):
             assert k["name_en"] and k["name_el"]
             for c in k["codes"]:
                 assert c["name_en"] and c["name_el"]
+
+
+def test_authorities_map_points_pins(client):
+    """The /authorities map's three dot populations (user, 2026-08-25): the
+    co-op dots are the located registered offices of the live population and
+    their even-split money sums to the ΔΑΣΕ stated-net basis to the cent;
+    the contractor dots are the in-scope Anti-nero contractors at their
+    document-stated seats."""
+    d = client.get("/api/authorities").get_json()
+    assert {"authorities", "other_units", "coops", "contractors"} <= set(d)
+    coops = d["coops"]
+    assert len(coops) == 246
+    assert all(c["lat"] and c["lon"] and c["name"] for c in coops)
+    assert sum(c["total_eur"] for c in coops) == pytest.approx(
+        29_920_558.46, abs=0.05)
+    cons = d["contractors"]
+    assert len(cons) == 151
+    assert all(c["lat"] and c["lon"] and c["name"] for c in cons)
+    # sorted by € so the biggest names surface first in any listing
+    assert cons[0]["total_eur"] >= cons[-1]["total_eur"]
 
 
 def test_dase_allocation_pins(client):

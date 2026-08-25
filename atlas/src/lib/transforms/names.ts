@@ -14,6 +14,7 @@ import orgRaw from '$lib/data/org_names_en.json';
 import unitRaw from '$lib/data/unit_names_en.json';
 import fireRaw from '$lib/data/fire_events_en.json';
 import effisRaw from '$lib/data/effis_names_en.json';
+import locRaw from '$lib/data/anadohoi_locations_en.json';
 import { ruLabel } from '$lib/transforms/regions';
 
 function fold(s: string): string {
@@ -95,6 +96,18 @@ const FIRE_EVENTS: Record<string, string> = (fireRaw as { events: Record<string,
 export function fireEn(label: string | null | undefined): string {
 	if (!label) return '';
 	return FIRE_EVENTS[label.trim()] ?? label;
+}
+
+/** Curated EN for the sponsored projects' LOCATION row (DATA_DECISIONS
+ *  2026-08-25, user: the facts text cannot mix Greek and English): exact
+ *  keys — the 61 strings are the acts' own — honest Greek fallback; the
+ *  verbatim Greek stays in the EXTRACTED QUOTES block. */
+const LOCATIONS_EN: Record<string, string> = Object.fromEntries(
+	Object.entries(locRaw as Record<string, string>).filter(([k]) => k !== '_comment')
+);
+export function locationEn(text: string | null | undefined): string {
+	if (!text) return '';
+	return LOCATIONS_EN[text.trim()] ?? text;
 }
 
 /** An EFFIS feature `name` — comma-joined NUTS-3 tokens, each translated

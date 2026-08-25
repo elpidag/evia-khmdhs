@@ -20,7 +20,7 @@
 	// section deleted; the data and its harvest stay in the repository.
 	const MENU = [
 		{ href: '/compare', label: 'KEY FINDINGS' },
-		{ href: '/authorities', label: 'AUTHORITIES' },
+		{ href: '/authorities', label: 'NETWORKS OF ACTORS' },
 		{ href: '/methodology', label: 'METHODOLOGY' }
 	];
 

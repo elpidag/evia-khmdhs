@@ -331,10 +331,9 @@
 				<PaperMap
 					width={mapW || 460}
 					height={mapH}
-					interactive={false}
 					fitPes={pe ? [pe] : undefined}
 					fitPoints={seat ? [[seat.lon, seat.lat]] : null}
-					fitPad={0.26}
+					fitPad={0.15}
 					colorOf={(p) => (p === pe ? 'color-mix(in srgb, var(--c-dase) 30%, #fff)' : '#fff')}
 					tipOf={(p) => `<strong>${ruLabel(p)}</strong>`}
 				>
@@ -612,6 +611,11 @@
 		cursor: pointer;
 	}
 	/* template map look — same as the sponsored-works maps */
+	/* the +/−/⌂ stack starts below the MAP/DIAGRAM switch that
+	   occupies the frame's top-right corner (user, 2026-08-25) */
+	.detailmap :global(.zoomctl) {
+		top: 46px;
+	}
 	.detailmap :global(.map) {
 		background: #f2f2f2;
 		border: 1px solid var(--line);

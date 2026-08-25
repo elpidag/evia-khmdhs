@@ -480,6 +480,8 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             "authorities": queries_extra.authorities_index(g.conn, dase),
             # the rest of the ΥΠΕΝ network — units with no recorded contracts
             "other_units": queries_extra.forest_units_extra(g.conn),
+            # the map's other two dot populations (user, 2026-08-25)
+            **queries_extra.authorities_map_points(g.conn, dase),
         })
 
     @app.route("/api/authority/<slug>")

@@ -872,10 +872,9 @@
 			<PaperMap
 				width={mapW || 460}
 				height={mapH}
-				interactive={false}
 				fitPoints={worksPoints}
 				fitPes={worksPes}
-				fitPad={0.26}
+				fitPad={0.15}
 				colorOf={(pe) => (regionSet.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, #fff)' : '#fff')}
 				tipOf={(pe) => `<strong>${ruLabel(pe)}</strong>`}
 			>
@@ -1193,6 +1192,11 @@
 	}
 	/* template map look — same as the sponsored-works maps:
 	   grey sea, no border, no paper shadow */
+	/* the +/−/⌂ stack starts below the MAP/DIAGRAM switch that
+	   occupies the frame's top-right corner (user, 2026-08-25) */
+	.detailmap :global(.zoomctl) {
+		top: 46px;
+	}
 	.detailmap :global(.map) {
 		background: #f2f2f2;
 		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */

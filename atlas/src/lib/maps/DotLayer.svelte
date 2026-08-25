@@ -137,7 +137,7 @@
 			r={radius(p) * (hot ? 1.5 : 1)}
 			fill={fillOf(p)}
 			fill-opacity={fillOpacityOf?.(p)}
-			stroke={hot ? 'var(--ink)' : stroke}
+			stroke={hot ? (stroke === 'none' ? 'none' : 'var(--ink)') : stroke}
 			stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
 			stroke-dasharray={dashOf?.(p)}
 			opacity={hot ? 1 : opacity}
@@ -152,7 +152,7 @@
 				r={radius(p) * (hot ? 1.5 : 1)}
 				fill={fillOf(p)}
 				fill-opacity={fillOpacityOf?.(p)}
-				stroke={hot ? 'var(--ink)' : stroke}
+				stroke={hot ? (stroke === 'none' ? 'none' : 'var(--ink)') : stroke}
 				stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
 				stroke-dasharray={dashOf?.(p)}
 				opacity={hot ? 1 : opacity}
@@ -168,7 +168,7 @@
 			r={radius(p) * (hot ? 1.5 : 1)}
 			fill={fillOf(p)}
 			fill-opacity={fillOpacityOf?.(p)}
-			stroke={hot ? 'var(--ink)' : stroke}
+			stroke={hot ? (stroke === 'none' ? 'none' : 'var(--ink)') : stroke}
 			stroke-width={(hot ? 1.8 : 0.8) / ctx.k}
 			stroke-dasharray={dashOf?.(p)}
 			opacity={hot ? 1 : opacity}

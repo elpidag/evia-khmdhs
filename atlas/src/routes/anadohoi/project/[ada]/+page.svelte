@@ -11,7 +11,7 @@
 	import { COLOR, NODATE_COLOR } from '$lib/charts/ganttTheme';
 	import type { Feature, LineString, MultiLineString, Polygon, MultiPolygon } from 'geojson';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
-	import { fireEn } from '$lib/transforms/names';
+	import { fireEn, locationEn } from '$lib/transforms/names';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -273,9 +273,9 @@
 			(worksZones?.length && !sitePins.length
 				? ''
 				: 'Each dot is a work site NAMED in a document of the trail, placed by geocoding ' +
-					'that name: at the named θέση where the document gives one, at the ' +
-					"municipality's centre where it names only a municipality (flagged «κατά " +
-					'προσέγγιση» on hover). ' +
+					'that name: at the named locality where the document gives one, at the ' +
+					"municipality's centre where it names only a municipality (flagged " +
+					'«approximate» on hover). ' +
 					(hasTrueSize
 						? 'Where a document states the intervention area, the dot is drawn at that ' +
 							'area’s true size at map scale (a minimum size applies when zoomed out). '
@@ -284,7 +284,7 @@
 				? 'River courses named by the act are drawn from OpenStreetMap — © OpenStreetMap ' +
 					'contributors, approximate. '
 				: '') +
-			'Fire perimeters are satellite estimates, not official οριοθετήσεις — © European ' +
+			'Fire perimeters are satellite estimates, not official delimitation acts — © European ' +
 			'Union, Copernicus Emergency Management Service — EFFIS.'
 	);
 
@@ -408,7 +408,8 @@
 				</dd>
 			{/if}
 			<dt>Location <small class="muted">as named in the designation act</small></dt>
-			<dd>{p.location_text ?? '—'}</dd>
+			<!-- curated EN (the act's verbatim Greek lives in the extracts) -->
+			<dd>{locationEn(p.location_text) || '—'}</dd>
 		{/snippet}
 		{#snippet map()}
 			<!-- ONE map per card: zone projects draw their pinned sites ON
@@ -421,6 +422,7 @@
 					sites={sitePins}
 					pinColor={barColor}
 					areaStremmata={capsuleArea}
+					pes={p.pe ? [p.pe] : []}
 				/>
 			{:else if sitePins.length || scarFeats.length}
 				<SiteMap
@@ -431,6 +433,7 @@
 					selectedId={hoverFireId}
 					rivers={riverFeats}
 					pinColor={barColor}
+					pes={p.pe ? [p.pe] : []}
 				/>
 			{/if}
 		{/snippet}

@@ -2986,6 +2986,46 @@ def authorities_index(kh: sqlite3.Connection,
                   key=lambda r: -(r["antinero_eur"] + r["dase_eur"]))
 
 
+def authorities_map_points(kh: sqlite3.Connection,
+                           dase: sqlite3.Connection | None) -> dict:
+    """The /authorities map's OTHER two dot populations (user, 2026-08-25):
+    the forest-authority seats already ride in `authorities_index`; this
+    adds every ΔΑΣΕ co-operative at its registered office and every
+    Anti-nero contractor at its seat, so the map can show any of the three
+    — or all at once — as dots. Values on the caller's basis (stated net
+    through the Atlas shims), even-split like every per-entity surface."""
+    out: dict = {"coops": [], "contractors": []}
+    if dase is not None and _table(dase, "contractor_locations"):
+        loc = {r["vat_number"]: r for r in dase.execute(
+            "SELECT vat_number, lat, lon, region_pe, city, geo_precision"
+            "  FROM contractor_locations WHERE lat IS NOT NULL")}
+        names = dase_display_names(dase)
+        for a in dq._coop_rows(dase):
+            r = loc.get(a["vat"])
+            if r is None:
+                continue
+            nm = names.get(a["vat"]) or {}
+            out["coops"].append({
+                "vat": a["vat"],
+                "name": nm.get("el") or a["name"],
+                "name_en": nm.get("en"),
+                "lat": r["lat"], "lon": r["lon"],
+                "pe": r["region_pe"], "place": r["city"],
+                "n_contracts": a["n_contracts"],
+                "total_eur": a["total_eur"],
+            })
+        out["coops"].sort(key=lambda x: -x["total_eur"])
+    pts = [dict(pt) for pt in q.contractor_points(kh)["points"]]
+    display = antinero_display_names(kh)
+    for pt in pts:
+        d = display.get((pt.get("vat") or "").strip())
+        if d and pt.get("name") != d["el"]:
+            pt["registry_name"] = pt.get("name")
+            pt["name"] = d["el"]
+    out["contractors"] = sorted(pts, key=lambda x: -(x["total_eur"] or 0.0))
+    return out
+
+
 def forest_units_extra(kh: sqlite3.Connection) -> list[dict]:
     """ΥΠΕΝ directory units OUTSIDE the contract registry (DATA_DECISIONS
     2026-08-17): the parts of the forest-service network with no recorded

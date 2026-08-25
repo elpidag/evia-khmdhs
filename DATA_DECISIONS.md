@@ -9387,3 +9387,170 @@ becomes the key strip of the dataset pages (grey #f2f2f2 rounded band
 ABOVE the chart, fs-14, round dots), was a bare fs-13 flex row under
 it. MONEY PER YEAR's side headings and REGION BY REGION's column heads
 already matched.
+
+## 2026-08-25 · Detail-page maps frame the whole Π.Ε.; controls everywhere (user)
+
+**Decision.** On every contract and act detail page the map frames the
+WHOLE regional unit(s) of the works: SiteMap and ZoneMap resolve the
+containing Π.Ε. of every site pin and every linked EFFIS scar (d3
+`geoContains`; the scar by its centroid), add the project's own stated
+Π.Ε. (`pes` prop), and fit the union of those regions whole — the
+geometry only extends the frame when it pokes beyond. This supersedes
+the 2026-08-16 fire-framed window (scar bbox + 0.35°/0.27° floors,
+width-fit shared among same-fire cards), which stays only as the
+fallback while the Π.Ε. layer loads. Multi-regional projects therefore
+show all their regional units; a border project's window is anchored on
+Greece — Δαδιά used to show more of Turkey than of Έβρος.
+
+**Controls.** Every detail map now carries the +/−/⌂ buttons: SiteMap's
+are unconditional (they used to appear only on multi-site or fire maps),
+ZoneMap gained the whole zoom/drag plumbing (it had none), and the two
+contract pages' PaperMaps dropped `interactive={false}` — their +/−/⌂
+stack starts below the MAP/DIAGRAM switch (46 px), and `fitPad` tightened
+0.26 → 0.15 so a border Π.Ε. keeps its surround modest. Fixed en route:
+SiteMap's component-wide `svg` rule (grey ground + hairline + radius)
+was painting each zoom-button GLYPH as a bordered grey box — the reason
+the sponsored-works buttons «did not appear well»; the glyphs now reset
+background/border.
+
+**Same day, round two (user):** SiteMap and ZoneMap also DRAW the
+context now — they never loaded the neighbours layer, so a border frame
+(the Έβρος projects) rendered Turkey and Bulgaria as open sea. Both
+components load `neighbours.geojson` and follow PaperMap's conventions
+exactly: context land white with the #c4c4c4 hairline coast under the
+Greek polygons, Athos included, and the dashed black land border drawn
+above the fills — with the neighbours in white, that line is what says
+where Greece ends.
+
+## 2026-08-25 · /authorities in the dataset pages' dress; one map, three populations (user)
+
+The AUTHORITIES page redressed to the dataset pages' presentation:
+kicker hero + `.basis` line, the harmonised KPI row kept, ChartFrame
+sections with kicker titles and bulbs in the ink (`.authp`), the map on
+the shared #f2f2f2 ground with ink zoom buttons, the legend as the key
+strip above the map. **The map takes a mode switch** (`?show=`,
+CONTRACT VALUES' segmented dress): Forest authorities (default) ·
+Forest co-ops · Anti-nero contractors · All. The authorities lens keeps
+the presence information the old legend carried, drawn legibly at last —
+black dot = hosts Anti-nero works, GREEN CORE on the black dot = also
+awards ΔΑΣΕ contracts (the old palette's «Anti-nero only» black was
+indistinguishable from «both» ink), green = ΔΑΣΕ awards only, pale =
+neither, hollow = the rest of the ΥΠΕΝ network. The co-op and contractor
+lenses put each population at its registered office (dots link to their
+pages); the ALL lens shows all three at once — authority seats in the
+/dase map's forest-directorate green #406e55, co-ops in the ΔΑΣΕ green,
+contractors in ink. Payload: `coops` + `contractors` on
+`/api/authorities` (`queries_extra.authorities_map_points`): the co-op
+dots are the 246 located registered offices of the live population and
+their even-split € sum to the ΔΑΣΕ stated-net basis €29.920.558,46 to
+the cent; the contractor dots are the 151 in-scope Anti-nero contractors
+at their document-stated seats with display names overlaid
+(`test_authorities_map_points_pins`).
+
+## 2026-08-25 · NETWORKS OF ACTORS; the LOCATION row in English (user, third round)
+
+**/authorities is NETWORKS OF ACTORS** (nav label, kicker, page title; the
+route stays): the hero numbers drop to a modest size (`.stat .value`
+fs-20), and the MAP is the page's key element — map left, and beside it
+the list OF THE NETWORK THE MAP IS SHOWING (authorities with both
+datasets' n·€ in their colours / co-ops by € / contractors by €; the ALL
+lens gets a three-line summary), scrollable at the map's height, linked
+to the dots by HOVER both ways (`hovKey` ↔ DotLayer `hotOf`; rows and
+dots both link to the entity pages).
+
+**The detail pages' left text carries no mixed Greek-English prose**
+(user): the sponsored LOCATION row now prints curated English —
+`khmdhs/data/anadohoi_locations_en.json`, 61 entries covering every
+`location_text` in the DB (the 2026-08-16 proposal's conventions:
+pe_names_en region forms, authority EN titles, «municipal unit of» /
+«local community of», stremmata; toponyms transliterated), byte-identical
+atlas copy, `names.locationEn()` with the honest Greek fallback, pinned
+by `test_location_names_en_pins` (coverage + NO Greek script in the
+values); the act's verbatim Greek stays in EXTRACTED QUOTES. The caveat's
+θέση/κατά προσέγγιση/οριοθετήσεις became locality/approximate/
+delimitation acts, and the map cards' «στρ.» qualifiers read
+«stremmata» / «(approximate)». Entity names (companies, co-ops) stay
+Greek by the standing decisions. The map's lower edge continues to track
+the left column's end (`FactsHeader leftHeight` → map height — the
+2026-08-16 mechanism, reconfirmed).
+
+## 2026-08-26 · NETWORK OF ACTORS trimmed to map + searchable lists (user)
+
+The page opens with the MAP frame — titled «NETWORK OF ACTORS» — and
+nothing before it: the hero paragraph, the basis line and the KPI row are
+gone (the basis facts moved into the map frame's caveat). Below it ONE
+listing frame follows the map's `?show=` mode — FOREST AUTHORITIES /
+FOREST CO-OPS / ANTI-NERO CONTRACTORS / ALL ACTORS — with a SEARCH box
+(accent-folded, matches the English and the Greek registry spellings), so
+the three populations are all listed on this page (they previously lived
+only on /antinero/contractors and /dase/coops). The authorities table
+drops the Greek «Δασαρχείο» chip (the English name already says the
+kind), the column header reads «Regional unit», and THE REST OF THE
+NETWORK section is gone — the 49 no-contract ΥΠΕΝ directory units fold
+into the authorities list as muted dash rows, their address/contact
+columns dropped. The 61 LOCATION translations went to the user as a
+numbered review artifact («Location Register»); verdicts pending.
+
+**Same day, the map corrected (user):** the frame is the crew map's
+exactly (640×620, view centre 23.8305/38.3566, k 1.08 — THE FOREST
+CO-OPS THE SPONSORS ENGAGED); NO outlines on any dot (`stroke="none"`
+on every layer, and DotLayer's hot state keeps none when a layer asks
+for none — the hover emphasis is the growth alone); and the forest
+authorities wear ONE colour in every lens — the /dase map's
+forest-directorate green #406e55 — because black in the authorities
+lens turned into the contractors' black on the ALL toggle. The
+authorities legend shrank to its three TRUE categories: «awards ΔΑΣΕ
+contracts only» described nobody (measured 0 — no authority awards
+co-op contracts without hosting Anti-nero works), and «neither» (2
+registry services) merged with the 49 hollow directory units into one
+pale «no contracts recorded in either dataset» — the old distinction
+was provenance (contract registry vs ΥΠΕΝ directory), not meaning.
+
+**Same day, round three (user):** the side list is EXACTLY as tall as
+the rendered map (`bind:clientHeight` on the holder → the panel's
+height); the no-contract grey darkened #cfcfcf → #a6a6a6 (it read as
+sea); the ALL panel lost its «The three networks» heading and its
+switch-hint note (self-explanatory); and the listing frame is PAGINATED
+— the user chose page controls over top-N+search, region folds and an
+alphabet index — 25 rows a page, a windowed «‹ 1 2 … 10 ›» pager per
+table, search or a mode switch resetting to page 1; the authorities
+table pages its registry rows and the folded directory units as one
+sequence.
+
+**Same day, round four (user):** the LEGEND moved into the right column
+— its grey band's top edge flush with the map's upper hairline, ONE
+full sentence per line («forest authority whose area hosts Anti-nero
+works», «the light core: it also awards ΔΑΣΕ contracts itself», …)
+instead of chip-speak, and in the ALL lens it carries the three
+counts+Σ (the separate summary block died); the side list gained
+COLUMN LABELS over its values (ANTI-NERO · ΔΑΣΕ / contracts · €) and
+moved to fs-13, the legend at the key strips' fs-14 — the Anti-nero
+page's sizes. And the three population lists are PERMANENT frames below
+the map (FOREST AUTHORITIES · FOREST CO-OPS · ANTI-NERO CONTRACTORS,
+each with its own search and pager) — behind the map's toggle the user
+could not find the co-op and contractor lists at all.
+
+**Same day, round five (user):** the three stacked list frames became
+ONE frame with its own toggle (Forest authorities / Forest co-ops /
+Anti-nero contractors beside one search on the title line; title and
+caveat follow the selection, each table keeps its pager); the
+authorities legend rephrased — the switch above already names the
+population, so the lines describe the dot plainly («Anti-nero
+contractors work on its territory» / «the light centre: it also
+awards ΔΑΣΕ contracts to forest co-ops»); and the side list's column
+labels print in the site's own spellings («Anti-nero» / «ΔΑΣΕ», no
+caps transform) centred over their columns.
+
+**Same day, round six — the legend texts are the user's verbatim:**
+authorities lens «responsible for supervision of Anti-nero works in its
+territory» / «…and contracts awarded to forest workers' co-operatives
+in its territory» / «no contracts recorded in its territory within this
+research»; ALL lens «105 forest authority seats» / «registered base for
+forest workers' co-operatives (246 found within this research; the
+official registry of the Ministry of Environment is not openly
+accessible)» / «registered offices for contractors of the Anti-nero
+works (151)» — the € totals left the ALL lines with them. Counts stay
+computed; polish applied: workers's→workers', antinero→Anti-nero (the
+site's spelling). The co-ops and contractors lenses wear the SAME lines
+as their ALL entries, and the seats line reads «forest authority seats
+(105)» — count in parentheses like its siblings.

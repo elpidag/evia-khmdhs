@@ -6,10 +6,18 @@
 	 *  never two. Hovering the fire shows date · ha (black top-left
 	 *  card); zone outlines and site dots share the bottom-left card.
 	 *  Data loads post-hydration. */
-	import { geoMercator, geoPath } from 'd3-geo';
+	import { geoContains, geoMercator, geoPath } from 'd3-geo';
 	import type { Feature, FeatureCollection, Polygon, MultiPolygon } from 'geojson';
 	import { dmy, grInt } from '$lib/transforms/format';
-	import { loadEviaZones, loadPe, type FireProps, type PeProps, type ZoneProps } from './useGeo';
+	import {
+		loadEviaZones,
+		loadNeighbours,
+		loadPe,
+		type FireProps,
+		type NeighbourProps,
+		type PeProps,
+		type ZoneProps
+	} from './useGeo';
 	import type { SitePin } from './SiteMap.svelte';
 
 	interface Props {
@@ -28,6 +36,8 @@
 		 *  this true area — the smallest such shape; boundaries invented,
 		 *  size and anchors documented */
 		areaStremmata?: number | null;
+	/** the project's own Π.Ε. name(s) — always framed whole */
+		pes?: string[];
 	}
 	let {
 		zones,
@@ -35,7 +45,8 @@
 		height = 340,
 		sites = [],
 		pinColor = 'var(--c-anadohoi)',
-		areaStremmata = null
+		areaStremmata = null,
+		pes = []
 	}: Props = $props();
 
 	const W = 460;
@@ -46,11 +57,22 @@
 	let zoneTip = $state<string | null>(null);
 	let siteTip = $state<string | null>(null);
 
+	/** zoom state: k = magnification, dx/dy = frame-centre offset (degrees) */
+	let zoom = $state({ k: 1, dx: 0, dy: 0 });
+	let svgEl = $state<SVGSVGElement | null>(null);
+	let dragging = false;
+
 	let pe = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
 	let fc = $state.raw<FeatureCollection<Polygon | MultiPolygon, ZoneProps> | null>(null);
+	/** context land (neighbours + Athos) + the dashed Greek land border */
+	let land = $state.raw<FeatureCollection<
+		Polygon | MultiPolygon | GeoJSON.MultiLineString,
+		NeighbourProps
+	> | null>(null);
 	$effect(() => {
 		loadPe(fetch).then((v) => (pe = v));
 		loadEviaZones(fetch).then((v) => (fc = v));
+		loadNeighbours(fetch).then((v) => (land = v));
 	});
 
 	// the padded lon/lat frame + zone selection. With linked burn scars
@@ -60,44 +82,54 @@
 	// (the ≥0.35°/0.27° pad floors keep the whole upper island in view);
 	// zones/sites only extend it when they poke beyond the padding.
 	const frameBox = $derived.by(() => {
-		if (!fc) return null;
+		if (!fc || !pe) return null;
 		const sel = fc.features.filter((f) => zones.includes(f.properties.zone));
 		if (!sel.length) return null;
 		const path0 = geoPath();
 		let [gx0, gy0, gx1, gy1] = [Infinity, Infinity, -Infinity, -Infinity];
-		for (const f of sel) {
-			const b = path0.bounds(f); // lon/lat planar bounds
-			gx0 = Math.min(gx0, b[0][0]); gy0 = Math.min(gy0, b[0][1]);
-			gx1 = Math.max(gx1, b[1][0]); gy1 = Math.max(gy1, b[1][1]);
+		const grow = (x0: number, y0: number, x1: number, y1: number) => {
+			gx0 = Math.min(gx0, x0); gy0 = Math.min(gy0, y0);
+			gx1 = Math.max(gx1, x1); gy1 = Math.max(gy1, y1);
+		};
+		for (const f of [...sel, ...scars]) {
+			const b = path0.bounds(f as Feature); // planar lon/lat bounds
+			grow(b[0][0], b[0][1], b[1][0], b[1][1]);
 		}
-		for (const s of sites) {
-			gx0 = Math.min(gx0, s.lon); gy0 = Math.min(gy0, s.lat);
-			gx1 = Math.max(gx1, s.lon); gy1 = Math.max(gy1, s.lat);
-		}
-		if (scars.length) {
-			let [fx0, fy0, fx1, fy1] = [Infinity, Infinity, -Infinity, -Infinity];
-			for (const f of scars) {
-				const b = path0.bounds(f as Feature);
-				fx0 = Math.min(fx0, b[0][0]); fy0 = Math.min(fy0, b[0][1]);
-				fx1 = Math.max(fx1, b[1][0]); fy1 = Math.max(fy1, b[1][1]);
+		for (const s of sites) grow(s.lon, s.lat, s.lon, s.lat);
+		// THE FRAME IS THE REGIONAL UNIT(S) (user, 2026-08-25; same rule as
+		// SiteMap): the Π.Ε. containing the zones/scars — plus the project's
+		// own — appear WHOLE; for the Εύβοια zones that is the whole island
+		const seen = new Set<string>();
+		const homePes: Feature<MultiPolygon, PeProps>[] = [];
+		const addPe = (f?: Feature<MultiPolygon, PeProps>) => {
+			if (f && !seen.has(f.properties.pe)) {
+				seen.add(f.properties.pe);
+				homePes.push(f);
 			}
-			// x floor 0.40°: at exact width-fit the shown window IS the
-			// frame, and 0.35° just clips the Λιχάδα cape tip on Εύβοια
-			const px = Math.max((fx1 - fx0) * 0.18, 0.4);
-			const py = Math.max((fy1 - fy0) * 0.18, 0.27);
-			return {
-				sel,
-				X0: Math.min(fx0 - px, gx0 - 0.03),
-				X1: Math.max(fx1 + px, gx1 + 0.03),
-				Y0: Math.min(fy0 - py, gy0 - 0.03),
-				Y1: Math.max(fy1 + py, gy1 + 0.03)
-			};
+		};
+		for (const name of pes) addPe(pe.features.find((f) => f.properties.pe === name));
+		for (const f of [...sel, ...scars]) {
+			const c = path0.centroid(f as Feature);
+			if (Number.isFinite(c[0]))
+				addPe(pe.features.find((g) => geoContains(g, c as [number, number])));
 		}
-		const sx = gx1 - gx0;
-		const sy = gy1 - gy0;
-		const padx = Math.max(sx * 0.18, 0.35);
-		const pady = Math.max(sy * 0.18, 0.27);
-		return { sel, X0: gx0 - padx, X1: gx1 + padx, Y0: gy0 - pady, Y1: gy1 + pady };
+		for (const s of sites) addPe(pe.features.find((f) => geoContains(f, [s.lon, s.lat])));
+		if (homePes.length) {
+			for (const f of homePes) {
+				const b = path0.bounds(f as Feature);
+				grow(b[0][0], b[0][1], b[1][0], b[1][1]);
+			}
+		}
+		const padScale = homePes.length ? 0.05 : 0.18;
+		const padx = Math.max((gx1 - gx0) * padScale, homePes.length ? 0.05 : 0.35);
+		const pady = Math.max((gy1 - gy0) * padScale, homePes.length ? 0.04 : 0.27);
+		return {
+			sel,
+			cx: (gx0 + gx1) / 2,
+			cy: (gy0 + gy1) / 2,
+			hx: (gx1 - gx0) / 2 + padx,
+			hy: (gy1 - gy0) / 2 + pady
+		};
 	});
 
 	/** frame polygon, wound CLOCKWISE — d3-geo spherical polygons invert otherwise */
@@ -112,30 +144,14 @@
 	const view = $derived.by(() => {
 		if (!pe || !frameBox) return null;
 		const { sel } = frameBox;
-		const frame = frameGeo(frameBox);
+		const cx = frameBox.cx + zoom.dx;
+		const cy = frameBox.cy + zoom.dy;
+		const hx = frameBox.hx / zoom.k;
+		const hy = frameBox.hy / zoom.k;
+		const frame = frameGeo({ X0: cx - hx, X1: cx + hx, Y0: cy - hy, Y1: cy + hy });
 		const proj = geoMercator();
-		if (scars.length) {
-			// fire-framed: fit by WIDTH at constant scale and centre the
-			// frame vertically — same-fire cards share one zoom and one
-			// horizontal window whatever each card's column height is;
-			// taller/shorter cards only gain/lose vertical PADDING context
-			proj.fitWidth(W - 12, frame);
-			const fb = geoPath(proj).bounds(frame);
-			const t = proj.translate();
-			proj.translate([t[0] + 6, t[1] + (H - (fb[1][1] - fb[0][1])) / 2 - fb[0][1]]);
-			// never crop the SCAR itself: a very short column falls back
-			// to a both-dims fit (padding may crop, the scar may not)
-			let [sy0, sy1] = [Infinity, -Infinity];
-			const p0 = geoPath(proj);
-			for (const f of scars) {
-				const b = p0.bounds(f as Feature);
-				sy0 = Math.min(sy0, b[0][1]);
-				sy1 = Math.max(sy1, b[1][1]);
-			}
-			if (sy1 - sy0 > H - 12) proj.fitExtent([[6, 6], [W - 6, H - 6]], frame);
-		} else {
-			proj.fitExtent([[6, 6], [W - 6, H - 6]], frame);
-		}
+		// one both-dims fit: the whole Π.Ε. must show (user, 2026-08-25)
+		proj.fitExtent([[6, 6], [W - 6, H - 6]], frame);
 		const path = geoPath(proj);
 		// all Π.Ε. polygons — the whole-scar frame reaches the mainland
 		// coast across the strait, which must not render as open sea
@@ -181,15 +197,69 @@
 		}
 		return { path, sel, land, pins, capsule };
 	});
+
+	const zoomIn = () => (zoom = { ...zoom, k: Math.min(16, zoom.k * 1.6) });
+	const zoomOut = () => {
+		const k = Math.max(1, zoom.k / 1.6);
+		zoom = k === 1 ? { k: 1, dx: 0, dy: 0 } : { ...zoom, k };
+	};
+	const home = () => (zoom = { k: 1, dx: 0, dy: 0 });
+
+	function onPointerDown(e: PointerEvent) {
+		if (zoom.k <= 1) return;
+		dragging = true;
+		(e.currentTarget as Element).setPointerCapture(e.pointerId);
+	}
+	function onPointerMove(e: PointerEvent) {
+		if (!dragging || !svgEl || !frameBox) return;
+		const unitPerPx = W / svgEl.clientWidth; // css px → viewBox units
+		const degX = (2 * frameBox.hx) / zoom.k / (W - 12);
+		const degY = (2 * frameBox.hy) / zoom.k / (H - 12);
+		zoom = {
+			k: zoom.k,
+			dx: zoom.dx - e.movementX * unitPerPx * degX,
+			dy: zoom.dy + e.movementY * unitPerPx * degY
+		};
+	}
+	function onPointerUp() {
+		dragging = false;
+	}
 </script>
 
 {#if view && fc}
 	<figure class="zonemap">
 		<div class="mapbox">
-		<svg viewBox="0 0 {W} {H}" role="img" aria-label="Works zone of this project">
+		<!-- svelte-ignore a11y_no_static_element_interactions, a11y_no_noninteractive_element_interactions -->
+		<svg
+			bind:this={svgEl}
+			viewBox="0 0 {W} {H}"
+			role="img"
+			aria-label="Works zone of this project"
+			class:grab={zoom.k > 1}
+			onpointerdown={onPointerDown}
+			onpointermove={onPointerMove}
+			onpointerup={onPointerUp}
+			onpointercancel={onPointerUp}
+		>
+			{#if land}
+				<!-- context land first: the Greek polygons paint over the overlap -->
+				{#each land.features as f, i (i)}
+					{#if f.properties.kind !== 'border'}
+						<path class="context" d={view.path(f) ?? ''} />
+					{/if}
+				{/each}
+			{/if}
 			{#each view.land as f (f.properties.pe)}
 				<path d={view.path(f) ?? ''} class="land" />
 			{/each}
+			{#if land}
+				<!-- the dashed Greek land border, PaperMap's convention -->
+				{#each land.features as f, i (i)}
+					{#if f.properties.kind === 'border'}
+						<path class="gr-border" d={view.path(f) ?? ''} />
+					{/if}
+				{/each}
+			{/if}
 			{#each scars as f (f.properties.id)}
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<path
@@ -227,7 +297,7 @@
 					style:stroke={pinColor}
 					stroke-width={2 * c.rpx}
 					onmouseenter={() =>
-						(siteTip = `announced area, drawn schematically — ${grInt(areaStremmata ?? 0)} στρ.`)}
+						(siteTip = `announced area, drawn schematically — ${grInt(areaStremmata ?? 0)} stremmata`)}
 					onmouseleave={() => (siteTip = null)}
 				/>
 			{/if}
@@ -242,12 +312,18 @@
 					onmouseenter={() =>
 						(siteTip =
 							s.name +
-							(s.stremmata ? ` — ${grInt(s.stremmata)} στρ.` : '') +
-							(APPROX.has(s.geo_precision ?? '') ? ' (κατά προσέγγιση)' : ''))}
+							(s.stremmata ? ` — ${grInt(s.stremmata)} stremmata` : '') +
+							(APPROX.has(s.geo_precision ?? '') ? ' (approximate)' : ''))}
 					onmouseleave={() => (siteTip = null)}
 				/>
 			{/each}
 		</svg>
+		<!-- controls on EVERY map (user, 2026-08-25) -->
+		<div class="zoomctl">
+			<button onclick={zoomIn} title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M5 1h2v4h4v2H7v4H5V7H1V5h4z" fill="currentColor"/></svg></button>
+			<button onclick={zoomOut} title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M1 5h10v2H1z" fill="currentColor"/></svg></button>
+			<button onclick={home} title="Reset view" aria-label="Reset view"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M6 1l4.4 3.4V11H1.6V4.4z" fill="currentColor"/></svg></button>
+		</div>
 		{#if fireTip}
 			<div class="tip">{fireTip}</div>
 		{/if}
@@ -279,12 +355,36 @@
 		/* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		border: 1px solid var(--line);
 		border-radius: 4px;
+	touch-action: none;
+	}
+	svg.grab {
+		cursor: grab;
 	}
 	.land {
 		fill: #fff;
 		stroke: var(--line);
 		stroke-width: 0.7;
 	}
+	/* the context land and the dashed Greek land border — PaperMap's
+	   conventions (user, 2026-08-25: a border frame without them read as
+	   if the neighbouring country were open sea) */
+	.context {
+		fill: #fff;
+		stroke: #c4c4c4;
+		stroke-width: 0.5;
+		vector-effect: non-scaling-stroke;
+		pointer-events: none;
+	}
+	.gr-border {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 0.9;
+		stroke-dasharray: 4 3;
+		stroke-linecap: butt;
+		vector-effect: non-scaling-stroke;
+		pointer-events: none;
+	}
+
 	/* solid fire tone, same as SiteMap — no alpha */
 	.scar {
 		fill: color-mix(in srgb, #6b2d35 85%, #fff);
@@ -315,6 +415,40 @@
 	}
 	.capsule:hover {
 		opacity: 0.7;
+	}
+	.zoomctl {
+		position: absolute;
+		top: var(--sp-2);
+		right: var(--sp-2);
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.zoomctl button {
+		font: inherit;
+		line-height: 0;
+		width: 1.45rem;
+		height: 1.45rem;
+		padding: 0;
+		display: grid;
+		place-items: center;
+		border: none;
+		border-radius: 50%;
+		background: var(--map-accent, var(--c-anadohoi));
+		color: #fff;
+		cursor: pointer;
+	}
+	.zoomctl button:hover {
+		opacity: 0.82;
+	}
+	.zoomctl button svg {
+		width: 9.5px;
+		height: 9.5px;
+		display: block;
+		/* undo the component's map-svg dress on the glyphs */
+		background: none;
+		border: none;
+		border-radius: 0;
 	}
 	.tip {
 		position: absolute;

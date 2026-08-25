@@ -8,9 +8,16 @@
 	 *  buttons); attribution lives in the FactsHeader caveat. Renders
 	 *  scar-only when the project has scars but no pinned sites.
 	 *  Multi-site maps get +/−/⌂ zoom buttons (drag pans while zoomed). */
-	import { geoMercator, geoPath } from 'd3-geo';
+	import { geoContains, geoMercator, geoPath } from 'd3-geo';
 	import { dmy, grInt } from '$lib/transforms/format';
-	import { loadPe, type FireProps, type PeProps, type RiverProps } from './useGeo';
+	import {
+		loadNeighbours,
+		loadPe,
+		type FireProps,
+		type NeighbourProps,
+		type PeProps,
+		type RiverProps
+	} from './useGeo';
 	import type {
 		Feature,
 		FeatureCollection,
@@ -44,6 +51,8 @@
 		rivers?: Feature<LineString | MultiLineString, RiverProps>[];
 		/** pin fill — the project's timeline-bar colour (identity hue) */
 		pinColor?: string;
+		/** the project's own Π.Ε. name(s) — always framed whole */
+		pes?: string[];
 	}
 	let {
 		sites,
@@ -52,7 +61,8 @@
 		fireColorOf = () => 'color-mix(in srgb, #6b2d35 85%, #fff)',
 		selectedId = null,
 		rivers = [],
-		pinColor = 'var(--c-anadohoi)'
+		pinColor = 'var(--c-anadohoi)',
+		pes = []
 	}: Props = $props();
 
 	const W = 460;
@@ -60,8 +70,14 @@
 	const APPROX = new Set(['municipality', 'pe']);
 
 	let pe = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
+	/** context land (neighbours + Athos) + the dashed Greek land border */
+	let land = $state.raw<FeatureCollection<
+		Polygon | MultiPolygon | MultiLineString,
+		NeighbourProps
+	> | null>(null);
 	$effect(() => {
 		loadPe(fetch).then((v) => (pe = v));
+		loadNeighbours(fetch).then((v) => (land = v));
 	});
 
 	/** zoom state: k = magnification, dx/dy = frame-centre offset (degrees) */
@@ -85,39 +101,50 @@
 		if (!pe || (!sites.length && !scars.length)) return null;
 		const path0 = geoPath();
 		let [gx0, gy0, gx1, gy1] = [Infinity, Infinity, -Infinity, -Infinity];
-		for (const s of sites) {
-			gx0 = Math.min(gx0, s.lon);
-			gy0 = Math.min(gy0, s.lat);
-			gx1 = Math.max(gx1, s.lon);
-			gy1 = Math.max(gy1, s.lat);
-		}
-		for (const f of rivers) {
+		const grow = (x0: number, y0: number, x1: number, y1: number) => {
+			gx0 = Math.min(gx0, x0); gy0 = Math.min(gy0, y0);
+			gx1 = Math.max(gx1, x1); gy1 = Math.max(gy1, y1);
+		};
+		for (const s of sites) grow(s.lon, s.lat, s.lon, s.lat);
+		for (const f of [...rivers, ...scars]) {
 			const b = path0.bounds(f as Feature); // planar lon/lat bounds
-			gx0 = Math.min(gx0, b[0][0]);
-			gy0 = Math.min(gy0, b[0][1]);
-			gx1 = Math.max(gx1, b[1][0]);
-			gy1 = Math.max(gy1, b[1][1]);
+			grow(b[0][0], b[0][1], b[1][0], b[1][1]);
 		}
-		if (scars.length) {
-			let [fx0, fy0, fx1, fy1] = [Infinity, Infinity, -Infinity, -Infinity];
-			for (const f of scars) {
-				const b = path0.bounds(f);
-				fx0 = Math.min(fx0, b[0][0]);
-				fy0 = Math.min(fy0, b[0][1]);
-				fx1 = Math.max(fx1, b[1][0]);
-				fy1 = Math.max(fy1, b[1][1]);
+		// THE FRAME IS THE REGIONAL UNIT(S) (user, 2026-08-25): every Π.Ε.
+		// that contains a site or a scar — plus the project's own stated
+		// Π.Ε. — appears WHOLE, so the window is anchored on Greece even at
+		// the border (Δαδιά used to show more of Turkey than of Έβρος);
+		// sites/scars only extend the frame when they poke beyond it. The
+		// old scar-bbox frame with its ≥0.35°/0.27° floors stays as the
+		// fallback while the Π.Ε. layer loads or when nothing resolves.
+		const seen = new Set<string>();
+		const homePes: Feature<MultiPolygon, PeProps>[] = [];
+		const addPe = (f?: Feature<MultiPolygon, PeProps>) => {
+			if (f && !seen.has(f.properties.pe)) {
+				seen.add(f.properties.pe);
+				homePes.push(f);
 			}
-			// x floor 0.40°: at exact width-fit the shown window IS the
-			// frame, and 0.35° just clips the Λιχάδα cape tip on Εύβοια
-			const px = Math.max((fx1 - fx0) * 0.18, 0.4);
-			const py = Math.max((fy1 - fy0) * 0.18, 0.27);
-			// never crop a site/river: extend the fire frame when needed
-			// (no-op when the geometry sits inside the padding, the norm)
-			const X0 = Math.min(fx0 - px, gx0 - 0.03);
-			const X1 = Math.max(fx1 + px, gx1 + 0.03);
-			const Y0 = Math.min(fy0 - py, gy0 - 0.03);
-			const Y1 = Math.max(fy1 + py, gy1 + 0.03);
-			return { cx: (X0 + X1) / 2, cy: (Y0 + Y1) / 2, hx: (X1 - X0) / 2, hy: (Y1 - Y0) / 2 };
+		};
+		for (const name of pes) addPe(pe.features.find((f) => f.properties.pe === name));
+		for (const s of sites) addPe(pe.features.find((f) => geoContains(f, [s.lon, s.lat])));
+		for (const f of scars) {
+			const c = path0.centroid(f);
+			if (Number.isFinite(c[0]))
+				addPe(pe.features.find((g) => geoContains(g, c as [number, number])));
+		}
+		if (homePes.length) {
+			for (const f of homePes) {
+				const b = path0.bounds(f as Feature);
+				grow(b[0][0], b[0][1], b[1][0], b[1][1]);
+			}
+			const padx = Math.max((gx1 - gx0) * 0.05, 0.05);
+			const pady = Math.max((gy1 - gy0) * 0.05, 0.04);
+			return {
+				cx: (gx0 + gx1) / 2,
+				cy: (gy0 + gy1) / 2,
+				hx: (gx1 - gx0) / 2 + padx,
+				hy: (gy1 - gy0) / 2 + pady
+			};
 		}
 		const sx = gx1 - gx0;
 		const sy = gy1 - gy0;
@@ -151,44 +178,15 @@
 			]
 		};
 		const proj = geoMercator();
-		if (scars.length) {
-			// fire-framed: fit by WIDTH at constant scale and centre the
-			// frame vertically — same-fire cards share one zoom and one
-			// horizontal window whatever each card's column height is;
-			// taller/shorter cards only gain/lose vertical PADDING context
-			proj.fitWidth(W - 12, frame);
-			const fb = geoPath(proj).bounds(frame);
-			const t = proj.translate();
-			proj.translate([t[0] + 6, t[1] + (H - (fb[1][1] - fb[0][1])) / 2 - fb[0][1]]);
-			// never crop the SCAR itself: at rest (k = 1) a very short
-			// column falls back to a both-dims fit; while the user zooms,
-			// the scar exceeding the viewport is the point
-			if (zoom.k === 1) {
-				let [sy0, sy1] = [Infinity, -Infinity];
-				const p0 = geoPath(proj);
-				for (const f of scars) {
-					const b = p0.bounds(f);
-					sy0 = Math.min(sy0, b[0][1]);
-					sy1 = Math.max(sy1, b[1][1]);
-				}
-				if (sy1 - sy0 > H - 12)
-					proj.fitExtent(
-						[
-							[6, 6],
-							[W - 6, H - 6]
-						],
-						frame
-					);
-			}
-		} else {
-			proj.fitExtent(
-				[
-					[6, 6],
-					[W - 6, H - 6]
-				],
-				frame
-			);
-		}
+		// one both-dims fit: the whole Π.Ε. must show (user, 2026-08-25
+		// — the width-fit shared fire window gave way to it)
+		proj.fitExtent(
+			[
+				[6, 6],
+				[W - 6, H - 6]
+			],
+			frame
+		);
 		const path = geoPath(proj);
 		const baseR = sites.length > 8 ? 4.5 : 6;
 		const pins = sites
@@ -323,9 +321,26 @@
 			onpointercancel={onPointerUp}
 			onclick={onSvgClick}
 		>
+			{#if land}
+				<!-- context land first: the Greek polygons paint over the overlap -->
+				{#each land.features as f, i (i)}
+					{#if f.properties.kind !== 'border'}
+						<path class="context" d={view.path(f) ?? ''} />
+					{/if}
+				{/each}
+			{/if}
 			{#if pe}
 				{#each pe.features as f (f.properties.pe)}
 					<path d={view.path(f) ?? ''} class="land" />
+				{/each}
+			{/if}
+			{#if land}
+				<!-- with the neighbours in white, this dashed line is what says
+				     where Greece ends (PaperMap's convention) -->
+				{#each land.features as f, i (i)}
+					{#if f.properties.kind === 'border'}
+						<path class="gr-border" d={view.path(f) ?? ''} />
+					{/if}
 				{/each}
 			{/if}
 			{#each rivers as f (f.properties.name)}
@@ -371,22 +386,18 @@
 					onmouseenter={() =>
 						(siteTip =
 							s.name +
-							(s.stremmata ? ` — ${grInt(s.stremmata)} στρ.` : '') +
-							(APPROX.has(s.geo_precision ?? '') ? ' (κατά προσέγγιση)' : ''))}
+							(s.stremmata ? ` — ${grInt(s.stremmata)} stremmata` : '') +
+							(APPROX.has(s.geo_precision ?? '') ? ' (approximate)' : ''))}
 					onmouseleave={() => (siteTip = null)}
 				/>
 			{/each}
 		</svg>
-		<!-- controls show wherever zooming is possible: multi-site maps,
-		     any map with a clickable fire, and ALWAYS once zoomed in —
-		     click-to-zoom must never strand the reader without a way back -->
-		{#if sites.length > 1 || scars.length > 0 || zoom.k > 1}
-			<div class="zoomctl">
-				<button onclick={zoomIn} title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M5 1h2v4h4v2H7v4H5V7H1V5h4z" fill="currentColor"/></svg></button>
-				<button onclick={zoomOut} title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M1 5h10v2H1z" fill="currentColor"/></svg></button>
-				<button onclick={home} title="Reset view" aria-label="Reset view"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M6 1l4.4 3.4V11H1.6V4.4z" fill="currentColor"/></svg></button>
-			</div>
-		{/if}
+		<!-- controls on EVERY map (user, 2026-08-25) -->
+		<div class="zoomctl">
+			<button onclick={zoomIn} title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M5 1h2v4h4v2H7v4H5V7H1V5h4z" fill="currentColor"/></svg></button>
+			<button onclick={zoomOut} title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M1 5h10v2H1z" fill="currentColor"/></svg></button>
+			<button onclick={home} title="Reset view" aria-label="Reset view"><svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M6 1l4.4 3.4V11H1.6V4.4z" fill="currentColor"/></svg></button>
+		</div>
 		{#if shownTip}
 			<div class="tip">{shownTip}</div>
 		{/if}
@@ -423,6 +434,26 @@
 		stroke-width: 0.7;
 		vector-effect: non-scaling-stroke;
 	}
+	/* the context land and the dashed Greek land border — PaperMap's
+	   conventions (user, 2026-08-25: a border frame without them read as
+	   if the neighbouring country were open sea) */
+	.context {
+		fill: #fff;
+		stroke: #c4c4c4;
+		stroke-width: 0.5;
+		vector-effect: non-scaling-stroke;
+		pointer-events: none;
+	}
+	.gr-border {
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 0.9;
+		stroke-dasharray: 4 3;
+		stroke-linecap: butt;
+		vector-effect: non-scaling-stroke;
+		pointer-events: none;
+	}
+
 	/* solid per-fire fills arrive inline via fireColorOf */
 	.scar {
 		stroke: #6b2d35;
@@ -501,6 +532,11 @@
 		width: 9.5px;
 		height: 9.5px;
 		display: block;
+		/* undo the component's map-svg dress — it painted each glyph as a
+		   bordered grey box inside the round button (user, 2026-08-25) */
+		background: none;
+		border: none;
+		border-radius: 0;
 	}
 	/* the fire card: black, white lettering, top-left — mirroring the
 	   zoom buttons in the opposite corner; the site card shares the look
