@@ -2523,6 +2523,40 @@ def dase_swarm(dase: sqlite3.Connection) -> dict:
 
 # ----------------------------------------------------------------- compare
 
+def state_funded_dots(kh: sqlite3.Connection, dase: sqlite3.Connection) -> dict:
+    """Every contract of BOTH programmes as one compact dot list — the
+    /compare STATE-FUNDED animation (user, 2026-08-25): one mass of
+    public money, then the two channels, then the recipients. Whole
+    contracts (no split — a dot is a contract), stated net; the two sums
+    reconcile to the pages' own bases and are pinned."""
+    a_ref, a_eur, a_yr = [], [], []
+    for r in kh.execute("""
+        SELECT k.reference_number AS ref, k.total_cost_with_vat AS eur,
+               CAST(strftime('%Y', COALESCE(k.contract_signed_date,
+                                            k.submission_date)) AS INT) AS yr
+        FROM contracts k
+        JOIN contract_scope s ON s.reference_number = k.reference_number
+        WHERE s.in_scope = 1 ORDER BY eur DESC"""):
+        a_ref.append(r["ref"])
+        a_eur.append(round(r["eur"] or 0.0, 2))
+        a_yr.append(r["yr"])
+    d_ref, d_eur, d_yr = [], [], []
+    for r in dase.execute(f"""
+        SELECT k.reference_number AS ref, k.total_cost_without_vat AS eur,
+               CAST(strftime('%Y', COALESCE(k.contract_signed_date,
+                                            k.submission_date)) AS INT) AS yr
+        FROM contracts k WHERE {dq.live_filter('k')} ORDER BY eur DESC"""):
+        d_ref.append(r["ref"])
+        d_eur.append(round(r["eur"] or 0.0, 2))
+        d_yr.append(r["yr"])
+    return {
+        "antinero": {"ref": a_ref, "eur": a_eur, "year": a_yr,
+                     "total_eur": round(sum(a_eur), 2)},
+        "dase": {"ref": d_ref, "eur": d_eur, "year": d_yr,
+                 "total_eur": round(sum(d_eur), 2)},
+    }
+
+
 def pipelines(kh: sqlite3.Connection, dase: sqlite3.Connection) -> dict:
     """The zero-overlap 'two parallel pipelines' payload.
 

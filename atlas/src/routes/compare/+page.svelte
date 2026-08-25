@@ -10,7 +10,7 @@
 	import BarH from '$lib/charts/BarH.svelte';
 	import CompareHist from '$lib/charts/CompareHist.svelte';
 	import PairedBars from '$lib/charts/PairedBars.svelte';
-	import ParallelPipelines from '$lib/charts/ParallelPipelines.svelte';
+	import StateFunded from '$lib/charts/StateFunded.svelte';
 	import ScatterLogLog from '$lib/charts/ScatterLogLog.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import { eur, eurShort, grInt, grNumber } from '$lib/transforms/format';
@@ -92,13 +92,17 @@
 </section>
 
 <ChartFrame
-	title="SHARED COMPANIES"
-	insight={`Same ministry, same forests — zero shared companies: ${grInt(c.pipelines.antinero.n_vats)} Anti-nero contractors on the left, ${grInt(c.pipelines.dase.n_vats)} co-op-side entities on the right (${grInt(c.pipelines.dase_n_coops)} of them curated co-operatives), sized by €, and not one ΑΦΜ appears on both sides.`}
-	caveat="Contract € split evenly across partners so each column sums to its programme total; ΑΦΜ compared canonicalised on both sides; awarders matched by name, never VAT (090273987 is shared by two bodies)."
+	title="STATE-FUNDED, TWO WORLDS"
+	insight={`Zero shared companies: ${grInt(c.pipelines.antinero.n_vats)} Anti-nero contractors and ${grInt(c.pipelines.dase.n_vats)} co-op-side entities (${grInt(c.pipelines.dase_n_coops)} of them curated co-operatives), and not one ΑΦΜ appears on both sides.`}
+	caveat="The € scale carries a radius floor: the smallest contracts print larger than true scale, or they would vanish beside the €11M dots."
 	anchor="pipelines"
 	methodology="zero-overlap"
 >
-	<ParallelPipelines data={c.pipelines} />
+	<StateFunded
+		dots={c.dots}
+		nCompanies={c.pipelines.antinero.n_vats}
+		nCoops={c.pipelines.dase.n_vats}
+	/>
 </ChartFrame>
 
 <ChartFrame

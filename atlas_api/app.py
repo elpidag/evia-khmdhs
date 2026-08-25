@@ -498,6 +498,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         dase = _dase_conn()
         payload = dase_queries.compare_payload(g.conn, dase)
         payload["pipelines"] = queries_extra.pipelines(g.conn, dase)
+        payload["dots"] = queries_extra.state_funded_dots(g.conn, dase)
         return jsonify(payload)
 
     return app

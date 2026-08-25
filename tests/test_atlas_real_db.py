@@ -1009,6 +1009,27 @@ def test_authorities_pins(client):
     assert p["antinero"]["contracts"] and p["dase"]["contracts"]
 
 
+def test_state_funded_dots_pins(client):
+    """The /compare STATE-FUNDED animation's dots (2026-08-25): every
+    contract of both programmes, whole, at stated net — the two sums ARE
+    the pages' own bases, to the cent."""
+    d = client.get("/api/compare").get_json()["dots"]
+    assert len(d["antinero"]["ref"]) == len(d["antinero"]["eur"]) == 245
+    assert len(d["dase"]["ref"]) == len(d["dase"]["eur"]) == 1998
+    assert d["antinero"]["total_eur"] == pytest.approx(622_534_181.72)
+    assert d["dase"]["total_eur"] == pytest.approx(29_920_558.46)
+    assert d["antinero"]["total_eur"] == pytest.approx(sum(d["antinero"]["eur"]), abs=0.05)
+    assert d["dase"]["total_eur"] == pytest.approx(sum(d["dase"]["eur"]), abs=0.05)
+    # sorted desc so the biggest dots pack from the centre
+    assert d["antinero"]["eur"] == sorted(d["antinero"]["eur"], reverse=True)
+    assert d["dase"]["eur"] == sorted(d["dase"]["eur"], reverse=True)
+    # every dot carries its signature year — the step-3 sweep runs on it
+    for side in ("antinero", "dase"):
+        ys = d[side]["year"]
+        assert len(ys) == len(d[side]["ref"])
+        assert all(y is not None and 2021 <= y <= 2026 for y in ys), side
+
+
 def test_pipelines_pins(client):
     p = client.get("/api/compare").get_json()["pipelines"]
     assert p["vat_overlap"] == []          # the zero-overlap headline fact

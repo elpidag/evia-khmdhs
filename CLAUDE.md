@@ -1410,7 +1410,22 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   FOREST CO-OP WORKS (/dase) · EXPLORE, then KEY FINDINGS (`/compare`,
   renamed and redressed 2026-08-23 — hero cards + kicker + basis once,
   caps frame titles, computed bulbs, method/source caveats, black hover
-  cards, «forest co-ops» in chart labels) · Authorities · Methodology in
+  cards, «forest co-ops» in chart labels; since 2026-08-25 it opens with
+  STATE-FUNDED, TWO WORLDS — `StateFunded.svelte`, a 3-step canvas
+  animation of all 2.243 contracts: a seeded random SCATTER (every dot a
+  contract, area ∝ stated net €) → the Anti-nero dots turn black → the
+  dots fly YEAR BY YEAR into per-year strips — 2021 at the BOTTOM, 2026
+  on top, each dot at a seeded random spot in its year's strip (one
+  overlap grid spans all strips, so neighbouring years' dots touch;
+  strip height from the year's dot area at EFF 0.42; canvas height
+  derived) — year labels on a y axis only at the end (the sweep numeral
+  previews each label's spot), side labels named from the start with
+  counts+€ appearing when settled; compact frame — labels under the
+  caption, 560 scatter field, 6 px bottom slack, ↻ replay symbol — so
+  title, chart and caveat fit one viewport; captions the user's
+  verbatim; `dots` on
+  `/api/compare` (per-contract year, signed-date w/ submission fallback)
+  pinned to both bases, `ParallelPipelines.svelte` parked) · Authorities · Methodology in
   the menu; active tab renders in its dataset hue. **ΑΡΩΓΗ and
   CONNECTIONS left the SITE on 2026-08-23** (user): the route folders
   `routes/arogi/` and `routes/connections/` are deleted (404), the

@@ -9292,3 +9292,88 @@ name, so neither their presence nor their absence as CONTRACTORS can be
 asserted from the names alone. CONTRACT VALUES keeps one sentence; MONEY PER YEAR and
 RANKING OF CO-OPERATIVES lose their bulbs; both maps lose their ⓘ (the
 dead `howToRead`/`whyWork`/`whySeat` helpers removed with them).
+
+## 2026-08-25 · /compare opens with STATE-FUNDED, TWO WORLDS (user)
+
+The SHARED COMPANIES parallel-pipelines frame confused its own reader:
+its «1.534 contracts» was the ΥΠΕΝ-node subset of the 1.998 the hero
+states (the ministry is the only SHARED awarder, but 464 co-op contracts
+have other public awarders). The user's replacement dissolves the subset
+by widening the true claim — ALL of it is state money — and turns the
+frame into a three-step canvas animation (`StateFunded.svelte`,
+`ParallelPipelines.svelte` PARKED):
+
+1. **One mass** — all 2.243 contracts as dots, area ∝ stated net €, one
+   neutral grey, packSiblings with the two sides interleaved before
+   packing (sorted input would ring-segregate them and step 2 would
+   reveal nothing);
+2. **the colours** — each dot takes its programme's hue where it stands
+   (Anti-nero #2b2b2b, co-op green);
+3. **the recipients** — the dots drift into two packed clusters: 151
+   private companies · €622,53M against 246 forest workers'
+   co-operatives · €29,92M, the zero-overlap line closing the caption.
+
+Auto-plays once on scroll-into-view; stepper + replay; reduced motion
+gets the final state; dots hover (€ + ΑΔΑΜ) and click through to their
+contract pages. The shared € scale carries a 1,3 px radius floor,
+admitted in the caveat — at true scale the co-op contracts would vanish
+beside the €11M dots, and that near-vanishing IS the finding the final
+frame shows. Payload: `dots` on `/api/compare`
+(`queries_extra.state_funded_dots`) — whole contracts, stated net, both
+sums pinned to the bases to the cent (`test_state_funded_dots_pins`).
+
+**Same day, the animation revised (user):** the opening mass is a loose
+SEEDED SCATTER across the whole field, not a packed circle (deterministic
+rejection sampling, biggest dots placed first, so every reader sees the
+same field); the separation runs **year by year, 2021 → 2026**, each
+year's dots flying in their own overlapping window with the year printed
+large and faint while its dots move (the payload's `dots` gained a
+per-contract `year`, signed-date with submission fallback, all 2.243
+non-null 2021–2026, pinned); and the two destinations are NAMED from the
+first frame — «private companies» / «forest workers' co-operatives» —
+with the exact numbers (151 · €622,53M / 246 · €29,92M) appearing only
+once the dots have divided.
+
+**Third round the same day (user):** the end state is not two packed
+circles — the dots ACCUMULATE BY YEAR, one horizontal band per year
+(2021 at the top), each side wrapping like type from its column's inner
+edge, and the years print on a Y AXIS only once the dots have settled.
+Fixed-slice bands overflowed (2025 spilt into its neighbours), so each
+band takes the height its own year needs — `wrapLines` shelves per
+side, band `h = max(side heights, 22) + 12`, cumulative tops, the canvas
+height derived from the last band (`canvasH`) and the year label at each
+band's own centre. Captions are the user's verbatim: «every dot
+represents a contract, area ∝ its stated value» / «Contracts that are
+included in the Anti-nero programme are coloured black.» / «Allocation
+of state funding via different contracts.» (the «two worlds — not one
+recipient on both sides» line retired with the circles).
+
+**Fourth round the same day (user: «this seems too forced… the dots of
+different shelves could touch»):** the shelf-wrapped rows go — each dot
+lands at a seeded RANDOM spot inside its year's strip (the opening
+field's rejection sampling, its own PRNG stream, biggest first, 120
+tries), one overlap grid spanning ALL strips so dots of neighbouring
+years touch across the strip line; strip height comes from the year's
+dot area at a safe random-packing density (EFF 0.42, floor 2·maxR); and
+the years are flipped — **2021 at the BOTTOM, 2026 on top**, so the
+year-by-year flight (still chronological) piles the money upward like
+sediment. Bands carry their year; the y-axis labels print from the bands
+themselves.
+
+**Fifth round the same day (user: no scrolling to see title, chart and
+caveat):** the frame compacted vertically — the destination labels ride
+up right under the caption (`.lab` top 3.6em), the strips and the
+scatter start at 64 (was 118/96), the scatter field is 560 tall (was
+640) so the canvas is equally compact in every step, the bottom slack
+is 6 px so the caveat sits right under the 2021 strip, and «replay» is
+the ↻ symbol beside the step dots. The sweep numeral moved from the
+top centre (now occupied by the 2026 strip) to the flying year's own
+axis position at x 96 — it previews where the label will land.
+
+**Sixth round the same day (user: the caveat gives nothing new):** the
+caveat trimmed to its ONE clause that is stated nowhere else — the
+radius floor (the caption promises area ∝ stated value; the floor
+breaks that for the smallest contracts, and dropping the admission
+would leave the caption overclaiming). The basis sentence is the page's
+`.basis` line, and the «ΑΦΜ canonicalised» sentence supported the
+retired zero-overlap claim — both gone.

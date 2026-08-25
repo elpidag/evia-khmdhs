@@ -371,6 +371,11 @@ export interface Pipelines {
 }
 
 export interface ComparePayload {
+	/** the STATE-FUNDED animation's per-contract dots (2026-08-25) */
+	dots: {
+		antinero: { ref: string[]; eur: number[]; year: (number | null)[]; total_eur: number };
+		dase: { ref: string[]; eur: number[]; year: (number | null)[]; total_eur: number };
+	};
 	antinero: {
 		n_contracts: number;
 		total_eur: number;
