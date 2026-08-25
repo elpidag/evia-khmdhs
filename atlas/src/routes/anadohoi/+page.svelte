@@ -523,6 +523,35 @@
 	</div>
 {/if}
 
+<div class="scopetype">
+<ChartFrame title="PROJECT SCOPE" anchor="deliverables" methodology="anadohoi">
+	<StackedShareBar
+		height={34}
+		segments={delivGroups.map((g) => ({
+			label: g.label,
+			value: g.count,
+			color: g.color,
+			// the palest segment's spill label prints in the full green
+			labelColor: g.key === 'study' ? '#2d6a4f' : undefined,
+			badge: g.key === 'study' ? ('outleft' as const) : ('above' as const)
+		}))}
+	/>
+</ChartFrame>
+
+<ChartFrame title="PROJECT TYPE" anchor="works-kind" methodology="anadohoi">
+	<!-- the same drawing as the Anti-nero CONTRACT TYPE (user, 2026-08-22):
+	     one bar per kind, counted in projects, biggest first -->
+	<BarH
+		rows={[...kindGroups].sort((a, b) => b.count - a.count).map((g) => ({ label: g.label, value: g.count }))}
+		color="#2d6a4f"
+		inside
+		barHeight={35}
+		fmt={grInt}
+		valuesRight
+	/>
+</ChartFrame>
+</div>
+
 <h2 class="status-title">CURRENT STATUS OF PROJECTS</h2>
 <ChartFrame
 	anchor="waffle"
@@ -750,35 +779,6 @@
 	</ChartFrame>
 </div>
 </Defer>
-
-<div class="scopetype">
-<ChartFrame title="PROJECT SCOPE" titleColor="#000" anchor="deliverables" methodology="anadohoi">
-	<StackedShareBar
-		height={34}
-		segments={delivGroups.map((g) => ({
-			label: g.label,
-			value: g.count,
-			color: g.color,
-			// the palest segment's spill label prints in the full green
-			labelColor: g.key === 'study' ? '#2d6a4f' : undefined,
-			badge: g.key === 'study' ? ('outleft' as const) : ('above' as const)
-		}))}
-	/>
-</ChartFrame>
-
-<ChartFrame title="PROJECT TYPE" titleColor="#000" anchor="works-kind" methodology="anadohoi">
-	<!-- the same drawing as the Anti-nero CONTRACT TYPE (user, 2026-08-22):
-	     one bar per kind, counted in projects, biggest first -->
-	<BarH
-		rows={[...kindGroups].sort((a, b) => b.count - a.count).map((g) => ({ label: g.label, value: g.count }))}
-		color="#2d6a4f"
-		inside
-		barHeight={35}
-		fmt={grInt}
-		valuesRight
-	/>
-</ChartFrame>
-</div>
 
 {#if execRows.length}
 	<ChartFrame

@@ -8920,3 +8920,10 @@ values at the row's RIGHT edge, table-style: the ranking via BarH's own
 `valuesRight`, the groups via a `.tail` column (note · value · caret) so
 a member's € lines up under its group's and the carets form their own
 rail. Verified: nothing overflows the frame edge at 1440.
+
+**Fifth round, same day (user): PROJECT SCOPE | PROJECT TYPE open the
+page.** The pair moves ABOVE CURRENT STATUS OF PROJECTS — what the scheme
+buys (scope, type) is read before how far it has come — and its titles
+drop their `titleColor="#000"` override: the page rule already sets every
+frame title in the dataset green, and the inline black was beating it.
+The charts themselves were already the page's green and are untouched.

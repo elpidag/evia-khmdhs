@@ -1720,7 +1720,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `webui/queries.py` (`search.golden.json`); known shared limitation:
   Greek ρ folds to visual P. Value bases differ per dataset and are
   labelled, never summed as one headline (methodology#explore).
-- **/anadohoi** (sponsor dataset analysis): status waffle headline,
+- **/anadohoi** (sponsor dataset analysis; order since 2026-08-25:
+  hero → PROJECT SCOPE | PROJECT TYPE pair (green titles — the page
+  rule, no titleColor override) → CURRENT STATUS → TIMELINE → the
+  sponsors pair → WHO DID THE WORK → FROM FIRE TO SPONSOR → fires):
+  status waffle headline,
   PromiseGantt (appointment→deadline bars grouped by outcome, extension
   segments, ✓/✕ marks, today rule, annotated standouts), fire-event small
   multiples (curated `fire_event`), sponsor ranking (registry spellings
