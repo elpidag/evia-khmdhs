@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { ruLabel } from '$lib/transforms/regions';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import SponsorGroups from '$lib/charts/SponsorGroups.svelte';
+	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import FireResponse from '$lib/charts/FireResponse.svelte';
 	import CrewMap, { type CrewLink } from '$lib/sections/CrewMap.svelte';
 	import { apiGetCached } from '$lib/api';
@@ -14,16 +16,21 @@
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import { loadCentroids, loadEffisFires, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
-	import { dmy, eurShort, grInt } from '$lib/transforms/format';
+	import { dmy, eurShort, grInt, pct } from '$lib/transforms/format';
 	import { COLOR, NODATE_COLOR, noDate, type GanttProject } from '$lib/charts/ganttTheme';
 	import ProjectCard from '$lib/charts/ProjectCard.svelte';
 	import { cardFor } from '$lib/charts/projectCard';
 	import { dev } from '$app/environment';
+	import { page } from '$app/state';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.o);
 	const k = $derived(o.kpis);
+
+	// WHO THE SPONSORS ARE measures: € committed or a plain project count
+	// (?sg=), the CONTRACT TYPE lens one dataset over
+	const sgLens = $derived<'eur' | 'n'>(page.url.searchParams.get('sg') === 'n' ? 'n' : 'eur');
 
 	// the TIMELINE's dashed rule marks the ACTUAL current day (local clock);
 	// the statuses themselves are as of the data's status_as_of date, which
@@ -697,6 +704,35 @@
 </ChartFrame>
 
 <Defer height={520}>
+<div class="rankpair">
+{#if o.sponsor_groups?.groups.length}
+	{@const sg = o.sponsor_groups}
+	{@const top = sg.groups[0]}
+	{@const second = sg.groups[1]}
+	{@const busiest = [...sg.groups].sort((a, b) => b.n - a.n)[0]}
+	<ChartFrame
+		title="WHO THE SPONSORS ARE"
+		insight={sgLens === 'eur'
+			? `Half the committed money — ${pct(sg.top2_share, 0)} of it — comes from two kinds of business: ${top.label.toLowerCase()} (${eurShort(top.eur)}, ${grInt(top.members.length)} companies) and ${second.label.toLowerCase()} (${eurShort(second.eur)}). The ${grInt(sg.n_sponsors)} sponsors are ${grInt(sg.groups.length)} kinds of business in all; click a bar for the companies inside it.`
+			: `Counted in projects rather than euros the order changes: ${busiest.label.toLowerCase()} took on ${grInt(busiest.n)} of the ${grInt(o.kpis.n_projects)}. ${grInt(sg.groups.filter((g) => !g.eur).length)} of the ${grInt(sg.groups.length)} kinds of business commit no stated sum at all, so they hold projects and no bar under the money lens.`}
+		caveat="Each sponsor is grouped by what it does, read from its own registered name or from the act appointing it — never by corporate ownership, which would be a legal claim needing verification company by company. Sums are the commitments written in the acts; a sponsor promising «τη συνολική χρηματοδότηση» with no figure adds projects but no euros."
+		anchor="sponsor-groups"
+		methodology="anadohoi"
+	>
+		{#snippet controls()}
+			<SegmentToggle
+				param="sg"
+				fallback="eur"
+				options={[
+					{ value: 'eur', label: '€ committed' },
+					{ value: 'n', label: 'number of projects' }
+				]}
+			/>
+		{/snippet}
+		<SponsorGroups groups={sg.groups} lens={sgLens} />
+	</ChartFrame>
+{/if}
+
 	<ChartFrame
 		title="RANKING OF COMPANIES"
 		subtitle="according to sums offered via the projects"
@@ -704,9 +740,7 @@
 		anchor="sponsors"
 		methodology="anadohoi"
 	>
-		<div class="rankw">
-			<BarH rows={sponsorRows} color="#52b788" inside barHeight={35} />
-		</div>
+		<BarH rows={sponsorRows} color="var(--c-anadohoi)" inside barHeight={35} valuesRight />
 		{#if topRaise}
 			<p class="muted note-inline">
 				The {topRaise.company} commitment grew {eurShort(topRaise.budget_stated ?? 0)} →
@@ -714,6 +748,7 @@
 			</p>
 		{/if}
 	</ChartFrame>
+</div>
 </Defer>
 
 <div class="scopetype">
@@ -744,6 +779,41 @@
 	/>
 </ChartFrame>
 </div>
+
+{#if execRows.length}
+	<ChartFrame
+		title="WHO DID THE WORK"
+		insight={crew
+			? `The crews travel. Of the ${grInt(crew.links.length)} sponsor–co-operative links the acts record, ${grInt(crew.far_150)} cross more than 150 km, and the median journey is ${grInt(crew.median_km)} km — ${crew.links[0].coop} went ${grInt(crew.links[0].km)} km from ${crew.links[0].seat_pe ? ruLabel(crew.links[0].seat_pe) : 'home'} to work for ${crew.links[0].company}. Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew at all; the rest record who paid and who approved, never who cut.`
+			: `Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew that did the digging — ${grInt(nExecCoops)} forest co-operatives in all.`}
+		caveat="Only what the acts themselves record. The work end is placed as precisely as each project allows — the θέσεις its acts name, else the digitised Β. Εύβοια works zone, else the EFFIS scar of the fire it repairs; the seat is the co-operative's registered office. Burn scars: © European Union, Copernicus Emergency Management Service — EFFIS; satellite estimates, not official οριοθετήσεις. {crew?.unplaced.length ? `${grInt(crew.unplaced.length)} crews have no seat on record and are off the map (${crew.unplaced.map((u) => u.coop).join(', ')}).` : ''}"
+		anchor="executors"
+		methodology="anadohoi"
+	>
+		{#if crew}
+			<CrewMap
+				links={crew.links}
+				fires={firesShown.filter((f) => f.properties.yr >= 2021)}
+			/>
+		{:else}
+			<div class="skeleton" style="height: 460px"></div>
+		{/if}
+	</ChartFrame>
+{/if}
+
+<Defer height={300}>
+	<ChartFrame
+		title="FROM FIRE TO SPONSOR"
+		insight={fireFacts
+			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireFacts.fastest.fire} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireFacts.slowest.fire} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
+			: ''}
+		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
+		anchor="pulse"
+		methodology="anadohoi"
+	>
+		<FireResponse fires={fireLanes} today={k.status_as_of ?? '2026-08-24'} />
+	</ChartFrame>
+</Defer>
 
 <div class="firesband">
 <ChartFrame
@@ -831,40 +901,6 @@
 </ChartFrame>
 </div>
 
-{#if execRows.length}
-	<ChartFrame
-		title="WHO DID THE WORK"
-		insight={crew
-			? `The crews travel. Of the ${grInt(crew.links.length)} sponsor–co-operative links the acts record, ${grInt(crew.far_150)} cross more than 150 km, and the median journey is ${grInt(crew.median_km)} km — ${crew.links[0].coop} went ${grInt(crew.links[0].km)} km from ${crew.links[0].seat_pe ? ruLabel(crew.links[0].seat_pe) : 'home'} to work for ${crew.links[0].company}. Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew at all; the rest record who paid and who approved, never who cut.`
-			: `Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew that did the digging — ${grInt(nExecCoops)} forest co-operatives in all.`}
-		caveat="Only what the acts themselves record. The work end is placed as precisely as each project allows — the θέσεις its acts name, else the digitised Β. Εύβοια works zone, else the EFFIS scar of the fire it repairs; the seat is the co-operative's registered office. Burn scars: © European Union, Copernicus Emergency Management Service — EFFIS; satellite estimates, not official οριοθετήσεις. {crew?.unplaced.length ? `${grInt(crew.unplaced.length)} crews have no seat on record and are off the map (${crew.unplaced.map((u) => u.coop).join(', ')}).` : ''}"
-		anchor="executors"
-		methodology="anadohoi"
-	>
-		{#if crew}
-			<CrewMap
-				links={crew.links}
-				fires={firesShown.filter((f) => f.properties.yr >= 2021)}
-			/>
-		{:else}
-			<div class="skeleton" style="height: 460px"></div>
-		{/if}
-	</ChartFrame>
-{/if}
-
-<Defer height={300}>
-	<ChartFrame
-		title="FROM FIRE TO SPONSOR"
-		insight={fireFacts
-			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireFacts.fastest.fire} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireFacts.slowest.fire} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
-			: ''}
-		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
-		anchor="pulse"
-		methodology="anadohoi"
-	>
-		<FireResponse fires={fireLanes} today={k.status_as_of ?? '2026-08-24'} />
-	</ChartFrame>
-</Defer>
 
 </div>
 
@@ -1026,13 +1062,20 @@
 		font-size: var(--fs-13);
 		margin-top: var(--sp-2);
 	}
-	/* the companies graph runs at 3/4 of the content width */
-	.rankw {
-		max-width: 75%;
+	/* RANKING OF COMPANIES | WHO THE SPONSORS ARE side by side, equal
+	   halves (user, 2026-08-25) — the same pair layout PROJECT SCOPE and
+	   PROJECT TYPE use; both carry 12 rows. One column again when narrow. */
+	.rankpair {
+		display: grid;
+		/* minmax(0,…), not a plain 1fr: the group rows are nowrap, so their
+		   min-content width would blow the track past its half */
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: var(--sp-7, 2.5rem);
+		align-items: start;
 	}
 	@media (max-width: 900px) {
-		.rankw {
-			max-width: none;
+		.rankpair {
+			grid-template-columns: 1fr;
 		}
 	}
 	/* PROJECT SCOPE | PROJECT TYPE side by side, equal halves (user,

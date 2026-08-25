@@ -3730,6 +3730,59 @@ def _effis_date(scar_id) -> str | None:
     return _effis_dates().get(scar_id)
 
 
+@lru_cache(maxsize=1)
+def _sponsor_group_curation() -> dict:
+    """What KIND of business each sponsor is — curated in
+    khmdhs/data/sponsor_groups.json with a basis per assignment
+    (DATA_DECISIONS 2026-08-25)."""
+    path = _ROOT / "khmdhs" / "data" / "sponsor_groups.json"
+    if not path.exists():
+        return {"_groups": {}, "sponsors": {}}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def anadohoi_sponsor_groups(sponsors: list[dict]) -> dict:
+    """The sponsors gathered into the kinds of business they are — the
+    finding a flat 36-bar ranking cannot show: half the scheme's committed
+    money comes from electricity and banking (DATA_DECISIONS 2026-08-25).
+
+    An uncurated sponsor is NOT silently dropped or lumped in: it lands in
+    `uncurated`, where the test suite fails on it."""
+    cur = _sponsor_group_curation()
+    labels = cur.get("_groups", {})
+    assign = cur.get("sponsors", {})
+    groups: dict[str, dict] = {}
+    uncurated: list[str] = []
+    for s in sponsors:
+        a = assign.get(s["company"])
+        if not a:
+            uncurated.append(s["company"])
+            continue
+        g = groups.setdefault(a["group"], {
+            "key": a["group"], "label": labels.get(a["group"], a["group"]),
+            "eur": 0.0, "n": 0, "unstated": 0, "members": []})
+        g["eur"] += s["budget"] or 0.0
+        g["n"] += s["n"]
+        g["unstated"] += s["unstated"]
+        g["members"].append({**s, "basis": a["basis"]})
+    for g in groups.values():
+        g["eur"] = round(g["eur"], 2)
+        g["members"].sort(key=lambda m: -m["budget"])
+    # by money; the groups whose sponsors all promise «τη συνολική
+    # χρηματοδότηση» with no figure tie at 0, so the count then the
+    # label break it — an arbitrary order would shuffle on every load
+    out = sorted(groups.values(), key=lambda g: (-g["eur"], -g["n"], g["label"]))
+    total = round(sum(g["eur"] for g in out), 2)
+    return {
+        "groups": out,
+        "uncurated": sorted(uncurated),
+        "total_eur": total,
+        "n_sponsors": sum(len(g["members"]) for g in out),
+        # the finding, computed so the copy cannot drift
+        "top2_share": round(sum(g["eur"] for g in out[:2]) / total * 100, 1) if total else 0.0,
+    }
+
+
 def anadohoi_overview(ana: sqlite3.Connection) -> dict:
     """Everything the /anadohoi analysis page needs (69 projects — small
     enough to ship whole)."""
@@ -3867,6 +3920,8 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
         "projects": projects,
         "fires": sorted(fires.values(), key=lambda f: f["first_start"] or ""),
         "sponsors": sorted(sponsors.values(), key=lambda s: -s["budget"]),
+        "sponsor_groups": anadohoi_sponsor_groups(
+            sorted(sponsors.values(), key=lambda s: -s["budget"])),
         "monthly": [{"m": m, "n": n} for m, n in sorted(monthly.items())],
     }
 

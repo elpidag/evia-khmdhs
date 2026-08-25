@@ -254,8 +254,11 @@
 							/>
 						{/each}
 					</g>
+					<!-- the journeys draw only while an episode is hovered or held:
+					     at rest they pulled the eye onto the lines and away from the
+					     burnt scars and the places themselves (user, 2026-08-25) -->
 					<g class="arcs">
-						{#each shownLinks as l (l.ada + (l.vat ?? l.coop))}
+						{#each active ? shownLinks : [] as l (l.ada + (l.vat ?? l.coop))}
 							{@const a = ctx.projection([l.seat_lon, l.seat_lat])}
 							{@const b = ctx.projection([l.work_lon, l.work_lat])}
 							{#if a && b}
@@ -306,6 +309,7 @@
 				<li><i class="sw work"></i>sponsored works</li>
 				<li><i class="sw fire"></i>other fires since 2021</li>
 				<li><i class="sw seat"></i>forest workers' co-op base</li>
+				<li class="hintrow">hover or choose an episode to draw its journey</li>
 			</ul>
 			{#if tinyScar}
 				<p class="zoomhint">This burnt area is small — click the map, then scroll to zoom into it.</p>
@@ -494,6 +498,11 @@
 		max-height: 540px;
 		overflow-y: auto;
 		scroll-behavior: smooth;
+	}
+	.mapkey li.hintrow {
+		grid-column: 1 / -1;
+		color: var(--ink-faint);
+		font-size: var(--fs-12);
 	}
 	.zoomhint {
 		margin: 0;

@@ -1076,6 +1076,48 @@ def test_anadohoi_overview_pins(client):
     assert top["company"] == "ΔΕΗ" and top["n"] == 6
 
 
+
+def test_sponsor_groups_pins(client):
+    """WHO THE SPONSORS ARE (DATA_DECISIONS 2026-08-25): every sponsor of
+    the flat ranking is placed in exactly one kind of business, and the
+    grouped euros reconcile to the ranking's own sum to the cent.
+
+    The coverage assertion is the point of the layer: a new sponsor
+    entering the scheme lands in `uncurated` and fails here, rather than
+    quietly vanishing from the grouped chart."""
+    o = client.get("/api/anadohoi/overview").get_json()
+    sg = o["sponsor_groups"]
+    ranking = o["sponsors"]
+
+    # nothing uncurated, and the two sides hold the same population
+    assert sg["uncurated"] == []
+    assert sg["n_sponsors"] == len(ranking) == 36
+    members = [m["company"] for g in sg["groups"] for m in g["members"]]
+    assert sorted(members) == sorted(s["company"] for s in ranking)
+    assert len(members) == len(set(members))            # one group each
+
+    # the euros reconcile to the ranking, and each group to its own members
+    assert sg["total_eur"] == pytest.approx(sum(s["budget"] for s in ranking))
+    for g in sg["groups"]:
+        assert g["eur"] == pytest.approx(sum(m["budget"] for m in g["members"]))
+        assert g["n"] == sum(m["n"] for m in g["members"])
+        assert g["unstated"] == sum(m["unstated"] for m in g["members"])
+        assert g["label"] and all(m["basis"] for m in g["members"])
+
+    # sorted by money, ties broken by count then label (three groups sit
+    # at 0 — every one of their sponsors promises a sum without a figure)
+    assert len(sg["groups"]) == 12
+    order = [(-g["eur"], -g["n"], g["label"]) for g in sg["groups"]]
+    assert order == sorted(order)
+    assert [g["key"] for g in sg["groups"][:2]] == ["electricity", "banking"]
+    assert [g["key"] for g in sg["groups"][-3:]] == ["wood", "waste", "consultancy"]
+    assert all(g["eur"] == 0 for g in sg["groups"][-3:])
+    # the finding the frame prints
+    assert sg["top2_share"] == pytest.approx(49.3, abs=0.05)
+    # the projects with no stated sum are counted, never dropped
+    assert sum(g["unstated"] for g in sg["groups"]) == 25
+
+
 def test_fire_response_pins(client):
     """FROM FIRE TO SPONSOR (DATA_DECISIONS 2026-08-24): each fire event
     carries WHEN it burnt, HOW BIG it was and every act that followed, so

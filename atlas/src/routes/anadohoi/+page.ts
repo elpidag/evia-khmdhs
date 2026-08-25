@@ -65,6 +65,22 @@ export interface AnadohoiOverview {
 		acts: { d: string; ada: string }[];
 	}[];
 	sponsors: { company: string; n: number; budget: number; unstated: number }[];
+	/** the same sponsors gathered into the kind of business each one is
+	 *  (curated in khmdhs/data/sponsor_groups.json, 2026-08-25) */
+	sponsor_groups: {
+		groups: {
+			key: string;
+			label: string;
+			eur: number;
+			n: number;
+			unstated: number;
+			members: { company: string; budget: number; n: number; unstated: number; basis: string }[];
+		}[];
+		uncurated: string[];
+		total_eur: number;
+		n_sponsors: number;
+		top2_share: number;
+	};
 	monthly: { m: string; n: number }[];
 }
 

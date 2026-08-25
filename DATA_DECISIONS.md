@@ -8767,3 +8767,156 @@ caveat); the median journey stays 273 km and the >150 km count rises to
 16. The `(mentioned in the completion act but it wasn't possible to match
 it with a canonical Α.Φ.Μ.)` note stands — the seat is now known, the ΑΦΜ
 still is not. Pinned by `test_crew_flows_pins`.
+
+## 2026-08-25 · /anadohoi review round twelve (user)
+
+RANKING OF COMPANIES took `#52b788` — the ΔΑΣΕ green — and now wears the
+page's own `--c-anadohoi`. WHO DID THE WORK draws its journeys ONLY while
+an episode is hovered or held: at rest the dashed lines pulled the eye onto
+themselves and away from the burnt scars and the places, which is what the
+frame is about (the legend carries a «hover or choose an episode to draw
+its journey» row instead). WHO DID THE WORK and FROM FIRE TO SPONSOR moved
+up to sit after PROJECT SCOPE and PROJECT TYPE, before the fires band. And
+the designation-act page's EXTRACTED QUOTES FROM DOCUMENTS went behind the
+Anti-nero contract page's own `Fold` — the sponsor dataset has no
+procurement details and no CPV codes to fold beside it, a designation act
+not being a procurement.
+
+## 2026-08-25 · WHO THE SPONSORS ARE: the sponsors grouped by the kind of business they are (user)
+
+**Decision.** The flat RANKING OF COMPANIES answers «who gave most» and
+nothing else — 36 bars, each a single legal entity, no reading above the
+line. A second frame beside it groups them into **twelve kinds of
+business**, which is what makes the pattern visible: **49,3% of the
+committed money is electricity and banking** — €12,78M from the four grid
+and gas companies (ΔΕΗ, ΔΕΔΔΗΕ, ΑΔΜΗΕ, ΔΕΠΑ Εμπορίας) and €7,81M from the
+three banks and one insurer — while three whole groups sit at €0: the two
+timber companies, the two waste companies and the one consultancy commit
+nothing in stated money across their 7 projects, because every one of them
+promises «τη συνολική χρηματοδότηση» with no figure.
+
+**The basis is SECTOR, never corporate ownership.** What a company does is
+readable from its own registered name or from the act appointing it —
+«Διαχειριστής Ελληνικού Δικτύου Διανομής Ηλεκτρικής Ενέργειας» says what
+ΔΕΔΔΗΕ is, «ΣΤΑΝΤΑ Α.Ε. ΕΤΑΙΡΕΙΑ ΔΙΑΧΕΙΡΙΣΗΣ ΑΚΙΝΗΤΩΝ» says what ΣΤΑΝΤΑ
+is. «Who owns whom» is a different claim: it needs per-company verification
+against ΓΕΜΗ shareholdings, it changes under us between the act and today,
+and it is exactly the kind of assertion this project does not make from
+inference. Two consequences are stated rather than hidden: ΤΕΡΝΑ Α.Ε. and
+ΤΕΡΝΑ Λευκόλιθοι Α.Ε. sit together in construction because both names
+carry ΤΕΡΝΑ — the one ownership link visible in the names themselves — and
+ΔΕΗ, ΔΕΔΔΗΕ, ΑΔΜΗΕ share the electricity group as three separate operators,
+not as one corporate parent.
+
+**Coverage.** 36 of 36 sponsors curated, 0 uncurated; every assignment
+carries its verbatim `basis`. The mapping keys on the display names
+`queries_extra._sponsor_group` produces (the same presentational merge the
+ranking uses — ΔΕΗ/ΔΕΗ Α.Ε., ΕΛΠΕ/HELLENiQ, the Greek/Latin Lidl and
+«ΕRΕΝ» pairs), so an uncurated sponsor cannot be silently dropped: it lands
+in the payload's `uncurated` list and `test_sponsor_groups_pins` fails on
+it.
+
+**The groups are the user's, one round of review** (2026-08-25): the first
+draft had nine, and two of them were holding unlike bodies under one name.
+«Foundations & NGOs» split into **Charitable foundations** (Λασκαρίδης,
+Κανελλοπούλου) and **Environmental NGOs** (WWF Ελλάς, Εταιρεία Προστασίας
+Βιοποικιλότητας Θράκης) — a κοινωφελές ίδρυμα endowing a restoration and an
+environmental organisation executing one are not the same kind of sponsor.
+«Wood, waste & other industry» — a residual bucket, and the weakest label on
+the chart — split into **Wood industry** (ALFA WOOD, ΑΚΡΙΤΑΣ, both
+appointed for plane-disease sanitation), **Waste management** (GEOCYCLE,
+ECORECOVERY) and **Planning & engineering** (ΔΟΞΙΑΔΗΣ ΠΛΑΣ, appointed for
+the μελέτη). Two groups now hold a single firm; that is the honest reading,
+not a defect — NOVA is the only telecoms sponsor in the scheme.
+
+| group | € committed | projects | firms |
+|---|---:|---:|---:|
+| Electricity & gas networks | 12.775.923 | 13 | 4 |
+| Banking & insurance | 7.814.679 | 6 | 4 |
+| Oil & renewable energy | 7.054.405 | 10 | 2 |
+| Property & tourism | 4.481.642 | 5 | 5 |
+| Construction & materials | 3.543.765 | 8 | 6 |
+| Charitable foundations | 3.100.000 | 3 | 2 |
+| Consumer goods & retail | 2.295.165 | 9 | 5 |
+| Telecoms & media | 580.000 | 4 | 1 |
+| Environmental NGOs | 138.678 | 3 | 2 |
+| Wood industry | 0 | 4 | 2 |
+| Waste management | 0 | 2 | 2 |
+| Planning & engineering | 0 | 1 | 1 |
+
+Sorted by €, and the three €0 groups tie — so the count then the label
+breaks it, or the order would shuffle on every load.
+
+**Artifacts.** Curated `khmdhs/data/sponsor_groups.json` (`_groups` =
+key→English label, `sponsors` = display name → group + basis) →
+`queries_extra.anadohoi_sponsor_groups` → `sponsor_groups` on
+`/api/anadohoi/overview` → `charts/SponsorGroups.svelte`, the frame WHO THE
+SPONSORS ARE right after RANKING OF COMPANIES. Form (user's choice among
+four sketched): **one bar per group, clicking it opens its member companies
+underneath** on the same scale — compact at rest, and the long company
+names are fully legible once opened. Every figure on the frame is computed;
+the 49,3% in its lightbulb ships as `top2_share`. The 25 projects with no
+stated sum are counted beside the € on every row («9 projects · 4 without a
+stated sum»), so a €-only reading cannot quietly lose them.
+
+**Second review round the same day (user).** Three corrections to the
+drawing itself. (a) The group names were set in the display face at 700,
+which printed them HEAVIER than the frame's own title (the serif h2 at
+600) — they now take the ui face at its own weight, the capitals and a
+0,08em tracking carrying the hierarchy instead. (b) The frame gained the
+CONTRACT TYPE lens pair (`?sg=`): **«€ committed»** keeps the money with
+the figure-less promises beside it, **«number of projects»** states a count
+and nothing else, so one of the two is always the quick read; each lens
+sorts by its own measure, which is the point — counted in projects the
+order changes (consumer goods & retail rises 7th → 3rd, banking falls 2nd →
+5th) and the three €0 groups stop being blank rows. (c) The graph left the
+`.rankw` 3/4 cap and takes the frame's whole width, as PROJECT SCOPE's bar
+takes its own frame's. Two magic constants died with the rewrite: the
+label-fits-inside test and the reserved end column are both MEASURED now
+(hidden spans bound to `clientWidth`, BarH's own technique) — a per-lens
+constant would have been wrong at every other width, and the reserved
+column differs sharply between the two lenses.
+
+**Third round, same day (user): the two frames are a PAIR, and the pair
+must be ONE SPECIES.** RANKING OF COMPANIES and WHO THE SPONSORS ARE sit
+side by side in equal halves — PROJECT SCOPE | PROJECT TYPE's own layout —
+which the data invites: the ranking is a top-12 and there are 12 groups.
+The ranking's `.rankw` 3/4 cap went with it, and the grid is
+`minmax(0, 1fr)`, never a plain `1fr`: the group rows' nowrap content
+pushed the track past its half and the «equal» columns came out 590/1030.
+
+Getting the right half to LOOK like the left took two rejected drawings,
+and the verdicts are the record. The first wore the display face at 700 —
+group names printed HEAVIER than the frame's own title. An interim fix
+stacked each row (name above, bar below) when the names stopped fitting,
+which the user rejected on sight: different letter weights left/right,
+shorter bars right, names off the bars — the halves read as different
+species. **The final rule: the group chart wears BarH's inside mode
+verbatim** — the shared dress of every ranking on all three pages — 35 px
+group bars, names INSIDE in white fs-13 with BarH's own two-line clamp
+(«Construction & materials» wraps exactly as «Ίδρυμα Α.Κ. Λασκαρίδης»
+does one column over), the value right after the bar in soft ink, no
+table rules, no uppercase, member bars at 26 px in the pale tone. What
+made room for it: the per-row «N projects · M without a stated sum» tail
+is what starved the bars of length, so under the € lens it survives only
+on the rows where the € say nothing (the three «—» groups print
+«4 projects · no stated sum» in their empty row); the full counts are one
+toggle away and the caveat carries the rule.
+
+Trap recorded from the interim form: a layout that CHANGES the value
+column's width must never decide that change by reading the live row —
+stacking narrowed the column, the one-line form fit again, and the chart
+oscillated until every width (names, longest word, value column) was
+measured from hidden copies, BarH's own technique. The final form has one
+layout, so it cannot oscillate; the measuring stays.
+
+**Fourth round, same day (user): the arrangement.** WHO THE SPONSORS ARE
+takes the pair's LEFT half and the ranking the right — the grouped
+reading leads, the 12 single entities detail it. The group names print in
+CAPS (same fs-13, no added weight — only the case tells a kind of
+business from a company, and the hidden measuring spans wear the same
+transform or the fit rules judge lowercase widths). Both halves put their
+values at the row's RIGHT edge, table-style: the ranking via BarH's own
+`valuesRight`, the groups via a `.tail` column (note · value · caret) so
+a member's € lines up under its group's and the carets form their own
+rail. Verified: nothing overflows the frame edge at 1440.

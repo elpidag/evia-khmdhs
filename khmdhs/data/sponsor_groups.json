@@ -1,0 +1,164 @@
+{
+ "_doc": "What KIND of business each sponsor of the ν.998/1979 άρθρο 42 §3 scheme is. The basis is SECTOR — readable from the company's own registered name or from the act appointing it — never corporate ownership, which is a legal claim needing per-company verification. Every assignment carries its basis. Keys are the display names queries_extra._sponsor_group produces; the coverage is pinned by the test suite.",
+ "_curated": "2026-08-25, user-reviewed",
+ "_groups": {
+  "electricity": "Electricity & gas networks",
+  "energy": "Oil & renewable energy",
+  "banking": "Banking & insurance",
+  "property": "Property & tourism",
+  "construction": "Construction & materials",
+  "consumer": "Consumer goods & retail",
+  "telecoms": "Telecoms & media",
+  "foundations": "Charitable foundations",
+  "environment": "Environmental NGOs",
+  "wood": "Wood industry",
+  "waste": "Waste management",
+  "consultancy": "Planning & engineering"
+ },
+ "sponsors": {
+  "ALFA WOOD GROUP": {
+   "group": "wood",
+   "basis": "timber and wood panels; its projects are plane-disease sanitation"
+  },
+  "AZOE RESORT ΜΟΝΟΠΡΟΣΩΠΗ Α.Ε.": {
+   "group": "property",
+   "basis": "a resort operator, as its name states"
+  },
+  "Christian Dior Couture": {
+   "group": "consumer",
+   "basis": "luxury goods"
+  },
+  "Coca-Cola (3Ε / Hellas)": {
+   "group": "consumer",
+   "basis": "soft drinks; the acts name both legal entities of the restatement pair"
+  },
+  "ECORECOVERY S.A": {
+   "group": "waste",
+   "basis": "the act names it «ΑΝΩΝΥΜΗ ΕΤΑΙΡΙΑ ΑΝΑΚΤΗΣΗΣ ΑΠΟΒΛΗΤΩΝ» — waste recovery"
+  },
+  "EREN Ελλάς / Eren Groupe": {
+   "group": "energy",
+   "basis": "Eren Groupe S.A. (Luxembourg) and its Greek arm — renewable energy"
+  },
+  "GEOCYCLE ΕΛΛΑΣ ΜΟΝΟΠΡΟΣΩΠΗ Α.Ε.": {
+   "group": "waste",
+   "basis": "waste management"
+  },
+  "Henkel Ελλάς ΑΒΕΕ": {
+   "group": "consumer",
+   "basis": "consumer goods"
+  },
+  "Lidl Ελλάς": {
+   "group": "consumer",
+   "basis": "food retail"
+  },
+  "Maxima INSURANCE": {
+   "group": "banking",
+   "basis": "an insurer, as its name states"
+  },
+  "NOVA Telecommunications & Media": {
+   "group": "telecoms",
+   "basis": "telecoms and media, as its name states"
+  },
+  "Nordia A.E.": {
+   "group": "construction",
+   "basis": "appointed in one act as «Nordia A.E. - Marmoline», the building-materials brand"
+  },
+  "Prodea Investments": {
+   "group": "property",
+   "basis": "a real-estate investment company"
+  },
+  "TATOΪ Club & ΕΛΙΑ Κατασκευαστική": {
+   "group": "property",
+   "basis": "a members' club appointed jointly with a construction company; grouped by the club, which is the sponsor of record"
+  },
+  "WWF Ελλάς": {
+   "group": "environment",
+   "basis": "an environmental NGO"
+  },
+  "Ίδρυμα Α.Κ. Λασκαρίδης": {
+   "group": "foundations",
+   "basis": "Κοινωφελές Ίδρυμα — a charitable foundation"
+  },
+  "Ίδρυμα Π. & Α. Κανελλοπούλου": {
+   "group": "foundations",
+   "basis": "a charitable foundation, as its name states"
+  },
+  "Α.Ε. Τσιμέντων ΤΙΤΑΝ": {
+   "group": "construction",
+   "basis": "cement, as its name states"
+  },
+  "ΑΔΜΗΕ": {
+   "group": "electricity",
+   "basis": "Ανεξάρτητος Διαχειριστής Μεταφοράς Ηλεκτρικής Ενέργειας — the transmission system operator, as its own name states"
+  },
+  "ΑΚΡΙΤΑΣ Α.Ε.": {
+   "group": "wood",
+   "basis": "wood products; its project is plane-disease sanitation on the Σπερχειός"
+  },
+  "ΔΕΔΔΗΕ": {
+   "group": "electricity",
+   "basis": "Διαχειριστής Ελληνικού Δικτύου Διανομής Ηλεκτρικής Ενέργειας — the distribution network operator, as its own name states"
+  },
+  "ΔΕΗ": {
+   "group": "electricity",
+   "basis": "Δημόσια Επιχείρηση Ηλεκτρισμού — the power utility"
+  },
+  "ΔΕΠΑ Εμπορίας Α.Ε.": {
+   "group": "electricity",
+   "basis": "Δημόσια Επιχείρηση Αερίου, trading arm — gas supply"
+  },
+  "ΔΟΞΙΑΔΗΣ ΠΛΑΣ ΜΟΝΟΠΡΟΣΩΠΗ ΕΠΕ": {
+   "group": "consultancy",
+   "basis": "ΔΟΞΙΑΔΗΣ ΠΛΑΣ — a planning and engineering consultancy; its act appoints it for the μελέτη, not for works"
+  },
+  "ΕΝΩΣΗ ΞΕΝΟΔΟΧΩΝ ΡΟΔΟΥ": {
+   "group": "property",
+   "basis": "the Rhodes hoteliers' association, as its name states"
+  },
+  "Εθνική Τράπεζα": {
+   "group": "banking",
+   "basis": "a bank, as its name states"
+  },
+  "Ελληνικά Πετρέλαια / HELLENiQ ENERGY": {
+   "group": "energy",
+   "basis": "the refiner; the acts name both the old «Ελληνικά Πετρέλαια Α.Ε.» and the renamed HELLENiQ ENERGY Holdings S.A."
+  },
+  "Εταιρεία Προστ. Βιοποικιλότητας Θράκης": {
+   "group": "environment",
+   "basis": "a biodiversity-protection society, seated at Δαδιά"
+  },
+  "ΖΙΤΑΚΑΤ ΑΤΕΒΕ": {
+   "group": "construction",
+   "basis": "ΑΤΕΒΕ = Ανώνυμη Τεχνική Εταιρεία — a construction firm"
+  },
+  "Ομάδα Σύμπραξις (Παπαστράτος)": {
+   "group": "consumer",
+   "basis": "a sponsorship partnership whose funder the acts record as Παπαστράτος — tobacco"
+  },
+  "ΣΤΑΝΤΑ Α.Ε.": {
+   "group": "property",
+   "basis": "the act names it «ΣΤΑΝΤΑ Α.Ε. ΕΤΑΙΡΕΙΑ ΔΙΑΧΕΙΡΙΣΗΣ ΑΚΙΝΗΤΩΝ» — property management"
+  },
+  "Τ & Τ ΚΑΤΑΣΚΕΥΕΣ Α.Ε.": {
+   "group": "construction",
+   "basis": "«ΚΑΤΑΣΚΕΥΕΣ» — a construction firm, as its name states"
+  },
+  "ΤΕΡΝΑ Α.Ε.": {
+   "group": "construction",
+   "basis": "a construction company, as its name states"
+  },
+  "ΤΕΡΝΑ Λευκόλιθοι Α.Ε.": {
+   "group": "construction",
+   "basis": "magnesite mining and materials; carries the ΤΕΡΝΑ name of the same group — the one ownership link visible in the names themselves"
+  },
+  "Τράπεζα EUROBANK A.E.": {
+   "group": "banking",
+   "basis": "a bank, as its name states"
+  },
+  "Τράπεζα Πειραιώς": {
+   "group": "banking",
+   "basis": "a bank, as its name states"
+  }
+ }
+}

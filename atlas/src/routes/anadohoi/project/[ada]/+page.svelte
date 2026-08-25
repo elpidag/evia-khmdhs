@@ -4,6 +4,7 @@
 	import ActTimelineBar from '$lib/detail/ActTimelineBar.svelte';
 	import DocTrail, { type TrailRow } from '$lib/detail/DocTrail.svelte';
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
+	import Fold from '$lib/ui/Fold.svelte';
 	import ZoneMap from '$lib/maps/ZoneMap.svelte';
 	import SiteMap, { type SitePin } from '$lib/maps/SiteMap.svelte';
 	import { loadEffisFires, loadRivers, type FireProps, type RiverProps } from '$lib/maps/useGeo';
@@ -470,7 +471,12 @@
 		</p>
 	{/if}
 
-	<QuoteList {quotes} />
+	<!-- the evidence sits behind the Anti-nero page's own fold (user,
+	     2026-08-25); this dataset has no procurement details or CPV codes
+	     to fold beside it — a designation act is not a procurement -->
+	<Fold title="Extracted quotes from documents">
+		<QuoteList heading={null} {quotes} />
+	</Fold>
 </div>
 
 <style>
