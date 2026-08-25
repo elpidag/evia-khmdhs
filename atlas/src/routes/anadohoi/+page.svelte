@@ -7,6 +7,7 @@
 	import CrewMap, { type CrewLink } from '$lib/sections/CrewMap.svelte';
 	import { apiGetCached } from '$lib/api';
 	import Defer from '$lib/ui/Defer.svelte';
+	import Hint from '$lib/ui/Hint.svelte';
 	import BarH from '$lib/charts/BarH.svelte';
 	import PromiseGantt from '$lib/charts/PromiseGantt.svelte';
 	import StatusWaffle from '$lib/charts/StatusWaffle.svelte';
@@ -331,6 +332,28 @@
 		return KIND_META.map(([key, label, color]) => ({ key, label, color, count: s[key] ?? 0 }));
 	});
 
+	// CURRENT STATUS' bulb: where the projects are, and how much of the
+	// country's burning since 2021 they answer (user's wording, 2026-08-25)
+	const atticaPct = $derived(
+		(ganttProjects.filter((p) => regionOfPe(p.pe) === 'Attica').length / k.n_projects) * 100
+	);
+	const eviaPct = $derived(
+		(ganttProjects.filter((p) => p.pe === 'Π.Ε. Ευβοίας').length / k.n_projects) * 100
+	);
+	const scarsAnswered = $derived(
+		new Set(ganttProjects.flatMap((p) => (p.scars ?? []).map((s) => s.id))).size
+	);
+
+	// the frames' computed findings (the copy doctrine, 2026-08-25):
+	// bulbs state findings from the payloads, never hardcoded
+	const topSponsor = $derived(o.sponsors[0]);
+	const unstatedN = $derived(o.sponsors.reduce((s, x) => s + (x.unstated ?? 0), 0));
+	const dWorks = $derived(delivGroups.find((g) => g.key === 'works'));
+	const dBoth = $derived(delivGroups.find((g) => g.key === 'study_and_works'));
+	const dStudy = $derived(delivGroups.find((g) => g.key === 'study'));
+	const topKind = $derived([...kindGroups].sort((a, b) => b.count - a.count)[0]);
+
+
 	// yearly counts (designations vs completions) for the area chart —
 	// folded population; a restated pair counts once, at its FIRST act
 	const areaYears = $derived.by(() => {
@@ -383,6 +406,10 @@
 	let firePe = $state<string | null>(null);
 	const firesShown = $derived(
 		(firesFc?.features ?? []).filter((f) => f.properties.yr >= FIRES_FROM)
+	);
+	/** how much of the country's burning since 2021 the projects answer */
+	const effisSince2021 = $derived(
+		(firesFc?.features ?? []).filter((f) => f.properties.yr >= 2021).length
 	);
 	const fireYears = $derived.by(() => {
 		let lo = Infinity, hi = -Infinity;
@@ -520,6 +547,15 @@
 			completion. Every value links back to the signed PDF —
 			<a href="/methodology#anadohoi">methodology</a>.
 		</p>
+		<!-- the BASIS, said once for the whole page (the Anti-nero copy
+		     doctrine, applied 2026-08-25): the frames below no longer
+		     repeat it -->
+		<p class="basis">
+			All sums are the commitments written in the designation acts, not verified spending —
+			net where the act states a VAT basis, never converted; a sponsor promising «τη συνολική
+			χρηματοδότηση» with no figure adds projects but no euros; a superseded restatement is
+			folded into its successor — <a href="/methodology#anadohoi">basis</a>.
+		</p>
 	</div>
 </section>
 
@@ -546,7 +582,15 @@
 {/if}
 
 <div class="scopetype">
-<ChartFrame title="PROJECT SCOPE" anchor="deliverables" methodology="anadohoi">
+<ChartFrame
+	title="PROJECT SCOPE"
+	insight={dWorks
+		? `In ${pct((dWorks.count / k.n_projects) * 100, 0)} of the designation acts, the private actors appointed for the restoration or reforestation of an area are responsible only for the works.`
+		: ''}
+	caveat="Read from each act's operative «Ορίζουμε … με σκοπό …» sentence, verbatim excerpt kept per project; trail evidence beats the σκοπός wording."
+	anchor="deliverables"
+	methodology="anadohoi"
+>
 	<StackedShareBar
 		height={34}
 		segments={delivGroups.map((g) => ({
@@ -560,7 +604,12 @@
 	/>
 </ChartFrame>
 
-<ChartFrame title="PROJECT TYPE" anchor="works-kind" methodology="anadohoi">
+<ChartFrame
+	title="PROJECT TYPE"
+	caveat="The kind as each act's own wording states it; «not stated» where the act names none."
+	anchor="works-kind"
+	methodology="anadohoi"
+>
 	<!-- the same drawing as the Anti-nero CONTRACT TYPE (user, 2026-08-22):
 	     one bar per kind, counted in projects, biggest first -->
 	<BarH
@@ -576,8 +625,8 @@
 
 <ChartFrame
 	title="CURRENT STATUS OF PROJECTS"
-	insight={regionCounts.rows.length >= 2
-		? `${regionCounts.rows[0][0]} and ${regionCounts.rows[1][0]} alone hold ${pct(((regionCounts.rows[0][1] + regionCounts.rows[1][1]) / k.n_projects) * 100, 0)} of the ${grInt(k.n_projects)} projects; in all, the projects reach ${grInt(projectRegions.size)} of Greece's 13 regions. Click a region that holds projects to zoom the map to it.`
+	insight={effisSince2021
+		? `${pct(atticaPct, 0)} of these projects are located in Attica and ${pct(eviaPct, 0)} in Evia. The European Forest Fire Information System (EFFIS) mapped ${grInt(effisSince2021)} burnt areas in Greece since 2021; the sponsored projects cover ${grInt(scarsAnswered)} of them.`
 		: ''}
 	anchor="waffle"
 	methodology="anadohoi"
@@ -585,7 +634,7 @@
 		unplaced.length
 			? `${unplaced.length} projects span multiple regions and are not placed on the map: ${unplaced.map((p) => p.company).join(', ')}. `
 			: ''
-	}${grInt(dotStats.exact)} dots sit at the work location the acts name (a project may have several — hovering links them); ${grInt(dotStats.approx)} dashed dots mark projects whose acts give only a municipality or region, drawn at its centre. Zoom in (click, then wheel or +) to separate co-located dots — at country view every dot keeps its true position. Designations count each project once, at its first act; completions are the acts identified on Διαύγεια — absence of one is not proof a project was abandoned. Status as of ${dmy(k.status_as_of)}.`}
+	}A dashed dot stands where the act names only a municipality or region, drawn at its centre; completions are the acts identified on Διαύγεια — the absence of one is not proof a project was abandoned. Status as of ${dmy(k.status_as_of)}.`}
 >
 	<!-- ONE legend for the waffle AND the map — wording matches the
 	     timeline legend, placed like it: a tinted strip under the title -->
@@ -608,7 +657,11 @@
 	<div class="statusgrid">
 		<div class="mcol">
 			<div class="maplabel">
-				MAP
+				MAP<Hint
+					text="Click a region that holds projects to zoom to it (Esc resets); zoom in to separate co-located dots."
+					heading
+					width="330px"
+				/>
 				{#if selRegion}
 					<button class="pill" onclick={() => (selRegion = null)}
 						>✕ {selRegion} · all of Greece</button
@@ -768,7 +821,8 @@
 
 <ChartFrame
 	title="TIMELINE"
-	caveat={`Rows are ordered by the date of each project's first designation act — the control at the top left switches to grouping by category. Click a company to open its decision trail. Statuses as recorded on Διαύγεια — data last checked ${dmy(k.status_as_of)}.`}
+	hint="Click a company's name to open that project's page — every act of its trail, dated and linked."
+	caveat={`Statuses as recorded on Διαύγεια — data last checked ${dmy(k.status_as_of)}.`}
 	anchor="gantt"
 	methodology="anadohoi"
 >
@@ -785,9 +839,9 @@
 	<ChartFrame
 		title="WHO THE SPONSORS ARE"
 		insight={sgLens === 'eur'
-			? `Half the committed money — ${pct(sg.top2_share, 0)} of it — comes from two kinds of business: ${top.label.toLowerCase()} (${eurShort(top.eur)}, ${grInt(top.members.length)} companies) and ${second.label.toLowerCase()} (${eurShort(second.eur)}). The ${grInt(sg.n_sponsors)} sponsors are ${grInt(sg.groups.length)} kinds of business in all; click a bar for the companies inside it.`
-			: `Counted in projects rather than euros the order changes: ${busiest.label.toLowerCase()} took on ${grInt(busiest.n)} of the ${grInt(o.kpis.n_projects)}. ${grInt(sg.groups.filter((g) => !g.eur).length)} of the ${grInt(sg.groups.length)} kinds of business commit no stated sum at all, so they hold projects and no bar under the money lens.`}
-		caveat="Each sponsor is grouped by what it does, read from its own registered name or from the act appointing it — never by corporate ownership, which would be a legal claim needing verification company by company. Sums are the commitments written in the acts; a sponsor promising «τη συνολική χρηματοδότηση» with no figure adds projects but no euros."
+			? `${pct(sg.top2_share, 0)} of the money stated in the designation acts is provided by companies in ${top.label.toLowerCase()} and ${second.label.toLowerCase()}.`
+			: `Counted in projects rather than euros the order changes; ${grInt(sg.groups.filter((g) => !g.eur).length)} of the ${grInt(sg.groups.length)} kinds of business commit no stated sum at all, so they hold projects and no bar under the money lens.`}
+		caveat="Each sponsor is grouped by what it does, read from its own registered name or from the act appointing it — never by corporate ownership, which would be a legal claim needing verification company by company."
 		anchor="sponsor-groups"
 		methodology="anadohoi"
 	>
@@ -808,7 +862,9 @@
 	<ChartFrame
 		title="RANKING OF COMPANIES"
 		subtitle="according to sums offered via the projects"
-		caveat="Sums are commitments written in the acts, not verified spending; sponsors often promise «συνολική χρηματοδότηση του κόστους που θα προκύψει» with no number."
+		insight={topSponsor
+			? `${topSponsor.company} accounts for ${pct((topSponsor.budget / k.stated_eur) * 100, 0)} of the money stated in the designation acts.`
+			: ''}
 		anchor="sponsors"
 		methodology="anadohoi"
 	>
@@ -827,7 +883,7 @@
 	<ChartFrame
 		title="FROM THE FIRE TO THE SPONSORED PROJECT"
 		insight={fireFacts
-			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireEn(fireFacts.fastest.fire)} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireEn(fireFacts.slowest.fire)} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
+			? `For the fire-affected areas where a private company has been appointed as a restoration or reforestation sponsor for part or the whole of the area, the median time between the fire itself and the appointment has been ${grInt(fireFacts.median)} days. In ${grInt(fireFacts.within60)} of these ${grInt(fireFacts.n)} areas the appointment came within the first two months after the fire.`
 			: ''}
 		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
 		anchor="pulse"
@@ -841,9 +897,7 @@
 	<ChartFrame
 		title="THE FOREST CO-OPS THE SPONSORS ENGAGED"
 		subtitle="forest workers' co-operatives engaged in projects financed by private restoration–reforestation contractors"
-		insight={crew
-			? `Forest co-operatives appear in only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} sponsored projects — ${pct((execRows.length / k.n_projects) * 100, 0)}; the other act trails record who paid and who approved, never who cut. The crews that do appear travel: ${grInt(crew.far_150)} of the ${grInt(crew.links.length)} sponsor–co-operative links cross more than 150 km, the median journey is ${grInt(crew.median_km)} km, and ${crew.links[0].coop} went ${grInt(crew.links[0].km)} km from ${crew.links[0].seat_pe ? ruLabel(crew.links[0].seat_pe) : 'home'} to work for ${crew.links[0].company}.`
-			: `Forest co-operatives appear in only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} sponsored projects — ${pct((execRows.length / k.n_projects) * 100, 0)} — ${grInt(nExecCoops)} co-operatives in all.`}
+		insight={`Based on the collected information, forest workers' co-operatives appear to have worked in ${grInt(execRows.length)} of the ${grInt(k.n_projects)} sponsored projects (${pct((execRows.length / k.n_projects) * 100, 0)}). Co-operatives may well have been engaged in the rest too, but no document naming them was found during this research.`}
 		caveat="Only what the acts themselves record. The work end is placed as precisely as each project allows — the θέσεις its acts name, else the digitised Β. Εύβοια works zone, else the EFFIS scar of the fire it repairs; the seat is the co-operative's registered office. Burn scars: © European Union, Copernicus Emergency Management Service — EFFIS; satellite estimates, not official οριοθετήσεις. {crew?.unplaced.length ? `${grInt(crew.unplaced.length)} crews have no seat on record and are off the map (${crew.unplaced.map((u) => u.coop).join(', ')}).` : ''}"
 		anchor="executors"
 		methodology="anadohoi"
@@ -998,6 +1052,9 @@
 	}
 	/* every subsection title on this page follows THE SCHEME kicker:
 	   display-black 14px, letterspaced, dataset green */
+	.anap {
+		--frame-accent: var(--c-anadohoi);
+	}
 	.anap :global(.frame .finding) {
 		font-family: var(--font-display);
 		font-weight: 900;
@@ -1099,6 +1156,16 @@
 	.note-inline {
 		font-size: var(--fs-13);
 		margin-top: var(--sp-2);
+	}
+	/* the page's one BASIS line under THE SCHEME (the Anti-nero dress) */
+	.basis {
+		margin-top: var(--sp-3);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+		line-height: 1.5;
+	}
+	.basis a {
+		color: var(--ink-soft);
 	}
 	/* RANKING OF COMPANIES | WHO THE SPONSORS ARE side by side, equal
 	   halves (user, 2026-08-25) — the same pair layout PROJECT SCOPE and

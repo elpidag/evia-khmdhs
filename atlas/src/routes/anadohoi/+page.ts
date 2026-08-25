@@ -21,6 +21,8 @@ export interface AnadohoiOverviewProject {
 	area: number | null;
 	pe: string | null;
 	fire: string | null;
+	/** EFFIS burn scars linked to the project (id + hectares) */
+	scars?: { id: number; ha?: number }[] | null;
 	/** net where the act states it (curated VAT basis), else as written */
 	budget: number | null;
 	budget_stated: number | null;

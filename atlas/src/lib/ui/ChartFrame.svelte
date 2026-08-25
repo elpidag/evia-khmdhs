@@ -186,6 +186,7 @@
 	   the chart, at any width (user, 2026-08-23: the AWARD PROCEDURES note
 	   fell on DIRECT AWARDS). Kept here, in the frame, so no page can forget. */
 	:global(.pair) .insight,
+	:global(.rankpair) .insight,
 	:global(.scopetype) .insight,
 	:global(.firesband) .insight {
 		position: static;

@@ -9142,3 +9142,67 @@ top-two share, the region count and the click affordance in one sentence.
 The standalone «CURRENT STATUS OF PROJECTS» h2 became the frame's own
 title (identical styling — the bulb needs the title row); the status
 legend stays exactly as it was.
+
+## 2026-08-25 · The copy doctrine applied to /anadohoi and /dase (user)
+
+The Anti-nero front page's conventions (the 2026-08-23 copy pass) now
+govern all three dataset pages: **the page says its BASIS once** in a
+`.basis` line under the intro prose; **a LIGHTBULB states findings
+computed from the payloads** — never how to read; **a CAVEAT is
+frame-specific method and source the page has not already said**; **a ⓘ
+carries the how-to-read** (beside the frame title via ChartFrame's `hint`,
+or on a MAP label as the Anti-nero maps do).
+
+**/anadohoi** gained its basis line (commitments not verified spending ·
+net where the act states it, never converted · a figure-less promise adds
+projects but no euros · restatements folded) — and the frames stopped
+repeating it: RANKING's caveat died into the basis and the frame gained a
+computed bulb (top sponsor share + figure-less count); WHO THE SPONSORS
+ARE lost the basis clause and its «click a bar» tail moved to a ⓘ;
+TIMELINE's ordering/click sentences moved from caveat to ⓘ, the caveat
+keeping only «statuses as recorded on Διαύγεια, checked <date>»; CURRENT
+STATUS moved the zoom/hover instructions from bulb and caveat into a MAP ⓘ
+(the AntineroMap pattern); PROJECT SCOPE and PROJECT TYPE gained computed
+bulbs (works-only split; the dominant kind) and one-clause method caveats.
+
+**/dase** gained its basis line (stated net excl. VAT · cancelled +
+superseded excluded · canonical-ΑΦΜ merge · even split · payments a
+separate, structurally partial layer), the intro prose handing those
+clauses over; MAP's «click a circle / click a unit» moved to a ⓘ;
+AWARDING PROCESS split its long caveat — ribbon reading and hover to the
+ⓘ, the middle-node merge / pooled node / consortium-at-lead staying as
+method; CONTRACT VALUES moved the one-axis explanation to a ⓘ, dropped
+the basis clause and gained a computed bulb (median vs largest);
+RANKING's and ALLOCATION's basis clauses died into the basis line.
+
+**Same day, the bulbs review (user, /anadohoi):** a bulb never RESTATES
+what the chart prints (the sponsor-group and ranking bulbs dropped the
+names and € their top bars already carry, keeping the shares and the
+figure-less counts; SCOPE/TYPE bulbs became share + author reading); the
+bulb icon wears the page colour (`.anap` now sets `--frame-accent`, the
+mechanism the ΔΑΣΕ page already used); the `.rankpair` joined ChartFrame's
+flows-above rule (the ranking's note used to open over its left
+neighbour); the MAP and TIMELINE ⓘ were cut to one clause each — the
+TIMELINE's keeps only «click a company's name…»; the status caveat lost
+the dot counts the map itself shows; and the fire bulb took the user's
+own phrasing — median days from the fire to the designation act since
+2021 — with no named cases, which the lanes print themselves.
+
+**Same day, the user's own bulb texts (/anadohoi), figures still
+computed:** PROJECT SCOPE «In 60% of the designation acts, the private
+actors appointed for the restoration or reforestation of an area are
+responsible only for the works»; PROJECT TYPE has NO bulb; CURRENT STATUS
+«53% of these projects are located in Attica and 16% in Evia. The
+European Forest Fire Information System (EFFIS) mapped 1.161 burnt areas
+in Greece since 2021; the sponsored projects cover 22 of them» — the
+Attica share is the REGION, the Evia share the Π.Ε., a deliberate mix of
+levels because both read as places; WHO THE SPONSORS ARE loses its ⓘ and
+states the 49%; RANKING names the top sponsor and its 20%; the fire frame
+and the co-op frame take the user's sentences verbatim, the latter
+carrying the honest «no document naming them was found during this
+research». Polish reported to the user: grammar in the SCOPE sentence,
+«these projects» → «these areas» in the fire frame (the 11 of 20 are
+fire-affected areas, not projects), and EFFIS spelled out. New deriveds:
+`atticaPct`, `eviaPct`, `effisSince2021` (the fires layer's 2021+
+features), `scarsAnswered` (distinct linked scar ids); the payload type
+gained `scars`.

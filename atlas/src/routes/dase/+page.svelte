@@ -306,6 +306,9 @@
 	// the dodge layout sizes itself to the tallest dot column; the brackets
 	// then draw at that height, so toggling never resizes the frame
 	let dotsHeight = $state(0);
+	const swarmMax = $derived(
+		swarm ? Math.max(...(swarm.eur.filter((v) => v != null) as number[])) : 0
+	);
 	const swarmYears = $derived(
 		swarm ? ([...new Set(swarm.year.filter(Boolean))].sort() as string[]) : []
 	);
@@ -392,11 +395,19 @@
 			{eurShort(o.kpis.paid_eur)} shows as paid ({grInt(o.kpis.n_payments)} payment orders) —
 			payments are posted for {grInt(o.kpis.n_paid_contracts)} of {grInt(
 				o.kpis.n_contracts
-			)} contracts, a registry practice, not a delivery record. {grInt(
-				o.kpis.n_cancelled
-			)} cancelled and {grInt(o.kpis.n_superseded)} superseded versions are excluded, and one
-			co-op's up to {o.kpis.max_name_variants} registry spellings merge on the canonical ΑΦΜ —
+			)} contracts, a registry practice, not a delivery record —
 			<a href="/methodology#dase-dedup">methodology</a>.
+		</p>
+		<!-- the BASIS, said once for the whole page (the Anti-nero copy
+		     doctrine, applied 2026-08-25): the frames below no longer
+		     repeat it -->
+		<p class="basis">
+			All amounts are the contracts' stated values excl. VAT; {grInt(o.kpis.n_cancelled)}
+			cancelled and {grInt(o.kpis.n_superseded)} superseded versions are excluded, one co-op's
+			registry spellings (up to {o.kpis.max_name_variants}) merge on its canonical ΑΦΜ, and a
+			contract signed by several co-ops jointly is split evenly between them — no euro counted
+			twice; payments are a separate, structurally partial layer —
+			<a href="/methodology#dase-dedup">basis</a>.
 		</p>
 	</div>
 </section>
@@ -409,7 +420,7 @@
 	<ChartFrame
 		title="ALLOCATION OF FUNDING"
 		insight={`${pct(alloc.away_share, 0)} of the money — ${eurShort(alloc.away_eur)} — is earned by co-operatives working OUTSIDE their own regional unit, and it follows the fires: ${peEn(topWork.pe)} received ${eurShort(topWork.eur)} of work and ${pct((topWork.imported_eur / topWork.eur) * 100, 0)} of it went to co-operatives from elsewhere${topFlow ? `; the largest single flow is ${peEn(topFlow.from)} → ${peEn(topFlow.to)}, ${eurShort(topFlow.eur)}` : ''}. The everyday firewood work stays home, which is why the other ${pct(100 - alloc.away_share, 0)} never crosses a border.`}
-		caveat="A contract signed by several co-operatives is split evenly between them; {eurShort(alloc.unresolved.eur)} on {grInt(alloc.unresolved.n)} transmission-corridor contracts has no work region and is off both maps."
+		caveat="{eurShort(alloc.unresolved.eur)} on {grInt(alloc.unresolved.n)} transmission-corridor contracts names no work region and is off both maps."
 		anchor="dase-allocation"
 		methodology="dase-award-basis"
 	>
@@ -421,7 +432,8 @@
 	<ChartFrame
 		title="MAP"
 		subtitle="Location of the projects is assigned according to the location of the awarding unit"
-		caveat="Circles sit at the awarding forest unit's registry seat; awarders with no seat on record — δήμοι, περιφέρειες and the other public bodies, plus a few forest units — are drawn at the centre of their regional unit instead. Click a circle for its contracts, click a regional unit to zoom to it. {grInt(
+		hint="Click a circle for its contracts; click a regional unit to zoom to it."
+		caveat="Circles sit at the awarding forest unit's registry seat; awarders with no seat on record — δήμοι, περιφέρειες and the other public bodies, plus a few forest units — are drawn at the centre of their regional unit instead. {grInt(
 			dmap.unresolved.n
 		)} ΑΔΜΗΕ power-line contracts span multiple regional units and stay off the map ({eurShort(
 			dmap.unresolved.eur
@@ -552,7 +564,8 @@
 
 <ChartFrame
 	title="AWARDING PROCESS"
-	caveat="Every contract names an awarding body, the operating unit that ran it and the co-op that won it; a ribbon is that chain, and both ribbon and bar are sized by the stated net € printed beside each bar. Hover a bar for the number of contracts behind that money. Bodies that ran the procurement through their own services — municipal departments, ephorates of antiquities, ΟΣΕ line maintenance — share one middle node, since naming them again would only repeat the first column. The right column holds the biggest co-ops by €; the rest are pooled into one node of the same colour. A consortium contract counts once, at the co-op listed first."
+	hint="Every contract names an awarding body, the operating unit that ran it and the co-op that won it — a ribbon is that chain, and both ribbon and bar are sized by the stated net € printed beside each bar; hover a bar for the number of contracts behind that money."
+	caveat="Bodies that ran the procurement through their own services — municipal departments, ephorates of antiquities, ΟΣΕ line maintenance — share one middle node; the right column holds the biggest co-ops by €, the rest pooled into one node; a consortium contract counts once, at the co-op listed first."
 	anchor="dase-delegation"
 	methodology="org-names"
 >
@@ -607,7 +620,10 @@
 {#if swarm}
 	<ChartFrame
 		title="CONTRACT VALUES"
-		caveat="Both views draw the same contracts from one list, on one axis: every bracket spans a doubling of value, which makes the equal-width slots a logarithmic scale, and the dots sit on that same scale — so a value is at the same place in both, the median line included. Colours are the signature year in both. Stated values excl. VAT; cancelled and superseded versions excluded."
+		insight={swarmMax
+			? `Half the contracts are worth ${eurShort(o.kpis.median_eur)} or less; the largest, ${eurShort(swarmMax)}, is ${grInt(Math.round(swarmMax / o.kpis.median_eur))} times the median.`
+			: ''}
+		hint="Both views draw the same contracts on one axis: every bracket spans a doubling of value — a logarithmic scale — and the dots sit on that same scale, so a value is at the same place in both, the median line included; colours are the signature year."
 		anchor="dase-swarm"
 		methodology="dase-dedup"
 	>
@@ -673,7 +689,6 @@
 	<ChartFrame
 		title="RANKING OF CO-OPERATIVES"
 		insight={`The top ${grInt(o.top_coops.length)} co-ops hold ${pct((rankTop / o.kpis.total_eur) * 100)} of the dataset (${eurShort(rankTop)} of ${eurShort(o.kpis.total_eur)}), out of ${grInt(o.kpis.n_coops)} co-operatives in all.`}
-		caveat="Registry spellings of one co-op merge on its canonical ΑΦΜ; a contract signed by several co-ops jointly ({grInt(o.kpis.n_consortium)} of {grInt(o.kpis.n_contracts)}) is split evenly between them, so no euro is counted twice."
 		anchor="top-coops"
 		methodology="canonical-vat"
 	>
@@ -1057,6 +1072,16 @@
 		font-weight: 400; /* Obviously Regular */
 		font-size: var(--fs-13);
 		line-height: 1.2;
+	}
+	/* the page's one BASIS line under the intro (the Anti-nero dress) */
+	.basis {
+		margin-top: var(--sp-3);
+		font-size: var(--fs-13);
+		color: var(--ink-soft);
+		line-height: 1.5;
+	}
+	.basis a {
+		color: var(--ink-soft);
 	}
 	.about .kicker {
 		font-family: var(--font-display);

@@ -1636,7 +1636,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   frame's LIGHTBULB states findings and author context computed from the
   payloads — never how to read, that is the chart's and the legend's
   job; a frame's CAVEAT is its specific method and source where the page
-  has not said them (one clause, or none), with the Methodology link.
+  has not said them (one clause, or none), with the Methodology link; a ⓘ
+  (ChartFrame `hint` beside the title, or a MAP-label Hint) carries the
+  how-to-read. Since 2026-08-25 the SAME doctrine governs /anadohoi and
+  /dase — each has its own `.basis` line and the frames' bulbs/caveats/ⓘ
+  were re-sorted to it.
   Findings pinned in `test_front_page_findings`.
 - **API endpoints** under `/api/{meta,antinero/*,dase/*,anadohoi/*,explore,
   compare,connections,authorities,authority/<slug>}` (no `arogi` since
