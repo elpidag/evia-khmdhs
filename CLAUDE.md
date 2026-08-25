@@ -1724,7 +1724,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
 - **/anadohoi** (sponsor dataset analysis; order since 2026-08-25:
   hero → PROJECT SCOPE | PROJECT TYPE pair (green titles — the page
   rule, no titleColor override) → CURRENT STATUS → TIMELINE → the
-  sponsors pair → WHO DID THE WORK → FROM FIRE TO SPONSOR → fires):
+  sponsors pair → FROM THE FIRE TO THE SPONSORED PROJECT → THE FOREST
+  CO-OPS THE SPONSORS ENGAGED (the crew map; the user's long wording
+  is the subtitle, the lightbulb leads with the 13-of-68 = 19%
+  share) → fires):
   status waffle headline, FROM FIRE TO SPONSOR (one lane per PHYSICAL
   fire: EFFIS burn → the live projects' ROOT designation acts as dots
   in the STATUS palette; since the same day's DECOMPOSITION an act

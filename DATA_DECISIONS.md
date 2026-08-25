@@ -9099,3 +9099,18 @@ aligned with it on the same line, the wait unlabeled (the dashed line in
 the demo still shows it), the tie caption reduced to «one act for more
 than one fire events», and the same-day and right-column notes deleted —
 the DAYS TO FIRST ACT column header carries its own meaning.
+
+**Same day, names and order (user wording verbatim):** WHO DID THE WORK
+is retitled «FOREST WORKERS' CO-OP ENGAGED IN PROJECTS FINANCED BY
+PRIVATE RESTORATION-REFORESTATION CONTRACTORS», FROM FIRE TO SPONSOR is
+«FROM THE FIRE TO THE SPONSORED PROJECT», and the two swapped places —
+the fire→act chart now precedes the crew map.
+
+**Same day, the crew frame's final name (user review of the long title):**
+«THE FOREST CO-OPS THE SPONSORS ENGAGED» — literal (only the co-op links
+are shown), short per the title convention, paired with WHO THE SPONSORS
+ARE — with the user's full wording as the SUBTITLE («forest workers'
+co-operatives engaged in projects financed by private
+restoration–reforestation contractors»). The lightbulb now LEADS with the
+user's key finding: forest co-operatives appear in only 13 of the 68
+sponsored projects — 19%, computed — the travel figures following.

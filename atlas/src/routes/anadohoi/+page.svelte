@@ -781,12 +781,27 @@
 </div>
 </Defer>
 
+<Defer height={300}>
+	<ChartFrame
+		title="FROM THE FIRE TO THE SPONSORED PROJECT"
+		insight={fireFacts
+			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireEn(fireFacts.fastest.fire)} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireEn(fireFacts.slowest.fire)} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
+			: ''}
+		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
+		anchor="pulse"
+		methodology="anadohoi"
+	>
+		<FireResponse fires={fireLanes} today={k.status_as_of ?? '2026-08-24'} />
+	</ChartFrame>
+</Defer>
+
 {#if execRows.length}
 	<ChartFrame
-		title="WHO DID THE WORK"
+		title="THE FOREST CO-OPS THE SPONSORS ENGAGED"
+		subtitle="forest workers' co-operatives engaged in projects financed by private restoration–reforestation contractors"
 		insight={crew
-			? `The crews travel. Of the ${grInt(crew.links.length)} sponsor–co-operative links the acts record, ${grInt(crew.far_150)} cross more than 150 km, and the median journey is ${grInt(crew.median_km)} km — ${crew.links[0].coop} went ${grInt(crew.links[0].km)} km from ${crew.links[0].seat_pe ? ruLabel(crew.links[0].seat_pe) : 'home'} to work for ${crew.links[0].company}. Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew at all; the rest record who paid and who approved, never who cut.`
-			: `Only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} act trails name the crew that did the digging — ${grInt(nExecCoops)} forest co-operatives in all.`}
+			? `Forest co-operatives appear in only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} sponsored projects — ${pct((execRows.length / k.n_projects) * 100, 0)}; the other act trails record who paid and who approved, never who cut. The crews that do appear travel: ${grInt(crew.far_150)} of the ${grInt(crew.links.length)} sponsor–co-operative links cross more than 150 km, the median journey is ${grInt(crew.median_km)} km, and ${crew.links[0].coop} went ${grInt(crew.links[0].km)} km from ${crew.links[0].seat_pe ? ruLabel(crew.links[0].seat_pe) : 'home'} to work for ${crew.links[0].company}.`
+			: `Forest co-operatives appear in only ${grInt(execRows.length)} of the ${grInt(k.n_projects)} sponsored projects — ${pct((execRows.length / k.n_projects) * 100, 0)} — ${grInt(nExecCoops)} co-operatives in all.`}
 		caveat="Only what the acts themselves record. The work end is placed as precisely as each project allows — the θέσεις its acts name, else the digitised Β. Εύβοια works zone, else the EFFIS scar of the fire it repairs; the seat is the co-operative's registered office. Burn scars: © European Union, Copernicus Emergency Management Service — EFFIS; satellite estimates, not official οριοθετήσεις. {crew?.unplaced.length ? `${grInt(crew.unplaced.length)} crews have no seat on record and are off the map (${crew.unplaced.map((u) => u.coop).join(', ')}).` : ''}"
 		anchor="executors"
 		methodology="anadohoi"
@@ -801,20 +816,6 @@
 		{/if}
 	</ChartFrame>
 {/if}
-
-<Defer height={300}>
-	<ChartFrame
-		title="FROM FIRE TO SPONSOR"
-		insight={fireFacts
-			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireEn(fireFacts.fastest.fire)} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireEn(fireFacts.slowest.fire)} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
-			: ''}
-		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
-		anchor="pulse"
-		methodology="anadohoi"
-	>
-		<FireResponse fires={fireLanes} today={k.status_as_of ?? '2026-08-24'} />
-	</ChartFrame>
-</Defer>
 
 <div class="firesband">
 <ChartFrame
@@ -901,8 +902,6 @@
 	</div>
 </ChartFrame>
 </div>
-
-
 </div>
 
 <style>
