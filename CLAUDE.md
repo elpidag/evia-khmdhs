@@ -1958,7 +1958,14 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   — the 69-entry EN translation proposal awaits user review (2026-08-16).
   Contract maps: Π.Ε. highlight + authority/unit seat dots
   (`queries_extra.contract_authorities`, `dase_contract_geo` payload
-  additions).
+  additions). **The three ENTITY pages share the same dress since
+  2026-08-26** (/antinero/contractor, /dase/coop, /authority):
+  FactsHeader facts + caveat, map at the facts column's height in the
+  page's --map-accent, CAPS .plain sections, no KPI cards; the co-op
+  page carries the seat layer's first page surface (`location` on
+  `/api/dase/coop/<vat>`, pinned). No sponsor entity page BY DECISION:
+  sponsors have no documentary identity key (DATA_DECISIONS
+  2026-08-26).
 - **Tests**: `tests/test_atlas_api.py` (+ `_queries_extra`, `_real_db` as
   they land) with pytest; frontend `cd atlas && npm run check && npm test`
   (vitest transform units incl. `format.ts` goldens that must equal

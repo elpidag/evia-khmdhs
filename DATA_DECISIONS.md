@@ -9554,3 +9554,33 @@ computed; polish applied: workers's→workers', antinero→Anti-nero (the
 site's spelling). The co-ops and contractors lenses wear the SAME lines
 as their ALL entries, and the seats line reads «forest authority seats
 (105)» — count in parentheses like its siblings.
+
+## 2026-08-26 · The entity pages in the contract pages' dress (user)
+
+The three entity pages — /antinero/contractor/[vat], /dase/coop/[vat]
+and /authority/[slug] — rebuilt to the detail-page template the contract
+pages set (user: study the contract pages, adjust aesthetics, letter
+sizes, diagram sizing): `FactsHeader` with CAPS label/value rows and the
+display name as the emphasised identity row, the map in the right slot
+AT THE FACTS COLUMN'S HEIGHT (leftHeight → mapH, floor 420) in the
+contract pages' map dress (#f2f2f2 ground, hairline, the page's
+--map-accent, +/−/⌂), the provenance sentences gathered into the
+CAVEAT under the facts, and CAPS `.plain` sections below (€ PER YEAR ·
+CONSORTIUM PARTNERS · AWARDED BY · CONTRACTS …). KPI card rows and the
+old h1 hgroups are gone — their figures became facts rows. En route:
+the contractor page's €-per-year bars joined the Anti-nero
+black-white-greyscale rule (they were the retired orange), the
+authority caveat says «matched from the awarding unit's name» instead
+of leaking the machine `match_basis`, and **the co-op page gained its
+REGISTERED OFFICE row and map dot** — `dase_coop_detail` now attaches
+`location` from the dase `contractor_locations` layer (2026-08-24),
+the first page surface of the co-op seats layer
+(`test_dase_list_and_detail` pins the new payload key).
+
+**Why there is NO sponsor entity page** (user asked): the designation
+acts name sponsors as free-text spellings with no ΑΦΜ or registry
+number — 51 spellings collapse to 36 groups only presentationally, and
+a merged label can span two legal entities («Coca-Cola (3Ε /
+Hellas)»). A sponsor URL would assert an identity the documents cannot
+prove; building one would first need a curated sponsor identity
+registry (legal entity, ΑΦΜ, evidence per row).

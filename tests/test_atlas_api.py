@@ -124,7 +124,8 @@ def test_dase_list_and_detail(client):
     coops = client.get("/api/dase/coops").get_json()
     assert coops[0]["vat"] == "096000001"
     cb = client.get("/api/dase/coop/096000001").get_json()
-    assert set(cb) == {"summary", "contracts", "yearly", "units"}
+    # `location` = the registered office (dase_coop_locations, 2026-08-26)
+    assert set(cb) == {"summary", "contracts", "yearly", "units", "location"}
 
 
 def test_unknown_entities_404(client):

@@ -30,6 +30,17 @@ export interface CoopBundle {
 	}[];
 	yearly: { year: string; n: number; eur: number }[];
 	units: { unit: string | null; org: string | null; n_contracts: number; total_eur: number }[];
+	/** the registered office (dase_coop_locations layer, 2026-08-24) */
+	location?: {
+		region_pe: string | null;
+		lat: number | null;
+		lon: number | null;
+		geo_precision: string | null;
+		city: string | null;
+		address: string | null;
+		postal_code: string | null;
+		source: string | null;
+	} | null;
 }
 
 export const load: PageLoad = async ({ fetch, params }) => {

@@ -1780,10 +1780,21 @@ def dase_coop_detail(dase: sqlite3.Connection, vat: str, summary: dict,
     of silently disagreeing with the total. The contract keeps its own
     stated value in `total_cost_with_vat` — that IS the contract's value —
     and the co-op's share rides beside it."""
+    # the registered office (dase_coop_locations layer, 2026-08-24) — the
+    # page's map dot and REGISTERED OFFICE row
+    loc = None
+    if _table(dase, "contractor_locations"):
+        r = dase.execute(
+            "SELECT region_pe, lat, lon, geo_precision, city, address,"
+            "       postal_code, source"
+            "  FROM contractor_locations WHERE vat_number = ?",
+            (dq.canonical_vat(vat) or vat,)).fetchone()
+        if r is not None:
+            loc = dict(r)
     mine = dase_coop_shares(dase).get(dq.canonical_vat(vat) or "", [])
     if not mine:
         return {"summary": summary, "contracts": contracts,
-                "yearly": yearly, "units": units}
+                "yearly": yearly, "units": units, "location": loc}
     by_ref = {s["ref"]: s for s in mine}
     for c in contracts:
         s = by_ref.get(c["reference_number"])
@@ -1792,7 +1803,7 @@ def dase_coop_detail(dase: sqlite3.Connection, vat: str, summary: dict,
             c["share_eur"] = s["share_eur"]
     # summary, yearly and units arrive already split from dase_queries
     return {"summary": summary, "contracts": contracts,
-            "yearly": yearly, "units": units}
+            "yearly": yearly, "units": units, "location": loc}
 
 
 def dase_coops(dase: sqlite3.Connection, q: str | None = None,
