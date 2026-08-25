@@ -231,9 +231,15 @@
 			median {eurShort(median)}
 		</text>
 		{#if biggest}
-			<text class="note" x={biggest.x - 6} y={biggest.y - 10} text-anchor="end">
-				largest: {eurShort(biggest.eur)}
-			</text>
+			<!-- on the top margin at the plot's right edge, not over the dots:
+			     the largest value sits at the far right of the axis, so its
+			     label used to run left across the swarm (user, 2026-08-25) -->
+			<text
+				class="note"
+				x={Math.min(biggest.x + 4, width - M.right)}
+				y={M.top - 8}
+				text-anchor="end">largest: {eurShort(biggest.eur)}</text
+			>
 		{/if}
 	</svg>
 

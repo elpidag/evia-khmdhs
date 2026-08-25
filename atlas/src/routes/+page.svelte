@@ -113,12 +113,12 @@
 		if (netMode === 'type')
 			return {
 				title: 'PROCUREMENT TIMELINE',
-				subtitle: `${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season. By type, the special forestry works are the grey mass and the specialised strands — mixed firebreaks, reforestation, flood protection, archaeological sites — arrive in campaigns.`,
+				subtitle: `In ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} procurements that were split into lots, every lot was signed on the same day; and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season.`,
 				caveat: ''
 			};
 		return {
 			title: 'PROCUREMENT TIMELINE',
-			subtitle: `${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} split procurements signed every lot on one day, and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season. By scope, ${y22.works} of the ${y22.n} contracts of 2022 bought works only, and the design-build template (the contractor drafts the studies, then builds) takes over from 2023.`,
+			subtitle: `In ${grInt(st.n_same_day_calls)} of the ${grInt(st.n_multi_calls)} procurements that were split into lots, every lot was signed on the same day; and ${grInt(network?.fire_season.n_contracts ?? 0)} of the ${grInt(st.n_contracts)} contracts were signed inside a fire season.`,
 			caveat: ''
 		};
 	});
@@ -630,7 +630,7 @@
 	<ChartFrame
 		title="ALLOCATION OF FUNDING"
 		insight={allocFacts
-			? `${ruLabel(allocFacts.top.pe)} holds the most money — ${pct(allocFacts.topShare)} of the programme — and ${grInt(allocFacts.nHalf)} of the ${grInt(allocFacts.n)} regional units with Anti-nero works hold half of it. ${grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the ${grInt(map.contracts.length)} contracts cover more than one regional unit; on the «individual dots» lens such a contract is counted in every region it touches, so counts overlap across regions where euros never do.`
+			? `The locations named in ${grInt(map.contracts.filter((c) => (c.regions?.length ?? 0) > 1).length)} of the ${grInt(map.contracts.length)} contracts involve more than one regional unit. For those contracts this analysis divides the contract's value equally between the regional units named, since no more specific allocation was found in the documents sourced during this research. On that basis ${pct(allocFacts.topShare)} of the programme's funding was assigned to ${ruLabel(allocFacts.top.pe)}.`
 			: ''}
 		caveat="Work regions as named in each signed contract; contractor seats as stated in the contract's party clause, geocoded."
 		anchor="map"
@@ -684,7 +684,7 @@
 	})()}
 	<ChartFrame
 		title="FLOWS OF MONEY"
-		insight="Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out. {maxReach.name} alone works in {maxReach.n} regional units; the «by company» lens breaks the same flows down to the {grInt(Object.keys(net.contractors).length)} firms that carry them."
+		insight="Only {localPct}% of the money is awarded to companies based within the regional unit where the works are carried out."
 		anchor="flows"
 		methodology="even-split"
 	>
@@ -702,14 +702,16 @@
 <ChartFrame
 	title="RANKING OF COMPANIES"
 	insight={rankMode === 'firm'
-		? `The same money attributed to the firms BEHIND the joint ventures — ${grInt(
+		? `Many Anti-nero contracts are signed by joint ventures rather than by a single company. This view looks behind them: each venture whose members are on record — ${grInt(
 				o.consortiums.n_documented
-			)} of the ${grInt(o.consortiums.n)} ventures have members on record, ${grInt(
+			)} of the ${grInt(o.consortiums.n)}, ${grInt(
 				o.consortiums.n_firms
-			)} firms in all: a venture with members on record is replaced by them, one whose members no document names keeps its own row, so ${eurShort(
+			)} firms in all — is replaced by those firms, with its money divided equally between them. The other ${grInt(
+				o.consortiums.n - o.consortiums.n_documented
+			)} ventures, whose members no document names, keep their own row, so ${eurShort(
 				o.consortiums.eur_unsplit
-			)} sits identically in both views.`
-		: `The top ${grInt(rankFacts.n)} contractors hold ${pct(rankFacts.share)} of the programme (${eurShort(rankFacts.top)} of ${eurShort(o.kpis.total_eur)}), out of ${grInt(o.kpis.n_contractors)} in all. Switch to «by member firm» to attribute the money to the firms behind the joint ventures.`}
+			)} is counted the same way in both views.`
+		: `The top ${grInt(rankFacts.n)} contractors have been awarded ${pct(rankFacts.share)} of the programme.`}
 	caveat={rankMode === 'firm' ? 'Venture members from the ΓΕΜΗ register and the signed contracts.' : ''}
 	anchor="top-contractors"
 	methodology={rankMode === 'firm' ? 'joint-contracts' : 'stated-basis'}
@@ -760,7 +762,7 @@
 	]}
 	<ChartFrame
 		title="AWARDING PROCESS"
-		insight={`The awarding body of every Anti-nero contract is the Ministry of Environment and Energy, acting through ${grInt(uf.n_units)} operating units${unitFacts ? ` — the ${unitFacts.label} alone handled ${pct(unitFacts.share)} of the money (${eurShort(unitFacts.eur)})` : ''}; the ${grInt(uf.n_top)} biggest contractors take ${eurShort(uf.top_eur)} of the ${eurShort(uf.total_eur)} (${grInt(uf.n_contractors)} contractors in all).`}
+		insight={`The awarding body of every Anti-nero contract is the Ministry of Environment and Energy, acting through ${grInt(uf.n_units)} units of its own central administration${unitFacts ? `, one of which — the ${unitFacts.label} — handled ${pct(unitFacts.share)} of the money` : ''}. None of the forest services that supervise the works on the ground awards a contract itself.`}
 		caveat="Awarding body and operating units as recorded in ΚΗΜΔΗΣ."
 		anchor="sankey"
 		methodology="even-split"
@@ -788,7 +790,6 @@
 <div class="pair">
 	<ChartFrame
 		title="AWARD PROCEDURES"
-		insight={`${grInt(directN)} of the ${grInt(procTotalN)} contracts — ${pct((directEur / procTotalEur) * 100, 0)} of the money — went by direct award; open procedures are the exception, not the rule.`}
 		caveat="Procedures as recorded in ΚΗΜΔΗΣ, named in the wording of Directive 2014/24/EU; «Direct award» is the ν.4412/2016 άρθρο 118 route, which has no Directive equivalent."
 		anchor="procedures"
 		methodology="procedures"
@@ -800,7 +801,6 @@
 
 	<ChartFrame
 		title="DIRECT AWARDS"
-		insight={`The ${grInt(o.direct_awards.n as number)} direct-award contracts pile up around €${daModal}, far beyond the ν.4782/2021 ceilings for direct awards (€30k and €60k, the dashed lines): the RRF emergency provisions allowed awards above them.`}
 		caveat="Ceilings: ν.4782/2021 on άρθρο 118 ν.4412/2016, defined excl. VAT."
 		anchor="direct-awards"
 		methodology="procedures"
@@ -819,9 +819,6 @@
 {#if swarm}
 	<ChartFrame
 		title="CONTRACT VALUES"
-		insight={valueFacts
-			? `The median contract is worth ${eurShort(valueFacts.median)}, the largest ${eurShort(valueFacts.max)}; ${valueFacts.above === valueFacts.n ? `every one of the ${grInt(valueFacts.n)} — the smallest at ${eurShort(valueFacts.min)} —` : `${grInt(valueFacts.above)} of the ${grInt(valueFacts.n)}`} lies above the €60k direct-award ceiling.`
-			: ''}
 		anchor="swarm"
 		methodology="stated-basis"
 	>
@@ -883,9 +880,6 @@
 	<div class="scopetype">
 		<ChartFrame
 			title="CONTRACT SCOPE"
-			insight={`${grInt(o.deliverables?.study_and_works ?? 0)} of ${grInt(
-				o.kpis.n_contracts
-			)} contracts are design-build — the contractor first drafts the studies, then executes the works they define.`}
 			caveat="Read from each contract's own signed text or its call; «study & works» is the design-build clause, quoted verbatim on the contract page; «study only» are the contracts whose object is the studies."
 			anchor="scope"
 			methodology="categories"
@@ -925,7 +919,6 @@
 
 		<ChartFrame
 			title="CONTRACT TYPE"
-			insight={`«${catShort.get(topCat.key) ?? topCat.label_en ?? topCat.label}» dominates with ${eurShort(topCat.eur)} across ${grInt(topCat.n)} contracts — ${pct((topCat.eur / o.kpis.total_eur) * 100)} of the programme.`}
 			caveat="One category per contract, curated from the project title in the signed PDF (CPV codes only as tie-breaker)."
 			anchor="categories"
 			methodology="categories"
@@ -984,14 +977,6 @@
 	{/snippet}
 	<ChartFrame
 		title="TYPES OF WORKS"
-		insight={`${chordFacts
-			.map((f) =>
-				f.left
-					? `${f.right.label}: ${grInt(f.n)} of its ${grInt(f.right.n)} contracts ${chordSides.left === 'works' ? 'name' : 'are'} «${f.left.label}»`
-					: ''
-			)
-			.filter(Boolean)
-			.join('; ')}${chordSides.left === 'works' || chordSides.right === 'works' ? `; ${grInt(works.unspecified)} of the ${grInt(works.n_contracts)} contracts name no specific work` : ''}. ${chordPair === 'cat-scope' ? 'Both halves are one per contract, so every arc and ribbon is a plain contract count.' : 'A contract naming several works lies under several ribbons, so an arc on the one-per-contract half measures mentions; the hover card counts contracts.'}`}
 		caveat={`Works as named in the signed titles or, where a title names none, in the call’s description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names. Categories and scope: one per contract, from the same documents.`}
 		anchor="works"
 		methodology="categories"
@@ -1031,9 +1016,6 @@
 <div class="pair">
 	<ChartFrame
 		title="MONEY PER YEAR"
-		insight={moneyFacts
-			? `${moneyFacts.year} was the biggest contracting year (${eurShort(moneyFacts.eur)}); payments peaked in ${moneyFacts.payYear} (${eurShort(moneyFacts.payEur)}) — they run behind contracting by design.`
-			: ''}
 		caveat="€ contracted: stated value by signature year; € paid: payment orders by payment year."
 		anchor="money-per-year"
 		methodology="stated-basis"
@@ -1057,9 +1039,6 @@
 
 	<ChartFrame
 		title="CUMULATIVE DISBURSEMENT"
-		insight={paidFacts
-			? `${paidFacts.last} stands at ${eurShort(paidFacts.lastEur)} so far${paidFacts.prev ? `, ${paidFacts.lastEur >= paidFacts.prevSameDay ? 'ahead of' : 'behind'} ${paidFacts.prev}'s ${eurShort(paidFacts.prevSameDay)} by the same day of that year` : ''}; ${paidFacts.year} was the heaviest full year (${eurShort(paidFacts.eur)}).`
-			: ''}
 		caveat="Payment orders (ΚΗΜΔΗΣ and Διαύγεια) cumulated within each calendar year, day by day."
 		anchor="disbursement"
 		methodology="payments"

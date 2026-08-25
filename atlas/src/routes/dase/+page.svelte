@@ -306,9 +306,6 @@
 	// the dodge layout sizes itself to the tallest dot column; the brackets
 	// then draw at that height, so toggling never resizes the frame
 	let dotsHeight = $state(0);
-	const swarmMax = $derived(
-		swarm ? Math.max(...(swarm.eur.filter((v) => v != null) as number[])) : 0
-	);
 	const swarmYears = $derived(
 		swarm ? ([...new Set(swarm.year.filter(Boolean))].sort() as string[]) : []
 	);
@@ -419,7 +416,7 @@
 	{@const topFlow = alloc.flows.find((f) => f.from !== f.to)}
 	<ChartFrame
 		title="ALLOCATION OF FUNDING"
-		insight={`${pct(alloc.away_share, 0)} of the money — ${eurShort(alloc.away_eur)} — is earned by co-operatives working OUTSIDE their own regional unit, and it follows the fires: ${peEn(topWork.pe)} received ${eurShort(topWork.eur)} of work and ${pct((topWork.imported_eur / topWork.eur) * 100, 0)} of it went to co-operatives from elsewhere${topFlow ? `; the largest single flow is ${peEn(topFlow.from)} → ${peEn(topFlow.to)}, ${eurShort(topFlow.eur)}` : ''}. The everyday firewood work stays home, which is why the other ${pct(100 - alloc.away_share, 0)} never crosses a border.`}
+		insight={`${pct(100 - alloc.away_share, 0)} of the money awarded to forest workers' co-operatives goes to co-operatives based in the region where the works are — as the forest code intends: under άρθρο 136Α ν.δ. 86/1969, added by ν.4423/2016, the exploitation of public forests is granted in an order of preference that begins with the co-operatives seated in the municipality of the works. ${peEn(topWork.pe)} is the notable exception: ${pct((topWork.imported_eur / topWork.eur) * 100, 0)} of the work there went to co-operatives based elsewhere, in the restoration that followed the 2021 fires. One documented reason is that from 2022 the seven-year ΔΥΠΑ programme (ΚΥΑ 19895/2022, ΦΕΚ Β΄ 956) hired the fire-hit resin workers of Istiaia–Aidipsos and Mantoudi–Limni–Agia Anna — members of the local co-operatives — into the Ministry's own forest services, on the express condition that they exercise no activity in that capacity.`}
 		caveat="{eurShort(alloc.unresolved.eur)} on {grInt(alloc.unresolved.n)} transmission-corridor contracts names no work region and is off both maps."
 		anchor="dase-allocation"
 		methodology="dase-award-basis"
@@ -432,7 +429,6 @@
 	<ChartFrame
 		title="MAP"
 		subtitle="Location of the projects is assigned according to the location of the awarding unit"
-		hint="Click a circle for its contracts; click a regional unit to zoom to it."
 		caveat="Circles sit at the awarding forest unit's registry seat; awarders with no seat on record — δήμοι, περιφέρειες and the other public bodies, plus a few forest units — are drawn at the centre of their regional unit instead. {grInt(
 			dmap.unresolved.n
 		)} ΑΔΜΗΕ power-line contracts span multiple regional units and stay off the map ({eurShort(
@@ -620,9 +616,7 @@
 {#if swarm}
 	<ChartFrame
 		title="CONTRACT VALUES"
-		insight={swarmMax
-			? `Half the contracts are worth ${eurShort(o.kpis.median_eur)} or less; the largest, ${eurShort(swarmMax)}, is ${grInt(Math.round(swarmMax / o.kpis.median_eur))} times the median.`
-			: ''}
+		insight={`Half the contracts are worth ${eurShort(o.kpis.median_eur)} or less.`}
 		hint="Both views draw the same contracts on one axis: every bracket spans a doubling of value — a logarithmic scale — and the dots sit on that same scale, so a value is at the same place in both, the median line included; colours are the signature year."
 		anchor="dase-swarm"
 		methodology="dase-dedup"
@@ -676,9 +670,6 @@
 <div class="pair">
 	<ChartFrame
 		title="MONEY PER YEAR"
-		insight={moneyFacts
-			? `${moneyFacts.year} was the biggest contracting year: ${eurShort(moneyFacts.eur)} over ${grInt(moneyFacts.n)} contracts — ${pct((moneyFacts.eur / o.kpis.total_eur) * 100)} of the dataset's stated total.`
-			: ''}
 		caveat="Stated value (net) by signature year. No €-paid series is drawn — payment orders exist for only part of the contracts as registry practice, so a paid bar would chart the registry, not disbursement."
 		anchor="dase-yearly"
 		methodology="dase-dedup"
@@ -688,7 +679,6 @@
 
 	<ChartFrame
 		title="RANKING OF CO-OPERATIVES"
-		insight={`The top ${grInt(o.top_coops.length)} co-ops hold ${pct((rankTop / o.kpis.total_eur) * 100)} of the dataset (${eurShort(rankTop)} of ${eurShort(o.kpis.total_eur)}), out of ${grInt(o.kpis.n_coops)} co-operatives in all.`}
 		anchor="top-coops"
 		methodology="canonical-vat"
 	>

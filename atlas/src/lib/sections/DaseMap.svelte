@@ -16,7 +16,6 @@
 	import { goto } from '$app/navigation';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
-	import Hint from '$lib/ui/Hint.svelte';
 	import { makeChoro, spreadOverlaps } from '$lib/maps/useGeo';
 	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import { eurShort, grInt, pct } from '$lib/transforms/format';
@@ -166,17 +165,6 @@
 	const dotR = (d: { eur: number }) => 3 + 9 * Math.sqrt(d.eur / dotMax);
 
 	// what a click does is said ONCE, in the MAP ⓘ — the Anti-nero convention
-	const howToRead =
-		'Click a regional unit on either map and the other shows only the money that moves ' +
-		'between them: where a region’s work went, or where its co-operatives worked. ' +
-		'Click it again, press Esc or use the pill to return to all of Greece.';
-	const whySeat =
-		'The registered office of each co-operative, read from the VAT register and its own ' +
-		'signed contracts and placed at the centre of the settlement it names.';
-	const whyWork =
-		'The forest service that awarded the contract administers the forests the work is in; ' +
-		'the documents themselves almost never name a site, so this is its area of ' +
-		'responsibility rather than a named place.';
 </script>
 
 {#snippet rampKey(maxLabel: string)}
@@ -191,7 +179,7 @@
 
 <div class="alloc">
 	<div class="bar">
-		<div class="maplabel">MAP<Hint text={howToRead} heading width="380px" /></div>
+		<div class="maplabel">MAP</div>
 		{#if focus}
 			<button class="reset" onclick={() => setFocus(focus.side, null)}
 				title="Back to all of Greece (Esc)">✕ {peEn(focus.pe)} · all of Greece</button
@@ -205,7 +193,7 @@
 			     the map is BY — never a heading of our own invention -->
 			<ul class="mapkey">
 				<li class="lbl">
-					by the area of the forest service that awarded the contract<Hint text={whyWork} />
+					by the area of the forest service that awarded the contract
 				</li>
 				<li class="ramp">
 					{@render rampKey(eurShort(scaleMax))}
@@ -233,7 +221,7 @@
 		<div class="panel">
 			<ul class="mapkey">
 				<li class="lbl">
-					by the registered office of the co-operative that signed it<Hint text={whySeat} />
+					by the registered office of the co-operative that signed it
 				</li>
 				{#if focus?.side === 'works'}
 					<li><i class="dot"></i>a co-operative that worked in {peEn(focus.pe)}</li>

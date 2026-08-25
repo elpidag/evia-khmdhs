@@ -9206,3 +9206,89 @@ fire-affected areas, not projects), and EFFIS spelled out. New deriveds:
 `atticaPct`, `eviaPct`, `effisSince2021` (the fires layer's 2021+
 features), `scarsAnswered` (distinct linked scar ids); the payload type
 gained `scars`.
+
+**Same day, the Anti-nero front page's bulb texts (user):** the user's own
+wording where given, no bulb where the chart already says it, figures
+still computed. ALLOCATION OF FUNDING now states the EVEN-SPLIT
+convention in the open («no more specific allocation was found in the
+documents sourced during this research») before the top region's share;
+FLOWS keeps the one finding sentence; RANKING «as contracted» is one
+clause, and the «by member firm» lens was rewritten as plain explanation
+(what a joint venture is, what the lens does, why the undocumented
+ventures' € are identical in both views) after the user found the old
+text unclear. **Bulbs REMOVED** (the chart states it): AWARD PROCEDURES,
+DIRECT AWARDS, CONTRACT VALUES, CONTRACT SCOPE, CONTRACT TYPE, TYPES OF
+WORKS, MONEY PER YEAR, CUMULATIVE DISBURSEMENT. PROCUREMENT TIMELINE
+keeps the user's two figures with the first sentence rephrased and the
+per-lens tails dropped. The beeswarm's «largest» label moved to the top
+margin at the plot's right edge — at the far right of a log axis it used
+to run left across the dots and was unreadable.
+
+**AWARDING PROCESS — the researched answer (user asked whether the units
+are all political).** They are not, and the sharper finding is a
+different one. The four ΚΗΜΔΗΣ operating units are: the **General
+Directorate of Forests and the Forest Environment** (209 contracts,
+77,6% of the money), the **General Secretariat for Forests** (19, 16,0%),
+the **General Directorate for the Development and Protection of Forests
+and the Agro-environment** (11, 5,2%) and the **Office of the Deputy
+Minister for the Environment** (6, 1,1%). Two are political-tier bodies
+— a Γενικός Γραμματέας is a μετακλητός appointee of the government
+(ν.4622/2019), and a minister's private office is by definition his own —
+and they awarded **17,1%** of the money; the two General Directorates are
+headed by career civil servants selected through the merit procedure of
+ν.4369/2016 and awarded **82,9%**. So «all directly connected with the
+political leadership» is not supportable. What IS supportable, and is
+what the bulb now says: **all four are units of the Ministry's own
+central administration — not one of the 103 regional forest services that
+supervise the works on the ground awards a contract itself.** A €622,5M
+programme is contracted centrally and supervised locally.
+
+**Same day, /dase bulb texts + the legal research the user asked for.**
+ALLOCATION states the user's finding with the law behind it, VERIFIED:
+«63% of the money … goes to co-operatives based in the region where the
+works are. The forest code provides for exactly that: under **άρθρο 136Α
+ν.δ. 86/1969, as added by ν.4423/2016**, the exploitation of public
+forests is granted to co-operatives in an order of preference that begins
+with those whose seat lies within the municipality of the works. Evia is
+the notable exception — 64% of the work there was awarded to
+co-operatives based elsewhere, in the restoration that followed the 2021
+fires.» Sourcing: 59 of our own cached ΔΑΣΕ documents cite άρθρο 136Α
+(the παρ. 3 penalty clause), and e-nomothesia's codified ν.4423/2016
+gives the tier verbatim — «Η παραχώρηση στις πρωτοβάθμιες ΔΑ.Σ.Ο. γίνεται
+με την ακόλουθη σειρά προτίμησης: α) στις ΔΑ.Σ.Ο, των οποίων η έδρα
+υπάγεται στα διοικητικά όρια του Δήμου». Scope note kept in mind: 136Α
+governs the παραχώρηση εκμετάλλευσης (the logging/firewood assignments),
+which is the bulk of this dataset, not every co-op contract.
+
+**Two of the user's proposed explanations were NOT printed, for cause.**
+(i) «Compulsory forest co-operatives may not work beyond the forests they
+own»: no such restriction was found in ν.4423/2016 άρθρο 46 or in Α.Ν.
+1627/1939 as reachable, and — decisive — **no αναγκαστικός δασικός
+συνεταιρισμός appears in this dataset's contractor population at all (0
+of ~251 names)**, so the claim cannot explain Evia's imports here.
+(ii) «Resin collectors absorbed by the ΔΥΠΑ programme could not take
+works as freelancers»: **VERIFIED the same day from the ΚΥΑ the user
+supplied** — αριθμ. **19895, ΦΕΚ Β΄ 956/02.03.2022**, «Ειδικό πρόγραμμα
+απασχόλησης ρητινεργατών σε Υπηρεσίες του Υπουργείου Περιβάλλοντος και
+Ενέργειας». Άρθρο 3 παρ. 2 sets the duration at **seven years** in
+cycles; άρθρο 2 παρ. 2 makes **ΥΠΕΝ the φορέας υποδοχής**; άρθρο 2 παρ. 5
+gives **€63.000.000 and 590 posts**; and **άρθρο 4 παρ. 1 περ. α** is
+decisive: the beneficiaries are unemployed ρητινοκαλλιεργητές, **μέλη
+Δασικών Συνεταιρισμών Εργασίας και Αναγκαστικών Δασικών Συνεταιρισμών**
+active in the named δήμοι — among them **Ιστιαίας–Αιδηψού and
+Μαντουδίου–Λίμνης–Αγίας Άννας of Π.Ε. Ευβοίας** — who keep their
+membership **«εφόσον δεν ασκούν οποιαδήποτε δραστηριότητα στο πλαίσιο
+αυτής της ιδιότητας»**. That clause is exactly the user's point: a
+member hired into the programme may not work as a co-operative member,
+and the pay is a full-time public post (άρθρο 2 παρ. 3-4, €1.000 gross
+for 25 days). It is now the ALLOCATION bulb's «one documented reason»
+for Evia's imported works, cited by ΚΥΑ number and ΦΕΚ.
+
+Incidental to (i): the same ΚΥΑ names **Αναγκαστικοί Δασικοί
+Συνεταιρισμοί** as co-ops active in those two North-Evia δήμοι, so they
+exist there — but none is identifiable by name among this dataset's 629
+registry spellings, and a compulsory co-op may register under a plain
+name, so neither their presence nor their absence as CONTRACTORS can be
+asserted from the names alone. CONTRACT VALUES keeps one sentence; MONEY PER YEAR and
+RANKING OF CO-OPERATIVES lose their bulbs; both maps lose their ⓘ (the
+dead `howToRead`/`whyWork`/`whySeat` helpers removed with them).
