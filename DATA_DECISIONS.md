@@ -8927,3 +8927,175 @@ buys (scope, type) is read before how far it has come — and its titles
 drop their `titleColor="#000"` override: the page rule already sets every
 frame title in the dataset green, and the inline black was beating it.
 The charts themselves were already the page's green and are untouched.
+
+**Sixth round, same day (user): FROM FIRE TO SPONSOR tells the acts'
+statuses.** «Do all of these designation acts have completion acts?» No —
+of the 63 acts the chart draws, only **16** have an identified completion
+act (7 are within deadline, 19 state no dates at all, **20 are past their
+deadline with no completion act found**, 1 was revoked) — and one uniform
+green painted a kept promise and a past-due one identically. Each act dot
+now wears the **CURRENT STATUS OF PROJECTS palette** (the same
+`ganttTheme` source as the waffle and the map, so the vocabularies cannot
+drift): the payload's `fires[].acts[]` gained `st` — the waffle's own
+bucket, `nodate` for an active project whose act sets no calendar
+deadline — the dot's tooltip says the status in the waffle's words, and
+the chart carries a second key row. What the colours now show: Τατόι–
+Βαρυμπόμπη's thirteen acts are nearly all grey, Β. Εύβοια's ten are
+mostly completed, the black revoked dot sits on ΒΑ Αττική 2024. Pinned:
+16/19/20/7/1 in `test_fire_response_pins`.
+
+**Seventh round, same day (user), the frame's dress:** the legend moved
+ABOVE the chart (every other frame's convention — it was below), the two
+text columns gained headers («FIRE» left, «DAYS TO FIRST ACT» right — the
+key line that explained the right column died with it), the act dots lost
+their white outline (the crew-map verdict again), and the year numbers
+centred on the 1 January rule they belong to instead of hanging to its
+right.
+
+## 2026-08-25 · English fire names: the 19 event labels curated, the 76 EFFIS tokens derived (user)
+
+**fire_events_en.json** — the curated `fire_event` vocabulary in English,
+in the user's format: **cardinal words spelled out, the month as MM-YYYY**
+(«North Evia, 08-2021», «Rhodes, 07-2023»), toponyms in the pe_names_en
+approved forms where one exists — which is why «Κορινθία (Φενεός)» is
+**Korinthia** (Feneos), not Corinthia. «πυρκαγιές Ιουλίου 2023 (πολλαπλά
+μέτωπα)» becomes «Multiple fronts, 07-2023» so every label keeps the one
+`Name, MM-YYYY` shape; «εκτός πυρκαγιάς» is «not fire-related». Keys are
+the exact Greek labels — they ARE the Greek version's text, so the one
+file serves both languages. Applied via `names.fireEn()` (exact-key,
+honest Greek fallback) on FROM FIRE TO SPONSOR's lanes and tooltips, the
+PROJECTS AND FIRES headings, the WHO DID THE WORK episode rows, the
+lightbulb sentences and the project pages' FIRE EVENT fallback + html
+title.
+
+**effis_names_en.json** — the EFFIS display layer's 1,963 Greek `name`
+fields turned out to be **comma-joined NUTS-3 names: 76 distinct tokens**,
+not toponyms — so no per-feature curation exists or is needed. The token
+map's Π.Ε. values are **pulled from pe_names_en.json at build time** (the
+2026-08-15 user-reviewed vocabulary — one source, no drift); 4 literals:
+Kea the island alone, «Κάρπαθος – Ηρωική Νήσος Κάσος» → Karpathos–Kasos,
+and two names EFFIS already writes in Latin (Aktio-Vonitsa; Berat, a
+cross-border scar in Albania). `names.effisNameEn()` translates a feature
+name token by token; no surface prints scar names yet — the layer is
+ready for the first one that does.
+
+Both files live in `khmdhs/data/` with byte-identical copies in
+`atlas/src/lib/data/`; `test_fire_names_en_pins` holds the copies
+identical, the fire coverage against the live payload (a new fire without
+a translation fails the suite), the EFFIS coverage against the committed
+geojson, and the pe_names_en bond on the familiar forms.
+
+**FROM FIRE TO SPONSOR widened** (the zoom question's first step, user):
+the svg always stretched to the frame, so W 920 → 1120 buys a FINER grid
+— one unit ≈ one CSS px, marks keep their pixel size and stop swallowing
+each other, LANE 14 → 16. The user will judge whether zoom is still
+wanted.
+
+## 2026-08-25 · The fire lanes decomposed: an act answering several fires attaches to EACH (user)
+
+**Decision (user verdicts ①②③, all accepted).** The lane/label unit of the
+fire layer is the PHYSICAL FIRE, never an act's own grouping. Two acts
+bundled several fires under composite labels — Maxima INSURANCE's 6ΟΗ7
+(«Αττική 2021–2022 (Αγ. Στέφανος & Πεντέλη)»: 490 στρ. of the 03.08.2021
+Τατόι–Βαρυμπόμπη–Αφίδνες fire + 516 στρ. of the 19.07.2022 Πεντέλη fire)
+and ΔΕΔΔΗΕ's 9ΕΘΠ («πυρκαγιές Ιουλίου 2023 (πολλαπλά μέτωπα)»: five
+fronts — Δερβενοχωρίων, Κουβαρά–Σαρωνίδας, Λουτρακίου, Αιγίου,
+Φυλής–Πάρνηθας). Both are now decomposed: the composite labels are no
+lanes, each act attaches to each of its fires with that fire's own scars,
+and a multi-fire act draws one dot on every one of its fires' lanes with
+the per-lane lag.
+
+**Mechanism.** Curated `fire_events` list on the two projects in
+`anadohoi_projects.json` ([{event, scars:[ids]}]; the other 67 need none —
+the payload synthesizes a one-element list), new `projects.fire_events`
+column (loader schema + validation extended; the committed sqlite migrated
+in place), and `anadohoi_overview` iterates (project × fire event), each
+membership sized by ITS event's scars only. New basis value **`act_front`**
+for a scar the act's own front list names: Κουβαράς–Σαρωνίδα → the
+17.07.2023 / 3.931 ha East Attica scar, Λουτράκι → 17.07.2023 / 1.272 ha
+Κορινθία, Φυλής–Πάρνηθας → the 22.08.2023 / 6.057 ha fire the Πάρνηθα lane
+already draws (verdict ①); ΔΕΔΔΗΕ's stray 27-ha near-match (218505,
+1,02 km) was REPLACED by the act-front scars — distance guessed, the act
+knew.
+
+**Three new fire events** (verdict ②): «Κουβαράς–Σαρωνίδα, Ιούλ. 2023» /
+Kouvaras–Saronida, 07-2023 · «Λουτράκι, Ιούλ. 2023» / Loutraki, 07-2023 ·
+«Αίγιο, Ιούλ. 2023» / Aigio, 07-2023. The EN vocabulary is now **22
+entries, all user-reviewed** — second review round the same day fixed:
+Gerania (the Σχίνος dropped), «Chios, 06-2025 & 08-2025», «Korinthia's
+Feneos, 07-2025»; the two composite entries stay as fallbacks for the two
+projects' own records, never as lanes.
+
+**What the decomposition changed on the chart** (all pinned): 19 lanes /
+68 dots (was 18/63); **the median wait falls 64 → 51 days** because each
+fire now measures to ITS OWN first act — Πάρνηθα's first sponsor is the
+ΔΕΔΔΗΕ act (15 days, was 55), Πεντέλη's the Maxima act (99 days, was 225);
+Κουβαράς–Σαρωνίδα and Λουτράκι waited 51 days, Αίγιο 45; Τατόι rises to 14
+acts; Έβρος stays the biggest-and-among-fastest contrast (96.610 ha, 26
+days); min 15 / max 574 / 11 of 19 within two months.
+
+**Same day, the next review round (user).** (a) **Chios decomposed too**:
+«καμένες εκτάσεις νήσου Χίου» covers BOTH 2025 fires — 22.06.2025
+(6.349 ha) and 12.08.2025 (7.914 ha) — so the Εθνική Τράπεζα act attaches
+to each («Χίος, Ιούν. 2025» lag 122 d, «Χίος, Αύγ. 2025» lag 71 d); 20
+lanes / 69 dots, median 53,5 d, EN vocabulary 24 entries — all pinned.
+(b) The chart's legend wears the page's tinted-strip dress (the status
+key's / crew map's: #f2f2f2, radius 6, fs-13) in ONE strip above the
+chart. (c) The left column prints the fire NAMES alone — the date is
+where the flame sits on the timeline; the full label stays in the hover.
+The two Chios lanes deliberately share the bare name and differ by their
+flames' positions, which is the point.
+
+**Same day, the honesty round (user): one act, one column of JOINED
+dots.** After the decomposition a multi-fire act drew several visually
+independent dots — countable as separate acts, which is misleading. The
+fix is the UpSet convention: the act's dots all sit at the SAME date, so
+a thin vertical TIE at that date joins them — Maxima's line runs
+Τατόι→Πεντέλη, ΔΕΔΔΗΕ's through its five rows, the Χίος act joins its two
+fires — and hovering any joined dot lights the whole act (tie to ink,
+dots enlarged); the dot's card says «ONE act answering N fires». The
+alternatives considered: a ring marker (weaker — says «special», not
+«these belong together») and hover-only linkage (rejected — tooltips
+never carry load-bearing information; the chart must be honest at rest).
+The LEGEND restructured into THREE READING ROWS in the tinted strip (the
+status key's own grid idea): what a row is (fire · wait · season), what
+a dot is (the five statuses), what joined dots are (a two-dots-joined
+glyph + the sentence) — height is cheaper than confusion.
+
+**Same day, the coincidence round (user: «why is ΡΚΖ7 linked with
+9ΕΘΠ?»).** They are not — ΤΕΡΝΑ's ΡΚΖ7 and ΔΕΔΔΗΕ's 9ΕΘΠ were both signed
+06.09.2023, so on the Δερβενοχώρια row the two dots sat at the same
+point, and the ΔΕΔΔΗΕ tie through that point looked like it grabbed both
+acts. Fix: same-lane dots closer than a dot's width SPREAD horizontally
+(≥6,5 px), the tie members PINNED at their true date and the loose dots
+giving way — a tie therefore passes through exactly its own act's dots,
+and a pushed dot moves a few px on the axis while its hover keeps the
+true date. Side benefit: same-day acts that used to swallow each other
+(the Τατόι and Β. Εύβοια clusters) now separate into countable dots.
+
+**Same day, the truth-of-position round (user).** Three verdicts on the
+frame. (a) The general near-day spreading was REVOKED — it drew dots at
+dates that are not theirs. The only departure left is acts signed the
+SAME DAY on one row, drawn a hair (6,5 px) apart because two objects
+cannot share one point — the tie member keeps the true date, and the
+legend states the convention in so many words. (b) In its place the chart
+gained a **context strip** (the brush, «the disciplined kin of zoom»):
+drag to frame a period and the chart rescales — near dots separate at
+their TRUE positions, month rules (MM-YYYY) appear when the window is
+short enough to give them room; drag the frame to move it, its edges to
+resize, double-click for the whole period. The strip carries the full
+timeline with season bands, year rules and one tick per act, so the
+reader sees where the activity is before framing. (c) Hover NEVER
+recolours a dot — black means revoked; hovering grows the act's dots and
+inks its tie instead. And the LEGEND was rebuilt on the TIMELINE panel's
+own organisation: a how-to-read-a-row SCHEMATIC (flame → dashed wait →
+status dots, then the tie glyph with its caption and the same-day note)
+beside the dot-status column and the season/right-column notes — one
+tinted strip, fs-14, three clear regions instead of a run-on line.
+
+**Same day, the legend's final trim (user, verbatim wording):** «fire
+event» over the flame (sub-caption kept), «the acts connected to it»
+aligned with it on the same line, the wait unlabeled (the dashed line in
+the demo still shows it), the tie caption reduced to «one act for more
+than one fire events», and the same-day and right-column notes deleted —
+the DAYS TO FIRST ACT column header carries its own meaning.

@@ -1,0 +1,30 @@
+{
+ "_doc": "English display names for the curated anadohoi fire-event labels (user format, 2026-08-25: cardinal words spelled out, month as MM-YYYY). Toponyms follow the pe_names_en approved forms where one exists. Keys are the exact Greek labels — the Greek version's own text; presentation only, payload keys stay Greek.",
+ "_curated": "2026-08-25, all 24 forms user-reviewed",
+ "events": {
+  "Έβρος, Αύγ. 2023": "Evros, 08-2023",
+  "Αίγιο, Ιούλ. 2023": "Aigio, 07-2023",
+  "Αττική 2021–2022 (Αγ. Στέφανος & Πεντέλη)": "Agios Stefanos & Penteli, 08-2021 & 07-2022",
+  "Αχαΐα, Αύγ. 2025": "Achaia, 08-2025",
+  "Β. Εύβοια, Αύγ. 2021": "North Evia, 08-2021",
+  "ΒΑ Αττική, Αύγ. 2024": "Northeast Attica, 08-2024",
+  "Γεράνεια (Σχίνος), Μάιος 2021": "Gerania, 05-2021",
+  "Δερβενοχώρια–Δυτ. Αττική, Ιούλ. 2023": "Dervenochoria–West Attica, 07-2023",
+  "Ερμιονίδα, Ιούλ. 2022": "Ermionida, 07-2022",
+  "Κερατέα, Αύγ. 2021": "Keratea, 08-2021",
+  "Κορινθία (Φενεός), Ιούλ. 2025": "Korinthia's Feneos, 07-2025",
+  "Κουβαράς–Σαρωνίδα, Ιούλ. 2023": "Kouvaras–Saronida, 07-2023",
+  "Κρυονέρι–Δροσοπηγή, Ιούλ. 2025": "Kryoneri–Drosopigi, 07-2025",
+  "Κύθηρα, Ιούλ. 2025": "Kythira, 07-2025",
+  "Λουτράκι, Ιούλ. 2023": "Loutraki, 07-2023",
+  "Πάρνηθα, Αύγ. 2023": "Parnitha, 08-2023",
+  "Πεντέλη, Ιούλ. 2022": "Penteli, 07-2022",
+  "Ρόδος, Ιούλ. 2023": "Rhodes, 07-2023",
+  "Τατόι–Βαρυμπόμπη–Αφίδνες, Αύγ. 2021": "Tatoi–Varympompi–Afidnes, 08-2021",
+  "Χίος, Αύγ. 2025": "Chios, 08-2025",
+  "Χίος, Ιούν. 2025": "Chios, 06-2025",
+  "Χίος, Ιούν./Αύγ. 2025": "Chios, 06-2025 & 08-2025",
+  "εκτός πυρκαγιάς": "not fire-related",
+  "πυρκαγιές Ιουλίου 2023 (πολλαπλά μέτωπα)": "Multiple fronts (Attica, Korinthia, Achaia), 07-2023"
+ }
+}

@@ -94,10 +94,18 @@ CREATE TABLE projects (
                                         -- municipality, pe, stremmata,
                                         -- source_ada, excerpt, lat, lon,
                                         -- geo_precision, geo_source, note})
-    effis_scars     TEXT                -- JSON array of linked EFFIS burn
+    effis_scars     TEXT,               -- JSON array of linked EFFIS burn
                                         -- scars ({id, yr, ha, name,
-                                        -- basis contains|near|region-year,
-                                        -- km}; scripts/link_effis_scars.py)
+                                        -- basis contains|near|region-year|
+                                        -- act_front, km};
+                                        -- scripts/link_effis_scars.py +
+                                        -- act-front curation 2026-08-25)
+    fire_events     TEXT                -- JSON array [{event, scars:[ids]}]
+                                        -- where ONE act answers SEVERAL
+                                        -- fires (2 projects; the fire lanes
+                                        -- iterate these — DATA_DECISIONS
+                                        -- 2026-08-25); NULL = the single
+                                        -- fire_event with all the scars
 );
 CREATE TABLE project_decisions (
     root_ada TEXT NOT NULL REFERENCES projects(root_ada) ON DELETE CASCADE,
@@ -203,9 +211,17 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                 raise SystemExit(f"{root}: work_site {s['name']!r} lat/lon "
                                  f"must be present iff geo_precision is "
                                  f"site/locality/municipality (got {prec!r})")
+        for fe in p.get("fire_events") or []:
+            if not (fe.get("event") and isinstance(fe.get("scars"), list)):
+                raise SystemExit(f"{root}: fire_event entry needs event/scars: {fe!r}")
+            own = {sc.get("id") for sc in (p.get("effis_scars") or [])}
+            bad = set(fe["scars"]) - own
+            if bad:
+                raise SystemExit(f"{root}: fire_event scars not in effis_scars: {bad}")
         for sc in p.get("effis_scars") or []:
             if not (sc.get("id") and sc.get("yr")
-                    and sc.get("basis") in ("contains", "near", "region-year")):
+                    and sc.get("basis") in ("contains", "near", "region-year",
+                                            "act_front")):
                 raise SystemExit(f"{root}: effis_scar needs id/yr/basis: {sc!r}")
         # amendments are ordered by their issue date so "latest wins" holds
         amendments = sorted(p.get("amendments") or [],
@@ -244,7 +260,9 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
             json.dumps(p["work_sites"], ensure_ascii=False)
             if p.get("work_sites") else None,
             json.dumps(p["effis_scars"], ensure_ascii=False)
-            if p.get("effis_scars") else None))
+            if p.get("effis_scars") else None,
+            json.dumps(p["fire_events"], ensure_ascii=False)
+            if p.get("fire_events") else None))
         link_rows.append((root, root, "initial", None, None))
         for a in amendments:
             link_rows.append((root, a["ada"], "amendment",
@@ -279,7 +297,7 @@ def load(db_path: Path = DEFAULT_DB, dry_run: bool = False,
                      decision_rows)
     conn.executemany(
         "INSERT INTO projects VALUES "
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)",
         project_rows)
     conn.executemany("INSERT INTO project_decisions VALUES (?,?,?,?,?)",
                      sorted(link_rows))

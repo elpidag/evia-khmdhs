@@ -11,6 +11,7 @@
 	import { COLOR, NODATE_COLOR } from '$lib/charts/ganttTheme';
 	import type { Feature, LineString, MultiLineString, Polygon, MultiPolygon } from 'geojson';
 	import { dmy, eurShort, grInt } from '$lib/transforms/format';
+	import { fireEn } from '$lib/transforms/names';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -161,7 +162,7 @@
 			.filter((d): d is string => !!d)
 			.sort();
 		if (dates.length) return dates.map(dmy).join(', ');
-		return p.fire_event;
+		return fireEn(p.fire_event);
 	});
 
 	// timeline fire markers: the linked scars' start dates from the layer
@@ -302,7 +303,7 @@
 </script>
 
 <svelte:head>
-	<title>{p.company} — {p.fire_event ?? 'Ανάδοχος'} — sponsor project</title>
+	<title>{p.company} — {p.fire_event ? fireEn(p.fire_event) : 'sponsor'} — sponsor project</title>
 	<meta property="og:title" content="{p.company} · {p.location_text ?? p.root_ada}" />
 	<meta
 		property="og:description"

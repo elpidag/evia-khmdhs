@@ -3812,6 +3812,15 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
             "area": r["area_stremmata"], "pe": r["pe"],
             "fire": r["fire_event"], "budget": budget,
             "scars": (json.loads(r["effis_scars"]) if r["effis_scars"] else None),
+            # the fires this act answers, ONE ENTRY PER FIRE (DATA_DECISIONS
+            # 2026-08-25: an act answering several fires attaches to each —
+            # curated list on the 2 composite acts, synthesized from
+            # fire_event + all scars for the rest)
+            "fire_events": (json.loads(r["fire_events"]) if r["fire_events"]
+                            else ([{"event": r["fire_event"],
+                                    "scars": [s["id"] for s in
+                                              json.loads(r["effis_scars"] or "[]")]}]
+                                  if r["fire_event"] else [])),
             "budget_stated": r["budget_eur"],
             "vat_basis": r["budget_vat_basis"],
             "start": r["start_date"],
@@ -3857,27 +3866,43 @@ def anadohoi_overview(ana: sqlite3.Connection) -> dict:
     # joins no lane and is counted in `n_no_fire`.
     fires: dict[str, dict] = {}
     for p in live:
-        f = fires.setdefault(p["fire"] or "—", {
-            "fire": p["fire"] or "—", "n": 0, "completed": 0,
-            "budget": 0.0, "first_start": p["start"],
-            "acts": [], "burn_date": None, "burn_ha": 0.0, "_scars": set()})
-        f["n"] += 1
-        f["completed"] += p["status"] == "completed"
-        f["budget"] += p["budget"] or 0
-        if p["start"] and (f["first_start"] or "9") > p["start"]:
-            f["first_start"] = p["start"]
-        if p["start"]:
-            f["acts"].append({"d": p["start"], "ada": p["ada"]})
-        for s in (p["scars"] or []):
-            sid = s.get("id") if isinstance(s, dict) else s
-            if sid in f["_scars"]:
-                continue
-            f["_scars"].add(sid)
-            if isinstance(s, dict):
-                f["burn_ha"] += s.get("ha") or 0
-                d = _effis_date(s.get("id"))
-                if d and (f["burn_date"] is None or d < f["burn_date"]):
-                    f["burn_date"] = d
+        by_id = {s["id"]: s for s in (p["scars"] or []) if isinstance(s, dict)}
+        # one membership per FIRE the act answers (DATA_DECISIONS
+        # 2026-08-25, user: an act naming several fires attaches to each
+        # of them — the two old composite labels are no lanes; a
+        # multi-fire act contributes a dot, with its own per-lane lag, to
+        # every fire's lane, and only THAT fire's scars size the flame)
+        events = p["fire_events"] or [{"event": p["fire"] or "—", "scars": []}]
+        for ev in events:
+            f = fires.setdefault(ev["event"], {
+                "fire": ev["event"], "n": 0, "completed": 0,
+                "budget": 0.0, "first_start": p["start"],
+                "acts": [], "burn_date": None, "burn_ha": 0.0, "_scars": set()})
+            f["n"] += 1
+            f["completed"] += p["status"] == "completed"
+            f["budget"] += p["budget"] or 0
+            if p["start"] and (f["first_start"] or "9") > p["start"]:
+                f["first_start"] = p["start"]
+            if p["start"]:
+                # `st` = the CURRENT STATUS OF PROJECTS bucket, so the
+                # chart's dots wear the waffle's own palette (user,
+                # 2026-08-25: one green painted a kept promise and a
+                # past-due one identically). `nodate` mirrors the waffle's
+                # pale bucket: active with no calendar deadline in the act.
+                st = p["status"]
+                if st == "active" and not p["deadline"]:
+                    st = "nodate"
+                f["acts"].append({"d": p["start"], "ada": p["ada"], "st": st})
+            for sid in ev["scars"]:
+                if sid in f["_scars"]:
+                    continue
+                f["_scars"].add(sid)
+                s = by_id.get(sid)
+                if s:
+                    f["burn_ha"] += s.get("ha") or 0
+                    d = _effis_date(sid)
+                    if d and (f["burn_date"] is None or d < f["burn_date"]):
+                        f["burn_date"] = d
     for f in fires.values():
         f.pop("_scars", None)
         f["acts"].sort(key=lambda a: a["d"])

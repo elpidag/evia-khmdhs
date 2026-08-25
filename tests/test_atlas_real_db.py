@@ -1070,6 +1070,9 @@ def test_anadohoi_overview_pins(client):
     assert len(o["projects"]) == 69
     fires = {f["fire"]: f for f in o["fires"]}
     assert fires["Β. Εύβοια, Αύγ. 2021"]["n"] == 10
+    # n counts lane MEMBERSHIPS since the 2026-08-25 decomposition — the
+    # Maxima act (Αγ. Στέφανος half) joined the Τατόι lane
+    assert fires["Τατόι–Βαρυμπόμπη–Αφίδνες, Αύγ. 2021"]["n"] == 14
     assert fires["Τατόι–Βαρυμπόμπη–Αφίδνες, Αύγ. 2021"]["completed"] == 0
     # sponsor grouping merges registry spellings (ΔΕΗ + ΔΕΗ Α.Ε. etc.)
     top = o["sponsors"][0]
@@ -1118,6 +1121,56 @@ def test_sponsor_groups_pins(client):
     assert sum(g["unstated"] for g in sg["groups"]) == 25
 
 
+def test_fire_names_en_pins(client):
+    """The two curated English-name layers of DATA_DECISIONS 2026-08-25.
+
+    (a) fire_events_en.json covers every fire_event label the payload
+    ships — a new fire entering the dataset without a translation fails
+    here instead of printing Greek on the English site. (b)
+    effis_names_en.json covers every token of every feature name in the
+    committed EFFIS display layer, and its Π.Ε. values equal the
+    pe_names_en approved forms. Both files' atlas copies byte-identical."""
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+
+    def both(name):
+        a = (root / "khmdhs" / "data" / name).read_text(encoding="utf-8")
+        b = (root / "atlas" / "src" / "lib" / "data" / name).read_text(encoding="utf-8")
+        assert a == b, f"{name}: the two copies differ"
+        return json.loads(a)
+
+    fire = both("fire_events_en.json")["events"]
+    o = client.get("/api/anadohoi/overview").get_json()
+    labels = {f["fire"] for f in o["fires"]} | {p["fire"] for p in o["projects"] if p["fire"]}
+    missing = {l for l in labels if l not in fire}
+    assert not missing, f"fire events without an English form: {missing}"
+    assert len(fire) == 24
+    # the user's format: cardinal words spelled out, month as MM-YYYY
+    assert fire["Β. Εύβοια, Αύγ. 2021"] == "North Evia, 08-2021"
+    assert fire["Ρόδος, Ιούλ. 2023"] == "Rhodes, 07-2023"
+    assert fire["εκτός πυρκαγιάς"] == "not fire-related"
+
+    effis = both("effis_names_en.json")["tokens"]
+    fc = json.loads((root / "atlas" / "static" / "geo" / "effis_fires.geojson")
+                    .read_text(encoding="utf-8"))
+    toks = {tk for f in fc["features"]
+            for tk in (f["properties"].get("name") or "").split(", ") if tk}
+    assert toks <= set(effis), f"uncovered EFFIS tokens: {toks - set(effis)}"
+    assert len(effis) == 76
+    # the Π.Ε. values are PULLED from the approved vocabulary — verify the
+    # bond on a sample that includes every user-overridden familiar form
+    pe = {k: v["en"] for k, v in json.loads(
+        (root / "khmdhs" / "data" / "pe_names_en.json").read_text(encoding="utf-8")
+    ).items() if not k.startswith("_")}
+    assert effis["Εύβοια"] == pe["Π.Ε. Ευβοίας"] == "Evia"
+    assert effis["Ρόδος"] == pe["Π.Ε. Ρόδου"] == "Rhodes"
+    assert effis["Κέρκυρα"] == pe["Π.Ε. Κέρκυρας"] == "Corfu"
+    assert effis["Νήσοι"] == pe["Π.Ε. Νήσων"] == "Attica Islands"
+    assert effis["Ηράκλειο"] == pe["Π.Ε. Ηρακλείου"] == "Heraklion"
+
+
 def test_fire_response_pins(client):
     """FROM FIRE TO SPONSOR (DATA_DECISIONS 2026-08-24): each fire event
     carries WHEN it burnt, HOW BIG it was and every act that followed, so
@@ -1128,7 +1181,13 @@ def test_fire_response_pins(client):
     o = client.get("/api/anadohoi/overview").get_json()
     lanes = [f for f in o["fires"]
              if f["fire"] != "εκτός πυρκαγιάς" and f["burn_date"] and f["acts"]]
-    assert len(lanes) == 18
+    # 20 lanes since the 2026-08-25 decomposition (user): an act answering
+    # several fires attaches to EACH — the composite labels dissolved,
+    # Κουβαράς–Σαρωνίδα / Λουτράκι / Αίγιο joined as lanes of their own,
+    # Chios split into its June and August 2025 fires, and a multi-fire
+    # act draws a dot on every one of its fires' lanes
+    assert len(lanes) == 20
+    assert sum(len(f["acts"]) for f in lanes) == 69
     for f in lanes:
         assert f["burn_ha"] > 0, f["fire"]
         assert f["lag_days"] is not None and f["lag_days"] > 0, f["fire"]
@@ -1136,13 +1195,29 @@ def test_fire_response_pins(client):
         assert f["acts"][0]["d"] == f["first_start"]
         assert all(a["d"] for a in f["acts"])
         assert len(f["acts"]) == f["n"]
+    # each dot wears the CURRENT STATUS OF PROJECTS bucket (2026-08-25:
+    # one green painted a kept promise and a past-due one identically) —
+    # only 20 of the 69 drawn memberships are completed acts
+    from collections import Counter
+    st = Counter(a["st"] for f in lanes for a in f["acts"])
+    assert st == {"completed": 20, "nodate": 20, "no_completion_recorded": 21,
+                  "active": 7, "revoked": 1}
     lags = [f["lag_days"] for f in lanes]
-    assert statistics.median(lags) == 64          # NOT «within weeks»
-    assert min(lags) == 24 and max(lags) == 574
-    assert sum(1 for x in lags if x <= 60) == 9   # half of them, not all
+    # per-fire lags since the decomposition: Πάρνηθα's first sponsor is
+    # the ΔΕΔΔΗΕ act of 06.09.2023 (15 d), Πεντέλη's the Maxima act of
+    # 26.10.2022 (99 d, was 225 measured to its own-label projects)
+    assert statistics.median(lags) == 53.5        # NOT «within weeks»
+    assert min(lags) == 15 and max(lags) == 574
+    assert sum(1 for x in lags if x <= 60) == 11
     # the contrast the frame states: the biggest fire is among the fastest
     biggest = max(lanes, key=lambda f: f["burn_ha"])
     assert biggest["fire"].startswith("Έβρος") and biggest["lag_days"] == 26
+    # the three lanes the ΔΕΔΔΗΕ act's front list created
+    names = {f["fire"] for f in lanes}
+    assert {"Κουβαράς–Σαρωνίδα, Ιούλ. 2023", "Λουτράκι, Ιούλ. 2023",
+            "Αίγιο, Ιούλ. 2023"} <= names
+    # and the composite labels are lanes NO MORE
+    assert not any("2021–2022" in n or "πολλαπλά" in n for n in names)
 
 
 def test_meta_anadohoi_pin(client):

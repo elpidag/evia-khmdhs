@@ -21,6 +21,7 @@
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import { dmy, grInt } from '$lib/transforms/format';
+	import { fireEn } from '$lib/transforms/names';
 	import type { Feature, Polygon, MultiPolygon } from 'geojson';
 	import type { FireProps } from '$lib/maps/useGeo';
 
@@ -334,7 +335,7 @@
 							<span class="lab"><i></i>fire</span>
 							<span class="val"
 								>{e.fire_date ? dmy(e.fire_date) : 'date unknown'}
-								<em>{e.fire ?? ''}</em></span
+								<em>{fireEn(e.fire ?? '')}</em></span
 							>
 						</span>
 						<span class="d act">

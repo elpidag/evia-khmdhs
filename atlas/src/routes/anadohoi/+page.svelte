@@ -17,6 +17,7 @@
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import { loadCentroids, loadEffisFires, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
 	import { dmy, eurShort, grInt, pct } from '$lib/transforms/format';
+	import { fireEn } from '$lib/transforms/names';
 	import { COLOR, NODATE_COLOR, noDate, type GanttProject } from '$lib/charts/ganttTheme';
 	import ProjectCard from '$lib/charts/ProjectCard.svelte';
 	import { cardFor } from '$lib/charts/projectCard';
@@ -215,7 +216,7 @@
 			.map((p) => ({
 				ada: p.ada,
 				company: p.company,
-				where: (p.pe ? ruLabel(p.pe) : null) ?? p.fire ?? '',
+				where: (p.pe ? ruLabel(p.pe) : null) ?? fireEn(p.fire) ?? '',
 				executors: p.executors as Executor[]
 			}))
 			.sort((a, b) => a.company.localeCompare(b.company, 'el'))
@@ -805,7 +806,7 @@
 	<ChartFrame
 		title="FROM FIRE TO SPONSOR"
 		insight={fireFacts
-			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireFacts.fastest.fire} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireFacts.slowest.fire} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
+			? `A burnt forest waits a median of ${grInt(fireFacts.median)} days for its first sponsor, and the wait tracks the fire's size: ${fireEn(fireFacts.fastest.fire)} (${grInt(Math.round(fireFacts.fastest.burn_ha))} ha) was sponsored in ${grInt(fireFacts.fastest.lag_days ?? 0)} days, while ${fireEn(fireFacts.slowest.fire)} (${grInt(Math.round(fireFacts.slowest.burn_ha))} ha) waited ${grInt(fireFacts.slowest.lag_days ?? 0)}. Only ${grInt(fireFacts.within60)} of the ${grInt(fireFacts.n)} fires drew a sponsor inside two months.`
 			: ''}
 		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
 		anchor="pulse"
@@ -883,7 +884,7 @@
 		<div class="fire-grid">
 			{#each fireCards as f (f.fire)}
 				<div class="fire-card">
-					<div class="fire-name">{f.fire}</div>
+					<div class="fire-name">{fireEn(f.fire)}</div>
 					<div class="fire-bar">
 						<div
 							class="fire-fill"

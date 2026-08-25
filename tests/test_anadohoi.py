@@ -304,7 +304,10 @@ def test_real_db_effis_scars_linked(conn):
         for sc in json.loads(blob):
             assert sc["id"] in layer_ids, (root, sc["id"])
             assert sc["yr"] in years, (root, sc["yr"], fire)
-            assert sc["basis"] in ("contains", "near", "region-year"), root
+            # act_front since 2026-08-25: a scar the act's own front list
+            # names (the ΔΕΔΔΗΕ five-front decomposition)
+            assert sc["basis"] in ("contains", "near", "region-year",
+                                   "act_front"), root
     assert n_linked == 63
 
 

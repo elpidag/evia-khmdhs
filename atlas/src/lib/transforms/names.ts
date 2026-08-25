@@ -12,6 +12,8 @@
 import authRaw from '$lib/data/authority_names_en.json';
 import orgRaw from '$lib/data/org_names_en.json';
 import unitRaw from '$lib/data/unit_names_en.json';
+import fireRaw from '$lib/data/fire_events_en.json';
+import effisRaw from '$lib/data/effis_names_en.json';
 import { ruLabel } from '$lib/transforms/regions';
 
 function fold(s: string): string {
@@ -83,4 +85,27 @@ export function bodyEn(name: string | null | undefined): string {
 export function devGreek(name: string | null | undefined): string | undefined {
 	if (!import.meta.env.DEV || !name) return undefined;
 	return bodyEn(name) !== name ? name : undefined;
+}
+
+/** Curated fire-event label (DATA_DECISIONS 2026-08-25): exact-key
+ *  lookup — the 19 labels are one curation's own strings — with the
+ *  honest Greek fallback. «North Evia, 08-2021» format (user). */
+const FIRE_EVENTS: Record<string, string> = (fireRaw as { events: Record<string, string> })
+	.events;
+export function fireEn(label: string | null | undefined): string {
+	if (!label) return '';
+	return FIRE_EVENTS[label.trim()] ?? label;
+}
+
+/** An EFFIS feature `name` — comma-joined NUTS-3 tokens, each translated
+ *  through the pe_names_en-derived token map (76 tokens, coverage
+ *  pinned); an unknown token stays Greek, honestly. */
+const EFFIS_TOKENS: Record<string, string> = (effisRaw as { tokens: Record<string, string> })
+	.tokens;
+export function effisNameEn(name: string | null | undefined): string {
+	if (!name) return '';
+	return name
+		.split(', ')
+		.map((tk) => EFFIS_TOKENS[tk] ?? tk)
+		.join(', ');
 }
