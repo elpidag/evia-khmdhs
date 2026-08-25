@@ -3977,6 +3977,16 @@ def anadohoi_crew_flows(ana: sqlite3.Connection,
                    "fire": r["fire_event"], "fire_date": fire_date,
                    "act_date": act_date, "lag_days": lag_days,
                    "scars": scar_ids}
+            # a crew with no canonical ΑΦΜ has no register seat; where the
+            # user has curated one from the co-operative's own name and its
+            # work, it is used and labelled as the curation it is
+            # (2026-08-25)
+            cur_seat = e.get("seat") if isinstance(e.get("seat"), dict) else None
+            if seat is None and cur_seat:
+                seat = {"lat": cur_seat["lat"], "lon": cur_seat["lon"],
+                        "region_pe": cur_seat.get("pe"),
+                        "address": cur_seat.get("place"), "city": None}
+                row["seat_source"] = "curated"
             if anchor is None or seat is None:
                 unplaced.append({**row, "why": "no seat on record" if seat is None
                                  else "no work location on record"})

@@ -8741,3 +8741,29 @@ anywhere (row, dot or scar) scrolls its row into view. A PaperMap bug the
 zoom exposed: the `panAtRest` filter read the reactive `transform`, so the
 zoom `$effect` re-ran on every zoom and re-attached the behaviour,
 swallowing the +/− buttons; it now reads d3's own `zoomTransform(svgEl)`.
+
+## 2026-08-25 · The two VAT-less crews get seats (user verdicts)
+
+**ΔΑ.Σ.Ε. Παπάδων** is the **Αναγκαστικός Δασικός Συνεταιρισμός Παπάδων**
+of **Παπάδες, ΒΟΡΕΙΑ ΕΥΒΟΙΑ** (δήμος Μαντουδίου–Λίμνης–Αγίας Άννας; OSM
+village node 38,93194 / 23,36386) — which also explains its work: it dug
+for ΔΕΗ on the Β. Εύβοια restoration, **13 km from home, the shortest
+journey in the whole set**. Worth recording that the machine's candidate
+was WRONG: OSM's only «Παππάδες» hit sat in Δ.Ε. Σιδηρονέρου, ΔΡΑΜΑ, and
+the same ΔΕΗ act naming a Σιδηρόνερο co-op made it look corroborated. The
+verdict was asked for rather than guessed, and a namesake 400 km away was
+avoided. **ΔΑΣΕ «Παντουρέ Δάσος Τρικάλων»** keeps **Τρίκαλα** as its base
+(39,556086 / 21,767884): no map carries the «Παντουρέ» forest locality, so
+the seat is the prefecture town the co-operative's own name states, at
+settlement precision — 153 km to its Coca-Cola work in Αχαΐα.
+
+Curated as a `seat` block on the executor entry in
+`anadohoi_projects.json` (place, lat/lon, Π.Ε., precision, source and the
+reasoning), applied to the committed sqlite in place as this dataset's
+curated fields always are; `anadohoi_crew_flows` uses it where a crew has
+no canonical ΑΦΜ and marks the link `seat_source: curated`. **The map now
+carries 23 of 23 links and nothing is off it** (was 21 + 2 named in the
+caveat); the median journey stays 273 km and the >150 km count rises to
+16. The `(mentioned in the completion act but it wasn't possible to match
+it with a canonical Α.Φ.Μ.)` note stands — the seat is now known, the ΑΦΜ
+still is not. Pinned by `test_crew_flows_pins`.

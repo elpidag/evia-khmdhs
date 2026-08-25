@@ -743,7 +743,16 @@
      "ada": "ΨΕΘΘ4653Π8-Ε1Γ",
      "excerpt": "υλοποιήθηκε από τους Δασικούς Συνεταιρισμούς ΔΑΣΕ «Τα Μακεδονικά Αλυσοπρίονα» και ΔΑΣΕ «Παντουρέ Δάσος Τρικάλων».",
      "note": "(mentioned in the completion act but it wasn’t possible to match it with a canonical Α.Φ.Μ.).",
-     "curation_note": "VAT-less: named only in the completion act, with no contract in the ΔΑΣΕ harvest window to pin a canonical ΑΦΜ to. Visible wording set by the user 2026-08-24; the previous note read: not in the ΔΑΣΕ dataset registry (no public contract in the harvest window)."
+     "curation_note": "VAT-less: named only in the completion act, with no contract in the ΔΑΣΕ harvest window to pin a canonical ΑΦΜ to. Visible wording set by the user 2026-08-24; the previous note read: not in the ΔΑΣΕ dataset registry (no public contract in the harvest window).",
+     "seat": {
+      "place": "ΤΡΙΚΑΛΑ",
+      "lat": 39.556086,
+      "lon": 21.767884,
+      "pe": "Π.Ε. Τρικάλων",
+      "precision": "municipality",
+      "source": "user verdict 2026-08-25",
+      "note": "No map carries the «Παντουρέ» forest locality, so the seat is the prefecture town the co-operative's own name states — Τρίκαλα, at settlement precision."
+     }
     }
    ],
    "work_sites": [
@@ -2673,7 +2682,16 @@
      "ada": "ΩΔΥΜΟΡ10-1ΝΟ",
      "excerpt": "Τα από 11/10/2021 Πρωτόκολλα εγκατάστασης των ΔΑ.Σ.Ε. Μίστρου, ΔΑ.Σ.Ε. Σιδηρόνερου ‘Η Ροδόπη’, ΔΑ.Σ.Ε. Σταυρού Θεσ/νίκης ‘Η Ένωση’ ως φορέων υλοποίησης του προαναφερόμενου έργου. 15.Το από 14/10/2021 Πρωτόκολλο εγκατάστασης του ΔΑ.Σ.Ε. Πωγωνίου ως φορέα υλοποίησης του προαναφερόμενου έργου. 16.Το από 19/11/2021 Πρωτόκολλο εγκατάστασης του ΔΑ.Σ.Ε. Παπάδων ως φορέα υλοποίησης του προαναφερόμενου έργου.",
      "note": "(mentioned in the completion act but it wasn’t possible to match it with a canonical Α.Φ.Μ.).",
-     "curation_note": "VAT-less: named only in the completion act, with no contract in the ΔΑΣΕ harvest window to pin a canonical ΑΦΜ to. Visible wording set by the user 2026-08-24; the previous note read: not in the ΔΑΣΕ dataset registry (no public contract in the harvest window)."
+     "curation_note": "VAT-less: named only in the completion act, with no contract in the ΔΑΣΕ harvest window to pin a canonical ΑΦΜ to. Visible wording set by the user 2026-08-24; the previous note read: not in the ΔΑΣΕ dataset registry (no public contract in the harvest window).",
+     "seat": {
+      "place": "ΠΑΠΠΑΔΕΣ",
+      "lat": 38.93194,
+      "lon": 23.36386,
+      "pe": "Π.Ε. Ευβοίας",
+      "precision": "municipality",
+      "source": "user verdict 2026-08-25",
+      "note": "Αναγκαστικός Δασικός Συνεταιρισμός Παπάδων, of Παπάδες in ΒΟΡΕΙΑ ΕΥΒΟΙΑ (δήμος Μαντουδίου–Λίμνης–Αγίας Άννας) — the village it dug beside, on the ΔΕΗ Β. Εύβοια restoration. OSM's «Παππάδες» in Σιδηρόνερο, Δράμα is a different village of the same name."
+     }
     }
    ],
    "effis_scars": [

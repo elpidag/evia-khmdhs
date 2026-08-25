@@ -1644,10 +1644,16 @@ def test_crew_flows_pins(client):
     have geocoded sites, and a Regional-Unit fallback would have thrown the
     precision away."""
     f = client.get("/api/anadohoi/crew-flows").get_json()
-    assert len(f["links"]) == 21
-    # the two without a seat are the co-ops with no canonical ΑΦΜ
-    assert len(f["unplaced"]) == 2
-    assert all(u["why"] == "no seat on record" for u in f["unplaced"])
+    # 23 since 2026-08-25: the two crews with no canonical ΑΦΜ got curated
+    # seats from the user (ΔΑ.Σ.Ε. Παπάδων of Παπάδες, Β. Εύβοια — a 13 km
+    # journey, the shortest in the set; Παντουρέ keeps Τρίκαλα), so no crew
+    # is off the map any more
+    assert len(f["links"]) == 23
+    assert f["unplaced"] == []
+    curated = [l for l in f["links"] if l.get("seat_source") == "curated"]
+    assert len(curated) == 2
+    papadon = next(l for l in curated if "Παπάδων" in l["coop"])
+    assert papadon["seat_pe"] == "Π.Ε. Ευβοίας" and papadon["km"] < 30
     kinds = {}
     for l in f["links"]:
         kinds[l["work_kind"]] = kinds.get(l["work_kind"], 0) + 1
@@ -1656,9 +1662,9 @@ def test_crew_flows_pins(client):
         assert l["km"] >= 0
     # all three anchor sources are in use — losing the zones sent the ΔΕΗ
     # basins down to the whole-Εύβοια scar and blunted the map
-    assert kinds == {"site": 9, "zone": 6, "scar": 6}
+    assert kinds == {"site": 10, "zone": 7, "scar": 6}
     # the finding the frame states
     assert f["median_km"] == 273
-    assert f["far_150"] == 15
+    assert f["far_150"] == 16
     top = f["links"][0]
     assert top["km"] == 672 and "ΠΙΕΡΙΑΣ" in top["coop"]
