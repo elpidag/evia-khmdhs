@@ -28,6 +28,13 @@
 </script>
 
 <div class="wrap" bind:clientWidth={width}>
+	<!-- the key strip above the chart, in the dataset pages' legend dress
+	     (user, 2026-08-25) -->
+	<ul class="legend">
+		<li><i class="a"></i>Anti-nero ({grInt(hist.antinero_n)} contracts)</li>
+		<li><i class="d"></i>forest co-ops ({grInt(hist.dase_n)} contracts)</li>
+		<li class="faint">y-axis: % of each programme's own contracts</li>
+	</ul>
 	<svg viewBox="0 0 {width} {height}" style:height="{height}px">
 		{#each hist.labels as label, i (label)}
 			<rect
@@ -67,11 +74,6 @@
 			co-op median {eurShort(hist.dase_median)}
 		</text>
 	</svg>
-	<div class="legend">
-		<span><i class="a"></i>Anti-nero ({grInt(hist.antinero_n)} contracts)</span>
-		<span><i class="d"></i>forest co-ops ({grInt(hist.dase_n)} contracts)</span>
-		<span class="faint">y-axis: % of each programme's own contracts</span>
-	</div>
 </div>
 
 <style>
@@ -117,18 +119,29 @@
 		fill: var(--c-dase);
 	}
 	.legend {
+		list-style: none;
+		margin: 0 0 var(--sp-3);
+		padding: var(--sp-2) var(--sp-3);
+		background: #f2f2f2;
+		border-radius: 6px;
 		display: flex;
-		gap: var(--sp-4);
 		flex-wrap: wrap;
-		font-size: var(--fs-13);
+		align-items: center;
+		gap: 6px var(--sp-6, 1.5rem);
+		font-size: var(--fs-14);
 		color: var(--ink-soft);
-		margin-top: var(--sp-2);
+	}
+	.legend li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
 	}
 	.legend i {
 		display: inline-block;
-		width: 0.7rem;
-		height: 0.7rem;
-		margin-right: 4px;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		flex: none;
 	}
 	.legend i.a {
 		background: var(--c-antinero);

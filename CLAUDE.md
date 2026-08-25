@@ -1410,7 +1410,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   FOREST CO-OP WORKS (/dase) · EXPLORE, then KEY FINDINGS (`/compare`,
   renamed and redressed 2026-08-23 — hero cards + kicker + basis once,
   caps frame titles, computed bulbs, method/source caveats, black hover
-  cards, «forest co-ops» in chart labels; since 2026-08-25 it opens with
+  cards, «forest co-ops» in chart labels; frame titles + legends in the
+  dataset pages' dress since 2026-08-25 (`.cmpp` kicker titles in ink,
+  CONTRACT SIZES' key strip above the chart); since 2026-08-25 it opens with
   STATE-FUNDED, TWO WORLDS — `StateFunded.svelte`, a 3-step canvas
   animation of all 2.243 contracts: a seeded random SCATTER (every dot a
   contract, area ∝ stated net €) → the Anti-nero dots turn black → the

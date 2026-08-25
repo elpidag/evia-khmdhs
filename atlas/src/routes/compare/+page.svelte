@@ -55,6 +55,7 @@
 	/>
 </svelte:head>
 
+<div class="cmpp">
 <section class="hero">
 	<div class="cards">
 		<div class="card antinero">
@@ -153,8 +154,23 @@
 		</div>
 	</div>
 </ChartFrame>
+</div>
 
 <style>
+	/* the frame titles and bulbs in the dataset pages' dress (user,
+	   2026-08-25); the page has no dataset hue, so they wear the ink —
+	   the hero kicker's own colour */
+	.cmpp {
+		--frame-accent: var(--ink);
+	}
+	.cmpp :global(.frame .finding) {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: var(--fs-14);
+		letter-spacing: 0.08em;
+		line-height: 1.3;
+		color: var(--ink);
+	}
 	/* the hero, in the dataset pages' geometry: cards left, the kicker and
 	   the page's two paragraphs right */
 	.hero {

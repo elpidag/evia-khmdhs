@@ -9377,3 +9377,13 @@ breaks that for the smallest contracts, and dropping the admission
 would leave the caption overclaiming). The basis sentence is the page's
 `.basis` line, and the «ΑΦΜ canonicalised» sentence supported the
 retired zero-overlap claim — both gone.
+
+**Seventh round the same day (user):** /compare's frame titles and
+legends match the three dataset pages — a `.cmpp` wrapper gives every
+ChartFrame title the kicker dress (display 900, fs-14, 0.08em; in the
+INK, the hero kicker's own colour — the page has no dataset hue) and
+sets `--frame-accent` to the ink for the bulbs; CONTRACT SIZES' legend
+becomes the key strip of the dataset pages (grey #f2f2f2 rounded band
+ABOVE the chart, fs-14, round dots), was a bare fs-13 flex row under
+it. MONEY PER YEAR's side headings and REGION BY REGION's column heads
+already matched.
