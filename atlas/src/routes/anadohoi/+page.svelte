@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ruLabel } from '$lib/transforms/regions';
+	import { ruLabel, regionOfPe, pesOfRegion } from '$lib/transforms/regions';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import SponsorGroups from '$lib/charts/SponsorGroups.svelte';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
@@ -32,6 +32,27 @@
 	// WHO THE SPONSORS ARE measures: € committed or a plain project count
 	// (?sg=), the CONTRACT TYPE lens one dataset over
 	const sgLens = $derived<'eur' | 'n'>(page.url.searchParams.get('sg') === 'n' ? 'n' : 'eur');
+
+	// PROJECTS PER REGION (περιφέρεια, not Π.Ε. — user, 2026-08-25): each
+	// live project's Π.Ε. resolves to its NUTS-2 region via the curated
+	// pe_names_en nuts_id bridge; the two pe-less projects counted aside
+	const regionCounts = $derived.by(() => {
+		const by = new Map<string, number>();
+		let unresolved = 0;
+		for (const p of ganttProjects) {
+			const r = regionOfPe(p.pe);
+			if (r) by.set(r, (by.get(r) ?? 0) + 1);
+			else unresolved++;
+		}
+		return {
+			rows: [...by.entries()].sort((a, b) => b[1] - a[1]),
+			unresolved
+		};
+	});
+	const projectRegions = $derived(new Set(regionCounts.rows.map(([r]) => r)));
+	// click a project region → the map zooms to its whole extent
+	let selRegion = $state<string | null>(null);
+	const selRegionPes = $derived(selRegion ? pesOfRegion(selRegion) : null);
 
 	// the TIMELINE's dashed rule marks the ACTUAL current day (local clock);
 	// the statuses themselves are as of the data's status_as_of date, which
@@ -553,8 +574,11 @@
 </ChartFrame>
 </div>
 
-<h2 class="status-title">CURRENT STATUS OF PROJECTS</h2>
 <ChartFrame
+	title="CURRENT STATUS OF PROJECTS"
+	insight={regionCounts.rows.length >= 2
+		? `${regionCounts.rows[0][0]} and ${regionCounts.rows[1][0]} alone hold ${pct(((regionCounts.rows[0][1] + regionCounts.rows[1][1]) / k.n_projects) * 100, 0)} of the ${grInt(k.n_projects)} projects; in all, the projects reach ${grInt(projectRegions.size)} of Greece's 13 regions. Click a region that holds projects to zoom the map to it.`
+		: ''}
 	anchor="waffle"
 	methodology="anadohoi"
 	caveat={`${
@@ -583,7 +607,14 @@
 
 	<div class="statusgrid">
 		<div class="mcol">
-			<div class="maplabel">MAP</div>
+			<div class="maplabel">
+				MAP
+				{#if selRegion}
+					<button class="pill" onclick={() => (selRegion = null)}
+						>✕ {selRegion} · all of Greece</button
+					>
+				{/if}
+			</div>
 			{#if dev}
 				<div class="framepick">
 					<label>
@@ -611,6 +642,17 @@
 						height={620}
 						view={pickFrame ? null : MAP_VIEW}
 						onViewChange={(v) => (pickedView = v)}
+						peGroup={(pe) => {
+							const r = regionOfPe(pe);
+							return r && projectRegions.has(r) ? r : null;
+						}}
+						onRegionClick={(pe) => {
+							const r = regionOfPe(pe);
+							if (r && projectRegions.has(r)) selRegion = selRegion === r ? null : r;
+						}}
+						fitPesLive={selRegionPes}
+						onEscape={() => (selRegion = null)}
+						onEmptyClick={() => (selRegion = null)}
 					>
 						{#snippet overlay(ctx)}
 							{@const dots = ctx.k >= 2 ? spreadOverlaps(mapDots, SPREAD_BASE / ctx.k) : mapDots}
@@ -956,7 +998,6 @@
 	}
 	/* every subsection title on this page follows THE SCHEME kicker:
 	   display-black 14px, letterspaced, dataset green */
-	.status-title,
 	.anap :global(.frame .finding) {
 		font-family: var(--font-display);
 		font-weight: 900;
@@ -964,9 +1005,6 @@
 		letter-spacing: 0.08em;
 		line-height: 1.3;
 		color: var(--c-anadohoi);
-	}
-	.status-title {
-		margin: 0 0 var(--sp-3);
 	}
 	/* invisible width reference for the prose right-edge alignment */
 	.ruler {
@@ -1134,6 +1172,24 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
+	}
+	.maplabel .pill {
+		font: inherit;
+		font-size: var(--fs-12);
+		letter-spacing: 0;
+		text-transform: none;
+		font-weight: 400;
+		margin-left: var(--sp-3);
+		padding: 1px 10px;
+		border: 1px solid var(--line-strong);
+		border-radius: 999px;
+		background: var(--paper);
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.maplabel .pill:hover {
+		border-color: var(--ink);
+		color: var(--ink);
 	}
 	.stkey i {
 		width: 12px;

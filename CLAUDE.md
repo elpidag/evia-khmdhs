@@ -1771,7 +1771,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   bars. Under the € lens the «without a stated sum»
   tail prints only on the bar-less «—» rows — the long tail is what
   starved the bars of length. Names, longest words and the value
-  column are MEASURED from hidden spans, never constants), status-coloured Π.Ε. dot map,
+  column are MEASURED from hidden spans, never constants), status-coloured Π.Ε. dot map (since 2026-08-25 its frame carries the
+  per-ΠΕΡΙΦΕΡΕΙΑ bulb — 8 of 13 regions, computed via the
+  `regions.regionOfPe()` nuts_id bridge, vitest-pinned — and clicking
+  a project region zooms to its extent via `fitPesLive`; hover lights
+  only project regions as units, PaperMap's optional `peGroup` prop),
   monthly appointment strip with fire markers, deadline-slip slope.
   `/anadohoi/project/[ada]` = decision trail with per-act Diavgeia PDFs +
   the verbatim-excerpt evidence block.

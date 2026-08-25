@@ -66,6 +66,12 @@
 		/** Escape with nothing pinned — the Anti-nero maps reset their drill */
 		onEscape?: () => void;
 		onRegionClick?: (pe: string) => void;
+		/** GROUP interactivity (the anadohoi status map, 2026-08-25): maps a
+		 *  Π.Ε. to its group key (περιφέρεια) or null for an INERT polygon —
+		 *  when set, hover lights every member of the hovered group and
+		 *  clicks fire only on members; inert polygons keep the resting
+		 *  stroke and take no pointer cursor */
+		peGroup?: (pe: string) => string | null;
 		/** drilled Π.Ε. — zooms to it, swaps in hi-res + municipality borders */
 		focusPe?: string | null;
 		/** set false to MARK the drilled Π.Ε. (the heavier outline) without
@@ -114,6 +120,9 @@
 		panAtRest?: boolean;
 	}
 
+	/** hovered group key (peGroup mode): every member lights together */
+	let hovGroup = $state<string | null>(null);
+
 	let {
 		colorOf = () => 'var(--land-empty)',
 		tipOf,
@@ -121,6 +130,7 @@
 		onEmptyClick,
 		onEscape,
 		onRegionClick,
+		peGroup,
 		focusPe = null,
 		focusZoom = true,
 		interactive = true,
@@ -560,22 +570,37 @@
 					/>
 				{/if}
 				{#each drawnFeatures as f (f.properties.pe)}
+					{@const grp = peGroup ? peGroup(f.properties.pe) : undefined}
+					{@const inert = peGroup ? grp == null : false}
+					{@const canClick = !!onRegionClick && !inert}
 					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 					<path
 						class="region"
 						class:focused={f.properties.pe === focusPe}
-						class:clickable={!!onRegionClick}
+						class:clickable={canClick}
+						class:inert
+						class:grouphot={!!peGroup && grp != null && grp === hovGroup}
 						data-pe={f.properties.pe}
 						d={dOf(f)}
 						fill={relief ? 'transparent' : colorOf(f.properties.pe)}
-						role={onRegionClick ? 'button' : undefined}
-						onmouseenter={tipOf ? () => regionEnter(f.properties.pe) : undefined}
-						onmouseleave={tipOf ? () => regionLeave() : undefined}
-						onclick={onRegionClick ? () => onRegionClick(f.properties.pe) : undefined}
-						onkeydown={onRegionClick
-							? (e) => e.key === 'Enter' && onRegionClick(f.properties.pe)
+						role={canClick ? 'button' : undefined}
+						onmouseenter={tipOf || (peGroup && !inert)
+							? () => {
+									if (tipOf) regionEnter(f.properties.pe);
+									if (peGroup && grp != null) hovGroup = grp;
+								}
 							: undefined}
-						tabindex={onRegionClick ? 0 : undefined}
+						onmouseleave={tipOf || (peGroup && !inert)
+							? () => {
+									if (tipOf) regionLeave();
+									if (peGroup) hovGroup = null;
+								}
+							: undefined}
+						onclick={canClick ? () => onRegionClick!(f.properties.pe) : undefined}
+						onkeydown={canClick
+							? (e) => e.key === 'Enter' && onRegionClick!(f.properties.pe)
+							: undefined}
+						tabindex={canClick ? 0 : undefined}
 					/>
 				{/each}
 				{#each muniFeatures as f, i (i)}
@@ -704,6 +729,16 @@
 		outline: none;
 		stroke: var(--ink);
 		stroke-width: 1.4;
+	}
+	/* GROUP mode (peGroup): an inert polygon never lights, the hovered
+	   group lights WHOLE — declared after :hover so it wins the tie */
+	.region.inert:hover {
+		stroke: var(--line-strong);
+		stroke-width: 0.6;
+	}
+	.region.grouphot {
+		stroke: var(--ink);
+		stroke-width: 1.3;
 	}
 	/* the drilled unit: a clearly heavier outline than a hover (user, 2026-08-21) */
 	.region.focused {

@@ -9114,3 +9114,31 @@ co-operatives engaged in projects financed by private
 restoration–reforestation contractors»). The lightbulb now LEADS with the
 user's key finding: forest co-operatives appear in only 13 of the 68
 sponsored projects — 19%, computed — the travel figures following.
+
+## 2026-08-25 · The status map reads by ΠΕΡΙΦΕΡΕΙΑ (user)
+
+CURRENT STATUS OF PROJECTS gained a lightbulb computing **projects per
+REGION** — περιφέρεια, not Π.Ε. — and the map now answers at that level:
+**clicking a region that holds projects zooms the map to its whole
+extent** (every Π.Ε. of the περιφέρεια, PaperMap's animated `fitPesLive`;
+✕ pill, Esc and bare-map click reset), and **hover highlights only those
+regions**, lighting the περιφέρεια as one unit — the 22 Π.Ε. of the five
+project-less regions are inert.
+
+No new curation was needed: each Π.Ε. in `pe_names_en.json` carries its
+Eurostat `nuts_id`, whose first four characters ARE the NUTS-2 region —
+`transforms/regions.regionOfPe()` / `pesOfRegion()` derive the bridge,
+the 13 English region names are presentation vocabulary in the
+familiar-English doctrine, and a vitest pins the partition (74 Π.Ε. → 13
+regions, no leftovers, round-trips). PaperMap gained the one optional
+prop `peGroup` (Π.Ε. → group key or null=inert): hover lights every
+member of the group, clicks fire only on members, and no other map
+changes behaviour.
+
+The computed reading (in the bulb, never hardcoded; user trimmed the
+full arithmetic on review): **Attica and Central Greece alone hold 76% of
+the 68 projects**, and the projects reach 8 of Greece's 13 regions — the
+top-two share, the region count and the click affordance in one sentence.
+The standalone «CURRENT STATUS OF PROJECTS» h2 became the frame's own
+title (identical styling — the bulb needs the title row); the status
+legend stays exactly as it was.
