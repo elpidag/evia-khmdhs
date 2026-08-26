@@ -9650,3 +9650,38 @@ reforestation, the opposite of «reforested»; «Palini» → «Pallini»
 Rows 41/42 name the service in the curated
 `authority_names_en.json` form («Lamia / Spercheiada Forest Service
 Office», user-confirmed) so one service reads the same on every surface.
+
+## 2026-08-26 · The co-op page settled; the map/diagram switch joins the site's toggles (user)
+
+Round after the entity-page redress, all user calls: the ΔΑΣΕ co-op page's
+facts read **NAME · ΑΦΜ · IN THE REGISTRY AS · REGISTERED OFFICE**, then
+**TOTAL € AWARDED · CONTRACTS AWARDED · ACTIVE PERIOD** — the English
+name row and the «· ΔΑ.Σ.Ε.» form after the ΑΦΜ are gone (the FORMS table
+with them), money and count are separate rows, and the labels are short
+enough to sit level with their values. AWARDING UNITS and CONTRACTS are
+`Fold` sections that arrive CLOSED (open folds were «too much noise»), the
+contracts list is date · ΑΔΑΜ · value (the unit lives in AWARDING UNITS),
+and the row below the header shares FactsHeader's own two columns so
+AWARDING UNITS starts at the map's left edge and shares its width. The map
+binds the slot's width like the contract pages (measured: 458 px on both,
+where the co-op map used to be hard-coded 460), frames the seat's own
+Π.Ε. through `fitPes` (it framed nothing before, so it drew the whole
+country and pulled in the Turkish coast), and ONLY the registered-office
+dot answers the pointer — the regions lost their card and their hover
+stroke.
+
+**The seat in English** (user: the facts row cannot mix Greek and
+English): curated `dase_coop_seats_en.json`, the 271 distinct
+village/town strings of the 246 co-op seats transliterated with the
+repository's own ISO-843 helper, title-cased, «ΑΓ» expanded to
+Agios/Agia/Agioi by the following word's gender, «ΧΙΛ»→km, «ΤΘ»→PO Box,
+«ΕΝΤΟΣ ΟΙΚΙΣΜΟΥ» dropped; byte-identical atlas copy, `names.placeEn()`
+with the honest Greek fallback. MACHINE-PROPOSED, awaiting the user's
+review like the LOCATION layer. Where the village and the post town are
+the same word it prints once, and the regional unit is not repeated.
+
+**The MAP/DIAGRAM switch** now wears the site's segmented-toggle dress
+(one bordered pill, active segment filled, fs-13) instead of two small
+caps chips, and sits to the LEFT of the map's +/−/⌂ stack, which returns
+to its usual top-right corner — on the Anti-nero AND the ΔΑΣΕ contract
+page, since they share the switch.

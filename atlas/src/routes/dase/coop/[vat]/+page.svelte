@@ -6,8 +6,8 @@
 	 * .plain sections below. Content unchanged; only the presentation.
 	 */
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
-	import { bodyEn, devGreek, orgEn } from '$lib/transforms/names';
-	import { ruLabel } from '$lib/transforms/regions';
+	import Fold from '$lib/ui/Fold.svelte';
+	import { bodyEn, devGreek, orgEn, placeEn } from '$lib/transforms/names';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import YearBars from '$lib/charts/YearBars.svelte';
@@ -17,15 +17,10 @@
 	let { data }: { data: PageData } = $props();
 	const b = $derived(data.b);
 	const loc = $derived(b.location ?? null);
-	const FORMS: Record<string, string> = {
-		dase: 'ΔΑ.Σ.Ε.',
-		adse: 'ΑΔΣΕ (αναγκαστικός)',
-		edase: 'ΕΔΑΣΕ',
-		daseragikos: 'δασεργατικός συνεταιρισμός'
-	};
-
-	// map height tracks the facts+caveat column — the contract pages' rule
+	// map height tracks the facts+caveat column, width the slot itself —
+	// the contract pages' rule exactly
 	let leftH = $state(0);
+	let mapW = $state(0);
 	const mapH = $derived(Math.max(420, Math.round(leftH)));
 
 	const CAVEAT = $derived(
@@ -50,55 +45,51 @@
 <div class="entp">
 	<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
 		{#snippet facts()}
-			<dt class="id">Forest workers' co-operative</dt>
+			<dt class="id">Name</dt>
 			<dd class="id">{b.summary.name}</dd>
-			{#if b.summary.name_en}
-				<dt>English name</dt>
-				<dd>{b.summary.name_en}</dd>
-			{/if}
 			<dt>ΑΦΜ</dt>
-			<dd>
-				{b.summary.vat}
-				{#if b.summary.form}<small class="muted">· {FORMS[b.summary.form] ?? b.summary.form}</small
-					>{/if}
-			</dd>
+			<dd>{b.summary.vat}</dd>
 			{#if b.summary.name_variants.length}
 				<dt>In the registry as</dt>
 				<dd><small class="muted">{b.summary.name_variants.join(' · ')}</small></dd>
 			{/if}
+			{#if loc}
+				<dt>Registered office</dt>
+				<!-- English throughout (user, 2026-08-26): toponyms from the
+				     curated transliteration, the Greek stays the stored value -->
+				<dd>
+					<!-- the village and the post town are often the same word;
+					     print it once -->
+					{placeEn(loc.address) === placeEn(loc.city)
+						? [placeEn(loc.city), loc.postal_code].filter(Boolean).join(', ')
+						: [placeEn(loc.address), [loc.postal_code, placeEn(loc.city)].filter(Boolean).join(' ')]
+								.filter(Boolean)
+								.join(', ') || placeEn(loc.city) || '—'}
+				</dd>
+			{/if}
 			<dt class="gap"></dt>
 			<dd class="gap"></dd>
-			<dt>Total awarded</dt>
-			<dd>
-				{eurShort(b.summary.total_eur)}
-				<small class="muted">across {grInt(b.summary.n_live)} live contracts</small>
-			</dd>
+			<dt>Total € awarded</dt>
+			<dd>{eurShort(b.summary.total_eur)}</dd>
+			<dt>Contracts awarded</dt>
+			<dd>{grInt(b.summary.n_live)}</dd>
 			<dt>Active period</dt>
 			<dd>
 				{(b.summary.first_date ?? '—').slice(0, 7)} → {(b.summary.last_date ?? '—').slice(0, 7)}
 			</dd>
-			{#if loc}
-				<dt class="gap"></dt>
-				<dd class="gap"></dd>
-				<dt>Registered office</dt>
-				<dd>
-					{[loc.address, [loc.postal_code, loc.city].filter(Boolean).join(' ')]
-						.filter(Boolean)
-						.join(', ') || loc.city || '—'}
-					{#if loc.region_pe}<small class="muted">· {ruLabel(loc.region_pe)}</small>{/if}
-				</dd>
-			{/if}
 		{/snippet}
 		{#snippet map()}
-			<div class="detailmap">
+			<div class="detailmap" bind:clientWidth={mapW}>
 				<PaperMap
-					width={460}
+					width={mapW || 460}
 					height={mapH}
+					fitPes={loc?.region_pe ? [loc.region_pe] : undefined}
+					fitPoints={loc?.lat && loc?.lon ? [[loc.lon, loc.lat]] : null}
+					fitPad={0.15}
 					colorOf={(pe) =>
 						loc?.region_pe && pe === loc.region_pe
 							? 'color-mix(in srgb, var(--c-dase) 30%, #fff)'
 							: '#fff'}
-					tipOf={(pe) => `<strong>${ruLabel(pe)}</strong>`}
 				>
 					{#snippet overlay(ctx)}
 						{#if loc?.lat && loc?.lon}
@@ -109,16 +100,13 @@
 								stroke="none"
 								fillOf={() => 'var(--c-dase)'}
 								tipOf={() =>
-									`<strong>Registered office</strong><br>${loc?.city ?? ''}${
+									`<strong>Registered office</strong><br>${placeEn(loc?.city)}${
 										loc?.geo_precision === 'municipality'
 											? '<br><span style="color:var(--ink-faint)">map point at the centre of the settlement named</span>'
 											: ''
 									}`}
 							/>
 						{/if}
-					{/snippet}
-					{#snippet legend()}
-						<div>● registered office{loc?.lat ? '' : ' — not geocoded'}</div>
 					{/snippet}
 				</PaperMap>
 			</div>
@@ -130,8 +118,8 @@
 			<h2>Stated € per year</h2>
 			<YearBars rows={b.yearly} color="var(--c-dase)" />
 		</section>
-		<section class="plain">
-			<h2>Awarding units</h2>
+		<div class="foldslot">
+			<Fold title="Awarding units">
 			<table>
 				<tbody>
 					{#each b.units as u, i (i)}
@@ -144,17 +132,16 @@
 					{/each}
 				</tbody>
 			</table>
-		</section>
+			</Fold>
+		</div>
 	</div>
 
-	<section class="plain">
-		<h2>Contracts ({b.contracts.length})</h2>
+	<Fold title="Contracts ({b.contracts.length})">
 		<table>
 			<thead>
 				<tr>
 					<th>Signed</th>
-					<th>Contract</th>
-					<th>Unit</th>
+					<th>ΑΔΑΜ</th>
 					<th class="num">Value</th>
 				</tr>
 			</thead>
@@ -162,11 +149,9 @@
 				{#each b.contracts as r (r.reference_number)}
 					<tr>
 						<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
-						<td
-							><a href={`/dase/contract/${r.reference_number}`}>{r.title ?? r.reference_number}</a
-							></td
+						<td class="tabular"
+							><a href={`/dase/contract/${r.reference_number}`}>{r.reference_number}</a></td
 						>
-						<td class="muted"><small>{r.units_operator_name ?? '—'}</small></td>
 						<td class="num">
 							{eur(r.total_cost_with_vat)}
 							{#if r.share_eur !== undefined}
@@ -190,10 +175,17 @@
 				>
 			</p>
 		{/if}
-	</section>
+	</Fold>
 </div>
 
 <style>
+	.entp {
+		--fold-accent: var(--c-dase);
+	}
+	.pair :global(.fold),
+	.foldslot :global(.fold) {
+		margin-top: 0;
+	}
 	/* the contract pages' section dress */
 	.plain {
 		margin-bottom: var(--sp-8);
@@ -213,10 +205,19 @@
 		--map-accent: var(--c-dase);
 		box-shadow: none;
 	}
+	/* the same two columns as FactsHeader above it, so AWARDING UNITS
+	   lines up with the map's left edge and shares its width (user,
+	   2026-08-26) */
 	.pair {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: minmax(0, 1fr) minmax(300px, 460px);
 		gap: var(--sp-8);
+		align-items: start;
+	}
+	/* the regions rest: no card, and no hover stroke either */
+	.detailmap :global(.map .region:hover) {
+		stroke: var(--line-strong);
+		stroke-width: 0.6;
 	}
 	@media (max-width: 900px) {
 		.pair {

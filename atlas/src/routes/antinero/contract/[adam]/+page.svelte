@@ -1112,31 +1112,31 @@
 	}
 	/* the switch rides ON the frame's top-right corner, so choosing a view
 	   costs no vertical space and the two views stay the same size */
+	/* the site's segmented toggle (user, 2026-08-26), sitting to the LEFT
+	   of the map's own +/−/⌂ stack, which keeps its usual corner */
 	.viewsw {
 		position: absolute;
-		top: 4px;
-		right: 4px;
+		top: var(--sp-2);
+		right: calc(var(--sp-2) + 1.45rem + 8px);
 		z-index: 2;
-		display: flex;
-		gap: 3px;
+		display: inline-flex;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		overflow: hidden;
+		background: var(--paper);
 	}
 	.sw {
 		font: inherit;
-		font-size: 10px;
-		font-family: var(--font-display);
-		text-transform: uppercase;
-		letter-spacing: 0.02em;
-		padding: 2px 7px;
-		border: 1px solid var(--line-strong);
-		border-radius: 999px;
+		font-size: var(--fs-13);
+		padding: 2px var(--sp-3);
+		border: 0;
 		background: var(--paper);
 		color: var(--ink-soft);
 		cursor: pointer;
 	}
 	.sw.on {
-		background: var(--c-antinero);
-		border-color: var(--c-antinero);
-		color: var(--paper);
+		background: var(--ink);
+		color: #fff;
 	}
 	/* evidence left, codes right — two reference blocks, one row */
 	.refcols {
@@ -1192,11 +1192,6 @@
 	}
 	/* template map look — same as the sponsored-works maps:
 	   grey sea, no border, no paper shadow */
-	/* the +/−/⌂ stack starts below the MAP/DIAGRAM switch that
-	   occupies the frame's top-right corner (user, 2026-08-25) */
-	.detailmap :global(.zoomctl) {
-		top: 46px;
-	}
 	.detailmap :global(.map) {
 		background: #f2f2f2;
 		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */

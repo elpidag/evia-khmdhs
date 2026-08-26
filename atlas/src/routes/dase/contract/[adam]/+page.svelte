@@ -539,31 +539,31 @@
 		color: var(--ink-soft);
 	}
 	/* the switch rides ON the frame's top-right corner */
+	/* the site's segmented toggle (user, 2026-08-26), left of the map's
+	   own +/−/⌂ stack, which keeps its usual corner */
 	.viewsw {
 		position: absolute;
-		top: 4px;
-		right: 4px;
+		top: var(--sp-2);
+		right: calc(var(--sp-2) + 1.45rem + 8px);
 		z-index: 2;
-		display: flex;
-		gap: 3px;
+		display: inline-flex;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		overflow: hidden;
+		background: var(--paper);
 	}
 	.sw {
 		font: inherit;
-		font-size: 10px;
-		font-family: var(--font-display);
-		text-transform: uppercase;
-		letter-spacing: 0.02em;
-		padding: 2px 7px;
-		border: 1px solid var(--line-strong);
-		border-radius: 999px;
+		font-size: var(--fs-13);
+		padding: 2px var(--sp-3);
+		border: 0;
 		background: var(--paper);
 		color: var(--ink-soft);
 		cursor: pointer;
 	}
 	.sw.on {
 		background: var(--c-dase);
-		border-color: var(--c-dase);
-		color: var(--paper);
+		color: #fff;
 	}
 	.famslot {
 		position: relative;
@@ -611,11 +611,6 @@
 		cursor: pointer;
 	}
 	/* template map look — same as the sponsored-works maps */
-	/* the +/−/⌂ stack starts below the MAP/DIAGRAM switch that
-	   occupies the frame's top-right corner (user, 2026-08-25) */
-	.detailmap :global(.zoomctl) {
-		top: 46px;
-	}
 	.detailmap :global(.map) {
 		background: #f2f2f2;
 		border: 1px solid var(--line);

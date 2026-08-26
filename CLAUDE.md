@@ -1967,7 +1967,15 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   FactsHeader facts + caveat, map at the facts column's height in the
   page's --map-accent, CAPS .plain sections, no KPI cards; the co-op
   page carries the seat layer's first page surface (`location` on
-  `/api/dase/coop/<vat>`, pinned). No sponsor entity page BY DECISION:
+  `/api/dase/coop/<vat>`, pinned) — since 2026-08-26 its facts are NAME ·
+  ΑΦΜ · IN THE REGISTRY AS · REGISTERED OFFICE (English via curated
+  `dase_coop_seats_en.json`, `names.placeEn`, machine-proposed pending
+  review) · TOTAL € AWARDED · CONTRACTS AWARDED · ACTIVE PERIOD, with
+  AWARDING UNITS and CONTRACTS as CLOSED folds, the contracts list
+  date · ΑΔΑΜ · value, the row below the header on FactsHeader's own
+  columns, and only the office dot hoverable. The MAP/DIAGRAM switch is
+  the site's segmented toggle left of the +/−/⌂ stack on both contract
+  pages. No sponsor entity page BY DECISION:
   sponsors have no documentary identity key (DATA_DECISIONS
   2026-08-26).
 - **Tests**: `tests/test_atlas_api.py` (+ `_queries_extra`, `_real_db` as

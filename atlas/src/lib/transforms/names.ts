@@ -15,6 +15,7 @@ import unitRaw from '$lib/data/unit_names_en.json';
 import fireRaw from '$lib/data/fire_events_en.json';
 import effisRaw from '$lib/data/effis_names_en.json';
 import locRaw from '$lib/data/anadohoi_locations_en.json';
+import seatRaw from '$lib/data/dase_coop_seats_en.json';
 import { ruLabel } from '$lib/transforms/regions';
 
 function fold(s: string): string {
@@ -112,6 +113,19 @@ export function locationEn(text: string | null | undefined): string {
 	if (!text) return '';
 	return LOCATIONS[text.trim()]?.en ?? text;
 }
+/** A ΔΑΣΕ co-operative's registered-office toponym in English
+ *  (DATA_DECISIONS 2026-08-26, user: the facts row cannot mix Greek and
+ *  English) — ISO-843 transliteration of the registry's own string,
+ *  machine-proposed and under review; unknown strings stay Greek. */
+const SEATS_EN: Record<string, string> = Object.fromEntries(
+	Object.entries(seatRaw as Record<string, string>).filter(([k]) => k !== '_comment')
+);
+export function placeEn(text: string | null | undefined): string {
+	if (!text) return '';
+	const key = text.trim().replace(/\s+/g, ' ');
+	return SEATS_EN[key] ?? text;
+}
+
 /** the Greek version's own wording for the same row */
 export function locationEl(text: string | null | undefined): string {
 	if (!text) return '';
