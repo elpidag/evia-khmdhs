@@ -7,14 +7,15 @@
 	 * below. Content unchanged; only the presentation moved.
 	 */
 	import FactsHeader from '$lib/detail/FactsHeader.svelte';
+	import Fold from '$lib/ui/Fold.svelte';
+	import QuoteList from '$lib/detail/QuoteList.svelte';
 	import Hint from '$lib/ui/Hint.svelte';
 	import { registryStatusNote } from '$lib/transforms/registry';
+	import { placeEn } from '$lib/transforms/names';
 	import { ruLabel } from '$lib/transforms/regions';
 	import YearBars from '$lib/charts/YearBars.svelte';
-	import ChoroLegend from '$lib/maps/ChoroLegend.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
-	import { RAMP_WORKS, makeChoro } from '$lib/maps/useGeo';
 	import { eur, eurShort, grInt, pct } from '$lib/transforms/format';
 	import type { PageData } from './$types';
 
@@ -48,17 +49,42 @@
 		)
 	);
 	const regionMap = $derived(new Map(b.map_data.regions.map((r) => [r.pe, r])));
-	const maxSplit = $derived(Math.max(...b.map_data.regions.map((r) => r.split_eur), 1));
-	const choro = $derived(makeChoro(RAMP_WORKS, maxSplit));
 
-	// map height tracks the facts+caveat column — the contract pages' rule
+	// map height tracks the facts+caveat column, width the slot itself —
+	// the contract pages' rule exactly
 	let leftH = $state(0);
+	let mapW = $state(0);
 	const mapH = $derived(Math.max(420, Math.round(leftH)));
+
+	// the seat's verbatim clause is evidence, so it lives in EXTRACTED
+	// QUOTES with its source document, never in the facts row (user,
+	// 2026-08-26)
+	const quotes = $derived(
+		b.location?.seat_excerpt
+			? [
+					{
+						label: 'Registered office',
+						text: b.location.seat_excerpt,
+						code: b.location.seat_source === 'contract' ? b.location.seat_ref : null,
+						href:
+							b.location.seat_source === 'contract' && b.location.seat_ref
+								? `/antinero/contract/${b.location.seat_ref}`
+								: null,
+						note:
+							b.location.seat_source === 'register'
+								? 'the seat ΓΕΜΗ / VIES record today; the clause is what its contract stated'
+								: b.location.seat_source === 'website'
+									? 'the address the company itself publishes; the clause is what its contract stated'
+									: null
+					}
+				]
+			: []
+	);
 
 	const CAVEAT = $derived(
 		'Stated € excl. VAT; a contract signed jointly is split evenly between its partners, so ' +
-			'the totals count this company’s share. The map shades the regional units of its works ' +
-			'(even-split €) and marks the registered office' +
+			'the totals count this company’s share. The map marks the regional units it has ' +
+			'worked in and its registered office' +
 			(b.location?.geo_precision ? ` — ${pointWording(b.location)}` : '') +
 			'.'
 	);
@@ -80,68 +106,23 @@
 <div class="entp">
 	<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
 		{#snippet facts()}
-			<dt class="id">Anti-nero contractor</dt>
+			<dt class="id">Name</dt>
 			<dd class="id">{name}</dd>
 			<dt>ΑΦΜ</dt>
-			<dd>
-				{b.summary.vat_number}
-				{#if b.summary.name_en}<small class="muted">· {b.summary.name_en}</small>{/if}
-			</dd>
+			<dd>{b.summary.vat_number}</dd>
 			{#if alsoKnown.length}
 				<dt>In the registry as</dt>
 				<dd><small class="muted">{alsoKnown.join(' · ')}</small></dd>
 			{/if}
-			<dt class="gap"></dt>
-			<dd class="gap"></dd>
-			<dt>Total awarded</dt>
-			<dd>
-				{eurShort(b.summary.total_eur)}
-				<small class="muted">across {grInt(b.summary.n_contracts)} contracts</small>
-			</dd>
-			<dt>Direct awards</dt>
-			<dd>
-				{b.summary.pct_direct === null ? '—' : pct(b.summary.pct_direct)}
-				<small class="muted">· {grInt(b.summary.n_single_bidder)} single-bid contracts</small>
-			</dd>
-			<dt>Regions worked in</dt>
-			<dd>
-				{grInt(regionMap.size)}
-				<small class="muted">· {grInt(b.summary.n_consortium)} consortium contracts</small>
-			</dd>
-			<dt>Active period</dt>
-			<dd>
-				{(b.summary.first_signed ?? '—').slice(0, 4)}–{(b.summary.last_signed ?? '—').slice(2, 4)}
-			</dd>
-			<dt class="gap"></dt>
-			<dd class="gap"></dd>
 			<dt>Registered office</dt>
+			<!-- English throughout (user, 2026-08-26): the street and town from
+			     the curated transliteration; the verbatim Greek clause below is
+			     evidence and stays as the document wrote it -->
 			<dd>
 				{#if b.location}
-					{b.location.address ?? ''}{b.location.postal_code
-						? `, ${b.location.postal_code}`
-						: ''}
-					{b.location.city ?? ''}
-					{#if b.location.region_pe}<small class="muted">· {ruLabel(b.location.region_pe)}</small
-						>{/if}
-					<br />
-					<small class="muted">
-						{#if b.location.seat_source === 'contract' && b.location.seat_ref}
-							as stated in contract
-							<a href={`/antinero/contract/${b.location.seat_ref}`}>{b.location.seat_ref}</a>
-						{:else if b.location.seat_source === 'register'}
-							registered seat in ΓΕΜΗ / VIES today
-						{:else if b.location.seat_source === 'website'}
-							the address the company itself publishes
-						{:else}
-							source: {b.location.source ?? '—'}
-						{/if}
-					</small>
-					{#if b.location.seat_excerpt}
-						<br /><small class="muted quote"
-							>{#if b.location.seat_source !== 'contract'}seat as its contract states it:
-							{/if}«{b.location.seat_excerpt}»</small
-						>
-					{/if}
+					{[placeEn(b.location.address), b.location.postal_code, placeEn(b.location.city)]
+						.filter(Boolean)
+						.join(', ')}
 					{#if b.location.seat_note}
 						<br /><small class="muted">{b.location.seat_note}</small>
 					{/if}
@@ -164,13 +145,30 @@
 					{/if}
 				</dd>
 			{/if}
+			<dt class="gap"></dt>
+			<dd class="gap"></dd>
+			<dt>Total € awarded</dt>
+			<dd>{eurShort(b.summary.total_eur)}</dd>
+			<dt>Contracts awarded</dt>
+			<dd>{grInt(b.summary.n_contracts)}</dd>
+			<dt>Direct awards</dt>
+			<dd>{b.summary.pct_direct === null ? '—' : pct(b.summary.pct_direct)}</dd>
+			{#if b.summary.n_consortium}
+				<dt>Consortium contracts</dt>
+				<dd>{grInt(b.summary.n_consortium)}</dd>
+			{/if}
+			<dt>Active period</dt>
+			<dd>
+				{(b.summary.first_signed ?? '—').slice(0, 4)}–{(b.summary.last_signed ?? '—').slice(2, 4)}
+			</dd>
 		{/snippet}
 		{#snippet map()}
-			<div class="detailmap">
+			<div class="detailmap" bind:clientWidth={mapW}>
 				<PaperMap
-					width={460}
+					width={mapW || 460}
 					height={mapH}
-					colorOf={(pe) => choro(regionMap.get(pe)?.split_eur ?? 0)}
+					colorOf={(pe) =>
+						regionMap.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, #fff)' : '#fff'}
 					tipOf={(pe) => {
 						const r = regionMap.get(pe);
 						return r
@@ -185,70 +183,48 @@
 								points={[{ lat: b.map_data.home.lat, lon: b.map_data.home.lon, name }]}
 								r={6}
 								stroke="none"
-								fillOf={() => 'var(--c-dase-deep)'}
+								fillOf={() => 'var(--c-antinero)'}
 								tipOf={() =>
-									`<strong>Registered office</strong><br>${b.location?.address ?? ''}, ${
-										b.map_data.home?.city ?? ''
-									}<br><span style="color:var(--ink-faint)">${pointWording(b.location)}</span>`}
+									`<strong>Registered office</strong><br>${placeEn(b.location?.address)}, ${placeEn(
+										b.map_data.home?.city
+									)}<br><span style="color:var(--ink-faint)">${pointWording(b.location)}</span>`}
 							/>
 						{/if}
-					{/snippet}
-					{#snippet legend()}
-						<ChoroLegend ramp={RAMP_WORKS} max={maxSplit} title="€ of works (even-split)" />
-						<div style="margin-top:4px">
-							● registered office{b.map_data.home ? '' : ' — not geocoded'}
-						</div>
 					{/snippet}
 				</PaperMap>
 			</div>
 		{/snippet}
 	</FactsHeader>
 
+	<div class="pair">
 	<section class="plain">
 		<h2>€ per year</h2>
 		<!-- the Anti-nero surfaces are black-white-greyscale (user, 2026-08-20) -->
 		<YearBars rows={b.yearly.years} color="var(--c-antinero)" />
 	</section>
+	<div class="foldslot">
 
-	{#if b.partners.length || b.signers.length}
-		<div class="pair">
-			{#if b.partners.length}
-				<section class="plain">
-					<h2>Consortium partners</h2>
-					<ul>
-						{#each b.partners as p (p.vat_number)}
-							<li>
-								<a href={`/antinero/contractor/${p.vat_number}`}>{p.name}</a>
-								<small class="muted">({p.n_shared} shared)</small>
-							</li>
-						{/each}
-					</ul>
-				</section>
-			{/if}
-			{#if b.signers.length}
-				<section class="plain">
-					<h2>Awarded by</h2>
-					<ul>
-						{#each b.signers as s (s.name)}
-							<li>
-								{s.name}
-								<small class="muted">— {s.n_contracts}× · {eurShort(s.total_eur)}</small>
-							</li>
-						{/each}
-					</ul>
-				</section>
-			{/if}
+	{#if b.partners.length}
+		<div class="foldslot">
+			<Fold title="Consortium partners">
+				<ul>
+					{#each b.partners as p (p.vat_number)}
+						<li>
+							<a href={`/antinero/contractor/${p.vat_number}`}>{p.name}</a>
+							<small class="muted">({p.n_shared} shared)</small>
+						</li>
+					{/each}
+				</ul>
+			</Fold>
 		</div>
 	{/if}
 
-	<section class="plain">
-		<h2>Contracts ({b.contracts.length})</h2>
+		<Fold title="Contracts ({b.contracts.length})">
 		<table>
 			<thead>
 				<tr>
 					<th>Signed</th>
-					<th>Contract</th>
-					<th>Unit</th>
+					<th>ΑΔΑΜ</th>
 					<th class="num">Stated € (net)</th>
 				</tr>
 			</thead>
@@ -256,15 +232,12 @@
 				{#each b.contracts as r (r.reference_number)}
 					<tr class:dead={r.cancelled === 1}>
 						<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
-						<td>
-							<a href={`/antinero/contract/${r.reference_number}`}
-								>{r.title ?? r.reference_number}</a
-							>
+						<td class="tabular">
+							<a href={`/antinero/contract/${r.reference_number}`}>{r.reference_number}</a>
 							{#if r.n_partners > 1}<span class="chip">consortium ×{r.n_partners}</span>{/if}
 							{#if r.bids_submitted === 1}<span class="chip warn">1 bid</span>{/if}
 							{#if r.cancelled}<span class="chip bad">cancelled</span>{/if}
 						</td>
-						<td class="muted"><small>{r.units_operator_name ?? '—'}</small></td>
 						<td class="num">
 							{eur(r.total_cost_with_vat)}
 							{#if b.summary.shares?.[r.reference_number]}
@@ -289,7 +262,15 @@
 				>
 			</p>
 		{/if}
-	</section>
+		</Fold>
+	</div>
+	</div>
+
+	{#if quotes.length}
+		<Fold title="Extracted quotes from documents">
+			<QuoteList heading={null} {quotes} />
+		</Fold>
+	{/if}
 </div>
 
 <style>
@@ -312,10 +293,20 @@
 		--map-accent: var(--c-antinero);
 		box-shadow: none;
 	}
+	.entp {
+		--fold-accent: var(--c-antinero);
+	}
+	.foldslot :global(.fold) {
+		margin-top: 0;
+	}
+	/* € per year beside the contracts, on FactsHeader's own columns, so
+	   the right-hand section lines up with the map above (user, 2026-08-26) */
 	.pair {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: minmax(0, 1fr) minmax(300px, 460px);
 		gap: var(--sp-8);
+		align-items: start;
+		margin-bottom: var(--sp-8);
 	}
 	@media (max-width: 900px) {
 		.pair {
@@ -335,9 +326,6 @@
 	}
 	.muted {
 		color: var(--ink-soft);
-	}
-	.quote {
-		font-style: italic;
 	}
 	td a,
 	li a,

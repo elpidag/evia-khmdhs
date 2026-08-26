@@ -9685,3 +9685,38 @@ the same word it prints once, and the regional unit is not repeated.
 caps chips, and sits to the LEFT of the map's +/−/⌂ stack, which returns
 to its usual top-right corner — on the Anti-nero AND the ΔΑΣΕ contract
 page, since they share the switch.
+
+## 2026-08-26 · The Anti-nero contractor page joins the pattern (user)
+
+The contractor page rebuilt on the co-op page's terms, all user calls:
+facts read **NAME · ΑΦΜ · IN THE REGISTRY AS · REGISTERED OFFICE · ΓΕΜΗ**,
+then **TOTAL € AWARDED · CONTRACTS AWARDED · DIRECT AWARDS · ACTIVE
+PERIOD** — one fact per row, the counts that used to ride as grey tails
+now rows of their own. **SINGLE-BID CONTRACTS is not shown** (that
+information has not been worked on) and **CONSORTIUM CONTRACTS prints
+only when non-zero** — it read «0» on a κοινοπραξία, which is true (the
+venture signs alone under its own ΑΦΜ) and misleading. REGIONS WORKED IN
+went too: the map says it. The seat prints in English from the curated
+place layer, its provenance and verbatim Greek clause moved to
+**EXTRACTED QUOTES FROM DOCUMENTS** where quotations belong.
+
+**The map lost its colour ramp and legend**: the regions worked in take
+one flat tone, the office dot the page's own ink (it was a stray
+blue-green that contradicted the legend's black ●), and the per-region €
+stays in the hover card. Sections are closed folds; **€ PER YEAR and
+CONTRACTS share one row** on FactsHeader's own columns, so the contracts
+table lines up with the map above it; the list is date · ΑΔΑΜ · value.
+
+**No procurement block here** (user, after trying one): a
+«Forest authorities» section where «Awarded by» had been implied the
+forest services award the contracts, which they do not — the Ministry
+does, through its General Secretariat, and the services supervise the
+works on their territory. One combined PROCUREMENT DETAILS block was
+built and then removed on the user's call: the contract pages tell that
+story better. `contractor_authorities` / `contractor_awarding` and their
+payload fields were deleted with it rather than left travelling unused.
+
+The place layer merged: `place_names_en.json` (476 entries) replaces
+`dase_coop_seats_en.json`, covering the co-op villages AND the
+contractors' street addresses (ordinals «107th km», «Ε.Ο.» → national
+road, «Λεωφ.» → Leoforos). Still machine-proposed, awaiting review.

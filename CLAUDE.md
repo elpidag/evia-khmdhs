@@ -1969,13 +1969,19 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   page carries the seat layer's first page surface (`location` on
   `/api/dase/coop/<vat>`, pinned) — since 2026-08-26 its facts are NAME ·
   ΑΦΜ · IN THE REGISTRY AS · REGISTERED OFFICE (English via curated
-  `dase_coop_seats_en.json`, `names.placeEn`, machine-proposed pending
-  review) · TOTAL € AWARDED · CONTRACTS AWARDED · ACTIVE PERIOD, with
+  `place_names_en.json` — 476 co-op villages AND contractor street
+  addresses, `names.placeEn`, machine-proposed pending review) · TOTAL € AWARDED · CONTRACTS AWARDED · ACTIVE PERIOD, with
   AWARDING UNITS and CONTRACTS as CLOSED folds, the contracts list
   date · ΑΔΑΜ · value, the row below the header on FactsHeader's own
   columns, and only the office dot hoverable. The MAP/DIAGRAM switch is
   the site's segmented toggle left of the +/−/⌂ stack on both contract
-  pages. No sponsor entity page BY DECISION:
+  pages. The Anti-nero contractor page follows the same pattern since
+  2026-08-26 (NAME first, one fact per row, no single-bid or regions
+  rows, consortium row only when non-zero, the seat's clause in EXTRACTED
+  QUOTES, the map one flat tone with no ramp or legend, € PER YEAR beside
+  CONTRACTS on the header's columns) — and carries NO procurement block
+  by decision: the Ministry awards, the forest services supervise, and
+  the contract pages tell that story. No sponsor entity page BY DECISION:
   sponsors have no documentary identity key (DATA_DECISIONS
   2026-08-26).
 - **Tests**: `tests/test_atlas_api.py` (+ `_queries_extra`, `_real_db` as
