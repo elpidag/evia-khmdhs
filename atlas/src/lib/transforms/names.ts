@@ -98,16 +98,24 @@ export function fireEn(label: string | null | undefined): string {
 	return FIRE_EVENTS[label.trim()] ?? label;
 }
 
-/** Curated EN for the sponsored projects' LOCATION row (DATA_DECISIONS
- *  2026-08-25, user: the facts text cannot mix Greek and English): exact
- *  keys — the 61 strings are the acts' own — honest Greek fallback; the
- *  verbatim Greek stays in the EXTRACTED QUOTES block. */
-const LOCATIONS_EN: Record<string, string> = Object.fromEntries(
-	Object.entries(locRaw as Record<string, string>).filter(([k]) => k !== '_comment')
+/** Curated BILINGUAL text for the sponsored projects' LOCATION row
+ *  (DATA_DECISIONS 2026-08-26, user: each version shows its own
+ *  language): exact keys — the 61 strings are the acts' own — with the
+ *  honest fallback to what the act wrote; the verbatim Greek sentence
+ *  stays the evidence in the EXTRACTED QUOTES block. */
+const LOCATIONS: Record<string, { el: string; en: string }> = Object.fromEntries(
+	Object.entries(locRaw as Record<string, unknown>).filter(
+		([k, v]) => k !== '_comment' && typeof v === 'object' && v !== null
+	) as [string, { el: string; en: string }][]
 );
 export function locationEn(text: string | null | undefined): string {
 	if (!text) return '';
-	return LOCATIONS_EN[text.trim()] ?? text;
+	return LOCATIONS[text.trim()]?.en ?? text;
+}
+/** the Greek version's own wording for the same row */
+export function locationEl(text: string | null | undefined): string {
+	if (!text) return '';
+	return LOCATIONS[text.trim()]?.el ?? text;
 }
 
 /** An EFFIS feature `name` — comma-joined NUTS-3 tokens, each translated

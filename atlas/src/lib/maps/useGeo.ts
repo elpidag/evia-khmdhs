@@ -1,6 +1,13 @@
 /** Module-cached TopoJSON fetches — every map on every page shares one copy. */
 import { feature } from 'topojson-client';
-import type { FeatureCollection, LineString, Polygon, MultiPolygon, MultiLineString } from 'geojson';
+import type {
+	Feature,
+	FeatureCollection,
+	LineString,
+	Polygon,
+	MultiPolygon,
+	MultiLineString
+} from 'geojson';
 import type { Topology } from 'topojson-specification';
 
 export interface PeProps {
@@ -198,6 +205,68 @@ export const loadCentroids = (fetch: Fetch): Promise<Record<string, [number, num
  *  is skipped and the next slot tried, so a group of seats sharing one
  *  waterfront point fans out along the coast, never into the water;
  *  if no slot within the search window is on land the point stays put. */
+/** lon/lat bbox: [x0, y0, x1, y1] */
+export type LonLatBBox = [number, number, number, number];
+
+function ringsBBox(rings: number[][][]): LonLatBBox {
+	let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+	for (const r of rings)
+		for (const [x, y] of r) {
+			if (x < x0) x0 = x;
+			if (y < y0) y0 = y;
+			if (x > x1) x1 = x;
+			if (y > y1) y1 = y;
+		}
+	return [x0, y0, x1, y1];
+}
+
+/** gap between two lon/lat bboxes (0 when they touch or overlap) */
+function bboxGap(a: LonLatBBox, b: LonLatBBox): number {
+	const dx = Math.max(0, a[0] - b[2], b[0] - a[2]);
+	const dy = Math.max(0, a[1] - b[3], b[1] - a[3]);
+	return Math.hypot(dx, dy);
+}
+
+/**
+ * A regional unit reduced to the island/land PARTS that belong with the
+ * subject (user, 2026-08-26). Framing a Π.Ε. whole is the rule — but
+ * Π.Ε. Ρόδου carries Καστελλόριζο 1,3° east of Rhodes, so «whole» threw
+ * the window across open sea onto the Turkish coast and the works became
+ * a speck. Parts further than `gap` (widened for a large subject) from
+ * the subject are dropped; the nearest part is always kept, so nothing
+ * ever frames on emptiness. With no subject the largest part anchors.
+ */
+export function nearParts<P>(
+	f: Feature<Polygon | MultiPolygon, P>,
+	subject: LonLatBBox | null,
+	gap = 0.6
+): Feature<Polygon | MultiPolygon, P> {
+	const parts: number[][][][] =
+		f.geometry.type === 'Polygon'
+			? [f.geometry.coordinates as number[][][]]
+			: (f.geometry.coordinates as number[][][][]);
+	if (parts.length < 2) return f;
+	const boxes = parts.map((p) => ringsBBox(p));
+	let anchor = subject;
+	if (!anchor) {
+		let best = 0;
+		boxes.forEach((b, i) => {
+			const area = (b[2] - b[0]) * (b[3] - b[1]);
+			if (area > (boxes[best][2] - boxes[best][0]) * (boxes[best][3] - boxes[best][1])) best = i;
+		});
+		anchor = boxes[best];
+	}
+	const reach = Math.max(gap, 1.5 * Math.max(anchor[2] - anchor[0], anchor[3] - anchor[1]));
+	const gaps = boxes.map((b) => bboxGap(b, anchor!));
+	const nearest = gaps.indexOf(Math.min(...gaps));
+	const kept = parts.filter((_, i) => gaps[i] <= reach || i === nearest);
+	if (kept.length === parts.length) return f;
+	return {
+		...f,
+		geometry: { type: 'MultiPolygon', coordinates: kept }
+	} as Feature<Polygon | MultiPolygon, P>;
+}
+
 export function spreadOverlaps<T extends { lat: number; lon: number }>(
 	points: T[],
 	stepDeg = 0.028,

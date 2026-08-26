@@ -50,7 +50,9 @@
 	} from 'd3-zoom';
 	import type { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 	import type { Snippet } from 'svelte';
-	import { loadMuniBorders, loadPe, loadPeHires, type PeProps, loadNeighbours, type NeighbourProps } from './useGeo';
+	import { loadMuniBorders, loadPe, loadPeHires, type PeProps, loadNeighbours, type NeighbourProps,
+	nearParts
+} from './useGeo';
 
 	interface Props {
 		/** polygon fill by Π.Ε. name; default = empty land */
@@ -298,17 +300,29 @@
 			appliedViewKey = key;
 		} else if ((fitPoints && fitPoints.length) || (fitPes && fitPes.length)) {
 			let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+			// the points' own lon/lat extent anchors which parts of a Π.Ε.
+			// belong in frame (user, 2026-08-26)
+			let sx0 = Infinity, sy0 = Infinity, sx1 = -Infinity, sy1 = -Infinity;
 			for (const c of fitPoints ?? []) {
 				const q = projection(c);
 				if (!q) continue;
 				x0 = Math.min(x0, q[0]); y0 = Math.min(y0, q[1]);
 				x1 = Math.max(x1, q[0]); y1 = Math.max(y1, q[1]);
+				sx0 = Math.min(sx0, c[0]); sy0 = Math.min(sy0, c[1]);
+				sx1 = Math.max(sx1, c[0]); sy1 = Math.max(sy1, c[1]);
 			}
-			// whole regions, not their centres
+			const subject: [number, number, number, number] | null = Number.isFinite(sx0)
+				? [sx0, sy0, sx1, sy1]
+				: null;
+			// whole regions, not their centres — but a Π.Ε. with a far-flung
+			// island (Ρόδου carries Καστελλόριζο) frames only the parts that
+			// belong with the works, or the window lands on open sea
 			for (const pe of fitPes ?? []) {
 				const f = coarse?.features.find((g) => g.properties.pe === pe);
 				if (!f) continue;
-				const [[bx0, by0], [bx1, by1]] = boundsOf(f as PeFeature);
+				const [[bx0, by0], [bx1, by1]] = boundsOf(
+					nearParts(f as PeFeature, subject) as PeFeature
+				);
 				x0 = Math.min(x0, bx0); y0 = Math.min(y0, by0);
 				x1 = Math.max(x1, bx1); y1 = Math.max(y1, by1);
 			}
@@ -334,8 +348,11 @@
 		}
 	}
 
-	function zoomToFeature(f: PeFeature) {
+	function zoomToFeature(f0: PeFeature) {
 		if (!path) return;
+		// the drilled unit's far-flung island part never sets the window
+		// (user, 2026-08-26): Π.Ε. Ρόδου carries Καστελλόριζο
+		const f = nearParts(f0, null) as PeFeature;
 		let [[x0, y0], [x1, y1]] = boundsOf(f);
 		// Χαλκιδική's third leg is Athos, which no administrative layer
 		// carries — drilling into the unit would cut it off mid-peninsula,
@@ -362,7 +379,10 @@
 	function zoomToFeatures(fs: PeFeature[]) {
 		if (!path || !fs.length) return;
 		let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-		for (const f of fs) {
+		for (const f0 of fs) {
+			// a Π.Ε.'s far-flung island part never sets the window
+			// (user, 2026-08-26); with no subject the largest part anchors
+			const f = nearParts(f0, null) as PeFeature;
 			const [[bx0, by0], [bx1, by1]] = boundsOf(f);
 			x0 = Math.min(x0, bx0); y0 = Math.min(y0, by0);
 			x1 = Math.max(x1, bx1); y1 = Math.max(y1, by1);

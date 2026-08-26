@@ -13,6 +13,7 @@
 		loadEviaZones,
 		loadNeighbours,
 		loadPe,
+		nearParts,
 		type FireProps,
 		type NeighbourProps,
 		type PeProps,
@@ -115,8 +116,13 @@
 		}
 		for (const s of sites) addPe(pe.features.find((f) => geoContains(f, [s.lon, s.lat])));
 		if (homePes.length) {
+			// only the parts of the Π.Ε. that belong with the zones/scars
+			// (SiteMap's rule; user, 2026-08-26)
+			const subject: [number, number, number, number] | null = Number.isFinite(gx0)
+				? [gx0, gy0, gx1, gy1]
+				: null;
 			for (const f of homePes) {
-				const b = path0.bounds(f as Feature);
+				const b = path0.bounds(nearParts(f, subject) as Feature);
 				grow(b[0][0], b[0][1], b[1][0], b[1][1]);
 			}
 		}

@@ -13,6 +13,7 @@
 	import {
 		loadNeighbours,
 		loadPe,
+		nearParts,
 		type FireProps,
 		type NeighbourProps,
 		type PeProps,
@@ -133,8 +134,15 @@
 				addPe(pe.features.find((g) => geoContains(g, c as [number, number])));
 		}
 		if (homePes.length) {
+			// the SUBJECT's own extent anchors which parts of a Π.Ε. belong
+			// in frame: Π.Ε. Ρόδου carries Καστελλόριζο 1,3° east, and
+			// framing it whole put the works in a corner of the Turkish
+			// coast (user, 2026-08-26)
+			const subject: [number, number, number, number] | null = Number.isFinite(gx0)
+				? [gx0, gy0, gx1, gy1]
+				: null;
 			for (const f of homePes) {
-				const b = path0.bounds(f as Feature);
+				const b = path0.bounds(nearParts(f, subject) as Feature);
 				grow(b[0][0], b[0][1], b[1][0], b[1][1]);
 			}
 			const padx = Math.max((gx1 - gx0) * 0.05, 0.05);

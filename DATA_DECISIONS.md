@@ -9584,3 +9584,69 @@ a merged label can span two legal entities («Coca-Cola (3Ε /
 Hellas)»). A sponsor URL would assert an identity the documents cannot
 prove; building one would first need a curated sponsor identity
 registry (legal entity, ΑΦΜ, evidence per row).
+
+## 2026-08-26 · The framed regional unit keeps only its RELEVANT parts (user)
+
+The Δωδεκάνησα project 971Χ4653Π8-222 framed a window that was
+mostly the Turkish coast and open sea, with Rhodes and its burnt area a
+speck: **Π.Ε. Ρόδου carries Καστελλόριζο**, 1,3° east of Rhodes
+(unit span 2,36° of longitude against Rhodes' own 0,56°), so the
+2026-08-25 rule «frame the whole Π.Ε.» threw the frame across the sea.
+The rule now reads: frame the parts of the unit that BELONG WITH THE
+SUBJECT. `useGeo.nearParts(feature, subjectBBox, gap = 0.6)` splits a
+Π.Ε. into its polygon parts and keeps those within
+`max(0.6°, 1.5 × subject span)` of the subject's own extent — the
+nearest part always survives, so nothing frames on emptiness, and with
+no subject the LARGEST part anchors. Wired into every framing path:
+SiteMap and ZoneMap (subject = the sites/scars/zones), PaperMap's
+`fitPes` (subject = the fitted points, e.g. the authority seats),
+`zoomToFeatures` (the /anadohoi region zoom) and `zoomToFeature` (the
+front-page drill). Measured effects: the Rhodes project frames Rhodes
+with Σύμη/Χάλκη/Τήλος and the Turkish coast only as the natural
+northern edge; Π.Ε. Έβρου KEEPS Σαμοθράκη (0,49° from the Dadia
+scar, inside the reach); a genuinely multi-region contract
+(22SYMV010856521: Γρεβενών + Λέσβου + Σάμου) is unchanged, every
+unit still in frame. The trade-off is stated plainly: an outlying
+island further than the reach is no longer drawn into the WINDOW — the
+data layer and the region highlight are untouched. Pinned on the real
+layer by `maps/nearParts.test.ts`.
+
+## 2026-08-26 · The LOCATION layer goes BILINGUAL (user)
+
+The sponsored projects' LOCATION row is curated in BOTH languages: each
+act's raw `location_text` maps to `{el, en}` — the Greek version shows
+`el`, the English one `en` — replacing the 2026-08-25 English-only file
+(same path, `anadohoi_locations_en.json`, both copies byte-identical;
+`names.locationEn` / new `names.locationEl`, honest fallback to what the
+act wrote; the pin now requires both fields, Greek script in `el` and
+NONE in `en`). **Rows 1–12 are the user's own wording**, three
+corrections applied and reported: (a) rows 9/10/11 converted στρέμματα
+to hectares wrongly — the acts state 11.124 / 13.626 / 8.900 στρεμμάτων,
+i.e. **1.112,4 / 1.362,6 / 890 ha**, not «11,124 / 13,626 / 8,9 ha»
+(1 στρ = 0,1 ha, as the user's own row 1 has it); (b) row 11
+«Prikrodafneza» → «Pikrodafneza» (Πικροδαφνέζας); (c) row 12
+Μάνδρας-Ειδυλλίας is ONE municipality, so the English lists three, not
+four. Rows 13–61 follow the twelve's patterns, each read from its own
+act — which also let two bare fragments say more than the registry
+stored: row 39 «περιοχή του Έβρου» is the settlement of **Παλαγία**, and
+row 43's Surface 2 is **Ραπεντώσα–Μαραθώνα**. Areas print only where the
+act's own location clause states them; row 46 carries none because the
+act says 14,410 στρ. where the curated field says 16. Every verdict is
+reviewed against the act's sentence in the «Location Register» artifact,
+which now prints the act's sentence, the GR text and the EN text per
+row.
+
+**Reviewed to completion the same day** (rounds 2 and 3, user): fifteen
+more verdicts verbatim and their patterns propagated — no
+municipality-genitive chains («Δ.Ε. X, Δήμου Y, Π.Ε. Z» → «X in Y»),
+«burnt» never «affected», «fire-affected» for πυρόπληκτη, «forested
+area» for «έκταση δασικού χαρακτήρα», the forest service named only
+where the act's own clause does (41, 42). Three more corrections
+reported: row 25 gains the act's SECOND area («Βίγλα» of Δήμου
+Παλλήνης, 10 στρ. = 1 ha, verified in the act) worded as «an area
+DESIGNATED for reforestation» — αναδασωτέα is land declared for
+reforestation, the opposite of «reforested»; «Palini» → «Pallini»
+(Παλλήνη); «juristiction» → «jurisdiction» (as in rows 2 and 6).
+Rows 41/42 name the service in the curated
+`authority_names_en.json` form («Lamia / Spercheiada Forest Service
+Office», user-confirmed) so one service reads the same on every surface.

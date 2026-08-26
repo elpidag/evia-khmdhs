@@ -1158,9 +1158,13 @@ def test_location_names_en_pins():
          "anadohoi_locations_en.json").read_text(encoding="utf-8")
     assert a == b
     data = {k: v for k, v in json.loads(a).items() if k != "_comment"}
-    assert all(v.strip() for v in data.values())
-    assert not any(re.search(r"[Ͱ-Ͽἀ-῿]", v)
-                   for v in data.values())
+    # bilingual since 2026-08-26: `el` is the Greek version's wording,
+    # `en` the English one — and only `en` may carry no Greek script
+    assert all(set(v) == {"el", "en"} for v in data.values())
+    assert all(v["el"].strip() and v["en"].strip() for v in data.values())
+    greek = re.compile(r"[Ͱ-Ͽἀ-῿]")
+    assert not any(greek.search(v["en"]) for v in data.values())
+    assert all(greek.search(v["el"]) for v in data.values())
     db = root / "data" / "processed" / "anadohoi.sqlite"
     if not db.exists():
         return
