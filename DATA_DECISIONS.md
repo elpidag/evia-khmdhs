@@ -9720,3 +9720,134 @@ The place layer merged: `place_names_en.json` (476 entries) replaces
 `dase_coop_seats_en.json`, covering the co-op villages AND the
 contractors' street addresses (ordinals «107th km», «Ε.Ο.» → national
 road, «Λεωφ.» → Leoforos). Still machine-proposed, awaiting review.
+
+## 2026-08-26 · The forest-authority page joins the pattern, and the place layer covers it (user)
+
+The third entity page rebuilt on the same terms as the co-op's and the
+contractor's. Facts read **NAME · IN THE REGISTRY AS · OFFICE · REGIONAL
+UNIT**, then the measures, one fact per row — **ANTI-NERO WORKS
+SUPERVISED · ANTI-NERO CONTRACTS · AWARDED TO FOREST CO-OPS · ΔΑΣΕ
+CONTRACTS AWARDED** — each pair printing **only when it is not zero**
+(the contractor page's rule: a «0,00 €» row is true and misleading). A
+service with neither side says so in one sentence under the map instead
+of carrying a heading over an empty grid, because the network page's own
+legend distinguishes «no contracts recorded in its territory». The two
+halves are one `.pair` row each on FactsHeader's columns — the entities
+on the left, the contracts in a CLOSED fold aligned with the map above,
+date · ΑΔΑΜ · value — the Anti-nero fold in the black accent, the ΔΑΣΕ
+one in green. The ranking now prints the **curated contractor display
+names** (`overlay_contractor_names` on `top_contractors`): the authority
+page is a contractor surface like any other, and it had been showing raw
+registry spellings.
+
+**`covers_pe` reaches the database.** The curated registry has always
+carried the Π.Ε. a service administers beyond the one its office sits in
+(8 entries: Δωδεκανήσου→Κω, Κεφαλληνίας→Ιθάκης, Σάμου→Ικαρίας,
+Αιγάλεω/Πάρνηθας→Δυτικής Αττικής, Πειραιά→Νήσων, Πεντέλης→3 Attica
+sectors, Φουρνάς→Καρδίτσας), but `forest_loader` never stored it, so the
+page could only frame the seat's own unit. Now a `covers_pe` column
+(CREATE + the ALTER guard, « · »-joined) feeds `authority_profile`, and
+the map **fits the whole jurisdiction**: seat unit at 30% of the
+authority green, administered units at 14%, the office dot on top. The
+facts row reads «Regional units administered» when there is more than
+one. Δασαρχείο Πεντέλης is the case that shows it — one Attica sector
+before, four now.
+
+**The place layer covers all three entity pages** (648 entries, was
+476): the forest authorities' office streets and post towns joined the
+co-op villages and the contractor addresses, and the generator moved out
+of scratch into **`scripts/build_place_names_en.py`**. The authorities'
+addresses exposed rules the first pass lacked, each now pinned in
+`tests/test_body_names_en.py`:
+
+- an ordinal turns English **only before «χλμ»** («107th km») — a street
+  named after a date keeps the form its own sign carries («25ης Μαρτίου»
+  → «25is Martiou», never «25th Martiou»);
+- Python uppercases «Τέρμα» to «ΤΈΡΜΑ», so every accented key missed:
+  the lookups **fold accents** before matching (the repository's standing
+  Greek-matcher trap, hit again);
+- a hyphen or a dot inside a token starts a new place name
+  («Komotinis-Alexandroupolis», «Pl.Kampanas») but a run after a **digit**
+  is that numeral's suffix, not a word;
+- «ΑΓ» takes the case of the word it qualifies — Agios / Agiou / Agia /
+  Agion — because in a street name it is a genitive;
+- what a building **is** gets said rather than transliterated
+  («Διοικητήριο» → Administration Building, «Δασικό Φυτώριο» → Forest
+  Nursery, «Περιφερειακή Οδός» → Ring Road, «Τέρμα» → End of), and the
+  ΥΠΕΝ tables' abbreviations expand («Κων/νου» → Konstantinou, «Μεγ.» →
+  Megalou);
+- «Οδός» is dropped as a bare word except before an article, where it is
+  the street's own name («Οδός των 118»).
+
+A new guard asserts that **every office string the three pages print has
+an English form** — a page may never mix the two alphabets in a facts
+row. All 648 values stay MACHINE-PROPOSED and await the user's review
+(register published 2026-08-26); the Greek remains the stored value and
+the evidence everywhere.
+
+## 2026-08-26 · ΕΛΟΤ voicing, and the three lists become one (user review)
+
+**Four corrections on the place register, three of them one rule.**
+ΕΛΟΤ 743 voices αυ/ευ/ηυ as av/ev/iv only before a vowel or a voiced
+consonant (β γ δ ζ λ μ ν ρ); before a voiceless one (θ κ ξ π σ τ φ χ ψ)
+or at the end of a word they are **af/ef/if**. `geocode_loader._translit`
+maps them blindly — it was written to build Nominatim queries, where the
+distinction does not matter — so «Ελευθερίου» printed «Elevtheriou»,
+«Ευκαρπία» «Evkarpia» and «ΠΕΥΚΟΦΥΤΟ» «Pevkofyto», all three caught by
+the user. The rule now lives in the DISPLAY layer
+(`scripts/build_place_names_en.py`), leaving the geocoder's helper and
+its cached hits untouched: **18 entries changed**, including the familiar
+forms Lefkada, Nafplio, Nafpaktos, Pefka, Lefkogeia, Kallipefki. The
+fourth: «ΘΕΣΗ Χ» is punctuation, not a word — «ΘΗΒΑ ΘΕΣΗ ΧΟΡΟΒΟΙΒΟΔΑ»
+reads «Thiva, Chorovoivoda», and a leading «θέση» simply drops.
+
+**Why not Google Maps** (user's question): it has no open, keyless name
+API, and its data may not be redistributed into a curated file. OSM does
+and may, and it is the gazetteer this project already geocodes with — so
+the settlement names are cross-checked against the map's own `name:en` /
+`int_name` tags, reverse-geocoded from the points we already hold
+(`namedetails=1`). It is a CHECK, never an overwrite: a disagreement is
+a question for the user.
+
+**What the check was worth**: 257 settlement strings, 212 carrying an
+English/int name in OSM, **174 «differences» — and almost all of them
+noise**: the stored point is a village address, and a reverse geocode at
+zoom 14 answers with whatever place polygon contains it, often the
+neighbouring hamlet. OSM is not a name source here. It did, however,
+catch **four real bugs of the abbreviation dictionary**, which is what a
+cross-check is for: «ΝΕΟ» was expanding to «New National Road» in
+«Νέο Ψυχικό», «Νέο Ηράκλειο» and «ΝΕΟ ΠΕΤΡΙΤΣΙ» (it means the road only
+where a «χλμ» has just been said, or where the writer dotted it), and
+«Μεγ.» was always «Megalou», turning «ΜΕΓ ΠΑΝΑΓΙΑ» into «Megalou
+Panagia» — it now takes the gender of the word it qualifies. Four
+single-letter abbreviations no rule can reach («Ν ΜΑΓΝΗΣΙΑ», «Ν
+ΠΕΤΡΙΤΣΙ», «Κ ΝΕΥΡΟΚΟΠΙ», «Κ ΠΟΡΟΙΑ») became hand verdicts in the
+generator's `OVERRIDES`, confirmed against OSM's own names.
+
+**And the familiar-English rule reaches the settlements.** The user ruled
+on familiar forms for the Π.Ε. names in 2026-08-15 (Rhodes, Corinth,
+Heraklion, Piraeus, Corfu …); a settlement of the same name must read the
+same way, or the site says «Rodos» on one page and «Rhodes» on the next.
+Seven strings adopted the ruled form. 15 entries changed in all, pinned
+by `test_place_review_verdicts_pinned`.
+
+**Round 2 of the review: one row.** «Οδός των 118, αρ. 37» — the Chios
+street named after the 118 exiles — reads **«118 Str. no. 37»** by the
+user's own wording; no rule reaches a street whose name is a number, so
+it joins `OVERRIDES`. Everything else in the 648 rows passed the user's
+read.
+
+**The forest-authority facts lose IN THE REGISTRY AS and the contact
+details** (user): the office row is an address, not a contact card, and
+the Greek name rides as the identity row's hover title. Every other
+authority-name surface still shows it.
+
+**/dase/coops and /antinero/contractors fold into NETWORK OF ACTORS**
+(user): the same three populations were being listed in three places.
+The list lens moved into the URL (`?list=coops|contractors`, `#list`),
+the two routes became **308 redirects** carrying `?q=` across so old
+links and bookmarks land on the right lens, and the entity pages' crumbs
+point there. Nothing was lost in the move except **single-bid contracts**
+(the user's standing rule: that information has not been worked on) —
+the ΑΦΜ column and the by-€ / by-contracts / by-name sort the standalone
+pages carried are now on the network list too.

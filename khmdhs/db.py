@@ -375,7 +375,10 @@ CREATE TABLE IF NOT EXISTS forest_authorities (
     city              TEXT,
     phone             TEXT,
     email             TEXT,
-    seat_precision    TEXT                  -- street | postcode | city | municipality
+    seat_precision    TEXT,                 -- street | postcode | city | municipality
+    -- the Π.Ε. this service administers BEYOND the one its office sits
+    -- in (8 user-confirmed), « · »-joined
+    covers_pe         TEXT
 );
 
 -- Which authority(ies) each contract's works fall under, extracted by the
@@ -490,6 +493,8 @@ def init_db(path: Path) -> sqlite3.Connection:
         ("forest_authorities", "phone", "TEXT"),
         ("forest_authorities", "email", "TEXT"),
         ("forest_authorities", "seat_precision", "TEXT"),
+        # the Π.Ε. a service administers BEYOND the one its office sits in
+        ("forest_authorities", "covers_pe", "TEXT"),
         # registry double-postings: the kept twin's ΑΔΑΜ (DATA_DECISIONS 2026-08-14)
         ("contracts", "duplicate_of", "TEXT"),
         # a contract kept out of a contractor-led dataset because its signed

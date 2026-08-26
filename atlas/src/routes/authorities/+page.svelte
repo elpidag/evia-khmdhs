@@ -96,7 +96,30 @@
 	// populations (user, 2026-08-26 — stacked frames were the earlier
 	// answer, a toggle reads better), its own search, 25-row pages
 	type ListShow = 'authorities' | 'coops' | 'contractors';
-	let listShow = $state<ListShow>('authorities');
+	const LIST_SHOWS: ListShow[] = ['authorities', 'coops', 'contractors'];
+	// in the URL, so /authorities?list=coops#list is a landing place — the
+	// two standalone listing pages redirect here (user, 2026-08-26)
+	const listShow = $derived<ListShow>(
+		LIST_SHOWS.find((v) => v === page.url.searchParams.get('list')) ?? 'authorities'
+	);
+	function setList(next: ListShow) {
+		const url = new URL(page.url);
+		if (next === 'authorities') url.searchParams.delete('list');
+		else url.searchParams.set('list', next);
+		goto(url, { replaceState: true, keepFocus: true, noScroll: true });
+	}
+	// the sorts the standalone pages carried
+	type Sort = 'total_eur' | 'n_contracts' | 'name';
+	let sort = $state<Sort>('total_eur');
+	function bySort<T extends { name: string; n_contracts: number; total_eur: number }>(
+		rows: T[]
+	): T[] {
+		const out = [...rows];
+		if (sort === 'name') out.sort((a, b) => a.name.localeCompare(b.name, 'el'));
+		else if (sort === 'n_contracts') out.sort((a, b) => b.n_contracts - a.n_contracts);
+		else out.sort((a, b) => b.total_eur - a.total_eur);
+		return out;
+	}
 	let q = $state('');
 	const fold = (s: string) =>
 		s
@@ -109,8 +132,12 @@
 	const authList = $derived(rows.filter((r) => hits(q, authEn(r.name), r.name)));
 	/** ΥΠΕΝ directory units with no contracts, folded into the same list */
 	const unitList = $derived(otherUnits.filter((u) => hits(q, bodyEn(u.name), u.name)));
-	const coopList = $derived(data.coops.filter((c) => hits(q, c.name, c.name_en ?? undefined)));
-	const conList = $derived(data.contractors.filter((c) => hits(q, c.name, c.registry_name)));
+	const coopList = $derived(
+		bySort(data.coops.filter((c) => hits(q, c.name, c.name_en ?? undefined, c.vat)))
+	);
+	const conList = $derived(
+		bySort(data.contractors.filter((c) => hits(q, c.name, c.registry_name, c.vat)))
+	);
 	const PAGE = 25;
 	let pa = $state(0);
 	let pk = $state(0);
@@ -118,6 +145,7 @@
 	$effect(() => {
 		void q;
 		void listShow;
+		void sort;
 		pa = 0;
 		pk = 0;
 		pc = 0;
@@ -441,17 +469,17 @@
 					<button
 						type="button"
 						class:active={listShow === 'authorities'}
-						onclick={() => (listShow = 'authorities')}>Forest authorities</button
+						onclick={() => setList('authorities')}>Forest authorities</button
 					>
 					<button
 						type="button"
 						class:active={listShow === 'coops'}
-						onclick={() => (listShow = 'coops')}>Forest co-ops</button
+						onclick={() => setList('coops')}>Forest co-ops</button
 					>
 					<button
 						type="button"
 						class:active={listShow === 'contractors'}
-						onclick={() => (listShow = 'contractors')}>Anti-nero contractors</button
+						onclick={() => setList('contractors')}>Anti-nero contractors</button
 					>
 				</div>
 				<input
@@ -461,6 +489,21 @@
 					bind:value={q}
 					aria-label="Search the list by name"
 				/>
+				{#if listShow !== 'authorities'}
+					<div class="mode sorts" role="group" aria-label="Sort the list">
+						<button type="button" class:active={sort === 'total_eur'} onclick={() => (sort = 'total_eur')}
+							>By €</button
+						>
+						<button
+							type="button"
+							class:active={sort === 'n_contracts'}
+							onclick={() => (sort = 'n_contracts')}>By contracts</button
+						>
+						<button type="button" class:active={sort === 'name'} onclick={() => (sort = 'name')}
+							>By name</button
+						>
+					</div>
+				{/if}
 			</div>
 		{/snippet}
 		{#if listShow === 'authorities'}
@@ -514,6 +557,7 @@
 				<thead>
 					<tr>
 						<th>Co-operative</th>
+						<th class="tabular">ΑΦΜ</th>
 						<th>Regional unit</th>
 						<th class="num">Contracts</th>
 						<th class="num">Total €</th>
@@ -523,6 +567,7 @@
 					{#each coopPageRows as c (c.vat)}
 						<tr>
 							<td><a href={`/dase/coop/${c.vat}`}>{c.name}</a></td>
+							<td class="tabular muted"><small>{c.vat}</small></td>
 							<td class="muted"><small>{c.pe ? peEn(c.pe) : '—'}</small></td>
 							<td class="num">{grInt(c.n_contracts)}</td>
 							<td class="num">{eurShort(c.total_eur)}</td>
@@ -536,6 +581,7 @@
 				<thead>
 					<tr>
 						<th>Contractor</th>
+						<th class="tabular">ΑΦΜ</th>
 						<th>Regional unit</th>
 						<th class="num">Contracts</th>
 						<th class="num">Total €</th>
@@ -545,6 +591,7 @@
 					{#each conPageRows as c (c.vat)}
 						<tr>
 							<td><a href={`/antinero/contractor/${c.vat}`}>{c.name}</a></td>
+							<td class="tabular muted"><small>{c.vat}</small></td>
 							<td class="muted"><small>{c.pe ? peEn(c.pe) : '—'}</small></td>
 							<td class="num">{grInt(c.n_contracts)}</td>
 							<td class="num">{eurShort(c.total_eur)}</td>
@@ -761,6 +808,9 @@
 	}
 	.siderow .v.dase {
 		color: var(--c-dase);
+	}
+	.sorts {
+		margin-left: auto;
 	}
 	/* the listing frame: the toggle and its search on the title line */
 	.listctl {

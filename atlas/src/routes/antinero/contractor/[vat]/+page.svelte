@@ -101,7 +101,7 @@
 	/>
 </svelte:head>
 
-<p class="crumb"><a href="/antinero/contractors">← Anti-nero contractors</a></p>
+<p class="crumb"><a href="/authorities?list=contractors#list">← Anti-nero contractors</a></p>
 
 <div class="entp">
 	<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>

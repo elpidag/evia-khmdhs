@@ -6,6 +6,8 @@ export interface AuthorityProfile {
 	slug: string;
 	kind: string;
 	pe: string;
+	/** the Π.Ε. it administers beyond the one its office sits in */
+	covers_pe: string[];
 	seat: { city: string | null; lat: number | null; lon: number | null };
 	/** curated office address (ΥΠΕΝ directory, Diavgeia-confirmed) */
 	contact: {
@@ -28,7 +30,14 @@ export interface AuthorityProfile {
 		}[];
 		total_eur: number;
 		exposure_eur: number;
-		top_contractors: { vat: string; name: string; n: number; eur: number }[];
+		/** the curated display name, the registry spelling beside it */
+		top_contractors: {
+			vat: string;
+			name: string;
+			registry_name?: string;
+			n: number;
+			eur: number;
+		}[];
 	};
 	dase: {
 		contracts: {

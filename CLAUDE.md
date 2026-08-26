@@ -213,7 +213,10 @@ refetching open contracts — prefer it for routine updates.
   Authorities also carry **`covers_pe`** — the Π.Ε. a service administers
   beyond the one its office sits in (8 user-confirmed: ΔΔ Σάμου→Ικαρίας,
   ΔΔ Κεφαλληνίας→Ιθάκης, Πεντέλης→3 Attica sectors, …); `region_pe` still
-  means the SEAT and places the map dot. Warns on new title/items
+  means the SEAT and places the map dot. Since 2026-08-26 the loader
+  STORES it (`forest_authorities.covers_pe`, « · »-joined) so the
+  /authority page's map can frame the whole jurisdiction, not the seat
+  unit alone (DATA_DECISIONS). Warns on new title/items
   disagreements; TODO-lists uncovered in-scope contracts. Matcher gotcha:
   fold() maps Greek→Latin homoglyphs, so connector/stop tokens must be
   folded too («ΚΑΙ» → Latin "KAI").
@@ -625,6 +628,7 @@ decisions land there FIRST, then get implemented.
 | `contract_regions.json` | ~331 contracts → project Π.Ε.(s), curated from titles/Δασαρχεία; amendments inherit from the superseded version. Optional per-contract `"sites"` lists (name, pe, PDF page, excerpt) → `contract_sites` |
 | `contractor_locations.json` | 187 contractor home locations (VIES + GEMI + hand curation) + `gemi` profile numbers (`"-1"` = confirmed not in GEMI) + Nominatim `lat/lon/geo_precision` + **`gemi_status`** — what the register says TODAY, verbatim (147 swept by `scripts/harvest_gemi_status.py`: 122 Ενεργή / 21 Διαγραφή / 4 Λύση-Εκκαθάριση; 20 in-scope contractors are wound-up joint ventures, flagged with an ⓘ + ΓΕΜΗ link and never rewritten — they signed the contract). NO status date is stored: the API's `dateGemiRegistered` is the registration date (DATA_DECISIONS 2026-08-20). **The seat is read from the contract** (DATA_DECISIONS 2026-08-21, the second entry of that day): `contractor_seats.json` is the primary source — address/postal_code/city/region_pe are the CHOSEN seat, `seat_source` contract|register|website, `seat_ref` (ΑΔΑΜ or URL), `seat_excerpt` (verbatim clause), `seat_note`, `geo_level` number|street for an `address` point, `register_*` the old VIES/ΓΕΜΗ values. In-scope dots 117 address (35 number / 82 street) / 34 settlement centre (the last 8 via Overpass — OSM ways Nominatim's search did not return, reverse-geocoded into the named settlement; 17 documents name only a settlement, 12 km markers/localities, 5 streets no map knows). `geo_precision: address` means «on the named street», at the number where OSM has it; `municipality` = centre of the settlement the document names (km markers, localities, streets OSM lacks). Geocode gate = `_acceptable` + street-level + a centre must be a settlement-type hit naming the settlement in its own place fields + a Τ.Κ.-prefix match in another settlement is refused |
 | `dase_coop_locations.json` | **The registered office of every ΔΑΣΕ co-operative** (DATA_DECISIONS 2026-08-24), 246 = the live population's own: **238 from VIES** (the register answers with the co-op's village + Τ.Κ. + reference town — ΓΕΜΗ knows no forest co-op, they sit in the ΥΠΕΝ Μητρώο Δασικών Συνεταιριστικών Οργανώσεων which has no public API) + **8 `name_inference`** (settlement read from the co-op's OWN registered name, accepted only because it lies in its contracts' Π.Ε. AND the awarding Δασαρχείο administers that village; reasoning in `note`, no postcode invented) + **64 verbatim contract party clauses** (`scripts/build_dase_coop_seats.py` anchors on the co-op's ΑΦΜ, reads BACKWARDS and requires a co-op name as the clause's SUBJECT — every ΔΑΣΕ contract states the AWARDING service's seat first, and a first pass captured «ΜΕ ΕΔΡΑ ΤΗΝ ΛΑΡΙΣΑ»; the clause quoted is the co-op's **LATEST** contract's, an earlier DIFFERENT one kept as `earlier_seat` — 2 cases, incl. 997309155 which moved Αυγερινός→Νεάπολη between 2024 and 2025, exactly what the register shows). **Where documents can check the register they confirm it 64/64.** **246 geocoded, 0 failures**, all `municipality` precision (a village seat has no street), via `scripts/geocode_dase_coop_seats.py` reusing `geocode_loader.geocode_entry` and its gate — 238/238 points fall in the Π.Ε. their own postcode implies. `contract_pes` rides along as the VALIDATOR, never a stated seat: **36 co-ops work outside their seat's Π.Ε.** (a Τρίκαλα co-op logging in Εύβοια after the 2021 fires) — a finding, not an error. Loaded by `khmdhs/dase_locations_loader.py` into dase.sqlite's `contractor_locations` (hooked at the end of `harvest_dase.py load`); pinned by `tests/test_dase_coop_seats.py`. NO UI/API surface yet, by user decision |
+| `place_names_en.json` | **English display text for every registered-office string the three ENTITY pages print** (DATA_DECISIONS 2026-08-26): 648 entries — the ΔΑΣΕ co-op villages, the Anti-nero contractor addresses AND the forest authorities' offices — keyed by the exact stored Greek. Built by `scripts/build_place_names_en.py` (ISO-843 via `geocode_loader._translit`); rules pinned in `tests/test_body_names_en.py`: an ordinal turns English only before «χλμ» («107th km»; a date-street keeps «25is Martiou»), keys are matched ACCENT-FOLDED («Τέρμα».upper() is «ΤΈΡΜΑ»), a hyphen/dot inside a token starts a new name but a run after a DIGIT is that numeral's suffix, «ΑΓ» takes the case of the word it qualifies, building words are said not transliterated («Διοικητήριο» → Administration Building), «Οδός» drops except before an article. A guard asserts every printed office string has an English form — a facts row may never mix alphabets. Byte-identical Atlas copy; `names.placeEn()`. MACHINE-PROPOSED, review owed |
 | `contractor_seats.json` | **The registered office of every in-scope Anti-nero contractor, read from the party clause of its OWN signed contract** (DATA_DECISIONS 2026-08-21): 151 entries, each city / street / number / Τ.Κ. transcribed by hand from the chain-read cached text (every row read; the parser only proposed), the source ΑΔΑΜ, the verbatim sentence, the register's values; `seat_source` contract 146 / register 3 / website 2 — where ΓΕΜΗ/VIES or the firm's own site shows a later move the CURRENT seat is chosen and `contract_seat` keeps the contract's (ΥΛΗ, ΚΗΠΟΠΡΑΞΙΣ, ΦΙΛΑΝΤΑΡΑΚΗ, ΑΛΣΟΣ, Τ&Τ; ΤΟΜΗ's own 2025 contract states its current Παιανία seat); 3 `flag: register_disagrees` (ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε., ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ, Κ/Ξ ΜΠΟΜΠΟΤΗ–ΞΑΝΘΟΠΟΥΛΟΣ which states no seat); a venture's seat is never inferred from a member's (two regions changed: ΚΑΡΝΟΜΟΥΡΑΚΗΣ–ΑΛΚΗ ΥΠΟΕΡΓΟ Β → Καβάλα, ΛΙΑΡΗ–ΓΚΙΚΑΣ → Λίμνη Ευβοίας). Merged into `contractor_locations.json` (scratch `merge_seats.py`), loaded by `contractor_loader` into five `seat_*`/`geo_level` columns; the Atlas contractor page prints «registered office as stated in contract <ΑΔΑΜ>» + the quoted sentence. Pinned by `tests/test_contractor_seats.py` |
 | `extension_act_curation.json` | Hand-read corrections to the machine reading of the extension acts (DATA_DECISIONS 2026-08-21, curation pass 1): `area_dates` = which service got which date when ONE act grants different dates per area (22 acts; the acts write the pairing in three orders, so no rule — the loader refuses a date the act does not state or a service the registry lacks), `scope_auth` judgments where the act names a DIRECTORATE standing for the contract's Δασαρχεία (Φθιώτιδας → Αταλάντης+Σπερχειάδας, Έβρου → Αλεξανδρούπολης+Σουφλίου), one `new_deadline` override (ΨΠΩΟ: the later date is a condition on approvals); verbatim grant sentence per entry. Applied by `extension_acts_loader` at load and on `--reextract`; the strips take each service's own date (`lanes.buildLanes`) |
 | `completion_act_overrides.json` | Completion AND extension acts whose SUBJECT line keys the wrong contract ΑΔΑΜ (9ΞΣΟ4653Π8-Ζ9Ο → 26SYMV018739467, ΨΕΡΟ4653Π8-2Θ6 → 22SYMV010473680 since curation pass 1). Completion acts whose SUBJECT line keys the wrong contract ΑΔΑΜ (ΥΠΕΝ keying errors, DATA_DECISIONS 2026-08-21): 4 ΑΔΑ → the contract the act really concerns (lots 15Α and 4Α, whose acts carried lots 15Γ's and 4Δ's ΑΔΑΜ), evidence quoted from the act's recitals/lot/title. Applied by `completion_acts_loader` at insert and on `--reextract`; candidates come from the loader's WARN, but the recital can be the typo too — every verdict is read from the act |
@@ -1438,7 +1442,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   hover-linked to the dots both ways, with ONE list frame
   below carrying its OWN toggle (Forest authorities · Forest co-ops ·
   Anti-nero contractors + one search on the title line; windowed 25/page
-  pager — user chose paging over top-N/folds; the 49 no-contract
+  pager — user chose paging over top-N/folds; **since 2026-08-26 that
+  frame IS the site's contractor and co-op list**: the lens is a URL
+  param (`?list=`, anchor `#list`), the entity lenses carry the ΑΦΜ
+  column and a by-€/by-contracts/by-name sort, and `/dase/coops` +
+  `/antinero/contractors` are 308 redirects into it (single-bid dropped
+  by the user's standing rule); the 49 no-contract
   directory units fold into the authorities table as dash rows,
   address/contact gone);
   the LEGEND lives at the top of the map's right column (grey band flush
@@ -1981,7 +1990,17 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   QUOTES, the map one flat tone with no ramp or legend, € PER YEAR beside
   CONTRACTS on the header's columns) — and carries NO procurement block
   by decision: the Ministry awards, the forest services supervise, and
-  the contract pages tell that story. No sponsor entity page BY DECISION:
+  the contract pages tell that story. **/authority joined the pattern the
+  same day**: NAME · OFFICE · REGIONAL UNIT(S) (no registry-name row and
+  no phone/email — the office is an address, not a contact card; the
+  Greek name is the identity row's hover title), the
+  measures one per row and only when non-zero, its map fitted to the
+  WHOLE jurisdiction (seat unit at 30% of the authority green, the
+  `covers_pe` units at 14%), and one `.pair` row per dataset — Anti-nero
+  contractors (curated display names) beside its contracts fold in the
+  black accent, forest co-ops beside its ΔΑΣΕ fold in green; a service
+  with an empty side says so in one sentence, never a heading over an
+  empty grid. No sponsor entity page BY DECISION:
   sponsors have no documentary identity key (DATA_DECISIONS
   2026-08-26).
 - **Tests**: `tests/test_atlas_api.py` (+ `_queries_extra`, `_real_db` as

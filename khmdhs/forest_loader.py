@@ -329,13 +329,15 @@ def write_db(conn: sqlite3.Connection, registry: dict, gazetteer: dict,
                 INSERT INTO forest_authorities
                     (name, kind, seat_city, municipality_code,
                      municipality_name, lat, lon, region_pe,
-                     street, postal_code, city, phone, email, seat_precision)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                     street, postal_code, city, phone, email, seat_precision,
+                     covers_pe)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """, (name, a["kind"], a.get("seat_city"), a["municipality_code"],
                   muni["name"], lat, lon, a["region_pe"],
                   office.get("street"), office.get("tk"), office.get("city"),
                   (office.get("phones") or [None])[0],
-                  (office.get("emails") or [None])[0], precision))
+                  (office.get("emails") or [None])[0], precision,
+                  " · ".join(a.get("covers_pe") or []) or None))
         # complete ΥΠΕΝ directory — reference layer, never matcher input
         import json as _json
         dir_path = Path(__file__).parent / "data" / "forest_units_directory.json"

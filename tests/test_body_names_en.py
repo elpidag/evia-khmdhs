@@ -90,3 +90,107 @@ def test_user_decisions_pinned():
     assert org["ΑΡΙΣΤΟΤΕΛΕΙΟ ΠΑΝΕΠΙΣΤΗΜΙΟ ΘΕΣ/ΝΙΚΗΣ"].endswith("(A.U.TH.)")
     assert org["ΓΕΝΙΚΟ ΝΟΣΟΚΟΜΕΙΟ ΚΟΖΑΝΗΣ ΜΑΜΑΤΣΕΙΟ"] == "General Hospital of Kozani"
     assert org["ΔΗΜΟΣ ΛΑΡΙΣΑΙΩΝ"] == "Municipality of Larisa"
+
+
+# ------------------------------------------------ the place layer (2026-08-26)
+
+def _places():
+    """place_names_en.json is a flat Greek → English map, not the {el, en}
+    shape the body-name files use."""
+    data = json.loads((ROOT / "khmdhs" / "data" / "place_names_en.json")
+                      .read_text(encoding="utf-8"))
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+
+def test_place_names_copies_identical_and_latin_only():
+    cur = (ROOT / "khmdhs" / "data" / "place_names_en.json").read_bytes()
+    shipped = (ROOT / "atlas" / "src" / "lib" / "data" / "place_names_en.json").read_bytes()
+    assert cur == shipped
+    for k, en in _places().items():
+        for ch in en:
+            assert "GREEK" not in unicodedata.name(ch, ""), (k, en)
+
+
+def test_every_printed_office_string_has_an_english_form():
+    """The three entity pages print a registered office; none of them may
+    fall back to Greek (user, 2026-08-26: the facts row cannot mix the two
+    alphabets)."""
+    p = ROOT / "data" / "processed" / "khmdhs.sqlite"
+    if not p.exists():
+        pytest.skip("committed khmdhs.sqlite not present")
+    places = _places()
+    k = sqlite3.connect(f"file:{p.as_posix()}?mode=ro", uri=True)
+    k.row_factory = sqlite3.Row
+    for r in k.execute("SELECT name, municipality_name, street, city "
+                       "FROM forest_authorities"):
+        for col in ("street", "city"):
+            v = " ".join((r[col] or "").split())
+            if v:
+                assert v in places, (r["name"], col, v)
+        if not (r["city"] or "").strip():
+            v = " ".join((r["municipality_name"] or "").split())
+            assert not v or v in places, (r["name"], v)
+    k.close()
+
+    contractors = json.loads((ROOT / "khmdhs" / "data" / "contractor_locations.json")
+                             .read_text(encoding="utf-8"))
+    rows = contractors if isinstance(contractors, list) else list(contractors.values())
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        for col in ("address", "city"):
+            v = " ".join((row.get(col) or "").replace(" None", "").split())
+            if v and v.lower() != "none":
+                assert v in places, (col, v)
+
+
+def test_place_rendering_rules_pinned():
+    """The conventions the generator encodes, each one a trap it walked into
+    (DATA_DECISIONS 2026-08-26)."""
+    pl = _places()
+    # an ordinal is English only before the km — a street named after a date
+    # keeps the form its own sign carries
+    assert pl["107ο χλμ. ΕΟ Αθηνών-Λαμίας"] == "107th km National Road Athinon-Lamias"
+    assert pl["25ης Μαρτίου 23"] == "25is Martiou 23"
+    # Python uppercases «Τέρμα» to «ΤΈΡΜΑ»: the keys are matched accent-folded
+    assert pl["Τέρμα Ομονοίας"] == "End of Omonoias"
+    assert pl["Δασικό Κτίριο"] == "Forest Building"
+    # a hyphen inside a token starts a new place name
+    assert pl["3ο χλμ. Ε.Ο. Κομοτηνής-Αλεξανδρούπολης"] == \
+        "3rd km National Road Komotinis-Alexandroupolis"
+    # «Αγ.» takes the case of the word it qualifies
+    assert pl["Αγ. Κωνσταντίνου 1"] == "Agiou Konstantinou 1"
+
+
+def test_place_review_verdicts_pinned():
+    """The user's own review of the register (2026-08-26), and the bugs the
+    OSM cross-check surfaced with it."""
+    pl = _places()
+    # ΕΛΟΤ 743 voicing — «ευ» before a voiceless consonant is «ef»
+    assert pl["Ελευθερίου Βενιζέλου 5"] == "Eleftheriou Venizelou 5"
+    assert pl["Ευκαρπία"] == "Efkarpia"
+    assert pl["ΠΕΥΚΟΦΥΤΟ"] == "Pefkofyto"
+    assert pl["Λευκάδα"] == "Lefkada"
+    assert pl["Ναύπλιο"] == "Nafplio"
+    # «ΘΕΣΗ» is punctuation, not a word
+    assert pl["ΘΗΒΑ ΘΕΣΗ ΧΟΡΟΒΟΙΒΟΔΑ"] == "Thiva, Chorovoivoda"
+    assert pl["θέση Βαρύπετρο"] == "Varypetro"
+    # «ΝΕΟ» is the road only after a «χλμ»; elsewhere it is the adjective
+    assert pl["1ο χλμ. ΝΕΟ Λαμίας Αθηνών"] == "1st km New National Road Lamias Athinon"
+    assert pl["Νέο Ψυχικό"] == "Neo Psychiko"
+    assert pl["Νέο Ηράκλειο"] == "Neo Irakleio"
+    # «Μεγ.» takes the gender of what it qualifies
+    assert pl["Μεγ. Αλεξάνδρου 24"] == "Megalou Alexandrou 24"
+    assert pl["ΜΕΓ ΠΑΝΑΓΙΑ"] == "Megali Panagia"
+    # a settlement of a Π.Ε.'s name reads the way the Π.Ε. layer rules
+    pe = json.loads((ROOT / "khmdhs" / "data" / "pe_names_en.json")
+                    .read_text(encoding="utf-8"))
+    pe_en = {k: (v["en"] if isinstance(v, dict) else v) for k, v in pe.items()
+             if not k.startswith("_")}
+    assert pl["Ρόδος"] == "Rhodes" and "Rhodes" in pe_en.values()
+    assert pl["Κόρινθος"] == "Corinth"
+    assert pl["Πειραιάς"] == "Piraeus"
+    assert pl["Κέρκυρα"] == "Corfu"
+    assert pl["ΗΡΑΚΛΕΙΟ"] == "Heraklion"
+    # the Chios street named after the 118 exiles, in the user's own form
+    assert pl["Οδός των 118, αρ. 37"] == "118 Str. no. 37"

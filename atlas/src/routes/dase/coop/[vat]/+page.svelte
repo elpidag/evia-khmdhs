@@ -40,7 +40,7 @@
 	/>
 </svelte:head>
 
-<p class="crumb"><a href="/dase/coops">← Co-operatives</a></p>
+<p class="crumb"><a href="/authorities?list=coops#list">← Forest co-operatives</a></p>
 
 <div class="entp">
 	<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
@@ -119,62 +119,62 @@
 			<YearBars rows={b.yearly} color="var(--c-dase)" />
 		</section>
 		<div class="foldslot">
-			<Fold title="Awarding units">
+		<Fold title="Contracts ({b.contracts.length})">
 			<table>
+				<thead>
+					<tr>
+						<th>Signed</th>
+						<th>ΑΔΑΜ</th>
+						<th class="num">Value</th>
+					</tr>
+				</thead>
 				<tbody>
-					{#each b.units as u, i (i)}
+					{#each b.contracts as r (r.reference_number)}
 						<tr>
-							<td title={devGreek(u.unit)}>{bodyEn(u.unit) || '—'}</td>
-							<td class="muted" title={devGreek(u.org)}><small>{orgEn(u.org)}</small></td>
-							<td class="num">{u.n_contracts}×</td>
-							<td class="num">{eurShort(u.total_eur)}</td>
+							<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
+							<td class="tabular"
+								><a href={`/dase/contract/${r.reference_number}`}>{r.reference_number}</a></td
+							>
+							<td class="num">
+								{eur(r.total_cost_with_vat)}
+								{#if r.share_eur !== undefined}
+									<br /><small class="muted"
+										>signed with {(r.n_parties ?? 2) - 1} other co-op{(r.n_parties ?? 2) > 2
+											? 's'
+											: ''} · {eur(r.share_eur)} counted here</small
+									>
+								{/if}
+							</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
-			</Fold>
+			{#if b.contracts.some((r) => r.share_eur !== undefined)}
+				<p class="muted">
+					<small
+						>A contract signed jointly by several co-ops is split evenly between them: the table
+						shows each contract's own stated value, while this co-op's totals count its share.
+						Neither the registry nor the signed document records who took what.</small
+					>
+				</p>
+			{/if}
+		</Fold>
 		</div>
 	</div>
 
-	<Fold title="Contracts ({b.contracts.length})">
+	<Fold title="Awarding units">
 		<table>
-			<thead>
-				<tr>
-					<th>Signed</th>
-					<th>ΑΔΑΜ</th>
-					<th class="num">Value</th>
-				</tr>
-			</thead>
 			<tbody>
-				{#each b.contracts as r (r.reference_number)}
+				{#each b.units as u, i (i)}
 					<tr>
-						<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
-						<td class="tabular"
-							><a href={`/dase/contract/${r.reference_number}`}>{r.reference_number}</a></td
-						>
-						<td class="num">
-							{eur(r.total_cost_with_vat)}
-							{#if r.share_eur !== undefined}
-								<br /><small class="muted"
-									>signed with {(r.n_parties ?? 2) - 1} other co-op{(r.n_parties ?? 2) > 2
-										? 's'
-										: ''} · {eur(r.share_eur)} counted here</small
-								>
-							{/if}
-						</td>
+						<td title={devGreek(u.unit)}>{bodyEn(u.unit) || '—'}</td>
+						<td class="muted" title={devGreek(u.org)}><small>{orgEn(u.org)}</small></td>
+						<td class="num">{u.n_contracts}×</td>
+						<td class="num">{eurShort(u.total_eur)}</td>
 					</tr>
 				{/each}
 			</tbody>
 		</table>
-		{#if b.contracts.some((r) => r.share_eur !== undefined)}
-			<p class="muted">
-				<small
-					>A contract signed jointly by several co-ops is split evenly between them: the table
-					shows each contract's own stated value, while this co-op's totals count its share.
-					Neither the registry nor the signed document records who took what.</small
-				>
-			</p>
-		{/if}
 	</Fold>
 </div>
 

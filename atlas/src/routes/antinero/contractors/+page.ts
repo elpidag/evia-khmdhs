@@ -1,22 +1,16 @@
+import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { apiGet } from '$lib/api';
 
-export interface ContractorRow {
-	vat_number: string;
-	name: string;
-	countries: string | null;
-	n_contracts: number;
-	n_single_bidder: number;
-	pct_direct: number | null;
-	total_eur: number;
-}
-
-export const load: PageLoad = async ({ fetch, url }) => {
-	const q = url.searchParams.get('q') ?? '';
-	const sort = url.searchParams.get('sort') ?? 'total_eur';
-	const params = new URLSearchParams();
-	if (q) params.set('q', q);
-	if (sort) params.set('sort', sort);
-	const rows = await apiGet<ContractorRow[]>(fetch, `/api/antinero/contractors?${params}`);
-	return { rows, q, sort };
+/**
+ * The contractors list lives in NETWORK OF ACTORS (user, 2026-08-26):
+ * the same population was listed in two places. The route stays as a
+ * landing point so old links, bookmarks and the site's own crumbs keep
+ * working — it carries the search term across.
+ */
+export const load: PageLoad = ({ url }) => {
+	const q = url.searchParams.get('q');
+	const to = new URL('/authorities', url);
+	to.searchParams.set('list', 'contractors');
+	if (q) to.searchParams.set('q', q);
+	redirect(308, `${to.pathname}${to.search}#list`);
 };

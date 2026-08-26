@@ -3128,10 +3128,18 @@ def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             e["eur"] = round(e["eur"], 2)
         return out
 
+    # every contractor surface prints the curated display name, the registry
+    # spelling riding beside it (DATA_DECISIONS 2026-08-20)
+    overlay_contractor_names(kh, anti_top_rows := top(anti_top), "vat", "name")
+
     keys = row.keys()
     return {
         "name": name, "slug": slug, "kind": row["kind"],
         "pe": row["region_pe"],
+        # the Π.Ε. this service administers beyond the one its office sits
+        # in (8 user-confirmed) — the map frames the whole jurisdiction
+        "covers_pe": [x for x in ((row["covers_pe"] if "covers_pe" in keys else None)
+                                  or "").split(" · ") if x],
         "seat": {"city": row["municipality_name"],
                  "lat": row["lat"], "lon": row["lon"]},
         # office layer (DATA_DECISIONS 2026-08-17): ΥΠΕΝ directory address
@@ -3149,7 +3157,7 @@ def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "total_eur": round(sum((c["eff"] or 0) / (c["n_auths"] or 1)
                                    for c in anti_contracts), 2),
             "exposure_eur": round(sum(c["eff"] or 0 for c in anti_contracts), 2),
-            "top_contractors": top(anti_top),
+            "top_contractors": anti_top_rows,
         },
         "dase": {
             "contracts": dase_contracts,
