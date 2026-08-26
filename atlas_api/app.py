@@ -464,6 +464,22 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             ana = None
         return jsonify(queries_extra.explore_rows(g.conn, dase, ana))
 
+    # ----------------------------------------------------------- landing
+
+    @app.route("/api/landing")
+    def api_landing():
+        """The field of codes on the landing page — every identifier the
+        three datasets hold; degrades like /api/meta when a DB is absent."""
+        try:
+            dase = _dase_conn()
+        except Exception:
+            dase = None
+        try:
+            ana = _anadohoi_conn()
+        except Exception:
+            ana = None
+        return jsonify(queries_extra.landing_codes(g.conn, dase, ana))
+
     # ------------------------------------------------------ cross-dataset
 
     @app.route("/api/connections")

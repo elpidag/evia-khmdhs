@@ -412,3 +412,17 @@ def test_diavgeia_ada_shape_covers_all_org_code_lengths():
     for bad in ("ΨΙ87ΟΡ10-1Φ", "ΨΙ8-1Φ8", "ΨΟΨΝ4653Π8ΧΧΧΧΧ-67Σ",
                 "ψοψν4653π8-67σ"):
         assert not _ADA_RE.fullmatch(bad), bad
+
+
+def test_landing_degrades_without_optional_dbs(tmp_path):
+    kh = tmp_path / "kh.sqlite"
+    _build_kh_db(kh)
+    app = app_module.create_app(db_path=kh,
+                                dase_db_path=tmp_path / "missing_dase.sqlite",
+                                anadohoi_db_path=tmp_path / "missing_ana.sqlite",
+                                pdf_cache_dir=tmp_path / "cache")
+    app.testing = True
+    L = app.test_client().get("/api/landing").get_json()
+    assert set(L) == {"antinero", "counts"}
+    assert L["antinero"] == {"contracts": ["22SYMV000000001"], "acts": []}
+    assert L["counts"] == {"antinero_contracts": 1, "antinero_acts": 0, "total": 1}

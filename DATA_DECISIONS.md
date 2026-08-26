@@ -9851,3 +9851,135 @@ point there. Nothing was lost in the move except **single-bid contracts**
 (the user's standing rule: that information has not been worked on) —
 the ΑΦΜ column and the by-€ / by-contracts / by-name sort the standalone
 pages carried are now on the network list too.
+
+## 2026-08-27 · The front door: a field of codes, a story, a hub and three cards (user)
+
+The site was a set of analysis pages behind four tabs; the user studied
+Common Wealth's «Who Owns Britain» (one door, a data branch and a story
+branch) and drew five mocks. Built as a skeleton the user now fills:
+
+**The landing at `/`** has three states on one URL. **A** — a
+full-viewport field of every identifier the site holds, written
+vertically one glyph per line in ~60 columns (32 px pitch, 14 px lines)
+drifting up and down at their own speeds, **each code in its dataset's
+colour** (user decision: Anti-nero black, forest co-ops green, sponsored
+works its hue — the field IS the data, and the honest proportions mean
+mostly green: 3.685 of the 4.496 codes are ΔΑΣΕ). **B** — the title
+fades in 1,8 s after the first frame. **C** — a click on the title
+collapses the field into the top-left cell of a 4×4 menu (a transform
+of the fixed stage into the cell's rectangle, 0,75 s; the cell then
+carries its own denser field) and the page becomes title · standfirst ·
+credit on the left, the grid on the right: START HERE, EXPLORE THE DATA,
+METHODOLOGY, the other cells empty for now (`lib/landing/homeCells.ts`
+is the cell map). The brand link returns straight to C (`/?menu=1`), a
+session that has seen C lands on it again (sessionStorage `sf.landing`),
+↻ in the cell replays with a fresh seed, and prefers-reduced-motion
+opens on C with a still field. Layout is pure (`lib/landing/field.ts`,
+seeded mulberry32 — now shared from `lib/transforms/prng.ts`), vitest-pinned.
+
+**The codes come from `/api/landing`** (`queries_extra.landing_codes`):
+every record of the in-scope Anti-nero chains (305 = the 245 tips and
+their superseded versions) with the calls, awards and requests their
+registry family and their own texts cite (298); the live ΔΑΣΕ contracts
+with their superseded versions (2.062) and their upstream acts (1.623);
+the designation-act trail of every live sponsored project (208) —
+**4.496 codes, globally distinct, payments deliberately out** (their own
+layer). 82 KB raw, 20 KB gzipped, memoised like every GET; degrades when
+a DB is absent; pinned by `test_landing_pins`.
+
+**`/` is no longer the Anti-nero overview.** It moved to `/antinero`
+(the alias that redirected the other way is gone). Every permalink the
+old front page minted keeps working: its query forms (`view focus sel
+selv flows money net chord rank ct`) are forwarded by the landing's
+loader with their parameters, its hash forms (`/#flows`) by the landing
+after hydration — `lib/transforms/legacyRoutes.ts`, pinned. The
+methodology's «front page» link follows.
+
+**EXPLORE THE DATA → `/data`**, the hub: title, one caption line, the
+three streams as large symbols and the two tools (search = /explore,
+network of actors = /authorities) smaller beneath. **The five symbols
+are ONE list** (`lib/datasets.ts:SYMBOLS`) feeding the hub, the header
+and the cards; the labels are the mock's placeholders until the user
+names the streams, and `DatasetSymbol.svelte` is a bordered square until
+the user's images arrive — one file to swap.
+
+**Each dataset page is a CARD** (`lib/ui/DatasetCard.svelte`): the
+symbol, the stream's name, the narrative and «explore more» on the
+left; three KPI cards on the right (`lib/ui/KpiCards.svelte` — the recipe
+the four heroes hand-rolled, extracted once); then the dataset's key
+frames at the page's full width — **one deviation from the mock, which
+puts them beside the text**: the frames keep the widths they were drawn
+for (the Anti-nero allocation map is a pair of maps), which an
+800-px column cannot hold. «Explore more» unfolds the rest below on the
+same URL (user decision); the state is READ from the URL — a frame
+anchor or one of the page's chart lenses opens unfolded — and the
+button sets `#more` (`lib/ui/expanded.ts`, pinned). Key frames: sponsored
+= CURRENT STATUS (the map), TIMELINE, WHO THE SPONSORS ARE (the mock's
+three); Anti-nero = ALLOCATION OF FUNDING, RANKING OF COMPANIES,
+PROCUREMENT TIMELINE and ΔΑΣΕ = ALLOCATION OF FUNDING, MONEY PER YEAR +
+RANKING OF CO-OPERATIVES — **defaults, the user's call**. The hero's
+programme-figure bars (direct-award share, single bids, paid) are not
+KPI cards and open the unfolded part as PROGRAMME / CONTRACT FIGURES;
+the hero's computed prose and basis line sit under the markdown in the
+card's text column. Every frame kept its markup, anchor and lens; the
+restructure script proved by multiset that no line of the old pages was
+lost.
+
+**The header** is the brand on two lines, the five symbols (the current
+one filled) and METHODOLOGY; the four tabs and the MENU dropdown are
+gone; the landing carries no chrome.
+
+**START HERE → `/story`**, the scroll the user writes next. Phase 1 is
+the skeleton: a chapter menu and ten chapters (`lib/story/chapters.ts`,
+placeholder titles), each reading its markdown; **KEY FINDINGS is a
+chapter** — the five frames of `/compare` moved into
+`lib/sections/KeyFindings.svelte` with their anchors and dress, and
+`/compare` redirects to `/story` (a browser carries the fragment across a
+redirect whose Location has none, so `/compare#pe-scatter` lands on the
+same frame).
+
+**Narration lives in markdown the user edits** (user decision): mdsvex
+is the one new dependency, wired in `vite.config.ts` (`extensions`,
+`preprocess`, the `$content` alias; `src/content.d.ts` types `*.md`);
+`atlas/src/content/{landing, data, datasets, story}/*.md`, each seeded
+with one placeholder line, rendered through `lib/ui/Prose.svelte`, which
+in dev prints the file path behind an empty slot.
+
+No colour, font or chart changed. 611 python tests, 144 frontend units.
+
+**Second round the same day — the cards are VIEWPORT compositions.** The
+user pointed out that the mocks and «Who Owns Britain» also set the
+zoom extents and the allocation of graphs: a card is one screen. The
+first build stacked the full frames under the text (4.352 px on the
+sponsored page). Now `main` is window-wide on the three dataset pages
+(`main.card`), the text column runs the full height on the left with
+«explore more» at its foot, the three KPI cards span the top of the
+right, and under them the key charts are compact **TILES**
+(`lib/ui/Tile.svelte`, `--paper-2` panels, content scrolling rather than
+growing) in the mock's grid — MAP top-left, the tall one right, the
+third under MAP — sized to the viewport (`calc(100dvh − header − KPI
+row)`, floor 560 px). Every page measures 1.224 px at 1920×1080. The
+tiles are compact drawings of the same data (the sponsored status map
+with its EFFIS scars and status dots, the Gantt in a scroll box, the
+sponsor groups; the Anti-nero and ΔΑΣΕ tiles a one-tone € choropleth by
+regional unit, the ranking, money per year), each titled with a link to
+its full frame; **«explore more» unfolds the WHOLE original page** —
+every frame in its original order, the hero's figure bars first — so the
+analysis pages are exactly what they were, under the card. The pages
+were rebuilt from git HEAD by `cards_v2.py` with the multiset guard.
+
+**Third round the same day (user).** (1) The three cards **do not scroll**:
+the card is the viewport under the header to the pixel (`height:
+calc(100dvh − 60px − 2·sp-4)`, the tiles' row taking what the KPI row
+leaves, a long narrative scrolling inside its own column) — measured
+scrollHeight == viewport at 1920×1080, 1600×900 and 1440×820. (2) The
+**footer is gone from every page** (the meta line and the source line);
+`/api/meta` still loads for the layout. (3) **«Explore more» REPLACES the
+card** with the frames — the analysis page as it was, at the article
+width, under a slim head naming the stream with «← back to the card» —
+instead of unfolding beneath it; the URL is still `#more`, a frame anchor
+still opens on the frames, and the way back lands on the card's top.
+(4) A class collision fixed on the way: the map tile's wrapper was
+`.fill`, the name the direct-award bar already used, so the unfold on
+Anti-nero and ΔΑΣΕ painted a viewport-sized block in the dataset's colour;
+the wrapper is `.tilefill`.

@@ -85,7 +85,7 @@
 		(ΚΑΕ 2910601001), so they are <em>probably</em> part of the programme — but probability
 		is not proof, so they are presented as additional contracts found, probably related to
 		the Antinero programme, and not included in the calculations. They remain in the dataset
-		with reachable detail pages, listed on the <a href="/">front page</a>.
+		with reachable detail pages, listed on the <a href="/antinero">Anti-nero page</a>.
 	</p>
 
 	<h2 id="payment-dates">Payment dates</h2>

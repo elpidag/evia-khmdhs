@@ -608,3 +608,13 @@ export interface Connections {
 		total_eur: number;
 	};
 }
+
+/** GET /api/landing — every identifier the site holds, for the landing
+ *  page's field of codes (sorted, deduplicated per list; `dase` and
+ *  `anadohoi` are absent when their database is). */
+export interface Landing {
+	antinero: { contracts: string[]; acts: string[] };
+	dase?: { contracts: string[]; acts: string[] };
+	anadohoi?: { acts: string[] };
+	counts: Record<string, number> & { total: number };
+}

@@ -4790,3 +4790,68 @@ def arogi_summary(ar: sqlite3.Connection) -> dict:
             "SELECT value FROM meta WHERE key='loaded_as_of'").fetchone()
             or [None])[0],
     }
+
+
+# ----------------------------------------------------------------- landing
+
+def landing_codes(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
+                  ana: sqlite3.Connection | None) -> dict:
+    """Every identifier the site holds, for the landing page's field of codes
+    (DATA_DECISIONS 2026-08-27): the contracts of the in-scope Anti-nero
+    chains (every record, not only the tips), the calls / awards / requests
+    their registry family and their own texts cite, the live ΔΑΣΕ contracts
+    with their superseded versions and their upstream acts, and the
+    designation-act trail of every live sponsored project. Payments stay
+    out — they are their own layer. Flat sorted string arrays, deduplicated
+    per list; the counts are computed here so the page never types one.
+    """
+    def has(conn: sqlite3.Connection, table: str) -> bool:
+        # the act tables are the loaders' own, not db.py's schema — a DB
+        # built without them (fixtures, a fresh harvest) still answers
+        return conn.execute("SELECT 1 FROM sqlite_master WHERE type IN "
+                            "('table','view') AND name = ?", (table,)).fetchone() is not None
+
+    def col(conn: sqlite3.Connection, sql: str, params: tuple = (),
+            table: str | None = None) -> list[str]:
+        if table and not has(conn, table):
+            return []
+        return sorted({r[0] for r in conn.execute(sql, params) if r[0]})
+
+    out: dict = {}
+
+    kh_contracts = col(kh, """
+        SELECT reference_number FROM contract_scope
+        WHERE in_scope = 1 OR superseded_by IS NOT NULL""")
+    marks = ",".join("?" * len(kh_contracts))
+    kh_acts = sorted(
+        set(col(kh, f"""
+            SELECT adam FROM contract_linked_acts
+            WHERE kind NOT IN ('contract', 'payment')
+              AND reference_number IN ({marks})""", tuple(kh_contracts),
+            table="contract_linked_acts"))
+        | set(col(kh, f"""
+            SELECT adam FROM contract_families
+            WHERE reference_number IN ({marks})""", tuple(kh_contracts),
+            table="contract_families")))
+    out["antinero"] = {"contracts": kh_contracts, "acts": kh_acts}
+
+    if dase is not None:
+        da_contracts = col(dase, "SELECT reference_number FROM contracts WHERE cancelled = 0")
+        dmarks = ",".join("?" * len(da_contracts))
+        da_acts = col(dase, f"""
+            SELECT adam FROM contract_linked_acts
+            WHERE kind NOT IN ('contract', 'payment')
+              AND reference_number IN ({dmarks})""", tuple(da_contracts),
+            table="contract_linked_acts")
+        out["dase"] = {"contracts": da_contracts, "acts": da_acts}
+
+    if ana is not None:
+        out["anadohoi"] = {"acts": col(ana, """
+            SELECT ada FROM project_decisions
+            WHERE root_ada IN (SELECT root_ada FROM projects
+                               WHERE status <> 'superseded')""")}
+
+    counts = {f"{ds}_{kind}": len(v) for ds, d in out.items() for kind, v in d.items()}
+    counts["total"] = sum(counts.values())
+    out["counts"] = counts
+    return out

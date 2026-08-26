@@ -1,12 +1,16 @@
+import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { apiGet, type AntineroOverview } from '$lib/api';
+import { legacyAntineroTarget } from '$lib/transforms/legacyRoutes';
 
-// Only the light overview payload is SSR'd (real HTML for the KPIs and
-// rankings). The heavy chart payloads (map 317KB, payments 139KB, …) render
-// client-side anyway, so they are fetched after hydration — serialising
-// them into the page HTML made `/` weigh ~900KB.
-export const load: PageLoad = async ({ fetch }) => {
-	return {
-		overview: await apiGet<AntineroOverview>(fetch, '/api/antinero/overview')
-	};
+/**
+ * The landing page (2026-08-27). Until that day `/` was the Anti-nero
+ * overview: any of its query permalinks is forwarded to /antinero with its
+ * parameters; hash-only ones are forwarded by the page after hydration.
+ * The landing itself loads nothing here — the field of codes is fetched
+ * post-hydration.
+ */
+export const load: PageLoad = ({ url }) => {
+	const target = legacyAntineroTarget(url.search);
+	if (target) redirect(308, target);
+	return { menu: url.searchParams.get('menu') === '1' };
 };

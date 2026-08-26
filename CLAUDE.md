@@ -1409,7 +1409,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
 - **Rebrand «FORESTRY WORKS TRACKER»** (2026-08-12, commits
   b35e5db…1d7161e): white paper (cream retired), `--c-antinero` is now
   BLACK, `--c-dase` green `#52b788`; sticky compacting header (base.css
-  `scroll-padding-top` keeps `#anchors` clear). Nav is 4 primary tabs +
+  `scroll-padding-top` keeps `#anchors` clear). Nav WAS, until 2026-08-27 (see the FRONT DOOR bullet below), 4 primary tabs +
   a MENU ▾ dropdown: SPONSORED WORKS (/anadohoi) · ANTINERO WORKS (/) ·
   FOREST CO-OP WORKS (/dase) · EXPLORE, then KEY FINDINGS (`/compare`,
   renamed and redressed 2026-08-23 — hero cards + kicker + basis once,
@@ -1474,6 +1474,55 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   successor client-side (`ganttProjects`) — charts count 68 live
   projects, the curation/test split (42/18/9 deliverables) counts all
   69 acts; both are correct on their own basis.
+- **FRONT DOOR since 2026-08-27** (user mocks after «Who Owns Britain»;
+  DATA_DECISIONS that day): **`/` is the LANDING**, three states on one
+  URL — A a full-viewport canvas field of every identifier the site
+  holds (`/api/landing` → `queries_extra.landing_codes`: 4.496 codes,
+  in-scope Anti-nero chains + their cited calls/awards/requests, live
+  ΔΑΣΕ + upstream acts, live sponsored designation trails; payments
+  OUT; pinned), one glyph per line in ~60 drifting columns, EACH CODE IN
+  ITS DATASET'S COLOUR; B the title fades in; C a click collapses the
+  field into the top-left cell of a 4×4 menu (START HERE → `/story`,
+  EXPLORE THE DATA → `/data`, METHODOLOGY). `lib/landing/` holds
+  `field.ts` (pure, seeded via `lib/transforms/prng.ts`, vitest),
+  `CodeField.svelte` (canvas: resize, DPR, fonts.ready, endless RAF with
+  cleanup, pause when hidden, reduced-motion still frame),
+  `LandingTitle`, `HomeGrid` + `homeCells.ts` (the cell map), `brand.ts`.
+  Brand link → `/?menu=1` (straight to C); sessionStorage `sf.landing`
+  remembers C; ↻ replays. **The Anti-nero overview lives at
+  `/antinero`**; every old `/` permalink is forwarded with its params by
+  the landing loader (query forms) or the page after hydration (hash
+  forms) — `lib/transforms/legacyRoutes.ts`, pinned. **Header** = brand
+  on two lines · the FIVE symbols (`lib/datasets.ts:SYMBOLS` — three
+  streams + search/actors; placeholders squares in `DatasetSymbol.svelte`
+  until the user's images; labels the user renames there) · METHODOLOGY;
+  no chrome on `/`. **`/data`** = the hub of symbols. **Each dataset page
+  is a CARD — one viewport** (`ui/DatasetCard.svelte`; `main.card` is
+  window-wide on the three pages): the symbol · name · markdown text ·
+  «explore more» in a full-height column left | three `ui/KpiCards`
+  across the top right | three `ui/Tile`s in the mock's grid (MAP
+  top-left, the tall one right, the third under MAP; `--paper-2`
+  panels sized to `100dvh`, content scrolls) — compact drawings of the
+  same data, titles linking to the full frames; the card is the viewport to
+  the pixel (NO scrolling; measured at three sizes); «explore more»
+  REPLACES the card with the WHOLE original page under `#more` (every
+  frame, original order, the hero's figure bars first as
+  PROGRAMME/CONTRACT FIGURES, a slim head with «← back to the card»;
+  `ui/expanded.ts` reads the state from any frame anchor or chart lens).
+  The site has NO footer since the same day (user). Map-tile wrapper class
+  is `.tilefill` — `.fill` is the direct-award bar's.
+  Tiles: sponsored = status map · Gantt · sponsor groups; Anti-nero =
+  € choropleth · ranking · money per year; ΔΑΣΕ likewise. The pages are
+  REGENERATED from git HEAD by the scratch `cards_v2.py` (multiset
+  guard: no line of the original middle lost). **`/story`** = the scroll
+  skeleton (`lib/story/chapters.ts`, ten chapters, KEY FINDINGS carrying
+  the former /compare frames via `sections/KeyFindings.svelte`;
+  `/compare` → 308 `/story`, fragments survive). **Narration = markdown**
+  in `atlas/src/content/{landing,data,datasets,story}/*.md` via mdsvex
+  (`vite.config.ts` extensions/preprocess/`$content` alias,
+  `src/content.d.ts`), rendered by `ui/Prose.svelte` (dev prints the
+  file path behind an empty slot). `base.css` scroll-padding 68px for the
+  60/52 px header.
 - **Stated analytics basis** (DATA_DECISIONS 2026-08-03, second entry):
   contract-value analytics use STATED values — `g.conn` passes through
   `queries_extra.apply_stated_basis` (net views + an EMPTY
@@ -2008,7 +2057,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (vitest transform units incl. `format.ts` goldens that must equal
   `webui/filters.py` output).
 
-## Tests (`tests/`, 582 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 126 frontend units)
+## Tests (`tests/`, 611 passing — `.venv/bin/python -m pytest`; plus `cd atlas && npm test` for the 144 frontend units)
 
 Unit tests use synthetic fixtures (`conftest.py`); several "real-DB pins" assert
 invariants on the committed SQLite: chain completeness / no double counting,

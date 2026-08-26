@@ -11,6 +11,9 @@
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import DatasetCard from '$lib/ui/DatasetCard.svelte';
+	import Tile from '$lib/ui/Tile.svelte';
+	import Text from '$content/datasets/dase.md';
 	import CpvColumns from '$lib/charts/CpvColumns.svelte';
 	import DaseMap from '$lib/sections/DaseMap.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
@@ -29,6 +32,28 @@
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.overview);
+
+	// the card (user mock, 2026-08-27): three KPIs, the URL parameters this
+	// page reads (any opens the card unfolded), the map tile's size
+	const PARAMS = ['focus'] as const;
+	const kpiCards = $derived([
+		{ num: grInt(o.kpis.n_contracts), label: 'live contracts since Sept 2021' },
+		{ num: grInt(o.kpis.n_coops), label: 'forest labour co-operatives' },
+		{
+			num: eurShort(o.kpis.total_eur).toLowerCase(),
+			label: 'total stated value of contracts',
+			sub: '(excl. VAT)'
+		}
+	]);
+	let tileW = $state(0);
+	let tileH = $state(0);
+	// the map tile: € of contracts by the awarding service's regional unit
+	const tileChoro = $derived.by(() => {
+		if (!alloc) return null;
+		const by = new Map(alloc.work_regions.map((r) => [r.pe, r.eur]));
+		const max = Math.max(1, ...alloc.work_regions.map((r) => r.eur));
+		return { by, max };
+	});
 
 	let swarm = $state.raw<DaseSwarm | null>(null);
 	let dmap = $state.raw<DaseMapPayload | null>(null);
@@ -343,43 +368,14 @@
 </svelte:head>
 
 <div class="dasep">
-<section class="hero">
-	<div class="heroleft">
-	<div class="cards">
-		<div class="card">
-			<div class="num">{grInt(o.kpis.n_contracts)}</div>
-			<div class="lbl">live contracts since Sept 2021</div>
-		</div>
-		<div class="card">
-			<div class="num">{grInt(o.kpis.n_coops)}</div>
-			<div class="lbl">forest labour co-operatives</div>
-		</div>
-		<div class="card">
-			<div class="num">{eurShort(o.kpis.total_eur).toLowerCase()}</div>
-			<div class="lbl">
-				total stated value of contracts<br />(excl. VAT)
-			</div>
-		</div>
-	</div>
-	<div class="midcol">
-		<div class="bars">
-			<div class="dabar" role="img" aria-label="Share of contracts awarded directly">
-				<div class="track">
-					<div class="fill" style:width={`${o.kpis.pct_direct}%`}>
-						<div class="danum">{pct(o.kpis.pct_direct)}</div>
-						<div class="datext">of contracts were direct awards</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="paidcard" role="img" aria-label="Paid so far, as a share of the stated total">
-			<div class="pfill" style:height={`${paidPct}%`}>
-				<div class="pnum">{eurShort(o.kpis.paid_eur).toLowerCase()}</div>
-				<div class="plbl">already paid</div>
-			</div>
-		</div>
-	</div>
-	</div>
+<DatasetCard
+	ds="dase"
+	params={PARAMS}
+	kpis={kpiCards}
+	hint="atlas/src/content/datasets/dase.md"
+>
+	{#snippet text()}
+		<Text />
 	<div class="about">
 		<div class="kicker">THE CO-OPERATIVES</div>
 		<p>
@@ -407,7 +403,54 @@
 			<a href="/methodology#dase-dedup">basis</a>.
 		</p>
 	</div>
-</section>
+	{/snippet}
+	{#snippet tiles()}
+		<Tile title="MAP" href="#dase-allocation">
+			<div class="tilefill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
+				{#if tileW && tileH && tileChoro}
+					<PaperMap
+						width={tileW}
+						height={tileH}
+						colorOf={(pe) => {
+							const v = tileChoro.by.get(pe) ?? 0;
+							return v ? `color-mix(in srgb, var(--c-dase) ${Math.round(12 + 78 * Math.sqrt(v / tileChoro.max))}%, #fff)` : '#fff';
+						}}
+						tipOf={(pe) => `<strong>${ruLabel(pe)}</strong><br>${eurShort(tileChoro.by.get(pe) ?? 0)} of contracts`}
+					/>
+				{/if}
+			</div>
+		</Tile>
+		<Tile title="RANKING OF CO-OPERATIVES" href="#top-coops">
+			<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={28} valuesRight />
+		</Tile>
+		<Tile title="MONEY PER YEAR" href="#dase-yearly">
+			<BarH rows={yearRows} color="var(--c-dase)" inside barHeight={28} valuesRight />
+		</Tile>
+	{/snippet}
+	{#snippet more()}
+<ChartFrame title="CONTRACT FIGURES" anchor="figures">
+	<div class="figures">
+		<div class="midcol">
+			<div class="bars">
+				<div class="dabar" role="img" aria-label="Share of contracts awarded directly">
+					<div class="track">
+						<div class="fill" style:width={`${o.kpis.pct_direct}%`}>
+							<div class="danum">{pct(o.kpis.pct_direct)}</div>
+							<div class="datext">of contracts were direct awards</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="paidcard" role="img" aria-label="Paid so far, as a share of the stated total">
+				<div class="pfill" style:height={`${paidPct}%`}>
+					<div class="pnum">{eurShort(o.kpis.paid_eur).toLowerCase()}</div>
+					<div class="plbl">already paid</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ChartFrame>
+
 
 <!-- the works/seats duo, the Anti-nero ALLOCATION OF FUNDING one dataset
      over (user, DATA_DECISIONS 2026-08-24) -->
@@ -704,6 +747,8 @@
 	{/if}
 </ChartFrame>
 
+	{/snippet}
+</DatasetCard>
 </div>
 
 <style>
@@ -923,28 +968,6 @@
 	.ucircle {
 		cursor: pointer;
 	}
-	.hero {
-		display: grid;
-		grid-template-columns: auto 1fr;
-		gap: var(--sp-6) var(--sp-12);
-		margin: var(--sp-6) 0 var(--sp-12);
-	}
-	/* cards column + the bars/paid column beside it — same equal-column
-	   geometry as the Anti-nero hero */
-	.heroleft {
-		display: grid;
-		grid-template-columns: 268px 268px;
-		gap: var(--sp-4);
-		align-items: stretch;
-	}
-	.cards {
-		/* three equal rows — every card the height of the tallest */
-		display: grid;
-		grid-template-rows: repeat(3, 1fr);
-		gap: var(--sp-4);
-		width: 268px;
-		max-width: 100%;
-	}
 	/* middle column mirrors the cards grid: the two bars share the first
 	   card's row, the paid card fills the third row */
 	.midcol {
@@ -1027,9 +1050,6 @@
 		line-height: 1.2;
 	}
 	@media (max-width: 900px) {
-		.heroleft {
-			grid-template-columns: 268px;
-		}
 		.midcol {
 			grid-template-rows: auto;
 		}
@@ -1040,28 +1060,6 @@
 		.paidcard {
 			height: 117px;
 		}
-	}
-	.card {
-		background: var(--c-dase);
-		color: #fff;
-		padding: var(--sp-4);
-		border-radius: 10px;
-		display: flex;
-		flex-direction: column;
-		gap: var(--sp-4);
-	}
-	.card .num {
-		font-family: var(--font-display);
-		font-weight: 900;
-		/* same cap as the other dataset pages' KPI cards */
-		font-size: clamp(28px, 3.2vw, 36px);
-		line-height: 0.95;
-	}
-	.card .lbl {
-		font-family: var(--font-display);
-		font-weight: 400; /* Obviously Regular */
-		font-size: var(--fs-13);
-		line-height: 1.2;
 	}
 	/* the page's one BASIS line under the intro (the Anti-nero dress) */
 	.basis {
@@ -1084,11 +1082,6 @@
 	.about p {
 		margin: 0;
 		max-width: var(--prose-w);
-	}
-	@media (max-width: 900px) {
-		.hero {
-			grid-template-columns: 1fr;
-		}
 	}
 	/* year legend left, mode switch hard right — one line above the chart */
 	.modes {
@@ -1151,5 +1144,35 @@
 	   measure now (user, 2026-08-24) */
 	.rankw {
 		max-width: none;
+	}
+	/* the card's map tile fills its panel, in the page's own map dress
+	   (`.tilefill`, not `.fill` — the direct-award bar owns that name) */
+	.tilefill {
+		position: absolute;
+		inset: 0;
+	}
+	.tilefill :global(.map) {
+		background: #f2f2f2;
+		border: 1px solid var(--line);
+		--land-context: #fff;
+		--map-accent: var(--card-accent);
+		box-shadow: none;
+	}
+	/* the programme figures — the bars the hero used to carry beside its
+	   cards — open the unfolded part */
+	.figures {
+		max-width: 560px;
+	}
+	.figures .midcol {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: none;
+		width: auto;
+	}
+	.figures .bars,
+	.figures .paidcard {
+		grid-row: auto;
+	}
+	.figures .paidcard {
+		min-height: 140px;
 	}
 </style>

@@ -1859,3 +1859,39 @@ def test_crew_flows_pins(client):
     assert f["far_150"] == 16
     top = f["links"][0]
     assert top["km"] == 672 and "ΠΙΕΡΙΑΣ" in top["coop"]
+
+
+def test_landing_pins(client, kh):
+    """The landing page's field of codes (DATA_DECISIONS 2026-08-27): every
+    identifier of the in-scope Anti-nero chains, the live ΔΑΣΕ contracts
+    and the live sponsored projects, with the acts each cites — payments
+    deliberately out. Counts measured 2026-08-27."""
+    import re
+    L = client.get("/api/landing").get_json()
+    assert L["counts"] == {
+        "antinero_contracts": 305, "antinero_acts": 298,
+        "dase_contracts": 2062, "dase_acts": 1623,
+        "anadohoi_acts": 208, "total": 4496,
+    }
+    lists = {f"{ds}_{k}": v for ds in ("antinero", "dase", "anadohoi")
+             for k, v in L[ds].items()}
+    assert {k: len(v) for k, v in lists.items()} == {
+        k: v for k, v in L["counts"].items() if k != "total"}
+    everything = [c for v in lists.values() for c in v]
+    assert len(set(everything)) == L["counts"]["total"]      # globally distinct
+    assert all(v == sorted(v) for v in lists.values())
+    assert all(re.fullmatch(r"\d{2}SYMV\d{9}", c)
+               for c in L["antinero"]["contracts"] + L["dase"]["contracts"])
+    assert all(re.fullmatch(r"\d{2}(PROC|AWRD|REQ)\d{9}", c)
+               for c in L["antinero"]["acts"] + L["dase"]["acts"])
+    assert all(re.fullmatch(r"[0-9Α-Ω]{7,12}-[0-9Α-Ω]{3}", c)
+               for c in L["anadohoi"]["acts"])
+    # the Anti-nero list is every record of the in-scope chains: the 245
+    # tips the analytics stand on, plus their superseded versions
+    tips = {r[0] for r in kh.execute(
+        "SELECT reference_number FROM contract_scope WHERE in_scope = 1")}
+    assert len(tips) == 245 and tips <= set(L["antinero"]["contracts"])
+    # and the ΔΑΣΕ list holds the whole live population of /api/compare
+    dots = client.get("/api/compare").get_json()["dots"]
+    assert set(dots["dase"]["ref"]) <= set(L["dase"]["contracts"])
+    assert set(dots["antinero"]["ref"]) <= set(L["antinero"]["contracts"])

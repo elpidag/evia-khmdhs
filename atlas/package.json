@@ -34,6 +34,7 @@
 		"@types/topojson-client": "^3.1.5",
 		"@types/topojson-server": "^3.0.4",
 		"@types/topojson-specification": "^1.0.5",
+		"mdsvex": "^0.12.8",
 		"svelte": "^5.56.1",
 		"svelte-check": "^4.6.0",
 		"topojson-server": "^3.0.1",

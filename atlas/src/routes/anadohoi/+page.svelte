@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { ruLabel, regionOfPe, pesOfRegion } from '$lib/transforms/regions';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import DatasetCard from '$lib/ui/DatasetCard.svelte';
+	import Tile from '$lib/ui/Tile.svelte';
+	import Text from '$content/datasets/anadohoi.md';
 	import SponsorGroups from '$lib/charts/SponsorGroups.svelte';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import FireResponse from '$lib/charts/FireResponse.svelte';
@@ -29,6 +32,24 @@
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.o);
 	const k = $derived(o.kpis);
+
+	// the card (user mock, 2026-08-27): three KPIs, the URL parameters this
+	// page reads (any opens the card unfolded), and the map tile's size
+	const PARAMS = ['sg'] as const;
+	const kpiCards = $derived([
+		{ num: grInt(k.n_projects), label: 'announced projects' },
+		{
+			num: grInt(k.n_companies),
+			label: 'private companies as restoration / reforestation contractors'
+		},
+		{
+			num: eurShort(k.stated_eur).toLowerCase(),
+			label: 'value of projects',
+			sub: `only ${grInt(k.n_stated)} of ${grInt(k.n_projects)} acts state a figure`
+		}
+	]);
+	let tileW = $state(0);
+	let tileH = $state(0);
 
 	// WHO THE SPONSORS ARE measures: € committed or a plain project count
 	// (?sg=), the CONTRACT TYPE lens one dataset over
@@ -520,25 +541,15 @@
 >
 
 <div class="anap">
-<section class="hero">
-	<div class="cards">
-		<div class="card">
-			<div class="num">{grInt(k.n_projects)}</div>
-			<div class="lbl">announced projects</div>
-		</div>
-		<div class="card">
-			<div class="num">{grInt(k.n_companies)}</div>
-			<div class="lbl">private companies as restoration / reforestation contractors</div>
-		</div>
-		<div class="card">
-			<div class="num">{eurShort(k.stated_eur).toLowerCase()}</div>
-			<div class="lbl">
-				value of projects<br />(only {grInt(k.n_stated)} of {grInt(k.n_projects)} acts state
-				a figure)
-			</div>
-		</div>
-	</div>
-	<div class="about" style:margin-right={proseCut ? `${proseCut}px` : null}>
+<DatasetCard
+	ds="anadohoi"
+	params={PARAMS}
+	kpis={kpiCards}
+	hint="atlas/src/content/datasets/anadohoi.md"
+>
+	{#snippet text()}
+		<Text />
+	<div class="about">
 		<div class="kicker">THE SCHEME</div>
 		<p>
 			Under ν.998/1979 άρθρο 42§3, companies volunteer to fund and execute the restoration of
@@ -557,7 +568,41 @@
 			folded into its successor — <a href="/methodology#anadohoi">basis</a>.
 		</p>
 	</div>
-</section>
+	{/snippet}
+	{#snippet tiles()}
+		<Tile title="MAP" href="#waffle">
+			<div class="tilefill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
+				{#if tileW && tileH}
+					<PaperMap width={tileW} height={tileH} view={MAP_VIEW}>
+						{#snippet overlay(ctx)}
+							{#if firesFc}
+								<FiresLayer {ctx} features={firesShown} tipOf={(f) => `${f.properties.yr} · ${grInt(f.properties.ha)} ha`} />
+							{/if}
+							<DotLayer
+								{ctx}
+								points={mapDots}
+								r={4.5}
+								fillOf={(p) => (noDate(p as never) ? NODATE_COLOR : (STATUS_COLOR[p.status as string] ?? '#999'))}
+								fillOpacityOf={(p) => (APPROX.has(p.prec as string) ? 0.45 : undefined)}
+								dashOf={(p) => (APPROX.has(p.prec as string) ? `${2.4 / ctx.k} ${1.8 / ctx.k}` : undefined)}
+								tipOf={(p) => `<strong>${p.company}</strong>`}
+								hrefOf={(p) => `/anadohoi/project/${p.ada}`}
+							/>
+						{/snippet}
+					</PaperMap>
+				{/if}
+			</div>
+		</Tile>
+		<Tile title="TIMELINE" href="#gantt">
+			<PromiseGantt projects={ganttProjects} today={todayIso} legend="compact" />
+		</Tile>
+		<Tile title="WHO THE SPONSORS ARE" href="#sponsor-groups">
+			{#if o.sponsor_groups?.groups.length}
+				<SponsorGroups groups={o.sponsor_groups.groups} lens={sgLens} />
+			{/if}
+		</Tile>
+	{/snippet}
+	{#snippet more()}
 
 {#if hoverCard}
 	{@const hp = ganttProjects.find((p) => p.ada === hoverCard?.ada)}
@@ -998,47 +1043,11 @@
 	</div>
 </ChartFrame>
 </div>
+	{/snippet}
+</DatasetCard>
 </div>
 
 <style>
-	/* hero: three solid dataset-green KPI cards beside the scheme prose */
-	.hero {
-		display: grid;
-		grid-template-columns: minmax(240px, 4fr) 8fr;
-		gap: var(--sp-6) var(--sp-12);
-		margin: var(--sp-6) 0 var(--sp-12);
-	}
-	.cards {
-		/* three equal rows — every card the height of the tallest;
-		   268px matches the Anti-nero page's equal hero columns */
-		display: grid;
-		grid-template-rows: repeat(3, 1fr);
-		gap: var(--sp-4);
-		width: 268px;
-		max-width: 100%;
-	}
-	.card {
-		background: var(--c-anadohoi);
-		color: #fff;
-		padding: var(--sp-4);
-		border-radius: 10px;
-		display: flex;
-		flex-direction: column;
-		gap: var(--sp-4);
-	}
-	.card .num {
-		font-family: var(--font-display);
-		font-weight: 900;
-		/* same cap as the Anti-nero cards so the KPI cards match across pages */
-		font-size: clamp(28px, 3.2vw, 36px);
-		line-height: 0.95;
-	}
-	.card .lbl {
-		font-family: var(--font-display);
-		font-weight: 400; /* Obviously Regular */
-		font-size: var(--fs-13);
-		line-height: 1.2;
-	}
 	.about .kicker {
 		font-family: var(--font-display);
 		font-weight: 900;
@@ -1071,11 +1080,6 @@
 		font-family: var(--font-serif);
 		font-weight: 600;
 		font-size: var(--fs-24);
-	}
-	@media (max-width: 900px) {
-		.hero {
-			grid-template-columns: 1fr;
-		}
 	}
 	/* the fires section breaks out to the full usable page width */
 	.firesband {
@@ -1406,5 +1410,18 @@
 	}
 	.muted {
 		color: var(--ink-soft);
+	}
+	/* the card's map tile fills its panel, in the page's own map dress
+	   (`.tilefill`, not `.fill` — the direct-award bar owns that name) */
+	.tilefill {
+		position: absolute;
+		inset: 0;
+	}
+	.tilefill :global(.map) {
+		background: #f2f2f2;
+		border: 1px solid var(--line);
+		--land-context: #fff;
+		--map-accent: var(--card-accent);
+		box-shadow: none;
 	}
 </style>
