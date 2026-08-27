@@ -12,9 +12,12 @@
 		features: Feature<Polygon | MultiPolygon, FireProps>[];
 		/** deepest colour (the most recent year) */
 		base?: string;
+		/** one flat colour for every scar, whatever its year — the card's
+		 *  map is too small for a year ramp to be read (user, 2026-08-27) */
+		flat?: boolean;
 		tipOf?: (f: Feature<Polygon | MultiPolygon, FireProps>) => string;
 	}
-	let { ctx, features, base = '#6b2d35', tipOf }: Props = $props();
+	let { ctx, features, base = '#6b2d35', flat = false, tipOf }: Props = $props();
 
 	const years = $derived.by(() => {
 		let lo = Infinity,
@@ -33,6 +36,7 @@
 		return [(v >> 16) & 255, (v >> 8) & 255, v & 255] as const;
 	});
 	function yearColor(yr: number): string {
+		if (flat) return base;
 		const t = 0.12 + (0.88 * (yr - years.lo)) / (years.hi - years.lo);
 		const [r, g, b] = rgb.map((c) => Math.round(255 + (c - 255) * t));
 		return `rgb(${r},${g},${b})`;

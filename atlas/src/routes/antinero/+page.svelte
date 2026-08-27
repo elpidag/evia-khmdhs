@@ -618,7 +618,12 @@
 	</div>
 	{/snippet}
 	{#snippet tiles()}
-		<Tile title="MAP" href="#map">
+		<Tile
+			title="MAP"
+			sub="stated net € by regional unit of the works"
+			hint="Each regional unit is shaded by the stated net € of the contracts working there — darker is more; a contract covering several units is split evenly between them. The full map adds the contractors' offices, the drill-down and the year maps."
+			href="#map"
+		>
 			<div class="tilefill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
 				{#if tileW && tileH && tileChoro}
 					<PaperMap
@@ -633,10 +638,20 @@
 				{/if}
 			</div>
 		</Tile>
-		<Tile title="RANKING OF COMPANIES" href="#top-contractors">
+		<Tile
+			title="RANKING OF COMPANIES"
+			sub="the ten contractors with the most stated net €"
+			hint="Bar length is the stated net € of the contracts each company signed; a contract signed by several firms is split evenly between them. The full frame has the by-member-firm view."
+			href="#top-contractors"
+		>
 			<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={28} />
 		</Tile>
-		<Tile title="MONEY PER YEAR" href="#money-per-year">
+		<Tile
+			title="MONEY PER YEAR"
+			sub="stated net € of the contracts signed in each year"
+			hint="One bar per year of signature, its length the stated net € of that year's contracts. The full frame adds the € paid lens."
+			href="#money-per-year"
+		>
 			<BarH rows={yearMoneyRows} color="var(--c-antinero)" inside barHeight={28} valuesRight />
 		</Tile>
 	{/snippet}

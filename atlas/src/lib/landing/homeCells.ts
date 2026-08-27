@@ -1,24 +1,21 @@
 /**
- * The landing menu is a 4×4 grid (user mock, 2026-08-27). Cells are data
- * so they can be reassigned as the site grows: one cell carries the
- * drifting field, three are links, the rest stay empty with their border.
+ * The landing menu is a 4×4 grid (Artboard 2, user 2026-08-27). Cells are
+ * data so they can be reassigned as the site grows: one cell carries the
+ * drifting field, three are links, one holds the language mark the
+ * artboard places top-right, the rest stay empty with their border.
  */
 export type HomeCell = { r: 1 | 2 | 3 | 4; c: 1 | 2 | 3 | 4 } & (
 	| { kind: 'field' }
 	| { kind: 'link'; label: string; href: string; tone?: 'ink' | 'paper' }
+	| { kind: 'note'; label: string }
 	| { kind: 'empty' }
 );
 
 export const HOME_CELLS: HomeCell[] = [
 	{ r: 1, c: 1, kind: 'field' },
-	{
-		r: 2,
-		c: 2,
-		kind: 'link',
-		label: 'START HERE',
-		href: '/story',
-		tone: 'ink'
-	},
+	// the artboard's «GR / EN» mark — a placeholder until a Greek version exists
+	{ r: 1, c: 4, kind: 'note', label: 'GR / EN' },
+	{ r: 2, c: 2, kind: 'link', label: 'START HERE', href: '/story', tone: 'ink' },
 	{ r: 3, c: 2, kind: 'link', label: 'EXPLORE THE DATA', href: '/data' },
 	{ r: 4, c: 3, kind: 'link', label: 'METHODOLOGY', href: '/methodology' }
 ];

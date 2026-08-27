@@ -1496,13 +1496,32 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   on two lines · the FIVE symbols (`lib/datasets.ts:SYMBOLS` — three
   streams + search/actors; placeholders squares in `DatasetSymbol.svelte`
   until the user's images; labels the user renames there) · METHODOLOGY;
-  no chrome on `/`. **`/data`** = the hub of symbols. **Each dataset page
+  no chrome on `/`. **Geometry = the user's four 1920×1080 SVG
+  artboards** (fourth round of 2026-08-27, DATA_DECISIONS): every size,
+  offset and type setting is the artboard's as a fraction of the frame
+  (`clamp(min, vw/vh, artboard px)`), verified by DOM measurement at
+  1920×1080; the Obviously **Narrow** (titles/labels) and **Condensed**
+  (card text) cuts come from the same kit as `--font-display-narrow` /
+  `--font-display-cond` in `tokens.css`; the header is ONE **BLACK** 85 px
+  band since the seventh round of 2026-08-27 (`--header-h`, no compaction:
+  white brand + FIVE filled 59,5 px squares — three streams, search, actor
+  network — each in its own `chip` tone with its name inside, the ink by
+  luminance, the current page ringed — and METHODOLOGY white at the right);
+  the sponsored stream is named **«financed by private companies»**
+  (`datasets.ts`; the square carries the `short` abbreviation); the landing menu is a full-height square
+  flush right with 2 px rules and a «GR / EN» `note` cell; the field is
+  12 px Obviously Regular on 14,4 px lines, 25,7 px columns (74 at 1920,
+  pinned), the cell showing the same field. **`/data`** = the hub of symbols. **Each dataset page
   is a CARD — one viewport** (`ui/DatasetCard.svelte`; `main.card` is
   window-wide on the three pages): the symbol · name · markdown text ·
   «explore more» in a full-height column left | three `ui/KpiCards`
   across the top right | three `ui/Tile`s in the mock's grid (MAP
   top-left, the tall one right, the third under MAP; `--paper-2`
-  panels sized to `100dvh`, content scrolls) — compact drawings of the
+  panels sized to `100dvh`, content scrolls; since the fifth round of
+  2026-08-27 each carries a one-line `sub` and a ⓘ `hint`, a 24 px title
+  and 14/16/12 px inset, the narrative is Condensed REGULAR 20/1.35, the
+  KPI number leads at 56 px over an 18 px caption, the pill reads «all
+  the charts →» — DATA_DECISIONS) — compact drawings of the
   same data, titles linking to the full frames; the card is the viewport to
   the pixel (NO scrolling; measured at three sizes); «explore more»
   REPLACES the card with the WHOLE original page under `#more` (every
@@ -1511,7 +1530,44 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `ui/expanded.ts` reads the state from any frame anchor or chart lens).
   The site has NO footer since the same day (user). Map-tile wrapper class
   is `.tilefill` — `.fill` is the direct-award bar's.
-  Tiles: sponsored = status map · Gantt · sponsor groups; Anti-nero =
+  Tiles: **the sponsored card is a THREE-COLUMN composition since the
+  seventh round of 2026-08-27** (`DatasetCard layout="triple"`, that card
+  only; DATA_DECISIONS): text 549 | a 137 px KPI row (`ui/KpiRich.svelte`,
+  unequal widths, the user's sentences over computed numbers) above the
+  tall TIMELINE 703×795 | TYPE OF COMPANIES … 520×412 above MAP 521×521 —
+  the timeline drawing ALL 68 projects with bars of one height
+  (`PromiseGantt variant="card"`, rows computed to fit, earliest first),
+  the map with every scar in one red (`FiresLayer flat`), thinner
+  administrative lines (`--region-line-w`) and the country framed by
+  `PaperMap fitBounds` + `fitPad` (a lon/lat box with a margin on every
+  side whatever the tile's shape, allowed to zoom OUT below the layer's
+  own fit — Kastellorizo left out; PaperMap's initial framing is keyed
+  on the frame's SIZE since the same day, so a resize reframes instead
+  of sliding the country — DATA_DECISIONS fifteenth round; since the
+  seventeenth — the user's own Illustrator edit of the exported page —
+  the map fills its 516,5 × 563,1 panel with the country 1,2% off the
+  edges and the KEY OVERLAID in its bottom corners in the user's
+  wording, the year in «areas burnt since …» computed from the scars
+  drawn; KPI cards 190 · 190 · 299,4 with 36/13 px headlines and the
+  sentences on the user's own ROWS (`KpiRich lines`/`tailLines`, each
+  measured and scaled down only where it would not fit); 25 px bars; a
+  145,7 × 37 «explore more» pill in Futura's true bold; a dev frame
+  picker on the card map reading PaperMap's new `onViewChange` `bounds`
+  — `unclamped` lifts the pan/zoom clamps while it is on, and the zoom
+  behaviour is seeded with the applied frame on attach; the frame the
+  user picked is `CARD_BOUNDS` with no padding, and the card map DRILLS:
+  a click on a project περιφέρεια zooms to it, any click while zoomed
+  returns, user 2026-08-27), the sponsor types counted in
+  **WHAT TYPES OF COMPANIES ARE INVOLVED** (`charts/SponsorTypes.svelte`,
+  the BARS alone on a grid that fits the tile; its vertical column and
+  `ShareStack.svelte` are parked) — each tile's ⓘ SWITCHING it to its own
+  legend (`Tile headOver` putting the MAP's label and ⓘ ON the drawing,
+  which then fills its tile; 10 px tile labels; gaps 25 px to the band
+  and to the middle column, 20 px elsewhere), `Tile fit` marking the
+  tiles whose drawing is sized to the room so they never scroll, the card's timeline rows carrying no links, and
+  the left column reduced to the SPACE for the user's own text in Futura
+  18/21,6 (the programme prose and the basis line moved into the unfolded
+  page); Anti-nero =
   € choropleth · ranking · money per year; ΔΑΣΕ likewise. The pages are
   REGENERATED from git HEAD by the scratch `cards_v2.py` (multiset
   guard: no line of the original middle lost). **`/story`** = the scroll

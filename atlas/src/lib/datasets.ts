@@ -12,6 +12,14 @@ export interface SiteSymbol {
 	href: string;
 	/** the caption under the symbol */
 	label: string;
+	/** the wording inside the header's 60 px square (Artboard 4) */
+	short?: string;
+	/** the card headline's own line breaks, as the artboard sets them */
+	titleLines?: string[];
+	/** the square's fill on the BLACK header band (Artboard 4, user
+	 *  2026-08-27) — the dataset hue where it reads on black, a pale
+	 *  stand-in where it does not */
+	chip: string;
 	/** the dataset hue token; the two tools take the ink */
 	color: string;
 	/** hub rank: the three streams large, the two tools small */
@@ -22,8 +30,13 @@ export const SYMBOLS: SiteSymbol[] = [
 	{
 		key: 'anadohoi',
 		href: '/anadohoi',
-		label: 'sponsored projects',
+		// renamed by the user on 2026-08-27: the stream's name everywhere
+		label: 'financed by private companies',
+		// the 59,5 px square cannot hold the whole name at a readable size
+		short: 'private companies',
+		titleLines: ['financed', 'by', 'private companies'],
 		color: 'var(--c-anadohoi)',
+		chip: '#2d6a4f',
 		rank: 'stream'
 	},
 	{
@@ -31,13 +44,17 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/antinero',
 		label: 'anti-nero programme',
 		color: 'var(--c-antinero)',
+		// the Anti-nero hue is black, which cannot sit on a black band
+		chip: '#f2f2f2',
 		rank: 'stream'
 	},
 	{
 		key: 'dase',
 		href: '/dase',
 		label: "works executed by forest workers' co-operatives",
+		short: "forest workers' co-ops",
 		color: 'var(--c-dase)',
+		chip: '#52b788',
 		rank: 'stream'
 	},
 	{
@@ -45,6 +62,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/explore',
 		label: 'search',
 		color: 'var(--ink)',
+		chip: '#f2f2f2',
 		rank: 'tool'
 	},
 	{
@@ -52,6 +70,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/authorities',
 		label: 'network of actors',
 		color: 'var(--ink)',
+		chip: '#b7e4c7',
 		rank: 'tool'
 	}
 ];

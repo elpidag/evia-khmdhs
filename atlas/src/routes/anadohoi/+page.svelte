@@ -5,6 +5,7 @@
 	import Tile from '$lib/ui/Tile.svelte';
 	import Text from '$content/datasets/anadohoi.md';
 	import SponsorGroups from '$lib/charts/SponsorGroups.svelte';
+	import SponsorTypes from '$lib/charts/SponsorTypes.svelte';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import FireResponse from '$lib/charts/FireResponse.svelte';
 	import CrewMap, { type CrewLink } from '$lib/sections/CrewMap.svelte';
@@ -36,20 +37,55 @@
 	// the card (user mock, 2026-08-27): three KPIs, the URL parameters this
 	// page reads (any opens the card unfolded), and the map tile's size
 	const PARAMS = ['sg'] as const;
-	const kpiCards = $derived([
-		{ num: grInt(k.n_projects), label: 'announced projects' },
+	// The card's KPI cards (Artboard 4, user 2026-08-27): the user's own
+	// sentences, every number computed from the payload. The widths are the
+	// artboard's 173,2 / 165,7 / 336,8.
+	// the sentences on the ROWS the user broke them into (the edit of
+	// 2026-08-27); the numbers computed from the payload
+	const kpiRich = $derived([
 		{
-			num: grInt(k.n_companies),
-			label: 'private companies as restoration / reforestation contractors'
+			w: 190,
+			parts: [{ num: grInt(k.n_projects), word: 'acts' }],
+			lines: [
+				'for designating private companies',
+				'as restoration and/or reforestation',
+				'contractors have been made public'
+			]
 		},
 		{
-			num: eurShort(k.stated_eur).toLowerCase(),
-			label: 'value of projects',
-			sub: `only ${grInt(k.n_stated)} of ${grInt(k.n_projects)} acts state a figure`
+			w: 190,
+			parts: [{ num: grInt(k.n_companies), word: 'companies' }],
+			lines: ['have been appointed as restoration', 'and/or reforestation contractors']
+		},
+		{
+			w: 299.4,
+			parts: [
+				{ num: grInt(k.n_stated) },
+				{ word: 'of' },
+				{ num: grInt(k.n_projects) },
+				{ word: 'acts state a figure' }
+			],
+			tailLines: ['those acts amount', 'to a value of'],
+			big: eurShort(k.stated_eur).toLowerCase()
 		}
 	]);
+	/** the card map's own drill (user, 2026-08-27): only a περιφέρεια that
+	 *  holds projects answers a click, the map zooms to it, and ANY click
+	 *  on the map while zoomed returns to the frame */
+	let selCard = $state<string | null>(null);
+	const selCardPes = $derived(selCard ? pesOfRegion(selCard) : null);
+	/** the card map's frame picker (dev): pan/zoom the small map, read the
+	 *  lon/lat box it shows, and set it as CARD_BOUNDS */
+	let pickCard = $state(false);
+	let pickedCard = $state<{ center: [number, number]; k: number; bounds?: [[number, number], [number, number]] } | null>(null);
 	let tileW = $state(0);
 	let tileH = $state(0);
+	let gW = $state(0);
+	let gH = $state(0);
+	let sW = $state(0);
+	let sH = $state(0);
+	/** how many rows the card's timeline could fit, said in its legend */
+	let ganttFit = $state({ shown: 0, total: 0 });
 
 	// WHO THE SPONSORS ARE measures: € committed or a plain project count
 	// (?sg=), the CONTRACT TYPE lens one dataset over
@@ -109,6 +145,30 @@
 			? { lo: '/geo/relief_hypso.avif', hi: '/geo/relief_hypso_hi.avif' }
 			: { lo: '/geo/relief.avif', hi: '/geo/relief_hi.avif' }
 	);
+	/** the card's map frames the WHOLE country, Crete to Thrace, Corfu to
+	 *  Rhodes (user, 2026-08-27): the box from Othonoi and Gavdos to Rhodes
+	 *  and Ormenio — Kastellorizo left out by decision — fitted with a 6%
+	 *  margin on every side WHATEVER the tile's shape. A fixed centre-and-
+	 *  zoom (k 1,05) had left Crete 4 px from the edge in a wide tile, and
+	 *  a browser window is rarely the artboard's 16:9 */
+	const CARD_BOUNDS: [[number, number], [number, number]] = [
+		[18.2336, 34.7812],
+		[28.7256, 41.9096]
+	];
+	/** the box's own shape on a Mercator map: width over height in
+	 *  projected units — so the map is drawn exactly as wide as the
+	 *  country and shows no land beyond its sides (user, 2026-08-27) */
+	const mercY = (lat: number) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360));
+	const CARD_ASPECT =
+		((CARD_BOUNDS[1][0] - CARD_BOUNDS[0][0]) * Math.PI) /
+		180 /
+		(mercY(CARD_BOUNDS[1][1]) - mercY(CARD_BOUNDS[0][1]));
+	/** the frame the user chose with the picker (2026-08-27, «bounds:
+	 *  [[18.2336, 34.7812], [28.7256, 41.9096]] · k 0.979»): the visible box
+	 *  itself, so no padding — it is the frame; the key sits ON the map in
+	 *  its bottom-left corner */
+	const MAP_PAD = 0;
+	void CARD_ASPECT;
 	const MAP_VIEW: { center: [number, number]; k: number } | null = {
 		center: [23.8305, 38.3566],
 		k: 1.08
@@ -540,15 +600,171 @@
 	>The promise vs. the delivery: every project from appointment to deadline</span
 >
 
+{#snippet timelineKey()}
+	<ul class="tkey">
+		<li><i style:background={NODATE_COLOR}></i>no implementation dates stated</li>
+		<li><i style:background={COLOR.completed}></i>completion act identified</li>
+		<li><i style:background={COLOR.no_completion_recorded}></i>past deadline, no completion act identified</li>
+		<li><i style:background={COLOR.active}></i>within its deadline, no completion act identified</li>
+		<li><span class="mk ok">✔</span>completion date</li>
+		<li><span class="mk bad">✖</span>revocation date</li>
+		<li class="note">
+			Each bar runs from the designation act to the deadline the act announced, the paler
+			stretch being an extension; every bar is drawn at one height here — the money is on the
+			full chart. Rows run from the earliest act downwards, {grInt(ganttFit.shown)} of {grInt(
+				ganttFit.total
+			)} projects shown.
+		</li>
+	</ul>
+{/snippet}
+{#snippet mapKey()}
+	<ul class="tkey">
+		<li><i class="dot" style:background={COLOR.completed}></i>completion act identified</li>
+		<li><i class="dot" style:background={COLOR.active}></i>no completion act — still inside deadline</li>
+		<li><i class="dot" style:background={NODATE_COLOR}></i>no implementation dates set</li>
+		<li><i class="dot" style:background={COLOR.no_completion_recorded}></i>no completion act — deadline passed</li>
+		<li><i class="dot" style:background={COLOR.revoked}></i>revoked</li>
+		<li><i class="dot approx"></i>the act names only a municipality or region — the dot is its centre</li>
+		<li><i class="scar"></i>areas burnt since 2018 (EFFIS satellite estimates)</li>
+		<li class="note">
+			One dot per project, at the site its act names. Click the title for the full map, with
+			its zoom, its regions and the year of each fire.
+		</li>
+	</ul>
+{/snippet}
+{#snippet stSwitch()}
+	<SegmentToggle
+		param="st"
+		fallback="bars"
+		options={[
+			{ value: 'bars', label: 'bars' },
+			{ value: 'column', label: 'column' }
+		]}
+	/>
+{/snippet}
 <div class="anap">
 <DatasetCard
 	ds="anadohoi"
 	params={PARAMS}
-	kpis={kpiCards}
+	layout="triple"
+	richKpis={kpiRich}
 	hint="atlas/src/content/datasets/anadohoi.md"
 >
 	{#snippet text()}
 		<Text />
+	{/snippet}
+	{#snippet tileMain()}
+		<Tile title="TIMELINE" href="#gantt" legend={timelineKey} fit>
+			<div class="tilefill" bind:clientWidth={gW} bind:clientHeight={gH}>
+				{#if gW && gH}
+					<PromiseGantt
+						projects={ganttProjects}
+						today={todayIso}
+						variant="card"
+						width={gW}
+						height={gH}
+						onFit={(f) => {
+							if (f.shown !== ganttFit.shown || f.total !== ganttFit.total) ganttFit = f;
+						}}
+					/>
+				{/if}
+			</div>
+		</Tile>
+	{/snippet}
+	{#snippet tileA()}
+		<Tile title="WHAT TYPES OF COMPANIES ARE INVOLVED" href="#sponsor-groups" fit tight>
+			<div class="tilefill" bind:clientWidth={sW} bind:clientHeight={sH}>
+				{#if o.sponsor_groups?.groups.length && sW && sH}
+					<SponsorTypes groups={o.sponsor_groups.groups} height={sH} />
+				{/if}
+			</div>
+		</Tile>
+	{/snippet}
+	{#snippet tileB()}
+		<Tile title="MAP" href="#waffle" fit headOver>
+			<div class="tilefill map" bind:clientWidth={tileW} bind:clientHeight={tileH}>
+				{#if dev}
+					<div class="framepick card">
+						<label>
+							<input type="checkbox" bind:checked={pickCard} />
+							adjust card frame (dev)
+						</label>
+						{#if pickCard}
+							<input
+								class="viewout"
+								readonly
+								value={pickedCard?.bounds
+									? `bounds: [[${pickedCard.bounds[0][0]}, ${pickedCard.bounds[0][1]}], [${pickedCard.bounds[1][0]}, ${pickedCard.bounds[1][1]}]] · k ${pickedCard.k}`
+									: 'drag / wheel / +− to frame, then copy this'}
+								onfocus={(e) => (e.currentTarget as HTMLInputElement).select()}
+							/>
+						{/if}
+					</div>
+				{/if}
+				{#if tileW && tileH}
+					<PaperMap
+						width={tileW}
+						height={tileH}
+						fitBounds={CARD_BOUNDS}
+						fitPad={MAP_PAD}
+						interactive={pickCard}
+						unclamped={pickCard}
+						onViewChange={(v) => (pickedCard = v)}
+						peGroup={(pe) => {
+							const r = regionOfPe(pe);
+							// zoomed: every unit answers (any click returns); at rest:
+							// only the regions with projects
+							if (selCard) return r ?? pe;
+							return r && projectRegions.has(r) ? r : null;
+						}}
+						onRegionClick={(pe) => {
+							if (selCard) {
+								selCard = null;
+								return;
+							}
+							const r = regionOfPe(pe);
+							if (r && projectRegions.has(r)) selCard = r;
+						}}
+						fitPesLive={selCardPes}
+						onEmptyClick={() => (selCard = null)}
+						onEscape={() => (selCard = null)}
+					>
+						{#snippet overlay(ctx)}
+							{#if firesFc}
+								<FiresLayer
+									{ctx}
+									features={firesShown}
+									flat
+									tipOf={(f) => `${f.properties.yr} · ${grInt(f.properties.ha)} ha`}
+								/>
+							{/if}
+							<DotLayer
+								{ctx}
+								points={mapDots}
+								r={4.9}
+								fillOf={(p) => (noDate(p as never) ? NODATE_COLOR : (STATUS_COLOR[p.status as string] ?? '#999'))}
+								fillOpacityOf={(p) => (APPROX.has(p.prec as string) ? 0.45 : undefined)}
+								dashOf={(p) => (APPROX.has(p.prec as string) ? `${2.4 / ctx.k} ${1.8 / ctx.k}` : undefined)}
+								tipOf={(p) => `<strong>${p.company}</strong>`}
+								hrefOf={(p) => `/anadohoi/project/${p.ada}`}
+							/>
+						{/snippet}
+					</PaperMap>
+					<ul class="mapkey left">
+						<li>
+							<i class="scar"></i>
+							<span>areas burnt{#if fireYears}&nbsp;since {fireYears.lo}{/if} (EFFIS)</span>
+						</li>
+						<li><i class="dot" style:background={NODATE_COLOR}></i>no implementation dates stated</li>
+						<li><i class="dot" style:background={COLOR.completed}></i>completion act identified</li>
+						<li><i class="dot" style:background={COLOR.no_completion_recorded}></i>past deadline, no completion act identified</li>
+						<li><i class="dot" style:background={COLOR.active}></i>within its deadline, no completion act identified</li>
+					</ul>
+				{/if}
+			</div>
+		</Tile>
+	{/snippet}
+	{#snippet more()}
 	<div class="about">
 		<div class="kicker">THE SCHEME</div>
 		<p>
@@ -568,41 +784,6 @@
 			folded into its successor — <a href="/methodology#anadohoi">basis</a>.
 		</p>
 	</div>
-	{/snippet}
-	{#snippet tiles()}
-		<Tile title="MAP" href="#waffle">
-			<div class="tilefill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
-				{#if tileW && tileH}
-					<PaperMap width={tileW} height={tileH} view={MAP_VIEW}>
-						{#snippet overlay(ctx)}
-							{#if firesFc}
-								<FiresLayer {ctx} features={firesShown} tipOf={(f) => `${f.properties.yr} · ${grInt(f.properties.ha)} ha`} />
-							{/if}
-							<DotLayer
-								{ctx}
-								points={mapDots}
-								r={4.5}
-								fillOf={(p) => (noDate(p as never) ? NODATE_COLOR : (STATUS_COLOR[p.status as string] ?? '#999'))}
-								fillOpacityOf={(p) => (APPROX.has(p.prec as string) ? 0.45 : undefined)}
-								dashOf={(p) => (APPROX.has(p.prec as string) ? `${2.4 / ctx.k} ${1.8 / ctx.k}` : undefined)}
-								tipOf={(p) => `<strong>${p.company}</strong>`}
-								hrefOf={(p) => `/anadohoi/project/${p.ada}`}
-							/>
-						{/snippet}
-					</PaperMap>
-				{/if}
-			</div>
-		</Tile>
-		<Tile title="TIMELINE" href="#gantt">
-			<PromiseGantt projects={ganttProjects} today={todayIso} legend="compact" />
-		</Tile>
-		<Tile title="WHO THE SPONSORS ARE" href="#sponsor-groups">
-			{#if o.sponsor_groups?.groups.length}
-				<SponsorGroups groups={o.sponsor_groups.groups} lens={sgLens} />
-			{/if}
-		</Tile>
-	{/snippet}
-	{#snippet more()}
 
 {#if hoverCard}
 	{@const hp = ganttProjects.find((p) => p.ada === hoverCard?.ada)}
@@ -1417,9 +1598,123 @@
 		position: absolute;
 		inset: 0;
 	}
+	/* the card map is small: thinner administrative lines and a flat red
+	   for every scar, so the project dots are what the eye finds first
+	   (user, 2026-08-27) */
+	.tilefill.map {
+		--region-line-w: 0.35;
+		--context-line-w: 0.35;
+		--border-line-w: 0.6;
+	}
+	/* the user's edit: the key in the map's bottom corners — marks 7 px in,
+	   11 px Futura on 14,4 px lines, the last line 5 px above the edge */
+	.mapkey {
+		position: absolute;
+		bottom: 5px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		z-index: 2;
+		pointer-events: none;
+		font-family: var(--font-ui);
+		font-size: 11px;
+		line-height: 14.4px;
+		color: var(--ink);
+	}
+	.mapkey.left {
+		left: 7px;
+	}
+	/* the dev frame picker rides over the map's top-right corner */
+	.framepick.card {
+		position: absolute;
+		top: 6px;
+		right: 42px;
+		z-index: 3;
+		background: rgba(255, 255, 255, 0.85);
+		padding: 2px 6px;
+		font-size: var(--fs-12);
+	}
+	.framepick.card .viewout {
+		display: block;
+		width: 300px;
+		margin-top: 2px;
+		font-size: 10px;
+	}
+	.mapkey li {
+		display: flex;
+		align-items: center;
+		gap: 3px;
+		white-space: nowrap;
+	}
+	.mapkey i {
+		flex: none;
+		width: 10px;
+		height: 10px;
+	}
+	.mapkey i.dot {
+		border-radius: 50%;
+	}
+	.mapkey i.scar {
+		background: #6b2d35;
+	}
+	/* the key in the tile's leftover height, two columns, the note across */
+	/* a tile's ⓘ key: the same wording as the frame legends, at tile size */
+	.tkey {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-family: var(--font-ui);
+		font-size: var(--fs-12);
+		line-height: 1.25;
+		color: var(--ink-soft);
+	}
+	.tkey li {
+		display: flex;
+		align-items: flex-start;
+		gap: 7px;
+	}
+	.tkey i {
+		flex: none;
+		width: 12px;
+		height: 12px;
+		margin-top: 1px;
+	}
+	.tkey i.dot {
+		border-radius: 50%;
+	}
+	.tkey i.approx {
+		background: rgba(64, 110, 85, 0.45);
+		border: 1px dashed var(--ink-soft);
+		box-sizing: border-box;
+	}
+	.tkey i.scar {
+		background: #6b2d35;
+		opacity: 0.85;
+	}
+	.tkey .mk {
+		flex: none;
+		width: 12px;
+		font-weight: 900;
+		line-height: 1;
+	}
+	.tkey .mk.ok {
+		color: var(--c-anadohoi);
+	}
+	.tkey .mk.bad {
+		color: #000;
+	}
+	.tkey .note {
+		display: block;
+		color: var(--ink-faint);
+	}
+	/* the card's map draws straight onto the panel — a plate of its own
+	   inside the tile only made the map smaller (user, 2026-08-27) */
 	.tilefill :global(.map) {
-		background: #f2f2f2;
-		border: 1px solid var(--line);
+		background: transparent;
+		border: none;
 		--land-context: #fff;
 		--map-accent: var(--card-accent);
 		box-shadow: none;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * A dataset's CARD (user mock, 2026-08-27) — exactly one viewport, no
+	 * A dataset's CARD (Artboard 4, user 2026-08-27) — exactly one viewport, no
 	 * scrolling: the symbol, the stream's name, the narrative and «explore
 	 * more» in a column on the left running the full height; the three KPI
 	 * cards across the top of the right; under them the dataset's key
@@ -15,6 +15,7 @@
 	import { symbolFor, type DatasetKey } from '$lib/datasets';
 	import DatasetSymbol from './DatasetSymbol.svelte';
 	import KpiCards, { type KpiCard } from './KpiCards.svelte';
+	import KpiRich, { type RichKpi } from './KpiRich.svelte';
 	import Prose from './Prose.svelte';
 	import { MORE_HASH, isExpanded, lessHref, moreHref } from './expanded';
 	import type { Snippet } from 'svelte';
@@ -22,21 +23,36 @@
 	let {
 		ds,
 		params,
-		kpis,
+		kpis = [],
+		richKpis = [],
+		layout = 'default',
 		hint = '',
 		text,
 		tiles,
+		tileMain,
+		tileA,
+		tileB,
 		more
 	}: {
 		ds: DatasetKey;
 		/** the page's own URL parameters — any of them opens the frames */
 		params: readonly string[];
-		kpis: KpiCard[];
+		kpis?: KpiCard[];
+		/** the sponsored card's richer cards (Artboard 4, user 2026-08-27) */
+		richKpis?: RichKpi[];
+		/** «triple» is the sponsored card's three columns: the text, then
+		 *  the KPI row over one tall tile, then two tiles stacked */
+		layout?: 'default' | 'triple';
 		/** the content file behind the narrative, shown while it is empty */
 		hint?: string;
 		text: Snippet;
-		/** three Tile components, in reading order */
-		tiles: Snippet;
+		/** three Tile components, in reading order (default layout) */
+		tiles?: Snippet;
+		/** the triple layout's tiles: the tall middle one, then the two on
+		 *  the right, top and bottom */
+		tileMain?: Snippet;
+		tileA?: Snippet;
+		tileB?: Snippet;
 		more: Snippet;
 	} = $props();
 
@@ -65,11 +81,38 @@
 		</div>
 		{@render more()}
 	</div>
+{:else if layout === 'triple'}
+	<div class="dcard triple" style:--card-accent={sym.color}>
+		<div class="side">
+			<div class="who big">
+				<DatasetSymbol key={ds} size="clamp(96px, 8.47vw, 162.6px)" active />
+				<span class="bigname">
+					{#if sym.titleLines}
+						{#each sym.titleLines as ln, i (i)}<span class="ln">{ln}</span>{/each}
+					{:else}
+						{sym.label}
+					{/if}
+				</span>
+			</div>
+			<div class="narrative">
+				<Prose {hint}>{@render text()}</Prose>
+			</div>
+			<a class="more" href={moreHref(page.url)}>explore more</a>
+		</div>
+		<div class="mid">
+			<div class="kpis"><KpiRich cards={richKpis} color={sym.color} /></div>
+			{@render tileMain?.()}
+		</div>
+		<div class="rightcol">
+			{@render tileA?.()}
+			{@render tileB?.()}
+		</div>
+	</div>
 {:else}
 	<div class="dcard" style:--card-accent={sym.color}>
 		<div class="side">
 			<div class="who">
-				<DatasetSymbol key={ds} size={150} />
+				<DatasetSymbol key={ds} size="clamp(96px, 7.93vw, 152px)" active />
 				<span class="label">{sym.label}</span>
 			</div>
 			<div class="narrative">
@@ -78,22 +121,27 @@
 			<a class="more" href={moreHref(page.url)}>explore more</a>
 		</div>
 		<div class="kpis"><KpiCards cards={kpis} color={sym.color} /></div>
-		<div class="tiles">{@render tiles()}</div>
+		<div class="tiles">{@render tiles?.()}</div>
 	</div>
 {/if}
 
 <style>
 	/* the card is the viewport under the header, to the pixel: the layout
-	   widens `main` and sets --header-h for these pages */
+	   widens `main`, sets --header-h and the artboard's four paddings.
+	   Artboard 4 (1920×1080): a 540 px left column, the KPI row 177 px
+	   tall starting 35 px to its right, 15 px above the tiles; the tiles in
+	   two columns 18 px apart, the rows 491 : 249 */
 	.dcard {
 		display: grid;
-		grid-template-columns: minmax(16rem, 29%) minmax(0, 1fr);
-		grid-template-rows: auto minmax(0, 1fr);
+		grid-template-columns: minmax(16rem, 29.7%) minmax(0, 1fr);
+		grid-template-rows: clamp(110px, 16.4vh, 177px) minmax(0, 1fr);
 		grid-template-areas:
 			'side kpis'
 			'side tiles';
-		gap: var(--sp-5, 1.25rem) var(--sp-8);
-		height: calc(100dvh - var(--header-h, 60px) - 2 * var(--sp-4));
+		gap: 1.4vh 1.9%;
+		height: calc(
+			100dvh - var(--header-h, 85px) - var(--card-pad-t, 25px) - var(--card-pad-b, 17px)
+		);
 		box-sizing: border-box;
 		align-items: stretch;
 	}
@@ -101,39 +149,85 @@
 		grid-area: side;
 		display: flex;
 		flex-direction: column;
-		gap: var(--sp-6);
 		min-height: 0;
 	}
+	/* the symbol 27 px under the card's top, filled in the stream's hue,
+	   the name to its right on its baseline */
 	.who {
 		display: flex;
 		align-items: flex-end;
-		gap: var(--sp-4);
+		gap: clamp(12px, 1.5vw, 29px);
+		margin-top: 2.5vh;
 	}
 	.label {
-		font-family: var(--font-display);
+		font-family: var(--font-display-cond);
 		font-weight: 700;
-		font-size: var(--fs-14);
+		font-size: clamp(14px, 1.25vw, 24px);
 		color: var(--card-accent);
-		line-height: 1.2;
-		padding-bottom: var(--sp-2);
+		line-height: 1;
 	}
-	/* a long narrative scrolls inside its column; the button stays put */
+	/* the narrative: the space for the user's own text, set in Futura
+	   100 GR 18 px on 21,6 px lines (Artboard 4, user 2026-08-27); a long
+	   one scrolls inside its column */
 	.narrative {
 		flex: 1;
 		min-height: 0;
 		overflow: auto;
+		margin-top: 3.9vh;
+	}
+	.side .narrative :global(.prose),
+	.side .narrative :global(.prose p) {
+		font-family: var(--font-ui);
+		font-weight: 400;
+		font-size: clamp(13px, 0.94vw, 18px);
+		line-height: 1.2;
+		color: var(--ink);
+		max-width: none;
+	}
+	.side .narrative :global(.prose p) {
+		margin: 0 0 1.2em;
+	}
+	.side .narrative :global(.prose strong) {
+		font-weight: 700;
 	}
 	.kpis {
 		grid-area: kpis;
+		min-height: 0;
 	}
-	/* the tiles' grid takes what the card leaves: MAP top-left, the tall
-	   one right, the third under MAP — the mock's proportions */
+	/* the KPI cards in the artboard's dress — 14.5 px apart, 12 px corners,
+	   23 px padding — with the NUMBER leading (56 px) and the caption in
+	   Condensed Regular under it, the way the dashboard we measured does */
+	.dcard:not(.triple) .kpis :global(.cards) {
+		height: 100%;
+		gap: clamp(8px, 0.75vw, 14.5px);
+	}
+	.dcard:not(.triple) .kpis :global(.card) {
+		flex-direction: column;
+		height: 100%;
+		box-sizing: border-box;
+		padding: clamp(14px, 3.15vh, 34px) clamp(10px, 1.2vw, 23px) clamp(10px, 1.2vw, 23px);
+		border-radius: 12px;
+		gap: 0;
+		min-height: 0;
+		overflow: hidden;
+	}
+	.dcard:not(.triple) .kpis :global(.lbl) {
+		margin-top: 8px;
+		font-family: var(--font-display-cond);
+		font-weight: 400;
+		font-size: clamp(13px, 0.94vw, 18px);
+		line-height: 1.25;
+	}
+	.dcard:not(.triple) .kpis :global(.num) {
+		margin-top: 0;
+		font-size: clamp(32px, 2.9vw, 56px);
+	}
 	.tiles {
 		grid-area: tiles;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		grid-template-rows: minmax(0, 3fr) minmax(0, 2fr);
-		gap: var(--sp-4);
+		grid-template-rows: minmax(0, 491fr) minmax(0, 249fr);
+		gap: clamp(10px, 0.95vw, 18.3px);
 		min-height: 0;
 	}
 	.tiles :global(.tile:nth-child(1)) {
@@ -148,17 +242,31 @@
 		grid-column: 1;
 		grid-row: 2;
 	}
+	/* the pill: 179 × 37, 13 px corners, Condensed Bold 24 px, flush with
+	   the card's bottom edge */
+	/* the user's edit (2026-08-27): a 145,7 × 37 pill with 9,8 px corners,
+	   «explore more» in Futura Bold 18 px 12 px in, an arrow in the room
+	   it leaves at the right */
 	.more,
 	.back {
 		align-self: flex-start;
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-start;
+		box-sizing: border-box;
+		width: clamp(110px, 7.59vw, 145.7px);
+		height: clamp(28px, 3.45vh, 37px);
+		padding: 0 clamp(8px, 0.57vw, 11px);
 		text-decoration: none;
-		font-family: var(--font-display);
+		/* Futura's TRUE bold: the Book family has no 700, the plain one has */
+		font-family: 'futura-100-greek', var(--font-ui);
 		font-weight: 700;
-		font-size: var(--fs-14);
+		font-size: clamp(13px, 0.94vw, 18px);
+		line-height: 1;
+		white-space: nowrap;
 		color: #fff;
 		background: var(--card-accent);
-		border-radius: 999px;
-		padding: var(--sp-2) var(--sp-6);
+		border-radius: 9.8px;
 	}
 	.more:hover,
 	.back:hover {
@@ -177,14 +285,102 @@
 		gap: var(--sp-4);
 		margin: 0 0 var(--sp-8);
 	}
-	.resthead .label {
-		padding-bottom: 0;
-	}
 	.resthead .back {
 		margin-left: auto;
 		align-self: center;
+		width: auto;
+		font-size: var(--fs-14);
+		height: auto;
+		padding: var(--sp-2) var(--sp-5);
+	}
+	/* ---- the sponsored card's three columns (Artboard 4, user 2026-08-27):
+	   the text 549 wide, the middle 703 (a 137 px KPI row over the tall
+	   tile), the right 521 (a 412 tile over a 521 one) */
+	.dcard.triple {
+		display: grid;
+		/* the artboard's widths with the user's gaps: 549 · 25 · 711 · 17 ·
+		   516 — the 3 px the narrower gap frees and 5 px of the right column
+		   go to the MIDDLE column (user, 2026-08-27) — as fractions of the
+		   card's 1818,5 */
+		grid-template-columns: 30.19% 1.375% 39.098% 0.935% 28.402%;
+		grid-template-rows: none;
+		grid-template-areas: none;
+		column-gap: 0;
+		row-gap: 0;
+	}
+	.triple .mid {
+		grid-column: 3;
+	}
+	.triple .rightcol {
+		grid-column: 5;
+	}
+	.triple .side {
+		grid-area: auto;
+		grid-column: 1;
+	}
+	.triple .mid {
+		display: grid;
+		/* the KPI row keeps its 137; whatever the narrower gaps free goes
+		   to the timeline (user, 2026-08-27) */
+		grid-template-rows: clamp(104px, 12.7vh, 137px) minmax(0, 1fr);
+		row-gap: 17px;
+		min-height: 0;
+	}
+	.triple .rightcol {
+		display: grid;
+		/* the user's edit of 2026-08-27: 374,5 above, 563,1 below, 15,4 apart */
+		grid-template-rows: minmax(0, 3745fr) minmax(0, 5631fr);
+		row-gap: clamp(8px, 1.43vh, 15.4px);
+		min-height: 0;
+	}
+	.triple .kpis {
+		grid-area: auto;
+	}
+	/* the symbol with the stream's name beside it, in the section hue */
+	.who.big {
+		align-items: center;
+		gap: clamp(16px, 3.7vw, 71px);
+		margin-top: 0;
+	}
+	/* the artboard sets the name on three centred lines */
+	.bigname {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		font-family: var(--font-display-narrow);
+		font-weight: 900;
+		font-size: clamp(15px, 1.25vw, 24px);
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+		text-align: center;
+		color: var(--card-accent);
+	}
+	.bigname .ln {
+		display: block;
+		white-space: nowrap;
+	}
+	.triple .narrative {
+		margin-top: 4vh;
 	}
 	@media (max-width: 1100px) {
+		.dcard.triple {
+			grid-template-columns: 1fr;
+			height: auto;
+		}
+		.triple .side,
+		.triple .mid,
+		.triple .rightcol {
+			grid-column: 1;
+		}
+		.triple .mid,
+		.triple .rightcol {
+			grid-template-rows: none;
+			row-gap: var(--sp-4);
+		}
+		.triple :global(.tile) {
+			min-height: 420px;
+		}
 		.dcard {
 			grid-template-columns: 1fr;
 			grid-template-rows: auto auto auto;
@@ -196,6 +392,9 @@
 		}
 		.narrative {
 			overflow: visible;
+		}
+		.dcard:not(.triple) .kpis :global(.card) {
+			min-height: 7.5rem;
 		}
 		.tiles {
 			grid-template-columns: 1fr;

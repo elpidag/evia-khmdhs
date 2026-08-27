@@ -44,20 +44,17 @@ export interface FieldOptions {
 	minCols: number;
 	maxCols: number;
 }
+/** Artboard 1 (user, 2026-08-27): 12 px glyphs on 14.4 px lines, a column
+ *  every 25.7 px — 74 across a 1920 frame — one blank line between codes */
 export const FIELD: FieldOptions = {
-	colW: 32,
-	lineH: 14,
-	gap: 2,
-	minCols: 6,
-	maxCols: 120
-};
-export const FIELD_DENSE: FieldOptions = {
-	colW: 15,
-	lineH: 8.5,
+	colW: 25.7,
+	lineH: 14.4,
 	gap: 1,
-	minCols: 4,
-	maxCols: 120
+	minCols: 6,
+	maxCols: 160
 };
+/** the menu cell shows the same field, clipped — Artboard 2 */
+export const FIELD_DENSE: FieldOptions = FIELD;
 
 /** every code tagged with its dataset, in a seeded shuffle */
 export function poolFrom(payload: Landing, seed: number): FieldCode[] {

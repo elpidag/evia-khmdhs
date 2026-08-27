@@ -190,14 +190,14 @@
 	.stage.flying {
 		transition: transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
 	}
+	/* Artboard 2 (1920×1080): the text column on the left, the menu a
+	   full-height SQUARE flush with the right edge; every measure below is
+	   the artboard's, as a fraction of the frame */
 	.home {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		gap: var(--sp-12);
-		min-height: 100dvh;
-		padding: var(--sp-8);
+		grid-template-columns: minmax(0, 1fr) auto;
+		height: 100dvh;
 		box-sizing: border-box;
-		align-items: stretch;
 		opacity: 0;
 		transition: opacity 0.6s ease;
 	}
@@ -207,10 +207,14 @@
 	.text {
 		display: flex;
 		flex-direction: column;
-		padding-top: 12vh;
+		/* the title's cap line 218 px down, the text 110 px in, the credit
+		   54 px off the bottom */
+		padding: 20vh 2.5vw 5vh 5.73vw;
+		box-sizing: border-box;
+		min-width: 0;
 	}
 	.title {
-		margin: 0 0 var(--sp-12);
+		margin: 0;
 		line-height: 1;
 	}
 	.l1,
@@ -219,36 +223,46 @@
 		white-space: nowrap;
 	}
 	.l1 {
-		font-family: var(--font-display);
+		font-family: var(--font-display-narrow);
 		font-weight: 900;
-		font-size: clamp(2rem, 4.2vw, 4.25rem);
-		letter-spacing: 0.005em;
+		font-size: clamp(36px, 3.75vw, 72px);
+		letter-spacing: 0.05em;
 	}
 	.l2 {
-		font-family: var(--font-ui);
-		font-weight: 400;
-		font-size: clamp(1.2rem, 2.6vw, 2.6rem);
-		letter-spacing: 0.32em;
-		margin-top: 0.1em;
+		font-family: var(--font-display-narrow);
+		font-weight: 500;
+		font-size: clamp(24px, 2.5vw, 48px);
+		letter-spacing: 0.26em;
 	}
-	.standfirst :global(.prose) {
-		font-size: var(--fs-18);
+	/* the standfirst: Obviously Regular 18 px on 21.6 px lines, ~630 px
+	   wide, its first line 210 px under the subtitle */
+	.standfirst {
+		margin-top: 19vh;
+		max-width: 630px;
+	}
+	.text .standfirst :global(.prose),
+	.text .standfirst :global(.prose p) {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(14px, 0.94vw, 18px);
+		line-height: 1.2;
 	}
 	.credit {
 		margin-top: auto;
+		max-width: 630px;
 	}
-	.credit :global(.prose) {
-		font-size: var(--fs-13);
+	.text .credit :global(.prose),
+	.text .credit :global(.prose p) {
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(11px, 0.625vw, 12px);
+		line-height: 1.2;
 		color: var(--ink-soft);
 	}
 	.menu {
-		display: flex;
-		align-items: center;
-	}
-	.menu :global(.grid) {
-		max-height: calc(100dvh - 2 * var(--sp-8));
-		max-width: calc(100dvh - 2 * var(--sp-8));
-		margin-left: auto;
+		height: 100dvh;
+		max-width: 62vw;
+		overflow: hidden;
 	}
 	.cell {
 		position: absolute;
@@ -260,14 +274,23 @@
 	@media (max-width: 900px) {
 		.home {
 			grid-template-columns: 1fr;
-			gap: var(--sp-8);
-			padding: var(--sp-6) var(--sp-4);
+			height: auto;
+			min-height: 100dvh;
 		}
 		.text {
-			padding-top: var(--sp-4);
+			padding: var(--sp-6) var(--sp-4) var(--sp-4);
+		}
+		.standfirst {
+			margin-top: var(--sp-8);
 		}
 		.credit {
 			margin-top: var(--sp-6);
+		}
+		.menu {
+			height: auto;
+			max-width: none;
+			width: 100%;
+			aspect-ratio: 1;
 		}
 	}
 </style>

@@ -405,7 +405,12 @@
 	</div>
 	{/snippet}
 	{#snippet tiles()}
-		<Tile title="MAP" href="#dase-allocation">
+		<Tile
+			title="MAP"
+			sub="stated net € by regional unit of the awarding forest service"
+			hint="Each regional unit is shaded by the stated net € of the contracts its forest service awarded — darker is more. The full map pairs it with where the co-operatives are seated and drills either way."
+			href="#dase-allocation"
+		>
 			<div class="tilefill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
 				{#if tileW && tileH && tileChoro}
 					<PaperMap
@@ -420,10 +425,20 @@
 				{/if}
 			</div>
 		</Tile>
-		<Tile title="RANKING OF CO-OPERATIVES" href="#top-coops">
+		<Tile
+			title="RANKING OF CO-OPERATIVES"
+			sub="the ten co-operatives with the most stated net €"
+			hint="Bar length is the stated net € of the contracts each co-operative signed, its registry spellings merged on its ΑΦΜ; a contract signed jointly is split evenly."
+			href="#top-coops"
+		>
 			<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={28} valuesRight />
 		</Tile>
-		<Tile title="MONEY PER YEAR" href="#dase-yearly">
+		<Tile
+			title="MONEY PER YEAR"
+			sub="stated net € of the contracts signed in each year"
+			hint="One bar per year of signature, its length the stated net € of that year's contracts."
+			href="#dase-yearly"
+		>
 			<BarH rows={yearRows} color="var(--c-dase)" inside barHeight={28} valuesRight />
 		</Tile>
 	{/snippet}

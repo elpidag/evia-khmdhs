@@ -9,9 +9,13 @@
 
 	let { children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 
-	// The header since 2026-08-27 (user mocks): the brand on two lines, the
-	// site's five symbols — the three streams and the two tools — and
-	// METHODOLOGY. The landing page at `/` carries no chrome at all.
+	// The header since 2026-08-27 (Artboard 4, second round): a BLACK 85 px
+	// band — the brand in white on two lines, then FIVE filled 59,5 px
+	// squares (the three streams, then search and the actor network) each
+	// carrying its own name, and METHODOLOGY in white at the right edge.
+	// `/` carries no chrome at all.
+	const streams = SYMBOLS.filter((s) => s.rank === 'stream');
+	const tools = SYMBOLS.filter((s) => s.rank === 'tool');
 	const isLanding = $derived(page.url.pathname === '/');
 	// the three dataset CARDS and the hub compose one viewport, so their
 	// page is as wide as the window; a card's unfolded part returns to the
@@ -20,7 +24,7 @@
 	const current = $derived(symbolOfPath(page.url.pathname));
 	const methodologyActive = $derived(page.url.pathname.startsWith('/methodology'));
 
-	// sticky header compacts to a single slim row once the page is scrolled
+	// the sticky band keeps its height; a shadow says the page is scrolled
 	let scrolled = $state(false);
 
 	const embed = $derived(page.url.searchParams.get('embed') === '1');
@@ -46,22 +50,48 @@
 			</a>
 			<nav>
 				<ul class="symbols">
-					{#each SYMBOLS as s (s.key)}
+					{#each streams as s (s.key)}
 						<li>
 							<a
 								href={s.href}
 								class="sym"
-								class:active={current === s.key}
 								title={s.label}
 								aria-current={current === s.key ? 'page' : undefined}
 							>
-								<DatasetSymbol key={s.key} size={30} active={current === s.key} />
+								<DatasetSymbol
+									key={s.key}
+									size="clamp(36px, 3.1vw, 59.5px)"
+									active={current === s.key}
+									band
+									labelled
+								/>
 								<span class="sr">{s.label}</span>
 							</a>
 						</li>
 					{/each}
 				</ul>
-				<a class="text" href="/methodology" class:active={methodologyActive}>METHODOLOGY</a>
+				<ul class="tools">
+					{#each tools as s (s.key)}
+						<li>
+							<a
+								href={s.href}
+								class="sym"
+								title={s.label}
+								aria-current={current === s.key ? 'page' : undefined}
+							>
+								<DatasetSymbol
+									key={s.key}
+									size="clamp(36px, 3.1vw, 59.5px)"
+									active={current === s.key}
+									band
+									labelled
+								/>
+								<span class="sr">{s.label}</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+				<a class="text method" href="/methodology" class:active={methodologyActive}>METHODOLOGY</a>
 			</nav>
 		</div>
 	</header>
@@ -73,69 +103,68 @@
 
 <style>
 	header {
-		/* pinned while scrolling, compacts past 60px (see onscroll) */
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		background: var(--paper);
-		transition: box-shadow 0.2s ease;
+		background: #000;
 	}
-	header.scrolled {
-		box-shadow:
-			0 1px 0 var(--line),
-			0 8px 24px rgba(0, 0, 0, 0.06);
-	}
-	header.scrolled .inner {
-		padding-top: var(--sp-2);
-		padding-bottom: var(--sp-2);
-	}
-	.inner {
-		max-width: var(--content-w);
-		margin: 0 auto;
-		padding: var(--sp-3) var(--sp-4);
-	}
+	/* the band: 85 px tall and BLACK, the brand 81 px in, METHODOLOGY off
+	   the right edge (Artboard 4, 1920 wide) */
 	header .inner {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: var(--sp-2) var(--sp-6);
-		transition: padding 0.2s ease;
+		gap: var(--sp-4);
+		height: var(--header-h, 85px);
+		padding: 0 clamp(12px, 0.9vw, 17px) 0 clamp(20px, 4.22vw, 81px);
+		box-sizing: border-box;
 	}
-	/* the brand: the site's name on two lines, small */
 	.brand {
 		text-decoration: none;
-		color: var(--ink);
+		color: #fff;
 		display: flex;
 		flex-direction: column;
 		line-height: 1;
+		flex: none;
 	}
 	.brand .l1 {
-		font-family: var(--font-display);
+		font-family: var(--font-display-narrow);
 		font-weight: 900;
-		font-size: var(--fs-18);
-		letter-spacing: 0.01em;
+		font-size: clamp(14px, 0.94vw, 18px);
+		letter-spacing: 0.05em;
 	}
 	.brand .l2 {
-		font-family: var(--font-ui);
-		font-weight: 400;
-		font-size: var(--fs-12);
-		letter-spacing: 0.3em;
-		margin-top: 3px;
+		font-family: var(--font-display-narrow);
+		font-weight: 500;
+		font-size: clamp(10px, 0.625vw, 12px);
+		letter-spacing: 0.27em;
+		margin-top: 2px;
 	}
 	nav {
 		display: flex;
 		align-items: center;
-		gap: var(--sp-8);
-		flex-wrap: wrap;
+		min-width: 0;
 	}
-	.symbols {
+	.symbols,
+	.tools {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: flex;
 		align-items: center;
-		gap: var(--sp-3);
+		gap: clamp(8px, 0.84vw, 16px);
+	}
+	.symbols li,
+	.tools li {
+		display: flex;
+	}
+	/* the artboard's rhythm: the three streams, a 110 px gap, the two
+	   tools, then METHODOLOGY */
+	.tools {
+		margin-left: clamp(16px, 5.75vw, 110px);
+	}
+	.method {
+		margin-left: clamp(20px, 6.7vw, 129px);
 	}
 	.sym {
 		display: inline-flex;
@@ -151,14 +180,17 @@
 	}
 	nav a.text {
 		text-decoration: none;
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-15);
-		letter-spacing: 0.02em;
-		color: #9e9e9e; /* dimmed until active */
+		font-family: var(--font-display-narrow);
+		font-weight: 500;
+		font-size: clamp(10px, 0.625vw, 12px);
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: #fff;
+		opacity: 0.75;
 	}
-	nav a.text.active {
-		color: var(--ink);
+	nav a.text.active,
+	nav a.text:hover {
+		opacity: 1;
 	}
 	main {
 		max-width: var(--content-w);
@@ -173,11 +205,33 @@
 		max-width: none;
 		padding: 0;
 	}
-	/* a dataset card is a viewport composition: window-wide, the mock's
-	   margins; the unfolded frames below re-centre at the article width */
+	/* a dataset card is a viewport composition: window-wide, the artboard's
+	   margins — 20 px above, 20 px right, 22 px below, 81 px left; the hub
+	   reads the same paddings to undo them */
 	main.card {
-		--header-h: 60px;
+		--header-h: 85px;
+		/* 25 px under the black band, 17 px at the foot (user, 2026-08-27) */
+		--card-pad-t: 25px;
+		--card-pad-r: clamp(12px, 1.07vw, 20.5px);
+		--card-pad-b: 17px;
+		--card-pad-l: clamp(24px, 4.22vw, 81px);
 		max-width: none;
-		padding: var(--sp-4) var(--sp-8);
+		padding: var(--card-pad-t) var(--card-pad-r) var(--card-pad-b) var(--card-pad-l);
+	}
+	@media (max-width: 900px) {
+		header .inner {
+			height: auto;
+			flex-wrap: wrap;
+			padding: var(--sp-3) var(--sp-4);
+			gap: var(--sp-2) var(--sp-4);
+		}
+		nav {
+			flex-wrap: wrap;
+			gap: var(--sp-3);
+		}
+		.tools,
+		.method {
+			margin-left: 0;
+		}
 	}
 </style>

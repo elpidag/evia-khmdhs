@@ -70,6 +70,10 @@
 	--font-ui: 'futura-100-greek-book', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
 	--font-serif: 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
 	--font-display: 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
+	/* the widths the user's artboards set (2026-08-27): Narrow for titles and
+	   labels, Condensed for the cards' running text — both in the kit */
+	--font-display-narrow: 'obviously-narrow', 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
+	--font-display-cond: 'obviously-condensed', 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
 	--fs-12: 0.75rem;
 	--fs-13: 0.8125rem;
 	--fs-14: 0.875rem;

@@ -38,6 +38,7 @@
 </script>
 
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { geoMercator, geoPath } from 'd3-geo';
 	import { select } from 'd3-selection';
 	import 'd3-transition';
@@ -92,6 +93,11 @@
 		 *  detail map should frame the regions it highlights rather than
 		 *  their centres — centres crop an island in half (user, 2026-08-19) */
 		fitPes?: string[] | null;
+		/** a lon/lat box [[lon0, lat0], [lon1, lat1]] to frame with `fitPad`
+		 *  of margin on every side, whatever the frame's shape — unlike
+		 *  `fitPes` it may zoom OUT below the layer's own fit, which is what
+		 *  a country view needs once Kastellorizo is left out (2026-08-27) */
+		fitBounds?: [[number, number], [number, number]] | null;
 		/** LIVE refit (animated) to these Π.Ε. wholes while set — used by the
 		 *  drilled map to show every region a hovered multi-region contract
 		 *  touches; clearing it returns to the focusPe zoom */
@@ -103,7 +109,13 @@
 		view?: { center: [number, number]; k: number } | null;
 		/** fires with the current {center,k} as the user pans/zooms —
 		 *  powers the dev-only frame picker */
-		onViewChange?: (v: { center: [number, number]; k: number }) => void;
+		onViewChange?: (v: {
+			center: [number, number];
+			k: number;
+			/** the frame's visible lon/lat box [[W, S], [E, N]] — what
+			 *  `fitBounds` needs to reproduce this view at any size */
+			bounds?: [[number, number], [number, number]];
+		}) => void;
 		/** overlay layers (dots, arcs) drawn in map coordinates */
 		overlay?: Snippet<[MapCtx]>;
 		/** legend block, absolutely positioned over the Ionian whitespace */
@@ -120,6 +132,10 @@
 		 *  drag can only dislodge the crop (user, 2026-08-24); panning
 		 *  re-arms as soon as the reader zooms in */
 		panAtRest?: boolean;
+		/** no clamps at all — the map may be zoomed OUT past the layer's fit
+		 *  and dragged anywhere; the frame picker's mode (2026-08-27), never
+		 *  a reader's */
+		unclamped?: boolean;
 	}
 
 	/** hovered group key (peGroup mode): every member lights together */
@@ -141,6 +157,7 @@
 		fitPoints = null,
 		fitPad = 0.12,
 		fitPes = null,
+		fitBounds = null,
 		fitPesLive = null,
 		view = null,
 		onViewChange,
@@ -148,7 +165,8 @@
 		legend,
 		relief = null,
 		context = true,
-		panAtRest = true
+		panAtRest = true,
+		unclamped = false
 	}: Props = $props();
 
 	type PeFeature = Feature<MultiPolygon, PeProps>;
@@ -285,17 +303,39 @@
 	});
 
 	// initial editorial framing (view / fitPoints), applied once per input;
-	// homeT remembers it so resetZoom (un-drill) returns to the same frame
+	// homeT remembers it so resetZoom (un-drill) returns to the same frame.
+	// The frame's SIZE is part of the input (2026-08-27): the translate and
+	// scale are computed against the projection fitted to width × height,
+	// so when the map's box changes after the first frame — fonts arriving,
+	// the grid settling, a window resized — the framing must be redone or
+	// the country slides out of frame (Crete vanished from the sponsored
+	// card in a live browser while every headless render showed it)
 	let appliedViewKey = $state('');
 	let homeT: { x: number; y: number; k: number } | null = null;
 	$effect(() => {
 		if (!projection || !path || (focusPe && focusZoom)) return;
-		const key = JSON.stringify(view ?? [fitPoints, fitPes, coarse ? 1 : 0]);
+		const key = JSON.stringify([
+			view ?? [fitPoints, fitPes, fitBounds, coarse ? 1 : 0],
+			Math.round(width),
+			Math.round(height)
+		]);
 		if (!key || key === 'null' || key === appliedViewKey) return;
 		if (view) {
 			const px = projection(view.center);
 			if (!px) return;
 			homeT = { k: view.k, x: width / 2 - view.k * px[0], y: height / 2 - view.k * px[1] };
+			applyTransform(homeT, false);
+			appliedViewKey = key;
+		} else if (fitBounds) {
+			const a = projection(fitBounds[0]);
+			const b = projection(fitBounds[1]);
+			if (!a || !b) return;
+			const x0 = Math.min(a[0], b[0]), x1 = Math.max(a[0], b[0]);
+			const y0 = Math.min(a[1], b[1]), y1 = Math.max(a[1], b[1]);
+			if (x1 <= x0 || y1 <= y0) return;
+			// no floor of 1: the box may be framed smaller than the layer's fit
+			const k = Math.min(8, (1 - fitPad) * Math.min(width / (x1 - x0), height / (y1 - y0)));
+			homeT = { k, x: width / 2 - (k * (x0 + x1)) / 2, y: height / 2 - (k * (y0 + y1)) / 2 };
 			applyTransform(homeT, false);
 			appliedViewKey = key;
 		} else if ((fitPoints && fitPoints.length) || (fitPes && fitPes.length)) {
@@ -412,14 +452,21 @@
 	$effect(() => {
 		if (!svgEl || !interactive || narrow) return;
 		zoomBehavior = d3zoom<SVGSVGElement, unknown>()
-			.scaleExtent([1, 14])
+			.scaleExtent(unclamped ? [0.2, 14] : [1, 14])
 			.wheelDelta((ev) => (-ev.deltaY * (ev.deltaMode === 1 ? 0.05 : ev.deltaMode ? 1 : 0.002)) * 0.18)
 			// pan/zoom can never show past the fitted frame — beyond it the
 			// context layer's clip box would come into view (user, 2026-08-22)
-			.translateExtent([
-				[0, 0],
-				[width, height]
-			])
+			.translateExtent(
+				unclamped
+					? [
+							[-1e6, -1e6],
+							[1e6, 1e6]
+						]
+					: [
+							[0, 0],
+							[width, height]
+						]
+			)
 			.filter((ev) => {
 				if (ev.type === 'wheel') return wheelArmed;
 				// a drag at the resting zoom only dislodges the crop. The scale
@@ -441,12 +488,33 @@
 						(width / 2 - t.x) / t.k,
 						(height / 2 - t.y) / t.k
 					]);
-					if (c) onViewChange({ center: [+c[0].toFixed(4), +c[1].toFixed(4)], k: +t.k.toFixed(3) });
+					const nw = projection.invert?.([-t.x / t.k, -t.y / t.k]);
+					const se = projection.invert?.([(width - t.x) / t.k, (height - t.y) / t.k]);
+					const r4 = (v: number) => +v.toFixed(4);
+					if (c)
+						onViewChange({
+							center: [r4(c[0]), r4(c[1])],
+							k: +t.k.toFixed(3),
+							bounds:
+								nw && se
+									? [
+											[r4(nw[0]), r4(se[1])],
+											[r4(se[0]), r4(nw[1])]
+										]
+									: undefined
+						});
 				}
 			})
 			.on('end', () => (zooming = false));
 		const sel = select(svgEl);
 		sel.call(zoomBehavior);
+		// hand the frame already applied (a fit or a view set while the map
+		// was not interactive) to d3, or its first gesture starts from the
+		// identity and the map jumps to the layer's own fit (2026-08-27) —
+		// read without tracking, or this effect re-runs on every zoom
+		const cur = untrack(() => transform);
+		if (cur && (cur.k !== 1 || cur.x || cur.y))
+			sel.call(zoomBehavior.transform, zoomIdentity.translate(cur.x, cur.y).scale(cur.k));
 		sel.on('pointerdown.arm', () => (wheelArmed = true));
 		sel.on('mouseleave.arm', () => (wheelArmed = false));
 		return () => {
@@ -687,7 +755,7 @@
 	.context {
 		fill: var(--land-context, #ffffff);
 		stroke: var(--land-context-line, #c4c4c4);
-		stroke-width: 0.5;
+		stroke-width: var(--context-line-w, 0.5);
 		vector-effect: non-scaling-stroke;
 		pointer-events: none;
 	}
@@ -696,7 +764,7 @@
 	.gr-border {
 		fill: none;
 		stroke: var(--ink);
-		stroke-width: 0.9;
+		stroke-width: var(--border-line-w, 0.9);
 		stroke-dasharray: 4 3;
 		stroke-linecap: butt;
 		vector-effect: non-scaling-stroke;
@@ -729,7 +797,8 @@
 	}
 	.region {
 		stroke: var(--line-strong);
-		stroke-width: 0.6;
+		/* a small map needs thinner administrative lines (user, 2026-08-27) */
+		stroke-width: var(--region-line-w, 0.6);
 		vector-effect: non-scaling-stroke;
 	}
 	/* stroke highlight, not filter — filters force expensive repaint layers */

@@ -50,7 +50,7 @@
 <style>
 	.chapters {
 		position: sticky;
-		top: 52px; /* under the compact header */
+		top: 85px; /* under the header band */
 		z-index: 5;
 		display: flex;
 		flex-wrap: wrap;

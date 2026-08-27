@@ -10,7 +10,7 @@
 html {
 	-webkit-text-size-adjust: 100%;
 	/* in-page anchors (#map, chart anchors) land below the sticky header */
-	scroll-padding-top: 68px /* the two-line header: 60px at rest, 52px compact */;
+	scroll-padding-top: 94px /* the 85 px header band of the artboards */;
 }
 
 body {

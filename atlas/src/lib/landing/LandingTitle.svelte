@@ -1,8 +1,10 @@
 <script lang="ts">
 	/**
-	 * The site's name over the field (user mock, 2026-08-27): the heavy
-	 * display line over the wide-tracked one. Fades in when `on` turns
-	 * true; a button while the field is up — clicking it opens the menu.
+	 * The site's name over the field — Artboard 1 (user, 2026-08-27):
+	 * Obviously Narrow Black 60 px tracked .2em over Obviously Narrow
+	 * Medium 48 px tracked .32em, the second baseline 61.6 px under the
+	 * first, the pair centred a little above the middle of the frame.
+	 * Fades in when `on` turns true; a button while the field is up.
 	 */
 	import { BRAND_LINE1, BRAND_LINE2 } from './brand';
 	let { on = false, onOpen }: { on?: boolean; onOpen?: () => void } = $props();
@@ -22,9 +24,9 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		padding: 0 0 3vh;
 		background: none;
 		border: none;
-		padding: 0;
 		cursor: pointer;
 		color: var(--ink);
 		opacity: 0;
@@ -48,16 +50,18 @@
 			0 0 24px var(--paper);
 	}
 	.l1 {
-		font-family: var(--font-display);
+		font-family: var(--font-display-narrow);
 		font-weight: 900;
-		font-size: clamp(2.4rem, 6vw, 6rem);
-		letter-spacing: 0.005em;
+		/* 60 px on the 1920 artboard */
+		font-size: clamp(28px, 3.125vw, 60px);
+		letter-spacing: 0.2em;
 	}
 	.l2 {
-		font-family: var(--font-ui);
-		font-weight: 400;
-		font-size: clamp(1.3rem, 3.6vw, 3.6rem);
+		font-family: var(--font-display-narrow);
+		font-weight: 500;
+		/* 48 px, its baseline 61.6 px under the first */
+		font-size: clamp(22px, 2.5vw, 48px);
 		letter-spacing: 0.32em;
-		margin-top: 0.12em;
+		margin-top: 0.28em;
 	}
 </style>

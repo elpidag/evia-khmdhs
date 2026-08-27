@@ -9983,3 +9983,432 @@ still opens on the frames, and the way back lands on the card's top.
 `.fill`, the name the direct-award bar already used, so the unfold on
 Anti-nero and ΔΑΣΕ painted a viewport-sized block in the dataset's colour;
 the wrapper is `.tilefill`.
+
+**Fourth round the same day — the artboards' geometry applied.** The
+user supplied the four mocks as 1920×1080 SVG artboards (landing field +
+title, landing menu, hub, card), so every position, size and type
+setting is now read off the file instead of approximated:
+
+- *Type.* The artboards set the Obviously family in its **Narrow** cut
+  for titles and labels and its **Condensed** cut for the cards' running
+  text; both are in the Typekit kit already (400/700 and the variable
+  cut), so `tokens.css` gained `--font-display-narrow` and
+  `--font-display-cond` — no new font, no colour change. The field's
+  codes are Obviously Regular 12 px on 14,4 px lines, a column every
+  25,7 px (74 across the frame; `field.ts`, pinned), one blank line
+  between codes; the menu cell shows the same field, not a denser one.
+- *Landing.* Title 60/48 px Narrow tracked .2/.32 em over the field; in
+  the menu state the text column is 110 px in with the 72/48 px title's
+  cap line 218 px down, the standfirst 18 px Regular on 21,6 px lines
+  ~630 px wide, the credit 12 px at the foot, and the menu a full-height
+  SQUARE flush with the right edge — 2 px rules, 24 px Narrow labels
+  top-right of their cells (Bold on the black START HERE), plus the
+  artboard's «GR / EN» mark top-right as a `note` cell (a placeholder
+  until a Greek version exists).
+- *Hub.* Title as on the menu; the caption 24 px Narrow Bold; three
+  186 px squares 50 px apart and two 98 px squares 40 px apart, the
+  group centred on x 905; labels 24 px Condensed Bold.
+- *Header.* One 83 px band on every inner page (the compaction on
+  scroll is gone): brand 24/16 px Narrow 86 px in, the three streams as
+  60 px squares with their names inside (the co-ops' short form
+  `short`), SEARCH and NETWORK OF ACTORS as 14 px text, METHODOLOGY
+  16 px at the right edge; `scroll-padding-top` 92.
+- *Card.* Paddings 24/20/22/81, a 540 px text column, the KPI row 177 px
+  tall (12 px corners, the label in Condensed Bold at the top — 30 px
+  rather than the artboard's 36 because our card also carries the figure
+  — the figure beneath), the tiles 18 px apart in rows 491 : 249 with
+  36 px Condensed Bold titles inset 42 px, the symbol 152 px FILLED with
+  the stream's name on its baseline, the narrative 24 px Condensed Bold
+  on 28,8 px lines, the pill 37 px tall with 13 px corners.
+
+Verified by measuring the rendered DOM at 1920×1080 against the
+artboards (MAP tile 656/299/613×492 vs 656/299/613×491; KPI cards, tile
+titles, header items and the menu cells within 1–7 px); no card or hub
+page scrolls. Fonts and colours unchanged; the artboards' greys and the
+menu's black are placeholders and keep the site's ink/paper tokens.
+
+**Fifth round the same day — readability, after measuring «Who Owns
+Britain».** The user asked for the dashboard's sizes to be studied again
+(buses tab, 1920×1080, measured in a browser): an 85 px band, a 621 px
+text column set in an 18 px LIGHT face on 23,4 px lines, KPI cards 137 px
+tall with a 57,6 px light number over a 13 px caption, chart panels with
+12 px of inset and a 10 px title/subtitle pair plus a ⓘ, the whole page
+one viewport. Six changes agreed and built: (1) the card's narrative is
+Obviously Condensed **Regular** 20 px on 1.35 lines — the artboard's
+24 px Bold read as six lines of headline, and its Greek words fell back
+to a bolder Futura — with `**bold**` in the markdown still rendering
+bold; (2) the KPI cards lead with the NUMBER (56 px) and put the caption
+under it in Condensed Regular 18 px, instead of a 30 px bold caption over
+a 48 px number; (3) tile titles are 24 px Condensed Bold with a one-line
+13 px SUBTITLE saying what the drawing shows (`Tile sub`); (4) tile inset
+is 14/16/12 px instead of 28/42/24, so the chart gets the panel; (5) each
+tile carries a ⓘ with its how-to-read (`Tile hint` → the site's `Hint`),
+the title still linking to the full frame; (6) the pill says «all the
+charts →». Subtitles and hints carry no data-derived number. Measured
+again at 1920×1080 → 1280×720: no card scrolls.
+
+**Sixth round the same day — WHO THE SPONSORS ARE as one stacked share
+bar on the card (user).** The tile no longer shows the full frame's
+group bars in a scroll box: `lib/charts/ShareStack.svelte` draws ONE bar
+whose segments are the kinds of business, width = share of the committed
+€, in a ramp of the section hue from full strength (the biggest) to pale;
+the share prints above a segment wide enough (≥ 7 %); a two-column KEY
+under the bar names every kind with its € and share, hover lighting the
+segment, and lists the kinds that committed no stated sum with their
+project counts — a share of zero cannot be drawn, so they are said. Every
+figure is computed from `sponsor_groups` on the overview payload; the
+segments reconcile to its `total_eur`. Measured: the tile's body holds
+it without scrolling at 1920×1080. The full frame (`SponsorGroups`) is
+unchanged behind «all the charts».
+
+**Seventh round the same day — the sponsored card rebuilt to Artboard 4,
+and the header band with it (user).** The user sent a second edit of the
+card artboard (`Artboard 4.svg`, 1920×1080) and a written spec. Built:
+
+- **The stream is renamed «financed by private companies» everywhere**
+  (`lib/datasets.ts` label — it feeds the header square, the hub, the card
+  and the unfolded head). The 59,5 px header square cannot hold that name
+  at a readable size, so it carries the abbreviation «private companies»
+  (`short`); the prose that describes the scheme in sentences is untouched,
+  being description rather than the name.
+- **The header band is BLACK on every page**, 85 px, no compaction on
+  scroll: the brand in white (18/12 px Narrow) 81 px in, then FIVE FILLED
+  59,5 px squares — the three streams, then search and the actor network —
+  each in the artboard's own tone (#2d6a4f · #f2f2f2 · #52b788 · #f2f2f2 ·
+  #b7e4c7) with its name inside, the lettering black or white by that
+  tone's luminance and shrunk to fit the square; METHODOLOGY in white at
+  the right edge. The page you are on keeps a ring (black gap, white
+  outline) — the only wayfinding left once every square is filled.
+- **The sponsored card is a THREE-COLUMN composition** (`DatasetCard
+  layout="triple"`, this card only by user decision): the text column 549,
+  then the KPI row 137 over the tall TIMELINE tile 703×795, then SPONSORS
+  520×412 over MAP 521×521. Measured against the artboard at 1920×1080:
+  every panel within 3 px. Still exactly one viewport at 1920×1080,
+  1600×900, 1440×820 and 1280×720.
+- **KPI cards** (`ui/KpiRich.svelte`): unequal widths (173 / 166 / 337),
+  all in the dataset hue, each a headline of numbers and words over the
+  user's own sentence — «68 acts / for designating private companies …»,
+  «only 43 of 68 acts state a figure / those acts amount to a value of /
+  41,78 m €». Every number is computed from the payload (`n_projects`,
+  `n_companies`, `n_stated`, `stated_eur`); only the wording is typed.
+- **TYPE OF COMPANIES APPOINTED AS RESTORATION/REFORESTATION SPONSOR**
+  (`charts/SponsorTypes.svelte`) replaces WHO THE SPONSORS ARE on the card
+  and counts PROJECTS, never money. Two forms behind a card-only switch
+  (`?st=`): «bars», the user's own drawing (name inside the bar where it
+  measures to fit, count at the right), and «column», one vertical stacked
+  column in a ramp of the hue with each kind named beside it on a leader.
+  The full frame keeps `SponsorGroups` with its two lenses;
+  `ShareStack.svelte` (the morning's horizontal € share bar) is PARKED.
+- **The card MAP**: every EFFIS scar in ONE red (`FiresLayer flat`),
+  thinner administrative lines (new `--region-line-w` / `--context-line-w`
+  / `--border-line-w` on PaperMap, 0.35 / 0.35 / 0.6 here), dots at r 4 and
+  no zoom controls — the full map is one click away on the title.
+- **The card TIMELINE**: ALL 68 projects, every bar the SAME height (the €
+  encoding is the full frame's), one-line labels. The rows are computed to
+  fit the tile's height and fall back to the earliest acts if they cannot;
+  at 1920×1080 they do fit, 68 of 68, and the legend says so.
+- **The ⓘ at each tile's top right SWITCHES the tile to its own legend**
+  and back (TIMELINE and MAP, user's rule), the legends written to the tile
+  and sharing `ganttTheme`'s colours so they cannot drift.
+
+Three gotchas worth keeping: a `chip` class collided with the global
+`.chip` pill and rounded every header square; `ResizeObserver` reports
+nothing for an INLINE element, so the label-measuring spans must be
+`inline-block` or every name measures 0 and lands clipped inside its bar;
+and a `height: 100%` chart inside an auto-height wrapper fed back until the
+column svg was 33 million px tall — the tile wrapper must carry a definite
+height. 611 python tests, 144 frontend units.
+
+**Eighth round the same day — the sponsored card corrected against the
+artboard (user).** Six corrections, all measured rather than estimated:
+
+- **The card's left column is only the SPACE for the user's own text**,
+  set in **Futura 100 GR 18 px on 21,6 px lines** as the artboard has it.
+  The programme paragraphs and the basis line that used to sit under the
+  markdown MOVED to the unfolded page, so nothing is lost and the card
+  waits for the copy the user will write into
+  `content/datasets/anadohoi.md`.
+- **The card's timeline rows are no longer links** — the clicking through
+  to a project belongs to the full chart (`PromiseGantt` renders a `<g>`
+  instead of an `<a>` in the card variant).
+- **The KPI cards were re-set from the artboard**: numbers and words share
+  ONE baseline, the sentence sits under them in Futura on 1,2 lines,
+  near-white. Two things had to give against the artboard's exact sizes:
+  our cut of Obviously sets the WORDS beside the numerals wider than
+  Illustrator's (measured: «companies» 84 px at 13 px against the
+  artboard's fit), so the numerals are 32 px rather than 36 and the words
+  12 px rather than 13; and the sentence is 10,5 px rather than 12 because
+  at 12 the longest of them ran past the card's bottom edge — the artboard
+  itself clips that card's last word. All three cards now fit to the
+  pixel, in both directions, at 1920 → 1280.
+- **WHAT TYPES OF COMPANIES ARE INVOLVED** is the frame's name on the card
+  (was TYPE OF COMPANIES APPOINTED AS RESTORATION/REFORESTATION SPONSOR),
+  and only the BARS form is offered — the vertical stacked column is
+  parked inside `SponsorTypes.svelte` behind its `mode` prop, off the
+  page. The twelve rows share the tile's height on a grid, so the tile
+  never scrolls, and the drawing takes the artboard's own measures:
+  bars 25 px on a 5 px gap, the longest 65% of the row, names inside in
+  Futura 10 px white where they measure to fit and beside the bar in ink
+  where they do not, counts at the right in 9,3 px.
+- **A tile that must not scroll says so** (`Tile fit`): the sponsored
+  card's three tiles are fitted — their drawings are sized to the room
+  they have — while an ordinary tile still scrolls a long list rather
+  than cutting it off, which is what the Anti-nero and ΔΑΣΕ rankings need.
+
+Two gotchas: whitespace between spans inside a flex row becomes flex
+ITEMS of its own and widened every headline past its card (fixed with
+`font-size: 0` on the row and a `> * + *` margin); and the KPI restyle of
+the OTHER two cards was reaching this one through `.kpis :global(.num)`,
+which is why the numerals stayed at 56 px however the component was
+edited — those overrides are now scoped to `.dcard:not(.triple)`.
+
+**Ninth round the same day — the card measured against the artboard again
+(user).** The three panels were the right SIZE (703×795, 521×412, 521×521,
+where the artboard has 703,2×794,5, 520,2×411,6 and 521×521) but read as
+bigger, and the reasons were colour and framing rather than geometry:
+
+- the panels were painted in the site's `--paper-2` (#f5f4f0, a warm
+  cream) instead of the artboard's **#f2f2f2**; `Tile` now takes that grey
+  (`--tile-bg`);
+- the card's map carried a plate AND a 1 px frame of its own inside the
+  tile — two backgrounds and a border, which is what made the map look
+  small and inset. It now draws straight onto the panel: no background of
+  its own, no border, the sea being the panel's own tone as on the
+  artboard;
+- the map's dots are the artboard's **r 4,63** (they were 4);
+- the columns now carry the artboard's TWO different gaps — 26 px between
+  the text and the middle column, 19,3 px between the middle and the right
+  — as a five-column grid (30,19% · 1,43% · 38,67% · 1,06% · 28,65% of the
+  card's 1818,5), instead of one 22,5 px gap on both sides;
+- the tiles' head lost 2 px of padding and 2 px of the gap under the title,
+  so the drawing starts where the artboard starts it.
+
+Measured after the change: panels at 656/263, 1378/105 and 1378/537, gaps
+26 and 19, panel #f2f2f2, map background none, dot r 4,63, and the page
+still exactly one viewport.
+
+**Tenth round the same day — the card's last corrections (user).**
+
+- **The map fills its tile and its label rides on top of it**, as the
+  artboard has it (the artwork there starts at the tile's own top edge,
+  y 536,4 against the tile's 536,6, with «MAP» 20 px down and the ⓘ at the
+  right). `Tile headOver` puts the head in the tile's top corners as an
+  overlay and gives the drawing the whole panel; the map gained the ~40 px
+  the head band was taking.
+- **Every tile label is 10 px** (was 14). It is a shared component, so the
+  Anti-nero and ΔΑΣΕ cards follow — the three cards stay siblings.
+- **The gaps are the user's**: 25 px between the black band and the cards,
+  25 px between the text column and the middle column, 20 px everywhere
+  else (middle→right, KPI row→timeline, sponsors→map) and 20 px at the
+  card's foot.
+- **The stream's name is set on the artboard's three centred lines** —
+  «FINANCED / BY / PRIVATE COMPANIES» — from a `titleLines` field on the
+  symbol rather than from a lucky wrap.
+- **The bars of WHAT TYPES OF COMPANIES ARE INVOLVED are 10 px tall**,
+  centred in rows that still share the tile's height so nothing scrolls.
+- **The pill reads «explore more»** again, as the artboard has it.
+
+The KPI cards' sentence needed a slightly tighter line (1,2) and 1–2 px
+off the paddings to stay inside the shorter KPI row of a 820 px window;
+checked at 1920×1080, 1600×900, 1440×820, 1366×768 and 1280×720 — nothing
+overflows and no card scrolls.
+
+**Eleventh round the same day — two KPI corrections (user).** The
+explaining sentence is back at the artboard's **12 px on 14,4 px lines**:
+it had been cut to 10,5 px when the cards carried more padding, and with
+the round-10 insets five lines of 12 px now fit the 137 px card (measured
+72 px against 74 available; ours shows «public», which the artboard
+itself clips). It steps down only on a narrower card, where 12 px would
+overrun — 10 px at 1600, 9 px at 1440, 8,5 px at 1280. And the third
+card's value now sits WHERE THE ARTBOARD PUTS IT: its sentence indented
+past the headline (31 px from the card's left against the artboard's
+31,7) with «41,78 m €» immediately after it (137,5 against 132,9) and its
+baseline on the sentence's LAST line (`align-items: last baseline`) —
+it had been pushed flush with the card's right edge.
+
+Also verified on the user's question: the gap between the TIMELINE's grey
+and the MAP's grey is **20,0 px** (panel edges 1358,2 and 1378,2), and the
+same 20,0 px between WHAT TYPES and MAP.
+
+**Twelfth round the same day — the card's gaps, the freed height and the
+map's frame (user).** The 20 px gaps are **17 px** (middle→right column,
+KPI row→timeline, WHAT TYPES→MAP, and the card's foot); the two 25 px ones
+stay. The height the narrower gaps free is given where the user said: in
+the middle column the KPI row keeps its 137 px and the **timeline takes
+all 6 px** (799 tall, was 793); in the right column the 6 px split **3
+and 3** — WHAT TYPES 413,7 (was 410,7), MAP 522,3 (was 519,3) — so the
+right column's rows are 415 : 524 in the artboard's terms and the tiles
+are 524 wide (the 3 px of the narrower column gap). The KPI row is
+**137 px** at 1920×1080 (the artboard's 137,0), 12,7 vh with a 104 px
+floor on a shorter window.
+
+**The card's map frames the whole country.** PaperMap's own fit keeps
+Kastellorizo in view, which leaves Greece at 78% of the frame's width
+with 35 px of empty sea above Thrace and below Crete; the card now sets
+its own view — centre 23,8° E / 38,37° N, k 1,12 — measured on the
+rendered regions so that the northern border sits 9 px under the top
+edge, Corfu 9 px in from the left and Crete's southern coast 7 px above
+the bottom, with Rhodes whole and only Kastellorizo out of frame. The
+«those acts amount to a value of» sentence is centred as a paragraph.
+No card scrolls and nothing overflows at 1920×1080, 1600×900, 1440×820,
+1366×768 or 1280×720.
+
+**Thirteenth round the same day (user).** The 3 px the narrower
+middle→right gap frees go to the MIDDLE column, not split across the
+right tiles: the columns are 549 · 25 · 706 · 17 · 521 (the timeline tile
+706 × 799, the right tiles back at the artboard's 521 wide — 521,5 with
+the percentages' rounding). The card map measures **521,5 × 522,3 px**,
+its svg filling the tile; with the frame 3 px narrower the country's
+edges are 10 px under the top, 9 px in from the left and Crete 8 px
+above the bottom. Kastellorizo stays out of frame by decision.
+
+**Fourteenth round the same day (user).** Five more px move from the right
+column to the middle: columns 549 · 25 · **711** · 17 · **516** (the
+timeline tile 711 wide, the right tiles 516,5). The card map is zoomed
+OUT to k 1,05 so the whole country sits well inside its 516,5 × 522,5
+frame — the northern border 28 px under the top, Corfu 25 px in, Crete's
+south coast 26 px above the bottom, Kastellorizo out by decision — and
+its dots are r 3,8 (were 4,63). The bars of WHAT TYPES OF COMPANIES ARE
+INVOLVED are **20 px** tall, capped at their row's height so a short
+window never lets them overlap (`min(20px, 100%)`); the twelve rows still
+share the tile without scrolling (370/370 at 1920×1080).
+
+**Fifteenth round the same day — why the site cut Crete while every export
+showed it (user).** Two causes, both in PaperMap's initial framing:
+
+1. **The framing was applied once per input and the input ignored the
+   frame's size.** `homeT` (the translate + scale of a `view` or a
+   `fitPes` fit) was computed against the projection fitted to the box
+   PaperMap had at that moment, and never redone; when the box changed
+   afterwards — the grid settling, fonts arriving, a window resized — the
+   projection refitted but the stale transform stayed, and the country
+   slid. Headless renders never see a size change, a live browser does.
+   The key now carries the rounded width and height, so any resize
+   reframes. Measured: 1280×720 → 1920×1080 now lands on the same frame
+   as a fresh load at 1920×1080.
+2. **A fixed centre-and-zoom (k 1,05) had no margin to spare in a wide
+   tile.** The country fits the tile's HEIGHT when the tile is wider than
+   tall (a browser window with its own chrome is rarely the artboard's
+   16:9), and a 5% zoom then leaves Crete 4 px from the edge — any offset
+   pushes it out. New PaperMap input **`fitBounds`**: a lon/lat box framed
+   with `fitPad` of margin on every side whatever the tile's shape, and —
+   unlike `fitPes` — allowed to zoom OUT below the layer's own fit (the
+   layer's extent carries Kastellorizo, which is exactly what the card
+   leaves out). The card frames Othonoi/Gavdos → Rhodes/Ormenio with 6%:
+   measured margins 25 / 19 / 25 px at 1920×1080, 12 / 22 / 12 at
+   1280×720, 16–17 at 1920×950 — Crete, Thrace, Corfu and Rhodes inside
+   at every size and after a resize.
+
+**Sixteenth round the same day — the card map in the country's own shape,
+its key beneath (user).** At the new zoom the tile's spare width showed
+the coarse outlines of the neighbouring countries. The map is now drawn
+in a box of the COUNTRY's own shape — the framed lon/lat box's Mercator
+aspect, computed from the bounds (`CARD_ASPECT`), a 2% margin all round —
+so it shows no land beyond the country's sides whatever the tile's shape;
+where the tile is wider than that the box is centred on the panel grey.
+The tile's remaining height carries the KEY: a compact two-column form of
+the seven entries (short wording, 11 px, a «full map →» link) reserved
+78 px under the map, so the map takes the rest — 449 × 444 in the 516 × 522
+tile at 1920×1080, 376 × 372 in the 516 × 450 tile of a 1920×950 window,
+246 × 243 at 1280×720 — with the ⓘ switch no longer needed on this tile.
+The trade-off is stated: the map gives up ~15% of its height to carry its
+legend permanently; the ⓘ form is one line to restore.
+
+**Seventeenth round the same day — the card rebuilt from the user's own
+edit of the exported page** (`sponsored_card_page.svg`, re-saved from
+Illustrator and parsed in a browser for every box and text):
+
+- **KPI cards** 190 · 190 · 299,4 wide, 15,8 apart, 4 px corners; the
+  headline in Obviously Bold at the artboard's 36 / 13 px again, the
+  numerals' line 20 px under the card's top, the sentence 16 px in; the
+  third card's sentence («those acts amount / to a value of») LEFT-aligned
+  at the card's own inset with the value right after it, both in the lower
+  half. With our wider cut of Obviously the third headline takes two lines
+  («only 43 of 68 / acts state a figure») where the user's substituted
+  font kept one; the rows beneath it give the room and every card fits to
+  the pixel at 1920 → 1280.
+- **WHAT TYPES OF COMPANIES ARE INVOLVED** 516,5 × 374,5: 25 px bars 3,3
+  apart (the user's file, superseding the 20 px asked for earlier), the
+  longest 65% of the row, names 4 px in, counts 14 px off the right, the
+  last bar 5 px above the panel's foot (`Tile tight`); the green ramp
+  unchanged by decision.
+- **MAP** 516,5 × 563,1 (15,4 under the types panel), the map filling the
+  whole panel with the country 1,2% off the edges, dots r 4,9, the label
+  9 px into the corner, and the KEY OVERLAID in the map's bottom corners
+  — four statuses at the left (marks 7 px in, 11 px Futura on 14,4 px
+  lines, the last line 5 px above the foot), the burnt areas at the
+  right — in the user's wording: «no implementation dates stated»,
+  «completion act identified», «past deadline, no completion act
+  identified», «within its deadline, no completion act identified»,
+  «areas burnt since <year> (EFFIS)». The year is computed from the scars
+  drawn (2018, the layer's first year), not typed: the user's file says
+  2021, and the card would have to show only the scheme's era for that to
+  be true. The «revoked» and «approximate site» entries the user left out
+  are left out. The user's map was stretched vertically in Illustrator to
+  reach the panel's top and foot; a projection cannot stretch, so the
+  country fills the panel's WIDTH and sits 33 px off its top and foot.
+- **The TIMELINE key** takes the same four wordings, in the same order.
+- **The pill** 145,7 × 37 with 9,8 px corners, «explore more» in Futura
+  Bold 18 px 12 px in, and an arrow in the room the user's file leaves at
+  its right — my reading of «the symbol of explore more».
+
+**Eighteenth round the same day (user).** (1) **A frame picker on the card
+map** (dev only, like the full map's): a checkbox at the map's top-right
+makes the small map answer to drag, wheel and +/−, and prints the lon/lat
+box the frame shows — PaperMap's `onViewChange` now reports `bounds`
+[[W, S], [E, N]] beside centre and k, the projection's inverse at the
+frame's corners — so the user can frame the country by hand and the box
+goes straight into `CARD_BOUNDS`, reproducible at any tile size. (2) The
+burnt-areas entry leads the map key, all five entries in the one column.
+(3) «explore more» plain and in Futura's TRUE bold: the UI token is the
+Book family, which has no 700 and was being synthesised; the pill names
+`futura-100-greek`. (4) **The KPI sentences sit on the user's own rows**:
+`KpiRich` takes `lines` / `tailLines` (one string per row: «for
+designating private companies / as restoration and/or reforestation /
+contractors have been made / public»; «have been appointed as restoration
+/ and/or reforestation contractors»; «those acts amount / to a value of»)
+and MEASURES every headline and row at its base size, scaling a card's
+text down only where it would not fit its box — the rows and their breaks
+are never changed. At 1920×1080: card 1 at 12 px and 36/13 (fits), card 2's
+rows at 11,7 px (its widest row is 176 px in our Futura Book against 171
+available), card 3's headline on ONE line at 32/11,6 (314 px against 280).
+Gotcha: a measuring copy inside a flex `.head` stretched to the widest
+sibling and read 176 for a 141 px headline — measuring copies are
+`inline-flex` / `inline-block` at `max-content`.
+
+**Nineteenth round the same day (user).** The KPI texts re-read from the
+user's file row by row: card 1's sentence is THREE rows («for designating
+private companies / as restoration and/or reforestation / contractors
+have been made public» — the stray «public» text below it in the file is
+a leftover, not a fourth row), card 3's headline has no «only» («43 of 68
+acts state a figure»), and «those acts amount / to a value of» is CENTRED
+(its second row starts 13,1 px in, half the two rows' difference). The
+headline's baseline sits 54,6 px under the card's top and the sentence's
+first row 9 px under the headline, both now measured on the page (54 /
+70). **The frame picker pans**: PaperMap clamps every map to its fitted
+frame (`translateExtent` the frame, `scaleExtent` ≥ 1), which is right
+for a reader and useless for choosing a frame; the picker passes
+`unclamped`, which lifts both while it is on and never otherwise.
+One more PaperMap gotcha met on the way: a frame applied while the map
+was NOT interactive (a fit or a view) lived only in the component's own
+transform, so when the picker switched the zoom behaviour on, d3 started
+its first gesture from the identity and the map jumped to the layer's own
+fit. The behaviour is now seeded with the applied frame on attach (read
+with `untrack`, or the effect would re-run on every zoom) — the readout
+shows the current box the moment the picker is ticked (k 1,115 at
+1920×1080) and a drag keeps it.
+
+**Twentieth round the same day (user).** The card map's frame is the one
+the user chose with the picker — «bounds: [[18.2336, 34.7812], [28.7256,
+41.9096]] · k 0.979», saved as `CARD_BOUNDS` with no padding, since the
+box IS the frame (on a 1920×1080 tile, which is taller than the user's,
+the box fits by width and sits centred, ~56 px off top and foot). And the
+card map DRILLS, on this card only: at rest only the περιφέρειες that
+hold projects answer a click (52 of the 74 units clickable, 22 inert —
+the full status map's rule, `peGroup` + `projectRegions`), the map zooms
+to that region (`fitPesLive`), and while zoomed EVERY click on the map —
+a unit or the sea — returns to the frame (`peGroup` then groups every unit
+so all 74 answer, `onEmptyClick` covers the sea, Esc too). Verified in
+the browser: Attica's central sector grows from 7 × 9 px to 33 × 43 on the
+click and the frame comes back on a click on the sea; a non-project unit
+at rest does nothing.

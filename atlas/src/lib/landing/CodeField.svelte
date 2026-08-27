@@ -31,7 +31,7 @@
 	let w = $state(0);
 	let h = $state(0);
 	const opts = $derived(dense ? FIELD_DENSE : FIELD);
-	const glyphPx = $derived(dense ? 7.5 : 12);
+	const glyphPx = 12; // Artboard 1: Obviously Regular 12 px, in the cell too
 
 	const pool = $derived(codes ? poolFrom(codes, seed) : []);
 	const columns = $derived(layoutColumns(w, h, pool, seed, opts));
@@ -58,7 +58,7 @@
 		}
 		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 		ctx.clearRect(0, 0, w, h);
-		ctx.font = `${glyphPx}px ${family}`;
+		ctx.font = `400 ${glyphPx}px ${family}`;
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
 		const slow = dense ? 0.4 : 1;
@@ -149,6 +149,7 @@
 	}
 	canvas {
 		display: block;
-		font-family: var(--font-ui);
+		/* the codes are set in Obviously Regular on the artboards */
+		font-family: var(--font-display);
 	}
 </style>

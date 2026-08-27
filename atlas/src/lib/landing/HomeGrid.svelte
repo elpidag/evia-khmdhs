@@ -1,8 +1,10 @@
 <script lang="ts">
 	/**
-	 * The landing menu: a square 4×4 of hairline cells. The field cell
-	 * renders whatever the page passes in (the drifting codes) plus a ↻;
-	 * link cells are the menu; the rest are empty on purpose.
+	 * The landing menu — Artboard 2 (user, 2026-08-27): a square 4×4 of
+	 * 2 px-ruled cells filling the frame's height on the right. Labels sit
+	 * top-right of their cell in Obviously Narrow 24 px (Bold on the black
+	 * START HERE cell, Medium elsewhere); the field cell renders whatever
+	 * the page passes in, plus a ↻.
 	 */
 	import { cellGrid, type HomeCell } from './homeCells';
 	let {
@@ -22,6 +24,8 @@
 		{#each row as cell, c (c)}
 			{#if cell.kind === 'link'}
 				<a class="cell link" class:ink={cell.tone === 'ink'} href={cell.href}>{cell.label}</a>
+			{:else if cell.kind === 'note'}
+				<div class="cell note">{cell.label}</div>
 			{:else if cell.kind === 'field'}
 				<div class="cell field">
 					{#if field}{@render field()}{/if}
@@ -44,33 +48,42 @@
 		grid-template-columns: repeat(4, 1fr);
 		grid-template-rows: repeat(4, 1fr);
 		aspect-ratio: 1;
-		width: 100%;
-		/* one hairline between cells, none doubled: each cell draws its
+		height: 100%;
+		box-sizing: border-box;
+		/* one 2 px rule between cells, none doubled: each cell draws its
 		   right and bottom edge, the grid its top and left */
-		border-top: 1px solid var(--ink);
-		border-left: 1px solid var(--ink);
+		border-top: 2px solid var(--ink);
+		border-left: 2px solid var(--ink);
 	}
 	.cell {
 		position: relative;
-		border-right: 1px solid var(--ink);
-		border-bottom: 1px solid var(--ink);
+		border-right: 2px solid var(--ink);
+		border-bottom: 2px solid var(--ink);
 		min-width: 0;
 		overflow: hidden;
 	}
-	.link {
+	.link,
+	.note {
 		display: flex;
 		align-items: flex-start;
 		justify-content: flex-end;
-		padding: var(--sp-4);
+		/* the artboard's inset: ~26 px from the right, the baseline ~50 px down */
+		padding: 24px 26px;
 		text-decoration: none;
 		color: var(--ink);
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-16);
-		letter-spacing: 0.01em;
+		font-family: var(--font-display-narrow);
+		font-weight: 500;
+		font-size: clamp(14px, 1.25vw, 24px);
+		line-height: 1.1;
 		text-align: right;
 		text-transform: uppercase;
-		transition: background 0.15s ease, color 0.15s ease;
+		transition:
+			background 0.15s ease,
+			color 0.15s ease;
+	}
+	.note {
+		font-weight: 700;
+		font-size: clamp(12px, 0.94vw, 18px);
 	}
 	.link:hover,
 	.link:focus-visible {
@@ -80,6 +93,7 @@
 	.link.ink {
 		background: var(--ink);
 		color: var(--paper);
+		font-weight: 700;
 	}
 	.link.ink:hover,
 	.link.ink:focus-visible {

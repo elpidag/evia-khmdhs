@@ -19,8 +19,29 @@
 		/** legend style: compact chip line (default) or the bordered panel
 		 *  with the "how to read a row" schematic */
 		legend?: 'compact' | 'panel';
+		/** «card» is the dataset card's form (user, 2026-08-27): EVERY
+		 *  project, bars of ONE height, one-line labels and rows squeezed
+		 *  to the height given — the money encoding and the legend live on
+		 *  the full frame. */
+		variant?: 'full' | 'card';
+		/** card variant: draw at the tile's own pixel width, so the
+		 *  lettering is the size it says it is */
+		width?: number;
+		/** card variant: the height the rows must fit into */
+		height?: number;
+		/** card variant: told how many rows actually fitted */
+		onFit?: (info: { shown: number; total: number }) => void;
 	}
-	let { projects, today, legend = 'compact' }: Props = $props();
+	let {
+		projects,
+		today,
+		legend = 'compact',
+		variant = 'full',
+		width = 920,
+		height = 0,
+		onFit
+	}: Props = $props();
+	const card = $derived(variant === 'card');
 
 	const T0 = new Date('2021-07-01').getTime();
 	/** axis end = the latest date anywhere in the data (or today) plus a
@@ -35,16 +56,29 @@
 				}
 		return m + 5 * 86_400_000;
 	});
-	const W = 920;
-	const LABEL_W = 210;
-	const ROW_H = 20;
+	const W = $derived(card ? width || 700 : 920);
+	const LABEL_W = $derived(card ? Math.min(168, W * 0.26) : 210);
+	/** the readable floor for a row of the card (an 8,5 px name needs it) */
+	const ROW_MIN = 9.6;
 	/** top band: year labels + the today label live above the rows */
-	const TOP_H = 30;
-	/** bars sit on a shared baseline; height encodes the row's own € */
-	const BASE = 16; // baseline offset inside the row
-	const BAR_MAX = 10; // tallest bar (the row's largest stated €)
-	const BAR_MIN = 4;
-	const LINE_H = 3; // acts with no stated budget render as a thick line
+	const TOP_H = $derived(card ? 20 : 30);
+	/** how many rows fit, and how tall each is: every project if the height
+	 *  allows it at the readable floor, otherwise the EARLIEST ones (user,
+	 *  2026-08-27) — and the card says how many it is showing */
+	const fit = $derived.by(() => {
+		if (!card) return { rows: projects.length, h: 20 };
+		const room = Math.max(40, (height || 700) - TOP_H - 6);
+		const n = projects.length;
+		if (n * ROW_MIN <= room) return { rows: n, h: Math.min(16, room / n) };
+		return { rows: Math.max(1, Math.floor(room / ROW_MIN)), h: ROW_MIN };
+	});
+	const ROW_H = $derived(card ? fit.h : 20);
+	/** bars sit on a shared baseline; on the full frame the height encodes
+	 *  the row's own €, on the card every bar is the same */
+	const BASE = $derived(card ? Math.min(11, ROW_H - 1.5) : 16);
+	const BAR_MAX = $derived(card ? 5 : 10);
+	const BAR_MIN = $derived(card ? 5 : 4);
+	const LINE_H = $derived(card ? 5 : 3);
 
 
 	let rowTip = $state<{ x: number; y: number; card: CardData } | null>(null);
@@ -96,9 +130,14 @@
 			(a.start0 ?? a.start ?? '').localeCompare(b.start0 ?? b.start ?? '')
 		);
 		// stable sort → chronological order survives inside each category
-		if (order === 'category') sorted.sort((a, b) => catRank(a) - catRank(b));
-		const rows: Row[] = sorted.map((p, i) => ({ p, y: TOP_H + i * ROW_H }));
-		return { rows, height: TOP_H + rows.length * ROW_H + 8 };
+		if (order === 'category' && !card) sorted.sort((a, b) => catRank(a) - catRank(b));
+		// the card takes them from the earliest act forward
+		const kept = card ? sorted.slice(0, fit.rows) : sorted;
+		const rows: Row[] = kept.map((p, i) => ({ p, y: TOP_H + i * ROW_H }));
+		return { rows, height: TOP_H + rows.length * ROW_H + (card ? 4 : 8) };
+	});
+	$effect(() => {
+		if (card) onFit?.({ shown: layout.rows.length, total: projects.length });
 	});
 
 	// every full year inside the axis range, skipping a label that would
@@ -112,6 +151,8 @@
 		return out;
 	});
 	const todayX = $derived(x(today) ?? LABEL_W);
+	/** the card's lettering: small, but never below what can be read */
+	const LABEL_FS = $derived(card ? Math.max(8, Math.min(9.5, ROW_H - 1.6)) : 9.5);
 
 
 
@@ -119,6 +160,11 @@
 	/** full company name over at most two lines (the doubled rows fit two);
 	 *  breaks at a word boundary, never silently truncates short of ~76 chars */
 	function nameLines(name: string): string[] {
+		if (card) {
+			// one line, cut to the label column's own width
+			const max = Math.max(8, Math.floor((LABEL_W - 8) / (LABEL_FS * 0.52)));
+			return [name.length > max ? name.slice(0, max - 1).trimEnd() + '…' : name];
+		}
 		const MAX = 38;
 		if (name.length <= MAX) return [name];
 		let cut = name.lastIndexOf(' ', MAX);
@@ -131,16 +177,18 @@
 
 </script>
 
-<GanttLegend {projects} variant={legend} />
+{#if !card}<GanttLegend {projects} variant={legend} />{/if}
 
-<div class="gwrap">
+<div class="gwrap" style:--mark-fs={card ? '8px' : null}>
 <!-- ordering control, sitting on the years band left of the first label -->
-<div class="orderctl">
-	<select bind:value={order} aria-label="Row ordering">
-		<option value="time">by time</option>
-		<option value="category">by category</option>
-	</select>
-</div>
+{#if !card}
+	<div class="orderctl">
+		<select bind:value={order} aria-label="Row ordering">
+			<option value="time">by time</option>
+			<option value="category">by category</option>
+		</select>
+	</div>
+{/if}
 {#if rowTip}
 	<ProjectCard x={rowTip.x} y={rowTip.y} anchor="left" card={rowTip.card} />
 {/if}
@@ -170,17 +218,24 @@
 		{@const b0 = p.start0 ? (p.budget0 ?? null) : null}
 		{@const maxB = Math.max(b0 ?? 0, b1 ?? 0)}
 		{@const isLine = maxB <= 0}
-		{@const h1 = isLine
-			? LINE_H
-			: Math.max(BAR_MIN, (BAR_MAX * (b1 ?? maxB)) / maxB)}
-		{@const h0 = b0 !== null && maxB > 0 ? Math.max(BAR_MIN, (BAR_MAX * b0) / maxB) : null}
+		{@const h1 = card
+			? BAR_MAX
+			: isLine
+				? LINE_H
+				: Math.max(BAR_MIN, (BAR_MAX * (b1 ?? maxB)) / maxB)}
+		{@const h0 = card
+			? BAR_MAX
+			: b0 !== null && maxB > 0
+				? Math.max(BAR_MIN, (BAR_MAX * b0) / maxB)
+				: null}
 		{@const lines = nameLines(displayName(p.company))}
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<g
 			class="row"
-			onmouseenter={(e) => showRow(e, p)}
+			onmouseenter={(e) => !card && showRow(e, p)}
 			onmouseleave={() => (rowTip = null)}
 		>
+			{#if card}<title>{displayName(p.company)}</title>{/if}
 			<!-- hover highlight: discreet rounded outline around the whole
 			     line (transparent fill also makes the full row hoverable) -->
 			<rect
@@ -191,13 +246,20 @@
 				height={ROW_H - 1}
 				rx="4"
 			/>
-			<a href={`/anadohoi/project/${p.ada}`}>
+			<!-- the card's rows are not links (user, 2026-08-27): the clicking
+			     belongs to the full chart -->
+			<svelte:element this={card ? 'g' : 'a'} href={card ? undefined : `/anadohoi/project/${p.ada}`}>
 				{#each lines as ln, li (li)}
-					<text x={LABEL_W - 6} y={y + (lines.length === 1 ? 13 : 8.5 + li * 9)} class="label">
+					<text
+						x={LABEL_W - 6}
+						y={y + (lines.length === 1 ? (card ? BASE : 13) : 8.5 + li * 9)}
+						class="label"
+						style:font-size="{LABEL_FS}px"
+					>
 						{ln}
 					</text>
 				{/each}
-			</a>
+			</svelte:element>
 			<!-- restated predecessor: its money at its own height until the
 			     restatement date (the step IS the story: €1M → €800k) -->
 			{#if xs0 !== null && xs !== null && h0 !== null && xs > xs0}
@@ -210,9 +272,11 @@
 					opacity="0.55"
 					rx="1"
 				/>
-				<text x={xs + 2} y={y + BASE - Math.max(h0, h1) - 2} class="step">
-					{eurShort(b0 ?? 0)} → {eurShort(b1 ?? 0)}
-				</text>
+				{#if !card}
+					<text x={xs + 2} y={y + BASE - Math.max(h0, h1) - 2} class="step">
+						{eurShort(b0 ?? 0)} → {eurShort(b1 ?? 0)}
+					</text>
+				{/if}
 			{/if}
 			{#if xs !== null && xd0 !== null && xd0 > xs}
 				<rect x={xs} y={y + BASE - h1} width={xd0 - xs} height={h1} fill={c} opacity="0.85" rx="1" />
@@ -307,7 +371,7 @@
 		fill: var(--ink);
 	}
 	.mark {
-		font-size: 10px;
+		font-size: var(--mark-fs, 10px);
 		font-weight: 900;
 	}
 	.mark.ok {

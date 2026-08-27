@@ -14,7 +14,9 @@ describe('the landing grid', () => {
 		});
 		expect(g[2][1]).toMatchObject({ kind: 'link', href: '/data' });
 		expect(g[3][2]).toMatchObject({ kind: 'link', href: '/methodology' });
-		expect(g.flat().filter((c) => c.kind === 'empty').length).toBe(12);
+		// Artboard 2's «GR / EN» mark in the top-right cell
+		expect(g[0][3]).toMatchObject({ kind: 'note', label: 'GR / EN' });
+		expect(g.flat().filter((c) => c.kind === 'empty').length).toBe(11);
 	});
 	it('refuses a double booking and a second field', () => {
 		expect(() => cellGrid([...HOME_CELLS, { r: 1, c: 1, kind: 'empty' }])).toThrow();
