@@ -74,10 +74,8 @@
 	 *  on the map while zoomed returns to the frame */
 	let selCard = $state<string | null>(null);
 	const selCardPes = $derived(selCard ? pesOfRegion(selCard) : null);
-	/** the card map's frame picker (dev): pan/zoom the small map, read the
-	 *  lon/lat box it shows, and set it as CARD_BOUNDS */
-	let pickCard = $state(false);
-	let pickedCard = $state<{ center: [number, number]; k: number; bounds?: [[number, number], [number, number]] } | null>(null);
+	// the frame picker that chose CARD_BOUNDS was removed once it had
+	// (user, 2026-08-27); PaperMap keeps `unclamped` + `bounds` for the next time
 	let tileW = $state(0);
 	let tileH = $state(0);
 	let gW = $state(0);
@@ -488,6 +486,18 @@
 	const firesShown = $derived(
 		(firesFc?.features ?? []).filter((f) => f.properties.yr >= FIRES_FROM)
 	);
+	/** the CARD map draws the scheme's era only (user, 2026-08-27): the
+	 *  13.08.2021 ΠΝΠ is where these projects begin, so the burnt areas
+	 *  shown are from that year on; the key's year is read off them */
+	const CARD_FIRES_FROM = 2021;
+	const cardFires = $derived(
+		(firesFc?.features ?? []).filter((f) => f.properties.yr >= CARD_FIRES_FROM)
+	);
+	const cardFireFrom = $derived.by(() => {
+		let lo = Infinity;
+		for (const f of cardFires) lo = Math.min(lo, f.properties.yr);
+		return Number.isFinite(lo) ? lo : null;
+	});
 	/** how much of the country's burning since 2021 the projects answer */
 	const effisSince2021 = $derived(
 		(firesFc?.features ?? []).filter((f) => f.properties.yr >= 2021).length
@@ -683,33 +693,16 @@
 	{#snippet tileB()}
 		<Tile title="MAP" href="#waffle" fit headOver>
 			<div class="tilefill map" bind:clientWidth={tileW} bind:clientHeight={tileH}>
-				{#if dev}
-					<div class="framepick card">
-						<label>
-							<input type="checkbox" bind:checked={pickCard} />
-							adjust card frame (dev)
-						</label>
-						{#if pickCard}
-							<input
-								class="viewout"
-								readonly
-								value={pickedCard?.bounds
-									? `bounds: [[${pickedCard.bounds[0][0]}, ${pickedCard.bounds[0][1]}], [${pickedCard.bounds[1][0]}, ${pickedCard.bounds[1][1]}]] · k ${pickedCard.k}`
-									: 'drag / wheel / +− to frame, then copy this'}
-								onfocus={(e) => (e.currentTarget as HTMLInputElement).select()}
-							/>
-						{/if}
-					</div>
-				{/if}
 				{#if tileW && tileH}
 					<PaperMap
 						width={tileW}
 						height={tileH}
 						fitBounds={CARD_BOUNDS}
 						fitPad={MAP_PAD}
-						interactive={pickCard}
-						unclamped={pickCard}
-						onViewChange={(v) => (pickedCard = v)}
+						interactive={false}
+						outlineBy={regionOfPe}
+						tipDefaultCorner="bottom-right"
+						tipCompact
 						peGroup={(pe) => {
 							const r = regionOfPe(pe);
 							// zoomed: every unit answers (any click returns); at rest:
@@ -733,7 +726,7 @@
 							{#if firesFc}
 								<FiresLayer
 									{ctx}
-									features={firesShown}
+									features={cardFires}
 									flat
 									tipOf={(f) => `${f.properties.yr} · ${grInt(f.properties.ha)} ha`}
 								/>
@@ -742,6 +735,7 @@
 								{ctx}
 								points={mapDots}
 								r={4.9}
+								tipCorner="bottom-right"
 								fillOf={(p) => (noDate(p as never) ? NODATE_COLOR : (STATUS_COLOR[p.status as string] ?? '#999'))}
 								fillOpacityOf={(p) => (APPROX.has(p.prec as string) ? 0.45 : undefined)}
 								dashOf={(p) => (APPROX.has(p.prec as string) ? `${2.4 / ctx.k} ${1.8 / ctx.k}` : undefined)}
@@ -753,7 +747,7 @@
 					<ul class="mapkey left">
 						<li>
 							<i class="scar"></i>
-							<span>areas burnt{#if fireYears}&nbsp;since {fireYears.lo}{/if} (EFFIS)</span>
+							<span>areas burnt{#if cardFireFrom}&nbsp;since {cardFireFrom}{/if} (EFFIS)</span>
 						</li>
 						<li><i class="dot" style:background={NODATE_COLOR}></i>no implementation dates stated</li>
 						<li><i class="dot" style:background={COLOR.completed}></i>completion act identified</li>
@@ -1605,6 +1599,8 @@
 		--region-line-w: 0.35;
 		--context-line-w: 0.35;
 		--border-line-w: 0.6;
+		/* a hovered region: grey, a shade darker than the sea (#f2f2f2) */
+		--land-hot: #e6e6e6;
 	}
 	/* the user's edit: the key in the map's bottom corners — marks 7 px in,
 	   11 px Futura on 14,4 px lines, the last line 5 px above the edge */
@@ -1623,22 +1619,6 @@
 	}
 	.mapkey.left {
 		left: 7px;
-	}
-	/* the dev frame picker rides over the map's top-right corner */
-	.framepick.card {
-		position: absolute;
-		top: 6px;
-		right: 42px;
-		z-index: 3;
-		background: rgba(255, 255, 255, 0.85);
-		padding: 2px 6px;
-		font-size: var(--fs-12);
-	}
-	.framepick.card .viewout {
-		display: block;
-		width: 300px;
-		margin-top: 2px;
-		font-size: 10px;
 	}
 	.mapkey li {
 		display: flex;

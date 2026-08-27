@@ -1557,7 +1557,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   behaviour is seeded with the applied frame on attach; the frame the
   user picked is `CARD_BOUNDS` with no padding, and the card map DRILLS:
   a click on a project περιφέρεια zooms to it, any click while zoomed
-  returns, user 2026-08-27), the sponsor types counted in
+  returns; it draws the περιφέρειες' outlines only — `PaperMap outlineBy`,
+  a mesh of the Π.Ε. topology's edges between different groups + coast,
+  the units unstroked — and the scars from 2021 on; its hover cards
+  bottom-RIGHT in the key's size (`PaperMap tipDefaultCorner`/`tipCompact`,
+  `DotLayer tipCorner`), the hovered region a grey `--land-hot`; the dev
+  frame picker is gone from the card, user 2026-08-27), the sponsor types counted in
   **WHAT TYPES OF COMPANIES ARE INVOLVED** (`charts/SponsorTypes.svelte`,
   the BARS alone on a grid that fits the tile; its vertical column and
   `ShareStack.svelte` are parked) — each tile's ⓘ SWITCHING it to its own

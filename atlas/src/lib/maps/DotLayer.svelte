@@ -37,7 +37,7 @@
 		/** per-dot fill opacity override (approximate dots render lighter) */
 		fillOpacityOf?: (p: DotPoint) => number | undefined;
 		/** which corner the dot's card sits in (default bottom-left) */
-		tipCorner?: 'bottom-left' | 'top-left';
+		tipCorner?: 'bottom-left' | 'top-left' | 'bottom-right';
 	}
 
 	let {

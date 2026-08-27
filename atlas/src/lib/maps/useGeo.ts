@@ -19,23 +19,36 @@ type Fetch = typeof globalThis.fetch;
 
 const cache = new Map<string, Promise<unknown>>();
 
+/** the TopoJSON itself, fetched once — the features are cut from it, and
+ *  so is any mesh of its shared edges */
+export function loadTopology(fetch: Fetch, url: string): Promise<Topology> {
+	const key = url + '#topo';
+	if (!cache.has(key)) {
+		cache.set(
+			key,
+			fetch(url).then((r) => {
+				if (!r.ok) throw new Error(`${url}: ${r.status}`);
+				return r.json() as Promise<Topology>;
+			})
+		);
+	}
+	return cache.get(key) as Promise<Topology>;
+}
+
 async function load<T>(fetch: Fetch, url: string, object: string): Promise<T> {
 	if (!cache.has(url)) {
 		cache.set(
 			url,
-			fetch(url)
-				.then((r) => {
-					if (!r.ok) throw new Error(`${url}: ${r.status}`);
-					return r.json() as Promise<Topology>;
-				})
-				.then((topo) => feature(topo, topo.objects[object]))
+			loadTopology(fetch, url).then((topo) => feature(topo, topo.objects[object]))
 		);
 	}
 	return cache.get(url) as Promise<T>;
 }
 
+export const PE_TOPO_URL = '/geo/pe.topo.json';
+
 export const loadPe = (fetch: Fetch) =>
-	load<FeatureCollection<MultiPolygon, PeProps>>(fetch, '/geo/pe.topo.json', 'pe');
+	load<FeatureCollection<MultiPolygon, PeProps>>(fetch, PE_TOPO_URL, 'pe');
 
 export const loadPeHires = (fetch: Fetch) =>
 	load<FeatureCollection<MultiPolygon, PeProps>>(fetch, '/geo/pe_hires.topo.json', 'pe');

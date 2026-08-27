@@ -10412,3 +10412,29 @@ so all 74 answer, `onEmptyClick` covers the sea, Esc too). Verified in
 the browser: Attica's central sector grows from 7 × 9 px to 33 × 43 on the
 click and the frame comes back on a click on the sea; a non-project unit
 at rest does nothing.
+
+**Twenty-first round the same day (user).** On the card map only: (1)
+**the outlines are the περιφέρειες', not the Π.Ε.'s.** No new geometry —
+PaperMap gains `outlineBy`, a grouping function; the Π.Ε. polygons then
+draw no border of their own (hover and focus included; a hot group is a
+tint of the fill instead) and a MESH cut from the Π.Ε. topology's shared
+edges is drawn on top, keeping only the edges between different groups
+plus the coast (`topojson.mesh` with `a === b || group(a) !== group(b)`;
+the topology is now memoised in `useGeo.loadTopology` so the features
+and the mesh come from one fetch). Every other map is untouched. (2)
+**The burnt areas are from 2021 on** — the scheme's own era (the
+13.08.2021 ΠΝΠ) — through a card-only filter (`CARD_FIRES_FROM`), and the
+key's year is read off the scars actually drawn, so it now says 2021
+because that is what is shown, not because it was typed.
+
+**Twenty-second round the same day (user).** On the card map only: the
+hover cards — a scar's «year · ha», a dot's company — sit in the
+bottom-RIGHT corner, away from the key at the bottom-left, and in the
+key's own size (11 px on 14,4 px lines, a slim box): PaperMap gains
+`tipDefaultCorner` and `tipCompact`, and `DotLayer`'s own `tipCorner`
+learns `bottom-right` (it passes its corner explicitly, so a map default
+alone did not move the dots' cards). The dev frame picker is removed from
+the card now that it has chosen the frame — PaperMap keeps `unclamped`
+and the `bounds` readout for the next time. A hovered project region is
+a GREY a shade darker than the sea (#e6e6e6 on the #f2f2f2 panel,
+`--land-hot`), not the section green.

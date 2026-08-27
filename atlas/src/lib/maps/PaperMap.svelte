@@ -10,7 +10,7 @@
 		 *  ✕ and makes Esc / the ✕ call `onClose` (user, 2026-08-21) */
 		showTip: (
 			html: string,
-			opts?: { pinned?: boolean; onClose?: () => void; corner?: 'bottom-left' | 'top-left' }
+			opts?: { pinned?: boolean; onClose?: () => void; corner?: 'bottom-left' | 'top-left' | 'bottom-right' }
 		) => void;
 		hideTip: () => void;
 	}
@@ -51,6 +51,9 @@
 	} from 'd3-zoom';
 	import type { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 	import type { Snippet } from 'svelte';
+	import { mesh } from 'topojson-client';
+	import type { MultiLineString } from 'geojson';
+	import { loadTopology, PE_TOPO_URL } from './useGeo';
 	import { loadMuniBorders, loadPe, loadPeHires, type PeProps, loadNeighbours, type NeighbourProps,
 	nearParts
 } from './useGeo';
@@ -136,6 +139,17 @@
 		 *  and dragged anywhere; the frame picker's mode (2026-08-27), never
 		 *  a reader's */
 		unclamped?: boolean;
+		/** draw only the borders between the GROUPS this returns (plus the
+		 *  coast), never the units' own — the sponsored card's map shows the
+		 *  περιφέρειες' outlines, not the Π.Ε.'s (user, 2026-08-27); a group
+		 *  hover then tints the fill instead of stroking the units */
+		outlineBy?: ((pe: string) => string | null) | null;
+		/** where a hover card lands unless the caller says otherwise — the
+		 *  sponsored card's map keeps its key bottom-left, so its cards go
+		 *  bottom-RIGHT (user, 2026-08-27) */
+		tipDefaultCorner?: 'bottom-left' | 'top-left' | 'bottom-right';
+		/** cards in the key's own size (11 px) rather than the frame's */
+		tipCompact?: boolean;
 	}
 
 	/** hovered group key (peGroup mode): every member lights together */
@@ -166,7 +180,10 @@
 		relief = null,
 		context = true,
 		panAtRest = true,
-		unclamped = false
+		unclamped = false,
+		outlineBy = null,
+		tipDefaultCorner = 'bottom-left',
+		tipCompact = false
 	}: Props = $props();
 
 	type PeFeature = Feature<MultiPolygon, PeProps>;
@@ -175,6 +192,23 @@
 	// on FeatureCollections make d3-geo read every coordinate through a
 	// getter (hundreds of ms per mount, heavy GC)
 	let coarse = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
+	/** the group borders + coast, cut once from the topology's shared edges */
+	let outline = $state.raw<MultiLineString | null>(null);
+	$effect(() => {
+		const by = outlineBy;
+		if (!by) {
+			outline = null;
+			return;
+		}
+		loadTopology(fetch, PE_TOPO_URL).then((topo) => {
+			const obj = topo.objects.pe as Parameters<typeof mesh>[1];
+			outline = mesh(topo, obj, (a, b) => {
+				const pa = (a as { properties?: PeProps }).properties?.pe ?? '';
+				const pb = (b as { properties?: PeProps }).properties?.pe ?? '';
+				return a === b || by(pa) !== by(pb);
+			}) as MultiLineString;
+		});
+	});
 	let hires = $state.raw<FeatureCollection<MultiPolygon, PeProps> | null>(null);
 	let muni = $state.raw<FeatureCollection<GeoJSON.MultiLineString, { pe: string }> | null>(null);
 	// the land around Greece — scenery, drawn first and never interactive
@@ -574,21 +608,19 @@
 	// may ask for the top-left so two kinds of card never share a corner
 	// (the contract map: authority seats top-left, δήμοι bottom-left — user,
 	// 2026-08-21)
-	let tipCorner = $state<'bottom-left' | 'top-left'>('bottom-left');
-	function showTip(
-		html: string,
-		opts?: { pinned?: boolean; onClose?: () => void; corner?: 'bottom-left' | 'top-left' }
-	) {
+	type TipCorner = 'bottom-left' | 'top-left' | 'bottom-right';
+	let tipCorner = $state<TipCorner>('bottom-left');
+	function showTip(html: string, opts?: { pinned?: boolean; onClose?: () => void; corner?: TipCorner }) {
 		tipHtml = html;
 		tipPinned = !!opts?.pinned;
 		tipOnClose = opts?.onClose ?? null;
-		tipCorner = opts?.corner ?? 'bottom-left';
+		tipCorner = opts?.corner ?? tipDefaultCorner;
 	}
 	function hideTip() {
 		tipHtml = '';
 		tipPinned = false;
 		tipOnClose = null;
-		tipCorner = 'bottom-left';
+		tipCorner = tipDefaultCorner;
 	}
 	function regionEnter(pe: string) {
 		if (!tipOf) return;
@@ -667,6 +699,7 @@
 						class:focused={f.properties.pe === focusPe}
 						class:clickable={canClick}
 						class:inert
+						class:noline={!!outlineBy}
 						class:grouphot={!!peGroup && grp != null && grp === hovGroup}
 						data-pe={f.properties.pe}
 						d={dOf(f)}
@@ -705,6 +738,9 @@
 						{/if}
 					{/each}
 				{/if}
+				{#if outline && path}
+					<path class="outline" d={path(outline) ?? ''} />
+				{/if}
 				{#if overlay && projection}
 					{@render overlay(ctx)}
 				{/if}
@@ -731,7 +767,13 @@
 		</div>
 	{/if}
 	{#if tipHtml}
-		<div class="tip item" class:pinned={tipPinned} class:topleft={tipCorner === 'top-left'}>
+		<div
+			class="tip item"
+			class:pinned={tipPinned}
+			class:topleft={tipCorner === 'top-left'}
+			class:bottomright={tipCorner === 'bottom-right'}
+			class:compact={tipCompact}
+		>
 			<!-- eslint-disable-next-line svelte/no-at-html-tags — tip HTML is built by our own code from DB values -->
 			{@html tipHtml}
 			{#if tipPinned}
@@ -834,6 +876,25 @@
 		stroke: var(--ink);
 		stroke-width: 1.6;
 	}
+	/* outline mode: the units draw no border of their own — hover and
+	   focus included — and a hot group shows as a tint of the fill */
+	.region.noline,
+	.region.noline:hover,
+	.region.noline.inert:hover,
+	.region.noline.grouphot,
+	.region.noline.focused {
+		stroke: none;
+	}
+	.region.noline.grouphot {
+		fill: var(--land-hot, #e6e6e6);
+	}
+	.outline {
+		fill: none;
+		stroke: var(--line-strong);
+		stroke-width: var(--region-line-w, 0.6);
+		vector-effect: non-scaling-stroke;
+		pointer-events: none;
+	}
 	.muni {
 		fill: none;
 		stroke: var(--ink-faint);
@@ -922,6 +983,18 @@
 	.tip.item.topleft {
 		top: var(--sp-2);
 		bottom: auto;
+	}
+	.tip.item.bottomright {
+		left: auto;
+		right: var(--sp-2);
+	}
+	/* the key's own size: 11 px on 14,4 px lines, a slimmer box */
+	.tip.compact {
+		font-size: 11px;
+		line-height: 14.4px;
+		padding: 2px 6px;
+		border-radius: 3px;
+		max-width: 16rem;
 	}
 	/* a held (clicked) card: white rule on top and a ✕ — hover cards have neither */
 	.tip.pinned {
