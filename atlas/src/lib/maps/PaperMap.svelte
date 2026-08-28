@@ -700,6 +700,7 @@
 						class:clickable={canClick}
 						class:inert
 						class:noline={!!outlineBy}
+						class:choro={!!colorOf}
 						class:grouphot={!!peGroup && grp != null && grp === hovGroup}
 						data-pe={f.properties.pe}
 						d={dOf(f)}
@@ -823,7 +824,8 @@
 	}
 	.map {
 		position: relative;
-		background: linear-gradient(180deg, #f9f6ec, #f3ecdb);
+		/* the sea: the site's one grey, never the old cream (2026-08-28) */
+		background: #f2f2f2;
 		/* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
@@ -883,9 +885,14 @@
 	.region.noline.inert:hover,
 	.region.noline.grouphot,
 	.region.noline.focused {
-		stroke: none;
+		/* none — unless the caller names a colour: a choropleth's grey
+		   units need a white seam to be told apart (user, 2026-08-28) */
+		stroke: var(--unit-line, none);
+		stroke-width: var(--unit-line-w, var(--region-line-w, 0.6));
 	}
-	.region.noline.grouphot {
+	/* a hot group is a tint — unless the fill IS the data (a choropleth),
+	   which a hover must never repaint */
+	.region.noline.grouphot:not(.choro) {
 		fill: var(--land-hot, #e6e6e6);
 	}
 	.outline {

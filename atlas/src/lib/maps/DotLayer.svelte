@@ -45,7 +45,7 @@
 		points,
 		r = 4,
 		fillOf = () => 'var(--accent)',
-		stroke = 'rgba(42,33,24,.45)',
+		stroke = 'rgba(0,0,0,.45)',
 		tipOf,
 		hrefOf,
 		opacity = 0.85,

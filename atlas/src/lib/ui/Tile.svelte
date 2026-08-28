@@ -21,6 +21,7 @@
 		controls,
 		fit = false,
 		headOver = false,
+		bleed = false,
 		tight = false,
 		children
 	}: {
@@ -42,6 +43,10 @@
 		/** the label and the ⓘ sit ON the drawing, which then fills the
 		 *  whole tile — the card's map (user, 2026-08-27) */
 		headOver?: boolean;
+		/** the body may draw into the tile's padding (the section still
+		 *  clips at its border) — the stacked column's counts and names
+		 *  (user, 2026-08-28) */
+		bleed?: boolean;
 		/** 5 px at the foot instead of 12 — the user's WHAT TYPES panel has
 		 *  its last bar 5 px above the edge */
 		tight?: boolean;
@@ -52,7 +57,7 @@
 	let showLegend = $state(false);
 </script>
 
-<section class="tile" class:fit class:over={headOver} class:tight>
+<section class="tile" class:fit class:over={headOver} class:tight class:bleed>
 	<div class="head">
 		<h3 class="tt">
 			{#if href}<a {href}>{title}</a>{:else}{title}{/if}
@@ -167,6 +172,9 @@
 	.tile.fit .body {
 		overflow: hidden;
 	}
+	.tile.bleed .body {
+		overflow: visible;
+	}
 	/* the map's tile: the drawing fills it and the label rides on top */
 	.tile.over {
 		position: relative;
@@ -184,8 +192,10 @@
 	.tile.tight {
 		padding-bottom: 5px;
 	}
+	/* the links and buttons on the overlaid head answer the pointer — the
+	   page's own controls included, hence :global */
 	.tile.over .head :global(a),
-	.tile.over .head button {
+	.tile.over .head :global(button) {
 		pointer-events: auto;
 	}
 	.tile.over .body {

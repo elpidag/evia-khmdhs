@@ -1530,9 +1530,28 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `ui/expanded.ts` reads the state from any frame anchor or chart lens).
   The site has NO footer since the same day (user). Map-tile wrapper class
   is `.tilefill` — `.fill` is the direct-award bar's.
-  Tiles: **the sponsored card is a THREE-COLUMN composition since the
-  seventh round of 2026-08-27** (`DatasetCard layout="triple"`, that card
-  only; DATA_DECISIONS): text 549 | a 137 px KPI row (`ui/KpiRich.svelte`,
+  Tiles: **the sponsored AND Anti-nero cards are THREE-COLUMN
+  compositions** (`DatasetCard layout="triple"` with `cols`/`midRows`/
+  `rightRows`/gaps as props and an optional `kpiBlock`; the Anti-nero
+  card since 2026-08-28 (second round): the sponsored card's sizing —
+  three EQUAL-width `KpiRich` cards over a `.duo` row — AWARD
+  PROCEDURES as ONE stacked column (`charts/StackColumn variant="card"`:
+  smallest on top, grey ramp, count left / lower-case name right;
+  `ColumnBars` parked) at the first KPI card's width beside DIRECT
+  AWARDS (395,2) — over CONTRACT VALUES (390, the year key under the
+  title, the swarm pushed right `padLeftFrac` 0,1285, median in
+  `--c-fire`) in the 711 px middle column, RANKING OF COMPANIES (327,2, the top TEN from the overview's 25-row
+  `ranking`, WHAT TYPES OF COMPANIES' rule: rows sharing the height, 25 px
+  bars 3,3 apart with 10 px names) over ALLOCATION OF FUNDING (605,3, 20,5
+  below; NO neighbours, the shared
+  `lib/maps/cardFrame.ts` frame, region outlines + WHITE unit seams via
+  PaperMap `--unit-line`, drill, the two lenses STACKED under the title
+  in full wording, the user's key bottom-left on `RAMP_WORKS`, both on
+  the title's A, the frame slid 0,264° west, cards bottom-right) in the 516 px right one — the user's own Illustrator
+  edit of the exported page, DATA_DECISIONS 2026-08-28; fire season =
+  `--c-fire-season` everywhere, thresholds `--c-fire`; `kpiSpan`/`kpiRows`/`kpiCols`, `charts/ColumnBars`
+  and `BarH compact` exist; ΔΑΣΕ stays on the default layout). The sponsored one since the seventh
+  round of 2026-08-27 (DATA_DECISIONS): text 549 | a 137 px KPI row (`ui/KpiRich.svelte`,
   unequal widths, the user's sentences over computed numbers) above the
   tall TIMELINE 703×795 | TYPE OF COMPANIES … 520×412 above MAP 521×521 —
   the timeline drawing ALL 68 projects with bars of one height
@@ -1698,7 +1717,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (the at-rest hue grouping is gone by decision — the dashed hover links
   carry it), HQ dots #2b2b2b, Sankey/Bipartite/DisbursementCurves accents →
   ink, `.antp` overrides `--c-threshold`. The orange `--ramp-works-*` tokens
-  stay as the webui-ported reference, now unused. CONTRACT VALUES is the
+  were DELETED on 2026-08-28 (user: no brown or beige anywhere — see
+  DATA_DECISIONS that day: warm inks/papers neutralised, `--accent` is the
+  ink, the ELEVATION relief toggle parked). CONTRACT VALUES is the
   ΔΑΣΕ merged frame one dataset over: dots/brackets toggle on ONE
   pure-doubling axis (`queries_extra.antinero_value_histogram`,
   `value_histogram` on `/api/antinero/overview`, pinned: Σ counts == 245),

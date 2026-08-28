@@ -416,6 +416,9 @@ def antinero_overview(kh: sqlite3.Connection,
         # the same money attributed to the firms behind the joint
         # ventures — the second view of the ranking (2026-08-20)
         "member_firms": antinero_member_firms(kh, limit=10),
+        # a longer ranking for the dataset CARD, which has the room for
+        # more than ten (user, 2026-08-28); the frame keeps its ten
+        "ranking": antinero_top_contractors(kh, limit=25),
         "consortiums": antinero_consortium_facts(kh),
         "top_authorities": q.top_authorities(kh, limit=5),
         "top_signers": q.top_signers(kh, limit=5),

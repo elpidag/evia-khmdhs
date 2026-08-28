@@ -25,13 +25,24 @@
 		params,
 		kpis = [],
 		richKpis = [],
+		kpiBlock,
 		layout = 'default',
+		cols = [549, 711, 516],
+		midRows = [1],
+		rightRows = [3745, 5631],
+		midGap = 17,
+		rightGap = 15.4,
+		kpiSpan = false,
+		kpiRows = 1,
+		kpiCols = 0,
 		hint = '',
 		text,
 		tiles,
 		tileMain,
+		tileMain2,
 		tileA,
 		tileB,
+		tileC,
 		more
 	}: {
 		ds: DatasetKey;
@@ -40,24 +51,54 @@
 		kpis?: KpiCard[];
 		/** the sponsored card's richer cards (Artboard 4, user 2026-08-27) */
 		richKpis?: RichKpi[];
-		/** «triple» is the sponsored card's three columns: the text, then
-		 *  the KPI row over one tall tile, then two tiles stacked */
+		/** «triple» is the three-column card: the text, then the KPI row over
+		 *  one or two tiles, then two or three tiles stacked (the sponsored
+		 *  card's Artboard 4, the Anti-nero card's Artboard 6) */
 		layout?: 'default' | 'triple';
+		/** a page's own KPI block in the 137 px row, instead of KpiRich */
+		kpiBlock?: Snippet;
+		/** the three columns' widths in the artboard's px (the gaps are
+		 *  25 and 17 between them, all as fractions of the card's width) */
+		cols?: [number, number, number];
+		/** the middle column's tile heights under the KPI row, and the right
+		 *  column's, as proportions */
+		midRows?: number[];
+		rightRows?: number[];
+		/** the row gaps in px */
+		midGap?: number;
+		rightGap?: number;
+		/** the KPI row across BOTH chart columns (the Anti-nero card, user
+		 *  2026-08-27) instead of over the middle one */
+		kpiSpan?: boolean;
+		/** the KPI block as TWO rows of full-height cards (2028-08-28), and
+		 *  how many cards per row */
+		kpiRows?: 1 | 2;
+		kpiCols?: number;
 		/** the content file behind the narrative, shown while it is empty */
 		hint?: string;
 		text: Snippet;
 		/** three Tile components, in reading order (default layout) */
 		tiles?: Snippet;
-		/** the triple layout's tiles: the tall middle one, then the two on
-		 *  the right, top and bottom */
+		/** the triple layout's tiles: the middle column's one or two under
+		 *  the KPI row, then the right column's two or three */
 		tileMain?: Snippet;
+		tileMain2?: Snippet;
 		tileA?: Snippet;
 		tileB?: Snippet;
+		tileC?: Snippet;
 		more: Snippet;
 	} = $props();
 
 	const sym = $derived(symbolFor(ds));
 	const expanded = $derived(isExpanded(page.url, params));
+	/** the triple grid's columns: the artboard's widths and the 25 / 17 px
+	 *  gaps, all as fractions of the card, so the card scales as one */
+	const colStyle = $derived.by(() => {
+		const total = cols[0] + 25 + cols[1] + 17 + cols[2];
+		const pc = (v: number) => `${((100 * v) / total).toFixed(3)}%`;
+		return [pc(cols[0]), pc(25), pc(cols[1]), pc(17), pc(cols[2])].join(' ');
+	});
+	const rowsOf = (rs: number[]) => rs.map((r) => `minmax(0, ${r}fr)`).join(' ');
 
 	// a tile's title links to its frame: the frames mount with the switch,
 	// so the scroll waits for them; the way back lands on the card's top
@@ -82,7 +123,22 @@
 		{@render more()}
 	</div>
 {:else if layout === 'triple'}
-	<div class="dcard triple" style:--card-accent={sym.color}>
+	<div
+		class="dcard triple"
+		class:span={kpiSpan}
+		style:--card-accent={sym.color}
+		style:--cols={colStyle}
+		style:--mid-rows={rowsOf(midRows)}
+		style:--right-rows={rowsOf(rightRows)}
+		style:--mid-gap="{midGap}px"
+		style:--right-gap="{rightGap}px"
+		style:--mid-gap-n={midGap}
+		style:--right-gap-n={rightGap}
+		style:--kpi-h={kpiRows === 2
+			? `calc(2 * clamp(104px, 12.7vh, 137px) + ${midGap}px)`
+			: 'clamp(104px, 12.7vh, 137px)'}
+		style:--kpi-row-gap="{midGap}px"
+	>
 		<div class="side">
 			<div class="who big">
 				<DatasetSymbol key={ds} size="clamp(96px, 8.47vw, 162.6px)" active />
@@ -99,13 +155,24 @@
 			</div>
 			<a class="more" href={moreHref(page.url)}>explore more</a>
 		</div>
+		{#if kpiSpan}
+			<div class="kpis wide">
+				{#if kpiBlock}{@render kpiBlock()}{:else}<KpiRich cards={richKpis} color={sym.color} columns={kpiCols} />{/if}
+			</div>
+		{/if}
 		<div class="mid">
-			<div class="kpis"><KpiRich cards={richKpis} color={sym.color} /></div>
+			{#if !kpiSpan}
+				<div class="kpis">
+					{#if kpiBlock}{@render kpiBlock()}{:else}<KpiRich cards={richKpis} color={sym.color} columns={kpiCols} />{/if}
+				</div>
+			{/if}
 			{@render tileMain?.()}
+			{@render tileMain2?.()}
 		</div>
 		<div class="rightcol">
 			{@render tileA?.()}
 			{@render tileB?.()}
+			{@render tileC?.()}
 		</div>
 	</div>
 {:else}
@@ -302,7 +369,7 @@
 		   516 — the 3 px the narrower gap frees and 5 px of the right column
 		   go to the MIDDLE column (user, 2026-08-27) — as fractions of the
 		   card's 1818,5 */
-		grid-template-columns: 30.19% 1.375% 39.098% 0.935% 28.402%;
+		grid-template-columns: var(--cols);
 		grid-template-rows: none;
 		grid-template-areas: none;
 		column-gap: 0;
@@ -322,19 +389,44 @@
 		display: grid;
 		/* the KPI row keeps its 137; whatever the narrower gaps free goes
 		   to the timeline (user, 2026-08-27) */
-		grid-template-rows: clamp(104px, 12.7vh, 137px) minmax(0, 1fr);
-		row-gap: 17px;
+		grid-template-rows: var(--kpi-h, clamp(104px, 12.7vh, 137px)) var(--mid-rows);
+		/* the artboard's gap at 1080 px, shrinking with a shorter window
+		   (1 px of the artboard = 0.0926 vh) — the same rule in both columns */
+		row-gap: min(calc(var(--mid-gap-n) * 1px), calc(var(--mid-gap-n) * 0.0926vh));
 		min-height: 0;
 	}
 	.triple .rightcol {
 		display: grid;
 		/* the user's edit of 2026-08-27: 374,5 above, 563,1 below, 15,4 apart */
-		grid-template-rows: minmax(0, 3745fr) minmax(0, 5631fr);
-		row-gap: clamp(8px, 1.43vh, 15.4px);
+		grid-template-rows: var(--right-rows);
+		row-gap: min(calc(var(--right-gap-n) * 1px), calc(var(--right-gap-n) * 0.0926vh));
 		min-height: 0;
 	}
 	.triple .kpis {
 		grid-area: auto;
+	}
+	/* the spanning form: the KPI row is the grid's first row across the two
+	   chart columns, the side column spans both rows */
+	.dcard.triple.span {
+		grid-template-rows: var(--kpi-h, clamp(104px, 12.7vh, 137px)) minmax(0, 1fr);
+		row-gap: var(--mid-gap);
+	}
+	.triple.span .side {
+		grid-row: 1 / 3;
+	}
+	.triple.span .kpis.wide {
+		grid-column: 3 / 6;
+		grid-row: 1;
+		min-height: 0;
+	}
+	.triple.span .mid {
+		grid-column: 3;
+		grid-row: 2;
+		grid-template-rows: var(--mid-rows);
+	}
+	.triple.span .rightcol {
+		grid-column: 5;
+		grid-row: 2;
 	}
 	/* the symbol with the stream's name beside it, in the section hue */
 	.who.big {
@@ -370,8 +462,10 @@
 		}
 		.triple .side,
 		.triple .mid,
-		.triple .rightcol {
+		.triple .rightcol,
+		.triple.span .kpis.wide {
 			grid-column: 1;
+			grid-row: auto;
 		}
 		.triple .mid,
 		.triple .rightcol {

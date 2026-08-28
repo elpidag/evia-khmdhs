@@ -104,7 +104,11 @@
 				<text class="count" x={M.left + i * bw + bw / 2} y={yOf(c) - 4}>{c}</text>
 			{/if}
 			{#if i % 2 === 0 || n < 10}
-				<text class="bin" x={M.left + i * bw + bw / 2} y={height - 22}>{labels[i]}</text>
+				<!-- a narrow plot (the card tile) staggers every other PRINTED
+				     label onto a second line so neighbours never touch
+				     (2026-08-28); with ≥10 bins only the even ones print -->
+				{@const step = n < 10 ? 1 : 2}
+				<text class="bin" x={M.left + i * bw + bw / 2} y={height - (bw * step < 44 && (i / step) % 2 ? 11 : 22)}>{labels[i]}</text>
 			{/if}
 		{/each}
 
@@ -112,7 +116,9 @@
 			{@const tx = thresholdX(th.v)}
 			{#if tx !== null}
 				<line class="threshold" x1={tx} x2={tx} y1={M.top - 4} y2={height - M.bottom} />
-				<text class="threshold-label" x={tx + 4} y={REF_Y}>{th.label}</text>
+				<!-- centred on its line, 5 px above it (user, 2026-08-28: «closer to
+				     the dashed lines») -->
+				<text class="threshold-label" x={tx} y={M.top - 9} text-anchor="middle">{th.label}</text>
 			{/if}
 		{/each}
 

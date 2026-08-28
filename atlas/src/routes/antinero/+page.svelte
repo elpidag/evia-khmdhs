@@ -1,5 +1,6 @@
 <script lang="ts">
 	import BarH from '$lib/charts/BarH.svelte';
+	import StackColumn from '$lib/charts/StackColumn.svelte';
 	import StackedShareBar from '$lib/charts/StackedShareBar.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import SideNote from '$lib/ui/SideNote.svelte';
@@ -24,12 +25,13 @@
 	} from '$lib/transforms/chordSides';
 	import { SCOPE_COLORS, SCOPE_LABELS, SCOPE_ORDER } from '$lib/charts/scopeColors';
 	import { unitEn } from '$lib/transforms/names';
-	import { ruLabel } from '$lib/transforms/regions';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import DatasetCard from '$lib/ui/DatasetCard.svelte';
 	import Tile from '$lib/ui/Tile.svelte';
+	import { CARD_BOUNDS } from '$lib/maps/cardFrame';
+	import { pesOfRegion, regionOfPe, ruLabel } from '$lib/transforms/regions';
 	import Text from '$content/datasets/antinero.md';
 	import { ANTINERO_PARAMS } from '$lib/transforms/legacyRoutes';
 	import FlowMap from '$lib/sections/FlowMap.svelte';
@@ -73,6 +75,74 @@
 	let tileH = $state(0);
 	// the map tile: € of works by regional unit, the allocation map's
 	// left half in one tone
+	/** the card's allocation map switches between the two € allocations
+	 *  of the full frame — by the works' regional unit and by the
+	 *  contractor's registered office (Artboard 6's TOGGLE) */
+	let allocKind = $state<'work' | 'home'>('work');
+	const allocChoro = $derived.by(() => {
+		if (!map) return null;
+		const rows = allocKind === 'work' ? map.work_regions : map.home_regions;
+		const by = new Map(rows.map((r) => [r.pe, r.split_eur]));
+		const max = Math.max(1, ...rows.map((r) => r.split_eur));
+		return { by, max };
+	});
+	let valH = $state(0);
+	/** the direct-award histogram's own tile */
+	let histH = $state(0);
+	/** the card map's drill (the private companies' map's manners): a
+	 *  περιφέρεια with money in the current allocation answers a click,
+	 *  the map zooms to it, any click while zoomed returns */
+	let selAnti = $state<string | null>(null);
+	const selAntiPes = $derived(selAnti ? pesOfRegion(selAnti) : null);
+	/** the card map's frame: the shared card frame slid WEST by 0,264° —
+	 *  13 px at the card's width, the same scale — so the country sits to
+	 *  the right and the title, the toggle and the key have their room at
+	 *  the left, as the user's drawing has it (2026-08-28: their Greece
+	 *  spans 1.452 → 1.887 against the frame's 1.439 → 1.874) */
+	const ALLOC_SHIFT = 0.264;
+	/** …and a further degree of room at the west, so the toggle sits on
+	 *  sea, not on the country (user, same day) — the frame is fitted by
+	 *  width, so the country also draws a little smaller */
+	const ALLOC_WEST = 1.0;
+	const ALLOC_BOUNDS: [[number, number], [number, number]] = [
+		[CARD_BOUNDS[0][0] - ALLOC_SHIFT - ALLOC_WEST, CARD_BOUNDS[0][1]],
+		[CARD_BOUNDS[1][0] - ALLOC_SHIFT, CARD_BOUNDS[1][1]]
+	];
+	/** the card map's colours: the site's grey ramp on the sqrt scale, as
+	 *  ALLOCATION OF FUNDING draws it — the key's swatches ARE these */
+	const cardChoro = $derived(makeChoro(RAMP_WORKS, allocChoro?.max ?? 0));
+	const regionEur = $derived.by(() => {
+		const m = new Map<string, number>();
+		if (!allocChoro) return m;
+		for (const [pe, v] of allocChoro.by) {
+			const r = regionOfPe(pe);
+			if (r && v > 0) m.set(r, (m.get(r) ?? 0) + v);
+		}
+		return m;
+	});
+	/** the four KPI cards, in the private companies' card's dress (user,
+	 *  2026-08-27): every number from the payload, the artboard's words
+	 *  where it gave them, the years read off the yearly series */
+	const kpiRich = $derived([
+		{
+			w: 238.6,
+			parts: [{ num: grInt(o.kpis.n_contracts), word: 'contracts' }],
+			lines: [
+				'in the scope of the programme,',
+				`signed between ${o.yearly[0]?.year ?? ''} and ${o.yearly[o.yearly.length - 1]?.year ?? ''}`
+			]
+		},
+		{
+			w: 220.6,
+			parts: [{ num: grInt(o.kpis.n_contractors), word: 'contractors' }],
+			lines: ['private companies and joint ventures', 'that signed the contracts']
+		},
+		{
+			w: 220.6,
+			parts: [{ num: eurShort(o.kpis.stated_eur).toLowerCase() }],
+			lines: ['total stated value of contracts', '(excl. VAT)']
+		}
+	]);
 	const tileChoro = $derived.by(() => {
 		if (!map) return null;
 		const by = new Map(map.work_regions.map((r) => [r.pe, r.split_eur]));
@@ -237,6 +307,19 @@
 		// degrade to the contracted view when the API predates this layer,
 		// rather than throwing on an undefined list
 		}[] = (rankMode === 'firm' ? o.member_firms : o.top_contractors) ?? o.top_contractors;
+		return toBarRows(rows);
+	});
+	/** a contractor row of the payload as a BarH row */
+	function toBarRows(
+		rows: {
+			vat_number: string;
+			name: string;
+			n_contracts: number;
+			total_eur: number;
+			via_eur?: number;
+			n_ventures?: number;
+		}[]
+	) {
 		return rows.map((c) => ({
 			label: c.name,
 			value: c.total_eur,
@@ -247,7 +330,22 @@
 					} joint venture${(c.n_ventures ?? 0) > 1 ? 's' : ''}`
 				: `${c.n_contracts} contracts`
 		}));
-	});
+	}
+	/** the card's ranking shows the rows its box has room for, out of the
+	 *  payload's longer list (25; the frame's ten where the API predates
+	 *  it) — never a cut row */
+	let rankH = $state(0);
+	/** WHAT TYPES OF COMPANIES' rule (user, 2026-08-28): the TEN rows share
+	 *  the tile's height, 3,3 px apart, each bar the row's height capped at
+	 *  25 px — the tile is sized to exactly that at 1920 × 1080 (327,2), so
+	 *  the bars are the other card's 25 px, and in a shorter window they
+	 *  shrink together instead of dropping out; the height the ranking no
+	 *  longer needs went to the map */
+	const RANK_N = 10;
+	const RANK_GAP = 3.3;
+	const cardRanking = $derived(toBarRows(o.ranking ?? o.top_contractors));
+	const rankRows = $derived(cardRanking.slice(0, RANK_N));
+	const rankBar = $derived(Math.max(10, Math.min(25, (rankH - (RANK_N - 1) * RANK_GAP) / RANK_N)));
 	// AWARD PROCEDURES in the Directive's English (the registry strings are
 	// Greek); the direct-award row is the one to point at
 	const procRows = $derived(
@@ -258,6 +356,20 @@
 			direct: p.label.includes('Απευθείας')
 		}))
 	);
+	/** the card's AWARD PROCEDURES as ONE stacked column (user, 2026-08-28,
+	 *  the WOB dashboard's form): the same rows as segments of the € total,
+	 *  the count as the value's second line, the direct-award segment at
+	 *  full strength */
+	const procCols = $derived(
+		o.procedures.map((p) => ({
+			label: procedureEn(p.label),
+			value: p.eur,
+			sub: `${grInt(p.n_contracts)} contracts`,
+			direct: p.label.includes('Απευθείας')
+		}))
+	);
+	let procW = $state(0);
+	let procH = $state(0);
 	const procTotalEur = $derived(o.procedures.reduce((s, p) => s + p.eur, 0));
 	const procTotalN = $derived(o.procedures.reduce((s, p) => s + p.n_contracts, 0));
 	const directN = $derived(o.procedures.find((p) => p.label.includes('Απευθείας'))?.n_contracts ?? 0);
@@ -552,15 +664,153 @@
 	/>
 </svelte:head>
 
+{#snippet allocSwitch()}
+	<!-- the user's edit (2026-08-28): the two lenses stacked under the
+	     title, each in its full wording, the chosen one black -->
+	<div class="allocsw" role="group" aria-label="Allocation by">
+		<button class:on={allocKind === 'work'} onclick={() => (allocKind = 'work')}
+			>by location of the contracts</button
+		>
+		<button class:on={allocKind === 'home'} onclick={() => (allocKind = 'home')}
+			>by registered office of the awarded contractors</button
+		>
+	</div>
+{/snippet}
 <div class="antp">
 <DatasetCard
 	ds="antinero"
 	params={PARAMS}
-	kpis={kpiCards}
+	layout="triple"
+	richKpis={kpiRich}
+	cols={[549, 711, 516]}
+	midRows={[402.2, 383]}
+	rightRows={[327.2, 605.3]}
+	midGap={15.4}
+	rightGap={20.5}
 	hint="atlas/src/content/datasets/antinero.md"
 >
 	{#snippet text()}
 		<Text />
+	{/snippet}
+	{#snippet tileB()}
+		<Tile title="ALLOCATION OF FUNDING" href="#map" fit headOver>
+			<div class="tilefill map" bind:clientWidth={tileW} bind:clientHeight={tileH}>
+				{@render allocSwitch()}
+				{#if tileW && tileH && allocChoro}
+					<PaperMap
+						width={tileW}
+						height={tileH}
+						interactive={false}
+						fitBounds={ALLOC_BOUNDS}
+						fitPad={0}
+						context={false}
+						outlineBy={regionOfPe}
+						tipDefaultCorner="bottom-right"
+						tipCompact
+						colorOf={(pe) => cardChoro(allocChoro.by.get(pe) ?? 0)}
+						tipOf={(pe) =>
+							`<strong>${ruLabel(pe)}</strong> · ${eurShort(allocChoro.by.get(pe) ?? 0)}`}
+						peGroup={(pe) => {
+							const r = regionOfPe(pe);
+							if (selAnti) return r ?? pe;
+							return r && regionEur.has(r) ? r : null;
+						}}
+						onRegionClick={(pe) => {
+							if (selAnti) {
+								selAnti = null;
+								return;
+							}
+							const r = regionOfPe(pe);
+							if (r && regionEur.has(r)) selAnti = r;
+						}}
+						fitPesLive={selAntiPes}
+						onEmptyClick={() => (selAnti = null)}
+						onEscape={() => (selAnti = null)}
+					/>
+					<!-- the key as the user drew it (2026-08-28): 0 and the max on a
+					     line above the swatch bar, the sentence under it -->
+					<div class="mapkey left">
+						<div class="ends"><span>0</span><span class="max">{eurShort(allocChoro.max)}</span></div>
+						<span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span>
+						<div class="sent">€ of works — each contract's even share</div>
+					</div>
+				{/if}
+			</div>
+		</Tile>
+	{/snippet}
+	{#snippet tileMain()}
+		<!-- the row: AWARD PROCEDURES as one stacked column at the first KPI
+		     card's width, DIRECT AWARDS beside it (user, 2026-08-28) -->
+		<div class="duo">
+			<Tile title="AWARD PROCEDURES" href="#procedures" fit bleed>
+				<div class="tilefill procbody" bind:clientWidth={procW} bind:clientHeight={procH}>
+					{#if procW && procH}
+						<StackColumn
+							rows={procCols}
+							color="var(--c-antinero)"
+							width={procW}
+							height={procH}
+							highlight={(r) => !!(r as { direct?: boolean }).direct}
+							variant="card"
+							inset={16}
+							ariaLabel="Award procedures"
+						/>
+					{/if}
+				</div>
+			</Tile>
+		<Tile title="DIRECT AWARDS" href="#direct-awards" fit>
+				<div class="tilefill" bind:clientHeight={histH}>
+					{#if histH}
+						<LogHistogram
+							labels={(o.direct_awards.labels as string[]).map(bracket)}
+							counts={o.direct_awards.counts as number[]}
+							edges={o.direct_awards.edges as number[]}
+							color="var(--c-antinero)"
+							thresholds={miniThresholds}
+							height={histH}
+							note={false}
+						/>
+					{/if}
+				</div>
+			</Tile>
+		</div>
+	{/snippet}
+	{#snippet tileMain2()}
+		<Tile title="CONTRACT VALUES" href="#swarm" fit>
+			<div class="tilefill valbody" bind:clientHeight={valH}>
+				{#if swarm && swarmCols && valH}
+					<!-- the dots' greys are the years of signature: said in a key
+					     under the title (user, 2026-08-28) -->
+					<div class="yearkey">
+						{#each swarmYears as y (y)}
+							<span><i style:background={YEAR_GREYS[y]}></i>{y}</span>
+						{/each}
+					</div>
+					<BeeswarmCanvas
+						data={swarmCols}
+						edges={o.value_histogram.edges}
+						colors={yearGrey}
+						thresholds={miniThresholds}
+						linkBase="/antinero/contract/"
+						minHeight={Math.max(60, valH - 34)}
+						radius={Math.max(0.9, 3.1 * Math.min(1, (valH - 34) / 350))}
+						padLeftFrac={0.1285}
+						medianColor="var(--c-fire)"
+					/>
+				{/if}
+			</div>
+		</Tile>
+	{/snippet}
+	{#snippet tileA()}
+		<Tile title="RANKING OF COMPANIES" href="#top-contractors" fit>
+			<div class="tilefill rankbody" bind:clientHeight={rankH}>
+				{#if rankH}
+					<BarH rows={rankRows} color="var(--c-antinero)" inside compact barHeight={rankBar} gap={RANK_GAP} fontPx={10} valuesRight />
+				{/if}
+			</div>
+		</Tile>
+	{/snippet}
+	{#snippet more()}
 	<div class="about">
 		<div class="kicker">THE PROGRAMME</div>
 		<p>
@@ -616,46 +866,6 @@
 			</details>
 		{/if}
 	</div>
-	{/snippet}
-	{#snippet tiles()}
-		<Tile
-			title="MAP"
-			sub="stated net € by regional unit of the works"
-			hint="Each regional unit is shaded by the stated net € of the contracts working there — darker is more; a contract covering several units is split evenly between them. The full map adds the contractors' offices, the drill-down and the year maps."
-			href="#map"
-		>
-			<div class="tilefill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
-				{#if tileW && tileH && tileChoro}
-					<PaperMap
-						width={tileW}
-						height={tileH}
-						colorOf={(pe) => {
-							const v = tileChoro.by.get(pe) ?? 0;
-							return v ? `color-mix(in srgb, var(--c-antinero) ${Math.round(12 + 78 * Math.sqrt(v / tileChoro.max))}%, #fff)` : '#fff';
-						}}
-						tipOf={(pe) => `<strong>${ruLabel(pe)}</strong><br>${eurShort(tileChoro.by.get(pe) ?? 0)} of works`}
-					/>
-				{/if}
-			</div>
-		</Tile>
-		<Tile
-			title="RANKING OF COMPANIES"
-			sub="the ten contractors with the most stated net €"
-			hint="Bar length is the stated net € of the contracts each company signed; a contract signed by several firms is split evenly between them. The full frame has the by-member-firm view."
-			href="#top-contractors"
-		>
-			<BarH rows={topRows} color="var(--c-antinero)" inside barHeight={28} />
-		</Tile>
-		<Tile
-			title="MONEY PER YEAR"
-			sub="stated net € of the contracts signed in each year"
-			hint="One bar per year of signature, its length the stated net € of that year's contracts. The full frame adds the € paid lens."
-			href="#money-per-year"
-		>
-			<BarH rows={yearMoneyRows} color="var(--c-antinero)" inside barHeight={28} valuesRight />
-		</Tile>
-	{/snippet}
-	{#snippet more()}
 <ChartFrame title="PROGRAMME FIGURES" anchor="figures">
 	<div class="figures">
 		<div class="midcol">
@@ -912,6 +1122,7 @@
 						linkBase="/antinero/contract/"
 						minHeight={380}
 						radius={3.1}
+						medianColor="var(--c-fire)"
 						bind:plotHeight={dotsHeight}
 					/>
 				{:else}
@@ -1583,9 +1794,154 @@
 		position: absolute;
 		inset: 0;
 	}
+	/* the card map's manners, the private companies' map's: thinner lines,
+	   the key overlaid bottom-left, a grey hover on a plain region */
+	.tilefill.map {
+		--region-line-w: 0.35;
+		--context-line-w: 0.35;
+		--border-line-w: 0.6;
+		--land-hot: #e6e6e6;
+		/* the units' own borders in white: grey against grey needs a seam
+		   (user, 2026-08-28) */
+		--unit-line: #fff;
+		--unit-line-w: 0.45;
+	}
+	/* the key as the user drew it (2026-08-28): the ends of the scale on a
+	   line ABOVE a 128 px swatch bar with a ½ px black hairline, the
+	   sentence under it, 10 px lettering, 15 px in from the tile's edge */
+	.mapkey {
+		position: absolute;
+		bottom: 14px;
+		/* on the title's A (user, 2026-08-28): the title sits 9 px into
+		   the tile, the body 1 px in past the hairline */
+		left: 8px;
+		margin: 0;
+		padding: 0;
+		z-index: 2;
+		pointer-events: none;
+		font-family: var(--font-ui);
+		font-size: 10px;
+		line-height: 12px;
+		color: var(--ink);
+		font-variant-numeric: tabular-nums;
+	}
+	.mapkey .ends {
+		position: relative;
+		width: 128px;
+		height: 13px;
+	}
+	.mapkey .ends span {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		white-space: nowrap;
+	}
+	.mapkey .ends .max {
+		left: auto;
+		right: -33px;
+	}
+	.mapkey .swatches {
+		display: flex;
+		width: 128px;
+		box-sizing: border-box;
+		border: 0.5px solid #000;
+	}
+	.mapkey .swatches i {
+		display: block;
+		flex: 1 1 0;
+		height: 11.6px;
+	}
+	.mapkey .swatches i.empty {
+		background: var(--land-empty);
+	}
+	.mapkey .sent {
+		margin-top: 9px;
+		white-space: nowrap;
+	}
+	/* the lenses, stacked under the title at the top-left (user, 2026-08-28) */
+	.allocsw {
+		position: absolute;
+		top: 36.4px;
+		/* on the title's A (user, 2026-08-28) */
+		left: 8px;
+		z-index: 3;
+		display: flex;
+		flex-direction: column;
+		width: 127.7px;
+	}
+	.allocsw button {
+		font-family: var(--font-ui);
+		font-size: 10px;
+		line-height: 12px;
+		text-align: left;
+		padding: 1.6px 3.4px 2px;
+		background: #fff;
+		color: var(--ink);
+		border: none;
+		cursor: pointer;
+		min-height: 20px;
+	}
+	.allocsw button.on {
+		background: #111;
+		color: #fff;
+	}
+	/* AWARD PROCEDURES | DIRECT AWARDS: the first column IS a KPI card's
+	   width (a third of the row less its two gaps), the gap the KPI row's */
+	.duo {
+		display: grid;
+		/* the first column IS the first KPI card's width — 238,6 of the
+		   cards' 680 since 2026-08-28 (12 px more than an equal third, so
+		   the stacked column's lettering has its room) */
+		grid-template-columns: calc((100% - 2 * clamp(8px, 0.82vw, 15.8px)) * 238.6 / 679.8) minmax(0, 1fr);
+		/* the KPI cards' own column gap (0,82 vw = 15,7 at 1920), so the
+		   tile's edges meet the first card's */
+		column-gap: clamp(8px, 0.82vw, 15.8px);
+		min-height: 0;
+	}
+	.tilefill.procbody {
+		position: absolute;
+		/* the drawing spans the tile's padding on both sides: the counts
+		   left of the column and the names right of it use it, as the
+		   user's drawing does (Tile `bleed`) */
+		left: -16px;
+		right: -16px;
+	}
+	/* the histogram's bracket labels at 9 px in the narrower tile */
+	.duo .tilefill :global(.bin) {
+		font-size: 9px;
+	}
+	.tilefill.valbody,
+	.tilefill.rankbody {
+		position: absolute;
+		display: flex;
+		flex-direction: column;
+	}
+	.yearkey {
+		flex: none;
+		display: flex;
+		gap: 12px;
+		padding: 8px 0 2px;
+		font-family: var(--font-ui);
+		font-size: 11px;
+		color: var(--ink-soft);
+	}
+	.yearkey i {
+		display: inline-block;
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		margin-right: 4px;
+		vertical-align: -1px;
+	}
+	.tilefill.valbody :global(.bees) {
+		flex: 1;
+		min-height: 0;
+	}
+	/* Artboard 6's card bits: the MAP label under the tile title, the
+	   two-button switch on the title line, the DIRECT AWARDS sub-heading */
 	.tilefill :global(.map) {
-		background: #f2f2f2;
-		border: 1px solid var(--line);
+		background: transparent;
+		border: none;
 		--land-context: #fff;
 		--map-accent: var(--card-accent);
 		box-shadow: none;

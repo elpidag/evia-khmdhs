@@ -10438,3 +10438,290 @@ the card now that it has chosen the frame — PaperMap keeps `unclamped`
 and the `bounds` readout for the next time. A hovered project region is
 a GREY a shade darker than the sea (#e6e6e6 on the #f2f2f2 panel,
 `--land-hot`), not the section green.
+
+**Twenty-third round the same day — the Anti-nero card from Artboard 6
+(user).** The three-column card is now DATA: `DatasetCard` takes the
+columns' widths (`cols`), the tile heights under the KPI row (`midRows`,
+`rightRows`) and the row gaps, and a page's own KPI block (`kpiBlock`);
+the sponsored card keeps its values as the defaults. The Anti-nero card is
+549 · 25 · 596,49 · 17 · 631,59 with 25 px under the band, 17 px between
+every tile and 17 at the foot (the user's gaps; the artboard drew 23,7
+and 11–16). Its content, every number from the payload:
+
+- **KPIs** as a 2 × 2 of 62 px cards (`ui/KpiQuad.svelte`, 14 × 13 px
+  apart, 31 px inset): «245 contracts», «151 contractors», «90,2 % — of
+  the contracts / were direct awards» (the sentence in Futura 12 px beside
+  the number), «622,53 m € / total stated value of contracts» (the caption
+  under the number).
+- **ALLOCATION OF FUNDING** 596,49 square: the € choropleth by regional
+  unit with the artboard's TOGGLE on the title line — «by works» / «by
+  registered office», the full frame's two allocations (`map.work_regions`
+  / `map.home_regions`), a card-local switch so no URL param opens the
+  frames — and the MAP label under the title.
+- **MONEY PER YEAR** as COLUMNS (`charts/ColumnBars.svelte`): one bar per
+  year of signature up to 80 px wide, the value above, the year below.
+- **AWARD PROCEDURES** with **DIRECT AWARDS** under it in one tile: the
+  procedures BarH (compact) and the direct-award histogram on the ν.4782
+  ceilings, the histogram taking what the bars leave and stepping aside
+  where a short window leaves it under 64 px.
+- **CONTRACT VALUES**: the beeswarm at the tile's height, the dots
+  shrinking with it.
+- **RANKING OF COMPANIES**: the top contractors by stated net €, as many
+  rows as the box holds (ten at the artboard's size, never a cut row).
+- The programme prose moved into the unfolded page, as on the sponsored
+  card; `BarH` gained `compact` (11 px lettering, 3 px between rows).
+
+Measured at 1920×1080: KPI cards at 654,8/959,9 × 110/185, 291 × 62; tiles
+at 264 (596,5) and 877,5 (185,5) in the middle, 110 (284,6), 411,6 (354)
+and 782,6 (280,4) at the right — the artboard's within 1 px. Nothing
+overflows and no card scrolls at 1920×1080, 1600×900, 1440×820 or
+1280×720 (the ranking shows 8 / 7 / 6 rows there).
+
+**Twenty-fourth round the same day — the Anti-nero card as the sponsored
+card's sibling (user, on the suggestions offered).** Same columns — 549 ·
+25 · 711 · 17 · 516 — and the same shape: the KPI 2 × 2 over the MAP in
+the tall middle slot (711 × 799, the timeline's place one card over), two
+tiles at the right, 17 px gaps. The map has the private companies' map's
+manners in full — the shared frame (`lib/maps/cardFrame.ts`, one constant
+for every card), the περιφέρειες' outlines only, no zoom buttons, a
+click on a region with money in the current allocation zooms to it and
+any click returns, the by-works / by-office switch on the title line, a
+key overlaid bottom-left (a white→black ramp «less — more» and the
+measure named for the allocation shown), hover cards bottom-right in the
+key's size; a group hover on a choropleth no longer repaints the fill
+(`.region.choro`). **CONTRACT VALUES keeps DIRECT AWARDS as its own
+chart** by the user's decision, under the beeswarm in the same tile
+(the histogram 104 px at the artboard's size, giving way with the box).
+**RANKING OF COMPANIES** takes the lower right box at full size: 26 px
+bars, names inside, values right-aligned, ten rows at 1920×1080 and as
+many as the box holds below. AWARD PROCEDURES and MONEY PER YEAR left
+the card (they stay in the unfolded page; the 90,2 % KPI carries the
+procedures' fact). Nothing overflows at 1920×1080 → 1280×720.
+Two things met on the way: a page's controls placed on an overlaid tile
+head (the by-works / by-office switch on the map) were unclickable — the
+head is `pointer-events: none` and re-enabled only its OWN buttons, so the
+rule is `:global(button)` now; and the ranking's names at 516 px wide
+clipped inside their bars, so the tile uses `BarH compact` (11 px) with
+26 px bars, ten rows in 290 px.
+The ranking settled with the names ABOVE thin bars (every name on one
+line, the contract count beside it, the value at the right), ten rows at
+1920×1080 and 9 / 8 / 6 as the box shortens; and the beeswarm's «largest»
+note now steps aside where it would run into the median's label — a
+narrow plot with the median near the right end has room for one of them,
+and the median is the one that matters.
+
+**Twenty-fifth round the same day (user).** The previous arrangement read
+as too empty and the 62 px KPI cards as too thin, and DIRECT AWARDS — kept
+under the beeswarm but gated on the tile's height — had vanished on the
+user's shorter window. Now: **four KPI cards of the private companies'
+card's height (137) across BOTH chart columns** (`DatasetCard kpiSpan`:
+the KPI row is the grid's first row over columns 3–5, the text column
+spanning both rows), in `KpiRich`'s dress with the numbers computed and
+the sentences short — «245 contracts / in the scope of the programme,
+signed between 2022 and 2026» (the years read off the yearly series),
+«151 contractors / private companies and joint ventures that signed the
+contracts», «90,2 % / of the contracts were direct awards», «622,53 m € /
+total stated value of contracts (excl. VAT)». **The two chart columns are
+equal** (549 · 25 · 613,75 · 17 · 613,75): the MAP fills the left one
+(613,7 × 799), and the right holds THREE tiles — CONTRACT VALUES (300),
+**DIRECT AWARDS as its own tile** (170, never gated), RANKING OF
+COMPANIES (295: names inside 22 px bars, ten rows at 1920×1080, fewer in
+a short window). `ui/KpiQuad.svelte` is deleted; `charts/ColumnBars.svelte`
+stays, unused, for a card that wants columns. Measured at 1920×1080: the
+KPI row 1244,5 wide at 110, cards 299,3 × 137; the right tiles 300 / 170 / 295 tall (the beeswarm needs ~128 px at the least, which set the split);
+nothing overflows at 1920×1080, 1600×900, 1440×820 or 1280×720.
+
+## 2026-08-28 — the Anti-nero card rearranged (user)
+
+The four KPI cards as a **2 × 2 of full-height cards** (137 each, 17 px
+apart) at the top of the middle column, CONTRACT VALUES (380) and DIRECT
+AWARDS (248) beneath them; the MAP (516 × 560) on top of the right column
+with RANKING OF COMPANIES (376) under it; the columns back to 549 · 25 ·
+711 · 17 · 516. `DatasetCard` gained `kpiRows` (a two-row KPI block, its
+height two cards and a gap) and `kpiCols`; `KpiRich` takes a `columns`
+count. Measured at 1920×1080: cards at 110 and 264, tiles at 418 / 815
+(middle) and 110 / 687 (right); nothing overflows and no card scrolls at
+1920×1080 → 1280×720.
+
+**Second round of 2026-08-28 (user).** The Anti-nero card takes the
+sponsored card's sizing: THREE KPI cards in one row at its widths (190 ·
+190 · 299,4 — contracts, contractors, stated value; the direct-award share
+left the KPIs, its chart carries it), the middle column's tiles 17 px
+apart — CONTRACT VALUES 400 over DIRECT AWARDS 382, the histogram given
+the room it lacked — and the right column the sponsored card's own rows,
+374,5 over 563,1 with 15,4 between, RANKING OF COMPANIES on top and the
+MAP beneath (swapped by the user). **The ranking shows more companies**:
+`/api/antinero/overview` gained `ranking`, the same top-contractors query
+at 25 rows (the frame's `top_contractors` keeps its ten and its pinned
+top-10 share), and the tile shows as many as its box holds — 13 at
+1920×1080, 10 / 9 / 7 in shorter windows. **The beeswarm's years are
+said**: a key of the five year greys under the dots (`YEAR_GREYS`). The
+gaps, asked for: 17 px in the middle column, 15,4 px in the right — the
+sponsored card's. Nothing overflows at 1920×1080 → 1280×720. Third round the same day: the three KPI
+cards divide the column's width EQUALLY (226,6 px each at 1920×1080,
+`w: 1` apiece) — the sponsored card's 190 · 190 · 299,4 were that card's
+own rows' widths, not a rule.
+Fourth round the same day (user): the two chart columns EQUAL (613,5
+each, the 549 text column and the 25 / 17 gutters unchanged) and the
+vertical gaps of both columns 15,4 — the middle column's rows become 400
+over 385,2 so the two columns still end on one line (a short window
+shrinks both gaps alike, `min(gap, 1.6vh)`). The card map's key is
+ALLOCATION OF FUNDING's own: «by location of the contracts» / «by
+location of the contractors' registered offices» over «0 · [white + the
+eight swatches] · max» and «€ of works — each contract's even share», and
+the map is painted on the SAME ramp (`makeChoro(RAMP_WORKS)`, the sqrt
+scale) so the swatches are its colours — the `color-mix` tint it had is
+gone. The units' own borders are drawn WHITE on this map (PaperMap
+`--unit-line` / `--unit-line-w`, none by default; the sponsored card's
+plain map keeps none): on a grey-on-grey choropleth the περιφέρεια
+outlines alone could not tell the units apart. CONTRACT VALUES prints its
+year key UNDER THE TITLE and the swarm takes the rest, dots r ≈ 3
+(3,1 scaled by the room, as the full frame's).
+Fifth round the same day (user): DIRECT AWARDS moves ABOVE CONTRACT
+VALUES (rows 385,2 over 400), and at its left a VERTICAL AWARD PROCEDURES
+— `charts/ColumnBars.svelte`, one column per procedure, the € above each
+with the contract count under it, the name wrapped on words beneath, the
+direct-award column at full strength and the others at 35 % (BarH's own
+rule) — in a tile exactly the first KPI card's width (a third of the row
+less its two 15,4 gaps) and the row's height; DIRECT AWARDS keeps the
+rest (404 px), its bracket labels at 9 px there and STAGGERED onto two
+lines by `LogHistogram` wherever a printed label has under 48 px (the
+full-page frames are wider and unchanged).
+Sixth round the same day (user, after the Who Owns Britain dashboard):
+AWARD PROCEDURES is ONE STACKED COLUMN — `charts/StackColumn.svelte`:
+each procedure a segment of the € total (its share printed inside where
+the segment is tall enough; 82 / 10 / 8 %), the name, € and contract count
+beside it on a short leader, the labels pushed apart by their own height
+where the segments are thinner than their text; the direct-award segment
+at full strength, the rest at 35 % — and the two chart columns back at the
+sponsored card's 711 / 516 (the three KPI cards equal at 226,6, the column
+tile the first card's width, DIRECT AWARDS 469). The one-column-per-row
+`ColumnBars` stays in the repo, parked.
+Seventh round the same day (user): the card's RANKING OF COMPANIES bars
+are 34 px tall, 3 apart — 8 companies at 1920×1080, every name INSIDE its
+bar in white, on two lines where one does not fit (BarH's tier rule; its
+compact mode now measures the fit at its own 11 px, it measured at 13 and
+sent fitting names outside). SVGs of AWARD PROCEDURES, DIRECT AWARDS,
+CONTRACT VALUES and the whole card page exported to Downloads for the
+user's own drawing — the exporter now turns a chart CANVAS into circles
+(`BeeswarmCanvas` hands its drawn dots over on the element as `__dots`;
+any other canvas is embedded as its pixels).
+
+**2026-08-28 — no brown or beige anywhere on the site (user).** The user
+found #5c5245 in the exported SVGs: the Atlas's «newsprint» tokens were
+WARM greys — ink #2a2118, ink-soft #5c5245, ink-faint #8a7f6e, papers
+#f5f4f0 / #eceae4, the threshold #6b5f4e, the paper shadow in the ink's
+own rgba — and the «one loud accent» was the rust #b33a1a, whose 6 %
+tint is the beige that shaded every fire season. All of it is neutral
+now: ink #1f1f1f / #525252 / #7e7e7e, papers #f4f4f4 / #e9e9e9, the
+accent IS the ink (no page overrode it and every chart with a hue of its
+own passes it), threshold #5e5e5e, `::selection` a grey, the DotLayer
+stroke and the shadow in black rgba, the beeswarm's hover ring the ink,
+the year/scope fallbacks a grey. Retired from the tokens: `--accent-deep`,
+`--c-direct-award`, the orange `--ramp-works-*` and blue `--ramp-home-*`
+sets (0–1 uses; the webui's own copies stay in geo_common.js). PaperMap's
+base `.map` background was still the old cream gradient — it is the sea
+grey #f2f2f2. The PROCUREMENT TIMELINE's key swatch was a literal beige
+#f0e5d8 beside a stripe drawn at the accent's 6 % — the swatch is now
+that same mix; its call ties #cfccc6 → #c9c9c9. The project pages' fire
+tones were the maroon fading to a PEACH (#dba28c) — now four tints of the
+maroon's own hue; FROM THE FIRE TO THE SPONSORED PROJECT shaded its
+seasons in a brick #b4553f — the ink's tint now. **Parked**: the fires map's ELEVATION toggle
+(`RELIEF_TOGGLE = false`) — the baked hypsometric ramp is earth-toned by
+construction; `relief_hypso*.avif`, `build_relief.py`'s `HYPSO_STOPS` and
+the key's gradient stay for a re-bake in a neutral ramp. Left for the
+user's word: the chord's TYPE families in `catColors.ts` (the amber
+studies #b07d1e and the red ramp's pale ends #d99c8c / #ebccc3, chosen
+2026-08-23) and the amber flag chip (#c99700, a gold) — hues with a
+meaning, not greys gone warm.
+
+**2026-08-28 — the fire season in the red's light shade; the Anti-nero
+card to the user's Illustrator edit.** The site's red is the EFFIS
+scars' maroon #6b2d35 — now a token, `--c-fire`, with `--c-fire-season`
+its 12 % tint — and every chart that marks the fire season shades it in
+that tint (PROCUREMENT TIMELINE and its key swatch, PAYMENTS TIMELINE,
+CUMULATIVE DISBURSEMENT, FROM THE FIRE TO THE SPONSORED PROJECT's lanes
+and key), the season labels in the red itself. The user's edit of
+`antinero_card_page.svg` also draws the ν.4782 ceilings and the median
+line in that red, so `--c-threshold` is #6b2d35 and the Anti-nero
+beeswarms pass `medianColor` (ΔΑΣΕ's stays the ink). **The card as
+edited**: RANKING 428,2 tall (TEN rows at 34 px, the two short bars'
+names beside them in ink) over ALLOCATION OF FUNDING 504,3 with 20,5
+between; AWARD PROCEDURES | DIRECT AWARDS 395,2 over CONTRACT VALUES 390
+(the middle gaps 15,4 — the user's own 10,3 left the column 5 px short);
+the gap clamp is now the artboard's px × 0,0926 vh, so both columns
+shrink alike and the 20,5 is honoured at 1080 (a `min(…, 1.6vh)` had
+been eating it). AWARD PROCEDURES = `StackColumn variant="card"`: the
+SMALLEST segment on top and the direct award at the foot, the segments in
+the grey ramp's darker half (#a6a6a6 / #5f5f5f / #111 for three) parted
+by white seams, the share inside, the COUNT at the column's left, the
+name at its right in lower case (the direct award bold), no € and no
+leaders, the column 24 % in — the counts and names may run into the
+tile's padding as the user's do. DIRECT AWARDS prints its bracket labels
+on ONE line at 469 px (the stagger now kicks in under 44 px, was 48).
+CONTRACT VALUES: the swarm pushed right by 12,85 % of its width at the
+same scale (`padLeftFrac`; the empty ≥16,4 M bracket falls off the right
+edge — dots 849,6 → 1.330,1 against the user's 849,9 → 1.330,3), the
+year key 8 px under the title, dots r 2,7. The map tile is titled
+ALLOCATION OF FUNDING; its two lenses are STACKED under the title at the
+top-left in their full wording («by location of the contracts» / «by
+registered office of the awarded contractors», 127,7 wide, the chosen one
+black on white); its key is the user's: «0» and the max on a line ABOVE a
+128 px swatch bar with a ½ px hairline, the sentence beneath, 10 px, 32,6
+px in. Every position verified against the SVG by DOM measurement.
+
+**2026-08-28 — TRIED AND UNDONE the same hour (user): the card scaled as
+one artboard.** The user's screenshot of the Anti-nero card differed from
+their SVG (six ranking rows, five-line names, a 98 px header) and
+reproduced in a browser at 115 % zoom, so the card was rebuilt as a fixed
+1920 × 995 box scaled by `transform` to the window. The user rejected it —
+the sponsored card had been showing perfectly in the same browser, so the
+cause lies elsewhere — and every part was reverted: no inline script in
+`app.html`, no `.stage`/`.art` in `DatasetCard`, the vw/vh clamps as they
+were. The card is laid out in window fractions again; the cause of the
+user's rendering is still open.
+
+**2026-08-28 — the user's corrections on the Anti-nero card, applied.**
+ALLOCATION OF FUNDING: the toggle's and the ramp's left edges sit on the
+A of the title (8 px into the body, the title's own 9 px); the map draws
+NO neighbouring countries (`context={false}`) and its frame is the shared
+card frame slid 0,264° west — 13 px at the card's width, the same scale —
+so the country sits to the right and the title, toggle and key have the
+left (the user's Greece spans 1.452 → 1.887; ours now the same to the
+pixel); the hover card was already bottom-right. DIRECT AWARDS: the €30k /
+€60k labels are CENTRED on their dashed lines, 9 px above the plot (they
+sat at the top-left of the frame). AWARD PROCEDURES: the stacked column's
+lettering as the user's — names in TWO lines at the segment's right
+(«negotiated procedure / without prior publication»), counts at its left,
+both allowed into the tile's padding (`Tile bleed`, the body 16 px wider on
+each side, `StackColumn inset`), the wrap on REAL text widths (a canvas
+measure of the page's font; the per-character estimate only on the
+server). RANKING OF COMPANIES takes WHAT TYPES OF COMPANIES' sizes as its
+base — 25 px bars, 3,3 px apart, 10 px names inside in white, the ones
+that do not fit beside the bar in ink (BarH `gap` / `fontPx`) — 13 rows at
+1920 × 1080, seven of them named beside their bar.
+Same day, the user's follow-up: CONTRACT VALUES gives 7 px to the row
+above (402,2 over 383); the stack's three parts stand 4 px apart
+(`StackColumn SEG_GAP`, the column's height less the gaps shared by
+value); the first KPI card and AWARD PROCEDURES under it are 12 px wider
+(238,6 of the cards' 680, the other two 220,6) so the lettering has its
+room; and the map is panned further right — the frame a full degree wider
+at the west (`ALLOC_WEST`), which slides the country 39 px right and,
+the frame being fitted by width, draws it 9 % smaller — so the toggle
+sits on sea, not on the country.
+Then: the stack's column is 48 px wide on the card (56 on the side
+form), a two-line name rides 3 px above its segment's middle, and a
+two-line name breaks where its lines come out most EVEN — «negotiated
+procedure / without prior publication», the user's own break, which the
+greedy wrap had turned into «… without / prior publication» once the
+column narrowed. The AWARD PROCEDURES | DIRECT AWARDS row takes the KPI
+cards' own column gap (0,82 vw = 15,7 at 1920), so the first tile's edges
+meet the first card's exactly.
+**RANKING OF COMPANIES = the top TEN** (user, same day), on WHAT TYPES OF
+COMPANIES' rule: the rows share the tile's height 3,3 px apart, each bar
+the row's height capped at 25 px — the tile is sized to exactly that at
+1920 × 1080 (327,2 = ten 25 px bars, nine gaps, the head and inset) so
+the bars are the other card's, and in a shorter window they shrink
+together instead of rows dropping out (a name beside a short bar stays on
+one line, ellipsised, so no row outgrows its bar). The height the ranking
+gave up went to ALLOCATION OF FUNDING: 605,3.

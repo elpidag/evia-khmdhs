@@ -41,7 +41,7 @@ export const SCOPE_COLORS: Record<string, string> = {
 };
 
 export const scopeLabel = (s: string): string => SCOPE_LABELS[s] ?? s;
-export const scopeColor = (s: string): string => SCOPE_COLORS[s] ?? '#8a7f6e';
+export const scopeColor = (s: string): string => SCOPE_COLORS[s] ?? '#7e7e7e';
 
 export function orderScopes(scopes: Iterable<string>): string[] {
 	const order = SCOPE_ORDER as readonly string[];

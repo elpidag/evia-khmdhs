@@ -78,8 +78,7 @@
 				y={M.top}
 				width={Math.min(s.x1, width - M.right) - Math.max(s.x0, M.left)}
 				height={lanes.length * LANE_H}
-				fill="var(--accent)"
-				opacity="0.06"
+				fill="var(--c-fire-season)"
 			/>
 		{/each}
 		{#if seasons.length}
@@ -151,8 +150,8 @@
 	}
 	.season-label {
 		font-size: 10px;
-		fill: var(--accent);
-		opacity: 0.75;
+		fill: var(--c-fire);
+		opacity: 0.85;
 	}
 	.tick {
 		stroke: var(--ink);

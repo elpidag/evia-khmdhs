@@ -24,7 +24,15 @@
 		/** width weight in the row (the user's 190 / 190 / 299,4) */
 		w: number;
 	}
-	let { cards, color = 'var(--ink)' }: { cards: RichKpi[]; color?: string } = $props();
+	let {
+		cards,
+		color = 'var(--ink)',
+		columns = 0
+	}: { cards: RichKpi[]; color?: string; /** cards per row; 0 = one row */ columns?: number } =
+		$props();
+	const gridCols = $derived(
+		columns > 0 ? `repeat(${columns}, minmax(0, 1fr))` : cards.map((c) => `${c.w}fr`).join(' ')
+	);
 
 	let boxW = $state<number[]>([]);
 	let headW = $state<number[]>([]);
@@ -51,7 +59,7 @@
 	};
 </script>
 
-<div class="kpirow" style:grid-template-columns={cards.map((c) => `${c.w}fr`).join(' ')}>
+<div class="kpirow" style:grid-template-columns={gridCols}>
 	{#each cards as c, i (i)}
 		<div
 			class="kcard"
@@ -106,8 +114,10 @@
 <style>
 	.kpirow {
 		display: grid;
-		/* the user's edit: 15,8 px between cards */
-		gap: clamp(8px, 0.82vw, 15.8px);
+		grid-auto-rows: minmax(0, 1fr);
+		/* the user's edit: 15,8 px between cards; a second row of cards sits
+		   the column's own gap below the first */
+		gap: var(--kpi-row-gap, clamp(8px, 0.82vw, 15.8px)) clamp(8px, 0.82vw, 15.8px);
 		height: 100%;
 	}
 	.kcard {

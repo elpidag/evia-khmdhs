@@ -264,7 +264,7 @@
 		/* a call whose lots were signed weeks apart draws a long line; kept
 		   faint so the same-day verticals — the finding — carry the ink */
 		fill: none;
-		stroke: #cfccc6;
+		stroke: #c9c9c9;
 		stroke-width: 1;
 	}
 	.tie.lit {
@@ -281,9 +281,8 @@
 		stroke-width: 1;
 	}
 	rect.season {
-		/* the page's ONE fire-season colour — the payments timeline's */
-		fill: var(--accent);
-		opacity: 0.06;
+		/* the page's ONE fire-season colour: the red's light shade */
+		fill: var(--c-fire-season);
 	}
 	.val {
 		font-size: 9px;
@@ -359,7 +358,7 @@
 	.key li i.tie {
 		width: 20px;
 		height: 0;
-		border-top: 2px solid #cfccc6;
+		border-top: 2px solid #c9c9c9;
 		border-radius: 0;
 		background: none;
 	}
@@ -367,11 +366,11 @@
 		color: var(--ink-faint);
 	}
 	.key li i.season {
-		background: color-mix(in srgb, var(--accent) 12%, white);
+		/* the stripe's own colour */
+		background: var(--c-fire-season);
 		width: 16px;
 		height: 10px;
 		border-radius: 0;
-		background: #f0e5d8;
 	}
 	.card {
 		position: absolute;

@@ -18,6 +18,7 @@
 	import StackedShareBar from '$lib/charts/StackedShareBar.svelte';
 	import AreaYears from '$lib/charts/AreaYears.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
+	import { CARD_BOUNDS } from '$lib/maps/cardFrame';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import { loadCentroids, loadEffisFires, loadEviaZones, spreadOverlaps } from '$lib/maps/useGeo';
@@ -138,6 +139,10 @@
 	// fires-map relief style toggle: greyscale plate vs hypsometric tints
 	// (both baked by scripts/build_relief.py from the same shading pass)
 	let reliefStyle = $state<'grey' | 'hypso'>('grey');
+	/** PARKED 2026-08-28 (user: no brown or beige anywhere) — the baked
+	 *  hypsometric ramp is earth-toned; the assets and build_relief.py stay
+	 *  for a re-bake in a neutral ramp */
+	const RELIEF_TOGGLE = false;
 	const reliefAssets = $derived(
 		reliefStyle === 'hypso'
 			? { lo: '/geo/relief_hypso.avif', hi: '/geo/relief_hypso_hi.avif' }
@@ -149,10 +154,7 @@
 	 *  margin on every side WHATEVER the tile's shape. A fixed centre-and-
 	 *  zoom (k 1,05) had left Crete 4 px from the edge in a wide tile, and
 	 *  a browser window is rarely the artboard's 16:9 */
-	const CARD_BOUNDS: [[number, number], [number, number]] = [
-		[18.2336, 34.7812],
-		[28.7256, 41.9096]
-	];
+	// the frame is shared with the other cards' maps: lib/maps/cardFrame.ts
 	/** the box's own shape on a Mercator map: width over height in
 	 *  projected units — so the map is drawn exactly as wide as the
 	 *  country and shows no land beyond its sides (user, 2026-08-27) */
@@ -1144,6 +1146,7 @@
 	<div class="firesgrid">
 		<div class="fmcol">
 			<div class="reliefbar">
+				{#if RELIEF_TOGGLE}
 				<div class="relieftoggle" role="group" aria-label="Relief colouring">
 					<button
 						type="button"
@@ -1156,6 +1159,7 @@
 						onclick={() => (reliefStyle = 'hypso')}>ELEVATION</button
 					>
 				</div>
+				{/if}
 				{#if reliefStyle === 'hypso'}
 					<div class="hypsokey" aria-hidden="true">
 						<span>0 μ</span>

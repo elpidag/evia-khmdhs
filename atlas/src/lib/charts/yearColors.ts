@@ -15,7 +15,7 @@ export const YEAR_COLORS: Record<string, string> = {
 
 /** Colour for a signature year; undated contracts render neutral. */
 export const yearColor = (y: string | null | undefined): string =>
-	YEAR_COLORS[y ?? ''] ?? '#8a7f6e';
+	YEAR_COLORS[y ?? ''] ?? '#7e7e7e';
 
 /** Signature-year ramp for the Anti-nero value chart — the same idea in the
  *  page's own palette: black-white-grayscale only (user, 2026-08-20),

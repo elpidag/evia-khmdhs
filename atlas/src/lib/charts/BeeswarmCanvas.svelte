@@ -4,7 +4,7 @@
 	// the ~60ms layout for 2,018 points
 	const layoutCache = new WeakMap<
 		object,
-		{ width: number; xs: number[]; ys: number[]; r: number; h: number }
+		{ width: number; xs: number[]; ys: number[]; r: number; h: number; pad: number }
 	>();
 </script>
 
@@ -33,7 +33,9 @@
 		thresholds = [],
 		linkBase = '/dase/contract/',
 		minHeight = 320,
-		radius = 2.6
+		radius = 2.6,
+		padLeftFrac = 0,
+		medianColor = 'var(--ink)'
 	}: {
 		data: DaseSwarm;
 		edges: number[];
@@ -50,6 +52,12 @@
 		 *  defaults */
 		minHeight?: number;
 		radius?: number;
+		/** push the plot right by this fraction of the width, the scale
+		 *  unchanged — the user's own placing of the card's swarm
+		 *  (2026-08-28); what runs past the right edge is clipped */
+		padLeftFrac?: number;
+		/** the median line's colour (the ink unless a page says otherwise) */
+		medianColor?: string;
 	} = $props();
 
 	// margins must match LogHistogram's exactly — the shared axis is defined
@@ -72,10 +80,11 @@
 	);
 	// one slot per bracket, exactly as LogHistogram lays them out
 	const bw = $derived((width - M.left - M.right) / edges.length);
-	const x = $derived((v: number) => binPosition(v, edges, M.left, bw));
+	const pad = $derived(Math.round(padLeftFrac * width));
+	const x = $derived((v: number) => binPosition(v, edges, M.left + pad, bw));
 	const layout = $derived.by(() => {
 		let cached = layoutCache.get(data);
-		if (cached && Math.abs(cached.width - width) <= 2) return cached;
+		if (cached && Math.abs(cached.width - width) <= 2 && cached.pad === pad) return cached;
 		const xs = valid.map((i) => x(data.eur[i]!));
 		// same-priced contracts stack into tall columns; size the canvas to
 		// the tallest one (the fixed-height version clipped ~1/3 of it) and
@@ -89,13 +98,24 @@
 			half = Math.max(...ys.map(Math.abs)) + r + 2;
 		}
 		const h = Math.round(Math.max(MIN_H, M.top + M.bottom + 2 * half));
-		cached = { width, xs, ys, r, h };
+		cached = { width, xs, ys, r, h, pad };
 		layoutCache.set(data, cached);
 		return cached;
 	});
 	const height = $derived(layout.h);
 	$effect(() => {
 		plotHeight = height;
+	});
+	/** the dots as drawn, on the canvas element itself — for an exporter
+	 *  that wants circles rather than pixels (2026-08-28); no DOM cost */
+	$effect(() => {
+		if (canvas)
+			(canvas as HTMLCanvasElement & { __dots?: unknown }).__dots = dots.map((d) => ({
+				x: d.x,
+				y: d.y,
+				r: layout.r,
+				fill: colors(data.year[d.i])
+			}));
 	});
 	const dots = $derived.by((): Dot[] => {
 		const { xs, ys } = layout;
@@ -164,7 +184,7 @@
 			ctx.globalAlpha = 1;
 			ctx.beginPath();
 			ctx.arc(hover.x, hover.y, layout.r + 1.5, 0, 2 * Math.PI);
-			ctx.strokeStyle = '#2a2118';
+			ctx.strokeStyle = '#1f1f1f';
 			ctx.lineWidth = 1.5;
 			ctx.stroke();
 		}
@@ -226,14 +246,17 @@
 			     the first label goes LEFT of its line, the next right (user) -->
 			<text class="thresh-label" x={left ? tx - 4 : tx + 4} y={M.top + 10} text-anchor={left ? 'end' : 'start'}>{th.label}</text>
 		{/each}
-		<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} />
+		<line class="median" x1={x(median)} x2={x(median)} y1={M.top} y2={height - M.bottom} style:stroke={medianColor} />
 		<text class="median-label" x={x(median)} y={M.top - 8} text-anchor="middle">
 			median {eurShort(median)}
 		</text>
-		{#if biggest}
+		{#if biggest && Math.min(biggest.x + 4, width - M.right) - 6.2 * (9 + eurShort(biggest.eur).length) > x(median) + 3.4 * (7 + eurShort(median).length) + 6}
 			<!-- on the top margin at the plot's right edge, not over the dots:
 			     the largest value sits at the far right of the axis, so its
-			     label used to run left across the swarm (user, 2026-08-25) -->
+			     label used to run left across the swarm (user, 2026-08-25);
+			     and only where it clears the median's label — a narrow plot
+			     (the card tile) with the median near the right end has no
+			     room for both, and the median is the one that matters -->
 			<text
 				class="note"
 				x={Math.min(biggest.x + 4, width - M.right)}

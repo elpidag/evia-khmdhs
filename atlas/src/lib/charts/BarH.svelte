@@ -32,6 +32,14 @@
 		/** align every value to the row's right edge, table-style (user,
 		 *  2026-08-22 — the CONTRACT TYPE amounts) */
 		valuesRight?: boolean;
+		/** the card tiles' size: 11 px lettering, 3 px between rows, so ten
+		 *  rows fit a 240 px box (2026-08-27) */
+		compact?: boolean;
+		/** the row gap and the lettering, in px, where a tile sets its own
+		 *  (the ranking on WHAT TYPES OF COMPANIES' 25 px bars 3,3 apart
+		 *  with 10 px names, user 2026-08-28) */
+		gap?: number;
+		fontPx?: number;
 	}
 	let {
 		rows,
@@ -42,7 +50,10 @@
 		colorOf,
 		inside = false,
 		barHeight = 14,
-		valuesRight = false
+		valuesRight = false,
+		compact = false,
+		gap,
+		fontPx
 	}: Props = $props();
 
 	const maxV = $derived(max ?? Math.max(...rows.map((r) => r.value), 1));
@@ -75,7 +86,13 @@
 </script>
 
 {#if inside}
-	<div class="chart tight" bind:clientWidth={trackW}>
+	<div
+		class="chart tight"
+		class:compact
+		style:gap={gap !== undefined ? `${gap}px` : undefined}
+		style:--bar-font={fontPx !== undefined ? `${fontPx}px` : undefined}
+		bind:clientWidth={trackW}
+	>
 		<div class="measure" aria-hidden="true">
 			{#each rows as r, i (i)}<span bind:clientWidth={labelW[i]}>{r.label}</span><span
 					bind:clientWidth={wordW[i]}>{longestWord(r.label)}</span
@@ -113,7 +130,7 @@
 		{/each}
 	</div>
 {:else}
-	<div class="chart">
+	<div class="chart" class:compact>
 		{#each rows as r, i (i)}
 			{@const w = Math.max(0.4, (100 * r.value) / maxV)}
 			{@const dim = highlight ? !highlight(r) : false}
@@ -139,6 +156,31 @@
 	.chart.tight {
 		position: relative;
 		gap: 6px;
+	}
+	.chart.compact {
+		gap: 3px;
+	}
+	.chart.compact .on,
+	.chart.compact .off,
+	.chart.compact .value,
+	.chart.compact .measure {
+		font-size: var(--bar-font, 11px);
+	}
+	/* a name beside a short bar stays on ONE line in the compact form, so
+	   every row keeps the bar's own height (the ranking tile is sized to
+	   its rows, 2026-08-28) */
+	.chart.compact .off {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		min-width: 0;
+	}
+	/* …and no text line box taller than the bar: a 10 px name in a 15 px
+	   bar on a small window must not push its row past the bar */
+	.chart.compact .on,
+	.chart.compact .off,
+	.chart.compact .value {
+		line-height: 1.1;
 	}
 	.measure {
 		position: absolute;

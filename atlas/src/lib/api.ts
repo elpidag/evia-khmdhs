@@ -451,6 +451,8 @@ export interface AntineroOverview {
 		classes?: { stated: number; db_unstated: number; works_none: number; study_only: number };
 	};
 	top_contractors: TopContractor[];
+	/** the card's longer ranking (25) — the frame keeps top_contractors' ten */
+	ranking?: TopContractor[];
 	/** the same money attributed to the firms BEHIND the joint ventures
 	 *  (DATA_DECISIONS 2026-08-20) — identical population, identical total */
 	member_firms: (TopContractor & {

@@ -140,7 +140,7 @@
 	});
 	// one tone per fire, earliest darkest — shared by the map scars and
 	// the timeline-bar dots so the two read as the same objects
-	const FIRE_TONES = ['#6b2d35', '#9a4a48', '#c47a66', '#dba28c'];
+	const FIRE_TONES = ['#6b2d35', '#8e4a52', '#b3717a', '#d5a2a8'];
 	const scarTone = $derived.by(() => {
 		const ordered = [...scarFeats].sort((a, b) =>
 			(a.properties.d ?? String(a.properties.yr)).localeCompare(

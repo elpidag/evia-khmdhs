@@ -60,8 +60,7 @@
 			y={M.top}
 			width={xYoy(243) - xYoy(120)}
 			height={height - M.top - M.bottom}
-			fill="var(--accent)"
-			opacity="0.06"
+			fill="var(--c-fire-season)"
 		/>
 		<text class="season-label" x={xYoy(120) + 4} y={M.top + 12}>fire season</text>
 		{#each yYoy.ticks(4) as t (t)}
@@ -120,7 +119,7 @@
 	}
 	.season-label {
 		font-size: 10px;
-		fill: var(--accent);
-		opacity: 0.75;
+		fill: var(--c-fire);
+		opacity: 0.85;
 	}
 </style>

@@ -624,15 +624,14 @@
 		width: 12px;
 		height: 12px;
 		border-radius: 2px;
-		background: #b4553f;
-		opacity: 0.14;
+		/* the season: the red's light shade (user, 2026-08-28) */
+		background: var(--c-fire-season);
 		flex: none;
 	}
 
 	/* ---------- the chart ---------- */
 	.season {
-		fill: #b4553f;
-		opacity: 0.07;
+		fill: var(--c-fire-season);
 	}
 	.yr {
 		stroke: var(--line);
