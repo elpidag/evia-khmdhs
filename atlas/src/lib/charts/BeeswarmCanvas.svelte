@@ -204,6 +204,17 @@
 		return vs[Math.floor(vs.length / 2)] ?? 0;
 	});
 	const biggest = $derived(dots.reduce((m, d) => (d.eur > m.eur ? d : m), dots[0]));
+	/** where the largest dot's label goes: above every dot under the
+	 *  label's own span (it ends over the dot and runs left), so the
+	 *  amount never prints over the swarm */
+	const noteY = $derived.by(() => {
+		if (!biggest) return 0;
+		const span = 6.2 * (9 + eurShort(biggest.eur).length) + 6;
+		let top = biggest.y;
+		for (const d of dots)
+			if (d.x <= biggest.x + layout.r + 2 && d.x >= biggest.x - span) top = Math.min(top, d.y);
+		return top - layout.r - 8;
+	});
 	// round decades that fall inside the bracket axis' own span
 	const axisTicks = $derived(
 		[100, 1e3, 1e4, 1e5, 1e6].filter((v) => v >= edges[1] && v <= edges[edges.length - 1])
@@ -250,18 +261,15 @@
 		<text class="median-label" x={x(median)} y={M.top - 8} text-anchor="middle">
 			median {eurShort(median)}
 		</text>
-		{#if biggest && Math.min(biggest.x + 4, width - M.right) - 6.2 * (9 + eurShort(biggest.eur).length) > x(median) + 3.4 * (7 + eurShort(median).length) + 6}
-			<!-- on the top margin at the plot's right edge, not over the dots:
-			     the largest value sits at the far right of the axis, so its
-			     label used to run left across the swarm (user, 2026-08-25);
-			     and only where it clears the median's label — a narrow plot
-			     (the card tile) with the median near the right end has no
-			     room for both, and the median is the one that matters -->
-			<text
-				class="note"
-				x={Math.min(biggest.x + 4, width - M.right)}
-				y={M.top - 8}
-				text-anchor="end">largest: {eurShort(biggest.eur)}</text
+		{#if biggest && noteY > M.top + 4}
+			<!-- the largest contract's amount AT its own dot (user, 2026-08-28:
+			     «closer to the dot of that contract, and legible»): just above
+			     the dots that stand near it, ending over the dot, with a
+			     vertical tick down to it — the dot is alone in its column at
+			     the far right, so the tick crosses nothing -->
+			<line class="notetick" x1={biggest.x} y1={noteY + 3} x2={biggest.x} y2={biggest.y - layout.r - 1} />
+			<text class="note" x={biggest.x + layout.r + 1} y={noteY} text-anchor="end"
+				>largest: {eurShort(biggest.eur)}</text
 			>
 		{/if}
 	</svg>
@@ -294,7 +302,9 @@
 	}
 	.axis {
 		font-size: 11px;
-		fill: var(--ink-faint);
+		/* the amounts under the grid lines must be read, not guessed
+		   (user, 2026-08-28) */
+		fill: var(--ink-soft);
 		text-anchor: middle;
 	}
 	.thresh {
@@ -317,8 +327,12 @@
 	}
 	.note {
 		font-size: 11px;
-		fill: var(--ink-soft);
+		fill: var(--ink);
 		font-style: italic;
+	}
+	.notetick {
+		stroke: var(--ink);
+		stroke-width: 0.8;
 	}
 	.tip {
 		position: absolute;

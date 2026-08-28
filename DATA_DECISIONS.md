@@ -10725,3 +10725,39 @@ the bars are the other card's, and in a shorter window they shrink
 together instead of rows dropping out (a name beside a short bar stays on
 one line, ellipsised, so no row outgrows its bar). The height the ranking
 gave up went to ALLOCATION OF FUNDING: 605,3.
+
+**2026-08-28 — the forest workers' co-operatives card in the Anti-nero
+card's arrangement (user).** The same triple layout and rows: three
+`KpiRich` cards (contracts · co-operatives · stated value, the years read
+off the yearly series), AWARD PROCEDURES as one stacked column — the ΔΑΣΕ
+greens' darker half (`StackColumn ramp`), its five procedures' counts
+and names pushed clear of each other where the segments are thin — beside
+DIRECT AWARDS with NO ceiling lines (DATA_DECISIONS 2026-08-24), CONTRACT
+VALUES as the year-coloured beeswarm with its key under the title (dots
+r ≈ 1,5 so the 1.998 contracts fit the tile), and — in the ranking's
+place, the user not wanting a ranking here — MONEY PER YEAR, the six bars
+sharing the tile's height at 35 px each. ALLOCATION OF FUNDING is treated
+exactly as on the Anti-nero card: the two lenses stacked under the title
+(«by area of the awarding forest service» / «by registered office of the
+co-operatives», from `/api/dase/allocation`'s work and seat regions), the
+green ramp's swatch key on the title's A, no neighbouring countries, the
+frame slid west, region outlines with white unit seams, the drill by
+περιφέρεια. `RAMP_DASE` moved from DaseMap into `useGeo` so the page and
+the map share it. The co-operatives prose and the basis line moved under
+«explore more», as on the other two cards.
+Then (user): the ΔΑΣΕ card's WHOLE middle column under the KPIs goes to
+CONTRACT VALUES (800,6 — the AWARD PROCEDURES | DIRECT AWARDS row leaves
+this card; the beeswarm's dots r ≈ 2,2 in the taller box), and the card
+maps on BOTH cards draw no hairline: the line was the pages' «every map
+gets a 1 px border» rule catching the tile's own wrapper, which was also
+classed `.map` — it is `.mapfill` now, and nothing in the tile draws a
+border or a shadow.
+Then (user): the card maps' two lenses each on ONE line (the toggle
+`max-content` wide, 40 tall, 30 px under the title) and the frame half a
+degree tighter at the west (`ALLOC_WEST` 0,5), the country a little
+larger with nothing under the toggle or the key; the beeswarm's axis
+amounts in the readable grey (`--ink-soft`, they were the faint one) and
+the «largest: …» note AT its own dot — above every dot within 70 px of
+its column, ending over the dot, a vertical tick down to it (the note
+used to sit in the frame's top-right corner, and a first move to the
+dot's left printed it over the neighbouring dots).

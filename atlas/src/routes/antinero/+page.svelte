@@ -103,7 +103,7 @@
 	/** …and a further degree of room at the west, so the toggle sits on
 	 *  sea, not on the country (user, same day) — the frame is fitted by
 	 *  width, so the country also draws a little smaller */
-	const ALLOC_WEST = 1.0;
+	const ALLOC_WEST = 0.5;
 	const ALLOC_BOUNDS: [[number, number], [number, number]] = [
 		[CARD_BOUNDS[0][0] - ALLOC_SHIFT - ALLOC_WEST, CARD_BOUNDS[0][1]],
 		[CARD_BOUNDS[1][0] - ALLOC_SHIFT, CARD_BOUNDS[1][1]]
@@ -694,7 +694,7 @@
 	{/snippet}
 	{#snippet tileB()}
 		<Tile title="ALLOCATION OF FUNDING" href="#map" fit headOver>
-			<div class="tilefill map" bind:clientWidth={tileW} bind:clientHeight={tileH}>
+			<div class="tilefill mapfill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
 				{@render allocSwitch()}
 				{#if tileW && tileH && allocChoro}
 					<PaperMap
@@ -1796,7 +1796,7 @@
 	}
 	/* the card map's manners, the private companies' map's: thinner lines,
 	   the key overlaid bottom-left, a grey hover on a plain region */
-	.tilefill.map {
+	.tilefill.mapfill {
 		--region-line-w: 0.35;
 		--context-line-w: 0.35;
 		--border-line-w: 0.6;
@@ -1861,19 +1861,22 @@
 	/* the lenses, stacked under the title at the top-left (user, 2026-08-28) */
 	.allocsw {
 		position: absolute;
-		top: 36.4px;
+		/* each lens on ONE line, the pair tight under the title (user, 2026-08-28) */
+		top: 30px;
 		/* on the title's A (user, 2026-08-28) */
 		left: 8px;
 		z-index: 3;
 		display: flex;
 		flex-direction: column;
-		width: 127.7px;
+		align-items: flex-start;
+		width: max-content;
 	}
 	.allocsw button {
 		font-family: var(--font-ui);
 		font-size: 10px;
 		line-height: 12px;
 		text-align: left;
+		white-space: nowrap;
 		padding: 1.6px 3.4px 2px;
 		background: #fff;
 		color: var(--ink);

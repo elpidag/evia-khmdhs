@@ -344,6 +344,18 @@ export const RAMP_WORKS = [
 	'#111111'
 ];
 
+/** the ΔΑΣΕ pages' green ramp (the allocation maps, the card map) */
+export const RAMP_DASE = [
+	'#eef7f2',
+	'#d7ece0',
+	'#b9dcc8',
+	'#93c9ac',
+	'#6bb28d',
+	'#479a72',
+	'#2b7d58',
+	'#175c3e'
+];
+
 export const RAMP_HOME = [
 	'#f2f7fe',
 	'#dcebfb',

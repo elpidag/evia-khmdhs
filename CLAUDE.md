@@ -1538,7 +1538,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   PROCEDURES as ONE stacked column (`charts/StackColumn variant="card"`:
   smallest on top, grey ramp, count left / lower-case name right;
   `ColumnBars` parked) at the first KPI card's width beside DIRECT
-  AWARDS (395,2) — over CONTRACT VALUES (390, the year key under the
+  AWARDS (402,2) — over CONTRACT VALUES (383, the year key under the
   title, the swarm pushed right `padLeftFrac` 0,1285, median in
   `--c-fire`) in the 711 px middle column, RANKING OF COMPANIES (327,2, the top TEN from the overview's 25-row
   `ranking`, WHAT TYPES OF COMPANIES' rule: rows sharing the height, 25 px
@@ -1550,7 +1550,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   the title's A, the frame slid 0,264° west, cards bottom-right) in the 516 px right one — the user's own Illustrator
   edit of the exported page, DATA_DECISIONS 2026-08-28; fire season =
   `--c-fire-season` everywhere, thresholds `--c-fire`; `kpiSpan`/`kpiRows`/`kpiCols`, `charts/ColumnBars`
-  and `BarH compact` exist; ΔΑΣΕ stays on the default layout). The sponsored one since the seventh
+  and `BarH compact` exist; **the ΔΑΣΕ card is the same arrangement
+  since 2026-08-28** — MONEY PER YEAR in the ranking's slot, the whole
+  middle column to CONTRACT VALUES (no procedures/direct-award row), the
+  allocation map from `/api/dase/allocation`'s two sides; neither card
+  map draws a hairline; `StackColumn ramp` and `RAMP_DASE` in `useGeo`
+  exist for a green stack). The sponsored one since the seventh
   round of 2026-08-27 (DATA_DECISIONS): text 549 | a 137 px KPI row (`ui/KpiRich.svelte`,
   unequal widths, the user's sentences over computed numbers) above the
   tall TIMELINE 703×795 | TYPE OF COMPANIES … 520×412 above MAP 521×521 —

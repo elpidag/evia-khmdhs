@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { bodyEn, devGreek } from '$lib/transforms/names';
-	import { peEn, ruLabel } from '$lib/transforms/regions';
+	import { peEn, pesOfRegion, regionOfPe, ruLabel } from '$lib/transforms/regions';
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
@@ -9,7 +9,8 @@
 	import { binByKey } from '$lib/transforms/histogram';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
-	import { loadEffisFires, type FireProps } from '$lib/maps/useGeo';
+	import { loadEffisFires, makeChoro, RAMP_DASE, type FireProps } from '$lib/maps/useGeo';
+	import { CARD_BOUNDS } from '$lib/maps/cardFrame';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import DatasetCard from '$lib/ui/DatasetCard.svelte';
 	import Tile from '$lib/ui/Tile.svelte';
@@ -36,23 +37,76 @@
 	// the card (user mock, 2026-08-27): three KPIs, the URL parameters this
 	// page reads (any opens the card unfolded), the map tile's size
 	const PARAMS = ['focus'] as const;
-	const kpiCards = $derived([
-		{ num: grInt(o.kpis.n_contracts), label: 'live contracts since Sept 2021' },
-		{ num: grInt(o.kpis.n_coops), label: 'forest labour co-operatives' },
+	/** the three KPI cards in the Anti-nero card's dress (user, 2026-08-28):
+	 *  every number from the payload, the years read off the yearly series */
+	const kpiRich = $derived([
 		{
-			num: eurShort(o.kpis.total_eur).toLowerCase(),
-			label: 'total stated value of contracts',
-			sub: '(excl. VAT)'
+			w: 238.6,
+			parts: [{ num: grInt(o.kpis.n_contracts), word: 'contracts' }],
+			lines: [
+				'live contracts in the registry,',
+				`signed between ${o.yearly[0]?.year ?? ''} and ${o.yearly[o.yearly.length - 1]?.year ?? ''}`
+			]
+		},
+		{
+			w: 220.6,
+			parts: [{ num: grInt(o.kpis.n_coops), word: 'co-operatives' }],
+			lines: ['forest labour co-operatives', 'that signed the contracts']
+		},
+		{
+			w: 220.6,
+			parts: [{ num: eurShort(o.kpis.total_eur).toLowerCase() }],
+			lines: ['total stated value of contracts', '(excl. VAT)']
 		}
 	]);
 	let tileW = $state(0);
 	let tileH = $state(0);
-	// the map tile: € of contracts by the awarding service's regional unit
-	const tileChoro = $derived.by(() => {
+	/** the card map's two lenses (the Anti-nero card's treatment, user
+	 *  2026-08-28): € by the awarding forest service's regional unit, or
+	 *  by the co-operatives' registered offices */
+	let allocKind = $state<'work' | 'home'>('work');
+	const allocChoro = $derived.by(() => {
 		if (!alloc) return null;
-		const by = new Map(alloc.work_regions.map((r) => [r.pe, r.eur]));
-		const max = Math.max(1, ...alloc.work_regions.map((r) => r.eur));
+		const rows = allocKind === 'work' ? alloc.work_regions : alloc.seat_regions;
+		const by = new Map(rows.map((r) => [r.pe, r.eur]));
+		const max = Math.max(1, ...rows.map((r) => r.eur));
 		return { by, max };
+	});
+	const cardChoro = $derived(makeChoro(RAMP_DASE, allocChoro?.max ?? 0));
+	/** the drill: a περιφέρεια with money in the current lens answers a
+	 *  click, the map zooms to it, any click while zoomed returns */
+	let selDase = $state<string | null>(null);
+	const selDasePes = $derived(selDase ? pesOfRegion(selDase) : null);
+	const regionEur = $derived.by(() => {
+		const m = new Map<string, number>();
+		if (!allocChoro) return m;
+		for (const [pe, v] of allocChoro.by) {
+			const r = regionOfPe(pe);
+			if (r && v > 0) m.set(r, (m.get(r) ?? 0) + v);
+		}
+		return m;
+	});
+	/** the card map's frame: the shared card frame slid 0,264° west and a
+	 *  degree wider there, as on the Anti-nero card, so the title, the
+	 *  toggle and the key have the left */
+	const ALLOC_SHIFT = 0.264;
+	const ALLOC_WEST = 0.5;
+	const ALLOC_BOUNDS: [[number, number], [number, number]] = [
+		[CARD_BOUNDS[0][0] - ALLOC_SHIFT - ALLOC_WEST, CARD_BOUNDS[0][1]],
+		[CARD_BOUNDS[1][0] - ALLOC_SHIFT, CARD_BOUNDS[1][1]]
+	];
+	let valH = $state(0);
+	/** MONEY PER YEAR in the ranking's slot: the six bars share the tile's
+	 *  height, 35 px each at most (the full frame's own), the rest in the gaps */
+	let moneyH = $state(0);
+	const MONEY_GAP = 3.3;
+	const moneyBar = $derived.by(() => {
+		const n = Math.max(1, o.yearly.length);
+		return Math.max(10, Math.min(35, (moneyH - (n - 1) * MONEY_GAP) / n));
+	});
+	const moneyGap = $derived.by(() => {
+		const n = Math.max(1, o.yearly.length);
+		return n > 1 ? Math.max(MONEY_GAP, (moneyH - n * moneyBar) / (n - 1)) : MONEY_GAP;
 	});
 
 	let swarm = $state.raw<DaseSwarm | null>(null);
@@ -368,81 +422,136 @@
 </svelte:head>
 
 <div class="dasep">
+<!-- the two lenses of the card map, stacked under its title in their
+     full wording, the chosen one black (the Anti-nero card's treatment) -->
+{#snippet allocSwitch()}
+	<div class="allocsw" role="group" aria-label="Allocation by">
+		<button class:on={allocKind === 'work'} onclick={() => (allocKind = 'work')}
+			>by area of the awarding forest service</button
+		>
+		<button class:on={allocKind === 'home'} onclick={() => (allocKind = 'home')}
+			>by registered office of the co-operatives</button
+		>
+	</div>
+{/snippet}
 <DatasetCard
 	ds="dase"
 	params={PARAMS}
-	kpis={kpiCards}
+	layout="triple"
+	richKpis={kpiRich}
+	cols={[549, 711, 516]}
+	midRows={[1]}
+	rightRows={[327.2, 605.3]}
+	midGap={15.4}
+	rightGap={20.5}
 	hint="atlas/src/content/datasets/dase.md"
 >
 	{#snippet text()}
 		<Text />
-	<div class="about">
-		<div class="kicker">THE CO-OPERATIVES</div>
-		<p>
-			Every public contract won by a forest labour co-operative (ΔΑ.Σ.Ε., ν.4423/2016) since
-			September 2021 — logging, clearing and tending work in the same forests the Anti-nero
-			millions target, at a fraction of the size: the median contract is {eur(
-				o.kpis.median_eur
-			)} and {pct(o.kpis.pct_direct)} went by direct award, from {grInt(o.kpis.n_orgs)} awarding
-			bodies through {grInt(o.kpis.n_units)} units. Of the {eurShort(o.kpis.total_eur)} stated,
-			{eurShort(o.kpis.paid_eur)} shows as paid ({grInt(o.kpis.n_payments)} payment orders) —
-			payments are posted for {grInt(o.kpis.n_paid_contracts)} of {grInt(
-				o.kpis.n_contracts
-			)} contracts, a registry practice, not a delivery record —
-			<a href="/methodology#dase-dedup">methodology</a>.
-		</p>
-		<!-- the BASIS, said once for the whole page (the Anti-nero copy
-		     doctrine, applied 2026-08-25): the frames below no longer
-		     repeat it -->
-		<p class="basis">
-			All amounts are the contracts' stated values excl. VAT; {grInt(o.kpis.n_cancelled)}
-			cancelled and {grInt(o.kpis.n_superseded)} superseded versions are excluded, one co-op's
-			registry spellings (up to {o.kpis.max_name_variants}) merge on its canonical ΑΦΜ, and a
-			contract signed by several co-ops jointly is split evenly between them — no euro counted
-			twice; payments are a separate, structurally partial layer —
-			<a href="/methodology#dase-dedup">basis</a>.
-		</p>
-	</div>
 	{/snippet}
-	{#snippet tiles()}
-		<Tile
-			title="MAP"
-			sub="stated net € by regional unit of the awarding forest service"
-			hint="Each regional unit is shaded by the stated net € of the contracts its forest service awarded — darker is more. The full map pairs it with where the co-operatives are seated and drills either way."
-			href="#dase-allocation"
-		>
-			<div class="tilefill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
-				{#if tileW && tileH && tileChoro}
-					<PaperMap
-						width={tileW}
-						height={tileH}
-						colorOf={(pe) => {
-							const v = tileChoro.by.get(pe) ?? 0;
-							return v ? `color-mix(in srgb, var(--c-dase) ${Math.round(12 + 78 * Math.sqrt(v / tileChoro.max))}%, #fff)` : '#fff';
-						}}
-						tipOf={(pe) => `<strong>${ruLabel(pe)}</strong><br>${eurShort(tileChoro.by.get(pe) ?? 0)} of contracts`}
+	{#snippet tileMain()}
+		<Tile title="CONTRACT VALUES" href="#dase-values" fit>
+			<div class="tilefill valbody" bind:clientHeight={valH}>
+				{#if swarm && valH}
+					<!-- the dots' greens are the years of signature: said in a key
+					     under the title -->
+					<div class="yearkey">
+						{#each swarmYears as y (y)}
+							<span><i style:background={YEAR_COLORS[y]}></i>{y}</span>
+						{/each}
+					</div>
+					<BeeswarmCanvas
+						data={swarm}
+						edges={o.histogram.edges}
+						linkBase="/dase/contract/"
+						minHeight={Math.max(60, valH - 34)}
+						radius={Math.max(0.9, Math.min(2.6, 1.6 * ((valH - 34) / 330)))}
 					/>
 				{/if}
 			</div>
 		</Tile>
-		<Tile
-			title="RANKING OF CO-OPERATIVES"
-			sub="the ten co-operatives with the most stated net €"
-			hint="Bar length is the stated net € of the contracts each co-operative signed, its registry spellings merged on its ΑΦΜ; a contract signed jointly is split evenly."
-			href="#top-coops"
-		>
-			<BarH rows={coopRows} color="var(--c-dase)" inside barHeight={28} valuesRight />
+	{/snippet}
+	{#snippet tileA()}
+		<Tile title="MONEY PER YEAR" href="#dase-yearly" fit>
+			<div class="tilefill rankbody" bind:clientHeight={moneyH}>
+				{#if moneyH}
+					<BarH rows={yearRows} color="var(--c-dase)" inside compact barHeight={moneyBar} gap={moneyGap} fontPx={10} valuesRight />
+				{/if}
+			</div>
 		</Tile>
-		<Tile
-			title="MONEY PER YEAR"
-			sub="stated net € of the contracts signed in each year"
-			hint="One bar per year of signature, its length the stated net € of that year's contracts."
-			href="#dase-yearly"
-		>
-			<BarH rows={yearRows} color="var(--c-dase)" inside barHeight={28} valuesRight />
+	{/snippet}
+	{#snippet tileB()}
+		<Tile title="ALLOCATION OF FUNDING" href="#dase-allocation" fit headOver>
+			<div class="tilefill mapfill" bind:clientWidth={tileW} bind:clientHeight={tileH}>
+				{@render allocSwitch()}
+				{#if tileW && tileH && allocChoro}
+					<PaperMap
+						width={tileW}
+						height={tileH}
+						interactive={false}
+						fitBounds={ALLOC_BOUNDS}
+						fitPad={0}
+						context={false}
+						outlineBy={regionOfPe}
+						tipDefaultCorner="bottom-right"
+						tipCompact
+						colorOf={(pe) => cardChoro(allocChoro.by.get(pe) ?? 0)}
+						tipOf={(pe) =>
+							`<strong>${ruLabel(pe)}</strong> · ${eurShort(allocChoro.by.get(pe) ?? 0)}`}
+						peGroup={(pe) => {
+							const r = regionOfPe(pe);
+							if (selDase) return r ?? pe;
+							return r && regionEur.has(r) ? r : null;
+						}}
+						onRegionClick={(pe) => {
+							if (selDase) {
+								selDase = null;
+								return;
+							}
+							const r = regionOfPe(pe);
+							if (r && regionEur.has(r)) selDase = r;
+						}}
+						fitPesLive={selDasePes}
+						onEmptyClick={() => (selDase = null)}
+						onEscape={() => (selDase = null)}
+					/>
+					<div class="mapkey left">
+						<div class="ends"><span>0</span><span class="max">{eurShort(allocChoro.max)}</span></div>
+						<span class="swatches"><i class="empty"></i>{#each RAMP_DASE as c (c)}<i style:background={c}></i>{/each}</span>
+						<div class="sent">€ of contracts — a jointly signed contract split evenly</div>
+					</div>
+				{/if}
+			</div>
 		</Tile>
 	{/snippet}
 	{#snippet more()}
+			<div class="about">
+			<div class="kicker">THE CO-OPERATIVES</div>
+			<p>
+				Every public contract won by a forest labour co-operative (ΔΑ.Σ.Ε., ν.4423/2016) since
+				September 2021 — logging, clearing and tending work in the same forests the Anti-nero
+				millions target, at a fraction of the size: the median contract is {eur(
+					o.kpis.median_eur
+				)} and {pct(o.kpis.pct_direct)} went by direct award, from {grInt(o.kpis.n_orgs)} awarding
+				bodies through {grInt(o.kpis.n_units)} units. Of the {eurShort(o.kpis.total_eur)} stated,
+				{eurShort(o.kpis.paid_eur)} shows as paid ({grInt(o.kpis.n_payments)} payment orders) —
+				payments are posted for {grInt(o.kpis.n_paid_contracts)} of {grInt(
+					o.kpis.n_contracts
+				)} contracts, a registry practice, not a delivery record —
+				<a href="/methodology#dase-dedup">methodology</a>.
+			</p>
+			<!-- the BASIS, said once for the whole page (the Anti-nero copy
+			     doctrine, applied 2026-08-25): the frames below no longer
+			     repeat it -->
+			<p class="basis">
+				All amounts are the contracts' stated values excl. VAT; {grInt(o.kpis.n_cancelled)}
+				cancelled and {grInt(o.kpis.n_superseded)} superseded versions are excluded, one co-op's
+				registry spellings (up to {o.kpis.max_name_variants}) merge on its canonical ΑΦΜ, and a
+				contract signed by several co-ops jointly is split evenly between them — no euro counted
+				twice; payments are a separate, structurally partial layer —
+				<a href="/methodology#dase-dedup">basis</a>.
+			</p>
+		</div>
 <ChartFrame title="CONTRACT FIGURES" anchor="figures">
 	<div class="figures">
 		<div class="midcol">
@@ -1160,18 +1269,140 @@
 	.rankw {
 		max-width: none;
 	}
-	/* the card's map tile fills its panel, in the page's own map dress
-	   (`.tilefill`, not `.fill` — the direct-award bar owns that name) */
+	/* the card's tiles fill their panels (`.tilefill`, not `.fill` — the
+	   direct-award bar owns that name); the map in the Anti-nero card's
+	   manners: thinner lines, no plate, white unit seams on the green */
 	.tilefill {
 		position: absolute;
 		inset: 0;
 	}
 	.tilefill :global(.map) {
-		background: #f2f2f2;
-		border: 1px solid var(--line);
+		background: transparent;
+		border: none;
 		--land-context: #fff;
 		--map-accent: var(--card-accent);
 		box-shadow: none;
+	}
+	.tilefill.mapfill {
+		--region-line-w: 0.35;
+		--context-line-w: 0.35;
+		--border-line-w: 0.6;
+		--land-hot: #e6e6e6;
+		--unit-line: #fff;
+		--unit-line-w: 0.45;
+	}
+	/* the page's own region stroke must not reach the card map's units */
+	.tilefill.mapfill :global(.region.noline) {
+		stroke: var(--unit-line);
+	}
+	/* the key as on the Anti-nero card: the ends of the scale on a line
+	   ABOVE a 128 px swatch bar with a ½ px black hairline, the sentence
+	   under it, 10 px lettering, on the title's A */
+	.tilefill .mapkey {
+		position: absolute;
+		bottom: 14px;
+		left: 8px;
+		margin: 0;
+		padding: 0;
+		z-index: 2;
+		pointer-events: none;
+		font-family: var(--font-ui);
+		font-size: 10px;
+		line-height: 12px;
+		color: var(--ink);
+		font-variant-numeric: tabular-nums;
+		background: none;
+		border-radius: 0;
+		display: block;
+	}
+	.mapkey .ends {
+		position: relative;
+		width: 128px;
+		height: 13px;
+	}
+	.mapkey .ends span {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		white-space: nowrap;
+	}
+	.mapkey .ends .max {
+		left: auto;
+		right: -33px;
+	}
+	.mapkey .swatches {
+		display: flex;
+		width: 128px;
+		box-sizing: border-box;
+		border: 0.5px solid #000;
+	}
+	.mapkey .swatches i {
+		display: block;
+		flex: 1 1 0;
+		height: 11.6px;
+	}
+	.mapkey .swatches i.empty {
+		background: var(--land-empty);
+	}
+	.mapkey .sent {
+		margin-top: 9px;
+		white-space: nowrap;
+	}
+	/* the lenses, stacked under the title at the top-left */
+	.allocsw {
+		position: absolute;
+		/* each lens on ONE line, the pair tight under the title (user, 2026-08-28) */
+		top: 30px;
+		left: 8px;
+		z-index: 3;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		width: max-content;
+	}
+	.allocsw button {
+		font-family: var(--font-ui);
+		font-size: 10px;
+		line-height: 12px;
+		text-align: left;
+		white-space: nowrap;
+		padding: 1.6px 3.4px 2px;
+		background: #fff;
+		color: var(--ink);
+		border: none;
+		cursor: pointer;
+		min-height: 20px;
+	}
+	.allocsw button.on {
+		background: var(--c-dase);
+		color: #fff;
+	}
+	.tilefill.valbody,
+	.tilefill.rankbody {
+		position: absolute;
+		display: flex;
+		flex-direction: column;
+	}
+	.yearkey {
+		flex: none;
+		display: flex;
+		gap: 12px;
+		padding: 8px 0 2px;
+		font-family: var(--font-ui);
+		font-size: 11px;
+		color: var(--ink-soft);
+	}
+	.yearkey i {
+		display: inline-block;
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		margin-right: 4px;
+		vertical-align: -1px;
+	}
+	.tilefill.valbody :global(.bees) {
+		flex: 1;
+		min-height: 0;
 	}
 	/* the programme figures — the bars the hero used to carry beside its
 	   cards — open the unfolded part */

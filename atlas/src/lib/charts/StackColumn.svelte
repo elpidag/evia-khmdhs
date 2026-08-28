@@ -32,6 +32,7 @@
 		highlight = null,
 		variant = 'side',
 		inset = 0,
+		ramp = RAMP_WORKS,
 		ariaLabel = 'Stacked column'
 	}: {
 		rows: Row[];
@@ -45,6 +46,9 @@
 		/** the card: how far the box extends into the tile's padding on
 		 *  each side — the drawing keeps the tile's own left edge as 0 */
 		inset?: number;
+		/** the card's tones: a ramp whose darker half colours the segments
+		 *  (the greys by default, the ΔΑΣΕ greens on that card) */
+		ramp?: string[];
 		ariaLabel?: string;
 	} = $props();
 	const COL_W_SIDE = 56;
@@ -81,7 +85,7 @@
 	const textW = (s: string) => (fontReady && measurer ? measurer.measureText(s).width : s.length * CHAR);
 	/** the grey ramp's darker half, one tone per segment, the biggest black */
 	const tone = (i: number, k: number) =>
-		RAMP_WORKS[k <= 1 ? 7 : Math.round(3 + (i * 4) / (k - 1))];
+		ramp[k <= 1 ? 7 : Math.round(3 + (i * 4) / (k - 1))];
 	/** the name beside a segment, WHOLE: wrapped on words to the label's width */
 	const wrap = (s: string): string[] => {
 		const out: string[] = [];
@@ -179,7 +183,7 @@
 				{/if}
 				{#if card}
 					{#if s.r.sub}
-						<text x={colX - 4} y={s.mid + 3.5} class="sub" text-anchor="end">{s.r.sub}</text>
+						<text x={colX - 4} y={s.ly + 3.5} class="sub" text-anchor="end">{s.r.sub}</text>
 					{/if}
 					{#each s.name as line, j (j)}
 						<text x={labX} y={top + 9 + j * NAME} class="lab" class:hot={s.hot}>{line}</text>

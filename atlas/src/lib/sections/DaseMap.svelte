@@ -16,7 +16,7 @@
 	import { goto } from '$app/navigation';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
 	import DotLayer from '$lib/maps/DotLayer.svelte';
-	import { makeChoro, spreadOverlaps } from '$lib/maps/useGeo';
+	import { makeChoro, spreadOverlaps, RAMP_DASE } from '$lib/maps/useGeo';
 	import { peEn, ruLabel } from '$lib/transforms/regions';
 	import { eurShort, grInt, pct } from '$lib/transforms/format';
 	import type { DaseAllocation } from '$lib/api';
@@ -32,16 +32,6 @@
 	};
 
 	// the ΔΑΣΕ green ramp — the dataset's own hue, light → dark
-	const RAMP_DASE = [
-		'#eef7f2',
-		'#d7ece0',
-		'#b9dcc8',
-		'#93c9ac',
-		'#6bb28d',
-		'#479a72',
-		'#2b7d58',
-		'#175c3e'
-	];
 
 	type Side = 'works' | 'seats';
 	const focus = $derived.by(() => {
