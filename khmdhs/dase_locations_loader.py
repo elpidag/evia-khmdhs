@@ -8,8 +8,14 @@ are kept identical so any reader works on either DB:
 
   address        the register's own address line (a co-op's is its village)
   city           the reference town of the register record
-  region_pe      the Π.Ε. the co-op's own contracts sit in — the geocode
-                 validator, recorded as what it is (see `notes`)
+  region_pe      the Π.Ε. of the REGISTERED OFFICE — the regional unit the
+                 geocoded point falls in (the coarse Π.Ε. layer, a ray
+                 cast), else the one the registered postcode / town
+                 implies. Until 2026-08-28 this column held the Π.Ε. of the
+                 co-op's FIRST CONTRACT: the seat choropleth and the actors
+                 map read it as the seat and credited 17 travelling co-ops
+                 to where they worked (DATA_DECISIONS). The contracts' Π.Ε.
+                 now ride in `notes`, for the audit only
   lat/lon        OSM Nominatim, accepted only through the shared gate
   geo_precision  address | municipality | failed — for co-ops it is almost
                  always `municipality`: the centre of the named settlement,
@@ -38,9 +44,53 @@ from datetime import date
 from pathlib import Path
 
 from . import db as db_mod
+from khmdhs.greek_regions import resolve_pe
 
 DATA_FILE = Path(__file__).parent / "data" / "dase_coop_locations.json"
 DEFAULT_DB = (Path(__file__).resolve().parents[1] / "data" / "processed" / "dase.sqlite")
+
+
+_PE_LAYER = Path(__file__).resolve().parents[1] / "webui" / "static" / "greek_pe.geojson"
+_PE_POLYS: list[tuple[str, list]] | None = None
+
+
+def _pe_polys() -> list[tuple[str, list]]:
+    """The 74 Π.Ε. polygons of the coarse display layer, as (pe, rings)."""
+    global _PE_POLYS
+    if _PE_POLYS is None:
+        polys: list[tuple[str, list]] = []
+        if _PE_LAYER.exists():
+            gj = json.loads(_PE_LAYER.read_text(encoding="utf-8"))
+            for f in gj["features"]:
+                g = f["geometry"]
+                parts = g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
+                for part in parts:
+                    polys.append((f["properties"]["pe"], part))
+        _PE_POLYS = polys
+    return _PE_POLYS
+
+
+def _inside(x: float, y: float, ring: list) -> bool:
+    ok, j = False, len(ring) - 1
+    for i in range(len(ring)):
+        xi, yi = ring[i][0], ring[i][1]
+        xj, yj = ring[j][0], ring[j][1]
+        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / ((yj - yi) or 1e-12) + xi:
+            ok = not ok
+        j = i
+    return ok
+
+
+def seat_pe(lat: float | None, lon: float | None, city: str | None,
+            postal: str | None) -> tuple[str | None, str]:
+    """The Π.Ε. of a registered office: the unit the point lies in, else
+    the one the postcode / town implies. Returns (pe, how)."""
+    if lat is not None and lon is not None:
+        for pe, rings in _pe_polys():
+            if _inside(lon, lat, rings[0]) and not any(_inside(lon, lat, h) for h in rings[1:]):
+                return pe, "point"
+    pe, how = resolve_pe(city, postal)
+    return pe, how
 
 
 def load(conn: sqlite3.Connection, data_file: Path = DATA_FILE) -> int:
@@ -77,7 +127,8 @@ def load(conn: sqlite3.Connection, data_file: Path = DATA_FILE) -> int:
             cur.get("note"), e.get("seat_note"),
             (f"Earlier, contract {older['ref']} ({older.get('date') or 'undated'}) "
              f"stated: «{older['excerpt']}»." if older else None)) if x) or None
-        pe = (e.get("contract_pes") or [None])[0]
+        pe, how = seat_pe(lat, lon, city, postal)
+        contract_pes = ", ".join(e.get("contract_pes") or []) or "none"
         conn.execute(
             """INSERT OR REPLACE INTO contractor_locations
                (vat_number, legal_name, address, postal_code, city, region_pe,
@@ -87,8 +138,8 @@ def load(conn: sqlite3.Connection, data_file: Path = DATA_FILE) -> int:
             (vat, reg.get("name") or (e.get("registry_names") or [None])[0],
              settlement, postal, city, pe, lat, lon, prec,
              seat_source, reg.get("source_url"),
-             ("region_pe is the Π.Ε. of this co-operative's own contracts, used to "
-              "validate the geocode — not a stated seat"),
+             (f"region_pe is the Π.Ε. of the registered office (by {how}); "
+              f"this co-operative's contracts sit in: {contract_pes}"),
              today, seat_source, seat.get("ref"), seat.get("excerpt"), note,
              "settlement" if prec == "municipality" else (
                  "street" if prec == "address" else None)))

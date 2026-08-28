@@ -137,19 +137,53 @@ def test_every_point_agrees_with_its_own_registered_postcode(conn):
     assert not bad, f"points outside their own postcode's Π.Ε.: {bad[:5]}"
 
 
-def test_the_inferred_seats_do_sit_in_their_contracts_region(conn):
+def test_the_inferred_seats_do_sit_in_their_contracts_region(conn, curated):
     """The 8 seats read from a co-op's own name were accepted BECAUSE the
     settlement lies in the Π.Ε. of its contracts — so for those, and only
-    those, that agreement must hold."""
+    those, that agreement must hold (the contracts' Π.Ε. come from the
+    curated file: `region_pe` is the SEAT's Π.Ε. since 2026-08-28)."""
     from khmdhs.greek_regions import PE_CENTROIDS
 
-    for vat, lat, lon, pe in conn.execute(
-            """SELECT vat_number, lat, lon, region_pe FROM contractor_locations
+    for vat, lat, lon in conn.execute(
+            """SELECT vat_number, lat, lon FROM contractor_locations
                 WHERE seat_source = 'name_inference' AND lat IS NOT NULL"""):
-        c = PE_CENTROIDS.get(pe)
-        assert c, f"{vat}: unknown Π.Ε. {pe!r}"
-        assert abs(lat - c[0]) <= 1.5 and abs(lon - c[1]) <= 1.5,             f"{vat}: inferred seat outside {pe}"
+        pes = curated[vat].get("contract_pes") or []
+        assert pes, f"{vat}: an inferred seat with no contract region to check against"
+        ok = False
+        for pe in pes:
+            c = PE_CENTROIDS.get(pe)
+            assert c, f"{vat}: unknown Π.Ε. {pe!r}"
+            ok = ok or (abs(lat - c[0]) <= 1.5 and abs(lon - c[1]) <= 1.5)
+        assert ok, f"{vat}: inferred seat outside its contracts' Π.Ε. {pes}"
 
+
+def test_region_pe_is_the_seat_not_the_work(conn, curated):
+    """`region_pe` is the regional unit of the REGISTERED OFFICE — the Π.Ε.
+    the geocoded point falls in (DATA_DECISIONS 2026-08-28). Until then it
+    held the Π.Ε. of the co-op's first contract, and the seat choropleth
+    credited 17 travelling co-operatives to where they worked: ΔΑ.Σ.Ε.
+    ΚΡΥΟΝΕΡΙΟΥ, seated at Κρυονέρι of Σοχός (57002, Θεσσαλονίκη), was shown
+    as an Ηλεία seat because its four contracts are in Ηλεία."""
+    from khmdhs.dase_locations_loader import seat_pe
+
+    rows = conn.execute(
+        """SELECT vat_number, lat, lon, city, postal_code, region_pe, notes
+             FROM contractor_locations""").fetchall()
+    assert len(rows) == 246
+    bad = [(vat, pe, seat_pe(lat, lon, city, pc)[0])
+           for vat, lat, lon, city, pc, pe, _ in rows
+           if pe != seat_pe(lat, lon, city, pc)[0]]
+    assert not bad, f"region_pe is not the seat's unit: {bad[:5]}"
+    kry = {vat: (pe, notes) for vat, _, _, _, _, pe, notes in rows}["096034987"]
+    assert kry[0] == "Π.Ε. Θεσσαλονίκης"
+    assert "Π.Ε. Ηλείας" in kry[1]           # where it works stays on record
+    # the finding this layer states: the co-operatives with at least one
+    # contract outside their seat's Π.Ε. (43 of 246 on the corrected seats;
+    # 11 of them have NO contract at home at all)
+    travelling = sum(
+        1 for vat, _, _, _, _, pe, _ in rows
+        if pe and any(p != pe for p in (curated[vat].get("contract_pes") or [])))
+    assert travelling == 43, travelling
 
 def test_seat_evidence_is_the_latest_statement(curated):
     """A seat can be restated: the excerpt stored must come from the co-op's

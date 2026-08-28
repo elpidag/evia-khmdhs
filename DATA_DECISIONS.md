@@ -10770,3 +10770,38 @@ tile's edge. `BeeswarmCanvas maxHeight`: a card tile passes its own box
 and the dots shrink until the tallest column fits it (floor r 0,9);
 verified on both cards at 1920 × 1080, 1667 × 784 and 1440 × 820 — the
 canvas ends 6–7 px inside the body everywhere.
+
+**2026-08-28 — a ΔΑΣΕ co-operative's seat Π.Ε. is its REGISTERED OFFICE's,
+not its first contract's.** The user found a regional unit shaded on the
+co-operatives card's «by registered office» map with no co-op dot in it
+on the actors map (Π.Ε. Ηλείας): `dase_locations_loader` had stored in
+`contractor_locations.region_pe` the Π.Ε. of the co-op's FIRST CONTRACT
+(`contract_pes[0]`, "the geocode validator, recorded as what it is"), and
+`queries_extra.dase_allocation` (the seat side, the flows, the away share)
+and `authorities_map_points` (the dots' `pe`) read that column as the SEAT
+— so every co-operative that works away from home was credited, on the
+seat map, to where it works. 17 of 246 were wrong: ΔΑ.Σ.Ε. ΚΡΥΟΝΕΡΙΟΥ
+(096034987), seated at Κρυονέρι of Σοχός (57002, Λαγκαδάς — the register's
+own address, its point in Π.Ε. Θεσσαλονίκης), shown as an Ηλεία seat
+because its four contracts are in Ηλεία; the Τρίκαλα co-ops of Περτούλι,
+Χρυσομηλιά, Αθαμανία and Καλογριανή shown in Εύβοια and Ρόδος; Στεφανινά
+(Θεσσαλονίκη) in Εύβοια; Δίστρατο (Ιωάννινα) in Πρέβεζα; Ξινό Νερό
+(Φλώρινα) in Ημαθία; … Fix: `region_pe` = the Π.Ε. the geocoded point
+falls in (a ray cast over the coarse Π.Ε. layer, `seat_pe`), else the
+postcode / town's (`resolve_pe`); the contracts' Π.Ε. list moves into
+`notes` for the audit. The seat map, the flows and the away share are
+recomputed from the corrected column — figures below; the work side is
+untouched. Pinned by `test_region_pe_is_the_seat_not_the_work` (every
+row's `region_pe` == the unit under its point; Κρυονέρι in Θεσσαλονίκη).
+**The corrected figures** (from `/api/dase/allocation`): the money earned
+by co-operatives working OUTSIDE their seat's Π.Ε. is **50,2 % —
+€14.996.831 — not 37,4 %** (the wrong seats had hidden a third of it);
+Εύβοια's €9,47M is 84,6 % imported (was 64 %), Ηλεία's €3,40M and Ρόδος's
+€2,48M are 100 % imported (were 83 % and 68 %) — no co-operative is seated
+in either; the largest flows are Τρίκαλα → Εύβοια €2,99M, Θεσσαλονίκη →
+Ηλεία €1,78M and Πιερία → Ρόδος €1,22M; 43 of the 246 co-operatives hold a
+contract outside their seat's unit and 11 hold none at home; the seat map
+has 25 units (Ηλεία is no longer one). `test_dase_allocation_pins` re-pinned
+to 50,2; the lightbulb on the /dase frame computes its sentence from the
+payload and now says so.
+

@@ -1805,7 +1805,10 @@ def test_dase_allocation_pins(client):
     assert seat == pytest.approx(basis, abs=0.01)   # every co-op has a seat
     # the finding the frame states, computed server-side so the copy cannot drift
     assert a["local_eur"] + a["away_eur"] == pytest.approx(work, abs=0.01)
-    assert a["away_share"] == pytest.approx(37.4, abs=0.1)
+    # 50,2 % since the seat column became the REGISTERED OFFICE's Π.Ε.
+    # (DATA_DECISIONS 2026-08-28; it read 37,4 % while 17 travelling co-ops
+    # were credited to where they worked)
+    assert a["away_share"] == pytest.approx(50.2, abs=0.1)
     # the flows are the drill's data: every pair reconciles to the work side
     assert sum(f["eur"] for f in a["flows"]) == pytest.approx(work, abs=0.01)
     top = a["work_regions"][0]
