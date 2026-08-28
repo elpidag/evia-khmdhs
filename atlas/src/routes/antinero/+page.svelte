@@ -793,6 +793,7 @@
 						thresholds={miniThresholds}
 						linkBase="/antinero/contract/"
 						minHeight={Math.max(60, valH - 34)}
+						maxHeight={Math.max(60, valH - 34)}
 						radius={Math.max(0.9, 3.1 * Math.min(1, (valH - 34) / 350))}
 						padLeftFrac={0.1285}
 						medianColor="var(--c-fire)"

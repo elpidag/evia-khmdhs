@@ -465,6 +465,7 @@
 						edges={o.histogram.edges}
 						linkBase="/dase/contract/"
 						minHeight={Math.max(60, valH - 34)}
+						maxHeight={Math.max(60, valH - 34)}
 						radius={Math.max(0.9, Math.min(2.6, 1.6 * ((valH - 34) / 330)))}
 					/>
 				{/if}

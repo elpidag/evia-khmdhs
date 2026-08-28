@@ -4,7 +4,7 @@
 	// the ~60ms layout for 2,018 points
 	const layoutCache = new WeakMap<
 		object,
-		{ width: number; xs: number[]; ys: number[]; r: number; h: number; pad: number }
+		{ width: number; xs: number[]; ys: number[]; r: number; h: number; pad: number; maxH: number }
 	>();
 </script>
 
@@ -35,7 +35,8 @@
 		minHeight = 320,
 		radius = 2.6,
 		padLeftFrac = 0,
-		medianColor = 'var(--ink)'
+		medianColor = 'var(--ink)',
+		maxHeight = 560
 	}: {
 		data: DaseSwarm;
 		edges: number[];
@@ -58,6 +59,10 @@
 		padLeftFrac?: number;
 		/** the median line's colour (the ink unless a page says otherwise) */
 		medianColor?: string;
+		/** the tallest the chart may be: the dots shrink until the tallest
+		 *  column fits it — a card tile passes its own box, so the axis
+		 *  amounts at the foot are never clipped (user, 2026-08-28) */
+		maxHeight?: number;
 	} = $props();
 
 	// margins must match LogHistogram's exactly — the shared axis is defined
@@ -66,7 +71,7 @@
 	let width = $state(900);
 	const R = $derived(radius);
 	const MIN_H = $derived(minHeight);
-	const MAX_H = 560;
+	const MAX_H = $derived(maxHeight);
 
 	interface Dot {
 		i: number;
@@ -84,7 +89,8 @@
 	const x = $derived((v: number) => binPosition(v, edges, M.left + pad, bw));
 	const layout = $derived.by(() => {
 		let cached = layoutCache.get(data);
-		if (cached && Math.abs(cached.width - width) <= 2 && cached.pad === pad) return cached;
+		if (cached && Math.abs(cached.width - width) <= 2 && cached.pad === pad && cached.maxH === MAX_H)
+			return cached;
 		const xs = valid.map((i) => x(data.eur[i]!));
 		// same-priced contracts stack into tall columns; size the canvas to
 		// the tallest one (the fixed-height version clipped ~1/3 of it) and
@@ -92,13 +98,13 @@
 		let r = R;
 		let ys = dodge(xs, r + 0.4);
 		let half = Math.max(...ys.map(Math.abs)) + r + 2;
-		while (M.top + M.bottom + 2 * half > MAX_H && r > 1.5) {
-			r = Math.max(1.5, r * 0.85);
+		while (M.top + M.bottom + 2 * half > MAX_H && r > 0.9) {
+			r = Math.max(0.9, r * 0.85);
 			ys = dodge(xs, r + 0.4);
 			half = Math.max(...ys.map(Math.abs)) + r + 2;
 		}
 		const h = Math.round(Math.max(MIN_H, M.top + M.bottom + 2 * half));
-		cached = { width, xs, ys, r, h, pad };
+		cached = { width, xs, ys, r, h, pad, maxH: MAX_H };
 		layoutCache.set(data, cached);
 		return cached;
 	});

@@ -10761,3 +10761,12 @@ the «largest: …» note AT its own dot — above every dot within 70 px of
 its column, ending over the dot, a vertical tick down to it (the note
 used to sit in the frame's top-right corner, and a first move to the
 dot's left printed it over the neighbouring dots).
+**Debugged the same evening** (user: the amounts under the lines «still
+do not appear»): they were there at 1920 × 1080 and CLIPPED in the user's
+smaller window — the beeswarm sized itself to its tallest dot column
+(shrinking the dots only past a fixed 560 px), so in a short tile the
+canvas ran past the box and the axis row at its foot fell under the
+tile's edge. `BeeswarmCanvas maxHeight`: a card tile passes its own box
+and the dots shrink until the tallest column fits it (floor r 0,9);
+verified on both cards at 1920 × 1080, 1667 × 784 and 1440 × 820 — the
+canvas ends 6–7 px inside the body everywhere.
