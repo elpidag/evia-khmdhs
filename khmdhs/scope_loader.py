@@ -1,7 +1,7 @@
 """Build the contract_scope table: Anti-nero relevance for every contract.
 
 For each row in `contracts`, khmdhs.scope.classify() decides a scope
-(antinero_i…antinero_2026, umbrella, support, non_antinero). Curated
+(antinero_i…antinero_v_plus, umbrella, support, non_antinero). Curated
 phases from khmdhs/data/antinero_supplement.json override the rules.
 
 After classification and amendment inheritance, a demote pass applies
@@ -72,7 +72,7 @@ def build_scopes(conn, overrides: dict[str, str],
     rows = conn.execute("""
         SELECT k.reference_number, k.title, k.public_funding_ref,
                k.public_funding_ref_num, k.prev_reference_no, k.cancelled,
-               k.total_cost_with_vat,
+               k.total_cost_with_vat, k.contract_signed_date,
                GROUP_CONCAT(c.vat_number) AS vats
         FROM contracts k
         LEFT JOIN contractors c USING (reference_number)
@@ -96,6 +96,8 @@ def build_scopes(conn, overrides: dict[str, str],
                 "public_funding_ref": r["public_funding_ref"],
                 "public_funding_ref_num": r["public_funding_ref_num"],
                 "contractor_vats": (r["vats"] or "").split(","),
+                "contract_signed_date": r["contract_signed_date"],
+                "prev_reference_no": r["prev_reference_no"],
             },
             overrides,
         )

@@ -996,7 +996,7 @@ _PHASE_LABELS = {
     "antinero_ii": "Anti-nero II",
     "antinero_iii": "Anti-nero III",
     "antinero_iv": "Anti-nero IV",
-    "antinero_2026": "Anti-nero 2026",
+    "antinero_v_plus": "Anti-nero V-PLUS",
     "antinero_esa": "ΕΣΑ reforestation",
     "antinero_restoration": "Restoration works",
     "antinero_unknown_phase": "Phase unknown",

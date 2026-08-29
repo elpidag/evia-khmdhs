@@ -41,7 +41,32 @@ def test_phase_iv():
 
 def test_phase_2026_not_mistaken_for_2():
     r = classify(row(title="ΕΡΓΑΣΙΕΣ ANTINERO 2026 ΔΑΣ ΤΡΙΚΑΛΩΝ"))
-    assert r.scope == "antinero_2026"
+    assert r.scope == "antinero_v_plus"
+
+
+def test_v_plus_by_fund_and_year():
+    """«Antinero V-PLUS» (DATA_DECISIONS 2026-08-29): the 2026 lots on the
+    III/IV fund name no phase in their titles; the signature year decides."""
+    r = classify(row(title="ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΚΟΡΙΝΘΟΥ",
+                     public_funding_ref_num="2023ΤΑ07500012",
+                     contract_signed_date="2026-03-19"))
+    assert r.scope == "antinero_v_plus" and r.scope in IN_SCOPE
+    # the same fund before 2026 stays what it was: unknown phase, to inherit
+    r = classify(row(title="1η ΤΡΟΠΟΠΟΙΗΣΗ ΣΥΜΒΑΣΗΣ 12/2024",
+                     public_funding_ref_num="2023ΤΑ07500012",
+                     contract_signed_date="2025-06-01"))
+    assert r.scope == "antinero_unknown_phase"
+    # a 2026 AMENDMENT of an older contract is no 2026 lot: unknown, to inherit
+    r = classify(row(title="ΔΕΞΑΜΕΝΕΣ & ΚΡΟΥΝΟΙ ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ 1η ΣΥΜΠΛΗΡΩΜΑΤΙΚΗ",
+                     public_funding_ref_num="2023ΤΑ07500012",
+                     contract_signed_date="2026-06-16",
+                     prev_reference_no="25SYMV017471484"))
+    assert r.scope == "antinero_unknown_phase"
+    # a 2026 lot whose title names IV keeps IV
+    r = classify(row(title="ΕΡΓΑ ANTINERO IV ΔΧ ΛΑΜΙΑΣ",
+                     public_funding_ref_num="2023ΤΑ07500012",
+                     contract_signed_date="2026-02-01"))
+    assert r.scope == "antinero_iv"
 
 
 def test_phase_ii_greek_iotas():

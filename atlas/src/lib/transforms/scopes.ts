@@ -5,7 +5,7 @@ export const SCOPE_ORDER = [
 	'antinero_ii',
 	'antinero_iii',
 	'antinero_iv',
-	'antinero_2026',
+	'antinero_v_plus',
 	'antinero_esa',
 	'antinero_restoration',
 	'antinero_unknown_phase'
@@ -16,7 +16,8 @@ export const SCOPE_LABELS: Record<string, string> = {
 	antinero_ii: 'Anti-nero II',
 	antinero_iii: 'Anti-nero III',
 	antinero_iv: 'Anti-nero IV',
-	antinero_2026: 'Anti-nero 2026',
+	// the ministry's own name for the February-2026 batch (DATA_DECISIONS 2026-08-29)
+	antinero_v_plus: 'Anti-nero V-PLUS',
 	antinero_esa: 'ΕΣΑ reforestation',
 	antinero_restoration: 'Restoration works',
 	antinero_unknown_phase: 'Phase unknown',
@@ -34,7 +35,7 @@ export const SCOPE_COLORS: Record<string, string> = {
 	antinero_ii: '#c4c4c4',
 	antinero_iii: '#a6a6a6',
 	antinero_iv: '#828282',
-	antinero_2026: '#5a5a5a',
+	antinero_v_plus: '#5a5a5a',
 	antinero_esa: '#3a3a3a',
 	antinero_restoration: '#141414',
 	antinero_unknown_phase: '#efefef'

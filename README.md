@@ -136,7 +136,7 @@ python -m khmdhs.scope_loader                # (re)build the contract_scope tabl
 ```
 
 `scope_loader` classifies **every** contract (khmdhs/scope.py) into
-`antinero_i…antinero_2026`, `antinero_umbrella` (ΤΑΙΠΕΔ/ΕΕΣΥΠ
+`antinero_i…antinero_v_plus`, `antinero_umbrella` (ΤΑΙΠΕΔ/ΕΕΣΥΠ
 pass-throughs), `antinero_support`, or `non_antinero` (routine pre-programme
 forest-road maintenance etc.), and marks contract versions superseded by a
 later modification. The web UI aggregates only `in_scope = 1` rows; detail

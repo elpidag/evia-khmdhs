@@ -109,7 +109,7 @@ authority-less), contractor HQs geocoded via Nominatim. Refreshable via
 |---|---|
 | `2022ΤΑ07500000` | Anti-nero I (07.02.2022 ΥΠΕΝ↔ΤΑΙΠΕΔ framework, ΟΠΣ 5161079) — titles never say "ANTINERO" |
 | `2021ΤΑ07500002` | Anti-nero II + its named components (ΕΣΑ, αντιδιαβρωτικά; ΟΠΣ ΤΑ 5201358) |
-| `2023ΤΑ07500012` | Anti-nero III / IV / 2026 (ΟΠΣ 5222791) |
+| `2023ΤΑ07500012` | Anti-nero III / IV / **V-PLUS** (ΟΠΣ 5222791, whose ΠΔΕ title is «ANTINERO III» — ΥΠΕΝ's acts on the 2026 lots say III). **«Antinero V-PLUS»** = the 19 February-2026 lots (16 calls, «αρ. 16 παρ. 5 ν. 998/1979», signed 05.03–03.04.2026), €66,110,956.16 net = €81,977,585.66 gross — the ministry's announced €81.98M to the euro; scope key `antinero_v_plus` (`antinero_2026` retired into it), rule in `scope.py`: fund 2023ΤΑ07500012 + signed ≥ 2026-01-01 + no title marker + NOT an amendment (an amendment inherits); 21 records = 19 lots + 2 amendments, 20 in scope; III 83 records / 79 in scope; DATA_DECISIONS 2026-08-29 |
 
 Fund fields are sometimes concatenated with the ΟΠΣ code → match with
 `startswith`. ΤΑΙΠΕΔ (997471299) / ΕΕΣΥΠ (997104555) hold umbrella pass-through
@@ -134,7 +134,7 @@ refetching open contracts — prefer it for routine updates.
 - `chain_loader.py` — repairs prev/next link columns from `raw_json`, then
   fetches missing amendment-chain members to closure.
 - `scope_loader.py` — classifies every contract via `scope.py` into
-  `antinero_{i,ii,iii,iv,2026,unknown_phase,esa,restoration,umbrella,support}` /
+  `antinero_{i,ii,iii,iv,v_plus,unknown_phase,esa,restoration,umbrella,support}` /
   `non_antinero`; IN_SCOPE = execution phases + esa + restoration + unknown.
   Then: (1) amendments with weak evidence (no evidence, or unknown_phase)
   inherit the predecessor's scope, iterating; (1b) demote pass — ADAMs in
@@ -501,6 +501,15 @@ refetching open contracts — prefer it for routine updates.
   pdftotext reads its command line in the ANSI code page and writes ANSI
   without `-enc UTF-8` — Greek ΑΔΑ paths and Greek text both broke; the
   helper now converts through ASCII temp names in UTF-8.
+- `scripts/find_antinero_new.py` — **the only discovery of a NEW Anti-nero
+  contract** (2026-08-29): the known contractors' spellings (≤30 chars, the
+  registry's limit) + ΑΦΜ over ΚΗΜΔΗΣ windows, the family siblings, and
+  ΥΠΕΝ's Diavgeia acts whose subject stamps a SYMV ΑΔΑΜ; every candidate
+  screened like `antinero_loader.verify_relevance`; the 17 post-export
+  contracts are its control. Writes a JSON report, never the DB. (The
+  contract universe itself came from a one-off portal export of 2026-05-09
+  plus the hand-made supplement — see DATA_DECISIONS 2026-08-29.)
+- `scripts/find_antinero_by_payments.py` + the `--cpv` route of `find_antinero_new.py` — round 2 of the discovery (2026-08-29): every ΥΠΕΝ «ΤΑ075»/clearance act on Diavgeia read for its «ΑΔΑΜ ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ» stamp (3,683 PDFs → 251 stamped contracts, all held; control 285/293 stored payment acts), and ΚΗΜΔΗΣ `cpvItems` on the programme's ten codes over 150-day windows since 2022 (3,082 Greek contracts, screened FUND-FIRST — `screen()` tests the fund before the authority since ΕΕΣΥΠ signs some lots). The CPV route is the only one that sees a first-time contractor: it found 26SYMV018768552 (ΕΣΑ Λίμνης, ΕΕΣΥΠ, €402,578.43 net; found, NOT loaded) and three registry second-postings of stored ΣΠ-Β studies (24SYMV016004702/016005190/016005431 — never to be added). Reports only, never the DB.
 - `refresh.py` — **incremental refresh**: refetches open in-scope chain tips
   (end_date NULL or <90 days past), upserts only changed payloads (diff on
   lastUpdateDate/paymentRefNo/nextRefNo/cancelled), backs payloads up to
@@ -791,7 +800,7 @@ forest labour cooperative (ΔΑ.Σ.Ε./ΑΔΣΕ/ΕΔΑΣΕ, ν.4423/2016 — exa
 26SYMV019413118): 2,164 contracts, €47.0M gross, ~251 co-ops.
 **Contractor-led harvest, NOT CPV-led** (the example's only CPV is
 77312000-0, outside the 772 δασοκομία family — CPV-first provably
-misses). `scripts/harvest_dase.py` (resumable: collect → close → load)
+misses). `scripts/harvest_dase.py` (resumable: collect → close → load; since 2026-08-29 `--since DATE` for an incremental window and `--out DIR` for a scratch run, the resume keys carry both window ends)
 sweeps KHMDHS search (`api.search_page`; body fields `contractorName`
 substring case/accent-sensitive, contractor-side `vatNumber`,
 `cpvItems`; the server clamps every query to a 6-month submissionDate
@@ -1212,7 +1221,10 @@ superseded. `projects` columns `budget_vat_basis` + `budget_net_eur`,
 evidence key `budget_vat` (verbatim, mechanically verified ⊂ act text).
 
 - `scripts/harvest_anadohoi.py` — resumable: seeds (2 raw list exports) +
-  luminapi subject sweep across ALL orgs (pre-2022 acts live under ΑΠΔ Θ-ΣΕ)
+  luminapi subject sweep across ALL orgs (pre-2022 acts live under ΑΠΔ Θ-ΣΕ;
+  seven phrases since 2026-08-29 — the two «ΔΙΑΠΙΣΤΩΤΙΚΗ ΠΡΑΞΗ
+  ΟΛΟΚΛΗΡΩΣΗΣ/ΠΕΡΑΤΩΣΗΣ» needles reach the ΥΠΕΝ-style completions the
+  first five could not; `harvest.json` regenerated that day)
   + **ΑΔΑ-citation crawl to closure** (recitals cite parents/μελέτες);
   classifier proposals via `khmdhs/anadohoi.py:classify` are never final —
   titles lie both ways («ΔΩΡΕΑ…» is an orismos, «ΠΡΩΤΟΚΟΛΛΟ ΕΓΚΑΤΑΣΤΑΣΗΣ…»

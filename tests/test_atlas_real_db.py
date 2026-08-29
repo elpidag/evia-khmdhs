@@ -1898,3 +1898,22 @@ def test_landing_pins(client, kh):
     dots = client.get("/api/compare").get_json()["dots"]
     assert set(dots["dase"]["ref"]) <= set(L["dase"]["contracts"])
     assert set(dots["antinero"]["ref"]) <= set(L["antinero"]["contracts"])
+
+
+def test_v_plus_phase_pins(kh):
+    """«Antinero V-PLUS» (DATA_DECISIONS 2026-08-29): the 19 February-2026
+    lots reconcile to the ministry's announced €81,98M to the euro; their two
+    2026 amendments ride with them; the basis is untouched by the relabel."""
+    n, net, gross = kh.execute("""
+        SELECT COUNT(*), ROUND(SUM(k.total_cost_without_vat), 2), ROUND(SUM(k.total_cost_with_vat), 2)
+          FROM contracts k JOIN contract_scope s USING (reference_number)
+         WHERE s.scope = 'antinero_v_plus' AND s.basis LIKE 'curated:antinero_supplement%'""").fetchone()
+    assert (n, net, gross) == (19, 66110956.16, 81977585.66)
+    by_scope = dict(kh.execute(
+        "SELECT scope, COUNT(*) FROM contract_scope WHERE in_scope = 1 GROUP BY 1").fetchall())
+    assert by_scope["antinero_v_plus"] == 20 and by_scope["antinero_iii"] == 79  # 83 records, 4 superseded
+    assert "antinero_2026" not in by_scope
+    assert kh.execute("SELECT COUNT(*) FROM contract_scope WHERE scope = 'antinero_v_plus'").fetchone()[0] == 21
+    n, eur = kh.execute("""SELECT COUNT(*), ROUND(SUM(total_cost_without_vat), 2)
+        FROM contracts JOIN contract_scope USING (reference_number) WHERE in_scope = 1""").fetchone()
+    assert (n, eur) == (245, 622534181.72)

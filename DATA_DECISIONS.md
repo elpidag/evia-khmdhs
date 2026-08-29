@@ -10805,3 +10805,179 @@ has 25 units (Ηλεία is no longer one). `test_dase_allocation_pins` re-pinne
 to 50,2; the lightbulb on the /dase frame computes its sentence from the
 payload and now says so.
 
+**2026-08-29 — freshness check of the three datasets: what has been
+published since they were built (found and counted; NOTHING loaded).**
+Three explorers first read every harvest and loader (the ΔΑΣΕ harvest is
+repeatable but re-searches 2021→today and its resume keys were keyed on a
+window's START, silently skipping the days a later run adds; the Anti-nero
+universe rests on a one-off portal export of 2026-05-09 plus a hand-made
+55-ADAM supplement with NO automated discovery of a new procurement; the
+sponsored harvest's five subject needles reach designations 68/69 but
+ΥΠΕΝ-style completions only 5/16, and its `harvest.json` was missing, so
+the loader could not run). Then the check, on COPIES of the DBs:
+- **ΔΑΣΕ** (contracts as of 2026-07-26): `harvest_dase.py` gained `--since`
+  and `--out` and keys carrying both window ends (+ UTF-8 state files —
+  the ANSI default died on a Greek name). `collect`+`close --since
+  2026-07-01`: 12 rows, 4 already stored (the control, 4/4), **7 new
+  contracts, all August, €241.511 net, every one by a co-op already in
+  the whitelist** (the one «uncurated» key is a zero-padded twin of
+  096135196; «ΚΕΝΤΡΟ ΔΙΑΣΚΕΔΑΣΕΩΣ» the known false positive) — no new
+  co-operative, no new awarding body. 26SYMV019686651 (ΔΑΣΕ ΜΙΣΤΡΟΥ,
+  €195.565 net, 27.08.2026) is the one large one.
+- **Anti-nero** (ΚΗΜΔΗΣ as of 2026-07-25): new `scripts/find_antinero_new.py`
+  — three routes (the 175 contractor spellings ≤30 chars + 151 ΑΦΜ over
+  ΚΗΜΔΗΣ since May; the one family sibling; ΥΠΕΝ's Diavgeia acts since May
+  whose subject stamps a SYMV ΑΔΑΜ) — re-found all 17 post-export
+  contracts (the control) and found **NO new Anti-nero contract** (331
+  candidates screened out by authority VAT or fund; the 24 unknown ΑΔΑΜ
+  in ΥΠΕΝ subjects are ΤΑ07500030 support contracts, forest-road
+  contracts of other authorities and the like; one to look at:
+  26SYMV018768552, ΕΕΣΥΠ, «Εργασίες αποκατάστασης – αναδάσωση» of
+  02.04.2026 — an umbrella by its authority, screened out as such). The
+  refresh dry-run on the copy: **14 of 233 open tips changed, every
+  change one new payment order** (26PAY0196…, August), no amendment, no
+  cancellation. The two act sweeps on the copy (344 luminapi searches
+  each, ~20 min each — the 15–30 s/query on record did not hold today):
+  **+9 completion acts** (all posted 24–27.08.2026, all in-scope chains,
+  end dates 27.02 → 26.07.2026) and **+2 extension acts** (28.08.2026, to
+  30.09.2026). Diavgeia payment clearances of the Anti-nero funds since
+  2026-05-04: **88 acts** (the hand-made worksheet stops at 2026-05-07) —
+  none stamps the ΑΔΑΜ in its subject; the loader reads it from the PDF.
+- **Sponsored works** (seeds to 2026-07-22): the harvest re-run with two
+  more needles («ΔΙΑΠΙΣΤΩΤΙΚΗ ΠΡΑΞΗ ΟΛΟΚΛΗΡΩΣΗΣ / ΠΕΡΑΤΩΣΗΣ») — 871
+  candidates (was 322), `harvest.json` restored. **1 new designation act:
+  Ε3ΣΨ4653Π8-2ΣΚ (06.08.2026) — Τράπεζα Πειραιώς, €1.500.000 excl. ΦΠΑ,
+  study + anti-erosion and small anti-flood works, Δασαρχείο Αιγάλεω,
+  Π.Ε. Δυτικής Αττικής, for the fire of 31 July 2026 (a fire event the
+  dataset does not yet know).** 78 completion-style acts we did not hold,
+  most generic ΥΠΕΝ forestry; matched against the projects' own anchors:
+  **2 endings of open projects confirmed** — 6Ρ9Ξ4653Π8-ΦΑΨ (23.02.2024,
+  EREN's Λίμνη pilot reforestation, 9Φ9Ρ4653Π8-ΞΕΦ, cites its ΑΔΑ and
+  protocol; status was «no completion recorded») and 6Σ3Β4653Π8-9ΦΑ
+  (08.02.2024, Eurobank's Rhodes «Άμεσα μέτρα αντιπλημμυρικής-
+  αντιδιαβρωτικής», 971Χ4653Π8-222, names «ανάδοχο αποκατάστασης EUROBANK
+  AE» and its whole title; status was «active») — and one to read by eye
+  (91ΧΘ4653Π8-ΛΣΔ, 21.08.2026, a «Μελέτη Αντιπλημμυρικών…» completion).
+  103 new lifecycle acts, 30 citing a stored ΑΔΑ/protocol — the parked
+  lifecycle harvest's territory, counted only.
+**Cost, measured**: ~1 h 45 min wall-clock for everything, ~2 h of session
+work; the Diavgeia sweeps ran at ~3 s/query. **Incorporation** is the
+second pass: 7 ΔΑΣΕ contracts (screens + Π.Ε. + the loader; no new
+names/seats), 14 payment orders + 9 completions + 2 extensions + 88
+clearance acts for Anti-nero (loaders exist; the clearances need a small
+harvest-JSON writer for `diavgeia_loader`), one new sponsored project
+typed by hand (~1 h: budget, deliverables, location EN, a NEW fire event
+with its EFFIS scar, sponsor group, sites) and two endings + one act to
+read (~15 min) — plus every pinned count moved with a decision entry.
+Outputs kept in the session scratchpad (`fresh/`: the report JSONs, the
+ΔΑΣΕ raw rows, the refreshed copies); the harvests' new `.txt` sidecars
+(anadohoi_cache 180, diavgeia_cache 11) are in the working tree.
+
+**2026-08-29 — «Antinero V-PLUS» is the 2026 batch, and it is complete; it
+gets its own phase.** The ministry announced the programme at €667M in
+total and «Antinero V-PLUS» as 19 contracts / €81,98M. No registry title
+carries that name — ΥΠΕΝ's 2026 titles say «ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ
+ΔΧ …» / «ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ ΕΡΓΩΝ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ …» — but the
+batch is in the dataset entire: the 19 lots of fund 2023ΤΑ07500012
+procured under the February-2026 «Προσκλήσεις έργων αντιπυρικής
+προστασίας … αρ. 16 παρ. 5 ν. 998/1979» (16 calls, 26PROC018445169 →
+26PROC018521195, one covering three lots), awarded 17.02–20.03.2026,
+signed 05.03–03.04.2026, sum to **€66.110.956,16 net = €81.977.585,66
+gross — the announcement's figure to the euro.** One of the 19,
+26SYMV018682054 (ΔΧ Αλεξανδρούπολης–Διδυμοτείχου, €1.900.694,13), stands
+behind its ΑΠΕ+supplementary approval 26SYMV019200696 of the same value,
+which supersedes it — the chain rule, the money counted once. What was
+wrong is the LABEL: 14 of the 19 were filed as `antinero_iii` (the
+supplement's curated phase; scope.py's fund default) and 5 as
+`antinero_2026`, so the site showed no such phase and overstated III by
+14 lots / €55,2M. Decision: a new scope key **`antinero_v_plus`** («Anti-nero
+V-PLUS», the ministry's name) for the 19; `antinero_2026` retired into it
+(its five lots are the same batch); scope.py's rule: fund 2023ΤΑ07500012
++ signed in 2026 + no phase marker in the title → V-PLUS (every III/IV
+lot carries its marker or predates 2026 — verified on the 22 such
+contracts); the supplement's 19 entries re-phased; the basis unchanged
+(€622.534.181,72). **The €667M** does not reconcile from the registry — our
+net basis ×1,24 is ≈ €772M gross, and the ΤΑΙΠΕΔ/ΕΕΣΥΠ umbrella contracts
+of fund 2023ΤΑ07500012 (€420,2M + €6,3M) sit BELOW its €443,6M of
+execution lots — so it is a figure on another basis (an allocation, or
+net of ΑΠΕ), not evidence of missing contracts; a per-phase comparison
+awaits the announcement's own table.
+Two things read while implementing it. (1) **ΥΠΕΝ's own acts on these lots
+write «ANTINERO III»** — the deadline-extension act ΡΞ6Α4653Π8-ΒΣΡ on
+σύμβαση 10/2026 (26SYMV018661963) speaks of «συμβάσεις υλοποίησης του
+Έργου «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ – ANTINERO III)» and «των στόχων του
+προγράμματος ANTINERO III» — because the ministry files III, IV and the
+2026 batch under one ΠΔΕ project (ΟΠΣ 5222791, fund 2023ΤΑ07500012) whose
+title is ANTINERO III. The phase label follows the ministry's PUBLIC name
+for the batch, which its 19 lots reconcile to the euro; the methodology says
+which name the acts use. (2) The year rule applies to ORIGINAL contracts
+only: 26SYMV019250208, the 2026 supplementary of the 2025 Θεσσαλονίκη
+water-tanks contract (III), has no phase of its own and inherits its
+predecessor's — an amendment on that fund signed in 2026 is
+`antinero_unknown_phase` from the rule and III by inheritance. Result:
+`antinero_v_plus` 21 records = the 19 lots + their two 2026 amendments
+(26SYMV019200696 restating a lot at the same value, 26SYMV019471687 a
+€161.288,15 supplementary — additive, so 20 records in scope), III 83
+records (from 97; 79 in scope, from 93), the basis €622.534.181,72 untouched.
+
+**2026-08-29 — Round 2 of the freshness check: the ways past the three
+routes' blind spots, and what they found.** The morning's routes (known
+contractors, family siblings, ΥΠΕΝ act SUBJECTS) cannot see a first-time
+contractor or an ΑΔΑΜ cited only in a PDF body. Four further routes were
+built, all reading a DB copy and writing JSON reports, nothing loaded:
+(1) `scripts/find_antinero_by_payments.py` — every ΥΠΕΝ «ΤΑ075» /
+«Εκκαθάριση-εντολή πληρωμής» act on Diavgeia (1.581 + the clearances),
+PDFs read, «ΑΔΑΜ ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ» stamps screened; (2) the `--cpv` route
+of `find_antinero_new.py` — ΚΗΜΔΗΣ `cpvItems` on the programme's ten codes
+over 150-day windows since 2022-01 (3.082 Greek contracts, 161 queries,
+screened by fund/authority; control: all 17 post-export contracts re-found);
+(3) `screen()` tests the FUND before the authority (two in-scope contracts
+are ΕΕΣΥΠ's, not ΥΠΕΝ's); (4) `GET /adamChain` from the side of the 262
+calls/awards the contracts cite. **The CPV route found four ΑΔΑΜ the dataset
+lacks.** Three are the registry's SECOND POSTINGS of contracts already held —
+24SYMV016004702 / 016005190 / 016005431, posted 16.12.2024 with signature
+date 12.12.2024, against the stored 24SYMV016017961 / 016018102 / 016018183
+of 17.12.2024 signed 13.12.2024: the ΣΠ-Β1/Β2/Β3 «Κατάρτιση Σχεδίου
+Αντιπυρικής Προστασίας» studies (Αιγάλεω, Αλμυρός, Κεφαλληνία), same
+contractors and values to the cent, neither posting cancelled or linked —
+the double-posting phenomenon of the ΔΑΣΕ audit (2026-08-14), here on the
+Anti-nero side; the earlier postings are NOT added (the money is counted
+once already) and are recorded here so the next sweep knows them. **One is
+a genuine missing contract: 26SYMV018768552** — «Εργασίες αποκατάστασης –
+αναδάσωσης με Χαλέπιο Πεύκη στο Δημόσιο Δάσος Λίμνης, περιοχής αρμοδιότητας
+Δασαρχείου Λίμνης, στο πλαίσιο του «Εθνικού Σχεδίου Αναδάσωσης»», signed
+02.04.2026 by ΕΕΣΥΠ (997104555) with ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ, €402.578,43
+net, fund 2021ΤΑ07500002, whose own text says «Το έργο περιλαμβάνεται στη
+Δράση 16849: «Εθνικό σχέδιο αναδάσωσης, πρόγραμμα αποκατάστασης και
+πρόληψης («Antinero»), αντιδιαβρωτικά και αντιπλημμυρικά μέτρα» … κωδικό
+ΤΑ 5201358» — an `antinero_esa` contract by every rule of scope.py. It was
+invisible to the three earlier routes because its contractor had never
+signed before and its authority is ΕΕΣΥΠ (the old `screen()` rejected it on
+the authority). **Found, not loaded**: it joins the freshness haul awaiting
+the user's word; loading = a supplement entry (phase `antinero_esa`, basis
+fund + the Δράση-16849 recital) and the refresh chain, and moves the basis
+to 246 contracts / €622.936.760,15.
+The call-side listing (route 4: `adamChain` of the 262 calls and awards the
+contracts cite, 71 contracts listed, 1 chain unreachable) named ONE ΑΔΑΜ
+the dataset lacks, 23SYMV013599468 — and it is the registry's CANCELLED
+first posting («Ματαίωση · ΚΑΤΑΧΩΡΗΣΗ ΛΑΘΟΣ ΣΤΟΙΧΕΙΩΝ», the same hour) of
+the ΕΣΑ nurseries contract stored as 23SYMV013600200, which the
+supplementary 24SYMV015185915 calls its «Αρχική Σύμβαση». Nothing new;
+the registry links every lot the calls produced to a record we hold.
+The payment-clearance route (route 1) finished last: 3.683 ΥΠΕΝ acts read
+(1.581 whose subject names a ΣΑ ΤΑ075 fund + the clearances naming none;
+every PDF fetched into `diavgeia_cache`, 0 failures), **251 contracts
+stamped by clearances on the three Anti-nero funds — every one of them in
+the dataset**. The single unknown stamp, 24SYMV014337027 in Ψ34Ε4653Π8-ΚΣΛ
+(a 2026-08 clearance of €162.259,28), is the act's own typo — its recital
+writes «24SYMV0143370271», ten digits, and its EPDE line the real
+24SYMV014370271, which we hold. Control: 285 of the 293 stored payment
+acts were among the swept ones; the 8 others (4 ΥΠΕΝ acts of 2024 whose
+subject words the clearance differently, 4 ΑΠΔ acts of 2017–2021) are
+pre-programme or non-ΥΠΕΝ postings — the sweep's blind spot is the wording
+of a subject line, not a fund. **Round 2's verdict: one contract was
+missing (26SYMV018768552, above); the other 245 in-scope contracts are
+confirmed from three independent directions — every contract ever PAID
+under the funds, every lot the registry links to the calls, and every
+Greek contract on the programme's CPV codes.**
+

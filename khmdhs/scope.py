@@ -6,7 +6,14 @@ programmes and programme-management umbrella contracts. This module is
 the single source of truth for telling them apart.
 
 Scope values:
-  antinero_i / _ii / _iii / _iv / _2026  execution contracts per phase
+  antinero_i / _ii / _iii / _iv / _v_plus  execution contracts per phase
+                                         (`_v_plus` = «Antinero V-PLUS», the
+                                         ministry's name for the February-2026
+                                         batch of 19 lots under fund
+                                         2023ΤΑ07500012, reconciled to its
+                                         announced €81,98M to the euro —
+                                         DATA_DECISIONS 2026-08-29; the former
+                                         `antinero_2026` key is retired into it)
   antinero_unknown_phase                 Anti-nero evidence, phase unclear
   antinero_umbrella                      ΥΠΕΝ↔ΤΑΙΠΕΔ/ΕΕΣΥΠ pass-through frameworks
   antinero_support                       programme admin (legal/consulting) services
@@ -46,13 +53,14 @@ UMBRELLA_VATS = frozenset({"997104555", "997471299"})  # Ε.Ε.ΣΥ.Π. / ΤΑΙ
 # Funding codes observed on verified Anti-nero contracts.
 FUND_ANTINERO_I = "2022ΤΑ07500000"      # 07.02.2022 ΥΠΕΝ-ΤΑΙΠΕΔ framework
 FUND_ANTINERO_LATER = ("2021ΤΑ07500002", "2023ΤΑ07500012")
+FUND_V_PLUS = "2023ΤΑ07500012"          # III / IV / V-PLUS (ΟΠΣ 5222791); the year tells them apart
 
 # Funding refs that positively identify pre-programme routine works.
 NON_ANTINERO_FUND_REFS = ("584", "ΠΡΑΣΙΝΟ ΤΑΜΕΙΟ")
 
 IN_SCOPE = frozenset({
     "antinero_i", "antinero_ii", "antinero_iii", "antinero_iv",
-    "antinero_2026", "antinero_unknown_phase",
+    "antinero_v_plus", "antinero_unknown_phase",
     "antinero_esa", "antinero_restoration",
 })
 
@@ -89,8 +97,8 @@ def _phase_from_title(norm: str) -> str | None:
     if "ANTINERO" not in norm:
         return None
     # Order matters: 2026 before 2, IV before I, III before II before I.
-    if "ANTINERO 2026" in norm:
-        return "antinero_2026"
+    if "ANTINERO 2026" in norm or "ANTINERO V" in norm:
+        return "antinero_v_plus"
     if "ANTINERO IV" in norm or "ANTINERO 4" in norm:
         return "antinero_iv"
     if "ANTINERO III" in norm or "ANTINERO 3" in norm:
@@ -106,7 +114,9 @@ def classify(row: dict, overrides: dict[str, str] | None = None) -> ScopeResult:
     """Classify one contract.
 
     `row` needs: reference_number, title, public_funding_ref,
-    public_funding_ref_num, contractor_vats (iterable of VAT strings).
+    public_funding_ref_num, contractor_vats (iterable of VAT strings),
+    and contract_signed_date (ISO) + prev_reference_no (both optional) for
+    the V-PLUS year rule.
     `overrides` maps reference_number → scope for curated entries
     (khmdhs/data/antinero_supplement.json); they win over every rule.
     """
@@ -156,6 +166,17 @@ def classify(row: dict, overrides: dict[str, str] | None = None) -> ScopeResult:
 
     if fund_num.startswith(FUND_ANTINERO_I):
         return ScopeResult("antinero_i", f"fund:{FUND_ANTINERO_I}")
+    # «Antinero V-PLUS»: the 2026 batch under the III/IV fund names no phase
+    # in its registry titles («ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ …»); every
+    # III/IV lot on that fund either carries its marker or predates 2026
+    # (verified on all 22 such contracts, DATA_DECISIONS 2026-08-29).
+    # An AMENDMENT of an older contract signed in 2026 (26SYMV019250208, the
+    # supplementary of a 2025 III water-tanks contract) is not a 2026 lot —
+    # it carries no phase of its own and inherits its predecessor's.
+    signed = (row.get("contract_signed_date") or "").strip()
+    is_amendment = bool((row.get("prev_reference_no") or "").strip())
+    if fund_num.startswith(FUND_V_PLUS) and signed >= "2026-01-01" and not is_amendment:
+        return ScopeResult("antinero_v_plus", f"fund:{FUND_V_PLUS}+signed:{signed[:4]}")
     if fund_num.startswith(FUND_ANTINERO_LATER):
         return ScopeResult("antinero_unknown_phase", f"fund:{fund_num[:14]}")
 

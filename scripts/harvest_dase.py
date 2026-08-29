@@ -69,8 +69,10 @@ FOREST_CPVS = [
 ]
 
 
-def windows() -> list[tuple[str, str]]:
-    out, d = [], START
+def windows(since: date | None = None) -> list[tuple[str, str]]:
+    """The ≤5-month windows from START (or `since`, for an incremental
+    run — the freshness check of 2026-08-29) to today."""
+    out, d = [], (since or START)
     today = date.today()
     while d <= today:
         end = min(d + timedelta(days=WINDOW_DAYS - 1), today)
@@ -79,13 +81,23 @@ def windows() -> list[tuple[str, str]]:
     return out
 
 
+def _qkey(pass_tag: str, what: str, lo: str, hi: str) -> str:
+    """A completed query's key carries BOTH ends of its window: keyed on the
+    start alone, a later run whose last window starts on the same day but
+    ends later (today moved on) was skipped as already done — and the days
+    in between were never searched (found 2026-08-29)."""
+    return f"{pass_tag}|{what}|{lo}|{hi}"
+
+
 def _load(path: Path, default):
-    return json.loads(path.read_text()) if path.exists() else default
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
 
 
 def _dump(path: Path, obj) -> None:
+    # explicit UTF-8: on Windows the default is the ANSI code page, which
+    # cannot hold a Greek registry name (the 2026-08-29 run died on it)
     tmp = path.with_suffix(".tmp")
-    tmp.write_text(json.dumps(obj, ensure_ascii=False))
+    tmp.write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
     tmp.replace(path)
 
 
@@ -120,11 +132,11 @@ def collect_query(session, raw, state, body: dict, key: str, tag: str) -> int:
     return new
 
 
-def cmd_collect() -> None:
+def cmd_collect(since: date | None = None) -> None:
     session = requests.Session()
     raw = _load(RAW, {})
     state = _load(STATE, {"done": []})
-    wins = windows()
+    wins = windows(since)
 
     print(f"-- pass A: {len(NAME_VARIANTS)} name variants × {len(wins)} windows")
     for name in NAME_VARIANTS:
@@ -133,7 +145,7 @@ def cmd_collect() -> None:
             got += collect_query(
                 session, raw, state,
                 {"contractorName": name, "dateFrom": lo, "dateTo": hi},
-                f"A|{name}|{lo}", "A")
+                _qkey("A", name, lo, hi), "A")
         print(f"   {name!r}: +{got} new (total {len(raw)})")
 
     # CPVs actually observed on pass-A ΔΑΣΕ rows extend the recall list.
@@ -152,7 +164,7 @@ def cmd_collect() -> None:
     for i in range(0, len(cpvs), 8):
         chunk = cpvs[i:i + 8]
         for lo, hi in wins:
-            key = f"B|{','.join(chunk)}|{lo}"
+            key = _qkey("B", ",".join(chunk), lo, hi)
             if key in state["done"]:
                 continue
             page = 0
@@ -210,14 +222,14 @@ def write_review(raw: dict) -> None:
           f"contractors {counts} -> {REVIEW}")
 
 
-def cmd_close() -> None:
+def cmd_close(since: date | None = None) -> None:
     curated = _load(CURATED, None)
     if curated is None:
         raise SystemExit(f"curate {REVIEW} into {CURATED} first")
     session = requests.Session()
     raw = _load(RAW, {})
     state = _load(STATE, {"done": []})
-    wins = windows()
+    wins = windows(since)
     # Registry keying noise: some member entries glue two ΑΦΜ together
     # («997106512 ΚΑΙ 997841856») or carry stray accent marks (΄096035032)
     # — the API validates vatNumber as a positive number, so query the
@@ -234,7 +246,7 @@ def cmd_close() -> None:
             new += collect_query(
                 session, raw, state,
                 {"vatNumber": vat, "dateFrom": lo, "dateTo": hi},
-                f"C|{vat}|{lo}", "C")
+                _qkey("C", vat, lo, hi), "C")
     print(f"   pass C added {new} rows (total {len(raw)})")
 
     # amendment-chain completion over ΔΑΣΕ rows
@@ -325,5 +337,21 @@ def cmd_load() -> None:
 
 
 if __name__ == "__main__":
-    cmd = sys.argv[1] if len(sys.argv) > 1 else "collect"
-    {"collect": cmd_collect, "close": cmd_close, "load": cmd_load}[cmd]()
+    import argparse
+    ap = argparse.ArgumentParser(description="ΔΑΣΕ harvest: collect | close | load")
+    ap.add_argument("cmd", nargs="?", default="collect", choices=("collect", "close", "load"))
+    ap.add_argument("--since", type=date.fromisoformat, default=None,
+                    help="incremental run: search windows from this date instead of 2021-09-01")
+    ap.add_argument("--out", type=Path, default=None,
+                    help="directory for the raw/state/review files (default data/processed) — "
+                         "a freshness check writes them elsewhere and never touches the DB")
+    args = ap.parse_args()
+    if args.out:
+        args.out.mkdir(parents=True, exist_ok=True)
+        RAW = args.out / RAW.name
+        STATE = args.out / STATE.name
+        REVIEW = args.out / REVIEW.name
+    if args.cmd == "load":
+        cmd_load()
+    else:
+        {"collect": cmd_collect, "close": cmd_close}[args.cmd](args.since)

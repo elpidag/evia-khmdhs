@@ -45,6 +45,12 @@ SWEEP_PHRASES = (
     "ΑΝΑΔΟΧΟΥ ΑΠΟΚΑΤΑΣΤΑΣΗΣ ΚΑΙ ΑΝΑΔΑΣΩΣΗΣ",
     "ΔΥΝΗΤΙΚΟΥ ΑΝΑΔΟΧΟΥ ΑΝΑΔΑΣΩΣΗΣ",
     "ΔΥΝΗΤΙΚΟΥ ΑΝΑΔΟΧΟΥ ΑΠΟΚΑΤΑΣΤΑΣΗΣ",
+    # the ΥΠΕΝ completion acts name no ανάδοχος in their subject — 11 of
+    # the 16 held came only from the manual seed export (measured
+    # 2026-08-29); these two phrases are what the classifier already
+    # recognises as `oloklirosi`, and the forest-org gate keeps the noise out
+    "ΔΙΑΠΙΣΤΩΤΙΚΗ ΠΡΑΞΗ ΟΛΟΚΛΗΡΩΣΗΣ",
+    "ΔΙΑΠΙΣΤΩΤΙΚΗ ΠΡΑΞΗ ΠΕΡΑΤΩΣΗΣ",
 )
 SEARCH_URL = "https://diavgeia.gov.gr/luminapi/api/search"
 ORG_URL = "https://diavgeia.gov.gr/opendata/organizations/{oid}.json"

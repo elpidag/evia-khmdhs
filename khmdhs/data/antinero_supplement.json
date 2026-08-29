@@ -181,34 +181,39 @@
   "notes": "ΥΛΟΤΟΜΙΕΣ ANTINERO IV ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ. Modification of 25SYMV017471411 already in the DB."
  },
  "26SYMV018725481": {
-  "phase": "antinero_2026",
+  "phase": "antinero_v_plus",
   "lot": "ΔΔ ΡΟΔΟΠΗΣ ΔΧ ΚΙΛΚΙΣ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "ANTINERO 2026 phase (Diavgeia decisions call this cohort ΑΝΤΙΝΕΡΟ 2026). Signed 2026-03-26."
+  "notes": "ANTINERO 2026 phase (Diavgeia decisions call this cohort ΑΝΤΙΝΕΡΟ 2026). Signed 2026-03-26.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018739467": {
-  "phase": "antinero_2026",
+  "phase": "antinero_v_plus",
   "lot": "ΔΔ ΦΩΚΙΔΑΣ ΔΧ ΕΛΑΣΣΟΝΑΣ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Signed 2026-03-30."
+  "notes": "Signed 2026-03-30.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018755812": {
-  "phase": "antinero_2026",
+  "phase": "antinero_v_plus",
   "lot": "ΔΔ ΗΡΑΚΛΕΙΟΥ ΛΑΣΙΘΙΟΥ ΡΕΘΥΜΝΟΥ ΧΑΝΙΩΝ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Signed 2026-03-31."
+  "notes": "Signed 2026-03-31.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018756094": {
-  "phase": "antinero_2026",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΟΛΥΜΠΙΑΣ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Signed 2026-03-31."
+  "notes": "Signed 2026-03-31.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018779399": {
-  "phase": "antinero_2026",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΑΡΙΔΑΙΑΣ ΑΡΝΑΙΑΣ ΔΔ ΠΙΕΡΙΑΣ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Signed 2026-04-03."
+  "notes": "Signed 2026-04-03.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "24SYMV014662280": {
   "phase": "antinero_iii",
@@ -247,87 +252,101 @@
   "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΔΕΞΑΜΕΝΕΣ & ΚΡΟΥΝΟΙ ΠΕΡΙΑΣΤΙΚΟΥ ΔΑΣΟΥΣ ΘΕΣΣΑΛΟΝΙΚΗΣ ΔΧ ΘΕΣΣΑΛΟΝΙΚΗΣ."
  },
  "26SYMV018638816": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΙΣΤΙΑΙΑΣ-ΛΙΜΝΗΣ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΙΣΤΙΑΙΑΣ ΛΙΜΝΗΣ."
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΙΣΤΙΑΙΑΣ ΛΙΜΝΗΣ.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018639407": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΚΑΛΑΜΠΑΚΑΣ κ.ά.",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΚΑΛΑΜΠΑΚΑΣ ΜΟΥΖΑΚΙΟΥ ΤΡΙΚΑΛΩΝ ΚΑΡΠΕΝΗΣΙΟΥ."
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΚΑΛΑΜΠΑΚΑΣ ΜΟΥΖΑΚΙΟΥ ΤΡΙΚΑΛΩΝ ΚΑΡΠΕΝΗΣΙΟΥ.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018642772": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΣΟΥΦΛΙΟΥ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΣΟΥΦΛΙΟΥ."
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΣΟΥΦΛΙΟΥ.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018680228": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΝΙΓΡΙΤΑΣ κ.ά.",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΝΙΓΡΙΤΑΣ ΠΟΛΥΓΥΡΟΥ ΣΕΡΡΩΝ ΣΙΔΗΡΟΚΑΣΤΡΟΥ."
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΝΙΓΡΙΤΑΣ ΠΟΛΥΓΥΡΟΥ ΣΕΡΡΩΝ ΣΙΔΗΡΟΚΑΣΤΡΟΥ.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018689005": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΚΟΡΙΝΘΟΥ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΚΟΡΙΝΘΟΥ."
+  "notes": "Discovered via Diavgeia payment decisions (payments_not_in_db_155.xlsx). The payment-order PDFs state ΤΙΤΛΟΣ ΕΡΓΟΥ «ΠΡΟΓΡΑΜΜΑ ΠΡΟΣΤΑΣΙΑΣ ΔΑΣΩΝ - ANTINERO III». ΕΡΓΑ ΑΝΤΙΠΥΡΙΚΗΣ ΠΡΟΣΤΑΣΙΑΣ ΔΧ ΚΟΡΙΝΘΟΥ.",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018599431": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΑΙΓΑΛΕΩ-ΜΕΓΑΡΩΝ-ΠΕΙΡΑΙΑ-ΠΕΝΤΕΛΗΣ (Σύμβαση 3/2026)",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΙΓΑΛΕΩ-ΜΕΓΑΡΩΝ-ΠΕΙΡΑΙΑ-ΠΕΝΤΕΛΗΣ (Σύμβαση 3/2026)"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΙΓΑΛΕΩ-ΜΕΓΑΡΩΝ-ΠΕΙΡΑΙΑ-ΠΕΝΤΕΛΗΣ (Σύμβαση 3/2026)",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018599446": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΚΑΠΑΝΔΡΙΤΙΟΥ-ΠΑΡΝΗΘΑΣ-ΠΟΡΟΥ (Σύμβαση 4/2026)",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΚΑΠΑΝΔΡΙΤΙΟΥ-ΠΑΡΝΗΘΑΣ-ΠΟΡΟΥ (Σύμβαση 4/2026)"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΚΑΠΑΝΔΡΙΤΙΟΥ-ΠΑΡΝΗΘΑΣ-ΠΟΡΟΥ (Σύμβαση 4/2026)",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018607958": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΔ ΔΩΔΕΚΑΝΗΣΟΥ-ΛΕΣΒΟΥ-ΣΑΜΟΥ-ΧΙΟΥ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΔ ΔΩΔΕΚΑΝΗΣΟΥ-ΛΕΣΒΟΥ-ΣΑΜΟΥ-ΧΙΟΥ"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΔ ΔΩΔΕΚΑΝΗΣΟΥ-ΛΕΣΒΟΥ-ΣΑΜΟΥ-ΧΙΟΥ",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018639041": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΑΤΑΛΑΝΤΗΣ-ΘΗΒΩΝ-ΛΙΒΑΔΕΙΑΣ-ΣΠΕΡΧΕΙΑΔΑΣ (Σύμβαση 7/2026)",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΤΑΛΑΝΤΗΣ-ΘΗΒΩΝ-ΛΙΒΑΔΕΙΑΣ-ΣΠΕΡΧΕΙΑΔΑΣ (Σύμβαση 7/2026)"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΤΑΛΑΝΤΗΣ-ΘΗΒΩΝ-ΛΙΒΑΔΕΙΑΣ-ΣΠΕΡΧΕΙΑΔΑΣ (Σύμβαση 7/2026)",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018661963": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΚΑΛΑΜΑΤΑΣ-ΠΥΡΓΟΥ-ΣΠΑΡΤΗΣ (Σύμβαση 10/2026)",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΚΑΛΑΜΑΤΑΣ-ΠΥΡΓΟΥ-ΣΠΑΡΤΗΣ (Σύμβαση 10/2026)"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΚΑΛΑΜΑΤΑΣ-ΠΥΡΓΟΥ-ΣΠΑΡΤΗΣ (Σύμβαση 10/2026)",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018661994": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΔ ΚΑΣΤΟΡΙΑΣ-ΦΛΩΡΙΝΑΣ-ΠΡΕΒΕΖΑΣ-ΘΕΣΠΡΩΤΙΑΣ",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΔ ΚΑΣΤΟΡΙΑΣ-ΦΛΩΡΙΝΑΣ-ΠΡΕΒΕΖΑΣ-ΘΕΣΠΡΩΤΙΑΣ"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΔ ΚΑΣΤΟΡΙΑΣ-ΦΛΩΡΙΝΑΣ-ΠΡΕΒΕΖΑΣ-ΘΕΣΠΡΩΤΙΑΣ",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018670757": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΑΙΓΙΟΥ-ΒΥΤΙΝΑΣ-ΠΑΤΡΩΝ (Σύμβαση 9/2026)",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΙΓΙΟΥ-ΒΥΤΙΝΑΣ-ΠΑΤΡΩΝ (Σύμβαση 9/2026)"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΙΓΙΟΥ-ΒΥΤΙΝΑΣ-ΠΑΤΡΩΝ (Σύμβαση 9/2026)",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018682054": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ-ΔΙΔΥΜΟΤΕΙΧΟΥ (Σύμβαση 12/2026)",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ-ΔΙΔΥΜΟΤΕΙΧΟΥ (Σύμβαση 12/2026)"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΑΛΕΞΑΝΔΡΟΥΠΟΛΗΣ-ΔΙΔΥΜΟΤΕΙΧΟΥ (Σύμβαση 12/2026)",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  },
  "26SYMV018718889": {
-  "phase": "antinero_iii",
+  "phase": "antinero_v_plus",
   "lot": "ΔΧ ΘΑΣΟΥ-ΔΡΑΜΑΣ (Σύμβαση 13/2026)",
   "basis": "fund:2023ΤΑ07500012",
-  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΘΑΣΟΥ-ΔΡΑΜΑΣ (Σύμβαση 13/2026)"
+  "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΘΑΣΟΥ-ΔΡΑΜΑΣ (Σύμβαση 13/2026)",
+  "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
  }
 }

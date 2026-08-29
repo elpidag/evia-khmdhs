@@ -72,7 +72,11 @@
 		16849 — amendments inherit the evidence of the contract they modify. Programme-management
 		umbrella contracts (ΤΑΙΠΕΔ/ΕΕΣΥΠ pass-throughs) and support services are stored but never
 		aggregated, so no euro is counted twice. Superseded contract versions along an amendment
-		chain count once, at the chain's final version.
+		chain count once, at the chain's final version. The phases are the programme's own:
+		the registry titles name I–IV, and the February-2026 batch — whose titles name no phase
+		and whose own ΥΠΕΝ acts file it under the ΠΔΕ project title «ANTINERO III» — is labelled
+		<strong>Anti-nero V-PLUS</strong>, the name the ministry announced it under, to which its
+		lots reconcile to the euro (decision log, 2026-08-29).
 	</p>
 	<p>
 		One tier is deliberately excluded from every calculation: {show(f['kh_probable_n'])}
