@@ -11329,3 +11329,120 @@ title-named |part behaviour. The forest reload removed EXACTLY the six wrong
 links and added none: completion-act links 26 → 20 (9 contracts), all links
 718 → 712. The lanes gain the four acts' per-part ✔ placement.
 
+**2026-09-01 — Lot 4Α of ANTINERO II found and loaded; how lots go missing.**
+Asked whether the Βυτίνα sibling of lot 4Β could be found, the answer came
+from the award we already held: 22AWRD011258574 names «για το Υποέργο Α, στον
+οικονομικό φορέα «ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ Ε.Ε.» … με ΑΦΜ 998269962 …
+αρμοδιότητας του Δασαρχείου Βυτίνας (με Α/Α ΕΣΗΔΗΣ 191213)», and a live
+registry search by that ΑΦΜ surfaced **22SYMV011331269 «ΣΥΜΒΑΣΗ ΕΚΤΕΛΕΣΗΣ
+ΕΡΓΟΥ 4A ΤΟΥ ΙΙ»**, signed 27.09.2022, €1.452.610,90 net / €1.801.237,52
+gross, no amendment, no payments. Every discovery route had missed it for
+three reasons at once: no ANTINERO word in its title («4A ΤΟΥ ΙΙ», Latin A),
+no fund code (only `regularBudgetFundedProgramRef C2420902001` — the seven
+title-only chains' funding pattern), and a registry record that declares no
+call, award or sibling (its adamChain lists itself alone, so the call's own
+chain never showed it). The user's decision: **in**, as `antinero_ii` via
+`antinero_supplement.json` (basis `title:ΤΟΥ ΙΙ`, the precedent of its sibling
+22SYMV011470180; verify_relevance accepts «ΤΟΥ ΙΙ»). Curated with it: region
+Π.Ε. Αρκαδίας, an 8th forest `contract_override` → Δασαρχείο Βυτίνας (the
+registry object text names both lots' services), category dasotexnika with
+its own verbatim title, and the machine readings of its text (study & works
+from the template clause, themes καθαρισμοί + οδικό δίκτυο, 3 months from
+signature, δήμος Γορτυνίας). **New mechanism, evidence-bound:**
+`khmdhs/data/family_curation.json` — the contract cites its πρόσκληση («η από
+10.08.2022 Πρόσκληση») and κατακύρωση (16.09.2022) by DATE only, while the
+ΑΔΑΜ are established by the family's other documents (the sibling's declared
+chain, the award naming this winner); families_loader appends such rows with
+source «curated», each carrying the contract's own citing sentence and the
+document that supplies the ΑΔΑΜ (`tests/test_families.py` checks the excerpt
+is verbatim in the cached text and the evidence names the ΑΔΑΜ). Lot 4Β needed the same rows — its own text also cites the call and award by
+date only (its link came from the registry chain, which the families layer
+does not read) — so both lots are curated symmetrically, the rows are merged
+BEFORE the inheritance walk and the amendment 23SYMV011953055 inherits them;
+the diagram now draws 4Α beside 4Β around 22PROC011082770 (families 222
+in-scope contracts → 136 calls; network: 55 multi-lot calls, 146 contracts in
+them).
+
+**How often does a lot go missing?** Three measures the same day: the
+registry-declared families of all 264 known calls/awards, swept live, name
+ONE contract we lack — 23SYMV013599468, the CANCELLED duplicate posting of
+the Αλίαρτος nursery contract (held as 23SYMV013600200); the 39 cached award
+texts name one unheld lot (4Α); the 142 cached call texts define more lots
+than we hold in three procurements: 22PROC011082770 (4Α, resolved),
+**24PROC014153399** (7 τμήματα, we hold 3/4/6; the only award the registry
+links awards exactly those three and is silent on 1, 2, 5, 7) and
+**25PROC016402950** (Εύβοια 2025, 3 τμήματα, we hold 2 and 3; the two awards
+cover 2 and 3). No Diavgeia act cites a contract for the missing τμήματα.
+Left OPEN pending the user's word on how far to chase (ΤΑΙΠΕΔ/ΥΠΕΝ awards by
+organisation and date window; ΚΗΜΔΗΣ web search read for the Α/Α ΕΣΗΔΗΣ;
+ΕΣΗΔΗΣ itself). Lesson recorded: the registry's own linkage is NOT where lots
+go missing — they go missing when a contract is posted with no programme word
+in its title, no fund code and no declared family; an award's winner list is
+a discovery route the scripts do not yet run.
+
+**4Α's Article 7 re-opens the Γορτυνίας verdict.** Its «Τόποι εκτέλεσης»
+sentence is IDENTICAL to 4Β's — «περιοχές Δυτικού Μαίναλου και Δάσους τέως
+Δήμου Θέλπουσας Π.Ε Αρκαδίας» — so in this procurement the clause is the
+Βυτίνα lot's (or the whole project's) area pasted into both contracts, not a
+lot-specific statement. The 2026-08-31 verdict (Αρκαδίας added to 4Β, its
+Γορτυνίας row kept) was taken when no cross-check existed; the user has been
+asked to confirm, revert, or re-flag. Nothing changed on 4Β pending that word.
+
+Also this day: the full extension-acts search re-ran for the new contract
+(no resume mode) and picked up **three new acts** posted 31.08.2026 — the
+4th extensions of the three ΕΣΑ lots of 29.05.2024 — 467 → 470 acts, 21
+«whole» extensions; 4Α itself has none.
+
+Basis after the add: **254 in scope, €633.588.292,66 net / €785.649.482,93
+gross; II 59; dasotexnika 162; 14 / 137 / 103; 404 theme links over 210; 594
+municipality rows / 158 contracts / 223 δήμοι, 0 flags; 8 title-only chains
+(1,7 %); families 222 in-scope contracts → 136 calls.** Every pin moved
+accordingly.
+
+**2026-09-01 — Γορτυνίας on lot 4Β: the row stays, flagged again (user).**
+With 4Α's text in hand the Άρθρο-7 clause is proven to be the Βυτίνα lot's
+area pasted into both contracts, so Π.Ε. Αρκαδίας leaves 4Β's regions (back to
+Ηλείας, the lot's «αρμοδιότητας Δασαρχείου Πύργου»), and the δήμος Γορτυνίας
+row — what the document states — stays on 4Β as an UNEXPLAINED flag, with the
+paste as its note. The municipality layer carries 1 flag again (594 rows / 158
+contracts / 223 δήμοι); 4Α keeps Αρκαδίας and its own Γορτυνίας row, which
+there is consistent with its lot. The 2026-08-31 verdict is superseded.
+
+**2026-09-01 — The two open procurements, chased (user: «go on with your
+recommendation»).** Route: the issuing organisations' own Diavgeia acts
+(luminapi `organizationUid:<uid> AND subject:"<phrase>"`, dates parsed from
+the DD/MM/YYYY `issueDate`), every hit read for the lots' Α/Α ΕΣΗΔΗΣ.
+
+*25PROC016402950 (Εύβοια 2025, Τμήμα 1, Α/Α ΕΣΗΔΗΣ 212495) — CANCELLED.*
+The issuer is ΕΕΣΥΠ (HCAP, uid 100074686; Διενεργούσα Αρχή, ΥΠΕΝ the
+Αναθέτουσα). Act **ΨΦ2Χ46ΝΩΑ7-Ψ25 of 06.11.2025**: «Έγκριση Πρακτικού ΙΙΙ …
+και ματαίωση της ανοικτής διαδικασίας … για το Τμήμα 1 … (Α/Α ΕΣΗΔΗΣ: 212495)
+… καθώς η εκτέλεση του εν λόγω Έργου δεν ενδιαφέρει πλέον την Αναθέτουσα
+Αρχή» (ΥΠΕΝ/ΔΠΔ/122971/8335/05.11.2025), after the 28.06.2025 προδικαστική
+προσφυγή of «ΣΑΚΚΟΣ Χ. & ΣΙΑ Ε.Ε.» against the provisional award to GREEN
+CONSTRUCTION ΑΤΕ. No contract exists; nothing is missing from the dataset.
+
+*24PROC014153399 (ΤΑΙΠΕΔ, 19.01.2024, seven τμήματα; we hold 3, 4, 6) —
+RE-PROCURED, inferred.* Of 118 ΤΑΙΠΕΔ acts of 2024–25 read, only the call
+summary and the award we hold (9ΓΨ846ΜΩΝ1-ΛΧ5 / 24AWRD014696933, awarding
+3, 4, 6) name the Α/Α ΕΣΗΔΗΣ of τμήματα 1, 2, 5, 7; no άγονο/ματαίωση act
+exists for them and the award's recitals are silent on their fate. But
+ΤΑΙΠΕΔ issued four separate «Προσκλήσεις υποβολής προσφορών» (the ν.998/1979
+αρ. 16 παρ. 5 direct-invitation route) on 15–18 April 2024 for EXACTLY the
+four area bundles of those τμήματα, each awarded within weeks — and all four
+contracts are in the dataset: τμήμα 1's areas (ΔΧ Αταλάντης, Σπερχειάδας,
+Λαμίας, Θήβας, Λιβαδειάς) → 24PROC014597593 → **24SYMV014809263**
+(22.05.2024); τμήμα 2's (ΔΧ Χαλκίδας, Δήμος Χαλκιδέων) → 24PROC014607187 →
+**24SYMV014749238** (13.05.2024); τμήμα 5's (ΔΧ Λάρισας, Τρικάλων,
+Καρπενησίου, Αγιάς, Ελασσόνας, Τσοτυλίου, ΔΔ Πιερίας) → 24PROC014615504 →
+**24SYMV014774679** (17.05.2024); τμήμα 7's (ΔΧ Νιγρίτας, Σερρών,
+Σιδηροκάστρου) → 24PROC014624686 → **24SYMV014774694** (17.05.2024). Neither
+the April calls nor the contracts cite the January procedure — the link is
+area-identical and time-consistent, not stated, and is recorded here as an
+INFERENCE. Nothing is missing from the dataset; no record changed.
+
+Method lessons recorded: the registry's declared families never showed either
+gap; the calls' lot tables did. An award's winner list (4Α) and an issuer's
+Diavgeia acts read for the lots' Α/Α ΕΣΗΔΗΣ (Εύβοια) are discovery routes the
+scripts do not run yet.
+

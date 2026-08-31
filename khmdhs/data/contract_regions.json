@@ -280,13 +280,10 @@
    {
     "pe": "Π.Ε. Ηλείας",
     "note": "Δασαρχείο Πύργου"
-   },
-   {
-    "pe": "Π.Ε. Αρκαδίας",
-    "note": "Άρθρο 7 της αρχικής σύμβασης 22SYMV011470180 (σελ. 17): «Τόποι εκτέλεσης της Σύμβασης είναι … (περιοχές Δυτικού Μαίναλου και Δάσους τέως Δήμου Θέλπουσας Π.Ε Αρκαδίας)» — user verdict 2026-08-31 (DATA_DECISIONS): the signed text wins; Ηλείας stays from the lot's «αρμοδιότητας Δασαρχείου Πύργου» label, and no other Δασαρχείο is named."
    }
   ],
-  "curated_at": "2026-08-31"
+  "curated_at": "2026-09-01",
+  "source_note": "Υποέργο Β «αρμοδιότητας Δασαρχείου Πύργου» of call 22PROC011082770. Its Άρθρο 7 names «περιοχές Δυτικού Μαίναλου και Δάσους τέως Δήμου Θέλπουσας Π.Ε Αρκαδίας» — but lot 4Α (22SYMV011331269, the Βυτίνας lot) carries the IDENTICAL sentence, so the clause is the Βυτίνα lot's area pasted into both contracts, not a lot-specific statement. Π.Ε. Αρκαδίας was added 2026-08-31 and REMOVED 2026-09-01 on that finding; the δήμος Γορτυνίας row stays, flagged as unexplained (user verdict, DATA_DECISIONS)."
  },
  "23SYMV012404390": {
   "regions": [],
@@ -4084,5 +4081,15 @@
    }
   ],
   "curated_at": "2026-08-29"
+ },
+ "22SYMV011331269": {
+  "regions": [
+   {
+    "pe": "Π.Ε. Αρκαδίας",
+    "note": "Δασαρχείο Βυτίνας — Υποέργο Α of call 22PROC011082770 (award 22AWRD011258574: «αρμοδιότητας του Δασαρχείου Βυτίνας»); its Άρθρο 7: «περιοχές Δυτικού Μαίναλου και Δάσους τέως Δήμου Θέλπουσας Π.Ε Αρκαδίας»"
+   }
+  ],
+  "curated_at": "2026-09-01",
+  "source_note": "Lot 4Α of ANTINERO II, added 2026-09-01 (DATA_DECISIONS); award + own Article 7 agree on Αρκαδία."
  }
 }

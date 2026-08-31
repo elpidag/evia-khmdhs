@@ -5,24 +5,25 @@ public-procurement programme (ΥΠΕΝ, RRF Action 16849). Flask + SQLite + Pico
 Everything derived is regenerable; `data/raw/` is never written to.
 
 **Current state** (2026-08-29, after the freshness haul — DATA_DECISIONS
-that day): 345 records, **253 in scope; the Atlas analytics basis is
-stated net €632,135,681.76** (€783,848,245.41 gross) — since 2026-08-29
+that day, +lot 4Α on 2026-09-01): 346 records, **254 in scope; the Atlas
+analytics basis is stated net €633,588,292.66** (€785,649,482.93 gross) —
+since 2026-08-29
 the seven «ANTINERO II» chains of 2022 are back in scope by user decision
 (`probable_related.json` is EMPTY, its `_history` keeps the 13.08 tier;
 the site's «probably related» tier renders only while non-empty) and
 26SYMV018768552 (ΕΣΑ Λίμνης, ΕΕΣΥΠ-signed, found by the CPV route) was
 added; the 19 curated keying-error corrections and the chain rule as
 before (245 / €622,534,181.72 until that day). Phases in scope: I 26 ·
-II 58 · III 79 · IV 48 · **V-PLUS 20** · ΕΣΑ 9 · restoration 13; effective
+II 59 · III 79 · IV 48 · **V-PLUS 20** · ΕΣΑ 9 · restoration 13; effective
 retired 2026-08-03, payments their own layer: 905 orders / €586.0M paid
-gross (5 Diavgeia-only); 290 completion acts, 467 extension acts; 157
+gross (5 Diavgeia-only); 290 completion acts, 470 extension acts; 157
 in-scope contractors, all with a curated seat and display name; 62
-joint ventures (48 with members, 98 links); categories dasotexnika 161 /
+joint ventures (48 with members, 98 links); categories dasotexnika 162 /
 miktes_zones 33 / arxaiologikoi 16 / meletes 14 / antidiavrotika 13 /
 anadasoseis 9 / ylotomies 6 / ydatodexamenes 1; deliverables 14 study /
-136 study & works / 103 works; 402 work-theme links over 209 contracts;
-593 municipality rows / 157 contracts / 223 δήμοι (0 flagged outside
-their Π.Ε.); 253/253 linked to a forest authority (2 documented
+137 study & works / 103 works; 404 work-theme links over 210 contracts;
+594 municipality rows / 158 contracts / 223 δήμοι (1 flagged outside
+their Π.Ε. — Γορτυνίας on lot 4Β, a pasted clause, by user verdict); 254/254 linked to a forest authority (2 documented
 authority-less). ΔΑΣΕ: 2,171 records, live 2,004 / €30,162,069.68 net /
 €37,254,303.72 gross. Sponsored: 70 projects, €43.28M stated, 19
 completed. Every pinned count in the suite is on these values.
@@ -194,7 +195,7 @@ refetching open contracts — prefer it for routine updates.
   geodata.gov.gr Kallikratis layer, ΥΠΕΣ codes, built by
   `scripts/build_municipalities.py`) against title+items (union) with
   cached-PDF fallback; amendments inherit (`inherited:<ref>`);
-  `contract_overrides` pin the 7 reviewed title/items conflicts (per-lot
+  `contract_overrides` pin the 8 reviewed title/items conflicts (per-lot
   bundles, keying errors) and `no_authority` documents the region-scoped
   contracts that genuinely name none (1 left; DATA_DECISIONS 2026-08-19).
   **Fourth source since 2026-08-19: the Diavgeia completion acts**, whose
@@ -394,7 +395,12 @@ refetching open contracts — prefer it for routine updates.
   CASCADE). Amendments inherit the predecessor's call — the accent trap
   bit here: `τροποποι` never matches «Τροποποίησης», so `_unaccent()`
   before testing (the uncorrected pass claimed 137 calls, the real number
-  is 134). Coverage: **219/245 in-scope contracts → 134 calls**; the
+  is 134). Coverage: **219/245 in-scope contracts → 134 calls** (222 → 136
+  since 2026-09-01, when lots 4Α and 4Β of ANTINERO II — both citing their
+  call and award by DATE only, the ΑΔΑΜ established by the award and 4Β's
+  declared chain — joined via curated `data/family_curation.json`: rows
+  merged BEFORE the inheritance walk, source «curated», an heir's
+  «inherited:<ref>», evidence per row, real-DB pinned); the
   other 26 cite none (direct awards / negotiations publish no call) and
   nothing is inferred for them. This layer is what exposed the €31,7M
   project-budget keying error — three lots of one πρόσκληση all stating
@@ -512,7 +518,11 @@ refetching open contracts — prefer it for routine updates.
   registry's limit) + ΑΦΜ over ΚΗΜΔΗΣ windows, the family siblings, and
   ΥΠΕΝ's Diavgeia acts whose subject stamps a SYMV ΑΔΑΜ; every candidate
   screened like `antinero_loader.verify_relevance`; the 17 post-export
-  contracts are its control. Writes a JSON report, never the DB. (The
+  contracts are its control. Writes a JSON report, never the DB. **Two routes
+  it does not run yet** (DATA_DECISIONS 2026-09-01): an AWARD's winner list
+  — how lot 4Α (22SYMV011331269: no programme word, no fund code, no declared
+  family) was found — and an issuer's Diavgeia acts read for a lot's Α/Α
+  ΕΣΗΔΗΣ. (The
   contract universe itself came from a one-off portal export of 2026-05-09
   plus the hand-made supplement — see DATA_DECISIONS 2026-08-29.)
 - `scripts/find_antinero_by_payments.py` + the `--cpv` route of `find_antinero_new.py` — round 2 of the discovery (2026-08-29): every ΥΠΕΝ «ΤΑ075»/clearance act on Diavgeia read for its «ΑΔΑΜ ΝΟΜΙΚΗΣ ΔΕΣΜΕΥΣΗΣ» stamp (3,683 PDFs → 251 stamped contracts, all held; control 285/293 stored payment acts), and ΚΗΜΔΗΣ `cpvItems` on the programme's ten codes over 150-day windows since 2022 (3,082 Greek contracts, screened FUND-FIRST — `screen()` tests the fund before the authority since ΕΕΣΥΠ signs some lots). The CPV route is the only one that sees a first-time contractor: it found 26SYMV018768552 (ΕΣΑ Λίμνης, ΕΕΣΥΠ, €402,578.43 net; found, NOT loaded) and three registry second-postings of stored ΣΠ-Β studies (24SYMV016004702/016005190/016005431 — never to be added). Reports only, never the DB.
@@ -540,8 +550,8 @@ refetching open contracts — prefer it for routine updates.
   + committed `municipality_curator.html`; `--curate` promotes the readings
   to curated `data/contract_municipalities.json` (`_overrides` merged on
   re-run) → `khmdhs/municipalities_loader.py` → `contract_municipalities`
-  (FK CASCADE; in the refresh chain after details_loader). **593 rows / 157
-  contracts / 223 δήμοι** since the 2026-08-31 tier-C verdicts (the
+  (FK CASCADE; in the refresh chain after details_loader). **594 rows / 158
+  contracts / 223 δήμοι** since the 2026-08-31 tier-C verdicts (+ lot 4Α, 2026-09-01) (the
   26PROC018350831 lot-split); the in-scope contracts naming none say so.
   Rules (user-approved): the πρόσκληση counts as evidence and the row names
   the document (79 rows); a δήμος outside the contract's curated Π.Ε. is
@@ -648,7 +658,7 @@ decisions land there FIRST, then get implemented.
 | `contractor_seats.json` | **The registered office of every in-scope Anti-nero contractor, read from the party clause of its OWN signed contract** (DATA_DECISIONS 2026-08-21): 151 entries, each city / street / number / Τ.Κ. transcribed by hand from the chain-read cached text (every row read; the parser only proposed), the source ΑΔΑΜ, the verbatim sentence, the register's values; `seat_source` contract 146 / register 3 / website 2 — where ΓΕΜΗ/VIES or the firm's own site shows a later move the CURRENT seat is chosen and `contract_seat` keeps the contract's (ΥΛΗ, ΚΗΠΟΠΡΑΞΙΣ, ΦΙΛΑΝΤΑΡΑΚΗ, ΑΛΣΟΣ, Τ&Τ; ΤΟΜΗ's own 2025 contract states its current Παιανία seat); 3 `flag: register_disagrees` (ΕΛΛΗΝΙΚΑ ΕΡΓΑ Ο.Ε., ΠΑΠΠΑΣ ΣΤΕΡΓΙΟΣ, Κ/Ξ ΜΠΟΜΠΟΤΗ–ΞΑΝΘΟΠΟΥΛΟΣ which states no seat); a venture's seat is never inferred from a member's (two regions changed: ΚΑΡΝΟΜΟΥΡΑΚΗΣ–ΑΛΚΗ ΥΠΟΕΡΓΟ Β → Καβάλα, ΛΙΑΡΗ–ΓΚΙΚΑΣ → Λίμνη Ευβοίας). Merged into `contractor_locations.json` (scratch `merge_seats.py`), loaded by `contractor_loader` into five `seat_*`/`geo_level` columns; the Atlas contractor page prints «registered office as stated in contract <ΑΔΑΜ>» + the quoted sentence. Pinned by `tests/test_contractor_seats.py` |
 | `extension_act_curation.json` | Hand-read corrections to the machine reading of the extension acts (DATA_DECISIONS 2026-08-21, curation pass 1): `area_dates` = which service got which date when ONE act grants different dates per area (22 acts; the acts write the pairing in three orders, so no rule — the loader refuses a date the act does not state or a service the registry lacks), `scope_auth` judgments where the act names a DIRECTORATE standing for the contract's Δασαρχεία (Φθιώτιδας → Αταλάντης+Σπερχειάδας, Έβρου → Αλεξανδρούπολης+Σουφλίου), one `new_deadline` override (ΨΠΩΟ: the later date is a condition on approvals); verbatim grant sentence per entry. Applied by `extension_acts_loader` at load and on `--reextract`; the strips take each service's own date (`lanes.buildLanes`) |
 | `completion_act_overrides.json` | Completion AND extension acts whose SUBJECT line keys the wrong contract ΑΔΑΜ (9ΞΣΟ4653Π8-Ζ9Ο → 26SYMV018739467, ΨΕΡΟ4653Π8-2Θ6 → 22SYMV010473680 since curation pass 1). Completion acts whose SUBJECT line keys the wrong contract ΑΔΑΜ (ΥΠΕΝ keying errors, DATA_DECISIONS 2026-08-21): 4 ΑΔΑ → the contract the act really concerns (lots 15Α and 4Α, whose acts carried lots 15Γ's and 4Δ's ΑΔΑΜ), evidence quoted from the act's recitals/lot/title. Applied by `completion_acts_loader` at insert and on `--reextract`; candidates come from the loader's WARN, but the recital can be the typo too — every verdict is read from the act |
-| `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 7 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts. Since 2026-08-17 each entry also carries an **`office` block** (street/Τ.Κ./city/phones/emails + geocoded lat/lon/geo_precision): basis = the ΥΠΕΝ επιθεωρήσεις contact tables (ypen.gov.gr, Akamai-blocked for bots — fetched via WINDOWED Playwright, `scripts/harvest_ypen_offices.py`, cache `ypen_offices_cache/`) corroborated by each authority's own Diavgeia letterheads (`scripts/harvest_office_letterheads.py`, unit uids under org 100015996; 90/102 Τ.Κ. confirmed, ΑΔΑ+excerpt kept; the Γουμένισσα ministry-page typo 63100→61300 caught this way). Differences documented per-entry in `office.note`; merge via `scripts/build_authority_offices.py`, geocode via `scripts/geocode_authority_offices.py` (Nominatim tiers + Τ.Κ.-prefix/≤35km gates → 41 street / 58 postcode / 1 city / 3 municipality-fallback). `forest_loader` prefers the office point over the municipality centroid (`seat_precision` column); /authority pages show the contact block. Περτουλίου is ΑΠΘ-run (no ΥΠΕΝ office data — centroid) |
+| `forest_authorities.json` | 103 ΔΔ/ΔΧ (canonical name, kind, genitive aliases incl. registry typos, seat municipality code, Π.Ε.) + 8 `contract_overrides` (reviewed title/items conflicts, PDF evidence) + 3 `no_authority` contracts. Since 2026-08-17 each entry also carries an **`office` block** (street/Τ.Κ./city/phones/emails + geocoded lat/lon/geo_precision): basis = the ΥΠΕΝ επιθεωρήσεις contact tables (ypen.gov.gr, Akamai-blocked for bots — fetched via WINDOWED Playwright, `scripts/harvest_ypen_offices.py`, cache `ypen_offices_cache/`) corroborated by each authority's own Diavgeia letterheads (`scripts/harvest_office_letterheads.py`, unit uids under org 100015996; 90/102 Τ.Κ. confirmed, ΑΔΑ+excerpt kept; the Γουμένισσα ministry-page typo 63100→61300 caught this way). Differences documented per-entry in `office.note`; merge via `scripts/build_authority_offices.py`, geocode via `scripts/geocode_authority_offices.py` (Nominatim tiers + Τ.Κ.-prefix/≤35km gates → 41 street / 58 postcode / 1 city / 3 municipality-fallback). `forest_loader` prefers the office point over the municipality centroid (`seat_precision` column); /authority pages show the contact block. Περτουλίου is ΑΠΘ-run (no ΥΠΕΝ office data — centroid) |
 | `greek_municipalities.json` | 325 Kallikratis municipalities: ΥΠΕΣ code → name + representative centroid + **hand-curated `pe`** (the municipality's Π.Ε.; the ONLY complete municipality→Π.Ε. table — validated 4 ways by `scripts/build_pe_geojson.py`) (geodata.gov.gr «Όρια Δήμων Καλλικράτη», CC-BY; `scripts/build_municipalities.py`) |
 | `pe_centroids.json` | 74 Π.Ε. → representative point (lat, lon), from the dissolved polygons; duplicated to `webui/static/` (`scripts/build_pe_geojson.py`) |
 | `study_costs.json` | 116 contracts → μελέτη cost net of ΦΠΑ (page + excerpt evidence) from the «Κόστος εκπόνησης μελετών» PDF anchor; loaded by `studies_loader` into `contract_study_costs`; tips inherit from predecessors in `queries.study_costs` |
@@ -2239,7 +2249,7 @@ prev links) — new registry keying errors surface here first, and
     THE lot), while elsewhere the title is shorthand or plain wrong («ΔΔ
     ΛΕΣΒΟΥ» on a PDF-verified Δωδεκανήσου contract). No side wins
     universally → forest_loader takes the union, WARNs on disagreement, and
-    the 7 reviewed cases are pinned in `contract_overrides` with evidence.
+    the 8 reviewed cases are pinned in `contract_overrides` with evidence.
 16. **Nominatim misses Greek-script queries** («ΚΟΡΝΑΡΟΥ 13, ΘΕΣΣΑΛΟΝΙΚΗ» →
     0 hits; "Kornarou 13, Thessaloniki" → hit) → geocode_loader adds a
     Greek→Latin transliteration tier; VIES's abbreviated prefixes («Λ

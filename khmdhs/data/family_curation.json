@@ -1,0 +1,35 @@
+{
+ "_doc": "Procurement-family links that a contract's own signed text cannot supply, because it cites its πρόσκληση and κατακύρωση by DATE only, while the ΑΔΑΜ are established by the family's other documents. Each row keeps the citing sentence of the contract AND names the document that supplies the ΑΔΑΜ; families_loader appends these with source «curated». Never inferred from a name, a date alone or a contractor (DATA_DECISIONS 2026-09-01).",
+ "22SYMV011331269": [
+  {
+   "adam": "22PROC011082770",
+   "kind": "notice",
+   "role": "procurement",
+   "excerpt": "Πρόσκληση: η από 10.08.2022 Πρόσκληση υποβολής προσφορών για την ανάδειξη αναδόχου για την εκτέλεση του έργου υπό τον τίτλο «Εργασίες ειδικών δασοτεχνικών έργων του άρθρου 16 παρ. 5 του ν.998/1979 για τον καθαρισμό των δασών και δασικών εκτάσεων καθώς και για τη συντήρηση του δασικού οδικού δικτύου και για την δημιουργία στεγασμ",
+   "evidence": "The contract cites «η από 10.08.2022 Πρόσκληση»; 22PROC011082770 is dated 2022-08-10, is the call the registry chain of the sibling lot 4Β (22SYMV011470180) declares, and its own text defines «το ΥΠΟΕΡΓΟ Α περιλαμβάνει τις περιοχές εργασιών αρμοδιότητας του Δασαρχείου Βυτίνας»."
+  },
+  {
+   "adam": "22AWRD011258574",
+   "kind": "auction",
+   "role": "award",
+   "excerpt": "(vi) την από 16.09.2022 Απόφαση του Εντεταλμένου Συμβούλου του ΤΑΙΠΕΔ περί έγκρισης των υπ’ αριθμ. IV/14.9.2022 και V/16.9.2022 πρακτικών της Επιτροπής Αξιολόγησης Προσφορών και ανάθεσης της σύμβασης του ",
+   "evidence": "The contract cites the ΤΑΙΠΕΔ award decision of 16.09.2022 by date; 22AWRD011258574 (dated 2022-09-16) awards «για το Υποέργο Α, στον οικονομικό φορέα «ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ Ε.Ε.» … με ΑΦΜ 998269962 … αρμοδιότητας του Δασαρχείου Βυτίνας (με Α/Α ΕΣΗΔΗΣ 191213)» — this contract's contractor and lot."
+  }
+ ],
+ "22SYMV011470180": [
+  {
+   "adam": "22PROC011082770",
+   "kind": "notice",
+   "role": "procurement",
+   "excerpt": "(iv) την από 29.08.2022 απόφαση του Δ.Σ. του ΤΑΙΠΕΔ, με την οποία εγκρίθηκαν τα υπ’ αριθμ. I/18.08.2022, ΙΙ/24.08.2022 και ΙΙΙ/26.08.2022 πρακτικά της Επιτροπής Αξιολόγησης Προσφορών, αναφορικά με τις προσφορές που υποβλήθηκαν κατά τη διαδικασία ανάθεσης που διενεργήθηκε δυνάμει της από 10.8.2022 Πρόσκλησης με καταληκτική ημερομηνία υποβολής προσφορών την 18.08.2022 από την οποία προκρίθηκε ως προσωρινός Ανάδοχος του Υποέργου Β (αρμοδιότητας Δασαρχείου Πύργου με Α/Α ΕΣΗΔΗΣ 191216) κατόπιν της διαδικασίας ανάθεσης που αφορά στο Έργο «Εργασίες ειδικών δασοτεχνικών έργων του άρθρο",
+   "evidence": "The contract cites «η από 10.8.2022 Πρόσκληση» by date; 22PROC011082770 is dated 2022-08-10 and is the call this contract's own registry chain (adamChain) declares; its text defines «το ΥΠΟΕΡΓΟ Β περιλαμβάνει τις περιοχές εργασιών αρμοδιότητας του Δασαρχείου Πύργου». Curated so that the two lots of one call meet in the diagram; the amendment 23SYMV011953055 inherits (2026-09-01)."
+  },
+  {
+   "adam": "22AWRD011258574",
+   "kind": "auction",
+   "role": "award",
+   "excerpt": "(vi) την από 16.09.2022 Απόφαση του Εντεταλμένου Συμβούλου του ΤΑΙΠΕΔ περί έγκρισης των υπ’ αριθμ. IV/14.09.2022 και V/15.09.2022 πρακτικών της Επιτροπής Αξιολόγησης Προσφορών και κατακύρωσης τη",
+   "evidence": "The contract cites the ΤΑΙΠΕΔ award decision of 16.09.2022 by date; 22AWRD011258574 (2022-09-16), declared in this contract's registry chain, awards Υποέργο Β «στην ένωση οικονομικών φορέων «3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ - ΚΑΤΣΙΑΒΑΣ ΧΡ. - ΝΑΤΣΗΣ ΚΩΝ Ο.Ε. – ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ»» — this contract's contractor."
+  }
+ ]
+}

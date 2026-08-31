@@ -38,8 +38,8 @@ def kh():
 
 def test_meta_pins(client):
     m = client.get("/api/meta").get_json()
-    assert m["antinero"]["n_contracts"] == 253  # 245 + the 7 ANTINERO-II chains + 26SYMV018768552 (2026-08-29)
-    assert m["antinero"]["total_eur"] == pytest.approx(632_135_681.76)
+    assert m["antinero"]["n_contracts"] == 254  # 245 + the 7 ANTINERO-II chains + 26SYMV018768552 (2026-08-29)
+    assert m["antinero"]["total_eur"] == pytest.approx(633_588_292.66)
     assert m["dase"]["n_contracts"] == 2004
     assert m["dase"]["total_eur"] == pytest.approx(30_162_069.68)
 
@@ -72,7 +72,7 @@ def test_cpvs_pins(client):
     cpvs = o["cpvs"]
     assert len(cpvs) == 147
     assert cpvs[0] == {"code": "77231300-1",
-                      "desc": "Υπηρεσίες διαχείρισης δασών", "n": 233}
+                      "desc": "Υπηρεσίες διαχείρισης δασών", "n": 234}
     # counts are per-contract: no code can exceed the in-scope population
     n_contracts = o["kpis"]["n_contracts"]
     assert all(0 < r["n"] <= n_contracts for r in cpvs)
@@ -88,15 +88,15 @@ def test_categories_pins(client):
     o = client.get("/api/antinero/overview").get_json()
     cats = o["categories"]
     assert {c["key"]: c["n"] for c in cats} == {
-        "dasotexnika": 161, "miktes_zones": 33, "arxaiologikoi": 16,
+        "dasotexnika": 162, "miktes_zones": 33, "arxaiologikoi": 16,
         "meletes": 14, "antidiavrotika": 13, "anadasoseis": 9,
         "ylotomies": 6, "ydatodexamenes": 1}
     assert sum(c["n"] for c in cats) == o["kpis"]["n_contracts"]
-    assert sum(c["eur"] for c in cats) == pytest.approx(632_135_681.76)
+    assert sum(c["eur"] for c in cats) == pytest.approx(633_588_292.66)
     assert cats[0]["key"] == "dasotexnika"
     # −€1.675.269,22 on 2026-08-18: all eight tender-budget corrections
     # are δασοτεχνικά contracts, so the whole drop lands in this category
-    assert cats[0]["eur"] == pytest.approx(366_787_559.77)
+    assert cats[0]["eur"] == pytest.approx(368_240_170.67)  # +€1.452.610,90: lot 4Α (2026-09-01)
     assert all(c["label"] and c["label"] != c["key"] for c in cats)
     assert cats == sorted(cats, key=lambda c: (-c["eur"], c["key"]))
     # detail supplement: label + verbatim-title evidence + provenance
@@ -129,8 +129,8 @@ def test_sankey_reconciles(client):
     s = client.get("/api/antinero/sankey").get_json()
     ministry_out = sum(l["eur"] for l in s["links"] if l["s"] == "ministry")
     contractor_in = sum(l["eur"] for l in s["links"] if l["s"] != "ministry")
-    assert ministry_out == pytest.approx(632_135_681.76, abs=1.0)
-    assert contractor_in == pytest.approx(632_135_681.76, abs=1.0)
+    assert ministry_out == pytest.approx(633_588_292.66, abs=1.0)
+    assert contractor_in == pytest.approx(633_588_292.66, abs=1.0)
 
 
 def test_types_of_work_lenses(client):
@@ -150,9 +150,9 @@ def test_types_of_work_lenses(client):
     th = o["themes"]
     # 158 titles name a work; 43 more title-silent contracts got theirs from
     # the CALL's works enumeration (DATA_DECISIONS 2026-08-22, second entry)
-    assert th["n_contracts"] == 253 and th["n_named"] == 209 and th["unspecified"] == 44
+    assert th["n_contracts"] == 254 and th["n_named"] == 210 and th["unspecified"] == 44
     assert {w["theme"]: w["n"] for w in th["themes"]} == {
-        "katharismoi": 109, "odiko_diktyo": 92, "syntirisi_zonon": 61,
+        "katharismoi": 110, "odiko_diktyo": 93, "syntirisi_zonon": 61,
         "miktes_zones": 35, "arxaiologikoi": 17, "anadasoseis": 16, "meletes": 14,
         "nero": 13, "antidiavrotika": 13, "estegasmenes_zones": 11, "dasokomika": 8,
         "ylotomies": 5, "psiles_zones": 4, "ypoleimmata": 4}
@@ -188,13 +188,13 @@ def test_deliverables_and_undocumented_calls(client):
     design-build clause is quoted; the nine date-only ΤΑΙΠΕΔ calls appear
     in the trail unlinked."""
     o = client.get("/api/antinero/overview").get_json()
-    assert o["deliverables"] == {"study": 14, "study_and_works": 136,
+    assert o["deliverables"] == {"study": 14, "study_and_works": 137,
                                  "works": 103}
     # the 2022 ΤΑΙΠΕΔ template («η Μελέτη που θα εκπονηθεί και εγκριθεί»):
     # 3 of the 20 contracts of 2022 are design-build, 17 works only
     net = client.get("/api/antinero/network").get_json()
     y22 = [n for n in net["nodes"] if (n.get("d") or "").startswith("2022")]
-    assert len(y22) == 26  # +6: the 2022 ANTINERO-II chains (2026-08-29)
+    assert len(y22) == 27  # +6: the 2022 ANTINERO-II chains (2026-08-29); +1 lot 4Α (2026-09-01)
     assert sum(1 for n in y22 if n["dk"] == "works") == 17
     d = client.get("/api/antinero/contract/23SYMV012972469").get_json()
     assert d["deliverables"]["kind"] == "study_and_works"
@@ -205,7 +205,7 @@ def test_deliverables_and_undocumented_calls(client):
     kh = sqlite3.connect(DEFAULT_DB)
     n = kh.execute("SELECT COUNT(*) FROM contract_deliverables").fetchone()[0]
     kh.close()
-    assert n == 253
+    assert n == 254
 
 
 def test_study_scatter_and_classes(client):
@@ -214,11 +214,11 @@ def test_study_scatter_and_classes(client):
     o = client.get("/api/antinero/overview").get_json()
     cl = o["studies"]["classes"]
     # 24 / 102 since the 2026-08-23 deliverables correction (5 works → s&w)
-    assert cl == {"stated": 110, "db_unstated": 26, "works_none": 103,
+    assert cl == {"stated": 110, "db_unstated": 27, "works_none": 103,
                   "study_only": 14}
     # every point carries its contract's main category (the dot's colour)
     assert all(p.get("cat") for p in o["studies"]["points"])
-    assert sum(cl.values()) == 253
+    assert sum(cl.values()) == 254
     pts = o["studies"]["points"]
     assert len(pts) == o["studies"]["summary"]["n_with"] == 110
     assert all(p["c"] and p["s"] > 0 for p in pts)
@@ -231,11 +231,11 @@ def test_unit_flow_reconciles(client):
     left = [n for n in u["nodes"] if n["side"] == "l"]
     right = [n for n in u["nodes"] if n["side"] == "r"]
     assert len(left) == 5 and len(right) == 11
-    assert sum(n["eur"] for n in left) == pytest.approx(632_135_681.76, abs=1.0)
-    assert sum(n["eur"] for n in right) == pytest.approx(632_135_681.76, abs=1.0)
-    assert sum(l["eur"] for l in u["links"]) == pytest.approx(632_135_681.76, abs=1.0)
-    assert u["total_eur"] == pytest.approx(632_135_681.76, abs=1.0)
-    assert sum(n["n"] for n in left) == 253
+    assert sum(n["eur"] for n in left) == pytest.approx(633_588_292.66, abs=1.0)
+    assert sum(n["eur"] for n in right) == pytest.approx(633_588_292.66, abs=1.0)
+    assert sum(l["eur"] for l in u["links"]) == pytest.approx(633_588_292.66, abs=1.0)
+    assert u["total_eur"] == pytest.approx(633_588_292.66, abs=1.0)
+    assert sum(n["n"] for n in left) == 254
     # every link joins a unit to a contractor node that exists
     ids = {n["id"] for n in u["nodes"]}
     assert all(l["s"] in ids and l["t"] in ids for l in u["links"])
@@ -243,7 +243,7 @@ def test_unit_flow_reconciles(client):
 
 def test_swarm_pins(client):
     sw = client.get("/api/antinero/swarm").get_json()
-    assert len(sw) == 253
+    assert len(sw) == 254
     assert all(r["pe"] for r in sw)        # every in-scope contract has regions
 
 
@@ -251,7 +251,7 @@ def test_pe_yearly_reconciles(client):
     py = client.get("/api/antinero/pe-yearly").get_json()
     assert len(py["pes"]) == 59
     total = sum(p["total_eur"] for p in py["pes"]) + py["unresolved_eur"]
-    assert total == pytest.approx(632_135_681.76, abs=1.0)
+    assert total == pytest.approx(633_588_292.66, abs=1.0)
 
 
 def test_document_kind_pins(client):
@@ -268,11 +268,11 @@ def test_document_kind_pins(client):
         JOIN contract_scope s ON s.reference_number = c.reference_number
         WHERE s.in_scope = 1"""))
     con.close()
-    assert sum(kinds.values()) == 253
+    assert sum(kinds.values()) == 254
     # 246 συμβάσεις: 200 original contracts, 25 revisions of terms,
     # 15 supplementary works (4 as the contract, 11 as its approval),
     # 6 deadline extensions — the composition /methodology prints
-    assert kinds["contract"] == 202
+    assert kinds["contract"] == 203
     assert kinds["amendment"] == 30
     assert kinds["supplementary_contract"] + kinds["approval_ape_supplementary"] == 15
     assert kinds["approval_schedule_extension"] == 6
@@ -304,18 +304,19 @@ def test_network_pins(client):
     from these stats, so a drift shows up here first."""
     net = client.get("/api/antinero/network").get_json()
     st = net["stats"]
-    assert st["n_contracts"] == len(net["nodes"]) == 253
+    assert st["n_contracts"] == len(net["nodes"]) == 254
     # 134 ΚΗΜΔΗΣ ΑΔΑΜ + the 4 ΤΑΙΠΕΔ calls known by date only
     # (undocumented_calls.json, DATA_DECISIONS 2026-08-22)
-    assert st["n_calls"] == 139 and st["n_date_calls"] == 4
+    assert st["n_calls"] == 140 and st["n_date_calls"] == 4
     # the three bands the chart draws, and nothing left over
-    assert st["n_in_multi_calls"] + st["n_single_call"] + st["n_no_call"] == 253
-    assert (st["n_in_multi_calls"], st["n_multi_calls"]) == (144, 54)
-    assert (st["n_single_call"], st["n_no_call"]) == (85, 24)
+    assert st["n_in_multi_calls"] + st["n_single_call"] + st["n_no_call"] == 254
+    assert (st["n_in_multi_calls"], st["n_multi_calls"]) == (146, 55)  # +4Α/4Β under one call (2026-09-01)
+    assert (st["n_single_call"], st["n_no_call"]) == (85, 23)  # 4Β left the no-call band with its curated call
     # a call with no sibling is not a cluster, and a bridge needs two calls
-    # 30 since the date-calls joined: two contractors bridge through them
-    assert st["n_bridge_multi"] <= st["n_bridge_contractors"] == 30
-    assert st["total_eur"] == pytest.approx(632_135_681.76, abs=1.0)
+    # 30 since the date-calls joined: two contractors bridge through them;
+    # 31 since 2026-09-01: lot 4Α's contractor (ΛΑΜΠΟΣ) also holds 2024 lots
+    assert st["n_bridge_multi"] <= st["n_bridge_contractors"] == 31
+    assert st["total_eur"] == pytest.approx(633_588_292.66, abs=1.0)
     # the timeline arrangement prints this and places every dot by it —
     # 37 since the date-call trios (04.03.2022, 22.05.2023) sign same-day
     assert st["n_same_day_calls"] == 37
@@ -326,7 +327,7 @@ def test_network_pins(client):
     # sentence next to them cannot drift apart
     fs = net["fire_season"]
     assert (fs["from"], fs["to"]) == ("05-01", "10-31")
-    assert fs["n_contracts"] == 121
+    assert fs["n_contracts"] == 122  # +1: lot 4Α, signed 27.09.2022 (2026-09-01)
     assert fs["n_contracts"] == sum(
         1 for n in net["nodes"] if "05-01" <= (n["d"] or "")[5:] <= "10-31")
     assert st["n_same_day_calls"] <= st["n_multi_calls"]
@@ -339,7 +340,7 @@ def test_network_pins(client):
     # 380 theme links over 201 contracts, 44 naming none — the layer's
     # own pinned numbers
     links = sum(len(n["wk"]) for n in net["nodes"])
-    assert links == 402
+    assert links == 404  # +2: lot 4Α's two themes (2026-09-01)
     assert sum(1 for n in net["nodes"] if not n["wk"]) == 44
     assert {t for n in net["nodes"] for t in n["wk"]} <= {
         "katharismoi", "odiko_diktyo", "syntirisi_zonon", "miktes_zones",
@@ -348,7 +349,7 @@ def test_network_pins(client):
         "arxaiologikoi"}
     # date ids of the ΤΑΙΠΕΔ calls, curated with verbatim evidence
     calls = {n["call"] for n in net["nodes"] if n["call"]}
-    assert len(calls) == 139
+    assert len(calls) == 140   # 139 + lot 4Α's curated call (2026-09-01)
     assert sum(1 for c in calls if c.startswith("date:")) == 4
     assert all(
         re.fullmatch(r"\d\dPROC\d{9}", c) or re.fullmatch(r"date:\d{4}-\d\d-\d\d", c)
@@ -364,7 +365,7 @@ def test_meta_family_facts_match_the_network(client):
     # date-only ΤΑΙΠΕΔ calls (their nine contracts leave the no-call band)
     assert f["kh_family_calls"] == st["n_calls"] - st["n_date_calls"]
     assert f["kh_family_none"] == st["n_no_call"] + 9
-    assert f["kh_family_contracts"] + f["kh_family_none"] == 253
+    assert f["kh_family_contracts"] + f["kh_family_none"] == 254
     # the registry's own chain declares far less than the texts do
     assert f["kh_family_declared"] == 83
     assert f["kh_notice"] == 43
@@ -393,7 +394,7 @@ def test_override_authority_links_ship_their_evidence(client):
         "SELECT DISTINCT reference_number FROM contract_forest_authorities"
         " WHERE source LIKE 'override%'")]
     conn.close()
-    assert len(refs) == 7
+    assert len(refs) == 8
     for ref in refs:
         links = client.get(f"/api/antinero/contract/{ref}").get_json()["authorities"]
         over = [a for a in links if (a["source"] or "").startswith("override")]
@@ -800,7 +801,7 @@ def test_per_contractor_totals_sum_to_the_programme_basis(client):
     rows = client.get("/api/antinero/contractors").get_json()
     assert len(rows) == 157
     assert sum(r["total_eur"] or 0.0 for r in rows) == pytest.approx(
-        632_135_681.76, abs=0.01)
+        633_588_292.66, abs=0.01)
 
 
 def test_two_in_scope_contracts_are_signed_by_two_parties(kh):
@@ -918,7 +919,7 @@ def test_member_firm_view_is_the_same_money(client, kh):
     parties = qx.antinero_contractors_list(con)
     con.close()
     total = sum(r["total_eur"] for r in firms)
-    assert total == pytest.approx(632_135_681.76, abs=0.01)
+    assert total == pytest.approx(633_588_292.66, abs=0.01)
     assert total == pytest.approx(sum(r["total_eur"] or 0 for r in parties), abs=0.01)
     # substituting members for ventures leaves FEWER names, not more
     assert len(firms) == 143 and len(parties) == 157
@@ -964,7 +965,7 @@ def test_connections_pins(client):
     # state no other allocation), so the flows, their per-year breakdown and
     # the origins all reconcile to the programme total; the tolerance is the
     # per-row rounding over 259 / 355 / 57 rows
-    basis = 632_135_681.76
+    basis = 633_588_292.66
     assert sum(f["total_eur"] for f in n["flows"]) == pytest.approx(basis, abs=0.5)
     assert sum(f["total_eur"] for f in n["flows_yearly"]) == pytest.approx(basis, abs=0.5)
     assert sum(o["total_eur"] for o in n["origins"]) == pytest.approx(basis, abs=0.5)
@@ -976,17 +977,17 @@ def test_connections_pins(client):
     # whole quoted project title's services and ΔΔ Δωδεκανήσου left the Χίος
     # lot (DATA_DECISIONS)
     assert len(n["contractor_authority"]) == 498
-    # 397 until 2026-08-31, when lot 4Β gained Π.Ε. Αρκαδίας from its own
-    # Άρθρο 7 («Δυτικού Μαίναλου … τέως Δήμου Θέλπουσας Π.Ε Αρκαδίας») —
-    # its contractor now pairs with a second region (DATA_DECISIONS)
-    assert len(n["contractor_pe"]) == 398
+    # 398 for one day (2026-08-31): lot 4Β had gained Π.Ε. Αρκαδίας from its
+    # Άρθρο 7 — reverted 2026-09-01 when lot 4Α proved the clause a paste;
+    # 4Α's own (contractor, Αρκαδίας) pair is what keeps the count at 397
+    assert len(n["contractor_pe"]) == 397
     # 259 until 2026-08-21, when two ventures' HQ regions followed their own
     # contracts (Μαρούσι→Καβάλα, Κόρινθος→Λίμνη Ευβοίας) and two (home, work)
-    # pairs merged into existing ones — DATA_DECISIONS 2026-08-21; 270 until
-    # 2026-08-31, when lot 4Β's Άρθρο-7 verdict added Π.Ε. Αρκαδίας and with
-    # it one new (home, work) pair
-    assert len(n["flows"]) == 271
-    assert len(n["contractor_signer"]) == 182
+    # pairs merged into existing ones — DATA_DECISIONS 2026-08-21; 271 for a
+    # day when lot 4Β carried Π.Ε. Αρκαδίας (2026-08-31, reverted 2026-09-01
+    # as a pasted clause); lot 4Α's own pair coincides with an existing one
+    assert len(n["flows"]) == 270
+    assert len(n["contractor_signer"]) == 183
     # and with them the visible partnerships: a κοινοπραξία is ONE registry
     # party, so the only pairs left are the two contracts whose venture had no
     # ΑΦΜ of its own to sign with
@@ -995,7 +996,7 @@ def test_connections_pins(client):
     assert len(n["authorities"]) == 105
     # even-split conservation: the Π.Ε. layer covers every in-scope contract
     assert sum(e["eur"] for e in n["contractor_pe"]) == pytest.approx(
-        632_135_681.76, abs=1.0)
+        633_588_292.66, abs=1.0)
 
 
 def test_authorities_pins(client):
@@ -1023,9 +1024,9 @@ def test_state_funded_dots_pins(client):
     contract of both programmes, whole, at stated net — the two sums ARE
     the pages' own bases, to the cent."""
     d = client.get("/api/compare").get_json()["dots"]
-    assert len(d["antinero"]["ref"]) == len(d["antinero"]["eur"]) == 253
+    assert len(d["antinero"]["ref"]) == len(d["antinero"]["eur"]) == 254
     assert len(d["dase"]["ref"]) == len(d["dase"]["eur"]) == 2004
-    assert d["antinero"]["total_eur"] == pytest.approx(632_135_681.76)
+    assert d["antinero"]["total_eur"] == pytest.approx(633_588_292.66)
     assert d["dase"]["total_eur"] == pytest.approx(30_162_069.68)
     assert d["antinero"]["total_eur"] == pytest.approx(sum(d["antinero"]["eur"]), abs=0.05)
     assert d["dase"]["total_eur"] == pytest.approx(sum(d["dase"]["eur"]), abs=0.05)
@@ -1053,7 +1054,7 @@ def test_pipelines_pins(client):
     # ten more were joint-venture MEMBERS the registry had keyed as parties
     # (DATA_DECISIONS 2026-08-20) — the κοινοπραξία that signed replaced them
     assert p["antinero"]["n_vats"] == 157
-    assert p["antinero"]["total_eur"] == pytest.approx(632_135_681.76)
+    assert p["antinero"]["total_eur"] == pytest.approx(633_588_292.66)
     assert p["dase"]["total_eur"] == pytest.approx(30_162_069.68)
     assert p["dase_n_coops"] == 246
     assert [s["name"] for s in p["shared_awarders"]] == [
@@ -1063,11 +1064,11 @@ def test_pipelines_pins(client):
 
 def test_explore_pins(client):
     e = client.get("/api/explore").get_json()
-    assert e["counts"] == {"antinero": 253, "dase": 2004, "anadohoi": 70}
-    assert len(e["rows"]) == 2327
+    assert e["counts"] == {"antinero": 254, "dase": 2004, "anadohoi": 70}
+    assert len(e["rows"]) == 2328
     # value bases per dataset reconcile with their own conventions
     kh_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "antinero")
-    assert kh_sum == pytest.approx(632_135_681.76, abs=1.0)
+    assert kh_sum == pytest.approx(633_588_292.66, abs=1.0)
     dase_sum = sum(r["v"] or 0 for r in e["rows"] if r["ds"] == "dase")
     assert dase_sum == pytest.approx(30_162_069.68, abs=1.0)
     # sponsor rows expose status; the 21 stalled ones are findable
@@ -1078,7 +1079,7 @@ def test_explore_pins(client):
     # διακήρυξη; the ΔΑΣΕ chain harvest (2026-08-03) covered all 2,164
     # contracts, so its flag is populated too
     kh_pr = [r["pr"] for r in e["rows"] if r["ds"] == "antinero"]
-    assert kh_pr.count(1) == 43 and kh_pr.count(0) == 210
+    assert kh_pr.count(1) == 43 and kh_pr.count(0) == 211
     dase_pr = [r["pr"] for r in e["rows"] if r["ds"] == "dase"]
     assert dase_pr.count(1) == 142 and dase_pr.count(0) == 1862
     assert all(r["pr"] is None for r in e["rows"] if r["ds"] == "anadohoi")
@@ -1088,7 +1089,7 @@ def test_explore_pins(client):
     # ΔΑΣΕ endings were never harvested
     kh_fin = [r["fin"] for r in e["rows"] if r["ds"] == "antinero"]
     # 148 until 2026-08-21: lot 15Α's acceptance act came back from lot 15Γ
-    assert kh_fin.count(1) == 161 and kh_fin.count(0) == 92
+    assert kh_fin.count(1) == 161 and kh_fin.count(0) == 93
     an_fin = [r["fin"] for r in e["rows"] if r["ds"] == "anadohoi"]
     assert an_fin.count(1) == 19  # +3 endings found 2026-08-29
     assert all(r["fin"] is None for r in e["rows"] if r["ds"] == "dase")
@@ -1389,13 +1390,13 @@ def test_contract_chain_pins(client):
 
     rows = client.get("/api/explore").get_json()["rows"]
     kh = [r for r in rows if r["ds"] == "antinero"]
-    assert len(kh) == 253                     # unchanged: chains were already tips
+    assert len(kh) == 254                     # unchanged: chains were already tips
     seen = set()
     for r in kh:                              # no ΑΔΑΜ may appear twice
         for ref in [r["ref"], *r.get("alt", [])]:
             assert ref not in seen, ref
             seen.add(ref)
-    assert round(sum(r["v"] or 0 for r in kh), 2) == 632135681.76
+    assert round(sum(r["v"] or 0 for r in kh), 2) == 633588292.66
     row = next(r for r in kh if r["ref"] == "26SYMV019098206")
     # the span runs from the contract's signature to the last act's OWN date —
     # ΚΗΜΔΗΣ files every later act under the contract's date, so the registry
@@ -1482,7 +1483,7 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
                        for e in dl["extensions"]), ref
             for e in dl["extensions"]:
                 src[e["source"]] += 1
-    assert seen == {"document": 250, "document_season": 3}
+    assert seen == {"document": 251, "document_season": 3}
     # 16 steps over 14 chains until 2026-08-21 (9 «Παράταση προθεσμίας»
     # records + 7 supplementary approvals with a later end date); since the
     # Diavgeia extension approvals joined (phase 1 of the lifecycle layer,
@@ -1495,8 +1496,8 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     # 435 since the duration unit is folded («Ημέρες».upper() kept its
     # accent, so 14 days read as 14 months and four supplementary approvals
     # drew deadlines in 2027–2028 — pass 3, 2026-08-21)
-    assert (ext_chains, ext_steps) == (170, 460)
-    assert src == {"diavgeia": 448, "khmdhs": 12}
+    assert (ext_chains, ext_steps) == (170, 463)
+    assert src == {"diavgeia": 451, "khmdhs": 12}
     # the deepest case: 15 months from the start of works, then one
     # «Παράταση προθεσμίας» — and the registry's own end date agrees to the
     # day (2026-01-21 against the document's 2026-01-22)
@@ -1508,8 +1509,8 @@ def test_the_bar_draws_what_was_promised_not_the_paperwork(client, kh):
     assert d2["basis"] == "document_season" and d2["deadline"] == "2025-10-31"
     # the counts the methodology prose prints come from /api/meta, not prose
     f = client.get("/api/meta").get_json()["facts"]
-    assert f["kh_deadline_document"] == 250 and f["kh_deadline_document_season"] == 3
-    assert f["kh_deadline_ext_steps"] == 460      # 16 until the Diavgeia acts joined (2026-08-21)
+    assert f["kh_deadline_document"] == 251 and f["kh_deadline_document_season"] == 3
+    assert f["kh_deadline_ext_steps"] == 463      # 16 until the Diavgeia acts joined (2026-08-21)
 
 
 def test_authority_evidence_is_quotable_greek(kh):
@@ -1541,12 +1542,12 @@ def test_the_municipality_layer_says_what_the_documents_say(client, kh):
     n, c, flagged, from_call = kh.execute(
         "SELECT COUNT(*), COUNT(DISTINCT reference_number), SUM(outside_region),"
         " SUM(from_call IS NOT NULL) FROM contract_municipalities").fetchone()
-    assert (n, c) == (593, 157)
-    # only what NOTHING accounts for stays flagged — and since the 2026-08-31
-    # verdicts NOTHING is: the 26PROC018350831 lot-split gave each 2026 lot its
-    # own δήμοι, and Γορτυνίας on lot 4Β was resolved by adding Π.Ε. Αρκαδίας
-    # to the chain's regions from the contract's own Άρθρο 7 (DATA_DECISIONS)
-    assert flagged == 0 and from_call == 72
+    assert (n, c) == (594, 158)
+    # only what NOTHING accounts for stays flagged: since the 2026-08-31
+    # lot-split each 2026 lot has its own δήμοι, and the ONE flag left is
+    # Γορτυνίας on lot 4Β — kept as the document states it, flagged by user
+    # verdict of 2026-09-01 because lot 4Α proved the placing clause a paste
+    assert flagged == 1 and from_call == 72
     why = dict(kh.execute(
         "SELECT outside_pe_explained, COUNT(*) FROM contract_municipalities"
         " WHERE outside_pe_explained IS NOT NULL GROUP BY 1"))
@@ -1585,7 +1586,7 @@ def test_explore_carries_the_municipalities(client):
     rows = client.get("/api/explore").get_json()["rows"]
     kh_rows = [r for r in rows if r["ds"] == "antinero"]
     with_mu = [r for r in kh_rows if r.get("mu")]
-    assert len(kh_rows) == 253 and len(with_mu) == 157
+    assert len(kh_rows) == 254 and len(with_mu) == 158
     assert len({m for r in with_mu for m in r["mu"]}) == 223
     assert not any(r.get("mu") for r in rows if r["ds"] != "antinero")
     # the δήμοι of one contract, as its call names them
@@ -1687,7 +1688,7 @@ def test_contractor_display_names_are_presented_and_both_names_search(client):
     rows = client.get("/api/antinero/contractors").get_json()
     assert len(rows) == 157
     assert sum(r["total_eur"] or 0.0 for r in rows) == pytest.approx(
-        632_135_681.76, abs=0.01)
+        633_588_292.66, abs=0.01)
     bios = next(r for r in rows if r["vat_number"] == "998342580")
     assert bios["name"] == "ΒΙΟΣ Α.Ε." and bios["registry_name"] != bios["name"]
     # the name it signed four of its contracts under still finds it
@@ -1726,12 +1727,12 @@ def test_value_histogram_covers_every_contract_on_doubling_edges(client):
     and the swarm it toggles with ships the same population with a date."""
     o = client.get("/api/antinero/overview").get_json()
     vh = o["value_histogram"]
-    assert sum(vh["counts"]) == o["kpis"]["n_contracts"] == 253
+    assert sum(vh["counts"]) == o["kpis"]["n_contracts"] == 254
     inner = vh["edges"][1:]
     assert all(b == a * 2 for a, b in zip(inner, inner[1:]))
     assert vh["median"] > 0
     sw = client.get("/api/antinero/swarm").get_json()
-    assert len(sw) == 253
+    assert len(sw) == 254
     assert all(r["d"] for r in sw)          # the tooltip's signature date
 
 
@@ -1753,14 +1754,14 @@ def test_front_page_findings(client):
     uf = client.get("/api/antinero/unit-flow").get_json()
     units = sorted((n for n in uf["nodes"] if n["id"].startswith("u:")),
                    key=lambda n: -n["eur"])
-    assert round(100 * units[0]["eur"] / uf["total_eur"], 1) == 76.5
+    assert round(100 * units[0]["eur"] / uf["total_eur"], 1) == 76.3
     sw = client.get("/api/antinero/swarm").get_json()
     vs = sorted(r["eur"] for r in sw)
-    assert len(vs) == 253 and vs[0] > 60_000          # every contract clears the ceiling
+    assert len(vs) == 254 and vs[0] > 60_000          # every contract clears the ceiling
     assert round(vs[len(vs) // 2] / 1e6, 2) == 2.1     # the median
     o = client.get("/api/antinero/overview").get_json()
     top10 = sorted((c["total_eur"] for c in o["top_contractors"]), reverse=True)[:10]
-    assert round(100 * sum(top10) / o["kpis"]["total_eur"], 1) == 26.2
+    assert round(100 * sum(top10) / o["kpis"]["total_eur"], 1) == 26.1
 
 
 def test_cpv_tree(client):
@@ -1769,10 +1770,10 @@ def test_cpv_tree(client):
     that overlap, every node named from the official CPV 2008 workbook."""
     o = client.get("/api/antinero/overview").get_json()
     tr = o["cpv_tree"]
-    assert (tr["n_contracts"], tr["n_codes"], len(tr["divisions"])) == (253, 147, 13)
-    assert tr["codes_per_contract"] == 15.8
+    assert (tr["n_contracts"], tr["n_codes"], len(tr["divisions"])) == (254, 147, 13)
+    assert tr["codes_per_contract"] == 15.7
     by = {d["code"][:2]: d for d in tr["divisions"]}
-    assert by["77"]["n"] == 241 and by["45"]["n"] == 205 and by["90"]["n"] == 130
+    assert by["77"]["n"] == 242 and by["45"]["n"] == 206 and by["90"]["n"] == 130
     assert by["77"]["name_en"].startswith("Agricultural, forestry")
     assert sum(len(k["codes"]) for d in tr["divisions"] for k in d["classes"]) == 147
     # every node carries an official EN and EL name
@@ -1887,9 +1888,9 @@ def test_landing_pins(client, kh):
     import re
     L = client.get("/api/landing").get_json()
     assert L["counts"] == {
-        "antinero_contracts": 313, "antinero_acts": 302,
+        "antinero_contracts": 314, "antinero_acts": 302,
         "dase_contracts": 2068, "dase_acts": 1652,
-        "anadohoi_acts": 212, "total": 4547,
+        "anadohoi_acts": 212, "total": 4548,
     }
     lists = {f"{ds}_{k}": v for ds in ("antinero", "dase", "anadohoi")
              for k, v in L[ds].items()}
@@ -1908,7 +1909,7 @@ def test_landing_pins(client, kh):
     # tips the analytics stand on, plus their superseded versions
     tips = {r[0] for r in kh.execute(
         "SELECT reference_number FROM contract_scope WHERE in_scope = 1")}
-    assert len(tips) == 253 and tips <= set(L["antinero"]["contracts"])
+    assert len(tips) == 254 and tips <= set(L["antinero"]["contracts"])
     # and the ΔΑΣΕ list holds the whole live population of /api/compare
     dots = client.get("/api/compare").get_json()["dots"]
     assert set(dots["dase"]["ref"]) <= set(L["dase"]["contracts"])
@@ -1931,7 +1932,7 @@ def test_v_plus_phase_pins(kh):
     assert kh.execute("SELECT COUNT(*) FROM contract_scope WHERE scope = 'antinero_v_plus'").fetchone()[0] == 21
     n, eur = kh.execute("""SELECT COUNT(*), ROUND(SUM(total_cost_without_vat), 2)
         FROM contracts JOIN contract_scope USING (reference_number) WHERE in_scope = 1""").fetchone()
-    assert (n, eur) == (253, 632135681.76)
+    assert (n, eur) == (254, 633588292.66)
 
 
 def test_dase_contract_family_pins(client):

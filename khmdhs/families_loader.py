@@ -27,6 +27,7 @@ import logging
 import re
 import sqlite3
 import sys
+import json
 import unicodedata
 from datetime import date
 from pathlib import Path
@@ -49,6 +50,7 @@ def _unaccent(s: str) -> str:
     nfd = unicodedata.normalize("NFD", s)
     return "".join(ch for ch in nfd if not unicodedata.combining(ch))
 WINDOW = 240
+CURATION_FILE = Path(__file__).parent / "data" / "family_curation.json"
 
 
 def _excerpt(text: str, at: int, end: int) -> str:
@@ -99,6 +101,39 @@ def load(conn: sqlite3.Connection, cache: Path, dry_run: bool = False) -> dict:
     direct = {ref: citations(t) for ref, t in texts.items()}
     stats = {"contracts": len(refs), "no_text": len(refs) - len(texts),
              "direct": 0, "inherited": 0, "none": 0, "rows": 0}
+    # Curated rows (khmdhs/data/family_curation.json, DATA_DECISIONS
+    # 2026-09-01): a contract that cites its call and award by DATE only,
+    # whose ΑΔΑΜ the family's other documents establish (the two lots of
+    # ANTINERO II's Βυτίνας/Πύργου project: the sibling's declared chain and
+    # the award that names each winner). They join the text-read citations
+    # BEFORE the inheritance walk, so an amendment inherits them like any
+    # other; each carries the contract's own citing sentence, and its row is
+    # labelled «curated» (an heir's: «inherited:<ref>», as always).
+    try:
+        curated = json.loads(CURATION_FILE.read_text(encoding="utf-8"))
+    except OSError:
+        curated = {}
+    curated_pairs: set[tuple[str, str]] = set()
+    stored = set(refs)
+    for ref, entries in curated.items():
+        if ref.startswith("_"):
+            continue
+        if ref not in stored:
+            # a fixture DB, or a typo — the real-DB test pins every curated
+            # ref as stored and loaded, so this only warns
+            logging.warning("family_curation.json: %s is not a stored contract - skipped", ref)
+            continue
+        have = {a for a, _k, _r, _e in direct.get(ref, [])}
+        for e in entries:
+            if not re.fullmatch(r"\d\d(PROC|AWRD)\d{9}", e["adam"]):
+                raise SystemExit(f"family_curation.json: {ref} names an odd ΑΔΑΜ {e['adam']!r}")
+            if not e.get("excerpt") or not e.get("evidence"):
+                raise SystemExit(f"family_curation.json: {ref}/{e['adam']} lacks excerpt or evidence")
+            if e["adam"] in have:
+                continue
+            direct.setdefault(ref, []).append((e["adam"], e["kind"], e["role"], e["excerpt"]))
+            curated_pairs.add((ref, e["adam"]))
+            stats["curated"] = stats.get("curated", 0) + 1
     rows: list[tuple] = []
     today = date.today().isoformat()
     for ref in refs:
@@ -118,16 +153,17 @@ def load(conn: sqlite3.Connection, cache: Path, dry_run: bool = False) -> dict:
                     break
                 cur = prev_of.get(cur)
         if not cites:
-            stats["none"] += 1
             continue
         if source == "text":
             stats["direct"] += 1
         for seq, (adam, kind, role, ex) in enumerate(cites):
             # a row is only ever written with the sentence that proves it
             assert ex, (ref, adam)
-            rows.append((ref, seq, adam, kind, role,
-                         source if kind == "notice" else "text", ex, today))
+            src = ("curated" if (ref, adam) in curated_pairs
+                   else source if kind == "notice" else "text")
+            rows.append((ref, seq, adam, kind, role, src, ex, today))
     stats["rows"] = len(rows)
+    stats["none"] = len(refs) - len({r[0] for r in rows})
     if dry_run:
         return stats
     with conn:

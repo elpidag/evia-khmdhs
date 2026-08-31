@@ -107,22 +107,42 @@ def test_real_db_family_coverage(kh):
         SELECT COUNT(DISTINCT f.reference_number) FROM contract_families f
         JOIN contract_scope s ON s.reference_number = f.reference_number
         WHERE s.in_scope = 1 AND f.kind = 'notice'""").fetchone()[0]
-    assert rows == 220
+    assert rows == 222        # 220 + lots 4Α and 4Β of ANTINERO II, curated 2026-09-01
     fams = kh.execute("""
         SELECT COUNT(DISTINCT f.adam) FROM contract_families f
         JOIN contract_scope s ON s.reference_number = f.reference_number
         WHERE s.in_scope = 1 AND f.kind = 'notice' AND f.role = 'procurement'
         """).fetchone()[0]
-    assert fams == 135
+    assert fams == 136
 
 
 def test_real_db_every_family_row_quotes_its_source(kh):
     """No row without the sentence that cites it, and the ΑΔΑΜ must appear
     inside that sentence — the rule that keeps this layer evidence-based."""
-    for r in kh.execute("SELECT adam, excerpt, kind, role, source FROM contract_families"):
-        assert r["adam"] in r["excerpt"], r["adam"]
+    import json, re
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent
+    curated = {k: v for k, v in json.loads(
+        (root / "khmdhs" / "data" / "family_curation.json").read_text(encoding="utf-8")).items()
+        if not k.startswith("_")}
+    for r in kh.execute("SELECT reference_number, adam, excerpt, kind, role, source FROM contract_families"):
         assert r["kind"] in ("notice", "auction")
         assert r["role"] in ("procurement", "amendment", "award")
+        # a contract citing its call/award by DATE only: the excerpt is
+        # still the contract's own sentence (verbatim in its cached text)
+        # and the curation names the document that supplies the ΑΔΑΜ
+        # (DATA_DECISIONS 2026-09-01); an amendment inherits such a row
+        # from its predecessor under the usual «inherited:<ref>» label
+        owner = (r["reference_number"] if r["source"] == "curated"
+                 else r["source"].split(":", 1)[1] if r["source"].startswith("inherited:") else None)
+        entry = next((e for e in curated.get(owner, []) if e["adam"] == r["adam"]), None) if owner else None
+        if entry:
+            assert entry["evidence"] and r["adam"] in entry["evidence"]
+            txt = re.sub(r"\s+", " ", (root / "data" / "processed" / "pdf_cache" /
+                                        f"{owner}.txt").read_text(encoding="utf-8", errors="replace"))
+            assert r["excerpt"][:120] in txt, owner
+            continue
+        assert r["adam"] in r["excerpt"], r["adam"]
         assert r["source"] == "text" or r["source"].startswith("inherited:")
 
 
@@ -139,3 +159,23 @@ def test_real_db_the_eight_lot_family(kh):
         "SELECT COUNT(*) FROM contract_linked_acts WHERE adam = ?",
         ("24PROC014447893",)).fetchone()[0]
     assert declared == 0        # the registry never linked this procurement
+
+
+def test_real_db_curated_family_rows_are_all_loaded(kh):
+    """Every ref in family_curation.json is a stored contract and every one
+    of its rows is in the DB with source «curated» — the guard that lets the
+    loader merely warn on an unknown ref (a synthetic fixture has none)."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent
+    curated = {k: v for k, v in json.loads(
+        (root / "khmdhs" / "data" / "family_curation.json").read_text(encoding="utf-8")).items()
+        if not k.startswith("_")}
+    assert curated                                   # 4Α of ANTINERO II, 2026-09-01
+    for ref, entries in curated.items():
+        assert kh.execute("SELECT 1 FROM contracts WHERE reference_number = ?", (ref,)).fetchone(), ref
+        rows = {r[0]: r[1] for r in kh.execute(
+            "SELECT adam, source FROM contract_families WHERE reference_number = ?", (ref,))}
+        for e in entries:
+            assert rows.get(e["adam"]) == "curated", (ref, e["adam"])
+

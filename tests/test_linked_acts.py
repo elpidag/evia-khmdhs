@@ -101,7 +101,7 @@ def test_real_db_in_scope_award_coverage(conn):
                            WHERE cla.reference_number = s.reference_number
                              AND cla.kind = 'auction') AS has_awrd
              FROM contract_scope s WHERE s.in_scope = 1)""").fetchone()
-    assert n == 253
+    assert n == 254
     # Registry reality (verified live 2026-08-02): the chain graph only knows
     # the links the ΣΥΜΒ payloads declared — most Anti-nero direct awards were
     # posted with NO linked κατακύρωση. This pin documents that gap.

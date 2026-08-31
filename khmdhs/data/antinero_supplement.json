@@ -354,5 +354,11 @@
   "lot": "Εργασίες αποκατάστασης – αναδάσωσης με Χαλέπιο Πεύκη στο Δημόσιο Δάσος Λίμνης (Δασαρχείο Λίμνης), Εθνικό Σχέδιο Αναδάσωσης",
   "basis": "fund:2021ΤΑ07500002",
   "notes": "Found 2026-08-29 by the CPV route of scripts/find_antinero_new.py (DATA_DECISIONS that day): signed 02.04.2026 by ΕΕΣΥΠ (997104555) with ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ, €402.578,43 net; its own text: «Το έργο περιλαμβάνεται στη Δράση 16849: «Εθνικό σχέδιο αναδάσωσης, πρόγραμμα αποκατάστασης και πρόληψης («Antinero»), αντιδιαβρωτικά και αντιπλημμυρικά μέτρα» … κωδικό ΤΑ 5201358 … ΣΑΤΑ ΤΑ075». Invisible to the contractor/family/subject routes: a first-time contractor and a non-ΥΠΕΝ signature."
+ },
+ "22SYMV011331269": {
+  "phase": "antinero_ii",
+  "lot": "4Α ΤΟΥ ΙΙ",
+  "basis": "title:ΤΟΥ ΙΙ",
+  "notes": "Υποέργο Α (Δασαρχείο Βυτίνας) of the two-lot project «…σε εκτάσεις ευθύνης των Δασαρχείων Βυτίνας και Πύργου» (call 22PROC011082770, ΤΑΙΠΕΔ-run) whose Υποέργο Β is 22SYMV011470180 → 23SYMV011953055. Signed 2022-09-27 by ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ Ε.Ε. (998269962), €1.452.610,90 net — the award 22AWRD011258574 names it: «για το Υποέργο Α, στον οικονομικό φορέα «ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ Ε.Ε.» … με ΑΦΜ 998269962 … αρμοδιότητας του Δασαρχείου Βυτίνας (με Α/Α ΕΣΗΔΗΣ 191213)». Found 2026-09-01 through the award's winner list (DATA_DECISIONS): invisible to every discovery route — no ANTINERO word in its title («4A ΤΟΥ ΙΙ», Latin A), no fund code (regularBudgetFundedProgramRef C2420902001 only) and a registry record that declares no call, award or sibling."
  }
 }

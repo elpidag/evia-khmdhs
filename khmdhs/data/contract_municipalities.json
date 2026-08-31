@@ -117,6 +117,25 @@
    "note": "Lot split, user verdict 2026-08-31 (DATA_DECISIONS): the contract's own heading says «Τμήμα 2: Περιοχές ευθύνης Δασαρχείων Χαλκίδας και Λαυρίου» and the call places its areas «στους Δήμους Λαυρεωτικής και Σαρωνίδας»; the five Τμήμα-1 δήμοι came from the shared πρόσκληση and do not belong to this lot."
   }
  },
+ "22SYMV011331269": {
+  "municipalities": [
+   {
+    "code": "9238",
+    "name": "Γορτυνίας",
+    "pe": "Π.Ε. Αρκαδίας",
+    "authority": "Δασαρχείο Βυτίνας",
+    "authority_basis": "the contract's sole authority",
+    "source_ref": "22SYMV011331269",
+    "from_call": null,
+    "excerpt": "ΡΙΟΧΕΣ ΔΥΤΙΚΟΥ ΜΑΙΝΑΛΟΥ ΚΑΙ ΔΑΣΟΥΣ ΤΕΩΣ ΔΗΜΟΥ ΘΕΛΠΟΥΣΑΣ Π.Ε ΑΡΚΑΔΙΑΣ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "rename",
+    "note": null,
+    "override": null
+   }
+  ]
+ },
  "22SYMV011360183": {
   "municipalities": [
    {
@@ -294,10 +313,10 @@
     "source_ref": "22SYMV011470180",
     "from_call": null,
     "excerpt": "ΡΙΟΧΕΣ ΔΥΤΙΚΟΥ ΜΑΙΝΑΛΟΥ ΚΑΙ ΔΑΣΟΥΣ ΤΕΩΣ ΔΗΜΟΥ ΘΕΛΠΟΥΣΑΣ Π.Ε ΑΡΚΑΔΙΑΣ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ",
-    "outside_region": false,
+    "outside_region": true,
     "outside_pe_explained": null,
     "via": "rename",
-    "note": null,
+    "note": "Flagged by user verdict 2026-09-01: the placing clause is pasted from the Βυτίνα lot (4Α carries it verbatim); the row stays as the document states it, unexplained.",
     "override": null
    }
   ]
