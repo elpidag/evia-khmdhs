@@ -55,6 +55,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
+	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.overview);
@@ -840,7 +841,7 @@
 				{grInt(dk.amendment)} revise the terms of one without touching its price,
 				{grInt(dk.supplementary)} add supplementary works, and {grInt(dk.extension)}
 				only extend a deadline —
-				<a href="/methodology#record-kinds">what each record is</a>.
+				<a href="/methodology#validation">what each record is</a>.
 			</p>
 		{/if}
 		{#if o.probable && o.probable.n > 0}
@@ -1154,7 +1155,7 @@
 			title="CONTRACT SCOPE"
 			caveat="Read from each contract's own signed text or its call; «study & works» is the design-build clause, quoted verbatim on the contract page; «study only» are the contracts whose object is the studies."
 			anchor="scope"
-			methodology="categories"
+			methodology="validation"
 		>
 			<div>
 				<StackedShareBar
@@ -1193,7 +1194,7 @@
 			title="CONTRACT TYPE"
 			caveat="One category per contract, curated from the project title in the signed PDF (CPV codes only as tie-breaker)."
 			anchor="categories"
-			methodology="categories"
+			methodology="validation"
 		>
 			{#snippet controls()}
 				<SegmentToggle
@@ -1251,7 +1252,7 @@
 		title="TYPES OF WORKS"
 		caveat={`Works as named in the signed titles or, where a title names none, in the call’s description of the lot (${grInt(o.themes.themes.length)} kinds, verbatim clause kept per contract); a contract counts under every work it names. Categories and scope: one per contract, from the same documents.`}
 		anchor="works"
-		methodology="categories"
+		methodology="validation"
 	>
 		<CatWorkChord data={chordData} leftControl={leftPick} rightControl={rightPick} />
 	</ChartFrame>
@@ -1266,7 +1267,7 @@
 			network.stats.n_calls
 		)} resolved this way); the fire season is the statutory 1 May – 31 October."
 		anchor="network"
-		methodology="procurement-families"
+		methodology="validation"
 	>
 		{#snippet controls()}
 			<SegmentToggle param="net" fallback="scope" options={NET_MODES} />
@@ -1313,7 +1314,7 @@
 		title="CUMULATIVE DISBURSEMENT"
 		caveat="Payment orders (ΚΗΜΔΗΣ and Διαύγεια) cumulated within each calendar year, day by day."
 		anchor="disbursement"
-		methodology="payments"
+		methodology="stated-basis"
 	>
 		{#if payments}
 			<DisbursementCurves {payments} />
@@ -1337,7 +1338,7 @@
 			? `; ${grInt(payments.undated.n)} remain undated (${eurShort(payments.undated.eur)})`
 			: ''}."
 		anchor="payments"
-		methodology="payment-dates"
+		methodology="stated-basis"
 	>
 		<StripTimeline data={payments} />
 	</ChartFrame>
@@ -1365,7 +1366,7 @@
 			: ''}
 		caveat="Codes as declared in ΚΗΜΔΗΣ, named from the EU CPV 2008 vocabulary (division → class → code); a contract declares several, so the counts overlap and are never summed."
 		anchor="cpvs"
-		methodology="cpv"
+		methodology={null}
 	>
 		{#if tree}
 			<CpvColumns divisions={tree.divisions} total={o.kpis.n_contracts} />
@@ -1375,6 +1376,7 @@
 
 	{/snippet}
 </DatasetCard>
+<RefreshLine />
 </div>
 
 <style>

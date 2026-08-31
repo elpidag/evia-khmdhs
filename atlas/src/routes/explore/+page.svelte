@@ -6,6 +6,7 @@
 	import { peEn } from '$lib/transforms/regions';
 	import { matches, phoneticFold, searchNorm } from '$lib/transforms/search';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
+	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	const DS_LABEL: Record<string, string> = {
 		antinero: 'Anti-nero',
@@ -362,7 +363,7 @@
 		· shown value Σ {eur(totalShown)}
 		<small
 			>(all € stated, excl. VAT; Ανάδοχοι = committed budget where the act declares one, net
-			where it says so — <a href="/methodology#explore">methodology</a>)</small
+			where it says so — <a href="/methodology">methodology</a>)</small
 		>
 	</p>
 
@@ -434,6 +435,9 @@
 {:else}
 	<div class="skeleton" style="height: 420px"></div>
 {/if}
+
+
+<RefreshLine />
 
 <style>
 	/* a chain row: its date cell carries the whole span, and the records of

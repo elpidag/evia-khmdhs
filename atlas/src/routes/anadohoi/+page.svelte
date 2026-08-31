@@ -30,6 +30,7 @@
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
 	import type { PageData } from './$types';
+	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.o);
@@ -1231,6 +1232,7 @@
 </div>
 	{/snippet}
 </DatasetCard>
+<RefreshLine />
 </div>
 
 <style>

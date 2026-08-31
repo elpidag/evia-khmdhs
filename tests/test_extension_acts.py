@@ -275,7 +275,13 @@ def test_real_db_area_acts_resolve_to_registry_authorities(conn):
                      "Δασαρχείο Σπερχειάδας"}
     parts = dict(conn.execute(
         "SELECT ada, part_auth FROM contract_completion_acts WHERE part_auth IS NOT NULL"))
-    assert len(parts) == 23
+    # 23 until 2026-09-01, when part_authority learned the «χωρικής
+    # αρμοδιότητας» and «και συγκεκριμένα» dialects (outside-quotes guard;
+    # the four verified: ΨΔ57→Χίου, ΡΦΚΕ→Πρέβεζας, ΨΚΒΕ→Αμαλιάδας,
+    # 9ΗΕ6→Θεσπρωτίας — DATA_DECISIONS)
+    assert len(parts) == 27
+    assert parts["ΨΔ574653Π8-Α4Γ"] == "Διεύθυνση Δασών Χίου"
+    assert parts["ΡΦΚΕ4653Π8-ΦΕΒ"] == "Διεύθυνση Δασών Πρέβεζας"
     assert parts["Ψ2ΚΞ4653Π8-44Ι"] == "Δασαρχείο Σπερχειάδας"
     assert conn.execute(
         "SELECT part_auth FROM contract_completion_acts WHERE ada = 'ΨΞΛ64653Π8-ΟΒΗ'").fetchone()[0] is None

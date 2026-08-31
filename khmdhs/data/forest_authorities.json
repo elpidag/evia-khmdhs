@@ -2819,6 +2819,13 @@
     "Δασαρχείο Σπερχειάδας"
    ],
    "evidence": "Items text names the five δασαρχεία; the title's «ΔΔ ΛΑΡΙΣΑΣ ΤΡΙΚΑΛΩΝ …» misspells them as Διευθύνσεις Δασών. Matches curated regions Τρικάλων/Λάρισας/Καρδίτσας/Φθιώτιδας."
+  },
+  "26SYMV018489793": {
+   "authorities": [
+    "Δασαρχείο Χαλκίδας",
+    "Δασαρχείο Λαυρίου"
+   ],
+   "evidence": "Per-lot bundle: the registry title/items quote the whole 7-service project of call 26PROC018350831, but the signed contract's own heading says «Τμήμα 2: Περιοχές ευθύνης Δασαρχείων Χαλκίδας και Λαυρίου» and the call places Τμήμα 2 «στην περιοχή ευθύνης του Δασαρχείου Χαλκίδας και Δασαρχείου Λαυρίου … στους Δήμους Λαυρεωτικής και Σαρωνίδας» (user verdict 2026-08-31, DATA_DECISIONS)."
   }
  },
  "no_authority": {

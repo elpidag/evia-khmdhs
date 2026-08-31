@@ -333,13 +333,26 @@ def part_authority(subject: str | None) -> str | None:
     περιοχής ευθύνης Δασαρχείου Σπερχειάδας (ΑΔΑΜ: …)» — the canonical name
     of that service, via the registry matcher; None for a whole-contract
     acceptance, or when the part is named by title rather than by service.
-    fold() maps Greek onto Latin homoglyphs, so the needles are folded too."""
+    fold() maps Greek onto Latin homoglyphs, so the needles are folded too.
+
+    Two further dialects since 2026-09-01 (DATA_DECISIONS): «… – Τμήμα 1»
+    χωρικής αρμοδιότητας Δ/νσης Δασών Πρέβεζας …» and «… και συγκεκριμένα
+    (όσον) αφορά το …» — both accepted ONLY where the phrase stands OUTSIDE
+    the « » quotes, because a project's own registered title can carry
+    «Χωρικής Αρμοδιότητας …» as its name (the Λευκάδας ANTINERO-IV project)
+    and that is the work's identity, not a part clause. The guard: the
+    nearest guillemet before the match must not be an opening «."""
     from khmdhs.forest_loader import fold
     src = subject or ""
     folded = fold(src)
-    for needle in ("ΓΙΑ ΤΟ ΤΜΗΜΑ", "ΤΜΗΜΑΤΟΣ ΤΟΥ ΕΡΓΟΥ"):
+
+    def outside_quotes(i: int) -> bool:
+        return src.rfind("«", 0, i) <= src.rfind("»", 0, i)
+
+    for needle in ("ΓΙΑ ΤΟ ΤΜΗΜΑ", "ΤΜΗΜΑΤΟΣ ΤΟΥ ΕΡΓΟΥ",
+                   "ΧΩΡΙΚΗΣ ΑΡΜΟΔΙΟΤΗΤΑΣ", "ΚΑΙ ΣΥΓΚΕΚΡΙΜΕΝΑ"):
         i = folded.find(fold(needle))
-        if i == -1:
+        if i == -1 or not outside_quotes(i):
             continue
         tail_src = src if len(src) == len(folded) else folded
         tail = tail_src[i + len(needle): i + len(needle) + 140]

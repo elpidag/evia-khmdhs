@@ -109,8 +109,7 @@
 				amendment versions); payments are a separate layer on each dataset's own page. Anti-nero
 				is one programme; the co-op dataset is every public contract won by a forest co-operative
 				anywhere in the state since September 2021 —
-				<a href="/methodology#compare-bases">basis</a> ·
-				<a href="/methodology#zero-overlap">overlap</a>.
+				<a href="/methodology#stated-basis">basis</a>.
 			</p>
 		</div>
 	</section>
@@ -120,7 +119,7 @@
 		insight={`Zero shared companies: ${grInt(c.pipelines.antinero.n_vats)} Anti-nero contractors and ${grInt(c.pipelines.dase.n_vats)} co-op-side entities (${grInt(c.pipelines.dase_n_coops)} of them curated co-operatives), and not one ΑΦΜ appears on both sides.`}
 		caveat="The € scale carries a radius floor: the smallest contracts print larger than true scale, or they would vanish beside the €11M dots."
 		anchor="pipelines"
-		methodology="zero-overlap"
+		methodology={null}
 	>
 		<StateFunded
 			dots={c.dots}
@@ -134,7 +133,7 @@
 		insight={`Two rhythms on one calendar: ${grInt(signed.a.k)} of the ${grInt(signed.a.n)} Anti-nero contracts (${grNumber(signed.a.share, 0)}%, ${eurShort(signed.a.eur)}) were signed inside the fire season, against ${grNumber(signed.d.share, 0)}% of the co-operatives' ${grInt(signed.d.n)}; the programme's busiest year was ${signed.aYear[0]} with ${grInt(signed.aYear[1])} signatures, the co-ops' ${signed.dYear[0]} with ${grInt(signed.dYear[1])}.`}
 		caveat={`One dot per contract at its signature date as recorded in ΚΗΜΔΗΣ — the colour is the programme, the Anti-nero dot drawn a little larger; the shaded bands are the fire season, 1 May – 31 October. The dots stack in columns of one week and never leave the frame, so in the busiest weeks a dot sits up to ${grInt(signedShift)} days from its date.${signed.fallback ? ` ${grInt(signed.fallback)} record${signed.fallback === 1 ? '' : 's'} state no signature date and sit at their registry posting date.` : ''}`}
 		anchor="signed-timeline"
-		methodology="compare-bases"
+		methodology="stated-basis"
 	>
 		<SignedTimeline dots={c.dots} bind:maxShiftDays={signedShift} />
 	</ChartFrame>
@@ -144,7 +143,7 @@
 		insight={`Different universes: the median Anti-nero contract is ${eurShort(c.hist.antinero_median)}, the median co-op contract ${eur(c.hist.dase_median)} — the two distributions barely overlap.`}
 		caveat="Contract-size distribution on shared log₂ brackets, each programme as % of its own contracts; both on stated values excl. VAT."
 		anchor="distributions"
-		methodology="compare-bases"
+		methodology="stated-basis"
 	>
 		<CompareHist hist={c.hist} />
 	</ChartFrame>
@@ -174,7 +173,7 @@
 		insight={`Anti-nero ramps up while the co-op money drifts down: Anti-nero peaked in ${peakYear(c.yearly.antinero).year} (${eurShort(peakYear(c.yearly.antinero).eur)}), the co-ops in ${peakYear(c.yearly.dase).year} (${eurShort(peakYear(c.yearly.dase).eur)}). Each programme on its own scale — a shared axis would erase the co-op bars entirely.`}
 		caveat="Stated € excl. VAT by signature year, each side on its own scale."
 		anchor="yearly"
-		methodology="compare-bases"
+		methodology="stated-basis"
 	>
 		<div class="years">
 			<div>

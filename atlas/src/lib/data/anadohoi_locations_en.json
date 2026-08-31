@@ -1,5 +1,5 @@
 {
- "_comment": "Bilingual display text for the sponsored projects' LOCATION row (DATA_DECISIONS 2026-08-26): keys are the exact location_text strings of anadohoi.sqlite; `el` is shown on the Greek version, `en` on the English one. Rows 1-12 are the user's own wording; 13-61 follow their patterns, each read from its own act. The act's verbatim sentence stays the evidence.",
+ "_comment": "Bilingual display text for the sponsored projects' LOCATION row (DATA_DECISIONS 2026-08-26): keys are the exact location_text strings of anadohoi.sqlite; `el` is shown on the Greek version, `en` on the English one. Rows 1-12 are the user's own wording; the rest follow their patterns, each read from its own act. The act's verbatim sentence stays the evidence. USER-REVIEWED one by one on 2026-08-31: two English corrections (Pefkofyto kept in the Varympompi row, «three-times-burnt» for τριπλοκαμένη), all 60 others accepted as written.",
  "490 στρεμμάτων στην περιοχή του Αγ. Στεφάνου και 516 στρεμμάτων στην περιοχή της Πεντέλης": {
   "el": "περιοχή Αγ. Στεφάνου (490 στρ.) και περιοχή Πεντέλης (516 στρ.)",
   "en": "areas in Agios Stefanos (49 ha) and Penteli (51.6 ha)"
@@ -10,7 +10,7 @@
  },
  "Βαρυμπόμπης – Τατοΐου – Αφιδνών Αττικής": {
   "el": "Τμήμα Πευκόφυτου – περιοχές Βαρυμπόμπης, Τατοΐου, Αφιδνών",
-  "en": "areas in Varympompi, Tatoi, Afidnes of Attica"
+  "en": "Pefkofyto, areas in Varympompi, Tatoi, Afidnes of Attica"
  },
  "Δερβενοχωρίων (Υπολεκάνη 1)": {
   "el": "καμένες εκτάσεις στην περιοχή Δερβενοχωρίων (υπολεκάνη 1)",
@@ -130,7 +130,7 @@
  },
  "περιοχή «ΔΡΥΜΟΣ»": {
   "el": "τριπλοκαμένη έκταση δασικού χαρακτήρα στην περιοχή «Δρυμός» Αλεξανδρούπολης (1.145,96 στρ.)",
-  "en": "thrice-burnt forested area in «Drymos» area of Alexandroupoli (114.6 ha)"
+  "en": "three-times-burnt forested area in «Drymos» of Alexandroupoli (114.6 ha)"
  },
  "περιοχή ΄Συντερίνα΄ Δημοτικής Ενότητας Κερατέας Δήμου Λαυρεωτικής": {
   "el": "καμένες εκτάσεις στην περιοχή «Συντερίνα» Κερατέας",

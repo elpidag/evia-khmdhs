@@ -206,7 +206,8 @@ def completion_authorities(conn: sqlite3.Connection,
     authority at all (DATA_DECISIONS 2026-08-19).
     """
     try:
-        rows = conn.execute("""SELECT ada, cited_ref, attributed_ref, subject
+        rows = conn.execute("""SELECT ada, cited_ref, attributed_ref, subject,
+                                      part_auth
                                FROM contract_completion_acts""").fetchall()
     except sqlite3.OperationalError:
         return {}                       # a DB without the completion layer
@@ -218,11 +219,19 @@ def completion_authorities(conn: sqlite3.Connection,
         # «…χωρικής αρμοδιότητας Δασαρχείου Χαλκίδας … ΓΙΑ ΤΟ ΤΜΗΜΑ του έργου
         # με τίτλο "Υλοτομία … στο σύμπλεγμα Δίρφυος"»: the act accepts ONE
         # part, so its service is not the contract's whole jurisdiction and
-        # the page must not present it as such (1 of 29 such links)
+        # the page must not present it as such.
         # fold() maps Greek onto Latin homoglyphs, so the needles must be
         # folded as well — a raw Greek literal matches nothing
         subj = fold(r["subject"])
         part = any(fold(n) in subj for n in ("ΓΙΑ ΤΟ ΤΜΗΜΑ", "ΤΜΗΜΑΤΟΣ ΤΟΥ ΕΡΓΟΥ"))
+        # Where the act RESOLVED which single service's part it accepts
+        # (part_auth, DATA_DECISIONS 2026-09-01), only THAT service may be
+        # linked: the subject also quotes the whole multi-lot project title,
+        # which is how ΔΔ Δωδεκανήσου landed on the Χίος lot (ΨΔ574653Π8-Α4Γ)
+        # and Δασαρχεία Χαλκίδας/Λαυρίου on Τμήμα 1 (ΡΦΚΕ4653Π8-ΦΕΒ).
+        if r["part_auth"]:
+            found = [(n, ex) for n, ex in found if n == r["part_auth"]]                 or [(r["part_auth"], (r["subject"] or "")[:160])]
+            part = True
         ada = f"{r['ada']}|part" if part else r["ada"]
         for ref in {r["attributed_ref"], r["cited_ref"]} - {None}:
             for name, excerpt in found:

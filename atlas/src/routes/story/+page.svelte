@@ -11,6 +11,7 @@
 	import { BRAND } from '$lib/landing/brand';
 	import type { Component } from 'svelte';
 	import type { PageData } from './$types';
+	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -45,6 +46,7 @@
 			{/if}
 		</section>
 	{/each}
+	<RefreshLine />
 </div>
 
 <style>

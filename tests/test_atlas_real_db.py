@@ -393,7 +393,7 @@ def test_override_authority_links_ship_their_evidence(client):
         "SELECT DISTINCT reference_number FROM contract_forest_authorities"
         " WHERE source LIKE 'override%'")]
     conn.close()
-    assert len(refs) == 6
+    assert len(refs) == 7
     for ref in refs:
         links = client.get(f"/api/antinero/contract/{ref}").get_json()["authorities"]
         over = [a for a in links if (a["source"] or "").startswith("override")]
@@ -971,13 +971,21 @@ def test_connections_pins(client):
     assert all(len(f["year"]) == 4 for f in n["flows_yearly"])
     # 476 until 2026-08-21: two ΥΠΕΝ acts keyed lot 15Γ's ΑΔΑΜ for lot 15Α
     # and had hung Ξάνθη/Ροδόπη on a Εύβοια contract (and Καστοριά/Φλώρινα on
-    # lot 4Δ) — re-attributed, the pairs fell away (DATA_DECISIONS 2026-08-21)
-    assert len(n["contractor_authority"]) == 499
-    assert len(n["contractor_pe"]) == 397
+    # lot 4Δ) — re-attributed, the pairs fell away (DATA_DECISIONS 2026-08-21);
+    # 499 until 2026-09-01, when part-acceptance acts stopped contributing the
+    # whole quoted project title's services and ΔΔ Δωδεκανήσου left the Χίος
+    # lot (DATA_DECISIONS)
+    assert len(n["contractor_authority"]) == 498
+    # 397 until 2026-08-31, when lot 4Β gained Π.Ε. Αρκαδίας from its own
+    # Άρθρο 7 («Δυτικού Μαίναλου … τέως Δήμου Θέλπουσας Π.Ε Αρκαδίας») —
+    # its contractor now pairs with a second region (DATA_DECISIONS)
+    assert len(n["contractor_pe"]) == 398
     # 259 until 2026-08-21, when two ventures' HQ regions followed their own
     # contracts (Μαρούσι→Καβάλα, Κόρινθος→Λίμνη Ευβοίας) and two (home, work)
-    # pairs merged into existing ones — DATA_DECISIONS 2026-08-21
-    assert len(n["flows"]) == 270
+    # pairs merged into existing ones — DATA_DECISIONS 2026-08-21; 270 until
+    # 2026-08-31, when lot 4Β's Άρθρο-7 verdict added Π.Ε. Αρκαδίας and with
+    # it one new (home, work) pair
+    assert len(n["flows"]) == 271
     assert len(n["contractor_signer"]) == 182
     # and with them the visible partnerships: a κοινοπραξία is ONE registry
     # party, so the only pairs left are the two contracts whose venture had no
@@ -1533,12 +1541,12 @@ def test_the_municipality_layer_says_what_the_documents_say(client, kh):
     n, c, flagged, from_call = kh.execute(
         "SELECT COUNT(*), COUNT(DISTINCT reference_number), SUM(outside_region),"
         " SUM(from_call IS NOT NULL) FROM contract_municipalities").fetchone()
-    assert (n, c) == (600, 157)
-    # only what NOTHING accounts for stays flagged: of the 49 δήμοι that sit
-    # outside their contract's curated regions, 30 are administered by the
-    # service that names them, 11 are in that service's own seat region and
-    # 6 carry a user verdict — 2 are left
-    assert flagged == 3 and from_call == 79  # the third: Γορτυνίας on lot 4Β (2026-08-29)
+    assert (n, c) == (593, 157)
+    # only what NOTHING accounts for stays flagged — and since the 2026-08-31
+    # verdicts NOTHING is: the 26PROC018350831 lot-split gave each 2026 lot its
+    # own δήμοι, and Γορτυνίας on lot 4Β was resolved by adding Π.Ε. Αρκαδίας
+    # to the chain's regions from the contract's own Άρθρο 7 (DATA_DECISIONS)
+    assert flagged == 0 and from_call == 72
     why = dict(kh.execute(
         "SELECT outside_pe_explained, COUNT(*) FROM contract_municipalities"
         " WHERE outside_pe_explained IS NOT NULL GROUP BY 1"))
@@ -1735,7 +1743,7 @@ def test_front_page_findings(client):
     rs = sorted(m["work_regions"], key=lambda r: -r["split_eur"])
     total = sum(r["split_eur"] for r in rs)
     assert rs[0]["pe"] == "Π.Ε. Ανατολικής Αττικής"
-    assert round(100 * rs[0]["split_eur"] / total, 1) == 11.8
+    assert round(100 * rs[0]["split_eur"] / total, 1) == 11.9
     acc, n_half = 0.0, 0
     for r in rs:
         acc += r["split_eur"]; n_half += 1

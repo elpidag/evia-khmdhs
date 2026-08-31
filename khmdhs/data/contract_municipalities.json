@@ -1,6 +1,122 @@
 {
  "_doc": "Which δήμος each in-scope Anti-nero contract worked in, read from the contract's own placement sentence or from the πρόσκληση it cites («εντός των Δήμων Χαϊδαρίου και Ασπροπύργου, αρμοδιότητας Δασαρχείου Αιγάλεω»). Proposals from scripts/extract_contract_municipalities.py; rules approved 2026-08-19. `outside_region` marks a δήμος whose Π.Ε. is not among the ones curated for the contract — the region layer is deliberately left alone. Attribution verdicts live in municipality_overrides.json.",
- "_overrides": {},
+ "_overrides": {
+  "26SYMV019488828": {
+   "municipalities": [
+    {
+     "code": "9116",
+     "name": "Ζακύνθου",
+     "pe": "Π.Ε. Ζακύνθου",
+     "authority": null,
+     "authority_basis": null,
+     "source_ref": "26PROC018350831",
+     "from_call": "26PROC018350831",
+     "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
+     "outside_region": false,
+     "outside_pe_explained": null,
+     "via": "name",
+     "note": null,
+     "override": null
+    },
+    {
+     "code": "9141",
+     "name": "Πύργου",
+     "pe": "Π.Ε. Ηλείας",
+     "authority": null,
+     "authority_basis": null,
+     "source_ref": "26PROC018350831",
+     "from_call": "26PROC018350831",
+     "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
+     "outside_region": false,
+     "outside_pe_explained": null,
+     "via": "name",
+     "note": null,
+     "override": null
+    },
+    {
+     "code": "9137",
+     "name": "Αρχαίας Ολυμπίας",
+     "pe": "Π.Ε. Ηλείας",
+     "authority": null,
+     "authority_basis": null,
+     "source_ref": "26PROC018350831",
+     "from_call": "26PROC018350831",
+     "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
+     "outside_region": false,
+     "outside_pe_explained": null,
+     "via": "name",
+     "note": null,
+     "override": null
+    },
+    {
+     "code": "9088",
+     "name": "Ζηρού",
+     "pe": "Π.Ε. Πρέβεζας",
+     "authority": null,
+     "authority_basis": null,
+     "source_ref": "26PROC018350831",
+     "from_call": "26PROC018350831",
+     "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
+     "outside_region": false,
+     "outside_pe_explained": null,
+     "via": "name",
+     "note": null,
+     "override": null
+    },
+    {
+     "code": "9073",
+     "name": "Αρταίων",
+     "pe": "Π.Ε. Άρτας",
+     "authority": null,
+     "authority_basis": null,
+     "source_ref": "26PROC018350831",
+     "from_call": "26PROC018350831",
+     "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
+     "outside_region": false,
+     "outside_pe_explained": null,
+     "via": "name",
+     "note": null,
+     "override": null
+    }
+   ],
+   "note": "Lot split, user verdict 2026-08-31 (DATA_DECISIONS): the call 26PROC018350831 places Τμήμα 1's works «στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως»; Λαυρεωτικής/Σαρωνικού belong to Τμήμα 2. «Δήμο Λασιθίου» is read as the Π.Ε./Δ-νση Δασών Λασιθίου area (no such δήμος exists) — no row invented."
+  },
+  "26SYMV018489793": {
+   "municipalities": [
+    {
+     "code": "9219",
+     "name": "Λαυρεωτικής",
+     "pe": "Π.Ε. Ανατολικής Αττικής",
+     "authority": null,
+     "authority_basis": null,
+     "source_ref": "26PROC018350831",
+     "from_call": "26PROC018350831",
+     "excerpt": "στους Δήμους Λαυρεωτικης και Σαρωνίδας. Οι περιοχές έχουν πληγεί και",
+     "outside_region": false,
+     "outside_pe_explained": null,
+     "via": "name",
+     "note": null,
+     "override": null
+    },
+    {
+     "code": "9225",
+     "name": "Σαρωνικού",
+     "pe": "Π.Ε. Ανατολικής Αττικής",
+     "authority": null,
+     "authority_basis": null,
+     "source_ref": "26PROC018350831",
+     "from_call": "26PROC018350831",
+     "excerpt": "στους Δήμους Λαυρεωτικης και Σαρωνίδας. Οι περιοχές έχουν πληγεί και",
+     "outside_region": false,
+     "outside_pe_explained": null,
+     "via": "rename",
+     "note": null,
+     "override": null
+    }
+   ],
+   "note": "Lot split, user verdict 2026-08-31 (DATA_DECISIONS): the contract's own heading says «Τμήμα 2: Περιοχές ευθύνης Δασαρχείων Χαλκίδας και Λαυρίου» and the call places its areas «στους Δήμους Λαυρεωτικής και Σαρωνίδας»; the five Τμήμα-1 δήμοι came from the shared πρόσκληση and do not belong to this lot."
+  }
+ },
  "22SYMV011360183": {
   "municipalities": [
    {
@@ -178,7 +294,7 @@
     "source_ref": "22SYMV011470180",
     "from_call": null,
     "excerpt": "ΡΙΟΧΕΣ ΔΥΤΙΚΟΥ ΜΑΙΝΑΛΟΥ ΚΑΙ ΔΑΣΟΥΣ ΤΕΩΣ ΔΗΜΟΥ ΘΕΛΠΟΥΣΑΣ Π.Ε ΑΡΚΑΔΙΑΣ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ",
-    "outside_region": true,
+    "outside_region": false,
     "outside_pe_explained": null,
     "via": "rename",
     "note": null,
@@ -6797,81 +6913,6 @@
  "26SYMV018489793": {
   "municipalities": [
    {
-    "code": "9116",
-    "name": "Ζακύνθου",
-    "pe": "Π.Ε. Ζακύνθου",
-    "authority": null,
-    "authority_basis": null,
-    "source_ref": "26PROC018350831",
-    "from_call": "26PROC018350831",
-    "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9141",
-    "name": "Πύργου",
-    "pe": "Π.Ε. Ηλείας",
-    "authority": null,
-    "authority_basis": null,
-    "source_ref": "26PROC018350831",
-    "from_call": "26PROC018350831",
-    "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9137",
-    "name": "Αρχαίας Ολυμπίας",
-    "pe": "Π.Ε. Ηλείας",
-    "authority": null,
-    "authority_basis": null,
-    "source_ref": "26PROC018350831",
-    "from_call": "26PROC018350831",
-    "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9088",
-    "name": "Ζηρού",
-    "pe": "Π.Ε. Πρέβεζας",
-    "authority": null,
-    "authority_basis": null,
-    "source_ref": "26PROC018350831",
-    "from_call": "26PROC018350831",
-    "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9073",
-    "name": "Αρταίων",
-    "pe": "Π.Ε. Άρτας",
-    "authority": null,
-    "authority_basis": null,
-    "source_ref": "26PROC018350831",
-    "from_call": "26PROC018350831",
-    "excerpt": "στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, , Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως. Ο",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
     "code": "9219",
     "name": "Λαυρεωτικής",
     "pe": "Π.Ε. Ανατολικής Αττικής",
@@ -6901,7 +6942,8 @@
     "note": null,
     "override": null
    }
-  ]
+  ],
+  "note": "Lot split, user verdict 2026-08-31 (DATA_DECISIONS): the contract's own heading says «Τμήμα 2: Περιοχές ευθύνης Δασαρχείων Χαλκίδας και Λαυρίου» and the call places its areas «στους Δήμους Λαυρεωτικής και Σαρωνίδας»; the five Τμήμα-1 δήμοι came from the shared πρόσκληση and do not belong to this lot."
  },
  "26SYMV018599431": {
   "municipalities": [
@@ -9477,38 +9519,9 @@
     "via": "name",
     "note": null,
     "override": null
-   },
-   {
-    "code": "9219",
-    "name": "Λαυρεωτικής",
-    "pe": "Π.Ε. Ανατολικής Αττικής",
-    "authority": null,
-    "authority_basis": null,
-    "source_ref": "26PROC018350831",
-    "from_call": "26PROC018350831",
-    "excerpt": "στους Δήμους Λαυρεωτικης και Σαρωνίδας. Οι περιοχές έχουν πληγεί και",
-    "outside_region": true,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9225",
-    "name": "Σαρωνικού",
-    "pe": "Π.Ε. Ανατολικής Αττικής",
-    "authority": null,
-    "authority_basis": null,
-    "source_ref": "26PROC018350831",
-    "from_call": "26PROC018350831",
-    "excerpt": "στους Δήμους Λαυρεωτικης και Σαρωνίδας. Οι περιοχές έχουν πληγεί και",
-    "outside_region": true,
-    "outside_pe_explained": null,
-    "via": "rename",
-    "note": null,
-    "override": null
    }
-  ]
+  ],
+  "note": "Lot split, user verdict 2026-08-31 (DATA_DECISIONS): the call 26PROC018350831 places Τμήμα 1's works «στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, Δήμο Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως»; Λαυρεωτικής/Σαρωνικού belong to Τμήμα 2. «Δήμο Λασιθίου» is read as the Π.Ε./Δ-νση Δασών Λασιθίου area (no such δήμος exists) — no row invented."
  },
  "26SYMV019488916": {
   "municipalities": [

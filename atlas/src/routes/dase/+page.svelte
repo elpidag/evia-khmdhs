@@ -30,6 +30,7 @@
 	import { procedureEn } from '$lib/transforms/procedures';
 	import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 	import type { PageData } from './$types';
+	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.overview);
@@ -863,7 +864,7 @@
 		: ''}
 	caveat="Codes as declared in ΚΗΜΔΗΣ, named from the EU CPV 2008 vocabulary (division → class → code); a contract may declare several, so the counts overlap and are never summed. The insurance CPV 66519300-4 on {grInt(cpvNoiseN)} υλοτομικά rows tags the state-funded ΕΦΚΑ contributions itemised in the awards — not procured insurance."
 	anchor="dase-cpvs"
-	methodology="dase-cpv-noise"
+	methodology={null}
 >
 	{#if cpvTree}
 		<CpvColumns divisions={cpvTree.divisions} total={o.kpis.n_contracts} />
@@ -874,6 +875,7 @@
 
 	{/snippet}
 </DatasetCard>
+<RefreshLine />
 </div>
 
 <style>

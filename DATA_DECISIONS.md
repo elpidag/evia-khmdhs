@@ -11160,3 +11160,172 @@ a dozen lots only this contract's label prints (the 33-lot firewood award
 co-op's); the rest stay in their hover titles. `FamilyTree.svelte` stays in
 the repo, off the page. Pinned on three contracts.
 
+**2026-08-29 — The methodology page is the author's own text.** The page had
+grown to 33 flat sections and ~4.900 words as each layer landed: the same
+rule stated in up to four places (the stated-net basis three times, the
+even split three times, «paid» four times, «a chain counts once» three
+times), a dozen sentences that were change history rather than method
+(«until 20.08.2026 …», «decision log, 2026-08-29», «caught in review»), a
+section documenting a chart that is parked, fifteen hard-coded numbers
+against the site's own rule, one caveat link pointing at an id the page did
+not carry (CUMULATIVE DISBURSEMENT → `#payments`, landing silently at the
+top), and a fact printed that the API never emits.
+
+**The replacement is the author's own four sections** — Sourcing and
+organisation of the data · Document analysis and validation · Analytical
+conventions · Limitations, ethics and reproducibility — written for the MA
+report and copied VERBATIM (2.012 words). They were fact-checked first
+against the databases, the loaders and this log; the author accepted most
+corrections (the co-op boundary is PUBLICATION not signature, and seven
+contracts signed 28.07–31.08.2021 are inside; the 2.171 → 2.004 exclusions;
+the seven title-only ANTINERO-II chains disclosed; the ΜΗΔΑΣΟ claim
+softened in §1 to what was established; VIES named as the principal source
+of the co-op seats; the reference layers named; the upstream acts' status;
+payments attributed to the chain tip; the gross-stated sponsored case; sole
+traders; the refused AADE lookup) and declined others, which stay declined:
+the umbrella/support exclusions keep one reason for two different cases,
+§4 still says the ΜΗΔΑΣΟ register «was not publicly accessible» where §1
+says only that no list could be obtained, «the metadata of each document
+was cross checked» stands beside the sentence saying the upstream records
+were read only when needed, and the AI paragraph does not disclose that the
+English renderings of Greek place names are machine-generated and unreviewed.
+Raised once; the author's call.
+
+**A fifth section, «Notes on particular charts»** (~500 words, this side of
+the work), carries the dozen chart caveats whose subject the four sections
+do not contain, each as an `<h3>` with its own anchor: `record-kinds`,
+`categories`, `contract-timeline`, `procurement-families`, `payments` (the
+id that was missing), `payment-dates`, `cpv`, `dase-cpv-noise`,
+`authorities`, `explore`, `compare-bases`, `zero-overlap`. The eighteen
+anchors the four sections carry sit on the paragraph — or the span — that
+states each rule, so every existing link lands on its explanation.
+
+**Every figure is computed.** New `meta` facts: `kh_records`,
+`kh_title_only_n` / `kh_title_only_share` (in scope, ANTINERO II, no ΠΔΕ
+code — 7 chains, 1,5%), `kh_categories`, `kh_payments_n` (read on the
+PAYMENTS connection: `kh` is the stated-basis view, where the payments
+table is deliberately empty), `dase_records`, `dase_pre_window`,
+`ana_live`, `ana_with_sum`, `ana_without_sum`, `ana_live_vat_*` (the LIVE
+projects' bases, where the older `ana_vat_*` counted the superseded
+restatement too). The refresh date prints from `meta.generated` as «29
+August 2026», and the same line — «Records last refreshed on … · how these
+figures are made» — closes /antinero, /dase, /anadohoi, /story and /explore
+(`ui/RefreshLine.svelte`; one line at the end of each page's content, NOT
+the footer returning).
+
+**`tests/test_methodology_anchors.py`** holds it: every `methodology="…"`
+prop and every `/methodology#…` href in `atlas/src` must resolve to an id on
+the page (this is what the broken `#payments` link failed), no bare figure
+may appear in the prose (law references, years and the 74 Kallikratis units
+excepted), and the page stays under 2.900 words — it is at 2.600.
+Same day, second round (author: «I do not think any of those are
+particularly important»): **the fifth section is OFF the page**. Its text is
+archived in `docs/chart-notes.archive.md`, unpublished. The twelve links it
+carried were then resolved one by one on the rule that a caveat link must
+lead to an explanation: nine were REPOINTED to the paragraph of the author's
+own text that does explain them — work-type categories, procurement
+families, the contract timeline, record kinds and the forest authorities to
+`#validation` (the documents are read where the metadata is thin, and later
+changes are distinguished from the stated terms), payments, payment dates
+and the two-dataset comparison to `#stated-basis` (payments are a separate
+layer; the net basis is what makes the comparison sound) — and three were
+DROPPED, because the four sections make no claim about them: the CPV
+roll-up on both dataset pages and the zero-overlap finding on Key Findings.
+Those frames keep their caveats; they simply no longer offer a link to an
+explanation that is not there. The page is 2.052 words.
+
+**2026-08-31 — The sponsored LOCATION translations are user-reviewed.** The
+62 bilingual entries of `anadohoi_locations_en.json` (61 of 2026-08-26 plus
+the Aigaleo row of 2026-08-29) were reviewed one by one. Two English
+corrections: the Βαρυμπόμπης row keeps its «Τμήμα Πευκόφυτου» in English
+(«Pefkofyto, areas in Varympompi, Tatoi, Afidnes of Attica» — its siblings
+already kept theirs), and τριπλοκαμένη is «three-times-burnt», not
+«thrice-burnt». Everything else stands as written, by the user's explicit
+word — including «areas near Kalamas and Acheron rivers» (raised, kept) and
+the Katerineza spelling (raised, kept). Both copies updated together
+(khmdhs/data + atlas/src/lib/data, byte-identical, pinned). The review debt
+recorded since 2026-08-25 is closed.
+
+**2026-08-31 — The municipality layer's tier-C residue: 14 of 15 pairs ruled.**
+The 2026-08-19 curation left the pairs with no independent confirmation for a
+human verdict; after the freshness haul the curator page counted 15. Ruled one
+by one against the documents (user):
+
+**Confirmed as they stand (7 pairs)** — the 2022 ANTINERO-II chains' own
+«Άρθρο 7: Τόπος εκτέλεσης» states them verbatim, and every δήμος sits in the
+lot's own services' area: lot 3Β (22SYMV011332276) «περιοχές Δήμων
+Ομηρούπολης, Χίου, Κίσσαμου, Δήμου Ιωαννίνων» → Χίου/Κισσάμου/Ιωαννιτών; lot
+5Β (22SYMV011632177) «εντός των Δήμων Ξυλοκάστρου-Ευρωστίνης, Βόρειας
+Κυνουρίας και Νότιας Κυνουρίας»; lot 5Α (22SYMV011332546) the Σικυωνίων of
+its three-δήμοι clause. No data change; the verdicts are this entry.
+
+**Split by lot (7 pairs, −7 rows)** — the two 2026 restoration lots of call
+26PROC018350831 each carried the WHOLE call's seven δήμοι, because the
+extractor read the shared πρόσκληση onto both. The documents split them: the
+call places Τμήμα 1 «στο Δήμο Ζακύνθου, Δήμο Πύργου – Αρχαίας Ολυμπίας, Δήμο
+Ζηρού – Αρταίων, Δήμο Λασιθίου αντιστοίχως» and Τμήμα 2 «στην περιοχή ευθύνης
+του Δασαρχείου Χαλκίδας και Δασαρχείου Λαυρίου … στους Δήμους Λαυρεωτικής και
+Σαρωνίδας», and Τμήμα 2's contract heading says so itself («Τμήμα 2: Περιοχές
+ευθύνης Δασαρχείων Χαλκίδας και Λαυρίου»). So 26SYMV019488828 (Τμήμα 1 tip)
+keeps Ζακύνθου/Πύργου/Αρχαίας Ολυμπίας/Ζηρού/Αρταίων and loses
+Λαυρεωτικής/Σαρωνικού (they were 2 of the 3 site flags — flagged precisely
+because they belong to the other lot), and 26SYMV018489793 (Τμήμα 2) keeps
+Λαυρεωτικής/Σαρωνικού and loses the five. «Δήμο Λασιθίου» is read as the
+Π.Ε./Δ-νση Δασών Λασιθίου area — no such δήμος exists and no row is invented
+(user). The corrected entries live in contract_municipalities.json AND its
+`_overrides`, so a --curate regeneration keeps them. **The same verdict
+shrinks Τμήμα 2's region and authority layers**: contract_regions.json
+26SYMV018489793 → Π.Ε. Ευβοίας + Ανατολικής Αττικής (was the full 7-Π.Ε.
+list, curated 2026-07-19 from contract_objects — which quote the whole
+multi-lot project), and a forest_authorities.json contract_override (the 7th)
+pins Δασαρχεία Χαλκίδας + Λαυρίου with the heading as evidence.
+
+Layer after reload: **593 rows / 157 contracts / 223 δήμοι, 72 from the
+call, 1 unexplained flag** (Γορτυνίας on lot 4Β — its own verdict pending;
+explains covers_pe 31 / seat 11 / curated 6 unchanged). The Ανατολικής
+Αττικής work-region share moved 11.8 → 11.9 % (pinned). Two side-findings
+surfaced by the same dig and NOT yet ruled: the completion acts
+ΨΔ574653Π8-Α4Γ (3Β) and ΡΦΚΕ4653Π8-ΦΕΒ (Τμήμα 1) add sibling-lot services to
+contracts because their subjects quote the whole project title while their
+operative clauses accept ONE area («…όσον αφορά το εργο: … αρμοδιότητας
+Διεύθυνσης Δασών Χίου», «χωρικής αρμοδιότητας Δ/νσης Δασών Πρέβεζας») — the
+part_authority needles (ΓΙΑ ΤΟ ΤΜΗΜΑ / ΤΜΗΜΑΤΟΣ ΤΟΥ ΕΡΓΟΥ) miss these two
+dialects, so ΔΔ Δωδεκανήσου rides on 22SYMV011928850 and Δασαρχεία
+Χαλκίδας/Λαυρίου on 26SYMV019488828 via completion_act sources.
+Same day, the 15th pair — **Γορτυνίας on lot 4Β: the signed text wins** (user,
+after reading the clause in the PDF): Άρθρο 7 of the original 22SYMV011470180
+(page 17) places both the μελέτες and the works at «περιοχές Δυτικού Μαίναλου
+και Δάσους τέως Δήμου Θέλπουσας Π.Ε Αρκαδίας», while the lot's own label says
+«Υποέργο Β, αρμοδιότητας Δασαρχείου Πύργου» (the project spans Δασαρχεία
+Βυτίνας ΚΑΙ Πύργου; the Βυτίνας lot was never captured, so no cross-check
+exists). Verdict: **Π.Ε. Αρκαδίας is ADDED to the chain's regions** beside
+Ηλείας (the label's), the δήμος Γορτυνίας row stops being flagged, and the
+authority stays Δασαρχείο Πύργου alone — the document names no other
+Δασαρχείο, and none is invented. The municipality layer now carries **0
+unexplained flags**; the 4Β € split over two regions moved the even-split
+aggregates accordingly. All 15 tier-C pairs are ruled; the 2026-08-19
+review debt is closed.
+
+**2026-09-01 — A part-acceptance act credits only the service it accepts.**
+The completion layer's subjects quote the WHOLE multi-lot project title, and
+the forest_loader's fourth source read every service out of the subject — so
+ΔΔ Δωδεκανήσου (a sibling lot's area) rode on the Χίος lot 3Β
+(22SYMV011332276/22SYMV011928850, act ΨΔ574653Π8-Α4Γ whose operative words
+accept «…όσον αφορά το εργο: … αρμοδιότητας Διεύθυνσης Δασών Χίου») and
+Δασαρχεία Χαλκίδας/Λαυρίου (Τμήμα 2's services) on Τμήμα 1
+(26SYMV018489783/26SYMV019488828, act ΡΦΚΕ4653Π8-ΦΕΒ, «χωρικής αρμοδιότητας
+Δ/νσης Δασών Πρέβεζας»). Fix (user-approved): (1) `part_authority` learns the
+two dialects — «ΧΩΡΙΚΗΣ ΑΡΜΟΔΙΟΤΗΤΑΣ» and «ΚΑΙ ΣΥΓΚΕΚΡΙΜΕΝΑ» — accepted only
+where the phrase stands OUTSIDE the « » quotes, because a project's own
+registered name can carry «Χωρικής Αρμοδιότητας …» (the Λευκάδας ANTINERO-IV
+title, verified: guard keeps it whole); (2) `forest_loader.
+completion_authorities` restricts an act with a resolved `part_auth` to THAT
+service alone, `|part`-marked. `--reextract` over all 290 stored acts changed
+exactly the four verified part acceptances (ΨΔ57→ΔΔ Χίου, ΡΦΚΕ→ΔΔ Πρέβεζας,
+ΨΚΒΕ4653Π8-ΒΥΑ→Δασαρχείο Αμαλιάδας of the two-service Αμαλιάδας+Βυτίνας lot,
+9ΗΕ64653Π8-Ρ4Θ→ΔΔ Θεσπρωτίας for «το τμήμα Α_1» of the three-service 14Α) —
+part_auth 23 → 27, the 23 existing untouched; the Δίρφυς act keeps its
+title-named |part behaviour. The forest reload removed EXACTLY the six wrong
+links and added none: completion-act links 26 → 20 (9 contracts), all links
+718 → 712. The lanes gain the four acts' per-part ✔ placement.
+

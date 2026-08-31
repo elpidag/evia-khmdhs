@@ -200,7 +200,7 @@
 		insight={`${grInt(both.length)} of the ${grInt(rows.length)} forest authorities both host Anti-nero works and award co-op contracts; ${grInt(data.coops.length)} co-operatives and ${grInt(data.contractors.length)} Anti-nero contractors are placed at the registered office their own documents state.`}
 		caveat="Every € stated net of VAT; the Anti-nero € of a contract covering several authorities is split evenly between them, and the co-op side is matched from the awarding unit's name. Authority seats from the ΥΠΕΝ contact tables corroborated by each service's own letterheads; co-op and contractor offices from their own documents."
 		anchor="map"
-		methodology="authorities"
+		methodology="validation"
 	>
 		{#snippet controls()}
 			<div class="mode" role="group" aria-label="Which dots the map shows">
@@ -461,7 +461,7 @@
 		title={LIST_TITLES[listShow]}
 		caveat={LIST_CAVEATS[listShow]}
 		anchor="list"
-		methodology="authorities"
+		methodology="validation"
 	>
 		{#snippet controls()}
 			<div class="listctl">

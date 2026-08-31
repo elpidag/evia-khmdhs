@@ -280,9 +280,13 @@
    {
     "pe": "Π.Ε. Ηλείας",
     "note": "Δασαρχείο Πύργου"
+   },
+   {
+    "pe": "Π.Ε. Αρκαδίας",
+    "note": "Άρθρο 7 της αρχικής σύμβασης 22SYMV011470180 (σελ. 17): «Τόποι εκτέλεσης της Σύμβασης είναι … (περιοχές Δυτικού Μαίναλου και Δάσους τέως Δήμου Θέλπουσας Π.Ε Αρκαδίας)» — user verdict 2026-08-31 (DATA_DECISIONS): the signed text wins; Ηλείας stays from the lot's «αρμοδιότητας Δασαρχείου Πύργου» label, and no other Δασαρχείο is named."
    }
   ],
-  "curated_at": "2026-05-16"
+  "curated_at": "2026-08-31"
  },
  "23SYMV012404390": {
   "regions": [],
@@ -3875,26 +3879,6 @@
  "26SYMV018489793": {
   "regions": [
    {
-    "pe": "Π.Ε. Ζακύνθου",
-    "note": "Δ/νση Δασών Ζακύνθου"
-   },
-   {
-    "pe": "Π.Ε. Ηλείας",
-    "note": "Δασαρχείο Πύργου"
-   },
-   {
-    "pe": "Π.Ε. Άρτας",
-    "note": "Δ/νση Δασών Άρτας"
-   },
-   {
-    "pe": "Π.Ε. Πρέβεζας",
-    "note": "Δ/νση Δασών Πρέβεζας"
-   },
-   {
-    "pe": "Π.Ε. Λασιθίου",
-    "note": "Δ/νση Δασών Λασιθίου"
-   },
-   {
     "pe": "Π.Ε. Ευβοίας",
     "note": "Δασαρχείο Χαλκίδας"
    },
@@ -3903,8 +3887,8 @@
     "note": "Δασαρχείο Λαυρίου"
    }
   ],
-  "curated_at": "2026-07-19",
-  "source_note": "from KHMDHS contract_objects.short_description (Δασαρχεία named in the contract object)"
+  "curated_at": "2026-08-31",
+  "source_note": "Its own heading: «Τμήμα 2: Περιοχές ευθύνης Δασαρχείων Χαλκίδας και Λαυρίου» — the 7-service list in contract_objects quotes the whole multi-lot project of call 26PROC018350831 (user verdict 2026-08-31, DATA_DECISIONS; was the full 7-Π.Ε. list, curated 2026-07-19)."
  },
  "26SYMV019098206": {
   "regions": [

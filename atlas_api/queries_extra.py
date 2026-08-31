@@ -331,6 +331,77 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "SELECT budget_vat_basis, COUNT(*) FROM projects "
             "WHERE budget_vat_basis IS NOT NULL GROUP BY budget_vat_basis"):
             facts[f"ana_vat_{basis}"] = cnt
+    # ---- the methodology page's own figures (2026-08-29) ----------------
+    # The page states the shape of each dataset in prose; every number it
+    # prints is computed here so the text cannot drift from the databases.
+    try:
+        facts["kh_records"] = kh.execute(
+            "SELECT COUNT(*) FROM contracts").fetchone()[0]
+        # the chains carried by the registry title alone: in scope, no ΠΔΕ
+        # code in their metadata, and no RRF language in their texts (the
+        # 2022 ANTINERO-II lots — DATA_DECISIONS 2026-08-29)
+        n, eur = kh.execute("""
+            SELECT COUNT(*), COALESCE(SUM(c.total_cost_without_vat), 0)
+            FROM contracts c JOIN contract_scope s USING (reference_number)
+            WHERE s.in_scope = 1 AND s.scope = 'antinero_ii'
+              AND (c.public_funding_ref_num IS NULL
+                   OR TRIM(c.public_funding_ref_num) = '')""").fetchone()
+        total = kh.execute("""
+            SELECT COALESCE(SUM(c.total_cost_without_vat), 0)
+            FROM contracts c JOIN contract_scope s USING (reference_number)
+            WHERE s.in_scope = 1""").fetchone()[0]
+        facts["kh_title_only_n"] = n
+        facts["kh_title_only_share"] = round(100 * eur / total, 1) if total else 0
+        facts["kh_categories"] = kh.execute("""
+            SELECT COUNT(DISTINCT cc.category) FROM contract_categories cc
+            JOIN contract_scope s USING (reference_number)
+            WHERE s.in_scope = 1""").fetchone()[0]
+    except sqlite3.OperationalError:
+        pass
+    # payments live on their own connection: `kh` is the stated-basis view,
+    # where contract_payments is deliberately empty
+    if pay is not None:
+        try:
+            facts["kh_payments_n"] = pay.execute(
+                "SELECT COUNT(*) FROM contract_payments WHERE cancelled = 0").fetchone()[0]
+        except sqlite3.OperationalError:
+            pass
+    if dase is not None:
+        try:
+            facts["dase_records"] = dase.execute(
+                "SELECT COUNT(*) FROM contracts").fetchone()[0]
+            # contracts signed before the harvest window opens: the window is
+            # bounded on PUBLICATION, the only date the registry can search
+            facts["dase_pre_window"] = dase.execute(f"""
+                SELECT COUNT(*) FROM contracts co
+                WHERE {dq.live_filter('co')}
+                  AND co.contract_signed_date < '2021-09-01'""").fetchone()[0]
+        except sqlite3.OperationalError:
+            pass
+    if ana is not None:
+        try:
+            facts["ana_live"] = ana.execute(
+                "SELECT COUNT(*) FROM projects WHERE status != 'superseded'").fetchone()[0]
+            facts["ana_with_sum"] = ana.execute(
+                "SELECT COUNT(*) FROM projects WHERE status != 'superseded'"
+                " AND budget_current IS NOT NULL").fetchone()[0]
+            facts["ana_without_sum"] = ana.execute(
+                "SELECT COUNT(*) FROM projects WHERE status != 'superseded'"
+                " AND budget_current IS NULL").fetchone()[0]
+            # the basis each act states, over the LIVE projects that state a
+            # sum: the `ana_vat_*` keys above count every project, this
+            # trio is what the methodology quotes
+            for basis, cnt in ana.execute(
+                "SELECT COALESCE(budget_vat_basis, 'unstated'), COUNT(*)"
+                " FROM projects WHERE status != 'superseded'"
+                "   AND budget_current IS NOT NULL GROUP BY 1"):
+                facts[f"ana_live_vat_{basis}"] = cnt
+            facts["ana_acts"] = ana.execute(
+                "SELECT COUNT(*) FROM decisions").fetchone()[0]
+            facts["ana_designations"] = ana.execute(
+                "SELECT COUNT(*) FROM decisions WHERE kind = 'orismos'").fetchone()[0]
+        except sqlite3.OperationalError:
+            pass
     out["facts"] = facts
     return out
 

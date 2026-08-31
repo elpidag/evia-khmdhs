@@ -13,7 +13,7 @@
 		/** anchor id for permalinks; also links the caveat to /methodology#<anchor> */
 		anchor?: string;
 		/** methodology anchor override (defaults to `anchor`) */
-		methodology?: string;
+		methodology?: string | null;
 		children: Snippet;
 		/** optional extra footer content (sources, downloads) */
 		footer?: Snippet;
@@ -35,6 +35,10 @@
 		subtitle = '',
 		caveat = '',
 		anchor = '',
+		/** the methodology section this chart's caveat links to. `null` means the
+		 *  page makes no claim about this chart, so the caveat carries no link
+		 *  (2026-08-29): the fallback to `anchor` would otherwise point at a
+		 *  chart id the methodology page does not have. */
 		methodology = '',
 		children,
 		footer,
@@ -44,6 +48,7 @@
 		controls
 	}: Props = $props();
 	const methodHref = $derived(`/methodology#${methodology || anchor}`);
+	const linkMethod = $derived(methodology !== null && (anchor || methodology));
 	let insightOpen = $state(false);
 </script>
 
@@ -94,7 +99,7 @@
 			{#if caveat}
 				<p class="caveat">
 					{caveat}
-					{#if anchor || methodology}<a href={methodHref}>Methodology</a>{/if}
+					{#if linkMethod}<a href={methodHref}>Methodology</a>{/if}
 				</p>
 			{/if}
 			{#if footer}{@render footer()}{/if}
