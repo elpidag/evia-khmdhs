@@ -373,8 +373,15 @@ export interface Pipelines {
 export interface ComparePayload {
 	/** the STATE-FUNDED animation's per-contract dots (2026-08-25) */
 	dots: {
-		antinero: { ref: string[]; eur: number[]; year: (number | null)[]; total_eur: number };
-		dase: { ref: string[]; eur: number[]; year: (number | null)[]; total_eur: number };
+		antinero: {
+			ref: string[]; eur: number[]; year: (number | null)[];
+			/** signature date (ISO), the submission date where none — SIGNED TIMELINE (2026-08-29) */
+			d: (string | null)[]; n_date_fallback: number; total_eur: number;
+		};
+		dase: {
+			ref: string[]; eur: number[]; year: (number | null)[];
+			d: (string | null)[]; n_date_fallback: number; total_eur: number;
+		};
 	};
 	antinero: {
 		n_contracts: number;

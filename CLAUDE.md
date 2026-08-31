@@ -1615,7 +1615,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   REGENERATED from git HEAD by the scratch `cards_v2.py` (multiset
   guard: no line of the original middle lost). **`/story`** = the scroll
   skeleton (`lib/story/chapters.ts`, ten chapters, KEY FINDINGS carrying
-  the former /compare frames via `sections/KeyFindings.svelte`;
+  the former /compare frames via `sections/KeyFindings.svelte` — plus, since 2026-08-29, EVERY CONTRACT, BY THE DAY IT WAS SIGNED (`charts/SignedTimeline.svelte`: the STATE-FUNDED dots on one time axis, Anti-nero above in ink, co-ops below in green, fire seasons shaded, `dots.d` on `/api/compare`);
   `/compare` → 308 `/story`, fragments survive). **Narration = markdown**
   in `atlas/src/content/{landing,data,datasets,story}/*.md` via mdsvex
   (`vite.config.ts` extensions/preprocess/`$content` alias,

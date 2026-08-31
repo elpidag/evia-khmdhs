@@ -2543,31 +2543,42 @@ def state_funded_dots(kh: sqlite3.Connection, dase: sqlite3.Connection) -> dict:
     public money, then the two channels, then the recipients. Whole
     contracts (no split — a dot is a contract), stated net; the two sums
     reconcile to the pages' own bases and are pinned."""
-    a_ref, a_eur, a_yr = [], [], []
+    # `d` = the signature date (ISO), the registry's submission date where a
+    # record states none — counted in `n_date_fallback` so the SIGNED
+    # TIMELINE frame can say so (2026-08-29)
+    a_ref, a_eur, a_yr, a_d, a_fb = [], [], [], [], 0
     for r in kh.execute("""
         SELECT k.reference_number AS ref, k.total_cost_with_vat AS eur,
                CAST(strftime('%Y', COALESCE(k.contract_signed_date,
-                                            k.submission_date)) AS INT) AS yr
+                                            k.submission_date)) AS INT) AS yr,
+               substr(COALESCE(k.contract_signed_date, k.submission_date), 1, 10) AS d,
+               k.contract_signed_date IS NULL AS fb
         FROM contracts k
         JOIN contract_scope s ON s.reference_number = k.reference_number
         WHERE s.in_scope = 1 ORDER BY eur DESC"""):
         a_ref.append(r["ref"])
         a_eur.append(round(r["eur"] or 0.0, 2))
         a_yr.append(r["yr"])
-    d_ref, d_eur, d_yr = [], [], []
+        a_d.append(r["d"])
+        a_fb += int(r["fb"] or 0)
+    d_ref, d_eur, d_yr, d_d, d_fb = [], [], [], [], 0
     for r in dase.execute(f"""
         SELECT k.reference_number AS ref, k.total_cost_without_vat AS eur,
                CAST(strftime('%Y', COALESCE(k.contract_signed_date,
-                                            k.submission_date)) AS INT) AS yr
+                                            k.submission_date)) AS INT) AS yr,
+               substr(COALESCE(k.contract_signed_date, k.submission_date), 1, 10) AS d,
+               k.contract_signed_date IS NULL AS fb
         FROM contracts k WHERE {dq.live_filter('k')} ORDER BY eur DESC"""):
         d_ref.append(r["ref"])
         d_eur.append(round(r["eur"] or 0.0, 2))
         d_yr.append(r["yr"])
+        d_d.append(r["d"])
+        d_fb += int(r["fb"] or 0)
     return {
-        "antinero": {"ref": a_ref, "eur": a_eur, "year": a_yr,
-                     "total_eur": round(sum(a_eur), 2)},
-        "dase": {"ref": d_ref, "eur": d_eur, "year": d_yr,
-                 "total_eur": round(sum(d_eur), 2)},
+        "antinero": {"ref": a_ref, "eur": a_eur, "year": a_yr, "d": a_d,
+                     "n_date_fallback": a_fb, "total_eur": round(sum(a_eur), 2)},
+        "dase": {"ref": d_ref, "eur": d_eur, "year": d_yr, "d": d_d,
+                 "n_date_fallback": d_fb, "total_eur": round(sum(d_eur), 2)},
     }
 
 

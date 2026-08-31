@@ -11091,3 +11091,50 @@ does not yet hold and their projects («… without a lane until the scar is
 published»); the lane itself waits for the EFFIS export (a rebuild of
 `effis_fires.geojson` and `link_effis_scars.py`).
 
+**2026-08-29 — KEY FINDINGS gains EVERY CONTRACT, BY THE DAY IT WAS SIGNED**
+(user): the STATE-FUNDED dots — one per contract of both programmes, area
+∝ stated net € on one scale with the same radius floor — on ONE time axis,
+`charts/SignedTimeline.svelte` after the STATE-FUNDED frame in
+`sections/KeyFindings.svelte`. The Anti-nero swarm above the axis in ink,
+the co-operatives' below it in green, each dodged around its own
+centreline (`beeswarm.dodgeVariable`) and shrunk to its band where it
+would overflow; the fire seasons (1 May – 31 October) shaded in the site's
+one season tint UNDER the dots, year rules, the opening year named at the
+axis start (the earliest signature is a co-op contract of July 2021 posted
+in September — the axis opens on that month), a hover card with amount ·
+date · ΑΔΑΜ linking to the contract page. `/api/compare` `dots` now carry
+`d` (the signature date, the registry posting date where a record states
+none — `n_date_fallback`, 0 on both sides today, said in the caveat when
+non-zero; pinned). The lightbulb states, computed from the dots, the share
+of each programme signed inside the fire season and each side's busiest
+year. What the drawing shows: the programme is signed in BATCHES — the
+2022 spring lots, the 2023 summer lots, the January–March 2024 lots, 2025,
+the March 2026 V-PLUS lots — while the co-operatives' contracts run all
+year, every year, thickest in the autumns.
+Second round the same day (user): NO size encoding — every dot the same
+radius (the size said nothing the STATE-FUNDED frame above does not; the
+colour alone says the programme, a two-entry key on the frame's first
+line) — and NO upper/lower split: ONE swarm of all 2.257 contracts dodged
+around a single centreline (`beeswarm.dodge`), the year labels CENTRED on
+their rules UNDER the axis at the bottom. The one radius is the largest
+the band holds, with a 26 px slack beyond the band before the dots
+shrink, so the mass-posting days (hundreds of firewood assignments posted
+in one October 2023 week, the tallest column) do not dictate a 1 px dot for
+everything; floor 1,5 px.
+Third round (user): BIGGER dots that never leave the frame, and no axis
+line. A beeswarm cannot do both — the October-2023 week alone would need a
+column three frames tall — so the dots sit on a LATTICE (cell = one
+2,6 px dot, ~5,9 days per column): each contract takes the free row nearest
+the centreline in the column of its signature day, and a full column
+spills into the nearest column with room, alternating sides. The frame's
+caveat states the largest displacement this forces, computed on every
+render (14 days today), and names the date field: the ΚΗΜΔΗΣ
+«Ημερομηνία υπογραφής σύμβασης», the posting date only where a record
+states none (none today). The year rules stay, the years centred under
+them; the axis line is gone.
+Fourth round (user): a column is ONE WEEK (the ~6-day column read as an
+odd unit), the dots a little smaller, and the Anti-nero dot a little
+bigger than the co-operatives' (2,0 vs 1,55 px) so the programme reads
+against the mass. Rows 4,4 px; the busiest weeks now displace a dot by at
+most 4 days (computed, said in the caveat).
+

@@ -1028,6 +1028,12 @@ def test_state_funded_dots_pins(client):
     for side in ("antinero", "dase"):
         ys = d[side]["year"]
         assert len(ys) == len(d[side]["ref"])
+        # …and its signature day, ISO, for the SIGNED TIMELINE (2026-08-29);
+        # the submission date stands in where the record states none, counted
+        ds = d[side]["d"]
+        assert len(ds) == len(ys) and all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", x) for x in ds)
+        assert all(int(x[:4]) == y for x, y in zip(ds, ys))
+        assert 0 <= d[side]["n_date_fallback"] <= len(ds)
         assert all(y is not None and 2021 <= y <= 2026 for y in ys), side
 
 

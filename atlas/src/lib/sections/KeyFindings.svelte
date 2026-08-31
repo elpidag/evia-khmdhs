@@ -10,6 +10,7 @@
 	import CompareHist from '$lib/charts/CompareHist.svelte';
 	import PairedBars from '$lib/charts/PairedBars.svelte';
 	import StateFunded from '$lib/charts/StateFunded.svelte';
+	import SignedTimeline from '$lib/charts/SignedTimeline.svelte';
 	import ScatterLogLog from '$lib/charts/ScatterLogLog.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import KpiCards from '$lib/ui/KpiCards.svelte';
@@ -66,6 +67,32 @@
 			color: '#6c6c6c'
 		}
 	]);
+	/** EVERY CONTRACT BY THE DAY IT WAS SIGNED — the frame's own facts,
+	 *  computed from the dots (2026-08-29): how much of each programme is
+	 *  signed inside Greece's fire season (1 May – 31 October) */
+	let signedShift = $state(0);
+	const signed = $derived.by(() => {
+		const inSeason = (d: string | null) => {
+			if (!d) return false;
+			const m = Number(d.slice(5, 7));
+			return m >= 5 && m <= 10;
+		};
+		const side = (s: { d: (string | null)[]; eur: number[] }) => {
+			const n = s.d.filter(Boolean).length;
+			const k = s.d.filter(inSeason).length;
+			const e = s.eur.reduce((t, v, i) => t + (inSeason(s.d[i]) ? v : 0), 0);
+			return { n, k, share: n ? (100 * k) / n : 0, eur: e };
+		};
+		const a = side(c.dots.antinero);
+		const d = side(c.dots.dase);
+		const byYear = (s: { d: (string | null)[] }) => {
+			const m = new Map<string, number>();
+			for (const x of s.d) if (x) m.set(x.slice(0, 4), (m.get(x.slice(0, 4)) ?? 0) + 1);
+			return [...m.entries()].sort((p, q) => q[1] - p[1])[0] ?? ['—', 0];
+		};
+		return { a, d, aYear: byYear(c.dots.antinero), dYear: byYear(c.dots.dase),
+			fallback: c.dots.antinero.n_date_fallback + c.dots.dase.n_date_fallback };
+	});
 </script>
 
 <div class="cmpp">
@@ -100,6 +127,16 @@
 			nCompanies={c.pipelines.antinero.n_vats}
 			nCoops={c.pipelines.dase.n_vats}
 		/>
+	</ChartFrame>
+
+	<ChartFrame
+		title="EVERY CONTRACT, BY THE DAY IT WAS SIGNED"
+		insight={`Two rhythms on one calendar: ${grInt(signed.a.k)} of the ${grInt(signed.a.n)} Anti-nero contracts (${grNumber(signed.a.share, 0)}%, ${eurShort(signed.a.eur)}) were signed inside the fire season, against ${grNumber(signed.d.share, 0)}% of the co-operatives' ${grInt(signed.d.n)}; the programme's busiest year was ${signed.aYear[0]} with ${grInt(signed.aYear[1])} signatures, the co-ops' ${signed.dYear[0]} with ${grInt(signed.dYear[1])}.`}
+		caveat={`One dot per contract at its signature date as recorded in ΚΗΜΔΗΣ — the colour is the programme, the Anti-nero dot drawn a little larger; the shaded bands are the fire season, 1 May – 31 October. The dots stack in columns of one week and never leave the frame, so in the busiest weeks a dot sits up to ${grInt(signedShift)} days from its date.${signed.fallback ? ` ${grInt(signed.fallback)} record${signed.fallback === 1 ? '' : 's'} state no signature date and sit at their registry posting date.` : ''}`}
+		anchor="signed-timeline"
+		methodology="compare-bases"
+	>
+		<SignedTimeline dots={c.dots} bind:maxShiftDays={signedShift} />
 	</ChartFrame>
 
 	<ChartFrame
