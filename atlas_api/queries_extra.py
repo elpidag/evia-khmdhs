@@ -1470,6 +1470,53 @@ def contract_authorities(kh: sqlite3.Connection, adam: str) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def dase_contract_family(dase: sqlite3.Connection, adam: str) -> dict | None:
+    """The ΔΑΣΕ contract's procurement family for the Anti-nero-style radial
+    (user, 2026-08-29): the centre is the CALL the registry's adamChain
+    declares (the award where the procedure published no call), the orbit
+    every contract of that family — the ones in the dataset with their
+    stated net €, the other lots (non-co-op contractors, refused at harvest)
+    marked `in_db: false` and carrying no €. None where the chain declares
+    nothing at all."""
+    try:
+        links = dase.execute("""
+            SELECT l.adam, l.kind, la.title, COALESCE(la.signed_date, la.submission_date) AS d
+              FROM contract_linked_acts l
+              LEFT JOIN linked_acts la ON la.adam = l.adam
+             WHERE l.reference_number = ?
+             ORDER BY l.kind, l.adam""", (adam,)).fetchall()
+    except sqlite3.OperationalError:
+        return None
+    if not links:
+        return None
+    centre = (next((r for r in links if r["kind"] == "notice"), None)
+              or next((r for r in links if r["kind"] == "auction"), None))
+    if centre is None:
+        return None
+    refs = [adam] + [r["adam"] for r in links if r["kind"] == "contract" and r["adam"] != adam]
+    members = []
+    for ref in refs:
+        row = dase.execute(
+            "SELECT title, contract_signed_date AS d, total_cost_without_vat AS eur, cancelled"
+            " FROM contracts WHERE reference_number = ?", (ref,)).fetchone()
+        if row:
+            members.append({"ref": ref, "title": row["title"], "d": (row["d"] or "")[:10] or None,
+                            "eur": row["eur"], "in_db": True, "cancelled": bool(row["cancelled"])})
+        else:
+            members.append({"ref": ref, "title": None, "d": None, "eur": None, "in_db": False,
+                            "cancelled": False})
+    members.sort(key=lambda m: -(m["eur"] or 0))
+    return {
+        "call": centre["adam"],
+        "centre_kind": centre["kind"],
+        "centre_title": centre["title"],
+        "centre_d": (centre["d"] or "")[:10] or None,
+        "contracts": members,
+        "n_outside": sum(1 for m in members if not m["in_db"]),
+        "total_eur": round(sum(m["eur"] or 0 for m in members if m["in_db"] and not m["cancelled"]), 2),
+    }
+
+
 def dase_contract_geo(dase: sqlite3.Connection, kh: sqlite3.Connection,
                       adam: str) -> dict:
     """Region + awarding-unit seat for a ΔΑΣΕ contract's detail map."""

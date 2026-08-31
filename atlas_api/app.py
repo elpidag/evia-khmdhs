@@ -363,6 +363,9 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         d["timeline"] = queries_extra.contract_timeline(
             conn, adam, own_records_only=True)
         d["family_acts"] = queries_extra.contract_timeline(conn, adam)
+        # the Anti-nero-style radial (user, 2026-08-29): the call at the centre,
+        # the family's contracts around it
+        d["family"] = queries_extra.dase_contract_family(conn, adam)
         d["gross"] = queries_extra.contract_gross(conn, adam)
         # registry double-postings kept reachable + cross-linked both ways
         d["duplicates"] = [r[0] for r in conn.execute(

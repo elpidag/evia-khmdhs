@@ -1924,3 +1924,26 @@ def test_v_plus_phase_pins(kh):
     n, eur = kh.execute("""SELECT COUNT(*), ROUND(SUM(total_cost_without_vat), 2)
         FROM contracts JOIN contract_scope USING (reference_number) WHERE in_scope = 1""").fetchone()
     assert (n, eur) == (253, 632135681.76)
+
+
+def test_dase_contract_family_pins(client):
+    """The ΔΑΣΕ contract page's Anti-nero-style radial (2026-08-29): the call
+    the registry chain declares at the centre — the award where the
+    procedure published no call — and every lot of the family around it,
+    the ones outside the dataset marked, never priced."""
+    f = client.get("/api/dase/contract/23SYMV012459562").get_json()["family"]
+    assert f["call"] == "23PROC012451886" and f["centre_kind"] == "notice"
+    assert [c["ref"] for c in f["contracts"]] == ["23SYMV012459562"] and f["n_outside"] == 0
+    assert f["total_eur"] == pytest.approx(3690.0)
+    # a 33-lot firewood award, every lot a co-op's and in the dataset
+    f = client.get("/api/dase/contract/24SYMV015291078").get_json()["family"]
+    assert f["call"] == "24AWRD015231161" and f["centre_kind"] == "auction"
+    assert len(f["contracts"]) == 33 and f["n_outside"] == 0
+    assert f["total_eur"] == pytest.approx(sum(c["eur"] for c in f["contracts"]), abs=0.05)
+    # a 41-lot regional procurement of which one lot is a co-op's
+    f = client.get("/api/dase/contract/23SYMV014052036").get_json()["family"]
+    assert len(f["contracts"]) == 41 and f["n_outside"] == 40
+    assert all(c["eur"] is None for c in f["contracts"] if not c["in_db"])
+    assert f["total_eur"] == pytest.approx(20500.0, abs=100)
+    # the award stands at the centre where the procedure published no call
+    assert client.get("/api/dase/contract/23SYMV013747204").get_json()["family"]["centre_kind"] == "auction"

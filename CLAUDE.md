@@ -1177,11 +1177,12 @@ two entries that day): the same facts rows where the data exists
 = the R.U. derived from the unit, said so — the TYPE / FIRE CONTEXT /
 document-DURATION rows came OFF the same day, user: certainty below the
 bar until independently verified, DATA_DECISIONS third entry; the payload
-keeps the fields), the map cropped to the unit's region with the
-FamilyTree behind the Map/Diagram switch (English labels, `fit` scales it
-to the slot; trunk → award fan → contracts, award↔contract edges only on
-name-verified pairs — `contract_timeline` ships `who` for in-db
-siblings), the TIMELINE as `ChainTimeline` in green (`ink`, `axisStart`
+keeps the fields), the map cropped to the unit's region with — since 2026-08-29 — the
+Anti-nero RADIAL behind the Map/Diagram switch (`ProcurementFamily` on the
+endpoint's `family`: the declared call, or the award where none was
+published, at the centre; the family's lots around it, those outside the
+dataset outlined and unpriced; labels only on this contract past 12 lots;
+`FamilyTree.svelte` parked), the TIMELINE as `ChainTimeline` in green (`ink`, `axisStart`
 2021-09-01) drawing NO deadline bar — signature, run-up acts and € marks
 only, all registry facts (never a ✔ — no completion acts exist), the
 DOCUMENT TRAIL with the payment

@@ -233,8 +233,13 @@ export interface ContractDetail {
 		source: string;
 		excerpt: string;
 		amendments: string[];
+		/** the ΔΑΣΕ family (2026-08-29): what the centre is, and the lots outside the dataset */
+		centre_kind?: 'notice' | 'auction';
+		centre_title?: string | null;
+		centre_d?: string | null;
+		n_outside?: number;
 		total_eur: number;
-		contracts: { ref: string; title: string | null; d: string | null; eur: number | null }[];
+		contracts: { ref: string; title: string | null; d: string | null; eur: number | null; in_db?: boolean; cancelled?: boolean }[];
 	} | null;
 	/** ΔΑΣΕ detail map geo (region + awarding-unit seat); absent on kh side */
 	geo?: { pe: string | null; unit_seat: { name: string; lat: number; lon: number } | null };

@@ -11138,3 +11138,25 @@ bigger than the co-operatives' (2,0 vs 1,55 px) so the programme reads
 against the mass. Rows 4,4 px; the busiest weeks now displace a dot by at
 most 4 days (computed, said in the caveat).
 
+**2026-08-29 — The ΔΑΣΕ card's middle column stays CONTRACT VALUES alone.** A
+version with the Anti-nero card's row (AWARD PROCEDURES stack + DIRECT
+AWARDS over a shorter swarm) was drawn and rejected by the user the same
+hour («no no undo this»); the 2026-08-28 arrangement stands.
+
+**2026-08-29 — The ΔΑΣΕ contract page's DIAGRAM is the Anti-nero radial**
+(user: the box-tree «is illegible»; the earlier «make it like the Anti-nero
+one» was mis-read as the card page and undone). `ProcurementFamily.svelte`
+now takes a link base, the page's own accent for the filled circle and a
+caption, and the ΔΑΣΕ page mounts it over a new `family` field of
+`/api/dase/contract/<ΑΔΑΜ>` (`queries_extra.dase_contract_family`): the
+centre is the CALL the registry's adamChain declares — the AWARD where the
+procedure published no call, which is 1.244 of the 1.587 live contracts
+with any chain (the direct assignments publish no πρόσκληση) — and the
+orbit every contract of that family: the ones in the dataset with their
+stated net €, the other lots (non-co-op contractors, refused at harvest)
+OUTLINED with «outside the dataset» and no €, counted in the caption. Past
+a dozen lots only this contract's label prints (the 33-lot firewood award
+24AWRD015231161, the 41-lot Thessaly procurement of which one lot is a
+co-op's); the rest stay in their hover titles. `FamilyTree.svelte` stays in
+the repo, off the page. Pinned on three contracts.
+

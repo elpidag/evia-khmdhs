@@ -18,6 +18,7 @@
 	import QuoteList, { type Quote } from '$lib/detail/QuoteList.svelte';
 	import ChainTimeline from '$lib/detail/ChainTimeline.svelte';
 	import FamilyTree from '$lib/charts/FamilyTree.svelte';
+	import ProcurementFamily from '$lib/charts/ProcurementFamily.svelte';
 	import Fold from '$lib/ui/Fold.svelte';
 	import Hint from '$lib/ui/Hint.svelte';
 	import { procedureEn } from '$lib/transforms/procedures';
@@ -105,7 +106,21 @@
 	});
 	/** the diagram: the whole family the registry's chain returns */
 	const familyActs = $derived(rowsOf(c.family_acts ?? c.timeline ?? []));
-	const hasFamily = $derived(familyActs.length > 1);
+	/** the Anti-nero-style radial (user, 2026-08-29): the call — or the award,
+	 *  where the procedure published no call — at the centre, the family's
+	 *  contracts around it; the FamilyTree stays in the repo, off the page */
+	const family = $derived(c.family ?? null);
+	const hasFamily = $derived(!!family);
+	const familyCaption = $derived.by(() => {
+		if (!family) return '';
+		const n = family.contracts.length;
+		const inDb = n - (family.n_outside ?? 0);
+		const centre = family.centre_kind === 'notice' ? `call ${family.call}` : `award ${family.call} (the procedure published no call)`;
+		const outside = family.n_outside
+			? ` ${grInt(family.n_outside)} other lot${family.n_outside === 1 ? '' : 's'} of the same procurement went to contractors that are not forest co-operatives and ${family.n_outside === 1 ? 'is' : 'are'} outside the dataset (outlined).`
+			: '';
+		return `${n === 1 ? 'The one contract' : `One of ${grInt(inDb)} contracts in the dataset`} awarded under ${centre}. Circle area ∝ stated net €; the centre is the sum of the lots the dataset holds.${outside}`;
+	});
 	const siblingContracts = $derived(familyActs.filter((a) => a.kind === 'contract').length);
 	let view = $state<'map' | 'family'>('map');
 	const showDiagram = () => {
@@ -314,17 +329,15 @@
 		{/if}
 		{#if hasFamily && view === 'family'}
 			<div class="famslot" style:min-height="{mapH}px">
-				<FamilyTree
-					acts={familyActs}
-					kindLabel={{ ...KIND, payment: 'Payments' }}
-					fit
-					payments={live.length ? { n: live.length, eur: eurShort(c.paid_without_vat ?? 0) } : null}
+				<ProcurementFamily
+					call={family!.call}
+					contracts={family!.contracts}
+					total={family!.total_eur}
+					self={c.reference_number}
+					linkBase="/dase/contract/"
+					selfColor="var(--c-dase)"
+					caption={familyCaption}
 				/>
-				<p class="muted">
-					<small>The ΚΗΜΔΗΣ family — request → call → award → contracts; this contract's trail in green,
-						sibling acts of the same procedure in grey. An award connects to a contract only when it
-						names that contract's co-op.</small>
-				</p>
 			</div>
 		{:else}
 			<div class="detailmap" bind:clientWidth={mapW}>
@@ -572,13 +585,6 @@
 		justify-content: center;
 		padding-bottom: 3.2rem;
 		box-sizing: border-box;
-	}
-	.famslot > p.muted {
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		margin: 0;
 	}
 	/* evidence left, codes right — two reference blocks, one row */
 	.refcols {
