@@ -175,16 +175,16 @@ def test_real_db_counts(conn):
     a deadline earlier than their own date (the act's year typo, kept as
     written and flagged) and 1 REFUSES a request; two acts whose SUBJECT
     keyed the wrong ΑΔΑΜ are re-pointed by the overrides (169 contracts)."""
-    assert conn.execute("SELECT COUNT(*) FROM contract_extension_acts").fetchone()[0] == 463
+    assert conn.execute("SELECT COUNT(*) FROM contract_extension_acts").fetchone()[0] == 467  # +4 since the 2026-08-29 sweep
     assert conn.execute(
         "SELECT COUNT(*) FROM contract_extension_acts WHERE new_deadline IS NOT NULL AND flag IS NULL"
-    ).fetchone()[0] == 459
+    ).fetchone()[0] == 463
     assert conn.execute("SELECT COUNT(*) FROM contract_extension_acts WHERE per_area = 1").fetchone()[0] == 22
     assert conn.execute(
-        "SELECT COUNT(DISTINCT attributed_ref) FROM contract_extension_acts").fetchone()[0] == 169
+        "SELECT COUNT(DISTINCT attributed_ref) FROM contract_extension_acts").fetchone()[0] == 170
     kinds = dict(conn.execute(
         "SELECT act_kind, COUNT(*) FROM contract_extension_acts GROUP BY act_kind"))
-    assert kinds == {"extension": 104, "extension_partial": 358, "extension_refused": 1}
+    assert kinds == {"extension": 108, "extension_partial": 358, "extension_refused": 1}
     flags = dict(conn.execute(
         "SELECT flag, COUNT(*) FROM contract_extension_acts WHERE flag IS NOT NULL GROUP BY flag"))
     assert flags == {"deadline_before_issue": 3, "refusal": 1}
@@ -206,8 +206,8 @@ def test_real_db_scope_of_the_grant(conn):
     rows = {(k, s or "—"): n for k, s, n in conn.execute(
         "SELECT act_kind, scope, COUNT(*) FROM contract_extension_acts GROUP BY 1, 2")}
     assert rows == {
-        ("extension", "area"): 28, ("extension", "stage"): 1, ("extension", "whole"): 16,
-        ("extension", "—"): 59,
+        ("extension", "area"): 28, ("extension", "stage"): 1, ("extension", "whole"): 18,
+        ("extension", "—"): 61,
         ("extension_partial", "area"): 195, ("extension_partial", "stage"): 4,
         ("extension_partial", "study"): 24, ("extension_partial", "whole"): 1,
         ("extension_partial", "—"): 134,

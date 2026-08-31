@@ -10981,3 +10981,113 @@ confirmed from three independent directions — every contract ever PAID
 under the funds, every lot the registry links to the calls, and every
 Greek contract on the programme's CPV codes.**
 
+**2026-08-29 — The seven «ANTINERO II» chains of 2022 return to scope (user
+decision; reverses the demotion of 2026-08-13).** The user asked for
+22SYMV011360183, 22SYMV011593395, 22SYMV011928850, 22SYMV011928864,
+22SYMV011928896, 22SYMV011928919 and 23SYMV011953055 — the seven chain
+tips of the `antinero_probable` tier (13 records with their superseded
+originals: ΕΡΓΑ 2Α, 2Β, 3Α, 3Β, 4Β, 5Α, 5Β «ΤΟΥ ANTINERO II», ΥΠΕΝ-signed
+26.09–11.11.2022, ΤΑΙΠΕΔ-procured, €9.198.921,61 net on the tips) — to be
+included. The documentary evidence is what it was on 2026-08-13 and was
+re-checked today: the 13 cached texts hold no «Ταμείο Ανάκαμψης», no Δράση
+16849, no ΠΔΕ/ΣΑΤΑ code and no ANTINERO in the body; the fund metadata is
+empty; no stored payment order and NONE of the 3.683 ΥΠΕΝ ΤΑ075 clearance
+acts read today stamps any of the 13 (the 37 Diavgeia acts that cite them
+are deadline extensions). What speaks for membership: the registry titles
+(«ΕΡΓΟΥ 2Α ΤΟΥ ANTINERO ΙΙ», «ΕΡΓΟΥ 3Α ΤΟΥ ΙΙ»), the same 2022 numbered-lot
+series and ΤΑΙΠΕΔ procurement as the Anti-nero I/II lots, and ΥΠΕΝ's own
+subject lines. Decision (the user's): in scope as `antinero_ii`, by title
+or by inheritance from the supplement-curated originals; `probable_related
+.json` is EMPTY (its `_history` keeps the 13 entries and the 13.08
+reasoning verbatim, so the tier can be restored), the «additional
+contracts found, probably related» presentation and the methodology's
+probable paragraph render only while the tier is non-empty. The basis
+rises by the seven tips; every figure is re-pinned in the load entry below.
+
+**2026-08-29 — The freshness haul LOADED, with the two scope decisions above.**
+Every pinned count moved; the suite (614) is green on the new values.
+- **Anti-nero**: `khmdhs.refresh` refetched the 233 open tips (14 changed, 14
+  new payment orders), `antinero_loader` fetched 26SYMV018768552 (its
+  relevance test now accepts ΕΕΣΥΠ as signer on a FUND basis), the seven
+  ANTINERO-II chains came back as `antinero_ii`, the clearance sweep's 88
+  Diavgeia acts went through `diavgeia_loader` (a new
+  `scripts/build_diavgeia_harvest.py` writes its harvest JSON from the
+  cached acts: 5 PAY records fetched, 83 already stored through the
+  registry's own links), the completion and extension sweeps ran live
+  (+9 completion acts → 290; +4 extension acts → 467, the 16Ε/16Δ
+  warning being a registry TITLE typo — both 23SYMV013039379 and
+  23SYMV013039380 are titled «16Δ» while ΨΔΨΙ4653Π8-Λ6Κ names 16Ε three
+  times for the ΑΔΑΜ it cites, so the act's attribution stands and no
+  override is needed). Basis **253 contracts / €632.135.681,76 net**
+  (€622.534.181,72 + the seven tips' €9.198.921,61 + €402.578,43);
+  payments 905 orders / €586,03M gross; phases in scope I 26 · II 58
+  (from 51) · III 79 · IV 48 · V-PLUS 20 · ΕΣΑ 9 · restoration 13.
+  The eight newly in-scope contracts were curated like the rest — one
+  category each from the signed PDF's descriptive title (7 dasotexnika,
+  1 anadasoseis), work themes by hand from those titles (clearing,
+  roads, firebreak maintenance; εστεγασμένες for lot 4Β; the registry
+  titles carry only the lot number), durations and municipalities
+  promoted from the readers (three pre-Καλλικράτης names resolved:
+  Ομηρούπολης → Χίου, «Ιωαννίνων» → Ιωαννιτών, «τέως Δήμου Θέλπουσας» →
+  Γορτυνίας — the last lies in Π.Ε. Αρκαδίας on lot 4Β (Δασαρχείο
+  Πύργου) and stays FLAGGED, the third such row: the study-area list
+  names the whole project's areas), deliverables (six chains state the
+  design-build Ορισμός, lot 2Β's original words it as the authority
+  «εποπτεύει την εκπόνηση της κάθε μελέτης και την υλοποίηση των
+  δασοτεχνικών εργασιών» — hand override; the ΕΣΑ contract states no
+  study → works). Six contractors gained a seat read from their party
+  clause (Καλαμπάκα, Καρδίτσα, Καβάλα, Σαλαμίνα, Ν. Μαγνησία, Τρίκαλα;
+  ΤΣΙΑΝΑΒΑΣ's contract seat differs from the register's Δάφνη —
+  `register_disagrees` in spirit, the contract wins) and five joint
+  ventures joined `consortium_members.json`: two with every member's
+  ΑΦΜ in the signed text (ΛΙΤΣΑ–ΕΔΡΑΙΟΣ, 3Κ–ΚΑΤΣΙΑΒΑΣ/ΝΑΤΣΗΣ–ΣΚΑΡΛΑΤΟΥΔΗΣ),
+  three whose contracts NAME the members but state no ΑΦΜ (identity-card
+  numbers only; ΓΕΜΗ's payload carries no managementPersons) —
+  `members_documented: false`, so nobody is credited money on a guess,
+  even where a member is an in-scope contractor under her own ΑΦΜ
+  (Οικονόμου Ιωάννα 031213597, Κοσμίδης Ιωάννης 117925460). 62 ventures,
+  48 documented, 98 links.
+- **ΔΑΣΕ**: the 12 scratch rows loaded through `harvest_dase.py load` —
+  2.171 records, **live 2.004 / €30.162.069,68 net / €37.254.303,72
+  gross**; among them a REGISTRY re-posting: 26SYMV019612527 (11.08.2026,
+  Δασαρχείο Καρπενησίου × Δ.Α.Σ.Ε. Αγίου Νικολάου, €21.772,52) was
+  cancelled by ΚΗΜΔΗΣ on 18.08 («ΠΑΡΑΛΗΨΗ ΑΑΗΤ») and re-signed the same
+  day as 26SYMV019642791 with a zero-padded ΑΦΜ «0096135196» — a
+  curated `contractors_vat` rewrite files it under 096135196 and the
+  registry's own cancellation counts the money once (103 cancelled
+  records). The load's INSERT OR REPLACE cascaded the linked acts of the
+  four re-upserted contracts away; `linked_acts_loader --with-payments`
+  refilled them (+30 acts, 1.698; payments unchanged at 953 /
+  €20.405.695,74). The six new live contracts' categories come from the
+  parked details layer's reader (4 ylotomia — sanitation felling of
+  bark-beetle fir —, 1 dentra, 1 antidiavrotika post-fire), not by eye:
+  the layer is off the pages. `dase_region_loader` places all six.
+- **Sponsored**: `anadohoi_loader` on the 871-candidate harvest — **70
+  projects**, 19 completed / 29 active / 20 no completion recorded / 1
+  revoked / 1 superseded; Τράπεζα Πειραιώς (Ε3ΣΨ4653Π8-2ΣΚ, €1,5M net,
+  study & works, Δασαρχείο Αιγάλεω, fire of 31.07.2026 — a new fire
+  event «Δυτ. Αττική (Αιγάλεω), Ιούλ. 2026» / «West Attica (Aigaleo),
+  07-2026», with no EFFIS scar in the 2008–2025 layer and no site
+  beyond the Δασαρχείο) and the three completions (EREN Λίμνη
+  6Ρ9Ξ4653Π8-ΦΑΨ 23.02.2024, Eurobank Rhodes 6Σ3Β4653Π8-9ΦΑ 08.02.2024,
+  Εθνική Χίος 91ΧΘ4653Π8-ΛΣΔ 21.08.2026 — its cipher-font text quoted as
+  pdftotext reads it, the note giving the plain reading). Stated
+  budgets €43.284.256,85 over 43 projects. The public-bodies coverage
+  test now reads the sponsored organs from the PROJECT-linked acts (the
+  seven needles' 549 unlinked candidates award nothing here) while an
+  alias may still match any candidate's organ.
+Left open: the three ventures' members by ΑΦΜ (a ΓΕΜΗ excerpt or an award
+act would settle them), the Γορτυνίας row on lot 4Β, and the six ΔΑΣΕ
+categories if the parked layer ever returns to the pages.
+Site check after the load (user, same day): the API and the server-rendered
+pages carried the new figures at once (the response cache is DB-mtime
+keyed); a browser holding the pre-load page needs a reload, because
+`apiGetCached` memoises payloads across client navigations. One genuine
+gap found: FROM THE FIRE TO THE SPONSORED PROJECT draws a lane only where
+an EFFIS scar dates the fire, so the Aigaleo fire of 31.07.2026 — whose
+scar the 2008–2025 layer cannot hold — had no lane and no mention. The
+frame's caveat now names, computed, the fires the acts answer but the layer
+does not yet hold and their projects («… without a lane until the scar is
+published»); the lane itself waits for the EFFIS export (a rebuild of
+`effis_fires.geojson` and `link_effis_scars.py`).
+

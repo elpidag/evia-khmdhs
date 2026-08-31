@@ -78,6 +78,7 @@
 		<strong>Anti-nero V-PLUS</strong>, the name the ministry announced it under, to which its
 		lots reconcile to the euro (decision log, 2026-08-29).
 	</p>
+	{#if (f['kh_probable_n'] ?? 0) > 0}
 	<p>
 		One tier is deliberately excluded from every calculation: {show(f['kh_probable_n'])}
 		contract chains ({f['kh_probable_eur'] !== undefined ? eurShort(f['kh_probable_eur']) : '—'}
@@ -91,6 +92,15 @@
 		the Antinero programme, and not included in the calculations. They remain in the dataset
 		with reachable detail pages, listed on the <a href="/antinero">Anti-nero page</a>.
 	</p>
+	{:else}
+	<p>
+		The seven «ANTINERO II» chains of 2022 whose signed texts carry no RRF-16849 financing
+		language — empty fund metadata, no Ταμείο Ανάκαμψης, no Δράση ID, and no payment order
+		on the programme's funds — were excluded from the calculations between 13 and 29 August
+		2026 and are counted since, on the registry titles, the 2022 numbered-lot series and
+		ΥΠΕΝ's own subject lines (decision log, 2026-08-29); the decision log keeps both verdicts.
+	</p>
+	{/if}
 
 	<h2 id="payment-dates">Payment dates</h2>
 	<p>

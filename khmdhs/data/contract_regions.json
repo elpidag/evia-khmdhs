@@ -4091,5 +4091,14 @@
   ],
   "curated_at": "2026-08-18",
   "source_note": "same works as the chain (25SYMV017985934 → 26SYMV019488916 → 26SYMV019512653); the act quotes the project title «… σε περιοχές αρμοδιότητας Δασαρχείου Αιγάλεω και Μεγάρων», which spans both Π.Ε. — matching the chain tip 26SYMV019512653"
+ },
+ "26SYMV018768552": {
+  "regions": [
+   {
+    "pe": "Π.Ε. Ευβοίας",
+    "note": "Δασαρχείο Λίμνης — registry title «…στο Δημόσιο Δάσος Λίμνης, περιοχής αρμοδιότητας Δασαρχείου Λίμνης…» (ΕΣΑ reforestation, found by the freshness check 2026-08-29)"
+   }
+  ],
+  "curated_at": "2026-08-29"
  }
 }

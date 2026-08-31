@@ -94,3 +94,4 @@ data/processed/name_evidence.json
 # neighbour/Athos source downloads (rebuildable: scripts/build_neighbours.py)
 data/processed/geo_cache/
 data/processed/dase_vies_cache.json
+data/processed/diavgeia_harvest_*.json

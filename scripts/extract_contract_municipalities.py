@@ -93,6 +93,10 @@ RENAMES = {
     # the δήμος that contains it today, and the page keeps the document's
     # own wording beside it (user decision, 2026-08-19).
     "ΘΕΣΠΙΕΩΝ": ("9144", "Καποδιστριακός Δήμος Θεσπιέων; ν.3852/2010 merged it into Θηβαίων"),
+    # the 2022 ANTINERO-II chains, back in scope 2026-08-29 (DATA_DECISIONS)
+    "ΟΜΗΡΟΥΠΟΛΗΣ": ("9266", "Καποδιστριακός Δήμος Ομηρούπολης; ν.3852/2010 merged it into Χίου"),
+    "ΙΩΑΝΝΙΝΩΝ": ("9084", "the document names the city; the Καλλικράτης δήμος is Ιωαννιτών"),
+    "ΘΕΛΠΟΥΣΑΣ": ("9238", "Καποδιστριακός Δήμος Θέλπουσας («τέως Δήμου Θέλπουσας» in the text); ν.3852/2010 merged it into Γορτυνίας"),
     "ΠΑΠΑΓΟΥ": ("9175", "the document names the Παπάγου half of Δήμου Παπάγου-Χολαργού"),
     "ΣΑΡΩΝΙΔΑΣ": ("9225", "Σαρωνίδα is a settlement of Δήμου Σαρωνικού, not a δήμος"),
     "ΒΟΡΕΙΑΣ ΚΕΡΚΥΡΑΣ": ("9118", _SPLIT + " Κέρκυρας"),

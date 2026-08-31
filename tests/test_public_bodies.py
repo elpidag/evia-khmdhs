@@ -121,14 +121,24 @@ def test_real_db_coverage_bijection():
             "WHERE organization_name IS NOT NULL")}
         conn.close()
     conn = sqlite3.connect(AN)
-    observed |= {r[0] for r in conn.execute(
+    # the acts of the sponsored PROJECTS only: since the 2026-08-29 harvest
+    # the decisions table also holds the ~550 unlinked candidates the seven
+    # needles return (δασικοί χάρτες, επιτροπές, δήμων acts …), whose organs
+    # award nothing here
+    linked = {r[0] for r in conn.execute(
+        "SELECT DISTINCT d.org FROM decisions d "
+        "JOIN project_decisions pd ON pd.ada = d.ada "
+        "WHERE d.org IS NOT NULL AND TRIM(d.org) != ''")}
+    every_org = {r[0] for r in conn.execute(
         "SELECT DISTINCT org FROM decisions "
         "WHERE org IS NOT NULL AND TRIM(org) != ''")}
     conn.close()
 
-    missing = observed - set(alias_to_key)
+    missing = (observed | linked) - set(alias_to_key)
     assert not missing, f"awarding bodies not in the registry: {sorted(missing)[:5]}"
-    stale = set(alias_to_key) - observed
+    # an alias may also match the organ of an unlinked candidate act — the
+    # registry was built over every decision's org before the 2026-08-29 harvest
+    stale = set(alias_to_key) - observed - every_org
     assert not stale, f"registry aliases matching no DB string: {sorted(stale)[:5]}"
 
 

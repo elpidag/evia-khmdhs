@@ -1,6 +1,191 @@
 {
  "_doc": "Which δήμος each in-scope Anti-nero contract worked in, read from the contract's own placement sentence or from the πρόσκληση it cites («εντός των Δήμων Χαϊδαρίου και Ασπροπύργου, αρμοδιότητας Δασαρχείου Αιγάλεω»). Proposals from scripts/extract_contract_municipalities.py; rules approved 2026-08-19. `outside_region` marks a δήμος whose Π.Ε. is not among the ones curated for the contract — the region layer is deliberately left alone. Attribution verdicts live in municipality_overrides.json.",
  "_overrides": {},
+ "22SYMV011360183": {
+  "municipalities": [
+   {
+    "code": "9296",
+    "name": "Ρόδου",
+    "pe": "Π.Ε. Ρόδου",
+    "authority": "Διεύθυνση Δασών Δωδεκανήσου",
+    "authority_basis": "the contract's sole authority",
+    "source_ref": "22SYMV011360183",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΠΕΡΙΟΧΕΣ ΔΗΜΩΝ ΡΟΔΟΥ, ΣΥΜΗΣ, ΚΩ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "name",
+    "note": null,
+    "override": null
+   },
+   {
+    "code": "9297",
+    "name": "Σύμης",
+    "pe": "Π.Ε. Ρόδου",
+    "authority": "Διεύθυνση Δασών Δωδεκανήσου",
+    "authority_basis": "the contract's sole authority",
+    "source_ref": "22SYMV011360183",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΠΕΡΙΟΧΕΣ ΔΗΜΩΝ ΡΟΔΟΥ, ΣΥΜΗΣ, ΚΩ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "name",
+    "note": null,
+    "override": null
+   },
+   {
+    "code": "9284",
+    "name": "Κω",
+    "pe": "Π.Ε. Κω",
+    "authority": "Διεύθυνση Δασών Δωδεκανήσου",
+    "authority_basis": "the contract's sole authority",
+    "source_ref": "22SYMV011360183",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΠΕΡΙΟΧΕΣ ΔΗΜΩΝ ΡΟΔΟΥ, ΣΥΜΗΣ, ΚΩ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": "covers_pe",
+    "via": "name",
+    "note": null,
+    "override": null
+   }
+  ]
+ },
+ "22SYMV011928850": {
+  "municipalities": [
+   {
+    "code": "9266",
+    "name": "Χίου",
+    "pe": "Π.Ε. Χίου",
+    "authority": null,
+    "authority_basis": null,
+    "source_ref": "22SYMV011332276",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΠΕΡΙΟΧΕΣ ΔΗΜΩΝ ΟΜΗΡΟΥΠΟΛΗΣ, ΧΙΟΥ, ΚΙΣΣΑΜΟΥ, ΔΗΜΟΥ ΙΩΑΝΝΙΝΩΝ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "rename",
+    "note": null,
+    "override": null
+   },
+   {
+    "code": "9322",
+    "name": "Κισσάμου",
+    "pe": "Π.Ε. Χανίων",
+    "authority": null,
+    "authority_basis": null,
+    "source_ref": "22SYMV011332276",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΠΕΡΙΟΧΕΣ ΔΗΜΩΝ ΟΜΗΡΟΥΠΟΛΗΣ, ΧΙΟΥ, ΚΙΣΣΑΜΟΥ, ΔΗΜΟΥ ΙΩΑΝΝΙΝΩΝ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "name",
+    "note": null,
+    "override": null
+   },
+   {
+    "code": "9084",
+    "name": "Ιωαννιτών",
+    "pe": "Π.Ε. Ιωαννίνων",
+    "authority": null,
+    "authority_basis": null,
+    "source_ref": "22SYMV011332276",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΠΕΡΙΟΧΕΣ ΔΗΜΩΝ ΟΜΗΡΟΥΠΟΛΗΣ, ΧΙΟΥ, ΚΙΣΣΑΜΟΥ, ΔΗΜΟΥ ΙΩΑΝΝΙΝΩΝ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "rename",
+    "note": null,
+    "override": null
+   }
+  ]
+ },
+ "22SYMV011928864": {
+  "municipalities": [
+   {
+    "code": "9247",
+    "name": "Σικυωνίων",
+    "pe": "Π.Ε. Κορινθίας",
+    "authority": null,
+    "authority_basis": null,
+    "source_ref": "22SYMV011332546",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΕΝΤΟΣ ΤΩΝ ΔΗΜΩΝ ΣΙΚΥΩΝΙΩΝ, ΛΟΥΤΡΑΚΙΟΥ – ΑΓΙΩΝ ΘΕΟΔΩΡΩΝ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "name",
+    "note": null,
+    "override": null
+   }
+  ]
+ },
+ "22SYMV011928896": {
+  "municipalities": [
+   {
+    "code": "9246",
+    "name": "Ξυλοκάστρου - Ευρωστίνης",
+    "pe": "Π.Ε. Κορινθίας",
+    "authority": null,
+    "authority_basis": null,
+    "source_ref": "22SYMV011632177",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΕΝΤΟΣ ΤΩΝ ΔΗΜΩΝ ΞΥΛΟΚΑΣΤΡΟΥ-ΕΥΡΩΣΤΙΝΗΣ, ΒΟΡΕΙΑΣ ΚΥΝΟΥΡΙΑΣ ΚΑΙ ΝΟΤΙΑΣ ΚΥΝΟΥΡΙΑΣ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "name",
+    "note": null,
+    "override": null
+   },
+   {
+    "code": "9237",
+    "name": "Βόρειας Κυνουρίας",
+    "pe": "Π.Ε. Αρκαδίας",
+    "authority": null,
+    "authority_basis": null,
+    "source_ref": "22SYMV011632177",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΕΝΤΟΣ ΤΩΝ ΔΗΜΩΝ ΞΥΛΟΚΑΣΤΡΟΥ-ΕΥΡΩΣΤΙΝΗΣ, ΒΟΡΕΙΑΣ ΚΥΝΟΥΡΙΑΣ ΚΑΙ ΝΟΤΙΑΣ ΚΥΝΟΥΡΙΑΣ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "name",
+    "note": null,
+    "override": null
+   },
+   {
+    "code": "9240",
+    "name": "Νότιας Κυνουρίας",
+    "pe": "Π.Ε. Αρκαδίας",
+    "authority": null,
+    "authority_basis": null,
+    "source_ref": "22SYMV011632177",
+    "from_call": null,
+    "excerpt": "ΤΩΝ ΜΕΛΕΤΩΝ (ΕΝΤΟΣ ΤΩΝ ΔΗΜΩΝ ΞΥΛΟΚΑΣΤΡΟΥ-ΕΥΡΩΣΤΙΝΗΣ, ΒΟΡΕΙΑΣ ΚΥΝΟΥΡΙΑΣ ΚΑΙ ΝΟΤΙΑΣ ΚΥΝΟΥΡΙΑΣ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ ΕΚΤΕΛΕΣΗΣ ΤΩ",
+    "outside_region": false,
+    "outside_pe_explained": null,
+    "via": "name",
+    "note": null,
+    "override": null
+   }
+  ]
+ },
+ "23SYMV011953055": {
+  "municipalities": [
+   {
+    "code": "9238",
+    "name": "Γορτυνίας",
+    "pe": "Π.Ε. Αρκαδίας",
+    "authority": "Δασαρχείο Πύργου",
+    "authority_basis": "the contract's sole authority",
+    "source_ref": "22SYMV011470180",
+    "from_call": null,
+    "excerpt": "ΡΙΟΧΕΣ ΔΥΤΙΚΟΥ ΜΑΙΝΑΛΟΥ ΚΑΙ ΔΑΣΟΥΣ ΤΕΩΣ ΔΗΜΟΥ ΘΕΛΠΟΥΣΑΣ Π.Ε ΑΡΚΑΔΙΑΣ) ΚΑΙ ΟΙ ΠΕΡΙΟΧΕΣ",
+    "outside_region": true,
+    "outside_pe_explained": null,
+    "via": "rename",
+    "note": null,
+    "override": null
+   }
+  ]
+ },
  "23SYMV012992073": {
   "municipalities": [
    {
@@ -4269,100 +4454,6 @@
     "source_ref": "25SYMV016658903",
     "from_call": null,
     "excerpt": "ρχείου Ολυμπίας χωροθετούνται εντός των Δήμων Ανδρίτσαινας – Κρεστένων και Ζαχάρως της Περιφερειακής Ενότητας Ηλείας (ΝUTS: EL633 – Ηλεία). 3.7 Αναλ",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   }
-  ]
- },
- "25SYMV016659302": {
-  "municipalities": [
-   {
-    "code": "9010",
-    "name": "Σουφλίου",
-    "pe": "Π.Ε. Έβρου",
-    "authority": "Δασαρχείο Διδυμοτείχου",
-    "authority_basis": "the only authority of this Π.Ε.",
-    "source_ref": "25SYMV016659302",
-    "from_call": null,
-    "excerpt": "εντός των Δήμων Σουφλίου, Διδυμότειχου και Ορεστιάδας της Περιφερειακής Ενότητας Έβρου (ΝUTS: EL511 – Έβρος), τα προτε",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9007",
-    "name": "Διδυμοτείχου",
-    "pe": "Π.Ε. Έβρου",
-    "authority": "Δασαρχείο Διδυμοτείχου",
-    "authority_basis": "the only authority of this Π.Ε.",
-    "source_ref": "25SYMV016659302",
-    "from_call": null,
-    "excerpt": "εντός των Δήμων Σουφλίου, Διδυμότειχου και Ορεστιάδας της Περιφερειακής Ενότητας Έβρου (ΝUTS: EL511 – Έβρος), τα προτε",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9008",
-    "name": "Ορεστιάδας",
-    "pe": "Π.Ε. Έβρου",
-    "authority": "Δασαρχείο Διδυμοτείχου",
-    "authority_basis": "the only authority of this Π.Ε.",
-    "source_ref": "25SYMV016659302",
-    "from_call": null,
-    "excerpt": "εντός των Δήμων Σουφλίου, Διδυμότειχου και Ορεστιάδας της Περιφερειακής Ενότητας Έβρου (ΝUTS: EL511 – Έβρος), τα προτε",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9017",
-    "name": "Ξάνθης",
-    "pe": "Π.Ε. Ξάνθης",
-    "authority": "Δασαρχείο Σταυρούπολης",
-    "authority_basis": "the only authority of this Π.Ε.",
-    "source_ref": "25SYMV016659302",
-    "from_call": null,
-    "excerpt": "εντός των Δήμων Ξάνθης και Τοπείρου, της Περιφερειακής Ενότητας Ξάνθης (ΝUTS: EL512 – Ξάνθη) και τα πρ",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9018",
-    "name": "Τοπείρου",
-    "pe": "Π.Ε. Ξάνθης",
-    "authority": "Δασαρχείο Σταυρούπολης",
-    "authority_basis": "the only authority of this Π.Ε.",
-    "source_ref": "25SYMV016659302",
-    "from_call": null,
-    "excerpt": "εντός των Δήμων Ξάνθης και Τοπείρου, της Περιφερειακής Ενότητας Ξάνθης (ΝUTS: EL512 – Ξάνθη) και τα πρ",
-    "outside_region": false,
-    "outside_pe_explained": null,
-    "via": "name",
-    "note": null,
-    "override": null
-   },
-   {
-    "code": "9022",
-    "name": "Μαρωνείας - Σαπών",
-    "pe": "Π.Ε. Ροδόπης",
-    "authority": "Διεύθυνση Δασών Ροδόπης",
-    "authority_basis": "the only authority of this Π.Ε.",
-    "source_ref": "25SYMV016659302",
-    "from_call": null,
-    "excerpt": "εντός του Δήμου Μαρώνειας-Σαπών, της Περιφερειακής Ενότητας Ροδόπης (ΝUTS: EL513 – Ροδόπη). 3.7 Ανα",
     "outside_region": false,
     "outside_pe_explained": null,
     "via": "name",

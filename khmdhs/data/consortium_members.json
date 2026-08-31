@@ -1506,5 +1506,100 @@
    }
   ],
   "note": "Stated TWICE, independently: the original σύμβαση 22SYMV010488925 and the amendment 22SYMV010806398 that superseded it both carry the clause «κοινοπραξίας «ΜΠΟΜΠΟΤΗ ΚΩΝΣΤΑΝΤΙΝΙΑ ΒΑΣΙΛΙΚΗ – ΞΑΝΘΟΠΟΥΛΟΣ ΒΑΣΙΛΕΙΟΣ» με ΑΦΜ 996870356, την οποία συνέστησαν στις 07.04.2022 τα μέλη της ένωσης … αποτελούμενη από α) … ΑΦΜ 044739770, β) … Α.Φ.Μ. 102529416». Found by the party-clause screen of 2026-08-20; the venture is in no ΓΕΜΗ register. Both ΑΦΜ arrive here from a second, independent direction: 044739770 is already a curated member of 996550834 and 102529416 of 996551148, both read from award acts."
+ },
+ "996604110": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ - ΕΔΡΑΙΟΣ ΑΤΕ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "166890007000",
+  "basis": "contract",
+  "contracts": [
+   "22SYMV011632177",
+   "22SYMV011928896"
+  ],
+  "members": [
+   {
+    "vat": "045312261",
+    "name": "ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+    "source": "22SYMV011632177",
+    "excerpt": "συνέστησαν τα μέλη της 1) η ΕΥΔΟΚΙΑ ΛΙΤΣΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ (ατομική επιχείρηση) που εδρεύει στον Βύρωνα Αττικής, Ερμού, αρ. 29, Τ.Κ. 16233, με ΑΦΜ 045312261 και ΔΟΥ ΙΖ ΑΘΗΝΩΝ και 2) η ανώνυμη εταιρεία με την επωνυμία «ΕΔΡΑΙΟΣ ΑΝΩΝΥΜΟΣ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ» με διακ"
+   },
+   {
+    "vat": "094419984",
+    "name": "ΕΔΡΑΙΟΣ ΑΝΩΝΥΜΟΣ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ",
+    "source": "22SYMV011632177",
+    "excerpt": "με την επωνυμία «ΕΔΡΑΙΟΣ ΑΝΩΝΥΜΟΣ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ» με διακριτικό τίτλο «ΕΔΡΑΙΟΣ ΑΤΕ» που εδρεύει στο Ίλιον, Πρωτεσιλάου αρ. 116, Τ.Κ. 13123, με ΑΦΜ 094419984 και ΔΟΥ ΦΑΕ ΑΘΗΝΩΝ, νομίμως εκπροσωπούμενης από τους διαχειρι"
+   }
+  ],
+  "note": "the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS): the party clause of the original contract enumerates both members with their ΑΦΜ"
+ },
+ "996813189": {
+  "name": "ΚΟΙΝΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ - ΚΑΤΣΙΑΒΑΣ ΧΡ. - ΝΑΤΣΗΣ ΚΩΝ ΟΕ - ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "166547553000",
+  "basis": "contract",
+  "contracts": [
+   "22SYMV011470180",
+   "23SYMV011953055"
+  ],
+  "members": [
+   {
+    "vat": "082911990",
+    "name": "3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ",
+    "source": "22SYMV011470180",
+    "excerpt": "αποτελούμενη από : α) την ανώνυμη εταιρεία με την επωνυμία «3Κ Τεχνική Εμπορική Ανώνυμη Εταιρεία» που εδρεύει στην Αθήνα, Αγίας Λαύρας αρ. 86, με ΑΦΜ 082911990, νομίμως εκπροσωπούμενη από τον Πρόεδρο και Δ/ντα Σύμβουλό της Δημήτρι"
+   },
+   {
+    "vat": "999474328",
+    "name": "ΚΑΤΣΙΑΒΑΣ ΧΡ. – ΝΑΤΣΗΣ ΚΩΝ. Ο.Ε.",
+    "source": "22SYMV011470180",
+    "excerpt": "β) την ομόρρυθμη εταιρεία με την επωνυμία «Κατσιάβας Χρ. – Νάτσης Κων. Ο.Ε.» με έδρα τα Τρίκαλα, Αν. Κομνηνής αρ. 4, με ΑΦΜ 999474328 νομίμως εκπροσωπούμενη από τον Χρήστο Κατσιάβα του Αποστόλου, κάτο"
+   },
+   {
+    "vat": "043658123",
+    "name": "ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΣΤΕΦΑΝΟΥ",
+    "source": "22SYMV011470180",
+    "excerpt": "γ) τον Δημήτριο Σκαρλατούδη του Στεφάνου (ατομική επιχείρηση) που εδρεύει στο Στεφανόβουνο Ελασσόνας Λάρισας Τ.Κ. 40200, με ΑΦΜ 043658123, που θα αποκαλείται εφεξής για συντομία \"Α"
+   }
+  ],
+  "note": "the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS): the party clause of the original contract enumerates the three members with their ΑΦΜ"
+ },
+ "996813233": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ «ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ»",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "166857453000",
+  "basis": "contract",
+  "contracts": [
+   "22SYMV011593395"
+  ],
+  "members": [],
+  "members_documented": false,
+  "note": "MEMBERS NAMED BUT NOT IDENTIFIABLE (the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS)): the party clause of the original contract enumerates the members — ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ (ατομική επιχείρηση, Θεσσαλονίκη) and ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ (ατομική επιχείρηση, Καλαμπάκα — an in-scope contractor under 031213597 in her own name) — but states no ΑΦΜ for them (identity-card numbers only), the ΓΕΜΗ publicity payload carries no managementPersons, and a name is not an ΑΦΜ; recorded as undocumented so no member is credited money on a guess. Clause: «συνέστησαν τα μέλη της: 1) η ατομική επιχείρηση «ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ», με έδρα τη Θεσσαλονίκη, επί της οδού Θ. Νάτσινα 48, Τ.Κ. 54248, με ΑΔΤ ΑΙ853780 και 2) η ατομική επιχείρηση «ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ», με έδρα την Καλαμπάκα, επί της οδού Τρικάλων 93, Τ.Κ. 42200, με ΑΔΤ ΑΟ372069»"
+ },
+ "996870694": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "-1",
+  "basis": "contract",
+  "contracts": [
+   "22SYMV011332546",
+   "22SYMV011928864"
+  ],
+  "members": [],
+  "members_documented": false,
+  "note": "MEMBERS NAMED BUT NOT IDENTIFIABLE (the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS)): the party clause of the original contract enumerates the members — ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΧΡΗΣΤΟΥ (Μεγαλόπολη) and ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ (Σιάτιστα — an in-scope contractor under 117925460 in his own name) — but states no ΑΦΜ for them (identity-card numbers only), the ΓΕΜΗ publicity payload carries no managementPersons, and a name is not an ΑΦΜ; recorded as undocumented so no member is credited money on a guess. Clause: «συνέστησαν τα μέλη της 1) η ατομική επιχείρηση «Παπαγεωργάκης Παναγιώτης του Χρήστου» και 2) η ατομική επιχείρηση «Κοσμίδης Ιωάννης του Κωνσταντίνου», με το από 12.09.2022 ιδιωτικό συμφωνητικό, με ΑΦΜ 996870694, με έδρα στην Καβάλα, Μεγάλου Αλεξάνδρου αρ. 27, νομίμως εκπροσωπούμενης από τον Παπαγεωρ»"
+ },
+ "997080215": {
+  "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ – ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ",
+  "legal_type": "Κοινοπραξία",
+  "gemi": "165541904000",
+  "basis": "contract",
+  "contracts": [
+   "22SYMV011332552",
+   "22SYMV011512210",
+   "22SYMV011928919"
+  ],
+  "members": [],
+  "members_documented": false,
+  "note": "MEMBERS NAMED BUT NOT IDENTIFIABLE (the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS)): the party clause of the original contract enumerates the members — ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ Α.Ε. and ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΤΟΥ ΦΩΤΙΟΥ (ατομική επιχείρηση) — but states no ΑΦΜ for them (identity-card numbers only), the ΓΕΜΗ publicity payload carries no managementPersons, and a name is not an ΑΦΜ; recorded as undocumented so no member is credited money on a guess. Clause: «συνέστησαν τα μέλη της 1) η ανώνυμη εταιρεία με την επωνυμία «ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΑΙΑ» και 2) η ατομική επιχείρηση «ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΤΟΥ ΦΩΤΙΟΥ», με το από 19.08.2022 ιδιωτικό συμφωνητικό με αρ. ΓΕΜΗ 165541904000, ΑΦΜ 997080215, με έδρα στη Ν. Μαγνησία Θεσσαλονίκης επί των αγρο»"
  }
 }

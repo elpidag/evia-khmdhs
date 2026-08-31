@@ -1816,5 +1816,11 @@
   "is_dase": true,
   "form": "dase",
   "basis": "name_regex; full distinct-name list reviewed 2026-07-26"
+ },
+ "0096135196": {
+  "name": "Δ.Α.Σ.Ε ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ",
+  "is_dase": true,
+  "form": "dase",
+  "basis": "zero-padded registry twin of 096135196 on 26SYMV019642791 (freshness check 2026-08-29; the registry's re-posting after it cancelled 26SYMV019612527 for a missing ΑΑΗΤ); the signed contract states ΑΦΜ 096135196 — rewritten by dase_contract_corrections.json"
  }
 }

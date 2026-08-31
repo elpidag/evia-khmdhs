@@ -348,5 +348,11 @@
   "basis": "fund:2023ΤΑ07500012",
   "notes": "Found via Diavgeia ΑΔΑΜ-subject sweep 2026-07-19. Same 2026 numbered-contract series as the payment-confirmed ANTINERO III batch; ΥΠΕΝ decision on σύμβαση 10/2026 (ΑΔΑΜ 26SYMV018661963) explicitly says «του προγράμματος ANTINERO III». ΔΧ ΘΑΣΟΥ-ΔΡΑΜΑΣ (Σύμβαση 13/2026)",
   "phase_note": "«Antinero V-PLUS» — the February-2026 batch under fund 2023ΤΑ07500012 (DATA_DECISIONS 2026-08-29)"
+ },
+ "26SYMV018768552": {
+  "phase": "antinero_esa",
+  "lot": "Εργασίες αποκατάστασης – αναδάσωσης με Χαλέπιο Πεύκη στο Δημόσιο Δάσος Λίμνης (Δασαρχείο Λίμνης), Εθνικό Σχέδιο Αναδάσωσης",
+  "basis": "fund:2021ΤΑ07500002",
+  "notes": "Found 2026-08-29 by the CPV route of scripts/find_antinero_new.py (DATA_DECISIONS that day): signed 02.04.2026 by ΕΕΣΥΠ (997104555) with ΛΙΤΣΟΣ ΗΛΙΑΣ ΤΟΥ ΑΓΓΕΛΟΥ, €402.578,43 net; its own text: «Το έργο περιλαμβάνεται στη Δράση 16849: «Εθνικό σχέδιο αναδάσωσης, πρόγραμμα αποκατάστασης και πρόληψης («Antinero»), αντιδιαβρωτικά και αντιπλημμυρικά μέτρα» … κωδικό ΤΑ 5201358 … ΣΑΤΑ ΤΑ075». Invisible to the contractor/family/subject routes: a first-time contractor and a non-ΥΠΕΝ signature."
  }
 }

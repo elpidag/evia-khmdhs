@@ -32,19 +32,19 @@ def test_coop_totals_sum_to_the_live_basis(conn):
 
 def test_population_pins(conn):
     k = dq.kpis(conn)
-    assert k["gross_n"] == 2164
-    assert k["n_cancelled"] == 102   # 82 registry + 10 double-postings
+    assert k["gross_n"] == 2171  # +7 of 2026-07/08 (freshness haul 2026-08-29)
+    assert k["n_cancelled"] == 103   # 83 registry (26SYMV019612527 since 2026-08-29) + 10 double-postings
                                 # + 2 not-a-co-op contracts (2026-08-17)
     assert k["n_superseded"] == 64
-    assert k["n_contracts"] == 1998
-    assert k["total_eur"] == pytest.approx(36_954_829.83, abs=0.01)
+    assert k["n_contracts"] == 2004
+    assert k["total_eur"] == pytest.approx(37_254_303.72, abs=0.01)
     assert k["n_coops"] >= 245
     assert k["pct_direct"] > 90
 
 
 def test_curated_contractors_pin(conn):
     n, = conn.execute("SELECT COUNT(*) FROM dase_contractors").fetchone()
-    assert n == 257
+    assert n == 258  # +1: the zero-padded twin 0096135196 (2026-08-29)
 
 
 def test_every_contract_has_a_curated_dase_contractor(conn):
@@ -336,7 +336,7 @@ def test_cpv_tree_pins(conn):
     from atlas_api import queries_extra as qe
 
     tree = qe.dase_cpv_tree(conn)
-    assert tree["n_contracts"] == 1998        # every live contract has a code
+    assert tree["n_contracts"] == 2004        # every live contract has a code
     assert tree["divisions"], "empty tree"
     for d in tree["divisions"]:
         assert d["name_en"], f"unnamed division {d['code']}"
@@ -366,9 +366,9 @@ def test_direct_award_distribution_pins():
         h = qe.dase_direct_award_distribution(c)
     finally:
         c.close()
-    assert h["n"] == 1917
+    assert h["n"] == 1922
     assert sum(h["counts"]) == h["n"]
     assert h["n_above_30k"] == 109
     assert h["n_above_60k"] == 77          # the ΠΝΠ emergency cohort
-    assert h["median"] == pytest.approx(5766.13, abs=0.01)
+    assert h["median"] == pytest.approx(5777.05, abs=0.01)
     assert "thresholds" not in h           # no ceiling lines, by decision

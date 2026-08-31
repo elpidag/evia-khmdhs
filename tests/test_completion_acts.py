@@ -125,10 +125,10 @@ def test_real_db_counts(conn):
     # 228/55 until 2026-08-21: a «Μερική έγκριση» and a «Τμηματική περαίωση»
     # were rejected as endings, three acts whose subject keyed the wrong
     # ΑΔΑΜ moved to their own contracts (DATA_DECISIONS 2026-08-21)
-    assert kinds == {"oristiki_paralavi": 227, "peraiosi": 54}
+    assert kinds == {"oristiki_paralavi": 235, "peraiosi": 55}  # +9 acts of 24–27.08.2026 (haul 2026-08-29)
     assert conn.execute(
         "SELECT COUNT(DISTINCT attributed_ref) FROM contract_completion_acts"
-    ).fetchone()[0] == 156
+    ).fetchone()[0] == 161
     basis = dict(conn.execute(
         "SELECT end_basis, COUNT(*) FROM contract_completion_acts "
         "GROUP BY end_basis"))
@@ -137,7 +137,7 @@ def test_real_db_counts(conn):
     # pass 5 of the same day read 21 more forms («τα από … πρωτόκολλα», a
     # protocol number/date, a two-day protocol, «περαίωσης των εργασιών
     # στις …», month-name dates) — 26 acts state no acceptance date at all
-    assert basis == {"protocol_date": 255, "act_date": 26}
+    assert basis == {"protocol_date": 263, "act_date": 27}
     assert conn.execute(
         "SELECT COUNT(*) FROM contract_completion_acts "
         "WHERE end_excerpt LIKE '%εγκατάστασ%'").fetchone()[0] == 0

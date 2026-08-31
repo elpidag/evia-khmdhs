@@ -2495,5 +2495,107 @@
       "city": "ΚΑΛΑΜΑΡΙΑ",
       "source": "vies"
     }
+  },
+  "996813233": {
+    "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+    "city": "Καλαμπάκα",
+    "street": "Τρικάλων",
+    "number": "93",
+    "postal_code": "42200",
+    "seat_source": "contract",
+    "source_ref": "22SYMV011593395",
+    "excerpt": "με την επωνυμία «ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ» με έδρα στην Καλαμπάκα Ν. Τρικάλων, επί της οδού Τρικάλων 93, Τ.Κ. 42200, με ΑΦΜ 996813233, που συνέστησαν τα μέλη της: 1) η ατομι",
+    "register": {
+      "address": null,
+      "postal_code": null,
+      "city": "ΤΡΙΚΑΛΑ",
+      "source": "consortium_member_inferred"
+    },
+    "note": "transcribed 2026-08-29 from the party clause of the chain's original contract, when the seven ANTINERO-II chains returned to scope (DATA_DECISIONS)"
+  },
+  "044705095": {
+    "name": "ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+    "city": "Καρδίτσα",
+    "street": "Μετεώρων",
+    "number": "45",
+    "postal_code": "43100",
+    "seat_source": "contract",
+    "source_ref": "22SYMV011332276",
+    "excerpt": "με την επωνυμία «ΤΣΙΑΝΑΒΑΣ ΓΕΩΡΓΙΟΣ ΤΟΥ ΙΩΑΝΝΗ» με έδρα στην Καρδίτσα, επί της οδού Μετεώρων αρ. 45, Τ.Κ. 43100, νομίμως εκπροσωπούμενης από τον ίδιο, κάτοχο του με αριθμό ΔΤ ΑΟ 348477, με ΑΦΜ 044705095, που θα αποκαλείται εφεξής για συντομία",
+    "register": {
+      "address": "ΑΛΚΜΗΝΗΣ 3",
+      "postal_code": "17237",
+      "city": "ΔΑΦΝΗ",
+      "source": "gemi"
+    },
+    "note": "transcribed 2026-08-29 from the party clause of the chain's original contract, when the seven ANTINERO-II chains returned to scope (DATA_DECISIONS)"
+  },
+  "996870694": {
+    "name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
+    "city": "Καβάλα",
+    "street": "Μεγάλου Αλεξάνδρου",
+    "number": "27",
+    "postal_code": null,
+    "seat_source": "contract",
+    "source_ref": "22SYMV011332546",
+    "excerpt": "με την επωνυμία «ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ» που συνέστησαν τα μέλη της 1) η ατομική επιχείρηση «Παπαγεωργάκης Παναγιώτης του Χρήστου» και 2) η ατομική επιχείρηση «Κοσμίδης Ιωάννης του Κωνσταντίνου», με το από 12.09.2022 ιδιωτικό συμφωνητικό, με ΑΦΜ 996870694, με έδρα στην Καβάλα, Μεγάλου Αλεξάνδρο",
+    "register": {
+      "address": null,
+      "postal_code": null,
+      "city": null,
+      "source": "consortium_unresolved"
+    },
+    "note": "transcribed 2026-08-29 from the party clause of the chain's original contract, when the seven ANTINERO-II chains returned to scope (DATA_DECISIONS)"
+  },
+  "996604110": {
+    "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ - ΕΔΡΑΙΟΣ ΑΤΕ",
+    "city": "Σαλαμίνα",
+    "street": "Ν. Παπανικολάου",
+    "number": "10",
+    "postal_code": "18900",
+    "seat_source": "contract",
+    "source_ref": "22SYMV011632177",
+    "excerpt": "με την επωνυμία «ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΛΙΤΣΑ ΕΥΔΟΚΙΑ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ - ΕΔΡΑΙΟΣ ΑΤΕ», με έδρα τη Σαλαμίνα, Ν. Παπανικολάου, αρ. 10, Τ.Κ. 18900, με ΑΦΜ 996604110 και ΔΟΥ Ε’ ΠΕΙΡΑΙΑ, που συνέστησαν τα μ",
+    "register": {
+      "address": null,
+      "postal_code": null,
+      "city": "ΣΑΛΑΜΙΝΑ",
+      "source": "consortium_member_inferred"
+    },
+    "note": "transcribed 2026-08-29 from the party clause of the chain's original contract, when the seven ANTINERO-II chains returned to scope (DATA_DECISIONS)"
+  },
+  "997080215": {
+    "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ – ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ",
+    "city": "Νέα Μαγνησία Θεσσαλονίκης",
+    "street": "αγροτεμάχια 567 & 584",
+    "number": "",
+    "postal_code": "57008",
+    "seat_source": "contract",
+    "source_ref": "22SYMV011332552",
+    "excerpt": "με την επωνυμία «ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΑΙΑ» και 2) η ατομική επιχείρηση «ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΤΟΥ ΦΩΤΙΟΥ», με το από 19.08.2022 ιδιωτικό συμφωνητικό με αρ. ΓΕΜΗ 165541904000, ΑΦΜ 997080215, με έδρα στη Ν. Μαγνησία Θεσσαλονίκης ε",
+    "register": {
+      "address": "ΑΓΡΟΤΕΜΑΧΙΑ 567 ΚΑΙ 584 0",
+      "postal_code": "57005",
+      "city": "Ν ΜΑΓΝΗΣΙΑ",
+      "source": "vies"
+    },
+    "note": "transcribed 2026-08-29 from the party clause of the chain's original contract, when the seven ANTINERO-II chains returned to scope (DATA_DECISIONS)"
+  },
+  "996813189": {
+    "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ - ΚΑΤΣΙΑΒΑΣ ΧΡ. - ΝΑΤΣΗΣ ΚΩΝ ΟΕ - ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ",
+    "city": "Τρίκαλα",
+    "street": "Άννης Κομνηνής",
+    "number": "4",
+    "postal_code": null,
+    "seat_source": "contract",
+    "source_ref": "22SYMV011470180",
+    "excerpt": "με την επωνυμία «ΚΟΙΝΞΙΑ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ 3Κ ΤΕΧΝΙΚΗ ΕΜΠΟΡΙΚΗ ΑΝΩΝΥΜΗ ΕΤΑΙΡΕΙΑ - ΚΑΤΣΙΑΒΑΣ ΧΡ. - ΝΑΤΣΗΣ ΚΩΝ ΟΕ - ΣΚΑΡΛΑΤΟΥΔΗΣ ΔΗΜΗΤΡΙΟΣ» με έδρα τα Τρίκαλα, Αν. Κομνηνής αρ. 4, με ΑΦΜ 996813189, νομίμως εκπροσωπούμενη από τον Χρήστο",
+    "register": {
+      "address": "ΑΝΝΗΣ ΚΟΜΝΗΝΗΣ 4",
+      "postal_code": "42131",
+      "city": "ΤΡΙΚΑΛΑ",
+      "source": "gemi"
+    },
+    "note": "transcribed 2026-08-29 from the party clause of the chain's original contract, when the seven ANTINERO-II chains returned to scope (DATA_DECISIONS)"
   }
 }

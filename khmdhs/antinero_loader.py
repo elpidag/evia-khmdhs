@@ -44,7 +44,11 @@ def verify_relevance(phase: str, basis: str, item: dict) -> str | None:
     norm_title = normalize_title(item.get("title"))
     org_vat = ((item.get("organizationVatNumber") or "")).strip()
 
-    if org_vat and org_vat.replace(",", "") not in ("090273987", "90273987"):
+    # ΥΠΕΝ signs nearly every lot, but the state vehicle ΕΕΣΥΠ (997104555)
+    # signs some ΕΣΑ/restoration lots itself (four in scope by 2026-08-29,
+    # 26SYMV018768552 the fifth) — accepted only on a FUND basis
+    ok_vats = ("090273987", "90273987") + (("997104555",) if basis.startswith("fund:") else ())
+    if org_vat and org_vat.replace(",", "") not in ok_vats:
         return f"unexpected contracting authority VAT {org_vat!r} (want ΥΠΕΝ)"
 
     if basis.startswith("fund:"):

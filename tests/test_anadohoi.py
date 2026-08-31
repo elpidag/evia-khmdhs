@@ -208,7 +208,7 @@ def test_real_db_deliverables_curated_for_all(conn):
         "SELECT deliverables, COUNT(*) FROM projects GROUP BY deliverables"))
     # 42/18/9 since 2026-08-13: ΨΤΑΤ reclassified study → study_and_works
     # on trail evidence (ΣΤΑΝΤΑ executes the Μύλος-ρέμα works itself)
-    assert counts == {"works": 42, "study_and_works": 18, "study": 9}
+    assert counts == {"works": 42, "study_and_works": 19, "study": 9}  # +1: Τράπεζα Πειραιώς 2026-08-29
     missing_ev = conn.execute(
         "SELECT root_ada, evidence_json FROM projects").fetchall()
     for root, ev in missing_ev:
@@ -312,29 +312,29 @@ def test_real_db_effis_scars_linked(conn):
 
 
 def test_real_db_pins(conn):
-    assert conn.execute("SELECT COUNT(*) FROM decisions").fetchone()[0] == 322
-    assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 69
+    assert conn.execute("SELECT COUNT(*) FROM decisions").fetchone()[0] == 871  # 322 until the 2026-08-29 harvest (seven needles)
+    assert conn.execute("SELECT COUNT(*) FROM projects").fetchone()[0] == 70
     statuses = dict(conn.execute(
         "SELECT status, COUNT(*) FROM projects GROUP BY status"))
-    assert statuses == {"completed": 16, "active": 30, "revoked": 1,
-                        "no_completion_recorded": 21, "superseded": 1}
+    assert statuses == {"completed": 19, "active": 29, "revoked": 1,
+                        "no_completion_recorded": 20, "superseded": 1}  # 2026-08-29: 3 endings found, 1 new project
     # stated budgets (42 of 68 live projects), and after δωρεά amendments
     stated, n = conn.execute(
         "SELECT ROUND(SUM(budget_eur),2), COUNT(budget_eur) FROM projects "
         "WHERE status != 'superseded'").fetchone()
-    assert (stated, n) == (37842320.85, 42)
+    assert (stated, n) == (39342320.85, 43)
     assert conn.execute(
         "SELECT ROUND(SUM(budget_current),2) FROM projects "
-        "WHERE status != 'superseded'").fetchone()[0] == 41842320.85
+        "WHERE status != 'superseded'").fetchone()[0] == 43342320.85
     # duration-based deadlines carried as text, never fabricated dates
     assert conn.execute(
-        "SELECT COUNT(deadline_text) FROM projects").fetchone()[0] == 36
+        "SELECT COUNT(deadline_text) FROM projects").fetchone()[0] == 37
     assert conn.execute(
         "SELECT deadline_initial FROM projects WHERE root_ada = "
         "'ΨΓΦΔ4653Π8-777'").fetchone()[0] is None
     # Π.Ε. resolved for all but the 2 genuinely supra-Π.Ε. projects
     assert conn.execute(
-        "SELECT COUNT(pe), COUNT(*) FROM projects").fetchone() == (67, 69)
+        "SELECT COUNT(pe), COUNT(*) FROM projects").fetchone() == (68, 70)
     for (root,) in conn.execute(
             "SELECT root_ada FROM projects WHERE pe IS NULL"):
         assert root in ("6Φ454653Π8-Ξ1Ζ", "9ΕΘΠ4653Π8-ΠΡ4")
@@ -342,7 +342,7 @@ def test_real_db_pins(conn):
     n_fire, n_nonfire = conn.execute(
         "SELECT COUNT(fire_event), SUM(fire_event = 'εκτός πυρκαγιάς') "
         "FROM projects").fetchone()
-    assert (n_fire, n_nonfire) == (69, 5)
+    assert (n_fire, n_nonfire) == (70, 5)
     # the restatement chain and the revocation are pinned
     assert conn.execute(
         "SELECT superseded_by FROM projects WHERE root_ada = "

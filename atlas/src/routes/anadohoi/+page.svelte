@@ -392,7 +392,12 @@
 			slowest,
 			noFire: (o.fires ?? [])
 				.filter((f) => f.fire === 'εκτός πυρκαγιάς')
-				.reduce((s, f) => s + f.n, 0)
+				.reduce((s, f) => s + f.n, 0),
+			// fires the acts answer but no EFFIS scar dates yet (the layer ends
+			// in 2025): they get no lane, and the frame says so (2026-08-29)
+			unscarred: (o.fires ?? []).filter(
+				(f) => f.fire !== 'εκτός πυρκαγιάς' && !f.burn_date && f.acts?.length
+			)
 		};
 	});
 	// WHO DID THE WORK as geography — fetched post-hydration like the
@@ -1107,7 +1112,9 @@
 		insight={fireFacts
 			? `For the fire-affected areas where a private company has been appointed as a restoration or reforestation sponsor for part or the whole of the area, the median time between the fire itself and the appointment has been ${grInt(fireFacts.median)} days. In ${grInt(fireFacts.within60)} of these ${grInt(fireFacts.n)} areas the appointment came within the first two months after the fire.`
 			: ''}
-		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane."
+		caveat="Burn dates and areas are EFFIS satellite estimates, not official οριοθετήσεις — © European Union, Copernicus Emergency Management Service. {grInt(fireFacts?.noFire ?? 0)} projects answer no fire at all (plane-disease sanitation, salvage logging) and have no lane.{fireFacts?.unscarred.length
+			? ` ${fireFacts.unscarred.map((f) => fireEn(f.fire)).join(', ')}: ${fireFacts.unscarred.length === 1 ? 'a fire' : 'fires'} the acts answer but the EFFIS layer (2008–2025) does not yet hold — ${grInt(fireFacts.unscarred.reduce((s, f) => s + f.n, 0))} project${fireFacts.unscarred.reduce((s, f) => s + f.n, 0) === 1 ? '' : 's'} without a lane until the scar is published.`
+			: ''}"
 		anchor="pulse"
 		methodology="anadohoi"
 	>

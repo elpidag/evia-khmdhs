@@ -62,7 +62,7 @@
   }
  },
  "_rules": "khmdhs/dase_details.py — the PDF's heading, quoted title and work sentence, in that order; registry title and recitals never; scanned or cipher-font PDFs read by eye (source says so)",
- "_curated_at": "2026-08-23",
+ "_curated_at": "2026-08-29",
  "21SYMV009138173": {
   "category": "kafsoxyla",
   "title": "ΣΥΜΦΩΝΗΤΙΚΟ ΔΕΣΜΕΥΣΗΣ ΚΑΥΣΟΞΥΛΩΝ ΓΙΑ ΤΗΝ ΚΑΛΥΨΗ ΑΤΟΜΙΚΩΝ ΑΝΑΓΚΩΝ",
@@ -16683,6 +16683,65 @@
   "source": "pdf:heading",
   "context": null,
   "context_excerpt": null,
+  "review": null
+ },
+ "26SYMV019562273": {
+  "category": "ylotomia",
+  "title": "ΣΥΜΒΑΣΗ Για την ανάθεση της εκτέλεσης των εργασιών «Υλοτομία και απομάκρυνση νεκρών και προσβληθέντων ατόμων ελάτης από φλοιοφάγα έντομα και το μύκητα Armillaria mellea, στην τοπική κοινότητα Κλειστού, στο πλαίσιο του",
+  "source": "pdf:heading",
+  "context": null,
+  "context_excerpt": null,
+  "review": null
+ },
+ "26SYMV019562330": {
+  "category": "ylotomia",
+  "title": "ΣΥΜΒΑΣΗ Για την ανάθεση της εκτέλεσης των εργασιών «Υλοτομία και απομάκρυνση νεκρών και προσβληθέντων ατόμων ελάτης από φλοιοφάγα έντομα και το μύκητα Armillaria mellea, στην τοπική κοινότητα Φουρνάς, στο πλαίσιο του Χ",
+  "source": "pdf:heading",
+  "context": null,
+  "context_excerpt": null,
+  "review": null
+ },
+ "26SYMV019562384": {
+  "category": "ylotomia",
+  "title": "ΣΥΜΒΑΣΗ Για την ανάθεση της εκτέλεσης των εργασιών «Υλοτομία και απομάκρυνση νεκρών και προσβληθέντων ατόμων ελάτης από φλοιοφάγα έντομα και το μύκητα Armillaria mellea, στις τοπικές κοινότητες Βράχας, Δομιανών, Αγίας",
+  "source": "pdf:heading",
+  "context": null,
+  "context_excerpt": null,
+  "review": null
+ },
+ "26SYMV019591086": {
+  "category": "dentra",
+  "title": "Σύμβαση αξίας (2.976,00/ευρώ) με (ΥΠΑ (24%) για υπηρεσίες Υλοτομίας, κοπή δέντρων χόρτων ,θάμνων, βάτων απομάκρυνση παλιών ελαστικών, επίπλων, σαπισμένη ξυλεία κ.λ.π. στο χώρο της Βιομηχανίας του Δασαρχείου Καλαμπάκας της Επιθεώρησης Εφαρμ",
+  "source": "pdf:heading",
+  "context": null,
+  "context_excerpt": null,
+  "review": [
+   "΢-font text layer repaired (Σ/Τ/Υ cycle, lowercase pairs)",
+   "the heading names two works: dentra, ylotomia"
+  ]
+ },
+ "26SYMV019612527": {
+  "category": "ylotomia",
+  "title": "Σύμβαση Για την υλοτομία και απομάκρυνση νεκρών και προσβληθέντων ατόμων ελάτης από φλοιοφάγα έντομα και το μύκητα Armillaria mellea, στην περιοχή ευθύνης Δασαρχείου Καρπενησίου.",
+  "source": "pdf:heading",
+  "context": null,
+  "context_excerpt": null,
+  "review": null
+ },
+ "26SYMV019642791": {
+  "category": "ylotomia",
+  "title": "Σύμβαση Για την υλοτομία και απομάκρυνση νεκρών και προσβληθέντων ατόμων ελάτης από φλοιοφάγα έντομα και το μύκητα Armillaria mellea, στην περιοχή ευθύνης Δασαρχείου Καρπενησίου.",
+  "source": "pdf:heading",
+  "context": null,
+  "context_excerpt": null,
+  "review": null
+ },
+ "26SYMV019686651": {
+  "category": "antidiavrotika",
+  "title": "Σύμβαση Εκτέλεσης του έργου με τίτλο «Αντιδιαβρωτικά έργα αποκατάστασης σε καμένη δασική έκταση συνολικού εμβαδού 60 στρεμμάτων, στην περιοχή της Τοπικής Κοινότητας Αφρατίου, του Δήμου Χαλκιδέων, Περιφερειακής",
+  "source": "pdf:heading",
+  "context": "post_fire",
+  "context_excerpt": "Σύμβαση Εκτέλεσης του έργου με τίτλο «Αντιδιαβρωτικά έργα αποκατάστασης σε καμένη δασική έκταση συνολικού εμβαδού 60 στρεμμάτων, στην περιοχή της Τοπικής Κοινότητας Αφρατίου, του Δήμου Χαλκιδέων, Περιφερειακής Ενότητας Εύβοιας» με Κωδικό ΟΠΣ",
   "review": null
  },
  "_overrides": {

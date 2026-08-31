@@ -197,5 +197,11 @@
   "exclude": true,
   "related_to": "",
   "reason": "Not a ΔΑ.Σ.Ε. contract: the contractor is ΑΦΜ 096000173 «Ένωση Δασικών Αγροτικών Συνεταιρισμών Εύβοιας», a second-tier UNION of forest-agricultural co-operatives — not a δασικός συνεταιρισμός εργασίας of ν.4423/2016, which is what this contractor-led dataset collects (user determination, DATA_DECISIONS 2026-08-18). It was accepted into the curated registry by the 2026-07-26 name review, whose regex saw «ΔΑΣΙΚΩΝ … ΣΥΝΕΤΑΙΡΙΣΜΩΝ». The work confirms it: «ΣΥΜΒΑΣΗ ΔΟΛΩΜΑΤΙΚΟΣ ΨΕΚΑΣΜΟΣ ΕΛΑΙΟΔΕΝΤΡΩΝ Π.Ε.ΕΥΒΟΙΑΣ ΤΜΗΜΑ Γ (ΔΗΜΟΣ ΙΣΤΙΑΙΑΣ – ΑΙΔΗΨΟΥ)», CPV 77100000-1 «Γεωργικές υπηρεσίες». Its two payment orders are excluded with it."
+ },
+ "26SYMV019642791": {
+  "contractors_vat": {
+   "0096135196": "096135196"
+  },
+  "reason": "The registry's re-posting of the Δασαρχείο Καρπενησίου × Δ.Α.Σ.Ε. Αγίου Νικολάου contract (υλοτομία νεκρών ελάτης, €21.772,52 net): the 11.08.2026 record 26SYMV019612527 was CANCELLED BY ΚΗΜΔΗΣ on 18.08.2026 («Ακύρωση λόγω λανθασμένης καταχώρησης — ΠΑΡΑΛΗΨΗ ΑΑΗΤ») and the contract re-signed and re-posted the same day with the ΑΑΗΤ code — so this record is the live one and the registry's own cancellation keeps the money counted once. Its contractor ΑΦΜ field carries a leading zero («0096135196»), which the canonical-ΑΦΜ rule would file under a phantom 009613519; the signed contract states «ΑΦΜ 096135196» and the field is rewritten to it. Freshness check 2026-08-29."
  }
 }

@@ -149,8 +149,8 @@ def test_every_live_dase_contract_has_a_category(dase):
           JOIN contract_categories k ON k.reference_number = c.reference_number
          WHERE {LIVE} GROUP BY k.category""").fetchall())
     # the curated population as loaded on 2026-08-23 (by-eye pass included)
-    assert counts == {"kafsoxyla": 1463, "kalliergitikes": 193, "ylotomia": 139,
-                      "antidiavrotika": 89, "dentra": 49, "katharismoi": 46, "loipa": 10,
+    assert counts == {"kafsoxyla": 1463, "kalliergitikes": 193, "ylotomia": 143,
+                      "antidiavrotika": 90, "dentra": 50, "katharismoi": 46, "loipa": 10,
                       "promitheia": 3, "antipyrikes_zones": 3, "anadasosi": 3}
     labels = {r[0]: r[1] for r in dase.execute("SELECT category, label_en FROM category_labels")}
     assert labels["kafsoxyla"] == "Firewood for local needs"
@@ -162,7 +162,7 @@ def test_fire_context_is_a_separate_attribute(dase):
         SELECT x.context, COUNT(*) FROM contracts c
           JOIN contract_fire_context x ON x.reference_number = c.reference_number
          WHERE {LIVE} GROUP BY x.context""").fetchall())
-    assert ctx == {"post_fire": 92, "prevention": 24}
+    assert ctx == {"post_fire": 93, "prevention": 24}
     # post-fire restoration spans several TYPES of work — the reason it is
     # an attribute and not a category
     kinds = {r[0] for r in dase.execute("""
@@ -176,7 +176,7 @@ def test_deadlines_are_document_stated_only(dase):
         SELECT d.kind, COUNT(*) FROM contracts c
           JOIN contract_durations d ON d.reference_number = c.reference_number
          WHERE {LIVE} GROUP BY d.kind""").fetchall())
-    assert kinds == {"date": 179, "duration": 100, "open_ended": 11}
+    assert kinds == {"date": 179, "duration": 102, "open_ended": 11}
     # a date-kind row always carries its date; a duration always n + unit
     assert dase.execute("SELECT COUNT(*) FROM contract_durations WHERE kind='date' AND deadline_date IS NULL").fetchone()[0] == 0
     assert dase.execute("SELECT COUNT(*) FROM contract_durations WHERE kind='duration' AND (n IS NULL OR unit IS NULL)").fetchone()[0] == 0
