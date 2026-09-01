@@ -11840,3 +11840,237 @@ carried the markers of figures 03 and 04 MID-paragraph — the marker is the
 author's own «the image changes here», so the paragraph now breaks at those
 two points (two newlines; not a word changed). Without the split the figure
 could not follow inside that paragraph.
+
+## 2026-09-02 — Figure 04 of the story: the 75 «112» alerts of August 2021, looping on one national satellite frame (user)
+
+**The request.** The author's `[FIGURE 04: 112 emergency alerts]` marker sits on
+the chronology paragraph «The 2021 fire season was the first one during which
+112 emergency alerts were used…». The user built this map once before, in the
+sibling repository `evia-wildfire-timeline` (`/alerts`: Astro + React +
+MapLibre GL over Esri World Imagery / OpenStreetMap raster tiles, a d3
+scrubber, a bottom-left detail card, +/− zoom buttons), and asked for it here
+with the site's own tools and looks: satellite only, no basemap toggle, no zoom
+panel, no bottom-left panel, a loop, the village told to leave BLACK and the
+village it was sent to WHITE, and the original's problems fixed. Decisions
+taken with the user on 2026-09-01/02: the base «the same as the original», the
+burnt area as a flat fill in the site's fire colour (the alternative — the
+post-fire ground revealed through the pre-fire image inside each day's burnt
+polygon — was offered and declined), **all 75 alerts nationwide** (the 14 of
+the North Evia fire and the 16 tagged Evia were offered), and Figure 04 as the
+place after the story's phase-3 commit of the same day.
+
+**What «112» is.** The emergency number, not a count: the source holds 75
+alerts for 1–23 August 2021 across Greece — Attica 33 (north 22, west 8, south
+3), Evia 16, Ilia 9, Rhodes 4, Fokida 4, Messinia 3, Arcadia 2, Corinthia 1,
+Grevena 1, two the source filed as «other» (one is the Messinia fire, one a
+nationwide warning); 62 evacuation orders, 7 shelter-in-place, 5 fire-danger,
+1 general. The original's default view showed 49 (Evia + Attica).
+
+**The data and its copies.** Raw inputs, never written by code:
+`data/raw/112/alerts_112_aug_2021_all.json` (the 75 @112Greece tweets as
+harvested), `data/raw/112/alerts-112.generated.json` and
+`alerts-112-gazetteer.json` (the sibling implementation's parsed rows and its
+213-entry gazetteer — the bootstrap's proposal), and
+`data/raw/burned_area/VNP64A1.A2021213.h19v05.002.2023198172838.hdf` (the
+burn-date grid). The curated source of truth the site reads is
+**`atlas/src/lib/data/alerts_112_2021.json`**: one row per tweet — `tweetId`,
+`timestamp` (+03:00, the offset the service posted in), `type`, `region`,
+**`orders[]`** (one per instruction sentence, each `from[]` and `to[]` of places
+`{tag, nameEn, lat, lon, source, note?}`), the tweet `text` verbatim, `url`,
+and `title` (an English gloss) on the rows that name no place. Rules: a
+two-sentence message («…evacuate to Pyrgos. If you are in Kavkonia or
+Chelidoni evacuate to Lala») is two orders, never the cartesian product the
+original drew (24 arrows from one Arcadia message); a place that cannot be
+placed keeps `lat/lon: null` and `source: "unplaced"` — never invented — and
+the card still names it; a destination the message gives in prose (Limni's
+harbour and the ferry, the Athens–Lamia national road, the Sekoula bridge) is
+a `to` entry with `source: "prose"`; every hand verdict carries `source:
+"hand"` and a `note` with its evidence.
+
+**The source's errors, and how they were found.** `scripts/bootstrap_alerts_112.py`
+`--init` writes the file once; `--audit` prints the review sheet and now
+includes a **point-in-unit test**: every placed village is ray-cast over the
+site's own Π.Ε. layer and must lie in a regional unit of its fire region.
+That test, not the eye, found the source's geocoding: 19 places outside their
+region (an Ilia «Vilia», «Kryoneri», «Milies», «Mouria», «Aspra Spitia» that
+were Attica's, Evia's or Athens' namesakes; a Grevena «Itea» that was
+Fokida's; a Corinthia-placed Messinia fire), 34 more with two- or
+three-decimal coordinates typed in by hand in the original (the Heraia
+villages of Arcadia 20 km east of Heraia), six routes of 186–196 km, three
+places sharing one coordinate under different names (Agia Skepi, Vrysaki,
+Lofos Kouremenou; Aidipsos and Loutra Aidipsou), the «προς» split that filed
+Drosopigi — a village told to leave — as a destination, five evacuations whose
+prose destination was dropped, and two region tags used as places (#Ρόδου on
+Psinthos, #Ερυθραίας on the Mortero junction). A first re-geocoding through
+Nominatim with a region qualifier answered 39 of 193 places and proposed a
+shop for Mantoudi; it was set aside. The verdicts came from **OpenStreetMap
+place nodes queried by exact Greek name through Overpass inside the region's
+units**, each recorded in the place's `note` with the OSM node id, and by
+reading each flagged tweet (`--overpass` caches every named place node of a
+region in one query; `--match` prints, for each doubted place, the nodes whose
+folded name matches one of the hand-written NAME_FORMS — the hashtags inflect,
+«#Πύργο», «#Κρυονερίου» — exact first, then loose).
+
+**Curation results.** 249 places over 77 orders: **187 keep the source's
+coordinates** (they lie in their region's unit and were not typed in),
+**41 were re-placed by hand on OSM place nodes** (Pyrgos, Lala, Kryoneri,
+Milies, Platanos, Koskinas, Mageiras, Xirokampos, Ambarion, Louvro, Lasdikas,
+Panopoulos, Sekoulas, Aspra Spitia, Pefkes, Kamena and Linaria of Ilia; Itea
+of Grevena and its Kentro, dropped by the source; Kokkinovrachos; Theologos;
+Loutra Aidipsou; Solomos; Elia and Agios Spyridon of Dorida; Karnasio,
+Desyllas, Zevgolatio, Monastiraki, Agioi Theodoroi and Agrilovouno of
+Messinia; Aetorrachi, Agios Ioannis of Heraia and Loutra Iraias of Arcadia;
+the island centres for the two Rhodes and the Crete warnings), **16 are
+honestly unplaced** (Vilia, Tsapareika, Mouria, Diliza and Kapellitsa of
+Ilia; the Agios Georgios of Koroni; Lekouna and Vlychada; Melidoni and the
+Heraia Palaiochori; Agia Skepi, Vrysaki and Lofos Kouremenou of Dionysos;
+Mortero — each note says what was looked for and what the source had), and
+**5 are prose destinations** (Diavolitsi, placed; the Athens–Lamia national
+road twice, national road 111 and the harbour of Limni, roads and a
+waterfront, not points). Two region qualifiers («#Ρόδου» on Psinthos and on
+Maritsa–Kalythies, «#Ερυθραίας» on the Mortero junction), a street
+(«Οδό #Ανοίξεως» of Kryoneri), a route («μέσω Λεωφόρου #Κύμης») and a
+duplicated hashtag pair («#ΙαματικέςΠηγές, #Λουτρά» = Loutra Iraias) were
+folded away, with the reasons on the alert; the «other» alert of 4 August is
+the Messinia fire (its way out, Diavolitsi, is a village of Messinia). The
+longest stated route is now Tropaia→Tripoli, 49 km, which the message says;
+the audit reports 0 flags and `test_alerts_112.py` pins the state. The
+loop's clock was retuned once more on the real data: 1.8 s per day, 68.3 s.
+
+**The satellite base.** At its zoom the original showed Esri's undated ~15 m
+Landsat mosaic (TerraColor NextGen by Earthstar Geographics — the tiles over
+North Evia were fetched and are green, pre-fire; Esri's 2025 post-fire aerial
+appears only past level 12) under a licence that allows no baking. The open
+like-for-like is **EOxCloudless, the Sentinel-2 cloudless mosaic of 2020** by
+EOX IT Services GmbH — 2020 rather than 2021 so the ground is pre-fire by
+construction — under **CC BY-NC-SA 4.0** (academic and non-commercial use
+permitted; a commercial deployment would need EOX's commercial licence or a
+swap to NASA Blue Marble / an own Sentinel-2 composite, both examined). It is
+fetched ONCE at build time by `scripts/build_alerts_base.py` — a single WMS
+GetMap in EPSG:3857 for the frame's exact corners at 1620 × 1620 (the server
+answers JPEG whatever format is asked; our AVIF at quality 65 is 268 KB) —
+and committed as `atlas/static/geo/alerts_base.avif`; nothing is fetched at
+runtime. Required attribution, printed under the caption: «EOxCloudless
+https://cloudless.eox.at by EOX IT Services GmbH (Contains modified Copernicus
+Sentinel data 2020)». **Palette:** the imagery is the user's explicit
+exception to the site's no-brown rule; everything of our own on it is black,
+white, grey and the fire colour. Dated Sentinel-2 scenes were also examined
+(3 Aug 2021 09:29 UTC, the morning of ignition, and 16 Aug 2021, the first
+clear pass after containment, both cloud-free on the four North Evia tiles
+via the public AWS bucket) — the right pair for a North Evia figure, not for
+a national one.
+
+**The frame.** ONE fixed national window, `ALERTS_BOX = [[19.5, 34.7],
+[28.6, 41.8]]` — Corfu to Rhodes, Crete to Thrace. A flying camera was
+rejected on the data: 45 of 74 consecutive alerts change region. The box is
+1013 × 1008 km in Mercator, so `fitExtent` on the square leaves a 0.5 %
+letterbox; the contract is therefore the **inverted corners of the fitted
+square** (`nw ≈ [19.5, 41.817]`, `se ≈ [28.6, 34.681]`, the same at any size),
+written by `atlas/scripts/build-alerts-frame.mjs` to
+`atlas/static/geo/alerts_frame.json` FROM the module the client projects with
+(`lib/transforms/alertsFrame.ts`, imported by node directly) and pinned by
+`alertsFrame.test.ts` the way `frame.test.ts` pins the relief. 625 m/px on the
+plate; the 540 px figure square is 1.87 km/px, which is why the Attica cluster
+(22 alerts in 57 × 37 km) reads as a cluster and the card carries the names.
+
+**The burnt ground.** The original drew a real product and it is kept: NASA
+VIIRS/NPP VNP64A1 v002 burned area (500 m, tile h19v05, the August 2021
+product), read from the raw HDF4 tile by `scripts/build_alerts_burn.py` into
+`alerts_burn_2021.geojson` (`data/processed/` + the byte-identical
+`atlas/static/geo/` copy, 92 KB): per day 1–23 August the pixels whose burn
+date is that day, dissolved, simplified 150 m, reprojected from the sinusoidal
+grid, clipped to the frame and to Greek land (the tile spills into Albania),
+rings clockwise for d3-geo — **increments, not cumulatives**, so the client
+draws days 1..k and no geometry repeats. Pixels are 463.31 m (0.2147 km², the
+original's `× 0.25` over-reported by 16 %). Coverage caveat on the credit
+line: the tile ends at 40.0 °N / ~25.6 °E — every mainland fire region of the
+alerts is inside, **Rhodes and Grevena are not** (tile h20v05 would add
+Rhodes). Drawn as a flat fill in `--c-fire` composited at 55 % from an
+offscreen buffer so touching days show no seams. The month, as the product
+saw it (mainland, inside the frame):
+
+| day | px | km² | cum km² |
+|---|---|---|---|
+| 01–03 Aug | 17 | 3.6 | 3.6 |
+| 04 Aug | 562 | 120.6 | 124.3 |
+| 05 Aug | 393 | 84.4 | 208.6 |
+| 06 Aug | 1,818 | 390.2 | 598.9 |
+| 07 Aug | 501 | 107.5 | 706.4 |
+| 08 Aug | 811 | 174.1 | 880.5 |
+| 09 Aug | 307 | 65.9 | 946.4 |
+| 10 Aug | 143 | 30.7 | 977.1 |
+| 11 Aug | 154 | 33.1 | 1,010.2 |
+| 12–15 Aug | 22 | 4.6 | 1,014.9 |
+| 16 Aug | 104 | 22.3 | 1,037.2 |
+| 17 Aug | 67 | 14.4 | 1,051.6 |
+| 18 Aug | 131 | 28.1 | 1,079.7 |
+| 19 Aug | 167 | 35.8 | 1,115.6 |
+| 20–23 Aug | 76 | 16.3 | 1,131.9 |
+
+**The clock** (`lib/transforms/alertsClock.ts`, pinned on the real alerts).
+Simulated time runs at 1.8 s per day; through an idle stretch (no alert within
+the next 3 simulated hours and the last dwell over) at 1 s per day; a firing
+never comes sooner than 0.5 s after the previous one — the clock HOLDS on that
+minute, so the peak days (16 alerts on 5 Aug, 14 on 6 Aug, 38 consecutive
+pairs under an hour apart) are alert-paced and each alert can be read; every
+alert is active 3 s, fades 1 s, then stays as a small past dot; the window
+ends only once the last alert has dwelt and faded, holds 3 s, fades 0.6 s and
+restarts. Loop **68.3 s** (the constants first proposed — 5 s per day — were
+simulated on the 75 timestamps and gave 78–105 s with 47 firings under 0.5 s
+apart; the retune is data-forced). Reduced motion = the final state drawn
+once. The loop runs only while the figure is mounted (StoryFigure mounts a
+live figure while its number is in force), the square is on screen and the
+tab visible.
+
+**The drawing.** Base plate · burnt ground · the past origins as small dots ·
+the fading alerts · the active alerts last: a thin white hairline from each
+origin to each destination its order names (what the message says, not a
+route), white destination dots, black origin dots (grey for a shelter-in-place
+or warning), village names in white beside the active dots (greedy
+de-collision, dropped where nothing fits — the card carries them) · a day
+strip along the bottom in a 35 % wash (23 day ticks, the 75 alert ticks, a
+playhead) · the site's black card top-left with the clock («5 Aug 2021 ·
+16:48») and the order («Agia Anna, Palaiovrysi, Kerameia, Agali → Mantoudi»;
+«Istiaia, Aidipsos, Loutra Aidipsou · stay indoors»; before the first alert
+the computed «75 alerts · 1–23 August 2021») · a key bottom-right. No
+outlines on any dot.
+
+**The figure slot.** `lib/story/figures.ts` is the registry of LIVE figures —
+the pattern for the other twelve — keyed by the author's own figure number,
+each declaring its component and its credit line; `StoryFigure.svelte` mounts
+the registered component inside the existing `{#key figure.n}` and prints the
+credit under the author's caption. `figures.test.ts` pins every key to an
+existing marker and marker 4's name («112 emergency alerts»), so a renumbering
+by the author fails loudly. The author's `.md` files, `content.ts`,
+`bindings.ts` and the story page are untouched.
+
+**Pins.** vitest: `alertsFrame`, `alertsClock`, `alertsText`, `alertsLayout`,
+`figures`; pytest: `test_alerts_112.py` (row count = raw tweets, verbatim
+text, vocabularies, every placed village in its region's unit, no two places
+of an alert on one point, no stated route over 60 km, the named corrections),
+`test_alerts_burn_layer.py`, `test_alerts_assets.py`.
+
+**A bug of the story page found on the way, and fixed.** mdsvex emits a
+paragraph that BEGINS with an inline tag — the author's `<span
+class="figmark">[FIGURE xx: …]</span> The 2021 fire season…` (nine of the
+chronology's paragraphs) — as a raw HTML block with no `<p>` around it. The
+page pairs its rendered `p`/`h3` elements with the parsed blocks in order, so
+those nine were missing from the pairing (the console warned «71 rendered
+blocks vs 80 parsed»), every block id after each of them was shifted, and the
+reading line could never reach the Figure 04 paragraph — the figure in force
+went from 01 straight past 04. `atlas/scripts/remark-tag-paragraphs.ts`, a
+remark plugin wired into mdsvex in `vite.config.ts`, restores what markdown
+proper does: a root-level raw-HTML node that is neither a lone tag nor real
+block-level HTML becomes a paragraph holding that HTML —
+`<p><span …>…</span> The 2021 …</p>`. `mdsvexParagraphs.test.ts` compiles the
+author's files and pins one `<p>`/`<h3>` per parsed block (80 = 80), and
+guards that no tag-led paragraph carries markdown that raw HTML would drop.
+Nothing in the author's files changed. Verified in the browser: 80 rendered
+blocks, no warning, Figure 04 mounting on its paragraph with the 112 event lit
+on the timeline. A second one, seen only once a real figure filled the square: the sticky
+title band (`.heads`, paper, z-index 4) spans all five grid columns while
+the figure rectangle's top aligns with the titles' top, so the band painted
+over the rectangle's first 37 px and the clock card lost its first line;
+the band's paper is now a `::after` covering the four tracks the text
+scrolls under (`inset: 0 calc(100% * 594 / 1784) 0 -20px`), the column's
+own share of the artboard.

@@ -1,0 +1,3049 @@
+{
+ "_meta": {
+  "source": "@112Greece (Γενική Γραμματεία Πολιτικής Προστασίας) tweets, 1–23 August 2021; raw copy data/raw/112/alerts_112_aug_2021_all.json",
+  "bootstrap": "scripts/bootstrap_alerts_112.py --init from the evia-wildfire-timeline implementation's parsed file (data/raw/112/alerts-112.generated.json), re-geocoded with --regeocode/--apply, then reviewed by hand — DATA_DECISIONS 2026-09-02",
+  "timezone": "+03:00 (EEST) throughout the window",
+  "types": [
+   "evacuation",
+   "shelter_in_place",
+   "fire_danger",
+   "general"
+  ],
+  "place_sources": [
+   "gazetteer:evia-wildfire-timeline",
+   "hand",
+   "prose",
+   "unplaced"
+  ],
+  "rules": [
+   "an alert holds one ORDER per instruction sentence: the places told to leave (from) and the places they were sent to (to); a two-sentence message has two orders, never a cartesian product",
+   "a place that cannot be placed keeps lat/lon null and source 'unplaced' — never invented; the card still names it",
+   "a destination the message gives in prose (no hashtag) is a 'to' entry with source 'prose'",
+   "every hand correction carries source 'hand' and a note quoting the evidence",
+   "the tweet text is verbatim and byte-equal to the raw record"
+  ],
+  "review": "2026-09-02: every place re-read against OSM place nodes inside its region's units (the audit's point-in-unit test); verdicts by hand, evidence in each note — DATA_DECISIONS 2026-09-02"
+ },
+ "alerts": [
+  {
+   "tweetId": "1421875081790230537",
+   "timestamp": "2021-08-01T19:46:51+03:00",
+   "type": "evacuation",
+   "region": "rhodes",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ψίνθο",
+       "nameEn": "Psinthos",
+       "lat": 36.314566,
+       "lon": 28.095778,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αφάντου",
+       "nameEn": "Afandou",
+       "lat": 36.293875,
+       "lon": 28.162187,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Aν βρίσκεστε στην #Ψίνθο #Ρόδου εκκενώστε άμεσα προς #Αφάντου από Επαρχιακή Οδό Αφάντου-Ψίνθου ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1421875081790230537",
+   "note": "«#Ρόδου» qualifies Psinthos (the island), it is not a place to leave"
+  },
+  {
+   "tweetId": "1421931123827949569",
+   "timestamp": "2021-08-01T23:29:32+03:00",
+   "type": "shelter_in_place",
+   "region": "rhodes",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μαριτσά",
+       "nameEn": "Maritsa",
+       "lat": 36.360775,
+       "lon": 28.117281,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καλυθιές",
+       "nameEn": "Kalythies",
+       "lat": 36.335893,
+       "lon": 28.174439,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Aν βρίσκεστε στη #Μαριτσά ή στις #Καλυθιές #Ρόδου παραμείνετε σε ετοιμότητα και ακολουθείτε τις οδηγίες των Αρχών ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1421931123827949569",
+   "note": "«#Ρόδου» qualifies the two villages (the island), it is not a place to shelter"
+  },
+  {
+   "tweetId": "1422522441964920857",
+   "timestamp": "2021-08-03T14:39:14+03:00",
+   "type": "shelter_in_place",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βαρυμπόμπης",
+       "nameEn": "Varympompi",
+       "lat": 38.129999,
+       "lon": 23.789367,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κρυονερίου",
+       "nameEn": "Kryoneri",
+       "lat": 38.140447,
+       "lon": 23.832835,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘Aν βρίσκεστε στην ευρύτερη περιοχή #Βαρυμπόμπης ή #Κρυονερίου #Αττικής, κλείστε καμινάδες, παράθυρα, πόρτες, για να μην διεισδύσουν οι καύτρες στο εσωτερικό σπιτιού-Παραμείνετε σε ετοιμότητα, ακολουθείτε οδηγίες αρχών ‼️Δασική πυρκαγιά στην περιοχή σας https://t.co/jIOzQj846O",
+   "url": "https://x.com/112Greece/status/1422522441964920857"
+  },
+  {
+   "tweetId": "1422549952136458249",
+   "timestamp": "2021-08-03T16:28:32+03:00",
+   "type": "shelter_in_place",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μορτερού",
+       "nameEn": "Morterou",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "the locality north of the Erythres junction has no OSM place node; the source's point lay in Boeotia"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε σε περιοχή #Μορτερού βόρεια κόμβου #Ερυθραίας #Αττικής, κλείστε καμινάδες, παράθυρα, πόρτες για να μην διεισδύσουν οι καύτρες στο εσωτερικό σπιτιού Παραμείνετε σε ετοιμότητα, ακολουθείτε οδηγίες αρχών ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/OI2H7c6sAJ",
+   "url": "https://x.com/112Greece/status/1422549952136458249",
+   "note": "«#Ερυθραίας» names the junction north of which the Mortero area lies, not a place to shelter",
+   "title": "Mortero area, north of the Erythres junction · stay indoors"
+  },
+  {
+   "tweetId": "1422554511235862539",
+   "timestamp": "2021-08-03T16:46:39+03:00",
+   "type": "evacuation",
+   "region": "messinia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βασιλίτσι",
+       "nameEn": "Vasilitsi",
+       "lat": 36.764522,
+       "lon": 21.90883,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Λειβαδάκια",
+       "nameEn": "Leivadakia",
+       "lat": 36.779608,
+       "lon": 21.925823,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "ΆγιοςΓεώργιος",
+       "nameEn": "Agios Georgios",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "the Agios Georgios beside Vasilitsi and Koroni is a church locality with no settlement node in OSM; the source's point was a namesake hamlet 58 km north"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Κορώνη",
+       "nameEn": "Koroni",
+       "lat": 36.795,
+       "lon": 21.958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην περιοχή #Βασιλίτσι, #Λειβαδάκια, #ΆγιοςΓεώργιος #Μεσσηνίας εκκενώστε τώρα προς #Κορώνη ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice @GSCP_GR",
+   "url": "https://x.com/112Greece/status/1422554511235862539"
+  },
+  {
+   "tweetId": "1422561070988812291",
+   "timestamp": "2021-08-03T17:12:43+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βαρυμπόμπη",
+       "nameEn": "Varympompi",
+       "lat": 38.129999,
+       "lon": 23.789367,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αδάμες",
+       "nameEn": "Adames",
+       "lat": 38.099087,
+       "lon": 23.790995,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Θρακομακεδόνες",
+       "nameEn": "Thrakomakedones",
+       "lat": 38.129447,
+       "lon": 23.757369,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Νέα ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Βαρυμπόμπη ή #Αδάμες #Αττικής εκκενώστε τώρα προς #Θρακομακεδόνες για λόγους ασφαλείας ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/iFdDz4zSQb",
+   "url": "https://x.com/112Greece/status/1422561070988812291"
+  },
+  {
+   "tweetId": "1422576912606629902",
+   "timestamp": "2021-08-03T18:15:40+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Θρακομακεδόνες",
+       "nameEn": "Thrakomakedones",
+       "lat": 38.129447,
+       "lon": 23.757369,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Βαρυμπόμπη",
+       "nameEn": "Varympompi",
+       "lat": 38.129999,
+       "lon": 23.789367,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αχαρνές",
+       "nameEn": "Acharnes",
+       "lat": 38.080218,
+       "lon": 23.743629,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Νέα ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους #Θρακομακεδόνες ή #Βαρυμπόμπη #Αττικής, εκκενώστε τώρα προς #Αχαρνές ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/IqbGWFNtlO",
+   "url": "https://x.com/112Greece/status/1422576912606629902"
+  },
+  {
+   "tweetId": "1422614015105290248",
+   "timestamp": "2021-08-03T20:43:06+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Θρακομακεδόνες",
+       "nameEn": "Thrakomakedones",
+       "lat": 38.129447,
+       "lon": 23.757369,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Ολυμπιακό_Χωριό",
+       "nameEn": "Olympic Village",
+       "lat": 38.109386,
+       "lon": 23.768163,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Βαρυμπόμπη",
+       "nameEn": "Varympompi",
+       "lat": 38.129999,
+       "lon": 23.789367,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αχαρνές",
+       "nameEn": "Acharnes",
+       "lat": 38.080218,
+       "lon": 23.743629,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους #Θρακομακεδόνες, #Ολυμπιακό_Χωριό ή #Βαρυμπόμπη εκκενώστε τώρα προς #Αχαρνές ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/CXXzZOSKz4",
+   "url": "https://x.com/112Greece/status/1422614015105290248"
+  },
+  {
+   "tweetId": "1422710292174286851",
+   "timestamp": "2021-08-04T03:05:40+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κουρκουλοί",
+       "nameEn": "Kourkouloi",
+       "lat": 38.832993,
+       "lon": 23.340848,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Σκεπαστή",
+       "nameEn": "Skepasti",
+       "lat": 38.83406,
+       "lon": 23.364559,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Κεχριές",
+       "nameEn": "Kechries",
+       "lat": 38.81228,
+       "lon": 23.368835,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Κουρκουλοί ή #Σκεπαστή #Εύβοιας εκκενώστε τώρα προς #Κεχριές μέσω Σκεπαστής ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1422710292174286851"
+  },
+  {
+   "tweetId": "1422717061302824963",
+   "timestamp": "2021-08-04T03:32:34+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κρυονερίου",
+       "nameEn": "Kryoneri",
+       "lat": 38.140447,
+       "lon": 23.832835,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αθηνών_Λαμίας",
+       "nameEn": "the Athens–Lamia national road",
+       "lat": null,
+       "lon": null,
+       "source": "prose",
+       "note": "a road, given as the way out; not a point"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην Οδό #Ανοίξεως πλησίον της δασικής έκτασης #Κρυονερίου εκκενώστε τώρα προς την Ε.Ο. #Αθηνών_Λαμίας μέσω Λεωφόρου Κρυονερίου ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1422717061302824963",
+   "note": "«Οδό #Ανοίξεως» is a street of Kryoneri beside the forest, not the town of Anoixi; folded into Kryoneri"
+  },
+  {
+   "tweetId": "1422816888736960518",
+   "timestamp": "2021-08-04T10:09:15+03:00",
+   "type": "fire_danger",
+   "region": "other",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κρήτη",
+       "nameEn": "Crete",
+       "lat": 35.24,
+       "lon": 24.9,
+       "source": "hand",
+       "note": "a region-wide warning: the dot marks the island's centre"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αποφύγετε ενέργειες που ενδέχεται να προκαλέσουν #πυρκαγιά στην ύπαιθρο - Πολύ υψηλός κίνδυνος πυρκαγιάς στην #Κρήτη σήμερα ‼️ Εξαιρετικά δύσκολες συνθήκες https://t.co/V31VWkIjfW",
+   "url": "https://x.com/112Greece/status/1422816888736960518",
+   "title": "Very high fire danger in Crete today"
+  },
+  {
+   "tweetId": "1422819203699159041",
+   "timestamp": "2021-08-04T10:18:27+03:00",
+   "type": "fire_danger",
+   "region": "rhodes",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ρόδου",
+       "nameEn": "Rhodes",
+       "lat": 36.17253,
+       "lon": 27.919402,
+       "source": "hand",
+       "note": "a warning for the whole regional unit: the source's point is the island's centre, kept as such"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αποφύγετε ενέργειες που ενδέχεται να προκαλέσουν #πυρκαγιά στην ύπαιθρο - Ακραίος κίνδυνος πυρκαγιάς σήμερα στην Περιφερειακή Ενότητα #Ρόδου ‼️ https://t.co/4shbOsAdXn",
+   "url": "https://x.com/112Greece/status/1422819203699159041",
+   "title": "Extreme fire danger in Rhodes today"
+  },
+  {
+   "tweetId": "1422859590576783361",
+   "timestamp": "2021-08-04T12:58:56+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κούλουρος",
+       "nameEn": "Koulouros",
+       "lat": 38.85899,
+       "lon": 23.254513,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Μαρούλι",
+       "nameEn": "Marouli",
+       "lat": 38.869432,
+       "lon": 23.242145,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιστιαία",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Κούλουρος ή #Μαρούλι #Ευβοίας, εκκενώστε τώρα προς #Ιστιαία ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/msg04ox51I",
+   "url": "https://x.com/112Greece/status/1422859590576783361"
+  },
+  {
+   "tweetId": "1422883625297657858",
+   "timestamp": "2021-08-04T14:34:26+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ροβιές",
+       "nameEn": "Rovies",
+       "lat": 38.811883,
+       "lon": 23.227968,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Παλαιοχώρι",
+       "nameEn": "Palaiochori",
+       "lat": 38.821242,
+       "lon": 23.251886,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αιδηψό",
+       "nameEn": "Aidipsos",
+       "lat": 38.879697,
+       "lon": 23.047145,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Ροβιές ή #Παλαιοχώρι #Ευβοίας, εκκενώστε τώρα προς #Αιδηψό ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/1RxMzdNFlu",
+   "url": "https://x.com/112Greece/status/1422883625297657858"
+  },
+  {
+   "tweetId": "1422933448453406720",
+   "timestamp": "2021-08-04T17:52:25+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πελόπιο",
+       "nameEn": "Pelopio",
+       "lat": 37.676605,
+       "lon": 21.592175,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Πλάτανο",
+       "nameEn": "Platano",
+       "lat": 37.66754,
+       "lon": 21.61131,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746947333 «Πλάτανος» (Π.Ε. Ηλείας); the source had 37.6300,21.6950 in Π.Ε. Ηλείας, 8 km away"
+      },
+      {
+       "tag": "Κοσκινά",
+       "nameEn": "Koskina",
+       "lat": 37.65678,
+       "lon": 21.63102,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746947301 «Κοσκινάς» (Π.Ε. Ηλείας); the source had 37.6060,21.6360 in Π.Ε. Ηλείας, 6 km away"
+      },
+      {
+       "tag": "Μάγειρα",
+       "nameEn": "Mageira",
+       "lat": 37.66952,
+       "lon": 21.63953,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746947310 «Μάγειρας» (Π.Ε. Ηλείας); the source had 37.6550,21.7200 in Π.Ε. Ηλείας, 7 km away"
+      },
+      {
+       "tag": "Κλαδέο",
+       "nameEn": "Kladeos",
+       "lat": 37.666486,
+       "lon": 21.634863,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Πύργο",
+       "nameEn": "Pyrgos",
+       "lat": 37.67221,
+       "lon": 21.43921,
+       "source": "hand",
+       "note": "re-placed on OSM node 193702230 «Πύργος» (Π.Ε. Ηλείας); the source had 38.0323,21.3641 in Π.Ε. Ηλείας, 41 km away; the city of Ilia"
+      }
+     ]
+    },
+    {
+     "from": [
+      {
+       "tag": "Καυκωνιά",
+       "nameEn": "Kavkonia",
+       "lat": 37.687501,
+       "lon": 21.615827,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Χελιδόνι",
+       "nameEn": "Chelidoni",
+       "lat": 37.713713,
+       "lon": 21.623382,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Λάλα",
+       "nameEn": "Lala",
+       "lat": 37.71088,
+       "lon": 21.72014,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973197 «Λάλας» (Π.Ε. Ηλείας); the source had 37.7993,21.3524 in Π.Ε. Ηλείας, 34 km away; the village at the centre of the Olympia fire's evacuations"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Πελόπιο, #Πλάτανο, #Κοσκινά, #Μάγειρα, #Κλαδέο εκκενώστε τώρα προς #Πύργο από Ε.Ο. #Τρίπολης_Ολυμπίας 🆘 Αν βρίσκεστε στην #Καυκωνιά ή #Χελιδόνι εκκενώστε τώρα προς #Λάλα ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/6IjWTvZauM",
+   "url": "https://x.com/112Greece/status/1422933448453406720",
+   "note": "two sentences, two orders: the five villages to Pyrgos; Kavkonia and Chelidoni to Lala (the source filed Kavkonia and Chelidoni as destinations)"
+  },
+  {
+   "tweetId": "1422936163648778241",
+   "timestamp": "2021-08-04T18:03:12+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Αρχαία_Ολυμπία",
+       "nameEn": "Ancient Olympia",
+       "lat": 37.644143,
+       "lon": 21.625277,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Μουριά",
+       "nameEn": "Mouria",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Ilia; the source's point lay in central Athens"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Αρχαία_Ολυμπία εκκενώστε τώρα προς #Μουριά από Αρχαία Πίσα και Ε.Ο. Τρίπολης Ολυμπίας ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1422936163648778241"
+  },
+  {
+   "tweetId": "1422956844889382915",
+   "timestamp": "2021-08-04T19:25:23+03:00",
+   "type": "evacuation",
+   "region": "messinia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μοναστηράκι",
+       "nameEn": "Monastiraki",
+       "lat": 37.32834,
+       "lon": 21.95771,
+       "source": "hand",
+       "note": "re-placed on OSM node 1733277118 «Μοναστηράκι» (Π.Ε. Μεσσηνίας); the source had 37.9340,23.1150 in Π.Ε. Κορινθίας, 122 km away"
+      },
+      {
+       "tag": "Αγίους_Θεοδώρους",
+       "nameEn": "Agioi Theodoroi",
+       "lat": 37.3147,
+       "lon": 21.96043,
+       "source": "hand",
+       "note": "re-placed on OSM node 1733277098 «Άγιοι Θεόδωροι» (Π.Ε. Μεσσηνίας); the source had 37.9330,23.1120 in Π.Ε. Κορινθίας, 123 km away"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αγριλόβουνο",
+       "nameEn": "Agrilovouno",
+       "lat": 37.29832,
+       "lon": 21.9426,
+       "source": "hand",
+       "note": "re-placed on OSM node 1733299131 «Αγριλόβουνο» (Π.Ε. Μεσσηνίας); the source had 37.9360,23.1200 in Π.Ε. Κορινθίας, 126 km away"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Μοναστηράκι ή στους #Αγίους_Θεοδώρους εκκενώστε τώρα προς #Αγριλόβουνο από Διαβολίτσι ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1422956844889382915",
+   "note": "the Messinia fire: Diavolitsi, which the message names as the way, is a village of Messinia; the source filed the alert as «other» and typed its villages into Corinthia"
+  },
+  {
+   "tweetId": "1422971539637559297",
+   "timestamp": "2021-08-04T20:23:47+03:00",
+   "type": "evacuation",
+   "region": "messinia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Παραπούγκι",
+       "nameEn": "Parapoungki",
+       "lat": 37.305443,
+       "lon": 21.98712,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καρνάσι",
+       "nameEn": "Karnasi",
+       "lat": 37.31812,
+       "lon": 21.99026,
+       "source": "hand",
+       "note": "re-placed on OSM node 1716578225 «Καρνάσιο» (Π.Ε. Μεσσηνίας); the source had 37.1470,21.9520 in Π.Ε. Μεσσηνίας, 19 km away"
+      },
+      {
+       "tag": "Δεσύλλα",
+       "nameEn": "Desylla",
+       "lat": 37.30013,
+       "lon": 21.9998,
+       "source": "hand",
+       "note": "re-placed on OSM node 1733342485 «Δεσύλλας» (Π.Ε. Μεσσηνίας); the source had 37.1670,21.9580 in Π.Ε. Μεσσηνίας, 15 km away"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Διαβολίτσι",
+       "nameEn": "Diavolitsi",
+       "lat": 37.29983,
+       "lon": 21.96897,
+       "source": "prose",
+       "note": "given in prose, no hashtag; OSM node 1733342490 «Διαβολίτσι» (Π.Ε. Μεσσηνίας)"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Παραπούγκι, #Καρνάσι ή #Δεσύλλα #Μεσσηνίας, εκκενώστε τώρα προς Διαβολίτσι ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1422971539637559297"
+  },
+  {
+   "tweetId": "1423172020003610626",
+   "timestamp": "2021-08-05T09:40:25+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κεχριές",
+       "nameEn": "Kechries",
+       "lat": 38.81228,
+       "lon": 23.368835,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Μαντούδι",
+       "nameEn": "Mantoudi",
+       "lat": 38.79866,
+       "lon": 23.478772,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στις #Κεχριές Ευβοίας εκκενώστε τώρα προς #Μαντούδι ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423172020003610626"
+  },
+  {
+   "tweetId": "1423197583317610499",
+   "timestamp": "2021-08-05T11:22:00+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Χελιδονίου",
+       "nameEn": "Chelidoniou",
+       "lat": 37.713713,
+       "lon": 21.623382,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Λατζόι",
+       "nameEn": "Latzoi",
+       "lat": 37.708508,
+       "lon": 21.560156,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην ευρύτερη περιοχή #Χελιδονίου Ηλείας εκκενώστε τώρα προς #Λατζόι ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423197583317610499"
+  },
+  {
+   "tweetId": "1423245540641411079",
+   "timestamp": "2021-08-05T14:32:34+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ιπποκράτειο_Πολιτεία",
+       "nameEn": "Ippokrateio Politeia",
+       "lat": 38.202969,
+       "lon": 23.803842,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Άθήνα",
+       "nameEn": "Athens",
+       "lat": 37.975,
+       "lon": 23.735,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    },
+    {
+     "from": [
+      {
+       "tag": "Δροσοπηγή",
+       "nameEn": "Drosopigi",
+       "lat": 38.168321,
+       "lon": 23.829347,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αφίδνες",
+       "nameEn": "Afidnes",
+       "lat": 38.203,
+       "lon": 23.838,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Ωρωπό",
+       "nameEn": "Oropos",
+       "lat": 38.305,
+       "lon": 23.752,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Ιπποκράτειο Πολιτεία εκκενώστε τώρα προς #Άθήνα από Ε.Ο Αθηνών- Λαμίας. Αν βρίσκεστε στη #Δροσοπηγή εκκενώστε τώρα προς #Αφίδνες ή #Ωρωπό ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki@hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423245540641411079",
+   "note": "two sentences, two orders: Ippokrateio Politeia to Athens; Drosopigi to Afidnes or Oropos (the source filed Drosopigi, a village told to leave, as a destination)"
+  },
+  {
+   "tweetId": "1423246649678249984",
+   "timestamp": "2021-08-05T14:36:58+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Δηλίζα",
+       "nameEn": "Diliza",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Ilia; the source's point lay in West Attica"
+      },
+      {
+       "tag": "Μουριά",
+       "nameEn": "Mouria",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Ilia; the source's point lay in central Athens"
+      },
+      {
+       "tag": "Πεύκες",
+       "nameEn": "Pefkes",
+       "lat": 37.67466,
+       "lon": 21.68786,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973207 «Πεύκες» (Π.Ε. Ηλείας); the source had 38.1188,23.4121 in Π.Ε. Δυτικής Αττικής, 159 km away"
+      },
+      {
+       "tag": "Καμμένα",
+       "nameEn": "Kammena",
+       "lat": 37.65424,
+       "lon": 21.72848,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746903781 «Κάμενα» (Π.Ε. Ηλείας); the source had 38.1600,23.3550 in Π.Ε. Δυτικής Αττικής, 153 km away"
+      },
+      {
+       "tag": "Λινάρια",
+       "nameEn": "Linaria",
+       "lat": 37.64798,
+       "lon": 21.68443,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746903783 «Λιναριά» (Π.Ε. Ηλείας); the source had 38.1550,23.3350 in Π.Ε. Δυτικής Αττικής, 155 km away"
+      },
+      {
+       "tag": "Βίλλια",
+       "nameEn": "Vilia",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Ilia; the source's point was the Vilia of West Attica, 150 km away"
+      }
+     ],
+     "to": [
+      {
+       "tag": "ΆσπραΣπίτια",
+       "nameEn": "Aspra Spitia",
+       "lat": 37.61496,
+       "lon": 21.77495,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746894874 «Άσπρα Σπίτια» (Π.Ε. Ηλείας); the source had 38.1620,23.3420 in Π.Ε. Δυτικής Αττικής, 150 km away"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Δηλίζα,#Άνω-Κάτω Λόυβρο, #Μουριά, #Πεύκες, #Καμμένα, #Λινάρια, #Βίλλια #Ηλείας εκκενώστε τώρα προς #ΆσπραΣπίτια ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423246649678249984"
+  },
+  {
+   "tweetId": "1423249731094986753",
+   "timestamp": "2021-08-05T14:49:13+03:00",
+   "type": "shelter_in_place",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κρυονέρι",
+       "nameEn": "Kryoneri",
+       "lat": 38.140447,
+       "lon": 23.832835,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Κρυονέρι, κλείστε όλες τις καμινάδες, παράθυρα, πόρτες ώστε να μη διεισδύσουν οι καύτρες στο εσωτερικό του σπιτιού. Παραμείνετε σε ετοιμότητα &amp; ακολουθείστε τις οδηγίες των αρχών ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/ndentotfty",
+   "url": "https://x.com/112Greece/status/1423249731094986753"
+  },
+  {
+   "tweetId": "1423259132933574662",
+   "timestamp": "2021-08-05T15:26:34+03:00",
+   "type": "evacuation",
+   "region": "messinia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Διαβολίτσι",
+       "nameEn": "Diavolitsi",
+       "lat": 37.299835,
+       "lon": 21.968966,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Άνω_Κάτω_Μέλπεια",
+       "nameEn": "Ano Kato Melpeia",
+       "lat": 37.307524,
+       "lon": 21.902605,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ζευγολατειό",
+       "nameEn": "Zevgolateio",
+       "lat": 37.25144,
+       "lon": 21.96687,
+       "source": "hand",
+       "note": "re-placed on OSM node 1733317667 «Ζευγολατιό» (Π.Ε. Μεσσηνίας); the source had 37.1450,21.8950 in Π.Ε. Μεσσηνίας, 13 km away"
+      },
+      {
+       "tag": "Κεντρικό",
+       "nameEn": "Kentriko",
+       "lat": 37.278159,
+       "lon": 21.970811,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Διαβολίτσι ή στην #Άνω_Κάτω_Μέλπεια εκκενώστε τώρα προς #Ζευγολατειό ή #Κεντρικό ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423259132933574662"
+  },
+  {
+   "tweetId": "1423273947085250569",
+   "timestamp": "2021-08-05T16:25:26+03:00",
+   "type": "evacuation",
+   "region": "grevena",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κέντρο",
+       "nameEn": "Kentro",
+       "lat": 40.01879,
+       "lon": 21.62139,
+       "source": "hand",
+       "note": "the message's first village, dropped by the source as a null-coordinate tag; OSM node 1596836732 «Κέντρο» (Π.Ε. Γρεβενών)"
+      },
+      {
+       "tag": "Νησί",
+       "nameEn": "Nisi",
+       "lat": 40.006337,
+       "lon": 21.606584,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αγαλαίοι",
+       "nameEn": "Agalaioi",
+       "lat": 40.02771,
+       "lon": 21.620975,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Δίπορο",
+       "nameEn": "Diporo",
+       "lat": 39.990738,
+       "lon": 21.654939,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιτέα",
+       "nameEn": "Itea",
+       "lat": 40.06335,
+       "lon": 21.61513,
+       "source": "hand",
+       "note": "re-placed on OSM node 306753263 «Ιτέα» (Π.Ε. Γρεβενών); the source had 38.4320,22.4220 in Π.Ε. Φωκίδας, 194 km away; the Itea of Grevena; the source had the Itea of Fokida, 190 km away"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Κέντρο, #Νησί, #Αγαλαίοι, #Δίπορο #Γρεβενών, εκκενώστε τώρα προς #Ιτέα. ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423273947085250569"
+  },
+  {
+   "tweetId": "1423274090610057218",
+   "timestamp": "2021-08-05T16:26:01+03:00",
+   "type": "evacuation",
+   "region": "fokida",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ελαία",
+       "nameEn": "Elaia",
+       "lat": 38.38677,
+       "lon": 22.11214,
+       "source": "hand",
+       "note": "re-placed on OSM node 1519673051 «Ελιά» (Π.Ε. Φωκίδας); the source had 38.4290,22.4340 in Π.Ε. Φωκίδας, 28 km away; the village beside Kallithea in Dorida, which the same fire's other messages name; the source had a point near Itea, 26 km east"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Καλλιθέα",
+       "nameEn": "Kallithea",
+       "lat": 38.391535,
+       "lon": 22.140735,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Ελαία #Φωκίδας εκκενώστε τώρα προς #Καλλιθέα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423274090610057218"
+  },
+  {
+   "tweetId": "1423275477632909322",
+   "timestamp": "2021-08-05T16:31:31+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βασιλάκι",
+       "nameEn": "Vasilaki",
+       "lat": 37.649409,
+       "lon": 21.760836,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Υψηλό",
+       "nameEn": "Ypsilo",
+       "lat": 37.637919,
+       "lon": 21.750342,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Άσπρα_Σπίτια",
+       "nameEn": "Aspra Spitia",
+       "lat": 37.614955,
+       "lon": 21.774946,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Ξηρόκαμπο",
+       "nameEn": "Xirokampo",
+       "lat": 37.67601,
+       "lon": 21.79365,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973204 «Ξηρόκαμπος» (Π.Ε. Ηλείας); the source had 37.6730,21.7400 in Π.Ε. Ηλείας, 5 km away"
+      },
+      {
+       "tag": "Αμπάρι",
+       "nameEn": "Ambari",
+       "lat": 37.67575,
+       "lon": 21.7805,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973181 «Αμπάριον» (Π.Ε. Ηλείας); the source had 37.6680,21.7250 in Π.Ε. Ηλείας, 5 km away"
+      },
+      {
+       "tag": "Άνω_Κάτω_Λούβρο",
+       "nameEn": "Ano Kato Louvro",
+       "lat": 37.64642,
+       "lon": 21.73555,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746903784 «Λούβρο» (Π.Ε. Ηλείας); the source had 37.6700,21.7350 in Π.Ε. Ηλείας, 3 km away; the one hashtag names the upper and lower village; placed on OSM's single node"
+      },
+      {
+       "tag": "Κρυονέρι",
+       "nameEn": "Kryoneri",
+       "lat": 37.72109,
+       "lon": 21.65736,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973196 «Κρυονέρι» (Π.Ε. Ηλείας); the source had 38.1404,23.8328 in Π.Ε. Ανατολικής Αττικής, 196 km away; the Kryoneri next to Lala; a second Kryoneri of Ilia lies 30 km south"
+      },
+      {
+       "tag": "Λάλα",
+       "nameEn": "Lala",
+       "lat": 37.71088,
+       "lon": 21.72014,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973197 «Λάλας» (Π.Ε. Ηλείας); the source had 37.7993,21.3524 in Π.Ε. Ηλείας, 34 km away; the village at the centre of the Olympia fire's evacuations"
+      },
+      {
+       "tag": "Δούκα",
+       "nameEn": "Douka",
+       "lat": 37.722256,
+       "lon": 21.704521,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Λάσδικα",
+       "nameEn": "Lasdika",
+       "lat": 37.71715,
+       "lon": 21.68951,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973198 «Λάσδικας» (Π.Ε. Ηλείας); the source had 37.6600,21.7300 in Π.Ε. Ηλείας, 7 km away"
+      },
+      {
+       "tag": "Νεμούτα",
+       "nameEn": "Nemouta",
+       "lat": 37.700741,
+       "lon": 21.79184,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Πανόπουλο",
+       "nameEn": "Panopoulo",
+       "lat": 37.81987,
+       "lon": 21.69101,
+       "source": "hand",
+       "note": "re-placed on OSM node 1745969066 «Πανόπουλος» (Π.Ε. Ηλείας); the source had 37.6570,21.7040 in Π.Ε. Ηλείας, 18 km away"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Βασιλάκι, #Υψηλό, #Άσπρα_Σπίτια, #Ξηρόκαμπο, #Αμπάρι, #Άνω_Κάτω_Λούβρο, #Κρυονέρι, #Λάλα, #Δούκα, #Λάσδικα, #Νεμούτα #Ηλείας εκκενώστε τώρα προς #Πανόπουλο ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423275477632909322"
+  },
+  {
+   "tweetId": "1423279868528103430",
+   "timestamp": "2021-08-05T16:48:58+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "ΑγίαΆννα",
+       "nameEn": "Agia Anna",
+       "lat": 38.858705,
+       "lon": 23.398708,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Παλαιόβρυση",
+       "nameEn": "Palaiovrysi",
+       "lat": 38.855619,
+       "lon": 23.393641,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κεραμεία",
+       "nameEn": "Kerameia",
+       "lat": 38.835697,
+       "lon": 23.38846,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αγκάλη",
+       "nameEn": "Agali",
+       "lat": 38.862253,
+       "lon": 23.445513,
+       "source": "gazetteer:evia-wildfire-timeline",
+       "note": "a seaside village of Agia Anna; the point is on the shore, a hair outside the coarse unit polygon"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Μαντούδι",
+       "nameEn": "Mantoudi",
+       "lat": 38.79866,
+       "lon": 23.478772,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #ΑγίαΆννα, #Παλαιόβρυση, #Κεραμεία, #Αγκάλη #Εύβοιας εκκενώστε τώρα προς #Μαντούδι ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423279868528103430"
+  },
+  {
+   "tweetId": "1423286244067352579",
+   "timestamp": "2021-08-05T17:14:18+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Δροσοπηγή",
+       "nameEn": "Drosopigi",
+       "lat": 38.168321,
+       "lon": 23.829347,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αθήνα",
+       "nameEn": "Athens",
+       "lat": 37.975,
+       "lon": 23.735,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Δροσοπηγή εκκενώστε τώρα προς #Αθήνα από Ε.Ο. #Αθηνών_Λαμίας ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423286244067352579"
+  },
+  {
+   "tweetId": "1423291064094392333",
+   "timestamp": "2021-08-05T17:33:27+03:00",
+   "type": "evacuation",
+   "region": "fokida",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ελαία",
+       "nameEn": "Elaia",
+       "lat": 38.38677,
+       "lon": 22.11214,
+       "source": "hand",
+       "note": "re-placed on OSM node 1519673051 «Ελιά» (Π.Ε. Φωκίδας); the source had 38.4290,22.4340 in Π.Ε. Φωκίδας, 28 km away; the village beside Kallithea in Dorida, which the same fire's other messages name; the source had a point near Itea, 26 km east"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Άγιο_Σπυρίδωνα",
+       "nameEn": "Agios Spyridonas",
+       "lat": 38.36804,
+       "lon": 22.1246,
+       "source": "hand",
+       "note": "re-placed on OSM node 1519680480 «Άγιος Σπυρίδων» (Π.Ε. Φωκίδας); the source had 38.4250,22.4300 in Π.Ε. Φωκίδας, 27 km away"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Ελαία #Φωκίδας εκκενώστε τώρα προς #Άγιο_Σπυρίδωνα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423291064094392333"
+  },
+  {
+   "tweetId": "1423292610051936270",
+   "timestamp": "2021-08-05T17:39:36+03:00",
+   "type": "evacuation",
+   "region": "fokida",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Καλλιθέα",
+       "nameEn": "Kallithea",
+       "lat": 38.391535,
+       "lon": 22.140735,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Άγιο_Σπυρίδωνα",
+       "nameEn": "Agios Spyridonas",
+       "lat": 38.36804,
+       "lon": 22.1246,
+       "source": "hand",
+       "note": "re-placed on OSM node 1519680480 «Άγιος Σπυρίδων» (Π.Ε. Φωκίδας); the source had 38.4250,22.4300 in Π.Ε. Φωκίδας, 27 km away"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Καλλιθέα #Φωκίδας εκκενώστε τώρα προς #Άγιο_Σπυρίδωνα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423292610051936270"
+  },
+  {
+   "tweetId": "1423312500179750913",
+   "timestamp": "2021-08-05T18:58:38+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Κρυονέρι",
+       "nameEn": "Kryoneri",
+       "lat": 38.140447,
+       "lon": 23.832835,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κοκκινόβραχος",
+       "nameEn": "Kokkinovrachos",
+       "lat": 38.17938,
+       "lon": 23.84206,
+       "source": "hand",
+       "note": "re-placed on OSM node 1857182838 «Κοκκινόβραχος» (Π.Ε. Ανατολικής Αττικής); the source had 37.9765,23.6126 in Π.Ε. Πειραιώς, 30 km away"
+      },
+      {
+       "tag": "Αφίδνες",
+       "nameEn": "Afidnes",
+       "lat": 38.203,
+       "lon": 23.838,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αθηνών_Λαμίας",
+       "nameEn": "the Athens–Lamia national road",
+       "lat": null,
+       "lon": null,
+       "source": "prose",
+       "note": "a road, given as the way out; not a point"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στις περιοχές #Κρυονέρι, #Κοκκινόβραχος και #Αφίδνες εκκενώστε τώρα προς Ε.Ο. #Αθηνών_Λαμίας ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice https://t.co/2XO8k1W8KW",
+   "url": "https://x.com/112Greece/status/1423312500179750913"
+  },
+  {
+   "tweetId": "1423314282473791488",
+   "timestamp": "2021-08-05T19:05:43+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ιπποκράτειο_Πολιτεία",
+       "nameEn": "Ippokrateio Politeia",
+       "lat": 38.202969,
+       "lon": 23.803842,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ωρωπό",
+       "nameEn": "Oropos",
+       "lat": 38.305,
+       "lon": 23.752,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Ιπποκράτειο_Πολιτεία εκκενώστε τώρα προς #Ωρωπό ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423314282473791488"
+  },
+  {
+   "tweetId": "1423378793222361095",
+   "timestamp": "2021-08-05T23:22:04+03:00",
+   "type": "shelter_in_place",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πολυδένδρι",
+       "nameEn": "Polydendri",
+       "lat": 38.216374,
+       "lon": 23.867864,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καπανδρίτι",
+       "nameEn": "Kapandriti",
+       "lat": 38.215872,
+       "lon": 23.877193,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Ταξιάρχες",
+       "nameEn": "Taxiarches",
+       "lat": 38.202124,
+       "lon": 23.856103,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Άγιο_Γεώργιο",
+       "nameEn": "Agios Georgios",
+       "lat": 38.127406,
+       "lon": 23.332324,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Πουρίθι",
+       "nameEn": "Pourithi",
+       "lat": 38.208493,
+       "lon": 23.90697,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Πολυδένδρι, #Καπανδρίτι,#Ταξιάρχες, #Άγιο_Γεώργιο ή #Πουρίθι κλείστε όλες τις καμινάδες, παράθυρα, πόρτες ώστε να μην διεισδύσουν οι καύτρες στο εσωτερικό του σπιτιού. ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423378793222361095"
+  },
+  {
+   "tweetId": "1423391071019618305",
+   "timestamp": "2021-08-06T00:10:51+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πολυδένδρι",
+       "nameEn": "Polydendri",
+       "lat": 38.216374,
+       "lon": 23.867864,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καπανδρίτι",
+       "nameEn": "Kapandriti",
+       "lat": 38.215872,
+       "lon": 23.877193,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Βαρνάβα",
+       "nameEn": "Varnava",
+       "lat": 38.223812,
+       "lon": 23.92252,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Νέα_Μάκρη",
+       "nameEn": "Nea Makri",
+       "lat": 38.083049,
+       "lon": 23.97907,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Πολυδένδρι ή #Καπανδρίτι, εκκενώστε τώρα προς #Βαρνάβα - #Νέα_Μάκρη από Επαρχ. Οδό Μαραθώνος - Καπανδριτίου. ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423391071019618305"
+  },
+  {
+   "tweetId": "1423391207502356487",
+   "timestamp": "2021-08-06T00:11:23+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πευκόφυτου",
+       "nameEn": "Pefkofyto",
+       "lat": 38.15431,
+       "lon": 23.867663,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Ποντίων",
+       "nameEn": "Pontion",
+       "lat": 38.149226,
+       "lon": 23.856914,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αγίου_Στεφάνου",
+       "nameEn": "Agios Stefanos",
+       "lat": 38.141904,
+       "lon": 23.858815,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αθήνα",
+       "nameEn": "Athens",
+       "lat": 37.975,
+       "lon": 23.735,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον Οικισμό #Πευκόφυτου ή τον Οικισμό #Ποντίων της περιοχής του #Αγίου_Στεφάνου εκκενώστε τώρα προς #Αθήνα μέσω Ν.Ε.Ο. Αθηνών-Λαμίας ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423391207502356487"
+  },
+  {
+   "tweetId": "1423479870856835074",
+   "timestamp": "2021-08-06T06:03:42+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βόθωνα",
+       "nameEn": "Vothona",
+       "lat": 38.175905,
+       "lon": 23.92216,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Μαραθώνα",
+       "nameEn": "Marathon",
+       "lat": 38.153175,
+       "lon": 23.961258,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Νέα_Μάκρη",
+       "nameEn": "Nea Makri",
+       "lat": 38.083049,
+       "lon": 23.97907,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον #Βόθωνα εκκενώστε τώρα προς #Μαραθώνα - #Νέα_Μάκρη ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice https://t.co/Wt9DgvuV0z",
+   "url": "https://x.com/112Greece/status/1423479870856835074"
+  },
+  {
+   "tweetId": "1423561879553781769",
+   "timestamp": "2021-08-06T11:29:35+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μαλακάσα",
+       "nameEn": "Malakasa",
+       "lat": 38.238815,
+       "lon": 23.796004,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Σφενδάλη",
+       "nameEn": "Sfendali",
+       "lat": 38.235496,
+       "lon": 23.78474,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ωρωπό",
+       "nameEn": "Oropos",
+       "lat": 38.305,
+       "lon": 23.752,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Μαλακάσα ή στον οικισμό #Σφενδάλη, εκκενώστε τώρα προς #Ωρωπό, μέσω Λεωφόρου Αθηνών-Ωρωπού. ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423561879553781769"
+  },
+  {
+   "tweetId": "1423563058681614337",
+   "timestamp": "2021-08-06T11:34:16+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πολυδένδρι",
+       "nameEn": "Polydendri",
+       "lat": 38.216374,
+       "lon": 23.867864,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καπανδρίτι",
+       "nameEn": "Kapandriti",
+       "lat": 38.215872,
+       "lon": 23.877193,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Βαρνάβα",
+       "nameEn": "Varnava",
+       "lat": 38.223812,
+       "lon": 23.92252,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Νέα_Μάκρη",
+       "nameEn": "Nea Makri",
+       "lat": 38.083049,
+       "lon": 23.97907,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Πολυδένδρι ή #Καπανδρίτι, εκκενώστε τώρα προς #Βαρνάβα-#Νέα_Μάκρη από Επαρχιακή Οδό Μαραθώνος-Καπανδριτίου ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423563058681614337"
+  },
+  {
+   "tweetId": "1423566290057322499",
+   "timestamp": "2021-08-06T11:47:06+03:00",
+   "type": "shelter_in_place",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βαρνάβα",
+       "nameEn": "Varnava",
+       "lat": 38.223812,
+       "lon": 23.92252,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κάλαμο",
+       "nameEn": "Kalamo",
+       "lat": 38.269,
+       "lon": 23.857,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Μαρκόπουλο_Ωρωπού",
+       "nameEn": "Markopoulo Oropou",
+       "lat": 38.289859,
+       "lon": 23.823737,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Ωρωπό",
+       "nameEn": "Oropos",
+       "lat": 38.305,
+       "lon": 23.752,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Μίλεσι",
+       "nameEn": "Milesi",
+       "lat": 38.273346,
+       "lon": 23.806016,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘Αν βρίσκεστε στην ευρύτερη περιοχή #Βαρνάβα #Κάλαμο #Μαρκόπουλο_Ωρωπού #Ωρωπό #Μίλεσι ή #Αγ.Αποστόλους κλείστε καμινάδες, παράθυρα, πόρτες για να μη διεισδύσουν καύτρες στο εσωτερικό του σπιτιού. ‼️ Δασική🔥στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423566290057322499"
+  },
+  {
+   "tweetId": "1423611940773957639",
+   "timestamp": "2021-08-06T14:48:30+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πευκόφυτο",
+       "nameEn": "Pefkofyto",
+       "lat": 38.15431,
+       "lon": 23.867663,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Ποντίων",
+       "nameEn": "Pontion",
+       "lat": 38.149226,
+       "lon": 23.856914,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "ΑγίουΣτεφάνου",
+       "nameEn": "Agios Stefanos",
+       "lat": 38.141904,
+       "lon": 23.858815,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αθήνα",
+       "nameEn": "Athens",
+       "lat": 37.975,
+       "lon": 23.735,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Πευκόφυτο, #Ποντίων, #Αγίου Στεφάνου εκκενώστε τώρα προς #Αθήνα μέσω #Λεωφόρου Θησέως, Κηφισίας ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice https://t.co/UdE8VgCNMb",
+   "url": "https://x.com/112Greece/status/1423611940773957639"
+  },
+  {
+   "tweetId": "1423614377601769472",
+   "timestamp": "2021-08-06T14:58:11+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Θεολόγο",
+       "nameEn": "Theologo",
+       "lat": 38.48797,
+       "lon": 23.79916,
+       "source": "hand",
+       "note": "re-placed on OSM node 1776361159 «Θεολόγος» (Π.Ε. Ευβοίας); the source had 38.6513,23.1723 in Π.Ε. Φθιώτιδας, 57 km away; the only place of that name in Evia; the source's point lay at sea off Limni"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Λεκούνα",
+       "nameEn": "Lekouna",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Evia; the source's point lay across the strait in Fthiotida"
+      },
+      {
+       "tag": "Βλυχάδα",
+       "nameEn": "Vlychada",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Evia; the source's point lay across the strait in Fthiotida"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον #Θεολόγο εκκενώστε τώρα προς #Λεκούνα - #Βλυχάδα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423614377601769472"
+  },
+  {
+   "tweetId": "1423616140304076800",
+   "timestamp": "2021-08-06T15:05:12+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βίλλια",
+       "nameEn": "Vilia",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Ilia; the source's point was the Vilia of West Attica, 150 km away"
+      },
+      {
+       "tag": "Τσαπαρέικα",
+       "nameEn": "Tsapareika",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Ilia; the source's point lay 30 km west of the villages the same message names"
+      },
+      {
+       "tag": "Νεμούτα",
+       "nameEn": "Nemouta",
+       "lat": 37.700741,
+       "lon": 21.79184,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αχλαδινή",
+       "nameEn": "Achladini",
+       "lat": 37.72156,
+       "lon": 21.78361,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στα #Βίλλια, #Τσαπαρέικα ή #Νεμούτα Ηλείας εκκενώστε τώρα προς #Αχλαδινή ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423616140304076800"
+  },
+  {
+   "tweetId": "1423665709348016128",
+   "timestamp": "2021-08-06T18:22:10+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ροδόπολης",
+       "nameEn": "Rodopoli",
+       "lat": 38.116697,
+       "lon": 23.875852,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Σταμάτας",
+       "nameEn": "Stamata",
+       "lat": 38.126384,
+       "lon": 23.871251,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αθήνα",
+       "nameEn": "Athens",
+       "lat": 37.975,
+       "lon": 23.735,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κηφισίας",
+       "nameEn": "Kifissia",
+       "lat": 38.038394,
+       "lon": 23.800739,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Ροδόπολης ή #Σταμάτας, εκκενώστε τώρα προς #Αθήνα μέσω Λεωφ. #Θησέως και #Κηφισίας ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/xiUN7tdKAd",
+   "url": "https://x.com/112Greece/status/1423665709348016128"
+  },
+  {
+   "tweetId": "1423672436302753795",
+   "timestamp": "2021-08-06T18:48:54+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βαρυμπόμπη",
+       "nameEn": "Varympompi",
+       "lat": 38.129999,
+       "lon": 23.789367,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Θρακομακεδόνες",
+       "nameEn": "Thrakomakedones",
+       "lat": 38.129447,
+       "lon": 23.757369,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αχαρνές",
+       "nameEn": "Acharnes",
+       "lat": 38.080218,
+       "lon": 23.743629,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Βαρυμπόμπη, εκκενώστε τώρα προς #Θρακομακεδόνες, #Αχαρνές, για λόγους ασφαλείας ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423672436302753795"
+  },
+  {
+   "tweetId": "1423679988927172615",
+   "timestamp": "2021-08-06T19:18:54+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Θρακομακεδόνες",
+       "nameEn": "Thrakomakedones",
+       "lat": 38.129447,
+       "lon": 23.757369,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Αχαρνές",
+       "nameEn": "Acharnes",
+       "lat": 38.080218,
+       "lon": 23.743629,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους #Θρακομακεδόνες, εκκενώστε τώρα προς #Αχαρνές μέσω Λεωφόρου #Κύμης ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423679988927172615",
+   "note": "«μέσω Λεωφόρου #Κύμης» is the road to take, not a destination"
+  },
+  {
+   "tweetId": "1423681307687673859",
+   "timestamp": "2021-08-06T19:24:09+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Λίμνη",
+       "nameEn": "Limni",
+       "lat": 38.765075,
+       "lon": 23.317626,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Λιμένα Λίμνης",
+       "nameEn": "the harbour of Limni and the ferry",
+       "lat": null,
+       "lon": null,
+       "source": "prose",
+       "note": "the village's own waterfront, given in prose; not drawn as a second point"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Λίμνη #Ευβοίας, εκκενώστε τώρα προς Λιμένα Λίμνης και Ferry Boat ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423681307687673859"
+  },
+  {
+   "tweetId": "1423683517565874186",
+   "timestamp": "2021-08-06T19:32:56+03:00",
+   "type": "evacuation",
+   "region": "fokida",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πάνορμος",
+       "nameEn": "Panormos",
+       "lat": 38.373051,
+       "lon": 22.249408,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "ΌρμοςΛεμονιάς",
+       "nameEn": "Ormos Lemonias",
+       "lat": 38.3627,
+       "lon": 22.249479,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "ΆγιοιΠάντες",
+       "nameEn": "Agioi Pantes",
+       "lat": 38.368039,
+       "lon": 22.295024,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιτέα",
+       "nameEn": "Itea",
+       "lat": 38.432,
+       "lon": 22.422,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στις περιοχές #Πάνορμος, #ΌρμοςΛεμονιάς και #ΆγιοιΠάντες #Φωκίδας, εκκενώστε τώρα προς #Ιτέα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1423683517565874186"
+  },
+  {
+   "tweetId": "1423855997060358149",
+   "timestamp": "2021-08-07T06:58:18+03:00",
+   "type": "evacuation",
+   "region": "attica_north",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "ΑγιάΠαρασκευή",
+       "nameEn": "Agia Paraskevi",
+       "lat": 38.144769,
+       "lon": 23.866429,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "ΑγίαΣκέπη",
+       "nameEn": "Agia Skepi",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "a locality of Dionysos with no OSM place node; the source gave it the same point as Vrysaki and Lofos Kouremenou"
+      },
+      {
+       "tag": "Καπιτένια",
+       "nameEn": "Kapitenia",
+       "lat": 38.141157,
+       "lon": 23.87822,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Βρυσάκι",
+       "nameEn": "Vrysaki",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "a locality of Dionysos with no OSM place node; the source gave it the same point as Agia Skepi and Lofos Kouremenou"
+      },
+      {
+       "tag": "ΛόφοςΚουρεμένου",
+       "nameEn": "Lofos Koursmenou",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "a locality of Dionysos with no OSM place node; the source gave it the same point as Agia Skepi and Vrysaki"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Δροσιά",
+       "nameEn": "Drosia",
+       "lat": 38.109001,
+       "lon": 23.861361,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στις περιοχές #Αγιά Παρασκευή, #Αγία Σκέπη, #Καπιτένια, #Βρυσάκι, #Λόφος Κουρεμένου εκκενώστε τώρα προς #Δροσιά μέσω Λεωφόρου Μαραθώνος ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/J3tv4YEPM1",
+   "url": "https://x.com/112Greece/status/1423855997060358149"
+  },
+  {
+   "tweetId": "1423898981176905732",
+   "timestamp": "2021-08-07T09:49:06+03:00",
+   "type": "fire_danger",
+   "region": "rhodes",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ρόδο",
+       "nameEn": "Rhodes",
+       "lat": 36.17253,
+       "lon": 27.919402,
+       "source": "hand",
+       "note": "a warning for the whole regional unit: the source's point is the island's centre, kept as such"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αποφύγετε ενέργειες που ενδέχεται να προκαλέσουν πυρκαγιά 🔥 στην ύπαιθρο ‼️ Ακραίος κίνδυνος πυρκαγιάς σήμερα στη #Ρόδο",
+   "url": "https://x.com/112Greece/status/1423898981176905732",
+   "title": "Extreme fire danger in Rhodes today"
+  },
+  {
+   "tweetId": "1423992903152582657",
+   "timestamp": "2021-08-07T16:02:19+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μηλιές",
+       "nameEn": "Milies",
+       "lat": 38.95528,
+       "lon": 23.275951,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιστιαία",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στις #Μηλιές #Ευβοίας, εκκενώστε τώρα προς #Ιστιαία ‼️ Δασική πυρκαγιά στην περιοχή σας https://t.co/Z0WNT1UJvU",
+   "url": "https://x.com/112Greece/status/1423992903152582657"
+  },
+  {
+   "tweetId": "1423994422728044546",
+   "timestamp": "2021-08-07T16:08:21+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Γαλατσάδες",
+       "nameEn": "Galatsades",
+       "lat": 38.892497,
+       "lon": 23.171142,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καματριάδες",
+       "nameEn": "Kamatriades",
+       "lat": 38.893826,
+       "lon": 23.18244,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιστιαία",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους #Γαλατσάδες ή #Καματριάδες #Ευβοίας, εκκενώστε τώρα προς #Ιστιαία ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1423994422728044546"
+  },
+  {
+   "tweetId": "1423999447185436677",
+   "timestamp": "2021-08-07T16:28:19+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μονοκαρυά",
+       "nameEn": "Monokarya",
+       "lat": 38.924529,
+       "lon": 23.208727,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κάτω_Μονοκαρυά",
+       "nameEn": "Kato Monokarya",
+       "lat": 38.929143,
+       "lon": 23.207204,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιστιαία",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Μονοκαρυά ή #Κάτω_Μονοκαρυά #Ευβοίας εκκενώστε τώρα προς #Ιστιαία ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1423999447185436677"
+  },
+  {
+   "tweetId": "1424021731732303880",
+   "timestamp": "2021-08-07T17:56:52+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Δούκας",
+       "nameEn": "Doukas",
+       "lat": 37.722256,
+       "lon": 21.704521,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Μηλιές",
+       "nameEn": "Milies",
+       "lat": 37.73483,
+       "lon": 21.69436,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973199 «Μηλιές» (Π.Ε. Ηλείας); the source had 38.9553,23.2760 in Π.Ε. Ευβοίας, 193 km away"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Νεράιδα",
+       "nameEn": "Neraida",
+       "lat": 37.734078,
+       "lon": 21.662653,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στις περιοχές #Δούκας ή #Μηλιές #Ηλείας εκκενώστε τώρα προς #Νεράιδα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1424021731732303880"
+  },
+  {
+   "tweetId": "1424274794585989121",
+   "timestamp": "2021-08-08T10:42:27+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Πευκί",
+       "nameEn": "Pefki",
+       "lat": 39.008267,
+       "lon": 23.210491,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αρτεμίσιο",
+       "nameEn": "Artemisio",
+       "lat": 39.011569,
+       "lon": 23.22637,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Γούβες",
+       "nameEn": "Gouves",
+       "lat": 39.004063,
+       "lon": 23.246227,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Βουλίκι",
+       "nameEn": "Vouliki",
+       "lat": 39.021657,
+       "lon": 23.243836,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιστιαία",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Πευκί, #Αρτεμίσιο, #Γούβες ή #Βουλίκι #Ευβοίας εκκενώστε τώρα προς #Ιστιαία ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice https://t.co/AssGshxHZt",
+   "url": "https://x.com/112Greece/status/1424274794585989121"
+  },
+  {
+   "tweetId": "1424284154020106242",
+   "timestamp": "2021-08-08T11:19:38+03:00",
+   "type": "shelter_in_place",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ιστιαίας",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αιδηψού",
+       "nameEn": "Aidipsos",
+       "lat": 38.879697,
+       "lon": 23.047145,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Λουτρών_Αιδηψού",
+       "nameEn": "Loutra Aidipsou",
+       "lat": 38.8574,
+       "lon": 23.04226,
+       "source": "hand",
+       "note": "re-placed on OSM node 364233062 «Λουτρά Αιδηψού» (Π.Ε. Ευβοίας); the source had 38.8797,23.0471 in Π.Ε. Ευβοίας, 3 km away; the spa town, distinct from the village of Aidipsos the message also names"
+      }
+     ],
+     "to": []
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην ευρύτερη περιοχή #Ιστιαίας, #Αιδηψού, #Λουτρών_Αιδηψού κλείστε όλες τις καμινάδες, παράθυρα, πόρτες ώστε να μην διεισδύσουν οι καύτρες στο εσωτερικό του σπιτιού. ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1424284154020106242"
+  },
+  {
+   "tweetId": "1424773477907709963",
+   "timestamp": "2021-08-09T19:44:02+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Αβγαριά_Εύβοιας",
+       "nameEn": "Avgaria",
+       "lat": 38.949759,
+       "lon": 23.192778,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιστιαία_Εύβοιας",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Αβγαριά_Εύβοιας, εκκενώστε τώρα προς #Ιστιαία_Εύβοιας ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1424773477907709963"
+  },
+  {
+   "tweetId": "1425020550045372419",
+   "timestamp": "2021-08-10T12:05:49+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Ασμήνιο",
+       "nameEn": "Asminio",
+       "lat": 39.002623,
+       "lon": 23.197843,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ιστιαία",
+       "nameEn": "Istiaia",
+       "lat": 38.953464,
+       "lon": 23.150958,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη περιοχή #Ασμήνιο Ευβοίας εκκενώστε τώρα προς #Ιστιαία ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1425020550045372419"
+  },
+  {
+   "tweetId": "1425057797025243178",
+   "timestamp": "2021-08-10T14:33:49+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Λιβαδάκι",
+       "nameEn": "Livadaki",
+       "lat": 37.530259,
+       "lon": 21.814153,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καπελλίτσα",
+       "nameEn": "Kapellitsa",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Ilia; the source's point lay in Arcadia"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Σέκουλα",
+       "nameEn": "Sekoula",
+       "lat": 37.5845,
+       "lon": 21.87919,
+       "source": "hand",
+       "note": "re-placed on OSM node 1747715198 «Σέκουλας» (Π.Ε. Ηλείας); the source had 37.6600,21.7280 in Π.Ε. Ηλείας, 16 km away; the message sends people to the BRIDGE of Sekoula, placed on the village's node"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στις περιοχές #Λιβαδάκι ή #Καπελλίτσα, εκκενώστε τώρα προς Γέφυρα #Σέκουλα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1425057797025243178"
+  },
+  {
+   "tweetId": "1425065270775848966",
+   "timestamp": "2021-08-10T15:03:31+03:00",
+   "type": "evacuation",
+   "region": "ilia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Λάλα",
+       "nameEn": "Lala",
+       "lat": 37.71088,
+       "lon": 21.72014,
+       "source": "hand",
+       "note": "re-placed on OSM node 1746973197 «Λάλας» (Π.Ε. Ηλείας); the source had 37.7993,21.3524 in Π.Ε. Ηλείας, 34 km away; the village at the centre of the Olympia fire's evacuations"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Εθνική Οδός 111",
+       "nameEn": "national road 111",
+       "lat": null,
+       "lon": null,
+       "source": "prose",
+       "note": "a road, given as the way out; not a point"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον οικισμό #Λάλα #Ηλείας εκκενώστε τώρα προς Εθνική Οδό 111 ‼️ Δασική πυρκαγιά στην περιοχή σας",
+   "url": "https://x.com/112Greece/status/1425065270775848966"
+  },
+  {
+   "tweetId": "1425085454198714371",
+   "timestamp": "2021-08-10T16:23:43+03:00",
+   "type": "evacuation",
+   "region": "arcadia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Παλαιοχώρι",
+       "nameEn": "Palaiochori",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "three villages of that name in Arcadia and the Heraia one has no OSM place node; the source's point was typed in"
+      },
+      {
+       "tag": "Πύρρης",
+       "nameEn": "Pyrris",
+       "lat": 37.616047,
+       "lon": 21.841134,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "ΆγιοςΙωάννης",
+       "nameEn": "Agios Ioannis",
+       "lat": 37.61346,
+       "lon": 21.86378,
+       "source": "hand",
+       "note": "re-placed on OSM node 1631721848 «Άγιος Ιωάννης Αρχαίας Ηραίας» (Π.Ε. Αρκαδίας); the source had 37.6872,22.1679 in Π.Ε. Αρκαδίας, 28 km away"
+      },
+      {
+       "tag": "Λώτης",
+       "nameEn": "Lotis",
+       "lat": 37.620646,
+       "lon": 21.878642,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Λιοδώρα",
+       "nameEn": "Liodora",
+       "lat": 37.633463,
+       "lon": 21.856136,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Καστράκι",
+       "nameEn": "Kastraki",
+       "lat": 37.670457,
+       "lon": 21.872404,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Φαναράκι",
+       "nameEn": "Fanaraki",
+       "lat": 37.68246,
+       "lon": 21.87728,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Τρόπαια",
+       "nameEn": "Tropaia",
+       "lat": 37.732224,
+       "lon": 21.958431,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Τρίπολη",
+       "nameEn": "Tripoli",
+       "lat": 37.51,
+       "lon": 22.37,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Παλαιοχώρι, #Πύρρης, #ΆγιοςΙωάννης Αρχαίας Ηραίας, #Λώτης, #Λιοδώρα, #Καστράκι, #Φαναράκι εκκενώστε τώρα προς #Τρόπαια, #Τρίπολη ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1425085454198714371"
+  },
+  {
+   "tweetId": "1425085636101517314",
+   "timestamp": "2021-08-10T16:24:27+03:00",
+   "type": "evacuation",
+   "region": "arcadia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Χρυσοχώρι",
+       "nameEn": "Chrysochori",
+       "lat": 37.647189,
+       "lon": 21.851893,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Λουτρά",
+       "nameEn": "Loutra",
+       "lat": 37.63501,
+       "lon": 21.87776,
+       "source": "hand",
+       "note": "re-placed on OSM node 352927134 «Λουτρά Ηραίας» (Π.Ε. Αρκαδίας); the source had 37.6321,21.8898 in Π.Ε. Αρκαδίας, 1 km away; the hashtag pair «#ΙαματικέςΠηγές, #Λουτρά» names this one place, the hot springs of Heraia"
+      },
+      {
+       "tag": "Λίθαρος",
+       "nameEn": "Litharos",
+       "lat": 37.626373,
+       "lon": 21.898945,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αγιονέρι",
+       "nameEn": "Agioneri",
+       "lat": 37.642066,
+       "lon": 21.877124,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Παρνασσός",
+       "nameEn": "Parnassos",
+       "lat": 37.638072,
+       "lon": 21.90667,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Όχθια",
+       "nameEn": "Ochthia",
+       "lat": 37.656062,
+       "lon": 21.899082,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αετοράχη",
+       "nameEn": "Aetorachi",
+       "lat": 37.67201,
+       "lon": 21.92499,
+       "source": "hand",
+       "note": "re-placed on OSM node 1631721867 «Αετορράχη» (Π.Ε. Αρκαδίας); the source had 37.7100,22.0400 in Π.Ε. Αρκαδίας, 11 km away"
+      },
+      {
+       "tag": "Κάλλιανη",
+       "nameEn": "Kalliani",
+       "lat": 37.689198,
+       "lon": 21.924479,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Δόξα",
+       "nameEn": "Doxa",
+       "lat": 37.706716,
+       "lon": 21.92136,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Τουμπίτσι",
+       "nameEn": "Toumbitsi",
+       "lat": 37.70631,
+       "lon": 21.876174,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Μελιδόνι",
+       "nameEn": "Melidoni",
+       "lat": null,
+       "lon": null,
+       "source": "unplaced",
+       "note": "no place node of that name in OSM's Arcadia; the source's point was typed in"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Τρόπαια",
+       "nameEn": "Tropaia",
+       "lat": 37.732224,
+       "lon": 21.958431,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Τρίπολη",
+       "nameEn": "Tripoli",
+       "lat": 37.51,
+       "lon": 22.37,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στους οικισμούς #Χρυσοχώρι, #ΙαματικέςΠηγές, #Λουτρά, #Λίθαρος, #Αγιονέρι, #Παρνασσός, #Όχθια, #Αετοράχη, #Κάλλιανη, #Δόξα, #Τουμπίτσι ή #Μελιδόνι εκκενώστε τώρα προς #Τρόπαια, #Τρίπολη ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki",
+   "url": "https://x.com/112Greece/status/1425085636101517314",
+   "note": "«#ΙαματικέςΠηγές, #Λουτρά» is one place, the hot springs of Heraia (Λουτρά Ηραίας), kept once under «Λουτρά»"
+  },
+  {
+   "tweetId": "1426535311685951493",
+   "timestamp": "2021-08-14T16:24:56+03:00",
+   "type": "evacuation",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μεσοχώρια",
+       "nameEn": "Mesochoria",
+       "lat": 38.250811,
+       "lon": 24.206313,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "ΝέαΣτύρα",
+       "nameEn": "Nea Styra",
+       "lat": 38.167,
+       "lon": 24.222,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στα #Μεσοχώρια Εύβοιας εκκενώστε τώρα προς #Νέα Στύρα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1426535311685951493"
+  },
+  {
+   "tweetId": "1426576070510358531",
+   "timestamp": "2021-08-14T19:06:54+03:00",
+   "type": "evacuation",
+   "region": "corinthia",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Σολομό",
+       "nameEn": "Solomo",
+       "lat": 37.878,
+       "lon": 22.8899,
+       "source": "hand",
+       "note": "re-placed on OSM node 1767693670 «Σολομός» (Π.Ε. Κορινθίας); the source had 37.8380,22.7570 in Π.Ε. Κορινθίας, 12 km away"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Χιλιομόδι",
+       "nameEn": "Chilomodi",
+       "lat": 37.809532,
+       "lon": 22.870123,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον #Σολομό Κορινθίας εκκενώστε τώρα προληπτικά προς #Χιλιομόδι ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1426576070510358531"
+  },
+  {
+   "tweetId": "1427188986309718016",
+   "timestamp": "2021-08-16T11:42:24+03:00",
+   "type": "evacuation",
+   "region": "attica_south",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Μαρκάτι",
+       "nameEn": "Markati",
+       "lat": 37.74324,
+       "lon": 24.025995,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κερατέας",
+       "nameEn": "Kerateas",
+       "lat": 37.756565,
+       "lon": 24.016189,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Λαύριο",
+       "nameEn": "Lavrio",
+       "lat": 37.718,
+       "lon": 24.053,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο #Μαρκάτι #Κερατέας, εκκενώστε τώρα προς #Λαύριο ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427188986309718016"
+  },
+  {
+   "tweetId": "1427201135841054721",
+   "timestamp": "2021-08-16T12:30:41+03:00",
+   "type": "evacuation",
+   "region": "attica_south",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Συντερίνα",
+       "nameEn": "Synterina",
+       "lat": 37.73,
+       "lon": 23.92,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Κερατέας",
+       "nameEn": "Kerateas",
+       "lat": 37.756565,
+       "lon": 24.016189,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ανάβυσσο",
+       "nameEn": "Anavyssos",
+       "lat": 37.737562,
+       "lon": 23.952192,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στη #Συντερίνα #Κερατέας, εκκενώστε τώρα προς #Ανάβυσσο ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427201135841054721"
+  },
+  {
+   "tweetId": "1427211104292413443",
+   "timestamp": "2021-08-16T13:10:18+03:00",
+   "type": "evacuation",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Άγιο_Γεώργιο",
+       "nameEn": "Agios Georgios",
+       "lat": 38.127406,
+       "lon": 23.332324,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Παλαιοχώρι",
+       "nameEn": "Palaiochori",
+       "lat": 38.124438,
+       "lon": 23.414757,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ψάθα",
+       "nameEn": "Psatha",
+       "lat": 38.112583,
+       "lon": 23.219878,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον #Άγιο_Γεώργιο ή #Παλαιοχώρι #Αττικής εκκενώστε τώρα προς #Ψάθα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427211104292413443"
+  },
+  {
+   "tweetId": "1427223005969661952",
+   "timestamp": "2021-08-16T13:57:35+03:00",
+   "type": "evacuation",
+   "region": "attica_south",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Άγιο_Κωνσταντίνο",
+       "nameEn": "Agios Konstantinos",
+       "lat": 37.726096,
+       "lon": 24.015035,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Λαύριο",
+       "nameEn": "Lavrio",
+       "lat": 37.718,
+       "lon": 24.053,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον #Άγιο_Κωνσταντίνο εκκενώστε τώρα προς #Λαύριο ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427223005969661952"
+  },
+  {
+   "tweetId": "1427224753832697857",
+   "timestamp": "2021-08-16T14:04:32+03:00",
+   "type": "evacuation",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "ΑγίαΠαρασκευή",
+       "nameEn": "Agia Paraskevi",
+       "lat": 38.144088,
+       "lon": 23.273785,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "ΚρύοΠηγάδι",
+       "nameEn": "Kryo Pigadi",
+       "lat": 38.143538,
+       "lon": 23.293611,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ψάθα",
+       "nameEn": "Psatha",
+       "lat": 38.112583,
+       "lon": 23.219878,
+       "source": "gazetteer:evia-wildfire-timeline"
+      },
+      {
+       "tag": "Αλεποχώρι",
+       "nameEn": "Alepochori",
+       "lat": 38.087247,
+       "lon": 23.186895,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #ΑγίαΠαρασκευή ή #ΚρύοΠηγάδι εκκενώστε τώρα προς #Ψάθα, #Αλεποχώρι ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427224753832697857"
+  },
+  {
+   "tweetId": "1427242566400028677",
+   "timestamp": "2021-08-16T15:15:19+03:00",
+   "type": "evacuation",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Άγιο_Γεώργιο",
+       "nameEn": "Agios Georgios",
+       "lat": 38.127406,
+       "lon": 23.332324,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Μάνδρα",
+       "nameEn": "Mandra",
+       "lat": 38.07479,
+       "lon": 23.496952,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον #Άγιο_Γεώργιο εκκενώστε τώρα προς #Μάνδρα #Αττικής ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427242566400028677"
+  },
+  {
+   "tweetId": "1427245487342723077",
+   "timestamp": "2021-08-16T15:26:55+03:00",
+   "type": "evacuation",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βαθυχώρι",
+       "nameEn": "Vathychori",
+       "lat": 38.115031,
+       "lon": 23.26222,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ψάθα",
+       "nameEn": "Psatha",
+       "lat": 38.112583,
+       "lon": 23.219878,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στο Μικρό ή Μέγα #Βαθυχώρι εκκενώστε τώρα προς #Ψάθα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427245487342723077"
+  },
+  {
+   "tweetId": "1427311497504514052",
+   "timestamp": "2021-08-16T19:49:13+03:00",
+   "type": "evacuation",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βενίζα",
+       "nameEn": "Veniza",
+       "lat": 38.08302,
+       "lon": 23.255555,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Μέγαρα",
+       "nameEn": "Megara",
+       "lat": 37.994,
+       "lon": 23.348,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στην #Βενίζα εκκενώστε τώρα προς #Μέγαρα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1427311497504514052"
+  },
+  {
+   "tweetId": "1429047419891822594",
+   "timestamp": "2021-08-21T14:47:09+03:00",
+   "type": "fire_danger",
+   "region": "evia",
+   "orders": [
+    {
+     "from": [],
+     "to": []
+    }
+   ],
+   "text": "⚠️Ακραίος κίνδυνος 🔥 αύριο, 22/8 σε #Αττική &amp; #Εύβοια 🆘Αποφεύγουμε οποιαδήποτε εργασία που μπορεί να προκαλέσει 🔥 🚫Δεν επιτρέπεται η πρόσβαση σε δάση &amp; άλση ‼️Αποφεύγουμε τις άσκοπες μετακινήσεις ‼️Ειδοποιούμε αμέσως την @pyrosvestiki στο ☎️199 ή 112 αν εντοπίσουμε εστία 🔥 https://t.co/uepjyODajW",
+   "url": "https://x.com/112Greece/status/1429047419891822594",
+   "title": "Extreme fire danger tomorrow, 22 August, in Attica and Evia"
+  },
+  {
+   "tweetId": "1429746594627432451",
+   "timestamp": "2021-08-23T13:05:26+03:00",
+   "type": "evacuation",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Βίλια",
+       "nameEn": "Vilia",
+       "lat": 38.167976,
+       "lon": 23.337193,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Ψάθα",
+       "nameEn": "Psatha",
+       "lat": 38.112583,
+       "lon": 23.219878,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στα #Βίλια εκκενώστε τώρα προς #Ψάθα ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1429746594627432451"
+  },
+  {
+   "tweetId": "1429747598236262410",
+   "timestamp": "2021-08-23T13:09:25+03:00",
+   "type": "evacuation",
+   "region": "attica_west",
+   "orders": [
+    {
+     "from": [
+      {
+       "tag": "Προφήτη_Ηλία_Βιλίων",
+       "nameEn": "Profitis Ilias Vilion",
+       "lat": 38.17,
+       "lon": 23.34,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ],
+     "to": [
+      {
+       "tag": "Μάνδρα_Αττικής",
+       "nameEn": "Mandra",
+       "lat": 38.07479,
+       "lon": 23.496952,
+       "source": "gazetteer:evia-wildfire-timeline"
+      }
+     ]
+    }
+   ],
+   "text": "⚠️ Ενεργοποίηση 1️⃣1️⃣2️⃣ 🆘 Αν βρίσκεστε στον #Προφήτη_Ηλία_Βιλίων εκκενώστε τώρα προς #Μάνδρα_Αττικής ‼️ Δασική πυρκαγιά στην περιοχή σας @pyrosvestiki @hellenicpolice",
+   "url": "https://x.com/112Greece/status/1429747598236262410"
+  }
+ ]
+}

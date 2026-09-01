@@ -9,8 +9,14 @@
 	 * than the screen's own notes, so nothing scrolls.
 	 *
 	 * The images themselves are still with the author; until they arrive the
-	 * square names its figure.
+	 * square names its figure — except where a LIVE figure exists for the
+	 * number (`lib/story/figures.ts`, keyed by the author's own figure number):
+	 * then the square mounts that drawing while its figure is in force, and
+	 * the figure's credit line (imagery and data attributions) prints under
+	 * the author's caption.
 	 */
+	import { FIGURES } from '$lib/story/figures';
+
 	interface Props {
 		figure: { n: number; name: string } | null;
 		notes: { n: number; text: string }[];
@@ -24,12 +30,22 @@
 	<div class="box">
 		{#if figure}
 			{#key figure.n}
-				<span class="ph">figure {pad(figure.n)} · {figure.name}</span>
+				{@const live = FIGURES[figure.n]}
+				{#if live}
+					<live.component />
+				{:else}
+					<span class="ph">figure {pad(figure.n)} · {figure.name}</span>
+				{/if}
 			{/key}
 		{/if}
 	</div>
 	<!-- the caption line the artboard writes under the image -->
-	<p class="cap">{figure ? `Figure ${pad(figure.n)} _ ${figure.name}` : ''}</p>
+	<div>
+		<p class="cap">{figure ? `Figure ${pad(figure.n)} _ ${figure.name}` : ''}</p>
+		{#if figure && FIGURES[figure.n]?.credit}
+			<p class="credit">{FIGURES[figure.n].credit}</p>
+		{/if}
+	</div>
 	{#if notes.length}
 		<div class="fnblock">
 			<p class="fnlabel">Footnote</p>
@@ -99,6 +115,14 @@
 	}
 	.ph {
 		font-size: var(--fs-12);
+		color: var(--ink-faint);
+	}
+	/* a live figure's attributions, under the author's caption */
+	.credit {
+		margin: 2px 0 0;
+		max-width: var(--fig-w);
+		font-size: 10px;
+		line-height: 1.3;
 		color: var(--ink-faint);
 	}
 

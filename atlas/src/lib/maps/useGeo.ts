@@ -126,6 +126,36 @@ export const loadEffisFires = (
 	return cache.get(url) as Promise<FeatureCollection<Polygon | MultiPolygon, FireProps>>;
 };
 
+export interface BurnProps {
+	/** ISO day of the product's burn-date estimate */
+	day: string;
+	doy: number;
+	/** 500 m pixels burnt that day inside the frame and Greek land */
+	px: number;
+	km2: number;
+}
+
+/** The burnt ground of August 2021, day by day, as INCREMENTS (WGS84,
+ *  simplified, CW — scripts/build_alerts_burn.py from NASA VIIRS VNP64A1,
+ *  tile h19v05: mainland only, Rhodes and Grevena not covered). The story's
+ *  Figure 04 draws the increments up to its clock's day. Attribution
+ *  required on display: «NASA VIIRS VNP64A1 burned area, 500 m». */
+export const loadAlertsBurn = (
+	fetch: Fetch
+): Promise<FeatureCollection<Polygon | MultiPolygon, BurnProps>> => {
+	const url = '/geo/alerts_burn_2021.geojson';
+	if (!cache.has(url)) {
+		cache.set(
+			url,
+			fetch(url).then((r) => {
+				if (!r.ok) throw new Error(`${url}: ${r.status}`);
+				return r.json();
+			})
+		);
+	}
+	return cache.get(url) as Promise<FeatureCollection<Polygon | MultiPolygon, BurnProps>>;
+};
+
 /** Context rivers for river-scoped sponsored projects (OSM courses,
  *  scripts/build_river_layer.py). Attribution required on display:
  *  «© OpenStreetMap contributors», marked approximate. */

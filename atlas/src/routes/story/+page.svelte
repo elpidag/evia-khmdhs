@@ -216,8 +216,18 @@
 		   when the text scrolls */
 		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
 		z-index: 4;
-		background: var(--paper);
 		padding-bottom: var(--sp-2);
+	}
+	/* the band's paper covers only the FOUR tracks the text scrolls under: the
+	   figure rectangle's top aligns with the titles' top (the artboard), so a
+	   full-width paper band painted over the rectangle's first 37 px — the
+	   clock card of Figure 04 lost its first line (2026-09-02) */
+	.heads::after {
+		content: '';
+		position: absolute;
+		inset: 0 calc(100% * 594 / 1784) 0 -20px;
+		background: var(--paper);
+		z-index: -1;
 	}
 	/* the strip between the black header and the pinned titles: paper, so the
 	   narrative never shows through while it scrolls past */

@@ -2,6 +2,7 @@ import { defineConfig } from 'vitest/config';
 import adapter from '@sveltejs/adapter-node';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
+import { tagParagraphs } from './scripts/remark-tag-paragraphs';
 
 export default defineConfig({
 	plugins: [
@@ -9,7 +10,9 @@ export default defineConfig({
 			// the narration lives in markdown the author edits (user, 2026-08-27):
 			// src/content/**/*.md compile to components through mdsvex
 			extensions: ['.svelte', '.md'],
-			preprocess: [mdsvex({ extensions: ['.md'] })],
+			// a paragraph that begins with a tag (the author's figure markers) is
+			// otherwise emitted with no <p> — scripts/remark-tag-paragraphs.ts
+			preprocess: [mdsvex({ extensions: ['.md'], remarkPlugins: [tagParagraphs] })],
 			compilerOptions: {
 				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
 				runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
