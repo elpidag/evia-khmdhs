@@ -11699,3 +11699,144 @@ in view. Clicking a bullet is wired and does nothing until a beat is set.
 
 Flagged to the author, not corrected: the sheet spells the same fire two ways —
 «Fires in the Peloponnese» (2007) and «Fires in the Peloponese» (2021).
+
+## 2026-09-02 — the report's texts distributed into the author's own markdown files, with live figures
+
+The author renamed the story's nine content files themselves and set the task:
+distribute `Website_Text_Storyboard.docx` into them, losing neither the
+footnotes nor the `[FIGURE xx: name]` markers, with every dataset-derived
+number corresponding to the dataset — then channel the texts into the site.
+
+**The distribution** (a one-off scratch script; the .md files are now the
+source of truth the author edits): nine sections → nine files —
+`introduction` · `chronology` · `timelinedisclaimer` · `methodology` ·
+`keyfindingandopenquestions` · `financedbyprivatecompanies` ·
+`antineroprogramme` · `coops` · `bibliography`. Verbatim text; the author's
+red `[FIGURE xx: name]` markers stay IN the text exactly where they placed
+them (they are the link between the chronology and the images to come); the
+18 real Word footnotes become inline superscripts plus a numbered list at the
+end of each section, in the document's own numbering (introduction 1–2,
+chronology 3–18). The methodology's four sub-titles render as sub-headings.
+`chapters.ts` now carries the author's nine sections (the scroll's beats, the
+heading row's titles), and `/story` renders the whole report.
+
+**The live figures**: every number in the text that reflects the datasets is a
+`<Num>` token read at render time — and the exercise proved the rule again,
+because the storyboard already disagreed with the data in four places
+(«Seven chains … 1.5 per cent» where the data answers eight/1.7 since lot 4Α;
+«253 contracts … €632.14 million» where it answers 254/€633.59M; the refresh
+date). `numbers.ts` keys now read THREE payload shapes in order — the card
+pages' overview kpis, `/api/meta` (which the root layout already loads
+everywhere), and `/api/compare` — and KEY FINDINGS' comparisons are DERIVED
+client-side from the compare payload (the value ratio, the count ratio, the
+share of co-op contracts below the smallest AntiNero contract, the peak year
+and its €). Two figures the text quotes had no computed source, so `/api/meta`
+gained them, pinned: `anadohoi.n_companies` (36, counted as the sponsor
+ranking counts) and `facts.dase_forest_eur` (€28,542,815.37 through forest
+offices/directorates, on the same per-contract pass the /dase delegation
+diagram reconciles with — the author's «around €28.5 million» to the word).
+
+**Liberties taken and disclosed, each reversible**: the section title prints
+«BIBLIOGRAPHY» where the document writes «Bibiography»; the Kalabokidis
+bibliography entry had its own 779-character abstract pasted after the DOI —
+removed as a paste accident, the citation kept; two sentences were reworded to
+carry a computed figure («more than twenty times» → «more than 21 times» via
+the ratio token, and «larger than more than 95 per cent» → «larger than
+N per cent», computed exactly). Figures that are the author's own research —
+85 deaths, 104, the hectares, the €60,000 ceiling, the 74 Kallikratis units —
+stay literal, as they should.
+
+## 2026-09-02 — the story page brought onto the author's Page01 artboard
+
+Four rulings from the author, applied together (their Page01.svg studied
+against the running page):
+
+1. **Footnotes present as the artboard draws them** — under the figure in the
+   RIGHT column: the «Figure xx _ name» caption line under the image, then a
+   small «Footnote» label, then the notes in TWO columns at the image's width,
+   12 px light. The .md files stay the single source: the page reads each
+   section's RAW file (its first `[FIGURE xx: name]` marker and the numbered
+   list after the closing `---`) and the narrative column HIDES both — the
+   markers are wrapped `<span class="figmark">` in the files so CSS can hide
+   them, and the section-end note lists hide as `hr ~ ol`. Nothing was moved
+   out of the author's files.
+2. **The titles never move** — TIMELINE, INTRODUCTION, CHRONOLOGY … pin at the
+   exact height they first render (`--story-top` = header + the page's own top
+   padding, defined in the layout) instead of riding up to the header on
+   scroll; a paper strip above them covers the text that scrolls past.
+3. **The methodology's four sub-chapters step back down** — Futura (the text
+   face), 16 px, sentence case: sub-chapters of METHODOLOGY, not display
+   titles. METHODOLOGY itself titles the section like every other.
+4. **The collapsed timeline shows its dots and capsules** on the converged
+   dotted line, coloured by lane — Page01 draws them there; only the event
+   TEXT (and the leader lines) wait for the spread.
+
+Answered the author's question in passing: the two sentences reworded to carry
+computed figures both sit in `keyfindingandopenquestions.md` («more than
+twenty times» → «more than 21 times» via the value-ratio token; «larger than
+more than 95 per cent» → «larger than N per cent», computed from the compare
+payload's per-contract values).
+
+## 2026-09-02 — the timeline owns its disclaimer, and the figure column rises
+
+Four more rulings from the author, applied:
+
+1. **The timeline disclaimer is not a narrative section.** It prints UNDER the
+   timeline, LEFT of the collapsed line — before it splits into the three
+   lanes — right-aligned against the line, fading when the timeline spreads.
+   `timelinedisclaimer.md` stays the source (the rail reads the raw file);
+   the DISCLAIMER FOR TIMELINE section left `chapters.ts`.
+2. **The lane titles sit to the RIGHT of the line at that same point** —
+   under the axis, opposite the disclaimer — instead of stacked above the
+   years. When the timeline spreads they ride out over their own lanes as
+   before. The collapsed fit gained ~200 px for the below-axis block.
+3. **The image rectangle rises** so its top aligns with the pinned section
+   title (the figure rail pins at `--story-top` with the heading row's
+   3.2 rem returned to it), and **the caption hugs the rectangle's lower
+   edge** (row-gap sp-2).
+4. **The footnote texts get the freed room** (~90 px taller block, leading
+   1.3). The author does not want the notes to SCROLL; the chronology's
+   sixteen still overflow, and the options were put to them: shrink the
+   square on note-heavy sections · smaller notes in three columns · notes
+   that follow the reading position within the section (per-paragraph
+   granularity — the right fix, more work). Their pick pending; the scroll
+   stays only where the set cannot fit.
+
+## 2026-09-02 — everything on /story follows the reader, at paragraph level
+
+The author's ruling on the footnote options — «the footnotes should follow the
+reader, and also that is what the timeline should do; the images on the
+figures have to work accordingly» — built as ONE mechanism, since all three
+are the same question: where in the text is the reader?
+
+**`lib/story/content.ts`** parses the author's own .md files into ordered
+BLOCKS (paragraphs and sub-headings), each knowing its section, its footnote
+superscripts and the `[FIGURE xx: name]` marker it carries; the page pairs
+these one-to-one with the rendered elements, gives each paragraph its block id
+and registers it on two observers — the reading line (which paragraph is
+active) and plain visibility (which paragraphs are on screen). From that:
+
+- **the figure in force** is the author's own marker, carried forward — the
+  document already said which figure corresponds to which part of the text,
+  and that information now drives the slot;
+- **the footnotes shown** are only those of the paragraphs on screen — never
+  more than a screenful, so the scroll is gone by construction;
+- **the timeline** lights the active paragraph's events and pans to their
+  date (`focusDate`, falling back to reading progress between bound
+  passages), and a bullet click scrolls to the exact paragraph.
+
+**`lib/story/bindings.ts`** is the curated event↔paragraph map under the
+author's standing policy (17 named events to the paragraph naming them, 4
+unnamed fires to the paragraph covering their moment, 10 unmentioned acts as
+unbound context): each binding is a VERBATIM needle from the author's text,
+resolved by substring at runtime, so their edits are free until they remove
+the phrase itself — at which point `content.test.ts` (11 tests) fails loudly.
+It also pins: 13 figures once each in order, 18 notes referenced once each in
+order, figure carry-forward, and the four 2021 fires sharing the season's
+paragraph.
+
+One disclosed touch to the author's file: `chronology.md`'s first paragraph
+carried the markers of figures 03 and 04 MID-paragraph — the marker is the
+author's own «the image changes here», so the paragraph now breaks at those
+two points (two newlines; not a word changed). Without the split the figure
+could not follow inside that paragraph.

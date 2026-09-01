@@ -1692,12 +1692,60 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   author's own text this way since 2026-09-01 (`content/datasets/*.md`) — their
   draft was already one contract out of date when it arrived, which is the rule's
   whole point.
-  Phases 1 (the shell) and 2 (the events above) are shipped, with the ten
-  chapters still standing in as beats; phase 3 brings the author's own text,
-  its footnotes, the images, the `beat` bindings that make the bullets live,
-  and the KEY FINDINGS charts moved into the right column at its width (they
-  are a full-width coda below the grid until then, which is why the timeline
-  column stands empty beside them). **Narration = markdown**
+  Phases 1 (the shell) and 2 (the 31 events) are shipped.
+  **The narrative is the author's own nine sections since 2026-09-02**
+  (DATA_DECISIONS): they renamed `content/story/*.md` themselves —
+  introduction · chronology · timelinedisclaimer · methodology ·
+  keyfindingandopenquestions · financedbyprivatecompanies ·
+  antineroprogramme · coops · bibliography — and the storyboard document
+  was distributed into them VERBATIM (scratch script, one-off; the .md
+  files are the editable source of truth). The `[FIGURE xx: name]` markers
+  stay IN the text where the author placed them (the future text↔image
+  link), the 18 real Word footnotes are inline `<sup>`s + a numbered list
+  at each section's end in the document's own numbering, and `chapters.ts`
+  carries the nine sections as the beats. **Every dataset-derived figure in
+  the text is a `<Num>` token** — `numbers.ts` keys read overview kpis →
+  `/api/meta` (root layout loads it on every page) → `/api/compare`, in
+  that order, and KEY FINDINGS' comparisons (value/count ratios, the
+  below-min share, the peak year) are derived from the compare payload
+  client-side; `/api/meta` gained `anadohoi.n_companies` and
+  `facts.dase_forest_eur` for the two figures nothing computed (pinned).
+  **The Page01 artboard pass (2026-09-02, DATA_DECISIONS):** the right
+  rail reads each section's RAW .md — its first `[FIGURE]` marker becomes
+  the «Figure xx _ name» caption under the image slot and its end-of-file
+  numbered list the «Footnote» block, TWO columns at the image's width —
+  while the narrative HIDES both (`.figmark` spans, `hr ~ ol`); the
+  titles PIN at `--story-top` (header + the page's top padding, set in
+  the layout) and never ride up, a `.heads::before` paper strip covering
+  the scroll-past; the methodology's four sub-chapters are Futura 16 px
+  sentence case (`h3` override), not display titles; and the COLLAPSED
+  timeline shows its dots/capsules on the converged line as the artboard
+  draws them (text and leader lines wait for the spread). Since the same
+  day's second round: the timeline DISCLAIMER prints under the axis LEFT
+  of the collapsed line (read from `timelinedisclaimer.md`, no longer a
+  narrative section; fades on spread), the lane titles sit RIGHT of the
+  line at that point (riding out to their lanes on spread), the figure
+  rail pins at `--story-top` so the rectangle's top aligns with the
+  section title, the caption hugs the rectangle, and the footnotes take
+  the freed room — the author wants NO scroll on the notes.
+  **Everything follows the reader since the same night** (their pick;
+  DATA_DECISIONS): `lib/story/content.ts` parses the .md files into
+  paragraph BLOCKS (section, sups, figure marker) paired 1:1 with the
+  rendered `p`/`h3` elements — two observers (reading line + visibility)
+  give the active and on-screen paragraphs, from which derive the figure
+  IN FORCE (the author's marker, carried forward), the footnotes shown
+  (only the visible paragraphs' — no scroll by construction) and the
+  timeline's lighting and `focusDate` pan; `lib/story/bindings.ts` holds
+  the curated event↔paragraph needles (17 named + 4 fires, 10 unbound
+  context; verbatim phrases, resolved by substring, 11 tests in
+  `content.test.ts` fail when an edit removes one). A marker
+  MID-paragraph splits the paragraph (chronology.md broke at figures
+  03/04 — the author's own «image changes here»; disclosed). StoryFigure
+  is a single live block now (figure + notes props). Still to come:
+  the 13 images and the KEY FINDINGS charts into the right column (the
+  coda below the grid until then); `StoryEvent.beat` is still unset — the
+  timeline pans by reading progress.
+  **Narration = markdown**
   in `atlas/src/content/{landing,data,datasets,story}/*.md` via mdsvex
   (`vite.config.ts` extensions/preprocess/`$content` alias,
   `src/content.d.ts`), rendered by `ui/Prose.svelte` (dev prints the

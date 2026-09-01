@@ -1,83 +1,54 @@
 <script lang="ts">
 	/**
-	 * The story's right column — the author's artboard: a square image, its
-	 * caption under it, and under that the footnotes of the passage the reader
-	 * is on, set in two columns.
+	 * The story's right column — the author's Page01 artboard, FOLLOWING THE
+	 * READER (their ruling, 2026-09-02): a square image slot showing the
+	 * figure IN FORCE at the passage being read (it changes at the author's
+	 * own `[FIGURE xx: name]` markers), the «Figure xx _ …» caption written
+	 * under it, and under that ONLY the footnotes of the paragraphs currently
+	 * on screen, in two columns behind a small «Footnote» label — never more
+	 * than the screen's own notes, so nothing scrolls.
 	 *
-	 * Every passage's block is mounted in the SAME rect and only opacity moves,
-	 * so a swap causes no reflow and the column never jumps. Phase 1 renders
-	 * placeholder boxes; the images, captions and real notes arrive with the
-	 * author's text (and, for the KEY FINDINGS charts, a chart in the same slot).
+	 * The images themselves are still with the author; until they arrive the
+	 * square names its figure.
 	 */
-	import type { Snippet } from 'svelte';
-
-	export interface FigureBlock {
-		/** the beat this belongs to */
-		id: string;
-		/** the caption printed under the image */
-		caption?: string;
-		/** the footnotes of that passage */
-		notes?: { n: number; text: string }[];
-	}
-
 	interface Props {
-		blocks: FigureBlock[];
-		active: string | null;
-		/** drawn inside the square when a block has no image yet */
-		placeholder?: Snippet<[FigureBlock]>;
+		figure: { n: number; name: string } | null;
+		notes: { n: number; text: string }[];
 	}
-	let { blocks, active, placeholder }: Props = $props();
+	let { figure, notes }: Props = $props();
 
-	/** the first block stands in until the reader reaches one of their own */
-	const shown = $derived(active ?? (blocks.length ? blocks[0].id : null));
+	const pad = (n: number) => String(n).padStart(2, '0');
 </script>
 
 <div class="fig">
-	{#each blocks as b (b.id)}
-		<div class="layer" class:on={b.id === shown} aria-hidden={b.id !== shown}>
-			<div class="box">
-				{#if placeholder}{@render placeholder(b)}{/if}
-			</div>
-			<p class="cap">{b.caption ?? ''}</p>
-			{#if b.notes?.length}
-				<ol class="notes">
-					{#each b.notes as n (n.n)}
-						<li value={n.n}>{n.text}</li>
-					{/each}
-				</ol>
-			{/if}
+	<div class="box">
+		{#if figure}
+			{#key figure.n}
+				<span class="ph">figure {pad(figure.n)} · {figure.name}</span>
+			{/key}
+		{/if}
+	</div>
+	<!-- the caption line the artboard writes under the image -->
+	<p class="cap">{figure ? `Figure ${pad(figure.n)} _ ${figure.name}` : ''}</p>
+	{#if notes.length}
+		<div class="fnblock">
+			<p class="fnlabel">Footnote</p>
+			<ol class="notes">
+				{#each notes as n (n.n)}
+					<li value={n.n}>{n.text}</li>
+				{/each}
+			</ol>
 		</div>
-	{/each}
+	{/if}
 </div>
 
 <style>
 	.fig {
-		position: relative;
-		width: 100%;
-		height: 100%;
-	}
-	/* every block in the same rect: a swap changes no layout, so nothing jumps */
-	.layer {
-		position: absolute;
-		inset: 0;
 		display: grid;
 		grid-template-rows: auto auto minmax(0, 1fr);
-		row-gap: var(--sp-3);
-		opacity: 0;
-		visibility: hidden;
-		transition:
-			opacity 0.35s ease,
-			visibility 0s 0.35s;
-	}
-	.layer.on {
-		opacity: 1;
-		visibility: visible;
-		transition:
-			opacity 0.35s ease,
-			visibility 0s 0s;
-	}
-
-	.layer {
+		row-gap: var(--sp-2); /* the caption sits close under the rectangle */
+		width: 100%;
+		height: 100%;
 		/* caption and notes are set to the IMAGE's width, not the column's */
 		--fig-w: min(100%, 540px);
 	}
@@ -95,39 +66,46 @@
 		font-size: var(--fs-12);
 		line-height: 1.35;
 		color: var(--ink-soft);
-		min-height: 2.4em;
+		min-height: 1.35em;
+	}
+	/* the artboard's footnote block: a small «Footnote» label, then the notes
+	   in TWO columns to the image's width, 12 px light. Only the visible
+	   paragraphs' notes print, so the set stays short by construction. */
+	.fnblock {
+		max-width: var(--fig-w);
+		min-height: 0;
+		margin-top: var(--sp-3);
+		overflow: hidden;
+	}
+	.fnlabel {
+		margin: 0 0 var(--sp-2);
+		font-size: var(--fs-12);
+		line-height: 1.2;
+		color: var(--ink-soft);
 	}
 	.notes {
 		margin: 0;
-		max-width: var(--fig-w);
-		padding-left: 1.1em;
+		padding-left: 1.2em;
 		columns: 2;
-		column-gap: var(--sp-6);
+		column-gap: var(--sp-7);
 		font-size: var(--fs-12);
-		line-height: 1.35;
+		line-height: 1.3;
+		font-weight: 300;
 		color: var(--ink-soft);
-		overflow: auto; /* a long set scrolls inside its own area */
 	}
 	.notes li {
 		break-inside: avoid;
 		margin-bottom: var(--sp-2);
 	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.layer {
-			transition: none;
-		}
+	.ph {
+		font-size: var(--fs-12);
+		color: var(--ink-faint);
 	}
+
 	@media (max-width: 1100px) {
-		/* released: the rails become a plain sequence under the text */
+		/* released: the rail becomes a plain block under the text */
 		.fig {
 			height: auto;
-		}
-		.layer {
-			position: static;
-			opacity: 1;
-			visibility: visible;
-			margin-bottom: var(--sp-8);
 		}
 	}
 </style>

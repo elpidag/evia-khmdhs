@@ -33,6 +33,7 @@
 		layoutLane,
 		storyDate,
 		storyRange,
+		yOfDate,
 		yearStops,
 		YEAR_W,
 		type Lane
@@ -46,18 +47,25 @@
 		activeYear?: number | null;
 		/** the events the passage on screen mentions; the rest stay grey */
 		activeIds?: string[];
-		/** 0→1 through the narrative, which is what the rail pans by until the
-		 *  author's text binds each event to its own passage */
+		/** the date the rail should centre on — the active paragraph's own
+		 *  event. While it is null the rail pans by `progress` instead. */
+		focusDate?: string | null;
+		/** 0→1 through the narrative — the fallback between bound passages */
 		progress?: number;
 		/** a bullet was clicked — the page scrolls to the passage that says it */
 		onSelect?: (e: StoryEvent) => void;
+		/** the author's timeline disclaimer — printed under the axis, LEFT of
+		 *  the collapsed line, before it splits into the three lanes */
+		note?: string;
 	}
 	let {
 		expanded = false,
 		activeYear = null,
 		activeIds = [],
+		focusDate = null,
 		progress = 0,
-		onSelect
+		onSelect,
+		note = ''
 	}: Props = $props();
 
 	const stops = yearStops();
@@ -86,14 +94,18 @@
 		fire: { legX: 383, legW: 130, color: '#a6312d', label: 'fires in Greece' }
 	};
 	/**
-	 * Where the three labels stack while the lanes are converged. They sit to
-	 * the LEFT of the converged line (which is at COLLAPSED_X) and 26 px apart,
-	 * because at the card pages' title size the first two wrap onto a second
-	 * line — at any less they print over one another.
+	 * Where the three labels stack while the lanes are converged: UNDER the
+	 * axis, to the RIGHT of the converged line — the author's ruling, with the
+	 * disclaimer on the line's left at the same point. 26 px apart, because at
+	 * this size the first two wrap onto a second line.
 	 */
-	const LEG_COLLAPSED_X = 60;
-	const LEG_COLLAPSED_W = COLLAPSED_X - LEG_COLLAPSED_X - 5;
+	const LEG_COLLAPSED_X = COLLAPSED_X + 14;
+	const LEG_COLLAPSED_W = W - LEG_COLLAPSED_X - 10;
 	const LEG_STEP = 26;
+	/** where the below-axis block (disclaimer left · titles right) begins */
+	const BELOW_TOP = axisHeight(stops) - 8;
+	/** the room that block needs — part of the collapsed fit */
+	const BELOW_H = 200;
 
 	/** the placed events, computed once — nothing here depends on the reader */
 	const placed = LANES.map((lane) => ({
@@ -119,19 +131,20 @@
 	const k = $derived(
 		expanded
 			? Math.min(w / W || 1, 1)
-			: Math.min(w / W || 1, (h || H_COLLAPSED) / H_COLLAPSED, 1)
+			: Math.min(w / W || 1, (h || 1) / (H_COLLAPSED + BELOW_H), 1)
 	);
 
 	/**
-	 * The pan. The reader's progress through the narrative maps onto the axis
-	 * and the rail centres a little above it — the axis's own travel, clamped so
-	 * it never scrolls past either end. When the author's text binds each event
-	 * to its passage this reads the bound event's y instead of the fraction.
+	 * The pan. The rail centres a little above the active paragraph's own
+	 * event (`focusDate`); between bound passages it falls back to the
+	 * reader's progress — clamped, so it never scrolls past either end.
 	 */
 	const viewH = $derived((h || 1) / k);
-	const panY = $derived(
-		expanded ? Math.max(0, Math.min(H - viewH, progress * H - viewH * 0.42)) : 0
-	);
+	const panY = $derived.by(() => {
+		if (!expanded) return 0;
+		const target = focusDate ? yOfDate(focusDate, stops) : progress * H;
+		return Math.max(0, Math.min(H - viewH, target - viewH * 0.42));
+	});
 
 	/**
 	 * The year printed large. The author's artboard puts one year in the reader's
@@ -159,6 +172,7 @@
 		style:--tc={TITLE_CLAMP}
 		style:--bc={BODY_CLAMP}
 		style:--yw={`${YEAR_W}px`}
+		style:--below={`${BELOW_TOP + 2}px`}
 	>
 		<!-- the legend: what each lane is. Stacked by the collapsed line, and
 		     carried out over its own lane when they spread. -->
@@ -171,12 +185,18 @@
 					style:--lw={`${l.legW}px`}
 					style:--cx={`${LEG_COLLAPSED_X}px`}
 					style:--cw={`${LEG_COLLAPSED_W}px`}
-					style:--ly={`${2 + i * LEG_STEP}px`}
+					style:--ly={`${BELOW_TOP + 2 + i * LEG_STEP}px`}
 				>
 					{l.label}
 				</li>
 			{/each}
 		</ul>
+
+		<!-- the author's disclaimer: under the axis, left of the collapsed
+		     line — it belongs to the un-split timeline and fades on the spread -->
+		{#if note}
+			<p class="disc" class:hidden={expanded}>{note}</p>
+		{/if}
 
 		<!-- the years: beside the collapsed line, far left when spread -->
 		<div class="years">
@@ -311,18 +331,24 @@
 		transform: translateX(0);
 	}
 
-	/* everything only the spread state shows */
-	.events,
+	/* the text blocks appear only when the timeline spreads; the DOTS and
+	   capsules ride the converged line even collapsed — the author's Page01
+	   draws them there */
 	.brk,
 	.blocks {
 		opacity: 0;
 		transition: opacity 0.3s ease;
 		pointer-events: none;
 	}
-	.expanded .events,
 	.expanded .brk,
 	.expanded .blocks {
 		opacity: 1;
+		pointer-events: auto;
+	}
+	.events {
+		pointer-events: none;
+	}
+	.expanded .events {
 		pointer-events: auto;
 	}
 
@@ -337,8 +363,13 @@
 	.cap.on {
 		opacity: 1;
 	}
+	/* collapsed, the leader lines make no sense — there is no text yet */
 	.lead {
 		stroke-width: 1;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+	.expanded .lead {
 		opacity: 0.35;
 	}
 
@@ -385,6 +416,24 @@
 		margin: 0;
 		padding: 0;
 		list-style: none;
+	}
+	.disc {
+		position: absolute;
+		top: var(--below, 0px);
+		left: 30px;
+		width: 246px;
+		margin: 0;
+		font-family: var(--font-ui);
+		/* the whole drawing renders at ~0.65 scale collapsed — any smaller
+		   than this and the disclaimer stops being readable */
+		font-size: 12.5px;
+		line-height: 1.35;
+		text-align: right;
+		color: var(--ink-soft);
+		transition: opacity 0.3s ease;
+	}
+	.disc.hidden {
+		opacity: 0;
 	}
 	/* stacked beside the collapsed line, then each label rides out over its own
 	   lane — the same horizontal move the lanes make */

@@ -1,0 +1,11 @@
+<script>
+	import Num from '$lib/story/Num.svelte';
+</script>
+
+The mechanism presented here emerged directly from the fires of August 2021. Announced while North Evia was still burning and legislated the following day, it amended Law 998/1979 to allow public or private organisations to be designated as contractors for the restoration and reforestation of burnt public forests. A designated organisation can finance the preparation of the necessary study and the execution of the works at its own expense, under the supervision of the Forest Service. Public ownership of the forest does not change, but functions previously financed and organised by the state can be undertaken by non-state actors.
+
+The mechanism therefore differs from public procurement. There is no contract awarded through KIMDIS and no public expenditure to follow. Instead, the administrative act of designation records the entry of a private organisation into a specific restoration process. It can also associate that organisation publicly with the recovery of a landscape after fire, giving restoration a role within corporate sponsorship and environmental responsibility strategies.
+
+The dataset brings together <Num id="ana.projects" /> designation acts concerning <Num id="ana.companies" /> companies and organisations. It traces where these interventions take place, the fires to which they respond, their announced duration and, where stated, their budget. Only <Num id="ana.stated_n" /> of the acts state a monetary amount, together reaching <Num id="ana.stated_eur" />, which means that the financial dimension of the scheme can only be partially reconstructed. The timeline also follows whether a completion act was subsequently identified. An absence of such an act does not mean that the works were abandoned or never completed. It means only that their completion could not be established through the documents sourced.
+
+Read together, the acts make visible a geography of privately financed intervention in public forests and the sectors of the economy that have entered it. They also allow the promise made at designation to be followed over time, from the announcement of restoration to the administrative record of its completion, where such a record exists.

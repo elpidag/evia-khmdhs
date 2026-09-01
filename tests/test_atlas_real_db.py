@@ -1292,7 +1292,11 @@ def test_fire_response_pins(client):
 
 def test_meta_anadohoi_pin(client):
     m = client.get("/api/meta").get_json()
-    assert m["anadohoi"] == {"n_projects": 69, "stated_eur": 43_284_256.85}
+    assert m["anadohoi"] == {"n_projects": 69, "stated_eur": 43_284_256.85,
+                             "n_companies": 36}
+    # the € the co-op dataset routes through forest offices/directorates —
+    # KEY FINDINGS quotes it as «around €28.5 million of the €30.2 million»
+    assert m["facts"]["dase_forest_eur"] == pytest.approx(28_542_815.37, abs=0.01)
 
 
 def test_executor_display_name_pins(client):

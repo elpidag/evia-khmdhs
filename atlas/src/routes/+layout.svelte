@@ -227,6 +227,9 @@
 	main.story {
 		--header-h: 85px;
 		--story-pad-b: clamp(12px, 1.85vh, 20px);
+		/* where the page's fixed titles sit: the header plus the top padding
+		   below — the story pins its heading row there so it never moves */
+		--story-top: calc(var(--header-h) + clamp(20px, 3.7vh, 40px));
 		max-width: 1920px;
 		padding: clamp(20px, 3.7vh, 40px) clamp(20px, 3.958vw, 76px) var(--story-pad-b)
 			clamp(20px, 3.125vw, 60px);

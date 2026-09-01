@@ -289,7 +289,8 @@ def full_client(tmp_path):
 
 def test_meta_includes_anadohoi(full_client):
     m = full_client.get("/api/meta").get_json()
-    assert m["anadohoi"] == {"n_projects": 1, "stated_eur": 50_000.0}
+    assert m["anadohoi"] == {"n_projects": 1, "stated_eur": 50_000.0,
+                             "n_companies": 1}
 
 
 def test_explore_all_three_datasets(full_client):

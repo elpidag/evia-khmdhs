@@ -197,6 +197,12 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "budget_current)), 2) FROM projects "
             "WHERE status != 'superseded'").fetchone()
         out["anadohoi"] = {"n_projects": n, "stated_eur": tot}
+        # the sponsors behind the projects, counted the way the ranking
+        # counts them (one presentational _sponsor_group per act spelling)
+        out["anadohoi"]["n_companies"] = len({
+            _sponsor_group(r[0]) for r in ana.execute(
+                "SELECT DISTINCT company FROM projects"
+                " WHERE status != 'superseded'")})
 
     # dataset-state counts the prose pages (methodology) cite — computed,
     # never hardcoded, so a refresh cannot leave stale numbers in copy
@@ -376,6 +382,16 @@ def meta(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                 SELECT COUNT(*) FROM contracts co
                 WHERE {dq.live_filter('co')}
                   AND co.contract_signed_date < '2021-09-01'""").fetchone()[0]
+        except sqlite3.OperationalError:
+            pass
+        try:
+            # the € the co-op dataset routes through the FOREST family of
+            # awarding units (offices + directorates), on the same
+            # per-contract pass the /dase delegation diagram reconciles to
+            # the basis with — quoted by KEY FINDINGS
+            facts["dase_forest_eur"] = round(sum(
+                r["eur"] for r in _dase_kind_rows(dase, kh)
+                if r["unit"] in ("dd", "dx")), 2)
         except sqlite3.OperationalError:
             pass
     if ana is not None:

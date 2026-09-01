@@ -1,15 +1,17 @@
 <script lang="ts">
 	/**
-	 * THE STORY — the scroll behind START HERE, rebuilt to the author's two
-	 * artboards (2026-09-01). Three columns: the TIMELINE on the left, the
-	 * NARRATIVE in the middle, and on the right the IMAGE with its caption and
-	 * the passage's FOOTNOTES. The chapter strip is gone; the heading row names
-	 * the chapter the reader is in, and the timeline is the navigation.
+	 * THE STORY — the scroll behind START HERE, on the author's artboards.
+	 * Three columns: the TIMELINE on the left, the NARRATIVE in the middle,
+	 * the FIGURE with its caption and footnotes on the right.
 	 *
-	 * PHASE 1 is the shell: the columns at the artboard's geometry, the scroll
-	 * wiring, and the timeline's structure with no events on it. The passages
-	 * are still the ten chapter placeholders; the author's own text, its
-	 * footnotes, the images and the timeline's events come next.
+	 * Everything follows the reader at PARAGRAPH granularity (the author's
+	 * ruling, 2026-09-02): the rendered paragraphs are paired one-to-one with
+	 * the parsed BLOCKS of the author's own .md files (`lib/story/content`),
+	 * so the figure in force changes at their `[FIGURE xx: name]` markers, the
+	 * right rail shows only the footnotes of the paragraphs on screen (nothing
+	 * scrolls), and the timeline pans to the passage being read — its events
+	 * lit through the curated needle bindings (`lib/story/bindings`), a bullet
+	 * click scrolling to the exact paragraph.
 	 *
 	 * RULE THE MARKUP MUST KEEP: the beats TILE the column — vertical rhythm
 	 * lives in padding inside `.beat`, never in margin between beats. A gap lets
@@ -20,8 +22,10 @@
 	import Prose from '$lib/ui/Prose.svelte';
 	import { BRAND } from '$lib/landing/brand';
 	import StoryTimeline from '$lib/story/StoryTimeline.svelte';
+	import StoryFigure from '$lib/story/StoryFigure.svelte';
 	import { EVENTS, type StoryEvent } from '$lib/story/events';
-	import StoryFigure, { type FigureBlock } from '$lib/story/StoryFigure.svelte';
+	import { BLOCKS, BLOCK_INDEX, NOTES, figureAt, timelineNote } from '$lib/story/content';
+	import { resolveBindings } from '$lib/story/bindings';
 	import { createSteps } from '$lib/story/steps';
 	import type { Component } from 'svelte';
 	import type { PageData } from './$types';
@@ -29,56 +33,124 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// every chapter's markdown, by id — a missing file is an empty chapter
+	// every section's markdown, by id — a missing file is an empty section
 	const texts = import.meta.glob('/src/content/story/*.md', {
 		eager: true,
 		import: 'default'
 	}) as Record<string, Component>;
 	const textOf = (id: string): Component | null => texts[`/src/content/story/${id}.md`] ?? null;
 
-	// Phase 1: a chapter stands in for a beat, so nothing breaks while the
-	// author writes. Phase 3 replaces this with their own marked passages.
-	const BEATS = CHAPTERS;
-	const IDS = BEATS.map((b) => b.id);
-	const INDEX = new Map(IDS.map((id, i) => [id, i]));
+	/* ── the bindings: which paragraph each timeline event belongs beside ── */
+	const bound = resolveBindings();
+	const eventsAtBlock = new Map<string, StoryEvent[]>();
+	for (const e of EVENTS) {
+		const b = bound.get(e.id);
+		if (!b) continue;
+		const list = eventsAtBlock.get(b.id) ?? [];
+		list.push(e);
+		eventsAtBlock.set(b.id, list);
+	}
+	/** the timeline spreads when the text reaches its first dated event */
+	const EXPAND_BLOCK = Math.min(
+		...[...bound.values()].map((b) => BLOCK_INDEX.get(b.id) ?? Infinity)
+	);
 
-	let active = $state<string | null>(null);
-	const steps = createSteps({ order: IDS, onActive: (id) => (active = id) });
-	$effect(() => () => steps.stop());
+	/* ── the reading position, one paragraph at a time ── */
+	let activeBlock = $state<string | null>(null);
+	const blockSteps = createSteps({
+		order: BLOCKS.map((b) => b.id),
+		onActive: (id) => (activeBlock = id)
+	});
+	$effect(() => () => blockSteps.stop());
 
-	/** the chapter printed over the middle column, in place of the old strip */
-	const here = $derived(BEATS.find((b) => b.id === active) ?? BEATS[0]);
+	/** the paragraphs currently anywhere on screen — the footnotes' window */
+	let visList = $state<string[]>([]);
 
 	/**
-	 * The timeline spreads once the reader's text reaches the first dated event.
-	 * The author's spreadsheet gives the events but not yet WHICH PASSAGE names
-	 * each one, so until that column exists the second passage stands in for
-	 * that moment and the rail pans by the reader's progress instead.
+	 * Pair the RENDERED paragraphs with the parsed blocks, in order: give each
+	 * element its block's id, register it on the reading-line observer, and on
+	 * a visibility observer for the footnote window. The correspondence is
+	 * p/h3 elements only — the hidden markers, rules and note lists don't
+	 * count on either side.
 	 */
-	const EXPAND_AT = 1;
-	const at = $derived(active ? (INDEX.get(active) ?? -1) : -1);
-	const expanded = $derived(at >= EXPAND_AT);
-	/** 0→1 down the narrative — what the timeline pans by, for now */
-	const progress = $derived(BEATS.length > 1 ? Math.max(0, at) / (BEATS.length - 1) : 0);
+	$effect(() => {
+		if (typeof IntersectionObserver === 'undefined') return;
+		const els: HTMLElement[] = [];
+		for (const c of CHAPTERS) {
+			const beat = document.getElementById(c.id);
+			if (!beat) continue;
+			els.push(...beat.querySelectorAll<HTMLElement>('.prose > p, .prose > h3'));
+		}
+		if (els.length !== BLOCKS.length) {
+			console.warn(`story: ${els.length} rendered blocks vs ${BLOCKS.length} parsed`);
+		}
+		const n = Math.min(els.length, BLOCKS.length);
+		const seen = new Set<string>();
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) {
+					const id = (e.target as HTMLElement).id;
+					if (e.isIntersecting) seen.add(id);
+					else seen.delete(id);
+				}
+				visList = BLOCKS.filter((b) => seen.has(b.id)).map((b) => b.id);
+			},
+			{ threshold: 0 }
+		);
+		const actions: { destroy(): void }[] = [];
+		for (let i = 0; i < n; i++) {
+			els[i].id = BLOCKS[i].id;
+			io.observe(els[i]);
+			actions.push(blockSteps.step(els[i], BLOCKS[i].id));
+		}
+		return () => {
+			io.disconnect();
+			for (const a of actions) a.destroy();
+		};
+	});
 
-	/** a bullet was clicked: go to the passage that tells it (once bound) */
+	/* ── what follows from the reading position ── */
+	const atBlock = $derived(activeBlock ? (BLOCK_INDEX.get(activeBlock) ?? -1) : -1);
+	const activeSection = $derived(atBlock >= 0 ? BLOCKS[atBlock].section : null);
+	const here = $derived(CHAPTERS.find((c) => c.id === activeSection) ?? CHAPTERS[0]);
+	const expanded = $derived(atBlock >= EXPAND_BLOCK);
+	const progress = $derived(BLOCKS.length > 1 ? Math.max(0, atBlock) / (BLOCKS.length - 1) : 0);
+
+	/** the figure IN FORCE — the author's own marker, carried forward */
+	const figure = $derived(figureAt(Math.max(0, atBlock)));
+
+	/** only the footnotes of the paragraphs on screen, in document order */
+	const shownNotes = $derived.by(() => {
+		const out: { n: number; text: string }[] = [];
+		for (const id of visList) {
+			const b = BLOCKS[BLOCK_INDEX.get(id) ?? -1];
+			if (!b) continue;
+			for (const n of b.sups) out.push({ n, text: NOTES.get(n) ?? '' });
+		}
+		return out.sort((a, b) => a.n - b.n);
+	});
+
+	/** the events the active paragraph names — lit on the timeline */
+	const activeIds = $derived(activeBlock ? (eventsAtBlock.get(activeBlock) ?? []).map((e) => e.id) : []);
+
+	/** the date the rail centres on; it holds position between bound passages */
+	let focusDate = $state<string | null>(null);
+	$effect(() => {
+		const evs = activeBlock ? eventsAtBlock.get(activeBlock) : undefined;
+		if (evs?.length) focusDate = evs[0].date;
+		else if (!activeBlock) focusDate = null;
+	});
+
+	/** a bullet was clicked: go to the exact paragraph that tells it */
 	function goToEvent(e: StoryEvent) {
-		if (!e.beat) return;
+		const b = bound.get(e.id);
+		if (!b) return;
 		document
-			.getElementById(e.beat)
+			.getElementById(b.id)
 			?.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' });
 	}
 	const reduced = () =>
 		typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-	const blocks: FigureBlock[] = BEATS.map((b, i) => ({
-		id: b.id,
-		caption: `Figure ${String(i + 1).padStart(2, '0')} — the picture for ${b.title.toLowerCase()}`,
-		notes: [
-			{ n: i * 2 + 1, text: 'The footnotes of this passage will print here, in two columns.' },
-			{ n: i * 2 + 2, text: 'They arrive with the text, and follow the reader down the page.' }
-		]
-	}));
 </script>
 
 <svelte:head>
@@ -96,37 +168,28 @@
 			<StoryTimeline
 				{expanded}
 				{progress}
-				activeIds={EVENTS.filter((e) => e.beat === active).map((e) => e.id)}
+				{focusDate}
+				{activeIds}
 				onSelect={goToEvent}
+				note={timelineNote()}
 			/>
 		</aside>
 
 		<div class="narrative">
-			{#each BEATS as b (b.id)}
-				<section class="beat" id={b.id} use:steps.step={b.id}>
-					<!-- the chapter is named ONCE, by the heading row above the column
-					     (the artboard prints it there, not again over the text) -->
-					<Prose hint={`atlas/src/content/story/${b.id}.md`}>
-						{@const Text = textOf(b.id)}
+			{#each CHAPTERS as c (c.id)}
+				<section class="beat" id={c.id}>
+					<!-- the section is named ONCE, by the heading row above the column -->
+					<Prose hint={`atlas/src/content/story/${c.id}.md`}>
+						{@const Text = textOf(c.id)}
 						{#if Text}<Text />{/if}
 					</Prose>
-					{#if b.id === 'findings'}
-						<p class="note">
-							The KEY FINDINGS charts stay below for now; they move into the right column, at its
-							width, with your own text beside them.
-						</p>
-					{/if}
 				</section>
 			{/each}
 			<RefreshLine />
 		</div>
 
 		<aside class="rail fig">
-			<StoryFigure {blocks} {active}>
-				{#snippet placeholder(b: FigureBlock)}
-					<span class="ph">image · {b.id}</span>
-				{/snippet}
-			</StoryFigure>
+			<StoryFigure {figure} notes={shownNotes} />
 		</aside>
 	</div>
 
@@ -148,10 +211,24 @@
 	}
 	.heads {
 		position: sticky;
-		top: var(--header-h, 85px);
+		/* pinned at the exact height they first render (header + the story
+		   page's own top padding) — the author: the titles must NOT move up
+		   when the text scrolls */
+		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
 		z-index: 4;
 		background: var(--paper);
 		padding-bottom: var(--sp-2);
+	}
+	/* the strip between the black header and the pinned titles: paper, so the
+	   narrative never shows through while it scrolls past */
+	.heads::before {
+		content: '';
+		position: absolute;
+		bottom: 100%;
+		left: -20px;
+		right: -20px;
+		height: 80px;
+		background: var(--paper);
 	}
 	/* the column titles are the dataset card's own name style — the same face,
 	   weight, size ramp, line-height and tracking as «ANTI-NERO PROGRAMME»
@@ -172,8 +249,11 @@
 
 	.rail {
 		position: sticky;
-		top: calc(var(--header-h, 85px) + 3.2rem);
-		height: calc(100dvh - var(--header-h, 85px) - 3.2rem - var(--story-pad-b, 20px));
+		top: calc(var(--story-top, calc(var(--header-h, 85px) + 100px)) + 3.2rem);
+		height: calc(
+			100dvh - var(--story-top, calc(var(--header-h, 85px) + 100px)) - 3.2rem -
+				var(--story-pad-b, 20px)
+		);
 		overflow: hidden;
 	}
 	.tl {
@@ -181,6 +261,14 @@
 	}
 	.fig {
 		grid-column: 5;
+		/* risen so the rectangle's top aligns with the TITLES — both pinned at
+		   --story-top; the 3.2rem is the heading row the other rails allow for */
+		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
+		margin-top: -3.2rem;
+		height: calc(
+			100dvh - var(--story-top, calc(var(--header-h, 85px) + 100px)) -
+				var(--story-pad-b, 20px)
+		);
 	}
 	.narrative {
 		grid-column: 3;
@@ -192,20 +280,36 @@
 	.beat {
 		padding: var(--sp-8) 0;
 		scroll-margin-top: 120px;
-		/* PHASE 1 ONLY: the author's passages are many paragraphs each, so a
-		   beat fills most of a screen. The placeholders are one line, and
-		   without this the whole story fits above the reading line and the
-		   timeline can never be seen collapsed. The real text removes it. */
-		min-height: 62vh;
 	}
-	.note {
-		margin: var(--sp-4) 0 0;
-		font-size: var(--fs-13);
-		color: var(--ink-faint);
+	/* the methodology's sub-chapters stay in the text face, modest —
+	   sub-chapters of METHODOLOGY, not titles of their own */
+	.beat :global(h3) {
+		margin: var(--sp-6) 0 var(--sp-3);
+		font-family: var(--font-ui);
+		font-weight: 700;
+		font-size: var(--fs-16);
+		line-height: 1.35;
+		letter-spacing: 0;
+		text-transform: none;
 	}
-	.ph {
-		font-size: var(--fs-12);
-		color: var(--ink-faint);
+	/* the narrative column hides what the right rail presents: the figure
+	   markers (the caption is written under the image, as the artboard does)
+	   and the section-end footnote lists (shown per visible paragraph under
+	   the figure) — both stay in the author's .md files as the source */
+	.beat :global(.figmark),
+	.beat :global(hr),
+	.beat :global(hr ~ ol) {
+		display: none;
+	}
+	/* the author's footnote marks */
+	.beat :global(sup) {
+		font-size: 0.68em;
+		line-height: 0;
+		color: var(--ink-soft);
+	}
+	/* the paragraphs are scroll targets for the timeline's bullets */
+	.beat :global(p) {
+		scroll-margin-top: 160px;
 	}
 
 	.coda {

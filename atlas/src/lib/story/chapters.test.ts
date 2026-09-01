@@ -6,6 +6,6 @@ describe('story chapters', () => {
 		const ids = CHAPTERS.map((c) => c.id);
 		expect(new Set(ids).size).toBe(ids.length);
 		expect(ids.every((id) => /^[a-z][a-z0-9-]*$/.test(id))).toBe(true);
-		expect(ids).toContain('findings');
+		expect(ids).toContain('chronology');
 	});
 });

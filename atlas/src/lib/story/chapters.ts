@@ -1,9 +1,9 @@
 /**
- * The story's chapters (user, 2026-08-27): a scroll the author writes over
- * the coming days. The ids are the anchors and the content file names
- * (src/content/story/<id>.md); the titles are placeholders to rename here.
- * KEY FINDINGS is the one chapter with substance today — the frames of
- * the former /compare page live in it.
+ * The story's sections — the author's own (2026-09-02): each id is a content
+ * file the author named (`src/content/story/<id>.md`, their text distributed
+ * from Website_Text_Storyboard.docx), each title the document's own heading.
+ * The heading row above the narrative prints the title of the section the
+ * reader is in; the ids are also the anchors.
  */
 export interface Chapter {
 	id: string;
@@ -11,14 +11,15 @@ export interface Chapter {
 }
 
 export const CHAPTERS: Chapter[] = [
-	{ id: 'intro', title: 'START HERE' },
-	{ id: 'findings', title: 'KEY FINDINGS' },
-	{ id: 'fire', title: 'THE FIRES' },
-	{ id: 'money', title: 'THE MONEY' },
-	{ id: 'awarding', title: 'AWARDING' },
-	{ id: 'companies', title: 'THE COMPANIES' },
-	{ id: 'coops', title: 'THE CO-OPERATIVES' },
-	{ id: 'sponsors', title: 'THE SPONSORS' },
-	{ id: 'supervision', title: 'SUPERVISION' },
-	{ id: 'outcome', title: 'THE OUTCOME' }
+	{ id: 'introduction', title: 'INTRODUCTION' },
+	{ id: 'chronology', title: 'CHRONOLOGY OF FIRES AND EVENTS' },
+	// the timeline disclaimer is NOT a narrative section: it prints under
+	// the timeline itself, left of the collapsed line (its .md stays the source)
+	{ id: 'methodology', title: 'METHODOLOGY' },
+	{ id: 'keyfindingandopenquestions', title: 'KEY FINDINGS AND OPEN QUESTIONS' },
+	{ id: 'financedbyprivatecompanies', title: 'FINANCED BY PRIVATE COMPANIES' },
+	{ id: 'antineroprogramme', title: 'ANTINERO PROGRAMME' },
+	{ id: 'coops', title: 'WORKS EXECUTED BY FOREST WORKERS’ COOPERATIVES' },
+	// the document spells it «Bibiography» — corrected here, flagged to the author
+	{ id: 'bibliography', title: 'BIBLIOGRAPHY' }
 ];
