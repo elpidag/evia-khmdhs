@@ -11639,3 +11639,63 @@ its own slot width and the three share one baseline above their rules, as Page02
 draws them. The figure column's caption and footnotes are set to the IMAGE's
 width (540px), not the column's.
 
+
+## 2026-09-01 — the story timeline's 31 events, from the author's own `Timeline.xlsx`
+
+The author supplied `13_MARA/INVESTIGATIVE-REPORT/Timeline.xlsx` — the events
+the story's left column draws. Columns: CATEGORY · START DATE · END DATE · KEY
+TITLE · EXPLANATION TEXT. **31 rows**, imported MECHANICALLY by
+`scripts/import_story_timeline.py` into `atlas/src/lib/story/events.ts` —
+nothing is retyped, the script rewrites only the data between the module's own
+markers (so the notes explaining the folds cannot be silently dropped), and it
+was verified to reproduce the committed file byte-for-byte. That gives **8 fires · 18 Greek events and laws · 5
+global/EU acts**, from the Peloponnese fires of 24.08.2007 to the N.E.C.C.A.
+carbon-units tender of 26.03.2026. **7 rows carry a later END DATE** and are
+therefore periods, not days — the four fires of August 2021, Rhodes, Evros, and
+the fortnight of 112 alerts — and are drawn as capsules. **12 rows carry no
+EXPLANATION TEXT**; they print as date and title, which for a fire is the whole
+statement.
+
+Two things happen to the sheet on the way in, both mechanical, both recorded in
+the module's own header:
+
+1. **The CATEGORY column is written four ways** — «Global events& EU Legislation
+   changes» (rows 7–8, no space) and «Global events & EU Legislative changes»
+   (rows 9, 28, 31) are one lane, and Sheet2 carries the three canonical names
+   («… Legislative changes in Greece», where Sheet1 says «legislation»). The
+   importer folds all four onto the three lanes `world | greece | fire`. A
+   spelling it does not know STOPS the import rather than inventing a lane.
+2. **`id` is a short slug of the title** — the anchor a bullet and its passage
+   will be bound by, so it must stay stable across a re-import.
+
+Three consequences the data forced on the design, all in
+`transforms/storyTimeline.ts` where the scale lives:
+
+- **The axis now starts in 2007, not 2016.** Two events sit before the
+  artboard's first year (the 2007 fires, Law 3889/2010) and nine years separate
+  them from the story proper. They are drawn as two short compressed steps and
+  the lanes carry a **break mark** at each, so the compression can never be read
+  as duration. Stops are no longer one per year; `yOfDate` interpolates inside
+  whichever pair brackets a date.
+- **2021 is given 260 px against a plain year's 81.4.** It carries twelve of the
+  thirty-one events and eight of them inside one fortnight of August; at an even
+  pitch those eight sit inside three pixels. 2023 (Rhodes, Evros and their two
+  committees) is given 110.
+- **The rail became a viewport that pans.** Thirty-one blocks of text cannot be
+  read at once in a column one screen tall, so the drawing is ~1.270 px and the
+  column follows the reader down it. The DOT always keeps its true date; where
+  events crowd, the BLOCK moves down and a leader line joins it back — the
+  layout is pure and tested, and the component decides no position. Titles clamp
+  to four lines and bodies to two, the same clamp the height estimate assumes
+  (the CSS takes it from the module, so drawing and maths cannot drift).
+
+**What the spreadsheet does NOT carry is the binding column** — which paragraph
+of the narrative mentions each event. That is the author's own requirement
+(«every bullet of the timeline is linked with the text where this event is
+mentioned»), and it cannot be inferred from a date. Until the narrative is
+placed, `StoryEvent.beat` is unset on all 31 rows, the rail pans by the reader's
+progress instead of by the event, and the year printed large is simply the year
+in view. Clicking a bullet is wired and does nothing until a beat is set.
+
+Flagged to the author, not corrected: the sheet spells the same fire two ways —
+«Fires in the Peloponnese» (2007) and «Fires in the Peloponese» (2021).

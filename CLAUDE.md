@@ -1652,8 +1652,32 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (never a `<line>`'s x1/x2, which are attributes and untransitionable), the
   years' x, the legend's x, all CSS transitions off one `class:expanded`, and
   the rules go dotted→solid. `lib/transforms/storyTimeline.ts` holds the pure
-  piecewise-linear year scale (~81.4px a year, 2016–2018 compressed, 2017
-  spaced but unnamed — the artboard's own decisions), vitest-pinned.
+  piecewise-linear year scale and the block layout, vitest-pinned (22 units).
+  **The 31 EVENTS are the author's own `Timeline.xlsx`** (2026-09-01,
+  DATA_DECISIONS), imported MECHANICALLY into `lib/story/events.ts` by
+  `scripts/import_story_timeline.py` — 8 fires / 18 Greek / 5 global-EU, 7 of them
+  periods with an END DATE (drawn as capsules), 12 with no explanation text
+  (date + title only). The sheet writes its CATEGORY four ways and Sheet2
+  carries the canonical three, so the importer FOLDS onto
+  `world | greece | fire` and refuses a spelling it does not know. Three things
+  the data forced: the axis starts at **2007** (two events precede the
+  artboard's 2016; the nine-year run-in is two compressed steps with a BREAK
+  MARK on each lane, so compression is never read as duration — stops are no
+  longer one per year and `yOfDate` interpolates inside whatever pair brackets
+  a date); **2021 gets 260px** against a plain year's 81.4 (twelve events,
+  eight inside one August fortnight — at an even pitch they sit inside 3px),
+  2023 gets 110; and the rail became a **VIEWPORT THAT PANS** — 31 blocks
+  cannot be read at once in a column one screen tall, so the drawing is
+  ~1.270px and the column follows the reader. The DOT keeps its true date
+  always; a crowded BLOCK moves down with a leader line back to it
+  (`layoutLane`, pure — the component decides no position). Titles clamp to 4
+  lines, bodies to 2, and the CSS takes both clamps FROM the module so the
+  drawing and the height estimate cannot drift. The world lane's text column
+  starts at `YEAR_W` because the years move into that margin when the timeline
+  spreads (pinned). **`StoryEvent.beat` — which passage names the event — is
+  the one thing the spreadsheet does not carry** and is unset on all 31 rows:
+  until the narrative is placed the rail pans by reading PROGRESS, the big year
+  is simply the year in view, and a bullet click is wired but inert.
   `lib/story/StoryFigure.svelte` is the right rail: every passage's block in
   the SAME rect with only opacity moving, so a swap reflows nothing.
   **Beats must TILE** — rhythm in padding inside `.beat`, never margin between
@@ -1668,10 +1692,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   author's own text this way since 2026-09-01 (`content/datasets/*.md`) — their
   draft was already one contract out of date when it arrived, which is the rule's
   whole point.
-  Phase 1 (shipped) is the shell with the ten chapters standing in as beats and
-  no events on the timeline; phase 2 adds `lib/story/events.ts` and the
-  bullets, phase 3 the author's own text, its footnotes and the KEY FINDINGS
-  charts moved into the right column at its width. **Narration = markdown**
+  Phases 1 (the shell) and 2 (the events above) are shipped, with the ten
+  chapters still standing in as beats; phase 3 brings the author's own text,
+  its footnotes, the images, the `beat` bindings that make the bullets live,
+  and the KEY FINDINGS charts moved into the right column at its width (they
+  are a full-width coda below the grid until then, which is why the timeline
+  column stands empty beside them). **Narration = markdown**
   in `atlas/src/content/{landing,data,datasets,story}/*.md` via mdsvex
   (`vite.config.ts` extensions/preprocess/`$content` alias,
   `src/content.d.ts`), rendered by `ui/Prose.svelte` (dev prints the

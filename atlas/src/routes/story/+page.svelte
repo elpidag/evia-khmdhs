@@ -20,6 +20,7 @@
 	import Prose from '$lib/ui/Prose.svelte';
 	import { BRAND } from '$lib/landing/brand';
 	import StoryTimeline from '$lib/story/StoryTimeline.svelte';
+	import { EVENTS, type StoryEvent } from '$lib/story/events';
 	import StoryFigure, { type FigureBlock } from '$lib/story/StoryFigure.svelte';
 	import { createSteps } from '$lib/story/steps';
 	import type { Component } from 'svelte';
@@ -50,11 +51,25 @@
 
 	/**
 	 * The timeline spreads once the reader's text reaches the first dated event.
-	 * With no events yet, the second passage stands in for that moment so the
-	 * movement can be judged.
+	 * The author's spreadsheet gives the events but not yet WHICH PASSAGE names
+	 * each one, so until that column exists the second passage stands in for
+	 * that moment and the rail pans by the reader's progress instead.
 	 */
 	const EXPAND_AT = 1;
-	const expanded = $derived((active ? (INDEX.get(active) ?? -1) : -1) >= EXPAND_AT);
+	const at = $derived(active ? (INDEX.get(active) ?? -1) : -1);
+	const expanded = $derived(at >= EXPAND_AT);
+	/** 0→1 down the narrative — what the timeline pans by, for now */
+	const progress = $derived(BEATS.length > 1 ? Math.max(0, at) / (BEATS.length - 1) : 0);
+
+	/** a bullet was clicked: go to the passage that tells it (once bound) */
+	function goToEvent(e: StoryEvent) {
+		if (!e.beat) return;
+		document
+			.getElementById(e.beat)
+			?.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' });
+	}
+	const reduced = () =>
+		typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	const blocks: FigureBlock[] = BEATS.map((b, i) => ({
 		id: b.id,
@@ -78,7 +93,12 @@
 
 	<div class="cols">
 		<aside class="rail tl">
-			<StoryTimeline {expanded} />
+			<StoryTimeline
+				{expanded}
+				{progress}
+				activeIds={EVENTS.filter((e) => e.beat === active).map((e) => e.id)}
+				onSelect={goToEvent}
+			/>
 		</aside>
 
 		<div class="narrative">
