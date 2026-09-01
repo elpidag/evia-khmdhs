@@ -154,7 +154,21 @@ def test_place_rendering_rules_pinned():
     assert pl["25ης Μαρτίου 23"] == "25is Martiou 23"
     # Python uppercases «Τέρμα» to «ΤΈΡΜΑ»: the keys are matched accent-folded
     assert pl["Τέρμα Ομονοίας"] == "End of Omonoias"
-    assert pl["Δασικό Κτίριο"] == "Forest Building"
+    assert pl["Δασικό Κτίριο"] == "Forestry Building"     # user verdict 2026-09-01
+    # the 2026-09-01 review's rules (DATA_DECISIONS): «γγ» is «ng», a word
+    # starting with «Μπ» takes the familiar «B», a letter after a building
+    # number stays a capital label, a bare «Λ» is Λεωφόρος, «Πλ.» is Plateia,
+    # a bare number before ΧΙΛ is an ordinal — and a foreign name stays by
+    # its letters (rule J, declined by the user)
+    assert pl["Λεωφόρος Συγγρού 189"] == "Leoforos Syngrou 189"
+    assert pl["Μεσολόγγι"] == "Mesolongi"
+    assert pl["Μπουμπουλίνας 57-59"] == "Bouboulinas 57-59"
+    assert pl["Λεωφόρος Κηφισίας 118Β"] == "Leoforos Kifisias 118B"
+    assert pl["Λ ΣΤΑΜΑΤΑΣ 5"] == "Leoforos Stamatas 5"
+    assert pl["Π.ΒΙΝΙΕΡΑΤΟΥ 5, ΠΛ.ΚΑΜΠΑΝΑΣ"] == "P. Vinieratou 5, Plateia Kampanas"
+    assert pl["3 ΧΙΛ ΔΡΑΜΑΣ ΣΕΡΡΩΝ"] == "3rd km Dramas – Serron"
+    assert pl["Βίκτωρος Ουγκώ 10"] == "Viktoros Ougko 10"
+    assert pl["Περιοχή ΖΕΠ"] == "ZEP area" and pl["αγροτεμάχια 567 & 584"] == "plots 567 & 584"
     # a hyphen inside a token starts a new place name
     assert pl["3ο χλμ. Ε.Ο. Κομοτηνής-Αλεξανδρούπολης"] == \
         "3rd km National Road Komotinis-Alexandroupolis"
@@ -192,5 +206,6 @@ def test_place_review_verdicts_pinned():
     assert pl["Πειραιάς"] == "Piraeus"
     assert pl["Κέρκυρα"] == "Corfu"
     assert pl["ΗΡΑΚΛΕΙΟ"] == "Heraklion"
-    # the Chios street named after the 118 exiles, in the user's own form
-    assert pl["Οδός των 118, αρ. 37"] == "118 Str. no. 37"
+    # the Chios street named after the 118 exiles — transliterated whole,
+    # by the user's verdict of 2026-09-01 (a half-translation read worse)
+    assert pl["Οδός των 118, αρ. 37"] == "Odos ton 118, no. 37"

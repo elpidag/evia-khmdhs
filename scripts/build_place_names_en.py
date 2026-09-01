@@ -83,8 +83,8 @@ SMALL = {"ΚΑΙ": "and", "ΧΙΛ": "km", "ΧΛΜ": "km", "ΤΘ": "PO Box",
 ROADS = {"ΕΟ": "National Road", "ΝΕΟ": "New National Road",
          "ΠΕΟ": "Old National Road"}
 # multi-word phrases, replaced before the words are read
-PHRASES = {"ΕΘΝΙΚΗΣ ΟΔΟΥ": "National Road", "ΠΕΡΙΦΕΡΕΙΑΚΗ ΟΔΟΣ": "Ring Road",
-           "ΔΑΣΙΚΟ ΚΤΙΡΙΟ": "Forest Building", "ΔΑΣΙΚΟ ΦΥΤΩΡΙΟ": "Forest Nursery"}
+PHRASES = {"ΕΘΝΙΚΗΣ ΟΔΟΥ": "National Road", "ΠΛ.": "Plateia ", "ΠΕΡΙΦΕΡΕΙΑΚΗ ΟΔΟΣ": "Ring Road",
+           "ΔΑΣΙΚΟ ΚΤΙΡΙΟ": "Forestry Building", "ΔΑΣΙΚΟ ΦΥΤΩΡΙΟ": "Forest Nursery"}
 DROP = ("ΕΝΤΟΣ ΟΙΚΙΣΜΟΥ", "ΕΝΤΟΣ ΣΧΕΔΙΟΥ")
 # Verdicts no rule can reach. The first four are single-letter
 # abbreviations whose expansion needs the toponym («Ν» is Νέα or Νέο, «Κ»
@@ -94,7 +94,13 @@ DROP = ("ΕΝΤΟΣ ΟΙΚΙΣΜΟΥ", "ΕΝΤΟΣ ΣΧΕΔΙΟΥ")
 # the same way, or the site says «Rodos» on one page and «Rhodes» on the
 # next.
 OVERRIDES = {
-    "Οδός των 118, αρ. 37": "118 Str. no. 37",
+    # the five single verdicts of the 2026-09-01 review (DATA_DECISIONS)
+    "Οδός των 118, αρ. 37": "Odos ton 118, no. 37",
+    "Περιοχή ΖΕΠ": "ZEP area",
+    "αγροτεμάχια 567 & 584": "plots 567 & 584",
+    "Μ. Αλεξάνδρου, Διοικητήριο": "Megalou Alexandrou, Administration Building",
+    "Π.ΒΙΝΙΕΡΑΤΟΥ 5, ΠΛ.ΚΑΜΠΑΝΑΣ": "P. Vinieratou 5, Plateia Kampanas",
+    "3 ΧΙΛ ΔΡΑΜΑΣ ΣΕΡΡΩΝ": "3rd km Dramas – Serron",
     "Ν ΜΑΓΝΗΣΙΑ": "Nea Magnisia",
     "Ν ΠΕΤΡΙΤΣΙ": "Neo Petritsi",
     "Κ ΝΕΥΡΟΚΟΠΙ": "Kato Nevrokopi",
@@ -143,6 +149,25 @@ def _voicing(t: str) -> str:
     return _VOICELESS.sub(lambda m: m.group(1) + "f", t)
 
 
+# Review rules of 2026-09-01 (DATA_DECISIONS), display layer only:
+#   A. «γγ» is «ng» (ELOT 743's own rule, which _translit lacks): Syngrou,
+#      Angelou, Mesolongi, Archangelos;
+#   B. a word that STARTS with «Μπ» takes the familiar «B», and its inner
+#      «μπ» follows (Bouboulinas, Bonou) — a word-internal «μπ» elsewhere
+#      keeps «mp» (Kampanas, Lampraki).
+def _familiar(t: str) -> str:
+    t = t.replace("gg", "ng").replace("Gg", "Ng").replace("GG", "NG")
+    if t[:2].lower() == "mp":
+        t = ("B" if t[0].isupper() else "b") + t[2:].replace("mp", "b")
+    return t
+
+
+# C. a letter after a building number is a label, not a word: «13Α» → «13A»,
+#    «118Β» → «118B», never «13a» / «118v»
+SUFFIX = {"Α": "A", "Β": "B", "Γ": "G", "Δ": "D"}
+NUM_SUFFIX = re.compile(r"^(\d+)([ΑΒΓΔ])$")
+
+
 def _cap(t: str) -> str:
     """Capitalise every alphabetic run — «komotinis-alexandroupolis» is two
     place names, and so is «Pl.kampanas»."""
@@ -183,7 +208,7 @@ def english(s: str) -> str:
             if prev_up in KM or "." in w:
                 out.append(ROADS[up])
             else:
-                out.append(_cap(_voicing(_translit(w))))
+                out.append(_cap(_familiar(_voicing(_translit(w)))))
             continue
         if up == "ΜΕΓ":
             out.append("Megalou" if nxt_up.endswith("ΟΥ")
@@ -200,10 +225,16 @@ def english(s: str) -> str:
             if SMALL[up]:
                 out.append(SMALL[up])
             continue
-        if w.isdigit():
-            out.append(w)
+        if fold(w) == "Λ" and i + 1 < len(words):
+            out.append("Leoforos")
             continue
-        out.append(_cap(_voicing(_translit(w))))
+        if (m := NUM_SUFFIX.fullmatch(fold(w))):
+            out.append(m.group(1) + SUFFIX[m.group(2)])
+            continue
+        if w.isdigit():
+            out.append(ordinal(w) if nxt_up in KM else w)
+            continue
+        out.append(_cap(_familiar(_voicing(_translit(w)))))
     # «ΘΕΣΗ» is punctuation, not a word: it hangs on the name before it
     joined = " ".join(out).strip()
     return " ".join(joined.replace(" ,", ",").split()).strip(" ,")
@@ -219,6 +250,8 @@ def main() -> None:
             "authorities' offices, keyed by the exact stored Greek string. "
             "ISO-843 transliteration (khmdhs.geocode_loader._translit), "
             "title-cased, «ΑΓ» expanded, ordinals and χλμ/Τ.Θ./Λεωφ. "
+            "rendered; USER-REVIEWED 2026-09-01 — rules A–I and five single "
+            "verdicts, DATA_DECISIONS. "
             "rendered. MACHINE-PROPOSED, awaiting the user's review; the "
             "Greek stays the stored value and the evidence. Rebuild: "
             "python scripts/build_place_names_en.py"

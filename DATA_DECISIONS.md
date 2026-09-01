@@ -11446,3 +11446,97 @@ gap; the calls' lot tables did. An award's winner list (4Α) and an issuer's
 Diavgeia acts read for the lots' Α/Α ΕΣΗΔΗΣ (Εύβοια) are discovery routes the
 scripts do not run yet.
 
+**2026-09-01 — `place_names_en.json` is user-reviewed.** The 646
+machine-proposed English renderings of the entity pages' registered-office
+strings (2026-08-26) were reviewed by RULE, not entry by entry: 435 are plain
+toponym transliterations, 211 carry a number, an abbreviation or a building
+word, and those reduced to ten rules and five single verdicts. Accepted (user):
+**A** «γγ» → «ng» (ELOT 743's own rule, which `_translit` lacks: Syngrou,
+Angelou, Mesolongi, Archangelos ×2); **B** a word starting with «Μπ» takes
+the familiar «B» and its inner «μπ» follows (Bouboulinas ×2, Bonou — an inner
+«μπ» elsewhere keeps «mp»); **C** a letter after a building number stays a
+capital label (13A, 118B, 10A, 14A — never «13a»/«118v»); **D** a bare «Λ»
+is Λεωφόρος (Leoforos Stamatas 5; «Λ.» with a dot stays an initial); **E**
+«Πλ.» is Plateia; **F** «Τέρμα X» stays «End of X»; **G** a bare number before
+ΧΙΛ is an ordinal (3rd km Dramas – Serron); **H** «εντός οικισμού» drops
+before a PO Box; **I** date-streets keep their Greek form (25is Martiou —
+the 26.08 rule). Declined: **J** foreign names by letters stay (Viktoros
+Ougko 10, not «Victor Hugo»). Singles: «Οδός των 118, αρ. 37» → «Odos ton
+118, no. 37»; «Περιοχή ΖΕΠ» → «ZEP area»; «αγροτεμάχια 567 & 584» → «plots
+567 & 584»; «Δασικό Κτίριο» → «Forestry Building»; «Μ. Αλεξάνδρου,
+Διοικητήριο» → «Megalou Alexandrou, Administration Building». The rules
+live in `scripts/build_place_names_en.py` (`_familiar`, `NUM_SUFFIX`, the
+«Λ»/«ΠΛ.» branches; the singles in `OVERRIDES`), so a rebuild keeps them,
+and `_translit` itself is untouched — it feeds the geocoder and stays
+ISO-843. Rebuilt: exactly 19 entries changed, both copies byte-identical.
+The review debt of 2026-08-26 is closed.
+
+**2026-09-01 — Two of the three 2022 ventures documented from the ΓΕΜΗ
+register; the third is in no register.** The user asked for the three
+ANTINERO-II ventures whose contracts name members without ΑΦΜ to be resolved
+through ΓΕΜΗ's publicity API. The publicity DETAILS payload carries the
+members at `companyInfo.payload.managementPersons` — one level ABOVE the
+`company` object `khmdhs.gemi.company_details` returns, which is why a
+company-object read shows nothing. Read there: **996813233 Κ/Ξ ΒΑΛΛΑΣ –
+ΟΙΚΟΝΟΜΟΥ** (ΓΕΜΗ 166857453000) = ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ 148450918 «Εταίρος - Μέλος»
+50 % + ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ 031213597 50 %, both from 27/10/2022 (liquidators from
+05/12/2025 — the venture is struck off); her register ΑΦΜ is the one she
+holds in-scope contracts under in her own name, corroborating the match.
+**997080215 Κ/Ξ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ – ΜΗΤΟΓΛΟΥ** (ΓΕΜΗ 165541904000) =
+ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ Α.Ε. 999126094 «Μέλος & Διαχειριστής» 90 % +
+ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ 045210926 10 %, from 07/09/2022 (ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ since
+20/01/2026). Curated with the 2026-08-20 conventions (source `gemi:<number>`,
+the register row verbatim as excerpt, `gemi_percentage` as metadata; the even
+split stays). **996870694 Κ/Ξ ΠΑΠΑΓΕΩΡΓΑΚΗΣ – ΚΟΣΜΙΔΗΣ** is in no ΓΕΜΗ
+register (search by ΑΦΜ: not found) and its family holds no award act, so it
+stays `members_documented: false` — a name is not evidence. Loaded: 62
+ventures, 50 with members (was 48), 102 member links (98), 70 distinct firms
+(66), 12 undocumented (14).
+
+**Found on the way, NOT applied:** the same read now returns members for
+NINE of the eleven ventures the user left undocumented on 2026-08-20
+(ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025, ΑΓΓΕΛΑΤΟΣ–ΜΑΝΑΡΙΤΣΑΣ–ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ,
+ΗΛΙΟΠΟΥΛΟΣ-ΠΑΡΛΑΝΤΖΑΣ–ΓΑΙΟΣΤΑΤ, ΓΚΑΤΖΙΟΣ–ΤΑΣΚΟΥΔΗΣ, ΔΡΑΜΗΤΙΝΟΣ–ΜΠΟΥΡΑΣ,
+ΖΑΜΠΑΣ–ΠΡΑΞΙΣ, ΓΚΙΚΑΣ–ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ–ΑΓΓΕΛΑΤΟΣ, ΔΗΜΗΤΡΙΟΥ–ΛΑΜΠΟΣ,
+ΝΤΑΝΟΣ–ΣΚΑΝΔΑΛΟΣ) — every one with ΑΦΜ, capacity, percentage and date, i.e.
+exactly the evidence the standard asks for. **Correction of the record (same
+day, after the user asked what had changed): NOTHING changed at the register.**
+The 2026-08-20 sweep (`sweep_gemi_members.py`, still in the session scratchpad
+with its output `gemi_member_sweep.json` of 20.08 19:09) fetched these very
+rows that day — they are in its output, filed under `other_roles` — because
+its filter counted as a member only a row whose role STARTS with «Εταίρος»;
+these nine ventures' rows read «Μέλος & Διαχειριστής» (3) or «Μέλος,
+Διαχειριστής & Εκπρόσωπος» (6) and were set aside. Batch B caught the first
+of those spellings and re-read FIVE ventures by hand, but the other nine were
+never re-read, and the batch-B entry's closing sentence («9 with a ΓΕΜΗ
+record that lists no member rows») was written from the proposals file, which
+had dropped the set-aside rows. So the 2026-08-20 statement was wrong, and the
+first explanation offered today (a `company`-object read) was wrong too — the
+sweep did read `managementPersons`. Proposals for the nine sit in the
+scratchpad; they wait for the user's word (they would move the «by member
+firm» ranking). Only ΛΙΑΡΗ–ΓΚΙΚΑΣ and ΤΣΙΑΝΑΒΑΣ–Μ.&Κ. have no register at all.
+
+**2026-09-01 — Batch C: the nine ventures documented from the register
+(user: «apply the nine»).** ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025 (ΑΓΓΕΛΑΤΟΣ
+075195407 50 / ΖΑΒΙΤΣΑΝΟΣ 042820089 50 — the πρόσκληση invites Ζαβιτσάνος
+under 073449705, a discrepancy kept on the record, unreconciled);
+ΑΓΓΕΛΑΤΟΣ–ΜΑΝΑΡΙΤΣΑΣ–ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ (054537472 50 / 075195407 25 /
+122499275 25, dated by the register 10/05/2023 — after its 2022 contracts;
+recorded as stated); ΗΛΙΟΠΟΥΛΟΣ-ΠΑΡΛΑΝΤΖΑΣ Ο.Ε.–ΓΑΙΟΣΤΑΤ Ε.Ε. (800349931 50 /
+998731143 50); ΓΚΑΤΖΙΟΣ–ΤΑΣΚΟΥΔΗΣ/ΓΚΑΤΖΙΟΣ Ι.Κ.Ε. (038925014 70 / 998746814
+30); ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.–ΜΠΟΥΡΑΣ & ΣΙΑ Ε.Ε. (999448728 60 / 998126035 40);
+ΖΑΜΠΑΣ–ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε. (042971088 50 / 999735729 50);
+ΓΚΙΚΑΣ–ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ–ΑΓΓΕΛΑΤΟΣ (073533221 50,56 / 122499275 24,72 /
+075195407 24,72); ΔΗΜΗΤΡΙΟΥ–ΛΑΜΠΟΣ (051122328 50 / 051955363 50 — the
+PERSON Ιωάννης Λάμπος, not his firm ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΑΙ ΣΙΑ Ε.Ε. 998269962);
+ΝΤΑΝΟΣ–ΣΚΑΝΔΑΛΟΣ (044397659 47 / 036343031 53). Conventions of 2026-08-20:
+source `gemi:<number>`, the register row verbatim as excerpt, percentage as
+`gemi_percentage` metadata only, the even split untouched; a member's display
+name is the site's curated one where the ΑΦΜ already has one (ΑΓΓΕΛΑΤΟΣ,
+ΜΑΝΑΡΙΤΣΑΣ, ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ, ΓΚΙΚΑΣ, ΔΗΜΗΤΡΙΟΥ, ΛΑΜΠΟΣ, ΝΤΑΝΟΣ, ΣΚΑΝΔΑΛΟΣ,
+ΓΚΑΤΖΙΟΣ … are contractors in their own right), the documented form with
+patronymic where a family document gives it (ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ ΤΟΥ ΔΗΜΗΤΡΙΟΥ),
+the register's otherwise. Loaded: **62 ventures / 59 documented (122 links,
+79 firms) / 3 undocumented** — ΠΑΠΑΓΕΩΡΓΑΚΗΣ–ΚΟΣΜΙΔΗΣ, ΛΙΑΡΗ–ΓΚΙΚΑΣ and
+ΤΣΙΑΝΑΒΑΣ–Μ.&Κ., none of which any register or document names.
+

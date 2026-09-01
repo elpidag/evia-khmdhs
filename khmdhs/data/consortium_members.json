@@ -149,13 +149,28 @@
   "name": "ΔΑΣΟΤΕΧΝΙΚΩΝ ΕΡΓΩΝ ΣΠΟΡΑΔΩΝ 2025 Κ Ξ",
   "legal_type": "Κοινοπραξία",
   "gemi": "183520344000",
-  "basis": "gemi",
+  "basis": "gemi+gemi_members",
   "contracts": [
    "25SYMV016712403"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). No document we hold names them: the contract states only the venture ΑΦΜ and its signatory, the registry declared no award act, and the 16 Diavgeia acts citing the contract are schedule approvals, extensions, ΑΠΕ and payment approvals with no text layer. Two unreconciled pointers were left on the record rather than guessed: the contract is signed by Ζαβιτσάνος Σπυρίδων, one of the five firms invited by πρόσκληση 25PROC016428942 (ΑΦΜ 073449705), while the venture is seated at Δ. Γεωργιάδου 278 Βόλος, which is ΓΚΑΡΑΝΑΤΣΙΟΥ ΑΡΕΤΗ address (043778194) — and she is not among the five.",
-  "members_documented": false
+  "members": [
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ",
+    "source": "gemi:183520344000",
+    "excerpt": "ΓΕΜΗ 183520344000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ», ΑΦΜ 075195407, Μέλος & Διαχειριστής, ποσοστό 50%, από 31/03/2025; name: register form",
+    "gemi_percentage": "50%"
+   },
+   {
+    "vat": "042820089",
+    "name": "ΖΑΒΙΤΣΑΝΟΣ ΣΠΥΡΙΔΩΝ",
+    "source": "gemi:183520344000",
+    "excerpt": "ΓΕΜΗ 183520344000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΣΠΥΡΙΔΩΝ ΖΑΒΙΤΣΑΝΟΣ», ΑΦΜ 042820089, Μέλος & Διαχειριστής, ποσοστό 50%, από 31/03/2025; name: register form",
+    "gemi_percentage": "50%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays. Discrepancy kept on the record: the πρόσκληση 25PROC016428942 invites Ζαβιτσάνος under ΑΦΜ 073449705, while the register's member row carries 042820089 — the register row is what documents membership; the two numbers are not reconciled here.",
+  "members_documented": true
  },
  "802662240": {
   "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ ΤΣΙΜΠΩΝΗ ΧΡΥΣΟΥΛΑ ΚΑΙ ΣΙΑ Ε.Ε. Κ/Ξ",
@@ -526,15 +541,37 @@
   "name": "ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ – ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ – ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ",
   "legal_type": "Κοινοπραξία",
   "gemi": "170518722000",
-  "basis": "gemi",
+  "basis": "gemi+gemi_members",
   "contracts": [
    "22SYMV010856518",
    "22SYMV010856519",
    "22SYMV010856521"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "054537472",
+    "name": "ΜΑΝΑΡΙΤΣΑΣ ΕΥΑΓΓΕΛΟΣ",
+    "source": "gemi:170518722000",
+    "excerpt": "ΓΕΜΗ 170518722000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΕΥΑΓΓΕΛΟΣ ΜΑΝΑΡΙΤΣΑΣ», ΑΦΜ 054537472, Μέλος & Διαχειριστής, ποσοστό 50%, από 10/05/2023, έως 29/01/2026; name: register form",
+    "gemi_percentage": "50%"
+   },
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ",
+    "source": "gemi:170518722000",
+    "excerpt": "ΓΕΜΗ 170518722000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ», ΑΦΜ 075195407, Μέλος & Διαχειριστής, ποσοστό 25%, από 10/05/2023, έως 29/01/2026; name: register form",
+    "gemi_percentage": "25%"
+   },
+   {
+    "vat": "122499275",
+    "name": "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ",
+    "source": "gemi:170518722000",
+    "excerpt": "ΓΕΜΗ 170518722000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ», ΑΦΜ 122499275, Μέλος & Διαχειριστής, ποσοστό 25%, από 10/05/2023, έως 29/01/2026; name: register form",
+    "gemi_percentage": "25%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays. The register dates the members from 10/05/2023, after the venture's three 2022 contracts — the announcement date, recorded as the register states it.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "054537472",
@@ -550,14 +587,29 @@
   "name": "Α ΗΛΙΟΠΟΥΛΟΣ Β ΠΑΡΛΑΝΤΖΑΣ ΟΕ - ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ ΟΙΚΟΝΟΜΙΚΩΝ ΦΟΡΕΩΝ ΚΟΙΝΟΠΡΑΞΙΑ",
   "legal_type": "Κοινοπραξία",
   "gemi": "183496802000",
-  "basis": "gemi+name",
+  "basis": "gemi+name+gemi_members",
   "contracts": [
    "25SYMV016722680",
    "25SYMV016723758"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "998731143",
+    "name": "ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ Ε.Ε.",
+    "source": "gemi:183496802000",
+    "excerpt": "ΓΕΜΗ 183496802000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΓΑΙΟΣΤΑΤ ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ ΕΕ», ΑΦΜ 998731143, Μέλος & Διαχειριστής, ποσοστό 50%, από 28/03/2025; name: register form (company)",
+    "gemi_percentage": "50%"
+   },
+   {
+    "vat": "800349931",
+    "name": "Α.ΗΛΙΟΠΟΥΛΟΣ - Β.ΠΑΡΛΑΝΤΖΑΣ Ο.Ε.",
+    "source": "gemi:183496802000",
+    "excerpt": "ΓΕΜΗ 183496802000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «Α.ΗΛΙΟΠΟΥΛΟΣ - Β.ΠΑΡΛΑΝΤΖΑΣ ΟΕ», ΑΦΜ 800349931, Μέλος & Διαχειριστής, ποσοστό 50%, από 28/03/2025; name: register form (company)",
+    "gemi_percentage": "50%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "800349931",
@@ -573,13 +625,28 @@
   "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ – ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ",
   "legal_type": "Κοινοπραξία",
   "gemi": "175712152000",
-  "basis": "gemi+name",
+  "basis": "gemi+name+gemi_members",
   "contracts": [
    "24SYMV014415876"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "998746814",
+    "name": "ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ Ι.Κ.Ε.",
+    "source": "gemi:175712152000",
+    "excerpt": "ΓΕΜΗ 175712152000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΤΑΣΚΟΥΔΗΣ Ι. ΝΙΚΟΛΑΟΣ – ΓΚΑΤΖΙΟΣ Ι. ΦΩΤΙΟΣ ΙΚΕ», ΑΦΜ 998746814, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 30%, από 29/02/2024; name: register form (company)",
+    "gemi_percentage": "30%"
+   },
+   {
+    "vat": "038925014",
+    "name": "ΓΚΑΤΖΙΟΣ ΦΩΤΙΟΣ ΤΟΥ ΙΩΑΝΝΗ",
+    "source": "gemi:175712152000",
+    "excerpt": "ΓΕΜΗ 175712152000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΦΩΤΙΟΣ ΓΚΑΤΖΙΟΣ», ΑΦΜ 038925014, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 70%, από 29/02/2024; name: documented form (24PROC014272524)",
+    "gemi_percentage": "70%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "038925014",
@@ -595,14 +662,29 @@
   "name": "«ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ ΚΑΙ ΣΙΑ Ε.Ε. - ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε.Ε. ΚΟΙΝΟΠΡΑΞΙΑ»",
   "legal_type": "Κοινοπραξία",
   "gemi": "184231301000",
-  "basis": "gemi+name",
+  "basis": "gemi+name+gemi_members",
   "contracts": [
    "25SYMV016921666",
    "25SYMV016921696"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "998126035",
+    "name": "ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε.Ε.",
+    "source": "gemi:184231301000",
+    "excerpt": "ΓΕΜΗ 184231301000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΗΛΙΑΣ ΜΠΟΥΡΑΣ ΚΑΙ ΣΙΑ Ε.Ε.», ΑΦΜ 998126035, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 40%, από 06/05/2025; name: register form (company)",
+    "gemi_percentage": "40%"
+   },
+   {
+    "vat": "999448728",
+    "name": "ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.",
+    "source": "gemi:184231301000",
+    "excerpt": "ΓΕΜΗ 184231301000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΙΩΑΝΝΗΣ ΔΡΑΜΗΤΙΝΟΣ & ΣΙΑ Ε.Ε.», ΑΦΜ 999448728, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 60%, από 06/05/2025; name: register form (company)",
+    "gemi_percentage": "60%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "998126035",
@@ -618,13 +700,28 @@
   "name": "ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ – ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε. ΚΟΙΝΟΠΡΑΞΙΑ",
   "legal_type": "Κοινοπραξία",
   "gemi": "183707904000",
-  "basis": "gemi+name",
+  "basis": "gemi+name+gemi_members",
   "contracts": [
    "25SYMV016782219"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "999735729",
+    "name": "ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε.",
+    "source": "gemi:183707904000",
+    "excerpt": "ΓΕΜΗ 183707904000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΠΡΑΞΙΣ ΤΕΧΝΙΚΗ Ε.Ε.», ΑΦΜ 999735729, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 50%, από 07/04/2025; name: register form (company)",
+    "gemi_percentage": "50%"
+   },
+   {
+    "vat": "042971088",
+    "name": "ΖΑΜΠΑΣ ΣΤΥΛΙΑΝΟΣ ΤΟΥ ΔΗΜΗΤΡΙΟΥ",
+    "source": "gemi:183707904000",
+    "excerpt": "ΓΕΜΗ 183707904000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΣΤΥΛΙΑΝΟΣ ΖΑΜΠΑΣ», ΑΦΜ 042971088, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 50%, από 07/04/2025; name: documented form (25PROC016392196)",
+    "gemi_percentage": "50%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "042971088",
@@ -640,13 +737,35 @@
   "name": "ΚΞ ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ - ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ - ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ",
   "legal_type": "Κοινοπραξία",
   "gemi": "177632622000",
-  "basis": "gemi+name",
+  "basis": "gemi+name+gemi_members",
   "contracts": [
    "24SYMV014917317"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "075195407",
+    "name": "ΑΓΓΕΛΑΤΟΣ ΖΗΣΗΣ",
+    "source": "gemi:177632622000",
+    "excerpt": "ΓΕΜΗ 177632622000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΖΗΣΗΣ ΑΓΓΕΛΑΤΟΣ», ΑΦΜ 075195407, Μέλος & Διαχειριστής, ποσοστό 24.72%, από 29/05/2024; name: register form",
+    "gemi_percentage": "24.72%"
+   },
+   {
+    "vat": "122499275",
+    "name": "ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ ΓΕΩΡΓΙΟΣ",
+    "source": "gemi:177632622000",
+    "excerpt": "ΓΕΜΗ 177632622000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΓΕΩΡΓΙΟΣ ΣΤΑΜΑΤΟΝΙΚΟΛΟΣ», ΑΦΜ 122499275, Μέλος & Διαχειριστής, ποσοστό 24.72%, από 29/05/2024; name: register form",
+    "gemi_percentage": "24.72%"
+   },
+   {
+    "vat": "073533221",
+    "name": "ΓΚΙΚΑΣ ΑΘΑΝΑΣΙΟΣ",
+    "source": "gemi:177632622000",
+    "excerpt": "ΓΕΜΗ 177632622000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΑΘΑΝΑΣΙΟΣ ΓΚΙΚΑΣ», ΑΦΜ 073533221, Μέλος & Διαχειριστής, ποσοστό 50.56%, από 29/05/2024; name: register form",
+    "gemi_percentage": "50.56%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "073533221",
@@ -745,13 +864,28 @@
   "name": "ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ - ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΚΟΙΝΟΠΡΑΞΙΑ",
   "legal_type": "Κοινοπραξία",
   "gemi": "179415145000",
-  "basis": "gemi+name",
+  "basis": "gemi+name+gemi_members",
   "contracts": [
    "24SYMV015889478"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "051122328",
+    "name": "ΔΗΜΗΤΡΙΟΥ ΝΙΚΟΛΑΟΣ ΤΟΥ ΠΕΤΡΟΥ",
+    "source": "gemi:179415145000",
+    "excerpt": "ΓΕΜΗ 179415145000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΝΙΚΟΛΑΟΣ ΔΗΜΗΤΡΙΟΥ», ΑΦΜ 051122328, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 50%, από 25/09/2024, έως 13/07/2026; name: documented form (24AWRD015586174)",
+    "gemi_percentage": "50%"
+   },
+   {
+    "vat": "051955363",
+    "name": "ΛΑΜΠΟΣ ΙΩΑΝΝΗΣ ΤΟΥ ΝΙΚΟΛΑΟΥ",
+    "source": "gemi:179415145000",
+    "excerpt": "ΓΕΜΗ 179415145000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΙΩΑΝΝΗΣ ΛΑΜΠΟΣ», ΑΦΜ 051955363, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 50%, από 25/09/2024, έως 13/07/2026; name: documented form (24AWRD015586174)",
+    "gemi_percentage": "50%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "051122328",
@@ -804,13 +938,28 @@
   "name": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ – ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ ΚΟΙΝΟΠΡΑΞΙΑ",
   "legal_type": "Κοινοπραξία",
   "gemi": "183918954000",
-  "basis": "gemi+name",
+  "basis": "gemi+name+gemi_members",
   "contracts": [
    "25SYMV016782541"
   ],
-  "members": [],
-  "note": "MEMBERS NOT DOCUMENTED (user decision 2026-08-20). The firms named in this venture title are identifiable, but no document states them to be its members: the contract prints only the venture own ΑΦΜ and its signatory, and the πρόσκληση/award name the firms as invitees or bidders, never as «μέλη». A venture named after two firms is almost certainly made of them, but the name is not evidence of membership — the standard applied to the other ventures is that a document must say so. Candidates kept in the review file for a future pass.",
-  "members_documented": false,
+  "members": [
+   {
+    "vat": "044397659",
+    "name": "ΝΤΑΝΟΣ ΒΑΣΙΛΕΙΟΣ",
+    "source": "gemi:183918954000",
+    "excerpt": "ΓΕΜΗ 183918954000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΒΑΣΙΛΕΙΟΣ ΝΤΑΝΟΣ», ΑΦΜ 044397659, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 47%, από 15/04/2025, έως 19/05/2026; name: register form",
+    "gemi_percentage": "47%"
+   },
+   {
+    "vat": "036343031",
+    "name": "ΣΚΑΝΔΑΛΟΣ ΣΩΤΗΡΙΟΣ",
+    "source": "gemi:183918954000",
+    "excerpt": "ΓΕΜΗ 183918954000 managementPersons (read 2026-09-01; the same rows were in the 2026-08-20 sweep's output): «ΣΩΤΗΡΙΟΣ ΣΚΑΝΔΑΛΟΣ», ΑΦΜ 036343031, Μέλος, Διαχειριστής & Εκπρόσωπος, ποσοστό 53%, από 15/04/2025, έως 19/05/2026; name: register form",
+    "gemi_percentage": "53%"
+   }
+  ],
+  "note": "Members read from the ΓΕΜΗ register (batch C, user: «apply the nine», 2026-09-01, DATA_DECISIONS): the rows had been fetched by the 2026-08-20 sweep and set aside by its role filter («Εταίρος…» only) — the register writes these members as «Μέλος & Διαχειριστής» / «Μέλος, Διαχειριστής & Εκπρόσωπος». The percentages are the venture's internal shares, never how contract money was distributed — the even split stays.",
+  "members_documented": true,
   "named_in_title": [
    {
     "vat": "036343031",
@@ -1567,13 +1716,28 @@
   "name": "ΚΟΙΝΟΠΡΑΞΙΑ «ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ - ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ»",
   "legal_type": "Κοινοπραξία",
   "gemi": "166857453000",
-  "basis": "contract",
+  "basis": "contract+gemi_members",
   "contracts": [
    "22SYMV011593395"
   ],
-  "members": [],
-  "members_documented": false,
-  "note": "MEMBERS NAMED BUT NOT IDENTIFIABLE (the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS)): the party clause of the original contract enumerates the members — ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ (ατομική επιχείρηση, Θεσσαλονίκη) and ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ (ατομική επιχείρηση, Καλαμπάκα — an in-scope contractor under 031213597 in her own name) — but states no ΑΦΜ for them (identity-card numbers only), the ΓΕΜΗ publicity payload carries no managementPersons, and a name is not an ΑΦΜ; recorded as undocumented so no member is credited money on a guess. Clause: «συνέστησαν τα μέλη της: 1) η ατομική επιχείρηση «ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ», με έδρα τη Θεσσαλονίκη, επί της οδού Θ. Νάτσινα 48, Τ.Κ. 54248, με ΑΔΤ ΑΙ853780 και 2) η ατομική επιχείρηση «ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ», με έδρα την Καλαμπάκα, επί της οδού Τρικάλων 93, Τ.Κ. 42200, με ΑΔΤ ΑΟ372069»"
+  "members": [
+   {
+    "vat": "148450918",
+    "name": "ΒΑΛΛΑΣ ΔΗΜΗΤΡΙΟΣ ΤΟΥ ΘΕΜΙΣΤΟΚΛΗ",
+    "source": "gemi:166857453000",
+    "excerpt": "ΓΕΜΗ 166857453000 managementPersons (read 2026-09-01): «ΔΗΜΗΤΡΙΟΣ ΒΑΛΛΑΣ», ΑΦΜ 148450918, Εταίρος - Μέλος, ποσοστό 50%, από 27/10/2022; patronymic from the contract's party clause",
+    "gemi_percentage": "50%"
+   },
+   {
+    "vat": "031213597",
+    "name": "ΟΙΚΟΝΟΜΟΥ ΙΩΑΝΝΑ ΤΟΥ ΓΕΩΡΓΙΟΥ",
+    "source": "gemi:166857453000",
+    "excerpt": "ΓΕΜΗ 166857453000 managementPersons (read 2026-09-01): «ΙΩΑΝΝΑ ΟΙΚΟΝΟΜΟΥ», ΑΦΜ 031213597, Εταίρος - Μέλος, ποσοστό 50%, από 27/10/2022; the same ΑΦΜ under which she holds contracts in her own name",
+    "gemi_percentage": "50%"
+   }
+  ],
+  "members_documented": true,
+  "note": "Members read from the ΓΕΜΗ register on 2026-09-01 (user: «resolve this through ΓΕΜΗ's publicity API», DATA_DECISIONS): the publicity details payload's managementPersons lists both as «Εταίρος - Μέλος» at 50% from 27/10/2022 (and, from 05/12/2025, as liquidators — the venture is struck off, ΔΙΑΓΡΑΦΗ). The contract's party clause names them without ΑΦΜ; ΟΙΚΟΝΟΜΟΥ's register ΑΦΜ 031213597 is the one she holds in-scope contracts under in her own name, which corroborates the match. The percentages are the venture's internal shares, never how contract money was distributed — the even split stays."
  },
  "996870694": {
   "name": "ΚΟΙΝΟΠΡΑΞΙΑ (Κ/Ξ) ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ – ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ",
@@ -1586,20 +1750,35 @@
   ],
   "members": [],
   "members_documented": false,
-  "note": "MEMBERS NAMED BUT NOT IDENTIFIABLE (the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS)): the party clause of the original contract enumerates the members — ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΧΡΗΣΤΟΥ (Μεγαλόπολη) and ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ (Σιάτιστα — an in-scope contractor under 117925460 in his own name) — but states no ΑΦΜ for them (identity-card numbers only), the ΓΕΜΗ publicity payload carries no managementPersons, and a name is not an ΑΦΜ; recorded as undocumented so no member is credited money on a guess. Clause: «συνέστησαν τα μέλη της 1) η ατομική επιχείρηση «Παπαγεωργάκης Παναγιώτης του Χρήστου» και 2) η ατομική επιχείρηση «Κοσμίδης Ιωάννης του Κωνσταντίνου», με το από 12.09.2022 ιδιωτικό συμφωνητικό, με ΑΦΜ 996870694, με έδρα στην Καβάλα, Μεγάλου Αλεξάνδρου αρ. 27, νομίμως εκπροσωπούμενης από τον Παπαγεωρ»"
+  "note": "MEMBERS NAMED BUT NOT IDENTIFIABLE (the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS)): the party clause of the original contract enumerates the members — ΠΑΠΑΓΕΩΡΓΑΚΗΣ ΠΑΝΑΓΙΩΤΗΣ ΤΟΥ ΧΡΗΣΤΟΥ (Μεγαλόπολη) and ΚΟΣΜΙΔΗΣ ΙΩΑΝΝΗΣ ΤΟΥ ΚΩΝΣΤΑΝΤΙΝΟΥ (Σιάτιστα — an in-scope contractor under 117925460 in his own name) — but states no ΑΦΜ for them (identity-card numbers only), the ΓΕΜΗ publicity payload carries no managementPersons, and a name is not an ΑΦΜ; recorded as undocumented so no member is credited money on a guess. Clause: «συνέστησαν τα μέλη της 1) η ατομική επιχείρηση «Παπαγεωργάκης Παναγιώτης του Χρήστου» και 2) η ατομική επιχείρηση «Κοσμίδης Ιωάννης του Κωνσταντίνου», με το από 12.09.2022 ιδιωτικό συμφωνητικό, με ΑΦΜ 996870694, με έδρα στην Καβάλα, Μεγάλου Αλεξάνδρου αρ. 27, νομίμως εκπροσωπούμενης από τον Παπαγεωρ» — Re-checked 2026-09-01: the venture is in no ΓΕΜΗ register (search by ΑΦΜ: not found), so the register route that documented its two 2022 siblings has nothing for it; ΚΟΣΜΙΔΗΣ's own ΑΦΜ (117925460) is known from his own contracts, but a name is not evidence of membership. Stays undocumented."
  },
  "997080215": {
   "name": "ΚΟΙΝΟΠΡΑΞΙΑ ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ – ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΦΩΤΙΟΥ",
   "legal_type": "Κοινοπραξία",
   "gemi": "165541904000",
-  "basis": "contract",
+  "basis": "contract+gemi_members",
   "contracts": [
    "22SYMV011332552",
    "22SYMV011512210",
    "22SYMV011928919"
   ],
-  "members": [],
-  "members_documented": false,
-  "note": "MEMBERS NAMED BUT NOT IDENTIFIABLE (the seven ANTINERO-II chains back in scope 2026-08-29 (DATA_DECISIONS)): the party clause of the original contract enumerates the members — ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ Α.Ε. and ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΤΟΥ ΦΩΤΙΟΥ (ατομική επιχείρηση) — but states no ΑΦΜ for them (identity-card numbers only), the ΓΕΜΗ publicity payload carries no managementPersons, and a name is not an ΑΦΜ; recorded as undocumented so no member is credited money on a guess. Clause: «συνέστησαν τα μέλη της 1) η ανώνυμη εταιρεία με την επωνυμία «ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΗ ΕΤΑΙΡΑΙΑ» και 2) η ατομική επιχείρηση «ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΤΟΥ ΦΩΤΙΟΥ», με το από 19.08.2022 ιδιωτικό συμφωνητικό με αρ. ΓΕΜΗ 165541904000, ΑΦΜ 997080215, με έδρα στη Ν. Μαγνησία Θεσσαλονίκης επί των αγρο»"
+  "members": [
+   {
+    "vat": "999126094",
+    "name": "ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ Α.Ε.",
+    "source": "gemi:165541904000",
+    "excerpt": "ΓΕΜΗ 165541904000 managementPersons (read 2026-09-01): «ΑΔΡΑΝΗ ΥΛΙΚΑ ΘΕΣΣΑΛΟΝΙΚΗΣ ΑΝΩΝΥΜΟΣ ΕΤΑΙΡΕΙΑ», ΑΦΜ 999126094, Μέλος & Διαχειριστής, ποσοστό 90%, από 07/09/2022",
+    "gemi_percentage": "90%"
+   },
+   {
+    "vat": "045210926",
+    "name": "ΜΗΤΟΓΛΟΥ ΑΙΚΑΤΕΡΙΝΗ ΤΟΥ ΦΩΤΙΟΥ",
+    "source": "gemi:165541904000",
+    "excerpt": "ΓΕΜΗ 165541904000 managementPersons (read 2026-09-01): «ΑΙΚΑΤΕΡΙΝΗ ΜΗΤΟΓΛΟΥ», ΑΦΜ 045210926, Εταίρος - Μέλος, ποσοστό 10%, από 07/09/2022; patronymic from the contract's party clause",
+    "gemi_percentage": "10%"
+   }
+  ],
+  "members_documented": true,
+  "note": "Members read from the ΓΕΜΗ register on 2026-09-01 (user, DATA_DECISIONS): managementPersons lists the company at 90% (Μέλος & Διαχειριστής) and ΜΗΤΟΓΛΟΥ at 10% (Εταίρος - Μέλος) from 07/09/2022, both liquidators from 20/01/2026 (the venture is ΥΠΟ ΕΚΚΑΘΑΡΙΣΗ). The contract's party clause names them without ΑΦΜ. Internal shares only — the even split stays."
  }
 }

@@ -906,11 +906,11 @@ def test_member_firm_view_is_the_same_money(client, kh):
     # same day's ΓΕΜΗ managementPersons sweep (user-confirmed batches A + B):
     # the register lists each member with ΑΦΜ and role — batch B's second
     # members sit under the combined role «Μέλος & Διαχειριστής»
-    assert (facts["n"], facts["n_documented"], facts["n_firms"]) == (62, 48, 66)
+    assert (facts["n"], facts["n_documented"], facts["n_firms"]) == (62, 59, 79)  # +11 ventures from the register, 2026-09-01 (batches: two + nine)
     # the ventures hold 31,7% of the programme; the undocumented ones sit
     # identically in both views and the page says so
     assert facts["eur"] == pytest.approx(204_464_510.58, abs=0.01)
-    assert facts["eur_unsplit"] == pytest.approx(45_884_402.83, abs=0.01)
+    assert facts["eur_unsplit"] == pytest.approx(10_891_005.85, abs=0.01)
 
     con = sqlite3.connect(DEFAULT_DB)
     con.row_factory = sqlite3.Row
@@ -922,7 +922,7 @@ def test_member_firm_view_is_the_same_money(client, kh):
     assert total == pytest.approx(633_588_292.66, abs=0.01)
     assert total == pytest.approx(sum(r["total_eur"] or 0 for r in parties), abs=0.01)
     # substituting members for ventures leaves FEWER names, not more
-    assert len(firms) == 143 and len(parties) == 157
+    assert len(firms) == 142 and len(parties) == 157  # 143 → 144 → 142 on 2026-09-01: eleven ventures replaced by their firms
     # the point of the view: Τ&Τ ΚΑΤΑΣΚΕΥΕΣ is 8th as a contractor and 3rd as
     # a firm, because half of a €22,9M κοινοπραξία is its own
     tt = next(r for r in firms if r["vat_number"] == "998807500")
@@ -940,13 +940,13 @@ def test_consortium_members_are_firms_not_ventures(kh):
     ventures = {r[0] for r in kh.execute("SELECT vat_number FROM consortiums")}
     members = {r[0] for r in kh.execute("SELECT member_vat FROM consortium_members")}
     assert not (ventures & members)
-    assert len(members) == 66
+    assert len(members) == 79  # 66 until 2026-09-01
     # every member carries the document it was read from, or the entry says
     # plainly that it was identified by name against the registry
-    assert kh.execute("SELECT COUNT(*) FROM consortium_members").fetchone()[0] == 98
+    assert kh.execute("SELECT COUNT(*) FROM consortium_members").fetchone()[0] == 122  # 98 until 2026-09-01
     undocumented = kh.execute(
         "SELECT COUNT(*) FROM consortiums WHERE members_documented = 0").fetchone()[0]
-    assert undocumented == 14
+    assert undocumented == 3  # 14 until 2026-09-01
 
 
 def test_connections_pins(client):
