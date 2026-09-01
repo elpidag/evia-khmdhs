@@ -1634,7 +1634,44 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   guard: no line of the original middle lost). **`/story`** = the scroll
   skeleton (`lib/story/chapters.ts`, ten chapters, KEY FINDINGS carrying
   the former /compare frames via `sections/KeyFindings.svelte` — plus, since 2026-08-29, EVERY CONTRACT, BY THE DAY IT WAS SIGNED (`charts/SignedTimeline.svelte`: the STATE-FUNDED dots on one time axis, Anti-nero above in ink, co-ops below in green, fire seasons shaded, `dots.d` on `/api/compare`);
-  `/compare` → 308 `/story`, fragments survive). **Narration = markdown**
+  `/compare` → 308 `/story`, fragments survive). **`/story` is a THREE-COLUMN
+  SCROLL NARRATIVE since 2026-09-01** (the author's two 1920×1080 artboards;
+  DATA_DECISIONS): the chapter strip is gone and `main.story` in the layout
+  makes the page window-wide — timeline 60→580 · text 610→1180 · figure
+  1250→1844, the artboard's own numbers as `fr` tracks, the outer two columns
+  sticky and viewport-tall, the middle scrolling with a 45vh tail so the last
+  passage can still reach the reading line. `lib/story/steps.ts` is the whole
+  scroll machinery: ONE IntersectionObserver with a ~1px band 45 % down the
+  viewport (scrollama's technique), no scroll listener, no per-frame work, and
+  `active = null` above the first passage — which IS the collapsed state.
+  `lib/story/StoryTimeline.svelte` authors everything 1:1 in ARTBOARD
+  coordinates inside one `transform: scale(k)` (SVG geometry and HTML type then
+  cannot drift apart), SVG for marks and HTML for every glyph (descriptions are
+  multi-line prose, which SVG cannot wrap); the vertical scale is identical in
+  both states, so collapse→spread is purely horizontal — lane `<g>` transforms
+  (never a `<line>`'s x1/x2, which are attributes and untransitionable), the
+  years' x, the legend's x, all CSS transitions off one `class:expanded`, and
+  the rules go dotted→solid. `lib/transforms/storyTimeline.ts` holds the pure
+  piecewise-linear year scale (~81.4px a year, 2016–2018 compressed, 2017
+  spaced but unnamed — the artboard's own decisions), vitest-pinned.
+  `lib/story/StoryFigure.svelte` is the right rail: every passage's block in
+  the SAME rect with only opacity moving, so a swap reflows nothing.
+  **Beats must TILE** — rhythm in padding inside `.beat`, never margin between
+  them, or the reading line falls in a gap and the active passage flickers.
+  **Figures inside written text are TOKENS, never digits**: `lib/story/Num.svelte`
+  + `lib/story/numbers.ts` read them from the page's own payload
+  (`page.data.overview.kpis`, or `.o.kpis` on /anadohoi) at render time, in
+  ENGLISH prose format («2,004», «€633.59 million», «€5,792» — the site's
+  `eur()`/`grInt()` are European and stay in tables and charts);
+  `numbers.test.ts` fails on an unknown key, on a file using `<Num>` without
+  importing it, and pins the formatting. The three dataset cards carry the
+  author's own text this way since 2026-09-01 (`content/datasets/*.md`) — their
+  draft was already one contract out of date when it arrived, which is the rule's
+  whole point.
+  Phase 1 (shipped) is the shell with the ten chapters standing in as beats and
+  no events on the timeline; phase 2 adds `lib/story/events.ts` and the
+  bullets, phase 3 the author's own text, its footnotes and the KEY FINDINGS
+  charts moved into the right column at its width. **Narration = markdown**
   in `atlas/src/content/{landing,data,datasets,story}/*.md` via mdsvex
   (`vite.config.ts` extensions/preprocess/`$content` alias,
   `src/content.d.ts`), rendered by `ui/Prose.svelte` (dev prints the

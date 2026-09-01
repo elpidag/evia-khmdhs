@@ -21,6 +21,9 @@
 	// page is as wide as the window; a card's unfolded part returns to the
 	// article width
 	const isCard = $derived(['/anadohoi', '/antinero', '/dase', '/data'].includes(page.url.pathname));
+	// the story composes three columns across the author's 1920 artboard, so it
+	// is as wide as the window too — but with its own rhythm, not a card's
+	const isStory = $derived(page.url.pathname === '/story');
 	const current = $derived(symbolOfPath(page.url.pathname));
 	const methodologyActive = $derived(page.url.pathname.startsWith('/methodology'));
 
@@ -97,7 +100,7 @@
 	</header>
 {/if}
 
-<main class:embed class:landing={isLanding} class:card={isCard}>
+<main class:embed class:landing={isLanding} class:card={isCard} class:story={isStory}>
 	{@render children()}
 </main>
 
@@ -217,6 +220,16 @@
 		--card-pad-l: clamp(24px, 4.22vw, 81px);
 		max-width: none;
 		padding: var(--card-pad-t) var(--card-pad-r) var(--card-pad-b) var(--card-pad-l);
+	}
+	/* the story is the author's 1920 artboard: three columns across the window,
+	   letterboxed above 1920 so the reading measure never grows past its design
+	   (the middle column is 570 px of 18 px type — about 68 characters) */
+	main.story {
+		--header-h: 85px;
+		--story-pad-b: clamp(12px, 1.85vh, 20px);
+		max-width: 1920px;
+		padding: clamp(20px, 3.7vh, 40px) clamp(20px, 3.958vw, 76px) var(--story-pad-b)
+			clamp(20px, 3.125vw, 60px);
 	}
 	@media (max-width: 900px) {
 		header .inner {

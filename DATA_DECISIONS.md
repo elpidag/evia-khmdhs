@@ -11540,3 +11540,102 @@ the register's otherwise. Loaded: **62 ventures / 59 documented (122 links,
 79 firms) / 3 undocumented** — ΠΑΠΑΓΕΩΡΓΑΚΗΣ–ΚΟΣΜΙΔΗΣ, ΛΙΑΡΗ–ΓΚΙΚΑΣ and
 ΤΣΙΑΝΑΒΑΣ–Μ.&Κ., none of which any register or document names.
 
+**2026-09-01 — `/story` becomes a three-column scroll narrative (phase 1: the
+shell).** The author redesigned the page START HERE leads to in two 1920×1080
+artboards: a vertical TIMELINE on the left, the NARRATIVE in the middle, and on
+the right the IMAGE with its caption and, under it, the passage's FOOTNOTES. The
+timeline opens COLLAPSED — three lanes converged on one dotted line, the years
+beside it, the legend stacked — and SPREADS into three solid lanes (global/EU
+grey, Greece black, fires red) when the reader's text reaches the first dated
+event; the years move to the far left and each label rides out over its own lane.
+Every bullet will be bound to the passage that mentions it, and the right column
+follows the reader too. The ten-chapter strip is DELETED; the heading row now
+names the chapter the reader is in, and the timeline is the navigation.
+
+Decisions taken with the author before building: **KEY FINDINGS stays inside the
+story, but its six charts become RIGHT-COLUMN figures** at that column's width,
+with the author's own text beside them (not a full-width band — phase 3, and it
+needs a legacy-anchor map because a chart in a sticky rail cannot be scrolled to);
+the timeline's small text is set in **futura-100-greek-book**, the site's own body
+face, because the artboards' Degular Text is not in the Typekit kit and will not be
+added (blocks run ≈1 line longer than drawn); once spread, **every event's text
+shows in grey with the active passage's lit**, as the artboard draws it; and the
+work is staged — shell, then the timeline's behaviour, then the content — because
+the author is finalising a presentation.
+
+**What phase 1 ships.** `main.story` in the layout (window-wide, letterboxed above
+1920 so the 570px reading measure never grows); the three columns as `fr` tracks
+carrying the artboard's own numbers, measured on the running page at 60/520,
+610/570, 1250/594; `lib/story/steps.ts` — ONE IntersectionObserver with a ~1px
+band 45 % down the viewport (scrollama's technique), no scroll listener, nothing
+per frame, and `active = null` above the first passage, which IS the collapsed
+state, for free; `lib/story/StoryTimeline.svelte` and `lib/story/StoryFigure.svelte`;
+and `lib/transforms/storyTimeline.ts` + its vitest for the pure year scale.
+
+Three things the artboards taught, encoded so they cannot be lost: the vertical
+scale is IDENTICAL collapsed and spread, so the transition is purely horizontal
+(one `class:expanded`, CSS transitions only — and a `<line>`'s x1/x2 are
+attributes, untransitionable, so the wrapping `<g>`'s transform is what moves);
+the axis is piecewise-linear at ~81.4px a year with 2016–2018 compressed and 2017
+spaced but unnamed; and the whole 2016–2026 span fits one screen at the design
+size, so no panning is needed. Everything is authored 1:1 in artboard coordinates
+inside a single `transform: scale(k)`, so SVG geometry and HTML type scale
+together and cannot drift.
+
+Two rules for whoever touches it next: **beats must TILE** (rhythm in padding
+inside `.beat`, never margin between them, or the reading line falls in a gap and
+the active passage flickers), and the placeholder `min-height: 62vh` on a beat is
+PHASE-1 ONLY — the author's passages are many paragraphs each and remove the need
+for it. Verified on the running page: the timeline opens collapsed, spreads once
+at the second passage, un-spreads on the way back, the heading tracks the chapter,
+the right column swaps without the page jumping, everything releases to one column
+at 1100px, and `/compare#pe-scatter`, `/story#signed-timeline` and `/story#fire`
+all still land in view. 621 pytest + 156 vitest, `npm run check` clean.
+
+**2026-09-01 (second entry) — The three dataset cards carry the author's own
+text, and its figures are LIVE.** The author delivered
+`Website_Text_Storyboard.docx` (INVESTIGATIVE-REPORT/): the opening question,
+the chronology narrative in 18 paragraphs with 16 real Word footnotes, a timeline
+disclaimer, the methodology already on the site, key findings, the three card
+texts and a bibliography. Their three card sections are now
+`atlas/src/content/datasets/{anadohoi,antinero,dase}.md`, verbatim — the
+placeholder columns of 2026-08-27 are gone.
+
+**Every data-derived figure in that prose is a token, not a digit**, and the
+draft proved exactly why: written on 31.08 it said «253 AntiNero contracts» and
+«€632.14 million», which lot 4Α had already made 254 and €633,59M by the time it
+arrived. `lib/story/Num.svelte` + `lib/story/numbers.ts` read the figure from the
+page's own payload at render time (`page.data.overview.kpis` on /antinero and
+/dase, `page.data.o.kpis` on /anadohoi — no page changes needed), so a refresh
+can never leave a sentence lying. Fourteen keys: the three counts, totals,
+medians and contractor/co-op/body/service counts the text uses. Formatting is
+ENGLISH PROSE on purpose («2,004 contracts», «€633.59 million», «€5,792») — the
+site's own `eur()`/`grInt()` are European and belong in tables and charts, not in
+a sentence. `numbers.test.ts` fails on a token the registry cannot supply, on a
+file that uses one without importing it, and pins the formatting; it reads the
+content through Vite's raw glob rather than `node:fs` so svelte-check stays clean
+without adding `@types/node`.
+
+One figure was deliberately NOT wired: «around three quarters concern the
+assignment of firewood». The share is computable (1.463 of 2.004 = 73%) but only
+from the ΔΑΣΕ work-type layer the author parked on 2026-08-23 as not yet
+verified, so it stays the author's own rounded characterisation rather than a
+number drawn from a layer the site does not show. Flagged to the author.
+
+Verified on the running cards: no unresolved token on any of the three, the
+prose's figures equal the KPI cards above them to the cent, and the text column
+scrolls inside the card (67–132px), which is the cards' own established
+behaviour — nothing is clipped away.
+
+Also that day, on the author's word: the story's column titles (TIMELINE, and the
+chapter over the middle column) are now the dataset card's own name style —
+`obviously-narrow` 900 at 24px/28.8px with 0.02em, verified identical to
+«ANTI-NERO PROGRAMME» on /antinero — and the duplicate chapter heading over the
+text was dropped, since the artboard names it once. The timeline's legend became
+the card pages' GRAPH-title style (`obviously` 700, uppercase, 12px): the author
+could not read it as sentence-case body type, and a display face in capitals
+carries at that size. Spreading it exposed a collision, so each label now holds
+its own slot width and the three share one baseline above their rules, as Page02
+draws them. The figure column's caption and footnotes are set to the IMAGE's
+width (540px), not the column's.
+
