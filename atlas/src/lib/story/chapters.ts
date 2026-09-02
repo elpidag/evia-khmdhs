@@ -17,9 +17,9 @@ export const CHAPTERS: Chapter[] = [
 	// the timeline itself, left of the collapsed line (its .md stays the source)
 	{ id: 'methodology', title: 'METHODOLOGY' },
 	{ id: 'keyfindingandopenquestions', title: 'KEY FINDINGS AND OPEN QUESTIONS' },
-	{ id: 'financedbyprivatecompanies', title: 'FINANCED BY PRIVATE COMPANIES' },
-	{ id: 'antineroprogramme', title: 'ANTINERO PROGRAMME' },
-	{ id: 'coops', title: 'WORKS EXECUTED BY FOREST WORKERS’ COOPERATIVES' },
+	// the three dataset sections do NOT appear on /story (author, 2026-09-02):
+	// their texts belong to the dataset card pages only. The .md files stay in
+	// this folder as the author's source.
 	// the document spells it «Bibiography» — corrected here, flagged to the author
 	{ id: 'bibliography', title: 'BIBLIOGRAPHY' }
 ];

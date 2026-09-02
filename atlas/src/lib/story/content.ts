@@ -79,10 +79,53 @@ function blocksOf(section: string): StoryBlock[] {
 export const BLOCKS: StoryBlock[] = CHAPTERS.flatMap((c) => blocksOf(c.id));
 export const BLOCK_INDEX = new Map(BLOCKS.map((b, i) => [b.id, i]));
 
-/** footnote number → its text, across all sections (numbering is document-wide) */
-export const NOTES: Map<number, string> = (() => {
-	const all = new Map<number, string>();
-	for (const c of CHAPTERS) for (const [n, t] of split(c.id).notes) all.set(n, t);
+export interface NotePart {
+	text: string;
+	/** set on a citation chunk: the URL that followed it in the note */
+	href?: string;
+}
+export interface NoteEntry {
+	/** the note in reading order: linked citation chunks and plain glue */
+	parts: NotePart[];
+}
+
+/**
+ * A note may cite SEVERAL sources (the author's 13 and 14 carry two each):
+ * every URL leaves the display text and the citation chunk BEFORE it becomes
+ * the link; the separators between citations stay as plain glue, and text
+ * after the last URL stays plain. Tracking params are stripped from targets.
+ */
+function noteEntry(t: string): NoteEntry {
+	const parts: NotePart[] = [];
+	const re = /https?:\/\/\S+/g;
+	let pos = 0;
+	let m: RegExpExecArray | null;
+	while ((m = re.exec(t))) {
+		let chunk = t.slice(pos, m.index);
+		const lead = /^[\s,;:]+/.exec(chunk)?.[0];
+		if (lead && parts.length) parts.push({ text: lead.replace(/\s+/g, ' ') });
+		chunk = (lead ? chunk.slice(lead.length) : chunk).replace(/[\s,;:]+$/, '');
+		const punct = /[.,;:\u002f]*$/.exec(m[0])?.[0] ?? '';
+		const href = m[0]
+			.replace(/[.,;:]+$/, '')
+			.replace(/[?&]utm_source=chatgpt\.com/, '');
+		if (chunk) parts.push({ text: chunk, href });
+		pos = re.lastIndex;
+		// «…-pyrkagies/; Papageorgiou…»: the separator the URL swallowed stays
+		// as glue between the citations
+		const sep = punct.replace(/[\u002f.]/g, '');
+		if (sep && t.slice(pos).trim()) parts.push({ text: `${sep} ` });
+	}
+	const tail = t.slice(pos).replace(/^[\s,;:]+/, '').replace(/\s+$/, '');
+	if (tail) parts.push({ text: tail });
+	if (!parts.length) parts.push({ text: t.trim() });
+	return { parts };
+}
+
+/** footnote number → its entry, across all sections (numbering is document-wide) */
+export const NOTES: Map<number, NoteEntry> = (() => {
+	const all = new Map<number, NoteEntry>();
+	for (const c of CHAPTERS) for (const [n, t] of split(c.id).notes) all.set(n, noteEntry(t));
 	return all;
 })();
 

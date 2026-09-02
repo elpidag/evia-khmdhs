@@ -1770,6 +1770,60 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   options) wraps such paragraphs; `mdsvexParagraphs.test.ts` pins 80 = 80.
   And the sticky title band's paper is a `::after` over the four text
   tracks only — full-width it painted over the figure square's top 37 px.
+  Since the same day's third round (author): the pinned SECTION TITLE
+  answers to the topmost VISIBLE paragraph (switching when the previous
+  section clears the band, 0.35 s entrance; the reading line keeps
+  figure/notes/timeline), the visibility observer has a 150 px top inset,
+  and the footnotes are LINKS —
+  `content.ts` `NoteEntry {parts: {text, href?}[]}`: every URL leaves the
+  display and the citation chunk BEFORE it carries it (a note may cite
+  several sources — 13/14 hold two links each; separators stay as plain
+  glue; utm stripped). Rendering gotchas fixed the same night: an
+  `<ol value>` marker inside CSS columns misrenders two-digit numbers →
+  numbers print inline as hanging text (`text-indent` hang), and
+  `break-inside: avoid` on an item taller than the column overflows ONTO
+  the neighbouring column → notes may break across columns; no «Footnote»
+  label. **The screenshot round (same night, author):** an event
+  shows DATE+TITLE only until the main text is AT its period — the lit
+  events open their bodies and `layoutLane` (now with a per-event
+  predicate) REFLOWS reactively, blocks gliding via `transition: top`;
+  year labels sit at `YearStop.midY` (span-centred, level with their
+  events); the timeline + its TIMELINE title FADE OUT past the chronology
+  (`timelineOn` on the section of the reading line), and it is SPREAD for
+  as long as the chronology is ON THE PAGE (`expanded` from `visList`,
+  2026-09-02 — the reading-line trigger `EXPAND_BLOCK` is gone); the three dataset
+  sections are OFF /story (cards only; `chapters.ts` — the .md files
+  stay; `mdsvexParagraphs.test` counts rendered sections only); and the
+  `.heads` row is GONE — TIMELINE is a grid sibling (`.tl-head`, all
+  first-row items `grid-row: 1`) sticky at `--story-top` like the section
+  titles, `.beat:first-of-type` unpadded so INTRODUCTION aligns, `.tcover`
+  (fixed paper, the band's twin) covering the strip under the header.
+  **The agreed UX package (same night, author):** section titles are
+  STICKY HANDOFFS — each section opens with its own `h2.sect-title` in the
+  flow (seen approaching), docking at `--story-top` and pushed out by the
+  next (pure CSS; the band keeps only TIMELINE; the `::after` four-track
+  paper and the topmost-visible logic are gone); a **48 px breathing band**
+  (`--story-band`, fixed `.bband` paper) ends every column short of the
+  window edge, the rails subtracting it; and the footnote block admits
+  **WHOLE NOTES ONLY, PACKED BY NOTE** — measured in a hidden column-width
+  copy, admitted nearest-to-the-reading-line first (`dist` rides on each
+  note), then packed in number order into TWO MANUAL STACKS (left to its
+  height, then right; overflow drops the farthest and repacks) — never CSS
+  `columns`, which split a note mid-sentence across the gap; a note that
+  does not fit waits. The COLLAPSED timeline's disclaimer and lane titles
+  render at NATIVE size outside the scaled drawing (`.below` in
+  StoryTimeline), in the UPPER part of the timeline since the balance
+  round of the same night: disclaimer top-left at the footnotes' size
+  (fs-12 light), the years column between it and the line, the lane
+  titles top-right on TWO LINES each (`KEY_LINES`), the scaled dotted
+  line the divider; nothing reserved below — the collapsed fit is the
+  full rail (`COLLAPSED_X` 345); on spread the block crossfades with the
+  in-scale legend. The three dataset card .md files are SYNCED to the
+  story-folder versions (typographic apostrophes; 2026-09-02). The story's
+  narrative paragraphs SET LIKE PRINT (author, same day): justified, 2 em
+  first-line indent, NO hyphenation — the base word gap tightened
+  (`word-spacing: -0.02em`) and `text-wrap: pretty` for even gaps;
+  `.beat :global(.prose > p)` on the story page only.
   **Narration = markdown**
   in `atlas/src/content/{landing,data,datasets,story}/*.md` via mdsvex
   (`vite.config.ts` extensions/preprocess/`$content` alias,

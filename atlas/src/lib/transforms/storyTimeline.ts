@@ -20,8 +20,10 @@ export type Lane = (typeof LANES)[number];
 
 /** local x of each lane's rule, spread (artboard 240 / 285 / 435, less the 60 px page margin) */
 export const LANE_X: Record<Lane, number> = { world: 180, greece: 225, fire: 375 };
-/** local x they all converge on when collapsed (artboard 350) */
-export const COLLAPSED_X = 290;
+/** local x they all converge on when collapsed — set so the line sits
+ * near the column's centre with the native disclaimer readable on its left
+ * (the author's balance round, 2026-09-02) */
+export const COLLAPSED_X = 345;
 
 /** local y of the first year's tick */
 export const AXIS_TOP = 90;
@@ -78,6 +80,9 @@ const SPANS: ReadonlyArray<readonly [year: number, px: number]> = [
 export interface YearStop {
 	year: number;
 	y: number;
+	/** the label's y — centred on the span to the next stop, so the year
+	 *  prints level with the events it holds (the author, 2026-09-02) */
+	midY: number;
 	/** false for a year the axis spaces but does not name */
 	labelled: boolean;
 	/** years to the NEXT stop — >1 means the axis is compressed here */
@@ -97,11 +102,12 @@ export function yearStops(): YearStop[] {
 	for (let i = 0; i < SPANS.length; i++) {
 		const [year, px] = SPANS[i];
 		const next = i + 1 < SPANS.length ? SPANS[i + 1][0] : year + 1;
-		out.push({ year, y, labelled: !UNLABELLED.has(year), gap: next - year });
+		out.push({ year, y, midY: y, labelled: !UNLABELLED.has(year), gap: next - year });
 		y += px;
 	}
 	const last = SPANS[SPANS.length - 1][0] + 1;
-	out.push({ year: last, y, labelled: !UNLABELLED.has(last), gap: 0 });
+	out.push({ year: last, y, midY: y, labelled: !UNLABELLED.has(last), gap: 0 });
+	for (let i = 0; i < out.length - 1; i++) out[i].midY = (out[i].y + out[i + 1].y) / 2;
 	return out;
 }
 
@@ -215,12 +221,15 @@ export interface PlacedEvent<E> {
 export function layoutLane<E extends { title: string; body?: string; date: string; end?: string }>(
 	events: E[],
 	stops: YearStop[] = yearStops(),
-	width = 132
+	width = 132,
+	/** whether this event's body is OPEN — the author's rule: the explanatory
+	 *  text shows only while the main text is at the event's period */
+	hasBody: (e: E) => boolean = () => true
 ): PlacedEvent<E>[] {
 	let cursor = -Infinity;
 	return events.map((e) => {
 		const dotY = yOfDate(e.date, stops);
-		const h = blockHeight(e, width);
+		const h = blockHeight(hasBody(e) ? e : { title: e.title }, width);
 		const want = dotY - DOT_LIFT;
 		const blockY = Math.max(want, cursor);
 		cursor = blockY + h + BLOCK_GAP;

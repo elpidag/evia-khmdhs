@@ -12074,3 +12074,166 @@ over the rectangle's first 37 px and the clock card lost its first line;
 the band's paper is now a `::after` covering the four tracks the text
 scrolls under (`inset: 0 calc(100% * 594 / 1784) 0 -20px`), the column's
 own share of the artboard.
+
+## 2026-09-02 — the section titles answer to what is below them, and a footnote carries its link
+
+Three rulings of the author on /story, applied:
+
+1. **The pinned section title follows what the reader SEES, not the reading
+   line.** It switches the moment the previous section's last paragraph
+   clears the title band — finishing the chronology now shows METHODOLOGY,
+   instead of the old title standing over a methodology sub-chapter. The
+   incoming title rises in with a 0.35 s entrance; the reading line stays
+   the authority for everything else (figure, notes, timeline). The
+   visibility observer gained a top inset (150 px) so a paragraph does not
+   count as on-screen while it is still hidden under the band.
+2. **A footnote that ends in a URL becomes a link**: the URL leaves the
+   display text and the rest of the note carries it (underlined, opens in a
+   new tab; `utm_source=chatgpt.com` stripped from the target — the DOI and
+   registry links are untouched). A note with no trailing URL stays plain
+   text. Parsed in `content.ts` (`NoteEntry {text, href?}`), pinned in
+   `content.test.ts`: no note's display text ends in a raw URL, note 8 reads
+   «For more information, see here» as a clean link.
+3. **The notes must read clearly**: the long unbreakable strings (DOIs,
+   URLs) were what ran under the neighbouring column — linkifying removes
+   the main culprits from the text, and `overflow-wrap: anywhere` on the
+   items catches whatever remains.
+
+## 2026-09-02 — the footnotes, second pass: every citation carries its own link
+
+The author's bug report on the first pass, verified and fixed:
+
+1. **A note may cite SEVERAL sources.** Notes 13 and 14 each carry two
+   Popaganda citations with a URL after each; the trailing-URL model
+   linkified only the last and PRINTED the first URL as text. `content.ts`
+   now parses a note into PARTS: every URL leaves the display and the
+   citation chunk before it becomes the link to it; separators between
+   citations stay as plain glue; text after the last URL stays plain.
+   Pinned: no URL is ever printed as text in any part of any note, and
+   notes 13/14 carry exactly two links each.
+2. **The numbers misprinted and the columns overlapped** — two rendering
+   bugs, found: an `<ol value>` marker inside CSS columns misrenders for
+   two-digit numbers, and `break-inside: avoid` on an item TALLER than the
+   column (the two-source notes) cannot break, so it overflowed ONTO the
+   right column's text. The numbers now print inline as hanging text, and a
+   long note may break across the two columns — the print convention.
+3. **The «Footnote» label is gone** (the author: the space is worth more).
+
+## 2026-09-02 — the sticky handoff, the breathing band, and whole notes only
+
+The author's chosen package for the two UX complaints (the invisible section
+transition; the footnotes cut mid-word at the window's edge), built:
+
+1. **Sticky handoff titles.** The narrative's section titles left the fixed
+   band and live IN the text: each section opens with its own heading, which
+   the reader sees approaching from below, and which docks (`position:
+   sticky`) at the band's height — the next section's title physically pushes
+   the previous one out as the boundary scrolls past. Pure CSS; the browser
+   animates it with the scroll; reversible by construction. The band keeps
+   only TIMELINE; the topmost-visible title logic and its entrance animation
+   were deleted (CSS does it better), along with the band's four-track paper
+   `::after` — each docked title carries its own paper.
+2. **The breathing band.** A 48 px paper band fixed at the window's bottom:
+   every column — the narrative included — stops short of the edge instead of
+   running into it; the page pads by the same amount so the end stays
+   reachable. The rails' heights subtract it.
+3. **Whole notes only.** The footnote block never cuts a word: every candidate
+   note is measured at column width in a hidden copy, and notes are admitted
+   NEAREST-TO-THE-READING-LINE first while the two columns' room lasts
+   (displayed back in number order). A note that does not fit is dropped
+   whole and appears when scrolling gives it room. Verified on the heaviest
+   screen: notes 13 and 15 read complete, 14 waits — nothing clipped.
+
+## 2026-09-02 — the timeline breathes with the text, and the story sheds the dataset sections
+
+Five rulings of the author (screenshot round), applied:
+
+1. **An event opens only at its own period.** Every timeline event stands as
+   DATE + TITLE; the explanatory text appears only while the main text is at
+   the event's period (the lit events of the active paragraph). The layout
+   REFLOWS around the opened bodies — `layoutLane` takes a per-event
+   predicate, blocks glide to their new tops — so the lanes stay tidy and the
+   open event reads in full.
+2. **The years print level with their events**: each label centres on its
+   span to the next stop (`YearStop.midY`) instead of marking the year's
+   first of January — an August cluster now sits beside its own year, not
+   the next one's.
+3. **The timeline withdraws after the chronology.** Reading the methodology
+   onward, the rail and its TIMELINE title fade out (returning when the
+   reader scrolls back). The introduction and the chronology are its home.
+4. **The three dataset sections left /story** — FINANCED BY PRIVATE
+   COMPANIES, ANTINERO PROGRAMME, WORKS EXECUTED BY FOREST WORKERS'
+   COOPERATIVES belong to the dataset card pages only (their .md files stay
+   in the story folder as the author's source; `mdsvexParagraphs.test`
+   counts only the rendered sections). The story is now: introduction ·
+   chronology · methodology · key findings · bibliography.
+5. **TIMELINE and INTRODUCTION start aligned**: the `.heads` row is gone —
+   TIMELINE is a grid sibling sticky at the same `--story-top` as the
+   section titles, the first section carries no top padding, and a fixed
+   paper strip (`.tcover`, the breathing band's twin) covers the gap under
+   the header so pushed-out titles vanish cleanly.
+
+Verified live: at the Law 4824/2021 paragraph the emergency act and the
+ratification light up, the act's body opens, and the rail pans to August
+2021; in the methodology the timeline is gone.
+
+## 2026-09-02 — notes never split, the collapsed timeline speaks at native size, the cards synced
+
+The author's night round, applied:
+
+1. **The footnote misprints (notes 1/2/3) had one root cause**: the two
+   columns were CSS `columns`, which BREAKS a note mid-sentence across the
+   gap — note 2 split at «Rather than / describing…», note 3 began under
+   note 2's continuation. The columns are now PACKED BY NOTE: whole notes
+   fill the left stack to its height, then the right (admission still
+   nearest-to-the-reading-line, packing in number order, an overflow drops
+   the farthest note and repacks). A note can no longer split, ever.
+2. **The collapsed timeline's texts were illegible** (~7 px: they scaled with
+   the whole 1162 px axis at ~0.6). The disclaimer and the lane titles now
+   render at NATIVE size outside the scaled drawing — the disclaimer
+   bottom-left of the converged line in the axis's own empty margin (11 px,
+   right-aligned), the three lane titles right of the line under the axis
+   (11.5 px caps, their lane colours), the scaled dotted line itself running
+   between them as the divider. The converged line moved from x 290 to 360
+   to give the disclaimer a readable measure; the collapsed fit reserves
+   130 px of native room. When the timeline spreads, the native block fades
+   and the in-scale legend fades in above the lanes (the ride-out motion
+   simplified to a crossfade).
+3. **The cards synced to the story texts** (the author's word): the
+   differences turned out to be typographic apostrophes only (the document's
+   «’» against typed «'») — `datasets/antinero.md` and `datasets/dase.md`
+   adopted the story versions; `anadohoi.md` was already identical.
+
+## 2026-09-02 — the collapsed timeline balanced
+
+The author's balance round on the collapsed state, applied: the two long lane
+titles print on TWO LINES each («GLOBAL EVENTS & EU / LEGISLATION CHANGES»,
+«EVENTS & LEGISLATION / CHANGES IN GREECE»; FIRES IN GREECE stays one); the
+disclaimer and the titles moved to the UPPER part of the timeline — the
+sparse early years — instead of its bottom; the disclaimer is set at the
+footnotes' own size (fs-12 light, 1.3) and a touch wider; and with nothing
+reserved below any more, the axis takes the whole rail (the collapsed scale
+rose from ~0.63 to ~0.74) with the converged line near the column's centre
+(COLLAPSED_X 360 → 345). The years column runs between the disclaimer and
+the line; the scaled dotted line stays the divider to the titles' side.
+
+## 2026-09-02 — the timeline spreads with the chronology's presence
+
+The author's rule refined once more: the timeline is SPREAD for as long as
+CHRONOLOGY OF FIRES AND EVENTS is on the page — the lanes open the moment its
+first paragraph enters the viewport (while the reading line may still be in
+the introduction) and stay open until its last paragraph has left. Implemented
+on the visibility window (`visList`), replacing the reading-line trigger
+(`EXPAND_BLOCK`, removed). Verified live: with the chronology's first
+paragraph at the viewport's lower edge and the reading line on the
+introduction's second paragraph, the timeline is already spread.
+
+## 2026-09-02 — the narrative sets like the printed page
+
+The author's reference (their own dissertation page): the story's narrative
+paragraphs now JUSTIFY to both edges and indent their first line 2 em —
+alignment only, the faces untouched. Story page only; the rest of the site
+keeps its ragged-right setting. Second ruling minutes later: NO hyphenation
+— instead the base word gap is tightened a touch (`word-spacing: -0.02em`,
+so justification stretches from lower) and `text-wrap: pretty` lets the
+browser choose line breaks that keep the gaps even.

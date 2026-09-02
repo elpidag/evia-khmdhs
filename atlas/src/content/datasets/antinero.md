@@ -10,4 +10,4 @@ The dataset contains <Num id="antinero.contracts" /> AntiNero contracts with a s
 
 Following the contracts beyond their signature also makes another characteristic of the programme visible. Many combine studies with the works they define, announce short periods for execution and are subsequently extended through administrative acts. The dataset therefore follows not only who receives AntiNero funding but the timing and territorial organisation of the works, the procurement procedures through which they are awarded and the administrative changes that follow.
 
-No AntiNero contract identified here was awarded to a forest workers' cooperative. Whether cooperatives subsequently participated through private subcontracting cannot be established from the public documents available and therefore remains outside what this dataset can claim.
+No AntiNero contract identified here was awarded to a forest workers’ cooperative. Whether cooperatives subsequently participated through private subcontracting cannot be established from the public documents available and therefore remains outside what this dataset can claim.

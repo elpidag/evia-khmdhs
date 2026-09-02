@@ -56,6 +56,13 @@ describe("the story timeline's year scale", () => {
 		expect(y(2022) - y(2021)).toBeGreaterThan(plain * 2.5);
 	});
 
+	it('centres each year label on its span, level with its events', () => {
+		for (let i = 0; i < stops.length - 1; i++) {
+			expect(stops[i].midY).toBeCloseTo((stops[i].y + stops[i + 1].y) / 2, 6);
+		}
+		expect(stops[stops.length - 1].midY).toBe(stops[stops.length - 1].y);
+	});
+
 	it('spaces 2017 but does not name it, as the artboard does', () => {
 		const y2017 = stops.find((s) => s.year === 2017)!;
 		expect(y2017.labelled).toBe(false);
@@ -181,6 +188,17 @@ describe('block layout', () => {
 		expect(aug[aug.length - 1].dotY - aug[0].dotY).toBeLessThan(20);
 		// … so all but the first had to be moved, and carry a leader line
 		expect(aug.slice(1).every((p) => p.pushed)).toBe(true);
+	});
+
+	it('shrinks a closed event to date + title, and reflows around an open one', () => {
+		const all = layoutLane(laneEvents('greece'), stops, LANE_TEXT.greece.w);
+		const closed = layoutLane(laneEvents('greece'), stops, LANE_TEXT.greece.w, () => false);
+		const withBody = laneEvents('greece').filter((e) => e.body);
+		expect(withBody.length).toBeGreaterThan(5);
+		for (let i = 0; i < all.length; i++) {
+			expect(closed[i].h).toBeLessThanOrEqual(all[i].h);
+			expect(closed[i].h).toBe(blockHeight({ title: closed[i].e.title }, LANE_TEXT.greece.w));
+		}
 	});
 
 	it('never places a block above its own dot', () => {

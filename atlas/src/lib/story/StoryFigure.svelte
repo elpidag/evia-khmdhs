@@ -19,11 +19,92 @@
 
 	interface Props {
 		figure: { n: number; name: string } | null;
-		notes: { n: number; text: string }[];
+		notes: { n: number; dist: number; parts: { text: string; href?: string }[] }[];
 	}
 	let { figure, notes }: Props = $props();
 
 	const pad = (n: number) => String(n).padStart(2, '0');
+
+	/**
+	 * WHOLE NOTES ONLY, PACKED BY NOTE (the author, 2026-09-02): the block
+	 * never cuts a word, and a note never breaks across the two columns — CSS
+	 * `columns` split notes mid-sentence, which is what read so badly. Every
+	 * candidate is measured at column width in a hidden copy; notes are
+	 * admitted nearest-to-the-reading-line first, then PACKED in number order
+	 * into the left stack while it has room, then the right; if the packing
+	 * overflows, the farthest admitted note is dropped and the pack rerun. A
+	 * note that does not fit waits until scrolling gives it room.
+	 */
+	const GAP = 28; // --sp-7, the column gap
+	const LI_MARGIN = 8; // --sp-2, under each note
+	let availH = $state(0);
+	let availW = $state(0);
+	let measureEl = $state<HTMLUListElement | null>(null);
+	let packed = $state<{ left: number[]; right: number[] } | null>(null);
+	const colW = $derived(Math.max(80, (availW - GAP) / 2));
+	$effect(() => {
+		const el = measureEl;
+		const H = availH;
+		const list = notes;
+		void colW; // re-measure when the column width changes
+		if (!el || !H || !list.length) {
+			packed = null;
+			return;
+		}
+		const heights = new Map<number, number>();
+		[...el.children].forEach((li, i) => {
+			const nt = list[i];
+			if (nt) heights.set(nt.n, li.getBoundingClientRect().height + LI_MARGIN);
+		});
+		// admit nearest-first while twice the column height lasts …
+		const byNeed = [...list].sort((a, b) => a.dist - b.dist || a.n - b.n);
+		const admitted = new Set<number>();
+		let used = 0;
+		for (const nt of byNeed) {
+			const hh = heights.get(nt.n) ?? 0;
+			if (used + hh <= 2 * H) {
+				admitted.add(nt.n);
+				used += hh;
+			}
+		}
+		// … then pack whole notes in number order: left stack, then right;
+		// an overflow drops the farthest admitted note and packs again
+		for (let guard = 0; guard < list.length + 1; guard++) {
+			const left: number[] = [];
+			const right: number[] = [];
+			let hL = 0;
+			let hR = 0;
+			let overflow = false;
+			for (const nt of list) {
+				if (!admitted.has(nt.n)) continue;
+				const hh = heights.get(nt.n) ?? 0;
+				if (hL + hh <= H) {
+					left.push(nt.n);
+					hL += hh;
+				} else if (hR + hh <= H) {
+					right.push(nt.n);
+					hR += hh;
+				} else {
+					overflow = true;
+					break;
+				}
+			}
+			if (!overflow) {
+				packed = { left, right };
+				return;
+			}
+			const drop = [...byNeed].reverse().find((nt) => admitted.has(nt.n));
+			if (!drop) break;
+			admitted.delete(drop.n);
+		}
+		packed = { left: [], right: [] };
+	});
+	const columns = $derived.by(() => {
+		const p = packed;
+		if (!p) return [notes, [] as typeof notes];
+		const pick = (ns: number[]) => ns.map((n) => notes.find((nt) => nt.n === n)!).filter(Boolean);
+		return [pick(p.left), pick(p.right)];
+	});
 </script>
 
 <div class="fig">
@@ -47,13 +128,30 @@
 		{/if}
 	</div>
 	{#if notes.length}
-		<div class="fnblock">
-			<p class="fnlabel">Footnote</p>
-			<ol class="notes">
-				{#each notes as n (n.n)}
-					<li value={n.n}>{n.text}</li>
+		<div class="fnblock" bind:clientHeight={availH} bind:clientWidth={availW}>
+			<!-- two stacks packed BY NOTE — a note never splits across the gap;
+			     numbers inline, each citation chunk a link to its URL -->
+			<div class="cols2">
+				{#each columns as col, c (c)}
+					<ul class="notes">
+						{#each col as n (n.n)}
+							<li>{n.n}.
+								{#each n.parts as p, i (i)}{#if p.href}<a href={p.href} target="_blank" rel="noopener"
+										>{p.text}</a
+									>{:else}{p.text}{/if}{/each}
+							</li>
+						{/each}
+					</ul>
 				{/each}
-			</ol>
+			</div>
+			<!-- the hidden measurer: every candidate at the column's width -->
+			<ul class="notes measure" bind:this={measureEl} style:width={`${colW}px`} aria-hidden="true">
+				{#each notes as n (n.n)}
+					<li>{n.n}.
+						{#each n.parts as p, i (i)}{#if p.href}<a href={p.href}>{p.text}</a>{:else}{p.text}{/if}{/each}
+					</li>
+				{/each}
+			</ul>
 		</div>
 	{/if}
 </div>
@@ -88,30 +186,48 @@
 	   in TWO columns to the image's width, 12 px light. Only the visible
 	   paragraphs' notes print, so the set stays short by construction. */
 	.fnblock {
+		position: relative; /* anchors the hidden measurer */
 		max-width: var(--fig-w);
 		min-height: 0;
 		margin-top: var(--sp-3);
-		overflow: hidden;
+		overflow: hidden; /* backstop only — the fit keeps whole notes */
 	}
-	.fnlabel {
-		margin: 0 0 var(--sp-2);
-		font-size: var(--fs-12);
-		line-height: 1.2;
-		color: var(--ink-soft);
+	.measure {
+		position: absolute;
+		top: 0;
+		left: 0;
+		visibility: hidden;
+		columns: auto;
+		column-gap: 0;
+	}
+	.cols2 {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		column-gap: var(--sp-7);
+		align-items: start;
 	}
 	.notes {
 		margin: 0;
-		padding-left: 1.2em;
-		columns: 2;
-		column-gap: var(--sp-7);
+		padding-left: 0;
+		list-style: none;
 		font-size: var(--fs-12);
 		line-height: 1.3;
 		font-weight: 300;
 		color: var(--ink-soft);
 	}
 	.notes li {
-		break-inside: avoid;
 		margin-bottom: var(--sp-2);
+		/* the number hangs; long unbroken strings wrap inside the column */
+		padding-left: 1.5em;
+		text-indent: -1.5em;
+		overflow-wrap: anywhere;
+	}
+	/* a note that carries its source: the whole text is the link */
+	.notes a {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		text-decoration-thickness: 0.5px;
 	}
 	.ph {
 		font-size: var(--fs-12);

@@ -50,10 +50,6 @@
 		list.push(e);
 		eventsAtBlock.set(b.id, list);
 	}
-	/** the timeline spreads when the text reaches its first dated event */
-	const EXPAND_BLOCK = Math.min(
-		...[...bound.values()].map((b) => BLOCK_INDEX.get(b.id) ?? Infinity)
-	);
 
 	/* ── the reading position, one paragraph at a time ── */
 	let activeBlock = $state<string | null>(null);
@@ -63,7 +59,8 @@
 	});
 	$effect(() => () => blockSteps.stop());
 
-	/** the paragraphs currently anywhere on screen — the footnotes' window */
+	/** the paragraphs currently on screen BELOW the pinned band — the
+	 *  footnotes' window, and what the section title answers to */
 	let visList = $state<string[]>([]);
 
 	/**
@@ -95,7 +92,9 @@
 				}
 				visList = BLOCKS.filter((b) => seen.has(b.id)).map((b) => b.id);
 			},
-			{ threshold: 0 }
+			// the top inset keeps the band's own strip out: a paragraph does not
+			// count as visible while it is still hidden under the pinned titles
+			{ threshold: 0, rootMargin: '-150px 0px 0px 0px' }
 		);
 		const actions: { destroy(): void }[] = [];
 		for (let i = 0; i < n; i++) {
@@ -111,9 +110,16 @@
 
 	/* ── what follows from the reading position ── */
 	const atBlock = $derived(activeBlock ? (BLOCK_INDEX.get(activeBlock) ?? -1) : -1);
+	/** the timeline serves the introduction and the chronology; once the
+	 *  reader is in the methodology it withdraws (the author, 2026-09-02) */
 	const activeSection = $derived(atBlock >= 0 ? BLOCKS[atBlock].section : null);
-	const here = $derived(CHAPTERS.find((c) => c.id === activeSection) ?? CHAPTERS[0]);
-	const expanded = $derived(atBlock >= EXPAND_BLOCK);
+	const timelineOn = $derived(
+		!activeSection || activeSection === 'introduction' || activeSection === 'chronology'
+	);
+	/** the timeline is SPREAD for as long as the chronology is on the page
+	 *  (the author, 2026-09-02) — the moment its first paragraph appears the
+	 *  lanes open, and they stay open until its last paragraph has left */
+	const expanded = $derived(visList.some((id) => id.startsWith('chronology-')));
 	const progress = $derived(BLOCKS.length > 1 ? Math.max(0, atBlock) / (BLOCKS.length - 1) : 0);
 
 	/** the figure IN FORCE — the author's own marker, carried forward */
@@ -121,11 +127,15 @@
 
 	/** only the footnotes of the paragraphs on screen, in document order */
 	const shownNotes = $derived.by(() => {
-		const out: { n: number; text: string }[] = [];
+		const out: { n: number; dist: number; parts: { text: string; href?: string }[] }[] = [];
 		for (const id of visList) {
 			const b = BLOCKS[BLOCK_INDEX.get(id) ?? -1];
 			if (!b) continue;
-			for (const n of b.sups) out.push({ n, text: NOTES.get(n) ?? '' });
+			const dist = Math.abs((BLOCK_INDEX.get(id) ?? 0) - Math.max(0, atBlock));
+			for (const n of b.sups) {
+				const e = NOTES.get(n);
+				if (e) out.push({ n, dist, parts: e.parts });
+			}
 		}
 		return out.sort((a, b) => a.n - b.n);
 	});
@@ -158,13 +168,12 @@
 </svelte:head>
 
 <div class="storyp">
-	<div class="heads">
-		<h2 class="head">TIMELINE</h2>
-		<h2 class="head mid">{here.title}</h2>
-	</div>
-
 	<div class="cols">
-		<aside class="rail tl">
+		<!-- TIMELINE is a grid sibling sticky at the SAME height as the section
+		     titles, so the two columns start aligned; it withdraws with its
+		     rail once the reader leaves the chronology -->
+		<h2 class="head tl-head" class:off={!timelineOn}>TIMELINE</h2>
+		<aside class="rail tl" class:off={!timelineOn}>
 			<StoryTimeline
 				{expanded}
 				{progress}
@@ -178,7 +187,9 @@
 		<div class="narrative">
 			{#each CHAPTERS as c (c.id)}
 				<section class="beat" id={c.id}>
-					<!-- the section is named ONCE, by the heading row above the column -->
+					<!-- the section announces itself in the flow, docks at the band and
+					     is pushed out by the next one — the handoff IS the transition -->
+					<h2 class="sect-title">{c.title}</h2>
 					<Prose hint={`atlas/src/content/story/${c.id}.md`}>
 						{@const Text = textOf(c.id)}
 						{#if Text}<Text />{/if}
@@ -196,49 +207,28 @@
 	<div class="coda" id="findings-charts">
 		<KeyFindings c={data.cmp} />
 	</div>
+
+	<!-- the page's bottom breathes: a paper band the columns stop short of;
+	     its twin covers the strip between the header and the docked titles -->
+	<div class="bband" aria-hidden="true"></div>
+	<div class="tcover" aria-hidden="true"></div>
 </div>
 
 <style>
+	.storyp {
+		/* the breathing band: every column stops this short of the window's
+		   bottom edge, and the page pads by it so the end is reachable */
+		--story-band: 48px;
+		padding-bottom: var(--story-band);
+	}
 	/* The artboard's own numbers, so the file documents itself:
 	   timeline 60→580 · gutter 30 · text 610→1180 · gutter 70 · figure 1250→1844 */
-	.heads,
 	.cols {
 		display: grid;
 		grid-template-columns:
 			minmax(0, 520fr) minmax(0, 30fr) minmax(0, 570fr)
 			minmax(0, 70fr) minmax(0, 594fr);
 		align-items: start; /* `stretch` would make the rails full-height and kill sticky */
-	}
-	.heads {
-		position: sticky;
-		/* pinned at the exact height they first render (header + the story
-		   page's own top padding) — the author: the titles must NOT move up
-		   when the text scrolls */
-		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
-		z-index: 4;
-		padding-bottom: var(--sp-2);
-	}
-	/* the band's paper covers only the FOUR tracks the text scrolls under: the
-	   figure rectangle's top aligns with the titles' top (the artboard), so a
-	   full-width paper band painted over the rectangle's first 37 px — the
-	   clock card of Figure 04 lost its first line (2026-09-02) */
-	.heads::after {
-		content: '';
-		position: absolute;
-		inset: 0 calc(100% * 594 / 1784) 0 -20px;
-		background: var(--paper);
-		z-index: -1;
-	}
-	/* the strip between the black header and the pinned titles: paper, so the
-	   narrative never shows through while it scrolls past */
-	.heads::before {
-		content: '';
-		position: absolute;
-		bottom: 100%;
-		left: -20px;
-		right: -20px;
-		height: 80px;
-		background: var(--paper);
 	}
 	/* the column titles are the dataset card's own name style — the same face,
 	   weight, size ramp, line-height and tracking as «ANTI-NERO PROGRAMME»
@@ -253,8 +243,37 @@
 		letter-spacing: 0.02em;
 		text-transform: uppercase;
 	}
-	.head.mid {
-		grid-column: 3;
+	/* TIMELINE: same grid row as the columns, sticky at the same height as the
+	   section titles — the two starts cannot misalign */
+	.tl-head {
+		grid-row: 1;
+		align-self: start;
+		position: sticky;
+		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
+		z-index: 5;
+		background: var(--paper);
+		padding-bottom: var(--sp-2);
+		transition: opacity 0.4s ease;
+	}
+	.tl-head.off {
+		opacity: 0;
+		pointer-events: none;
+	}
+	/* a section's own title: sticky at the band, full column width in paper so
+	   the text scrolls under it, pushed out by the next section's title */
+	.sect-title {
+		position: sticky;
+		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
+		z-index: 3;
+		margin: 0 0 var(--sp-4);
+		padding-bottom: var(--sp-2);
+		background: var(--paper);
+		font-family: var(--font-display-narrow);
+		font-weight: 900;
+		font-size: clamp(15px, 1.25vw, 24px);
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
 	}
 
 	.rail {
@@ -262,26 +281,32 @@
 		top: calc(var(--story-top, calc(var(--header-h, 85px) + 100px)) + 3.2rem);
 		height: calc(
 			100dvh - var(--story-top, calc(var(--header-h, 85px) + 100px)) - 3.2rem -
-				var(--story-pad-b, 20px)
+				var(--story-band, 48px)
 		);
 		overflow: hidden;
 	}
 	.tl {
 		grid-column: 1;
+		grid-row: 1;
+		transition: opacity 0.4s ease;
+	}
+	.rail.tl.off {
+		opacity: 0;
+		pointer-events: none;
 	}
 	.fig {
 		grid-column: 5;
-		/* risen so the rectangle's top aligns with the TITLES — both pinned at
-		   --story-top; the 3.2rem is the heading row the other rails allow for */
+		grid-row: 1;
+		/* the rectangle's top aligns with the titles — pinned at --story-top */
 		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
-		margin-top: -3.2rem;
 		height: calc(
 			100dvh - var(--story-top, calc(var(--header-h, 85px) + 100px)) -
-				var(--story-pad-b, 20px)
+				var(--story-band, 48px)
 		);
 	}
 	.narrative {
 		grid-column: 3;
+		grid-row: 1;
 		/* the tail that lets the LAST passage reach the reading line */
 		padding-bottom: 45vh;
 	}
@@ -290,6 +315,10 @@
 	.beat {
 		padding: var(--sp-8) 0;
 		scroll-margin-top: 120px;
+	}
+	/* the first section starts level with TIMELINE */
+	.beat:first-of-type {
+		padding-top: 0;
 	}
 	/* the methodology's sub-chapters stay in the text face, modest —
 	   sub-chapters of METHODOLOGY, not titles of their own */
@@ -311,6 +340,18 @@
 	.beat :global(hr ~ ol) {
 		display: none;
 	}
+	/* the narrative sets like the printed page (the author, 2026-09-02):
+	   justified with the first line indented — and NO hyphenation (their
+	   second ruling): the base word gap is tightened a touch so the
+	   justification stretches from lower, and `text-wrap: pretty` lets the
+	   browser pick line breaks that keep the gaps even */
+	.beat :global(.prose > p) {
+		text-align: justify;
+		text-indent: 2em;
+		hyphens: manual;
+		word-spacing: -0.02em;
+		text-wrap: pretty;
+	}
 	/* the author's footnote marks */
 	.beat :global(sup) {
 		font-size: 0.68em;
@@ -326,21 +367,51 @@
 		max-width: var(--content-w);
 		margin: var(--sp-12) auto 0;
 	}
+	.bband {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: var(--story-band, 48px);
+		background: var(--paper);
+		z-index: 40;
+		pointer-events: none;
+	}
+	/* the strip between the header and the docked titles: a pushed-out title
+	   slides under it and vanishes cleanly */
+	.tcover {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: var(--header-h, 85px);
+		height: calc(
+			var(--story-top, calc(var(--header-h, 85px) + 100px)) - var(--header-h, 85px)
+		);
+		background: var(--paper);
+		z-index: 40;
+		pointer-events: none;
+	}
 
 	@media (max-width: 1100px) {
 		/* released, as the dataset cards release at the same width */
-		.heads,
 		.cols {
 			grid-template-columns: minmax(0, 1fr);
 		}
-		.head,
-		.head.mid,
+		.tl-head,
 		.tl,
 		.fig,
 		.narrative {
 			grid-column: 1;
+			grid-row: auto;
 		}
-		.heads {
+		.tl-head {
+			position: static;
+		}
+		.bband,
+		.tcover {
+			display: none;
+		}
+		.sect-title {
 			position: static;
 		}
 		.rail {

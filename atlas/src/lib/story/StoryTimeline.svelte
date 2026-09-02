@@ -94,44 +94,51 @@
 		fire: { legX: 383, legW: 130, color: '#a6312d', label: 'fires in Greece' }
 	};
 	/**
-	 * Where the three labels stack while the lanes are converged: UNDER the
-	 * axis, to the RIGHT of the converged line — the author's ruling, with the
-	 * disclaimer on the line's left at the same point. 26 px apart, because at
-	 * this size the first two wrap onto a second line.
+	 * The collapsed chrome (disclaimer left of the line · lane titles right of
+	 * it) renders at NATIVE size outside the scaled drawing — at the collapsed
+	 * scale anything inside it is illegible (the author, 2026-09-02). It sits
+	 * in the UPPER part of the timeline, where the early years are sparse, so
+	 * the axis takes the whole rail and nothing is reserved below.
+	 * The two long lane titles print on two lines each (the author's split).
 	 */
-	const LEG_COLLAPSED_X = COLLAPSED_X + 14;
-	const LEG_COLLAPSED_W = W - LEG_COLLAPSED_X - 10;
-	const LEG_STEP = 26;
-	/** where the below-axis block (disclaimer left · titles right) begins */
-	const BELOW_TOP = axisHeight(stops) - 8;
-	/** the room that block needs — part of the collapsed fit */
-	const BELOW_H = 200;
+	const KEY_LINES: Record<Lane, string[]> = {
+		world: ['GLOBAL EVENTS & EU', 'LEGISLATION CHANGES'],
+		greece: ['EVENTS & LEGISLATION', 'CHANGES IN GREECE'],
+		fire: ['FIRES IN GREECE']
+	};
 
-	/** the placed events, computed once — nothing here depends on the reader */
-	const placed = LANES.map((lane) => ({
-		lane,
-		x: LANE_X[lane],
-		text: LANE_TEXT[lane],
-		...LANE_META[lane],
-		items: layoutLane(laneEvents(lane), stops, LANE_TEXT[lane].w)
-	}));
-	const H = contentHeight(
-		placed.map((l) => l.items),
-		stops
+	const lit = $derived(new Set(activeIds));
+
+	/**
+	 * The placed events. The layout REFLOWS with the reading position: an
+	 * event carries its explanatory text only while the main text is at its
+	 * period (the lit events), so everything else stands as date + title and
+	 * the lanes stay tidy. Blocks animate to their new tops in CSS.
+	 */
+	const placed = $derived.by(() =>
+		LANES.map((lane) => ({
+			lane,
+			x: LANE_X[lane],
+			text: LANE_TEXT[lane],
+			...LANE_META[lane],
+			items: layoutLane(laneEvents(lane), stops, LANE_TEXT[lane].w, (e) => lit.has(e.id))
+		}))
+	);
+	const H = $derived(
+		contentHeight(
+			placed.map((l) => l.items),
+			stops
+		)
 	);
 	/** the collapsed artboard shows the year scale alone, so it needs less */
 	const H_COLLAPSED = axisHeight(stops);
-
-	const lit = $derived(new Set(activeIds));
 
 	/** the box we are given, and the scale that fits the artboard into it */
 	let w = $state(0);
 	let h = $state(0);
 	/** collapsed the whole span is in view; spread we fit the WIDTH and pan */
 	const k = $derived(
-		expanded
-			? Math.min(w / W || 1, 1)
-			: Math.min(w / W || 1, (h || 1) / (H_COLLAPSED + BELOW_H), 1)
+		expanded ? Math.min(w / W || 1, 1) : Math.min(w / W || 1, (h || 1) / H_COLLAPSED, 1)
 	);
 
 	/**
@@ -172,37 +179,22 @@
 		style:--tc={TITLE_CLAMP}
 		style:--bc={BODY_CLAMP}
 		style:--yw={`${YEAR_W}px`}
-		style:--below={`${BELOW_TOP + 2}px`}
 	>
 		<!-- the legend: what each lane is. Stacked by the collapsed line, and
 		     carried out over its own lane when they spread. -->
 		<ul class="legend">
-			{#each placed as l, i (l.lane)}
-				<li
-					class="leg"
-					style:color={l.color}
-					style:--lx={`${l.legX}px`}
-					style:--lw={`${l.legW}px`}
-					style:--cx={`${LEG_COLLAPSED_X}px`}
-					style:--cw={`${LEG_COLLAPSED_W}px`}
-					style:--ly={`${BELOW_TOP + 2 + i * LEG_STEP}px`}
-				>
+			{#each placed as l (l.lane)}
+				<li class="leg" style:color={l.color} style:--lx={`${l.legX}px`} style:--lw={`${l.legW}px`}>
 					{l.label}
 				</li>
 			{/each}
 		</ul>
 
-		<!-- the author's disclaimer: under the axis, left of the collapsed
-		     line — it belongs to the un-split timeline and fades on the spread -->
-		{#if note}
-			<p class="disc" class:hidden={expanded}>{note}</p>
-		{/if}
-
 		<!-- the years: beside the collapsed line, far left when spread -->
 		<div class="years">
 			{#each stops as s (s.year)}
 				{#if s.labelled}
-					<span class="yr" class:on={s.year === bigYear} style:top={`${s.y}px`}>{s.year}</span>
+					<span class="yr" class:on={s.year === bigYear} style:top={`${s.midY}px`}>{s.year}</span>
 				{/if}
 			{/each}
 		</div>
@@ -285,12 +277,35 @@
 									: storyDate(p.e.date)}</span
 							>
 							<span class="t">{p.e.title}</span>
-							{#if p.e.body}<span class="b">{p.e.body}</span>{/if}
+							{#if p.e.body && lit.has(p.e.id)}<span class="b">{p.e.body}</span>{/if}
 						</button>
 					{/each}
 				</div>
 			{/each}
 		</div>
+	</div>
+
+	<!-- NATIVE-size chrome of the collapsed state (the author, 2026-09-02: at
+	     the collapsed scale these were illegible inside the drawing): in the
+	     UPPER part of the timeline, where the early years are sparse — the
+	     disclaimer left of the years column, the lane titles (two lines each)
+	     right of the converged line, the scaled dotted line the divider. -->
+	<div
+		class="below"
+		class:hidden={expanded}
+		style:--split={`${k * COLLAPSED_X}px`}
+		style:--dw={`${Math.max(120, k * (COLLAPSED_X - YEAR_W - 12) - 16)}px`}
+	>
+		{#if note}
+			<p class="ndisc">{note}</p>
+		{/if}
+		<ul class="nkeys">
+			{#each placed as l (l.lane)}
+				<li style:color={l.color}>
+					{#each KEY_LINES[l.lane] as line (line)}<span>{line}</span>{/each}
+				</li>
+			{/each}
+		</ul>
 	</div>
 </div>
 
@@ -379,7 +394,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		transform: translateX(226px); /* beside the collapsed line */
+		transform: translateX(281px); /* beside the collapsed line (345 - 64) */
 		transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 	}
 	.expanded .years {
@@ -417,31 +432,13 @@
 		padding: 0;
 		list-style: none;
 	}
-	.disc {
-		position: absolute;
-		top: var(--below, 0px);
-		left: 30px;
-		width: 246px;
-		margin: 0;
-		font-family: var(--font-ui);
-		/* the whole drawing renders at ~0.65 scale collapsed — any smaller
-		   than this and the disclaimer stops being readable */
-		font-size: 12.5px;
-		line-height: 1.35;
-		text-align: right;
-		color: var(--ink-soft);
-		transition: opacity 0.3s ease;
-	}
-	.disc.hidden {
-		opacity: 0;
-	}
-	/* stacked beside the collapsed line, then each label rides out over its own
-	   lane — the same horizontal move the lanes make */
+	/* the in-scale legend exists only SPREAD, above each lane's own rule; the
+	   collapsed state names the lanes in the native block below the axis */
 	.leg {
 		position: absolute;
-		top: var(--ly);
-		left: var(--cx);
-		width: var(--cw);
+		top: 34px;
+		left: var(--lx);
+		width: var(--lw);
 		/* the card pages' graph titles: the display face, bold, in caps —
 		   `ui/Tile.svelte` .tt */
 		font-family: var(--font-display);
@@ -450,17 +447,58 @@
 		line-height: 1.15;
 		letter-spacing: 0.02em;
 		text-transform: uppercase;
-		transition:
-			left 0.55s cubic-bezier(0.2, 0.7, 0.2, 1),
-			top 0.55s cubic-bezier(0.2, 0.7, 0.2, 1),
-			width 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+		opacity: 0;
+		transition: opacity 0.3s ease;
 	}
-	/* spread: the three labels share one baseline above their own rules, each
-	   held to the room before the next one starts so they cannot collide */
 	.expanded .leg {
-		top: 34px;
-		left: var(--lx);
-		width: var(--lw);
+		opacity: 1;
+	}
+
+	/* ── the native collapsed chrome ── */
+	.below {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		transition: opacity 0.3s ease;
+	}
+	.below.hidden {
+		opacity: 0;
+	}
+	.ndisc {
+		position: absolute;
+		left: 6px;
+		top: 36px;
+		/* up to the years' left edge — computed in the markup */
+		width: var(--dw);
+		margin: 0;
+		font-family: var(--font-ui);
+		/* the footnotes' own setting (the author's ruling) */
+		font-size: var(--fs-12);
+		font-weight: 300;
+		line-height: 1.3;
+		text-align: right;
+		color: var(--ink-soft);
+	}
+	.nkeys {
+		position: absolute;
+		left: calc(var(--split) + 14px);
+		right: 4px;
+		top: 36px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 11.5px;
+		line-height: 1.25;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+	}
+	.nkeys span {
+		display: block;
 	}
 
 	.blocks {
@@ -485,7 +523,9 @@
 		font: inherit;
 		color: var(--ink-faint);
 		cursor: pointer;
-		transition: color 0.25s ease;
+		transition:
+			color 0.25s ease,
+			top 0.3s ease;
 	}
 	.ev.right {
 		text-align: right;

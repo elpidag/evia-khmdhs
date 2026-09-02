@@ -18,7 +18,7 @@ describe("the story's paragraph blocks (the author's own files)", () => {
 	it("carry the document's 18 footnotes, referenced once each, in order", () => {
 		const sups = BLOCKS.flatMap((b) => b.sups);
 		expect(sups).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
-		for (const n of sups) expect(NOTES.get(n), `note ${n}`).toBeTruthy();
+		for (const n of sups) expect(NOTES.get(n)?.parts.length, `note ${n}`).toBeTruthy();
 		expect(NOTES.size).toBe(18);
 	});
 
@@ -35,6 +35,32 @@ describe("the story's paragraph blocks (the author's own files)", () => {
 		const second = BLOCKS.findIndex((b) => b.figure && b.figure.n === 2);
 		expect(figureAt(second - 1)!.n).toBe(1);
 		expect(figureAt(BLOCKS.length - 1)).not.toBeNull();
+	});
+
+	it('links every citation chunk to the URL that followed it', () => {
+		const n1 = NOTES.get(1)!.parts;
+		expect(n1).toHaveLength(1);
+		expect(n1[0].href).toContain('doi.org/10.1029/2020RG000726');
+		expect(n1[0].href).not.toContain('utm_source');
+		expect(n1[0].text.endsWith('e2020RG000726')).toBe(true);
+		// NO URL is ever printed as text, in any part of any note
+		for (const [, e] of NOTES) {
+			for (const p of e.parts) {
+				expect(p.text).not.toMatch(/https?:\/\//);
+				if (p.href) expect(p.href).toMatch(/^https?:\/\//);
+			}
+		}
+		// a note with no URL stays one plain part
+		expect(NOTES.get(2)!.parts).toHaveLength(1);
+		expect(NOTES.get(2)!.parts[0].href).toBeUndefined();
+		// «see here: URL» reads as a clean link
+		expect(NOTES.get(8)!.parts[0].text).toBe('For more information, see here');
+		// the two-source notes carry TWO links, each on its own citation
+		for (const nn of [13, 14]) {
+			const links = NOTES.get(nn)!.parts.filter((p) => p.href);
+			expect(links, `note ${nn}`).toHaveLength(2);
+			for (const p of links) expect(p.text.length).toBeGreaterThan(20);
+		}
 	});
 
 	it("the timeline's disclaimer comes from its own file, whole", () => {

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { compile } from 'mdsvex';
 import { tagParagraphs } from '../../../scripts/remark-tag-paragraphs';
 import { BLOCKS } from './content';
+import { CHAPTERS } from './chapters';
 
 const opts = { extensions: ['.md'], remarkPlugins: [tagParagraphs] };
 
@@ -34,8 +35,12 @@ describe('paragraphs that begin with a tag', () => {
 
 	it("renders the author's files with one <p> or <h3> per parsed block", async () => {
 		let rendered = 0;
+		// only the sections the story RENDERS count — the folder also holds the
+		// timeline disclaimer and the three dataset-card texts (author,
+		// 2026-09-02: those appear on the card pages only)
+		const shown = new Set(CHAPTERS.map((c) => `/src/content/story/${c.id}.md`));
 		for (const [path, raw] of Object.entries(FILES)) {
-			if (path.endsWith('/timelinedisclaimer.md')) continue;
+			if (!shown.has(path)) continue;
 			const code = (await compile(raw, opts))!.code;
 			rendered += (code.match(/<p>/g) ?? []).length + (code.match(/<h3>/g) ?? []).length;
 		}
