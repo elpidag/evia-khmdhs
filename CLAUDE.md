@@ -1665,15 +1665,25 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   artboard's 2016; the nine-year run-in is two compressed steps with a BREAK
   MARK on each lane, so compression is never read as duration — stops are no
   longer one per year and `yOfDate` interpolates inside whatever pair brackets
-  a date); **2021 gets 260px** against a plain year's 81.4 (twelve events,
-  eight inside one August fortnight — at an even pitch they sit inside 3px),
-  2023 gets 110; and the rail became a **VIEWPORT THAT PANS** — 31 blocks
-  cannot be read at once in a column one screen tall, so the drawing is
-  ~1.270px and the column follows the reader. The DOT keeps its true date
-  always; a crowded BLOCK moves down with a leader line back to it
-  (`layoutLane`, pure — the component decides no position). Titles clamp to 4
-  lines, bodies to 2, and the CSS takes both clamps FROM the module so the
-  drawing and the height estimate cannot drift. The world lane's text column
+  a date); **each year's span GROWS to hold its own events' closed blocks**
+  (2026-09-02, after two author screenshots: the fixed spans gave 2022–2026
+  ~614 px for ~750 px of Greek blocks, so the chain smeared a year below its
+  labels however it was dodged — `yearStops`' `neededPx` takes the tallest
+  lane's stack per year, the artboard's spans as the floor: 2021's 260 and
+  2023's 110 stay, a plain year 81.4; 2026 is a real year closed by an
+  unlabelled 2027 endpoint, and a vitest pins span ≥ stack per year × lane);
+  the rail became a **VIEWPORT THAT PANS** — the drawing (~1.690px) cannot
+  be read in a column one screen tall, so the column follows the reader,
+  centring the active paragraph's whole event RANGE (`focusDates`). The DOT
+  keeps its true date always; crowded BLOCKS BALANCE around their dates
+  (`layoutLane`, pure — a pool-adjacent-violators dodge since 2026-09-02:
+  each crowd centres on the least-squares mean of its members' dates, up or
+  down; the old downward-only push cascaded 2021's blocks beside 2022–2023),
+  a leader line joining a moved block back either way. Titles clamp to 4
+  lines, bodies to 2 — CLOSED; the reader's own events STRETCH whole (full
+  title + body, `blockHeight`'s `open` mode with a line of slack) — and the
+  CSS takes the clamps FROM the module so the drawing and the height
+  estimate cannot drift. The world lane's text column
   starts at `YEAR_W` because the years move into that margin when the timeline
   spreads (pinned). **`StoryEvent.beat` — which passage names the event — is
   the one thing the spreadsheet does not carry** and is unset on all 31 rows:
@@ -1736,7 +1746,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   give the active and on-screen paragraphs, from which derive the figure
   IN FORCE (the author's marker, carried forward), the footnotes shown
   (only the visible paragraphs' — no scroll by construction) and the
-  timeline's lighting and `focusDate` pan; `lib/story/bindings.ts` holds
+  timeline's lighting and its pan — since 2026-09-02 the rail frames the
+  active paragraph's WHOLE event range via `focusDates` (midpoint-centred,
+  anchored above the earliest when taller than the view: the AntiNero
+  paragraph spans Green Deal 2019 → launch 2022); `lib/story/bindings.ts` holds
   the curated event↔paragraph needles (17 named + 4 fires, 10 unbound
   context; verbatim phrases, resolved by substring, 11 tests in
   `content.test.ts` fail when an edit removes one). A marker
@@ -1785,8 +1798,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   the neighbouring column → notes may break across columns; no «Footnote»
   label. **The screenshot round (same night, author):** an event
   shows DATE+TITLE only until the main text is AT its period — the lit
-  events open their bodies and `layoutLane` (now with a per-event
-  predicate) REFLOWS reactively, blocks gliding via `transition: top`;
+  events then STRETCH WHOLE (full title and body, no clamps;
+  `blockHeight(e, w, open)` with a line of slack so the estimate never
+  runs short) and `layoutLane` (per-event `open` predicate) REFLOWS
+  reactively, blocks gliding via `transition: top`;
   year labels sit at `YearStop.midY` (span-centred, level with their
   events); the timeline + its TIMELINE title FADE OUT past the chronology
   (`timelineOn` on the section of the reading line), and it is SPREAD for

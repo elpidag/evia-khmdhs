@@ -47,9 +47,11 @@
 		activeYear?: number | null;
 		/** the events the passage on screen mentions; the rest stay grey */
 		activeIds?: string[];
-		/** the date the rail should centre on — the active paragraph's own
-		 *  event. While it is null the rail pans by `progress` instead. */
-		focusDate?: string | null;
+		/** the dates of the ACTIVE paragraph's events — the rail frames the
+		 *  whole range (a paragraph may bind events years apart: the AntiNero
+		 *  one spans the Green Deal 2019 to the launch 2022). Empty = the rail
+		 *  pans by `progress` instead. */
+		focusDates?: string[];
 		/** 0→1 through the narrative — the fallback between bound passages */
 		progress?: number;
 		/** a bullet was clicked — the page scrolls to the passage that says it */
@@ -62,7 +64,7 @@
 		expanded = false,
 		activeYear = null,
 		activeIds = [],
-		focusDate = null,
+		focusDates = [],
 		progress = 0,
 		onSelect,
 		note = ''
@@ -142,14 +144,23 @@
 	);
 
 	/**
-	 * The pan. The rail centres a little above the active paragraph's own
-	 * event (`focusDate`); between bound passages it falls back to the
+	 * The pan. The rail frames the WHOLE range of the active paragraph's
+	 * events (the author, 2026-09-02: reading about the 2022 launch must not
+	 * pan to the 2019 Green Deal because it fired first): the window centres
+	 * on the range's midpoint, and a range taller than the view anchors just
+	 * above its earliest event. Between bound passages it falls back to the
 	 * reader's progress — clamped, so it never scrolls past either end.
 	 */
 	const viewH = $derived((h || 1) / k);
 	const panY = $derived.by(() => {
 		if (!expanded) return 0;
-		const target = focusDate ? yOfDate(focusDate, stops) : progress * H;
+		let target = progress * H;
+		if (focusDates.length) {
+			const ys = focusDates.map((d) => yOfDate(d, stops));
+			const lo = Math.min(...ys);
+			const hi = Math.max(...ys);
+			target = hi - lo > viewH * 0.8 ? lo + viewH * 0.42 : (lo + hi) / 2;
+		}
 		return Math.max(0, Math.min(H - viewH, target - viewH * 0.42));
 	});
 
@@ -561,8 +572,13 @@
 		-webkit-line-clamp: var(--tc);
 		line-clamp: var(--tc);
 	}
+	/* an OPEN event stretches: full title, full body, no clamps — the layout
+	   has already made the room (the author, 2026-09-02) */
 	.ev.on .t {
 		font-weight: 700;
+		display: block;
+		-webkit-line-clamp: unset;
+		line-clamp: unset;
 	}
 	.b {
 		margin-top: 3px;
@@ -570,10 +586,7 @@
 		font-size: 11px;
 		line-height: 1.2;
 		opacity: 0.75;
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: var(--bc);
-		line-clamp: var(--bc);
+		display: block;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

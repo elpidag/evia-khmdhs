@@ -166,6 +166,9 @@
 		/* caption and notes are set to the IMAGE's width, not the column's */
 		--fig-w: min(100%, 540px);
 	}
+	/* no alignment tricks: the page grid gives this column exactly the
+	   content's 540 px (the author, 2026-09-02), so image, caption and
+	   notes share both edges and the right one sits on the page margin */
 	.box {
 		/* the artboard's square, inset in its column */
 		width: var(--fig-w);

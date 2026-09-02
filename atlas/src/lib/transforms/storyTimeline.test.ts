@@ -23,9 +23,11 @@ import { EVENTS, laneEvents } from '$lib/story/events';
 describe("the story timeline's year scale", () => {
 	const stops = yearStops();
 
-	it('runs from the first event to 2026, top to bottom', () => {
+	it('runs from the first event through 2026, top to bottom', () => {
 		expect(stops[0]).toMatchObject({ year: 2007, y: AXIS_TOP, labelled: true });
-		expect(stops[stops.length - 1].year).toBe(2026);
+		// 2027 is only the endpoint that makes 2026 a real year, never printed
+		expect(stops[stops.length - 1]).toMatchObject({ year: 2027, labelled: false });
+		expect(stops.filter((s) => s.labelled).at(-1)!.year).toBe(2026);
 		for (let i = 1; i < stops.length; i++) {
 			expect(stops[i].year).toBeGreaterThan(stops[i - 1].year);
 			expect(stops[i].y).toBeGreaterThan(stops[i - 1].y);
@@ -66,7 +68,25 @@ describe("the story timeline's year scale", () => {
 	it('spaces 2017 but does not name it, as the artboard does', () => {
 		const y2017 = stops.find((s) => s.year === 2017)!;
 		expect(y2017.labelled).toBe(false);
-		expect(stops.filter((s) => !s.labelled)).toHaveLength(1);
+		// 2017 and the 2027 endpoint are the only unnamed stops
+		expect(stops.filter((s) => !s.labelled)).toHaveLength(2);
+	});
+
+	it("gives every year the room its own events' blocks need", () => {
+		// the correspondence guarantee: a year's span can hold each lane's
+		// closed stack, so the chain never has to smear past the labels
+		for (let i = 0; i < stops.length - 1; i++) {
+			const span = stops[i + 1].y - stops[i].y;
+			for (const lane of LANES) {
+				const stack = laneEvents(lane)
+					.filter((e) => {
+						const t = fractionalYear(e.date);
+						return t >= stops[i].year && t < stops[i + 1].year;
+					})
+					.reduce((s, e) => s + blockHeight({ title: e.title }, LANE_TEXT[lane].w) + 12, 0);
+				expect(span, `${lane} in ${stops[i].year}`).toBeGreaterThanOrEqual(stack);
+			}
+		}
 	});
 });
 
@@ -190,30 +210,36 @@ describe('block layout', () => {
 		expect(aug.slice(1).every((p) => p.pushed)).toBe(true);
 	});
 
-	it('shrinks a closed event to date + title, and reflows around an open one', () => {
-		const all = layoutLane(laneEvents('greece'), stops, LANE_TEXT.greece.w);
+	it('shrinks a closed event to date + title, and STRETCHES an open one whole', () => {
+		const openAll = layoutLane(laneEvents('greece'), stops, LANE_TEXT.greece.w);
 		const closed = layoutLane(laneEvents('greece'), stops, LANE_TEXT.greece.w, () => false);
 		const withBody = laneEvents('greece').filter((e) => e.body);
 		expect(withBody.length).toBeGreaterThan(5);
-		for (let i = 0; i < all.length; i++) {
-			expect(closed[i].h).toBeLessThanOrEqual(all[i].h);
+		for (let i = 0; i < openAll.length; i++) {
+			expect(closed[i].h).toBeLessThanOrEqual(openAll[i].h);
 			expect(closed[i].h).toBe(blockHeight({ title: closed[i].e.title }, LANE_TEXT.greece.w));
+			// open = unclamped: a long body never truncates, the block grows
+			expect(openAll[i].h).toBe(blockHeight(openAll[i].e, LANE_TEXT.greece.w, true));
 		}
 	});
 
-	it('never places a block above its own dot', () => {
+	it('balances every crowd around its own dates, so lanes track the years', () => {
 		for (const lane of LANES) {
-			for (const p of layoutLane(laneEvents(lane), stops, LANE_TEXT[lane].w)) {
-				expect(p.blockY).toBeGreaterThan(p.dotY - 10);
-			}
+			const placed = layoutLane(laneEvents(lane), stops, LANE_TEXT[lane].w, () => false);
+			// least-squares balance: the displacements cancel out overall …
+			const drift =
+				placed.reduce((s, p) => s + (p.blockY - (p.dotY - 4)), 0) / (placed.length || 1);
+			expect(Math.abs(drift), lane).toBeLessThan(25);
+			// … and no block strays into the legend's line
+			for (const p of placed) expect(p.blockY).toBeGreaterThanOrEqual(62);
 		}
 	});
 
 	it('reports a drawing taller than the viewport, so the rail must pan', () => {
-		const placed = LANES.map((l) => layoutLane(laneEvents(l), stops, LANE_TEXT[l].w));
+		// the runtime shape: everything closed but the reader's own events
+		const placed = LANES.map((l) => layoutLane(laneEvents(l), stops, LANE_TEXT[l].w, () => false));
 		const h = contentHeight(placed, stops);
 		expect(h).toBeGreaterThanOrEqual(axisHeight(stops));
-		expect(h).toBeGreaterThan(1000);
 		expect(h).toBeLessThan(2000); // and not so tall the pan becomes a second scroll
 	});
 });

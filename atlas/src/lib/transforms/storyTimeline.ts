@@ -1,7 +1,10 @@
+import { EVENTS } from '$lib/story/events';
+
 /**
  * The story timeline's vertical scale and block layout — pure, so it can be
  * unit-tested with no DOM (the project's convention for layout maths:
- * `lib/transforms/*.ts`).
+ * `lib/transforms/*.ts`). (`events.ts`'s own import from here is type-only,
+ * so the runtime import above closes no cycle.)
  *
  * Everything here is in the ARTBOARD's own coordinates (the author's 1920×1080
  * Illustrator pages). The component authors its markup 1:1 in these numbers and
@@ -74,7 +77,8 @@ const SPANS: ReadonlyArray<readonly [year: number, px: number]> = [
 	[2022, 81.4],
 	[2023, 110],
 	[2024, 81.4],
-	[2025, 81.4]
+	[2025, 81.4],
+	[2026, 81.4]
 ];
 
 export interface YearStop {
@@ -90,12 +94,32 @@ export interface YearStop {
 }
 
 /**
- * The years the axis PRINTS. 2017 keeps its spacing but not its label — the
- * artboard leaves it out, because the compressed stretch has no room for it.
+ * The years the axis PRINTS. 2017 keeps its spacing but not its label (the
+ * artboard's own economy), and 2027 is only the axis's endpoint — it exists
+ * so 2026 is a real year instead of a point the last events clamp onto.
  */
-const UNLABELLED = new Set([2017]);
+const UNLABELLED = new Set([2017, 2027]);
 
-/** cumulative sum of SPANS — one stop per entry, first at AXIS_TOP */
+/**
+ * How much a span's own events need: the tallest lane's stack of CLOSED
+ * blocks inside [year, next). This is what keeps the lanes CORRESPONDING
+ * with the years (the author, 2026-09-02, after two screenshots): a year
+ * whose events cannot fit its pixels forces the whole chain below to smear
+ * past the labels, however the dodge balances it.
+ */
+function neededPx(year: number, next: number): number {
+	const byLane = new Map<Lane, number>();
+	for (const e of EVENTS) {
+		const t = fractionalYear(e.date);
+		if (t >= year && t < next) {
+			const h = blockHeight({ title: e.title }, LANE_TEXT[e.lane].w) + BLOCK_GAP;
+			byLane.set(e.lane, (byLane.get(e.lane) ?? 0) + h);
+		}
+	}
+	return byLane.size ? Math.max(...byLane.values()) + 10 : 0;
+}
+
+/** cumulative sum of SPANS, each grown to hold its own events' blocks */
 export function yearStops(): YearStop[] {
 	const out: YearStop[] = [];
 	let y = AXIS_TOP;
@@ -103,7 +127,7 @@ export function yearStops(): YearStop[] {
 		const [year, px] = SPANS[i];
 		const next = i + 1 < SPANS.length ? SPANS[i + 1][0] : year + 1;
 		out.push({ year, y, midY: y, labelled: !UNLABELLED.has(year), gap: next - year });
-		y += px;
+		y += Math.max(px, neededPx(year, next));
 	}
 	const last = SPANS[SPANS.length - 1][0] + 1;
 	out.push({ year: last, y, midY: y, labelled: !UNLABELLED.has(last), gap: 0 });
@@ -191,12 +215,21 @@ const BLOCK_GAP = 12;
 /** the block's first line sits this far above its dot, so they read as level */
 const DOT_LIFT = 4;
 
-/** the estimated height of one event's block in a column `w` wide */
-export function blockHeight(e: { title: string; body?: string }, w: number): number {
+/**
+ * The estimated height of one event's block in a column `w` wide. An OPEN
+ * block (the reader is at its period) STRETCHES: full title and full body,
+ * no clamps — the author, 2026-09-02: a highlighted event must be readable
+ * whole. A closed block clamps the title and carries no body. Open blocks
+ * get one line of slack, because the estimate must never run SHORT (the
+ * next block would overlap the real text).
+ */
+export function blockHeight(e: { title: string; body?: string }, w: number, open = false): number {
 	const cpl = Math.max(8, Math.floor(w / CHAR_W));
-	const title = Math.min(TITLE_CLAMP, Math.max(1, Math.ceil(e.title.length / cpl)));
-	const body = e.body ? Math.min(BODY_CLAMP, Math.ceil(e.body.length / cpl)) : 0;
-	return DATE_H + title * LINE + (body ? 3 + body * LINE : 0);
+	const titleLines = Math.max(1, Math.ceil(e.title.length / cpl));
+	const title = open ? titleLines : Math.min(TITLE_CLAMP, titleLines);
+	const bodyLines = e.body ? Math.ceil(e.body.length / cpl) : 0;
+	const body = open ? bodyLines : Math.min(BODY_CLAMP, bodyLines);
+	return DATE_H + title * LINE + (body ? 3 + body * LINE : 0) + (open ? LINE : 0);
 }
 
 export interface PlacedEvent<E> {
@@ -212,34 +245,84 @@ export interface PlacedEvent<E> {
 	pushed: boolean;
 }
 
+/** blocks may not rise into the spread legend's line */
+const MIN_TOP = 62;
+
 /**
- * Place one lane's blocks. The DOT keeps its true y always; where two events
- * are closer together than their text, the block moves DOWN and a leader line
- * joins it back to its dot (`DeadlineSlope`'s convention). Events must arrive
- * in date order — `EVENTS` is sorted at import.
+ * Place one lane's blocks. The DOT keeps its true y always; where events
+ * crowd, the blocks BALANCE around their dates (pool-adjacent-violators:
+ * order kept, no overlaps, each contiguous crowd centred on the least-squares
+ * mean of its members' dates) — never the old downward-only push, which let
+ * 2021's blocks cascade beside the 2022-2023 year labels (the author,
+ * 2026-09-02). A block may sit above OR below its dot; the leader line joins
+ * it back either way. Events must arrive in date order.
  */
 export function layoutLane<E extends { title: string; body?: string; date: string; end?: string }>(
 	events: E[],
 	stops: YearStop[] = yearStops(),
 	width = 132,
-	/** whether this event's body is OPEN — the author's rule: the explanatory
-	 *  text shows only while the main text is at the event's period */
-	hasBody: (e: E) => boolean = () => true
+	/** whether this event is OPEN — the author's rule: while the main text
+	 *  is at the event's period it stretches to its FULL title and body */
+	open: (e: E) => boolean = () => true
 ): PlacedEvent<E>[] {
-	let cursor = -Infinity;
-	return events.map((e) => {
-		const dotY = yOfDate(e.date, stops);
-		const h = blockHeight(hasBody(e) ? e : { title: e.title }, width);
-		const want = dotY - DOT_LIFT;
-		const blockY = Math.max(want, cursor);
-		cursor = blockY + h + BLOCK_GAP;
+	const want = events.map((e) => yOfDate(e.date, stops) - DOT_LIFT);
+	const hs = events.map((e) =>
+		open(e) ? blockHeight(e, width, true) : blockHeight({ title: e.title }, width)
+	);
+
+	interface Cluster {
+		top: number;
+		height: number;
+		count: number;
+		/** Σ of members' desired cluster-top (want minus offset inside) */
+		sumDesired: number;
+		start: number;
+	}
+	const clusters: Cluster[] = [];
+	for (let i = 0; i < events.length; i++) {
+		let c: Cluster = {
+			top: Math.max(MIN_TOP, want[i]),
+			height: hs[i] + BLOCK_GAP,
+			count: 1,
+			sumDesired: want[i],
+			start: i
+		};
+		// merge backwards while overlapping the previous crowd
+		while (clusters.length) {
+			const p = clusters[clusters.length - 1];
+			if (p.top + p.height <= c.top) break;
+			clusters.pop();
+			c = {
+				top: 0,
+				height: p.height + c.height,
+				count: p.count + c.count,
+				// appending after p shifts every member of c down by p.height
+				sumDesired: p.sumDesired + c.sumDesired - p.height * c.count,
+				start: p.start
+			};
+			c.top = Math.max(MIN_TOP, c.sumDesired / c.count);
+		}
+		clusters.push(c);
+	}
+
+	const ys = new Array<number>(events.length);
+	for (const c of clusters) {
+		let y = c.top;
+		for (let i = c.start; i < c.start + c.count; i++) {
+			ys[i] = y;
+			y += hs[i] + BLOCK_GAP;
+		}
+	}
+
+	return events.map((e, i) => {
+		const dotY = want[i] + DOT_LIFT;
 		return {
 			e,
 			dotY,
 			endY: e.end && e.end !== e.date ? yOfDate(e.end, stops) : undefined,
-			blockY,
-			h,
-			pushed: blockY - want > 1
+			blockY: ys[i],
+			h: hs[i],
+			pushed: Math.abs(ys[i] - want[i]) > 1
 		};
 	});
 }

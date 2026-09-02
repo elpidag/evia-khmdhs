@@ -143,12 +143,13 @@
 	/** the events the active paragraph names — lit on the timeline */
 	const activeIds = $derived(activeBlock ? (eventsAtBlock.get(activeBlock) ?? []).map((e) => e.id) : []);
 
-	/** the date the rail centres on; it holds position between bound passages */
-	let focusDate = $state<string | null>(null);
+	/** the ACTIVE paragraph's event dates — the rail frames the whole range;
+	 *  it holds position between bound passages */
+	let focusDates = $state<string[]>([]);
 	$effect(() => {
 		const evs = activeBlock ? eventsAtBlock.get(activeBlock) : undefined;
-		if (evs?.length) focusDate = evs[0].date;
-		else if (!activeBlock) focusDate = null;
+		if (evs?.length) focusDates = evs.map((e) => e.date);
+		else if (!activeBlock) focusDates = [];
 	});
 
 	/** a bullet was clicked: go to the exact paragraph that tells it */
@@ -177,7 +178,7 @@
 			<StoryTimeline
 				{expanded}
 				{progress}
-				{focusDate}
+				{focusDates}
 				{activeIds}
 				onSelect={goToEvent}
 				note={timelineNote()}
@@ -221,13 +222,17 @@
 		--story-band: 48px;
 		padding-bottom: var(--story-band);
 	}
-	/* The artboard's own numbers, so the file documents itself:
-	   timeline 60→580 · gutter 30 · text 610→1180 · gutter 70 · figure 1250→1844 */
+	/* The five tracks, retuned by the author (2026-09-02) from the artboard's
+	   520/30/570/70/594: the figure track is exactly its content's 540 px —
+	   image, caption and notes then share both edges, the right one on the
+	   page margin — and the spare went to the narrative. The fr values are
+	   READ AS PIXELS AT 1920, which holds only while they sum to 1784 (the
+	   content width inside the page margins) — keep that sum when retuning. */
 	.cols {
 		display: grid;
 		grid-template-columns:
-			minmax(0, 520fr) minmax(0, 30fr) minmax(0, 570fr)
-			minmax(0, 70fr) minmax(0, 594fr);
+			minmax(0, 500fr) minmax(0, 30fr) minmax(0, 674fr)
+			minmax(0, 40fr) minmax(0, 540fr);
 		align-items: start; /* `stretch` would make the rails full-height and kill sticky */
 	}
 	/* the column titles are the dataset card's own name style — the same face,

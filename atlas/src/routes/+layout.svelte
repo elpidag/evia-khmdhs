@@ -223,7 +223,7 @@
 	}
 	/* the story is the author's 1920 artboard: three columns across the window,
 	   letterboxed above 1920 so the reading measure never grows past its design
-	   (the middle column is 570 px of 18 px type — about 68 characters) */
+	   (the middle column is 674 px of 18 px type — about 80 characters) */
 	main.story {
 		--header-h: 85px;
 		--story-pad-b: clamp(12px, 1.85vh, 20px);
@@ -231,8 +231,8 @@
 		   below — the story pins its heading row there so it never moves */
 		--story-top: calc(var(--header-h) + clamp(20px, 3.7vh, 40px));
 		max-width: 1920px;
-		padding: clamp(20px, 3.7vh, 40px) clamp(20px, 3.958vw, 76px) var(--story-pad-b)
-			clamp(20px, 3.125vw, 60px);
+		padding: clamp(20px, 3.7vh, 40px) clamp(20px, 3.500vw, 68px) var(--story-pad-b)
+			clamp(20px, 3.500vw, 68px);
 	}
 	@media (max-width: 900px) {
 		header .inner {

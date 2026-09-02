@@ -12237,3 +12237,86 @@ keeps its ragged-right setting. Second ruling minutes later: NO hyphenation
 — instead the base word gap is tightened a touch (`word-spacing: -0.02em`,
 so justification stretches from lower) and `text-wrap: pretty` lets the
 browser choose line breaks that keep the gaps even.
+
+## 2026-09-02 — a highlighted event stretches to its whole text
+
+The author: many events' texts were not fully visible even highlighted — the
+title clamped at four lines, the body at two. Now an OPEN event (the reader
+at its period) STRETCHES: full title, full body, no clamps — the reflow
+machinery already made the room, and `blockHeight` gained an `open` mode
+(unclamped, plus one line of slack so the estimate can never run short and
+let the next block overlap real text). Closed events keep the tidy
+date-plus-clamped-title form. The `< 2000` drawing-height pin now measures
+the runtime shape (everything closed but the reader's own events).
+
+## 2026-09-02 — the rail frames the paragraph's whole event range
+
+The author's screenshot: reading «…AntiNero programme began to operate at
+national scale in 2022», the timeline sat on 2018–2019 — the AntiNero
+paragraph binds three events years apart (Green Deal 12.2019, Forest
+Strategy 07.2021, the launch 07.2022) and the pan followed the EARLIEST.
+`focusDate` became `focusDates`: the rail now centres on the MIDPOINT of the
+active paragraph's event range (all three in view together, bodies open);
+a range taller than the view anchors just above its earliest event. The
+same fix serves every multi-event paragraph (Mati + the two 112 launches;
+Evros + committee + Rhodes; the four 2021 fires).
+
+## 2026-09-02 — the lanes balance around their dates
+
+The author's screenshot: the middle (Greek) lane's blocks did not correspond
+with the years — the dodge pushed crowded blocks only DOWNWARD, so the 2021
+cluster cascaded beside the 2022–2023 labels, amplified once open events
+stretch whole. The suspect was the pan change of the previous round; the
+cause was the one-way push. `layoutLane` is now a BALANCED dodge
+(pool-adjacent-violators): order kept, no overlaps, and every contiguous
+crowd centres on the least-squares mean of its members' dates — spreading up
+into an empty year as much as down, clamped below the spread legend's line.
+A block may now sit above its dot as well as below; the leader line joins it
+back either way. Pinned: per-lane mean displacement under 25 px in the
+closed layout, nothing above y 62.
+
+## 2026-09-02 — the axis stretches where the events crowd
+
+The author's second screenshot: the balance was not enough — Law 5106
+(01.05.2024) still printed past the 2026 label. Measured, the cause is
+CAPACITY, not the dodge: from mid-2021 the Greek lane's 13 blocks need
+~750 px where the fixed spans (2022–2026 at 81.4/110/81.4/81.4) give ~614,
+so the chain has no choice but to smear below its dates however it is
+balanced. The fix is at the SCALE: `yearStops` now grows each year's span
+to hold its own events' closed blocks (`neededPx` — the tallest lane's
+stack inside the year, +10 headroom; the artboard's spans stay as the
+floor), and 2026 became a real year with an unlabelled 2027 endpoint
+(its events used to clamp onto the axis END). The axis runs ~470 px
+taller; the collapsed fit simply rescales (chrome is native-size since
+the same day's earlier round). Verified at both screenshot paragraphs:
+every closed Greek block now sits at its year or its boundary, the lit
+Law 5106 beside 2024, and at the 4824 paragraph the two stretched-open
+blocks straddle the 2021 label with only their immediate neighbours
+displaced (leader lines say so). Pinned: a new vitest walks every year ×
+lane and asserts span ≥ the closed stack — a future event added to a
+crowded year grows the axis instead of reviving the smear.
+
+## 2026-09-02 — the story page is optically centred
+
+The author noticed /story's side margins differed and chose symmetry over
+artboard fidelity: the artboard drew x 60→1844 on the 1920 canvas (60 left,
+76 right), and the build had reproduced that. The author edited the side
+paddings themselves to an even `clamp(20px, 3.5vw, 68px)` each — the same
+136 px total, split evenly. Measured after: 67,2 px both sides at 1920, the
+figure square's right edge on the same margin as TIMELINE's left. The five
+column tracks are untouched. Second and third rounds the same day (two
+author screenshots): equal page margins were not enough — the figure
+COLUMN's content (capped at `--fig-w` 540 px) was narrower than its track,
+so the slack fell on the page's right edge; a right-align pass then left
+the caption and credit behind (their own `margin: 0` cancelled the
+`margin-left: auto`, the classic cascade trap) and the author ruled the
+opposite anyway: caption and footnotes LEFT-ALIGN with the image, spare
+pixels go to the NARRATIVE. Final mechanism: no alignment rules at all —
+the grid gives the figure track exactly its content's 540 px and the
+narrative the whole spare (tracks 500 · 30 · 674 · 40 · 540, the author's
+own 500/30/40/540 kept). The fr lesson is written at the rule: the values
+read as pixels at 1920 ONLY while they sum to 1784, the content width
+inside the margins — the author's interim edit summed 1680 and every
+track silently inflated ~6%. Measured after: image, caption, credit and
+footnote stacks all at left 1312,3 / right 1852,3, the right edge on the
+page margin; mobile unaffected.
