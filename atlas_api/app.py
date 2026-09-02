@@ -7,6 +7,7 @@ only — the HTML lives in the SvelteKit app under atlas/.
 from __future__ import annotations
 
 import gzip
+import os
 from pathlib import Path
 
 from flask import Flask, Response, abort, g, jsonify, request
@@ -21,8 +22,16 @@ from atlas_api import pdf_proxy, queries_extra
 def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
                pdf_cache_dir: Path | None = None,
                anadohoi_db_path: Path | None = None,
-               anadohoi_pdf_cache: Path | None = None) -> Flask:
+               anadohoi_pdf_cache: Path | None = None,
+               pdf_cache_budget_mb: int | None = None) -> Flask:
     app = Flask(__name__, template_folder="templates", static_folder=None)
+    # How much the on-demand PDF caches may grow before the proxy stops
+    # keeping downloads (0 = unlimited, the local default). The container sets
+    # ATLAS_PDF_CACHE_BUDGET_MB because its writable disk is memory.
+    app.config["PDF_CACHE_BUDGET_MB"] = int(
+        pdf_cache_budget_mb if pdf_cache_budget_mb is not None
+        else (os.environ.get("ATLAS_PDF_CACHE_BUDGET_MB") or 0)
+    )
     app.config["DB_PATH"] = Path(db_path) if db_path else DEFAULT_DB
     app.config["DASE_DB_PATH"] = Path(dase_db_path) if dase_db_path else DASE_DB
     app.config["ANADOHOI_DB_PATH"] = (

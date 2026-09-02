@@ -427,3 +427,71 @@ def test_landing_degrades_without_optional_dbs(tmp_path):
     assert set(L) == {"antinero", "counts"}
     assert L["antinero"] == {"contracts": ["22SYMV000000001"], "acts": []}
     assert L["counts"] == {"antinero_contracts": 1, "antinero_acts": 0, "total": 1}
+
+
+# ------------------------------------------------- pdf proxy cache budget
+# Cloud Run's writable filesystem is memory (DEPLOYMENT.md): once the PDFs in
+# a cache dir reach ATLAS_PDF_CACHE_BUDGET_MB the proxy still serves every
+# download but keeps nothing more; the committed .txt sidecars never count.
+
+def _budget_app(tmp_path, cache, **kw):
+    db = tmp_path / "empty.sqlite"
+    sqlite3.connect(db).close()
+    app = app_module.create_app(db_path=db, dase_db_path=db, pdf_cache_dir=cache,
+                                anadohoi_pdf_cache=tmp_path / "ana_cache", **kw)
+    app.testing = True
+    return app
+
+
+def test_pdf_cache_budget_stops_keeping_downloads(tmp_path, monkeypatch):
+    cache = tmp_path / "cache"
+    cache.mkdir()
+    (cache / "22SYMV010447493.txt").write_text("sidecar")
+    (cache / "22SYMV000000001.pdf").write_bytes(b"%PDF" + b"0" * (1024 * 1024))
+    app = _budget_app(tmp_path, cache, pdf_cache_budget_mb=1)
+    monkeypatch.setattr(pdf_module.requests, "get", lambda url, timeout: FakeResponse())
+    r = app.test_client().get("/pdf/payment/25PAY018152892")
+    assert r.status_code == 200
+    assert r.mimetype == "application/pdf"
+    assert r.data == b"%PDF-1.5 fake"          # served …
+    assert not (cache / "25PAY018152892.pdf").exists()   # … but not kept
+    assert not list(cache.glob("*.tmp"))
+    assert (cache / "22SYMV010447493.txt").read_text() == "sidecar"
+    assert (cache / "22SYMV000000001.pdf").exists()      # nothing evicted
+
+
+def test_pdf_cache_budget_keeps_downloads_under_it(tmp_path, monkeypatch):
+    cache = tmp_path / "cache"
+    cache.mkdir()
+    # a sidecar far bigger than the budget must not count as cached PDF bytes
+    (cache / "22SYMV010447493.txt").write_bytes(b"t" * (3 * 1024 * 1024))
+    (cache / "22SYMV000000001.pdf").write_bytes(b"%PDF small")
+    app = _budget_app(tmp_path, cache, pdf_cache_budget_mb=1)
+    monkeypatch.setattr(pdf_module.requests, "get", lambda url, timeout: FakeResponse())
+    r = app.test_client().get("/pdf/payment/25PAY018152892")
+    assert r.status_code == 200
+    assert (cache / "25PAY018152892.pdf").read_bytes() == b"%PDF-1.5 fake"
+
+
+def test_pdf_cache_budget_applies_to_diavgeia_cache_too(tmp_path, monkeypatch):
+    cache = tmp_path / "cache"
+    ana = tmp_path / "ana_cache"
+    ana.mkdir()
+    (ana / "ΤΕΣΤ4653Π8-ΒΒΒ.pdf").write_bytes(b"%PDF" + b"0" * (1024 * 1024))
+    app = _budget_app(tmp_path, cache, pdf_cache_budget_mb=1)
+    monkeypatch.setattr(pdf_module.requests, "get",
+                        lambda url, timeout: FakeResponse(content=b"%PDF-1.4 act"))
+    r = app.test_client().get("/pdf/diavgeia/ΤΕΣΤ4653Π8-ΑΑΑ")
+    assert r.status_code == 200 and r.data == b"%PDF-1.4 act"
+    assert not (ana / "ΤΕΣΤ4653Π8-ΑΑΑ.pdf").exists()
+
+
+def test_pdf_cache_budget_reads_the_container_env_and_defaults_to_unlimited(tmp_path, monkeypatch):
+    cache = tmp_path / "cache"
+    monkeypatch.setenv("ATLAS_PDF_CACHE_BUDGET_MB", "7")
+    assert _budget_app(tmp_path, cache).config["PDF_CACHE_BUDGET_MB"] == 7
+    monkeypatch.delenv("ATLAS_PDF_CACHE_BUDGET_MB")
+    assert _budget_app(tmp_path, cache).config["PDF_CACHE_BUDGET_MB"] == 0
+    # explicit argument wins over the environment
+    monkeypatch.setenv("ATLAS_PDF_CACHE_BUDGET_MB", "7")
+    assert _budget_app(tmp_path, cache, pdf_cache_budget_mb=3).config["PDF_CACHE_BUDGET_MB"] == 3

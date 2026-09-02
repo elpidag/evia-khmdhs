@@ -8,6 +8,7 @@ dataset — same mechanics, its own cache dir (the harvest already filled it).
 """
 from __future__ import annotations
 
+import io
 import re
 import unicodedata
 from pathlib import Path
@@ -28,6 +29,46 @@ _PDF_KINDS = {
 }
 
 bp = Blueprint("pdf", __name__, template_folder="templates")
+
+
+def _over_budget(cache_dir: Path) -> bool:
+    """True once the cache dir holds at least PDF_CACHE_BUDGET_MB of PDFs.
+
+    The budget exists for the container: Cloud Run's writable filesystem is
+    in-memory, so an on-demand cache that grows for as long as the instance
+    lives would eventually take the instance down with it (DEPLOYMENT.md).
+    0 / unset = unlimited, the local default. Only ``*.pdf`` count — the
+    committed pdftotext sidecars beside them are never touched.
+    """
+    budget_mb = current_app.config.get("PDF_CACHE_BUDGET_MB") or 0
+    if not budget_mb:
+        return False
+    total = 0
+    for p in cache_dir.glob("*.pdf"):
+        try:
+            total += p.stat().st_size
+        except OSError:
+            pass
+    return total >= budget_mb * 1024 * 1024
+
+
+def _serve(cache_dir: Path, name: str, content: bytes):
+    """Cache the fetched PDF and serve it — or, once the cache is over its
+    budget, serve this download straight from memory and keep nothing."""
+    if _over_budget(cache_dir):
+        return send_file(
+            io.BytesIO(content), mimetype="application/pdf",
+            as_attachment=False, download_name=name,
+        )
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    tmp = cache_dir / f"{name}.tmp"
+    tmp.write_bytes(content)
+    path = cache_dir / name
+    tmp.replace(path)
+    return send_file(
+        path, mimetype="application/pdf",
+        as_attachment=False, download_name=name,
+    )
 
 # digitisation sources of the Β. Εύβοια works zones (DATA_DECISIONS
 # 2026-08-16): the two map sheets provided by the Διεύθυνση Δασών
@@ -86,10 +127,7 @@ def pdf_attachment(kind: str, adam: str):
                 reason=f"the registry returned HTTP {resp.status_code} instead of a PDF "
                        "(the document may have no attachment)",
             ), 502
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        tmp = cache_dir / f"{adam}.pdf.tmp"
-        tmp.write_bytes(resp.content)
-        tmp.replace(path)
+        return _serve(cache_dir, f"{adam}.pdf", resp.content)
     return send_file(
         path, mimetype="application/pdf",
         as_attachment=False, download_name=f"{adam}.pdf",
@@ -134,10 +172,7 @@ def diavgeia_pdf(ada: str):
                 reason=f"Diavgeia returned HTTP {resp.status_code} instead of "
                        "a PDF (the decision may have no signed document)",
             ), 502
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        tmp = cache_dir / f"{ada}.pdf.tmp"
-        tmp.write_bytes(resp.content)
-        tmp.replace(path)
+        return _serve(cache_dir, f"{ada}.pdf", resp.content)
     return send_file(
         path, mimetype="application/pdf",
         as_attachment=False, download_name=f"{ada}.pdf",

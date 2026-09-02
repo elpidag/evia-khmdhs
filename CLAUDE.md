@@ -1497,7 +1497,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (the front page's FLOWS OF MONEY reads it), `/api/arogi/*` is gone; the
   data is untouched. Fonts are now **Adobe Typekit loaded from
   use.typekit.net in app.html** (futura-100-greek UI + obviously display;
-  domain-locked kit, external CDN — the old self-hosted doctrine no
+  NOT domain-locked — Adobe web projects load anywhere, verified 2026-09-02; external CDN — the old self-hosted doctrine no
   longer holds; Sofia Sans woff2 stays as fallback, Literata is unused).
   Root-level `kit.css` is the tracked Typekit licence/reference copy,
   wired to nothing. /anadohoi was redesigned around the curated fields
@@ -1907,6 +1907,38 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   Production: `npm run build && npm run serve` — `atlas/server.mjs` wraps the
   adapter-node handler AND proxies `/api`+`/pdf` to Flask itself (single
   origin, no external reverse proxy, no CORS anywhere).
+- **Deployment (2026-09-02, DATA_DECISIONS)**: ONE container on **Google
+  Cloud Run** (europe-west1, 1 vCPU / 1 GiB, scale-to-zero, `--cpu-boost`,
+  max 3 instances), built and rolled out by **GitHub Actions on every push
+  to `main`** (`.github/workflows/deploy.yml`; keyless Workload Identity
+  Federation — the repo holds NO secret, the pool admits only
+  `elpidag/evia-khmdhs` on `refs/heads/main`; the two project values at the
+  top of the file are the only thing filled in by hand). `Dockerfile` (two
+  stages: node build → node + python runtime; `deploy/start.sh` runs gunicorn
+  then `server.mjs`), `.dockerignore` (data/ excluded wholesale, the three DBs
+  + `pdf_cache/*.txt` + the two zone-map PDFs added back; **`arogi.sqlite` is
+  NEVER shipped**), runbook **`DEPLOYMENT.md`** (the one-time gcloud setup,
+  publish = push, undo = the previous revision, the optional
+  `ATLAS_BASIC_AUTH` preview password that `server.mjs` honours only when
+  set). Gotchas: (1) **Cloud Run's writable filesystem is MEMORY** — the PDF
+  proxy stops KEEPING downloads once `ATLAS_PDF_CACHE_BUDGET_MB` of PDFs sit
+  in a cache dir (200 in the image; 0 = unlimited locally; `pdf_proxy._serve`,
+  pinned in `test_atlas_api.py`), the `.txt` sidecars never touched; (2)
+  adapter-node precompresses html/js/json/css/svg/xml/wasm BY DEFAULT but not
+  `.geojson` — the Dockerfile gzips those after the build — and NOTHING
+  compresses the SSR document, so `server.mjs` wraps the page path in the
+  `compression` middleware (the `/api`,`/pdf` proxy path untouched); (3) the
+  API reads `atlas/static/geo/effis_fires.geojson` + `evia_works_zones.geojson`
+  at request time — the image copies them explicitly (the first draft did
+  not: fire dates and zone centroids silently returned `{}`); (4) the Adobe Fonts
+  web project is NOT domain-locked — Adobe dropped domain lists from web
+  projects, and the kit was probed on 2026-09-02 with a registered, an
+  unregistered and no referer: CSS and font files identical — so no hostname
+  is ever registered (the earlier «domain lock» runbook step was wrong);
+  (5) a free cron-job.org ping of `/api/meta` every 5 min keeps the one
+  instance warm inside the free tier (CPU is billed only during requests).
+  `robots.txt` disallows `/pdf/` and `/api/`. Expected cost ≈ €0.11 per
+  thousand visits (European egress; everything else inside the free tier).
 - **Performance conventions** (violating any re-introduces 1s page navs):
   atlas_api memoises every GET /api response in-process (DB-mtime-validated,
   pre-gzipped; list titles trimmed to 140 chars); big client payloads

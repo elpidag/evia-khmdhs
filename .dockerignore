@@ -1,0 +1,46 @@
+# Build context = what `docker build` uploads. data/ is ~3.3 GB locally (PDF
+# caches, DEM cache, raw layers), of which the deployed site needs ~150 MB —
+# so data/ is excluded wholesale and the few files the API reads at request
+# time are added back.
+
+.git
+.gitignore
+.venv
+.pytest_cache
+.claude
+**/__pycache__
+*.pyc
+logs/
+
+# Frontend: rebuilt inside the image from package-lock.json
+atlas/node_modules
+atlas/build
+atlas/.svelte-kit
+node_modules
+
+# The author's full-size figure originals (gitignored, on her machine only);
+# the site serves the .webp derivatives beside them
+atlas/static/img/story/Figure*.png
+atlas/static/img/story/figure01/
+
+# Not part of the served site (these patterns match at the ROOT only — Docker
+# semantics — so atlas/src/content/**/*.md and atlas_api/templates/*.html stay)
+tests/
+scripts/
+prints/
+webui/static/
+*.html
+*.md
+
+# ---------------------------------------------------------------- data
+data/**
+# the three DBs the Atlas API opens (arogi.sqlite is deliberately NOT shipped:
+# its pages left the site on 2026-08-23 and its acts name private individuals)
+!data/processed/khmdhs.sqlite
+!data/processed/dase.sqlite
+!data/processed/anadohoi.sqlite
+# pdftotext sidecars: queries_extra.act_own_date / _stamped_date read them live
+!data/processed/pdf_cache/*.txt
+# the two Β. Εύβοια map sheets served by /pdf/zonesource/<key>
+!data/raw/XARTHS_ERGON_DAS_LIMNHS_4.1.pdf
+!data/raw/XARTHS_ERGON_DAS_ISTIAIAS_4.2.pdf

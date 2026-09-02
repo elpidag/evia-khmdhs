@@ -1,0 +1,3 @@
+# Runtime-only additions for the container; requirements.txt stays the
+# development file both laptops install.
+gunicorn>=22.0

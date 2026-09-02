@@ -1,0 +1,74 @@
+# Publish the Atlas: every push to main builds the container and rolls it out
+# to Cloud Run (DEPLOYMENT.md). Authentication is keyless — GitHub's OIDC token
+# is exchanged through Workload Identity Federation for the deployer service
+# account, so this repository holds NO secret; the pool's attribute condition
+# admits only pushes to main of elpidag/evia-khmdhs.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+
+# one rollout at a time, in order — never cancel a build that is half-way
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  # ── fill these two in once, after DEPLOYMENT.md step 1 ──
+  PROJECT_ID: YOUR_PROJECT_ID
+  PROJECT_NUMBER: "000000000000"
+  REGION: europe-west1
+  SERVICE: atlas
+  REPO: atlas
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github/providers/github
+          service_account: atlas-deployer@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+          token_format: access_token
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGION }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:${{ github.sha }}
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # The flags ARE the service definition (re-stated on every deploy so they
+      # cannot drift). No env vars are set here, so a preview password put on
+      # the service by hand (ATLAS_BASIC_AUTH) survives every rollout.
+      - run: |
+          gcloud run deploy "$SERVICE" \
+            --image="$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$SERVICE:$GITHUB_SHA" \
+            --region="$REGION" --platform=managed --port=8080 \
+            --cpu=1 --memory=1Gi --concurrency=40 \
+            --min-instances=0 --max-instances=3 --timeout=120 \
+            --service-account="atlas-runtime@$PROJECT_ID.iam.gserviceaccount.com" \
+            --cpu-boost --allow-unauthenticated --quiet
+          echo "serving at: $(gcloud run services describe "$SERVICE" --region="$REGION" --format='value(status.url)')"

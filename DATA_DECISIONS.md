@@ -12617,3 +12617,65 @@ every later figure prints marker+17 — «Figure 19 _ Fires in 2007» …
 marker 13 as Figure 30, the placeholder squares included. The author's
 own [FIGURE xx] markers and every file keep their numbering; the map is
 one presentational function (`dispN`).
+
+## 2026-09-02 — the Atlas goes public: Google Cloud Run, deployed by GitHub Actions on every push to main (user)
+
+The user asked for the site online for the public, free as far as possible,
+simple, auto-updated from GitHub `main`, and not sluggish — and whether a
+plain Vercel app would do. Hosts weighed on their PRIMARY docs that day:
+Google Cloud Run (2 M requests / 180k vCPU-s / 360k GiB-s free, egress free
+only from North America, billing account required), Render free (0.1 CPU /
+512 MB, 15-min spin-down, ~1 min wake, no card), Koyeb free (0.1 vCPU, forced
+1-hour scale-to-zero, card), Northflank sandbox (always-on, unspecified
+compute, egress $0.06/GB, card), Oracle Always Free (2 OCPU / 12 GB since the
+June 2026 halving, 10 TB egress, card, 7-day idle RECLAIM — a quiet site is
+idle by definition), Vercel Hobby (the SvelteKit half fits; the Flask API and
+the PDF proxy do not — 4.5 MB response cap, read-only disk, per-instance cold
+memo), Hugging Face Spaces (Docker Spaces now need the paid PRO plan), Fly.io
+(no free tier since 2024), Cloudflare Containers ($5 plan), Azure Container
+Apps (the same grant as Cloud Run). Measured against this API on a 2.9 GHz
+core — cold endpoints 35–470 ms, a memoised hit 0.5 ms — a 0.1-vCPU host
+means 0.5–5 s a page even warm, which is what "draggy" would be.
+
+Decisions (user): **Google Cloud Run** (the parked `deploy/cloud-run` design,
+one container, two processes); a **free 5-minute pinger** (cron-job.org on
+`/api/meta`) instead of a paid always-on instance — Cloud Run keeps an
+instance up to 15 idle minutes and bills CPU only during requests, so this
+costs nothing; the **host's own `run.app` URL** for now; and **nothing from
+the repository owner** — the user has write, not admin, on
+`elpidag/evia-khmdhs`, so neither the Cloud Build GitHub App nor a repository
+secret was available; **GitHub Actions with keyless Workload Identity
+Federation** needs neither (the workflow is a file in the repo, the pool's
+attribute condition admits only pushes to `main` of that repository). The
+Cloud Build trigger config was dropped — one deploy mechanism.
+
+Four things fixed on the way, three of them found by the review of the
+parked branch: (1) the image never copied `atlas/static/geo/effis_fires.geojson`
+and `evia_works_zones.geojson`, which `queries_extra` reads at REQUEST time —
+in production the EFFIS fire dates and the zone centroids would silently
+have been `{}`; (2) adapter-node precompresses by default (so the planned
+`precompress: true` was a no-op) but never `.geojson`, and nothing gzips the
+SSR document (~220 KB on the data pages) — the Dockerfile gzips the geojson
+after the build and `server.mjs` wraps the page path in the `compression`
+middleware; (3) **Cloud Run's writable filesystem is in-memory**, so an
+on-demand PDF cache growing for as long as a pinger-kept instance lives would
+eventually crash it: `atlas_api/pdf_proxy._serve` stops KEEPING downloads
+once the PDFs in a cache dir reach `ATLAS_PDF_CACHE_BUDGET_MB` (200 in the
+image, 0 = unlimited locally; the committed `.txt` sidecars are never
+counted or touched; pinned); (4) the budget alert is €3, not €1 — a €1
+budget would fire at ~9,000 visits.
+
+Cost: everything inside the free tier except European egress at ≈ €0.11/GB
+— **1,000 visits ≈ €0.11 a month, 10,000 ≈ €1.10** (≈ 1 MB a visit once the
+document and the geojson are compressed). Safeguards, in order:
+`--min-instances=0`, `--max-instances=3` + `--concurrency=40`, `robots.txt`
+denying `/pdf/` and `/api/`, the cache budget, the €3 budget alert, the
+optional billing kill-switch. **`data/processed/arogi.sqlite` is never
+shipped** (its acts name private individuals; restated from 2026-08-23). The
+runbook's «Typekit domain lock» step turned out to be WRONG when the user
+reached it: Adobe dropped domain lists from web projects (its help: add the
+embed code to any website, wherever it is hosted), and the kit answered a
+registered, an unregistered and no referer with the identical CSS and font
+files — nothing to register, nothing to publish; the step is gone. Set aside, recorded for later: a fully static export (adapter-static
++ an API snapshot on GitHub/Cloudflare Pages) would be truly €0 and
+CDN-fast, but it is a multi-day refactor and loses the PDF proxy.
