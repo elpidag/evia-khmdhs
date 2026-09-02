@@ -8,22 +8,32 @@
 	 * on screen, in two columns behind a small «Footnote» label — never more
 	 * than the screen's own notes, so nothing scrolls.
 	 *
-	 * The images themselves are still with the author; until they arrive the
-	 * square names its figure — except where a LIVE figure exists for the
-	 * number (`lib/story/figures.ts`, keyed by the author's own figure number):
+	 * A figure shows, in order of preference: its LIVE drawing
+	 * (`lib/story/figures.ts`), the author's DELIVERED image(s)
+	 * (`lib/story/figureImages.ts` — figure 01 as their 6×3 grid of 18
+	 * filling the column, figure 02 as its a+b pair, the rest single), or
+	 * the named placeholder square. For a LIVE figure
+	 * (keyed by the author's own figure number):
 	 * then the square mounts that drawing while its figure is in force, and
 	 * the figure's credit line (imagery and data attributions) prints under
 	 * the author's caption.
 	 */
 	import { FIGURES } from '$lib/story/figures';
+	import { FIGURE_IMAGES } from '$lib/story/figureImages';
 
 	interface Props {
 		figure: { n: number; name: string } | null;
 		notes: { n: number; dist: number; parts: { text: string; href?: string }[] }[];
+		/** the introduction's staged reveal (the author, 2026-09-02): 0 = the
+		 *  grid shows nothing yet, 1 = its first pack of nine at full width,
+		 *  2 = all eighteen. Figures other than the grid ignore it. */
+		stage?: number;
 	}
-	let { figure, notes }: Props = $props();
+	let { figure, notes, stage = 2 }: Props = $props();
 
 	const pad = (n: number) => String(n).padStart(2, '0');
+	/** the author's delivered image(s) for the figure in force, if any */
+	const img = $derived(figure ? (FIGURE_IMAGES[figure.n] ?? null) : null);
 
 	/**
 	 * WHOLE NOTES ONLY, PACKED BY NOTE (the author, 2026-09-02; refit the
@@ -140,22 +150,55 @@
 	);
 </script>
 
-<div class="fig">
-	<div class="box">
+<div class="fig" class:tall={img?.kind === 'grid'}>
+	<div class="box" class:gridbox={img?.kind === 'grid'} class:pairbox={img?.kind === 'pair'}>
 		{#if figure}
 			{#key figure.n}
 				{@const live = FIGURES[figure.n]}
 				{#if live}
 					<live.component />
+				{:else if img?.kind === 'grid'}
+					<!-- the author's 18 squares in packs of NINE (their ruling: the
+					     second pack REPLACES the first, the full grid never shows):
+					     3×3 at full width, centred on the column's height -->
+					{#if stage >= 1}
+						<div class="grid18">
+							{#each img.srcs.slice(stage < 2 ? 0 : 9, stage < 2 ? 9 : 18) as src, gi (src)}
+								<img
+									{src}
+									alt={`${figure.name} — ${(stage < 2 ? 1 : 10) + gi} of ${img.srcs.length}`}
+									loading="lazy"
+								/>
+							{/each}
+						</div>
+					{/if}
+				{:else if img?.kind === 'pair'}
+					{#each img.srcs as src, pi (src)}
+						<img class="half" {src} alt={`${figure.name} — ${pi + 1} of 2`} />
+					{/each}
+				{:else if img}
+					<img class="whole" src={img.srcs[0]} alt={figure.name} />
 				{:else}
 					<span class="ph">figure {pad(figure.n)} · {figure.name}</span>
 				{/if}
 			{/key}
 		{/if}
 	</div>
-	<!-- the caption line the artboard writes under the image -->
+	<!-- the caption line the artboard writes under the image; the grid's
+	     packs carry the author's own wording, the range following the pack -->
 	<div>
-		<p class="cap">{figure ? `Figure ${pad(figure.n)} _ ${figure.name}` : ''}</p>
+		<p class="cap">
+			{#if figure && img?.kind === 'grid'}
+				{#if stage >= 1}
+					{stage < 2
+						? 'Figures 1 to 9: Images from media coverage of fires in Greece.'
+						: 'Figures 10 to 18: Images from fires worldwide.'}
+					All images are credited to their corresponding authors <a href="#sources">here</a>.
+				{/if}
+			{:else}
+				{figure ? `Figure ${pad(figure.n)} _ ${figure.name}` : ''}
+			{/if}
+		</p>
 		{#if figure && FIGURES[figure.n]?.credit}
 			<p class="credit">{FIGURES[figure.n].credit}</p>
 		{/if}
@@ -232,6 +275,74 @@
 		background: var(--paper-2);
 		display: grid;
 		place-items: center;
+	}
+	/* figure 01's grid takes the WHOLE column height (the author,
+	   2026-09-02: its footnotes moved under the timeline to make the
+	   room): square cells sized by the six rows, centred */
+	.fig.tall {
+		grid-template-rows: minmax(0, 1fr) auto auto;
+	}
+	.box.gridbox {
+		aspect-ratio: auto;
+		height: 100%;
+		background: none;
+		place-items: stretch;
+		/* the grid overlays the box absolutely: a percentage height chained
+		   through grid items never resolved (the grid grew to its content,
+		   1.084 px over an 875 px box, and drew over the caption) */
+		position: relative;
+	}
+	/* one pack of nine at a time: 3×3 at the column's full width — the
+	   author's squares stay square (177 px, width-driven) — vertically
+	   CENTRED on the column's height (the author, 2026-09-02) */
+	.grid18 {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-auto-rows: max-content;
+		align-content: center;
+		gap: 4px;
+	}
+	.grid18 img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: cover;
+		display: block;
+		animation: figfade 0.45s ease;
+	}
+	@keyframes figfade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.grid18 img {
+			animation: none;
+		}
+	}
+	/* figure 02's a + b side by side, each its own square */
+	.box.pairbox {
+		aspect-ratio: auto;
+		grid-template-columns: 1fr 1fr;
+		gap: 4px;
+		background: none;
+	}
+	.box img.half {
+		width: 100%;
+		aspect-ratio: 1;
+		object-fit: cover;
+		display: block;
+	}
+	.box img.whole {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
 	}
 	.cap {
 		margin: 0;

@@ -116,10 +116,66 @@
 	const timelineOn = $derived(
 		!activeSection || activeSection === 'introduction' || activeSection === 'chronology'
 	);
-	/** the timeline is SPREAD for as long as the chronology is on the page
-	 *  (the author, 2026-09-02) — the moment its first paragraph appears the
-	 *  lanes open, and they stay open until its last paragraph has left */
-	const expanded = $derived(visList.some((id) => id.startsWith('chronology-')));
+	/** the timeline SPREADS when the CHRONOLOGY title DOCKS level with the
+	 *  TIMELINE title (the author, 2026-09-02 — not when its first paragraph
+	 *  peeks in at the viewport's bottom), and folds back once the section's
+	 *  end passes the band */
+	let chronoDocked = $state(false);
+	$effect(() => {
+		if (typeof IntersectionObserver === 'undefined') return;
+		const el = document.getElementById('chronology');
+		if (!el) return;
+		// the docking line: the header plus the page's top padding, where the
+		// sticky section titles pin (--story-top in the layout)
+		const st = Math.round(85 + Math.min(40, Math.max(20, window.innerHeight * 0.037)));
+		const io = new IntersectionObserver(
+			(es) => {
+				for (const e of es) chronoDocked = e.isIntersecting;
+			},
+			{ rootMargin: `-${st}px 0px ${st + 4 - window.innerHeight}px 0px`, threshold: 0 }
+		);
+		io.observe(el);
+		return () => io.disconnect();
+	});
+	const expanded = $derived(chronoDocked);
+
+	/** the introduction's STAGED REVEAL (the author, 2026-09-02): stage 0
+	 *  until the reader scrolls at all (a 1 px sentinel at the document's
+	 *  very top — no scroll listener, the page keeps none), stage 1 until
+	 *  the «Greece is part of the wider Mediterranean Basin …» paragraph
+	 *  docks at the title, stage 2 after */
+	let scrolledAny = $state(false);
+	let greecePassed = $state(false);
+	let topSentinel = $state<HTMLElement | null>(null);
+	$effect(() => {
+		const el = topSentinel;
+		if (!el || typeof IntersectionObserver === 'undefined') return;
+		const io = new IntersectionObserver((es) => {
+			for (const e of es) scrolledAny = !e.isIntersecting;
+		});
+		io.observe(el);
+		return () => io.disconnect();
+	});
+	$effect(() => {
+		if (typeof IntersectionObserver === 'undefined') return;
+		const b = BLOCKS.find((x) =>
+			x.text.startsWith('Greece is part of the wider Mediterranean Basin')
+		);
+		const el = b ? document.getElementById(b.id) : null;
+		if (!el) return;
+		const st = Math.round(85 + Math.min(40, Math.max(20, window.innerHeight * 0.037)));
+		const io = new IntersectionObserver(
+			(es) => {
+				for (const e of es) {
+					greecePassed = e.isIntersecting || e.boundingClientRect.top <= st;
+				}
+			},
+			{ rootMargin: `-${st}px 0px ${st + 4 - window.innerHeight}px 0px`, threshold: 0 }
+		);
+		io.observe(el);
+		return () => io.disconnect();
+	});
+	const introStage = $derived(greecePassed ? 2 : scrolledAny ? 1 : 0);
 	const progress = $derived(BLOCKS.length > 1 ? Math.max(0, atBlock) / (BLOCKS.length - 1) : 0);
 
 	/** the figure IN FORCE — the author's own marker, carried forward */
@@ -137,20 +193,34 @@
 		return Math.min(n, 4);
 	});
 
+	/** while the timeline is COLLAPSED (the introduction) the visible
+	 *  footnotes print on ITS lower part instead of the right column (the
+	 *  author, 2026-09-02: notes 1 and 2 left, the room right for the
+	 *  figure 01 grid) */
+	const notesLeft = $derived(timelineOn && !expanded);
+
 	/** only the footnotes of the paragraphs on screen, in document order */
 	const shownNotes = $derived.by(() => {
-		const out: { n: number; dist: number; parts: { text: string; href?: string }[] }[] = [];
+		const out: {
+			n: number;
+			dist: number;
+			sec: string;
+			parts: { text: string; href?: string }[];
+		}[] = [];
 		for (const id of visList) {
 			const b = BLOCKS[BLOCK_INDEX.get(id) ?? -1];
 			if (!b) continue;
 			const dist = Math.abs((BLOCK_INDEX.get(id) ?? 0) - Math.max(0, atBlock));
 			for (const n of b.sups) {
 				const e = NOTES.get(n);
-				if (e) out.push({ n, dist, parts: e.parts });
+				if (e) out.push({ n, dist, sec: b.section, parts: e.parts });
 			}
 		}
 		return out.sort((a, b) => a.n - b.n);
 	});
+	/** the left block carries the INTRODUCTION's own notes only — a
+	 *  chronology note peeking in at the bottom waits for the spread */
+	const introNotes = $derived(shownNotes.filter((x) => x.sec === 'introduction'));
 
 	/** the events the active paragraph names — lit on the timeline */
 	const activeIds = $derived(activeBlock ? (eventsAtBlock.get(activeBlock) ?? []).map((e) => e.id) : []);
@@ -181,6 +251,7 @@
 </svelte:head>
 
 <div class="storyp">
+	<div class="topsent" bind:this={topSentinel} aria-hidden="true"></div>
 	<div class="cols" class:centred={!timelineOn}>
 		<!-- TIMELINE is a grid sibling sticky at the SAME height as the section
 		     titles, so the two columns start aligned; it withdraws with its
@@ -195,6 +266,18 @@
 				onSelect={goToEvent}
 				note={timelineNote()}
 			/>
+			{#if notesLeft && introStage >= 2 && introNotes.length}
+				<!-- the introduction's footnotes, on the timeline's lower part -->
+				<ul class="tlnotes">
+					{#each introNotes as n (n.n)}
+						<li>{n.n}.
+							{#each n.parts as p, i (i)}{#if p.href}<a href={p.href} target="_blank" rel="noopener"
+									>{p.text}</a
+								>{:else}{p.text}{/if}{/each}
+						</li>
+					{/each}
+				</ul>
+			{/if}
 		</aside>
 
 		<div class="narrative">
@@ -217,9 +300,11 @@
 				{#key kfAt}
 					<KeyFindings c={data.cmp} i={kfAt} />
 				{/key}
-			{:else if activeSection !== 'bibliography'}
-				<!-- the bibliography stands alone — no figure beside it (author) -->
-				<StoryFigure {figure} notes={shownNotes} />
+			{:else if activeSection !== 'bibliography' && activeSection !== 'sources'}
+				<!-- the bibliography stands alone — no figure beside it (author);
+				     while the notes print under the timeline the right column
+				     passes none, and the figure takes the whole height -->
+				<StoryFigure {figure} notes={notesLeft ? [] : shownNotes} stage={introStage} />
 			{/if}
 		</aside>
 	</div>
@@ -231,6 +316,13 @@
 </div>
 
 <style>
+	.topsent {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 1px;
+		height: 1px;
+	}
 	.storyp {
 		/* the breathing band: every column stops this short of the window's
 		   bottom edge, and the page pads by it so the end is reachable */
@@ -241,14 +333,15 @@
 	   520/30/570/70/594: the figure track is exactly its content's 540 px —
 	   image, caption and notes then share both edges, the right one on the
 	   page margin — and the spare went to the narrative, less the author's
-	   6 px trim of 2026-09-02 and its EQUAL 38 px gutters either side. The fr values are
+	   trims of 2026-09-02 (6, 10 and 10 px) and its EQUAL 48 px gutters
+	   either side. The fr values are
 	   READ AS PIXELS AT 1920, which holds only while they sum to 1784 (the
 	   content width inside the page margins) — keep that sum when retuning. */
 	.cols {
 		display: grid;
 		grid-template-columns:
-			minmax(0, 500fr) minmax(0, 38fr) minmax(0, 668fr)
-			minmax(0, 38fr) minmax(0, 540fr);
+			minmax(0, 500fr) minmax(0, 48fr) minmax(0, 648fr)
+			minmax(0, 48fr) minmax(0, 540fr);
 		align-items: start; /* `stretch` would make the rails full-height and kill sticky */
 		transition:
 			grid-template-columns 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -260,8 +353,8 @@
 	   sides of the 668+38+540 pair, the fr values still px at 1920 */
 	.cols.centred {
 		grid-template-columns:
-			minmax(0, 231fr) minmax(0, 38fr) minmax(0, 668fr)
-			minmax(0, 38fr) minmax(0, 540fr);
+			minmax(0, 231fr) minmax(0, 48fr) minmax(0, 648fr)
+			minmax(0, 48fr) minmax(0, 540fr);
 		padding-right: 15.0785%; /* 269 / 1784 */
 	}
 	/* the column titles are the dataset card's own name style — the same face,
@@ -323,6 +416,42 @@
 		grid-column: 1;
 		grid-row: 1;
 		transition: opacity 0.4s ease;
+	}
+	/* the timeline yields its lower part to the introduction's notes: the
+	   drawing flexes above, the notes stack under it (the author, 2026-09-02) */
+	.rail.tl {
+		display: flex;
+		flex-direction: column;
+	}
+	.rail.tl > :global(.tl) {
+		height: auto;
+		flex: 1 1 auto;
+		min-height: 0;
+	}
+	.tlnotes {
+		flex: none;
+		margin: var(--sp-4) 0 0;
+		padding: 0;
+		list-style: none;
+		/* the full rail, so the left gap to the text reads as the same 43 px
+		   as the right one (author, 2026-09-02) */
+		max-width: none;
+		font-size: var(--fs-12);
+		line-height: 1.3;
+		font-weight: 300;
+		color: var(--ink-soft);
+	}
+	.tlnotes li {
+		margin-bottom: var(--sp-2);
+		padding-left: 1.5em;
+		text-indent: -1.5em;
+		overflow-wrap: anywhere;
+	}
+	.tlnotes a {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		text-decoration-thickness: 0.5px;
 	}
 	.rail.tl.off {
 		opacity: 0;

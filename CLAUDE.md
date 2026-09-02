@@ -1772,8 +1772,20 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `content.test.ts` fail when an edit removes one). A marker
   MID-paragraph splits the paragraph (chronology.md broke at figures
   03/04 — the author's own «image changes here»; disclosed). StoryFigure
-  is a single live block now (figure + notes props). Still to come:
-  twelve of the 13 images; `StoryEvent.beat` is still unset — the
+  is a single live block now (figure + notes props). Still to come: the
+  images of figures 05-10 and 12 (01 grid, 02 pair, 03, 11, 13 are
+  DELIVERED — `lib/story/figureImages.ts` + `figureImages.test.ts`,
+  derivatives via `scripts/build_story_images.py`, originals gitignored;
+  figure 01 is the author's SIX-BY-THREE grid of 18 numbered images
+  filling the right column, whose room comes from notes 1-2 moving to the
+  collapsed timeline's lower part — revealed in STAGES (author): page
+  open none, first scroll images 1-9 as 3×3 at full width (177² squares,
+  vertically centred on the column), the «Greece is part …» paragraph
+  docking at the title brings the notes and REPLACES them with 10-18 —
+  the full 6×3 never shows (`StoryFigure stage`, a top sentinel + a
+  docking band, no scroll listener) — and the timeline now SPREADS only
+  when the CHRONOLOGY title docks at the band, a docking IO replacing the
+  visibility trigger); `StoryEvent.beat` is still unset — the
   timeline pans by reading progress.
   **Figure 04 is LIVE since 2026-09-02** (DATA_DECISIONS): `lib/story/figures.ts`
   is the registry of live figures keyed by the author's own figure number

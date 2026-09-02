@@ -503,7 +503,9 @@
 	.nkeys {
 		position: absolute;
 		left: calc(var(--split) + 14px);
-		right: 4px;
+		/* to the rail's edge: the text gutter on the other side of the text
+		   is 43 px, and the titles' ink must answer it (author, 2026-09-02) */
+		right: 0;
 		top: 36px;
 		margin: 0;
 		padding: 0;

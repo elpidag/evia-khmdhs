@@ -96,3 +96,8 @@ data/processed/name_evidence.json
 data/processed/geo_cache/
 data/processed/dase_vies_cache.json
 data/processed/diavgeia_harvest_*.json
+
+# the story figures' full-size originals (and .psd) stay local; the site
+# serves only the small .webp derivatives built by scripts/build_story_images.py
+atlas/static/img/story/Figure*.png
+atlas/static/img/story/figure01/

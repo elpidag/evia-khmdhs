@@ -223,7 +223,7 @@
 	}
 	/* the story is the author's 1920 artboard: three columns across the window,
 	   letterboxed above 1920 so the reading measure never grows past its design
-	   (the middle column is 668 px of 16 px type — about 83 characters) */
+	   (the middle column is 648 px of 16 px type — about 81 characters) */
 	main.story {
 		--header-h: 85px;
 		--story-pad-b: clamp(12px, 1.85vh, 20px);

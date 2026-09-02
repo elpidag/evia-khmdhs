@@ -12454,3 +12454,96 @@ notes); the full-width coda is gone. Verified: each paragraph brings its
 item at 540 px, in order. Follow-up the same hour: the BIBLIOGRAPHY
 carries NO figure beside it (author) — the rail renders nothing there,
 instead of the carried-forward marker.
+
+## 2026-09-02 — the author's figure images arrive: the 18-image grid, notes 1-2 under the timeline, the spread waits for the title
+
+The author delivered figure images into `atlas/static/img/story/` —
+`Figure02a/b`, `Figure03`, `Figure11`, `Figure13` (2481² PNGs) and a
+`figure01/` folder of 18 numbered 4724² images (~316 MB, plus a 1,38 GB
+.psd). Three rulings in one message: (1) FIGURE 01 is a GRID of the 18 —
+six rows of three, the filenames' numbers being the reading order (1,2,3
+the first row left to right) — filling the right column's whole height;
+(2) the introduction's footnotes 1 and 2 move to the LEFT column, the
+lower part of the collapsed timeline, freeing that height; (3) the
+timeline SPREADS only when the CHRONOLOGY OF FIRES AND EVENTS title
+DOCKS level with the TIMELINE title — not when its first paragraph peeks
+in at the viewport's bottom (a docking IntersectionObserver band at
+`--story-top` replaced the visibility trigger). Mechanics: the originals
+never ship — `scripts/build_story_images.py` (Pillow) emits small .webp
+derivatives (grid cells at 320 px ≈ 7-32 KB, singles at 1100 px ≈
+67-200 KB, ~1 MB in all), the originals and the .psd are GITIGNORED in
+place; `lib/story/figureImages.ts` is the manifest (grid · pair · single;
+figure 02 renders its a+b side by side, singles object-fit contain in the
+square), pinned by `figureImages.test.ts` (every key has a marker, every
+src a built file, the grid is 18 in order). The left block carries the
+INTRODUCTION's own notes only — a chronology note peeking in waits for
+the spread. Gotcha kept in the CSS: a percentage height chained through
+grid items never resolved (the grid grew to 1.084 px over an 875 px box
+and drew over the caption) — the grid overlays its box absolutely.
+Delivered so far: 01 grid, 02 pair, 03, 11, 13 + the live 04; still with
+the author: 05-10 and 12.
+
+## 2026-09-02 — ten more px to the gutters, and the grid cells become true squares
+
+Two author rulings. (1) The narrative track went 668 → 658, the ten px
+split equally into its gutters (500 · 43 · 658 · 43 · 540, sum 1784; the
+centred variant follows). (2) «The images I gave you were square — the
+ones that appear are not»: the 6×3 grid's full-width cells were 177×142
+(three squares across 540 px want 177 px cells, but six such rows are
+1.085 px against the column's ~875) and object-fit cropped ~20% off each
+image. The cells are now TRUE SQUARES sized by the height — one sixth of
+the box via container units (`container-type: size` on the box,
+`calc((100cqh − 20px)/6)` columns) — so nothing is cropped; the grid
+keeps the caption's left edge and runs ~436 of the 540 px. The
+alternatives (full width with the crop, or full-width whole squares at
+1.085 px with an inner scroll) were set aside; the author can call either
+back. Measured: cells 142,5 × 142,5, gutters 43,0 both, text 658.
+
+## 2026-09-02 — the introduction reveals itself in stages («let's see how it looks»)
+
+The author's staged reveal of the opening: on PAGE OPEN the grid shows no
+images and no footnotes; on the FIRST SCROLL (a 1 px sentinel at the
+document's top — the page still keeps no scroll listener) the first pack,
+images 1-9, appears as 3×3 at the column's FULL width — three rows fit
+the height, so the squares grow to 177 px uncropped; when the «Greece is
+part of the wider Mediterranean Basin …» paragraph DOCKS at the title
+(the chronology's own docking-band technique, sticky past the line), the
+two footnotes appear under the timeline and the second pack — images 10-18 —
+REPLACES the first (the author's follow-up: the full 6×3 never shows),
+still 3×3 at full width, the block vertically CENTRED on the column's
+height. `StoryFigure` takes a `stage` prop
+(0 · 1 · 2, default 2 so every other figure is untouched); images fade
+in 0,45 s, reduced motion turns it off; fully reversible on scrolling
+back. Verified: 0 imgs/0 notes · 01-09 at 177² centred (167 px above =
+below) · 10-18 at 177² centred + notes 1-2.
+
+## 2026-09-02 — the left gap must READ as the right one
+
+The author: the timeline→text gap and the text→figure gap are not the
+same. The grid TRACKS were equal (43 px both, measured) — what differed
+was the INK: the collapsed lane titles stopped 4 px inside their rail and
+the introduction's footnotes were capped at 460 px, ending ~40 px short,
+so the left gap read wider. Both now reach the rail's edge (`.nkeys
+right: 0`, `.tlnotes max-width: none`); measured after: ink gaps 43,0 /
+43,0 to the decimal.
+
+## 2026-09-02 — another 10 px off the text, and the grid caption in the author's words
+
+The narrative track went 658 → 648, the ten px into its gutters (500 ·
+48 · 648 · 48 · 540, the centred variant following; measured 648,6 with
+48,0 both sides). The grid figure's caption is the author's wording —
+«Figures 1 to 9: Images from media coverage of fires in Greece. All
+images are credited to their corresponding authors here.» — with the
+RANGE following the pack on show (10 to 18 at stage 2, the same
+sentence; empty at stage 0). «here» reads as a link-to-be; the target is
+still with the author.
+
+## 2026-09-02 — SOURCES joins the story, and the captions link to it
+
+The author's captions final: pack one «Figures 1 to 9: Images from media
+coverage of fires in Greece.», pack two «Figures 10 to 18: Images from
+fires worldwide.», both closing with «All images are credited to their
+corresponding authors here.» — and «here» LINKS the new SOURCES section,
+which stands after BIBLIOGRAPHY (its own chapter and anchor, figure-free
+like the bibliography). `src/content/story/sources.md` is created EMPTY:
+the author is writing the credits text and will deliver it in that file.

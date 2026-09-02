@@ -21,5 +21,8 @@ export const CHAPTERS: Chapter[] = [
 	// their texts belong to the dataset card pages only. The .md files stay in
 	// this folder as the author's source.
 	// the document spells it «Bibiography» — corrected here, flagged to the author
-	{ id: 'bibliography', title: 'BIBLIOGRAPHY' }
+	{ id: 'bibliography', title: 'BIBLIOGRAPHY' },
+	// the figure credits the grid captions' «here» links to (author,
+	// 2026-09-02); the text is still with the author — the file waits
+	{ id: 'sources', title: 'SOURCES' }
 ];
