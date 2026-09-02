@@ -20,8 +20,8 @@ permissions:
 
 env:
   # ── fill these two in once, after DEPLOYMENT.md step 1 ──
-  PROJECT_ID: YOUR_PROJECT_ID
-  PROJECT_NUMBER: "000000000000"
+  PROJECT_ID: schorched-forests
+  PROJECT_NUMBER: "904194646389"
   REGION: europe-west1
   SERVICE: atlas
   REPO: atlas
