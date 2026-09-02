@@ -55,6 +55,14 @@ describe("the story's paragraph blocks (the author's own files)", () => {
 		expect(NOTES.get(2)!.parts[0].href).toBeUndefined();
 		// «see here: URL» reads as a clean link
 		expect(NOTES.get(8)!.parts[0].text).toBe('For more information, see here');
+		// a long note ending in one citation links only its «see:» tail
+		// (the author, 2026-09-02, on note 6)
+		const n6 = NOTES.get(6)!.parts;
+		expect(n6).toHaveLength(2);
+		expect(n6[0].href).toBeUndefined();
+		expect(n6[0].text.includes('in spatial planning in Greece')).toBe(true);
+		expect(n6[1].text.startsWith('see: Loukas Triantis')).toBe(true);
+		expect(n6[1].href).toContain('doi.org/10.15488/18216');
 		// the two-source notes carry TWO links, each on its own citation
 		for (const nn of [13, 14]) {
 			const links = NOTES.get(nn)!.parts.filter((p) => p.href);

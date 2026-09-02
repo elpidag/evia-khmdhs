@@ -109,6 +109,15 @@ function noteEntry(t: string): NoteEntry {
 		const href = m[0]
 			.replace(/[.,;:]+$/, '')
 			.replace(/[?&]utm_source=chatgpt\.com/, '');
+		// a «see:» inside the chunk marks where the citation begins — only
+		// that tail carries the link (the author, 2026-09-02, on note 6: a
+		// long explanatory note ending in one cited source must not be
+		// underlined whole)
+		const at = chunk.toLowerCase().lastIndexOf('see:');
+		if (at > 0) {
+			parts.push({ text: chunk.slice(0, at) });
+			chunk = chunk.slice(at);
+		}
 		if (chunk) parts.push({ text: chunk, href });
 		pos = re.lastIndex;
 		// «…-pyrkagies/; Papageorgiou…»: the separator the URL swallowed stays

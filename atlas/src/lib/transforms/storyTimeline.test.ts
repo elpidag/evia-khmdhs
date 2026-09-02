@@ -11,6 +11,7 @@ import {
 	axisHeight,
 	blockHeight,
 	contentHeight,
+	eventY,
 	fractionalYear,
 	layoutLane,
 	storyDate,
@@ -72,19 +73,15 @@ describe("the story timeline's year scale", () => {
 		expect(stops.filter((s) => !s.labelled)).toHaveLength(2);
 	});
 
-	it("gives every year the room its own events' blocks need", () => {
-		// the correspondence guarantee: a year's span can hold each lane's
-		// closed stack, so the chain never has to smear past the labels
-		for (let i = 0; i < stops.length - 1; i++) {
-			const span = stops[i + 1].y - stops[i].y;
-			for (const lane of LANES) {
-				const stack = laneEvents(lane)
-					.filter((e) => {
-						const t = fractionalYear(e.date);
-						return t >= stops[i].year && t < stops[i + 1].year;
-					})
-					.reduce((s, e) => s + blockHeight({ title: e.title }, LANE_TEXT[lane].w) + 12, 0);
-				expect(span, `${lane} in ${stops[i].year}`).toBeGreaterThanOrEqual(stack);
+	it("reserves every closed block's room on the axis itself", () => {
+		// the warp's guarantee: consecutive events of a lane are at least the
+		// earlier one's closed block apart, so blocks can sit AT their dates
+		for (const lane of LANES) {
+			const evs = laneEvents(lane);
+			for (let i = 1; i < evs.length; i++) {
+				const gap = eventY(evs[i].id)! - eventY(evs[i - 1].id)!;
+				const need = blockHeight({ title: evs[i - 1].title }, LANE_TEXT[lane].w) + 12;
+				expect(gap, `${lane}: ${evs[i - 1].id} → ${evs[i].id}`).toBeGreaterThanOrEqual(need - 0.5);
 			}
 		}
 	});
@@ -190,24 +187,37 @@ describe('block layout', () => {
 		expect(long).toBeLessThan(short + (TITLE_CLAMP + BODY_CLAMP) * 20);
 	});
 
-	it('keeps every dot on its true date and never overlaps two blocks', () => {
+	it('keeps every dot on its own warped moment and never overlaps blocks', () => {
 		for (const lane of LANES) {
 			const placed = layoutLane(laneEvents(lane), stops, LANE_TEXT[lane].w);
-			for (const p of placed) expect(p.dotY).toBeCloseTo(yOfDate(p.e.date, stops), 6);
+			for (const p of placed) {
+				// the dot anchors on the event's own knot (a same-day pile
+				// steps down, so members differ from the bare date's y) …
+				expect(p.dotY).toBeCloseTo(eventY((p.e as { id: string }).id)!, 6);
+				// … and never sits above the date's baseline position
+				expect(p.dotY).toBeGreaterThanOrEqual(yOfDate(p.e.date, stops) - 120);
+			}
 			for (let i = 1; i < placed.length; i++) {
+				expect(placed[i].dotY).toBeGreaterThanOrEqual(placed[i - 1].dotY);
 				expect(placed[i].blockY).toBeGreaterThanOrEqual(placed[i - 1].blockY + placed[i - 1].h);
 			}
 		}
 	});
 
-	it('pushes the August 2021 cluster apart and says it did', () => {
-		const placed = layoutLane(laneEvents('greece'), stops, LANE_TEXT.greece.w);
+	it('spreads the August 2021 cluster on the axis itself, in sync across lanes', () => {
+		const placed = layoutLane(laneEvents('greece'), stops, LANE_TEXT.greece.w, () => false);
 		const aug = placed.filter((p) => p.e.date.startsWith('2021-08'));
 		expect(aug.length).toBeGreaterThanOrEqual(3);
-		// their dots are within a fortnight of each other …
-		expect(aug[aug.length - 1].dotY - aug[0].dotY).toBeLessThan(20);
-		// … so all but the first had to be moved, and carry a leader line
-		expect(aug.slice(1).every((p) => p.pushed)).toBe(true);
+		// the SCALE spread them: closed blocks sit at their dots, no leaders
+		for (let i = 1; i < aug.length; i++) {
+			expect(aug[i].dotY - aug[i - 1].dotY).toBeGreaterThanOrEqual(aug[i - 1].h + 11.5);
+		}
+		expect(aug.every((p) => !p.pushed)).toBe(true);
+		// and the lanes AGREE on a shared date (the author's screenshot: the
+		// 112 period and the Peloponnese fire both start 03-08-2021)
+		const g = laneEvents('greece').find((e) => e.date === '2021-08-03')!;
+		const f = laneEvents('fire').find((e) => e.date === '2021-08-03')!;
+		expect(eventY(g.id)).toBeCloseTo(eventY(f.id)!, 6);
 	});
 
 	it('shrinks a closed event to date + title, and STRETCHES an open one whole', () => {
@@ -223,15 +233,24 @@ describe('block layout', () => {
 		}
 	});
 
-	it('balances every crowd around its own dates, so lanes track the years', () => {
+	it('sets every closed block AT its date, and lanes agree by construction', () => {
+		const all: { t: number; y: number }[] = [];
 		for (const lane of LANES) {
 			const placed = layoutLane(laneEvents(lane), stops, LANE_TEXT[lane].w, () => false);
-			// least-squares balance: the displacements cancel out overall …
-			const drift =
-				placed.reduce((s, p) => s + (p.blockY - (p.dotY - 4)), 0) / (placed.length || 1);
-			expect(Math.abs(drift), lane).toBeLessThan(25);
-			// … and no block strays into the legend's line
-			for (const p of placed) expect(p.blockY).toBeGreaterThanOrEqual(62);
+			for (const p of placed) {
+				// closed = zero displacement: the scale already made the room
+				expect(Math.abs(p.blockY - (p.dotY - 4)), lane).toBeLessThanOrEqual(0.5);
+				expect(p.blockY).toBeGreaterThanOrEqual(62);
+				all.push({ t: fractionalYear(p.e.date), y: p.dotY });
+			}
+		}
+		// cross-lane: later dates never print above earlier ones
+		all.sort((a, b) => a.t - b.t);
+		let high = -Infinity;
+		for (const p of all) {
+			if (p.t > high) void 0;
+			expect(p.y).toBeGreaterThanOrEqual(high - 0.01);
+			high = Math.max(high, p.y);
 		}
 	});
 

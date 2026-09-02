@@ -102,6 +102,10 @@
 	 * in the UPPER part of the timeline, where the early years are sparse, so
 	 * the axis takes the whole rail and nothing is reserved below.
 	 * The two long lane titles print on two lines each (the author's split).
+	 * Since the author's own SVG edit of the same day, the collapsed drawing
+	 * shifts RIGHT (`cx`) so the disclaimer gets a real measure — the rail's
+	 * left half, right-aligned toward the years — and the line, years and
+	 * dots sit just left of the titles; spreading returns the shift to 0.
 	 */
 	const KEY_LINES: Record<Lane, string[]> = {
 		world: ['GLOBAL EVENTS & EU', 'LEGISLATION CHANGES'],
@@ -141,6 +145,11 @@
 	/** collapsed the whole span is in view; spread we fit the WIDTH and pan */
 	const k = $derived(
 		expanded ? Math.min(w / W || 1, 1) : Math.min(w / W || 1, (h || 1) / H_COLLAPSED, 1)
+	);
+	/** the collapsed drawing's rightward shift — the author's SVG geometry:
+	 *  21.4% of the rail at the design width, never past the rail's edge */
+	const cx = $derived(
+		expanded ? 0 : Math.max(0, Math.min(0.214 * (w || 0), (w || 0) - k * W - 8))
 	);
 
 	/**
@@ -184,6 +193,7 @@
 		class="scale"
 		class:expanded
 		style:--k={k}
+		style:--cx={`${cx}px`}
 		style:--pan={`${-panY}px`}
 		style:--w={`${W}px`}
 		style:--h={`${H}px`}
@@ -304,8 +314,8 @@
 	<div
 		class="below"
 		class:hidden={expanded}
-		style:--split={`${k * COLLAPSED_X}px`}
-		style:--dw={`${Math.max(120, k * (COLLAPSED_X - YEAR_W - 12) - 16)}px`}
+		style:--split={`${cx + k * COLLAPSED_X}px`}
+		style:--dw={`${Math.max(140, cx + k * (COLLAPSED_X - YEAR_W - 8) - 14)}px`}
 	>
 		{#if note}
 			<p class="ndisc">{note}</p>
@@ -334,7 +344,7 @@
 		inset: 0;
 		width: var(--w);
 		height: var(--h);
-		transform: scale(var(--k)) translateY(var(--pan));
+		transform: translateX(var(--cx, 0px)) scale(var(--k)) translateY(var(--pan));
 		transform-origin: 0 0;
 		transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 	}
@@ -477,7 +487,7 @@
 	}
 	.ndisc {
 		position: absolute;
-		left: 6px;
+		left: 0;
 		top: 36px;
 		/* up to the years' left edge — computed in the markup */
 		width: var(--dw);

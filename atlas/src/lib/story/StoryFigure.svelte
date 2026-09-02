@@ -26,21 +26,31 @@
 	const pad = (n: number) => String(n).padStart(2, '0');
 
 	/**
-	 * WHOLE NOTES ONLY, PACKED BY NOTE (the author, 2026-09-02): the block
-	 * never cuts a word, and a note never breaks across the two columns — CSS
-	 * `columns` split notes mid-sentence, which is what read so badly. Every
-	 * candidate is measured at column width in a hidden copy; notes are
-	 * admitted nearest-to-the-reading-line first, then PACKED in number order
-	 * into the left stack while it has room, then the right; if the packing
-	 * overflows, the farthest admitted note is dropped and the pack rerun. A
-	 * note that does not fit waits until scrolling gives it room.
+	 * WHOLE NOTES ONLY, PACKED BY NOTE (the author, 2026-09-02; refit the
+	 * same day after their «8 and 2» report): a note never breaks across the
+	 * two columns — CSS `columns` split notes mid-sentence, which read badly.
+	 * Every candidate is measured at column width in a hidden copy, admission
+	 * is nearest-to-the-reading-line first by TRUE FIT (a note that cannot
+	 * fit is skipped, never a reason to drop its neighbours), the packing
+	 * preserves number order (one cut: left run, right run), and the
+	 * READING paragraph's own notes, when they cannot all stack whole,
+	 * go TOGETHER to ONE full-width flow that may scroll (the author's
+	 * one-column ruling for text-heavy notes, 2026-09-02) — the only
+	 * exception to no-scroll, because the alternative was notes that
+	 * never appeared at all (5-7 total twice the block).
 	 */
 	const GAP = 28; // --sp-7, the column gap
 	const LI_MARGIN = 8; // --sp-2, under each note
 	let availH = $state(0);
 	let availW = $state(0);
 	let measureEl = $state<HTMLUListElement | null>(null);
-	let packed = $state<{ left: number[]; right: number[] } | null>(null);
+	let measureWideEl = $state<HTMLUListElement | null>(null);
+	let packed = $state<{
+		left: number[];
+		right: number[];
+		spread: number[];
+		spreadH: number;
+	} | null>(null);
 	const colW = $derived(Math.max(80, (availW - GAP) / 2));
 	$effect(() => {
 		const el = measureEl;
@@ -56,48 +66,68 @@
 			const nt = list[i];
 			if (nt) heights.set(nt.n, li.getBoundingClientRect().height + LI_MARGIN);
 		});
-		// admit nearest-first while twice the column height lasts …
-		const byNeed = [...list].sort((a, b) => a.dist - b.dist || a.n - b.n);
-		const admitted = new Set<number>();
-		let used = 0;
-		for (const nt of byNeed) {
-			const hh = heights.get(nt.n) ?? 0;
-			if (used + hh <= 2 * H) {
-				admitted.add(nt.n);
-				used += hh;
-			}
+		// the same notes at FULL width — what the one-column spread will use
+		const heightsWide = new Map<number, number>();
+		if (measureWideEl) {
+			[...measureWideEl.children].forEach((li, i) => {
+				const nt = list[i];
+				if (nt) heightsWide.set(nt.n, li.getBoundingClientRect().height + LI_MARGIN);
+			});
 		}
-		// … then pack whole notes in number order: left stack, then right;
-		// an overflow drops the farthest admitted note and packs again
-		for (let guard = 0; guard < list.length + 1; guard++) {
-			const left: number[] = [];
-			const right: number[] = [];
-			let hL = 0;
-			let hR = 0;
-			let overflow = false;
-			for (const nt of list) {
-				if (!admitted.has(nt.n)) continue;
-				const hh = heights.get(nt.n) ?? 0;
-				if (hL + hh <= H) {
-					left.push(nt.n);
-					hL += hh;
-				} else if (hR + hh <= H) {
-					right.push(nt.n);
-					hR += hh;
-				} else {
-					overflow = true;
-					break;
+		// admit nearest-first, by TRUE FIT (the author's report, 2026-09-02:
+		// the old farthest-drop cascaded one oversized note into an EMPTY
+		// block): a candidate joins only if the admitted set plus it still
+		// packs — one that cannot fit is SKIPPED, never a reason to drop
+		// its neighbours. Packing preserves NUMBER ORDER: the admitted
+		// notes, sorted by n, are cut ONCE — the first run reads down the
+		// left stack, the rest down the right.
+		const byNeed = [...list].sort((a, b) => a.dist - b.dist || a.n - b.n);
+		const hOf = (n: number) => heights.get(n) ?? 0;
+		const split = (
+			set: number[],
+			cap: number
+		): { left: number[]; right: number[] } | null => {
+			const seq = [...set].sort((a, b) => a - b);
+			const hs = seq.map(hOf);
+			for (let cut = 0; cut <= seq.length; cut++) {
+				const hL = hs.slice(0, cut).reduce((s, x) => s + x, 0);
+				const hR = hs.slice(cut).reduce((s, x) => s + x, 0);
+				if (hL <= cap && hR <= cap) {
+					return { left: seq.slice(0, cut), right: seq.slice(cut) };
 				}
 			}
-			if (!overflow) {
-				packed = { left, right };
-				return;
-			}
-			const drop = [...byNeed].reverse().find((nt) => admitted.has(nt.n));
-			if (!drop) break;
-			admitted.delete(drop.n);
+			return null;
+		};
+		// the READING paragraph's own notes are a UNIT: when they cannot all
+		// stack whole (one taller than a column, or an essay-sized pile like
+		// notes 5-7 on one paragraph), they ALL go to the spread flow —
+		// number order, two columns, scrolling inside that block alone —
+		// because the alternative was notes that never appeared at all
+		let spread: number[] = [];
+		let spreadH = 0;
+		let stackH = H;
+		const minDist = byNeed.length ? byNeed[0].dist : 0;
+		const actives = list.filter((nt) => nt.dist === minDist).map((nt) => nt.n);
+		if (actives.length && !split(actives, H)) {
+			spread = [...actives].sort((a, b) => a - b);
+			const tot = spread.reduce(
+				(s, n) => s + (heightsWide.get(n) ?? Math.ceil(hOf(n) / 2) + 12),
+				0
+			);
+			spreadH = Math.min(H, tot + 4);
+			stackH = Math.max(0, H - spreadH - LI_MARGIN);
 		}
-		packed = { left: [], right: [] };
+		let best: { left: number[]; right: number[] } = { left: [], right: [] };
+		const taken: number[] = [];
+		for (const nt of byNeed) {
+			if (spread.includes(nt.n)) continue;
+			const attempt = split([...taken, nt.n], stackH);
+			if (attempt) {
+				taken.push(nt.n);
+				best = attempt;
+			}
+		}
+		packed = { left: best.left, right: best.right, spread, spreadH };
 	});
 	const columns = $derived.by(() => {
 		const p = packed;
@@ -105,6 +135,9 @@
 		const pick = (ns: number[]) => ns.map((n) => notes.find((nt) => nt.n === n)!).filter(Boolean);
 		return [pick(p.left), pick(p.right)];
 	});
+	const spreadNotes = $derived(
+		(packed?.spread ?? []).map((n) => notes.find((nt) => nt.n === n)!).filter(Boolean)
+	);
 </script>
 
 <div class="fig">
@@ -129,6 +162,21 @@
 	</div>
 	{#if notes.length}
 		<div class="fnblock" bind:clientHeight={availH} bind:clientWidth={availW}>
+			{#if spreadNotes.length}
+				<!-- the reading paragraph's notes when they cannot stack whole:
+				     ONE full-width column, scrolling inside if it must -->
+				<ul class="notes spread" style:height={`${packed?.spreadH ?? 0}px`}>
+					{#each spreadNotes as sn (sn.n)}
+						<li>{sn.n}.
+							{#each sn.parts as p, i (i)}{#if p.href}<a
+										href={p.href}
+										target="_blank"
+										rel="noopener">{p.text}</a
+									>{:else}{p.text}{/if}{/each}
+						</li>
+					{/each}
+				</ul>
+			{/if}
 			<!-- two stacks packed BY NOTE — a note never splits across the gap;
 			     numbers inline, each citation chunk a link to its URL -->
 			<div class="cols2">
@@ -144,8 +192,16 @@
 					</ul>
 				{/each}
 			</div>
-			<!-- the hidden measurer: every candidate at the column's width -->
+			<!-- the hidden measurers: every candidate at the stack column's
+			     width, and once more at the block's full width for the spread -->
 			<ul class="notes measure" bind:this={measureEl} style:width={`${colW}px`} aria-hidden="true">
+				{#each notes as n (n.n)}
+					<li>{n.n}.
+						{#each n.parts as p, i (i)}{#if p.href}<a href={p.href}>{p.text}</a>{:else}{p.text}{/if}{/each}
+					</li>
+				{/each}
+			</ul>
+			<ul class="notes measure" bind:this={measureWideEl} aria-hidden="true">
 				{#each notes as n (n.n)}
 					<li>{n.n}.
 						{#each n.parts as p, i (i)}{#if p.href}<a href={p.href}>{p.text}</a>{:else}{p.text}{/if}{/each}
@@ -208,6 +264,13 @@
 		grid-template-columns: 1fr 1fr;
 		column-gap: var(--sp-7);
 		align-items: start;
+	}
+	/* the text-heavy state reads as ONE full-width column (the author,
+	   2026-09-02) — no mid-sentence jump across a gap; it scrolls inside
+	   only when even the whole block cannot hold it */
+	.spread {
+		overflow-y: auto;
+		margin-bottom: var(--sp-2);
 	}
 	.notes {
 		margin: 0;

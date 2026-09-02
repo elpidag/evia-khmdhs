@@ -61,6 +61,21 @@ export function createSteps({ order, line = 0.45, onActive }: StepsOptions): Ste
 						hit = id;
 					}
 				}
+				// the band can settle in a GAP — a paragraph margin, a section
+				// seam. That is not a change of reading position: HOLD the
+				// current passage (the author, 2026-09-02: the rail rewound to
+				// 2007 mid-chronology). Step BACK only when the current
+				// passage's own exit says the reader went above it — the
+				// entry's rects ride on the callback, so nothing forces layout.
+				if (!hit && current) {
+					const ex = entries.find((e) => !e.isIntersecting && ids.get(e.target) === current);
+					if (ex && ex.boundingClientRect.top >= (ex.rootBounds?.bottom ?? 0)) {
+						const i = rank.get(current) ?? 0;
+						hit = i > 0 ? order[i - 1] : null;
+					} else {
+						return;
+					}
+				}
 				if (hit === current) return;
 				current = hit;
 				onActive(hit);

@@ -100,39 +100,93 @@ export interface YearStop {
  */
 const UNLABELLED = new Set([2017, 2027]);
 
-/**
- * How much a span's own events need: the tallest lane's stack of CLOSED
- * blocks inside [year, next). This is what keeps the lanes CORRESPONDING
- * with the years (the author, 2026-09-02, after two screenshots): a year
- * whose events cannot fit its pixels forces the whole chain below to smear
- * past the labels, however the dodge balances it.
- */
-function neededPx(year: number, next: number): number {
-	const byLane = new Map<Lane, number>();
-	for (const e of EVENTS) {
-		const t = fractionalYear(e.date);
-		if (t >= year && t < next) {
-			const h = blockHeight({ title: e.title }, LANE_TEXT[e.lane].w) + BLOCK_GAP;
-			byLane.set(e.lane, (byLane.get(e.lane) ?? 0) + h);
-		}
-	}
-	return byLane.size ? Math.max(...byLane.values()) + 10 : 0;
+/** one resolved moment of the warped scale */
+interface Knot {
+	t: number;
+	y: number;
+}
+interface Scale {
+	stops: YearStop[];
+	knots: Knot[];
+	evY: Map<string, number>;
 }
 
-/** cumulative sum of SPANS, each grown to hold its own events' blocks */
-export function yearStops(): YearStop[] {
-	const out: YearStop[] = [];
-	let y = AXIS_TOP;
-	for (let i = 0; i < SPANS.length; i++) {
-		const [year, px] = SPANS[i];
-		const next = i + 1 < SPANS.length ? SPANS[i + 1][0] : year + 1;
-		out.push({ year, y, midY: y, labelled: !UNLABELLED.has(year), gap: next - year });
-		y += Math.max(px, neededPx(year, next));
+/**
+ * The WARPED scale (the author's third alignment screenshot, 2026-09-02:
+ * the Greek lane and the fires disagreed on the SAME dates, because each
+ * lane dodged its crowds independently). The axis is built by walking every
+ * lane's events in ONE date order: each lane's chain reserves the room its
+ * CLOSED blocks need, so the axis stretches wherever any lane crowds, a
+ * closed block sits AT its warped date, same-date events across lanes share
+ * one y by construction, and the year labels ride the same warp. The
+ * artboard's SPANS survive as the RATE FLOOR — time never takes less room
+ * than the artboard gave it, only more. A same-day pile (the three 03-08
+ * fires) turns its instant into a vertical band, stepping down in arrival
+ * order.
+ */
+function buildScale(): Scale {
+	// px per year at a moment — the artboard's floor, constant inside a span
+	const rate = (t: number): number => {
+		for (let i = 0; i < SPANS.length; i++) {
+			const next = i + 1 < SPANS.length ? SPANS[i + 1][0] : SPANS[i][0] + 1;
+			if (t >= SPANS[i][0] && t < next) return SPANS[i][1] / (next - SPANS[i][0]);
+		}
+		return 81.4;
+	};
+	interface Q {
+		t: number;
+		year?: number;
+		e?: (typeof EVENTS)[number];
 	}
-	const last = SPANS[SPANS.length - 1][0] + 1;
-	out.push({ year: last, y, midY: y, labelled: !UNLABELLED.has(last), gap: 0 });
-	for (let i = 0; i < out.length - 1; i++) out[i].midY = (out[i].y + out[i + 1].y) / 2;
-	return out;
+	const q: Q[] = [];
+	for (const [year] of SPANS) q.push({ t: year, year });
+	const endYear = SPANS[SPANS.length - 1][0] + 1;
+	q.push({ t: endYear, year: endYear });
+	for (const e of EVENTS) q.push({ t: fractionalYear(e.date), e });
+	// by time; a year boundary precedes an event on the same instant
+	q.sort((a, b) => a.t - b.t || (a.year !== undefined ? -1 : 1) - (b.year !== undefined ? -1 : 1));
+
+	const stops: YearStop[] = [];
+	const knots: Knot[] = [];
+	const evY = new Map<string, number>();
+	const lastY = new Map<Lane, number>();
+	const lastH = new Map<Lane, number>();
+	let y = AXIS_TOP;
+	let tPrev = q.length ? q[0].t : 0;
+	for (const k of q) {
+		// every SPANS boundary is itself a knot, so the rate is constant here
+		y += Math.max(0, k.t - tPrev) * rate(tPrev);
+		tPrev = k.t;
+		if (k.year !== undefined) {
+			stops.push({ year: k.year, y, midY: y, labelled: !UNLABELLED.has(k.year), gap: 0 });
+		} else if (k.e) {
+			const lane = k.e.lane as Lane;
+			const bottom = (lastY.get(lane) ?? -Infinity) + (lastH.get(lane) ?? 0) + BLOCK_GAP;
+			y = Math.max(y, bottom);
+			lastY.set(lane, y);
+			lastH.set(lane, blockHeight({ title: k.e.title }, LANE_TEXT[lane].w));
+			evY.set(k.e.id, y);
+		}
+		knots.push({ t: k.t, y });
+	}
+	for (let i = 0; i < stops.length; i++) {
+		stops[i].gap = i + 1 < stops.length ? stops[i + 1].year - stops[i].year : 0;
+		stops[i].midY = i + 1 < stops.length ? (stops[i].y + stops[i + 1].y) / 2 : stops[i].y;
+	}
+	return { stops, knots, evY };
+}
+let _scale: Scale | null = null;
+const scale = (): Scale => (_scale ??= buildScale());
+
+/** the warped year stops — one build, shared by every caller */
+export function yearStops(): YearStop[] {
+	return scale().stops;
+}
+
+/** the warped y of one event's own moment — where its dot and block anchor
+ *  (a same-day pile steps down in arrival order, each member its own y) */
+export function eventY(id: string): number | undefined {
+	return scale().evY.get(id);
 }
 
 /** the year scale's own height: the last stop plus a little air */
@@ -147,6 +201,20 @@ export function axisHeight(stops: YearStop[] = yearStops()): number {
  */
 export function yOfDate(iso: string, stops: YearStop[] = yearStops()): number {
 	const t = fractionalYear(iso);
+	if (stops === scale().stops) {
+		// the real scale interpolates over its KNOTS, so a date between two
+		// events lands between their warped moments, not on a straight line
+		const ks = scale().knots;
+		if (t <= ks[0].t) return ks[0].y;
+		if (t >= ks[ks.length - 1].t) return ks[ks.length - 1].y;
+		for (let i = ks.length - 1; i >= 0; i--) {
+			if (ks[i].t <= t) {
+				const a = ks[i];
+				const b = ks[i + 1];
+				return b.t === a.t ? a.y : a.y + ((t - a.t) / (b.t - a.t)) * (b.y - a.y);
+			}
+		}
+	}
 	const first = stops[0];
 	const last = stops[stops.length - 1];
 	if (t <= first.year) return first.y;
@@ -249,15 +317,17 @@ export interface PlacedEvent<E> {
 const MIN_TOP = 62;
 
 /**
- * Place one lane's blocks. The DOT keeps its true y always; where events
- * crowd, the blocks BALANCE around their dates (pool-adjacent-violators:
- * order kept, no overlaps, each contiguous crowd centred on the least-squares
- * mean of its members' dates) — never the old downward-only push, which let
- * 2021's blocks cascade beside the 2022-2023 year labels (the author,
- * 2026-09-02). A block may sit above OR below its dot; the leader line joins
- * it back either way. Events must arrive in date order.
+ * Place one lane's blocks. The warped scale already reserved every CLOSED
+ * block's room at its date, so at rest a block sits exactly on its dot and
+ * lanes agree wherever dates agree (the author's third screenshot,
+ * 2026-09-02). The remaining dodge is a downward cursor that only absorbs
+ * the OPEN stretch delta — an open block pushes its own lane's later blocks
+ * down, locally, and a leader line joins any moved block to its dot.
+ * Events must arrive in date order.
  */
-export function layoutLane<E extends { title: string; body?: string; date: string; end?: string }>(
+export function layoutLane<
+	E extends { id?: string; title: string; body?: string; date: string; end?: string }
+>(
 	events: E[],
 	stops: YearStop[] = yearStops(),
 	width = 132,
@@ -265,64 +335,21 @@ export function layoutLane<E extends { title: string; body?: string; date: strin
 	 *  is at the event's period it stretches to its FULL title and body */
 	open: (e: E) => boolean = () => true
 ): PlacedEvent<E>[] {
-	const want = events.map((e) => yOfDate(e.date, stops) - DOT_LIFT);
-	const hs = events.map((e) =>
-		open(e) ? blockHeight(e, width, true) : blockHeight({ title: e.title }, width)
-	);
-
-	interface Cluster {
-		top: number;
-		height: number;
-		count: number;
-		/** Σ of members' desired cluster-top (want minus offset inside) */
-		sumDesired: number;
-		start: number;
-	}
-	const clusters: Cluster[] = [];
-	for (let i = 0; i < events.length; i++) {
-		let c: Cluster = {
-			top: Math.max(MIN_TOP, want[i]),
-			height: hs[i] + BLOCK_GAP,
-			count: 1,
-			sumDesired: want[i],
-			start: i
-		};
-		// merge backwards while overlapping the previous crowd
-		while (clusters.length) {
-			const p = clusters[clusters.length - 1];
-			if (p.top + p.height <= c.top) break;
-			clusters.pop();
-			c = {
-				top: 0,
-				height: p.height + c.height,
-				count: p.count + c.count,
-				// appending after p shifts every member of c down by p.height
-				sumDesired: p.sumDesired + c.sumDesired - p.height * c.count,
-				start: p.start
-			};
-			c.top = Math.max(MIN_TOP, c.sumDesired / c.count);
-		}
-		clusters.push(c);
-	}
-
-	const ys = new Array<number>(events.length);
-	for (const c of clusters) {
-		let y = c.top;
-		for (let i = c.start; i < c.start + c.count; i++) {
-			ys[i] = y;
-			y += hs[i] + BLOCK_GAP;
-		}
-	}
-
-	return events.map((e, i) => {
-		const dotY = want[i] + DOT_LIFT;
+	const real = stops === scale().stops;
+	let cursor = -Infinity;
+	return events.map((e) => {
+		const anchor = (real && e.id ? eventY(e.id) : undefined) ?? yOfDate(e.date, stops);
+		const want = Math.max(MIN_TOP, anchor - DOT_LIFT);
+		const h = open(e) ? blockHeight(e, width, true) : blockHeight({ title: e.title }, width);
+		const blockY = Math.max(want, cursor);
+		cursor = blockY + h + BLOCK_GAP;
 		return {
 			e,
-			dotY,
+			dotY: anchor,
 			endY: e.end && e.end !== e.date ? yOfDate(e.end, stops) : undefined,
-			blockY: ys[i],
-			h: hs[i],
-			pushed: Math.abs(ys[i] - want[i]) > 1
+			blockY,
+			h,
+			pushed: blockY - want > 1
 		};
 	});
 }

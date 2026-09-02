@@ -12320,3 +12320,114 @@ inside the margins — the author's interim edit summed 1680 and every
 track silently inflated ~6%. Measured after: image, caption, credit and
 footnote stacks all at left 1312,3 / right 1852,3, the right edge on the
 page margin; mobile unaffected.
+
+## 2026-09-02 — the footnote fit rebuilt so every note appears where it is cited
+
+The author: «some do not appear correctly like 8 and some do not appear at
+all like 2». A browser walk of all 66 paragraphs found the causes in the
+whole-note packing: on overflow it dropped the FARTHEST note and repacked,
+which cascaded — one oversized note emptied the whole block (paragraphs
+citing 3-4 and 5-7 showed NOTHING; note 8 once printed alone, the survivor
+of an emptied block — its own text and URL are complete and verbatim); a
+note taller than one 323 px stack (4 at 289, 5 at 390, 6 at 780 measured)
+could never print at all; and the two stacks interleaved numbers
+(13,15,17 | 14,16). Rebuilt in `StoryFigure.svelte`: admission is
+nearest-first by TRUE FIT (a note that cannot fit is skipped, never a
+reason to drop neighbours), packing preserves NUMBER ORDER (the admitted
+notes sorted by n are cut once — left run, right run), and the READING
+paragraph's own notes are a UNIT — when they cannot all stack whole they
+go TOGETHER to a spread flow across both columns that may scroll inside
+(the only exceptions to the no-split/no-scroll rules, conceded because
+notes 5-7 hang on ONE paragraph and total 1.303 px against the block's
+646 — no arrangement of whole notes can show them; the author's demand
+that they appear outranks the earlier no-scroll ruling exactly there).
+Verified: all 18 notes render at their own citing paragraph (15 via
+stacks, 5-7 via the spread), zero-shown states gone. Also found, for the
+author: note 5 carries two literal words «link» where the Word document's
+hyperlinks lost their URLs before distribution — the storyboard docx is
+not on this machine, so the two URLs must come from the author; and note
+8's polsxedia.ypen.gov.gr URL answers 403 to a plain client but that host
+blocks non-browser clients (like ypen.gov.gr) — the link works in a
+browser and matches the document exactly.
+
+## 2026-09-02 — the eighteen footnotes verified against the author's own text
+
+The author attached the canonical text of all 18 footnotes. A mechanical
+whitespace-folded diff against the stored .md lines found ONE divergence:
+note 6's «3)in the case» is the author's «3) in the case» — corrected in
+chronology.md. Everything else, including every URL, is byte-faithful.
+Note 5's two literal words «link» (no URL behind them) stand in the
+author's canonical text exactly the same way, so they stay as written —
+the author has been told, in case the underlying document's hyperlinks
+were meant to survive there.
+
+## 2026-09-02 — a footnote's «see:» tail alone carries its link
+
+The author, on note 6: the whole text must not be underlined — the link
+belongs only on «see: Loukas Triantis, … 55–70». The chunk-before-the-URL
+rule made a long explanatory note into one giant link wherever its single
+citation came last. `content.ts` `noteEntry` now cuts a chunk at its last
+«see:»: the text before stays plain, the tail from «see:» carries the
+href. Note 6 is the only current case (notes with a bare «See …» carry no
+URL); pinned in `content.test.ts` (two parts, plain head, linked tail on
+doi.org/10.15488/18216) and verified in the rendered page.
+
+## 2026-09-02 — the story page's evening round: one-column heavy notes, the author's disclaimer, a 6 px trim
+
+Three author rulings in one message. (1) «Would the footnotes fit better
+in one column when text-heavy?» — capacity is identical (same area either
+way), but one column removes the mid-sentence jump across the gap, so the
+SPREAD state (the reading paragraph's notes when they cannot stack) now
+flows as ONE full-width column, its height MEASURED in a second hidden
+copy at the block's width instead of the halved-stack estimate; the
+two-stack packing for light notes is untouched, and the per-note walk
+still passes 18/18. (2) The author edited the delivered SVG to show the
+collapsed timeline they want: the disclaimer at a real measure — the
+rail's left half, right-aligned toward the years — with the converged
+line, years and dots shifted RIGHT to sit beside the lane titles.
+Implemented as a collapsed-only translate of the scaled drawing
+(`cx` = 21,4% of the rail at the design width, the author's own geometry;
+spreading returns it to 0 through the same transform transition), the
+native chrome deriving its split and the disclaimer width from it.
+(3) The narrative track is 6 px narrower, the pixels split into its two
+gutters: tracks 500 · 33 · 668 · 43 · 540, sum still 1784.
+
+## 2026-09-02 — the axis itself warps, so the lanes agree on every date
+
+The author's third alignment screenshot: the Greek lane and the fire lane
+disagreed on the SAME dates — the 112 period (03-08 → 16-08-2021) printed
+~150 px above the Peloponnese fires (03-08 → 12-08-2021). Cause: each lane
+dodged its crowds INDEPENDENTLY, so the balanced Greek August pile lifted
+its early blocks off their dates while the sparse fire lane stayed put. No
+per-lane dodge can fix that; the SCALE now does: `buildScale` walks every
+lane's events in ONE date order, each lane's chain reserving the room its
+closed blocks need — the axis stretches wherever any lane crowds, a closed
+block sits AT its warped date (zero displacement, no leader lines at
+rest), same-date events across lanes share one y BY CONSTRUCTION, the
+year labels ride the same warp, and a same-day pile (the three 03-08-2021
+fires) turns its instant into a stepped band. The artboard's SPANS stay
+as the rate floor — time never takes less room than the artboard gave it.
+`yOfDate` interpolates over the warp's knots; `layoutLane` shrank to a
+downward cursor absorbing only the OPEN stretch delta. Axis 1.835 px
+(2021 grew to 555). Pinned: per-lane reservations, closed blocks at zero
+displacement, cross-lane date monotonicity, and the 112 ↔ Peloponnese
+equality itself; measured in the browser: both blocks at y 429,5 to the
+decimal. Same message: the story grid's two gutters became EQUAL 38 px
+(500 · 38 · 668 · 38 · 540, sum 1784).
+
+## 2026-09-02 — the reading position holds across gaps; no more rewinds
+
+The author: past «It also opened public forest restoration …» the timeline
+elapsed BACK TO THE START, then snapped forward at the October-2021
+paragraph — and the same elsewhere. Reproduced at three scroll positions
+in that region alone: the ~1 px reading band can settle in a GAP (a
+paragraph margin, a section seam), `steps.ts` then emitted null, the page
+cleared `focusDates`, progress computed 0 and the rail panned to 2007
+(the figure also flipped back to 01). Fixed at the source: an empty band
+now HOLDS the current passage — a gap is not a change of reading
+position — stepping back one beat only when the current passage's own
+exit entry shows the reader went above it (the observer entry's rects,
+nothing forces layout), and null returns only above the first passage.
+Verified by scroll-walks both ways: the pan is monotonic through the
+whole chronology going down, and going up the timeline still collapses
+at the introduction.

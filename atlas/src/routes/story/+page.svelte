@@ -225,14 +225,15 @@
 	/* The five tracks, retuned by the author (2026-09-02) from the artboard's
 	   520/30/570/70/594: the figure track is exactly its content's 540 px —
 	   image, caption and notes then share both edges, the right one on the
-	   page margin — and the spare went to the narrative. The fr values are
+	   page margin — and the spare went to the narrative, less the author's
+	   6 px trim of 2026-09-02 and its EQUAL 38 px gutters either side. The fr values are
 	   READ AS PIXELS AT 1920, which holds only while they sum to 1784 (the
 	   content width inside the page margins) — keep that sum when retuning. */
 	.cols {
 		display: grid;
 		grid-template-columns:
-			minmax(0, 500fr) minmax(0, 30fr) minmax(0, 674fr)
-			minmax(0, 40fr) minmax(0, 540fr);
+			minmax(0, 500fr) minmax(0, 38fr) minmax(0, 668fr)
+			minmax(0, 38fr) minmax(0, 540fr);
 		align-items: start; /* `stretch` would make the rails full-height and kill sticky */
 	}
 	/* the column titles are the dataset card's own name style — the same face,

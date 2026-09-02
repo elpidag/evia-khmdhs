@@ -1638,13 +1638,19 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `/compare` → 308 `/story`, fragments survive). **`/story` is a THREE-COLUMN
   SCROLL NARRATIVE since 2026-09-01** (the author's two 1920×1080 artboards;
   DATA_DECISIONS): the chapter strip is gone and `main.story` in the layout
-  makes the page window-wide — timeline 60→580 · text 610→1180 · figure
-  1250→1844, the artboard's own numbers as `fr` tracks, the outer two columns
+  makes the page window-wide — timeline 500 · gutter 33 · text 668 · gutter 43 · figure
+  540 (the author's retunes of 2026-09-02: the figure track = its content's 540 px so image, caption and notes share both edges on the page margin, the spare to the narrative and its gutters; the `fr` values read as px at 1920 only while they sum to 1784 — the comment at the rule says so) as `fr` tracks, the outer two columns
   sticky and viewport-tall, the middle scrolling with a 45vh tail so the last
   passage can still reach the reading line. `lib/story/steps.ts` is the whole
   scroll machinery: ONE IntersectionObserver with a ~1px band 45 % down the
   viewport (scrollama's technique), no scroll listener, no per-frame work, and
-  `active = null` above the first passage — which IS the collapsed state.
+  `active = null` above the first passage — which IS the collapsed state. Since 2026-09-02 the position is STICKY across gaps: a band
+  settling in a paragraph margin or section seam HOLDS the current
+  passage (it used to emit null — focusDates cleared, the rail rewound
+  to 2007 and the figure to 01 mid-chronology); it steps BACK one beat
+  only when the current passage's own exit entry shows the reader above
+  it (entry rects, no layout forced), and null returns only above the
+  first passage.
   `lib/story/StoryTimeline.svelte` authors everything 1:1 in ARTBOARD
   coordinates inside one `transform: scale(k)` (SVG geometry and HTML type then
   cannot drift apart), SVG for marks and HTML for every glyph (descriptions are
@@ -1665,21 +1671,24 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   artboard's 2016; the nine-year run-in is two compressed steps with a BREAK
   MARK on each lane, so compression is never read as duration — stops are no
   longer one per year and `yOfDate` interpolates inside whatever pair brackets
-  a date); **each year's span GROWS to hold its own events' closed blocks**
-  (2026-09-02, after two author screenshots: the fixed spans gave 2022–2026
-  ~614 px for ~750 px of Greek blocks, so the chain smeared a year below its
-  labels however it was dodged — `yearStops`' `neededPx` takes the tallest
-  lane's stack per year, the artboard's spans as the floor: 2021's 260 and
-  2023's 110 stay, a plain year 81.4; 2026 is a real year closed by an
-  unlabelled 2027 endpoint, and a vitest pins span ≥ stack per year × lane);
-  the rail became a **VIEWPORT THAT PANS** — the drawing (~1.690px) cannot
+  a date); **the axis itself WARPS to its events** (2026-09-02, after three
+  author screenshots — the last showed the Greek and fire lanes disagreeing
+  on the SAME date, because each lane dodged independently: `buildScale`
+  walks every lane's events in ONE date order, each lane's chain reserving
+  its closed blocks' room, so the axis stretches wherever any lane crowds,
+  a closed block sits AT its warped date, same-date events across lanes
+  share one y BY CONSTRUCTION, the year labels ride the same warp, and a
+  same-day pile steps into a band; the artboard's SPANS are the rate
+  floor, 2026 a real year closed by an unlabelled 2027 endpoint;
+  `yOfDate` interpolates over the knots; pinned: reservations, zero
+  closed displacement, cross-lane monotonicity, the 112 ↔ Peloponnese
+  equality); the rail is a **VIEWPORT THAT PANS** — the drawing (~1.865px) cannot
   be read in a column one screen tall, so the column follows the reader,
   centring the active paragraph's whole event RANGE (`focusDates`). The DOT
-  keeps its true date always; crowded BLOCKS BALANCE around their dates
-  (`layoutLane`, pure — a pool-adjacent-violators dodge since 2026-09-02:
-  each crowd centres on the least-squares mean of its members' dates, up or
-  down; the old downward-only push cascaded 2021's blocks beside 2022–2023),
-  a leader line joining a moved block back either way. Titles clamp to 4
+  anchors on its event's own warped moment; at rest a closed block sits ON
+  its dot (`layoutLane` is a downward cursor absorbing only the OPEN
+  stretch delta), a leader line joining a block to its dot only where an
+  open neighbour pushed it. Titles clamp to 4
   lines, bodies to 2 — CLOSED; the reader's own events STRETCH whole (full
   title + body, `blockHeight`'s `open` mode with a line of slack) — and the
   CSS takes the clamps FROM the module so the drawing and the height
@@ -1791,7 +1800,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `content.ts` `NoteEntry {parts: {text, href?}[]}`: every URL leaves the
   display and the citation chunk BEFORE it carries it (a note may cite
   several sources — 13/14 hold two links each; separators stay as plain
-  glue; utm stripped). Rendering gotchas fixed the same night: an
+  glue; utm stripped; a chunk holding a «see:» links only that
+  tail — the author on note 6, whose long text must not underline whole).
+  Rendering gotchas fixed the same night: an
   `<ol value>` marker inside CSS columns misrenders two-digit numbers →
   numbers print inline as hanging text (`text-indent` hang), and
   `break-inside: avoid` on an item taller than the column overflows ONTO
@@ -1822,17 +1833,24 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   window edge, the rails subtracting it; and the footnote block admits
   **WHOLE NOTES ONLY, PACKED BY NOTE** — measured in a hidden column-width
   copy, admitted nearest-to-the-reading-line first (`dist` rides on each
-  note), then packed in number order into TWO MANUAL STACKS (left to its
-  height, then right; overflow drops the farthest and repacks) — never CSS
-  `columns`, which split a note mid-sentence across the gap; a note that
-  does not fit waits. The COLLAPSED timeline's disclaimer and lane titles
+  note) by TRUE FIT since the 2026-09-02 refit (a note that cannot fit is
+  SKIPPED, never a reason to drop its neighbours — the old farthest-drop
+  cascaded one oversized note into an EMPTY block, the author's «8 and 2»
+  report), packed in NUMBER ORDER into two stacks with one cut (left run,
+  right run) — never CSS `columns`, which split a note mid-sentence across
+  the gap. The READING paragraph's own notes are a UNIT: when they cannot
+  all stack whole they go TOGETHER to ONE full-width flow (the author's one-column ruling for text-heavy notes)
+  that may scroll inside (`.spread`, height measured at full width in a second hidden copy; the sole no-scroll
+  exception — notes 5-7 hang on ONE paragraph at 2× the block, nothing
+  else can show them); every note is pinned to render at its own citing
+  paragraph by the browser walk. Other notes that do not fit wait. The COLLAPSED timeline's disclaimer and lane titles
   render at NATIVE size outside the scaled drawing (`.below` in
   StoryTimeline), in the UPPER part of the timeline since the balance
   round of the same night: disclaimer top-left at the footnotes' size
   (fs-12 light), the years column between it and the line, the lane
   titles top-right on TWO LINES each (`KEY_LINES`), the scaled dotted
   line the divider; nothing reserved below — the collapsed fit is the
-  full rail (`COLLAPSED_X` 345); on spread the block crossfades with the
+  full rail (`COLLAPSED_X` 345). Since the author's own SVG edit of 2026-09-02 the collapsed drawing shifts RIGHT (`cx`, 21,4% of the rail at the design width) so the disclaimer gets the left half's full measure, right-aligned toward the years, with line, years and dots beside the lane titles; on spread the block crossfades with the
   in-scale legend. The three dataset card .md files are SYNCED to the
   story-folder versions (typographic apostrophes; 2026-09-02). The story's
   narrative paragraphs SET LIKE PRINT (author, same day): justified, 2 em
