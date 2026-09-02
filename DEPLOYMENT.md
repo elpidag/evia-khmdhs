@@ -68,8 +68,12 @@ lives in the repo and holds no secret.
 
 ```bash
 gcloud auth login
+# The project that exists: its id was typed «schorched» on creation and a
+# Google project ID can never be changed; only the display name was
+# corrected to "Scorched Forests". The id appears nowhere on the site —
+# the service URL carries the project NUMBER.
 export PROJECT_ID=schorched-forests
-gcloud projects create "$PROJECT_ID" --name="Schorched Forests"
+gcloud projects create "$PROJECT_ID" --name="Scorched Forests"
 gcloud config set project "$PROJECT_ID"
 # link the billing account: console → Billing → My projects → the project → Change billing
 export PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')

@@ -12679,3 +12679,13 @@ registered, an unregistered and no referer with the identical CSS and font
 files — nothing to register, nothing to publish; the step is gone. Set aside, recorded for later: a fully static export (adapter-static
 + an API snapshot on GitHub/Cloudflare Pages) would be truly €0 and
 CDN-fast, but it is a multi-day refactor and loses the PDF proxy.
+
+## 2026-09-03 — the brand is SCORCHED FORESTS (user)
+
+The site's name had carried the mocks' spelling «SCHORCHED FORESTS» since
+2026-08-27 — a typo, corrected in the one constant every page title and
+header reads (`lib/landing/brand.ts`). The Google Cloud project created the
+day before was typed the same way, `schorched-forests`; a project ID is
+immutable, so only its display name is corrected ("Scorched Forests") and
+the runbook and the workflow say so where they quote the id. The id appears
+nowhere on the public site: the service URL carries the project NUMBER.

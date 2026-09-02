@@ -20,7 +20,7 @@ permissions:
 
 env:
   # ── fill these two in once, after DEPLOYMENT.md step 1 ──
-  PROJECT_ID: schorched-forests
+  PROJECT_ID: schorched-forests   # the real project id (immutable; the typo lives only here)
   PROJECT_NUMBER: "904194646389"
   REGION: europe-west1
   SERVICE: atlas
