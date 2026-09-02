@@ -12431,3 +12431,26 @@ nothing forces layout), and null returns only above the first passage.
 Verified by scroll-walks both ways: the pan is monotonic through the
 whole chronology going down, and going up the timeline still collapses
 at the introduction.
+
+## 2026-09-02 — key findings into the figure column, the page centres after the timeline, the bibliography steps down
+
+Four author rulings. (1) The bibliography must be smaller than the main
+text (which is 16 px — the `.prose` base; the layout comment claiming
+18 px was corrected): it now sets at 13 px, apparatus not narrative.
+(2) With no timeline past the methodology, the text and figure columns
+CENTRE: `.cols.centred` (driven by the existing `timelineOn`) shrinks the
+first track to 231 and balances with 15,08% right padding — 269 px of
+whitespace each side of the 668+38+540 pair, the grid transition carrying
+the slide; measured symmetric to the decimal (336,4 / 336,4 at 1901 vw).
+(3) WHERE BOTH FLOWS LAND (the log–log scatter) and the hero's two
+explanatory paragraphs («The Anti-nero programme pays … side by side» and
+the basis note) are REMOVED from KEY FINDINGS; the four KPI cards stay.
+(4) The remaining five items render ONE AT A TIME in the figure column at
+its 540 px width, advancing 1:1 with the five paragraphs of KEY FINDINGS
+AND OPEN QUESTIONS (`kfAt` in the story page; `KeyFindings.svelte` is now
+an indexed rail card — cards+STATE-FUNDED · SIGNED · SIZES · REGION BY
+REGION · MONEY PER YEAR — compact titles, the computed insights as small
+notes); the full-width coda is gone. Verified: each paragraph brings its
+item at 540 px, in order. Follow-up the same hour: the BIBLIOGRAPHY
+carries NO figure beside it (author) — the rail renders nothing there,
+instead of the carried-forward marker.

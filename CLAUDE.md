@@ -1634,7 +1634,15 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   REGENERATED from git HEAD by the scratch `cards_v2.py` (multiset
   guard: no line of the original middle lost). **`/story`** = the scroll
   skeleton (`lib/story/chapters.ts`, ten chapters, KEY FINDINGS carrying
-  the former /compare frames via `sections/KeyFindings.svelte` — plus, since 2026-08-29, EVERY CONTRACT, BY THE DAY IT WAS SIGNED (`charts/SignedTimeline.svelte`: the STATE-FUNDED dots on one time axis, Anti-nero above in ink, co-ops below in green, fire seasons shaded, `dots.d` on `/api/compare`);
+  the former /compare frames via `sections/KeyFindings.svelte` — since
+  2026-09-02 an INDEXED rail card in the FIGURE column: one item per KEY
+  FINDINGS paragraph (`kfAt`, 1:1 with the section's five paragraphs) at
+  the column's 540 px — KPI cards + STATE-FUNDED · SIGNED · SIZES ·
+  REGION BY REGION · MONEY PER YEAR; the hero text, the WHERE BOTH FLOWS
+  LAND scatter and the full-width coda are GONE (author); past the
+  methodology the text and figure columns CENTRE (`.cols.centred`,
+  269 px each side, the grid transition sliding) and the bibliography
+  sets at 13 px under the 16 px prose — plus, since 2026-08-29, EVERY CONTRACT, BY THE DAY IT WAS SIGNED (`charts/SignedTimeline.svelte`: the STATE-FUNDED dots on one time axis, Anti-nero above in ink, co-ops below in green, fire seasons shaded, `dots.d` on `/api/compare`);
   `/compare` → 308 `/story`, fragments survive). **`/story` is a THREE-COLUMN
   SCROLL NARRATIVE since 2026-09-01** (the author's two 1920×1080 artboards;
   DATA_DECISIONS): the chapter strip is gone and `main.story` in the layout
@@ -1765,8 +1773,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   MID-paragraph splits the paragraph (chronology.md broke at figures
   03/04 — the author's own «image changes here»; disclosed). StoryFigure
   is a single live block now (figure + notes props). Still to come:
-  twelve of the 13 images and the KEY FINDINGS charts into the right column (the
-  coda below the grid until then); `StoryEvent.beat` is still unset — the
+  twelve of the 13 images; `StoryEvent.beat` is still unset — the
   timeline pans by reading progress.
   **Figure 04 is LIVE since 2026-09-02** (DATA_DECISIONS): `lib/story/figures.ts`
   is the registry of live figures keyed by the author's own figure number

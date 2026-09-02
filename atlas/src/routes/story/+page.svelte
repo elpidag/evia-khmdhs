@@ -125,6 +125,18 @@
 	/** the figure IN FORCE — the author's own marker, carried forward */
 	const figure = $derived(figureAt(Math.max(0, atBlock)));
 
+	/** KEY FINDINGS charts live in the figure column while the reader is in
+	 *  that section (the author, 2026-09-02): its five paragraphs advance
+	 *  through the five chart items one-to-one */
+	const kfAt = $derived.by(() => {
+		if (atBlock < 0 || BLOCKS[atBlock]?.section !== 'keyfindingandopenquestions') return -1;
+		let n = 0;
+		for (let j = 0; j < atBlock; j++) {
+			if (BLOCKS[j].section === 'keyfindingandopenquestions') n++;
+		}
+		return Math.min(n, 4);
+	});
+
 	/** only the footnotes of the paragraphs on screen, in document order */
 	const shownNotes = $derived.by(() => {
 		const out: { n: number; dist: number; parts: { text: string; href?: string }[] }[] = [];
@@ -169,7 +181,7 @@
 </svelte:head>
 
 <div class="storyp">
-	<div class="cols">
+	<div class="cols" class:centred={!timelineOn}>
 		<!-- TIMELINE is a grid sibling sticky at the SAME height as the section
 		     titles, so the two columns start aligned; it withdraws with its
 		     rail once the reader leaves the chronology -->
@@ -201,12 +213,15 @@
 		</div>
 
 		<aside class="rail fig">
-			<StoryFigure {figure} notes={shownNotes} />
+			{#if kfAt >= 0}
+				{#key kfAt}
+					<KeyFindings c={data.cmp} i={kfAt} />
+				{/key}
+			{:else if activeSection !== 'bibliography'}
+				<!-- the bibliography stands alone — no figure beside it (author) -->
+				<StoryFigure {figure} notes={shownNotes} />
+			{/if}
 		</aside>
-	</div>
-
-	<div class="coda" id="findings-charts">
-		<KeyFindings c={data.cmp} />
 	</div>
 
 	<!-- the page's bottom breathes: a paper band the columns stop short of;
@@ -235,6 +250,19 @@
 			minmax(0, 500fr) minmax(0, 38fr) minmax(0, 668fr)
 			minmax(0, 38fr) minmax(0, 540fr);
 		align-items: start; /* `stretch` would make the rails full-height and kill sticky */
+		transition:
+			grid-template-columns 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+			padding-right 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+	/* once the timeline withdraws (methodology onward) the text and the
+	   figure column CENTRE (the author, 2026-09-02): the first track gives
+	   up its rail width, the right padding balances it — 231+38 = 269 both
+	   sides of the 668+38+540 pair, the fr values still px at 1920 */
+	.cols.centred {
+		grid-template-columns:
+			minmax(0, 231fr) minmax(0, 38fr) minmax(0, 668fr)
+			minmax(0, 38fr) minmax(0, 540fr);
+		padding-right: 15.0785%; /* 269 / 1784 */
 	}
 	/* the column titles are the dataset card's own name style — the same face,
 	   weight, size ramp, line-height and tracking as «ANTI-NERO PROGRAMME»
@@ -368,11 +396,13 @@
 	.beat :global(p) {
 		scroll-margin-top: 160px;
 	}
-
-	.coda {
-		max-width: var(--content-w);
-		margin: var(--sp-12) auto 0;
+	/* the bibliography reads as apparatus, not narrative: two sizes under
+	   the 16 px main text (the author, 2026-09-02) */
+	#bibliography :global(.prose) {
+		font-size: var(--fs-13);
+		line-height: 1.5;
 	}
+
 	.bband {
 		position: fixed;
 		left: 0;
