@@ -1,22 +1,21 @@
 <script lang="ts">
 	/**
 	 * The story's right column — the author's Page01 artboard, FOLLOWING THE
-	 * READER (their ruling, 2026-09-02): a square image slot showing the
-	 * figure IN FORCE at the passage being read (it changes at the author's
-	 * own `[FIGURE xx: name]` markers), the «Figure xx _ …» caption written
-	 * under it, and under that ONLY the footnotes of the paragraphs currently
-	 * on screen, in two columns behind a small «Footnote» label — never more
-	 * than the screen's own notes, so nothing scrolls.
+	 * READER: the figure IN FORCE at the passage being read (it changes at
+	 * the author's own `[FIGURE xx: name]` markers) with the caption under it.
+	 *
+	 * ONE PLACEMENT FOR EVERY FIGURE (the author, 2026-09-03): the figure
+	 * block sits on the column's vertical centre SET 60 PX LOWER, its caption
+	 * 7 px below the image — grid, single, carousel, live drawing and the
+	 * placeholder square alike.
 	 *
 	 * A figure shows, in order of preference: its LIVE drawing
 	 * (`lib/story/figures.ts`), the author's DELIVERED image(s)
-	 * (`lib/story/figureImages.ts` — figure 01 as their 6×3 grid of 18
-	 * filling the column, figure 02 as its a+b pair, the rest single), or
-	 * the named placeholder square. For a LIVE figure
-	 * (keyed by the author's own figure number):
-	 * then the square mounts that drawing while its figure is in force, and
-	 * the figure's credit line (imagery and data attributions) prints under
-	 * the author's caption.
+	 * (`lib/story/figureImages.ts` — figure 01 as packs of nine, figure 02 as
+	 * a CAROUSEL with a small arrow, the rest single), or the named
+	 * placeholder square. The footnotes moved to the timeline column
+	 * (2026-09-03, `StoryNotes.svelte`); the packing machinery below lies
+	 * DORMANT (`notes={[]}`), kept for any return.
 	 */
 	import { FIGURES } from '$lib/story/figures';
 	import { FIGURE_IMAGES } from '$lib/story/figureImages';
@@ -25,29 +24,32 @@
 		figure: { n: number; name: string } | null;
 		notes: { n: number; dist: number; parts: { text: string; href?: string }[] }[];
 		/** the introduction's staged reveal (the author, 2026-09-02): 0 = the
-		 *  grid shows nothing yet, 1 = its first pack of nine at full width,
-		 *  2 = all eighteen. Figures other than the grid ignore it. */
+		 *  grid shows nothing yet, 1 = its first pack of nine, 2 = the second
+		 *  pack replacing it. Figures other than the grid ignore it. */
 		stage?: number;
 	}
 	let { figure, notes, stage = 2 }: Props = $props();
 
 	const pad = (n: number) => String(n).padStart(2, '0');
+	/** the DISPLAYED figure number (the author, 2026-09-03): the grid's 18
+	 *  images are figures 1-18, so every later figure prints its marker
+	 *  number + 17 — marker 02 shows as Figure 19, marker 13 as Figure 30.
+	 *  The author's own [FIGURE xx] markers keep their numbering. */
+	const dispN = (n: number) => n + 17;
 	/** the author's delivered image(s) for the figure in force, if any */
 	const img = $derived(figure ? (FIGURE_IMAGES[figure.n] ?? null) : null);
 
+	/** the carousel's position — back to the first image on a figure change */
+	let pairIdx = $state(0);
+	$effect(() => {
+		void figure?.n;
+		pairIdx = 0;
+	});
+
 	/**
-	 * WHOLE NOTES ONLY, PACKED BY NOTE (the author, 2026-09-02; refit the
-	 * same day after their «8 and 2» report): a note never breaks across the
-	 * two columns — CSS `columns` split notes mid-sentence, which read badly.
-	 * Every candidate is measured at column width in a hidden copy, admission
-	 * is nearest-to-the-reading-line first by TRUE FIT (a note that cannot
-	 * fit is skipped, never a reason to drop its neighbours), the packing
-	 * preserves number order (one cut: left run, right run), and the
-	 * READING paragraph's own notes, when they cannot all stack whole,
-	 * go TOGETHER to ONE full-width flow that may scroll (the author's
-	 * one-column ruling for text-heavy notes, 2026-09-02) — the only
-	 * exception to no-scroll, because the alternative was notes that
-	 * never appeared at all (5-7 total twice the block).
+	 * WHOLE NOTES ONLY, PACKED BY NOTE — the fitting machinery of the
+	 * one-time figure-column footnotes; dormant since the notes moved to the
+	 * timeline column (`StoryNotes.svelte` carries the same logic there).
 	 */
 	const GAP = 28; // --sp-7, the column gap
 	const LI_MARGIN = 8; // --sp-2, under each note
@@ -76,7 +78,6 @@
 			const nt = list[i];
 			if (nt) heights.set(nt.n, li.getBoundingClientRect().height + LI_MARGIN);
 		});
-		// the same notes at FULL width — what the one-column spread will use
 		const heightsWide = new Map<number, number>();
 		if (measureWideEl) {
 			[...measureWideEl.children].forEach((li, i) => {
@@ -84,22 +85,15 @@
 				if (nt) heightsWide.set(nt.n, li.getBoundingClientRect().height + LI_MARGIN);
 			});
 		}
-		// admit nearest-first, by TRUE FIT (the author's report, 2026-09-02:
-		// the old farthest-drop cascaded one oversized note into an EMPTY
-		// block): a candidate joins only if the admitted set plus it still
-		// packs — one that cannot fit is SKIPPED, never a reason to drop
-		// its neighbours. Packing preserves NUMBER ORDER: the admitted
-		// notes, sorted by n, are cut ONCE — the first run reads down the
-		// left stack, the rest down the right.
 		const byNeed = [...list].sort((a, b) => a.dist - b.dist || a.n - b.n);
 		const hOf = (n: number) => heights.get(n) ?? 0;
-		const split = (
-			set: number[],
-			cap: number
-		): { left: number[]; right: number[] } | null => {
+		const split = (set: number[], cap: number): { left: number[]; right: number[] } | null => {
 			const seq = [...set].sort((a, b) => a - b);
 			const hs = seq.map(hOf);
-			for (let cut = 0; cut <= seq.length; cut++) {
+			// the LARGEST left run that fits: the left column fills first — the
+			// author's screenshot had a lone note parked right with the left
+			// empty, because the empty-left cut was tried first (2026-09-03)
+			for (let cut = seq.length; cut >= 0; cut--) {
 				const hL = hs.slice(0, cut).reduce((s, x) => s + x, 0);
 				const hR = hs.slice(cut).reduce((s, x) => s + x, 0);
 				if (hL <= cap && hR <= cap) {
@@ -108,11 +102,6 @@
 			}
 			return null;
 		};
-		// the READING paragraph's own notes are a UNIT: when they cannot all
-		// stack whole (one taller than a column, or an essay-sized pile like
-		// notes 5-7 on one paragraph), they ALL go to the spread flow —
-		// number order, two columns, scrolling inside that block alone —
-		// because the alternative was notes that never appeared at all
 		let spread: number[] = [];
 		let spreadH = 0;
 		let stackH = H;
@@ -150,43 +139,58 @@
 	);
 </script>
 
-<div class="fig" class:tall={img?.kind === 'grid'}>
-	<div class="box" class:gridbox={img?.kind === 'grid'} class:pairbox={img?.kind === 'pair'}>
-		{#if figure}
-			{#key figure.n}
-				{@const live = FIGURES[figure.n]}
-				{#if live}
-					<live.component />
-				{:else if img?.kind === 'grid'}
-					<!-- the author's 18 squares in packs of NINE (their ruling: the
-					     second pack REPLACES the first, the full grid never shows):
-					     3×3 at full width, centred on the column's height -->
-					{#if stage >= 1}
-						<div class="grid18">
-							{#each img.srcs.slice(stage < 2 ? 0 : 9, stage < 2 ? 9 : 18) as src, gi (src)}
-								<img
-									{src}
-									alt={`${figure.name} — ${(stage < 2 ? 1 : 10) + gi} of ${img.srcs.length}`}
-									loading="lazy"
-								/>
+<div class="fig">
+	<!-- every figure on ONE placement: centred 60 px low, caption 7 px under -->
+	<div class="stack">
+		<div class="box" class:gridbox={img?.kind === 'grid'}>
+			{#if figure}
+				{#key figure.n}
+					{@const live = FIGURES[figure.n]}
+					{#if live}
+						<live.component />
+					{:else if img?.kind === 'grid'}
+						<!-- the author's 18 squares in packs of NINE (the second pack
+						     REPLACES the first; the full grid never shows) -->
+						{#if stage >= 1}
+							<div class="cells">
+								{#each img.srcs.slice(stage < 2 ? 0 : 9, stage < 2 ? 9 : 18) as src, gi (src)}
+									<img
+										{src}
+										alt={`${figure.name} — ${(stage < 2 ? 1 : 10) + gi} of ${img.srcs.length}`}
+										loading="lazy"
+									/>
+								{/each}
+							</div>
+						{/if}
+					{:else if img?.kind === 'pair'}
+						<!-- figure 02 as a CAROUSEL: one image at a time, a small
+						     arrow to interchange (the author, 2026-09-03) -->
+						{#key pairIdx}
+							<img
+								class="whole"
+								src={img.srcs[pairIdx]}
+								alt={`${figure.name} — ${pairIdx + 1} of ${img.srcs.length}`}
+							/>
+						{/key}
+						<button
+							class="adv"
+							type="button"
+							aria-label="next image"
+							onclick={() => (pairIdx = (pairIdx + 1) % (img?.srcs.length ?? 1))}>›</button
+						>
+						<div class="dots" aria-hidden="true">
+							{#each img.srcs as _, di (di)}
+								<span class:on={di === pairIdx}></span>
 							{/each}
 						</div>
+					{:else if img}
+						<img class="whole" src={img.srcs[0]} alt={figure.name} />
+					{:else}
+						<span class="ph">figure {pad(dispN(figure.n))} · {figure.name}</span>
 					{/if}
-				{:else if img?.kind === 'pair'}
-					{#each img.srcs as src, pi (src)}
-						<img class="half" {src} alt={`${figure.name} — ${pi + 1} of 2`} />
-					{/each}
-				{:else if img}
-					<img class="whole" src={img.srcs[0]} alt={figure.name} />
-				{:else}
-					<span class="ph">figure {pad(figure.n)} · {figure.name}</span>
-				{/if}
-			{/key}
-		{/if}
-	</div>
-	<!-- the caption line the artboard writes under the image; the grid's
-	     packs carry the author's own wording, the range following the pack -->
-	<div>
+				{/key}
+			{/if}
+		</div>
 		<p class="cap">
 			{#if figure && img?.kind === 'grid'}
 				{#if stage >= 1}
@@ -195,8 +199,8 @@
 						: 'Figures 10 to 18: Images from fires worldwide.'}
 					All images are credited to their corresponding authors <a href="#sources">here</a>.
 				{/if}
-			{:else}
-				{figure ? `Figure ${pad(figure.n)} _ ${figure.name}` : ''}
+			{:else if figure}
+				{`Figure ${pad(dispN(figure.n))} _ ${figure.name}`}
 			{/if}
 		</p>
 		{#if figure && FIGURES[figure.n]?.credit}
@@ -206,8 +210,6 @@
 	{#if notes.length}
 		<div class="fnblock" bind:clientHeight={availH} bind:clientWidth={availW}>
 			{#if spreadNotes.length}
-				<!-- the reading paragraph's notes when they cannot stack whole:
-				     ONE full-width column, scrolling inside if it must -->
 				<ul class="notes spread" style:height={`${packed?.spreadH ?? 0}px`}>
 					{#each spreadNotes as sn (sn.n)}
 						<li>{sn.n}.
@@ -220,8 +222,6 @@
 					{/each}
 				</ul>
 			{/if}
-			<!-- two stacks packed BY NOTE — a note never splits across the gap;
-			     numbers inline, each citation chunk a link to its URL -->
 			<div class="cols2">
 				{#each columns as col, c (c)}
 					<ul class="notes">
@@ -235,8 +235,6 @@
 					</ul>
 				{/each}
 			</div>
-			<!-- the hidden measurers: every candidate at the stack column's
-			     width, and once more at the block's full width for the spread -->
 			<ul class="notes measure" bind:this={measureEl} style:width={`${colW}px`} aria-hidden="true">
 				{#each notes as n (n.n)}
 					<li>{n.n}.
@@ -257,17 +255,22 @@
 
 <style>
 	.fig {
-		display: grid;
-		grid-template-rows: auto auto minmax(0, 1fr);
-		row-gap: var(--sp-2); /* the caption sits close under the rectangle */
+		position: relative;
 		width: 100%;
 		height: 100%;
 		/* caption and notes are set to the IMAGE's width, not the column's */
 		--fig-w: min(100%, 540px);
 	}
-	/* no alignment tricks: the page grid gives this column exactly the
-	   content's 540 px (the author, 2026-09-02), so image, caption and
-	   notes share both edges and the right one sits on the page margin */
+	/* the one placement (the author, 2026-09-03): the block rides the
+	   column's vertical centre 60 px LOW, the caption 7 px under the image */
+	.stack {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		transform: translateY(60px);
+	}
 	.box {
 		/* the artboard's square, inset in its column */
 		width: var(--fig-w);
@@ -275,36 +278,20 @@
 		background: var(--paper-2);
 		display: grid;
 		place-items: center;
-	}
-	/* figure 01's grid takes the WHOLE column height (the author,
-	   2026-09-02: its footnotes moved under the timeline to make the
-	   room): square cells sized by the six rows, centred */
-	.fig.tall {
-		grid-template-rows: minmax(0, 1fr) auto auto;
+		position: relative;
 	}
 	.box.gridbox {
 		aspect-ratio: auto;
-		height: 100%;
 		background: none;
-		place-items: stretch;
-		/* the grid overlays the box absolutely: a percentage height chained
-		   through grid items never resolved (the grid grew to its content,
-		   1.084 px over an 875 px box, and drew over the caption) */
-		position: relative;
 	}
-	/* one pack of nine at a time: 3×3 at the column's full width — the
-	   author's squares stay square (177 px, width-driven) — vertically
-	   CENTRED on the column's height (the author, 2026-09-02) */
-	.grid18 {
-		position: absolute;
-		inset: 0;
+	.cells {
+		width: 100%;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		grid-auto-rows: max-content;
-		align-content: center;
 		gap: 4px;
 	}
-	.grid18 img {
+	.cells img {
 		width: 100%;
 		height: auto;
 		aspect-ratio: 1;
@@ -320,87 +307,63 @@
 			opacity: 1;
 		}
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.grid18 img {
-			animation: none;
-		}
-	}
-	/* figure 02's a + b side by side, each its own square */
-	.box.pairbox {
-		aspect-ratio: auto;
-		grid-template-columns: 1fr 1fr;
-		gap: 4px;
-		background: none;
-	}
-	.box img.half {
-		width: 100%;
-		aspect-ratio: 1;
-		object-fit: cover;
-		display: block;
-	}
 	.box img.whole {
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
 		display: block;
+		animation: figfade 0.45s ease;
+	}
+	/* the carousel's small arrow, riding the image's right edge — dark, so
+	   it reads on the author's white map images (2026-09-03) */
+	.adv {
+		position: absolute;
+		right: 8px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 30px;
+		height: 30px;
+		border: 0;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, 0.62);
+		color: #fff;
+		font-size: 20px;
+		line-height: 1;
+		cursor: pointer;
+		display: grid;
+		place-items: center;
+		padding: 0 0 3px;
+	}
+	.adv:hover {
+		background: rgba(0, 0, 0, 0.85);
+	}
+	/* which of the pack is on show */
+	.dots {
+		position: absolute;
+		bottom: 8px;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		gap: 6px;
+	}
+	.dots span {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, 0.25);
+	}
+	.dots span.on {
+		background: rgba(0, 0, 0, 0.8);
 	}
 	.cap {
-		margin: 0;
+		margin: 7px 0 0;
 		max-width: var(--fig-w);
 		font-size: var(--fs-12);
 		line-height: 1.35;
 		color: var(--ink-soft);
 		min-height: 1.35em;
 	}
-	/* the artboard's footnote block: a small «Footnote» label, then the notes
-	   in TWO columns to the image's width, 12 px light. Only the visible
-	   paragraphs' notes print, so the set stays short by construction. */
-	.fnblock {
-		position: relative; /* anchors the hidden measurer */
-		max-width: var(--fig-w);
-		min-height: 0;
-		margin-top: var(--sp-3);
-		overflow: hidden; /* backstop only — the fit keeps whole notes */
-	}
-	.measure {
-		position: absolute;
-		top: 0;
-		left: 0;
-		visibility: hidden;
-		columns: auto;
-		column-gap: 0;
-	}
-	.cols2 {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		column-gap: var(--sp-7);
-		align-items: start;
-	}
-	/* the text-heavy state reads as ONE full-width column (the author,
-	   2026-09-02) — no mid-sentence jump across a gap; it scrolls inside
-	   only when even the whole block cannot hold it */
-	.spread {
-		overflow-y: auto;
-		margin-bottom: var(--sp-2);
-	}
-	.notes {
-		margin: 0;
-		padding-left: 0;
-		list-style: none;
-		font-size: var(--fs-12);
-		line-height: 1.3;
-		font-weight: 300;
-		color: var(--ink-soft);
-	}
-	.notes li {
-		margin-bottom: var(--sp-2);
-		/* the number hangs; long unbroken strings wrap inside the column */
-		padding-left: 1.5em;
-		text-indent: -1.5em;
-		overflow-wrap: anywhere;
-	}
-	/* a note that carries its source: the whole text is the link */
-	.notes a {
+	.cap a {
 		color: inherit;
 		text-decoration: underline;
 		text-underline-offset: 2px;
@@ -419,10 +382,50 @@
 		color: var(--ink-faint);
 	}
 
-	@media (max-width: 1100px) {
-		/* released: the rail becomes a plain block under the text */
-		.fig {
-			height: auto;
-		}
+	/* ── the dormant footnote block (the notes live on the timeline column
+	      since 2026-09-03; `notes={[]}` keeps this unrendered) ── */
+	.fnblock {
+		position: relative;
+		max-width: var(--fig-w);
+		min-height: 0;
+		margin-top: var(--sp-3);
+		overflow: hidden;
+	}
+	.spread {
+		overflow-y: auto;
+		margin-bottom: var(--sp-2);
+	}
+	.measure {
+		position: absolute;
+		top: 0;
+		left: 0;
+		visibility: hidden;
+	}
+	.cols2 {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		column-gap: var(--sp-7);
+		align-items: start;
+	}
+	.notes {
+		margin: 0;
+		padding-left: 0;
+		list-style: none;
+		font-size: var(--fs-12);
+		line-height: 1.3;
+		font-weight: 300;
+		color: var(--ink-soft);
+	}
+	.notes li {
+		margin-bottom: var(--sp-2);
+		padding-left: 1.5em;
+		text-indent: -1.5em;
+		overflow-wrap: anywhere;
+	}
+	.notes a {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		text-decoration-thickness: 0.5px;
 	}
 </style>

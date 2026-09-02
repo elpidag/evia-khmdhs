@@ -23,6 +23,7 @@
 	import { BRAND } from '$lib/landing/brand';
 	import StoryTimeline from '$lib/story/StoryTimeline.svelte';
 	import StoryFigure from '$lib/story/StoryFigure.svelte';
+	import StoryNotes from '$lib/story/StoryNotes.svelte';
 	import { EVENTS, type StoryEvent } from '$lib/story/events';
 	import { BLOCKS, BLOCK_INDEX, NOTES, figureAt, timelineNote } from '$lib/story/content';
 	import { resolveBindings } from '$lib/story/bindings';
@@ -193,12 +194,6 @@
 		return Math.min(n, 4);
 	});
 
-	/** while the timeline is COLLAPSED (the introduction) the visible
-	 *  footnotes print on ITS lower part instead of the right column (the
-	 *  author, 2026-09-02: notes 1 and 2 left, the room right for the
-	 *  figure 01 grid) */
-	const notesLeft = $derived(timelineOn && !expanded);
-
 	/** only the footnotes of the paragraphs on screen, in document order */
 	const shownNotes = $derived.by(() => {
 		const out: {
@@ -221,6 +216,15 @@
 	/** the left block carries the INTRODUCTION's own notes only — a
 	 *  chronology note peeking in at the bottom waits for the spread */
 	const introNotes = $derived(shownNotes.filter((x) => x.sec === 'introduction'));
+
+	/** EVERY note presents on the timeline column's lower part — where
+	 *  notes 1 and 2 were shown (the author's switch, 2026-09-03); the
+	 *  figure column keeps figures only. Collapsed, the intro's own notes
+	 *  wait for stage 2; spread, the visible paragraphs' notes. */
+	let railH = $state(0);
+	const railNotes = $derived(
+		!timelineOn ? [] : expanded ? shownNotes : introStage >= 2 ? introNotes : []
+	);
 
 	/** the events the active paragraph names — lit on the timeline */
 	const activeIds = $derived(activeBlock ? (eventsAtBlock.get(activeBlock) ?? []).map((e) => e.id) : []);
@@ -257,7 +261,7 @@
 		     titles, so the two columns start aligned; it withdraws with its
 		     rail once the reader leaves the chronology -->
 		<h2 class="head tl-head" class:off={!timelineOn}>TIMELINE</h2>
-		<aside class="rail tl" class:off={!timelineOn}>
+		<aside class="rail tl" class:off={!timelineOn} bind:clientHeight={railH}>
 			<StoryTimeline
 				{expanded}
 				{progress}
@@ -266,17 +270,11 @@
 				onSelect={goToEvent}
 				note={timelineNote()}
 			/>
-			{#if notesLeft && introStage >= 2 && introNotes.length}
-				<!-- the introduction's footnotes, on the timeline's lower part -->
-				<ul class="tlnotes">
-					{#each introNotes as n (n.n)}
-						<li>{n.n}.
-							{#each n.parts as p, i (i)}{#if p.href}<a href={p.href} target="_blank" rel="noopener"
-									>{p.text}</a
-								>{:else}{p.text}{/if}{/each}
-						</li>
-					{/each}
-				</ul>
+			{#if railNotes.length}
+				<!-- the footnotes, on the timeline's lower part (the author) -->
+				<div class="tlnb">
+					<StoryNotes notes={railNotes} budget={(railH || 0) * 0.44} />
+				</div>
 			{/if}
 		</aside>
 
@@ -304,7 +302,9 @@
 				<!-- the bibliography stands alone — no figure beside it (author);
 				     while the notes print under the timeline the right column
 				     passes none, and the figure takes the whole height -->
-				<StoryFigure {figure} notes={notesLeft ? [] : shownNotes} stage={introStage} />
+				<!-- the figure column keeps FIGURES only since the notes moved
+				     left (2026-09-03); StoryFigure's own block lies dormant -->
+				<StoryFigure {figure} notes={[]} stage={introStage} />
 			{/if}
 		</aside>
 	</div>
@@ -333,29 +333,30 @@
 	   520/30/570/70/594: the figure track is exactly its content's 540 px —
 	   image, caption and notes then share both edges, the right one on the
 	   page margin — and the spare went to the narrative, less the author's
-	   trims of 2026-09-02 (6, 10 and 10 px) and its EQUAL 48 px gutters
-	   either side. The fr values are
+	   trims of 2026-09-02/03 down to the author's 556 — the half-frame
+	   measure of the dataset pages — and its EQUAL 94 px gutters either
+	   side. The fr values are
 	   READ AS PIXELS AT 1920, which holds only while they sum to 1784 (the
 	   content width inside the page margins) — keep that sum when retuning. */
 	.cols {
 		display: grid;
 		grid-template-columns:
-			minmax(0, 500fr) minmax(0, 48fr) minmax(0, 648fr)
-			minmax(0, 48fr) minmax(0, 540fr);
+			minmax(0, 500fr) minmax(0, 94fr) minmax(0, 556fr)
+			minmax(0, 94fr) minmax(0, 540fr);
 		align-items: start; /* `stretch` would make the rails full-height and kill sticky */
 		transition:
 			grid-template-columns 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
 			padding-right 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 	}
 	/* once the timeline withdraws (methodology onward) the text and the
-	   figure column CENTRE (the author, 2026-09-02): the first track gives
-	   up its rail width, the right padding balances it — 231+38 = 269 both
-	   sides of the 668+38+540 pair, the fr values still px at 1920 */
+	   figure column CENTRE at the explore-more pages' 1152 px (the author,
+	   2026-09-03): 556 + 56 + 540 = 1152, with 260+56 = 316 of whitespace
+	   on the left and the same as padding on the right */
 	.cols.centred {
 		grid-template-columns:
-			minmax(0, 231fr) minmax(0, 48fr) minmax(0, 648fr)
-			minmax(0, 48fr) minmax(0, 540fr);
-		padding-right: 15.0785%; /* 269 / 1784 */
+			minmax(0, 260fr) minmax(0, 56fr) minmax(0, 556fr)
+			minmax(0, 56fr) minmax(0, 540fr);
+		padding-right: 17.713%; /* 316 / 1784 */
 	}
 	/* the column titles are the dataset card's own name style — the same face,
 	   weight, size ramp, line-height and tracking as «ANTI-NERO PROGRAMME»
@@ -428,30 +429,9 @@
 		flex: 1 1 auto;
 		min-height: 0;
 	}
-	.tlnotes {
+	.tlnb {
 		flex: none;
-		margin: var(--sp-4) 0 0;
-		padding: 0;
-		list-style: none;
-		/* the full rail, so the left gap to the text reads as the same 43 px
-		   as the right one (author, 2026-09-02) */
-		max-width: none;
-		font-size: var(--fs-12);
-		line-height: 1.3;
-		font-weight: 300;
-		color: var(--ink-soft);
-	}
-	.tlnotes li {
-		margin-bottom: var(--sp-2);
-		padding-left: 1.5em;
-		text-indent: -1.5em;
-		overflow-wrap: anywhere;
-	}
-	.tlnotes a {
-		color: inherit;
-		text-decoration: underline;
-		text-underline-offset: 2px;
-		text-decoration-thickness: 0.5px;
+		margin-top: var(--sp-4);
 	}
 	.rail.tl.off {
 		opacity: 0;

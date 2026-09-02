@@ -12547,3 +12547,58 @@ corresponding authors here.» — and «here» LINKS the new SOURCES section,
 which stands after BIBLIOGRAPHY (its own chapter and anchor, figure-free
 like the bibliography). `src/content/story/sources.md` is created EMPTY:
 the author is writing the credits text and will deliver it in that file.
+
+## 2026-09-03 — the narrative settles at 556 px
+
+The author set the story's text column to 556 px — the half-frame measure
+of the dataset pages' unfolded charts — the freed width split equally
+into the two gutters as before (500 · 94 · 556 · 94 · 540, sum 1784; the
+centred variant follows). Measured: 556,5 with 94,1 both sides; ~69
+characters of 16 px type.
+
+## 2026-09-03 — every footnote presents where notes 1 and 2 are shown
+
+The author's switch: ALL footnotes now present on the timeline column's
+lower part — where the introduction's notes 1-2 already lived — and the
+figure column keeps FIGURES only. `StoryNotes.svelte` carries the figure
+column's fitting machinery there (whole notes, hidden-copy measurement,
+nearest-first true-fit admission, number-order two-stack packing, the
+active paragraph's unfitting notes to one full-width flow), given a
+HEIGHT BUDGET of 44% of the rail by the page instead of a grid row; the
+timeline (collapsed or spread) flexes above it, its scale and pan
+adapting. Collapsed, the intro's notes still wait for stage 2; spread,
+the visible paragraphs' notes show. StoryFigure's own block lies dormant
+(`notes={[]}`), its machinery kept. Verified by the per-note walk: all
+18 render on the left rail at their citing paragraphs — the three
+transitional cases (1 before the Greece dock, 3-4 before the chronology
+title docks) appear the moment the author's own stage rules fire — and
+the right column carries zero notes everywhere.
+
+## 2026-09-03 — five rulings: the grid drops 20 px with its caption, the pair stacks at 75%, the centred pair measures 1152, the collapsed timeline loses its titles, LEGISLATIVE
+
+The author's round: (1) the 3×3 grid sits 20 px below the column's
+centre with its caption RIGHT UNDER the cells (measured: block mid =
+box mid + 20, caption 10 px below); (2) figure 02's two images stack ONE
+BELOW THE OTHER at 75% of the 540 slot (405×405 each); (3) the centred
+two-column state (methodology onward) totals the explore-more pages'
+1152 px — 556 + 56 + 540, whitespace 316 a side (measured 1153 with
+383,5 = 383,5 margins); (4) the COLLAPSED timeline prints no category
+titles — the lanes name themselves only when they spread; (5) the two
+lane titles say LEGISLATIVE changes, not LEGISLATION.
+
+## 2026-09-03 — the notes' left column fills first, the carousel is seen, the figures renumber on display
+
+Three author reports in one message. (1) «Something weird» in the notes:
+the number-order split searched its cut from EMPTY-LEFT upward, so a set
+that fit one column parked in the RIGHT stack with the left empty (their
+screenshot: note 4 full-width, note 3 alone at the right); the search
+now takes the LARGEST left run that fits (StoryNotes + the dormant
+StoryFigure copy). Verified at the same position: left [3,4], right
+empty, no spread. (2) The carousel WAS advancing but its white arrow was
+invisible on the author's white map images: the arrow is now a dark chip
+and two indicator dots say which of the pack is shown. (3) DISPLAY
+NUMBERING runs on from the grid: its 18 images are figures 1-18, so
+every later figure prints marker+17 — «Figure 19 _ Fires in 2007» …
+marker 13 as Figure 30, the placeholder squares included. The author's
+own [FIGURE xx] markers and every file keep their numbering; the map is
+one presentational function (`dispN`).

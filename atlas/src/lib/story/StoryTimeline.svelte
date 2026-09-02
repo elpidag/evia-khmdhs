@@ -85,13 +85,13 @@
 			legX: 66,
 			legW: 106,
 			color: '#606060',
-			label: 'global events & EU legislation changes'
+			label: 'global events & EU legislative changes'
 		},
 		greece: {
 			legX: 235,
 			legW: 140,
 			color: '#000000',
-			label: 'events & legislation changes in Greece'
+			label: 'events & legislative changes in Greece'
 		},
 		fire: { legX: 383, legW: 130, color: '#a6312d', label: 'fires in Greece' }
 	};
@@ -101,17 +101,12 @@
 	 * scale anything inside it is illegible (the author, 2026-09-02). It sits
 	 * in the UPPER part of the timeline, where the early years are sparse, so
 	 * the axis takes the whole rail and nothing is reserved below.
-	 * The two long lane titles print on two lines each (the author's split).
-	 * Since the author's own SVG edit of the same day, the collapsed drawing
-	 * shifts RIGHT (`cx`) so the disclaimer gets a real measure — the rail's
-	 * left half, right-aligned toward the years — and the line, years and
-	 * dots sit just left of the titles; spreading returns the shift to 0.
+	 * The collapsed state prints NO category titles since 2026-09-03 (the
+	 * author) — the lanes name themselves only when they spread. Since the
+	 * author's own SVG edit, the collapsed drawing shifts RIGHT (`cx`) so
+	 * the disclaimer gets a real measure — the rail's left half,
+	 * right-aligned toward the years.
 	 */
-	const KEY_LINES: Record<Lane, string[]> = {
-		world: ['GLOBAL EVENTS & EU', 'LEGISLATION CHANGES'],
-		greece: ['EVENTS & LEGISLATION', 'CHANGES IN GREECE'],
-		fire: ['FIRES IN GREECE']
-	};
 
 	const lit = $derived(new Set(activeIds));
 
@@ -320,13 +315,6 @@
 		{#if note}
 			<p class="ndisc">{note}</p>
 		{/if}
-		<ul class="nkeys">
-			{#each placed as l (l.lane)}
-				<li style:color={l.color}>
-					{#each KEY_LINES[l.lane] as line (line)}<span>{line}</span>{/each}
-				</li>
-			{/each}
-		</ul>
 	</div>
 </div>
 
@@ -499,29 +487,6 @@
 		line-height: 1.3;
 		text-align: right;
 		color: var(--ink-soft);
-	}
-	.nkeys {
-		position: absolute;
-		left: calc(var(--split) + 14px);
-		/* to the rail's edge: the text gutter on the other side of the text
-		   is 43 px, and the titles' ink must answer it (author, 2026-09-02) */
-		right: 0;
-		top: 36px;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-		font-family: var(--font-display);
-		font-weight: 700;
-		font-size: 11.5px;
-		line-height: 1.25;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
-	}
-	.nkeys span {
-		display: block;
 	}
 
 	.blocks {

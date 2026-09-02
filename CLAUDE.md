@@ -1849,7 +1849,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   next (pure CSS; the band keeps only TIMELINE; the `::after` four-track
   paper and the topmost-visible logic are gone); a **48 px breathing band**
   (`--story-band`, fixed `.bband` paper) ends every column short of the
-  window edge, the rails subtracting it; and the footnote block admits
+  window edge, the rails subtracting it; and the footnotes present ON THE TIMELINE COLUMN'S LOWER PART since 2026-09-03 (`StoryNotes.svelte`, a 44%-of-rail budget, the timeline flexing above; StoryFigure's own block lies dormant with `notes={[]}`) — the block admits
   **WHOLE NOTES ONLY, PACKED BY NOTE** — measured in a hidden column-width
   copy, admitted nearest-to-the-reading-line first (`dist` rides on each
   note) by TRUE FIT since the 2026-09-02 refit (a note that cannot fit is
