@@ -132,7 +132,3 @@ the forests.’ Source: Ethnos.
 ## 13 — prints as Figure 30
 
 fires in Evia
-
-## 19a
-Peloponnese, 2007. False-colour Landsat composite showing the spatial extent
-of areas affected by the 2007 fires. Burned areas appear in red and magenta tones.
