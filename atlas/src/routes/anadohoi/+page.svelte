@@ -33,6 +33,11 @@
 	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
+
+	/** PROJECTS AND FIRES THAT TRIGGERED THEM is OFF the page (author,
+	 *  2026-09-03) — the frame, its layers and its data all stay in the
+	 *  repo for a possible return; flip this to bring it back. */
+	const SHOW_FIRES_FRAME = false;
 	const o = $derived(data.o);
 	const k = $derived(o.kpis);
 
@@ -1144,91 +1149,93 @@
 {/if}
 
 <div class="firesband">
-<ChartFrame
-	title="PROJECTS AND FIRES THAT TRIGGERED THEM"
-	titleColor="#000"
-	caveat="Burnt-area perimeters: © European Union, Copernicus Emergency Management Service — EFFIS (satellite rapid-mapping estimates, not official οριοθετήσεις). Relief: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. The fire each project answers to is the one its act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
-	anchor="fires"
-	methodology="anadohoi"
->
-	<div class="firesgrid">
-		<div class="fmcol">
-			<div class="reliefbar">
-				{#if RELIEF_TOGGLE}
-				<div class="relieftoggle" role="group" aria-label="Relief colouring">
-					<button
-						type="button"
-						class:active={reliefStyle === 'grey'}
-						onclick={() => (reliefStyle = 'grey')}>GREYSCALE</button
-					>
-					<button
-						type="button"
-						class:active={reliefStyle === 'hypso'}
-						onclick={() => (reliefStyle = 'hypso')}>ELEVATION</button
-					>
-				</div>
-				{/if}
-				{#if reliefStyle === 'hypso'}
-					<div class="hypsokey" aria-hidden="true">
-						<span>0 μ</span>
-						<i></i>
-						<span>2.900 μ</span>
-					</div>
-				{/if}
-			</div>
-			<Defer height={760}>
-				<div class="mapscale">
-					<div class="map-wrap">
-						<PaperMap
-							interactive={false}
-							width={640}
-							height={620}
-							view={MAP_VIEW}
-							focusPe={firePe}
-							onRegionClick={(pe) => (firePe = firePe === pe ? null : pe)}
-							relief={reliefAssets}
+{#if SHOW_FIRES_FRAME}
+	<ChartFrame
+		title="PROJECTS AND FIRES THAT TRIGGERED THEM"
+		titleColor="#000"
+		caveat="Burnt-area perimeters: © European Union, Copernicus Emergency Management Service — EFFIS (satellite rapid-mapping estimates, not official οριοθετήσεις). Relief: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. The fire each project answers to is the one its act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
+		anchor="fires"
+		methodology="anadohoi"
+	>
+		<div class="firesgrid">
+			<div class="fmcol">
+				<div class="reliefbar">
+					{#if RELIEF_TOGGLE}
+					<div class="relieftoggle" role="group" aria-label="Relief colouring">
+						<button
+							type="button"
+							class:active={reliefStyle === 'grey'}
+							onclick={() => (reliefStyle = 'grey')}>GREYSCALE</button
 						>
-							{#snippet overlay(ctx)}
-								{#if firesFc}
-									<FiresLayer
-										{ctx}
-										features={firesShown}
-										tipOf={(f) =>
-											`<strong>${f.properties.yr}</strong> · ${grInt(f.properties.ha)} ha${f.properties.name ? ` · ${f.properties.name}` : ''}`}
-									/>
-								{/if}
-							{/snippet}
-						</PaperMap>
+						<button
+							type="button"
+							class:active={reliefStyle === 'hypso'}
+							onclick={() => (reliefStyle = 'hypso')}>ELEVATION</button
+						>
 					</div>
-					{#if fireYears}
-						<div class="yearscale" aria-hidden="true">
-							<span>{fireYears.lo}</span>
+					{/if}
+					{#if reliefStyle === 'hypso'}
+						<div class="hypsokey" aria-hidden="true">
+							<span>0 μ</span>
 							<i></i>
-							<span>{fireYears.hi}</span>
+							<span>2.900 μ</span>
 						</div>
 					{/if}
 				</div>
-			</Defer>
-		</div>
-		<div class="fire-grid">
-			{#each fireCards as f (f.fire)}
-				<div class="fire-card">
-					<div class="fire-name">{fireEn(f.fire)}</div>
-					<div class="fire-bar">
-						<div
-							class="fire-fill"
-							style:width={`${(100 * f.completed) / f.n}%`}
-						></div>
+				<Defer height={760}>
+					<div class="mapscale">
+						<div class="map-wrap">
+							<PaperMap
+								interactive={false}
+								width={640}
+								height={620}
+								view={MAP_VIEW}
+								focusPe={firePe}
+								onRegionClick={(pe) => (firePe = firePe === pe ? null : pe)}
+								relief={reliefAssets}
+							>
+								{#snippet overlay(ctx)}
+									{#if firesFc}
+										<FiresLayer
+											{ctx}
+											features={firesShown}
+											tipOf={(f) =>
+												`<strong>${f.properties.yr}</strong> · ${grInt(f.properties.ha)} ha${f.properties.name ? ` · ${f.properties.name}` : ''}`}
+										/>
+									{/if}
+								{/snippet}
+							</PaperMap>
+						</div>
+						{#if fireYears}
+							<div class="yearscale" aria-hidden="true">
+								<span>{fireYears.lo}</span>
+								<i></i>
+								<span>{fireYears.hi}</span>
+							</div>
+						{/if}
 					</div>
-					<div class="fire-stats">
-						{f.completed}/{f.n} completed
-						{#if f.budget > 0}· {eurShort(f.budget)}{/if}
+				</Defer>
+			</div>
+			<div class="fire-grid">
+				{#each fireCards as f (f.fire)}
+					<div class="fire-card">
+						<div class="fire-name">{fireEn(f.fire)}</div>
+						<div class="fire-bar">
+							<div
+								class="fire-fill"
+								style:width={`${(100 * f.completed) / f.n}%`}
+							></div>
+						</div>
+						<div class="fire-stats">
+							{f.completed}/{f.n} completed
+							{#if f.budget > 0}· {eurShort(f.budget)}{/if}
+						</div>
 					</div>
-				</div>
-			{/each}
+				{/each}
+			</div>
 		</div>
-	</div>
-</ChartFrame>
+	</ChartFrame>
+{/if}
 </div>
 	{/snippet}
 </DatasetCard>

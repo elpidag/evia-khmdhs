@@ -2230,6 +2230,20 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `webui/queries.py` (`search.golden.json`); known shared limitation:
   Greek ρ folds to visual P. Value bases differ per dataset and are
   labelled, never summed as one headline (methodology#explore).
+  **2026-09-03 (author, three rounds)**: SEARCH title + the author's
+  two-sentence intro, both sized exactly like a card page's stream name
+  and narrative text (DatasetCard .bigname / .narrative clamps); the
+  count/Σ summary line is gone; dataset labels All · Anti-nero ·
+  F.W.CO-OP · Companies as sponsors; the dead «cancelled» status removed
+  and every dataset-specific filter shows ONLY where it can match
+  (status → sponsors; published call/municipality/HQ → Anti-nero; end
+  date → Anti-nero+sponsors; procedure hidden for sponsors, its
+  «sponsor» option only under All), procedure labels in the site's
+  English (`procedures.ts` vocabulary). Rows carry `au` — the chain's
+  linked forest authorities from `contract_forest_authorities` — and the
+  haystack indexes them Greek AND English (`names.authEn`), so
+  «Δασαρχείο Λαυρίου», «parnithas» and «forest service office» all
+  match; payload `?v=10`.
 - **/anadohoi** (sponsor dataset analysis; order since 2026-08-25:
   hero → PROJECT SCOPE | PROJECT TYPE pair (green titles — the page
   rule, no titleColor override) → CURRENT STATUS → TIMELINE → the

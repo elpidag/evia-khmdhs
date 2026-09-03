@@ -4,29 +4,31 @@
 	import { apiGetCached, type ExplorePayload, type ExploreRow } from '$lib/api';
 	import { eur, grInt } from '$lib/transforms/format';
 	import { peEn } from '$lib/transforms/regions';
+	import { authEn } from '$lib/transforms/names';
 	import { matches, phoneticFold, searchNorm } from '$lib/transforms/search';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	const DS_LABEL: Record<string, string> = {
 		antinero: 'Anti-nero',
-		dase: 'ΔΑΣΕ',
-		anadohoi: 'Ανάδοχοι'
+		dase: 'F.W.CO-OP',
+		anadohoi: 'Companies as sponsors'
 	};
+	/** the site's English procedure vocabulary (procedures.ts, Directive
+	 *  2014/24 wording), grouped; «sponsor» is the designation-act route */
 	const PROC_LABEL: Record<string, string> = {
-		direct: 'Απευθείας ανάθεση',
-		open: 'Ανοικτή διαδικασία',
-		nego: 'Διαπραγμάτευση',
-		other: 'Άλλη διαδικασία',
-		sponsor: 'Πράξη αναδόχου (χορηγία)'
+		direct: 'Direct award',
+		open: 'Open procedure',
+		nego: 'Negotiated procedure',
+		other: 'Other procedure',
+		sponsor: 'Sponsor designation act'
 	};
 	const ST_LABEL: Record<string, string> = {
 		completed: 'completed',
 		active: 'active',
 		no_completion_recorded: 'no completion recorded',
 		revoked: 'revoked',
-		superseded: 'superseded',
-		cancelled: 'cancelled'
+		superseded: 'superseded'
 	};
 	// what each record of a chain IS — the ν.4412 vocabulary settled on
 	// 2026-08-18; all 246 are συμβάσεις, the label says which kind
@@ -57,14 +59,16 @@
 	let indexed: Indexed[] = $state.raw([]);
 	$effect(() => {
 		// ?v= busts HTTP + module caches when the payload shape changes
-		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=9').then((p) => {
+		apiGetCached<ExplorePayload>(fetch, '/api/explore?v=10').then((p) => {
 			payload = p;
 			indexed = p.rows.map((r) => {
 				// every ΑΔΑΜ of the chain is searchable: a citation of an
 				// earlier version must find the contract, not nothing
 				const hn = searchNorm(
 					`${r.ref} ${(r.alt ?? []).join(' ')} ${r.t} ${r.co} ${(r.ac ?? []).join(' ')} ` +
-						`${r.pe.join(' ')} ${r.hq.join(' ')} ${(r.mu ?? []).join(' ')}`
+						`${r.pe.join(' ')} ${r.hq.join(' ')} ${(r.mu ?? []).join(' ')} ` +
+						// the linked forest authorities, Greek and English alike
+						`${(r.au ?? []).join(' ')} ${(r.au ?? []).map((a) => authEn(a)).join(' ')}`
 				);
 				return { r, hn, hf: phoneticFold(hn) };
 			});
@@ -243,15 +247,11 @@
 </svelte:head>
 
 <hgroup>
-	<p class="muted">
-		{#if payload}
-			{grInt(payload.counts['antinero'] ?? 0)} Anti-nero contracts ·
-			{grInt(payload.counts['dase'] ?? 0)} ΔΑΣΕ contracts ·
-			{grInt(payload.counts['anadohoi'] ?? 0)} sponsor projects.
-		{:else}
-			Loading the combined table…
-		{/if}
-		Search is accent-, homoglyph- and Greeklish-tolerant (“evias” finds Ευβοίας).
+	<!-- the author's wording, 2026-09-03 -->
+	<h1 class="ptitle">SEARCH</h1>
+	<p class="intro">
+		Search here all the contracts and designation acts processed in this website. Search is
+		accent-, homoglyph- and Greeklish-tolerant.
 	</p>
 </hgroup>
 
@@ -259,7 +259,7 @@
 	<input
 		class="search"
 		type="search"
-		placeholder="Search ΑΔΑΜ/ΑΔΑ, title, company, region…"
+		placeholder="Search ΑΔΑΜ/ΑΔΑ, title, company, region, forest authority…"
 		bind:value={qInput}
 		oninput={onSearch}
 	/>
@@ -270,45 +270,58 @@
 			options={[
 				{ value: 'all', label: 'All' },
 				{ value: 'antinero', label: 'Anti-nero' },
-				{ value: 'dase', label: 'ΔΑΣΕ' },
-				{ value: 'anadohoi', label: 'Ανάδοχοι' }
+				{ value: 'dase', label: 'F.W.CO-OP' },
+				{ value: 'anadohoi', label: 'Companies as sponsors' }
 			]}
 		/>
-		<select value={proc} onchange={(e) => setParam('proc', e.currentTarget.value === 'all' ? null : e.currentTarget.value)}>
-			<option value="all">Any procedure</option>
-			{#each Object.entries(PROC_LABEL) as [v, l] (v)}
-				<option value={v}>{l}</option>
-			{/each}
-		</select>
-		<select value={st} onchange={(e) => setParam('st', e.currentTarget.value || null)}>
-			<option value="">Any status</option>
-			{#each Object.entries(ST_LABEL) as [v, l] (v)}
-				<option value={v}>{l}</option>
-			{/each}
-		</select>
+		{#if ds !== 'anadohoi'}
+			<!-- every sponsor project shares one route, so the select would be
+			     a single answer there (author's rule, 2026-09-03) -->
+			<select value={proc} onchange={(e) => setParam('proc', e.currentTarget.value === 'all' ? null : e.currentTarget.value)}>
+				<option value="all">Any procedure</option>
+				{#each Object.entries(PROC_LABEL).filter(([v]) => ds === 'all' || v !== 'sponsor') as [v, l] (v)}
+					<option value={v}>{l}</option>
+				{/each}
+			</select>
+		{/if}
+		{#if ds === 'anadohoi'}
+			<!-- the statuses are the sponsor projects' vocabulary and match ONLY
+			     their 70 rows, so the select shows only on that dataset
+			     (author, 2026-09-03) -->
+			<select value={st} onchange={(e) => setParam('st', e.currentTarget.value || null)}>
+				<option value="">Any status</option>
+				{#each Object.entries(ST_LABEL) as [v, l] (v)}
+					<option value={v}>{l}</option>
+				{/each}
+			</select>
+		{/if}
 		<select value={vmin} onchange={(e) => setParam('vmin', e.currentTarget.value || null)}>
 			{#each VMIN_OPTIONS as o (o.value)}
 				<option value={o.value}>{o.label}</option>
 			{/each}
 		</select>
-		<select
-			value={prf}
-			onchange={(e) => setParam('prf', e.currentTarget.value || null)}
-			title="Whether ΚΗΜΔΗΣ links a διακήρυξη/πρόσκληση (PROC) to the contract — Anti-nero only"
-		>
-			<option value="">Διακήρυξη: any</option>
-			<option value="yes">With διακήρυξη (PROC) ({grInt(prCounts.yes)})</option>
-			<option value="no">Without διακήρυξη ({grInt(prCounts.no)})</option>
-		</select>
-		<select
-			value={fin}
-			onchange={(e) => setParam('fin', e.currentTarget.value || null)}
-			title="Whether a project end date is on record — an Anti-nero completion act on Diavgeia or a completed sponsor project; ΔΑΣΕ endings were never harvested"
-		>
-			<option value="">End date: any</option>
-			<option value="yes">With end date ({grInt(finCounts.yes)})</option>
-			<option value="no">Without end date ({grInt(finCounts.no)})</option>
-		</select>
+		{#if ds === 'antinero'}
+			<select
+				value={prf}
+				onchange={(e) => setParam('prf', e.currentTarget.value || null)}
+				title="Whether ΚΗΜΔΗΣ links a call/notice (PROC record, διακήρυξη) to the contract"
+			>
+				<option value="">Published call: any</option>
+				<option value="yes">With published call ({grInt(prCounts.yes)})</option>
+				<option value="no">Without published call ({grInt(prCounts.no)})</option>
+			</select>
+		{/if}
+		{#if ds === 'antinero' || ds === 'anadohoi'}
+			<select
+				value={fin}
+				onchange={(e) => setParam('fin', e.currentTarget.value || null)}
+				title="Whether a project end date is on record — an Anti-nero completion act on Diavgeia or a completed sponsor project; ΔΑΣΕ endings were never harvested"
+			>
+				<option value="">End date: any</option>
+				<option value="yes">With end date ({grInt(finCounts.yes)})</option>
+				<option value="no">Without end date ({grInt(finCounts.no)})</option>
+			</select>
+		{/if}
 	</div>
 	<div class="filter-row">
 		<label
@@ -320,24 +333,26 @@
 				{/each}
 			</select>
 		</label>
-		<label
-			>Municipality <small class="muted">(Anti-nero)</small>
-			<select value={mu} onchange={(e) => setParam('mu', e.currentTarget.value || null)}>
-				<option value="">Any</option>
-				{#each muOptions as [m, n] (m)}
-					<option value={m}>Δήμος {m} ({grInt(n)})</option>
-				{/each}
-			</select>
-		</label>
-		<label
-			>HQ region <small class="muted">(Anti-nero)</small>
-			<select value={hq} onchange={(e) => setParam('hq', e.currentTarget.value || null)}>
-				<option value="">Any</option>
-				{#each hqOptions as [p, n] (p)}
-					<option value={p}>{peEn(p)} ({grInt(n)})</option>
-				{/each}
-			</select>
-		</label>
+		{#if ds === 'antinero'}
+			<label
+				>Municipality
+				<select value={mu} onchange={(e) => setParam('mu', e.currentTarget.value || null)}>
+					<option value="">Any</option>
+					{#each muOptions as [m, n] (m)}
+						<option value={m}>Δήμος {m} ({grInt(n)})</option>
+					{/each}
+				</select>
+			</label>
+			<label
+				>HQ region
+				<select value={hq} onchange={(e) => setParam('hq', e.currentTarget.value || null)}>
+					<option value="">Any</option>
+					{#each hqOptions as [p, n] (p)}
+						<option value={p}>{peEn(p)} ({grInt(n)})</option>
+					{/each}
+				</select>
+			</label>
+		{/if}
 		<label
 			>From
 			<input type="date" value={from} onchange={(e) => setParam('from', e.currentTarget.value || null)} />
@@ -353,20 +368,6 @@
 </div>
 
 {#if payload}
-	<p class="count muted">
-		<strong>{grInt(filtered.length)}</strong> of {grInt(payload.rows.length)} rows match
-		<small
-			>(an Anti-nero row is a contract, not a ΚΗΜΔΗΣ record: its later acts —
-			τροποποιήσεις, παρατάσεις, εγκρίσεις συμπληρωματικών — are listed inside it and
-			counted once)</small
-		>
-		· shown value Σ {eur(totalShown)}
-		<small
-			>(all € stated, excl. VAT; Ανάδοχοι = committed budget where the act declares one, net
-			where it says so — <a href="/methodology">methodology</a>)</small
-		>
-	</p>
-
 	<table class="listing">
 		<thead>
 			<tr>
@@ -469,6 +470,24 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--sp-2);
+	}
+	/* the author's rule (2026-09-03, second round): the title sets exactly
+	   like a card page's stream name (DatasetCard .bigname) and the intro
+	   exactly like its narrative text — not bigger, not smaller */
+	.ptitle {
+		margin: 0 0 var(--sp-2);
+		font-family: var(--font-display-narrow);
+		font-weight: 900;
+		font-size: clamp(15px, 1.25vw, 24px);
+		line-height: 1.2;
+		letter-spacing: 0.02em;
+	}
+	.intro {
+		margin: 0 0 var(--sp-4);
+		font-family: var(--font-ui);
+		font-weight: 400;
+		font-size: clamp(13px, 0.94vw, 18px);
+		line-height: 1.2;
 	}
 	.search {
 		font: inherit;

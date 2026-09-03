@@ -12768,3 +12768,66 @@ the 2026-08-21 ruling; now passed as zeros). The dormant «probably
 related» chip — the other --c-flag-amber wearer — stays wired for its
 empty tier. API payloads keep the fields; presentation only. Verified:
 zero «1 bid» chips and no bid sentence on the rendered pages.
+
+## 2026-09-03 — PROJECTS AND FIRES THAT TRIGGERED THEM leaves the sponsored page (user)
+
+The author: off the website for now, but keep the processes — «we might
+come back to it». The frame (the status-coloured project dot map over
+the EFFIS burn scars, the baked relief, its legend and caveat) is parked
+behind a `SHOW_FIRES_FRAME = false` flag in `/anadohoi/+page.svelte` —
+the markup, the layers (FiresLayer, the relief bakes), the data and the
+harvest all stay untouched, and flipping the flag brings it back whole.
+No live link pointed at its `#fires` anchor. The FROM THE FIRE TO THE
+SPONSORED PROJECT lanes and the card's MAP tile are separate surfaces
+and stay.
+
+## 2026-09-03 — the /explore round: the author's intro, honest dropdowns, new dataset labels
+
+Four author rulings. (1) The intro is their wording: «Search here all the
+contracts and designation acts processed in this website …» with the
+tolerance sentence and the searchable-fields list; the counts line it
+replaced is gone. (2) The dataset labels read All · Anti-nero ·
+F.W.CO-OP · Companies as sponsors — on the toggle AND on each row's
+dataset chip. (3) The count/Σ-value summary line is removed («I do not
+need this text»). (4) The dropdowns were walked option by option in the
+browser: every filter WORKS (proc 2.151/22/30/55/70, statuses 19-29-20-
+1-1, value brackets, διακήρυξη, end date, the 60 regions, 224 δήμοι, 32
+HQ regions all move the table) — what read as broken were two traps, now
+fixed: the «cancelled» status could only ever match zero rows (the live
+population excludes cancelled) and is gone, and the dataset-specific
+filters hide where they cannot match — the statuses sum exactly to the
+70 sponsor rows, so that select shows ONLY on Companies as sponsors
+(the author's follow-up), and the rule generalised on their next ruling:
+a filter that does not apply to all three datasets shows ONLY where it
+can match — published call, municipality and HQ on Anti-nero alone; end
+date on Anti-nero and sponsors; the procedure select everywhere but the
+sponsors (one route there), its «sponsor» option only under All. And the
+procedure labels speak the site's English (procedures.ts, the Directive
+wording): Direct award · Open procedure · Negotiated procedure · Other
+procedure · Sponsor designation act; the διακήρυξη filter reads
+«Published call».
+
+## 2026-09-03 — /explore follow-up: the SEARCH title, the intro at full size, search by forest authority
+
+Three more author rulings the same day. (1) The page opens with a title,
+SEARCH, in the display narrow face. (2) The intro is exactly two
+sentences — «Search here all the contracts and designation acts
+processed in this website. Search is accent-, homoglyph- and
+Greeklish-tolerant.» — and the searchable-fields clause of the morning's
+wording moved into the box's placeholder («… region, forest
+authority…»). The sizing is the CARD PAGES' own (the author's third
+ruling, «not bigger not smaller»): the SEARCH title sets exactly like a
+stream's name on its card (DatasetCard .bigname — display narrow 900,
+clamp(15px, 1.25vw, 24px), lh 1.2) and the intro exactly like the card's
+narrative text (font-ui 400, clamp(13px, 0.94vw, 18px), lh 1.2) —
+verified computed-style-identical against /anadohoi at 1920. (3) Search reaches the
+FOREST AUTHORITIES: `queries_extra.explore_rows` now ships each
+Anti-nero chain's linked authorities as `au` (the union of
+`contract_forest_authorities.authority_name` over every record of the
+chain, from the same layer the contract pages print), and the /explore
+haystack indexes them in BOTH languages — the registry Greek and the
+site's English form via `names.authEn` — so «Δασαρχείο Λαυρίου»,
+«parnithas» and «forest service office» all find their contracts
+(verified in the browser: the English-only phrase matches 220 rows,
+reachable through no other column). Payload version bumped to v=10; the
+real-DB explore pins stay green (the row shape is additive).

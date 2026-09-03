@@ -3761,6 +3761,12 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
     eff = q.effective_cost(kh, "c")
     # every party of every contract, and the curated display names, so the row
     # shows one name per ΑΦΜ and still answers to the registry spellings
+    # the linked forest authorities, searchable per row (author, 2026-09-03)
+    auth_map: dict[str, list[str]] = {}
+    for _a in kh.execute(
+            "SELECT reference_number, authority_name FROM contract_forest_authorities"):
+        auth_map.setdefault(_a["reference_number"], []).append(_a["authority_name"])
+
     kh_names = antinero_display_names(kh)
     kh_parties: dict[str, list[tuple[str, str]]] = {}
     for _r in kh.execute("SELECT reference_number, vat_number, name FROM contractors"):
@@ -3806,6 +3812,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             r["contract_signed_date"]) or _full_date(r["submission_date"])
         rows.append({
             "ds": "antinero", "ref": r["ref"],
+            "au": sorted({n for m in chain for n in auth_map.get(m, [])}) or None,
             "d": row_d,
             # last date of the chain, for the «first → last» date cell; absent
             # for a contract posted once, which is most of them

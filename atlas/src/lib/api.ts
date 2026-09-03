@@ -576,6 +576,8 @@ export interface ExploreRow {
 	/** the δήμοι the contract's documents name (Anti-nero only; absent for
 	 *  the 93 that name none, and for the other two datasets) */
 	mu?: string[];
+	/** the linked forest authorities (Anti-nero), searchable */
+	au?: string[] | null;
 }
 
 export interface ExplorePayload {
