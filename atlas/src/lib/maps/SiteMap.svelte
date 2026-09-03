@@ -59,7 +59,7 @@
 		sites,
 		scars = [],
 		height = 340,
-		fireColorOf = () => 'color-mix(in srgb, #6b2d35 85%, #fff)',
+		fireColorOf = () => 'color-mix(in srgb, var(--c-fire) 85%, var(--paper))',
 		selectedId = null,
 		rivers = [],
 		pinColor = 'var(--c-anadohoi)',
@@ -427,7 +427,7 @@
 		width: 100%;
 		height: auto;
 		display: block;
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		/* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		border: 1px solid var(--line);
 		border-radius: 4px;
@@ -437,7 +437,7 @@
 		cursor: grab;
 	}
 	.land {
-		fill: #fff;
+		fill: var(--paper);
 		stroke: var(--line);
 		stroke-width: 0.7;
 		vector-effect: non-scaling-stroke;
@@ -446,8 +446,8 @@
 	   conventions (user, 2026-08-25: a border frame without them read as
 	   if the neighbouring country were open sea) */
 	.context {
-		fill: #fff;
-		stroke: #c4c4c4;
+		fill: var(--paper);
+		stroke: color-mix(in srgb, var(--ink) 26.2%, var(--paper));
 		stroke-width: 0.5;
 		vector-effect: non-scaling-stroke;
 		pointer-events: none;
@@ -464,7 +464,7 @@
 
 	/* solid per-fire fills arrive inline via fireColorOf */
 	.scar {
-		stroke: #6b2d35;
+		stroke: var(--c-fire);
 		stroke-width: 0.9;
 		cursor: pointer;
 	}
@@ -473,7 +473,7 @@
 		filter: brightness(0.82);
 	}
 	.scarmark {
-		stroke: #6b2d35;
+		stroke: var(--c-fire);
 		stroke-width: 0.9;
 		cursor: pointer;
 	}
@@ -504,7 +504,7 @@
 		fill: #46779e;
 		text-anchor: middle;
 		paint-order: stroke;
-		stroke: #fff;
+		stroke: var(--paper);
 		stroke-width: 2px;
 	}
 	.zoomctl {
@@ -528,7 +528,7 @@
 		   each section sets --map-accent, black is the fallback */
 		border-radius: 50%;
 		background: var(--map-accent, var(--c-anadohoi));
-		color: #fff;
+		color: var(--paper);
 		cursor: pointer;
 	}
 	.zoomctl button:hover {
@@ -553,8 +553,8 @@
 		position: absolute;
 		top: var(--sp-2);
 		left: var(--sp-2);
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 		border-radius: 4px;
 		padding: var(--sp-1) var(--sp-2);
 		font-size: var(--fs-13);

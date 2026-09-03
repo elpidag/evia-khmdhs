@@ -679,7 +679,7 @@
 	}
 	.act.onbar,
 	.act.selfact.onbar {
-		fill: #fff;
+		fill: var(--paper);
 	}
 	.actlbl {
 		font-size: 8.5px;
@@ -704,7 +704,7 @@
 		stroke-dasharray: 2 3;
 	}
 	.pre {
-		fill: #9b9b9b;
+		fill: color-mix(in srgb, var(--ink) 44.5%, var(--paper));
 		stroke: none;
 		cursor: pointer;
 	}
@@ -757,7 +757,7 @@
 		stroke: none;
 	}
 	.pay.onbar {
-		fill: #fff;
+		fill: var(--paper);
 		stroke: none;
 	}
 	.barhot {

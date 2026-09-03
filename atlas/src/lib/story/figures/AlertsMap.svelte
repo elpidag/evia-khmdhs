@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolveCssColor } from '$lib/theme.svelte';
 	/**
 	 * Figure 04 of the story: the «112» alerts of August 2021, looping on one
 	 * national satellite frame (DATA_DECISIONS 2026-09-02). A canvas the size
@@ -93,7 +94,7 @@
 		if (canvas) {
 			const cs = getComputedStyle(canvas);
 			family = cs.fontFamily || family;
-			fire = cs.getPropertyValue('--c-fire').trim() || fire;
+			fire = resolveCssColor('var(--c-fire)');
 		}
 		const ro = new ResizeObserver((entries) => {
 			for (const e of entries) size = Math.floor(Math.min(e.contentRect.width, e.contentRect.height));

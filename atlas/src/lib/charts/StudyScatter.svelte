@@ -33,7 +33,7 @@
 	// palette (user, 2026-08-23) — the same colour a category has on the
 	// chord and the timeline's type lens
 	const cats = $derived(CAT_ORDER.filter((k) => points.some((p) => p.cat === k)));
-	const hue = (c?: string | null) => CAT_COLORS[c ?? ''] ?? '#9b9b9b';
+	const hue = (c?: string | null) => CAT_COLORS[c ?? ''] ?? 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))';
 
 	let width = $state(900);
 	const height = 420;
@@ -149,7 +149,7 @@
 		width: 100%;
 	}
 	.grid {
-		stroke: var(--rule-soft, #eee);
+		stroke: var(--rule-soft, color-mix(in srgb, var(--ink) 7.6%, var(--paper)));
 		stroke-width: 0.5;
 	}
 	.axis {
@@ -185,7 +185,7 @@
 	}
 	.pt:hover {
 		opacity: 1;
-		stroke: #000;
+		stroke: var(--ink);
 	}
 	/* the MAP legend's dress, as on the other category keys */
 	.key {
@@ -193,7 +193,7 @@
 		margin: 0 0 var(--sp-2);
 		box-sizing: border-box;
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-wrap: wrap;

@@ -364,35 +364,37 @@ export function makeChoro(ramp: string[], maxV: number): (v: number) => string {
 
 // black-white-grayscale only on the Anti-nero surfaces (user, 2026-08-20)
 export const RAMP_WORKS = [
-	'#f0f0f0',
-	'#dcdcdc',
-	'#c4c4c4',
-	'#a6a6a6',
-	'#858585',
-	'#5f5f5f',
-	'#383838',
-	'#111111'
+	'color-mix(in srgb, var(--ink) 6.5%, var(--paper))',
+	'color-mix(in srgb, var(--ink) 15.5%, var(--paper))',
+	'color-mix(in srgb, var(--ink) 26.2%, var(--paper))',
+	'color-mix(in srgb, var(--ink) 39.6%, var(--paper))',
+	'color-mix(in srgb, var(--ink) 54.3%, var(--paper))',
+	'color-mix(in srgb, var(--ink) 71.3%, var(--paper))',
+	'color-mix(in srgb, var(--ink) 88.7%, var(--paper))',
+	'color-mix(in srgb, var(--ink) 53.3%, black)'
 ];
 
 /** the ΔΑΣΕ pages' green ramp (the allocation maps, the card map) */
 export const RAMP_DASE = [
-	'#eef7f2',
-	'#d7ece0',
-	'#b9dcc8',
-	'#93c9ac',
-	'#6bb28d',
-	'#479a72',
-	'#2b7d58',
-	'#175c3e'
+	'color-mix(in oklab, var(--c-dase) 10.6%, var(--paper))',
+	'color-mix(in oklab, var(--c-dase) 24.7%, var(--paper))',
+	'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 38%, white) 96%, black)',
+	'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 61%, white) 95%, black)',
+	'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 81%, white) 90%, black)',
+	'color-mix(in srgb, var(--c-dase) 84.8%, black)',
+	'color-mix(in oklab, var(--c-dase) 72.4%, black)',
+	'color-mix(in oklab, var(--c-dase) 56.1%, black)'
 ];
 
+// unused since the 4-mode maps retired; kept as an approximate one-anchor
+// family of --c-cat-blue (the old multi-stop blues rotated hue)
 export const RAMP_HOME = [
-	'#f2f7fe',
-	'#dcebfb',
-	'#bcd8f5',
-	'#92beec',
-	'#64a0df',
-	'#3d7fcb',
-	'#2258a5',
-	'#0d366b'
+	'color-mix(in srgb, var(--c-cat-blue) 3.6%, var(--paper))',
+	'color-mix(in oklab, var(--c-cat-blue) 9.4%, var(--paper))',
+	'color-mix(in oklab, var(--c-cat-blue) 18.7%, var(--paper))',
+	'color-mix(in oklab, var(--c-cat-blue) 31.4%, var(--paper))',
+	'color-mix(in oklab, var(--c-cat-blue) 46.5%, var(--paper))',
+	'color-mix(in oklab, var(--c-cat-blue) 61.8%, var(--paper))',
+	'color-mix(in oklab, var(--c-cat-blue) 79.3%, var(--paper))',
+	'var(--c-cat-blue)'
 ];

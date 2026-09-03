@@ -48,7 +48,7 @@
 	const ROW_PX = 13.5; // one row of 11.5px text, perpendicular to the radius
 	const HEAD_ROOM = 6;
 	const SEAM_STUB = 34;
-	const RIB_END = '#c9c9c9';
+	const RIB_END = 'color-mix(in srgb, var(--ink) 23.9%, var(--paper))';
 	const MAX_ROWS = 3;
 
 	/** greedy word wrap into at most MAX_ROWS rows; a name that still
@@ -87,7 +87,7 @@
 			side: 'right',
 			key: it.key,
 			n: it.n,
-			color: it.color ?? '#9b9b9b'
+			color: it.color ?? 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))'
 		}));
 		const leftEnts: Ent[] = data.left.items.map((it) => ({
 			id: `l:${it.key}`,
@@ -426,8 +426,8 @@
 		position: absolute;
 		right: 0;
 		top: 0;
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 		padding: 8px 10px;
 		font-size: var(--fs-12);
 		pointer-events: none;

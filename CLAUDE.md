@@ -1535,11 +1535,18 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (`clamp(min, vw/vh, artboard px)`), verified by DOM measurement at
   1920×1080; the Obviously **Narrow** (titles/labels) and **Condensed**
   (card text) cuts come from the same kit as `--font-display-narrow` /
-  `--font-display-cond` in `tokens.css`; the header is ONE **BLACK** 85 px
+  `--font-display-cond` in `tokens.css`; the header is ONE 85 px
   band since the seventh round of 2026-08-27 (`--header-h`, no compaction:
   white brand + FIVE filled 59,5 px squares — three streams, search, actor
   network — each in its own `chip` tone with its name inside, the ink by
   luminance, the current page ringed — and METHODOLOGY white at the right);
+  **since 2026-09-03 (user) the band is a GRADIENT of the three stream
+  hues** (`linear-gradient(90deg, --c-antinero, --c-dase, --c-anadohoi)` —
+  black → green → deep green at the default palette) and the five `chip`
+  tones are token derivations (the two hue squares their own primaries,
+  the antinero/search/actors squares pale fades of antinero/ink/dase —
+  byte-equivalent at default), the square lettering picked by
+  `theme.svelte.cssLuminance` so it follows the lab;
   the sponsored stream is named **«financed by private companies»**
   (`datasets.ts`; the square carries the `short` abbreviation); the landing menu is a full-height square
   flush right with 2 px rules and a «GR / EN» `note` cell; the field is
@@ -1771,7 +1778,22 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   context; verbatim phrases, resolved by substring, 11 tests in
   `content.test.ts` fail when an edit removes one). A marker
   MID-paragraph splits the paragraph (chronology.md broke at figures
-  03/04 — the author's own «image changes here»; disclosed). StoryFigure
+  03/04 — the author's own «image changes here»; disclosed).
+  **The markers are PLAIN TEXT and the caption text lives apart since
+  2026-09-03** (author; DATA_DECISIONS): they write `[FIGURE 05: Press
+  conference]` with NO span — `scripts/remark-tag-paragraphs.ts`
+  `figureMarkers()` (registered before `tagParagraphs`) wraps it at build
+  time, handling the `linkReference` node markdown actually produces for
+  `[…]`, the literal-text form, and a hand-wrapped marker (never twice);
+  a marker-led paragraph is now an ordinary paragraph, so its prose keeps
+  its markdown. The CAPTIONS are the author's own
+  `src/content/story/captions.md` — `## 5` per figure, `## 2a`/`## 2b`
+  per carousel slide (`## 1a`/`## 1b` = the grid's two packs, their
+  wording moved out of the component), free length, blank lines making
+  paragraphs, `[text](url)`/`*i*`/`**b**` the only mark-up, rendered
+  escape-first by `lib/story/captions.ts` (`captionFor(n, slot)` resolves
+  slide → figure → the marker's short name; the page prefixes «Figure NN
+  _ » except on the grid). Pinned by `captions.test.ts`. StoryFigure
   is a single live block now (figure + notes props). Still to come: the
   images of figures 05-10 and 12 (01 grid, 02 pair, 03, 11, 13 are
   DELIVERED — `lib/story/figureImages.ts` + `figureImages.test.ts`,
@@ -2080,8 +2102,21 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `vite.config.ts`, no svelte.config file); plain CSS custom properties
   (`src/lib/styles/tokens.css`; `lib/dev/ThemeLab.svelte` — DEV-ONLY, any
   URL + `?lab` — overrides the colour/font tokens live for the author's
-  palette try-outs, presets in localStorage, «copy CSS» exports the picks; since the same day tokens.css is ~10 PRIMARIES with every grey a `color-mix` fade of ink into paper — one ink refills all the text tones — white-paper palette since the 2026-08-12
-  rebrand + the geo_common.js ramps ported verbatim), NO
+  palette try-outs, presets in localStorage, «copy CSS» exports the picks; since the same day tokens.css is ~11 PRIMARIES (incl. the `--c-cat-blue/amber/red` categorical anchors) with every grey a `color-mix` fade of ink into paper — one ink refills all the text tones — white-paper palette since the 2026-08-12
+  rebrand + the geo_common.js ramps ported verbatim). **Every chart
+  palette DERIVES from the tokens live since 2026-09-03** (DATA_DECISIONS
+  that day, the Theme Lab follow-up): CAT_COLORS / YEAR_COLORS /
+  YEAR_GREYS / SCOPE_COLORS (both) / ganttTheme / RAMP_WORKS / RAMP_DASE
+  and ~300 formerly inline hexes are CSS strings over the tokens
+  (`var()` + fitted `color-mix` fades reproducing the old hexes; ≤10/255
+  drift only on the deepest green ramp steps, former literal blacks now
+  ride `--ink`); `$lib/theme.svelte.ts` (`resolveCssColor`/`cssRgb`/
+  `cssLuminance` + the `themelab:change` tick) is how canvas charts
+  (BeeswarmCanvas, StateFunded, SignedTimeline, CodeField, AlertsMap)
+  and luminance pickers follow — the resolver reads the tick, so any
+  $effect/$derived that resolves re-runs on a lab change. NOT following
+  by design: the story timeline's artboard colours, the baked
+  relief/hypso gradients, the header chips, webui. NO
   Tailwind/Chart.js/Leaflet — d3-* + topojson only (d3-hierarchy joined the
   list on 2026-08-18 for the programme chart's packed arrangement). Fonts via the Adobe
   Typekit kit (see the rebrand bullet); the self-hosted Sofia Sans woff2

@@ -140,7 +140,7 @@
 	});
 	// one tone per fire, earliest darkest — shared by the map scars and
 	// the timeline-bar dots so the two read as the same objects
-	const FIRE_TONES = ['#6b2d35', '#8e4a52', '#b3717a', '#d5a2a8'];
+	const FIRE_TONES = ['var(--c-fire)', 'color-mix(in oklab, var(--c-fire) 81.5%, var(--paper))', 'color-mix(in oklab, var(--c-fire) 59.7%, var(--paper))', 'color-mix(in oklab, var(--c-fire) 36.8%, var(--paper))'];
 	const scarTone = $derived.by(() => {
 		const ordered = [...scarFeats].sort((a, b) =>
 			(a.properties.d ?? String(a.properties.yr)).localeCompare(
@@ -205,7 +205,7 @@
 			: (COLOR[p.status] ?? NODATE_COLOR)
 	);
 	// self-row lettering is always white on the bar colour (user decision)
-	const barInk = '#fff';
+	const barInk = 'var(--paper)';
 
 	// template facts derived from the decision trail
 	const designationDate = $derived(

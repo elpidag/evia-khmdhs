@@ -221,9 +221,9 @@
 	// same palette as the status waffle (see StatusWaffle ORDER)
 	const STATUS_COLOR: Record<string, string> = {
 		completed: 'var(--c-anadohoi)',
-		active: '#52b788',
-		no_completion_recorded: '#8F8F8F',
-		revoked: '#000000'
+		active: 'var(--c-dase)',
+		no_completion_recorded: 'var(--line)',
+		revoked: 'var(--ink)'
 	};
 
 	// fires, chronological, «εκτός πυρκαγιάς» last
@@ -290,13 +290,13 @@
 	const DELIV_META: [string, string, string][] = [
 		['study', 'study only', 'rgba(45, 106, 79, 0.3)'],
 		['study_and_works', 'study & works', 'rgba(45, 106, 79, 0.62)'],
-		['works', 'works only', '#2d6a4f']
+		['works', 'works only', 'var(--c-anadohoi)']
 	];
 	const KIND_META: [string, string, string][] = [
-		['anadasosi', 'reforestation', '#b5b5b5'],
-		['both', 'restoration & reforestation', '#6c6c6c'],
-		['apokatastasi', 'restoration', '#3d3d3d'],
-		['', 'not stated', '#d8d8d8']
+		['anadasosi', 'reforestation', 'color-mix(in srgb, var(--ink) 32.9%, var(--paper))'],
+		['both', 'restoration & reforestation', 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))'],
+		['apokatastasi', 'restoration', 'color-mix(in srgb, var(--ink) 86.4%, var(--paper))'],
+		['', 'not stated', 'color-mix(in srgb, var(--ink) 17.4%, var(--paper))']
 	];
 	const countBy = (field: 'deliverables' | 'works_kind') => {
 		const s: Record<string, number> = {};
@@ -749,7 +749,7 @@
 								points={mapDots}
 								r={4.9}
 								tipCorner="bottom-right"
-								fillOf={(p) => (noDate(p as never) ? NODATE_COLOR : (STATUS_COLOR[p.status as string] ?? '#999'))}
+								fillOf={(p) => (noDate(p as never) ? NODATE_COLOR : (STATUS_COLOR[p.status as string] ?? 'color-mix(in srgb, var(--ink) 45.5%, var(--paper))'))}
 								fillOpacityOf={(p) => (APPROX.has(p.prec as string) ? 0.45 : undefined)}
 								dashOf={(p) => (APPROX.has(p.prec as string) ? `${2.4 / ctx.k} ${1.8 / ctx.k}` : undefined)}
 								tipOf={(p) => `<strong>${p.company}</strong>`}
@@ -831,7 +831,7 @@
 			value: g.count,
 			color: g.color,
 			// the palest segment's spill label prints in the full green
-			labelColor: g.key === 'study' ? '#2d6a4f' : undefined,
+			labelColor: g.key === 'study' ? 'var(--c-anadohoi)' : undefined,
 			badge: g.key === 'study' ? ('outleft' as const) : ('above' as const)
 		}))}
 	/>
@@ -847,7 +847,7 @@
 	     one bar per kind, counted in projects, biggest first -->
 	<BarH
 		rows={[...kindGroups].sort((a, b) => b.count - a.count).map((g) => ({ label: g.label, value: g.count }))}
-		color="#2d6a4f"
+		color="var(--c-anadohoi)"
 		inside
 		barHeight={35}
 		fmt={grInt}
@@ -993,7 +993,7 @@
 								fillOf={(p) =>
 									noDate(p as never)
 										? NODATE_COLOR
-										: (STATUS_COLOR[p.status as string] ?? '#999')}
+										: (STATUS_COLOR[p.status as string] ?? 'color-mix(in srgb, var(--ink) 45.5%, var(--paper))')}
 								fillOpacityOf={(p) => (APPROX.has(p.prec as string) ? 0.45 : undefined)}
 								dashOf={(p) =>
 									APPROX.has(p.prec as string) ? `${2.4 / ctx.k} ${1.8 / ctx.k}` : undefined}
@@ -1041,7 +1041,7 @@
 				series={[
 					{
 						label: 'designation acts',
-						color: '#52b788',
+						color: 'var(--c-dase)',
 						values: areaYears.designations,
 						kind: 'line'
 					},
@@ -1152,7 +1152,7 @@
 {#if SHOW_FIRES_FRAME}
 	<ChartFrame
 		title="PROJECTS AND FIRES THAT TRIGGERED THEM"
-		titleColor="#000"
+		titleColor="var(--ink)"
 		caveat="Burnt-area perimeters: © European Union, Copernicus Emergency Management Service — EFFIS (satellite rapid-mapping estimates, not official οριοθετήσεις). Relief: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. The fire each project answers to is the one its act itself cites; «εκτός πυρκαγιάς» covers the same legal instrument used for tree disease and forest upgrades."
 		anchor="fires"
 		methodology="anadohoi"
@@ -1323,7 +1323,7 @@
 		flex: 1;
 		width: 10px;
 		border-radius: 5px;
-		background: linear-gradient(to bottom, #ecdadc, #6b2d35);
+		background: linear-gradient(to bottom, color-mix(in oklab, var(--c-fire) 14.9%, var(--paper)), var(--c-fire));
 	}
 	.fire-grid {
 		display: grid;
@@ -1419,7 +1419,7 @@
 		list-style: none;
 		margin: 0 0 var(--sp-3);
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		/* three aligned columns (2 rows) so entries line up, not rag */
 		display: grid;
@@ -1477,7 +1477,7 @@
 		position: fixed;
 		transform: translate(0, -50%);
 		background: var(--ink);
-		color: #fff;
+		color: var(--paper);
 		font-size: var(--fs-12);
 		line-height: 1.3;
 		padding: 4px 10px;
@@ -1508,7 +1508,7 @@
 		margin-top: var(--sp-10, 2.5rem);
 	}
 	.wcol :global(.ay figcaption) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 	}
 	.maplabel {
 		font-family: var(--font-display);
@@ -1538,7 +1538,7 @@
 	}
 	.relieftoggle {
 		display: inline-flex;
-		border: 1px solid #8f8f8f;
+		border: 1px solid var(--line);
 		border-radius: 999px;
 		overflow: hidden;
 	}
@@ -1549,12 +1549,12 @@
 		padding: 3px 14px;
 		border: 0;
 		background: none;
-		color: #6f6f6f;
+		color: color-mix(in srgb, var(--ink) 64.3%, var(--paper));
 		cursor: pointer;
 	}
 	.relieftoggle button.active {
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 	}
 	.hypsokey {
 		display: flex;
@@ -1586,7 +1586,7 @@
 	   page CSS paints the polygons white OVER the relief (CSS beats the
 	   fill attribute) */
 	.map-wrap :global(.map:not(.plate)) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		--map-accent: var(--c-anadohoi); /* the zoom buttons' circle hue */
 		box-shadow: none;
@@ -1597,11 +1597,11 @@
 		box-shadow: none;
 	}
 	.map-wrap :global(.map:not(.plate) .region) {
-		fill: #fff;
-		stroke: #8f8f8f;
+		fill: var(--paper);
+		stroke: var(--line);
 	}
 	.map-wrap :global(.map.plate .region) {
-		stroke: #8f8f8f;
+		stroke: var(--line);
 	}
 	.muted {
 		color: var(--ink-soft);
@@ -1619,8 +1619,8 @@
 		--region-line-w: 0.35;
 		--context-line-w: 0.35;
 		--border-line-w: 0.6;
-		/* a hovered region: grey, a shade darker than the sea (#f2f2f2) */
-		--land-hot: #e6e6e6;
+		/* a hovered region: grey, a shade darker than the sea (color-mix(in srgb, var(--ink) 5.8%, var(--paper))) */
+		--land-hot: color-mix(in srgb, var(--ink) 11.2%, var(--paper));
 	}
 	/* the user's edit: the key in the map's bottom corners — marks 7 px in,
 	   11 px Futura on 14,4 px lines, the last line 5 px above the edge */
@@ -1655,7 +1655,7 @@
 		border-radius: 50%;
 	}
 	.mapkey i.scar {
-		background: #6b2d35;
+		background: var(--c-fire);
 	}
 	/* the key in the tile's leftover height, two columns, the note across */
 	/* a tile's ⓘ key: the same wording as the frame legends, at tile size */
@@ -1691,7 +1691,7 @@
 		box-sizing: border-box;
 	}
 	.tkey i.scar {
-		background: #6b2d35;
+		background: var(--c-fire);
 		opacity: 0.85;
 	}
 	.tkey .mk {
@@ -1704,7 +1704,7 @@
 		color: var(--c-anadohoi);
 	}
 	.tkey .mk.bad {
-		color: #000;
+		color: var(--ink);
 	}
 	.tkey .note {
 		display: block;
@@ -1715,7 +1715,7 @@
 	.tilefill :global(.map) {
 		background: transparent;
 		border: none;
-		--land-context: #fff;
+		--land-context: var(--paper);
 		--map-accent: var(--card-accent);
 		box-shadow: none;
 	}

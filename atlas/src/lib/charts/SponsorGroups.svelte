@@ -213,7 +213,7 @@
 		border-radius: 2px;
 	}
 	.on {
-		color: #fff;
+		color: var(--paper);
 		font-size: var(--fs-13);
 		padding: 0 6px;
 		white-space: nowrap;
@@ -284,7 +284,7 @@
 		align-items: center;
 		flex: none;
 		height: 26px;
-		background: color-mix(in srgb, var(--c-anadohoi) 32%, #fff);
+		background: color-mix(in srgb, var(--c-anadohoi) 32%, var(--paper));
 		border-radius: 2px;
 	}
 	/* the member bars are pale, so a name on one stays ink */

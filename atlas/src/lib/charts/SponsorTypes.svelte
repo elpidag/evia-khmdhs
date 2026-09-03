@@ -144,7 +144,7 @@
 		align-self: center;
 	}
 	.glab.in {
-		color: #fff;
+		color: var(--paper);
 		padding-left: 4px;
 	}
 	.glab.out {

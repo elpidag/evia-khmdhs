@@ -4,6 +4,11 @@
 	 * READER: the figure IN FORCE at the passage being read (it changes at
 	 * the author's own `[FIGURE xx: name]` markers) with the caption under it.
 	 *
+	 * The caption TEXT is the author's own `content/story/captions.md`
+	 * (their request, 2026-09-03) — as long as they like, one entry per
+	 * carousel slide where a figure has several images, falling back to the
+	 * marker's short name where the file says nothing.
+	 *
 	 * ONE PLACEMENT FOR EVERY FIGURE (the author, 2026-09-03): the figure
 	 * block sits on the column's vertical centre SET 60 PX LOWER, its caption
 	 * 7 px below the image — grid, single, carousel, live drawing and the
@@ -19,6 +24,7 @@
 	 */
 	import { FIGURES } from '$lib/story/figures';
 	import { FIGURE_IMAGES } from '$lib/story/figureImages';
+	import { captionFor, renderCaption } from '$lib/story/captions';
 
 	interface Props {
 		figure: { n: number; name: string } | null;
@@ -41,6 +47,30 @@
 
 	/** the carousel's position — back to the first image on a figure change */
 	let pairIdx = $state(0);
+	/** which image of a multi-image figure is showing: a, b, … — the letter
+	 *  the captions file keys a slide's own caption by (the grid's two packs
+	 *  count the same way) */
+	const slot = $derived(
+		img?.kind === 'grid'
+			? stage < 2
+				? 'a'
+				: 'b'
+			: img?.kind === 'pair'
+				? String.fromCharCode(97 + pairIdx)
+				: undefined
+	);
+	/** the caption's paragraphs: the author's own text, else the marker's name */
+	const caption = $derived.by(() => {
+		if (!figure) return [] as string[];
+		const own = captionFor(figure.n, slot);
+		if (own) return own;
+		return figure.name ? [figure.name] : [];
+	});
+	/** the grid's captions name their own figure range, so they take no
+	 *  «Figure NN _ » prefix; every other figure does */
+	const prefix = $derived(
+		figure && img?.kind !== 'grid' ? `Figure ${pad(dispN(figure.n))} _ ` : ''
+	);
 	$effect(() => {
 		void figure?.n;
 		pairIdx = 0;
@@ -191,18 +221,13 @@
 				{/key}
 			{/if}
 		</div>
-		<p class="cap">
-			{#if figure && img?.kind === 'grid'}
-				{#if stage >= 1}
-					{stage < 2
-						? 'Figures 1 to 9: Images from media coverage of fires in Greece.'
-						: 'Figures 10 to 18: Images from fires worldwide.'}
-					All images are credited to their corresponding authors <a href="#sources">here</a>.
-				{/if}
-			{:else if figure}
-				{`Figure ${pad(dispN(figure.n))} _ ${figure.name}`}
+		<div class="cap">
+			{#if figure && !(img?.kind === 'grid' && stage < 1)}
+				{#each caption as para, i (i)}
+					<p>{#if i === 0}{prefix}{/if}{@html renderCaption(para)}</p>
+				{/each}
 			{/if}
-		</p>
+		</div>
 		{#if figure && FIGURES[figure.n]?.credit}
 			<p class="credit">{FIGURES[figure.n].credit}</p>
 		{/if}
@@ -363,7 +388,17 @@
 		color: var(--ink-soft);
 		min-height: 1.35em;
 	}
-	.cap a {
+	/* an extensive caption may run to several paragraphs (the author writes
+	   them as blank lines in captions.md) */
+	.cap p {
+		margin: 0;
+	}
+	.cap p + p {
+		margin-top: 0.5em;
+	}
+	/* the caption's links come from the author's markdown through {@html},
+	   so the selector must reach past Svelte's scoping */
+	.cap :global(a) {
 		color: inherit;
 		text-decoration: underline;
 		text-underline-offset: 2px;

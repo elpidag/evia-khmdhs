@@ -74,11 +74,11 @@
 	// contracts — no authority awards ΔΑΣΕ without hosting Anti-nero
 	// works (measured 0), and the no-contract ones render pale
 	const authFill = (p: Record<string, unknown>) =>
-		p.antinero_n || p.dase_n ? AUTH_TONE : '#a6a6a6';
+		p.antinero_n || p.dase_n ? AUTH_TONE : 'color-mix(in srgb, var(--ink) 39.6%, var(--paper))';
 	/** THE forest-authorities colour, every lens (user, 2026-08-26: black
 	 *  in one lens and contractors-black in the next confused the toggle);
 	 *  the /dase map's forest-directorate green */
-	const AUTH_TONE = '#406e55';
+	const AUTH_TONE = 'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black)';
 	/** the crew map's frame (THE FOREST CO-OPS THE SPONSORS ENGAGED) —
 	 *  the user wants this map at the same zoom and extents */
 	const MAP_VIEW = { center: [23.8305, 38.3566] as [number, number], k: 1.08 };
@@ -338,7 +338,7 @@
 							forest workers' co-operatives in its territory
 						</li>
 						<li>
-							<i class="dot" style:background="#a6a6a6"></i>
+							<i class="dot" style:background="color-mix(in srgb, var(--ink) 39.6%, var(--paper))"></i>
 							no contracts recorded in its territory within this research
 						</li>
 					{:else if show === 'coops'}
@@ -641,7 +641,7 @@
 		color: var(--ink);
 	}
 	.authp :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line);
 		--map-accent: var(--ink);
 		box-shadow: none;
@@ -664,7 +664,7 @@
 	}
 	.mode button.active {
 		background: var(--ink);
-		color: #fff;
+		color: var(--paper);
 	}
 	/* the legend — the dataset pages' grey band, docked at the top of the
 	   right column, one sentence per line (user, 2026-08-26) */
@@ -672,7 +672,7 @@
 		list-style: none;
 		margin: 0 0 var(--sp-4);
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-direction: column;
@@ -700,11 +700,11 @@
 		flex: none;
 	}
 	i.dot.both {
-		background: radial-gradient(circle, var(--c-dase) 0 34%, #406e55 34%);
+		background: radial-gradient(circle, var(--c-dase) 0 34%, color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black) 34%);
 	}
 	.nodot {
-		/* darker than the sea's #f2f2f2 — #cfcfcf read as water (user) */
-		fill: #a6a6a6;
+		/* darker than the sea's color-mix(in srgb, var(--ink) 5.8%, var(--paper)) — color-mix(in srgb, var(--ink) 21.4%, var(--paper)) read as water (user) */
+		fill: color-mix(in srgb, var(--ink) 39.6%, var(--paper));
 		stroke: none;
 	}
 	/* the map is the page's key element: map left, the shown network's
@@ -784,7 +784,7 @@
 	}
 	.siderow:hover,
 	.siderow.hot {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 	}
 	.siderow .nm {
 		white-space: nowrap;
@@ -854,7 +854,7 @@
 	.pager button.active {
 		background: var(--ink);
 		border-color: var(--ink);
-		color: #fff;
+		color: var(--paper);
 	}
 	.pager button:disabled {
 		opacity: 0.4;

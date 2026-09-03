@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolveCssColor } from '$lib/theme.svelte';
 	import { mulberry32 } from '$lib/transforms/prng';
 	/**
 	 * STATE-FUNDED — the /compare opening animation (user, 2026-08-25;
@@ -36,9 +37,9 @@
 
 	const W = 1120;
 	const H = 560;
-	const INK = '#2b2b2b';
-	const GREEN_RAW = '#52b788';
-	const NEUTRAL = '#8f8f8f';
+	const INK = 'color-mix(in srgb, var(--ink) 94.6%, var(--paper))';
+	const GREEN_RAW = 'var(--c-dase)';
+	const NEUTRAL = 'var(--line)';
 	const R_FLOOR = 1.3;
 	const R_MAX = 21;
 	/** the strips start just below the label band */
@@ -249,7 +250,7 @@
 		}
 		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 		ctx.clearRect(0, 0, W, built.canvasH);
-		const green = getComputedStyle(canvas).getPropertyValue('--c-dase').trim() || GREEN_RAW;
+		const green = resolveCssColor(GREEN_RAW);
 		const e = ease(t);
 		const colourMix = step === 0 ? 0 : step === 1 ? e : 1;
 		for (const d of built.all) {

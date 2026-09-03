@@ -12831,3 +12831,123 @@ site's English form via `names.authEn` — so «Δασαρχείο Λαυρίο�
 (verified in the browser: the English-only phrase matches 220 rows,
 reachable through no other column). Payload version bumped to v=10; the
 real-DB explore pins stay green (the row shape is additive).
+
+## 2026-09-03 — every chart palette becomes a LIVE derivation of the tokens (the Theme Lab follow-up)
+
+The author, trying two saved palettes: «when I use them the colours do not
+change accordingly in all the graphs … different colour palettes mix».
+They could not: the Theme Lab overrides the CSS tokens, but the charts'
+own palettes were TypeScript hex constants — CAT_COLORS, YEAR_COLORS /
+YEAR_GREYS, SCOPE_COLORS (both files), the gantt statuses, the map ramps
+(RAMP_WORKS / RAMP_DASE / RAMP_HOME), the ΔΑΣΕ map kinds and ~300 inline
+hexes across the chart components — none of which read a token.
+
+**The fix, in three moves.** (1) Every palette value is now a CSS string
+over the tokens — `var(--…)` where a primary matches, and
+`color-mix(in srgb|oklab, anchor P%, paper|black)` fades whose
+percentages were FITTED numerically to reproduce the old hand hexes
+(greys and the categorical red ramp to 0/255; the sequential green ramps
+to ≤10/255 on their two deepest steps — the old scales rotated hue,
+which a one-anchor family cannot). SVG fills and CSS surfaces follow a
+token change live, with no re-render. (2) Three new primaries anchor the
+families the 8 knobs lacked: `--c-cat-blue` #0d366b (flood works + the
+blue ramp), `--c-cat-amber` #b07d1e (studies), `--c-cat-red` #b33a1a
+(the fire-prevention ramp; its lighter steps are paper-fades at
+71.9/50/26%, exact). The greens of the category palette reuse the two
+dataset hues. (3) `$lib/theme.svelte.ts` is the bridge for what CSS
+cannot reach: `resolveCssColor()` resolves any expression against the
+live tokens through a probe element AND reads a reactive tick, so every
+canvas draw ($effect) and luminance pick that resolves a colour re-runs
+by itself when the Theme Lab announces a change (`themelab:change`
+window event, dispatched by apply/clear/reset). Converted that way:
+BeeswarmCanvas, StateFunded, SignedTimeline, CodeField, AlertsMap
+(canvas); ContractNetwork, StackedYears, BeeswarmCanvas's tip,
+DatasetSymbol untouched (header chips are chrome); FiresLayer's year
+gradient now derives from the resolved `--c-fire`.
+
+**Fidelity at the default palette** (screenshot-diffed on all four main
+pages before/after): /authorities pixel-identical; /antinero max 10/255
+(the fitted ramp steps); the only >12/255 shifts are former literal
+blacks — the ΔΑΣΕ map's municipal circles, revoked gantt marks — which
+now ride `--ink` (#000 → #1f1f1f, 12% lighter, the point of the
+conversion). Verified live with a deliberately wild palette (purple
+ΔΑΣΕ, teal fire, navy ink, warm paper): choropleths, KindFlow, the
+canvas beeswarm, the gantt, waffles, EFFIS scars and the maps all
+follow, on all three dataset pages.
+
+**Deliberately NOT following the lab**: the story page's timeline (the
+author's artboard colours, pending their /story palette decision), the
+baked relief plate + hypsometric legend gradients (image-locked), the
+satellite figure's plate, the header band's chip tones (chrome), and
+webui (:5000, frozen). The Theme Lab's footer note now says the charts
+follow; presets apply whole.
+
+## 2026-09-03 — the header band becomes a gradient of the three stream hues (user)
+
+«The black menu bar … should be a gradient of the three colours we have
+for --c-antinero, --c-dase, --c-anadohoi, and the rectangle colours of
+that menu bar should also rely on those.» Done, in the order the user
+named the tokens: `linear-gradient(90deg, var(--c-antinero),
+var(--c-dase), var(--c-anadohoi))` — at the default palette black under
+the brand fading through the ΔΑΣΕ green to the sponsored deep green at
+METHODOLOGY. The five squares' `chip` tones (datasets.ts) are now token
+derivations instead of hexes: the sponsored and co-op squares carry
+their own primaries verbatim, and the three squares that cannot sit as
+full hues on a dark band are pale fades — antinero 5% into paper
+(= the old #f2f2f2 to ±1), search ink 5.8% (= #f2f2f2 exactly), actors
+dase 43.3% (≈ the old #b7e4c7). The square lettering's black/white pick
+now measures the RESOLVED chip via `theme.svelte.cssLuminance`, which
+gained a 1×1-canvas fallback parser: Chrome serialises a resolved
+`color-mix` as `color(srgb …)`, which the rgb regexes missed — the first
+render printed white names on the pale chips. Verified at the default
+palette (byte-equivalent squares, correct lettering) and under a wild
+three-hue palette (gradient, chips and lettering all follow the lab).
+
+## 2026-09-03 — the figure captions leave the narrative: `content/story/captions.md` (author)
+
+The author, writing their captions: the `<span class="figmark">…</span>`
+wrapper in the middle of their prose «makes it difficult for me to
+incorporate the text for the captions, bcs i do not want to mess up how
+the appearance of the image works», some captions are extensive, and a
+figure the reader switches with the arrow must change its caption with
+the image. Three fixes, one round.
+
+**(1) The marker is PLAIN TEXT.** The author writes `[FIGURE 05: Press
+conference]` — no HTML at all — and the wrapper goes back on at build
+time: `scripts/remark-tag-paragraphs.ts` gained `figureMarkers()`,
+registered in `vite.config.ts` BEFORE `tagParagraphs`. The trap it
+encodes: `[FIGURE 05: …]` is markdown's own shortcut-reference syntax,
+so remark hands it over as a `linkReference` node carrying the text in
+`label`, NOT as text with brackets — the first pass matched nothing. It
+now handles the reference form, the literal-text form, and a marker the
+author already wrapped by hand (which arrives as span · reference ·
+span and must not be wrapped twice). All 13 markers in the author's two
+files were unwrapped; a marker-led paragraph is now an ordinary
+paragraph, so — unlike the raw-HTML block it used to become — its own
+prose keeps its markdown (the pairing test was rewritten to pin exactly
+that, and that no file opens a paragraph with raw HTML any more).
+
+**(2) The caption text lives in `src/content/story/captions.md`**, the
+author's own file, headed by its own instructions: one block per figure,
+`## 5`, as long as they like, blank lines making paragraphs, with
+`[text](url)`, `*italic*` and `**bold**` as the only mark-up — rendered
+by `lib/story/captions.ts` through an escape-first renderer, so raw HTML
+in that file can never reach the page as markup. The page still prints
+«Figure NN _ » in front (the grid's two captions name their own ranges
+and take no prefix). A figure with no entry falls back to the short name
+inside its marker, which is what the page printed before — so the file
+starts pre-filled with today's names and nothing moved.
+
+**(3) A carousel slide takes its own caption**: `## 2a` is the first
+image, `## 2b` the second (the grid's two packs of nine are `## 1a` /
+`## 1b`, their wording moved verbatim out of `StoryFigure.svelte` —
+author text no longer lives in a component). `captionFor(n, slot)`
+resolves slide → figure → marker name. Verified in the browser: the
+arrow swaps image AND caption, and swaps back.
+
+The numbering the author already lives with is unchanged and now stated
+in the file's header: their `[FIGURE 02]` prints as «Figure 19», because
+the opening grid's eighteen images are figures 1 to 18. Pinned by
+`captions.test.ts` (every entry keys to a real marker, every marked
+figure answers, multi-image figures answer per slot, the renderer
+escapes).

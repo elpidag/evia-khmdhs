@@ -168,7 +168,7 @@
 					width={mapW || 460}
 					height={mapH}
 					colorOf={(pe) =>
-						regionMap.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, #fff)' : '#fff'}
+						regionMap.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, var(--paper))' : 'var(--paper)'}
 					tipOf={(pe) => {
 						const r = regionMap.get(pe);
 						return r
@@ -287,7 +287,7 @@
 	}
 	/* the contract pages' map dress on the entity map */
 	.detailmap :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line);
 		--map-accent: var(--c-antinero);
 		box-shadow: none;

@@ -13,6 +13,7 @@
 	 * always fits the 59,5 px square.
 	 */
 	import { symbolFor, type SymbolKey } from '$lib/datasets';
+	import { cssLuminance } from '$lib/theme.svelte';
 	let {
 		key,
 		size = 96,
@@ -35,14 +36,9 @@
 	const s = $derived(symbolFor(key));
 	const css = $derived(typeof size === 'number' ? `${size}px` : size);
 	const text = $derived(s.short ?? s.label);
-	/** white on a dark tone, ink on a light one */
-	const ink = $derived.by(() => {
-		const m = /^#?([0-9a-f]{6})$/i.exec(s.chip);
-		if (!m) return '#000';
-		const v = parseInt(m[1], 16);
-		const lum = (0.299 * ((v >> 16) & 255) + 0.587 * ((v >> 8) & 255) + 0.114 * (v & 255)) / 255;
-		return lum > 0.6 ? '#000' : '#fff';
-	});
+	/** white on a dark tone, black on a light one — the chip tones are CSS
+	 *  strings over the tokens, so measure the resolved colour */
+	const ink = $derived.by(() => (cssLuminance(s.chip) > 0.6 ? '#000' : '#fff'));
 	/** 14 px for a short name, less for a long one, so it never overflows */
 	const fs = $derived(
 		`clamp(9px, calc(var(--sym-size) * ${(0.235 * Math.min(1, 17 / Math.max(17, text.length))).toFixed(3)}), 14px)`

@@ -103,10 +103,10 @@
 					fitPad={0.15}
 					colorOf={(pe) =>
 						pe === a.pe
-							? 'color-mix(in srgb, #406e55 30%, #fff)'
+							? 'color-mix(in srgb, color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black) 30%, var(--paper))'
 							: covered.has(pe)
-								? 'color-mix(in srgb, #406e55 14%, #fff)'
-								: '#fff'}
+								? 'color-mix(in srgb, color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black) 14%, var(--paper))'
+								: 'var(--paper)'}
 				>
 					{#snippet overlay(ctx)}
 						{#if a.seat.lat && a.seat.lon}
@@ -115,7 +115,7 @@
 								points={[{ lat: a.seat.lat, lon: a.seat.lon, name: a.name }]}
 								r={5.5}
 								stroke="none"
-								fillOf={() => '#406e55'}
+								fillOf={() => 'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black)'}
 								tipOf={() =>
 									`<strong>Office</strong><br>${placeEn(a.contact.city) || placeEn(a.seat.city) || ''}`}
 							/>
@@ -283,9 +283,9 @@
 	}
 	/* the contract pages' map dress; the authorities wear their own green */
 	.detailmap :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line);
-		--map-accent: #406e55;
+		--map-accent: color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black);
 		box-shadow: none;
 	}
 	/* the regions rest: no card, and no hover stroke either */

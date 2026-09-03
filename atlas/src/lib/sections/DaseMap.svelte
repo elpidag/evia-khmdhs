@@ -243,7 +243,7 @@
 							points={drillDots}
 							r={(p) => dotR(p as unknown as { eur: number })}
 							fillOf={() => 'var(--c-dase)'}
-							stroke="#1c4a34"
+							stroke="color-mix(in oklab, var(--c-dase) 51.8%, black)"
 							hrefOf={(p) => `/dase/coop/${(p as unknown as { vat: string }).vat}`}
 							tipOf={(p) => {
 								const d = p as unknown as {
@@ -329,7 +329,7 @@
 		z-index: 2;
 		box-sizing: border-box;
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-wrap: wrap;
@@ -379,7 +379,7 @@
 		height: 11px;
 		border-radius: 50%;
 		background: var(--c-dase);
-		border: 1px solid #1c4a34;
+		border: 1px solid color-mix(in oklab, var(--c-dase) 51.8%, black);
 		flex: none;
 		display: inline-block;
 	}

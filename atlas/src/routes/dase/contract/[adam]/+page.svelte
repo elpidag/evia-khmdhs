@@ -346,7 +346,7 @@
 					fitPes={pe ? [pe] : undefined}
 					fitPoints={seat ? [[seat.lon, seat.lat]] : null}
 					fitPad={0.15}
-					colorOf={(p) => (p === pe ? 'color-mix(in srgb, var(--c-dase) 30%, #fff)' : '#fff')}
+					colorOf={(p) => (p === pe ? 'color-mix(in srgb, var(--c-dase) 30%, var(--paper))' : 'var(--paper)')}
 					tipOf={(p) => `<strong>${ruLabel(p)}</strong>`}
 				>
 					{#snippet overlay(ctx)}
@@ -574,7 +574,7 @@
 	}
 	.sw.on {
 		background: var(--c-dase);
-		color: #fff;
+		color: var(--paper);
 	}
 	.famslot {
 		position: relative;
@@ -616,14 +616,14 @@
 	}
 	/* template map look — same as the sponsored-works maps */
 	.detailmap :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line);
 		--map-accent: var(--c-dase);
 		box-shadow: none;
 		border-radius: 4px;
 	}
 	.detailmap :global(.map .region) {
-		stroke: #8f8f8f;
+		stroke: var(--line);
 	}
 	.tplsec {
 		margin-top: var(--sp-2);

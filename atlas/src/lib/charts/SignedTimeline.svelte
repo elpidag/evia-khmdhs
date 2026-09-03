@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolveCssColor } from '$lib/theme.svelte';
 	/**
 	 * EVERY CONTRACT BY THE DAY IT WAS SIGNED (user, 2026-08-29, second
 	 * round): one EQUAL dot per contract of either programme — the size says
@@ -37,8 +38,8 @@
 	const H = 460;
 	const PADL = 10;
 	const PADR = 10;
-	const INK = '#2b2b2b';
-	const GREEN = '#52b788';
+	const INK = 'color-mix(in srgb, var(--ink) 94.6%, var(--paper))';
+	const GREEN = 'var(--c-dase)';
 	/** the lattice: ONE WEEK per column (user, fourth round), rows this tall;
 	 *  the Anti-nero dot a little bigger than the co-operatives' */
 	const DAYS_PER_COL = 7;
@@ -188,7 +189,7 @@
 		for (const d of built.all) {
 			ctx.beginPath();
 			ctx.arc(d.x, d.y, d.r, 0, 2 * Math.PI);
-			ctx.fillStyle = d.side === 'a' ? INK : GREEN;
+			ctx.fillStyle = resolveCssColor(d.side === 'a' ? INK : GREEN);
 			ctx.globalAlpha = 0.85;
 			ctx.fill();
 		}
@@ -196,7 +197,7 @@
 			ctx.globalAlpha = 1;
 			ctx.beginPath();
 			ctx.arc(hover.x, hover.y, hover.r + 1.6, 0, 2 * Math.PI);
-			ctx.strokeStyle = hover.side === 'a' ? INK : GREEN;
+			ctx.strokeStyle = resolveCssColor(hover.side === 'a' ? INK : GREEN);
 			ctx.lineWidth = 1.4;
 			ctx.stroke();
 		}
@@ -309,13 +310,13 @@
 		fill: var(--ink);
 	}
 	text.lane.d {
-		fill: #2e8a5c;
+		fill: color-mix(in oklab, var(--c-dase) 77.2%, black);
 	}
 	circle.key.a {
-		fill: #2b2b2b;
+		fill: color-mix(in srgb, var(--ink) 94.6%, var(--paper));
 	}
 	circle.key.d {
-		fill: #52b788;
+		fill: var(--c-dase);
 	}
 	.tip {
 		position: absolute;
@@ -327,11 +328,11 @@
 		font-size: var(--fs-13);
 		pointer-events: none;
 		box-shadow: var(--shadow-paper);
-		background: #1f1f1f;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 	}
 	.tip.green {
-		background: #52b788;
-		color: #0d2a1c;
+		background: var(--c-dase);
+		color: color-mix(in oklab, var(--c-dase) 36.4%, black);
 	}
 </style>

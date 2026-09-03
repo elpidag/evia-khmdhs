@@ -176,8 +176,8 @@
 		pointer-events: none;
 		padding: 7px 10px;
 		border-radius: 4px;
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 		font-size: var(--fs-12);
 		line-height: 1.3;
 		white-space: nowrap;

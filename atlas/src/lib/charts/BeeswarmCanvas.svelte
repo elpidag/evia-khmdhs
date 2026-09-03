@@ -11,6 +11,7 @@
 <script lang="ts">
 	import type { DaseSwarm } from '$lib/api';
 	import { goto } from '$app/navigation';
+	import { resolveCssColor, cssLuminance } from '$lib/theme.svelte';
 	import { dodge } from '$lib/transforms/beeswarm';
 	import { eur, eurShort } from '$lib/transforms/format';
 	import { binPosition } from '$lib/transforms/histogram';
@@ -120,7 +121,7 @@
 				x: d.x,
 				y: d.y,
 				r: layout.r,
-				fill: colors(data.year[d.i])
+				fill: resolveCssColor(colors(data.year[d.i]))
 			}));
 	});
 	const dots = $derived.by((): Dot[] => {
@@ -173,14 +174,14 @@
 		for (const d of dots) {
 			ctx.beginPath();
 			ctx.arc(d.x, d.y, layout.r, 0, 2 * Math.PI);
-			ctx.fillStyle = colors(data.year[d.i]);
+			ctx.fillStyle = resolveCssColor(colors(data.year[d.i]));
 			ctx.globalAlpha = 0.85;
 			ctx.fill();
 			if (ring?.[d.i]) {
 				ctx.globalAlpha = 1;
 				ctx.beginPath();
 				ctx.arc(d.x, d.y, layout.r + 0.9, 0, 2 * Math.PI);
-				ctx.strokeStyle = '#111111';
+				ctx.strokeStyle = resolveCssColor('color-mix(in srgb, var(--ink) 53.3%, black)');
 				ctx.lineWidth = 0.9;
 				ctx.stroke();
 				ctx.globalAlpha = 0.85;
@@ -190,7 +191,7 @@
 			ctx.globalAlpha = 1;
 			ctx.beginPath();
 			ctx.arc(hover.x, hover.y, layout.r + 1.5, 0, 2 * Math.PI);
-			ctx.strokeStyle = '#1f1f1f';
+			ctx.strokeStyle = resolveCssColor('var(--ink)');
 			ctx.lineWidth = 1.5;
 			ctx.stroke();
 		}
@@ -228,11 +229,10 @@
 
 	const dmy = (iso: string | null | undefined) =>
 		iso ? `${iso.slice(8, 10)}.${iso.slice(5, 7)}.${iso.slice(0, 4)}` : '—';
-	// dark ink on the light year swatches, white on the deep ones
-	function tipInk(hex: string): string {
-		const n = parseInt(hex.slice(1), 16);
-		const lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
-		return lum > 0.55 ? '#1c221f' : '#ffffff';
+	// dark ink on the light year swatches, white on the deep ones — the
+	// swatch colours are CSS strings over the tokens now, so resolve first
+	function tipInk(c: string): string {
+		return cssLuminance(c) > 0.55 ? 'var(--ink)' : 'var(--paper)';
 	}
 	const hoverColor = $derived(hover ? colors(data.year[hover.i]) : '');
 </script>

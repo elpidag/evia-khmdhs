@@ -11,15 +11,21 @@
  * fire protection around archaeological sites, and the catch-all special
  * forestry works each a step lighter. `CAT_ORDER` is that reading order.
  */
+// Since the Theme Lab round (2026-09-03) every value is a LIVE CSS string
+// over the tokens — the greens are the two dataset hues, blue/amber/red are
+// the --c-cat-* categorical anchors, and the red family's lighter steps are
+// paper-fades of the anchor whose percentages reproduce the old hexes
+// exactly (#c8715a / #d99c8c / #ebccc3). Canvas or luminance consumers
+// resolve through $lib/theme.svelte.
 export const CAT_COLORS: Record<string, string> = {
-	anadasoseis: '#2d6a4f',
-	ylotomies: '#52b788',
-	antidiavrotika: '#0d366b',
-	meletes: '#b07d1e',
-	miktes_zones: '#b33a1a',
-	ydatodexamenes: '#c8715a',
-	arxaiologikoi: '#d99c8c',
-	dasotexnika: '#ebccc3'
+	anadasoseis: 'var(--c-anadohoi)',
+	ylotomies: 'var(--c-dase)',
+	antidiavrotika: 'var(--c-cat-blue)',
+	meletes: 'var(--c-cat-amber)',
+	miktes_zones: 'var(--c-cat-red)',
+	ydatodexamenes: 'color-mix(in srgb, var(--c-cat-red) 71.9%, var(--paper))',
+	arxaiologikoi: 'color-mix(in srgb, var(--c-cat-red) 50%, var(--paper))',
+	dasotexnika: 'color-mix(in srgb, var(--c-cat-red) 26%, var(--paper))'
 };
 
 /** the categories top to bottom on the chord (user, 2026-08-23, with the

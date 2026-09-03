@@ -174,7 +174,7 @@
 		color: var(--c-anadohoi);
 	}
 	.mk.bad {
-		color: #000;
+		color: var(--ink);
 	}
 	.note {
 		color: var(--ink-faint);
@@ -205,7 +205,7 @@
 		grid-template-columns: auto minmax(0, 1fr) max-content;
 		gap: var(--sp-1) var(--sp-5, 1.25rem);
 		align-items: center;
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		padding: var(--sp-2) var(--sp-3);
 		margin: 0 0 var(--sp-3);
@@ -311,7 +311,7 @@
 		right: 0;
 		width: 0;
 		height: 57px;
-		border-right: 2px solid #000;
+		border-right: 2px solid var(--ink);
 	}
 	.dlab {
 		grid-column: 1;
@@ -332,10 +332,10 @@
 		width: 55%;
 	}
 	.b {
-		background: #000;
+		background: var(--ink);
 	}
 	.g {
-		background: #8f8f8f;
+		background: var(--line);
 	}
 	.thin {
 		height: 3px;

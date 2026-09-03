@@ -101,9 +101,9 @@
 	.hint button.on,
 	.hint button:hover,
 	.hint button:focus-visible {
-		background: #000;
-		border-color: #000;
-		color: #fff;
+		background: var(--ink);
+		border-color: var(--ink);
+		color: var(--paper);
 	}
 	/* every card is the same 200 px wide and grows downwards for a longer
 	   text (user, 2026-08-20) — cards that sized to their sentence read as a
@@ -117,8 +117,8 @@
 		left: calc(100% + 6px);
 		width: 200px;
 		max-width: 80vw;
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 		border-radius: 4px;
 		padding: var(--sp-2) var(--sp-3);
 		/* the card carries its OWN typography: inside a CAPS display heading

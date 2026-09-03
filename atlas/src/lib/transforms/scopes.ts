@@ -31,18 +31,18 @@ export const SCOPE_LABELS: Record<string, string> = {
  *  the two qualitatively different strands take the darkest steps and
  *  the unknown phase the lightest, so it reads as "least defined" */
 export const SCOPE_COLORS: Record<string, string> = {
-	antinero_i: '#dedede',
-	antinero_ii: '#c4c4c4',
-	antinero_iii: '#a6a6a6',
-	antinero_iv: '#828282',
-	antinero_v_plus: '#5a5a5a',
-	antinero_esa: '#3a3a3a',
-	antinero_restoration: '#141414',
-	antinero_unknown_phase: '#efefef'
+	antinero_i: 'color-mix(in srgb, var(--ink) 14.6%, var(--paper))',
+	antinero_ii: 'color-mix(in srgb, var(--ink) 26.2%, var(--paper))',
+	antinero_iii: 'color-mix(in srgb, var(--ink) 39.6%, var(--paper))',
+	antinero_iv: 'color-mix(in srgb, var(--ink) 55.6%, var(--paper))',
+	antinero_v_plus: 'color-mix(in srgb, var(--ink) 73.5%, var(--paper))',
+	antinero_esa: 'color-mix(in srgb, var(--ink) 87.8%, var(--paper))',
+	antinero_restoration: 'color-mix(in srgb, var(--ink) 63%, black)',
+	antinero_unknown_phase: 'color-mix(in srgb, var(--ink) 7%, var(--paper))'
 };
 
 export const scopeLabel = (s: string): string => SCOPE_LABELS[s] ?? s;
-export const scopeColor = (s: string): string => SCOPE_COLORS[s] ?? '#7e7e7e';
+export const scopeColor = (s: string): string => SCOPE_COLORS[s] ?? 'color-mix(in srgb, var(--ink) 57.4%, var(--paper))';
 
 export function orderScopes(scopes: Iterable<string>): string[] {
 	const order = SCOPE_ORDER as readonly string[];

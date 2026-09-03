@@ -360,7 +360,7 @@
 	}
 	.rowbox {
 		fill: transparent;
-		stroke: #000;
+		stroke: var(--ink);
 		stroke-width: 1;
 		opacity: 0;
 	}
@@ -378,7 +378,7 @@
 		fill: var(--c-anadohoi);
 	}
 	.mark.bad {
-		fill: #000000;
+		fill: var(--ink);
 	}
 	.step {
 		font-size: 8.5px;

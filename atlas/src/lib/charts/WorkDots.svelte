@@ -153,7 +153,7 @@
 						cx={d.x}
 						cy={d.y}
 						r={DOT_R}
-						fill={CAT_COLORS[d.cat ?? ''] ?? '#9b9b9b'}
+						fill={CAT_COLORS[d.cat ?? ''] ?? 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))'}
 						class="dot"
 						class:hot={hover?.ref === d.ref}
 						opacity={lit(d) ? 1 : 0.22}
@@ -193,7 +193,7 @@
 	}
 	.dot.hot,
 	a:hover .dot {
-		stroke: #000;
+		stroke: var(--ink);
 		stroke-width: 1.4;
 	}
 	.count {
@@ -213,7 +213,7 @@
 		margin: 0 0 var(--sp-3);
 		box-sizing: border-box;
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-wrap: wrap;
@@ -238,8 +238,8 @@
 		position: absolute;
 		left: 0;
 		bottom: 0;
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 		padding: 8px 10px;
 		display: grid;
 		gap: 2px;

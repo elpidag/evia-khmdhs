@@ -18,6 +18,8 @@ const LONE_TAG = /^<\/?[a-zA-Z][^<>]*\/?>$/;
 interface Node {
 	type: string;
 	value?: string;
+	/** a shortcut reference's own text, brackets excluded */
+	label?: string;
 	position?: unknown;
 	children?: Node[];
 }
@@ -31,4 +33,60 @@ export function tagParagraphs() {
 			return { type: 'paragraph', children: [{ type: 'html', value: n.value }], position: n.position };
 		});
 	};
+}
+
+// The author writes their figure markers as PLAIN TEXT — `[FIGURE 05: Press
+// conference]` — since 2026-09-03: the `<span class="figmark">…</span>`
+// wrapper they used to have to type is markup in the middle of their prose,
+// and it made the text hard to edit without breaking the page. This plugin
+// puts the wrapper back at build time, so the marker still hides in the
+// narrative and still marks where the figure changes.
+//
+// The trap: `[FIGURE 05: …]` is markdown's own shortcut-reference syntax, so
+// remark hands it over as a `linkReference` node carrying the text in
+// `label` — NOT as text with brackets. Both shapes are handled (a marker
+// already inside a span is an `html` node and is left alone), and the
+// paragraph around it stays a paragraph, so its prose is still markdown.
+const MARKER = /\[FIGURE\s*\d+\s*(?::[^\]]*)?\]/g;
+const LABEL = /^FIGURE\s*\d+\s*(?::.*)?$/i;
+
+const span = (inner: string): Node => ({
+	type: 'html',
+	value: `<span class="figmark">${inner}</span>`
+});
+
+export function figureMarkers() {
+	const walk = (n: Node): void => {
+		if (!n.children) return;
+		const out: Node[] = [];
+		for (const child of n.children) {
+			// `[FIGURE 05: …]` as markdown read it: a shortcut reference
+			if (child.type === 'linkReference' && typeof child.label === 'string' && LABEL.test(child.label.trim())) {
+				// a marker the author already wrapped by hand arrives as
+				// `<span …>` · reference · `</span>`: give the text back as it
+				// was rather than wrapping it twice
+				const prev = out[out.length - 1];
+				const wrapped =
+					prev?.type === 'html' && /class="figmark">\s*$/.test(prev.value ?? '');
+				out.push(wrapped ? { type: 'text', value: `[${child.label}]` } : span(`[${child.label}]`));
+				continue;
+			}
+			// the same marker as literal text (inside another construct)
+			if (child.type === 'text' && typeof child.value === 'string' && child.value.includes('[FIGURE')) {
+				let last = 0;
+				for (const m of child.value.matchAll(MARKER)) {
+					const at = m.index ?? 0;
+					if (at > last) out.push({ type: 'text', value: child.value.slice(last, at) });
+					out.push(span(m[0]));
+					last = at + m[0].length;
+				}
+				if (last < child.value.length) out.push({ type: 'text', value: child.value.slice(last) });
+				continue;
+			}
+			walk(child);
+			out.push(child);
+		}
+		n.children = out;
+	};
+	return (tree: Node) => walk(tree);
 }

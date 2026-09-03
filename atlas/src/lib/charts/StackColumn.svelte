@@ -218,7 +218,7 @@
 	}
 	/* the card's segments are parted by a hairline of the paper */
 	.seg.seam {
-		stroke: #fff;
+		stroke: var(--paper);
 		stroke-width: 0.4;
 	}
 	.share {
@@ -229,7 +229,7 @@
 		text-anchor: middle;
 	}
 	.share.onink {
-		fill: #fff;
+		fill: var(--paper);
 	}
 	.lab {
 		font-family: var(--font-ui);

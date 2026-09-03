@@ -10,10 +10,12 @@
 
 	let { children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 
-	// The header since 2026-08-27 (Artboard 4, second round): a BLACK 85 px
+	// The header since 2026-08-27 (Artboard 4, second round): an 85 px
 	// band — the brand in white on two lines, then FIVE filled 59,5 px
 	// squares (the three streams, then search and the actor network) each
 	// carrying its own name, and METHODOLOGY in white at the right edge.
+	// Since 2026-09-03 (user) the band is a GRADIENT of the three stream
+	// hues, antinero -> dase -> anadohoi, so it follows the palette.
 	// `/` carries no chrome at all.
 	const streams = SYMBOLS.filter((s) => s.rank === 'stream');
 	const tools = SYMBOLS.filter((s) => s.rank === 'tool');
@@ -124,10 +126,15 @@
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		background: #000;
+		background: linear-gradient(
+			90deg,
+			var(--c-antinero),
+			var(--c-dase),
+			var(--c-anadohoi)
+		);
 	}
-	/* the band: 85 px tall and BLACK, the brand 81 px in, METHODOLOGY off
-	   the right edge (Artboard 4, 1920 wide) */
+	/* the band: 85 px tall in the stream-hue gradient, the brand 81 px in,
+	   METHODOLOGY off the right edge (Artboard 4, 1920 wide) */
 	header .inner {
 		display: flex;
 		align-items: center;

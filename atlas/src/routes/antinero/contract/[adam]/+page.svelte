@@ -872,7 +872,7 @@
 				fitPoints={worksPoints}
 				fitPes={worksPes}
 				fitPad={0.15}
-				colorOf={(pe) => (regionSet.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, #fff)' : '#fff')}
+				colorOf={(pe) => (regionSet.has(pe) ? 'color-mix(in srgb, var(--c-antinero) 22%, var(--paper))' : 'var(--paper)')}
 				tipOf={(pe) => `<strong>${ruLabel(pe)}</strong>`}
 			>
 				{#snippet overlay(ctx)}
@@ -1132,7 +1132,7 @@
 	}
 	.sw.on {
 		background: var(--ink);
-		color: #fff;
+		color: var(--paper);
 	}
 	/* evidence left, codes right — two reference blocks, one row */
 	.refcols {
@@ -1189,14 +1189,14 @@
 	/* template map look — same as the sponsored-works maps:
 	   grey sea, no border, no paper shadow */
 	.detailmap :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		--map-accent: var(--c-antinero); /* the zoom buttons' circle hue */
 		box-shadow: none;
 		border-radius: 4px;
 	}
 	.detailmap :global(.map .region) {
-		stroke: #8f8f8f;
+		stroke: var(--line);
 	}
 	.tplsec {
 		margin-top: var(--sp-8);

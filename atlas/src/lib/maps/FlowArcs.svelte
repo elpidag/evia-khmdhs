@@ -33,8 +33,8 @@
 	// widest is ~4 units, not 8 — the dash and its gap grow WITH the stroke
 	// (a wide dashed line with a fixed gap read as a misprint), and the
 	// arrowhead is an OPEN chevron, never a solid triangle.
-	const ARC = '#111111';
-	const LOCAL = '#ffffff';
+	const ARC = 'color-mix(in srgb, var(--ink) 53.3%, black)';
+	const LOCAL = 'var(--paper)';
 
 	const shown = $derived(
 		flows
@@ -128,7 +128,7 @@
 			cy={p[1]}
 			r={(4 + 9 * Math.sqrt(localEur / maxEur)) / ctx.k}
 			fill={LOCAL}
-			stroke="#111111"
+			stroke="color-mix(in srgb, var(--ink) 53.3%, black)"
 			stroke-width={1.2 / ctx.k}
 			opacity="0.9"
 			onmouseenter={() =>

@@ -215,7 +215,7 @@
 	.col-title {
 		font-size: 14px;
 		font-weight: 400;
-		fill: #111111;
+		fill: color-mix(in srgb, var(--ink) 53.3%, black);
 	}
 	.edge {
 		fill: none;

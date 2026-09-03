@@ -135,7 +135,7 @@
 	}
 	.barcell {
 		height: 28px;
-		background: var(--paper-3, #f2f2f2);
+		background: var(--paper-3, color-mix(in srgb, var(--ink) 5.8%, var(--paper)));
 		position: relative;
 	}
 	.bar {

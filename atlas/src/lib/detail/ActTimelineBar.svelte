@@ -294,7 +294,7 @@
 		fill: var(--c-anadohoi);
 	}
 	.mark.bad {
-		fill: #000;
+		fill: var(--ink);
 	}
 	.dlabel {
 		font-size: 10px;
@@ -302,8 +302,8 @@
 	}
 	/* per-fire tones arrive inline, matching the site map's scar fills */
 	.fire {
-		fill: color-mix(in srgb, #6b2d35 85%, #fff);
-		stroke: #6b2d35;
+		fill: color-mix(in srgb, var(--c-fire) 85%, var(--paper));
+		stroke: var(--c-fire);
 		stroke-width: 0.8;
 		cursor: pointer;
 	}

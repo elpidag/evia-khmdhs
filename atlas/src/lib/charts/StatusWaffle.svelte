@@ -49,7 +49,7 @@
 					(RANK[keyOf(a)] ?? 9) - (RANK[keyOf(b)] ?? 9) ||
 					(a.start0 ?? a.start ?? '').localeCompare(b.start0 ?? b.start ?? '')
 			)
-			.map((p) => ({ ada: p.ada, name: p.company, color: CAT_COLOR[keyOf(p)] ?? '#999' }));
+			.map((p) => ({ ada: p.ada, name: p.company, color: CAT_COLOR[keyOf(p)] ?? 'color-mix(in srgb, var(--ink) 45.5%, var(--paper))' }));
 	});
 	const cells = $derived(
 		ORDER.flatMap(([k, label, color]) =>
@@ -138,7 +138,7 @@
 		left: 50%;
 		transform: translateX(-50%);
 		background: var(--ink);
-		color: #fff;
+		color: var(--paper);
 		font-size: var(--fs-12);
 		line-height: 1.3;
 		padding: 3px 8px;

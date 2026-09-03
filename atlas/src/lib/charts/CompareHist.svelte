@@ -122,7 +122,7 @@
 		list-style: none;
 		margin: 0 0 var(--sp-3);
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-wrap: wrap;

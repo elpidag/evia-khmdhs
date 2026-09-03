@@ -146,8 +146,8 @@
 	/* timeline-dot hover: the linked act's row goes black, lettering white */
 	.hl td,
 	.hl td a {
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 	}
 	.nowrap {
 		white-space: nowrap;

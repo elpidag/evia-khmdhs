@@ -169,8 +169,8 @@
 		for (const p of data.contract_points) m.set(p.ref, (m.get(p.ref) ?? 0) + 1);
 		return m;
 	});
-	const SINGLE_FILL = '#6b6b6b';
-	const DRILL_STROKE = '#333333';
+	const SINGLE_FILL = 'color-mix(in srgb, var(--ink) 65.9%, var(--paper))';
+	const DRILL_STROKE = 'color-mix(in srgb, var(--ink) 91.1%, var(--paper))';
 
 	// the coarse Π.Ε. layer (the same memoised load PaperMap uses), so the
 	// de-overlap spread can keep every dot ON LAND — five seats share Λίμνη's
@@ -423,7 +423,7 @@
 						points={contractDots}
 						r={focus.side === 'works' ? 6 : 4.5}
 						fillOf={(p) =>
-							hotRefs.has(p.ref as string) || p.ref === selectedRef ? '#111111' : SINGLE_FILL}
+							hotRefs.has(p.ref as string) || p.ref === selectedRef ? 'color-mix(in srgb, var(--ink) 53.3%, black)' : SINGLE_FILL}
 						stroke={DRILL_STROKE}
 						tipOf={(p) =>
 							`<strong><a href="/antinero/contract/${p.ref}">${p.ref}</a></strong>` +
@@ -485,10 +485,10 @@
 						r={focus?.side === 'home' ? 6 : 4.5}
 						fillOf={(p) =>
 							hotVats.has(p.vat as string) || p.vat === selectedVat
-								? '#111111'
+								? 'color-mix(in srgb, var(--ink) 53.3%, black)'
 								: focus?.side === 'works'
-									? '#9a9a9a'
-									: '#555555'}
+									? 'color-mix(in srgb, var(--ink) 44.9%, var(--paper))'
+									: 'color-mix(in srgb, var(--ink) 75.9%, var(--paper))'}
 						tipOf={(p) =>
 							`<strong><a href="/antinero/contractor/${p.vat}">${p.name}</a></strong>` +
 							`<br>${grInt(p.n_contracts as number)} ${(p.n_contracts as number) === 1 ? 'contract' : 'contracts'} · ${eur(p.total_eur as number)}`}
@@ -561,7 +561,7 @@
 		z-index: 2; /* the card paints above the map that follows */
 		box-sizing: border-box;
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-wrap: wrap;
@@ -613,20 +613,20 @@
 		width: 10px;
 		height: 10px;
 		border-radius: 50%;
-		background: #555555; /* the country-level registered-office dot */
+		background: color-mix(in srgb, var(--ink) 75.9%, var(--paper)); /* the country-level registered-office dot */
 		flex: none;
 	}
 	/* the left map's contract dots: the map's own grey and stroke */
 	.mapkey i.dot.work {
-		background: #6b6b6b;
-		border: 1px solid #333333;
+		background: color-mix(in srgb, var(--ink) 65.9%, var(--paper));
+		border: 1px solid color-mix(in srgb, var(--ink) 91.1%, var(--paper));
 		box-sizing: border-box;
 	}
 	/* the selected contract: black, enlarged, ink-stroked — as on the map */
 	.mapkey i.dot.sel {
 		width: 14px;
 		height: 14px;
-		background: #111111;
+		background: color-mix(in srgb, var(--ink) 53.3%, black);
 		border: 1.5px solid var(--ink);
 		box-sizing: border-box;
 	}
@@ -634,21 +634,21 @@
 		flex-basis: 100%; /* its own row; same lettering as every entry */
 	}
 	.mapkey i.dot.grey {
-		background: #9a9a9a;
+		background: color-mix(in srgb, var(--ink) 44.9%, var(--paper));
 	}
 	/* a settlement-centre dot: dashed ring over a 55 % fill — as drawn */
 	.mapkey i.dot.approx {
 		background: rgba(85, 85, 85, 0.55);
-		border: 1.5px dashed #555555;
+		border: 1.5px dashed color-mix(in srgb, var(--ink) 75.9%, var(--paper));
 		box-sizing: border-box;
 	}
 	.mapkey i.dot.hot {
-		background: #111111;
+		background: color-mix(in srgb, var(--ink) 53.3%, black);
 	}
 	.mapkey i.dash {
 		width: 18px;
 		height: 0;
-		border-top: 1.5px dashed #555;
+		border-top: 1.5px dashed color-mix(in srgb, var(--ink) 75.9%, var(--paper));
 		flex: none;
 	}
 	.twin {

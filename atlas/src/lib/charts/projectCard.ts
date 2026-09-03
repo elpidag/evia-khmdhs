@@ -67,7 +67,7 @@ export function cardFor(p: GanttProject): CardData {
 	return {
 		name: displayName(p.company),
 		color: noDate(p) ? NODATE_COLOR : (COLOR[p.status] ?? 'var(--ink)'),
-		ink: noDate(p) ? 'var(--ink)' : '#fff',
+		ink: noDate(p) ? 'var(--ink)' : 'var(--paper)',
 		lines
 	};
 }

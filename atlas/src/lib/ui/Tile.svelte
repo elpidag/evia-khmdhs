@@ -95,7 +95,7 @@
 		min-height: 0;
 		/* the artboard's own panel grey (user, 2026-08-27) — our --paper-2
 		   is a warm cream and read as a heavier block */
-		background: var(--tile-bg, #f2f2f2);
+		background: var(--tile-bg, color-mix(in srgb, var(--ink) 5.8%, var(--paper)));
 		padding: 12px 16px 12px;
 		box-sizing: border-box;
 	}
@@ -203,7 +203,7 @@
 	}
 	.tile.over .legend {
 		padding: 34px 16px 12px;
-		background: var(--tile-bg, #f2f2f2);
+		background: var(--tile-bg, color-mix(in srgb, var(--ink) 5.8%, var(--paper)));
 	}
 	.legend {
 		height: 100%;

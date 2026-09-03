@@ -331,7 +331,7 @@
 		font-size: clamp(13px, 0.94vw, 18px);
 		line-height: 1;
 		white-space: nowrap;
-		color: #fff;
+		color: var(--paper);
 		background: var(--card-accent);
 		border-radius: 9.8px;
 	}

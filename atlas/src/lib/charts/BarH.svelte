@@ -206,7 +206,7 @@
 		flex: none;
 	}
 	.on {
-		color: #fff;
+		color: var(--paper);
 		font-size: var(--fs-13);
 		padding: 0 6px;
 		white-space: nowrap;
@@ -224,7 +224,7 @@
 		overflow: hidden;
 	}
 	.on a {
-		color: #fff;
+		color: var(--paper);
 		text-decoration: none;
 	}
 	.on a:hover {
@@ -294,7 +294,7 @@
 	}
 	.onhint :global(.hint button) {
 		background: transparent;
-		color: #fff;
-		border-color: #fff;
+		color: var(--paper);
+		border-color: var(--paper);
 	}
 </style>

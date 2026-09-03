@@ -28,7 +28,7 @@
 	}
 	let {
 		call, contracts, total, self, amendments = [],
-		linkBase = '/antinero/contract/', selfColor = 'var(--c-antinero, #000)', caption
+		linkBase = '/antinero/contract/', selfColor = 'var(--c-antinero, var(--ink))', caption
 	}: Props = $props();
 
 	// The ΑΔΑΜ labels sit OUTSIDE the orbit, so the viewBox has to be sized
@@ -117,17 +117,17 @@
 <style>
 	.fam { margin: 0; }
 	svg { width: 100%; height: auto; display: block; overflow: visible; }
-	.call { fill: #e4e4e4; }
-	.node { fill: #d8d8d8; transition: fill 0.15s; }
-	a:hover .node { fill: #b0b0b0; }
-	.node.self { fill: var(--c-antinero, #000); }
+	.call { fill: color-mix(in srgb, var(--ink) 12.1%, var(--paper)); }
+	.node { fill: color-mix(in srgb, var(--ink) 17.4%, var(--paper)); transition: fill 0.15s; }
+	a:hover .node { fill: color-mix(in srgb, var(--ink) 35.1%, var(--paper)); }
+	.node.self { fill: var(--c-antinero, var(--ink)); }
 	/* a lot of the same procurement the dataset does not hold: outlined */
-	.node.outside { fill: #fff; stroke: #9a9a9a; stroke-width: 1; stroke-dasharray: 3 2; }
+	.node.outside { fill: var(--paper); stroke: color-mix(in srgb, var(--ink) 44.9%, var(--paper)); stroke-width: 1; stroke-dasharray: 3 2; }
 	.callid { text-anchor: middle; font-size: 11px; fill: var(--ink); }
 	.callsum { text-anchor: middle; font-size: 11px; fill: var(--ink); font-weight: 700; }
 	.id { font-size: 9px; fill: var(--ink-soft); }
 	.id.selfid { fill: var(--ink); font-weight: 700; }
 	.val { font-size: 9px; fill: var(--ink-soft); }
-	.link { stroke: #9a9a9a; stroke-width: 1; stroke-dasharray: 4 3; }
+	.link { stroke: color-mix(in srgb, var(--ink) 44.9%, var(--paper)); stroke-width: 1; stroke-dasharray: 4 3; }
 	figcaption { font-size: var(--fs-12); color: var(--ink-soft); margin-top: var(--sp-2); }
 </style>

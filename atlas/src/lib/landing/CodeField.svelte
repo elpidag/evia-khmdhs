@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolveCssColor } from '$lib/theme.svelte';
 	/**
 	 * The drifting field of codes on a canvas (user mock, 2026-08-27). The
 	 * layout comes from field.ts; this shell fills its wrapper, re-lays out
@@ -95,9 +96,9 @@
 			const cs = getComputedStyle(canvas);
 			family = cs.fontFamily || 'sans-serif';
 			colours = {
-				antinero: cs.getPropertyValue('--c-antinero').trim() || colours.antinero,
-				dase: cs.getPropertyValue('--c-dase').trim() || colours.dase,
-				anadohoi: cs.getPropertyValue('--c-anadohoi').trim() || colours.anadohoi
+				antinero: resolveCssColor('var(--c-antinero)'),
+				dase: resolveCssColor('var(--c-dase)'),
+				anadohoi: resolveCssColor('var(--c-anadohoi)')
 			};
 		}
 		const ro = new ResizeObserver((entries) => {

@@ -1000,7 +1000,7 @@
 	<!-- two columns, no phase (user, 2026-08-21): the ΥΠΕΝ unit that signed on
 	     the left, the ten biggest contractors + everyone else on the right;
 	     units in greys (ribbons take the unit's tone), the ΔΑΣΕ drawing -->
-	{@const UNIT_GREYS = ['#1f1f1f', '#5a5a5a', '#8a8a8a', '#b4b4b4', '#d0d0d0']}
+	{@const UNIT_GREYS = ['var(--ink)', 'color-mix(in srgb, var(--ink) 73.5%, var(--paper))', 'color-mix(in srgb, var(--ink) 52.2%, var(--paper))', 'color-mix(in srgb, var(--ink) 33.5%, var(--paper))', 'color-mix(in srgb, var(--ink) 21%, var(--paper))']}
 	<!-- three columns, as the forest co-op diagram (user, 2026-08-22, for
 	     comparability): the awarding body — the Ministry, one node — → its
 	     operating units → contractors -->
@@ -1008,7 +1008,7 @@
 		...n,
 		side: (n.side === 'l' ? 'm' : n.side) as 'l' | 'm' | 'r',
 		label: n.side === 'l' ? unitEn(n.label) : n.label,
-		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? '#9b9b9b' : '#3a3a3a'
+		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))' : 'color-mix(in srgb, var(--ink) 87.8%, var(--paper))'
 	}))}
 	{@const ufNodes = [
 		{
@@ -1017,7 +1017,7 @@
 			side: 'l' as const,
 			n: uf.nodes.filter((n) => n.side === 'l').reduce((s, n) => s + n.n, 0),
 			eur: uf.total_eur,
-			color: '#111111'
+			color: 'color-mix(in srgb, var(--ink) 53.3%, black)'
 		},
 		...unitNodes
 	]}
@@ -1201,7 +1201,7 @@
 			{/snippet}
 			<BarH
 				rows={lowerRows(catRows).map((r) => ({ ...r, ...splitHint(r.label) }))}
-				color="#2b2b2b"
+				color="color-mix(in srgb, var(--ink) 94.6%, var(--paper))"
 				inside
 				barHeight={35}
 				fmt={ctLens === 'eur' ? eurShort : grInt}
@@ -1426,7 +1426,7 @@
 	/* black-white-grayscale only on this page (user, 2026-08-20): the
 	   reference-line ink follows */
 	.antp {
-		--c-threshold: #4a4a4a;
+		--c-threshold: color-mix(in srgb, var(--ink) 80.8%, var(--paper));
 	}
 	/* every section title follows the sponsored-works kicker, in the
 	   antinero dataset colour (black) */
@@ -1440,7 +1440,7 @@
 	}
 	/* the two paper maps take the sponsored-works ground */
 	.antp :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		--map-accent: var(--c-antinero); /* the zoom buttons' circle hue */
 		box-shadow: none;
@@ -1451,7 +1451,7 @@
 		pointer-events: auto; /* the card carries the item's link */
 	}
 	.antp :global(.map .tip a) {
-		color: #fff;
+		color: var(--paper);
 		text-decoration: underline;
 	}
 	.antp :global(.map .tip .tip-rule) {
@@ -1477,14 +1477,14 @@
 	}
 	.dabar .track {
 		height: 100%;
-		background: #e0e0e0;
+		background: color-mix(in srgb, var(--ink) 13.8%, var(--paper));
 		border-radius: 10px;
 		overflow: hidden;
 	}
 	.dabar .fill {
 		height: 100%;
 		background: var(--c-antinero);
-		color: #fff;
+		color: var(--paper);
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -1508,7 +1508,7 @@
 	.paidcard {
 		grid-row: 3;
 		position: relative;
-		background: #e0e0e0;
+		background: color-mix(in srgb, var(--ink) 13.8%, var(--paper));
 		border-radius: 10px;
 		overflow: hidden;
 	}
@@ -1518,7 +1518,7 @@
 		right: 0;
 		bottom: 0;
 		background: var(--c-antinero);
-		color: #fff;
+		color: var(--paper);
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
@@ -1768,10 +1768,10 @@
 		--region-line-w: 0.35;
 		--context-line-w: 0.35;
 		--border-line-w: 0.6;
-		--land-hot: #e6e6e6;
+		--land-hot: color-mix(in srgb, var(--ink) 11.2%, var(--paper));
 		/* the units' own borders in white: grey against grey needs a seam
 		   (user, 2026-08-28) */
-		--unit-line: #fff;
+		--unit-line: var(--paper);
 		--unit-line-w: 0.45;
 	}
 	/* the key as the user drew it (2026-08-28): the ends of the scale on a
@@ -1812,7 +1812,7 @@
 		display: flex;
 		width: 128px;
 		box-sizing: border-box;
-		border: 0.5px solid #000;
+		border: 0.5px solid var(--ink);
 	}
 	.mapkey .swatches i {
 		display: block;
@@ -1846,15 +1846,15 @@
 		text-align: left;
 		white-space: nowrap;
 		padding: 1.6px 3.4px 2px;
-		background: #fff;
+		background: var(--paper);
 		color: var(--ink);
 		border: none;
 		cursor: pointer;
 		min-height: 20px;
 	}
 	.allocsw button.on {
-		background: #111;
-		color: #fff;
+		background: color-mix(in srgb, var(--ink) 53.3%, black);
+		color: var(--paper);
 	}
 	/* AWARD PROCEDURES | DIRECT AWARDS: the first column IS a KPI card's
 	   width (a third of the row less its two gaps), the gap the KPI row's */
@@ -1913,7 +1913,7 @@
 	.tilefill :global(.map) {
 		background: transparent;
 		border: none;
-		--land-context: #fff;
+		--land-context: var(--paper);
 		--map-accent: var(--card-accent);
 		box-shadow: none;
 	}

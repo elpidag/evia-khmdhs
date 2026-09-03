@@ -115,7 +115,7 @@
 		left: 50%;
 		transform: translateX(-50%);
 		background: var(--ink);
-		color: #fff;
+		color: var(--paper);
 		font-size: var(--fs-12);
 		line-height: 1.3;
 		padding: 3px 8px;

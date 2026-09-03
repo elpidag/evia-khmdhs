@@ -466,7 +466,7 @@
 		   «fire event» · «the acts connected to it» · «each dot is …» ·
 		   «fire season …» all start level */
 		align-items: start;
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		padding: var(--sp-2) var(--sp-3);
 		margin: 0 0 var(--sp-3);
@@ -522,7 +522,7 @@
 		width: 13px;
 		height: 13px;
 		border-radius: 50%;
-		background: #6b2d35;
+		background: var(--c-fire);
 		opacity: 0.85;
 	}
 	.dwait {
@@ -667,7 +667,7 @@
 		stroke-dasharray: 2 3;
 	}
 	.burn {
-		fill: #6b2d35;
+		fill: var(--c-fire);
 		opacity: 0.85;
 	}
 	.act {
@@ -701,7 +701,7 @@
 		outline: none;
 	}
 	.stripbg {
-		fill: #f7f7f7;
+		fill: color-mix(in srgb, var(--ink) 3.6%, var(--paper));
 		stroke: var(--line);
 		stroke-width: 0.6;
 	}

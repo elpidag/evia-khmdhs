@@ -18,7 +18,7 @@ const built = new Set(
 function markerNumbers(): Set<number> {
 	const out = new Set<number>();
 	for (const s of Object.values(sources)) {
-		for (const m of s.matchAll(/\[FIGURE (\d+):/g)) out.add(Number(m[1]));
+		for (const m of s.matchAll(/\[FIGURE\s*(\d+)/g)) out.add(Number(m[1]));
 	}
 	return out;
 }

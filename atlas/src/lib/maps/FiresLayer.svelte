@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cssRgb } from '$lib/theme.svelte';
 	/** EFFIS burnt-scar polygons, coloured by fire year on a gradient
 	 *  into the base maroon — older fires pale, recent ones saturated.
 	 *  Perimeters are satellite rapid-mapping estimates, not official
@@ -17,7 +18,7 @@
 		flat?: boolean;
 		tipOf?: (f: Feature<Polygon | MultiPolygon, FireProps>) => string;
 	}
-	let { ctx, features, base = '#6b2d35', flat = false, tipOf }: Props = $props();
+	let { ctx, features, base = 'var(--c-fire)', flat = false, tipOf }: Props = $props();
 
 	const years = $derived.by(() => {
 		let lo = Infinity,
@@ -30,11 +31,9 @@
 	});
 
 	/** base colour mixed towards white: t=0 → 88% white, t=1 → full base */
-	const rgb = $derived.by(() => {
-		const m = /^#?([0-9a-f]{6})$/i.exec(base);
-		const v = parseInt(m ? m[1] : '6b2d35', 16);
-		return [(v >> 16) & 255, (v >> 8) & 255, v & 255] as const;
-	});
+	const rgb = $derived.by(
+		() => (cssRgb(base) ?? [107, 45, 53]) as readonly [number, number, number]
+	);
 	function yearColor(yr: number): string {
 		if (flat) return base;
 		const t = 0.12 + (0.88 * (yr - years.lo)) / (years.hi - years.lo);

@@ -282,19 +282,19 @@
 	   green via --cpv-ink, 2026-08-24); the hover/dim states are the same
 	   ink mixed toward the paper, so every page gets its own colour's
 	   «transparencies» — on Anti-nero the mixes land on the exact greys
-	   these rules used to hardcode (#3a3a3a / #bdbdbd / #9b9b9b) */
+	   these rules used to hardcode (color-mix(in srgb, var(--ink) 87.8%, var(--paper)) / #bdbdbd / color-mix(in srgb, var(--ink) 44.5%, var(--paper))) */
 	.bar {
 		fill: var(--cpv-ink, var(--c-antinero));
 	}
 	.col:hover .bar {
-		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 77%, #fff);
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 77%, var(--paper));
 	}
 	/* the other divisions, faded while one is split open */
 	.col.dim .bar {
-		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 26%, #fff);
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 26%, var(--paper));
 	}
 	.col.dim:hover .bar {
-		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 39%, #fff);
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 39%, var(--paper));
 	}
 	.bar.cls {
 		fill: var(--cpv-ink, var(--c-antinero));
@@ -304,7 +304,7 @@
 		fill: var(--cpv-ink, var(--c-antinero));
 	}
 	.bar.cls:hover {
-		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 77%, #fff);
+		fill: color-mix(in srgb, var(--cpv-ink, var(--c-antinero)) 77%, var(--paper));
 	}
 	.bar.cls.lit {
 		fill: var(--accent);

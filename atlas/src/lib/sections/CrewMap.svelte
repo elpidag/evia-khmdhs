@@ -215,7 +215,7 @@
 				fitPad={0.16}
 				interactive={tinyScar}
 				panAtRest={false}
-				colorOf={() => '#fff'}
+				colorOf={() => 'var(--paper)'}
 			>
 				{#snippet overlay(ctx)}
 					<defs>
@@ -292,7 +292,7 @@
 						{ctx}
 						points={seatDots}
 						r={chosen ? 5.5 : 4}
-						fillOf={() => '#111'}
+						fillOf={() => 'color-mix(in srgb, var(--ink) 53.3%, black)'}
 						stroke="none"
 						opacity={1}
 						onOver={(p) => (hov = (p as unknown as { adas: string[] }).adas)}
@@ -392,7 +392,7 @@
 		list-style: none;
 		margin: 0;
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, auto));
@@ -415,17 +415,17 @@
 		display: inline-block;
 	}
 	.sw.seat {
-		background: #111;
+		background: color-mix(in srgb, var(--ink) 53.3%, black);
 	}
 	.sw.work {
 		background: var(--c-anadohoi);
 	}
 	.sw.fire {
 		border-radius: 2px;
-		background: #d8b6ba;
+		background: color-mix(in oklab, var(--c-fire) 30.4%, var(--paper));
 	}
 	.sw.fire.dark {
-		background: #6b2d35;
+		background: var(--c-fire);
 	}
 	/* the STATUS map's own footprint: the map fills a ~640px column, the
 	   episode list rides beside it */
@@ -441,18 +441,18 @@
 		}
 	}
 	.map-wrap :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line);
 		--map-accent: var(--c-anadohoi);
 		box-shadow: none;
 	}
 	.map-wrap :global(.map .region) {
-		fill: #fff;
-		stroke: #8f8f8f;
+		fill: var(--paper);
+		stroke: var(--line);
 	}
 	.flow {
 		fill: none;
-		stroke: #111;
+		stroke: color-mix(in srgb, var(--ink) 53.3%, black);
 		opacity: 0.85;
 		vector-effect: non-scaling-stroke;
 		stroke-linecap: round;
@@ -468,17 +468,17 @@
 
 	.arrowhead {
 		fill: none;
-		stroke: #111;
+		stroke: color-mix(in srgb, var(--ink) 53.3%, black);
 		stroke-width: 1.7;
 		stroke-linecap: round;
 		stroke-linejoin: round;
 	}
 	.scar.light {
-		fill: #d8b6ba;
+		fill: color-mix(in oklab, var(--c-fire) 30.4%, var(--paper));
 		opacity: 0.7;
 	}
 	.scar.dark {
-		fill: #6b2d35;
+		fill: var(--c-fire);
 		opacity: 0.85;
 	}
 	.flow.solid {
@@ -521,7 +521,7 @@
 	}
 	.episodes li.on {
 		opacity: 1;
-		background: #f5f8f6;
+		background: color-mix(in srgb, var(--c-dase) 6.3%, var(--paper));
 	}
 	.ep {
 		display: flex;
@@ -568,13 +568,13 @@
 	}
 	.d.fire .lab i {
 		border-radius: 2px;
-		background: #6b2d35;
+		background: var(--c-fire);
 	}
 	.d.act .lab i {
 		background: var(--c-anadohoi);
 	}
 	.d.crews .lab i {
-		background: #111;
+		background: color-mix(in srgb, var(--ink) 53.3%, black);
 	}
 	/* the second sponsor line aligns under the first without repeating
 	   the mark */

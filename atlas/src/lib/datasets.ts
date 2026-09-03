@@ -16,9 +16,10 @@ export interface SiteSymbol {
 	short?: string;
 	/** the card headline's own line breaks, as the artboard sets them */
 	titleLines?: string[];
-	/** the square's fill on the BLACK header band (Artboard 4, user
-	 *  2026-08-27) — the dataset hue where it reads on black, a pale
-	 *  stand-in where it does not */
+	/** the square's fill on the header band (Artboard 4, user 2026-08-27;
+	 *  the band is a gradient of the three stream hues since 2026-09-03) —
+	 *  the dataset hue where it reads on the dark band, a pale FADE of the
+	 *  same hue where it does not, so every square follows its token */
 	chip: string;
 	/** the dataset hue token; the two tools take the ink */
 	color: string;
@@ -36,7 +37,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		short: 'private companies',
 		titleLines: ['financed', 'by', 'private companies'],
 		color: 'var(--c-anadohoi)',
-		chip: '#2d6a4f',
+		chip: 'var(--c-anadohoi)',
 		rank: 'stream'
 	},
 	{
@@ -44,8 +45,9 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/antinero',
 		label: 'anti-nero programme',
 		color: 'var(--c-antinero)',
-		// the Anti-nero hue is black, which cannot sit on a black band
-		chip: '#f2f2f2',
+		// the Anti-nero hue is black, which cannot sit on the dark band —
+		// a 5% fade of it into paper (#f2f2f2 at the default palette)
+		chip: 'color-mix(in srgb, var(--c-antinero) 5%, var(--paper))',
 		rank: 'stream'
 	},
 	{
@@ -54,7 +56,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		label: "works executed by forest workers' co-operatives",
 		short: "forest workers' co-ops",
 		color: 'var(--c-dase)',
-		chip: '#52b788',
+		chip: 'var(--c-dase)',
 		rank: 'stream'
 	},
 	{
@@ -62,7 +64,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/explore',
 		label: 'search',
 		color: 'var(--ink)',
-		chip: '#f2f2f2',
+		chip: 'color-mix(in srgb, var(--ink) 5.8%, var(--paper))',
 		rank: 'tool'
 	},
 	{
@@ -70,7 +72,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/authorities',
 		label: 'network of actors',
 		color: 'var(--ink)',
-		chip: '#b7e4c7',
+		chip: 'color-mix(in srgb, var(--c-dase) 43.3%, var(--paper))',
 		rank: 'tool'
 	}
 ];

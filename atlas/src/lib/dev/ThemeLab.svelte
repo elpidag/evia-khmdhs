@@ -10,8 +10,11 @@
 	 * in localStorage, and copies the CHANGED tokens as a ready `:root`
 	 * block to hand back for baking in.
 	 *
-	 * Limitation, said in the footer: colours that live in chart CODE
-	 * (category palette, year greys, map ramps) don't answer to tokens yet.
+	 * Since the same day's follow-up the chart palettes (category colours,
+	 * year ramps, map ramps, gantt statuses) are CSS strings over these
+	 * tokens, so they follow a change live; every apply/clear announces
+	 * itself as a `themelab:change` window event and the canvas charts
+	 * redraw through $lib/theme.svelte's tick.
 	 */
 	import tokensRaw from '$lib/styles/tokens.css?raw';
 
@@ -113,16 +116,21 @@
 		}
 	});
 
+	function announce() {
+		window.dispatchEvent(new CustomEvent('themelab:change'));
+	}
 	function apply(name: string, value: string) {
 		over = { ...over, [name]: value };
 		document.documentElement.style.setProperty(`--${name}`, value);
 		persistLive();
+		announce();
 	}
 	function clear(name: string) {
 		const { [name]: _, ...rest } = over;
 		over = rest;
 		document.documentElement.style.removeProperty(`--${name}`);
 		persistLive();
+		announce();
 	}
 	function resetAll() {
 		for (const name of Object.keys(over)) {
@@ -136,6 +144,7 @@
 		} catch {
 			/* fine */
 		}
+		announce();
 	}
 
 	/** per-font status line: loaded, not found, file loaded … */
@@ -375,7 +384,7 @@
 
 		<p class="foot">
 			Chart-internal colours (the category palette, year greys, map ramps) live in code and
-			don't answer to these tokens yet — pick the direction here, and they follow when baked.
+			follow these tokens live, charts included; a preset is your palette, applied whole.
 		</p>
 	{/if}
 </aside>

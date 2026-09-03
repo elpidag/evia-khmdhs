@@ -162,10 +162,10 @@
 	// Διευθύνσεις Δασών, light for the Δασαρχεία; black for municipal &
 	// regional government, grey for every other public body
 	const KIND_COLOR: Record<MapPt['kindKey'], string> = {
-		dd: '#406e55',
-		dx: '#6fb28c',
-		muni: '#000000',
-		misc: '#9b9b9b'
+		dd: 'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black)',
+		dx: 'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 75%, white) 87%, black)',
+		muni: 'var(--ink)',
+		misc: 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))'
 	};
 	const KIND_LABEL: Record<MapPt['kindKey'], string> = {
 		dd: 'forest directorate',
@@ -277,12 +277,12 @@
 	// Awarding-body categories, smallest first, in neutral greys — the
 	// first column of the delegation diagram.
 	const BODY_KINDS: [string, string, string][] = [
-		['region', 'regions', '#d8d8d8'],
-		['other_public', 'other public bodies', '#bcbcbc'],
-		['municipality', 'municipalities', '#9a9a9a'],
-		['decentralized_administration', 'decentralized administrations', '#6c6c6c'],
-		['ministry', 'ministries', '#3d3d3d'],
-		['unknown', 'unclassified', '#e6e6e6']
+		['region', 'regions', 'color-mix(in srgb, var(--ink) 17.4%, var(--paper))'],
+		['other_public', 'other public bodies', 'color-mix(in srgb, var(--ink) 29.9%, var(--paper))'],
+		['municipality', 'municipalities', 'color-mix(in srgb, var(--ink) 44.9%, var(--paper))'],
+		['decentralized_administration', 'decentralized administrations', 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))'],
+		['ministry', 'ministries', 'color-mix(in srgb, var(--ink) 86.4%, var(--paper))'],
+		['unknown', 'unclassified', 'color-mix(in srgb, var(--ink) 11.2%, var(--paper))']
 	];
 	// delegation diagram: awarding body → operating unit → contractor,
 	// ribbon width = € net. Nodes reuse the bars' category metadata so the
@@ -294,7 +294,7 @@
 	// What they have in common is the honest label: the body's own services.
 	const OWN = 'own';
 	const MIDDLE_KINDS: [string, string, string][] = [
-		[OWN, "the body's own services", '#9b9b9b'],
+		[OWN, "the body's own services", 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))'],
 		['dd', 'forest directorates', KIND_COLOR.dd],
 		['dx', 'local forest service offices', KIND_COLOR.dx]
 	];
@@ -612,7 +612,7 @@
 					width={640}
 					height={620}
 					view={MAP_VIEW}
-					colorOf={() => '#fff'}
+					colorOf={() => 'var(--paper)'}
 					focusPe={mapPe}
 					onRegionClick={(pe) => (mapPe = mapPe === pe ? null : pe)}
 				>
@@ -899,13 +899,13 @@
 	/* the paper map takes the shared ground; regions stay white so the
 	   proportional circles carry the data */
 	.dasep :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line); /* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		--map-accent: var(--c-dase); /* the zoom buttons' circle hue */
 		box-shadow: none;
 	}
 	.dasep :global(.region) {
-		stroke: #8f8f8f;
+		stroke: var(--line);
 	}
 	/* flat solid dots, exactly like the legend swatches — no outline;
 	   the hover ring is interaction feedback only */
@@ -919,7 +919,7 @@
 		vector-effect: non-scaling-stroke;
 	}
 	.ulabel {
-		fill: #fff;
+		fill: var(--paper);
 		font-family: var(--font-display);
 		font-weight: 900;
 		text-anchor: middle;
@@ -947,7 +947,7 @@
 	/* the legend panel per the approved mock: awarder dots stacked in the
 	   left column, size icon + burnt-areas gradient in the right one */
 	.mapkey {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 10px;
 		padding: var(--sp-2) var(--sp-4);
 		font-size: var(--fs-13);
@@ -1017,7 +1017,7 @@
 		max-width: 340px;
 		height: 14px;
 		border-radius: 3px;
-		background: linear-gradient(to right, #ffffff, #6b2d35);
+		background: linear-gradient(to right, var(--paper), var(--c-fire));
 	}
 	.mk-years {
 		display: flex;
@@ -1027,7 +1027,7 @@
 		color: var(--ink-soft);
 	}
 	.unitpanel {
-		background: #fff;
+		background: var(--paper);
 		border: 1px solid var(--line);
 		border-radius: 6px;
 		display: flex;
@@ -1077,7 +1077,7 @@
 	}
 	.uptable td {
 		padding: 4px 8px 4px 0;
-		border-top: 1px solid #f0f0f0;
+		border-top: 1px solid color-mix(in srgb, var(--ink) 6.5%, var(--paper));
 		vertical-align: top;
 	}
 	.uptable td a {
@@ -1112,7 +1112,7 @@
 	}
 	.dabar .track {
 		height: 100%;
-		background: #fff;
+		background: var(--paper);
 		border: 1.5px solid var(--c-dase);
 		border-radius: 10px;
 		overflow: hidden;
@@ -1120,7 +1120,7 @@
 	.dabar .fill {
 		height: 100%;
 		background: var(--c-dase);
-		color: #fff;
+		color: var(--paper);
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -1144,7 +1144,7 @@
 	.paidcard {
 		grid-row: 3;
 		position: relative;
-		background: #fff;
+		background: var(--paper);
 		border: 1.5px solid var(--c-dase);
 		border-radius: 10px;
 		overflow: hidden;
@@ -1155,7 +1155,7 @@
 		right: 0;
 		bottom: 0;
 		background: var(--c-dase);
-		color: #fff;
+		color: var(--paper);
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
@@ -1282,7 +1282,7 @@
 	.tilefill :global(.map) {
 		background: transparent;
 		border: none;
-		--land-context: #fff;
+		--land-context: var(--paper);
 		--map-accent: var(--card-accent);
 		box-shadow: none;
 	}
@@ -1290,8 +1290,8 @@
 		--region-line-w: 0.35;
 		--context-line-w: 0.35;
 		--border-line-w: 0.6;
-		--land-hot: #e6e6e6;
-		--unit-line: #fff;
+		--land-hot: color-mix(in srgb, var(--ink) 11.2%, var(--paper));
+		--unit-line: var(--paper);
 		--unit-line-w: 0.45;
 	}
 	/* the page's own region stroke must not reach the card map's units */
@@ -1337,7 +1337,7 @@
 		display: flex;
 		width: 128px;
 		box-sizing: border-box;
-		border: 0.5px solid #000;
+		border: 0.5px solid var(--ink);
 	}
 	.mapkey .swatches i {
 		display: block;
@@ -1370,7 +1370,7 @@
 		text-align: left;
 		white-space: nowrap;
 		padding: 1.6px 3.4px 2px;
-		background: #fff;
+		background: var(--paper);
 		color: var(--ink);
 		border: none;
 		cursor: pointer;
@@ -1378,7 +1378,7 @@
 	}
 	.allocsw button.on {
 		background: var(--c-dase);
-		color: #fff;
+		color: var(--paper);
 	}
 	.tilefill.valbody,
 	.tilefill.rankbody {

@@ -546,7 +546,7 @@
 		font-weight: 600;
 		padding: 1px 6px;
 		border-radius: var(--radius);
-		color: #fff;
+		color: var(--paper);
 		white-space: nowrap;
 	}
 	.ds-antinero {

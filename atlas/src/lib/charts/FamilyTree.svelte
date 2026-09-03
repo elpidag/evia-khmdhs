@@ -259,7 +259,7 @@
 	}
 	.edge {
 		fill: none;
-		stroke: #c9c9c9;
+		stroke: color-mix(in srgb, var(--ink) 23.9%, var(--paper));
 		stroke-width: 1;
 	}
 	.edge.trail {
@@ -267,8 +267,8 @@
 		stroke-width: 2;
 	}
 	.node rect {
-		fill: #fff;
-		stroke: #bfbfbf;
+		fill: var(--paper);
+		stroke: color-mix(in srgb, var(--ink) 28.6%, var(--paper));
 		stroke-width: 1;
 	}
 	.node.faint rect {
@@ -280,7 +280,7 @@
 		stroke-width: 1.6;
 	}
 	.node.self rect {
-		fill: color-mix(in srgb, var(--c-dase) 10%, #fff);
+		fill: color-mix(in srgb, var(--c-dase) 10%, var(--paper));
 	}
 	.node .k {
 		font-size: 9px;

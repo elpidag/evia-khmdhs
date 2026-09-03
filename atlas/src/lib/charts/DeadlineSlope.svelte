@@ -84,15 +84,15 @@
 		stroke: var(--line-strong);
 	}
 	.wire {
-		stroke: #9e9e9e;
+		stroke: color-mix(in srgb, var(--ink) 43.3%, var(--paper));
 		stroke-width: 1;
 	}
 	.wire.big {
-		stroke: #000000;
+		stroke: var(--ink);
 		stroke-width: 1.6;
 	}
 	circle {
-		fill: #8f8f8f;
+		fill: var(--line);
 	}
 	.lab {
 		font-size: 9.5px;

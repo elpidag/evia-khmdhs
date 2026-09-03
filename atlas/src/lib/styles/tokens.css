@@ -25,6 +25,15 @@
 	/* semantic flags */
 	--c-good: #3d7a4a;
 	--c-flag-amber: #c99700;
+	/* the CATEGORICAL anchors (2026-09-03, the Theme Lab round): the
+	   work-type palette's blue flood-works and amber studies families,
+	   and the red fire-prevention ramp's full tone — its lighter steps
+	   are paper-fades of this anchor, and the greens of that palette
+	   reuse the two dataset hues. --c-cat-blue also anchors the unused
+	   blue map ramp. */
+	--c-cat-blue: #0d366b;
+	--c-cat-amber: #b07d1e;
+	--c-cat-red: #b33a1a;
 
 	/* ── DERIVED: every grey is the INK faded into the PAPER (the mix
 	   percentages reproduce the old hand-picked hexes to ±1/255), the

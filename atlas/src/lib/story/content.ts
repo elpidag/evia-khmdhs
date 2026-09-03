@@ -57,7 +57,10 @@ function blocksOf(section: string): StoryBlock[] {
 		const t = part.trim();
 		if (!t) continue;
 		const h3 = t.startsWith('### ');
-		const fig = /\[FIGURE\s*(\d+)\s*:\s*([^\]]+?)\s*\]/.exec(t);
+		// the author writes `[FIGURE 05: Press conference]` as plain text since
+		// 2026-09-03 (the span is added at build time); the name is optional —
+		// the caption itself lives in captions.md
+		const fig = /\[FIGURE\s*(\d+)\s*(?::\s*([^\]]+?))?\s*\]/.exec(t);
 		out.push({
 			id: `${section}-b${out.length}`,
 			section,
@@ -65,11 +68,12 @@ function blocksOf(section: string): StoryBlock[] {
 			text: t
 				.replace(/^###\s+/, '')
 				.replace(/<span class="figmark">[^<]*<\/span>/g, ' ')
+				.replace(/\[FIGURE\s*\d+\s*(?::[^\]]*)?\]/g, ' ')
 				.replace(/<[^>]+>/g, '')
 				.replace(/\s+/g, ' ')
 				.trim(),
 			sups: [...t.matchAll(/<sup>(\d+)<\/sup>/g)].map((m) => Number(m[1])),
-			figure: fig ? { n: Number(fig[1]), name: fig[2] } : null
+			figure: fig ? { n: Number(fig[1]), name: (fig[2] ?? '').trim() } : null
 		});
 	}
 	return out;

@@ -44,12 +44,12 @@
 		{
 			num: `${grNumber(c.ratio, 1)}×`,
 			label: `the size of the gap, stated to stated — ≈${grInt(Math.round(c.antinero.median_eur / c.dase.median_eur))}× at the median`,
-			color: '#6c6c6c'
+			color: 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))'
 		},
 		{
 			num: grInt(c.pipelines.vat_overlap.length),
 			label: `companies in both datasets — ${grInt(c.pipelines.antinero.n_vats + c.pipelines.dase.n_vats)} entities, no shared ΑΦΜ`,
-			color: '#6c6c6c'
+			color: 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))'
 		}
 	]);
 	/** EVERY CONTRACT BY THE DAY IT WAS SIGNED — the frame's own facts,

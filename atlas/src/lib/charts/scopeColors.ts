@@ -7,9 +7,9 @@
  */
 export const SCOPE_ORDER = ['study', 'study_and_works', 'works'] as const;
 export const SCOPE_COLORS: Record<string, string> = {
-	study: '#b5b5b5',
-	study_and_works: '#6c6c6c',
-	works: '#3d3d3d'
+	study: 'color-mix(in srgb, var(--ink) 32.9%, var(--paper))',
+	study_and_works: 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))',
+	works: 'color-mix(in srgb, var(--ink) 86.4%, var(--paper))'
 };
 export const SCOPE_LABELS: Record<string, string> = {
 	study: 'study only',

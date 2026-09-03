@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { compile } from 'mdsvex';
-import { tagParagraphs } from '../../../scripts/remark-tag-paragraphs';
+import { tagParagraphs, figureMarkers } from '../../../scripts/remark-tag-paragraphs';
 import { BLOCKS } from './content';
 import { CHAPTERS } from './chapters';
 
-const opts = { extensions: ['.md'], remarkPlugins: [tagParagraphs] };
+// the site's own order: the author's plain markers are wrapped first, then a
+// paragraph that begins with a tag gets its <p> back
+const opts = { extensions: ['.md'], remarkPlugins: [figureMarkers, tagParagraphs] };
 
 // the author's files, raw — the same glob content.ts reads
 const FILES = import.meta.glob('/src/content/story/*.md', {
@@ -47,15 +49,24 @@ describe('paragraphs that begin with a tag', () => {
 		expect(rendered).toBe(BLOCKS.length);
 	});
 
-	it("the author's tag-led paragraphs carry no markdown that raw HTML would drop", () => {
-		let checked = 0;
+	// The author's markers are PLAIN TEXT since 2026-09-03 — the span goes
+	// back on at build time — so a marker-led paragraph is a real paragraph
+	// again and its markdown is parsed like any other's.
+	it("wraps the author's plain markers and leaves their prose as markdown", async () => {
+		const md = '[FIGURE 05: Press conference] During a [press conference](https://x.test) …\n';
+		const out = (await compile(md, opts))!.code;
+		expect(out).toContain('<p><span class="figmark">[FIGURE 05: Press conference]</span>');
+		expect(out).toContain('<a href="https://x.test"');
+	});
+
+	it("leaves no raw-HTML paragraph openers in the author's own files", () => {
+		let markers = 0;
 		for (const [path, raw] of Object.entries(FILES)) {
 			for (const line of raw.split('\n')) {
-				if (!/^<(span|Num)/.test(line)) continue;
-				checked++;
-				expect(line, `${path}: ${line.slice(0, 60)}`).not.toMatch(/\]\(|\*\*|(^|\s)_[^_]+_(\s|$)/);
+				if (/\[FIGURE\s*\d+/.test(line)) markers++;
+				expect(line.startsWith('<span'), `${path}: ${line.slice(0, 60)}`).toBe(false);
 			}
 		}
-		expect(checked).toBeGreaterThan(0);
+		expect(markers).toBeGreaterThan(0);
 	});
 });

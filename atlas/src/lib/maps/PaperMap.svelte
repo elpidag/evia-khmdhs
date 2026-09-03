@@ -796,8 +796,8 @@
 	/* the land around Greece: one flat tone, a hairline coast, no
 	   interaction — it must never compete with the data (user, 2026-08-22) */
 	.context {
-		fill: var(--land-context, #ffffff);
-		stroke: var(--land-context-line, #c4c4c4);
+		fill: var(--land-context, var(--paper));
+		stroke: var(--land-context-line, color-mix(in srgb, var(--ink) 26.2%, var(--paper)));
 		stroke-width: var(--context-line-w, 0.5);
 		vector-effect: non-scaling-stroke;
 		pointer-events: none;
@@ -818,14 +818,14 @@
 	   colour and coastline, at the Greek layers' accuracy (user, 2026-08-22);
 	   it stays inert: it holds no contract and answers no click */
 	.context.athos {
-		fill: var(--land-athos, var(--land-context, #e4e4e4));
+		fill: var(--land-athos, var(--land-context, color-mix(in srgb, var(--ink) 12.1%, var(--paper))));
 		stroke: var(--line);
 		stroke-width: 0.6;
 	}
 	.map {
 		position: relative;
 		/* the sea: the site's one grey, never the old cream (2026-08-28) */
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		/* the maps' hairline — the zoom buttons' outline tone (user, 2026-08-22) */
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
@@ -893,7 +893,7 @@
 	/* a hot group is a tint — unless the fill IS the data (a choropleth),
 	   which a hover must never repaint */
 	.region.noline.grouphot:not(.choro) {
-		fill: var(--land-hot, #e6e6e6);
+		fill: var(--land-hot, color-mix(in srgb, var(--ink) 11.2%, var(--paper)));
 	}
 	.outline {
 		fill: none;
@@ -949,7 +949,7 @@
 		   each section sets --map-accent, black is the fallback */
 		border-radius: 50%;
 		background: var(--map-accent, var(--ink));
-		color: #fff;
+		color: var(--paper);
 		cursor: pointer;
 	}
 	.zoomctl button:hover {
@@ -969,8 +969,8 @@
 		bottom: var(--sp-2);
 		left: var(--sp-2);
 		max-width: 22rem;
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 		border-radius: 4px;
 		padding: var(--sp-1) var(--sp-2);
 		font-size: var(--fs-13);
@@ -983,7 +983,7 @@
 	.tip.region {
 		top: var(--sp-2);
 		bottom: auto;
-		background: #5c5c5c;
+		background: color-mix(in srgb, var(--ink) 72.8%, var(--paper));
 	}
 	/* an item card asked into the top-left corner (the contract map's
 	   authority seats, so the δήμοι keep the bottom-left) */
@@ -1005,7 +1005,7 @@
 	}
 	/* a held (clicked) card: white rule on top and a ✕ — hover cards have neither */
 	.tip.pinned {
-		border-top: 2px solid #fff;
+		border-top: 2px solid var(--paper);
 		padding-right: 1.8rem;
 		pointer-events: auto;
 	}
@@ -1015,7 +1015,7 @@
 		right: 4px;
 		background: none;
 		border: 0;
-		color: #fff;
+		color: var(--paper);
 		font-size: var(--fs-12);
 		line-height: 1;
 		cursor: pointer;

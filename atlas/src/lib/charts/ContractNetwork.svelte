@@ -12,6 +12,7 @@
 	 * identity only — ΑΔΑΜ and amount.
 	 */
 	import { interpolateRgb } from 'd3-interpolate';
+	import { resolveCssColor, cssLuminance } from '$lib/theme.svelte';
 	import { type NetNode, type Placed } from '$lib/transforms/network';
 	import { NET_HEIGHT, scene, type NetMode, type Season } from '$lib/transforms/networkScene';
 	import { eur, eurShort, eurTiny, grInt } from '$lib/transforms/format';
@@ -45,9 +46,9 @@
 	// vs light grey vs white-with-ring — the flip from the works-only 2022
 	// era to the design-build template must read at a glance
 	const DK_COLORS: Record<string, string> = {
-		works: '#1d1d1d',
-		study_and_works: '#a8a8a8',
-		study: '#ffffff'
+		works: 'color-mix(in srgb, var(--ink) 92%, black)',
+		study_and_works: 'color-mix(in srgb, var(--ink) 38.8%, var(--paper))',
+		study: 'var(--paper)'
 	};
 	const DK_LABELS: Record<string, string> = {
 		works: 'works only',
@@ -62,12 +63,14 @@
 	const inGroup = $derived(new Set(sc.marks.filter((n) => n.group >= 0).map((n) => n.ref)));
 
 	let hover = $state<Placed | null>(null);
-	const hue = (p?: string | null) => DK_COLORS[p ?? ''] ?? '#9a9a9a';
-	const catHue = (c?: string | null) => CAT_COLORS[c ?? ''] ?? '#9a9a9a';
+	const hue = (p?: string | null) => DK_COLORS[p ?? ''] ?? 'color-mix(in srgb, var(--ink) 44.9%, var(--paper))';
+	const catHue = (c?: string | null) => CAT_COLORS[c ?? ''] ?? 'color-mix(in srgb, var(--ink) 44.9%, var(--paper))';
 	const markHue = (n: { phase?: string | null; cat?: string | null }) =>
 		lens === 'type' ? catHue(n.cat) : hue(n.phase);
-	const lighten = (c: string, t: number) => interpolateRgb(c, '#ffffff')(t);
-	const darken = (c: string, t: number) => interpolateRgb(c, '#000000')(t);
+	// palette entries are CSS strings over the tokens — resolve before d3
+	const lighten = (c: string, t: number) =>
+		interpolateRgb(resolveCssColor(c), resolveCssColor('var(--paper)'))(t);
+	const darken = (c: string, t: number) => interpolateRgb(resolveCssColor(c), '#000000')(t);
 	/** a lot inside a call bubble is a lighter tint of the bubble's own hue */
 	const fill = (n: Placed) =>
 		mode === 'pack' && inGroup.has(n.ref) ? lighten(markHue(n), 0.42) : markHue(n);
@@ -75,15 +78,9 @@
 	 *  one — the same contrast rule the reference packed-circle maps use */
 	const arcInk = (p?: string | null) => {
 		const h = hue(p);
-		return ink(h) === '#1a1a1a' ? darken(h, 0.55) : lighten(h, 0.74);
+		return ink(h) === 'var(--ink)' ? darken(h, 0.55) : lighten(h, 0.74);
 	};
-	const ink = (c: string) => {
-		const m = c.match(/\d+/g);
-		const [r, g, b] = m
-			? m.map(Number)
-			: [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)];
-		return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '#1a1a1a' : '#ffffff';
-	};
+	const ink = (c: string) => (cssLuminance(c) > 150 / 255 ? 'var(--ink)' : 'var(--paper)');
 	const dim = (n: Placed) =>
 		!hover ? 1 : hover.call ? (n.call === hover.call ? 1 : 0.25) : n.ref === hover.ref ? 1 : 0.25;
 	const tiePath = (pts: { x: number; y: number }[]) =>
@@ -168,7 +165,7 @@
 				
 				class:ringed={lens === 'scope' && n.phase === 'study'}
 				class:udcnode={n.udc}
-				class:dark={n.udc && ink(fill(n)) === '#ffffff'}/>
+				class:dark={n.udc && ink(fill(n)) === 'var(--paper)'}/>
 			</a>
 		{/each}
 		{#each sc.arcs as a (a.key)}
@@ -221,7 +218,7 @@
 		stroke-dasharray: 3 2.5;
 	}
 	a:hover .node {
-		stroke: #000;
+		stroke: var(--ink);
 		stroke-width: 1.4;
 		stroke-dasharray: none;
 	}
@@ -229,34 +226,34 @@
 		transition: all 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 	.spoke {
-		stroke: #b4b4b4;
+		stroke: color-mix(in srgb, var(--ink) 33.5%, var(--paper));
 		stroke-width: 1;
 	}
 	:global(circle.ringed),
 	i.ringed {
-		stroke: #4a4a4a;
+		stroke: color-mix(in srgb, var(--ink) 80.8%, var(--paper));
 		stroke-width: 1;
-		border: 1px solid #4a4a4a;
+		border: 1px solid color-mix(in srgb, var(--ink) 80.8%, var(--paper));
 	}
 	path.tie.udc {
-		stroke: #6b6b6b;
+		stroke: color-mix(in srgb, var(--ink) 65.9%, var(--paper));
 		stroke-dasharray: 3 3;
 	}
 	/* the date-only (HRADF) marker sits on the DOTS since the touching
 	   same-day runs cover the join line (user, 2026-08-22): a dashed ring */
 	:global(circle.udcnode) {
-		stroke: #6b6b6b;
+		stroke: color-mix(in srgb, var(--ink) 65.9%, var(--paper));
 		stroke-width: 1.3;
 		stroke-dasharray: 2.6 2;
 	}
 	/* the dash flips light on a dark fill, or it disappears */
 	:global(circle.udcnode.dark) {
-		stroke: #d8d8d8;
+		stroke: color-mix(in srgb, var(--ink) 17.4%, var(--paper));
 	}
 	.key li i.udcnode {
 		width: 11px;
 		height: 11px;
-		border: 1.5px dashed #6b6b6b;
+		border: 1.5px dashed color-mix(in srgb, var(--ink) 65.9%, var(--paper));
 		border-radius: 50%;
 		background: none;
 	}
@@ -264,15 +261,15 @@
 		/* a call whose lots were signed weeks apart draws a long line; kept
 		   faint so the same-day verticals — the finding — carry the ink */
 		fill: none;
-		stroke: #c9c9c9;
+		stroke: color-mix(in srgb, var(--ink) 23.9%, var(--paper));
 		stroke-width: 1;
 	}
 	.tie.lit {
-		stroke: #000;
+		stroke: var(--ink);
 		stroke-width: 1.4;
 	}
 	.bridge {
-		stroke: #000;
+		stroke: var(--ink);
 		stroke-width: 1;
 		stroke-dasharray: 4 3;
 	}
@@ -332,7 +329,7 @@
 		margin: 0 0 var(--sp-2);
 		box-sizing: border-box;
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-wrap: wrap;
@@ -358,7 +355,7 @@
 	.key li i.tie {
 		width: 20px;
 		height: 0;
-		border-top: 2px solid #c9c9c9;
+		border-top: 2px solid color-mix(in srgb, var(--ink) 23.9%, var(--paper));
 		border-radius: 0;
 		background: none;
 	}
@@ -376,8 +373,8 @@
 		position: absolute;
 		left: 0;
 		bottom: 0;
-		background: #000;
-		color: #fff;
+		background: var(--ink);
+		color: var(--paper);
 		padding: 8px 10px;
 		display: grid;
 		gap: 2px;

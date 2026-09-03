@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cssLuminance } from '$lib/theme.svelte';
 	/**
 	 * Stacked columns per calendar year (user, 2026-08-23, after the Common
 	 * Wealth «Complaints have tripled» form): one column per year, its
@@ -63,13 +64,7 @@
 			});
 		})
 	);
-	const ink = (c: string) => {
-		const m = c.match(/\d+/g);
-		const [r, g, b] = m && c.startsWith('rgb')
-			? m.map(Number)
-			: [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)];
-		return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '#1a1a1a' : '#ffffff';
-	};
+	const ink = (c: string) => (cssLuminance(c) > 150 / 255 ? 'var(--ink)' : 'var(--paper)');
 </script>
 
 <figure class="sy">

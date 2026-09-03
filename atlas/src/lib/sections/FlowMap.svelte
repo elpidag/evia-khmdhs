@@ -227,7 +227,7 @@
 			height={620}
 			view={{ center: [23.8305, 38.3566], k: 1.08 }}
 			colorOf={flowFocus
-				? (pe) => (pe === flowFocus ? '#e0e0e0' : 'var(--land-empty)')
+				? (pe) => (pe === flowFocus ? 'color-mix(in srgb, var(--ink) 13.8%, var(--paper))' : 'var(--land-empty)')
 				: importChoro}
 			tipOf={importTip}
 			splitTips
@@ -381,7 +381,7 @@
 		z-index: 2;
 		box-sizing: border-box;
 		padding: var(--sp-2) var(--sp-3);
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border-radius: 6px;
 		display: flex;
 		flex-wrap: wrap;
@@ -429,7 +429,7 @@
 		display: inline-block;
 		width: 1.4rem;
 		height: 0;
-		border-top: 1.5px solid #111111;
+		border-top: 1.5px solid color-mix(in srgb, var(--ink) 53.3%, black);
 		flex: none;
 	}
 	.mapkey i.line.dash {
@@ -447,18 +447,18 @@
 		background: var(--ink);
 	}
 	.mapkey i.sq.grey {
-		background: #c9c9c9;
+		background: color-mix(in srgb, var(--ink) 23.9%, var(--paper));
 	}
 	.mapkey i.sq.hatch {
-		background: repeating-linear-gradient(45deg, #ececec 0 3px, #f8f8f8 3px 6px);
+		background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--ink) 8.5%, var(--paper)) 0 3px, color-mix(in srgb, var(--ink) 3.1%, var(--paper)) 3px 6px);
 	}
 	.mapkey i.dot.ring {
 		display: inline-block;
 		width: 0.6rem;
 		height: 0.6rem;
 		border-radius: 50%;
-		background: #ffffff;
-		border: 1.2px solid #111111;
+		background: var(--paper);
+		border: 1.2px solid color-mix(in srgb, var(--ink) 53.3%, black);
 		flex: none;
 	}
 	.flow-list h3 {
@@ -492,7 +492,7 @@
 		display: inline-block;
 		width: 1.1rem;
 		height: 0;
-		border-top: 1.5px solid #111111;
+		border-top: 1.5px solid color-mix(in srgb, var(--ink) 53.3%, black);
 		margin-right: 5px;
 		vertical-align: 3px;
 	}
@@ -502,9 +502,9 @@
 	i.dir.local {
 		width: 0.6rem;
 		height: 0.6rem;
-		border: 1.2px solid #111111;
+		border: 1.2px solid color-mix(in srgb, var(--ink) 53.3%, black);
 		border-radius: 50%;
-		background: #ffffff;
+		background: var(--paper);
 		vertical-align: -1px;
 		box-sizing: border-box;
 	}
@@ -533,7 +533,7 @@
 	}
 	.years input[type='range'] {
 		width: 100%;
-		accent-color: #111111; /* black on the Anti-nero page, never the warm ink (user) */
+		accent-color: color-mix(in srgb, var(--ink) 53.3%, black); /* black on the Anti-nero page, never the warm ink (user) */
 		margin: 0;
 	}
 	.ticks {
@@ -543,7 +543,7 @@
 		color: var(--ink-faint);
 	}
 	.ticks span.on {
-		color: #111111;
+		color: color-mix(in srgb, var(--ink) 53.3%, black);
 		font-weight: 700;
 	}
 	.empty {

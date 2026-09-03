@@ -88,8 +88,8 @@
 					fitPad={0.15}
 					colorOf={(pe) =>
 						loc?.region_pe && pe === loc.region_pe
-							? 'color-mix(in srgb, var(--c-dase) 30%, #fff)'
-							: '#fff'}
+							? 'color-mix(in srgb, var(--c-dase) 30%, var(--paper))'
+							: 'var(--paper)'}
 				>
 					{#snippet overlay(ctx)}
 						{#if loc?.lat && loc?.lon}
@@ -200,7 +200,7 @@
 	}
 	/* the contract pages' map dress on the entity map */
 	.detailmap :global(.map) {
-		background: #f2f2f2;
+		background: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 		border: 1px solid var(--line);
 		--map-accent: var(--c-dase);
 		box-shadow: none;
