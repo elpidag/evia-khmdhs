@@ -18,7 +18,7 @@
 	interface Tok {
 		name: string;
 		base: string;
-		kind: 'color' | 'font';
+		kind: 'color' | 'font' | 'derived';
 	}
 	const TOKENS: Tok[] = [];
 	for (const m of tokensRaw.matchAll(/--([a-z0-9-]+):\s*([^;]+);/g)) {
@@ -26,13 +26,20 @@
 		const value = m[2].replace(/\s+/g, ' ').trim();
 		if (name.startsWith('font-')) {
 			TOKENS.push({ name, base: value, kind: 'font' });
-		} else if (/^(#|rgb|oklch|color-mix|hsl)/.test(value)) {
+		} else if (value.includes('var(')) {
+			// tokens.css derives these from the primaries (the author's
+			// optimisation, 2026-09-03) — shown, never edited here
+			TOKENS.push({ name, base: value, kind: 'derived' });
+		} else if (/^(#|rgb|oklch|hsl)/.test(value)) {
 			TOKENS.push({ name, base: value, kind: 'color' });
 		}
 	}
 
 	/** current overrides, token name → value */
 	let over = $state<Record<string, string>>({});
+	/** ancillary loads that must come back after a reload */
+	let liveGoogle = $state<string[]>([]);
+	let liveKits = $state<string[]>([]);
 	/** the google-font trial name typed per font token */
 	let fontPick = $state<Record<string, string>>({});
 	let presets = $state<Record<string, Record<string, string>>>(loadPresets());
@@ -53,20 +60,82 @@
 		}
 	}
 
+	/** the LIVE state survives a reload: overrides + the fonts they need
+	 *  (google families and adobe kits re-inject; a font loaded from a FILE
+	 *  cannot come back by itself — its row says session-only) */
+	function persistLive() {
+		try {
+			localStorage.setItem(
+				'themelab.live',
+				JSON.stringify({ over, google: liveGoogle, kits: liveKits })
+			);
+		} catch {
+			/* fine */
+		}
+	}
+	function injectGoogle(fam: string) {
+		const id = `themelab-font-${fam.replace(/\s+/g, '-').toLowerCase()}`;
+		if (document.getElementById(id)) return;
+		const link = document.createElement('link');
+		link.id = id;
+		link.rel = 'stylesheet';
+		link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fam).replace(/%20/g, '+')}:wght@300;400;700;900&display=swap`;
+		document.head.appendChild(link);
+	}
+	function injectKit(id: string) {
+		const dom = `themelab-kit-${id}`;
+		if (document.getElementById(dom)) return;
+		const link = document.createElement('link');
+		link.id = dom;
+		link.rel = 'stylesheet';
+		link.href = `https://use.typekit.net/${id}.css`;
+		document.head.appendChild(link);
+	}
+	// restore the live state once, when the panel mounts after a reload
+	$effect(() => {
+		try {
+			const raw = localStorage.getItem('themelab.live');
+			if (!raw) return;
+			const live = JSON.parse(raw) as {
+				over?: Record<string, string>;
+				google?: string[];
+				kits?: string[];
+			};
+			for (const fam of live.google ?? []) injectGoogle(fam);
+			for (const id of live.kits ?? []) injectKit(id);
+			liveGoogle = live.google ?? [];
+			liveKits = live.kits ?? [];
+			for (const [k, v] of Object.entries(live.over ?? {})) {
+				if (!(k in over)) apply(k, v);
+			}
+		} catch {
+			/* fine */
+		}
+	});
+
 	function apply(name: string, value: string) {
 		over = { ...over, [name]: value };
 		document.documentElement.style.setProperty(`--${name}`, value);
+		persistLive();
 	}
 	function clear(name: string) {
 		const { [name]: _, ...rest } = over;
 		over = rest;
 		document.documentElement.style.removeProperty(`--${name}`);
+		persistLive();
 	}
 	function resetAll() {
 		for (const name of Object.keys(over)) {
 			document.documentElement.style.removeProperty(`--${name}`);
 		}
 		over = {};
+		liveGoogle = [];
+		liveKits = [];
+		try {
+			localStorage.removeItem('themelab.live');
+		} catch {
+			/* fine */
+		}
 	}
 
 	/** per-font status line: loaded, not found, file loaded … */
@@ -87,14 +156,8 @@
 			ok = false;
 		}
 		if (ok) {
-			const id = `themelab-font-${fam.replace(/\s+/g, '-').toLowerCase()}`;
-			if (!document.getElementById(id)) {
-				const link = document.createElement('link');
-				link.id = id;
-				link.rel = 'stylesheet';
-				link.href = href;
-				document.head.appendChild(link);
-			}
+			injectGoogle(fam);
+			if (!liveGoogle.includes(fam)) liveGoogle = [...liveGoogle, fam];
 			fontMsg = { ...fontMsg, [tok.name]: 'Google font loaded ✓' };
 		} else {
 			fontMsg = {
@@ -140,19 +203,14 @@
 			return;
 		}
 		const id = m[1].toLowerCase();
-		const dom = `themelab-kit-${id}`;
-		if (!document.getElementById(dom)) {
-			const link = document.createElement('link');
-			link.id = dom;
-			link.rel = 'stylesheet';
-			link.href = `https://use.typekit.net/${id}.css`;
-			link.onload = () => (kitMsg = `kit ${id} loaded ✓ — now type its CSS family names below and press try`);
-			link.onerror = () => (kitMsg = `kit ${id} did not load`);
-			document.head.appendChild(link);
-			kitMsg = `loading kit ${id} …`;
+		if (!document.getElementById(`themelab-kit-${id}`)) {
+			injectKit(id);
+			kitMsg = `kit ${id} loading … then type its CSS family names below and press try`;
 		} else {
 			kitMsg = `kit ${id} already loaded`;
 		}
+		if (!liveKits.includes(id)) liveKits = [...liveKits, id];
+		persistLive();
 	}
 
 	function savePreset() {
@@ -182,8 +240,26 @@
 	/** an <input type=color> speaks only #rrggbb */
 	const hexish = (v: string) => /^#[0-9a-fA-F]{6}$/.test(v.trim());
 	const colors = TOKENS.filter((t) => t.kind === 'color');
+	const derived = TOKENS.filter((t) => t.kind === 'derived');
 	const fonts = TOKENS.filter((t) => t.kind === 'font');
 	let open = $state(true);
+
+	/** the derived tones RESOLVED for their swatches — recomputed whenever a
+	 *  primary changes, through a probe element (a color-mix string cannot
+	 *  paint a swatch by itself) */
+	let resolved = $state<Record<string, string>>({});
+	$effect(() => {
+		void over;
+		const probe = document.createElement('div');
+		document.body.appendChild(probe);
+		const out: Record<string, string> = {};
+		for (const t of derived) {
+			probe.style.color = `var(--${t.name})`;
+			out[t.name] = getComputedStyle(probe).color;
+		}
+		probe.remove();
+		resolved = out;
+	});
 </script>
 
 <aside class="lab" class:min={!open}>
@@ -233,6 +309,20 @@
 				{#if t.name in over}
 					<button class="px" onclick={() => clear(t.name)} aria-label="reset token">↺</button>
 				{/if}
+			</div>
+		{/each}
+
+		<h3>DERIVED — FOLLOW INK &amp; PAPER</h3>
+		<p class="hint">
+			These tones are mixed automatically from the primaries above (tokens.css `color-mix`):
+			change --ink or --paper and every grey refills itself.
+		</p>
+		{#each derived as t (t.name)}
+			<div class="row drow">
+				<label for={`tld-${t.name}`}>--{t.name}</label>
+				<span id={`tld-${t.name}`} class="swatch" style:background={resolved[t.name] ?? 'transparent'}
+				></span>
+				<span class="dval">{t.base}</span>
 			</div>
 		{/each}
 
@@ -462,6 +552,19 @@
 		font-size: 10px;
 		line-height: 1.3;
 		color: #946200;
+	}
+	.drow label {
+		color: #888;
+	}
+	.dval {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-family: ui-monospace, monospace;
+		font-size: 10px;
+		color: #999;
 	}
 	.hint,
 	.foot {

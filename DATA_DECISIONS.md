@@ -12721,3 +12721,50 @@ KIT field — paste any web-project kit id or use.typekit.net URL, its
 stylesheet loads, and the kit's CSS family slugs then answer the try
 field; smoke-tested with the site's own kit drh1gfl. No download needed:
 fonts go into a web project on fonts.adobe.com and connect by id.
+And the LIVE state now survives: overrides persist to localStorage on
+every change and restore when the panel mounts (`themelab.live` —
+google families and adobe kits re-inject themselves; a file-loaded font
+stays session-only), so the author browses every page with the trial
+theme following (SPA navigation carries the :root overrides anyway) and
+a reload with `?lab` brings it all back; «reset» clears the store.
+
+## 2026-09-03 — the palette collapses to ~10 primaries; every grey derives from the ink
+
+The author, preparing to test palettes: too many colours move at once,
+above all for TEXT — «give you one of the colours of the ink and you
+automatically fill the gradients». The measurements agreed: every grey
+already sat on the ink→paper line. `tokens.css` is now PRIMARIES
+(--paper, --ink, the three dataset hues + --c-dase-deep, --c-fire, the
+three flags — ten knobs) and DERIVED tones — the papers, ink-soft/faint,
+line/line-strong, the accent, the fire season, the thresholds and the
+map scenery are all `color-mix` fades of ink into paper (or references),
+their percentages reproducing the old hand-picked hexes to ±1/255
+(verified by probe on the live page: 5/10/26/43/50/58/77%). Changing
+--ink refills every grey — tested: a warm brown ink yielded a warm
+--line with no other touch. THEME LAB splits accordingly: the ten
+primaries carry pickers, the thirteen derived tones display read-only
+with live-resolved swatches. The canvas charts read only primary tokens
+(--c-dase, --c-fire) — unaffected. Follow-up rulings the same day: the
+ALARM RED derives from the FIRE RED whatever the palette
+(`--c-flag-red: var(--c-fire)` — the excluded-record chips and the
+missing-number mark drop their old vermilion #c23b2e for the one maroon;
+verified coupled under a palette change), leaving NINE primaries — then
+EIGHT: `--c-dase-deep` is RETIRED (author) — its navy #0d366b printed
+only in the hover of a name link in the AWARDING PROCESS sankey, and on
+the Anti-nero page that hover silently broke the grayscale doctrine; the
+hover is now the accent with an underline, verified on both pages.
+
+## 2026-09-03 — single-bid information comes OFF the site (user)
+
+«We haven't worked on this type of information and I do not want to show
+it.» The registry's bids_submitted field (30 in-scope Anti-nero
+contracts record exactly one bid, of 55 carrying the field) leaves every
+surface: the three «1 bid» warning chips (Anti-nero contracts list,
+contractor pages, /explore), the two contract pages' one-bid hints AND
+their «Bids» detail rows, the front page's «N contracts drew 1 bid» bar
+in PROGRAMME FIGURES and the programme sentence's clause, and the
+CONTRACT VALUES beeswarm's ring column (already undrawn on Anti-nero by
+the 2026-08-21 ruling; now passed as zeros). The dormant «probably
+related» chip — the other --c-flag-amber wearer — stays wired for its
+empty tier. API payloads keep the fields; presentation only. Verified:
+zero «1 bid» chips and no bid sentence on the rendered pages.

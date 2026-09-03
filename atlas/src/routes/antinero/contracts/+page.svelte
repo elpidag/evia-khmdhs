@@ -41,7 +41,6 @@
 				<td class="tabular muted">{(r.contract_signed_date ?? '—').slice(0, 10)}</td>
 				<td>
 					<a href={`/antinero/contract/${r.reference_number}`}>{r.title ?? r.reference_number}</a>
-					{#if r.bids_submitted === 1}<span class="chip warn">1 bid</span>{/if}
 					{#if r.cancelled === 1}<span class="chip bad">cancelled</span>{/if}
 				</td>
 				<td class="muted"><small>{r.contractor_names ?? '—'}</small></td>

@@ -235,7 +235,6 @@
 						<td class="tabular">
 							<a href={`/antinero/contract/${r.reference_number}`}>{r.reference_number}</a>
 							{#if r.n_partners > 1}<span class="chip">consortium ×{r.n_partners}</span>{/if}
-							{#if r.bids_submitted === 1}<span class="chip warn">1 bid</span>{/if}
 							{#if r.cancelled}<span class="chip bad">cancelled</span>{/if}
 						</td>
 						<td class="num">

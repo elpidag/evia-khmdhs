@@ -401,7 +401,8 @@
 	);
 	// the CONTRACT VALUES frame: the ΔΑΣΕ dots/brackets convention, greys by
 	// signature year (user, 2026-08-20). The swarm list becomes the canvas
-	// component's column arrays; the ring column marks single-bid contracts.
+	// component's column arrays; the ring column is OFF — single-bid
+	// information is not shown on the site (author, 2026-09-03).
 	let valueMode = $state<'dots' | 'brackets'>('dots');
 	let dotsHeight = $state(0);
 	const swarmCols = $derived.by((): (DaseSwarm & { ring: number[] }) | null => {
@@ -414,7 +415,7 @@
 			d: swarm.map((r) => r.d),
 			pe: swarm.map((r) => r.pe),
 			vat: swarm.map(() => null),
-			ring: swarm.map((r) => r.single_bidder)
+			ring: swarm.map(() => 0)
 		};
 	});
 	const swarmYears = $derived(
@@ -632,8 +633,7 @@
 	const topCat = $derived(
 		o.categories.reduce((a, b) => (b.eur > a.eur ? b : a), o.categories[0])
 	);
-	// hero bar fills — both data-proportional
-	const bidPct = $derived((o.kpis.n_single_bidder / o.kpis.n_contracts) * 100);
+	// hero bar fill — data-proportional
 	// what kind of σύμβαση each in-scope record is: computed from the payload,
 	// never typed. The supplementary works are one phenomenon in two document
 	// forms — the supplementary contract itself and the decision approving one
@@ -820,10 +820,9 @@
 			{grInt(o.kpis.n_contracts)} contracts since {o.yearly[0]?.year ?? '2022'} — of the
 			{eurShort(o.kpis.stated_eur)} stated, {eurShort(o.kpis.paid_eur)} has actually been paid
 			({grInt(o.kpis.n_payments)} payment orders). {pct(o.kpis.pct_direct)} of contracts —
-			{eurShort(directEur)}, the bulk of the money — went by direct award, and {grInt(
-				o.kpis.n_single_bidder
-			)} contracts drew exactly one bid. This page follows what actually got paid, to whom,
-			and where — <a href="/methodology#antinero">methodology</a>.
+			{eurShort(directEur)}, the bulk of the money — went by direct award. This page follows
+			what actually got paid, to whom, and where —
+			<a href="/methodology#antinero">methodology</a>.
 		</p>
 		<!-- the BASIS, said once for the whole page (copy pass 2026-08-23): the
 		     frames below no longer repeat it -->
@@ -878,12 +877,6 @@
 							<div class="danum">{pct(o.kpis.pct_direct)}</div>
 							<div class="datext">of contracts were direct awards</div>
 						</div>
-					</div>
-				</div>
-				<div class="bidbar" role="img" aria-label="Contracts that drew exactly one bid">
-					<div class="track">
-						<div class="bfill" style:width={`${bidPct}%`}>{grInt(o.kpis.n_single_bidder)}</div>
-						<div class="btext">contracts drew <strong>1 bid</strong></div>
 					</div>
 				</div>
 			</div>
@@ -1479,11 +1472,10 @@
 	.bars {
 		grid-row: 1;
 		display: grid;
-		grid-template-rows: 1fr 1fr;
+		grid-template-rows: 1fr;
 		gap: var(--sp-4);
 	}
-	.dabar .track,
-	.bidbar .track {
+	.dabar .track {
 		height: 100%;
 		background: #e0e0e0;
 		border-radius: 10px;
@@ -1510,33 +1502,6 @@
 		font-weight: 400;
 		font-size: var(--fs-12);
 		line-height: 1.2;
-	}
-	.bidbar .track {
-		display: flex;
-		align-items: center;
-	}
-	.bidbar .bfill {
-		height: 100%;
-		min-width: 40px;
-		background: var(--c-antinero);
-		color: #fff;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-18);
-		flex: 0 0 auto;
-	}
-	.bidbar .btext {
-		padding-left: 10px;
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--fs-13);
-		white-space: nowrap;
-	}
-	.bidbar .btext strong {
-		font-weight: 900;
 	}
 	/* paid vs stated: black fill rises to the paid share of the stated €;
 	   the unfilled remainder reads as light grey, no outer border */

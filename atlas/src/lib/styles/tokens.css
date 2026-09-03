@@ -10,48 +10,49 @@
  * file's git history).
  */
 :root {
-	/* paper & ink */
+	/* ── the PRIMARIES (the author's optimisation, 2026-09-03): the only
+	   colours picked by hand — everything below DERIVES from them, so a
+	   palette is decided by these ~10 knobs alone ─────────────────── */
 	--paper: #ffffff;
-	--paper-2: #f4f4f4;
-	--paper-3: #e9e9e9;
 	--ink: #1f1f1f;
-	--ink-soft: #525252;
-	--ink-faint: #7e7e7e;
-	--line: #8f8f8f;
-	--line-strong: #9e9e9e;
-
-	/* the accent IS the ink: a chart that names no colour draws in black */
-	--accent: #1f1f1f;
-
-	/* dataset hues */
 	--c-antinero: #000000;
 	--c-dase: #52b788;
-	--c-dase-deep: #0d366b;
 	--c-anadohoi: #2d6a4f;
-
 	/* the site's RED: the EFFIS burn scars' maroon — and, since 2026-08-28
 	   (user), the fire season on every chart that marks it is its light
 	   shade, and the ν.4782 ceilings / the median line are drawn in it */
 	--c-fire: #6b2d35;
-	--c-fire-season: color-mix(in srgb, #6b2d35 12%, #ffffff);
-
-	/* semantic */
-	--c-threshold: #6b2d35;
+	/* semantic flags */
 	--c-good: #3d7a4a;
-	--c-flag-red: #c23b2e;
 	--c-flag-amber: #c99700;
 
+	/* ── DERIVED: every grey is the INK faded into the PAPER (the mix
+	   percentages reproduce the old hand-picked hexes to ±1/255), the
+	   papers are the faintest of those fades, and the map scenery rides
+	   the paper — change --ink or --paper and all of these follow ──── */
+	--paper-2: color-mix(in srgb, var(--ink) 5%, var(--paper));
+	--paper-3: color-mix(in srgb, var(--ink) 10%, var(--paper));
+	--ink-soft: color-mix(in srgb, var(--ink) 77%, var(--paper));
+	--ink-faint: color-mix(in srgb, var(--ink) 58%, var(--paper));
+	--line: color-mix(in srgb, var(--ink) 50%, var(--paper));
+	--line-strong: color-mix(in srgb, var(--ink) 43%, var(--paper));
+	/* the accent IS the ink: a chart that names no colour draws in it */
+	--accent: var(--ink);
+	--c-fire-season: color-mix(in srgb, var(--c-fire) 12%, var(--paper));
+	--c-threshold: var(--c-fire);
+	/* the alarm red IS the fire red, whatever the palette (author,
+	   2026-09-03): one red across scars, thresholds, chips and the
+	   missing-number mark */
+	--c-flag-red: var(--c-fire);
+
 	/* the map ramps live in code (useGeo RAMP_WORKS, a grey ramp); the
-	   webui's orange/blue ramps are its own (webui/static/geo_common.js) */
-	--land-empty: #ffffff;
-	/* the land AROUND Greece on every map — scenery, never data */
-	/* Three tones, distinct on every map (user, 2026-08-22): the sea is
-	   #f2f2f2, Greek land with no data is white, and the land outside the
-	   programme's units — the neighbouring countries and Athos — is darker
-	   than both, so neither reads as a hole nor as sea */
-	--land-context: #ffffff;
-	--land-context-line: #c4c4c4;
-	--land-athos: #ffffff;
+	   webui's orange/blue ramps are its own (webui/static/geo_common.js).
+	   The land AROUND Greece on every map is scenery, never data — three
+	   tones, distinct on every map (user, 2026-08-22). */
+	--land-empty: var(--paper);
+	--land-context: var(--paper);
+	--land-context-line: color-mix(in srgb, var(--ink) 26%, var(--paper));
+	--land-athos: var(--paper);
 
 	/* type (Adobe Fonts kit drh1gfl):
 	   body/UI = Futura 100 Greek Book (the light text cut; Regular/Bold

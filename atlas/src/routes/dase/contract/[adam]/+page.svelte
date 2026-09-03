@@ -295,7 +295,6 @@
 		<dt>Awarding procedure</dt>
 		<dd>
 			<span title={devGreek(c.procedure_type ?? '')}>{procedureEn(c.procedure_type)}</span>
-			{#if c.bids_submitted === 1}<Hint text="one bid was submitted for this contract" />{/if}
 		</dd>
 		<dt>Contracting authority</dt>
 		<dd><span title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</span></dd>
@@ -458,7 +457,6 @@
 		<dl class="facts more">
 			<div><dt>Registry type</dt><dd>{c.contract_type ?? '—'}</dd></div>
 			<div><dt>Legal framework</dt><dd>{c.legal_context ?? '—'}</dd></div>
-			<div><dt>Bids</dt><dd>{c.bids_submitted ?? '—'}</dd></div>
 			<div><dt>Registry duration</dt><dd>{c.contract_duration ? `${c.contract_duration} ${c.contract_duration_unit ?? ''}` : '—'} <small class="muted">{dmy(c.start_date) || '—'} → {c.end_date ? dmy(c.end_date) : 'open'}</small></dd></div>
 		</dl>
 		{#if c.objects.length}

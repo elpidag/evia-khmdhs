@@ -475,7 +475,11 @@
 		fill: var(--ink);
 	}
 	.label a:hover {
-		fill: var(--c-dase-deep, var(--accent));
+		/* the accent, not a colour of its own: --c-dase-deep was retired
+		   (author, 2026-09-03) — its navy printed only in this hover and
+		   broke the Anti-nero page's grayscale doctrine */
+		fill: var(--accent);
+		text-decoration: underline;
 	}
 	.brace {
 		fill: none;

@@ -2080,7 +2080,7 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   `vite.config.ts`, no svelte.config file); plain CSS custom properties
   (`src/lib/styles/tokens.css`; `lib/dev/ThemeLab.svelte` — DEV-ONLY, any
   URL + `?lab` — overrides the colour/font tokens live for the author's
-  palette try-outs, presets in localStorage, «copy CSS» exports the picks — white-paper palette since the 2026-08-12
+  palette try-outs, presets in localStorage, «copy CSS» exports the picks; since the same day tokens.css is ~10 PRIMARIES with every grey a `color-mix` fade of ink into paper — one ink refills all the text tones — white-paper palette since the 2026-08-12
   rebrand + the geo_common.js ramps ported verbatim), NO
   Tailwind/Chart.js/Leaflet — d3-* + topojson only (d3-hierarchy joined the
   list on 2026-08-18 for the programme chart's packed arrangement). Fonts via the Adobe

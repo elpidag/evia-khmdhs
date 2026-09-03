@@ -399,7 +399,6 @@
 					<td><span class="ds ds-{r.ds}">{DS_LABEL[r.ds]}</span></td>
 					<td>
 						<a href={detailHref(r)}>{r.t || r.ref}</a>
-						{#if r.b1 === 1}<span class="chip warn">1 bid</span>{/if}
 						{#if r.st && r.st !== 'active'}<span
 								class="chip"
 								class:bad={r.st === 'cancelled' || r.st === 'revoked' || r.st === 'no_completion_recorded'}

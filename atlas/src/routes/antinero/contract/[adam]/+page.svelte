@@ -762,9 +762,6 @@
 			{#if c.award_procedure}<Hint
 					text={`ground stated in the registry: ${procedureEn(c.award_procedure).toLowerCase()}`}
 				/>{/if}
-			{#if c.bids_submitted === 1}<Hint
-					text="one bid was submitted for this contract"
-				/>{/if}
 		</dd>
 		<dt>Contracting authority</dt>
 		<dd><span title={devGreek(c.organization_name)}>{orgEn(c.organization_name) || '—'}</span></dd>
@@ -1010,7 +1007,6 @@
 		<div><dt>Award basis</dt><dd>{c.award_procedure ?? '—'}</dd></div>
 		<div><dt>Registry type</dt><dd>{c.contract_type ?? '—'}</dd></div>
 		<div><dt>Legal framework</dt><dd>{c.legal_context ?? '—'}</dd></div>
-		<div><dt>Bids</dt><dd>{c.bids_submitted ?? '—'}</dd></div>
 	</dl>
 	{#if c.sites.length}
 		<h3>Named work sites</h3>
