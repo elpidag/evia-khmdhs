@@ -12951,3 +12951,51 @@ the opening grid's eighteen images are figures 1 to 18. Pinned by
 `captions.test.ts` (every entry keys to a real marker, every marked
 figure answers, multi-image figures answer per slot, the renderer
 escapes).
+
+## 2026-09-03 — a carousel's caption prints the letter of the image on show (user)
+
+**Decision.** Where a figure has several images the reader switches with the
+arrow (today only figure 02, marker `pair` in `lib/story/figureImages.ts`),
+the caption's prefix names the image on show: «Figure 19a _ » on the first,
+«Figure 19b _ » on the second, and so on through c, d … as the reader
+pages. A single-image figure keeps its plain «Figure 20 _ »; the opening
+grid keeps no prefix, as before.
+
+**Why.** The captions file already keys a slide's own text by that letter
+(`## 2a` / `## 2b`), and the two slides of figure 02 now carry different
+captions (Peloponnese / Evia and Attica, 2007) — the printed number must say
+which of the two the reader is looking at, or the caption and the image
+cannot be cited apart.
+
+**Implementation.** The displayed number is one pure rule,
+`figureLabel(n, slot)` in `lib/story/captions.ts` (marker number + 17,
+two digits, plus the slot letter where given); `StoryFigure.svelte` passes
+the carousel's live slot and nothing for a single image or the placeholder.
+Pinned in `captions.test.ts` (02 → 19, 13 → 30, 19a / 19b / 19c, a single
+image adds nothing). The captions file's own header still says «Figure NN
+_ »; the author may add the letter rule there when they next edit it.
+
+## 2026-09-03 — a caption too long for the page scrolls inside itself (user)
+
+**Decision.** Figure 23's caption (the author's long note on the urban plans
+of Mantoudi–Limni–Agia Anna) ran off the bottom of the figure column. From
+today a caption taller than its room scrolls within its own box, ending
+exactly at the breathing band; a caption that fits has no scroll and no bar.
+The figure block keeps its one placement, centred 60 px low.
+
+**The room.** The column's height less twice the drop (the block's centre
+sits that far below the column's, so that much is lost at the bottom), the
+image's height, the 7 px gap under it and, on a live figure, its credit
+line — every term measured in the browser (`bind:clientHeight`), never
+assumed, so a window resize or a taller image re-fits it; floor two lines
+(34 px), so a small window still shows something to scroll.
+
+**Gotcha.** `overflow-y: auto` alone put a scrollbar under a TWO-LINE
+caption that fit: at 12 px / 1.35 the lines are 16,2 px, the block 32,4 px,
+and Chrome reported `scrollHeight` 33 against `clientHeight` 32. So the
+scroll is switched on (`class:scrolls` + the inline `max-height`) only when
+the text's own measured height exceeds the room; otherwise the caption is
+an ordinary block. `overscroll-behavior: contain` keeps a wheel at the
+caption's end from running on into the narrative. Verified in the browser:
+figure 23 scrolls in a 66 px window at 895 px tall, figures 19 and 22 show
+no bar.

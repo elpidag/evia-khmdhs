@@ -24,7 +24,7 @@
 	 */
 	import { FIGURES } from '$lib/story/figures';
 	import { FIGURE_IMAGES } from '$lib/story/figureImages';
-	import { captionFor, renderCaption } from '$lib/story/captions';
+	import { captionFor, figureLabel, renderCaption } from '$lib/story/captions';
 
 	interface Props {
 		figure: { n: number; name: string } | null;
@@ -36,12 +36,6 @@
 	}
 	let { figure, notes, stage = 2 }: Props = $props();
 
-	const pad = (n: number) => String(n).padStart(2, '0');
-	/** the DISPLAYED figure number (the author, 2026-09-03): the grid's 18
-	 *  images are figures 1-18, so every later figure prints its marker
-	 *  number + 17 — marker 02 shows as Figure 19, marker 13 as Figure 30.
-	 *  The author's own [FIGURE xx] markers keep their numbering. */
-	const dispN = (n: number) => n + 17;
 	/** the author's delivered image(s) for the figure in force, if any */
 	const img = $derived(figure ? (FIGURE_IMAGES[figure.n] ?? null) : null);
 
@@ -67,14 +61,50 @@
 		return figure.name ? [figure.name] : [];
 	});
 	/** the grid's captions name their own figure range, so they take no
-	 *  «Figure NN _ » prefix; every other figure does */
+	 *  «Figure NN _ » prefix; every other figure does — and a carousel's
+	 *  prefix carries the letter of the image on show, «Figure 19a _ »,
+	 *  «Figure 19b _ », following the reader through the arrow (the user,
+	 *  2026-09-03). The displayed number itself is `figureLabel`'s rule. */
 	const prefix = $derived(
-		figure && img?.kind !== 'grid' ? `Figure ${pad(dispN(figure.n))} _ ` : ''
+		figure && img?.kind !== 'grid'
+			? `Figure ${figureLabel(figure.n, img?.kind === 'pair' ? slot : undefined)} _ `
+			: ''
 	);
 	$effect(() => {
 		void figure?.n;
 		pairIdx = 0;
 	});
+
+	/**
+	 * A caption too long for the page SCROLLS INSIDE ITSELF; one that fits
+	 * shows no scroll (the user, 2026-09-03 — figure 23's caption ran off
+	 * the column). The block keeps its one placement — centred CENTRE_DROP
+	 * px low — so the room a caption may take is what is left between the
+	 * block's bottom and the column's: the column's height less twice the
+	 * drop (the block's centre sits that far below the column's), the
+	 * image, the gap under it and a live figure's credit line. Measured
+	 * live, so a window resize or a taller image re-fits it.
+	 */
+	const CENTRE_DROP = 60; // the .stack transform below
+	const CAP_GAP = 7; // .cap margin-top
+	const CREDIT_GAP = 2; // .credit margin-top
+	const CAP_MIN = 34; // two lines at fs-12/1.35: never less than that
+	let stackH = $state(0);
+	let boxH = $state(0);
+	let creditH = $state(0);
+	const hasCredit = $derived(Boolean(figure && FIGURES[figure.n]?.credit));
+	const capMax = $derived.by(() => {
+		if (!stackH || !boxH) return null;
+		const room =
+			stackH - 2 * CENTRE_DROP - boxH - CAP_GAP - (hasCredit ? creditH + CREDIT_GAP : 0);
+		return Math.max(CAP_MIN, Math.floor(room));
+	});
+	/** the caption's text at its natural height — the scroll switches on
+	 *  ONLY when that exceeds the room. (`overflow: auto` alone grew a bar
+	 *  under a two-line caption that fit: 16,2 px lines make a 32,4 px
+	 *  block, and Chrome's rounding read it as overflowing itself.) */
+	let capH = $state(0);
+	const scrolls = $derived(capMax !== null && capH > capMax);
 
 	/**
 	 * WHOLE NOTES ONLY, PACKED BY NOTE — the fitting machinery of the
@@ -171,8 +201,8 @@
 
 <div class="fig">
 	<!-- every figure on ONE placement: centred 60 px low, caption 7 px under -->
-	<div class="stack">
-		<div class="box" class:gridbox={img?.kind === 'grid'}>
+	<div class="stack" bind:clientHeight={stackH}>
+		<div class="box" class:gridbox={img?.kind === 'grid'} bind:clientHeight={boxH}>
 			{#if figure}
 				{#key figure.n}
 					{@const live = FIGURES[figure.n]}
@@ -216,20 +246,22 @@
 					{:else if img}
 						<img class="whole" src={img.srcs[0]} alt={figure.name} />
 					{:else}
-						<span class="ph">figure {pad(dispN(figure.n))} · {figure.name}</span>
+						<span class="ph">figure {figureLabel(figure.n)} · {figure.name}</span>
 					{/if}
 				{/key}
 			{/if}
 		</div>
-		<div class="cap">
-			{#if figure && !(img?.kind === 'grid' && stage < 1)}
-				{#each caption as para, i (i)}
-					<p>{#if i === 0}{prefix}{/if}{@html renderCaption(para)}</p>
-				{/each}
-			{/if}
+		<div class="cap" class:scrolls style:max-height={scrolls ? `${capMax}px` : null}>
+			<div class="capin" bind:clientHeight={capH}>
+				{#if figure && !(img?.kind === 'grid' && stage < 1)}
+					{#each caption as para, i (i)}
+						<p>{#if i === 0}{prefix}{/if}{@html renderCaption(para)}</p>
+					{/each}
+				{/if}
+			</div>
 		</div>
 		{#if figure && FIGURES[figure.n]?.credit}
-			<p class="credit">{FIGURES[figure.n].credit}</p>
+			<p class="credit" bind:clientHeight={creditH}>{FIGURES[figure.n].credit}</p>
 		{/if}
 	</div>
 	{#if notes.length}
@@ -387,6 +419,14 @@
 		line-height: 1.35;
 		color: var(--ink-soft);
 		min-height: 1.35em;
+	}
+	/* a caption longer than its room scrolls inside itself (max-height set
+	   inline from the measured room); one that fits is never a scroller —
+	   and the wheel never runs on into the page from the caption's end */
+	.cap.scrolls {
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: thin;
 	}
 	/* an extensive caption may run to several paragraphs (the author writes
 	   them as blank lines in captions.md) */

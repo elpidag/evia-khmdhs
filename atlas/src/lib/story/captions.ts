@@ -53,6 +53,18 @@ function normalise(head: string): string | null {
 	return String(Number(m[1])) + (m[2] ? m[2].toLowerCase() : '');
 }
 
+/**
+ * The number a figure PRINTS (the author, 2026-09-03): the grid's 18 images
+ * are figures 1-18, so every later figure shows its marker number + 17 —
+ * marker 02 as «19», marker 13 as «30» — and a figure whose images the
+ * reader pages through with the arrow adds the letter of the image on show
+ * (the user, 2026-09-03): «19a», then «19b» … A single image adds nothing.
+ */
+export const DISPLAY_OFFSET = 17;
+export function figureLabel(n: number, slot?: string): string {
+	return String(n + DISPLAY_OFFSET).padStart(2, '0') + (slot ?? '');
+}
+
 /** the caption in force: the slide's own, else the figure's, else null */
 export function captionFor(n: number, slot?: string): string[] | null {
 	if (slot) {

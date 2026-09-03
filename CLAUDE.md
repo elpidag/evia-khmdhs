@@ -1793,7 +1793,17 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   paragraphs, `[text](url)`/`*i*`/`**b**` the only mark-up, rendered
   escape-first by `lib/story/captions.ts` (`captionFor(n, slot)` resolves
   slide → figure → the marker's short name; the page prefixes «Figure NN
-  _ » except on the grid). Pinned by `captions.test.ts`. StoryFigure
+  _ » except on the grid — and on a carousel the prefix carries the
+  LETTER of the image on show, «Figure 19a _ » then «Figure 19b _ » as the
+  reader arrows through, `figureLabel(n, slot)`, the user 2026-09-03;
+  and a caption TALLER THAN ITS ROOM — the column's height less twice
+  the 60 px drop, the image, its gap and a live figure's credit, all
+  measured — SCROLLS INSIDE ITSELF while one that fits is never a
+  scroller: `class:scrolls` switches on only when the text's own
+  measured height exceeds the room, because `overflow: auto` alone grew
+  a bar under a fitting two-line caption through Chrome's rounding of
+  16,2 px lines; the user, same day, on figure 23's caption).
+  Pinned by `captions.test.ts`. StoryFigure
   is a single live block now (figure + notes props). Still to come: the
   images of figures 05-10 and 12 (01 grid, 02 pair, 03, 11, 13 are
   DELIVERED — `lib/story/figureImages.ts` + `figureImages.test.ts`,

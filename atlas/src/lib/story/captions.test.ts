@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CAPTIONS, captionFor, renderCaption } from './captions';
+import { CAPTIONS, captionFor, figureLabel, renderCaption } from './captions';
 import { FIGURE_IMAGES } from './figureImages';
 import { BLOCKS } from './content';
 
@@ -33,6 +33,18 @@ describe("the story figures' captions", () => {
 		// figure 5 is written once and serves whatever slot asks
 		expect(captionFor(5, 'b')).toEqual(captionFor(5));
 		expect(captionFor(999)).toBeNull();
+	});
+
+	it('prints the figure number 17 higher, with the letter of the image on show', () => {
+		// the grid's 18 images are figures 1-18: marker 02 prints as 19, 13 as 30
+		expect(figureLabel(2)).toBe('19');
+		expect(figureLabel(13)).toBe('30');
+		// a carousel adds the slide's letter as the reader arrows through
+		expect(figureLabel(2, 'a')).toBe('19a');
+		expect(figureLabel(2, 'b')).toBe('19b');
+		expect(figureLabel(2, 'c')).toBe('19c');
+		// a single image adds nothing
+		expect(figureLabel(5, undefined)).toBe('22');
 	});
 
 	it("renders the author's small mark-up and nothing else", () => {
