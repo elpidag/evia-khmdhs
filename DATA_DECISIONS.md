@@ -12689,3 +12689,35 @@ day before was typed the same way, `schorched-forests`; a project ID is
 immutable, so only its display name is corrected ("Scorched Forests") and
 the runbook and the workflow say so where they quote the id. The id appears
 nowhere on the public site: the service URL carries the project NUMBER.
+
+## 2026-09-03 — THEME LAB: the author's try-out panel for colours and fonts
+
+The author asked for a way to try alternative palettes and typefaces on
+the site and only then decide. Built as `lib/dev/ThemeLab.svelte` — a
+DEV-ONLY floating panel (lazy-imported by the layout when the URL
+carries `?lab`; production never bundles or renders it) that reads the
+design tokens from `tokens.css` itself (the ?raw import, so the list
+cannot go stale), overrides them LIVE on `:root` while the author
+browses the real pages, keeps named presets in localStorage, tries any
+Google Fonts family in front of a font token's stack, and copies the
+changed tokens as a ready `:root` block to hand back for baking in.
+23 colour tokens and the 5 font tokens; the panel's own footer says the
+one limitation honestly — chart-internal palettes (categories, year
+greys, map ramps) live in code and follow only when a direction is
+chosen. Verified live: `--c-dase` flipped to blue repainted the ΔΑΣΕ
+card's KPI cards, year bars, pill and symbol instantly, while the
+beeswarm's coded greens stood still — the limitation made visible.
+Follow-up the same day: the author tried «Novel Sans» and «Gridlite PE
+Variable» and nothing happened — commercial faces, not on Google Fonts,
+and the loader failed silently. The try now VERIFIES the family against
+Google Fonts and says when it is not there (still applying the name as a
+locally-installed lookup), and every font row gained a 📁 FILE button:
+the author's own .woff2/.otf/.ttf loads straight into the page via the
+FontFace API (weight 100-900, so variable fonts render), session-only
+and said so — the proper wiring follows once a face is chosen. And for
+the fonts in the author's ADOBE account (their two names carry Adobe's
+own marks — «PE» is the Pan-European suffix): the panel gained an ADOBE
+KIT field — paste any web-project kit id or use.typekit.net URL, its
+stylesheet loads, and the kit's CSS family slugs then answer the try
+field; smoke-tested with the site's own kit drh1gfl. No download needed:
+fonts go into a web project on fonts.adobe.com and connect by id.

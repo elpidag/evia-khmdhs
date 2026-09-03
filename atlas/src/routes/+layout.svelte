@@ -5,6 +5,7 @@
 	import { SYMBOLS, symbolOfPath } from '$lib/datasets';
 	import { BRAND, BRAND_LINE1, BRAND_LINE2 } from '$lib/landing/brand';
 	import DatasetSymbol from '$lib/ui/DatasetSymbol.svelte';
+	import { dev } from '$app/environment';
 	import type { LayoutData } from './$types';
 
 	let { children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
@@ -32,6 +33,16 @@
 
 	const embed = $derived(page.url.searchParams.get('embed') === '1');
 	const chrome = $derived(!embed && !isLanding);
+
+	// THEME LAB (author's try-out panel, 2026-09-03): dev-only, opened with
+	// `?lab` on any page, lazy-imported so production never bundles it
+	let ThemeLab = $state<typeof import('$lib/dev/ThemeLab.svelte').default | null>(null);
+	const wantLab = $derived(dev && page.url.searchParams.has('lab'));
+	$effect(() => {
+		if (wantLab && !ThemeLab) {
+			import('$lib/dev/ThemeLab.svelte').then((m) => (ThemeLab = m.default));
+		}
+	});
 </script>
 
 <svelte:window onscroll={() => (scrolled = window.scrollY > 60)} />
@@ -103,6 +114,10 @@
 <main class:embed class:landing={isLanding} class:card={isCard} class:story={isStory}>
 	{@render children()}
 </main>
+
+{#if wantLab && ThemeLab}
+	<ThemeLab />
+{/if}
 
 <style>
 	header {
