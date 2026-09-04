@@ -44,11 +44,13 @@ export interface FieldOptions {
 	minCols: number;
 	maxCols: number;
 }
-/** Artboard 1 (user, 2026-08-27): 12 px glyphs on 14.4 px lines, a column
- *  every 25.7 px — 74 across a 1920 frame — one blank line between codes */
+/** Artboard 1 (user, 2026-08-27) set 12 px glyphs on 14.4 px lines, a
+ *  column every 25.7 px — 74 across a 1920 frame; since 2026-09-04 (the
+ *  author: «a bit denser») the same glyphs sit on 13.2 px lines, a column
+ *  every 22 px — 87 across 1920 — one blank line between codes */
 export const FIELD: FieldOptions = {
-	colW: 25.7,
-	lineH: 14.4,
+	colW: 22,
+	lineH: 13.2,
 	gap: 1,
 	minCols: 6,
 	maxCols: 160

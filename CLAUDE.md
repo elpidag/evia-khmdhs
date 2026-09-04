@@ -1537,7 +1537,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   columns; plus the fire image `img/landing/bs-distorted.webp`) — pictures,
   not figures, the author's colours as drawn (a live version was built and
   retired the same day, DATA_DECISIONS) — with STILL code fields in the
-  four white cells (`homeCells.ts` spans via `cellGrid`/`gridArea`). `lib/landing/` holds
+  four white cells (`homeCells.ts` spans via `cellGrid`/`gridArea`); the
+  three text links 30 / 20 px and the credit the author's «Afterlives of
+  Fire» paragraph with the refresh date as a `<Num id="meta.refreshed">`
+  token (2026-09-04). `lib/landing/` holds
   `field.ts` (pure, seeded via `lib/transforms/prng.ts`, vitest),
   `CodeField.svelte` (canvas: resize, DPR, fonts.ready, endless RAF with
   cleanup, pause when hidden, reduced-motion still frame),
@@ -1579,8 +1582,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   the sponsored stream is named **«financed by private companies»**
   (`datasets.ts`; the square carries the `short` abbreviation); the landing menu is a full-height square
   flush right with 2 px rules and a «GR / EN» `note` cell; the field is
-  12 px Obviously Regular on 14,4 px lines, 25,7 px columns (74 at 1920,
-  pinned), the cell showing the same field. **`/data`** = the hub of symbols (since 2026-09-04: no band, the
+  12 px Obviously Regular on 13,2 px lines, 22 px columns (87 at 1920,
+  pinned; the artboard's 14,4/25,7 until the author's «a bit denser» of
+  2026-09-04), the cell showing the same field. **`/data`** = the hub of symbols (since 2026-09-04: no band, the
   title 80 px higher and smaller, the caption on two balanced lines, the
   drawings sized to EQUAL AREA (`sizeFor`: base × √elongation × 0,72;
   streams on a 251 px base, tools 132) standing on one baseline, each name

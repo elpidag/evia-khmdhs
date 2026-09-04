@@ -139,7 +139,8 @@
 		color: var(--ink);
 		font-family: var(--font-display-narrow);
 		font-weight: 700;
-		font-size: clamp(14px, 1.25vw, 24px);
+		/* a bit smaller than the artboard's 24 / 36 px (the author, 2026-09-04) */
+		font-size: clamp(12px, 1.04vw, 20px);
 		line-height: 1.1;
 		text-align: right;
 		text-transform: uppercase;
@@ -150,7 +151,7 @@
 		padding-bottom: 22px;
 	}
 	.link.lg {
-		font-size: clamp(20px, 1.875vw, 36px);
+		font-size: clamp(17px, 1.56vw, 30px);
 		padding-top: 28px;
 	}
 	a.cell:hover,

@@ -13560,3 +13560,21 @@ paragraph, nothing sticky in the section) was offered, not built.
   illegible: its substance joins the note («shared log₂ brackets, each
   programme as a share of its own contracts; stated values excl. VAT»),
   and the remaining KEY FINDINGS caveats are set at the notes' 12 px.
+
+## 2026-09-04 — the landing field a bit denser (author)
+
+«I would like the text to be a bit denser.» The field of codes keeps its
+12 px glyphs but sits on 13,2 px lines in columns 22 px apart (the
+artboard's 14,4 and 25,7) — 87 columns across 1920 instead of 74, about a
+quarter more glyphs on the screen; the menu's still code cells share the
+pitch. `field.test.ts` pins 87.
+
+## 2026-09-04 — the landing credit is the author's «Afterlives of Fire» paragraph, its date the records' own; the menu links a bit smaller (author)
+
+The credit under the standfirst is the author's new paragraph verbatim
+(`content/landing/credit.md`), with one substitution: «last updated on
+31 August 2026» is written as the `<Num id="meta.refreshed" />` token, so
+the date is the refresh date the API reports (the same source as the
+refresh line on the cards) and cannot go stale when the records are
+refreshed again. START HERE, EXPLORE THE DATA and METHODOLOGY are a bit
+smaller than the artboard's 36 / 24 px: 30 / 20 px at 1920.

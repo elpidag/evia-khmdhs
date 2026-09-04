@@ -32,9 +32,9 @@ describe('the field of codes', () => {
 
 	it('fills the width with columns at the pitch, each stacked to at least twice the viewport', () => {
 		const pool = poolFrom(payload, 1);
-		// the artboard's 74 columns across 1920
+		// 87 columns across 1920 since the denser pitch of 2026-09-04 (the artboard's 74 at 25.7 px)
 		expect(layoutColumns(1920, 1080, pool, 1).length).toBe(Math.floor(1920 / FIELD.colW));
-		expect(layoutColumns(1920, 1080, pool, 1).length).toBe(74);
+		expect(layoutColumns(1920, 1080, pool, 1).length).toBe(87);
 		expect(layoutColumns(1280, 800, pool, 1).length).toBe(Math.floor(1280 / FIELD.colW));
 		expect(layoutColumns(100, 800, pool, 1).length).toBe(FIELD.minCols);
 		for (const c of layoutColumns(1920, 1080, pool, 1)) {
