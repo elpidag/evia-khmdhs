@@ -13439,3 +13439,124 @@ Theme Lab, like the story timeline's artboard. They are pictures, not
 figures: nothing on the landing states a number, so the no-hardcoded-
 number rule is not engaged. The still code fields, the three links, the
 network symbol and the fire image stay as the entry above says.
+
+## 2026-09-04 — the programme's name is written «Anti-nero», «ANTI-NERO» in capitals (author)
+
+«Wherever we use antinero it is written consistently as Anti-nero and,
+when it is all caps, ANTI-NERO.» A sweep of the site copy found four
+other spellings — AntiNero (the author's own text on the cards and in
+the story, the parked methodology page), AntiNERO (the timeline's
+launch event, from the author's spreadsheet), Antinero (the probable
+tier's sentence) and ANTINERO (two captions and the sources' figure 27
+line) — and set them all to the rule. NOT changed: cited titles keep
+their sources' spelling — the bibliography, the chronology's footnotes
+14 and 15 (Papageorgiou's «Φάκελος «Antinero»» articles and their
+bracketed translations) and the ministry map's title «Πρόγραμμα
+Προστασίας Δασών ANTINERO» in the sources — nor identifiers (routes,
+keys, `--c-antinero`, type names), nor registry titles in the data
+(«ANTINERO IV ΑΤΤΙΚΗΣ» is what ΚΗΜΔΗΣ says) and the search fold that
+maps «ΑΝΤΙΝΕΡΟ» onto them. The stream label reads «Anti-nero programme»
+(a proper noun keeps its capital in the lowercase labels; the card's
+uppercase transform makes ANTI-NERO PROGRAMME). The timeline importer
+normalises the name on import so a re-run of the spreadsheet keeps the
+rule.
+
+## 2026-09-04 — KEY FINDINGS re-set: the text in the middle, CONTRACT SIZES left, the KPI cards right, three full-width charts in the flow (author)
+
+The author's four instructions, in one round: «the main text stays in the
+centre»; «the ALLOCATION OF STATE FUNDING chart must not start playing
+before the user can see it in full»; «CONTRACT SIZES appears on the left
+of the main text when the KPI cards appear»; «EVERY CONTRACT, BY THE DAY
+IT WAS SIGNED goes full width after the sentence ‹Forest intervention is
+made increasingly calculable … repeatedly procured›»; and «after the
+sentence ‹All €633.6 million is awarded by the Ministry … contracted
+elsewhere› present the AWARDING PROCESS graphic from Anti-nero and the
+forest co-ops».
+
+- **Layout.** While the reader is in KEY FINDINGS the grid is symmetric
+  (`.cols.kf`: 540 · 94 · 556 · 94 · 540), so the narrative column's
+  centre is the page's (measured 960 at 1920). CONTRACT SIZES renders in
+  the LEFT rail (`aside.kfleft`, the timeline's column) and the KPI cards
+  in the right, both from the same dock — the first paragraph reaching
+  the docked title; the last two paragraphs swap the right rail to
+  REGION BY REGION and MONEY PER YEAR (`KF_PARTS` by paragraph index; the
+  left keeps the sizes). `KeyFindings` takes a named `part` instead of an
+  index.
+- **Bands.** `ChartBand` has three kinds, mounted into every
+  `[CHART: name]` placeholder: `state-funded` after paragraph 1 (as
+  before), `awarding` — the two AWARDING PROCESS sankeys, Anti-nero over
+  the co-ops, each with its computed note — after the Ministry sentence,
+  and `signed` — the SIGNED timeline with its note and caveat — after
+  paragraph 3. The awarding diagrams are built by the new shared
+  `transforms/awardingFlows.ts` (`antineroAwardingFlow`,
+  `daseAwardingFlow`, `FOREST_KIND_COLOR`), which the two dataset pages now
+  use as well, so the story cannot draw a different diagram from the
+  pages (17 and 19 nodes as before, verified).
+- **The author's text.** The second paragraph is SPLIT at the Ministry
+  sentence to give the band its place — a structural change only, the
+  words untouched (disclosed); the two marker lines are plain text in
+  `keyfindingandopenquestions.md`. KEY FINDINGS now has six paragraph
+  blocks.
+- **Autoplay.** STATE-FUNDED's observer threshold was 0,35; it now plays
+  only when the whole chart is in view (threshold 1, or the viewport's
+  share of a taller chart), `data-played` on its wrapper for the tests.
+
+## 2026-09-04 — a band passing over the rails: the rails step aside, the title row keeps its paper; the two awarding diagrams side by side (author)
+
+The author's screenshot showed the STATE-FUNDED band leaving upward with
+the KPI cards half under its bottom edge, CONTRACT SIZES' title under it
+too, and the dots strewn either side of the docked section title. Two
+mechanisms, story page only:
+
+- **The rails are VEILED while a band overlaps their items** — one
+  IntersectionObserver over the `.chartmark` bands whose root zone is the
+  rails' items' own vertical range (measured after each part swap and on
+  resize; no scroll listener), so the cards and the sizes keep the room
+  ABOVE a band as it approaches, fade out (0,25 s) as it reaches them and
+  return once its bottom has cleared them. The earlier objection (a fade
+  hid the cards the moment they appeared) was to hiding the rails whenever
+  a band was in VIEW; the zone is now the items' box, which the
+  state-funded band reaches ~200 px after the dock.
+- **A full-bleed paper strip under the docked title row** (`.tstrip`, a
+  zero-height sticky element inside the narrative, 40 px painted, z 3
+  under the titles and above the bands), only while the reader is in KEY
+  FINDINGS — the chronology's figure pins at the same top and must not be
+  covered.
+- **The two AWARDING PROCESS diagrams sit side by side** on a band of
+  min(1800 px, 96 vw): the co-op diagram at 150/300 px margins (the
+  /dase frame's 340/340 would leave no plot in half a band), both 620 px
+  tall; one column under 1100 px.
+
+The consequence, measured at 1920×1080 and stated to the author: with
+three full-width bands in a six-paragraph section, the sticky rails are
+veiled for most of it — the STATE-FUNDED band's top is already inside
+the sizes chart's box at the dock, and the gap between that band and the
+awarding one (one paragraph) is shorter than the items' box — so the
+cards and CONTRACT SIZES are seen for a stretch of two paragraphs after
+the awarding band and REGION BY REGION / MONEY PER YEAR after the signed
+one. The veil drops at once and the return fades in. An in-flow
+alternative (the cards and the sizes as a two-sided band after the first
+paragraph, nothing sticky in the section) was offered, not built.
+
+## 2026-09-04 — KEY FINDINGS frames: the signed timeline retitled and reworded, MONEY PER YEAR vertical in both colours, the sizes note legible (author)
+
+- The signed frame is «TIMELINE OF CONTRACTS BY THE DAY THEY WERE SIGNED»
+  (the author wrote «BY THEY DAY» — read as «BY THE DAY»). Its note keeps
+  the computed first sentence (in-season counts, shares and €) and
+  continues with the author's own two sentences on the months; the
+  «busiest year» clause is gone. The sentences were checked against the
+  signature dates before they went in: 80,8 % of the co-op contracts are
+  signed in August–November, and 80,7 % of Anti-nero's in March–October
+  (32,7 % in March–April, 48,0 % inside the season). «AntiNero» in the
+  author's sentence follows the spelling rule of the same day.
+- MONEY PER YEAR, in the story only: `charts/YearColumns.svelte` — one
+  group of two columns per year, ink and green, each column's height the
+  programme's SHARE OF ITS OWN TOTAL (a €30M programme beside a €634M one
+  cannot share a € axis), the € printed on every column; the dataset
+  pages keep their horizontal bars.
+- CONTRACT SIZES: the two median labels sat on one row and ran into each
+  other at the rail's width — the co-op label now takes a row above
+  (CompareHist top margin 30 → 44). The 11 px bracket caveat was
+  illegible: its substance joins the note («shared log₂ brackets, each
+  programme as a share of its own contracts; stated values excl. VAT»),
+  and the remaining KEY FINDINGS caveats are set at the notes' 12 px.

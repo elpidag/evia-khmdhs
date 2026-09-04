@@ -190,7 +190,7 @@ export const EVENTS: StoryEvent[] = [
 		id: 'official-launch-of-the-antinero',
 		lane: 'greece',
 		date: '2022-07-08',
-		title: 'Official launch of the AntiNERO programme by the Ministry of Environment and Energy',
+		title: 'Official launch of the Anti-nero programme by the Ministry of Environment and Energy',
 		body: '(see here)'
 	},
 	{

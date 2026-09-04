@@ -110,12 +110,12 @@ responsibility in the environmental sector.’
 
 ## 9 — prints as Figure 26
 
-Spatial distribution and extent of works implemented under the ANTINERO Forest
+Spatial distribution and extent of works implemented under the ANTI-NERO Forest
 Protection Programme. Source: Ministry of Environment and Energy.
 
 ## 10 — prints as Figure 27
 
-Graph representing distribution of work types included in ANTINERO programme
+Graph representing distribution of work types included in ANTI-NERO programme
 contracts, based on the data sourced and analysed through this research.
 
 ## 11 — prints as Figure 28

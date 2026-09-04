@@ -295,13 +295,17 @@
 
 	$effect(() => {
 		if (!wrap) return;
+		// plays only once the WHOLE chart is in view (the author, 2026-09-04)
+		// — or as much of it as the viewport can hold, when it is taller
+		const el = wrap;
+		const thr = Math.min(1, Math.max(0.35, (window.innerHeight - 24) / Math.max(1, el.offsetHeight)));
 		const io = new IntersectionObserver(
 			(es) => {
-				if (es.some((x) => x.isIntersecting)) autoplay();
+				if (es.some((x) => x.isIntersecting && x.intersectionRatio >= thr - 0.01)) autoplay();
 			},
-			{ threshold: 0.35 }
+			{ threshold: [thr] }
 		);
-		io.observe(wrap);
+		io.observe(el);
 		return () => io.disconnect();
 	});
 
@@ -333,7 +337,7 @@
 	}
 </script>
 
-<div class="sf" bind:this={wrap}>
+<div class="sf" data-played={played} bind:this={wrap}>
 	<div class="bar">
 		<div class="steps" role="group" aria-label="Animation steps">
 			{#each CAPTIONS as _, i (i)}

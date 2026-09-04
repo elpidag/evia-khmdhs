@@ -1445,6 +1445,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   expectations hold on either basis. The three dataset pages open with
   harmonised KPI rows (stated net / paid net / median net / counts /
   % direct).
+- **The programme's name in site copy is «Anti-nero», «ANTI-NERO» in
+  capitals** (author, 2026-09-04; DATA_DECISIONS): never AntiNero /
+  Antinero / ANTINERO in prose, captions or labels — cited titles keep
+  their sources' spelling, identifiers and registry data are untouched.
 - **Rebrand «FORESTRY WORKS TRACKER»** (2026-08-12, commits
   b35e5db…1d7161e): white paper (cream retired), `--c-antinero` was BLACK until 2026-09-04 (the ink grey #1f1f1f since, the
   author's Theme Lab pick — with `--c-fire` the terracotta #b33a1a, from the
@@ -1690,7 +1694,27 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   269 px each side, the grid transition sliding) — and since 2026-09-04
   the METHODOLOGY, BIBLIOGRAPHY and SOURCES read ALONE (`figureOff` →
   `.cols.solo`: no figure carried into them, the rail faded, the text
-  column in the middle, 614/556/614; KEY FINDINGS keeps its centred pair); **KEY FINDINGS since 2026-09-04**: the rail's first card = KPI
+  column in the middle, 614/556/614); **KEY FINDINGS since 2026-09-04
+  (evening round)**: the text in the MIDDLE (`.cols.kf`, symmetric
+  540/94/556/94/540), CONTRACT SIZES in the LEFT rail (`aside.kfleft`)
+  and the KPI cards in the right from the first paragraph's dock,
+  REGION BY REGION / MONEY PER YEAR on the right for the last two
+  paragraphs (`KF_PARTS`), and THREE full-width bands mounted into the
+  author's `[CHART: state-funded|awarding|signed]` lines (`ChartBand`
+  kinds; the awarding one = both AWARDING PROCESS sankeys from the shared
+  `transforms/awardingFlows.ts` the dataset pages use too, SIDE BY SIDE
+  on a 1800 px band; the second paragraph split at the Ministry
+  sentence); STATE-FUNDED autoplays only when wholly in view; the rails
+  are VEILED while a band overlaps their items (an observer whose zone is
+  the items' box) and a zero-height sticky paper strip (`.tstrip`) keeps
+  the docked title row clean of a passing band. Its frames (evening, author):
+  the signed band is «TIMELINE OF CONTRACTS BY THE DAY THEY WERE SIGNED»
+  with the author's two month sentences after the computed one (checked:
+  81 % of co-op signatures Aug–Nov, 81 % of Anti-nero's Mar–Oct), MONEY
+  PER YEAR is `charts/YearColumns.svelte` (vertical, both colours, each
+  column its programme's share of its own total — story only), the
+  sizes' bracket caveat lives in its note and CompareHist's two median
+  labels sit on two rows. Earlier that day: the rail's first card = KPI
   cards in TWO COLUMNS (Anti-nero / co-ops × stated € / contracts —
   headers on one bottom-aligned row, cards ROW by ROW so the rectangles
   align, 44 px under the title, 92 px tall; the band carries NO title),

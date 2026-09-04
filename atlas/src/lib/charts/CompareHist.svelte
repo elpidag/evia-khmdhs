@@ -6,7 +6,9 @@
 
 	let width = $state(900);
 	const height = 280;
-	const M = { top: 30, right: 8, bottom: 40, left: 36 };
+	// room for the two median labels on TWO rows (the author, 2026-09-04:
+	// on one row they ran into each other at the story rail's width)
+	const M = { top: 44, right: 8, bottom: 40, left: 36 };
 
 	const n = $derived(hist.labels.length);
 	const bw = $derived((width - M.left - M.right) / n);
@@ -68,9 +70,11 @@
 			text-anchor="end">
 			Anti-nero median {eurShort(hist.antinero_median)}
 		</text>
+		<!-- the co-op label a row higher: it runs right from its line toward the
+		     Anti-nero label running left from its own -->
 		<line class="median d" x1={xOf(hist.dase_median)} x2={xOf(hist.dase_median)}
 			y1={M.top - 4} y2={height - M.bottom} />
-		<text class="median-label d" x={xOf(hist.dase_median) + 5} y={M.top - 8}>
+		<text class="median-label d" x={xOf(hist.dase_median) + 5} y={M.top - 24}>
 			co-op median {eurShort(hist.dase_median)}
 		</text>
 	</svg>

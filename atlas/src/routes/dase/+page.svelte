@@ -4,7 +4,8 @@
 	import BarH from '$lib/charts/BarH.svelte';
 	import BeeswarmCanvas from '$lib/charts/BeeswarmCanvas.svelte';
 	import LogHistogram from '$lib/charts/LogHistogram.svelte';
-	import KindFlow, { type FlowLink, type FlowNode } from '$lib/charts/KindFlow.svelte';
+	import KindFlow from '$lib/charts/KindFlow.svelte';
+	import { FOREST_KIND_COLOR, daseAwardingFlow } from '$lib/transforms/awardingFlows';
 	import { YEAR_COLORS } from '$lib/charts/yearColors';
 	import { binByKey } from '$lib/transforms/histogram';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
@@ -162,8 +163,8 @@
 	// Διευθύνσεις Δασών, light for the Δασαρχεία; black for municipal &
 	// regional government, grey for every other public body
 	const KIND_COLOR: Record<MapPt['kindKey'], string> = {
-		dd: 'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 84%, white) 56%, black)',
-		dx: 'color-mix(in srgb, color-mix(in oklab, var(--c-dase) 75%, white) 87%, black)',
+		dd: FOREST_KIND_COLOR.dd,
+		dx: FOREST_KIND_COLOR.dx,
 		muni: 'var(--ink)',
 		misc: 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))'
 	};
@@ -274,94 +275,10 @@
 			sublabel: `${c.n_contracts} contracts · ${c.n_units} units · ${pct(c.pct_direct)} direct`
 		}))
 	);
-	// Awarding-body categories, smallest first, in neutral greys — the
-	// first column of the delegation diagram.
-	const BODY_KINDS: [string, string, string][] = [
-		['region', 'regions', 'color-mix(in srgb, var(--ink) 17.4%, var(--paper))'],
-		['other_public', 'other public bodies', 'color-mix(in srgb, var(--ink) 29.9%, var(--paper))'],
-		['municipality', 'municipalities', 'color-mix(in srgb, var(--ink) 44.9%, var(--paper))'],
-		['decentralized_administration', 'decentralized administrations', 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))'],
-		['ministry', 'ministries', 'color-mix(in srgb, var(--ink) 86.4%, var(--paper))'],
-		['unknown', 'unclassified', 'color-mix(in srgb, var(--ink) 11.2%, var(--paper))']
-	];
-	// delegation diagram: awarding body → operating unit → contractor,
-	// ribbon width = € net. Nodes reuse the bars' category metadata so the
-	// charts share one vocabulary and one palette.
-	// In the middle column the two non-forest kinds collapse into ONE node:
-	// «regional or municipal authorities» merely repeats what column 1
-	// already says, and «other public bodies» is wrong there anyway (the
-	// Ephorate of Antiquities is a unit OF the ministry, not another body).
-	// What they have in common is the honest label: the body's own services.
-	const OWN = 'own';
-	const MIDDLE_KINDS: [string, string, string][] = [
-		[OWN, "the body's own services", 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))'],
-		['dd', 'forest directorates', KIND_COLOR.dd],
-		['dx', 'local forest service offices', KIND_COLOR.dx]
-	];
-	const midKind = (unit: string) => (unit === 'dx' || unit === 'dd' ? unit : OWN);
-	const flowNodes = $derived.by<FlowNode[]>(() => {
-		const f = o.kind_mix?.flows ?? [];
-		const bodies: FlowNode[] = BODY_KINDS.map(([k, label, color]) => ({
-			id: `l:${k}`,
-			label,
-			color,
-			side: 'l' as const,
-			n: f.filter((x) => x.body === k).reduce((a, x) => a + x.n, 0),
-			eur: f.filter((x) => x.body === k).reduce((a, x) => a + x.eur, 0)
-		}));
-		const units: FlowNode[] = MIDDLE_KINDS.map(([k, label, color]) => ({
-			id: `m:${k}`,
-			label,
-			color,
-			side: 'm' as const,
-			n: f.filter((x) => midKind(x.unit) === k).reduce((a, x) => a + x.n, 0),
-			eur: f.filter((x) => midKind(x.unit) === k).reduce((a, x) => a + x.eur, 0)
-		}));
-		const coops: FlowNode[] = (o.kind_mix?.coops ?? []).map((c) => ({
-			id: `r:${c.vat ?? 'other'}`,
-			label: c.label ?? `${grInt(c.n_coops ?? 0)} other co-ops`,
-			// the pooled node is co-ops too — a different colour would read
-			// as a different kind of contractor
-			color: 'var(--c-dase)',
-			side: 'r' as const,
-			n: c.n,
-			eur: c.eur,
-			href: c.vat ? `/dase/coop/${c.vat}` : undefined
-		}));
-		return [...bodies, ...units, ...coops]
-			.filter((n) => n.n > 0)
-			.sort((a, b) => (a.side === b.side ? b.eur - a.eur : 0));
-	});
-	const flowLinks = $derived.by<FlowLink[]>(() => {
-		const merge = (rows: { key: string; n: number; eur: number }[]) => {
-			const m = new Map<string, FlowLink>();
-			for (const r of rows) {
-				const [s, t] = r.key.split('>');
-				const cur = m.get(r.key);
-				if (cur) {
-					cur.n += r.n;
-					cur.eur += r.eur;
-				} else m.set(r.key, { s, t, n: r.n, eur: r.eur });
-			}
-			return [...m.values()];
-		};
-		return [
-			...merge(
-				(o.kind_mix?.flows ?? []).map((f) => ({
-					key: `l:${f.body}>m:${midKind(f.unit)}`,
-					n: f.n,
-					eur: f.eur
-				}))
-			),
-			...merge(
-				(o.kind_mix?.coop_flows ?? []).map((f) => ({
-					key: `m:${midKind(f.unit)}>r:${f.vat ?? 'other'}`,
-					n: f.n,
-					eur: f.eur
-				}))
-			)
-		];
-	});
+	/** the delegation diagram — awarding body → operating unit → contractor,
+	 *  ribbon width = € net — is built by the SHARED `awardingFlows`
+	 *  (2026-09-04), which the story's AWARDING PROCESS band draws too */
+	const flow = $derived(daseAwardingFlow(o.kind_mix));
 	const yearRows = $derived(
 		o.yearly.map((y) => ({
 			label: y.year,
@@ -702,8 +619,8 @@
 	<!-- equal outer margins: the three columns are then evenly spaced AND the
 	     middle one sits on the drawing's centre (user, 2026-08-22) -->
 	<KindFlow
-		nodes={flowNodes}
-		links={flowLinks}
+		nodes={flow.nodes}
+		links={flow.links}
 		height={660}
 		headings={['awarding bodies', 'operating units', 'contractors']}
 		marginLeft={340}

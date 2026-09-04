@@ -70,6 +70,15 @@ def slug(t):
         words.pop()
     return '-'.join(words)
 
+# the programme's name is written «Anti-nero» on the site, «ANTI-NERO» in
+# capitals (the author, 2026-09-04) — the spreadsheet writes it AntiNERO
+NAME = re.compile(r'\b(?:AntiNero|Antinero|AntiNERO|ANTINERO|Anti-Nero)\b')
+
+
+def programme_name(t):
+    return NAME.sub(lambda m: 'ANTI-NERO' if m.group(0) == 'ANTINERO' else 'Anti-nero', t)
+
+
 def q(s):
     """a TS single-quoted literal"""
     s = s.replace('\\', '\\\\').replace("'", "\\'")
@@ -81,8 +90,8 @@ for c in rows:
     if not lane:
         sys.exit('unknown category: %r' % c['A'])
     start, end = iso(c['B']), iso(c.get('C', c['B']))
-    title = re.sub(r'\s+', ' ', c['D']).strip().rstrip('.')
-    body = re.sub(r'\s+', ' ', c.get('E', '') or '').strip()
+    title = programme_name(re.sub(r'\s+', ' ', c['D']).strip().rstrip('.'))
+    body = programme_name(re.sub(r'\s+', ' ', c.get('E', '') or '').strip())
     base = slug(title)
     n = seen.get(base, 0)
     seen[base] = n + 1

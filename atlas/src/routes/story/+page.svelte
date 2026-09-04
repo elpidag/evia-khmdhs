@@ -128,6 +128,12 @@
 			activeSection === 'bibliography' ||
 			activeSection === 'sources'
 	);
+	/** KEY FINDINGS (the author, 2026-09-04): the text in the MIDDLE of the
+	 *  page, CONTRACT SIZES on its left and the KPI cards on its right from
+	 *  the first paragraph's dock; REGION BY REGION and MONEY PER YEAR take
+	 *  the right rail for the last two paragraphs; the SIGNED timeline and
+	 *  the two AWARDING PROCESS diagrams are full-width bands in the text */
+	const kfOn = $derived(activeSection === 'keyfindingandopenquestions');
 	/** the timeline SPREADS when the CHRONOLOGY title DOCKS level with the
 	 *  TIMELINE title (the author, 2026-09-02 — not when its first paragraph
 	 *  peeks in at the viewport's bottom), and folds back once the section's
@@ -193,17 +199,20 @@
 	/** the figure IN FORCE — the author's own marker, carried forward */
 	const figure = $derived(figureAt(Math.max(0, atBlock)));
 
-	/** KEY FINDINGS charts live in the figure column while the reader is in
-	 *  that section (the author, 2026-09-02): its five paragraphs advance
-	 *  through the five chart items one-to-one */
+	/** which KEY FINDINGS paragraph the reader is at (−1 outside the section) */
 	const kfAt = $derived.by(() => {
 		if (atBlock < 0 || BLOCKS[atBlock]?.section !== 'keyfindingandopenquestions') return -1;
 		let n = 0;
 		for (let j = 0; j < atBlock; j++) {
 			if (BLOCKS[j].section === 'keyfindingandopenquestions') n++;
 		}
-		return Math.min(n, 4);
+		return n;
 	});
+	/** the right rail's item per paragraph: the KPI cards through the first
+	 *  four (the second paragraph is split by the awarding band), then
+	 *  REGION BY REGION and MONEY PER YEAR */
+	const KF_PARTS = ['cards', 'cards', 'cards', 'cards', 'region', 'yearly'] as const;
+	const kfPart = $derived(KF_PARTS[Math.min(Math.max(kfAt, 0), KF_PARTS.length - 1)]);
 
 	/** the KPI cards appear once the KEY FINDINGS title has docked AND the
 	 *  section's first paragraph has reached the top of the column too (the
@@ -224,12 +233,62 @@
 		io.observe(el);
 		return () => io.disconnect();
 	});
+	/** the rails show their KEY FINDINGS items once the cards have docked */
+	const kfShown = $derived(kfAt > 0 || (kfAt === 0 && kfDocked));
+	/** the rails' items step aside while a full-width band passes over
+	 *  them (the author's screenshot, 2026-09-04: cards half under the
+	 *  band's edge) — one observer over the bands whose zone is the items'
+	 *  own vertical range, so the cards keep the room above the band and
+	 *  return once its bottom has cleared them; remeasured when the item
+	 *  or the window changes */
+	let veiled = $state(false);
+	$effect(() => {
+		void kfPart;
+		void pageW;
+		const nar = narrativeEl;
+		if (!kfOn || !kfShown || !nar || typeof IntersectionObserver === 'undefined') {
+			veiled = false;
+			return;
+		}
+		// veiled until the observer's first report, so the items never flash
+		// under a band that is already over them (the state-funded band's top
+		// is ~200 px under the dock; the observer answers within a frame)
+		veiled = true;
+		let io: IntersectionObserver | null = null;
+		const over = new Set<Element>();
+		const raf = requestAnimationFrame(() => {
+			const items = [...document.querySelectorAll<HTMLElement>('.rail.fig .item, .kfleft .item')];
+			const bands = [...nar.querySelectorAll<HTMLElement>('.chartmark')];
+			if (!items.length || !bands.length) return;
+			const rects = items.map((e) => e.getBoundingClientRect());
+			const top = Math.max(0, Math.round(Math.min(...rects.map((r) => r.top))));
+			const bottom = Math.round(Math.max(...rects.map((r) => r.bottom)));
+			io = new IntersectionObserver(
+				(es) => {
+					for (const e of es) {
+						if (e.isIntersecting) over.add(e.target);
+						else over.delete(e.target);
+					}
+					veiled = over.size > 0;
+				},
+				{
+					rootMargin: `-${top}px 0px -${Math.max(0, window.innerHeight - bottom)}px 0px`,
+					threshold: 0
+				}
+			);
+			for (const b of bands) io.observe(b);
+		});
+		return () => {
+			cancelAnimationFrame(raf);
+			io?.disconnect();
+		};
+	});
 
-	/** the FULL-WIDTH chart in the narrative's flow (the author, 2026-09-04):
-	 *  the author's `[CHART: state-funded]` line renders as a placeholder;
-	 *  the band mounts into it, full-bleed — `--nar-left` (the column's
-	 *  distance from the window's edge) and `--page-w` (the window without
-	 *  its scrollbar) are measured here */
+	/** the FULL-WIDTH charts in the narrative's flow (the author, 2026-09-04):
+	 *  each `[CHART: name]` line renders as a placeholder; a band mounts into
+	 *  every one, full-bleed — `--nar-left` (the column's distance from the
+	 *  window's edge) and `--page-w` (the window without its scrollbar) are
+	 *  measured here */
 	let narrativeEl = $state<HTMLElement | null>(null);
 	let narLeft = $state(0);
 	let pageW = $state(0);
@@ -253,14 +312,23 @@
 		};
 	});
 	$effect(() => {
-		const host = narrativeEl?.querySelector<HTMLElement>('.chartmark[data-chart="state-funded"]');
-		if (!host) return;
-		const app = mount(ChartBand, { target: host, props: { c: data.cmp } });
-		// no fading of the rail: the band sits ABOVE the rail in stacking and
+		const hosts = narrativeEl
+			? [...narrativeEl.querySelectorAll<HTMLElement>('.chartmark[data-chart]')]
+			: [];
+		if (!hosts.length) return;
+		const apps = hosts.map((host) =>
+			mount(ChartBand, {
+				target: host,
+				props: { kind: host.dataset.chart as 'state-funded' | 'signed' | 'awarding', c: data.cmp }
+			})
+		);
+		// no fading of the rails: a band sits ABOVE them in stacking and
 		// simply slides over the sticky cards as the reader scrolls, the way
 		// any content passes a sticky panel (a fade hid the cards at the very
 		// moment they appeared, the band's top being 479 px down at the dock)
-		return () => unmount(app);
+		return () => {
+			for (const a of apps) unmount(a);
+		};
 	});
 
 	/** only the footnotes of the paragraphs on screen, in document order */
@@ -376,7 +444,7 @@
 			</div>
 		</div>
 	{/if}
-	<div class="cols" class:centred={!timelineOn} class:solo={figureOff}>
+	<div class="cols" class:centred={!timelineOn && !kfOn} class:kf={kfOn} class:solo={figureOff}>
 		<!-- TIMELINE is a grid sibling sticky at the SAME height as the section
 		     titles, so the two columns start aligned; it withdraws with its
 		     rail once the reader leaves the chronology -->
@@ -408,6 +476,13 @@
 				</div>
 			{/if}
 		</aside>
+		{#if kfOn && kfShown}
+			<!-- KEY FINDINGS' left rail: CONTRACT SIZES beside the text, from the
+			     same dock as the KPI cards on the right (the author, 2026-09-04) -->
+			<aside class="rail kfleft" class:veiled>
+				<KeyFindings c={data.cmp} part="sizes" />
+			</aside>
+		{/if}
 
 		<div
 			class="narrative"
@@ -415,6 +490,12 @@
 			style:--nar-left={`${narLeft}px`}
 			style:--page-w={pageW ? `${pageW}px` : null}
 		>
+			{#if kfOn}
+				<!-- a full-bleed paper strip under the docked title's row, so a
+				     passing band shows nothing beside the title (the author's
+				     screenshot, 2026-09-04); no height in the flow -->
+				<div class="tstrip" aria-hidden="true"></div>
+			{/if}
 			{#each CHAPTERS as c (c.id)}
 				<section class="beat" id={c.id}>
 					<!-- the section announces itself in the flow, docks at the band and
@@ -429,10 +510,10 @@
 			<RefreshLine />
 		</div>
 
-		<aside class="rail fig" class:off={figureOff}>
-			{#if kfAt > 0 || (kfAt === 0 && kfDocked)}
-				{#key kfAt}
-					<KeyFindings c={data.cmp} i={kfAt} />
+		<aside class="rail fig" class:off={figureOff} class:veiled>
+			{#if kfShown}
+				{#key kfPart}
+					<KeyFindings c={data.cmp} part={kfPart} />
 				{/key}
 			{:else if !figureOff && kfAt < 0}
 				<!-- the methodology, bibliography and sources stand alone — no
@@ -503,6 +584,48 @@
 			minmax(0, 614fr) minmax(0, 0fr) minmax(0, 556fr)
 			minmax(0, 0fr) minmax(0, 614fr);
 		padding-right: 0;
+	}
+	/* KEY FINDINGS (the author, 2026-09-04): the text in the MIDDLE of the
+	   page — equal rails either side, CONTRACT SIZES on the left, the KPI
+	   cards on the right */
+	.cols.kf {
+		grid-template-columns:
+			minmax(0, 540fr) minmax(0, 94fr) minmax(0, 556fr)
+			minmax(0, 94fr) minmax(0, 540fr);
+		padding-right: 0;
+	}
+	.kfleft {
+		grid-column: 1;
+		grid-row: 1;
+		z-index: 1;
+	}
+	.rail.fig,
+	.rail.kfleft {
+		transition: opacity 0.25s ease;
+	}
+	/* the veil drops at once (no fade-out to catch the eye); the return fades in */
+	.rail.veiled {
+		opacity: 0;
+		pointer-events: none;
+		transition: none;
+	}
+	.tstrip {
+		position: sticky;
+		top: var(--story-top, calc(var(--header-h, 85px) + 100px));
+		height: 0;
+		z-index: 3;
+		width: var(--page-w, 100vw);
+		margin-left: calc(-1 * var(--nar-left, 0px));
+		pointer-events: none;
+	}
+	.tstrip::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 40px;
+		background: var(--paper);
 	}
 	/* the column titles are the dataset card's own name style — the same face,
 	   weight, size ramp, line-height and tracking as «ANTI-NERO PROGRAMME»

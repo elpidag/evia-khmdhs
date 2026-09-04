@@ -58,7 +58,7 @@ export const SYMBOLS: SiteSymbol[] = [
 	{
 		key: 'antinero',
 		href: '/antinero',
-		label: 'anti-nero programme',
+		label: 'Anti-nero programme',
 		color: 'var(--c-antinero)',
 		symbol: '/img/symbols/antinero.svg',
 		aspect: 707.14 / 289.27,

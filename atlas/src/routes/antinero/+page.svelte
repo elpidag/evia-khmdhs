@@ -25,6 +25,7 @@
 	} from '$lib/transforms/chordSides';
 	import { SCOPE_COLORS, SCOPE_LABELS, SCOPE_ORDER } from '$lib/charts/scopeColors';
 	import { unitEn } from '$lib/transforms/names';
+	import { antineroAwardingFlow } from '$lib/transforms/awardingFlows';
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
@@ -824,7 +825,7 @@
 				<summary>
 					+ {grInt(o.probable.n)} additional contracts found ({eurShort(
 						o.probable.total_eur
-					).toLowerCase()} excl. VAT), probably related to the Antinero programme, but not
+					).toLowerCase()} excl. VAT), probably related to the Anti-nero programme, but not
 					included in the calculations
 				</summary>
 				<p class="pnote">
@@ -956,34 +957,12 @@
 <Defer height={620}>
 {#if unitFlow}
 	{@const uf = unitFlow}
-	<!-- two columns, no phase (user, 2026-08-21): the ΥΠΕΝ unit that signed on
-	     the left, the ten biggest contractors + everyone else on the right;
-	     units in greys (ribbons take the unit's tone), the ΔΑΣΕ drawing -->
-	{@const UNIT_GREYS = ['var(--ink)', 'color-mix(in srgb, var(--ink) 73.5%, var(--paper))', 'color-mix(in srgb, var(--ink) 52.2%, var(--paper))', 'color-mix(in srgb, var(--ink) 33.5%, var(--paper))', 'color-mix(in srgb, var(--ink) 21%, var(--paper))']}
 	<!-- three columns, as the forest co-op diagram (user, 2026-08-22, for
 	     comparability): the awarding body — the Ministry, one node — → its
-	     operating units → contractors -->
-	{@const unitNodes = uf.nodes.map((n, i) => ({
-		...n,
-		side: (n.side === 'l' ? 'm' : n.side) as 'l' | 'm' | 'r',
-		label: n.side === 'l' ? unitEn(n.label) : n.label,
-		color: n.side === 'l' ? UNIT_GREYS[Math.min(i, UNIT_GREYS.length - 1)] : n.id === 'rest' ? 'color-mix(in srgb, var(--ink) 44.5%, var(--paper))' : 'color-mix(in srgb, var(--ink) 87.8%, var(--paper))'
-	}))}
-	{@const ufNodes = [
-		{
-			id: 'ministry',
-			label: 'Ministry of Environment & Energy',
-			side: 'l' as const,
-			n: uf.nodes.filter((n) => n.side === 'l').reduce((s, n) => s + n.n, 0),
-			eur: uf.total_eur,
-			color: 'color-mix(in srgb, var(--ink) 53.3%, black)'
-		},
-		...unitNodes
-	]}
-	{@const ufLinks = [
-		...uf.nodes.filter((n) => n.side === 'l').map((n) => ({ s: 'ministry', t: n.id, n: n.n, eur: n.eur })),
-		...uf.links
-	]}
+	     operating units (greys, ribbons take the unit's tone) → the ten
+	     biggest contractors + everyone else; the graph is built by the
+	     SHARED `awardingFlows` (2026-09-04), which the story's band draws too -->
+	{@const built = antineroAwardingFlow(uf)}
 	<ChartFrame
 		title="AWARDING PROCESS"
 		insight={`The awarding body of every Anti-nero contract is the Ministry of Environment and Energy, acting through ${grInt(uf.n_units)} units of its own central administration${unitFacts ? `, one of which — the ${unitFacts.label} — handled ${pct(unitFacts.share)} of the money` : ''}. None of the forest services that supervise the works on the ground awards a contract itself.`}
@@ -995,8 +974,8 @@
 		     characters and the nodes are padded so a three-line name clears
 		     its neighbour -->
 		<KindFlow
-			nodes={ufNodes}
-			links={ufLinks}
+			nodes={built.nodes}
+			links={built.links}
 			height={620}
 			headings={['awarding body', 'operating units', 'contractors']}
 			marginLeft={50}

@@ -77,11 +77,11 @@
 	</p>
 	<p>The starting documents differ across the three datasets that are assembled.</p>
 	<p id="antinero">
-		For the AntiNero dataset, the search was programme based. A first list of contracts was compiled
-		manually through ΚΗΜΔΗΣ by searching different spellings of AntiNero and references to Recovery
+		For the Anti-nero dataset, the search was programme based. A first list of contracts was compiled
+		manually through ΚΗΜΔΗΣ by searching different spellings of Anti-nero and references to Recovery
 		and Resilience Facility Measure 16849. This list was then expanded through scripted searches
 		intended to locate contracts that the manual search had missed. A contract enters the dataset
-		only where there is positive evidence of its connection to the programme, through the AntiNero
+		only where there is positive evidence of its connection to the programme, through the Anti-nero
 		name in the registry title, a funding code associated with the programme, or an explicit
 		reference to Measure 16849 in the signed PDF document. {Spell(f['kh_title_only_n'])} contract chains
 		from 2022 are included on the strength of the registry title alone: they carry the programme name
@@ -126,7 +126,7 @@
 			identifiers do not distinguish them reliably in every case.</span
 		>
 		<span id="pe-vocabulary">Geographical analysis uses the 74 Kallikratis regional units.</span> For
-		AntiNero, the regions of intervention are identified from the contracts themselves.
+		Anti-nero, the regions of intervention are identified from the contracts themselves.
 		<span id="dase-regions"
 			>For cooperative contracts, the regional unit is normally derived from the territorial
 			competence of the forest authority that awarded the contract.</span
@@ -178,7 +178,7 @@
 
 	<h2 id="conventions">Analytical conventions</h2>
 	<p id="stated-basis">
-		For the AntiNero dataset and the dataset including works awarded to Forest Workers'
+		For the Anti-nero dataset and the dataset including works awarded to Forest Workers'
 		Cooperatives, <span id="net-basis"
 			>monetary analysis is based on the stated value of each contract excluding VAT</span
 		>. This is the amount agreed in the signed contract and provides a consistent basis for
@@ -202,7 +202,7 @@
 		than being estimated.
 	</p>
 	<p id="even-split">
-		Some AntiNero contracts cover more than one regional unit or involve more than one contracting
+		Some Anti-nero contracts cover more than one regional unit or involve more than one contracting
 		party, while the documents provide only one total contract value. Where no information on its
 		internal allocation is available, the value is divided equally between the regions or partners
 		concerned for the purposes of aggregate maps and rankings. This is an analytical convention and
