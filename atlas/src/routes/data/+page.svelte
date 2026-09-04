@@ -16,6 +16,12 @@
 
 	const streams = SYMBOLS.filter((s) => s.rank === 'stream');
 	const tools = SYMBOLS.filter((s) => s.rank === 'tool');
+	/** the drawings differ in shape (a wide digger, a tall hand), so each is
+	 *  sized to the SAME AREA — the longer side grows with the square root
+	 *  of the shape's elongation — and the row stands them on one baseline
+	 *  (the author, 2026-09-04: «organise the symbols better») */
+	const sizeFor = (s: (typeof SYMBOLS)[number], base: string) =>
+		s.aspect ? `calc(${base} * ${(Math.sqrt(Math.max(s.aspect, 1 / s.aspect)) * 0.72).toFixed(3)})` : base;
 </script>
 
 <svelte:head>
@@ -37,7 +43,7 @@
 			{#each streams as s (s.key)}
 				<li>
 					<a href={s.href}>
-						<DatasetSymbol key={s.key} size="clamp(150px, 13.1vw, 251px)" named />
+						<DatasetSymbol key={s.key} size={sizeFor(s, 'clamp(150px, 13.1vw, 251px)')} named />
 						<span class="label" style:color={s.color}>{s.label}</span>
 					</a>
 				</li>
@@ -48,7 +54,7 @@
 			{#each tools as s (s.key)}
 				<li>
 					<a href={s.href}>
-						<DatasetSymbol key={s.key} size="clamp(80px, 6.9vw, 132px)" named />
+						<DatasetSymbol key={s.key} size={sizeFor(s, 'clamp(80px, 6.9vw, 132px)')} named />
 						<span class="label" style:color={s.color}>{s.label}</span>
 					</a>
 				</li>
@@ -100,6 +106,11 @@
 		font-size: clamp(18px, 1.875vw, 36px);
 		letter-spacing: 0.26em;
 	}
+	/* the caption on TWO balanced lines (the author, 2026-09-04) */
+	.centre .caption {
+		max-width: 22em;
+		font-size: clamp(14px, 1.25vw, 24px);
+	}
 	.centre .caption :global(.prose),
 	.centre .caption :global(.prose p) {
 		font-family: var(--font-display-narrow);
@@ -107,6 +118,7 @@
 		font-size: clamp(14px, 1.25vw, 24px);
 		line-height: 1.2;
 		text-align: center;
+		text-wrap: balance;
 		color: var(--ink);
 	}
 	.rank {
@@ -115,7 +127,8 @@
 		padding: 0;
 		display: flex;
 		justify-content: center;
-		align-items: flex-start;
+		/* the drawings stand on one baseline, their names on one line under */
+		align-items: flex-end;
 	}
 	.rank.streams {
 		margin-top: 2.9vh;
@@ -134,10 +147,10 @@
 		color: var(--ink);
 	}
 	.rank.streams a {
-		max-width: clamp(150px, 13.1vw, 251px);
+		max-width: clamp(190px, 16vw, 300px);
 	}
 	.rank.tools a {
-		max-width: clamp(80px, 6.9vw, 132px);
+		max-width: clamp(100px, 8.4vw, 160px);
 		gap: 10px;
 	}
 	/* the name in the stream's own colour, shown on HOVER only (the author,

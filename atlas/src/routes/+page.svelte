@@ -155,12 +155,13 @@
 		</div>
 	</div>
 	<div class="menu">
-		<HomeGrid cells={HOME_CELLS} onReplay={replay}>
+		<HomeGrid cells={HOME_CELLS} onReplay={replay} {codes} seed={SEED}>
 			{#snippet field()}
 				<div class="cell" bind:this={cellEl}>
 					{#if !big}
 						{#key seed}
-							<CodeField {codes} {seed} dense />
+							<!-- still, like the other code cells (the author, 2026-09-04) -->
+							<CodeField {codes} {seed} dense playing={false} />
 						{/key}
 					{/if}
 				</div>
@@ -172,7 +173,8 @@
 <noscript>
 	<p class="noscript">
 		<a href="/story">Start here</a> · <a href="/data">Explore the data</a> ·
-		<a href="/story#methodology">Methodology</a>
+		<a href="/story#methodology">Methodology</a> · <a href="/authorities">Network of actors</a> ·
+		<a href="/anadohoi">Financed by private companies</a>
 	</p>
 </noscript>
 

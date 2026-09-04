@@ -13261,3 +13261,181 @@ entries (structure, not wording — the same repair as the introduction's
 on 2026-09-03); each reference is its own paragraph again. The new
 caption of Figure 30 and the curly-quoted, re-ordered references render
 as written.
+
+## 2026-09-04 — the sponsored page's expanded view loses THE SCHEME and its basis line; the way back is an arrow at the left (author)
+
+On «explore more» of the sponsored card the author wants neither THE
+SCHEME paragraph nor the BASIS line (the card's own text says what the
+scheme is), and finds the head's symbol and title redundant — «the user
+already knows they are in that category». The `.about` block leaves the
+anadohoi page's expanded snippet (the two other dataset pages keep their
+PROGRAMME paragraph and basis line, not asked about), and the shared
+expanded head (`DatasetCard .resthead`, all three cards) is now the way
+back alone — an arrow, «←», at the LEFT, with its accessible name — no
+symbol, no stream name. The first frame under it is PROJECT SCOPE.
+**Follow-up the same day** — «for the Anti-nero programme and the forest
+co-op work accordingly»: THE PROGRAMME and THE CO-OPERATIVES paragraphs
+and their basis lines leave those two expanded pages as well (the
+Anti-nero record-kinds note and the probable-tier disclosure, other
+matter, stay). And the way back is the author's own `arrow.svg`
+(`static/img/symbols/`), drawn as a mask in the card's accent, 44×26,
+no pill — on all three.
+
+## 2026-09-04 — METHODOLOGY leaves the menu bar; the Anti-nero and co-op expanded pages open on one row of KPI cards (author)
+
+(1) The band no longer carries METHODOLOGY (the story's section is the
+methodology, reached from the landing menu, the frames' caveats and the
+freshness line). (2) On «explore more», PROGRAMME FIGURES (Anti-nero) and
+CONTRACT FIGURES (co-ops) are ONE ROW of five cards — contracts ·
+contractors / co-operatives · stated value excl. VAT · share of direct
+awards · already paid — in the stream's hue (`KpiCards`), replacing the
+direct-award bar and the paid card the hero used to carry. (3) The
+record-kinds note («All 254 are συμβάσεις … what each record is», every
+figure computed from `kh_doc_<kind>`) is no longer a paragraph: it is the
+Anti-nero CONTRACTS card's HOVER — `KpiCards` gained an optional `hover`
+per card, the site's black card under the KPI, shown on hover and on
+keyboard focus. Measured: five cards on one row on both pages (254 · 157
+· 633,59 m € · 90,2% · 456,37 m €; 2.004 · 246 · 30,16 m € · 95,9% ·
+20,41 m €), the note appearing on hover, no METHODOLOGY in the band.
+
+## 2026-09-04 — the author's Theme Lab picks are baked: terracotta fire, ink-grey Anti-nero, News Cycle for the UI; the sources re-paragraphed
+
+The author handed over the lab's «copy CSS»: `--c-fire: #b33a1a`,
+`--c-antinero: #1f1f1f`, and News Cycle at the head of `--font-ui`.
+Baked into tokens.css — and because every chart palette now derives from
+the tokens (2026-09-03), the whole site followed at once: the EFFIS burn
+scars, the fire season, the ν.4782 ceilings and the median lines are the
+terracotta (the same hex as the work-type palette's red anchor, the
+author's choice); the Anti-nero stream's hue is the ink grey rather than
+pure black (its KPI cards, chips, the band's left end, the STATE-FUNDED
+and SIGNED dots); the UI face is News Cycle — a Google Font, loaded from
+fonts.googleapis.com in app.html beside the Typekit kit (the site's
+fonts are external CDNs since 2026-09-02); it has Latin only and weights
+400/700, so Greek text falls through to Futura 100 Greek, glyph by
+glyph, as the stack orders. Verified: the tokens computed on the page,
+the News Cycle faces loaded, body text set in it.
+
+Separately, «the sources do not print well»: `sources.md` had its 27
+entries on consecutive lines, which markdown fused into one paragraph
+(the bibliography's problem of the same morning). A blank line between
+entries again — structure, not wording — and the section takes the
+bibliography's small type (13 px): 27 paragraphs, each a figure's source.
+
+## 2026-09-04 — the band unfilled, the brand in the two hues, the author's drawings for all five symbols (author)
+
+Three more drawings arrived — `antinero.svg` (the programme), and the
+network in two versions, `network_bw.svg` and a full-colour `network.svg`
+— completing the five. The author: on /data use the coloured network; the
+menu bar «not filled with any colour»; the title at the same spot, a bit
+enlarged, SCORCHED FORESTS in the Anti-nero hue and COVERED WITH MONEY in
+the sponsored one; the five squares replaced by the black-and-white
+drawings, the current page's drawing shown in colour. Done: the header's
+background is the paper (not transparent — the sticky band must not let
+the scrolling content show through); the brand a quarter larger (22,5 /
+15 px at 1920) in `--c-antinero` / `--c-anadohoi`; each symbol on the band
+is its drawing as a MASK in ink, in a box 1,7× the old square's width so
+the landscape drawings keep their size, no ring; the current page's
+drawing takes its stream's hue — and the network, whose author made a
+coloured version, shows that image instead (`symbolColor` on the entry),
+on the hub too. Verified on /dase (co-op drawing green, the rest ink) and
+/authorities (the coloured network), and the hub's five.
+**Follow-up** — the programme's drawing is very wide (707×289), so at the
+cards' shared opening size it read small: its entry carries
+`openScale: 1.4` and the Anti-nero card opens at 455 px (the others at
+325), the reading size unchanged. And COVERED WITH MONEY on the band is
+bolder (700, from 500).
+**Corrected the same hour** — the author: «I meant it should be like the
+other two; inspect why it was different». It was the BOX: every drawing
+sat in a square, and the programme's very wide drawing occupied the
+square's middle third, its name far beneath the visible drawing — the
+enlargement made that worse. Now each symbol's box takes the DRAWING'S
+OWN SHAPE (`aspect` = the svg's viewBox ratio on the entry; `size` is
+the longer side), everywhere but the band: the programme opens 325×133
+with its name 22 px under the drawing, exactly as the co-ops' 325×183
+and the sponsors' 269×325; `openScale` is gone. Also on the band: the
+word START (18 px, the story's door) before the sponsors' drawing, and
+the two tools 30 px from the streams instead of 110. And a loop found
+on the way: releasing the opening reflows the column, the narrative
+re-clamps its scroll and reports 0, and a handler reading 0 as «back
+at the top» re-opened it — the release is ONE WAY on scroll now, and
+only a wheel up while at the top restores the opening (verified with a
+real wheel on all three cards).
+
+## 2026-09-04 — the hub's caption on two lines; its drawings equal in area, on one baseline (author)
+
+«Write the caption in two lines; organise the symbols better, they seem
+weird now.» The caption («select to explore more about the different
+streams of forestry works») sets on two balanced lines (a 22 em measure,
+`text-wrap: balance`; the author's words untouched). The drawings looked
+disorganised because each was sized by its LONGER side: the wide digger
+came out small and low, the tall hand large, tops aligned and bottoms
+ragged. Now each drawing is sized to the SAME AREA — the longer side
+grows with the square root of the shape's elongation — and the row
+stands them on one baseline, their names on one line beneath:
+measured 164×199, 283×116, 241×135, all ≈ 33k px², bottoms level; the
+two tools likewise. The hub still fits one viewport.
+
+## 2026-09-04 — the search symbol in the fire red (author)
+
+The magnifier was drawn in the ink like the network. It is now
+`--c-fire` (`datasets.ts`, the search entry's `color`): on the hub the
+mask and the hover name are red, on the band the drawing turns red when
+the search page is the current one (ink elsewhere, as every other
+drawing). The chip tone stays as the fallback for a symbol-less entry.
+
+## 2026-09-04 — the landing menu re-set to the author's second artboard: drawings of the data in the cells, still codes in the white ones (author)
+
+The author's updated `landing_menu.svg` (Downloads, 2026-09-04) decides
+what each of the sixteen rectangles holds; «the rectangles that are left
+white should be filled with the codes but they shouldn't be moving».
+Read from the artboard (cell ≈ 270 px, the merged cells with no rule
+between them):
+
+| cell | holds | drawn from |
+|---|---|---|
+| r1c1 · r1c2 · r1c4 · r3c3 | a STILL field of codes (one seed per cell; r1c1 is where the opening animation lands, the ↻ stays) | `/api/landing` codes, `CodeField playing={false}` draws once, no loop |
+| r1c3 | the network drawing in colour → /authorities | `network.svg` |
+| r2c1 | START HERE, 36 px Obviously Narrow Bold in the co-op green, top-right → /story | — |
+| r2c2 + r3c2 (merged) | the co-op CONTRACT VALUES swarm: one dot per live ΔΑΣΕ contract on the /dase doubling axis, dodged about the middle, the median a dashed vertical | `menu.dase` on `/api/landing`: the 2,004 values, `dase_value_histogram`'s edges and median |
+| r2c3 | EXPLORE THE DATA, 24 px, bottom-right → /data | — |
+| r2c4 | the author's fire image (`bs-distorted.png` → `static/img/landing/bs-distorted.webp`, 245 KB) | — |
+| r3c1 | METHODOLOGY, bottom-right → /story#methodology | — |
+| r3c4 | a stacked column of the three streams' stated € (co-ops · sponsors · Anti-nero, top to bottom) | `/api/meta` |
+| r4c1 | twelve bars, the biggest sponsors by committed € | `menu.sponsors` on `/api/landing` = the sponsored ranking's top 12 |
+| r4c2 | the sponsors' plant drawing, larger than its cell so the hand is cut → /anadohoi | `financed.svg` as a mask |
+| r4c3 + r4c4 (merged) | Εύβοια from the site's Π.Ε. layer in the co-op green, running off the right and bottom edges | `pe.topo.json` |
+
+The artboard's stacked column and bars are schematic (33:100:100, a
+descending run); on the site they carry the real figures — the column's
+blocks are the streams' € (the co-ops 4,8 %, the sponsors 6,1 %, the
+programme 89,6 % of the three together), the bars the ranking's own
+values — read from the same functions the dataset pages draw from, so
+the menu can never disagree with them (`test_landing_pins`). The
+artboard's «EPLORE THE» is the label's typo. The old GR / EN mark, the
+black START HERE cell and the drifting cell field are gone.
+`homeCells.ts` carries the map with row/column SPANS (`cellGrid` marks
+the covered slots, `gridArea` places each cell), `HomeGrid` renders by
+kind, the four data drawings live in `lib/landing/cells/`
+(`SwarmCell` canvas with d3's greedy dodge, `StackCell`, `BarsCell`,
+`IslandCell` with d3-geo). Verified at 1920×1080 against the artboard;
+two frames a second apart are pixel-identical (nothing moves).
+
+## 2026-09-04 — the landing menu's drawings are the author's own, schematic (author)
+
+«I have added the svgs I want you to use on the landing page. For the
+landing page the graphs can be just schematic.» The four live drawings
+of the data built the same morning (the ΔΑΣΕ swarm, the € stack, the
+sponsor bars, Εύβοια from the Π.Ε. layer; `lib/landing/cells/`, the
+`menu` block on `/api/landing` and its pins) are RETIRED — deleted, not
+parked — and the cells show the author's files from
+`static/img/symbols/`: `landinggraph03.svg` (the swarm with its dashed
+median, across two rows), `landinggraph02.svg` (the stacked column),
+`landinggraph01.svg` (the bars), `landingtree.svg` (the plant, a link to
+/anadohoi) and `landingmap.svg` (Εύβοια, across two columns), each an
+`<img>` at the artboard's own offsets — left, top and width as
+fractions of its cell, the height the file's own (`HomeCell` kind
+`image`). They carry the author's colours as drawn and do not follow the
+Theme Lab, like the story timeline's artboard. They are pictures, not
+figures: nothing on the landing states a number, so the no-hardcoded-
+number rule is not engaged. The still code fields, the three links, the
+network symbol and the fire image stay as the entry above says.

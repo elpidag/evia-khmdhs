@@ -28,6 +28,7 @@
 	import StripTimeline from '$lib/charts/StripTimeline.svelte';
 	import AntineroMap from '$lib/sections/AntineroMap.svelte';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import KpiCards from '$lib/ui/KpiCards.svelte';
 	import DatasetCard from '$lib/ui/DatasetCard.svelte';
 	import Tile from '$lib/ui/Tile.svelte';
 	import { CARD_BOUNDS } from '$lib/maps/cardFrame';
@@ -637,6 +638,22 @@
 			extension: c.approval_schedule_extension ?? 0
 		};
 	});
+	/** PROGRAMME FIGURES as one row of cards (the author, 2026-09-04); the
+	 *  record-kinds note — every figure computed — is the contracts card's
+	 *  hover text */
+	const kindsNote = $derived(
+		dk && dk.n_kinds > 0
+			? `All ${grInt(dk.total)} are συμβάσεις, which is what the registry files them as; the kind says which. ${grInt(dk.contract)} are original contracts, ${grInt(dk.amendment)} revise the terms of one without touching its price, ${grInt(dk.supplementary)} add supplementary works, and ${grInt(dk.extension)} only extend a deadline — what each record is.`
+			: undefined
+	);
+	const figureCards = $derived([
+		{ num: grInt(o.kpis.n_contracts), label: 'contracts', hover: kindsNote },
+		{ num: grInt(o.kpis.n_contractors), label: 'contractors' },
+		{ num: eurShort(o.kpis.stated_eur).toLowerCase(), label: 'stated value, excl. VAT' },
+		{ num: pct(o.kpis.pct_direct), label: 'of contracts were direct awards' },
+		{ num: eurShort(o.kpis.paid_eur).toLowerCase(), label: 'already paid' }
+	]);
+
 	const paidPct = $derived((o.kpis.paid_eur / o.kpis.stated_eur) * 100);
 </script>
 
@@ -798,36 +815,10 @@
 		</Tile>
 	{/snippet}
 	{#snippet more()}
+	<!-- THE PROGRAMME paragraph and the basis line left the expanded page (the
+	     author, 2026-09-04, as on the sponsored page): the card's own text says
+	     it; the record-kinds note and the probable-tier disclosure stay -->
 	<div class="about">
-		<div class="kicker">THE PROGRAMME</div>
-		<p>
-			Greece's flagship wildfire-prevention programme (ΥΠΕΝ, RRF Action 16849) has signed
-			{grInt(o.kpis.n_contracts)} contracts since {o.yearly[0]?.year ?? '2022'} — of the
-			{eurShort(o.kpis.stated_eur)} stated, {eurShort(o.kpis.paid_eur)} has actually been paid
-			({grInt(o.kpis.n_payments)} payment orders). {pct(o.kpis.pct_direct)} of contracts —
-			{eurShort(directEur)}, the bulk of the money — went by direct award. This page follows
-			what actually got paid, to whom, and where —
-			<a href="/story#methodology">methodology</a>.
-		</p>
-		<!-- the BASIS, said once for the whole page (copy pass 2026-08-23): the
-		     frames below no longer repeat it -->
-		<p class="basis">
-			All amounts are the contracts' stated values excl. VAT, from the ΚΗΜΔΗΣ records and the
-			signed contract PDFs; a contract signed by several firms or covering several regional
-			units is split equally between them — the documents state no other allocation; payments
-			(ΚΗΜΔΗΣ and Διαύγεια) are a separate layer —
-			<a href="/story#methodology">basis</a> · <a href="/story#methodology">split</a>.
-		</p>
-		{#if dk && dk.n_kinds > 0}
-			<p class="kinds">
-				All {grInt(dk.total)} are συμβάσεις, which is what the registry files them as; the
-				kind says which. {grInt(dk.contract)} are original contracts,
-				{grInt(dk.amendment)} revise the terms of one without touching its price,
-				{grInt(dk.supplementary)} add supplementary works, and {grInt(dk.extension)}
-				only extend a deadline —
-				<a href="/story#methodology">what each record is</a>.
-			</p>
-		{/if}
 		{#if o.probable && o.probable.n > 0}
 			<details class="probable">
 				<summary>
@@ -853,26 +844,9 @@
 		{/if}
 	</div>
 <ChartFrame title="PROGRAMME FIGURES" anchor="figures">
-	<div class="figures">
-		<div class="midcol">
-			<div class="bars">
-				<div class="dabar" role="img" aria-label="Share of contracts awarded directly">
-					<div class="track">
-						<div class="fill" style:width={`${o.kpis.pct_direct}%`}>
-							<div class="danum">{pct(o.kpis.pct_direct)}</div>
-							<div class="datext">of contracts were direct awards</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="paidcard" role="img" aria-label="Paid so far, as a share of the stated total">
-				<div class="pfill" style:height={`${paidPct}%`}>
-					<div class="pnum">{eurShort(o.kpis.paid_eur).toLowerCase()}</div>
-					<div class="plbl">already paid</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<!-- ONE ROW of the programme's figures (the author, 2026-09-04); the
+	     record-kinds note rides the contracts card's hover -->
+	<KpiCards color="var(--c-antinero)" cards={figureCards} />
 </ChartFrame>
 
 
@@ -1446,111 +1420,11 @@
 	/* middle column mirrors the cards grid: the two bars share the first
 	   card's row (equal heights + the gap between), the paid card fills
 	   the third row so it matches the stated-value card exactly */
-	.midcol {
-		display: grid;
-		grid-template-rows: repeat(3, 1fr);
-		gap: var(--sp-4);
-		width: 268px;
-		max-width: 100%;
-	}
-	.bars {
-		grid-row: 1;
-		display: grid;
-		grid-template-rows: 1fr;
-		gap: var(--sp-4);
-	}
-	.dabar .track {
-		height: 100%;
-		background: color-mix(in srgb, var(--ink) 13.8%, var(--paper));
-		border-radius: 10px;
-		overflow: hidden;
-	}
-	.dabar .fill {
-		height: 100%;
-		background: var(--c-antinero);
-		color: var(--paper);
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 2px;
-		padding: 0 14px;
-	}
-	.dabar .danum {
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-18);
-		line-height: 1;
-	}
-	.dabar .datext {
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--fs-12);
-		line-height: 1.2;
-	}
 	/* paid vs stated: black fill rises to the paid share of the stated €;
 	   the unfilled remainder reads as light grey, no outer border */
-	.paidcard {
-		grid-row: 3;
-		position: relative;
-		background: color-mix(in srgb, var(--ink) 13.8%, var(--paper));
-		border-radius: 10px;
-		overflow: hidden;
-	}
-	.paidcard .pfill {
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: var(--c-antinero);
-		color: var(--paper);
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		gap: 2px;
-		padding: 8px 14px 10px;
-	}
-	.paidcard .pnum {
-		font-family: var(--font-display);
-		font-weight: 900;
-		/* matches the card numbers' 36px cap; fits the 268px card */
-		font-size: 36px;
-		line-height: 0.95;
-		white-space: nowrap;
-	}
-	.paidcard .plbl {
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--fs-13);
-		line-height: 1.2;
-	}
-	@media (max-width: 900px) {
-		.midcol {
-			grid-template-rows: auto;
-		}
-		.bars,
-		.paidcard {
-			grid-row: auto;
-		}
-		.paidcard {
-			height: 117px;
-		}
-	}
-	.about .kicker {
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-14);
-		letter-spacing: 0.08em;
-		margin-bottom: var(--sp-3);
-		color: var(--c-antinero);
-	}
 	.about p {
 		margin: 0;
 		max-width: var(--prose-w);
-	}
-	.about p.kinds {
-		margin-top: var(--sp-3);
-		font-size: var(--fs-13);
-		color: var(--ink-faint);
 	}
 	.probable {
 		margin-top: var(--sp-4);
@@ -1646,15 +1520,6 @@
 		margin-top: var(--sp-4, 1rem);
 	}
 	/* the page's one BASIS line under the programme paragraph */
-	.basis {
-		margin-top: var(--sp-3);
-		font-size: var(--fs-13);
-		color: var(--ink-soft);
-		line-height: 1.5;
-	}
-	.basis a {
-		color: var(--ink-soft);
-	}
 	.rankbar {
 		display: flex;
 		justify-content: flex-start;
@@ -1865,7 +1730,6 @@
 	.duo .tilefill :global(.bin) {
 		font-size: 9px;
 	}
-	.tilefill.valbody,
 	.tilefill.rankbody {
 		position: absolute;
 		display: flex;
@@ -1900,22 +1764,5 @@
 		--land-context: var(--paper);
 		--map-accent: var(--card-accent);
 		box-shadow: none;
-	}
-	/* the programme figures — the bars the hero used to carry beside its
-	   cards — open the unfolded part */
-	.figures {
-		max-width: 560px;
-	}
-	.figures .midcol {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: none;
-		width: auto;
-	}
-	.figures .bars,
-	.figures .paidcard {
-		grid-row: auto;
-	}
-	.figures .paidcard {
-		min-height: 140px;
 	}
 </style>

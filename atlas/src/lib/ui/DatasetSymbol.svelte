@@ -34,11 +34,23 @@
 		src?: string | null;
 	} = $props();
 	const s = $derived(symbolFor(key));
-	/** the author's symbol where one exists (the co-op's since 2026-09-04),
-	 *  on every surface but the header band, which keeps its lettered
-	 *  squares for now; an explicit `src` wins */
-	const image = $derived(src ?? (band ? null : (s.symbol ?? null)));
+	/** the author's drawing where one exists; an explicit `src` wins. On the
+	 *  band the drawing is a MASK in ink — in the stream's hue when this is
+	 *  the current page (the author, 2026-09-04) */
+	const image = $derived(src ?? s.symbol ?? null);
+	/** the full-colour version, shown on the hub and for the current page */
+	const colorImage = $derived(s.symbolColor && (!band || active) ? s.symbolColor : null);
+	const glyphColor = $derived(band && !active ? 'var(--ink)' : s.color);
 	const css = $derived(typeof size === 'number' ? `${size}px` : size);
+	/** off the band, the box takes the drawing's shape: `size` is its longer
+	 *  side — width for a landscape drawing, height for a portrait one */
+	const shaped = $derived(Boolean((colorImage || image) && !band && s.aspect));
+	const boxW = $derived(
+		shaped ? (s.aspect! >= 1 ? css : `calc(${css} * ${s.aspect!.toFixed(4)})`) : css
+	);
+	const boxH = $derived(
+		shaped ? (s.aspect! >= 1 ? `calc(${css} / ${s.aspect!.toFixed(4)})` : css) : css
+	);
 	const text = $derived(s.short ?? s.label);
 	/** white on a dark tone, black on a light one — the chip tones are CSS
 	 *  strings over the tokens, so measure the resolved colour */
@@ -55,13 +67,18 @@
 	class:named
 	class:band
 	class:logo={!!image}
-	style:--sym-color={band ? s.chip : s.color}
+	style:--sym-color={image ? glyphColor : band ? s.chip : s.color}
 	style:--sym-ink={ink}
 	style:--sym-fs={fs}
 	style:--sym-size={css}
+	style:--sym-w={boxW}
+	style:--sym-h={boxH}
 	aria-hidden={named || labelled ? undefined : true}
 >
-	{#if image}
+	{#if colorImage}
+		<!-- the author's coloured drawing, as drawn -->
+		<img class="pic" src={colorImage} alt="" />
+	{:else if image}
 		<!-- the symbol as a MASK, so it prints in the stream's hue and follows
 		     the Theme Lab; the mask keeps the drawing's own proportions -->
 		<span class="glyph" style:--sym-img={`url(${image})`}></span>
@@ -95,11 +112,14 @@
 		background: var(--sym-color);
 		color: var(--paper);
 	}
-	/* a drawn symbol: no square, no border - the glyph alone */
+	/* a drawn symbol: no square, no border - the glyph alone, in a box of the
+	   drawing's own shape */
 	.sym.logo,
 	.sym.logo.active {
 		border: 0;
 		background: none;
+		width: var(--sym-w, var(--sym-size));
+		height: var(--sym-h, var(--sym-size));
 	}
 	.glyph {
 		display: block;
@@ -108,6 +128,24 @@
 		background: var(--sym-color);
 		-webkit-mask: var(--sym-img) center / contain no-repeat;
 		mask: var(--sym-img) center / contain no-repeat;
+		transition: background 0.25s ease;
+	}
+	.pic {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+	/* on the band the drawings get a wider box than the old square, so the
+	   landscape ones (the programme, the co-ops) keep their size; no ring —
+	   the current page's drawing is the one in colour */
+	.sym.band.logo {
+		width: calc(var(--sym-size) * 1.7);
+		background: none;
+		border: 0;
+	}
+	.sym.band.logo.active {
+		box-shadow: none;
 	}
 	/* the band's form: a solid tile of the tone, no border */
 	.sym.band {

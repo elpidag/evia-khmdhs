@@ -13,6 +13,10 @@
 		sub?: string;
 		/** a per-card hue; the group's `color` otherwise */
 		color?: string;
+		/** a note shown on HOVER (and keyboard focus) as the site's black
+		 *  card under the KPI — the record-kinds note on the contracts card,
+		 *  the author, 2026-09-04 */
+		hover?: string;
 	}
 	let {
 		cards,
@@ -23,12 +27,16 @@
 
 <div class="cards" class:column={direction === 'column'}>
 	{#each cards as c, i (i)}
-		<div class="card" style:background={c.color ?? color}>
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+		<div class="card" class:hashover={!!c.hover} style:--card-c={c.color ?? color} tabindex={c.hover ? 0 : undefined}>
 			<div class="num">{c.num}</div>
 			<div class="lbl">
 				{c.label}
 				{#if c.sub}<br /><span class="sub">{c.sub}</span>{/if}
 			</div>
+			{#if c.hover}
+				<div class="hov" role="note">{c.hover}</div>
+			{/if}
 		</div>
 	{/each}
 </div>
@@ -46,7 +54,8 @@
 		width: 268px;
 	}
 	.card {
-		color: #fff;
+		background: var(--card-c, var(--ink));
+		color: var(--paper);
 		padding: var(--sp-4);
 		border-radius: 10px;
 		display: flex;
@@ -69,6 +78,33 @@
 	}
 	.sub {
 		opacity: 0.85;
+	}
+	/* the hover note: the site's black card, under the KPI, on hover or focus */
+	.card.hashover {
+		position: relative;
+		cursor: help;
+	}
+	.card .hov {
+		position: absolute;
+		left: 0;
+		top: calc(100% + 6px);
+		z-index: 5;
+		width: max(100%, 300px);
+		max-width: 420px;
+		padding: var(--sp-3) var(--sp-4);
+		background: var(--ink);
+		color: var(--paper);
+		font-family: var(--font-ui);
+		font-size: var(--fs-12);
+		line-height: 1.4;
+		border-radius: 6px;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.15s ease;
+	}
+	.card.hashover:hover .hov,
+	.card.hashover:focus-visible .hov {
+		opacity: 1;
 	}
 	@media (max-width: 900px) {
 		.cards {

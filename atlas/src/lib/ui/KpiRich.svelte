@@ -63,7 +63,7 @@
 	{#each cards as c, i (i)}
 		<div
 			class="kcard"
-			style:background={color}
+			style:--card-c={color}
 			style:--hs={hs(i)}
 			style:--ts={ts(i, c.lines?.length ?? 0)}
 			style:--bs={bs(i, c.tailLines?.length ?? 0)}
@@ -121,6 +121,7 @@
 		height: 100%;
 	}
 	.kcard {
+		background: var(--card-c, var(--ink));
 		box-sizing: border-box;
 		min-width: 0;
 		/* the user's file: the headline's baseline 54,6 px under the card's
@@ -128,7 +129,7 @@
 		padding: clamp(13px, 2.31vh, 25px) clamp(4px, 0.26vw, 5px) clamp(7px, 0.93vh, 10px)
 			clamp(9px, 0.73vw, 14px);
 		border-radius: 4px;
-		color: #fff;
+		color: var(--paper);
 		overflow: hidden;
 	}
 	.inner {
@@ -197,7 +198,7 @@
 		font-weight: 400;
 		font-size: calc(clamp(8.5px, 0.625vw, 12px) * var(--ts, 1));
 		line-height: 1.2;
-		color: #f2f2f2;
+		color: color-mix(in srgb, var(--ink) 5.8%, var(--paper));
 	}
 	.row {
 		display: block;

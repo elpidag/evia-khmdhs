@@ -669,7 +669,8 @@
 	}
 	/* the bibliography reads as apparatus, not narrative: two sizes under
 	   the 16 px main text (the author, 2026-09-02) */
-	#bibliography :global(.prose) {
+	#bibliography :global(.prose),
+	#sources :global(.prose) {
 		font-size: var(--fs-13);
 		line-height: 1.5;
 	}

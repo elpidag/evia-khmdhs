@@ -24,9 +24,18 @@ export interface SiteSymbol {
 	/** the dataset hue token; the two tools take the ink */
 	color: string;
 	/** the author's own SYMBOL, an SVG under static/img/symbols, drawn as a
-	 *  mask in the stream's hue on the hub and the card (2026-09-04, the
-	 *  co-op's first); the header band keeps its lettered squares */
+	 *  MASK — in the stream's hue on the hub and the card, in ink on the
+	 *  header band unless it is the current page's (2026-09-04) */
 	symbol?: string;
+	/** a full-colour version of the drawing, where the author made one (the
+	 *  network): shown as an image on the hub and, on the band, for the
+	 *  current page */
+	symbolColor?: string;
+	/** the drawing's width ÷ height (its viewBox), so the box that holds it
+	 *  takes the drawing's own shape instead of a square — the wide
+	 *  programme drawing used to float in the middle third of a square, its
+	 *  name far beneath it (the author, 2026-09-04) */
+	aspect?: number;
 	/** hub rank: the three streams large, the two tools small */
 	rank: 'stream' | 'tool';
 }
@@ -42,6 +51,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		titleLines: ['financed', 'by', 'private companies'],
 		color: 'var(--c-anadohoi)',
 		symbol: '/img/symbols/financed.svg',
+		aspect: 343.8 / 416.23,
 		chip: 'var(--c-anadohoi)',
 		rank: 'stream'
 	},
@@ -50,6 +60,8 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/antinero',
 		label: 'anti-nero programme',
 		color: 'var(--c-antinero)',
+		symbol: '/img/symbols/antinero.svg',
+		aspect: 707.14 / 289.27,
 		// the Anti-nero hue is black, which cannot sit on the dark band —
 		// a 5% fade of it into paper (#f2f2f2 at the default palette)
 		chip: 'color-mix(in srgb, var(--c-antinero) 5%, var(--paper))',
@@ -62,6 +74,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		short: "forest workers' co-ops",
 		color: 'var(--c-dase)',
 		symbol: '/img/symbols/coop.svg',
+		aspect: 570.58 / 320.31,
 		chip: 'var(--c-dase)',
 		rank: 'stream'
 	},
@@ -69,8 +82,11 @@ export const SYMBOLS: SiteSymbol[] = [
 		key: 'search',
 		href: '/explore',
 		label: 'search',
-		color: 'var(--ink)',
+		/* the fire red (the author, 2026-09-04): the magnifier's own colour on
+		   the hub and, on the band, when the search page is the current one */
+		color: 'var(--c-fire)',
 		symbol: '/img/symbols/search.svg',
+		aspect: 246.99 / 373.28,
 		chip: 'color-mix(in srgb, var(--ink) 5.8%, var(--paper))',
 		rank: 'tool'
 	},
@@ -79,6 +95,9 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/authorities',
 		label: 'network of actors',
 		color: 'var(--ink)',
+		symbol: '/img/symbols/network_bw.svg',
+		symbolColor: '/img/symbols/network.svg',
+		aspect: 272.45 / 332.04,
 		chip: 'color-mix(in srgb, var(--c-dase) 43.3%, var(--paper))',
 		rank: 'tool'
 	}

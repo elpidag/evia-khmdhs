@@ -634,7 +634,13 @@ refetching open contracts — prefer it for routine updates.
 - `scripts/extract_site_candidates.py` — scans cached contract PDFs for
   site cues (ΔΑΣΑΡΧΕΙ, ΘΕΣΗ, Τ.Κ., …) into a review file; a human curates
   real sites into contract_regions.json. `scripts/export_prints.py` —
-  Playwright A4 PDFs of /origins and /map (needs the dev server running).
+  Playwright A4 PDFs of /origins and /map (needs the dev server running). **`scripts/export_svg.py <url> <selector|tile:TITLE> <out.svg>`**
+  (2026-09-04) — a region of the running Atlas as VECTOR SVG for the
+  author's Illustrator: backgrounds/borders as rects, every rendered text
+  line as <text> in its computed Typekit face, inline svgs copied with
+  computed fills, a beeswarm canvas as circles (`canvas.__dots`), other
+  canvases as PNG; opacity-0 elements skipped. Wrote
+  `dase_contract_values.svg` and `landing_menu.svg` to Downloads.
 
 Decision log: **`DATA_DECISIONS.md`** at the project root is the append-only
 audit trail (date · decision · evidence · affected records). New data
@@ -1440,8 +1446,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   harmonised KPI rows (stated net / paid net / median net / counts /
   % direct).
 - **Rebrand «FORESTRY WORKS TRACKER»** (2026-08-12, commits
-  b35e5db…1d7161e): white paper (cream retired), `--c-antinero` is now
-  BLACK, `--c-dase` green `#52b788`; sticky compacting header (base.css
+  b35e5db…1d7161e): white paper (cream retired), `--c-antinero` was BLACK until 2026-09-04 (the ink grey #1f1f1f since, the
+  author's Theme Lab pick — with `--c-fire` the terracotta #b33a1a, from the
+  EFFIS maroon, and News Cycle (Google Fonts, in app.html) leading
+  `--font-ui`; Greek falls through to Futura), `--c-dase` green `#52b788`; sticky compacting header (base.css
   `scroll-padding-top` keeps `#anchors` clear). Nav WAS, until 2026-08-27 (see the FRONT DOOR bullet below), 4 primary tabs +
   a MENU ▾ dropdown: SPONSORED WORKS (/anadohoi) · ANTINERO WORKS (/) ·
   FOREST CO-OP WORKS (/dase) · EXPLORE, then KEY FINDINGS (`/compare`,
@@ -1515,8 +1523,17 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   ΔΑΣΕ + upstream acts, live sponsored designation trails; payments
   OUT; pinned), one glyph per line in ~60 drifting columns, EACH CODE IN
   ITS DATASET'S COLOUR; B the title fades in; C a click collapses the
-  field into the top-left cell of a 4×4 menu (START HERE → `/story`,
-  EXPLORE THE DATA → `/data`, METHODOLOGY). `lib/landing/` holds
+  field into the top-left cell of a 4×4 menu — **the author's second
+  artboard since 2026-09-04** (DATA_DECISIONS, the table there): START
+  HERE → `/story` (36 px, co-op green), EXPLORE THE DATA → `/data`,
+  METHODOLOGY → `/story#methodology`, the network drawing → `/authorities`,
+  and the author's own SCHEMATIC drawings as `<img>`s at the artboard's
+  offsets (`static/img/symbols/landing*.svg`: the swarm across two rows,
+  a stacked column, bars, the plant → `/anadohoi`, Εύβοια across two
+  columns; plus the fire image `img/landing/bs-distorted.webp`) — pictures,
+  not figures, the author's colours as drawn (a live version was built and
+  retired the same day, DATA_DECISIONS) — with STILL code fields in the
+  four white cells (`homeCells.ts` spans via `cellGrid`/`gridArea`). `lib/landing/` holds
   `field.ts` (pure, seeded via `lib/transforms/prng.ts`, vitest),
   `CodeField.svelte` (canvas: resize, DPR, fonts.ready, endless RAF with
   cleanup, pause when hidden, reduced-motion still frame),
@@ -1528,8 +1545,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   forms) — `lib/transforms/legacyRoutes.ts`, pinned. **Header** = brand
   on two lines · the FIVE symbols (`lib/datasets.ts:SYMBOLS` — three
   streams + search/actors; placeholder squares in `DatasetSymbol.svelte`
-  until the user's images — three arrived 2026-09-04: `coop.svg`,
-  `financed.svg`, `search.svg` under `static/img/symbols/`, declared as
+  until the user's images — all five arrived 2026-09-04: `coop.svg`,
+  `financed.svg`, `search.svg`, `antinero.svg`, `network_bw.svg` (+ the
+  coloured `network.svg`) under `static/img/symbols/`, declared as
   `symbol` on their `datasets.ts` entries and drawn as CSS MASKS in the
   stream's hue on the hub and the cards, the band's lettered squares
   unchanged; labels the user renames there) · METHODOLOGY;
@@ -1543,25 +1561,33 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   band since the seventh round of 2026-08-27 (`--header-h`, no compaction:
   white brand + FIVE filled 59,5 px squares — three streams, search, actor
   network — each in its own `chip` tone with its name inside, the ink by
-  luminance, the current page ringed — and METHODOLOGY white at the right);
-  **since 2026-09-03 (user) the band is a GRADIENT of the three stream
-  hues** (`linear-gradient(90deg, --c-antinero, --c-dase, --c-anadohoi)` —
-  black → green → deep green at the default palette) and the five `chip`
-  tones are token derivations (the two hue squares their own primaries,
-  the antinero/search/actors squares pale fades of antinero/ink/dase —
-  byte-equivalent at default), the square lettering picked by
-  `theme.svelte.cssLuminance` so it follows the lab;
+  luminance, the current page ringed — and, until 2026-09-04, METHODOLOGY white at the right — gone since: the
+  story's section is the methodology);
+  the band was a GRADIENT of the three stream hues on 2026-09-03 and is
+  UNFILLED (the paper) since 2026-09-04 (author): the brand a quarter
+  larger, line 1 in `--c-antinero`, line 2 in `--c-anadohoi`; the five
+  squares are the author's DRAWINGS (`static/img/symbols/*.svg`, all five
+  delivered) as ink MASKS in a 1,7×-wide box, the current page's in its
+  hue, the word START (→ /story) before them and the two tools 30 px
+  from the streams — the network's `symbolColor` (a coloured svg) shown as an image
+  there and on the hub; the `chip` tones stay only as the fallback for a
+  symbol-less entry;
   the sponsored stream is named **«financed by private companies»**
   (`datasets.ts`; the square carries the `short` abbreviation); the landing menu is a full-height square
   flush right with 2 px rules and a «GR / EN» `note` cell; the field is
   12 px Obviously Regular on 14,4 px lines, 25,7 px columns (74 at 1920,
   pinned), the cell showing the same field. **`/data`** = the hub of symbols (since 2026-09-04: no band, the
-  title 80 px higher and smaller, stream symbols 251 px / tools 132 px,
-  each name in its stream's colour and shown on HOVER only). **Each dataset page
+  title 80 px higher and smaller, the caption on two balanced lines, the
+  drawings sized to EQUAL AREA (`sizeFor`: base × √elongation × 0,72;
+  streams on a 251 px base, tools 132) standing on one baseline, each name
+  in its stream's colour and shown on HOVER only; the search magnifier is
+  `--c-fire` since 2026-09-04, the network's colour the ink). **Each dataset page
   is a CARD — one viewport** (`ui/DatasetCard.svelte`; since 2026-09-04 it
-  OPENS with the symbol at TWICE its size and the name on ONE line below
-  it — `intro` state, released by the narrative's first inner scroll,
-  restored at its top; `main.card` is
+  OPENS with the symbol at TWICE its size — the box shaped to the
+  drawing by `aspect`, so a wide drawing's name sits right under it — and
+  the name on ONE line below; `intro` state, released ONE WAY by the
+  narrative's first scroll or a wheel down (a wheel up at the top
+  restores it; a scroll-event restore looped through the reflow); `main.card` is
   window-wide on the three pages): the symbol · name · markdown text ·
   «explore more» in a full-height column left | three `ui/KpiCards`
   across the top right | three `ui/Tile`s in the mock's grid (MAP
@@ -1574,8 +1600,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   same data, titles linking to the full frames; the card is the viewport to
   the pixel (NO scrolling; measured at three sizes); «explore more»
   REPLACES the card with the WHOLE original page under `#more` (every
-  frame, original order, the hero's figure bars first as
-  PROGRAMME/CONTRACT FIGURES, a slim head with «← back to the card»;
+  frame, original order, PROGRAMME/CONTRACT FIGURES first — since 2026-09-04 ONE ROW of five
+  `KpiCards` (contracts · contractors/co-ops · stated € · direct-award
+  share · paid), the record-kinds note the contracts card's `hover` — a slim head that since 2026-09-04 is the way back ALONE — the author's
+  `arrow.svg` as a mask in the card accent, at the left, no symbol or name;
+  the three expanded snippets lost their PROGRAMME / SCHEME / CO-OPERATIVES
+  paragraph and basis line that day (Anti-nero keeps its record-kinds note);
   `ui/expanded.ts` reads the state from any frame anchor or chart lens).
   The site has NO footer since the same day (user). Map-tile wrapper class
   is `.tilefill` — `.fill` is the direct-award bar's.

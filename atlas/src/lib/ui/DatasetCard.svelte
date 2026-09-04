@@ -126,10 +126,12 @@
 
 {#if expanded}
 	<div class="rest" id={MORE_HASH} style:--card-accent={sym.color}>
+		<!-- the way back alone, an arrow at the left: the reader knows which
+		     stream they are in (the author, 2026-09-04) -->
 		<div class="resthead">
-			<DatasetSymbol key={ds} size={34} />
-			<span class="label">{sym.label}</span>
-			<a class="back" href={lessHref(page.url)}>← back to the card</a>
+			<a class="back arrow" href={lessHref(page.url)} aria-label="back to the card" title="back to the card"
+				><span class="glyph"></span></a
+			>
 		</div>
 		{@render more()}
 		<RefreshLine />
@@ -162,7 +164,22 @@
 					{/if}
 				</span>
 			</div>
-			<div class="narrative" bind:this={narEl} onscroll={() => (intro = (narEl?.scrollTop ?? 0) < 4)}>
+			<!-- the first scroll (or a wheel down over a text too short to scroll)
+			     RELEASES the opening — one way: releasing reflows the column, the
+			     narrative re-clamps its scroll and reports 0, and a handler that
+			     read 0 as «back at the top» re-opened it in a loop. Only a wheel
+			     UP at the top restores the opening, a deliberate gesture. -->
+			<div
+				class="narrative"
+				bind:this={narEl}
+				onscroll={() => {
+					if ((narEl?.scrollTop ?? 0) >= 4) intro = false;
+				}}
+				onwheel={(e) => {
+					if (e.deltaY > 0) intro = false;
+					else if ((narEl?.scrollTop ?? 0) < 4) intro = true;
+				}}
+			>
 				<Prose {hint}>{@render text()}</Prose>
 			</div>
 			<!-- the pill with the freshness line beside it, in small letters, so
@@ -389,8 +406,27 @@
 		gap: var(--sp-4);
 		margin: 0 0 var(--sp-8);
 	}
+	/* the author's arrow.svg (2026-09-04), a mask in the card's accent, no pill */
+	.resthead .back.arrow {
+		background: none;
+		padding: 0;
+		width: 44px;
+		height: 26px;
+		border-radius: 0;
+	}
+	.resthead .back.arrow .glyph {
+		display: block;
+		width: 100%;
+		height: 100%;
+		background: var(--card-accent);
+		-webkit-mask: url('/img/symbols/arrow.svg') center / contain no-repeat;
+		mask: url('/img/symbols/arrow.svg') center / contain no-repeat;
+	}
+	.resthead .back.arrow:hover .glyph {
+		filter: brightness(1.15);
+	}
 	.resthead .back {
-		margin-left: auto;
+		margin-left: 0;
 		align-self: center;
 		width: auto;
 		font-size: var(--fs-14);

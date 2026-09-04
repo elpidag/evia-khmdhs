@@ -30,8 +30,6 @@
 	// is as wide as the window too — but with its own rhythm, not a card's
 	const isStory = $derived(page.url.pathname === '/story');
 	const current = $derived(symbolOfPath(page.url.pathname));
-	// the methodology is the story's own section since 2026-09-04
-	const methodologyActive = $derived(page.url.pathname === '/story' && page.url.hash === '#methodology');
 
 	// the sticky band keeps its height; a shadow says the page is scrolled
 	let scrolled = $state(false);
@@ -68,6 +66,9 @@
 				<span class="l2">{BRAND_LINE2}</span>
 			</a>
 			<nav>
+				<!-- START, before the first drawing: the way into the story (the
+				     author, 2026-09-04), a size under the brand's first line -->
+				<a class="start" href="/story">START</a>
 				<ul class="symbols">
 					{#each streams as s (s.key)}
 						<li>
@@ -110,7 +111,6 @@
 						</li>
 					{/each}
 				</ul>
-				<a class="text method" href="/story#methodology" class:active={methodologyActive}>METHODOLOGY</a>
 			</nav>
 		</div>
 	</header>
@@ -129,12 +129,9 @@
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		background: linear-gradient(
-			90deg,
-			var(--c-antinero),
-			var(--c-dase),
-			var(--c-anadohoi)
-		);
+		/* no fill (the author, 2026-09-04): the page's paper, so the content
+		   scrolling under the sticky band never shows through */
+		background: var(--paper);
 	}
 	/* the band: 85 px tall in the stream-hue gradient, the brand 81 px in,
 	   METHODOLOGY off the right edge (Artboard 4, 1920 wide) */
@@ -149,24 +146,28 @@
 	}
 	.brand {
 		text-decoration: none;
-		color: #fff;
 		display: flex;
 		flex-direction: column;
 		line-height: 1;
 		flex: none;
 	}
+	/* the brand a quarter larger, the two lines in the two streams' hues
+	   (the author, 2026-09-04) */
 	.brand .l1 {
 		font-family: var(--font-display-narrow);
 		font-weight: 900;
-		font-size: clamp(14px, 0.94vw, 18px);
+		font-size: clamp(17px, 1.17vw, 22.5px);
 		letter-spacing: 0.05em;
+		color: var(--c-antinero);
 	}
 	.brand .l2 {
 		font-family: var(--font-display-narrow);
-		font-weight: 500;
-		font-size: clamp(10px, 0.625vw, 12px);
+		/* bolder (the author, 2026-09-04) */
+		font-weight: 700;
+		font-size: clamp(12px, 0.78vw, 15px);
 		letter-spacing: 0.27em;
 		margin-top: 2px;
+		color: var(--c-anadohoi);
 	}
 	nav {
 		display: flex;
@@ -186,13 +187,20 @@
 	.tools li {
 		display: flex;
 	}
-	/* the artboard's rhythm: the three streams, a 110 px gap, the two
-	   tools, then METHODOLOGY */
+	/* the two tools close to the three streams (the author, 2026-09-04;
+	   the artboard's 110 px gap is gone) */
 	.tools {
-		margin-left: clamp(16px, 5.75vw, 110px);
+		margin-left: clamp(12px, 1.6vw, 30px);
 	}
-	.method {
-		margin-left: clamp(20px, 6.7vw, 129px);
+	.start {
+		text-decoration: none;
+		font-family: var(--font-display-narrow);
+		font-weight: 900;
+		font-size: clamp(14px, 0.94vw, 18px);
+		letter-spacing: 0.05em;
+		color: var(--ink);
+		margin-right: clamp(12px, 1.6vw, 30px);
+		white-space: nowrap;
 	}
 	.sym {
 		display: inline-flex;
@@ -205,20 +213,6 @@
 		overflow: hidden;
 		clip: rect(0 0 0 0);
 		white-space: nowrap;
-	}
-	nav a.text {
-		text-decoration: none;
-		font-family: var(--font-display-narrow);
-		font-weight: 500;
-		font-size: clamp(10px, 0.625vw, 12px);
-		text-transform: uppercase;
-		white-space: nowrap;
-		color: #fff;
-		opacity: 0.75;
-	}
-	nav a.text.active,
-	nav a.text:hover {
-		opacity: 1;
 	}
 	main {
 		max-width: var(--content-w);
@@ -274,8 +268,7 @@
 			flex-wrap: wrap;
 			gap: var(--sp-3);
 		}
-		.tools,
-		.method {
+		.tools {
 			margin-left: 0;
 		}
 	}

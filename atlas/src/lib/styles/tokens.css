@@ -15,13 +15,15 @@
 	   palette is decided by these ~10 knobs alone ─────────────────── */
 	--paper: #ffffff;
 	--ink: #1f1f1f;
-	--c-antinero: #000000;
+	/* the author's pick (Theme Lab, 2026-09-04): the ink grey, not pure black */
+	--c-antinero: #1f1f1f;
 	--c-dase: #52b788;
 	--c-anadohoi: #2d6a4f;
-	/* the site's RED: the EFFIS burn scars' maroon — and, since 2026-08-28
-	   (user), the fire season on every chart that marks it is its light
-	   shade, and the ν.4782 ceilings / the median line are drawn in it */
-	--c-fire: #6b2d35;
+	/* the site's RED — the author's terracotta since 2026-09-04 (Theme Lab
+	   pick; the EFFIS scars' maroon #6b2d35 until then): the burn scars,
+	   the fire season as its light shade, the ν.4782 ceilings and the
+	   median line are drawn in it */
+	--c-fire: #b33a1a;
 	/* semantic flags */
 	--c-good: #3d7a4a;
 	--c-flag-amber: #c99700;
@@ -67,7 +69,10 @@
 	   body/UI = Futura 100 Greek Book (the light text cut; Regular/Bold
 	   family as fallback), headings + display = Obviously. Sofia Sans
 	   (self-hosted) stays as the offline/glyph fallback. */
-	--font-ui: 'futura-100-greek-book', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
+	/* News Cycle (Google Fonts, loaded in app.html) leads the UI stack since
+	   2026-09-04 — the author's pick; Latin only, so Greek falls through to
+	   Futura 100 Greek */
+	--font-ui: 'News Cycle', 'futura-100-greek-book', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
 	--font-serif: 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
 	--font-display: 'obviously', 'futura-100-greek', 'Sofia Sans', system-ui, sans-serif;
 	/* the widths the user's artboards set (2026-08-27): Narrow for titles and

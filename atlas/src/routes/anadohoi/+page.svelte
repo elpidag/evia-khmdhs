@@ -771,25 +771,8 @@
 		</Tile>
 	{/snippet}
 	{#snippet more()}
-	<div class="about">
-		<div class="kicker">THE SCHEME</div>
-		<p>
-			Under ν.998/1979 άρθρο 42§3, companies volunteer to fund and execute the restoration of
-			burnt public forest land — designated by ministerial act, spending their own money. This
-			page follows all {grInt(k.n_projects)} projects from designation act to (sometimes)
-			completion. Every value links back to the signed PDF —
-			<a href="/story#methodology">methodology</a>.
-		</p>
-		<!-- the BASIS, said once for the whole page (the Anti-nero copy
-		     doctrine, applied 2026-08-25): the frames below no longer
-		     repeat it -->
-		<p class="basis">
-			All sums are the commitments written in the designation acts, not verified spending —
-			net where the act states a VAT basis, never converted; a sponsor promising «τη συνολική
-			χρηματοδότηση» with no figure adds projects but no euros; a superseded restatement is
-			folded into its successor — <a href="/story#methodology">basis</a>.
-		</p>
-	</div>
+	<!-- THE SCHEME paragraph and the basis line left the expanded page
+	     (the author, 2026-09-04): the card's own text says it -->
 
 {#if hoverCard}
 	{@const hp = ganttProjects.find((p) => p.ada === hoverCard?.ada)}
@@ -1241,17 +1224,6 @@
 </div>
 
 <style>
-	.about .kicker {
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-14);
-		letter-spacing: 0.08em;
-		margin-bottom: var(--sp-3);
-		color: var(--c-anadohoi);
-	}
-	.about p {
-		margin: 0;
-	}
 	/* every subsection title on this page follows THE SCHEME kicker:
 	   display-black 14px, letterspaced, dataset green */
 	.anap {
@@ -1353,16 +1325,6 @@
 	.note-inline {
 		font-size: var(--fs-13);
 		margin-top: var(--sp-2);
-	}
-	/* the page's one BASIS line under THE SCHEME (the Anti-nero dress) */
-	.basis {
-		margin-top: var(--sp-3);
-		font-size: var(--fs-13);
-		color: var(--ink-soft);
-		line-height: 1.5;
-	}
-	.basis a {
-		color: var(--ink-soft);
 	}
 	/* RANKING OF COMPANIES | WHO THE SPONSORS ARE side by side, equal
 	   halves (user, 2026-08-25) — the same pair layout PROJECT SCOPE and

@@ -42,7 +42,8 @@
 	let elapsed = 0;
 	let last = 0;
 	let raf = 0;
-	let fontReady = false;
+	// reactive, so the still-frame effect below runs once the face is in
+	let fontReady = $state(false);
 	let family = '';
 	let colours: Record<Ds, string> = { antinero: '#000', dase: '#52b788', anadohoi: '#2d6a4f' };
 	let reduced = false;
@@ -120,7 +121,9 @@
 		]);
 		ready.then(() => {
 			fontReady = true;
-			if (reduced) draw();
+			// a still field (the menu's code cells, 2026-09-04) draws once and
+			// runs no loop; a moving one starts the clock
+			if (reduced || !playing) draw();
 			else raf = requestAnimationFrame(tick);
 		});
 		return () => {

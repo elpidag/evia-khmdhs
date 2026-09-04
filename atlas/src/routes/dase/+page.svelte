@@ -12,6 +12,7 @@
 	import { loadEffisFires, makeChoro, RAMP_DASE, type FireProps } from '$lib/maps/useGeo';
 	import { CARD_BOUNDS } from '$lib/maps/cardFrame';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
+	import KpiCards from '$lib/ui/KpiCards.svelte';
 	import DatasetCard from '$lib/ui/DatasetCard.svelte';
 	import Tile from '$lib/ui/Tile.svelte';
 	import Text from '$content/datasets/dase.md';
@@ -409,6 +410,14 @@
 
 	// hero bar fills — data-proportional
 	const paidPct = $derived((o.kpis.paid_eur / o.kpis.total_eur) * 100);
+	/** CONTRACT FIGURES as one row of cards (the author, 2026-09-04) */
+	const figureCards = $derived([
+		{ num: grInt(o.kpis.n_contracts), label: 'contracts' },
+		{ num: grInt(o.kpis.n_coops), label: 'co-operatives' },
+		{ num: eurShort(o.kpis.total_eur).toLowerCase(), label: 'stated value, excl. VAT' },
+		{ num: pct(o.kpis.pct_direct), label: 'of contracts were direct awards' },
+		{ num: eurShort(o.kpis.paid_eur).toLowerCase(), label: 'already paid' }
+	]);
 </script>
 
 <svelte:head>
@@ -526,54 +535,11 @@
 		</Tile>
 	{/snippet}
 	{#snippet more()}
-			<div class="about">
-			<div class="kicker">THE CO-OPERATIVES</div>
-			<p>
-				Every public contract won by a forest labour co-operative (ΔΑ.Σ.Ε., ν.4423/2016) since
-				September 2021 — logging, clearing and tending work in the same forests the Anti-nero
-				millions target, at a fraction of the size: the median contract is {eur(
-					o.kpis.median_eur
-				)} and {pct(o.kpis.pct_direct)} went by direct award, from {grInt(o.kpis.n_orgs)} awarding
-				bodies through {grInt(o.kpis.n_units)} units. Of the {eurShort(o.kpis.total_eur)} stated,
-				{eurShort(o.kpis.paid_eur)} shows as paid ({grInt(o.kpis.n_payments)} payment orders) —
-				payments are posted for {grInt(o.kpis.n_paid_contracts)} of {grInt(
-					o.kpis.n_contracts
-				)} contracts, a registry practice, not a delivery record —
-				<a href="/story#methodology">methodology</a>.
-			</p>
-			<!-- the BASIS, said once for the whole page (the Anti-nero copy
-			     doctrine, applied 2026-08-25): the frames below no longer
-			     repeat it -->
-			<p class="basis">
-				All amounts are the contracts' stated values excl. VAT; {grInt(o.kpis.n_cancelled)}
-				cancelled and {grInt(o.kpis.n_superseded)} superseded versions are excluded, one co-op's
-				registry spellings (up to {o.kpis.max_name_variants}) merge on its canonical ΑΦΜ, and a
-				contract signed by several co-ops jointly is split evenly between them — no euro counted
-				twice; payments are a separate, structurally partial layer —
-				<a href="/story#methodology">basis</a>.
-			</p>
-		</div>
+	<!-- THE CO-OPERATIVES paragraph and the basis line left the expanded page
+	     (the author, 2026-09-04, as on the sponsored page): the card says it -->
 <ChartFrame title="CONTRACT FIGURES" anchor="figures">
-	<div class="figures">
-		<div class="midcol">
-			<div class="bars">
-				<div class="dabar" role="img" aria-label="Share of contracts awarded directly">
-					<div class="track">
-						<div class="fill" style:width={`${o.kpis.pct_direct}%`}>
-							<div class="danum">{pct(o.kpis.pct_direct)}</div>
-							<div class="datext">of contracts were direct awards</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="paidcard" role="img" aria-label="Paid so far, as a share of the stated total">
-				<div class="pfill" style:height={`${paidPct}%`}>
-					<div class="pnum">{eurShort(o.kpis.paid_eur).toLowerCase()}</div>
-					<div class="plbl">already paid</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<!-- ONE ROW of the dataset's figures (the author, 2026-09-04) -->
+	<KpiCards color="var(--c-dase)" cards={figureCards} />
 </ChartFrame>
 
 
@@ -1095,119 +1061,11 @@
 	}
 	/* middle column mirrors the cards grid: the two bars share the first
 	   card's row, the paid card fills the third row */
-	.midcol {
-		display: grid;
-		grid-template-rows: repeat(3, 1fr);
-		gap: var(--sp-4);
-		width: 268px;
-		max-width: 100%;
-	}
-	.bars {
-		grid-row: 1;
-		display: grid;
-		grid-template-rows: 1fr 1fr;
-		gap: var(--sp-4);
-	}
-	.dabar .track {
-		height: 100%;
-		background: var(--paper);
-		border: 1.5px solid var(--c-dase);
-		border-radius: 10px;
-		overflow: hidden;
-	}
-	.dabar .fill {
-		height: 100%;
-		background: var(--c-dase);
-		color: var(--paper);
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 2px;
-		padding: 0 14px;
-	}
-	.dabar .danum {
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-18);
-		line-height: 1;
-	}
-	.dabar .datext {
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--fs-12);
-		line-height: 1.2;
-	}
 	/* paid vs stated: green fill rises to the paid share of the stated €;
 	   the unfilled remainder reads as light grey, no outer border */
-	.paidcard {
-		grid-row: 3;
-		position: relative;
-		background: var(--paper);
-		border: 1.5px solid var(--c-dase);
-		border-radius: 10px;
-		overflow: hidden;
-	}
-	.paidcard .pfill {
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: var(--c-dase);
-		color: var(--paper);
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		gap: 2px;
-		padding: 8px 14px 10px;
-	}
-	.paidcard .pnum {
-		font-family: var(--font-display);
-		font-weight: 900;
-		/* matches the card numbers' cap */
-		font-size: 36px;
-		line-height: 0.95;
-		white-space: nowrap;
-	}
-	.paidcard .plbl {
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: var(--fs-13);
-		line-height: 1.2;
-	}
 	@media (max-width: 900px) {
-		.midcol {
-			grid-template-rows: auto;
-		}
-		.bars,
-		.paidcard {
-			grid-row: auto;
-		}
-		.paidcard {
-			height: 117px;
-		}
 	}
 	/* the page's one BASIS line under the intro (the Anti-nero dress) */
-	.basis {
-		margin-top: var(--sp-3);
-		font-size: var(--fs-13);
-		color: var(--ink-soft);
-		line-height: 1.5;
-	}
-	.basis a {
-		color: var(--ink-soft);
-	}
-	.about .kicker {
-		font-family: var(--font-display);
-		font-weight: 900;
-		font-size: var(--fs-14);
-		letter-spacing: 0.08em;
-		margin-bottom: var(--sp-3);
-		color: var(--c-dase);
-	}
-	.about p {
-		margin: 0;
-		max-width: var(--prose-w);
-	}
 	/* year legend left, mode switch hard right — one line above the chart */
 	.modes {
 		display: flex;
@@ -1378,7 +1236,6 @@
 		background: var(--c-dase);
 		color: var(--paper);
 	}
-	.tilefill.valbody,
 	.tilefill.rankbody {
 		position: absolute;
 		display: flex;
@@ -1404,22 +1261,5 @@
 	.tilefill.valbody :global(.bees) {
 		flex: 1;
 		min-height: 0;
-	}
-	/* the programme figures — the bars the hero used to carry beside its
-	   cards — open the unfolded part */
-	.figures {
-		max-width: 560px;
-	}
-	.figures .midcol {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: none;
-		width: auto;
-	}
-	.figures .bars,
-	.figures .paidcard {
-		grid-row: auto;
-	}
-	.figures .paidcard {
-		min-height: 140px;
 	}
 </style>
