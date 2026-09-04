@@ -17,6 +17,7 @@
 	import KpiCards, { type KpiCard } from './KpiCards.svelte';
 	import KpiRich, { type RichKpi } from './KpiRich.svelte';
 	import Prose from './Prose.svelte';
+	import RefreshLine from './RefreshLine.svelte';
 	import { MORE_HASH, isExpanded, lessHref, moreHref } from './expanded';
 	import type { Snippet } from 'svelte';
 
@@ -89,6 +90,16 @@
 		more: Snippet;
 	} = $props();
 
+	/** the OPENING presentation (the author, 2026-09-04): the symbol at twice
+	 *  its reading size with the stream's name on one line below it, until
+	 *  the reader's first scroll of the text — the narrative scrolls inside
+	 *  its own column, so its scrollTop is the signal; scrolling back to the
+	 *  top brings the opening back */
+	let narEl = $state<HTMLElement | null>(null);
+	let intro = $state(true);
+	const SYM_READ = 'clamp(96px, 8.47vw, 162.6px)';
+	const SYM_OPEN = 'clamp(192px, 16.94vw, 325.2px)';
+
 	const sym = $derived(symbolFor(ds));
 	const expanded = $derived(isExpanded(page.url, params));
 	/** the triple grid's columns: the artboard's widths and the 25 / 17 px
@@ -121,6 +132,7 @@
 			<a class="back" href={lessHref(page.url)}>← back to the card</a>
 		</div>
 		{@render more()}
+		<RefreshLine />
 	</div>
 {:else if layout === 'triple'}
 	<div
@@ -140,8 +152,8 @@
 		style:--kpi-row-gap="{midGap}px"
 	>
 		<div class="side">
-			<div class="who big">
-				<DatasetSymbol key={ds} size="clamp(96px, 8.47vw, 162.6px)" active />
+			<div class="who big" class:intro>
+				<DatasetSymbol key={ds} size={intro ? SYM_OPEN : SYM_READ} active />
 				<span class="bigname">
 					{#if sym.titleLines}
 						{#each sym.titleLines as ln, i (i)}<span class="ln">{ln}</span>{/each}
@@ -150,10 +162,16 @@
 					{/if}
 				</span>
 			</div>
-			<div class="narrative">
+			<div class="narrative" bind:this={narEl} onscroll={() => (intro = (narEl?.scrollTop ?? 0) < 4)}>
 				<Prose {hint}>{@render text()}</Prose>
 			</div>
-			<a class="more" href={moreHref(page.url)}>explore more</a>
+			<!-- the pill with the freshness line beside it, in small letters, so
+			     the card keeps to one viewport and the page never scrolls (the
+			     author, 2026-09-04) -->
+			<div class="foot">
+				<a class="more" href={moreHref(page.url)}>explore more</a>
+				<RefreshLine compact />
+			</div>
 		</div>
 		{#if kpiSpan}
 			<div class="kpis wide">
@@ -185,7 +203,13 @@
 			<div class="narrative">
 				<Prose {hint}>{@render text()}</Prose>
 			</div>
-			<a class="more" href={moreHref(page.url)}>explore more</a>
+			<!-- the pill with the freshness line beside it, in small letters, so
+			     the card keeps to one viewport and the page never scrolls (the
+			     author, 2026-09-04) -->
+			<div class="foot">
+				<a class="more" href={moreHref(page.url)}>explore more</a>
+				<RefreshLine compact />
+			</div>
 		</div>
 		<div class="kpis"><KpiCards cards={kpis} color={sym.color} /></div>
 		<div class="tiles">{@render tiles?.()}</div>
@@ -339,6 +363,19 @@
 	.back:hover {
 		filter: brightness(1.15);
 	}
+	/* the card's foot: the pill, the freshness line beside it */
+	.foot {
+		display: flex;
+		align-items: center;
+		gap: clamp(10px, 1vw, 18px);
+		flex: none;
+	}
+	.foot .more {
+		align-self: center;
+	}
+	.foot :global(.refreshed) {
+		color: var(--ink-faint);
+	}
 	/* the frames, at the article width, with a slim head that names the
 	   stream and the way back */
 	.rest {
@@ -433,6 +470,20 @@
 		align-items: center;
 		gap: clamp(16px, 3.7vw, 71px);
 		margin-top: 0;
+		transition: gap 0.45s ease;
+	}
+	/* the opening: the symbol twice its size, the name on ONE line under it */
+	.who.big.intro {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: clamp(10px, 2vh, 22px);
+	}
+	.who.big.intro .bigname {
+		flex-direction: row;
+		flex-wrap: wrap;
+		column-gap: 0.32em;
+		align-items: baseline;
+		text-align: left;
 	}
 	/* the artboard sets the name on three centred lines */
 	.bigname {

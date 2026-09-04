@@ -20,6 +20,8 @@
 	const streams = SYMBOLS.filter((s) => s.rank === 'stream');
 	const tools = SYMBOLS.filter((s) => s.rank === 'tool');
 	const isLanding = $derived(page.url.pathname === '/');
+	// the hub carries the brand itself: no band there either (author, 2026-09-04)
+	const isHub = $derived(page.url.pathname === '/data');
 	// the three dataset CARDS and the hub compose one viewport, so their
 	// page is as wide as the window; a card's unfolded part returns to the
 	// article width
@@ -28,13 +30,14 @@
 	// is as wide as the window too — but with its own rhythm, not a card's
 	const isStory = $derived(page.url.pathname === '/story');
 	const current = $derived(symbolOfPath(page.url.pathname));
-	const methodologyActive = $derived(page.url.pathname.startsWith('/methodology'));
+	// the methodology is the story's own section since 2026-09-04
+	const methodologyActive = $derived(page.url.pathname === '/story' && page.url.hash === '#methodology');
 
 	// the sticky band keeps its height; a shadow says the page is scrolled
 	let scrolled = $state(false);
 
 	const embed = $derived(page.url.searchParams.get('embed') === '1');
-	const chrome = $derived(!embed && !isLanding);
+	const chrome = $derived(!embed && !isLanding && !isHub);
 
 	// THEME LAB (author's try-out panel, 2026-09-03): dev-only, opened with
 	// `?lab` on any page, lazy-imported so production never bundles it
@@ -107,13 +110,13 @@
 						</li>
 					{/each}
 				</ul>
-				<a class="text method" href="/methodology" class:active={methodologyActive}>METHODOLOGY</a>
+				<a class="text method" href="/story#methodology" class:active={methodologyActive}>METHODOLOGY</a>
 			</nav>
 		</div>
 	</header>
 {/if}
 
-<main class:embed class:landing={isLanding} class:card={isCard} class:story={isStory}>
+<main class:embed class:landing={isLanding} class:card={isCard} class:story={isStory} class:nochrome={isHub}>
 	{@render children()}
 </main>
 
@@ -242,6 +245,10 @@
 		--card-pad-l: clamp(24px, 4.22vw, 81px);
 		max-width: none;
 		padding: var(--card-pad-t) var(--card-pad-r) var(--card-pad-b) var(--card-pad-l);
+	}
+	/* the hub without the band: nothing to subtract from the viewport */
+	main.card.nochrome {
+		--header-h: 0px;
 	}
 	/* the story is the author's 1920 artboard: three columns across the window,
 	   letterboxed above 1920 so the reading measure never grows past its design

@@ -13,7 +13,7 @@ describe('the landing grid', () => {
 			tone: 'ink'
 		});
 		expect(g[2][1]).toMatchObject({ kind: 'link', href: '/data' });
-		expect(g[3][2]).toMatchObject({ kind: 'link', href: '/methodology' });
+		expect(g[3][2]).toMatchObject({ kind: 'link', href: '/story#methodology' });
 		// Artboard 2's «GR / EN» mark in the top-right cell
 		expect(g[0][3]).toMatchObject({ kind: 'note', label: 'GR / EN' });
 		expect(g.flat().filter((c) => c.kind === 'empty').length).toBe(11);

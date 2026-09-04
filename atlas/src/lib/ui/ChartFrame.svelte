@@ -10,7 +10,7 @@
 		subtitle?: string;
 		/** per-chart caveat, always rendered when provided */
 		caveat?: string;
-		/** anchor id for permalinks; also links the caveat to /methodology#<anchor> */
+		/** anchor id for permalinks; also links the caveat to /story#methodology<anchor> */
 		anchor?: string;
 		/** methodology anchor override (defaults to `anchor`) */
 		methodology?: string | null;
@@ -47,7 +47,7 @@
 		insight = '',
 		controls
 	}: Props = $props();
-	const methodHref = $derived(`/methodology#${methodology || anchor}`);
+	const methodHref = $derived(`/story#methodology || anchor}`);
 	const linkMethod = $derived(methodology !== null && (anchor || methodology));
 	let insightOpen = $state(false);
 </script>

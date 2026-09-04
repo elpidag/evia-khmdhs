@@ -12,7 +12,14 @@
 	 * ONE PLACEMENT FOR EVERY FIGURE (the author, 2026-09-03): the figure
 	 * block sits on the column's vertical centre SET 60 PX LOWER, its caption
 	 * 7 px below the image — grid, single, carousel, live drawing and the
-	 * placeholder square alike.
+	 * placeholder square alike. The one exception is a figure marked `lift`
+	 * (figure 23, the same day): its block starts at the column's TOP, so a
+	 * long caption gets the room below.
+	 *
+	 * A `slider` figure (figure 23's two land-use maps) shows both images at
+	 * once — the second underneath, the first to the LEFT of a handle the
+	 * reader drags across; a transparent range input under the pointer does
+	 * the dragging, and gives the keyboard and touch for free.
 	 *
 	 * A figure shows, in order of preference: its LIVE drawing
 	 * (`lib/story/figures.ts`), the author's DELIVERED image(s)
@@ -38,9 +45,61 @@
 
 	/** the author's delivered image(s) for the figure in force, if any */
 	const img = $derived(figure ? (FIGURE_IMAGES[figure.n] ?? null) : null);
+	/** NO WHITE FILLER (the author, 2026-09-03): an image box is the image's
+	 *  own size — never the artboard's square with paper around a landscape —
+	 *  so the caption sits 7 px under the image itself; a live figure may
+	 *  ask the same (`frame: 'auto'`); the grid and the placeholder keep
+	 *  their shapes */
+	const natural = $derived(
+		img ? img.kind !== 'grid' : Boolean(figure && FIGURES[figure.n]?.frame === 'auto')
+	);
 
 	/** the carousel's position — back to the first image on a figure change */
 	let pairIdx = $state(0);
+	/** the slider's handle, as a percentage of the width from the left */
+	let split = $state(50);
+	/** the slider ENLARGED and centred, the only thing on the page — the
+	 *  timeline's focus view for a figure (the author, 2026-09-04); the
+	 *  handle is shared, so the reader continues where they were */
+	let figOpen = $state(false);
+	/** the enlarged view is PORTALED to <body>: inside the sticky rail's own
+	 *  stacking context it could never cover the header. Svelte delegates
+	 *  click and input from the app's root, which a node moved to <body> no
+	 *  longer bubbles through — so the action wires the two itself. */
+	function portal(node: HTMLElement, h: { close: () => void; split: (v: number) => void }) {
+		document.body.appendChild(node);
+		const onClick = (e: MouseEvent) => {
+			const t = e.target as HTMLElement;
+			if (t === node || t.closest('.figclose')) h.close();
+		};
+		const onInput = (e: Event) => {
+			const t = e.target as HTMLInputElement;
+			if (t.classList.contains('range')) h.split(Number(t.value));
+		};
+		node.addEventListener('click', onClick);
+		node.addEventListener('input', onInput);
+		return {
+			destroy() {
+				node.removeEventListener('click', onClick);
+				node.removeEventListener('input', onInput);
+				node.remove();
+			}
+		};
+	}
+	$effect(() => {
+		if (!figOpen) return;
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') figOpen = false;
+		};
+		window.addEventListener('keydown', onKey);
+		const prev = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+		return () => {
+			window.removeEventListener('keydown', onKey);
+			document.body.style.overflow = prev;
+		};
+	});
+	const lifted = $derived(Boolean(img?.lift));
 	/** which image of a multi-image figure is showing: a, b, … — the letter
 	 *  the captions file keys a slide's own caption by (the grid's two packs
 	 *  count the same way) */
@@ -73,6 +132,8 @@
 	$effect(() => {
 		void figure?.n;
 		pairIdx = 0;
+		split = 50;
+		figOpen = false;
 	});
 
 	/**
@@ -95,8 +156,9 @@
 	const hasCredit = $derived(Boolean(figure && FIGURES[figure.n]?.credit));
 	const capMax = $derived.by(() => {
 		if (!stackH || !boxH) return null;
-		const room =
-			stackH - 2 * CENTRE_DROP - boxH - CAP_GAP - (hasCredit ? creditH + CREDIT_GAP : 0);
+		// a lifted block starts at the top: the whole column below the image
+		const drop = lifted ? 0 : CENTRE_DROP;
+		const room = stackH - 2 * drop - boxH - CAP_GAP - (hasCredit ? creditH + CREDIT_GAP : 0);
 		return Math.max(CAP_MIN, Math.floor(room));
 	});
 	/** the caption's text at its natural height — the scroll switches on
@@ -199,10 +261,47 @@
 	);
 </script>
 
+{#snippet sliderBlock(srcs: string[], name: string, big: boolean)}
+	<div class="slider" style:--split="{split}%">
+		<img class="whole under" src={srcs[1]} alt={`${name} — second of two`} />
+		<img class="whole over" src={srcs[0]} alt={`${name} — first of two`} />
+		<div class="knife" aria-hidden="true"><span>‹›</span></div>
+		<input
+			class="range"
+			type="range"
+			min="0"
+			max="100"
+			step="0.5"
+			value={split}
+			oninput={(e) => (split = Number(e.currentTarget.value))}
+			aria-label="drag to compare the two maps"
+		/>
+		{#if !big}
+			<button class="grow" type="button" aria-label="enlarge" onclick={() => (figOpen = true)}
+				>⤢</button
+			>
+		{/if}
+	</div>
+{/snippet}
+
 <div class="fig">
+	{#if figOpen && img?.kind === 'slider' && figure}
+		<!-- the slider ENLARGED and centred, the only thing on the page; the
+		     margin, the ✕ or Esc closes it (the author, 2026-09-04) -->
+		<div
+			class="figmodal"
+			role="dialog"
+			tabindex="-1"
+			aria-label={`figure ${figureLabel(figure.n)} enlarged`}
+			use:portal={{ close: () => (figOpen = false), split: (v) => (split = v) }}
+		>
+			<button class="figclose" type="button" aria-label="close">✕</button>
+			<div class="figbig">{@render sliderBlock(img.srcs, figure.name, true)}</div>
+		</div>
+	{/if}
 	<!-- every figure on ONE placement: centred 60 px low, caption 7 px under -->
-	<div class="stack" bind:clientHeight={stackH}>
-		<div class="box" class:gridbox={img?.kind === 'grid'} bind:clientHeight={boxH}>
+	<div class="stack" class:lifted style:--img-scale={img?.scale ?? null} bind:clientHeight={stackH}>
+		<div class="box" class:gridbox={img?.kind === 'grid'} class:natural bind:clientHeight={boxH}>
 			{#if figure}
 				{#key figure.n}
 					{@const live = FIGURES[figure.n]}
@@ -225,24 +324,31 @@
 					{:else if img?.kind === 'pair'}
 						<!-- figure 02 as a CAROUSEL: one image at a time, a small
 						     arrow to interchange (the author, 2026-09-03) -->
-						{#key pairIdx}
-							<img
-								class="whole"
-								src={img.srcs[pairIdx]}
-								alt={`${figure.name} — ${pairIdx + 1} of ${img.srcs.length}`}
-							/>
-						{/key}
-						<button
-							class="adv"
-							type="button"
-							aria-label="next image"
-							onclick={() => (pairIdx = (pairIdx + 1) % (img?.srcs.length ?? 1))}>›</button
-						>
-						<div class="dots" aria-hidden="true">
-							{#each img.srcs as _, di (di)}
-								<span class:on={di === pairIdx}></span>
-							{/each}
+						<div class="carousel">
+							{#key pairIdx}
+								<img
+									class="whole"
+									src={img.srcs[pairIdx]}
+									alt={`${figure.name} — ${pairIdx + 1} of ${img.srcs.length}`}
+								/>
+							{/key}
+							<button
+								class="adv"
+								type="button"
+								aria-label="next image"
+								onclick={() => (pairIdx = (pairIdx + 1) % (img?.srcs.length ?? 1))}>›</button
+							>
+							<div class="dots" aria-hidden="true">
+								{#each img.srcs as _, di (di)}
+									<span class:on={di === pairIdx}></span>
+								{/each}
+							</div>
 						</div>
+					{:else if img?.kind === 'slider'}
+						<!-- figure 23's two maps as an IMAGE SLIDER (the author,
+						     2026-09-03): the second map underneath, the first shown
+						     LEFT of the handle; the corner button opens it enlarged -->
+						{@render sliderBlock(img.srcs, figure.name, false)}
 					{:else if img}
 						<img class="whole" src={img.srcs[0]} alt={figure.name} />
 					{:else}
@@ -328,11 +434,19 @@
 		justify-content: center;
 		transform: translateY(60px);
 	}
+	/* a lifted figure starts at the column's top (figure 23: the caption
+	   needs the room below — the author, 2026-09-03) */
+	.stack.lifted {
+		justify-content: flex-start;
+		transform: none;
+	}
 	.box {
-		/* the artboard's square, inset in its column */
+		/* the artboard's square, inset in its column — PAPER behind it, so a
+		   non-square image sits in white, never in grey bars (author,
+		   2026-09-03) */
 		width: var(--fig-w);
 		aspect-ratio: 1;
-		background: var(--paper-2);
+		background: var(--paper);
 		display: grid;
 		place-items: center;
 		position: relative;
@@ -340,6 +454,31 @@
 	.box.gridbox {
 		aspect-ratio: auto;
 		background: none;
+	}
+	/* an image box is the image's own size: the image shrinks into the
+	   540 square keeping its shape, and the box wraps it — no paper bars */
+	.box.natural {
+		aspect-ratio: auto;
+		/* a FLEX column, not the grid: a grid item's percentage max-width
+		   resolved against its own centred area (a 0.85 scale drew as 0.85
+		   squared, in a box taller than its image); in a flex column the
+		   percentage is the slot's width, and the box is exactly the image */
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.box.natural img.whole {
+		width: auto;
+		height: auto;
+		max-width: calc(100% * var(--img-scale, 1));
+		/* the artboard's square as the height cap, in px: a percentage
+		   height against an auto-height box would resolve to nothing */
+		max-height: calc(540px * var(--img-scale, 1));
+	}
+	.carousel {
+		position: relative;
+		width: fit-content;
+		max-width: 100%;
 	}
 	.cells {
 		width: 100%;
@@ -370,6 +509,121 @@
 		object-fit: contain;
 		display: block;
 		animation: figfade 0.45s ease;
+	}
+	/* the image slider: both maps fill the square, the first clipped to the
+	   left of the handle; the range input lies invisible over the whole
+	   square so a press anywhere takes the handle there and drags it */
+	.slider {
+		position: relative;
+		width: fit-content;
+		max-width: 100%;
+	}
+	.slider img.under {
+		display: block;
+	}
+	.slider img.over {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		clip-path: inset(0 calc(100% - var(--split)) 0 0);
+	}
+	.knife {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: var(--split);
+		width: 0;
+		border-left: 2px solid rgba(0, 0, 0, 0.62);
+		transform: translateX(-1px);
+		pointer-events: none;
+	}
+	.knife span {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translate(-50%, -50%);
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, 0.62);
+		color: #fff;
+		font-size: 15px;
+		line-height: 30px;
+		text-align: center;
+		letter-spacing: 1px;
+	}
+	.slider:focus-within .knife {
+		border-color: rgba(0, 0, 0, 0.85);
+	}
+	.slider:focus-within .knife span {
+		background: rgba(0, 0, 0, 0.85);
+	}
+	.range {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		opacity: 0;
+		cursor: ew-resize;
+	}
+	/* the corner button that opens the slider enlarged — above the range
+	   input, in the carousel arrow's dress */
+	.grow {
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		width: 30px;
+		height: 30px;
+		border: 0;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, 0.62);
+		color: #fff;
+		font-size: 16px;
+		line-height: 1;
+		cursor: zoom-in;
+		display: grid;
+		place-items: center;
+		padding: 0;
+	}
+	.grow:hover {
+		background: rgba(0, 0, 0, 0.85);
+	}
+	/* the enlarged view: the page's paper over everything, header
+	   included, the slider centred at the window's size */
+	.figmodal {
+		position: fixed;
+		inset: 0;
+		z-index: 300;
+		background: var(--paper);
+		display: grid;
+		place-items: center;
+		cursor: zoom-out;
+	}
+	.figbig {
+		cursor: default;
+	}
+	.figbig .slider img.under {
+		width: auto;
+		height: auto;
+		max-width: 92vw;
+		max-height: 88vh;
+	}
+	.figclose {
+		position: fixed;
+		top: 18px;
+		right: 22px;
+		z-index: 301;
+		width: 40px;
+		height: 40px;
+		border: 0;
+		border-radius: 50%;
+		background: var(--ink);
+		color: var(--paper);
+		font-size: 18px;
+		line-height: 1;
+		cursor: pointer;
 	}
 	/* the carousel's small arrow, riding the image's right edge — dark, so
 	   it reads on the author's white map images (2026-09-03) */
@@ -414,7 +668,11 @@
 	}
 	.cap {
 		margin: 7px 0 0;
+		/* a scaled image's caption is no wider than the image, and sits
+		   under it (the author, 2026-09-03, on figure 25) */
+		width: calc(var(--fig-w) * var(--img-scale, 1));
 		max-width: var(--fig-w);
+		align-self: center;
 		font-size: var(--fs-12);
 		line-height: 1.35;
 		color: var(--ink-soft);

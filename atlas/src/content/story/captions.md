@@ -131,4 +131,4 @@ the forests.’ Source: Ethnos.
 
 ## 13 — prints as Figure 30
 
-fires in Evia
+Satellite-based false-color composite highlighting areas affected by the 2021 wildfires across Greece.

@@ -53,9 +53,9 @@
 	} from '$lib/api';
 	import { bracket, eurShort, grInt, pct } from '$lib/transforms/format';
 	import { page } from '$app/state';
+	import { categoryRows } from '$lib/transforms/categoryRows';
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
-	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.overview);
@@ -612,21 +612,6 @@
 		if (paren) return { label: paren[1], hint: paren[2] };
 		return { label: s };
 	};
-	const catRows = $derived(
-		[...o.categories]
-			.sort((a, b) => (ctLens === 'eur' ? b.eur - a.eur : b.n - a.n))
-			.map((c) => ({
-				label: c.label_en ?? c.label,
-				value: ctLens === 'eur' ? c.eur : c.n,
-				// the hover: the contract count and what this category's
-				// contracts NAME, from the themes layer
-				title:
-					`${c.label_en ?? c.label} — ${grInt(c.n)} contracts` +
-					(c.names?.length
-						? `. Works named: ${c.names.map((w) => `${w.label_en.toLowerCase()} ${grInt(w.n)}`).join(', ')}`
-						: '')
-			}))
-	);
 	// the reverse link: under each work, the main categories of the contracts
 	// that name it — from the categories' own `names` lists, inverted (user,
 	// 2026-08-22: the two lenses must show their connection both ways)
@@ -822,7 +807,7 @@
 			({grInt(o.kpis.n_payments)} payment orders). {pct(o.kpis.pct_direct)} of contracts —
 			{eurShort(directEur)}, the bulk of the money — went by direct award. This page follows
 			what actually got paid, to whom, and where —
-			<a href="/methodology#antinero">methodology</a>.
+			<a href="/story#methodology">methodology</a>.
 		</p>
 		<!-- the BASIS, said once for the whole page (copy pass 2026-08-23): the
 		     frames below no longer repeat it -->
@@ -831,7 +816,7 @@
 			signed contract PDFs; a contract signed by several firms or covering several regional
 			units is split equally between them — the documents state no other allocation; payments
 			(ΚΗΜΔΗΣ and Διαύγεια) are a separate layer —
-			<a href="/methodology#stated-basis">basis</a> · <a href="/methodology#even-split">split</a>.
+			<a href="/story#methodology">basis</a> · <a href="/story#methodology">split</a>.
 		</p>
 		{#if dk && dk.n_kinds > 0}
 			<p class="kinds">
@@ -840,7 +825,7 @@
 				{grInt(dk.amendment)} revise the terms of one without touching its price,
 				{grInt(dk.supplementary)} add supplementary works, and {grInt(dk.extension)}
 				only extend a deadline —
-				<a href="/methodology#validation">what each record is</a>.
+				<a href="/story#methodology">what each record is</a>.
 			</p>
 		{/if}
 		{#if o.probable && o.probable.n > 0}
@@ -853,7 +838,7 @@
 				</summary>
 				<p class="pnote">
 					Their signed documents carry no provable RRF-16849 financing evidence — no fund
-					code, no Ταμείο Ανάκαμψης clause (<a href="/methodology#antinero">methodology</a>).
+					code, no Ταμείο Ανάκαμψης clause (<a href="/story#methodology">methodology</a>).
 				</p>
 				<ul>
 					{#each o.probable.rows as r (r.ref)}
@@ -1200,7 +1185,7 @@
 				/>
 			{/snippet}
 			<BarH
-				rows={lowerRows(catRows).map((r) => ({ ...r, ...splitHint(r.label) }))}
+				rows={categoryRows(o.categories, ctLens)}
 				color="color-mix(in srgb, var(--ink) 94.6%, var(--paper))"
 				inside
 				barHeight={35}
@@ -1369,7 +1354,6 @@
 
 	{/snippet}
 </DatasetCard>
-<RefreshLine />
 </div>
 
 <style>

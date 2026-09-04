@@ -30,7 +30,6 @@
 	import { procedureEn } from '$lib/transforms/procedures';
 	import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 	import type { PageData } from './$types';
-	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
 	const o = $derived(data.overview);
@@ -540,7 +539,7 @@
 				payments are posted for {grInt(o.kpis.n_paid_contracts)} of {grInt(
 					o.kpis.n_contracts
 				)} contracts, a registry practice, not a delivery record —
-				<a href="/methodology#dase-dedup">methodology</a>.
+				<a href="/story#methodology">methodology</a>.
 			</p>
 			<!-- the BASIS, said once for the whole page (the Anti-nero copy
 			     doctrine, applied 2026-08-25): the frames below no longer
@@ -551,7 +550,7 @@
 				registry spellings (up to {o.kpis.max_name_variants}) merge on its canonical ΑΦΜ, and a
 				contract signed by several co-ops jointly is split evenly between them — no euro counted
 				twice; payments are a separate, structurally partial layer —
-				<a href="/methodology#dase-dedup">basis</a>.
+				<a href="/story#methodology">basis</a>.
 			</p>
 		</div>
 <ChartFrame title="CONTRACT FIGURES" anchor="figures">
@@ -875,7 +874,6 @@
 
 	{/snippet}
 </DatasetCard>
-<RefreshLine />
 </div>
 
 <style>

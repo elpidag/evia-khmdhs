@@ -17,7 +17,7 @@ export const HOME_CELLS: HomeCell[] = [
 	{ r: 1, c: 4, kind: 'note', label: 'GR / EN' },
 	{ r: 2, c: 2, kind: 'link', label: 'START HERE', href: '/story', tone: 'ink' },
 	{ r: 3, c: 2, kind: 'link', label: 'EXPLORE THE DATA', href: '/data' },
-	{ r: 4, c: 3, kind: 'link', label: 'METHODOLOGY', href: '/methodology' }
+	{ r: 4, c: 3, kind: 'link', label: 'METHODOLOGY', href: '/story#methodology' }
 ];
 
 /** the full 4×4, row-major, empties filled in; refuses a double booking */

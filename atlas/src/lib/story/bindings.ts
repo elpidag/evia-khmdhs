@@ -36,7 +36,7 @@ export const BINDINGS: Binding[] = [
 		event: 'extensive-use-of-112-emergency',
 		needle: 'The 2021 fire season was the first one during which 112'
 	},
-	{ event: 'fires-in-northern-evia', needle: 'hectares burnt in North Evia alone' },
+	{ event: 'fires-in-northern-evia', needle: '50,000 of them in North Evia alone' },
 	{
 		event: 'prime-minister-s-press-conference',
 		needle: 'During a press conference the Prime Minister announced'
@@ -59,9 +59,9 @@ export const BINDINGS: Binding[] = [
 		needle: 'Law 5106/2024 introduced Hybrid Cooperative Schemes'
 	},
 	// ── fires the text does not name: the paragraph covering their moment ──
-	{ event: 'fires-in-the-peloponese', needle: '125,000 hectares of forest and arable land' },
-	{ event: 'fires-in-northern-attica', needle: '125,000 hectares of forest and arable land' },
-	{ event: 'fires-in-western-attica', needle: '125,000 hectares of forest and arable land' },
+	{ event: 'fires-in-the-peloponese', needle: '125,000 hectares of forest and agricultural land' },
+	{ event: 'fires-in-northern-attica', needle: '125,000 hectares of forest and agricultural land' },
+	{ event: 'fires-in-western-attica', needle: '125,000 hectares of forest and agricultural land' },
 	{ event: 'fires-in-rhodes', needle: 'fires that broke out near Alexandroupolis' }
 	// everything else stays unbound: timeline context the narrative never
 	// mentions (laws 3889/4423/4936/5281, the forest-maps and state-aid acts,

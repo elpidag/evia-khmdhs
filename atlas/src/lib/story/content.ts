@@ -56,6 +56,9 @@ function blocksOf(section: string): StoryBlock[] {
 	for (const part of body.split(/\n{2,}/)) {
 		const t = part.trim();
 		if (!t) continue;
+		// `[CHART: name]` on a line of its own is a full-width chart's place,
+		// not a passage (2026-09-04); the build turns it into a placeholder
+		if (/^\[CHART:[^\]]*\]$/i.test(t)) continue;
 		const h3 = t.startsWith('### ');
 		// the author writes `[FIGURE 05: Press conference]` as plain text since
 		// 2026-09-03 (the span is added at build time); the name is optional —

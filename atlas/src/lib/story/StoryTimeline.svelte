@@ -59,6 +59,11 @@
 		/** the author's timeline disclaimer — printed under the axis, LEFT of
 		 *  the collapsed line, before it splits into the three lanes */
 		note?: string;
+		/** the WHOLE drawing at once, the box as tall as it needs — the focus
+		 *  view the reader opens with a click (the author, 2026-09-03) */
+		whole?: boolean;
+		/** how far past the artboard's size the drawing may grow */
+		maxK?: number;
 	}
 	let {
 		expanded = false,
@@ -67,7 +72,9 @@
 		focusDates = [],
 		progress = 0,
 		onSelect,
-		note = ''
+		note = '',
+		whole = false,
+		maxK = 1
 	}: Props = $props();
 
 	const stops = yearStops();
@@ -139,7 +146,7 @@
 	let h = $state(0);
 	/** collapsed the whole span is in view; spread we fit the WIDTH and pan */
 	const k = $derived(
-		expanded ? Math.min(w / W || 1, 1) : Math.min(w / W || 1, (h || 1) / H_COLLAPSED, 1)
+		expanded ? Math.min(w / W || 1, maxK) : Math.min(w / W || 1, (h || 1) / H_COLLAPSED, 1)
 	);
 	/** the collapsed drawing's rightward shift — the author's SVG geometry:
 	 *  21.4% of the rail at the design width, never past the rail's edge */
@@ -157,7 +164,7 @@
 	 */
 	const viewH = $derived((h || 1) / k);
 	const panY = $derived.by(() => {
-		if (!expanded) return 0;
+		if (!expanded || whole) return 0;
 		let target = progress * H;
 		if (focusDates.length) {
 			const ys = focusDates.map((d) => yOfDate(d, stops));
@@ -183,7 +190,7 @@
 	const bigYear = $derived(activeYear ?? centreYear);
 </script>
 
-<div class="tl" bind:clientWidth={w} bind:clientHeight={h}>
+<div class="tl" bind:clientWidth={w} bind:clientHeight={h} style:height={whole ? `${H * k}px` : null}>
 	<div
 		class="scale"
 		class:expanded

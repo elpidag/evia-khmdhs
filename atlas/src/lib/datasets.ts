@@ -23,6 +23,10 @@ export interface SiteSymbol {
 	chip: string;
 	/** the dataset hue token; the two tools take the ink */
 	color: string;
+	/** the author's own SYMBOL, an SVG under static/img/symbols, drawn as a
+	 *  mask in the stream's hue on the hub and the card (2026-09-04, the
+	 *  co-op's first); the header band keeps its lettered squares */
+	symbol?: string;
 	/** hub rank: the three streams large, the two tools small */
 	rank: 'stream' | 'tool';
 }
@@ -37,6 +41,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		short: 'private companies',
 		titleLines: ['financed', 'by', 'private companies'],
 		color: 'var(--c-anadohoi)',
+		symbol: '/img/symbols/financed.svg',
 		chip: 'var(--c-anadohoi)',
 		rank: 'stream'
 	},
@@ -56,6 +61,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		label: "works executed by forest workers' co-operatives",
 		short: "forest workers' co-ops",
 		color: 'var(--c-dase)',
+		symbol: '/img/symbols/coop.svg',
 		chip: 'var(--c-dase)',
 		rank: 'stream'
 	},
@@ -64,6 +70,7 @@ export const SYMBOLS: SiteSymbol[] = [
 		href: '/explore',
 		label: 'search',
 		color: 'var(--ink)',
+		symbol: '/img/symbols/search.svg',
 		chip: 'color-mix(in srgb, var(--ink) 5.8%, var(--paper))',
 		rank: 'tool'
 	},

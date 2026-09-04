@@ -55,6 +55,36 @@ const span = (inner: string): Node => ({
 	value: `<span class="figmark">${inner}</span>`
 });
 
+// The author's `[CHART: name]` on a line of its own (2026-09-04, KEY
+// FINDINGS): the paragraph becomes a block-level placeholder
+// `<div class="chartmark" data-chart="name"></div>` the story page mounts
+// the chart into, full-bleed; tagParagraphs leaves a <div> alone, and
+// content.ts skips the line, so the rendered <p>s still pair 1:1 with the
+// parsed blocks.
+const CHART = /^CHART:\s*([a-z0-9-]+)\s*$/i;
+
+export function chartMarkers() {
+	return (tree: Node) => {
+		tree.children = (tree.children ?? []).map((n): Node => {
+			if (n.type !== 'paragraph' || !n.children || n.children.length !== 1) return n;
+			const only = n.children[0];
+			const label =
+				only.type === 'linkReference' && typeof only.label === 'string'
+					? only.label
+					: only.type === 'text' && typeof only.value === 'string'
+						? only.value.trim().replace(/^\[|\]$/g, '')
+						: null;
+			const m = label ? CHART.exec(label.trim()) : null;
+			if (!m) return n;
+			return {
+				type: 'html',
+				value: `<div class="chartmark" data-chart="${m[1].toLowerCase()}"></div>`,
+				position: n.position
+			};
+		});
+	};
+}
+
 export function figureMarkers() {
 	const walk = (n: Node): void => {
 		if (!n.children) return;

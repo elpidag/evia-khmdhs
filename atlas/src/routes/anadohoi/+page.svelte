@@ -30,7 +30,6 @@
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
 	import type { PageData } from './$types';
-	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -779,7 +778,7 @@
 			burnt public forest land — designated by ministerial act, spending their own money. This
 			page follows all {grInt(k.n_projects)} projects from designation act to (sometimes)
 			completion. Every value links back to the signed PDF —
-			<a href="/methodology#anadohoi">methodology</a>.
+			<a href="/story#methodology">methodology</a>.
 		</p>
 		<!-- the BASIS, said once for the whole page (the Anti-nero copy
 		     doctrine, applied 2026-08-25): the frames below no longer
@@ -788,7 +787,7 @@
 			All sums are the commitments written in the designation acts, not verified spending —
 			net where the act states a VAT basis, never converted; a sponsor promising «τη συνολική
 			χρηματοδότηση» with no figure adds projects but no euros; a superseded restatement is
-			folded into its successor — <a href="/methodology#anadohoi">basis</a>.
+			folded into its successor — <a href="/story#methodology">basis</a>.
 		</p>
 	</div>
 
@@ -1239,7 +1238,6 @@
 </div>
 	{/snippet}
 </DatasetCard>
-<RefreshLine />
 </div>
 
 <style>

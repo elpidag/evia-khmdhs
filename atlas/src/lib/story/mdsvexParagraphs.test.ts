@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { compile } from 'mdsvex';
-import { tagParagraphs, figureMarkers } from '../../../scripts/remark-tag-paragraphs';
+import { tagParagraphs, figureMarkers, chartMarkers } from '../../../scripts/remark-tag-paragraphs';
 import { BLOCKS } from './content';
 import { CHAPTERS } from './chapters';
 
 // the site's own order: the author's plain markers are wrapped first, then a
 // paragraph that begins with a tag gets its <p> back
-const opts = { extensions: ['.md'], remarkPlugins: [figureMarkers, tagParagraphs] };
+// the same chain as vite.config.ts — a `[CHART: …]` line must render as a
+// placeholder div, never as a <p>, or the pairing breaks
+const opts = { extensions: ['.md'], remarkPlugins: [figureMarkers, chartMarkers, tagParagraphs] };
 
 // the author's files, raw — the same glob content.ts reads
 const FILES = import.meta.glob('/src/content/story/*.md', {

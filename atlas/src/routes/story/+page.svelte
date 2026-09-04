@@ -22,6 +22,8 @@
 	import Prose from '$lib/ui/Prose.svelte';
 	import { BRAND } from '$lib/landing/brand';
 	import StoryTimeline from '$lib/story/StoryTimeline.svelte';
+	import ChartBand from '$lib/story/ChartBand.svelte';
+	import { mount, unmount } from 'svelte';
 	import StoryFigure from '$lib/story/StoryFigure.svelte';
 	import StoryNotes from '$lib/story/StoryNotes.svelte';
 	import { EVENTS, type StoryEvent } from '$lib/story/events';
@@ -117,6 +119,15 @@
 	const timelineOn = $derived(
 		!activeSection || activeSection === 'introduction' || activeSection === 'chronology'
 	);
+	/** the methodology, the bibliography and the sources read ALONE: no
+	 *  figure beside them (the one in force is not carried into them) and
+	 *  the text in the middle of the page; KEY FINDINGS keeps its pair with
+	 *  the rail card (the author, 2026-09-04) */
+	const figureOff = $derived(
+		activeSection === 'methodology' ||
+			activeSection === 'bibliography' ||
+			activeSection === 'sources'
+	);
 	/** the timeline SPREADS when the CHRONOLOGY title DOCKS level with the
 	 *  TIMELINE title (the author, 2026-09-02 — not when its first paragraph
 	 *  peeks in at the viewport's bottom), and folds back once the section's
@@ -194,6 +205,64 @@
 		return Math.min(n, 4);
 	});
 
+	/** the KPI cards appear once the KEY FINDINGS title has docked AND the
+	 *  section's first paragraph has reached the top of the column too (the
+	 *  author, 2026-09-04) — the same docking observer as the introduction's */
+	let kfDocked = $state(false);
+	$effect(() => {
+		if (typeof IntersectionObserver === 'undefined') return;
+		const b = BLOCKS.find((x) => x.section === 'keyfindingandopenquestions');
+		const el = b ? document.getElementById(b.id) : null;
+		if (!el) return;
+		const st = Math.round(85 + Math.min(40, Math.max(20, window.innerHeight * 0.037)));
+		const io = new IntersectionObserver(
+			(es) => {
+				for (const e of es) kfDocked = e.boundingClientRect.top <= st + 2;
+			},
+			{ rootMargin: `-${st}px 0px ${st + 4 - window.innerHeight}px 0px`, threshold: 0 }
+		);
+		io.observe(el);
+		return () => io.disconnect();
+	});
+
+	/** the FULL-WIDTH chart in the narrative's flow (the author, 2026-09-04):
+	 *  the author's `[CHART: state-funded]` line renders as a placeholder;
+	 *  the band mounts into it, full-bleed — `--nar-left` (the column's
+	 *  distance from the window's edge) and `--page-w` (the window without
+	 *  its scrollbar) are measured here */
+	let narrativeEl = $state<HTMLElement | null>(null);
+	let narLeft = $state(0);
+	let pageW = $state(0);
+	$effect(() => {
+		const el = narrativeEl;
+		if (!el) return;
+		const measure = () => {
+			narLeft = el.getBoundingClientRect().left;
+			pageW = document.documentElement.clientWidth;
+		};
+		measure();
+		const ro = new ResizeObserver(measure);
+		ro.observe(document.documentElement);
+		const cols = el.parentElement;
+		cols?.addEventListener('transitionend', measure);
+		const tick = setInterval(measure, 700);
+		return () => {
+			ro.disconnect();
+			cols?.removeEventListener('transitionend', measure);
+			clearInterval(tick);
+		};
+	});
+	$effect(() => {
+		const host = narrativeEl?.querySelector<HTMLElement>('.chartmark[data-chart="state-funded"]');
+		if (!host) return;
+		const app = mount(ChartBand, { target: host, props: { c: data.cmp } });
+		// no fading of the rail: the band sits ABOVE the rail in stacking and
+		// simply slides over the sticky cards as the reader scrolls, the way
+		// any content passes a sticky panel (a fade hid the cards at the very
+		// moment they appeared, the band's top being 479 px down at the dock)
+		return () => unmount(app);
+	});
+
 	/** only the footnotes of the paragraphs on screen, in document order */
 	const shownNotes = $derived.by(() => {
 		const out: {
@@ -222,6 +291,26 @@
 	 *  figure column keeps figures only. Collapsed, the intro's own notes
 	 *  wait for stage 2; spread, the visible paragraphs' notes. */
 	let railH = $state(0);
+	let railW = $state(0);
+
+	/** the timeline's FOCUS VIEW (the author, 2026-09-03): a click on the
+	 *  rail opens the whole drawing, enlarged and centred, as the only thing
+	 *  on the page; Esc, the ✕ or the margin closes it, a bullet closes it
+	 *  and goes to the passage. The page behind keeps its scroll. */
+	let tlOpen = $state(false);
+	$effect(() => {
+		if (!tlOpen) return;
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') tlOpen = false;
+		};
+		window.addEventListener('keydown', onKey);
+		const prev = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+		return () => {
+			window.removeEventListener('keydown', onKey);
+			document.body.style.overflow = prev;
+		};
+	});
 	const railNotes = $derived(
 		!timelineOn ? [] : expanded ? shownNotes : introStage >= 2 ? introNotes : []
 	);
@@ -256,12 +345,54 @@
 
 <div class="storyp">
 	<div class="topsent" bind:this={topSentinel} aria-hidden="true"></div>
-	<div class="cols" class:centred={!timelineOn}>
+	{#if tlOpen}
+		<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+		<div
+			class="tlmodal"
+			role="dialog"
+			tabindex="-1"
+			aria-label="the timeline"
+			onclick={(e) => {
+				if (e.target === e.currentTarget) tlOpen = false;
+			}}
+		>
+			<button class="tlclose" type="button" aria-label="close the timeline" onclick={() => (tlOpen = false)}
+				>✕</button
+			>
+			<!-- 130 % of the rail's width (the author, 2026-09-03): wider read
+			     as disproportionate; this shows a bigger span of time at once -->
+			<div class="tlbig" style:width={`${Math.round((railW || 500) * 1.3)}px`}>
+				<StoryTimeline
+					expanded
+					whole
+					maxK={2}
+					{activeIds}
+					onSelect={(ev) => {
+						tlOpen = false;
+						goToEvent(ev);
+					}}
+					note={timelineNote()}
+				/>
+			</div>
+		</div>
+	{/if}
+	<div class="cols" class:centred={!timelineOn} class:solo={figureOff}>
 		<!-- TIMELINE is a grid sibling sticky at the SAME height as the section
 		     titles, so the two columns start aligned; it withdraws with its
 		     rail once the reader leaves the chronology -->
 		<h2 class="head tl-head" class:off={!timelineOn}>TIMELINE</h2>
-		<aside class="rail tl" class:off={!timelineOn} bind:clientHeight={railH}>
+		<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions, a11y_no_noninteractive_element_interactions -->
+		<aside
+			class="rail tl"
+			class:off={!timelineOn}
+			bind:clientHeight={railH}
+			bind:clientWidth={railW}
+			title="click to open the timeline"
+			onclick={(e) => {
+				// the footnotes under the drawing keep their own clicks (links)
+				if (!(e.target as HTMLElement).closest('.tlnb')) tlOpen = true;
+			}}
+		>
 			<StoryTimeline
 				{expanded}
 				{progress}
@@ -278,7 +409,12 @@
 			{/if}
 		</aside>
 
-		<div class="narrative">
+		<div
+			class="narrative"
+			bind:this={narrativeEl}
+			style:--nar-left={`${narLeft}px`}
+			style:--page-w={pageW ? `${pageW}px` : null}
+		>
 			{#each CHAPTERS as c (c.id)}
 				<section class="beat" id={c.id}>
 					<!-- the section announces itself in the flow, docks at the band and
@@ -293,17 +429,18 @@
 			<RefreshLine />
 		</div>
 
-		<aside class="rail fig">
-			{#if kfAt >= 0}
+		<aside class="rail fig" class:off={figureOff}>
+			{#if kfAt > 0 || (kfAt === 0 && kfDocked)}
 				{#key kfAt}
 					<KeyFindings c={data.cmp} i={kfAt} />
 				{/key}
-			{:else if activeSection !== 'bibliography' && activeSection !== 'sources'}
-				<!-- the bibliography stands alone — no figure beside it (author);
-				     while the notes print under the timeline the right column
-				     passes none, and the figure takes the whole height -->
-				<!-- the figure column keeps FIGURES only since the notes moved
-				     left (2026-09-03); StoryFigure's own block lies dormant -->
+			{:else if !figureOff && kfAt < 0}
+				<!-- the methodology, bibliography and sources stand alone — no
+				     figure beside them (author, 2026-09-04); and inside KEY FINDINGS
+				     nothing shows before the cards dock — the chronology's last
+				     figure used to be carried in (author's report, 2026-09-04);
+				     the figure column keeps FIGURES only since the notes moved
+				     left (2026-09-03) -->
 				<StoryFigure {figure} notes={[]} stage={introStage} />
 			{/if}
 		</aside>
@@ -357,6 +494,15 @@
 			minmax(0, 260fr) minmax(0, 56fr) minmax(0, 556fr)
 			minmax(0, 56fr) minmax(0, 540fr);
 		padding-right: 17.713%; /* 316 / 1784 */
+	}
+	/* a section read ALONE (methodology, bibliography, sources — the author,
+	   2026-09-04): the text column in the middle of the page, the rails'
+	   tracks closed — 614 + 556 + 614 = 1784 */
+	.cols.solo {
+		grid-template-columns:
+			minmax(0, 614fr) minmax(0, 0fr) minmax(0, 556fr)
+			minmax(0, 0fr) minmax(0, 614fr);
+		padding-right: 0;
 	}
 	/* the column titles are the dataset card's own name style — the same face,
 	   weight, size ramp, line-height and tracking as «ANTI-NERO PROGRAMME»
@@ -433,9 +579,20 @@
 		flex: none;
 		margin-top: var(--sp-4);
 	}
-	.rail.tl.off {
+	.rail.tl.off,
+	.rail.fig.off {
 		opacity: 0;
 		pointer-events: none;
+	}
+	/* the full-width chart's place in the narrative: as wide as the window
+	   (without its scrollbar), pulled left by the column's own offset; in
+	   stacking ABOVE the rails (no z-index of their own) and BELOW the docked
+	   section titles (z 3) and the TIMELINE head (5) */
+	.narrative :global(.chartmark) {
+		position: relative;
+		z-index: 2;
+		width: var(--page-w, 100vw);
+		margin: var(--sp-6) 0 var(--sp-6) calc(-1 * var(--nar-left, 0px));
 	}
 	.fig {
 		grid-column: 5;
@@ -448,6 +605,11 @@
 		);
 	}
 	.narrative {
+		/* a stacking context ABOVE the rails (which have none): the full-width
+		   chart band inside it must paint over the sticky figure card, and the
+		   rails come later in the DOM (2026-09-04) */
+		position: relative;
+		z-index: 1;
 		grid-column: 3;
 		grid-row: 1;
 		/* the tail that lets the LAST passage reach the reading line */
@@ -512,6 +674,42 @@
 		line-height: 1.5;
 	}
 
+	/* the rail invites the click that opens the focus view */
+	.rail.tl {
+		cursor: zoom-in;
+	}
+	/* the timeline's FOCUS VIEW: the page's paper over everything, header
+	   included, the whole drawing at 130 % of the rail's width, centred,
+	   scrolling inside the view */
+	.tlmodal {
+		position: fixed;
+		inset: 0;
+		z-index: 300;
+		background: var(--paper);
+		overflow: auto;
+		overscroll-behavior: contain;
+		cursor: zoom-out;
+	}
+	.tlbig {
+		max-width: 92vw;
+		margin: 48px auto 64px;
+		cursor: default;
+	}
+	.tlclose {
+		position: fixed;
+		top: 18px;
+		right: 22px;
+		z-index: 301;
+		width: 40px;
+		height: 40px;
+		border: 0;
+		border-radius: 50%;
+		background: var(--ink);
+		color: var(--paper);
+		font-size: 18px;
+		line-height: 1;
+		cursor: pointer;
+	}
 	.bband {
 		position: fixed;
 		left: 0;

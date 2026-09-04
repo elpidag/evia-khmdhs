@@ -1527,9 +1527,13 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   the landing loader (query forms) or the page after hydration (hash
   forms) — `lib/transforms/legacyRoutes.ts`, pinned. **Header** = brand
   on two lines · the FIVE symbols (`lib/datasets.ts:SYMBOLS` — three
-  streams + search/actors; placeholders squares in `DatasetSymbol.svelte`
-  until the user's images; labels the user renames there) · METHODOLOGY;
-  no chrome on `/`. **Geometry = the user's four 1920×1080 SVG
+  streams + search/actors; placeholder squares in `DatasetSymbol.svelte`
+  until the user's images — three arrived 2026-09-04: `coop.svg`,
+  `financed.svg`, `search.svg` under `static/img/symbols/`, declared as
+  `symbol` on their `datasets.ts` entries and drawn as CSS MASKS in the
+  stream's hue on the hub and the cards, the band's lettered squares
+  unchanged; labels the user renames there) · METHODOLOGY;
+  no chrome on `/` — nor on `/data` since 2026-09-04 (the hub carries the brand). **Geometry = the user's four 1920×1080 SVG
   artboards** (fourth round of 2026-08-27, DATA_DECISIONS): every size,
   offset and type setting is the artboard's as a fraction of the frame
   (`clamp(min, vw/vh, artboard px)`), verified by DOM measurement at
@@ -1551,8 +1555,13 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   (`datasets.ts`; the square carries the `short` abbreviation); the landing menu is a full-height square
   flush right with 2 px rules and a «GR / EN» `note` cell; the field is
   12 px Obviously Regular on 14,4 px lines, 25,7 px columns (74 at 1920,
-  pinned), the cell showing the same field. **`/data`** = the hub of symbols. **Each dataset page
-  is a CARD — one viewport** (`ui/DatasetCard.svelte`; `main.card` is
+  pinned), the cell showing the same field. **`/data`** = the hub of symbols (since 2026-09-04: no band, the
+  title 80 px higher and smaller, stream symbols 251 px / tools 132 px,
+  each name in its stream's colour and shown on HOVER only). **Each dataset page
+  is a CARD — one viewport** (`ui/DatasetCard.svelte`; since 2026-09-04 it
+  OPENS with the symbol at TWICE its size and the name on ONE line below
+  it — `intro` state, released by the narrative's first inner scroll,
+  restored at its top; `main.card` is
   window-wide on the three pages): the symbol · name · markdown text ·
   «explore more» in a full-height column left | three `ui/KpiCards`
   across the top right | three `ui/Tile`s in the mock's grid (MAP
@@ -1648,7 +1657,23 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   REGION BY REGION · MONEY PER YEAR; the hero text, the WHERE BOTH FLOWS
   LAND scatter and the full-width coda are GONE (author); past the
   methodology the text and figure columns CENTRE (`.cols.centred`,
-  269 px each side, the grid transition sliding) and the bibliography
+  269 px each side, the grid transition sliding) — and since 2026-09-04
+  the METHODOLOGY, BIBLIOGRAPHY and SOURCES read ALONE (`figureOff` →
+  `.cols.solo`: no figure carried into them, the rail faded, the text
+  column in the middle, 614/556/614; KEY FINDINGS keeps its centred pair); **KEY FINDINGS since 2026-09-04**: the rail's first card = KPI
+  cards in TWO COLUMNS (Anti-nero / co-ops × stated € / contracts —
+  headers on one bottom-aligned row, cards ROW by ROW so the rectangles
+  align, 44 px under the title, 92 px tall; the band carries NO title),
+  shown only once the section's FIRST PARAGRAPH docks (`kfDocked`; before
+  that the rail shows NOTHING — `kfAt < 0` guards the carried figure, which
+  used to appear half-way), and
+  the STATE-FUNDED chart runs ACROSS THE PAGE after that paragraph —
+  the author's `[CHART: state-funded]` line → `chartMarkers` remark
+  plugin → `div.chartmark` placeholder → `ChartBand.svelte` mounted
+  into it (`mount`), full-bleed via measured `--nar-left`/`--page-w`,
+  the narrative column at z 1 so the band paints over the sticky rail
+  and under the docked titles; content.ts skips the marker line and
+  `mdsvexParagraphs.test` runs the same plugin chain as the build and the bibliography
   sets at 13 px under the 16 px prose — plus, since 2026-08-29, EVERY CONTRACT, BY THE DAY IT WAS SIGNED (`charts/SignedTimeline.svelte`: the STATE-FUNDED dots on one time axis, Anti-nero above in ink, co-ops below in green, fire seasons shaded, `dots.d` on `/api/compare`);
   `/compare` → 308 `/story`, fragments survive). **`/story` is a THREE-COLUMN
   SCROLL NARRATIVE since 2026-09-01** (the author's two 1920×1080 artboards;
@@ -1804,9 +1829,34 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   a bar under a fitting two-line caption through Chrome's rounding of
   16,2 px lines; the user, same day, on figure 23's caption).
   Pinned by `captions.test.ts`. StoryFigure
-  is a single live block now (figure + notes props). Still to come: the
-  images of figures 05-10 and 12 (01 grid, 02 pair, 03, 11, 13 are
-  DELIVERED — `lib/story/figureImages.ts` + `figureImages.test.ts`,
+  is a single live block now (figure + notes props). Every figure is in place — 04 and 10 LIVE (10 = the CONTRACT TYPE
+  bars WITH the frame's title — in the CAPTION's type, story only — and
+  its `?ct=` lens toggle, smaller, no credit line, `figures/ContractType.svelte` through the SHARED
+  `transforms/categoryRows.ts` the Anti-nero frame uses too, `frame:
+  'auto'` for a slot of the drawing's own height), the rest images
+  (`scale: 0.85` draws 05 and 08 at 85 % of the slot, the caption then
+  no wider than the image and under it): 01 grid, 02 and 07 as CAROUSELS
+  (`kind: 'pair'`), **06 as an image SLIDER** (`kind: 'slider'` —
+  the second map underneath, the first left of a draggable handle; a
+  transparent range input does the drag; a ⤢ corner button opens it
+  ENLARGED and centred over the whole page, the handle shared both
+  ways, the view PORTALED to <body> with its click/input wired in the
+  action because Svelte 5's delegated events never reach a node moved
+  out of the app root — with `lift: true`, the one block that starts at
+  the column's TOP so its long caption gets the room, DATA_DECISIONS
+  2026-09-03 and 09-04), 03, 05, 08, 09, 11, 12, 13 single.
+  **NO WHITE FILLER** (author, the same evening): an image box is the
+  image's own size (`.box.natural` — the image shrinks into the 540
+  square keeping its shape, the box wraps it, the caption 7 px under
+  the image itself; carousel and slider in wrappers of the image's
+  size). **The timeline is a click target**: the rail opens the whole
+  drawing as the ONLY thing on the page (`.tlmodal`, z 300 over the
+  header, `StoryTimeline whole` — the box as tall as the drawing, no
+  pan — at 130 % of the RAIL's width (650 on the 500 rail, k 1,25;
+  wider read as disproportionate), scrolling inside; Esc / ✕ / margin
+  close, a bullet closes and goes to its passage; the footnotes under
+  the rail keep their links)
+  (all — `lib/story/figureImages.ts` + `figureImages.test.ts`,
   derivatives via `scripts/build_story_images.py`, originals gitignored;
   figure 01 is the author's SIX-BY-THREE grid of 18 numbered images
   filling the right column, whose room comes from notes 1-2 moving to the
@@ -1823,8 +1873,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   is the registry of live figures keyed by the author's own figure number
   (component + credit line; `figures.test.ts` pins each key to an existing
   marker and marker 4's name), `StoryFigure` mounts the registered component
-  inside its `{#key figure.n}` and prints the credit under the author's
-  caption. Figure 04 = `lib/story/figures/AlertsMap.svelte` + `alertsDraw.ts`:
+  inside its `{#key figure.n}` and prints a `credit` under the author's
+  caption where a figure declares one — none does since 2026-09-04: the
+  112 map's attributions (`ALERTS_CREDIT`, pinned) are the SOURCES
+  section's to print, a licence obligation (EOxCloudless is CC BY-NC-SA). Figure 04 = `lib/story/figures/AlertsMap.svelte` + `alertsDraw.ts`:
   the 75 «112» alerts of August 2021 on ONE fixed national satellite frame
   (`transforms/alertsFrame.ts` box `[[19.5,34.7],[28.6,41.8]]`, plate baked
   for the fitted square's inverted corners — the relief's alignment contract
@@ -2177,7 +2229,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   /dase — each has its own `.basis` line and the frames' bulbs/caveats/ⓘ
   were re-sorted to it.
   Findings pinned in `test_front_page_findings`.
-- **`/methodology` is the author's own text since 2026-08-29** (DATA_DECISIONS):
+- **`/methodology` FORWARDS to `/story#methodology` since 2026-09-04** (author: the
+  methodology is the story's own section; every link on the site points there,
+  the old address 308s, the page component stays parked for the anchor tests).
+  Until then **`/methodology` was the author's own text since 2026-08-29** (DATA_DECISIONS):
   four sections written for the MA report and copied VERBATIM — Sourcing and
   organisation of the data (`sources`) · Document analysis and validation
   (`validation`) · Analytical conventions (`conventions`) · Limitations, ethics
@@ -2190,7 +2245,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   the four sections**: corrections are proposed to the author, who accepts or
   declines. Every figure prints from `/api/meta` `facts` (the page states no
   number of its own); the refresh date closes the five dataset pages via
-  `ui/RefreshLine.svelte`. `tests/test_methodology_anchors.py` fails on a link
+  `ui/RefreshLine.svelte` — on the three CARDS since 2026-09-04 as a
+  `compact` line beside the «explore more» pill (`DatasetCard .foot`), so
+  the card never scrolls; the expanded `#more` page keeps the full line. `tests/test_methodology_anchors.py` fails on a link
   into a missing id, on a hard-coded figure in the prose, and above 2.900 words.
 - **API endpoints** under `/api/{meta,antinero/*,dase/*,anadohoi/*,explore,
   compare,connections,authorities,authority/<slug>}` (no `arogi` since

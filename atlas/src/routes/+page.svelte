@@ -172,7 +172,7 @@
 <noscript>
 	<p class="noscript">
 		<a href="/story">Start here</a> · <a href="/data">Explore the data</a> ·
-		<a href="/methodology">Methodology</a>
+		<a href="/story#methodology">Methodology</a>
 	</p>
 </noscript>
 

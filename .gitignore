@@ -101,3 +101,5 @@ data/processed/diavgeia_harvest_*.json
 # serves only the small .webp derivatives built by scripts/build_story_images.py
 atlas/static/img/story/Figure*.png
 atlas/static/img/story/figure01/
+# the author's full-size story originals stay out; only the .webp derivatives ship
+atlas/static/img/story/*.png

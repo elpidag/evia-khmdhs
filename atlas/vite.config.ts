@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 import adapter from '@sveltejs/adapter-node';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
-import { tagParagraphs, figureMarkers } from './scripts/remark-tag-paragraphs';
+import { tagParagraphs, figureMarkers, chartMarkers } from './scripts/remark-tag-paragraphs';
 
 export default defineConfig({
 	plugins: [
@@ -14,7 +14,7 @@ export default defineConfig({
 			// they hide in the prose; tagParagraphs restores the <p> around a
 			// paragraph that begins with a tag — scripts/remark-tag-paragraphs.ts
 			preprocess: [
-				mdsvex({ extensions: ['.md'], remarkPlugins: [figureMarkers, tagParagraphs] })
+				mdsvex({ extensions: ['.md'], remarkPlugins: [figureMarkers, chartMarkers, tagParagraphs] })
 			],
 			compilerOptions: {
 				// Force runes mode for the project, except for libraries. Can be removed in svelte 6.

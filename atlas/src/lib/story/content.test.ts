@@ -15,11 +15,11 @@ describe("the story's paragraph blocks (the author's own files)", () => {
 		expect(figs).toEqual(Array.from({ length: 13 }, (_, i) => i + 1));
 	});
 
-	it("carry the document's 18 footnotes, referenced once each, in order", () => {
+	it("carry the document's 19 footnotes, referenced once each, in order", () => {
 		const sups = BLOCKS.flatMap((b) => b.sups);
-		expect(sups).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
+		expect(sups).toEqual(Array.from({ length: 19 }, (_, i) => i + 1));
 		for (const n of sups) expect(NOTES.get(n)?.parts.length, `note ${n}`).toBeTruthy();
-		expect(NOTES.size).toBe(18);
+		expect(NOTES.size).toBe(19);
 	});
 
 	it('strip their markup: no tags, markers or clamped whitespace in the match text', () => {
@@ -54,17 +54,18 @@ describe("the story's paragraph blocks (the author's own files)", () => {
 		expect(NOTES.get(2)!.parts).toHaveLength(1);
 		expect(NOTES.get(2)!.parts[0].href).toBeUndefined();
 		// «see here: URL» reads as a clean link
-		expect(NOTES.get(8)!.parts[0].text).toBe('For more information, see here');
+		expect(NOTES.get(9)!.parts[0].text).toBe('For more information, see here');
 		// a long note ending in one citation links only its «see:» tail
-		// (the author, 2026-09-02, on note 6)
-		const n6 = NOTES.get(6)!.parts;
+		// (the author, 2026-09-02, on note 6 — note 7 since the field-visit
+		// note of 2026-09-03 became 5)
+		const n6 = NOTES.get(7)!.parts;
 		expect(n6).toHaveLength(2);
 		expect(n6[0].href).toBeUndefined();
 		expect(n6[0].text.includes('in spatial planning in Greece')).toBe(true);
 		expect(n6[1].text.startsWith('see: Loukas Triantis')).toBe(true);
 		expect(n6[1].href).toContain('doi.org/10.15488/18216');
 		// the two-source notes carry TWO links, each on its own citation
-		for (const nn of [13, 14]) {
+		for (const nn of [14, 15]) {
 			const links = NOTES.get(nn)!.parts.filter((p) => p.href);
 			expect(links, `note ${nn}`).toHaveLength(2);
 			for (const p of links) expect(p.text.length).toBeGreaterThan(20);

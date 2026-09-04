@@ -11,8 +11,7 @@
 	import BarH from '$lib/charts/BarH.svelte';
 	import CompareHist from '$lib/charts/CompareHist.svelte';
 	import PairedBars from '$lib/charts/PairedBars.svelte';
-	import StateFunded from '$lib/charts/StateFunded.svelte';
-	import SignedTimeline from '$lib/charts/SignedTimeline.svelte';
+		import SignedTimeline from '$lib/charts/SignedTimeline.svelte';
 	import KpiCards from '$lib/ui/KpiCards.svelte';
 	import { eur, eurShort, grInt, grNumber } from '$lib/transforms/format';
 	import type { ComparePayload } from '$lib/api';
@@ -30,27 +29,20 @@
 		});
 		return { year: c.years[bi], eur: vals[bi] || 0 };
 	};
-	const cards = $derived([
-		{
-			num: eurShort(c.antinero.total_eur).toLowerCase(),
-			label: `Anti-nero — ${grInt(c.antinero.n_contracts)} contracts, median ${eurShort(c.antinero.median_eur).toLowerCase()}`,
-			color: 'var(--c-antinero)'
-		},
-		{
-			num: eurShort(c.dase.total_eur).toLowerCase(),
-			label: `forest co-ops — ${grInt(c.dase.n_contracts)} contracts, median ${eur(c.dase.median_eur)}`,
-			color: 'var(--c-dase)'
-		},
-		{
-			num: `${grNumber(c.ratio, 1)}×`,
-			label: `the size of the gap, stated to stated — ≈${grInt(Math.round(c.antinero.median_eur / c.dase.median_eur))}× at the median`,
-			color: 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))'
-		},
-		{
-			num: grInt(c.pipelines.vat_overlap.length),
-			label: `companies in both datasets — ${grInt(c.pipelines.antinero.n_vats + c.pipelines.dase.n_vats)} entities, no shared ΑΦΜ`,
-			color: 'color-mix(in srgb, var(--ink) 65.5%, var(--paper))'
-		}
+	/** the KPI cards as the author set them (2026-09-04): TWO COLUMNS — the
+	 *  Anti-nero programme and the forest workers' co-operatives — each with
+	 *  its stated money and its number of contracts */
+	const A = 'var(--c-antinero)';
+	const D = 'var(--c-dase)';
+	/** by ROW, so the two columns' rectangles align whatever their headers'
+	 *  line count: the money row, then the contracts row */
+	const kpiMoney = $derived([
+		{ num: eurShort(c.antinero.total_eur).toLowerCase(), label: 'stated value, excl. VAT', color: A },
+		{ num: eurShort(c.dase.total_eur).toLowerCase(), label: 'stated value, excl. VAT', color: D }
+	]);
+	const kpiCount = $derived([
+		{ num: grInt(c.antinero.n_contracts), label: 'contracts', color: A },
+		{ num: grInt(c.dase.n_contracts), label: 'contracts', color: D }
 	]);
 	/** EVERY CONTRACT BY THE DAY IT WAS SIGNED — the frame's own facts,
 	 *  computed from the dots (2026-08-29): how much of each programme is
@@ -87,20 +79,21 @@
 
 <div class="cmpp">
 	{#if i <= 0}
+		<!-- the STATE-FUNDED chart left this card for the full-width band in
+		     the narrative (ChartBand.svelte, the author, 2026-09-04) -->
 		<div class="item" id="pipelines">
-			<div class="cards"><KpiCards {cards} /></div>
-			<h3 class="tt">STATE-FUNDED, TWO WORLDS</h3>
-			<StateFunded
-				dots={c.dots}
-				nCompanies={c.pipelines.antinero.n_vats}
-				nCoops={c.pipelines.dase.n_vats}
-			/>
-			<p class="note">
-				Zero shared companies: {grInt(c.pipelines.antinero.n_vats)} Anti-nero contractors and {grInt(
-					c.pipelines.dase.n_vats
-				)} co-op-side entities ({grInt(c.pipelines.dase_n_coops)} of them curated co-operatives), and
-				not one ΑΦΜ appears on both sides.
-			</p>
+			<!-- headers on one row (bottom-aligned, so a two-line name never
+			     pushes its column's cards down), then the cards ROW by ROW —
+			     a little below the section title, a little smaller (the author,
+			     2026-09-04) -->
+			<div class="kgrid">
+				<div class="kheads">
+					<h3 class="tt">ANTI-NERO PROGRAMME</h3>
+					<h3 class="tt">FOREST WORKERS' CO-OPERATIVES</h3>
+				</div>
+				<KpiCards cards={kpiMoney} />
+				<KpiCards cards={kpiCount} />
+			</div>
 		</div>
 	{:else if i === 1}
 		<div class="item" id="signed-timeline">
@@ -193,9 +186,27 @@
 		flex-direction: column;
 		gap: var(--sp-3);
 	}
-	.cards :global(.cards) {
-		grid-auto-flow: row;
+	.kgrid {
+		display: flex;
+		flex-direction: column;
+		gap: var(--sp-3);
+		/* below the docked section title's line, not level with it */
+		margin-top: 44px;
+	}
+	.kheads {
+		display: grid;
 		grid-template-columns: 1fr 1fr;
+		gap: var(--sp-4);
+		align-items: end;
+	}
+	/* the rectangles a little smaller than the site's KPI cards */
+	.kgrid :global(.card) {
+		min-height: 5.75rem;
+		padding: var(--sp-3) var(--sp-4);
+		gap: var(--sp-3);
+	}
+	.kgrid :global(.num) {
+		font-size: var(--fs-34);
 	}
 	.tt {
 		margin: 0;

@@ -34,6 +34,10 @@
 		src?: string | null;
 	} = $props();
 	const s = $derived(symbolFor(key));
+	/** the author's symbol where one exists (the co-op's since 2026-09-04),
+	 *  on every surface but the header band, which keeps its lettered
+	 *  squares for now; an explicit `src` wins */
+	const image = $derived(src ?? (band ? null : (s.symbol ?? null)));
 	const css = $derived(typeof size === 'number' ? `${size}px` : size);
 	const text = $derived(s.short ?? s.label);
 	/** white on a dark tone, black on a light one — the chip tones are CSS
@@ -50,14 +54,17 @@
 	class:active
 	class:named
 	class:band
+	class:logo={!!image}
 	style:--sym-color={band ? s.chip : s.color}
 	style:--sym-ink={ink}
 	style:--sym-fs={fs}
 	style:--sym-size={css}
 	aria-hidden={named || labelled ? undefined : true}
 >
-	{#if src}
-		<img {src} alt="" />
+	{#if image}
+		<!-- the symbol as a MASK, so it prints in the stream's hue and follows
+		     the Theme Lab; the mask keeps the drawing's own proportions -->
+		<span class="glyph" style:--sym-img={`url(${image})`}></span>
 	{:else if labelled}
 		<span class="ph name">{text}</span>
 	{:else if named}
@@ -78,11 +85,29 @@
 		color: var(--sym-color);
 		flex: none;
 		overflow: hidden;
-		transition: background 0.15s ease;
+		/* width/height follow the card's opening-to-reading change */
+		transition:
+			background 0.15s ease,
+			width 0.45s ease,
+			height 0.45s ease;
 	}
 	.sym.active {
 		background: var(--sym-color);
 		color: var(--paper);
+	}
+	/* a drawn symbol: no square, no border - the glyph alone */
+	.sym.logo,
+	.sym.logo.active {
+		border: 0;
+		background: none;
+	}
+	.glyph {
+		display: block;
+		width: 100%;
+		height: 100%;
+		background: var(--sym-color);
+		-webkit-mask: var(--sym-img) center / contain no-repeat;
+		mask: var(--sym-img) center / contain no-repeat;
 	}
 	/* the band's form: a solid tile of the tone, no border */
 	.sym.band {
@@ -98,12 +123,6 @@
 		box-shadow:
 			0 0 0 2px #000,
 			0 0 0 4px #fff;
-	}
-	.sym img {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
 	}
 	/* the artboards set the placeholder in Obviously Condensed Bold at
 	   ~a fifth of the square (36 px in the hub's 186) */

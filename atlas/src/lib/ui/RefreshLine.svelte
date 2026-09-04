@@ -7,6 +7,9 @@
 	 * line at the end of the page's own content, not a footer returning.
 	 */
 	import { page } from '$app/state';
+	/** `compact`: one small inline line beside the card's «explore more»
+	 *  pill (the author, 2026-09-04) — no rule above, no margins */
+	let { compact = false }: { compact?: boolean } = $props();
 	const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
 		'August', 'September', 'October', 'November', 'December'];
 	const refreshed = $derived.by(() => {
@@ -18,9 +21,9 @@
 </script>
 
 {#if refreshed}
-	<p class="refreshed">
+	<p class="refreshed" class:compact>
 		Records last refreshed on {refreshed} ·
-		<a href="/methodology">how these figures are made</a>
+		<a href="/story#methodology">how these figures are made</a>
 	</p>
 {/if}
 
@@ -35,5 +38,12 @@
 	}
 	.refreshed a {
 		color: inherit;
+	}
+	.refreshed.compact {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: var(--fs-12);
+		line-height: 1.3;
 	}
 </style>

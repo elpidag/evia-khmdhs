@@ -37,8 +37,8 @@
 			{#each streams as s (s.key)}
 				<li>
 					<a href={s.href}>
-						<DatasetSymbol key={s.key} size="clamp(110px, 9.7vw, 186px)" named />
-						<span class="label">{s.label}</span>
+						<DatasetSymbol key={s.key} size="clamp(150px, 13.1vw, 251px)" named />
+						<span class="label" style:color={s.color}>{s.label}</span>
 					</a>
 				</li>
 			{/each}
@@ -48,8 +48,8 @@
 			{#each tools as s (s.key)}
 				<li>
 					<a href={s.href}>
-						<DatasetSymbol key={s.key} size="clamp(60px, 5.1vw, 98px)" named />
-						<span class="label">{s.label}</span>
+						<DatasetSymbol key={s.key} size="clamp(80px, 6.9vw, 132px)" named />
+						<span class="label" style:color={s.color}>{s.label}</span>
 					</a>
 				</li>
 			{/each}
@@ -67,7 +67,9 @@
 		min-height: calc(100dvh - var(--header-h, 85px));
 		margin: calc(-1 * var(--card-pad-t, 0px)) calc(-1 * var(--card-pad-r, 0px))
 			calc(-1 * var(--card-pad-b, 0px)) calc(-1 * var(--card-pad-l, 0px));
-		padding: 12.5vh 11.46vw 4vh 5.73vw;
+		/* the title 80 px higher than the artboard's cap line, and smaller
+		   (the author, 2026-09-04) */
+		padding: max(24px, calc(12.5vh - 80px)) 11.46vw 4vh 5.73vw;
 		box-sizing: border-box;
 	}
 	.centre {
@@ -89,13 +91,13 @@
 	.l1 {
 		font-family: var(--font-display-narrow);
 		font-weight: 900;
-		font-size: clamp(36px, 3.75vw, 72px);
+		font-size: clamp(27px, 2.8vw, 54px);
 		letter-spacing: 0.05em;
 	}
 	.l2 {
 		font-family: var(--font-display-narrow);
 		font-weight: 500;
-		font-size: clamp(24px, 2.5vw, 48px);
+		font-size: clamp(18px, 1.875vw, 36px);
 		letter-spacing: 0.26em;
 	}
 	.centre .caption :global(.prose),
@@ -132,18 +134,26 @@
 		color: var(--ink);
 	}
 	.rank.streams a {
-		max-width: clamp(110px, 9.7vw, 186px);
+		max-width: clamp(150px, 13.1vw, 251px);
 	}
 	.rank.tools a {
-		max-width: clamp(60px, 5.1vw, 98px);
+		max-width: clamp(80px, 6.9vw, 132px);
 		gap: 10px;
 	}
+	/* the name in the stream's own colour, shown on HOVER only (the author,
+	   2026-09-04) — kept in the layout, so nothing moves when it appears */
 	.label {
 		font-family: var(--font-display-cond);
 		font-weight: 700;
 		font-size: clamp(14px, 1.25vw, 24px);
 		text-align: center;
 		line-height: 1.2;
+		opacity: 0;
+		transition: opacity 0.25s ease;
+	}
+	.rank a:hover .label,
+	.rank a:focus-visible .label {
+		opacity: 1;
 	}
 	/* a short window: the artboard's vertical gaps tighten so the hub still
 	   composes one viewport (it ran 19 px over at 1280×720) */

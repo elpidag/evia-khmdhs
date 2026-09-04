@@ -370,7 +370,7 @@
 <section class="plain">
 	<h2 class="withhint">
 		Timeline<Hint text={barNote} width="21rem" up heading />
-		<a class="mth" href="/methodology#validation">Methodology</a>
+		<a class="mth" href="/story#methodology">Methodology</a>
 	</h2>
 	<div class="tlrow">
 		<ChainTimeline

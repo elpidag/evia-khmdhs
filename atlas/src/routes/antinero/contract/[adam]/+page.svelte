@@ -909,7 +909,7 @@
 	     the right of it, clear of the chart it explains (user, 2026-08-20) -->
 	<h2 class="withhint">
 		Timeline<Hint text={barNote} width="21rem" up heading />
-		<a class="mth" href="/methodology#validation">Methodology</a>
+		<a class="mth" href="/story#methodology">Methodology</a>
 	</h2>
 	<div class="tlrow">
 		<ChainTimeline
