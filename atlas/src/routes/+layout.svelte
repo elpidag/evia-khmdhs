@@ -247,6 +247,15 @@
 	/* the story is the author's 1920 artboard: three columns across the window,
 	   letterboxed above 1920 so the reading measure never grows past its design
 	   (the middle column is 556 px of 16 px type — about 69 characters) */
+	/* the story never grows a horizontal scrollbar: its full-bleed bands
+	   reach the window's edges by measured widths, and a sub-pixel
+	   overshoot on a fractional device scale was enough for one — which
+	   put the fixed bottom band and the 100dvh-sized rails out of step
+	   (2026-09-18). `clip`, not `hidden`: hidden would make the root a
+	   scroll container and unstick the rails */
+	:global(html:has(main.story)) {
+		overflow-x: clip;
+	}
 	main.story {
 		--header-h: 85px;
 		--story-pad-b: clamp(12px, 1.85vh, 20px);

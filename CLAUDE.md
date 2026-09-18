@@ -1924,7 +1924,14 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   scroller: `class:scrolls` switches on only when the text's own
   measured height exceeds the room, because `overflow: auto` alone grew
   a bar under a fitting two-line caption through Chrome's rounding of
-  16,2 px lines; the user, same day, on figure 23's caption).
+  16,2 px lines; the user, same day, on figure 23's caption — and since
+  2026-09-18 the IMAGE GIVES WAY first: its height is capped at the
+  column less the caption's own height up to a 45 % share (`--img-cap`,
+  the square live box's width too), the 60 px drop shrinks to 0 as the
+  room runs out (`--drop`), and a scroller SHOWS its scroll — a thin
+  coloured bar plus a sticky in-flow fade at the bottom edge — on a
+  745 px window the full-size image had left the caption's box past the
+  column's bottom, read as text cut off; DATA_DECISIONS that day).
   Pinned by `captions.test.ts`. StoryFigure
   is a single live block now (figure + notes props). Every figure is in place — 04 and 10 LIVE (10 = the CONTRACT TYPE
   bars WITH the frame's title — in the CAPTION's type, story only — and
@@ -1952,7 +1959,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   pan — at 130 % of the RAIL's width (650 on the 500 rail, k 1,25;
   wider read as disproportionate), scrolling inside; Esc / ✕ / margin
   close, a bullet closes and goes to its passage; the footnotes under
-  the rail keep their links)
+  the rail keep their links; the reading paragraph's notes may stretch
+  the block to 60 % of the rail since 2026-09-18 — `budgetMax`, the
+  stacks keep 44 % — its flow showing the same bar and fade, and the
+  notes follow the reading line past the introduction before the
+  timeline spreads)
   (all — `lib/story/figureImages.ts` + `figureImages.test.ts`,
   derivatives via `scripts/build_story_images.py`, originals gitignored;
   figure 01 is the author's SIX-BY-THREE grid of 18 numbered images
@@ -2035,7 +2046,14 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   next (pure CSS; the band keeps only TIMELINE; the `::after` four-track
   paper and the topmost-visible logic are gone); a **48 px breathing band**
   (`--story-band`, fixed `.bband` paper) ends every column short of the
-  window edge, the rails subtracting it; and the footnotes present ON THE TIMELINE COLUMN'S LOWER PART since 2026-09-03 (`StoryNotes.svelte`, a 44%-of-rail budget, the timeline flexing above; StoryFigure's own block lies dormant with `notes={[]}`) — the block admits
+  window edge, the rails subtracting it — the band's TOP is
+  `calc(100dvh − band)` since 2026-09-18, the rails' bottom by
+  construction, and the story clips sideways overflow
+  (`html:has(main.story) { overflow-x: clip }`): a horizontal scrollbar
+  had put `bottom: 0` above the scrollbar while 100dvh counted its
+  strip, hiding the rails' last line under the band on the author's
+  screen (DATA_DECISIONS that day; Playwright draws no scrollbars —
+  `ignore_default_args=['--hide-scrollbars']` to see them); and the footnotes present ON THE TIMELINE COLUMN'S LOWER PART since 2026-09-03 (`StoryNotes.svelte`, a 44%-of-rail budget, the timeline flexing above; StoryFigure's own block lies dormant with `notes={[]}`) — the block admits
   **WHOLE NOTES ONLY, PACKED BY NOTE** — measured in a hidden column-width
   copy, admitted nearest-to-the-reading-line first (`dist` rides on each
   note) by TRUE FIT since the 2026-09-02 refit (a note that cannot fit is

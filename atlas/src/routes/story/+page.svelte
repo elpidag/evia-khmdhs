@@ -379,8 +379,18 @@
 			document.body.style.overflow = prev;
 		};
 	});
+	// the reading line past the introduction shows the visible paragraphs'
+	// notes even before the timeline spreads — notes 3 and 4 went missing
+	// at their own paragraphs while the chronology title was still
+	// travelling to its dock (2026-09-18)
 	const railNotes = $derived(
-		!timelineOn ? [] : expanded ? shownNotes : introStage >= 2 ? introNotes : []
+		!timelineOn
+			? []
+			: expanded || (activeSection && activeSection !== 'introduction')
+				? shownNotes
+				: introStage >= 2
+					? introNotes
+					: []
 	);
 
 	/** the events the active paragraph names — lit on the timeline */
@@ -472,7 +482,13 @@
 			{#if railNotes.length}
 				<!-- the footnotes, on the timeline's lower part (the author) -->
 				<div class="tlnb">
-					<StoryNotes notes={railNotes} budget={(railH || 0) * 0.44} />
+					<!-- the stacks take 44 % of the rail; the reading paragraph's own
+					     notes may stretch to 60 % when they do not fit (2026-09-18) -->
+					<StoryNotes
+						notes={railNotes}
+						budget={(railH || 0) * 0.44}
+						budgetMax={(railH || 0) * 0.6}
+					/>
 				</div>
 			{/if}
 		</aside>
@@ -856,7 +872,12 @@
 		position: fixed;
 		left: 0;
 		right: 0;
-		bottom: 0;
+		/* the band's TOP is the rails' bottom by construction — the same
+		   100dvh the rails subtract from. `bottom: 0` sat above a horizontal
+		   scrollbar while 100dvh counted the scrollbar's strip, and the
+		   rails' last line hid under the band (the author's screen,
+		   2026-09-18) */
+		top: calc(100dvh - var(--story-band, 48px));
 		height: var(--story-band, 48px);
 		background: var(--paper);
 		z-index: 40;

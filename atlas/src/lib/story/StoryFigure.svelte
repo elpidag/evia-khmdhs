@@ -146,26 +146,50 @@
 	 * image, the gap under it and a live figure's credit line. Measured
 	 * live, so a window resize or a taller image re-fits it.
 	 */
-	const CENTRE_DROP = 60; // the .stack transform below
+	const CENTRE_DROP = 60; // the .stack's drop when everything fits under it
 	const CAP_GAP = 7; // .cap margin-top
 	const CREDIT_GAP = 2; // .credit margin-top
 	const CAP_MIN = 34; // two lines at fs-12/1.35: never less than that
+	/** the most of the column a caption may take before it scrolls — the
+	 *  image gives way down to the rest (the author, 2026-09-18: on a
+	 *  745 px window the full-size image left the caption's box past the
+	 *  column's bottom, read as text cut off) */
+	const CAP_SHARE = 0.45;
+	const IMG_MIN = 120; // an image never shrinks past this
 	let stackH = $state(0);
 	let boxH = $state(0);
 	let creditH = $state(0);
-	const hasCredit = $derived(Boolean(figure && FIGURES[figure.n]?.credit));
-	const capMax = $derived.by(() => {
-		if (!stackH || !boxH) return null;
-		// a lifted block starts at the top: the whole column below the image
-		const drop = lifted ? 0 : CENTRE_DROP;
-		const room = stackH - 2 * drop - boxH - CAP_GAP - (hasCredit ? creditH + CREDIT_GAP : 0);
-		return Math.max(CAP_MIN, Math.floor(room));
-	});
 	/** the caption's text at its natural height — the scroll switches on
 	 *  ONLY when that exceeds the room. (`overflow: auto` alone grew a bar
 	 *  under a two-line caption that fit: 16,2 px lines make a 32,4 px
 	 *  block, and Chrome's rounding read it as overflowing itself.) */
 	let capH = $state(0);
+	const hasCredit = $derived(Boolean(figure && FIGURES[figure.n]?.credit));
+	const creditRoom = $derived(hasCredit ? creditH + CREDIT_GAP : 0);
+	/** the IMAGE's height cap: the column less the caption's own height
+	 *  (up to its share) — a px value the CSS reads as `--img-cap`; the
+	 *  measured box then follows it, so nothing below depends on itself */
+	const imgCap = $derived.by(() => {
+		if (!stackH) return null;
+		const budget = Math.max(CAP_MIN, Math.floor(stackH * CAP_SHARE));
+		const want = Math.min(capH || 0, budget);
+		return Math.max(IMG_MIN, Math.floor(stackH - CAP_GAP - creditRoom - want));
+	});
+	/** the room under the image with no drop at all */
+	const room0 = $derived(stackH && boxH ? stackH - boxH - CAP_GAP - creditRoom : 0);
+	/** the block's drop: the artboard's 60 px while the whole caption
+	 *  still fits under it, less as the room runs out, none when the
+	 *  caption needs it all (a lifted block: none) */
+	const drop = $derived.by(() => {
+		if (lifted) return 0;
+		if (!stackH || !boxH) return CENTRE_DROP;
+		const shown = Math.min(capH, Math.max(0, room0));
+		return Math.max(0, Math.min(CENTRE_DROP, Math.floor((room0 - shown) / 2)));
+	});
+	const capMax = $derived.by(() => {
+		if (!stackH || !boxH) return null;
+		return Math.max(CAP_MIN, Math.floor(room0 - 2 * drop));
+	});
 	const scrolls = $derived(capMax !== null && capH > capMax);
 
 	/**
@@ -300,7 +324,14 @@
 		</div>
 	{/if}
 	<!-- every figure on ONE placement: centred 60 px low, caption 7 px under -->
-	<div class="stack" class:lifted style:--img-scale={img?.scale ?? null} bind:clientHeight={stackH}>
+	<div
+		class="stack"
+		class:lifted
+		style:--img-scale={img?.scale ?? null}
+		style:--drop="{drop}px"
+		style:--img-cap={imgCap !== null ? `${imgCap}px` : null}
+		bind:clientHeight={stackH}
+	>
 		<div class="box" class:gridbox={img?.kind === 'grid'} class:natural bind:clientHeight={boxH}>
 			{#if figure}
 				{#key figure.n}
@@ -432,7 +463,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		transform: translateY(60px);
+		transform: translateY(var(--drop, 60px));
 	}
 	/* a lifted figure starts at the column's top (figure 23: the caption
 	   needs the room below — the author, 2026-09-03) */
@@ -455,6 +486,11 @@
 		aspect-ratio: auto;
 		background: none;
 	}
+	/* the artboard's square gives way to its caption on a short window:
+	   as wide as the image cap is tall (2026-09-18) */
+	.box:not(.natural):not(.gridbox) {
+		width: min(var(--fig-w), var(--img-cap, 9999px));
+	}
 	/* an image box is the image's own size: the image shrinks into the
 	   540 square keeping its shape, and the box wraps it — no paper bars */
 	.box.natural {
@@ -473,7 +509,7 @@
 		max-width: calc(100% * var(--img-scale, 1));
 		/* the artboard's square as the height cap, in px: a percentage
 		   height against an auto-height box would resolve to nothing */
-		max-height: calc(540px * var(--img-scale, 1));
+		max-height: min(calc(540px * var(--img-scale, 1)), var(--img-cap, 9999px));
 	}
 	.carousel {
 		position: relative;
@@ -684,7 +720,25 @@
 	.cap.scrolls {
 		overflow-y: auto;
 		overscroll-behavior: contain;
+		/* the scroll is SHOWN (the author, 2026-09-18: the overlay bar
+		   Chrome hides until a hover read as text cut off): a thin bar in
+		   the ink's faint tone, and a fade at the bottom edge that sits
+		   over the text until the last line is reached */
 		scrollbar-width: thin;
+		scrollbar-color: var(--ink-faint) transparent;
+		scrollbar-gutter: stable;
+	}
+	/* the fade is IN FLOW at the end of the text: while there is more
+	   below it sticks to the box's bottom edge over the text, and at the
+	   end of the scroll it sits under the last line, never over it */
+	.cap.scrolls::after {
+		content: '';
+		position: sticky;
+		bottom: 0;
+		display: block;
+		height: 18px;
+		background: linear-gradient(to bottom, transparent, var(--paper));
+		pointer-events: none;
 	}
 	/* an extensive caption may run to several paragraphs (the author writes
 	   them as blank lines in captions.md) */

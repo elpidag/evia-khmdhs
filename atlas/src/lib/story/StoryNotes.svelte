@@ -14,10 +14,14 @@
 	 */
 	interface Props {
 		notes: { n: number; dist: number; parts: { text: string; href?: string }[] }[];
-		/** the vertical room the rail grants — the notes never take more */
+		/** the vertical room the rail grants — the stacks never take more */
 		budget: number;
+		/** the room the READING paragraph's own notes may stretch to when
+		 *  they do not fit the budget (2026-09-18) — every px is a line
+		 *  fewer behind the scroll */
+		budgetMax?: number;
 	}
-	let { notes, budget }: Props = $props();
+	let { notes, budget, budgetMax }: Props = $props();
 
 	const GAP = 28; // --sp-7, the column gap
 	const LI_MARGIN = 8; // --sp-2, under each note
@@ -29,11 +33,14 @@
 		right: number[];
 		spread: number[];
 		spreadH: number;
+		/** the flow holds more than its box: the scroll is shown */
+		spreadScrolls: boolean;
 	} | null>(null);
 	const colW = $derived(Math.max(80, (availW - GAP) / 2));
 	$effect(() => {
 		const el = measureEl;
 		const H = budget;
+		const HMAX = Math.max(H, budgetMax ?? H);
 		const list = notes;
 		void colW; // re-measure when the column width changes
 		if (!el || !H || !list.length) {
@@ -73,6 +80,7 @@
 		// stack whole they go together to the full-width flow
 		let spread: number[] = [];
 		let spreadH = 0;
+		let spreadScrolls = false;
 		let stackH = H;
 		const minDist = byNeed.length ? byNeed[0].dist : 0;
 		const actives = list.filter((nt) => nt.dist === minDist).map((nt) => nt.n);
@@ -82,7 +90,8 @@
 				(s, n) => s + (heightsWide.get(n) ?? Math.ceil(hOf(n) / 2) + 12),
 				0
 			);
-			spreadH = Math.min(H, tot + 4);
+			spreadH = Math.min(HMAX, tot + 4);
+			spreadScrolls = tot + 4 > HMAX;
 			stackH = Math.max(0, H - spreadH - LI_MARGIN);
 		}
 		let best: { left: number[]; right: number[] } = { left: [], right: [] };
@@ -95,7 +104,7 @@
 				best = attempt;
 			}
 		}
-		packed = { left: best.left, right: best.right, spread, spreadH };
+		packed = { left: best.left, right: best.right, spread, spreadH, spreadScrolls };
 	});
 	const columns = $derived.by(() => {
 		const p = packed;
@@ -110,7 +119,11 @@
 
 <div class="nblock" bind:clientWidth={availW}>
 	{#if spreadNotes.length}
-		<ul class="notes spread" style:height={`${packed?.spreadH ?? 0}px`}>
+		<ul
+			class="notes spread"
+			class:scrolls={packed?.spreadScrolls}
+			style:height={`${packed?.spreadH ?? 0}px`}
+		>
 			{#each spreadNotes as sn (sn.n)}
 				<li>{sn.n}.
 					{#each sn.parts as p, i (i)}{#if p.href}<a href={p.href} target="_blank" rel="noopener"
@@ -158,6 +171,25 @@
 	.spread {
 		overflow-y: auto;
 		margin-bottom: var(--sp-2);
+		/* the scroll is SHOWN (the author, 2026-09-18: the overlay bar
+		   Chrome hides until a hover read as a note cut off): a thin bar
+		   in the ink's faint tone and a fade at the bottom edge that sits
+		   over the text until the last line is reached */
+		scrollbar-width: thin;
+		scrollbar-color: var(--ink-faint) transparent;
+		scrollbar-gutter: stable;
+	}
+	/* the fade is IN FLOW at the end of the notes: while there is more
+	   below it sticks to the box's bottom edge over the text, and at the
+	   end of the scroll it sits under the last line, never over it */
+	.spread.scrolls::after {
+		content: '';
+		position: sticky;
+		bottom: 0;
+		display: block;
+		height: 18px;
+		background: linear-gradient(to bottom, transparent, var(--paper));
+		pointer-events: none;
 	}
 	.measure {
 		position: absolute;

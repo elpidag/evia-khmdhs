@@ -13674,3 +13674,85 @@ titles' capitals like the others (`chapters.ts`). The section's id stays
 `sources`: it is the `#sources` anchor the grid captions' «here» links and
 the figure registry's notes point at, and nothing else on the site names
 the old title.
+
+## 2026-09-18 — the cut footnotes and captions: the image gives way to its caption, a scroll is shown, the notes stretch (author)
+
+The author's screenshot (a 1536-wide laptop window, ~745 px tall): notes
+and captions chopped at the bottom of their boxes. Measured on the live
+page before the change, two faults, neither a loss of text:
+
+- CAPTIONS. The figure block kept the artboard's placement whatever the
+  window — the image at its full size, the block centred 60 px low — so
+  on a 745 px window a 432 px image left the caption a two-line box that
+  fell PAST the column's bottom (image + drop + caption > column); a
+  caption longer than two lines scrolled inside an invisible box. Now the
+  image gives way: its height is capped at the column less the caption's
+  own height (up to a 45 % share, `CAP_SHARE`; an image never below
+  120 px), the drop shrinks from 60 to 0 as the room runs out, and only a
+  caption longer than its share still scrolls. At 1920×1080 nothing
+  moves — every caption fit already (drop 60 everywhere, verified).
+  At 1536×745: every caption whole except figure 23's (453 px, shown
+  262, the slider block lifted); the 112 map's box stays 432 with its
+  130 px caption ending exactly at the column's edge.
+- NOTES. The reading paragraph's unit (notes 6–8: 741 px at full width)
+  scrolled inside a box capped at 44 % of the rail, with Chrome's overlay
+  scrollbar hidden. The unit may now stretch the block to 60 % of the
+  rail (`budgetMax`; the stacks keep 44 %): 320 of 757 px at 1536×745
+  instead of 235, 514 of 617 at 1920×1080 instead of 377; notes 15–18
+  now show 320 of 359. The block still never exceeds its share — the
+  timeline above is a viewport that pans, but not below 40 %.
+- THE SCROLL IS SHOWN, on both scrollers: a thin bar in the ink's faint
+  tone (`scrollbar-width: thin` + `scrollbar-color` — a coloured bar is
+  drawn as a classic, always-visible one, not an overlay) and an 18 px
+  fade at the bottom edge, a sticky pseudo-element IN FLOW at the end of
+  the text: it sits over the text while there is more below and under
+  the last line at the end of the scroll. The notes' fade only on a flow
+  that really scrolls (`spreadScrolls`).
+- A THIRD FAULT found on the way: `railNotes` showed the visible
+  paragraphs' notes only once the timeline had SPREAD (the chronology
+  title docking), so at 1920×1080 the first two chronology paragraphs
+  read with the introduction's notes and notes 3 and 4 went missing at
+  their own paragraphs. The notes follow the reading line into any
+  section past the introduction now; the intro's staged reveal is
+  unchanged.
+
+Verified by walking every note-citing paragraph and every figure marker
+at 1536×745 and 1920×1080 (the notes block, its scroller, the stacks, the
+caption box against its text, the block against the column), and by
+zoomed screenshots of both scrollers at the top and at the end of their
+scroll. 39 story tests, svelte-check clean.
+
+## 2026-09-18 — the last line under the band: a horizontal scrollbar put the fixed band and the rails out of step (author)
+
+After the round above the author still saw the last line of the notes,
+of the caption AND of the narrative cut on ONE line at the bottom of
+their window, with a uniform grey strip beneath — which is what a
+horizontal scrollbar looks like when a page overflows sideways by a few
+px (its thumb fills the track). Playwright's browser draws no scrollbars
+at all, so no measurement had seen it. Reproduced with scrollbars
+rendered and a 24 px sliver injected at the page's right edge: the rails
+are sized from `100dvh`, which counts the scrollbar's strip, while the
+band (`.bband`) was fixed at `bottom: 0`, which sits ABOVE the scrollbar
+— so the rails ended 15 px (17 in the author's Chrome) BELOW the band's
+top and their last line hid under it; a caption ending at the column's
+edge lost its last line the same way. What overflowed on the author's
+screen was not found (a fractional device scale — Windows at 125 % — is
+enough for a sub-pixel overshoot of the measured full-bleed bands); the
+fix does not depend on it: (1) the band's top is `calc(100dvh −
+--story-band)`, the rails' own bottom by construction, whatever
+scrollbars exist; (2) the story page clips sideways overflow
+(`html:has(main.story) { overflow-x: clip }` — `clip`, not `hidden`,
+which would make the root a scroll container and unstick the rails), so
+no horizontal scrollbar can appear there. Re-probed with the sliver still
+injected: no scrollbar, band top = rails' bottom, nothing under the band.
+
+## 2026-09-18 — two captions and one credit line set to «Anti-nero» (the spelling rule of 2026-09-04)
+
+The author found «ANTI-NERO» in the captions of figures 26 and 27
+(`captions.md` markers 9 and 10) — sentence-case running text, where the
+rule of 2026-09-04 reads «Anti-nero»; the same figure's credit line in
+FIGURE SOURCES AND IMAGE CREDITS had it too. All three set to
+«Anti-nero». The capitalised form stays only where the whole text is in
+capitals — the KEY FINDINGS card and band titles, the signed timeline's
+label, the actors list's lens — and cited titles keep their sources'
+spelling («ANTINERO», «AntiNero», «Antinero» in the bibliography).
