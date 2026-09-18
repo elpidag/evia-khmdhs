@@ -13650,3 +13650,27 @@ rank the parser does not know now fails `content.test` (a `#`-led block).
 The author's markdown is untouched. Verified in the local browser at
 1920×1080: 112 = 112 with no console mismatch, note 6 one link on «link»,
 note 19 two, note 20 one, the heading at `methodology-b22`.
+
+## 2026-09-18 — a web address in the bibliography may break at any character (author)
+
+The Ethnos entry printed wrong: its article slug is ninety letters with
+no hyphen, slash or dot, so the justified paragraph had no break
+opportunity inside it — the address ran past the narrative column into
+the figure column and the line before it («…άλλες πόλεις της Ελλάδας.»
+April 9, 2025.») was stretched to the edge. The other entries showed the
+same thing more mildly: an address that breaks only at its hyphens leaves
+the line before it stretched too. The story page now sets the links of the
+BIBLIOGRAPHY and SOURCES sections with `line-break: anywhere` (and
+`overflow-wrap: anywhere`): the printed address fills its line and wraps
+at the column edge, the href is untouched, the narrative paragraphs keep
+their ruling (justified, no hyphenation). Verified at 1920×1080: the
+Ethnos and CNN addresses start on their date's line and wrap on two lines
+inside the column, no paragraph overflows.
+
+## 2026-09-18 — the story's last section is titled FIGURE SOURCES AND IMAGE CREDITS (author)
+
+«Sources» becomes «Figure Sources and Image Credits» — set in the section
+titles' capitals like the others (`chapters.ts`). The section's id stays
+`sources`: it is the `#sources` anchor the grid captions' «here» links and
+the figure registry's notes point at, and nothing else on the site names
+the old title.

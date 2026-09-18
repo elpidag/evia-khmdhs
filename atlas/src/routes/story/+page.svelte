@@ -805,6 +805,16 @@
 		font-size: var(--fs-13);
 		line-height: 1.5;
 	}
+	/* a printed web address in the apparatus may break at ANY character
+	   (the author, 2026-09-18, on the Ethnos entry: an article slug of
+	   ninety letters with no hyphen had no break opportunity, so it ran
+	   past the column and the justified line before it stretched to the
+	   edge); the href is untouched, only the printed text wraps */
+	#bibliography :global(.prose a),
+	#sources :global(.prose a) {
+		line-break: anywhere;
+		overflow-wrap: anywhere;
+	}
 
 	/* the rail invites the click that opens the focus view */
 	.rail.tl {

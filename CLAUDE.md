@@ -1723,7 +1723,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   LAND scatter and the full-width coda are GONE (author); past the
   methodology the text and figure columns CENTRE (`.cols.centred`,
   269 px each side, the grid transition sliding) — and since 2026-09-04
-  the METHODOLOGY, BIBLIOGRAPHY and SOURCES read ALONE (`figureOff` →
+  the METHODOLOGY, BIBLIOGRAPHY and SOURCES — the last titled «FIGURE
+  SOURCES AND IMAGE CREDITS» since 2026-09-18 (author), id and `#sources`
+  anchor unchanged — read ALONE (`figureOff` →
   `.cols.solo`: no figure carried into them, the rail faded, the text
   column in the middle, 614/556/614); **KEY FINDINGS since 2026-09-04
   (evening round)**: the text in the MIDDLE (`.cols.kf`, symmetric
@@ -1759,7 +1761,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   the narrative column at z 1 so the band paints over the sticky rail
   and under the docked titles; content.ts skips the marker line and
   `mdsvexParagraphs.test` runs the same plugin chain as the build and the bibliography
-  sets at 13 px under the 16 px prose — plus, since 2026-08-29, EVERY CONTRACT, BY THE DAY IT WAS SIGNED (`charts/SignedTimeline.svelte`: the STATE-FUNDED dots on one time axis, Anti-nero above in ink, co-ops below in green, fire seasons shaded, `dots.d` on `/api/compare`);
+  sets at 13 px under the 16 px prose (its printed web addresses break at
+  ANY character since 2026-09-18 — `line-break: anywhere` on the
+  bibliography's and sources' links, after a hyphen-less Ethnos slug
+  overflowed the column and stretched the justified line before it) — plus, since 2026-08-29, EVERY CONTRACT, BY THE DAY IT WAS SIGNED (`charts/SignedTimeline.svelte`: the STATE-FUNDED dots on one time axis, Anti-nero above in ink, co-ops below in green, fire seasons shaded, `dots.d` on `/api/compare`);
   `/compare` → 308 `/story`, fragments survive). **`/story` is a THREE-COLUMN
   SCROLL NARRATIVE since 2026-09-01** (the author's two 1920×1080 artboards;
   DATA_DECISIONS): the chapter strip is gone and `main.story` in the layout

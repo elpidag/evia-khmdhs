@@ -23,6 +23,7 @@ export const CHAPTERS: Chapter[] = [
 	// the document spells it «Bibiography» — corrected here, flagged to the author
 	{ id: 'bibliography', title: 'BIBLIOGRAPHY' },
 	// the figure credits the grid captions' «here» links to (author,
-	// 2026-09-02); the text is still with the author — the file waits
-	{ id: 'sources', title: 'SOURCES' }
+	// 2026-09-02); retitled by the author on 2026-09-18 — the id stays
+	// `sources`, it is the anchor those links point at
+	{ id: 'sources', title: 'FIGURE SOURCES AND IMAGE CREDITS' }
 ];
