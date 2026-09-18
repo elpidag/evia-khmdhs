@@ -659,10 +659,10 @@
 </script>
 
 <svelte:head>
-	<title>Anti-nero — where the wildfire-prevention money went</title>
+	<title>Antinero — where the wildfire-prevention money went</title>
 	<meta
 		name="description"
-		content="Interactive audit of Greece's Anti-nero wildfire-prevention programme: {grInt(
+		content="Interactive audit of Greece's antinero wildfire-prevention programme: {grInt(
 			o.kpis.n_contracts
 		)} contracts, {eurShort(o.kpis.total_eur)} stated (excl. VAT)."
 	/>
@@ -825,7 +825,7 @@
 				<summary>
 					+ {grInt(o.probable.n)} additional contracts found ({eurShort(
 						o.probable.total_eur
-					).toLowerCase()} excl. VAT), probably related to the Anti-nero programme, but not
+					).toLowerCase()} excl. VAT), probably related to the antinero programme, but not
 					included in the calculations
 				</summary>
 				<p class="pnote">
@@ -927,7 +927,7 @@
 <ChartFrame
 	title="RANKING OF COMPANIES"
 	insight={rankMode === 'firm'
-		? `Many Anti-nero contracts are signed by joint ventures rather than by a single company. This view looks behind them: each venture whose members are on record — ${grInt(
+		? `Many antinero contracts are signed by joint ventures rather than by a single company. This view looks behind them: each venture whose members are on record — ${grInt(
 				o.consortiums.n_documented
 			)} of the ${grInt(o.consortiums.n)}, ${grInt(
 				o.consortiums.n_firms
@@ -965,7 +965,7 @@
 	{@const built = antineroAwardingFlow(uf)}
 	<ChartFrame
 		title="AWARDING PROCESS"
-		insight={`The awarding body of every Anti-nero contract is the Ministry of Environment and Energy, acting through ${grInt(uf.n_units)} units of its own central administration${unitFacts ? `, one of which — the ${unitFacts.label} — handled ${pct(unitFacts.share)} of the money` : ''}. None of the forest services that supervise the works on the ground awards a contract itself.`}
+		insight={`The awarding body of every antinero contract is the Ministry of Environment and Energy, acting through ${grInt(uf.n_units)} units of its own central administration${unitFacts ? `, one of which — the ${unitFacts.label} — handled ${pct(unitFacts.share)} of the money` : ''}. None of the forest services that supervise the works on the ground awards a contract itself.`}
 		caveat="Awarding body and operating units as recorded in ΚΗΜΔΗΣ."
 		anchor="sankey"
 		methodology="even-split"

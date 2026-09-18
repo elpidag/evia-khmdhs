@@ -10,11 +10,11 @@
 </script>
 
 <svelte:head>
-	<title>Anti-nero contracts{data.q ? ` — ${data.q}` : ''}</title>
+	<title>Antinero contracts{data.q ? ` — ${data.q}` : ''}</title>
 </svelte:head>
 
 <hgroup>
-	<h1>Anti-nero contracts</h1>
+	<h1>Antinero contracts</h1>
 	<p class="muted">
 		{grInt(data.rows.length)} contracts{data.q ? ` for «${data.q}»` : ''} ·
 		{eurShort(data.total_eur)} stated (excl. VAT) · search is accent-, homoglyph- and Greeklish-tolerant

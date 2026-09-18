@@ -13756,3 +13756,37 @@ FIGURE SOURCES AND IMAGE CREDITS had it too. All three set to
 capitals — the KEY FINDINGS card and band titles, the signed timeline's
 label, the actors list's lens — and cited titles keep their sources'
 spelling («ANTINERO», «AntiNero», «Antinero» in the bibliography).
+
+## 2026-09-18 — the programme's name is written «antinero»: lowercase in running text, «Antinero» opening a sentence, «ANTINERO» in capitals (author)
+
+«I want to change that «Anti-nero» to antinero for the running text of
+all website. Of course if it is beginning of sentence it turns into
+Antinero and if all are caps to ANTINERO. Bibliography stays.» This
+replaces the rule of 2026-09-04. The sweep covered every source the site
+renders — the Atlas's `.svelte`, `.ts` and `.md` files, the API's phase
+labels («Antinero I» … «Antinero V-PLUS», capitalised as labels) — 234
+occurrences in 68 files: 5 «ANTI-NERO» → «ANTINERO» (the KEY FINDINGS
+card and band titles, the signed timeline's label, the actors list's
+lens), 44 → «Antinero» (the first word of a sentence, a title, a heading,
+a table header, a chip or a phase label) and 185 → «antinero» (running
+text). A word starting a LABEL follows its neighbours' case: lowercase
+beside lowercase keys («antinero programme» beside «financed by private
+companies» in the header and on the hub; the legends' «antinero» beside
+«forest co-ops»; the scatter's axis titles and tooltip lines), capital
+beside capitalised ones («Antinero contractors» beside «Forest
+co-operatives»; «← Antinero contracts» beside «← Forest co-op
+contracts»; the explore chip «Antinero» beside «All»). The rule for a
+wrapped line: a line break inside a sentence does not open one. NOT
+changed: the bibliography and every cited title (Papageorgiou's
+«Φάκελος «Antinero»» articles and their bracketed translations, the
+Parliament's «AntiNero Programme in Greece», the ministry map's
+«Πρόγραμμα Προστασίας Δασών ANTINERO»), identifiers (routes, keys,
+`--c-antinero`, the `[FIGURE 09: antinero image]` marker's name is the
+author's own text and followed the rule), registry titles in the data
+(«ANTINERO IV ΑΤΤΙΚΗΣ»), the curated JSON files' internal notes, the
+frozen webui and the repository's own documentation. The timeline
+importer normalises the spreadsheet's spelling to the new rule, so a
+re-import keeps it. Verified: no hyphenated form in the sources the site
+renders nor in the rendered text of the story, the three streams, the
+search, the actors, the hub, the landing menu and the contracts list;
+svelte-check clean, 242 frontend tests, the API test files green.

@@ -1,7 +1,7 @@
 <script lang="ts">
 	/**
 	 * One column per row — the vertical form of BarH for a narrow slot
-	 * (Artboard 6's MONEY PER YEAR, user 2026-08-27; the Anti-nero card's
+	 * (Artboard 6's MONEY PER YEAR, user 2026-08-27; the antinero card's
 	 * AWARD PROCEDURES beside DIRECT AWARDS, user 2026-08-28): the value
 	 * above each column in 9,3 px with an optional second line under it,
 	 * the label beneath the column in 10 px WRAPPED on words to the slot's

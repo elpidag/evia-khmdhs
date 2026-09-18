@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { matches, phoneticFold, searchNorm } from './search';
 
 /**
- * /explore ships ONE row per Anti-nero contract-chain, so the row must answer
+ * /explore ships ONE row per antinero contract-chain, so the row must answer
  * to every ΑΔΑΜ of that chain — citing the σύμβαση itself must not return
  * «nothing matches» because a later act on it is the record in scope
  * (DATA_DECISIONS 2026-08-19).

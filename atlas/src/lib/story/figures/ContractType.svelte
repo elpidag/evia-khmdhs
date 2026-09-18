@@ -1,7 +1,7 @@
 <script lang="ts">
 	/**
 	 * Figure 27 (the author's marker 10, «types of work graph»): the
-	 * Anti-nero page's CONTRACT TYPE frame, live in the story (the author,
+	 * antinero page's CONTRACT TYPE frame, live in the story (the author,
 	 * 2026-09-03) — its title, its stated-€ / number-of-contracts toggle and
 	 * its bars, one curated work-type category per in-scope contract, through
 	 * the SAME transform the page uses (`lib/transforms/categoryRows.ts`), so

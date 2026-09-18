@@ -1,7 +1,7 @@
 <script lang="ts">
 	/**
 	 * ONE stacked column — the Who Owns Britain dashboard's form (user,
-	 * 2026-08-28, the Anti-nero card's AWARD PROCEDURES): every row is a
+	 * 2026-08-28, the antinero card's AWARD PROCEDURES): every row is a
 	 * segment of one column, height = its share of the total, the share
 	 * printed inside a segment tall enough to carry it.
 	 *

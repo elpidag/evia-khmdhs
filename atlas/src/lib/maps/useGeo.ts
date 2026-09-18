@@ -362,7 +362,7 @@ export function makeChoro(ramp: string[], maxV: number): (v: number) => string {
 	};
 }
 
-// black-white-grayscale only on the Anti-nero surfaces (user, 2026-08-20)
+// black-white-grayscale only on the antinero surfaces (user, 2026-08-20)
 export const RAMP_WORKS = [
 	'color-mix(in srgb, var(--ink) 6.5%, var(--paper))',
 	'color-mix(in srgb, var(--ink) 15.5%, var(--paper))',

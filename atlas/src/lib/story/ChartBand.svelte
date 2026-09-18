@@ -5,7 +5,7 @@
 	 *   state-funded — every contract of both programmes as a dot, after the
 	 *                  paragraph that says the money reached a different
 	 *                  population of contractors;
-	 *   awarding     — the two AWARDING PROCESS diagrams, Anti-nero over the
+	 *   awarding     — the two AWARDING PROCESS diagrams, antinero over the
 	 *                  forest co-ops, after the sentence on the Ministry's
 	 *                  central operating units;
 	 *   signed       — EVERY CONTRACT, BY THE DAY IT WAS SIGNED, after the
@@ -58,7 +58,7 @@
 				nCoops={c.pipelines.dase.n_vats}
 			/>
 			<p class="note">
-				Zero shared companies: {grInt(c.pipelines.antinero.n_vats)} Anti-nero contractors and {grInt(
+				Zero shared companies: {grInt(c.pipelines.antinero.n_vats)} antinero contractors and {grInt(
 					c.pipelines.dase.n_vats
 				)} co-op-side entities ({grInt(c.pipelines.dase_n_coops)} of them curated co-operatives), and not
 				one ΑΦΜ appears on both sides.
@@ -68,7 +68,7 @@
 		{:else}
 			<div class="duo">
 				<div class="one">
-					<h3 class="tt">AWARDING PROCESS — ANTI-NERO PROGRAMME</h3>
+					<h3 class="tt">AWARDING PROCESS — ANTINERO PROGRAMME</h3>
 					{#if anti && uf}
 						<KindFlow
 							nodes={anti.nodes}

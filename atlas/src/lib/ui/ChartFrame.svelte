@@ -211,7 +211,7 @@
 		border: 0;
 		background: none;
 		/* the bulb follows the hosting page's accent (ΔΑΣΕ green via
-		   --frame-accent, 2026-08-24); Anti-nero keeps its ink */
+		   --frame-accent, 2026-08-24); antinero keeps its ink */
 		color: var(--frame-accent, var(--ink));
 		cursor: pointer;
 		line-height: 0;

@@ -42,7 +42,7 @@ export interface CoopPoint {
 	[key: string]: unknown;
 }
 
-/** an Anti-nero contractor at its registered office */
+/** an antinero contractor at its registered office */
 export interface ContractorPoint {
 	vat: string;
 	name: string;

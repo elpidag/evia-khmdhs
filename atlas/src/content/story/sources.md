@@ -46,7 +46,7 @@ Figure 25. Hellenic Ministry of Environment and Energy (ΥΠΕΝ). “Εκδήλ
 
 Figure 26. Hellenic Ministry of Environment and Energy (ΥΠΕΝ). Πρόγραμμα Προστασίας Δασών ANTINERO: Καταγραφή Εκτάσεων Εργασιών. 2024. Map.
 
-Figure 27. Graph produced by the author showing the distribution of work types included in Anti-nero programme contracts. Data compiled and analysed by the author from Anti-nero programme contracts and associated official documentation.
+Figure 27. Graph produced by the author showing the distribution of work types included in antinero programme contracts. Data compiled and analysed by the author from antinero programme contracts and associated official documentation.
 
 Figure 28. Evros, 2023. False-colour Landsat composite showing the spatial extent of areas affected by the 2023 fires. See the shared source and processing credit for Figures 19a–b, 20, and 28 above.
 

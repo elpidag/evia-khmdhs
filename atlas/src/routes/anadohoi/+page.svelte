@@ -825,7 +825,7 @@
 	anchor="works-kind"
 	methodology="anadohoi"
 >
-	<!-- the same drawing as the Anti-nero CONTRACT TYPE (user, 2026-08-22):
+	<!-- the same drawing as the antinero CONTRACT TYPE (user, 2026-08-22):
 	     one bar per kind, counted in projects, biggest first -->
 	<BarH
 		rows={[...kindGroups].sort((a, b) => b.count - a.count).map((g) => ({ label: g.label, value: g.count }))}

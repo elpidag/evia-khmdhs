@@ -114,7 +114,7 @@
 		viewBox={sc.view}
 		style:max-width={sc.maxW ? `${sc.maxW}px` : null}
 		role="img"
-		aria-label="Every Anti-nero contract, arranged by {mode}"
+		aria-label="Every antinero contract, arranged by {mode}"
 	>
 		{#each sc.seasons as s (s.key)}
 			<rect x={s.x0} y={0} width={s.x1 - s.x0} height={sc.height - 18} class="season" />

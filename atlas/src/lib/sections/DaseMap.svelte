@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * ALLOCATION OF FUNDING on /dase — the Anti-nero duo one dataset over
+	 * ALLOCATION OF FUNDING on /dase — the antinero duo one dataset over
 	 * (user, DATA_DECISIONS 2026-08-24): the same money seen twice, by WHERE
 	 * THE WORK IS (the awarding forest service's Regional Unit) and by WHERE
 	 * THE CO-OPERATIVE IS SEATED (its registered office).
@@ -23,7 +23,7 @@
 
 	let { data }: { data: DaseAllocation } = $props();
 
-	// the fixed frame every map on this section (and the Anti-nero duo)
+	// the fixed frame every map on this section (and the antinero duo)
 	// uses — without it the pair centred and zoomed differently from the
 	// MAP frame below (user, 2026-08-24)
 	const MAP_VIEW: { center: [number, number]; k: number } = {
@@ -137,7 +137,7 @@
 	/** the co-operatives that worked in the drilled work region, each at its
 	 *  registered office — the drill's answer to «who came here» (user,
 	 *  2026-08-24). A region's colour cannot say which co-op it was; a dot at
-	 *  the seat can, and it is the Anti-nero maps' own convention. */
+	 *  the seat can, and it is the antinero maps' own convention. */
 	const drillDots = $derived.by(() => {
 		if (focus?.side !== 'works') return [];
 		const pts = new Map(data.coop_points.map((p) => [p.vat, p]));
@@ -154,12 +154,12 @@
 	/** area ∝ €, like the awarding-unit circles of the MAP frame below */
 	const dotR = (d: { eur: number }) => 3 + 9 * Math.sqrt(d.eur / dotMax);
 
-	// what a click does is said ONCE, in the MAP ⓘ — the Anti-nero convention
+	// what a click does is said ONCE, in the MAP ⓘ — the antinero convention
 </script>
 
 {#snippet rampKey(maxLabel: string)}
 	<!-- 0 · [white + eight swatches, one hairline round the bar] · max —
-	     the Anti-nero maps' key, in this dataset's green -->
+	     the antinero maps' key, in this dataset's green -->
 	<span class="rampkey">
 		<span>0</span><span class="swatches"><i class="empty"></i>{#each RAMP_DASE as c (c)}<i
 					style:background={c}
@@ -272,7 +272,7 @@
 		flex-direction: column;
 		gap: var(--sp-2);
 	}
-	/* the toolbar above the maps — the Anti-nero .bar, one dataset over */
+	/* the toolbar above the maps — the antinero .bar, one dataset over */
 	.bar {
 		display: flex;
 		align-items: center;
@@ -304,7 +304,7 @@
 	.twin {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		/* the Anti-nero .twin's breather — NOT --sp-5, which is not in the
+		/* the antinero .twin's breather — NOT --sp-5, which is not in the
 		   token scale (1/2/3/4/6/8/12) and collapsed the gap to zero,
 		   gluing the maps and their key strips together (user, 2026-08-24) */
 		gap: var(--sp-4);
@@ -317,7 +317,7 @@
 	.panel {
 		min-width: 0;
 	}
-	/* the key strip — the Anti-nero/sponsored-works legend dress, with the
+	/* the key strip — the antinero/sponsored-works legend dress, with the
 	   same FIXED height so both map rectangles sit at one level and never
 	   move on drill */
 	.mapkey {

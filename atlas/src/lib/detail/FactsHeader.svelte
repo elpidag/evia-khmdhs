@@ -57,7 +57,7 @@
 		}
 	}
 	/* One label column width for every detail page (user, 2026-08-19): the
-	   sponsored-works and Anti-nero cards line up, and a long label like
+	   sponsored-works and antinero cards line up, and a long label like
 	   «RESPONSIBLE FOREST SERVICE BODY» wraps onto a second row instead of
 	   pushing the values across. */
 	.facts {

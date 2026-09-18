@@ -35,7 +35,7 @@
 		note?: string;
 		/** href for the Methodology link closing the side note */
 		methodologyHref?: string;
-		/** geometry overrides for a TWO-column graph (the Anti-nero MONEY FLOW,
+		/** geometry overrides for a TWO-column graph (the antinero MONEY FLOW,
 		 *  user 2026-08-21): symmetric margins centre the plot, a wider left
 		 *  wrap and more node padding keep long unit names off each other;
 		 *  the ΔΑΣΕ three-column call keeps the defaults */
@@ -43,7 +43,7 @@
 		marginRight?: number;
 		wrapLeft?: number;
 		/** the middle column's labels sit ABOVE their nodes and do not wrap by
-		 *  default (ΔΑΣΕ's three kinds are short); the Anti-nero units are
+		 *  default (ΔΑΣΕ's three kinds are short); the antinero units are
 		 *  long names and wrap (user, 2026-08-22) */
 		wrapMid?: number;
 		nodePad?: number;
@@ -477,7 +477,7 @@
 	.label a:hover {
 		/* the accent, not a colour of its own: --c-dase-deep was retired
 		   (author, 2026-09-03) — its navy printed only in this hover and
-		   broke the Anti-nero page's grayscale doctrine */
+		   broke the antinero page's grayscale doctrine */
 		fill: var(--accent);
 		text-decoration: underline;
 	}

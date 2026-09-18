@@ -23,7 +23,7 @@
 		linkBase?: string;
 		/** the filled circle's colour — the page's own accent */
 		selfColor?: string;
-		/** the caption; the Anti-nero one by default */
+		/** the caption; the antinero one by default */
 		caption?: string;
 	}
 	let {

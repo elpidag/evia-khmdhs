@@ -70,13 +70,22 @@ def slug(t):
         words.pop()
     return '-'.join(words)
 
-# the programme's name is written «Anti-nero» on the site, «ANTI-NERO» in
-# capitals (the author, 2026-09-04) — the spreadsheet writes it AntiNERO
-NAME = re.compile(r'\b(?:AntiNero|Antinero|AntiNERO|ANTINERO|Anti-Nero)\b')
+# the programme's name is written «antinero» on the site — «Antinero» at
+# the start of a sentence, «ANTINERO» in capitals (the author, 2026-09-18;
+# «Anti-nero» / «ANTI-NERO» from 2026-09-04 until then) — the spreadsheet
+# writes it AntiNERO
+NAME = re.compile(r'\b(?:AntiNero|Antinero|AntiNERO|ANTINERO|Anti-Nero|Anti-nero|ANTI-NERO)\b')
 
 
 def programme_name(t):
-    return NAME.sub(lambda m: 'ANTI-NERO' if m.group(0) == 'ANTINERO' else 'Anti-nero', t)
+    def one(m):
+        if m.group(0) in ('ANTINERO', 'ANTI-NERO'):
+            return 'ANTINERO'
+        # the first word of the text or of a sentence keeps its capital
+        before = t[: m.start()].rstrip(' \t«"\'‘“([')
+        return 'Antinero' if not before or before[-1] in '.!?…' else 'antinero'
+
+    return NAME.sub(one, t)
 
 
 def q(s):

@@ -24,7 +24,7 @@
 		both: 'restoration & reforestation'
 	};
 	// ONE wording for the scope trio across both datasets (user,
-	// 2026-08-22): the same values print on the Anti-nero contract page
+	// 2026-08-22): the same values print on the antinero contract page
 	const DELIVERABLES: Record<string, string> = {
 		works: 'works only',
 		study_and_works: 'study & works',
@@ -475,7 +475,7 @@
 		</p>
 	{/if}
 
-	<!-- the evidence sits behind the Anti-nero page's own fold (user,
+	<!-- the evidence sits behind the antinero page's own fold (user,
 	     2026-08-25); this dataset has no procurement details or CPV codes
 	     to fold beside it — a designation act is not a procurement -->
 	<Fold title="Extracted quotes from documents">

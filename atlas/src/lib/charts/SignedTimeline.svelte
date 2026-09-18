@@ -3,7 +3,7 @@
 	/**
 	 * EVERY CONTRACT BY THE DAY IT WAS SIGNED (user, 2026-08-29, second
 	 * round): one EQUAL dot per contract of either programme — the size says
-	 * nothing here, the colour says the programme (ink Anti-nero, green the
+	 * nothing here, the colour says the programme (ink antinero, green the
 	 * co-operatives) — in ONE swarm on ONE time axis, dodged around a single
 	 * centreline so a busy week piles up and a quiet month lies flat. The
 	 * fire season (1 May – 31 October) is shaded in the site's one season
@@ -13,7 +13,7 @@
 	 * frame — so they sit on a lattice whose column is ONE WEEK (fourth
 	 * round) and a week whose column is full spills into the neighbouring
 	 * weeks; the frame reports the largest such displacement, computed. The
-	 * Anti-nero dot is a little bigger than the co-operatives' (user).
+	 * antinero dot is a little bigger than the co-operatives' (user).
 	 */
 	import { goto } from '$app/navigation';
 	import { eur, grInt, dmy } from '$lib/transforms/format';
@@ -41,7 +41,7 @@
 	const INK = 'color-mix(in srgb, var(--ink) 94.6%, var(--paper))';
 	const GREEN = 'var(--c-dase)';
 	/** the lattice: ONE WEEK per column (user, fourth round), rows this tall;
-	 *  the Anti-nero dot a little bigger than the co-operatives' */
+	 *  the antinero dot a little bigger than the co-operatives' */
 	const DAYS_PER_COL = 7;
 	const CELL_H = 4.4;
 	const R_A = 2.0;
@@ -247,7 +247,7 @@
 		<!-- the key: colour is the programme, every dot the same size -->
 		<circle class="key a" cx={PADL + 6} cy={18} r={R_A + 1.2} />
 		<text class="lane a" x={PADL + 16} y={22}
-			>ANTI-NERO · {grInt(dots.antinero.ref.length)} contracts</text
+			>ANTINERO · {grInt(dots.antinero.ref.length)} contracts</text
 		>
 		<circle class="key d" cx={PADL + 236} cy={18} r={R_D + 1.2} />
 		<text class="lane d" x={PADL + 246} y={22}

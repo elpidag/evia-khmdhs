@@ -164,7 +164,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             ana = None
         return jsonify(queries_extra.meta(g.conn, dase, ana, _pay_conn()))
 
-    # -------------------------------------------------------- Anti-nero
+    # -------------------------------------------------------- antinero
 
     @app.route("/api/antinero/overview")
     def api_antinero_overview():
@@ -366,13 +366,13 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             abort(404)
         d.pop("raw_json", None)
         d.pop("raw_pretty", None)
-        # the same rule as Anti-nero (user, 2026-08-19): the TABLE holds this
+        # the same rule as antinero (user, 2026-08-19): the TABLE holds this
         # contract's own records, and the other lots of the procurement —
         # which the registry's adamChain returns — feed the family DIAGRAM
         d["timeline"] = queries_extra.contract_timeline(
             conn, adam, own_records_only=True)
         d["family_acts"] = queries_extra.contract_timeline(conn, adam)
-        # the Anti-nero-style radial (user, 2026-08-29): the call at the centre,
+        # the antinero-style radial (user, 2026-08-29): the call at the centre,
         # the family's contracts around it
         d["family"] = queries_extra.dase_contract_family(conn, adam)
         d["gross"] = queries_extra.contract_gross(conn, adam)
@@ -388,7 +388,7 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
             disp = names.get(dase_queries.canonical_vat(ct["vat_number"]) or "")
             if disp:
                 ct["display_el"], ct["display_en"] = disp["el"], disp["en"]
-        # the page mirrors the Anti-nero one (DATA_DECISIONS 2026-08-23): the
+        # the page mirrors the antinero one (DATA_DECISIONS 2026-08-23): the
         # curated work-type category + its fire context, the version chain
         # from the registry links, the document-stated deadline (and only
         # that), and a date for every payment tick

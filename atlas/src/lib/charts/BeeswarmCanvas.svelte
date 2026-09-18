@@ -44,12 +44,12 @@
 		plotHeight?: number;
 		/** dot colour by signature year — defaults to the ΔΑΣΕ greens */
 		colors?: (y: string | null | undefined) => string;
-		/** per-row flag drawn as a ring (Anti-nero: single-bid contracts) */
+		/** per-row flag drawn as a ring (antinero: single-bid contracts) */
 		ring?: (number | null)[];
 		/** dashed reference lines on the shared axis (ν.4782 ceilings) */
 		thresholds?: { v: number; label: string }[];
 		linkBase?: string;
-		/** the canvas floor and the dot radius — the Anti-nero frame asks for
+		/** the canvas floor and the dot radius — the antinero frame asks for
 		 *  380 px with dots grown to match (user, 2026-08-21); ΔΑΣΕ keeps the
 		 *  defaults */
 		minHeight?: number;

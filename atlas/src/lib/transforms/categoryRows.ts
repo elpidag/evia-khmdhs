@@ -1,5 +1,5 @@
 /**
- * The CONTRACT TYPE rows — ONE transform for the Anti-nero page's frame and
+ * The CONTRACT TYPE rows — ONE transform for the antinero page's frame and
  * the story's Figure 27 (the author, 2026-09-03: «instead of an image, show
  * our graph»), so the two can never drift: the curated categories sorted by
  * the lens, the hover naming the works the category's contracts name, the

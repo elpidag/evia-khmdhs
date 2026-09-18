@@ -2,7 +2,7 @@
 	/**
 	 * MONEY PER YEAR for the story's KEY FINDINGS rail (the author,
 	 * 2026-09-04: «vertical, and mix the two colours»): one group of two
-	 * columns per year — Anti-nero in the ink, the forest co-ops in the
+	 * columns per year — antinero in the ink, the forest co-ops in the
 	 * green — each column as high as that programme's SHARE OF ITS OWN
 	 * TOTAL, so a €30M programme and a €634M one read on one drawing, the
 	 * € printed on every column. The dataset pages keep their horizontal
@@ -30,7 +30,7 @@
 
 <div class="wrap" bind:clientWidth={width}>
 	<ul class="legend">
-		<li><i class="a"></i>Anti-nero</li>
+		<li><i class="a"></i>antinero</li>
 		<li><i class="d"></i>forest co-ops</li>
 		<li class="faint">column height: share of each programme's own total</li>
 	</ul>
@@ -48,7 +48,7 @@
 	</svg>
 	<p class="sr">
 		{#each years as y, i (y)}
-			{y}: Anti-nero {grInt(a[i] || 0)} €, co-ops {grInt(d[i] || 0)} €.
+			{y}: antinero {grInt(a[i] || 0)} €, co-ops {grInt(d[i] || 0)} €.
 		{/each}
 	</p>
 </div>

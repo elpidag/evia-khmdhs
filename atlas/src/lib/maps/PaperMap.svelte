@@ -66,10 +66,10 @@
 		/** two card slots: the REGION card in its own grey top-left slot, so a
 		 *  dot's card (bottom-left, black) never replaces it (user, 2026-08-21) */
 		splitTips?: boolean;
-		/** a click on the bare map (no region, no dot) — the Anti-nero maps
+		/** a click on the bare map (no region, no dot) — the antinero maps
 		 *  clear their selection with it (user, 2026-08-21) */
 		onEmptyClick?: () => void;
-		/** Escape with nothing pinned — the Anti-nero maps reset their drill */
+		/** Escape with nothing pinned — the antinero maps reset their drill */
 		onEscape?: () => void;
 		onRegionClick?: (pe: string) => void;
 		/** GROUP interactivity (the anadohoi status map, 2026-08-25): maps a
@@ -83,7 +83,7 @@
 		/** set false to MARK the drilled Π.Ε. (the heavier outline) without
 		 *  zooming to it — a map whose drill reveals no sub-region marks
 		 *  loses the country context for nothing (the /dase allocation duo,
-		 *  2026-08-24). Anti-nero keeps the default. */
+		 *  2026-08-24). Antinero keeps the default. */
 		focusZoom?: boolean;
 		interactive?: boolean;
 		/** viewBox aspect (Greece is portrait-ish) */

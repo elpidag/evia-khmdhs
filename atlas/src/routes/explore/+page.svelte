@@ -10,7 +10,7 @@
 	import RefreshLine from '$lib/ui/RefreshLine.svelte';
 
 	const DS_LABEL: Record<string, string> = {
-		antinero: 'Anti-nero',
+		antinero: 'Antinero',
 		dase: 'F.W.CO-OP',
 		anadohoi: 'Companies as sponsors'
 	};
@@ -79,7 +79,7 @@
 	const ds = $derived(params.get('ds') ?? 'all');
 	const pe = $derived(params.get('pe') ?? '');
 	const hq = $derived(params.get('hq') ?? '');
-	/** municipality — one level finer than `pe`, Anti-nero only */
+	/** municipality — one level finer than `pe`, antinero only */
 	const mu = $derived(params.get('mu') ?? '');
 	const proc = $derived(params.get('proc') ?? 'all');
 	const st = $derived(params.get('st') ?? '');
@@ -168,8 +168,8 @@
 			for (const p of r.pe) counts.set(p, (counts.get(p) ?? 0) + 1);
 		return [...counts.entries()].sort((a, b) => b[1] - a[1]);
 	});
-	/** the δήμοι present in the data, most contracts first. Only Anti-nero
-	 *  rows carry them, so the facet counts are Anti-nero counts. */
+	/** the δήμοι present in the data, most contracts first. Only antinero
+	 *  rows carry them, so the facet counts are antinero counts. */
 	const muOptions = $derived.by(() => {
 		const counts = new Map<string, number>();
 		for (const { r } of indexed)
@@ -242,7 +242,7 @@
 	<title>Explore — all three datasets</title>
 	<meta
 		name="description"
-		content="One searchable table over Anti-nero contracts, ΔΑΣΕ co-op contracts and Ανάδοχοι sponsor projects."
+		content="One searchable table over antinero contracts, ΔΑΣΕ co-op contracts and Ανάδοχοι sponsor projects."
 	/>
 </svelte:head>
 
@@ -269,7 +269,7 @@
 			fallback="all"
 			options={[
 				{ value: 'all', label: 'All' },
-				{ value: 'antinero', label: 'Anti-nero' },
+				{ value: 'antinero', label: 'Antinero' },
 				{ value: 'dase', label: 'F.W.CO-OP' },
 				{ value: 'anadohoi', label: 'Companies as sponsors' }
 			]}
@@ -315,7 +315,7 @@
 			<select
 				value={fin}
 				onchange={(e) => setParam('fin', e.currentTarget.value || null)}
-				title="Whether a project end date is on record — an Anti-nero completion act on Diavgeia or a completed sponsor project; ΔΑΣΕ endings were never harvested"
+				title="Whether a project end date is on record — an antinero completion act on Diavgeia or a completed sponsor project; ΔΑΣΕ endings were never harvested"
 			>
 				<option value="">End date: any</option>
 				<option value="yes">With end date ({grInt(finCounts.yes)})</option>

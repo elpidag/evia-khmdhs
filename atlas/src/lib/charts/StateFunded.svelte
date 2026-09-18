@@ -183,7 +183,7 @@
 	// ---- the steps -------------------------------------------------------
 	const CAPTIONS = $derived([
 		`${grInt(built.all.length)} state-funded forestry contracts since September 2021, every dot represents a contract, area ∝ its stated value.`,
-		`Contracts that are included in the Anti-nero programme are coloured black.`,
+		`Contracts that are included in the antinero programme are coloured black.`,
 		`Allocation of state funding via different contracts.`
 	]);
 	let step = $state(0);

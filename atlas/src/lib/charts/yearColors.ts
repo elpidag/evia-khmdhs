@@ -22,7 +22,7 @@ export const YEAR_COLORS: Record<string, string> = {
 export const yearColor = (y: string | null | undefined): string =>
 	YEAR_COLORS[y ?? ''] ?? 'color-mix(in srgb, var(--ink) 57.4%, var(--paper))';
 
-/** Signature-year ramp for the Anti-nero value chart — the same idea in the
+/** Signature-year ramp for the antinero value chart — the same idea in the
  *  page's own palette: black-white-grayscale only (user, 2026-08-20),
  *  light → dark by year so the ordering survives without hue. */
 export const YEAR_GREYS: Record<string, string> = {

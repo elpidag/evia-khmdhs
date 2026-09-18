@@ -9,7 +9,7 @@
 		/** count per year, aligned with the `years` prop */
 		values: number[];
 		/** 'area' (default): translucent fill + edge; 'line': no fill — dashed
-		 *  unless `dash` is false (the Anti-nero scope lines are solid) */
+		 *  unless `dash` is false (the antinero scope lines are solid) */
 		kind?: 'area' | 'line';
 		dash?: boolean;
 	}

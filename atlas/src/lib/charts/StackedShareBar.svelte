@@ -3,7 +3,7 @@
 
 	/**
 	 * ONE horizontal bar whose segments share a total — the SCOPE charts
-	 * (Anti-nero CONTRACT SCOPE, sponsored PROJECT SCOPE), which is all
+	 * (antinero CONTRACT SCOPE, sponsored PROJECT SCOPE), which is all
 	 * this component draws since PROJECT TYPE became a BarH (2026-08-22).
 	 *
 	 * Redesigned per the user the same day: the counts print as PLAIN

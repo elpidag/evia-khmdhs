@@ -49,7 +49,7 @@
 	function show(r: ComparePayload['by_pe'][0]) {
 		tip =
 			`<strong>${ruLabel(r.pe)}</strong>` +
-			`<br>Anti-nero: ${eurShort(r.antinero_eur)} · ${r.antinero_n} contracts` +
+			`<br>antinero: ${eurShort(r.antinero_eur)} · ${r.antinero_n} contracts` +
 			`<br>forest co-ops: ${eurShort(r.dase_eur)} · ${r.dase_n} contracts`;
 	}
 	const ticksOf = (dom: [number, number]) =>
@@ -72,7 +72,7 @@
 		{/each}
 
 		<text class="axis-title" x={width - M.right} y={height - 8} text-anchor="end">
-			Anti-nero € in the regional unit →
+			antinero € in the regional unit →
 		</text>
 		<text class="axis-title" x={12} y={M.top - 8}>forest co-op € ↑</text>
 
@@ -111,7 +111,7 @@
 		{/each}
 
 		<text class="gutter-label" x={width - M.right} y={height - M.bottom - GUTTER - 5}
-			text-anchor="end">Anti-nero only ({onlyA.length} R.U.) ↓</text>
+			text-anchor="end">antinero only ({onlyA.length} R.U.) ↓</text>
 		<text class="gutter-label" x={M.left + GUTTER / 2 + 8} y={M.top + 12}>
 			co-ops only ({onlyD.length} R.U.)
 		</text>

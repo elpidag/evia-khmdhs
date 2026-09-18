@@ -25,7 +25,7 @@
 <div class="chart">
 	<div class="cols-head">
 		<span></span>
-		<span class="antinero">Anti-nero — % of its total</span>
+		<span class="antinero">antinero — % of its total</span>
 		<span class="dase">forest co-ops — % of its total</span>
 	</div>
 	{#each shown as r (r.pe)}

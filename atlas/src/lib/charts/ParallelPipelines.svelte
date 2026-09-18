@@ -76,7 +76,7 @@
 
 		<!-- column headers -->
 		<text class="col-head antinero" x={leftX + COL_W / 2} y={TOP - 4}>
-			{grInt(data.antinero.n_vats)} Anti-nero contractors · {eurShort(data.antinero.total_eur)}
+			{grInt(data.antinero.n_vats)} antinero contractors · {eurShort(data.antinero.total_eur)}
 		</text>
 		<text class="col-head dase" x={rightX + COL_W / 2} y={TOP - 4}>
 			{grInt(data.dase.n_vats)} co-op-side entities · {eurShort(data.dase.total_eur)}

@@ -1,4 +1,4 @@
-/** Programme-phase vocabulary shared by every Anti-nero chart. */
+/** Programme-phase vocabulary shared by every antinero chart. */
 
 export const SCOPE_ORDER = [
 	'antinero_i',
@@ -12,22 +12,22 @@ export const SCOPE_ORDER = [
 ] as const;
 
 export const SCOPE_LABELS: Record<string, string> = {
-	antinero_i: 'Anti-nero I',
-	antinero_ii: 'Anti-nero II',
-	antinero_iii: 'Anti-nero III',
-	antinero_iv: 'Anti-nero IV',
+	antinero_i: 'Antinero I',
+	antinero_ii: 'Antinero II',
+	antinero_iii: 'Antinero III',
+	antinero_iv: 'Antinero IV',
 	// the ministry's own name for the February-2026 batch (DATA_DECISIONS 2026-08-29)
-	antinero_v_plus: 'Anti-nero V-PLUS',
+	antinero_v_plus: 'Antinero V-PLUS',
 	antinero_esa: 'ΕΣΑ reforestation',
 	antinero_restoration: 'Restoration works',
 	antinero_unknown_phase: 'Phase unknown',
 	// kept in the dataset, excluded from every calculation (DATA_DECISIONS 2026-08-13)
-	antinero_probable: 'Probably Anti-nero — not included in the calculations'
+	antinero_probable: 'Probably antinero — not included in the calculations'
 };
 
 /** ordinal greys, light → dark down the phase order — the phases are
  *  ordered in time, so a grey ramp keeps them legible without hue
- *  (black-white-grayscale only on the Anti-nero page: user, 2026-08-20);
+ *  (black-white-grayscale only on the antinero page: user, 2026-08-20);
  *  the two qualitatively different strands take the darkest steps and
  *  the unknown phase the lightest, so it reads as "least defined" */
 export const SCOPE_COLORS: Record<string, string> = {

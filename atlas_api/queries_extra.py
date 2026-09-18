@@ -451,7 +451,7 @@ def antinero_kpis(kh: sqlite3.Connection,
 
 def antinero_overview(kh: sqlite3.Connection,
                       pay: sqlite3.Connection | None = None) -> dict:
-    """Everything the Anti-nero overview page needs except the map/detail
+    """Everything the antinero overview page needs except the map/detail
     payloads. `kh` = stated-basis connection (all value analytics);
     `pay` = payments layer (disbursement timeseries, per-year paid,
     paid KPI)."""
@@ -742,7 +742,7 @@ def antinero_cpv_tree(kh: sqlite3.Connection) -> dict:
 
 def dase_cpv_tree(dase: sqlite3.Connection) -> dict:
     """The live ΔΑΣΕ contracts' declared codes rolled up the same tree
-    (DATA_DECISIONS 2026-08-24 — the /dase CPV CODES frame in the Anti-nero
+    (DATA_DECISIONS 2026-08-24 — the /dase CPV CODES frame in the antinero
     form). cpv_nodes.json covers both datasets since the same day; the
     insurance code 66519300-4 rides with the documented ΕΦΚΑ caveat
     (state-borne contributions itemised in the awards, never procured
@@ -963,7 +963,7 @@ def _table(conn: sqlite3.Connection, name: str) -> bool:
 
 def probable_related(kh: sqlite3.Connection) -> dict:
     """Chains kept in the dataset but excluded from every calculation:
-    probably Anti-nero, RRF-16849 membership unproven from the primary
+    probably antinero, RRF-16849 membership unproven from the primary
     documents (curated khmdhs/data/probable_related.json, DATA_DECISIONS
     2026-08-13). Counted on chain tips so each chain appears once; on the
     Atlas stated-basis connection `total_cost_with_vat` carries the net."""
@@ -1079,11 +1079,11 @@ def payment_events(kh: sqlite3.Connection) -> dict:
 # ------------------------------------------------------------------ sankey
 
 _PHASE_LABELS = {
-    "antinero_i": "Anti-nero I",
-    "antinero_ii": "Anti-nero II",
-    "antinero_iii": "Anti-nero III",
-    "antinero_iv": "Anti-nero IV",
-    "antinero_v_plus": "Anti-nero V-PLUS",
+    "antinero_i": "Antinero I",
+    "antinero_ii": "Antinero II",
+    "antinero_iii": "Antinero III",
+    "antinero_iv": "Antinero IV",
+    "antinero_v_plus": "Antinero V-PLUS",
     "antinero_esa": "ΕΣΑ reforestation",
     "antinero_restoration": "Restoration works",
     "antinero_unknown_phase": "Phase unknown",
@@ -1558,7 +1558,7 @@ def contract_authorities(kh: sqlite3.Connection, adam: str) -> list[dict]:
 
 
 def dase_contract_family(dase: sqlite3.Connection, adam: str) -> dict | None:
-    """The ΔΑΣΕ contract's procurement family for the Anti-nero-style radial
+    """The ΔΑΣΕ contract's procurement family for the antinero-style radial
     (user, 2026-08-29): the centre is the CALL the registry's adamChain
     declares (the award where the procedure published no call), the orbit
     every contract of that family — the ones in the dataset with their
@@ -1899,7 +1899,7 @@ def _split_coop_totals(rows: list[dict], shares: dict[str, list[dict]],
                        vat_key: str = "vat") -> list[dict]:
     """Turn full-attribution rows into even-split ones in place. `vat_key` is
     the row's ΑΦΜ field — «vat» on the ΔΑΣΕ side, «vat_number» in the frozen
-    Anti-nero queries; getting it wrong silently leaves the totals unsplit."""
+    antinero queries; getting it wrong silently leaves the totals unsplit."""
     for a in rows:
         over = sum(s["over_eur"] for s in shares.get(a.get(vat_key) or "", ()))
         if over:
@@ -2074,7 +2074,7 @@ def dase_direct_award_distribution(dase: sqlite3.Connection) -> dict:
 
 
 def antinero_value_histogram(kh: sqlite3.Connection) -> dict:
-    """Value brackets for the Anti-nero CONTRACT VALUES chart — the ΔΑΣΕ
+    """Value brackets for the antinero CONTRACT VALUES chart — the ΔΑΣΕ
     convention, one dataset over (user, 2026-08-20): every bracket is exactly
     one doubling, anchored on €1.000 and derived from the live range, so the
     equal-width slots ARE a log axis and the beeswarm the chart toggles with
@@ -2829,7 +2829,7 @@ def _flow_units(kh: sqlite3.Connection) -> list[dict]:
     """One row per (contract, party, work region) with that cell's EVEN-SPLIT
     share of the contract's €.
 
-    The convention behind every Anti-nero flow surface (user, 2026-08-20):
+    The convention behind every antinero flow surface (user, 2026-08-20):
     a contract that names k regional units and m signing parties is divided
     into k×m equal shares — eff/(k·m) each — because the documents we hold
     state NO allocation of the money between the regions a contract covers
@@ -3150,7 +3150,7 @@ def authorities_map_points(kh: sqlite3.Connection,
     """The /authorities map's OTHER two dot populations (user, 2026-08-25):
     the forest-authority seats already ride in `authorities_index`; this
     adds every ΔΑΣΕ co-operative at its registered office and every
-    Anti-nero contractor at its seat, so the map can show any of the three
+    antinero contractor at its seat, so the map can show any of the three
     — or all at once — as dots. Values on the caller's basis (stated net
     through the Atlas shims), even-split like every per-entity surface."""
     out: dict = {"coops": [], "contractors": []}
@@ -3207,7 +3207,7 @@ def forest_units_extra(kh: sqlite3.Connection) -> list[dict]:
 
 def authority_profile(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                       slug: str) -> dict | None:
-    """Cross-dataset profile: the authority as Anti-nero works executor AND
+    """Cross-dataset profile: the authority as antinero works executor AND
     as ΔΑΣΕ awarding unit."""
     row = next((r for r in kh.execute("SELECT * FROM forest_authorities")
                 if slugify_authority(r["name"]) == slug), None)
@@ -3695,7 +3695,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                  ana: sqlite3.Connection | None) -> dict:
     """One compact row per contract/project across the three datasets, for
     the client-side /explore finder. One stated-basis value per row (net):
-    Anti-nero + ΔΑΣΕ = stated contract value, Ανάδοχοι = committed budget
+    Antinero + ΔΑΣΕ = stated contract value, Ανάδοχοι = committed budget
     after amendments, net where the act states it (nullable — sponsors
     often commit without a figure). Missing DBs degrade honestly (their
     rows are simply absent)."""
@@ -3823,7 +3823,7 @@ def explore_rows(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
             "v": round(r["value"], 2) if r["value"] is not None else None,
             "pe": pes, "hq": hqs,
             # the δήμοι the contract's documents name — one level finer than
-            # the Π.Ε. filter, Anti-nero only (DATA_DECISIONS 2026-08-19)
+            # the Π.Ε. filter, antinero only (DATA_DECISIONS 2026-08-19)
             **({"mu": muni_map[r["ref"]]} if muni_map.get(r["ref"]) else {}),
             "proc": _proc_kind(r["procedure_type"]),
             "st": "cancelled" if r["cancelled"] else None,
@@ -4541,7 +4541,7 @@ def contract_timeline(kh: sqlite3.Connection, ref: str,
             # multi-lot award puts the other lots here — other companies'
             # contracts, with their own pages, listed as if they were
             # documents of this one (19 in-scope pages, up to 11 rows each).
-            # The Anti-nero page drops them (`own_records_only`): the
+            # The antinero page drops them (`own_records_only`): the
             # relationship is the DIAGRAM's, which knows the call for 220 of
             # 246 contracts, and a line under the trail points at it (user,
             # 2026-08-19). ΔΑΣΕ keeps them — its FamilyTree is drawn FROM
@@ -4952,7 +4952,7 @@ def arogi_summary(ar: sqlite3.Connection) -> dict:
 def landing_codes(kh: sqlite3.Connection, dase: sqlite3.Connection | None,
                   ana: sqlite3.Connection | None) -> dict:
     """Every identifier the site holds, for the landing page's field of codes
-    (DATA_DECISIONS 2026-08-27): the contracts of the in-scope Anti-nero
+    (DATA_DECISIONS 2026-08-27): the contracts of the in-scope antinero
     chains (every record, not only the tips), the calls / awards / requests
     their registry family and their own texts cite, the live ΔΑΣΕ contracts
     with their superseded versions and their upstream acts, and the

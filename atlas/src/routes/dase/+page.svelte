@@ -39,7 +39,7 @@
 	// the card (user mock, 2026-08-27): three KPIs, the URL parameters this
 	// page reads (any opens the card unfolded), the map tile's size
 	const PARAMS = ['focus'] as const;
-	/** the three KPI cards in the Anti-nero card's dress (user, 2026-08-28):
+	/** the three KPI cards in the antinero card's dress (user, 2026-08-28):
 	 *  every number from the payload, the years read off the yearly series */
 	const kpiRich = $derived([
 		{
@@ -63,7 +63,7 @@
 	]);
 	let tileW = $state(0);
 	let tileH = $state(0);
-	/** the card map's two lenses (the Anti-nero card's treatment, user
+	/** the card map's two lenses (the antinero card's treatment, user
 	 *  2026-08-28): € by the awarding forest service's regional unit, or
 	 *  by the co-operatives' registered offices */
 	let allocKind = $state<'work' | 'home'>('work');
@@ -89,7 +89,7 @@
 		return m;
 	});
 	/** the card map's frame: the shared card frame slid 0,264° west and a
-	 *  degree wider there, as on the Anti-nero card, so the title, the
+	 *  degree wider there, as on the antinero card, so the title, the
 	 *  toggle and the key have the left */
 	const ALLOC_SHIFT = 0.264;
 	const ALLOC_WEST = 0.5;
@@ -217,7 +217,7 @@
 	// legend + contract list may never run past the map's bottom edge
 	let mapH = $state(0);
 	let keyH = $state(0);
-	// the Anti-nero maps' fixed frame — same footprint on every dataset page
+	// the antinero maps' fixed frame — same footprint on every dataset page
 	const MAP_VIEW: { center: [number, number]; k: number } = {
 		center: [23.8305, 38.3566],
 		k: 1.08
@@ -245,7 +245,7 @@
 			.flatMap((d) => d.classes.flatMap((k) => k.codes))
 			.sort((a, b) => b.n - a.n)[0] ?? null
 	);
-	// AWARD PROCEDURES + DIRECT AWARDS (2026-08-24): the Anti-nero pair's
+	// AWARD PROCEDURES + DIRECT AWARDS (2026-08-24): the antinero pair's
 	// dress, but NO ceiling lines — the recital audit showed the mass rests
 	// on the forest-code assignment regime and the >€60k cohort on the
 	// 13.08.2021 ΠΝΠ derogation (DATA_DECISIONS); every number computed
@@ -349,7 +349,7 @@
 
 <div class="dasep">
 <!-- the two lenses of the card map, stacked under its title in their
-     full wording, the chosen one black (the Anti-nero card's treatment) -->
+     full wording, the chosen one black (the antinero card's treatment) -->
 {#snippet allocSwitch()}
 	<div class="allocsw" role="group" aria-label="Allocation by">
 		<button class:on={allocKind === 'work'} onclick={() => (allocKind = 'work')}
@@ -460,7 +460,7 @@
 </ChartFrame>
 
 
-<!-- the works/seats duo, the Anti-nero ALLOCATION OF FUNDING one dataset
+<!-- the works/seats duo, the antinero ALLOCATION OF FUNDING one dataset
      over (user, DATA_DECISIONS 2026-08-24) -->
 {#if alloc}
 	{@const topWork = alloc.work_regions[0]}
@@ -629,7 +629,7 @@
 	/>
 </ChartFrame>
 
-<!-- the Anti-nero AWARD PROCEDURES + DIRECT AWARDS pair, one dataset over
+<!-- the antinero AWARD PROCEDURES + DIRECT AWARDS pair, one dataset over
      (DATA_DECISIONS 2026-08-24): same dress, NO ceiling lines — the
      άρθρο 118 ceilings do not govern the forest-code or ΠΝΠ regimes -->
 <div class="pair">
@@ -982,7 +982,7 @@
 	   the unfilled remainder reads as light grey, no outer border */
 	@media (max-width: 900px) {
 	}
-	/* the page's one BASIS line under the intro (the Anti-nero dress) */
+	/* the page's one BASIS line under the intro (the antinero dress) */
 	/* year legend left, mode switch hard right — one line above the chart */
 	.modes {
 		display: flex;
@@ -1046,7 +1046,7 @@
 		max-width: none;
 	}
 	/* the card's tiles fill their panels (`.tilefill`, not `.fill` — the
-	   direct-award bar owns that name); the map in the Anti-nero card's
+	   direct-award bar owns that name); the map in the antinero card's
 	   manners: thinner lines, no plate, white unit seams on the green */
 	.tilefill {
 		position: absolute;
@@ -1071,7 +1071,7 @@
 	.tilefill.mapfill :global(.region.noline) {
 		stroke: var(--unit-line);
 	}
-	/* the key as on the Anti-nero card: the ends of the scale on a line
+	/* the key as on the antinero card: the ends of the scale on a line
 	   ABOVE a 128 px swatch bar with a ½ px black hairline, the sentence
 	   under it, 10 px lettering, on the title's A */
 	.tilefill .mapkey {

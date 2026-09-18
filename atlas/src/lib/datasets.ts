@@ -58,11 +58,11 @@ export const SYMBOLS: SiteSymbol[] = [
 	{
 		key: 'antinero',
 		href: '/antinero',
-		label: 'Anti-nero programme',
+		label: 'antinero programme',
 		color: 'var(--c-antinero)',
 		symbol: '/img/symbols/antinero.svg',
 		aspect: 707.14 / 289.27,
-		// the Anti-nero hue is black, which cannot sit on the dark band —
+		// the antinero hue is black, which cannot sit on the dark band —
 		// a 5% fade of it into paper (#f2f2f2 at the default palette)
 		chip: 'color-mix(in srgb, var(--c-antinero) 5%, var(--paper))',
 		rank: 'stream'

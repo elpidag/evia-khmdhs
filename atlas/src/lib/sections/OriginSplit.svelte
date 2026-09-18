@@ -2,7 +2,7 @@
 	/**
 	 * € of works in the biggest destination regions, split by whether the
 	 * winning firm is based in that region. Lifted out of /connections so the
-	 * Anti-nero page can carry it (user, 2026-08-20).
+	 * antinero page can carry it (user, 2026-08-20).
 	 */
 	import { peEn } from '$lib/transforms/regions';
 	import { eurShort } from '$lib/transforms/format';

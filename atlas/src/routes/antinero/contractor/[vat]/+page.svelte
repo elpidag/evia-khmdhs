@@ -91,17 +91,17 @@
 </script>
 
 <svelte:head>
-	<title>{name} — Anti-nero contractor</title>
+	<title>{name} — antinero contractor</title>
 	<meta property="og:title" content={name} />
 	<meta
 		property="og:description"
-		content="{grInt(b.summary.n_contracts)} Anti-nero contracts, {eurShort(
+		content="{grInt(b.summary.n_contracts)} antinero contracts, {eurShort(
 			b.summary.total_eur
 		)} · {b.location?.city ?? ''}"
 	/>
 </svelte:head>
 
-<p class="crumb"><a href="/authorities?list=contractors#list">← Anti-nero contractors</a></p>
+<p class="crumb"><a href="/authorities?list=contractors#list">← Antinero contractors</a></p>
 
 <div class="entp">
 	<FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
@@ -199,7 +199,7 @@
 	<div class="pair">
 	<section class="plain">
 		<h2>€ per year</h2>
-		<!-- the Anti-nero surfaces are black-white-greyscale (user, 2026-08-20) -->
+		<!-- the antinero surfaces are black-white-greyscale (user, 2026-08-20) -->
 		<YearBars rows={b.yearly.years} color="var(--c-antinero)" />
 	</section>
 	<div class="foldslot">

@@ -243,7 +243,7 @@ export interface DaseOverview {
 	kpis: DaseKpis;
 	yearly: { year: string; n: number; eur: number }[];
 	/** the declared codes rolled up the CPV tree — same shape and
-	 *  conventions as the Anti-nero front page's (2026-08-24) */
+	 *  conventions as the antinero front page's (2026-08-24) */
 	cpv_tree?: AntineroOverview['cpv_tree'];
 	/** the live direct-award contracts' stated values on the doubling axis;
 	 *  NO thresholds by design — the άρθρο 118 ceilings do not govern the
@@ -480,7 +480,7 @@ export interface AntineroOverview {
 	top_signers: Record<string, unknown>[];
 	coverage: Record<string, number>;
 	/** chains kept in the dataset but excluded from every calculation:
-	 *  probably Anti-nero, RRF-16849 membership unproven (chain tips) */
+	 *  probably antinero, RRF-16849 membership unproven (chain tips) */
 	probable: {
 		n: number;
 		total_eur: number;
@@ -559,13 +559,13 @@ export interface ExploreRow {
 	proc: 'direct' | 'open' | 'nego' | 'other' | 'sponsor';
 	st: string | null;
 	b1: number;
-	/** linked διακήρυξη/πρόσκληση: 1/0 for Anti-nero, null elsewhere */
+	/** linked διακήρυξη/πρόσκληση: 1/0 for antinero, null elsewhere */
 	pr: number | null;
-	/** project end date on record: 1/0 (Anti-nero completion act /
+	/** project end date on record: 1/0 (antinero completion act /
 	 *  anadohoi completed status), null for ΔΑΣΕ (never harvested) */
 	fin: number | null;
 	/** last date of the contract's chain, when it has more than one record —
-	 *  the row's date cell reads «first → last» (Anti-nero only) */
+	 *  the row's date cell reads «first → last» (antinero only) */
 	d1?: string;
 	/** every record of the chain, oldest first: what each one IS, when, and
 	 *  the value it carried. Absent for a contract posted once. */
@@ -573,10 +573,10 @@ export interface ExploreRow {
 	/** the chain's other ΑΔΑΜ — searchable, so citing an earlier version
 	 *  finds the contract instead of nothing */
 	alt?: string[];
-	/** the δήμοι the contract's documents name (Anti-nero only; absent for
+	/** the δήμοι the contract's documents name (antinero only; absent for
 	 *  the 93 that name none, and for the other two datasets) */
 	mu?: string[];
-	/** the linked forest authorities (Anti-nero), searchable */
+	/** the linked forest authorities (antinero), searchable */
 	au?: string[] | null;
 }
 
@@ -585,7 +585,7 @@ export interface ExplorePayload {
 	counts: Record<string, number>;
 }
 
-/** `/api/connections` — the Anti-nero flow layer (region→region flows, the
+/** `/api/connections` — the antinero flow layer (region→region flows, the
  *  local-vs-imported split, hubs, signers, consortium pairs). Fetched by the
  *  front page's FLOWS OF MONEY frame post-hydration; the old /connections
  *  page that first carried it left the site on 2026-08-23. */

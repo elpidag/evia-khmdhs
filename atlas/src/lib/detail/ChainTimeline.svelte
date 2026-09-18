@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * One Anti-nero contract's life on the programme axis: the bar from
+	 * One antinero contract's life on the programme axis: the bar from
 	 * signature to the day it was accepted, a dot for every later act on the
 	 * same contract (τροποποίηση όρων, παράταση προθεσμίας, έγκριση
 	 * συμπληρωματικών εργασιών), a tick for every payment order, and the ✔ of
@@ -129,9 +129,9 @@
 		/** act-dot hover in/out — the page highlights the trail row */
 		onActHover?: (ref: string | null) => void;
 		/** the bar's ink — the dataset's own hue (the ΔΑΣΕ page passes green;
-		 *  Anti-nero keeps the default) */
+		 *  antinero keeps the default) */
 		ink?: string;
-		/** the axis origin (ISO) — Anti-nero's programme year by default */
+		/** the axis origin (ISO) — antinero's programme year by default */
 		axisStart?: string;
 		/** draw a DOT at the signature instead of the stub bar — the ΔΑΣΕ
 		 *  page, where no verified deadline layer exists and a bar would
@@ -173,7 +173,7 @@
 	// the extension fill the sponsor Gantt uses for a running project's
 	// extended stretch — the same convention, so the two read alike
 	// the extension is the SAME ink as the bar, thinned (user, 2026-08-19) —
-	// the sponsor pages' green said «other dataset» on an Anti-nero page
+	// the sponsor pages' green said «other dataset» on an antinero page
 	const EXT_FILL = 'var(--tl-ink, var(--c-antinero))';
 	const EXT_OPACITY = 0.3;
 	const ORDINAL = (n: number): string =>
@@ -187,7 +187,7 @@
 		auction: 'award'
 	};
 
-	// Anti-nero's own programme axis: the first in-scope signature is
+	// antinero's own programme axis: the first in-scope signature is
 	// 2022-04-13 and the ΥΠΕΝ↔ΤΑΙΠΕΔ framework 07.02.2022, so the year opens it;
 	// the ΔΑΣΕ page passes its own start (its dataset opens in September 2021)
 	const T0 = $derived(new Date(axisStart).getTime());

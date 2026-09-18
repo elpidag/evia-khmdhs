@@ -1472,10 +1472,16 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   expectations hold on either basis. The three dataset pages open with
   harmonised KPI rows (stated net / paid net / median net / counts /
   % direct).
-- **The programme's name in site copy is «Anti-nero», «ANTI-NERO» in
-  capitals** (author, 2026-09-04; DATA_DECISIONS): never AntiNero /
-  Antinero / ANTINERO in prose, captions or labels — cited titles keep
-  their sources' spelling, identifiers and registry data are untouched.
+- **The programme's name in site copy is «antinero» — lowercase in
+  running text, «Antinero» as the first word of a sentence, a title or a
+  capitalised label, «ANTINERO» where the whole text is in capitals**
+  (author, 2026-09-18; DATA_DECISIONS — it was «Anti-nero» / «ANTI-NERO»
+  from 2026-09-04): never Anti-nero / AntiNero / AntiNERO in prose,
+  captions or labels; a label's first word follows its neighbours' case
+  («antinero programme» beside the lowercase stream names, «Antinero
+  contractors» beside «Forest co-operatives»); cited titles keep their
+  sources' spelling, identifiers and registry data are untouched; the
+  timeline importer normalises the spreadsheet's spelling.
 - **Rebrand «FORESTRY WORKS TRACKER»** (2026-08-12, commits
   b35e5db…1d7161e): white paper (cream retired), `--c-antinero` was BLACK until 2026-09-04 (the ink grey #1f1f1f since, the
   author's Theme Lab pick — with `--c-fire` the terracotta #b33a1a, from the

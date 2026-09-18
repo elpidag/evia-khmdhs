@@ -54,7 +54,7 @@
 		richKpis?: RichKpi[];
 		/** «triple» is the three-column card: the text, then the KPI row over
 		 *  one or two tiles, then two or three tiles stacked (the sponsored
-		 *  card's Artboard 4, the Anti-nero card's Artboard 6) */
+		 *  card's Artboard 4, the antinero card's Artboard 6) */
 		layout?: 'default' | 'triple';
 		/** a page's own KPI block in the 137 px row, instead of KpiRich */
 		kpiBlock?: Snippet;
@@ -68,7 +68,7 @@
 		/** the row gaps in px */
 		midGap?: number;
 		rightGap?: number;
-		/** the KPI row across BOTH chart columns (the Anti-nero card, user
+		/** the KPI row across BOTH chart columns (the antinero card, user
 		 *  2026-08-27) instead of over the middle one */
 		kpiSpan?: boolean;
 		/** the KPI block as TWO rows of full-height cards (2028-08-28), and

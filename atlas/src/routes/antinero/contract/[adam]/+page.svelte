@@ -397,7 +397,7 @@
 
 	const quotes = $derived<Quote[]>([
 		// a curated stated-value correction must be visible on the page it
-		// changes: 5 Anti-nero contracts carry one (DATA_DECISIONS 2026-08-14,
+		// changes: 5 antinero contracts carry one (DATA_DECISIONS 2026-08-14,
 		// 2026-08-18), and without this the page shows a figure that differs
 		// from the registry with no explanation
 		...(c.correction_note
@@ -688,17 +688,17 @@
 </script>
 
 <svelte:head>
-	<title>{c.title ?? c.reference_number} — Anti-nero</title>
+	<title>{c.title ?? c.reference_number} — antinero</title>
 	<meta property="og:title" content={c.title ?? c.reference_number} />
 	<meta
 		property="og:description"
-		content="Anti-nero contract {c.reference_number}: {eurShort(
+		content="Antinero contract {c.reference_number}: {eurShort(
 			c.total_cost_without_vat ?? 0
 		)} stated (excl. VAT) · {c.contractors.map((x) => x.name).join(', ')}"
 	/>
 </svelte:head>
 
-<p class="crumb"><a href="/antinero/contracts">← Anti-nero contracts</a></p>
+<p class="crumb"><a href="/antinero/contracts">← Antinero contracts</a></p>
 
 <FactsHeader caveat={CAVEAT} bind:leftHeight={leftH}>
 	{#snippet facts()}

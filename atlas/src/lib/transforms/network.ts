@@ -1,5 +1,5 @@
 /**
- * Deterministic layout for the Anti-nero contract network.
+ * Deterministic layout for the antinero contract network.
  *
  * No force simulation: a simulation gives a different picture on every
  * load, cannot be pinned by a test, and at 245 nodes degenerates into a

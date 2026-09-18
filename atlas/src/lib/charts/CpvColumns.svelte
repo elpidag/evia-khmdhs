@@ -46,7 +46,7 @@
 	const ROW = 15; // a row of the 13px names
 	// ~5 labelled ticks whatever the dataset's size — the fixed 25/50 pair
 	// smeared 40 ticks onto the axis when the ΔΑΣΕ page (total 1.998) took
-	// this chart (2026-08-24); Anti-nero (245) still lands on 50
+	// this chart (2026-08-24); antinero (245) still lands on 50
 	const step = $derived.by(() => {
 		for (const s of [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000])
 			if (total / s <= 5.5) return s;
@@ -281,7 +281,7 @@
 	/* the bars take the hosting page's ink (— the ΔΑΣΕ page passes its
 	   green via --cpv-ink, 2026-08-24); the hover/dim states are the same
 	   ink mixed toward the paper, so every page gets its own colour's
-	   «transparencies» — on Anti-nero the mixes land on the exact greys
+	   «transparencies» — on antinero the mixes land on the exact greys
 	   these rules used to hardcode (color-mix(in srgb, var(--ink) 87.8%, var(--paper)) / #bdbdbd / color-mix(in srgb, var(--ink) 44.5%, var(--paper))) */
 	.bar {
 		fill: var(--cpv-ink, var(--c-antinero));

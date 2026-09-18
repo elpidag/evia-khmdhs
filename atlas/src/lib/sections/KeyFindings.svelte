@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * KEY FINDINGS — Anti-nero beside the forest co-op contracts. Until
+	 * KEY FINDINGS — antinero beside the forest co-op contracts. Until
 	 * 2026-08-27 this was the /compare page, then the story's full-width
 	 * coda; since 2026-09-02 (the author) it renders ONE item at a time in
 	 * the story's columns, advancing with the paragraphs of KEY FINDINGS AND
@@ -29,7 +29,7 @@
 		return { year: c.years[bi], eur: vals[bi] || 0 };
 	};
 	/** the KPI cards as the author set them (2026-09-04): TWO COLUMNS — the
-	 *  Anti-nero programme and the forest workers' co-operatives — each with
+	 *  antinero programme and the forest workers' co-operatives — each with
 	 *  its stated money and its number of contracts */
 	const A = 'var(--c-antinero)';
 	const D = 'var(--c-dase)';
@@ -87,7 +87,7 @@
 			     2026-09-04) -->
 			<div class="kgrid">
 				<div class="kheads">
-					<h3 class="tt">ANTI-NERO PROGRAMME</h3>
+					<h3 class="tt">ANTINERO PROGRAMME</h3>
 					<h3 class="tt">FOREST WORKERS' CO-OPERATIVES</h3>
 				</div>
 				<KpiCards cards={kpiMoney} />
@@ -100,10 +100,10 @@
 			<SignedTimeline dots={c.dots} bind:maxShiftDays={signedShift} />
 			<!-- the first sentence computed from the dots; the two that follow are
 			     the author's own (2026-09-04), checked against the signature months:
-			     81 % of co-op contracts fall in August–November, 81 % of Anti-nero's
+			     81 % of co-op contracts fall in August–November, 81 % of antinero's
 			     in March–October -->
 			<p class="note">
-				{grInt(signed.a.k)} of the {grInt(signed.a.n)} Anti-nero contracts ({grNumber(
+				{grInt(signed.a.k)} of the {grInt(signed.a.n)} antinero contracts ({grNumber(
 					signed.a.share,
 					0
 				)}%, {eurShort(signed.a.eur)}) were signed inside the fire season, against {grNumber(
@@ -111,7 +111,7 @@
 					0
 				)}% of the co-operatives' {grInt(signed.d.n)}. Co-operative contracts tend to be
 				concentrated between August and November, corresponding largely to the final months of the
-				fire season and the period immediately thereafter. By contrast, Anti-nero contracts are more
+				fire season and the period immediately thereafter. By contrast, antinero contracts are more
 				frequently signed in the months immediately preceding the start of the fire season or during
 				the fire season itself.
 			</p>
@@ -128,7 +128,7 @@
 			<!-- the bracket note folded into the text (the author, 2026-09-04: the
 			     caveat size was illegible) -->
 			<p class="note">
-				Different universes: the median Anti-nero contract is {eurShort(c.hist.antinero_median)},
+				Different universes: the median antinero contract is {eurShort(c.hist.antinero_median)},
 				the median co-op contract {eur(c.hist.dase_median)} — the two distributions barely overlap.
 				Shared log₂ brackets, each programme as a share of its own contracts; stated values excl.
 				VAT.
@@ -155,7 +155,7 @@
 			<!-- vertical, the two colours together (the author, 2026-09-04) -->
 			<YearColumns years={c.years} a={c.yearly.antinero} d={c.yearly.dase} />
 			<p class="note">
-				Anti-nero ramps up while the co-op money drifts down: Anti-nero peaked in {peakYear(
+				Antinero ramps up while the co-op money drifts down: antinero peaked in {peakYear(
 					c.yearly.antinero
 				).year} ({eurShort(peakYear(c.yearly.antinero).eur)}), the co-ops in {peakYear(
 					c.yearly.dase

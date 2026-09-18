@@ -29,7 +29,7 @@ export const FIGURES: Record<number, LiveFigure> = {
 	// imagery and burnt-area data require live in ALERTS_CREDIT
 	// (transforms/alerts.ts) for the SOURCES section to carry
 	4: { component: AlertsMap, name: '112 emergency alerts' },
-	// the Anti-nero page's CONTRACT TYPE frame, live (the author, 2026-09-03)
+	// the antinero page's CONTRACT TYPE frame, live (the author, 2026-09-03)
 	// no credit line under it (the author, 2026-09-03): the figure carries
 	// the frame's own title and lens toggle instead
 	10: { component: ContractType, name: 'types of work graph', frame: 'auto' }

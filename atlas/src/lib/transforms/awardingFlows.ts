@@ -3,7 +3,7 @@
  * shared by the dataset pages and the story's full-width band so the
  * story can never draw a different diagram from the pages:
  *
- *   Anti-nero — the Ministry (one node) → its operating units → the ten
+ *   Antinero — the Ministry (one node) → its operating units → the ten
  *   biggest contractors + everyone else, from `/api/antinero/unit-flow`
  *   (`queries_extra.unit_flows`, even split, pinned to the basis);
  *
@@ -13,7 +13,7 @@
  *   `kind_mix` of `/api/dase/overview` (`queries_extra.dase_kind_mix`).
  *
  * Colours are CSS strings over the tokens (the palette doctrine of
- * 2026-09-03). The Anti-nero units are greys in rank order; the co-op
+ * 2026-09-03). The antinero units are greys in rank order; the co-op
  * diagram reuses the /dase map's two forest greens.
  */
 import type { DaseOverview } from '$lib/api';

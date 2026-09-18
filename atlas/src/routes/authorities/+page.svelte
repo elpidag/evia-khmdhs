@@ -44,7 +44,7 @@
 	const MODES = [
 		{ value: 'authorities', label: 'Forest authorities' },
 		{ value: 'coops', label: 'Forest co-ops' },
-		{ value: 'contractors', label: 'Anti-nero contractors' },
+		{ value: 'contractors', label: 'Antinero contractors' },
 		{ value: 'all', label: 'All' }
 	] as const;
 	type Mode = (typeof MODES)[number]['value'];
@@ -71,7 +71,7 @@
 
 	// the authority dot wears the authorities' own tone; the green core
 	// (a second inert layer) marks the ones that ALSO award ΔΑΣΕ
-	// contracts — no authority awards ΔΑΣΕ without hosting Anti-nero
+	// contracts — no authority awards ΔΑΣΕ without hosting antinero
 	// works (measured 0), and the no-contract ones render pale
 	const authFill = (p: Record<string, unknown>) =>
 		p.antinero_n || p.dase_n ? AUTH_TONE : 'color-mix(in srgb, var(--ink) 39.6%, var(--paper))';
@@ -85,7 +85,7 @@
 
 	const authTip = (p: Record<string, unknown>) =>
 		`<strong>${authEn(String(p.name))}</strong><br>` +
-		`Anti-nero: ${p.antinero_n ? `${grInt(p.antinero_n as number)} contracts · ${eurShort(p.antinero_eur as number)}` : '—'}<br>` +
+		`Antinero: ${p.antinero_n ? `${grInt(p.antinero_n as number)} contracts · ${eurShort(p.antinero_eur as number)}` : '—'}<br>` +
 		`ΔΑΣΕ awards: ${p.dase_n ? `${grInt(p.dase_n as number)} contracts · ${eurShort(p.dase_eur as number)}` : '—'}`;
 	const coopTip = (p: Record<string, unknown>) =>
 		`<strong>${p.name}</strong><br>${p.place ? `${p.place} · ` : ''}${grInt(p.n_contracts as number)} contracts · ${eurShort(p.total_eur as number)}`;
@@ -153,11 +153,11 @@
 	const LIST_TITLES: Record<ListShow, string> = {
 		authorities: 'FOREST AUTHORITIES',
 		coops: 'FOREST CO-OPS',
-		contractors: 'ANTI-NERO CONTRACTORS'
+		contractors: 'ANTINERO CONTRACTORS'
 	};
 	const LIST_CAVEATS: Record<ListShow, string> = {
 		authorities:
-			'Anti-nero € even-split across a contract’s authorities; the ΔΑΣΕ side matched from the awarding unit’s name. Units with no contracts in either dataset come from the ministry’s own directory.',
+			'Antinero € even-split across a contract’s authorities; the ΔΑΣΕ side matched from the awarding unit’s name. Units with no contracts in either dataset come from the ministry’s own directory.',
 		coops: 'Stated net €, a jointly signed contract split evenly between its co-operatives.',
 		contractors:
 			"Stated net €, a jointly signed contract split evenly between its parties; names as each contractor's own documents write them."
@@ -190,15 +190,15 @@
 	<title>Network of actors — forest authorities, co-ops, contractors</title>
 	<meta
 		name="description"
-		content="Greece's forest authorities, forest workers' co-operatives and Anti-nero contractors — one map, three networks."
+		content="Greece's forest authorities, forest workers' co-operatives and antinero contractors — one map, three networks."
 	/>
 </svelte:head>
 
 <div class="authp">
 	<ChartFrame
 		title="NETWORK OF ACTORS"
-		insight={`${grInt(both.length)} of the ${grInt(rows.length)} forest authorities both host Anti-nero works and award co-op contracts; ${grInt(data.coops.length)} co-operatives and ${grInt(data.contractors.length)} Anti-nero contractors are placed at the registered office their own documents state.`}
-		caveat="Every € stated net of VAT; the Anti-nero € of a contract covering several authorities is split evenly between them, and the co-op side is matched from the awarding unit's name. Authority seats from the ΥΠΕΝ contact tables corroborated by each service's own letterheads; co-op and contractor offices from their own documents."
+		insight={`${grInt(both.length)} of the ${grInt(rows.length)} forest authorities both host antinero works and award co-op contracts; ${grInt(data.coops.length)} co-operatives and ${grInt(data.contractors.length)} antinero contractors are placed at the registered office their own documents state.`}
+		caveat="Every € stated net of VAT; the antinero € of a contract covering several authorities is split evenly between them, and the co-op side is matched from the awarding unit's name. Authority seats from the ΥΠΕΝ contact tables corroborated by each service's own letterheads; co-op and contractor offices from their own documents."
 		anchor="map"
 		methodology="validation"
 	>
@@ -330,11 +330,11 @@
 						<!-- the user's wording (2026-08-26) -->
 						<li>
 							<i class="dot" style:background={AUTH_TONE}></i>
-							responsible for supervision of Anti-nero works in its territory
+							responsible for supervision of antinero works in its territory
 						</li>
 						<li>
 							<i class="dot both"></i>
-							responsible for supervision of Anti-nero works and contracts awarded to
+							responsible for supervision of antinero works and contracts awarded to
 							forest workers' co-operatives in its territory
 						</li>
 						<li>
@@ -352,7 +352,7 @@
 					{:else if show === 'contractors'}
 						<li>
 							<i class="dot" style:background="var(--ink)"></i>
-							registered offices for contractors of the Anti-nero works ({grInt(
+							registered offices for contractors of the antinero works ({grInt(
 								conDots.length
 							)})
 						</li>
@@ -370,7 +370,7 @@
 						</li>
 						<li>
 							<i class="dot" style:background="var(--ink)"></i>
-							registered offices for contractors of the Anti-nero works ({grInt(
+							registered offices for contractors of the antinero works ({grInt(
 								data.contractors.length
 							)})
 						</li>
@@ -381,7 +381,7 @@
 					<div class="cols">
 						<span class="nm"></span>
 						<span class="vals">
-							<span class="v anti">Anti-nero</span>
+							<span class="v anti">Antinero</span>
 							<span class="v dase">ΔΑΣΕ</span>
 						</span>
 					</div>
@@ -431,7 +431,7 @@
 						{/each}
 					</div>
 				{:else if show === 'contractors'}
-					<div class="sidehead">Anti-nero contractors <small>by €</small></div>
+					<div class="sidehead">Antinero contractors <small>by €</small></div>
 					<div class="cols">
 						<span class="nm"></span>
 						<span class="vals"><span class="v">contracts · €</span></span>
@@ -479,7 +479,7 @@
 					<button
 						type="button"
 						class:active={listShow === 'contractors'}
-						onclick={() => setList('contractors')}>Anti-nero contractors</button
+						onclick={() => setList('contractors')}>Antinero contractors</button
 					>
 				</div>
 				<input
@@ -512,7 +512,7 @@
 					<tr>
 						<th>Authority</th>
 						<th>Regional unit</th>
-						<th class="num">Anti-nero works</th>
+						<th class="num">Antinero works</th>
 						<th class="num">ΔΑΣΕ awards</th>
 					</tr>
 				</thead>

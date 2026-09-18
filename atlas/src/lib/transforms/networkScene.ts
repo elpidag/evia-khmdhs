@@ -1,5 +1,5 @@
 /**
- * One scene per arrangement of the Anti-nero programme chart.
+ * One scene per arrangement of the antinero programme chart.
  *
  * The mark never changes — one circle per in-scope contract, area ∝ stated
  * net €, colour = programme phase — so the toggle rearranges a population

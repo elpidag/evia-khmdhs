@@ -644,7 +644,7 @@
 		background: var(--paper);
 	}
 	/* the column titles are the dataset card's own name style — the same face,
-	   weight, size ramp, line-height and tracking as «ANTI-NERO PROGRAMME»
+	   weight, size ramp, line-height and tracking as «ANTINERO PROGRAMME»
 	   (`ui/DatasetCard.svelte` .bigname), so the two pages speak once */
 	.head {
 		grid-column: 1;

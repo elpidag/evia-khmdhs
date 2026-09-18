@@ -44,7 +44,7 @@
 	const mapH = $derived(Math.max(420, Math.round(leftH)));
 
 	const CAVEAT = $derived(
-		'Anti-nero € stated net of VAT, split evenly across the services a contract names; the ' +
+		'antinero € stated net of VAT, split evenly across the services a contract names; the ' +
 			'ΔΑΣΕ side matched from the awarding unit’s own name. Office details from the ΥΠΕΝ ' +
 			'contact tables, corroborated by the service’s own letterheads.'
 	);
@@ -55,7 +55,7 @@
 	<meta property="og:title" content={authEn(a.name)} />
 	<meta
 		property="og:description"
-		content="{authEn(a.name)}: {eurShort(a.antinero.total_eur)} of Anti-nero works · {grInt(
+		content="{authEn(a.name)}: {eurShort(a.antinero.total_eur)} of antinero works · {grInt(
 			a.dase.contracts.length
 		)} ΔΑΣΕ contracts awarded"
 	/>
@@ -77,9 +77,9 @@
 			<dt class="gap"></dt>
 			<dd class="gap"></dd>
 {#if a.antinero.contracts.length}
-				<dt>Anti-nero works supervised</dt>
+				<dt>Antinero works supervised</dt>
 				<dd>{eurShort(a.antinero.total_eur)}</dd>
-				<dt>Anti-nero contracts</dt>
+				<dt>Antinero contracts</dt>
 				<dd>{grInt(a.antinero.contracts.length)}</dd>
 			{/if}
 			{#if a.dase.contracts.length}
@@ -126,11 +126,11 @@
 		{/snippet}
 	</FactsHeader>
 
-	<!-- the Anti-nero side: the companies whose works it supervises -->
+	<!-- the antinero side: the companies whose works it supervises -->
 	{#if a.antinero.contracts.length}
 	<div class="pair anti">
 		<section class="plain">
-			<h2>Anti-nero contractors</h2>
+			<h2>Antinero contractors</h2>
 			<ul>
 				{#each a.antinero.top_contractors as t (t.vat)}
 					<li>
@@ -143,7 +143,7 @@
 			</ul>
 		</section>
 		<div class="foldslot">
-				<Fold title="Anti-nero contracts ({a.antinero.contracts.length})">
+				<Fold title="Antinero contracts ({a.antinero.contracts.length})">
 					<table>
 						<thead>
 							<tr>
@@ -236,10 +236,10 @@
 	{#if !a.antinero.contracts.length || !a.dase.contracts.length}
 		<p class="none muted">
 			{#if !a.antinero.contracts.length && !a.dase.contracts.length}
-				No Anti-nero contract names this service, and it awarded no contract to a forest
+				No antinero contract names this service, and it awarded no contract to a forest
 				co-operative, within this research.
 			{:else if !a.antinero.contracts.length}
-				No Anti-nero contract names this service within this research.
+				No antinero contract names this service within this research.
 			{:else}
 				This service awarded no contract to a forest co-operative within this research.
 			{/if}

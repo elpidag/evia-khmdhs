@@ -33,7 +33,7 @@
 	<!-- the key strip above the chart, in the dataset pages' legend dress
 	     (user, 2026-08-25) -->
 	<ul class="legend">
-		<li><i class="a"></i>Anti-nero ({grInt(hist.antinero_n)} contracts)</li>
+		<li><i class="a"></i>antinero ({grInt(hist.antinero_n)} contracts)</li>
 		<li><i class="d"></i>forest co-ops ({grInt(hist.dase_n)} contracts)</li>
 		<li class="faint">y-axis: % of each programme's own contracts</li>
 	</ul>
@@ -68,10 +68,10 @@
 			y1={M.top - 4} y2={height - M.bottom} />
 		<text class="median-label a" x={xOf(hist.antinero_median) - 5} y={M.top - 8}
 			text-anchor="end">
-			Anti-nero median {eurShort(hist.antinero_median)}
+			antinero median {eurShort(hist.antinero_median)}
 		</text>
 		<!-- the co-op label a row higher: it runs right from its line toward the
-		     Anti-nero label running left from its own -->
+		     antinero label running left from its own -->
 		<line class="median d" x1={xOf(hist.dase_median)} x2={xOf(hist.dase_median)}
 			y1={M.top - 4} y2={height - M.bottom} />
 		<text class="median-label d" x={xOf(hist.dase_median) + 5} y={M.top - 24}>

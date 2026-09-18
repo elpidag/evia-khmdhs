@@ -152,7 +152,7 @@
 	// every state (the instructions live in the ⓘ, as on the allocation maps)
 	function importTip(pe: string): string {
 		const w = perWork.get(pe);
-		if (!w || !w.total) return `<strong>${peEn(pe)}</strong><br>no Anti-nero works recorded`;
+		if (!w || !w.total) return `<strong>${peEn(pe)}</strong><br>no antinero works recorded`;
 		const share = Math.round(100 * (1 - w.local / w.total));
 		return `<strong>${peEn(pe)}</strong><br>${eurShort(w.total)} of works · ${share}% won by out-of-region firms`;
 	}
@@ -533,7 +533,7 @@
 	}
 	.years input[type='range'] {
 		width: 100%;
-		accent-color: color-mix(in srgb, var(--ink) 53.3%, black); /* black on the Anti-nero page, never the warm ink (user) */
+		accent-color: color-mix(in srgb, var(--ink) 53.3%, black); /* black on the antinero page, never the warm ink (user) */
 		margin: 0;
 	}
 	.ticks {

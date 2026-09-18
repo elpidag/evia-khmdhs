@@ -1,5 +1,5 @@
 /**
- * `/` was the Anti-nero overview until 2026-08-27, when the landing page
+ * `/` was the antinero overview until 2026-08-27, when the landing page
  * took the root and the overview moved to /antinero. Every permalink the
  * old page minted keeps working: its query forms are forwarded by the
  * landing's loader (server-visible), its hash forms by the landing page

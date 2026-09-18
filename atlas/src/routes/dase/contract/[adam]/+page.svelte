@@ -1,6 +1,6 @@
 <script lang="ts">
 	/**
-	 * The ΔΑΣΕ contract page on the Anti-nero skeleton (user, DATA_DECISIONS
+	 * The ΔΑΣΕ contract page on the antinero skeleton (user, DATA_DECISIONS
 	 * 2026-08-23): the facts list where the data exists, the map with the
 	 * procurement DIAGRAM behind a switch, the TIMELINE (signature, run-up
 	 * acts and € payment marks — NO deadline bar), the DOCUMENT TRAIL with
@@ -106,7 +106,7 @@
 	});
 	/** the diagram: the whole family the registry's chain returns */
 	const familyActs = $derived(rowsOf(c.family_acts ?? c.timeline ?? []));
-	/** the Anti-nero-style radial (user, 2026-08-29): the call — or the award,
+	/** the antinero-style radial (user, 2026-08-29): the call — or the award,
 	 *  where the procedure published no call — at the centre, the family's
 	 *  contracts around it; the FamilyTree stays in the repo, off the page */
 	const family = $derived(c.family ?? null);
@@ -508,7 +508,7 @@
 
 <style>
 	/* the page wears the dataset's hue: folds, the timeline's ink, the map's
-	   zoom buttons — the Anti-nero page's skeleton in green */
+	   zoom buttons — the antinero page's skeleton in green */
 	.dasep {
 		--fold-accent: var(--c-dase);
 	}

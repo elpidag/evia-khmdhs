@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { legacyAntineroTarget } from './legacyRoutes';
 
-describe('old Anti-nero permalinks on /', () => {
+describe('old antinero permalinks on /', () => {
 	it('forwards every query form with its parameters intact', () => {
 		expect(
 			legacyAntineroTarget(
