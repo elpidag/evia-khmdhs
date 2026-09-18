@@ -37,7 +37,7 @@ describe('paragraphs that begin with a tag', () => {
 		expect(out).toContain('<p>Text.</p>');
 	});
 
-	it("renders the author's files with one <p> or <h3> per parsed block", async () => {
+	it("renders the author's files with one <p>, <h3> or <h4> per parsed block", async () => {
 		let rendered = 0;
 		// only the sections the story RENDERS count — the folder also holds the
 		// timeline disclaimer and the three dataset-card texts (author,
@@ -46,7 +46,9 @@ describe('paragraphs that begin with a tag', () => {
 		for (const [path, raw] of Object.entries(FILES)) {
 			if (!shown.has(path)) continue;
 			const code = (await compile(raw, opts))!.code;
-			rendered += (code.match(/<p>/g) ?? []).length + (code.match(/<h3>/g) ?? []).length;
+			// both heading ranks the author writes (`###` sub-chapters, the
+			// `####` of 2026-09-18) pair with a block
+			rendered += (code.match(/<p>/g) ?? []).length + (code.match(/<h3>/g) ?? []).length + (code.match(/<h4>/g) ?? []).length;
 		}
 		expect(rendered).toBe(BLOCKS.length);
 	});

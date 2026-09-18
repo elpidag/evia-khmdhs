@@ -12769,6 +12769,20 @@ related» chip — the other --c-flag-amber wearer — stays wired for its
 empty tier. API payloads keep the fields; presentation only. Verified:
 zero «1 bid» chips and no bid sentence on the rendered pages.
 
+## 2026-09-03 — the tinted-KPI try-out, behind the Theme Lab
+
+The Who Owns Britain lesson the author asked to try: KPI cards as PALE
+TINTS of their hue with dark text, instead of solid hue with white text.
+Both card systems — `KpiRich` (the dataset card pages) and `KpiCards`
+(the story's key-findings item) — now carry their colour as `--card-c`
+and a `.kpi-tinted` variant (`color-mix` hue 14% into the paper, every
+line in the ink); the Theme Lab gained a TRY-OUTS checkbox that toggles
+the class on the root, persists with the live state, and marks the CSS
+export when chosen. Nothing changes for anyone without the toggle — the
+default look is untouched. One descendant gotcha: KpiRich's sentences
+carry their own near-white (.text #f2f2f2), so the variant recolours
+them explicitly.
+
 ## 2026-09-03 — PROJECTS AND FIRES THAT TRIGGERED THEM leaves the sponsored page (user)
 
 The author: off the website for now, but keep the processes — «we might
@@ -13578,3 +13592,61 @@ the date is the refresh date the API reports (the same source as the
 refresh line on the cards) and cannot go stale when the records are
 refreshed again. START HERE, EXPLORE THE DATA and METHODOLOGY are a bit
 smaller than the artboard's 36 / 24 px: 30 / 20 px at 1920.
+
+## 2026-09-18 — the chronology's rewrite: 26 footnotes in the document's numbering, two timeline needles re-keyed (author)
+
+The author rewrote the chronology (`content/story/chronology.md`: the
+programme's financing under Measure 16849, its contestation, the EU
+parliamentary question and petition, the Court of Audit rulings) and
+supplied the footnotes as one list. The section's superscripts now run
+3–26 (1–2 stay the introduction's); the end-of-file list was replaced
+with notes 3–26 in the established form — one `N. text` line per note
+after the `---`, URLs as plain text, which `content.ts` turns into links
+on the citation chunk before each. Three notes carry link anchors whose
+targets the paste lost — 6 («link», twice: the EU Cohesion Policy page
+and the Greek ITI description), 19 («Parliamentary question»,
+«Commission answer») and 20 («Official petition record», «PETI
+newsletter») — kept verbatim and flagged to the author; nothing was
+invented. The new prose wrote the programme «antinero» eight times: the
+spelling rule of 2026-09-04 applies («Anti-nero»; the cited titles keep
+their sources' spelling), and one typo («ffirst») was corrected — the
+only two departures from the author's text, disclosed. Two timeline
+needles the rewrite removed were re-keyed to the new sentences
+(`bindings.ts`: the EU Forest Strategy's adoption; the programme's
+introduction on 8 July 2022); `content.test.ts` pins 26 notes and the
+two-source notes 16, 18 and 23. Verified locally: 39 story tests, the
+notes rendering with their links at the Court of Audit and Hybrid
+Schemes paragraphs. Figure markers 02–13 are all still in place.
+
+## 2026-09-18 — the three notes' link anchors placed; a `####` heading is a block too (author)
+
+The author supplied the six targets the paste had lost. Note 6 keeps ONE
+anchor — the first «link» (the EU Cohesion Policy page) is removed, the
+second («link» after «development plan») points at the Greek ITI
+description, `2014-2020.espa.gr/el/Pages/staticOXE.aspx`; note 19's
+«Parliamentary question» and «Commission answer» point at the written
+question E-002676/2024 and the Commission's answer on europarl.europa.eu;
+note 20's «Official petition record» at the PETI notice to members
+(PE 785.139) and the stray «PETI newsletter» anchor is deleted. The
+`utm_source=chatgpt.com` tails the author's browser attached are stripped.
+Written in the notes as `[text](url)` — and `content.ts` now reads that
+form: a markdown link inside a note links THAT text alone, while the plain
+stretches around it keep the established rule (a bare URL links the
+citation chunk before it — notes 16, 18, 23 unchanged, two links each).
+`content.test.ts` pins the three notes' link texts and targets and that
+note 19's citation text carries no link of its own.
+
+The same day the author added a fifth heading to the methodology,
+«Fieldwork encounters», written `####` — one rank below the four `###`
+sub-chapters (it sits under Limitations, ethics and reproducibility). The
+parser knew only `### `, filed it as a paragraph, and the page paired only
+`p`/`h3` elements: 111 rendered against 112 parsed, every pairing from
+that heading on one block out (the notes and the figure in force would
+have answered to the wrong paragraph). `content.ts` reads both ranks
+(`kind: 'h4'`), the page pairs `.prose > h4` too and sets it in the
+sub-chapters' face one step smaller (15 px, closer to its text — the UI
+face has no italic), `mdsvexParagraphs.test` counts `<h4>`, and a heading
+rank the parser does not know now fails `content.test` (a `#`-led block).
+The author's markdown is untouched. Verified in the local browser at
+1920×1080: 112 = 112 with no console mismatch, note 6 one link on «link»,
+note 19 two, note 20 one, the heading at `methodology-b22`.

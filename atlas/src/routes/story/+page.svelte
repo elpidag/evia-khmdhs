@@ -70,7 +70,7 @@
 	 * Pair the RENDERED paragraphs with the parsed blocks, in order: give each
 	 * element its block's id, register it on the reading-line observer, and on
 	 * a visibility observer for the footnote window. The correspondence is
-	 * p/h3 elements only — the hidden markers, rules and note lists don't
+	 * p/h3/h4 elements only — the hidden markers, rules and note lists don't
 	 * count on either side.
 	 */
 	$effect(() => {
@@ -79,7 +79,7 @@
 		for (const c of CHAPTERS) {
 			const beat = document.getElementById(c.id);
 			if (!beat) continue;
-			els.push(...beat.querySelectorAll<HTMLElement>('.prose > p, .prose > h3'));
+			els.push(...beat.querySelectorAll<HTMLElement>('.prose > p, .prose > h3, .prose > h4'));
 		}
 		if (els.length !== BLOCKS.length) {
 			console.warn(`story: ${els.length} rendered blocks vs ${BLOCKS.length} parsed`);
@@ -750,7 +750,8 @@
 	}
 	/* the methodology's sub-chapters stay in the text face, modest —
 	   sub-chapters of METHODOLOGY, not titles of their own */
-	.beat :global(h3) {
+	.beat :global(h3),
+	.beat :global(h4) {
 		margin: var(--sp-6) 0 var(--sp-3);
 		font-family: var(--font-ui);
 		font-weight: 700;
@@ -758,6 +759,13 @@
 		line-height: 1.35;
 		letter-spacing: 0;
 		text-transform: none;
+	}
+	/* one rank below (the author's `####` — «Fieldwork encounters» under
+	   Limitations, ethics and reproducibility, 2026-09-18): a step smaller,
+	   closer to its text; the UI face has no italic to lean on */
+	.beat :global(h4) {
+		margin-top: var(--sp-5);
+		font-size: var(--fs-15);
 	}
 	/* the narrative column hides what the right rail presents: the figure
 	   markers (the caption is written under the image, as the artboard does)

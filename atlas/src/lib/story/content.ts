@@ -18,7 +18,10 @@ export interface StoryBlock {
 	 *  bullet can scroll to the exact paragraph */
 	id: string;
 	section: string;
-	kind: 'p' | 'h3';
+	/** a paragraph, or a heading at either rank the author writes — the
+ *  methodology's `### ` sub-chapters and, since 2026-09-18, a `#### `
+ *  heading one rank below («Fieldwork encounters») */
+	kind: 'p' | 'h3' | 'h4';
 	/** the block's text with tags stripped — what needles match against */
 	text: string;
 	/** the footnote numbers this block references */
@@ -59,7 +62,7 @@ function blocksOf(section: string): StoryBlock[] {
 		// `[CHART: name]` on a line of its own is a full-width chart's place,
 		// not a passage (2026-09-04); the build turns it into a placeholder
 		if (/^\[CHART:[^\]]*\]$/i.test(t)) continue;
-		const h3 = t.startsWith('### ');
+		const head = /^(#{3,4})\s+/.exec(t);
 		// the author writes `[FIGURE 05: Press conference]` as plain text since
 		// 2026-09-03 (the span is added at build time); the name is optional —
 		// the caption itself lives in captions.md
@@ -67,9 +70,9 @@ function blocksOf(section: string): StoryBlock[] {
 		out.push({
 			id: `${section}-b${out.length}`,
 			section,
-			kind: h3 ? 'h3' : 'p',
+			kind: head ? (head[1].length === 3 ? 'h3' : 'h4') : 'p',
 			text: t
-				.replace(/^###\s+/, '')
+				.replace(/^#{3,4}\s+/, '')
 				.replace(/<span class="figmark">[^<]*<\/span>/g, ' ')
 				.replace(/\[FIGURE\s*\d+\s*(?::[^\]]*)?\]/g, ' ')
 				.replace(/<[^>]+>/g, '')
@@ -102,7 +105,36 @@ export interface NoteEntry {
  * the link; the separators between citations stay as plain glue, and text
  * after the last URL stays plain. Tracking params are stripped from targets.
  */
+/** `[text](url)` links THAT text alone — the author's Word anchors at the
+ *  end of a citation («Parliamentary question», «Commission answer»;
+ *  2026-09-18); the plain stretches between keep the URL rule below */
+const MDLINK = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+
 function noteEntry(t: string): NoteEntry {
+	const parts: NotePart[] = [];
+	let pos = 0;
+	let m: RegExpExecArray | null;
+	MDLINK.lastIndex = 0;
+	while ((m = MDLINK.exec(t))) {
+		const before = t.slice(pos, m.index);
+		if (before.trim()) parts.push(...plainParts(before));
+		// the space the trim took, so the anchor never fuses with the text before it
+		if (parts.length && /\s$/.test(before)) parts.push({ text: ' ' });
+		parts.push({ text: m[1], href: m[2].replace(/[?&]utm_source=chatgpt\.com/, '') });
+		pos = MDLINK.lastIndex;
+	}
+	const rest = t.slice(pos);
+	if (rest.trim()) {
+		if (parts.length && /^\s/.test(rest)) parts.push({ text: ' ' });
+		parts.push(...plainParts(rest));
+	}
+	if (!parts.length) parts.push({ text: t.trim() });
+	return { parts };
+}
+
+/** the URL rule: every URL leaves the display text and links the citation
+ *  chunk before it; separators stay as glue; text after the last URL stays plain */
+function plainParts(t: string): NotePart[] {
 	const parts: NotePart[] = [];
 	const re = /https?:\/\/\S+/g;
 	let pos = 0;
@@ -134,8 +166,7 @@ function noteEntry(t: string): NoteEntry {
 	}
 	const tail = t.slice(pos).replace(/^[\s,;:]+/, '').replace(/\s+$/, '');
 	if (tail) parts.push({ text: tail });
-	if (!parts.length) parts.push({ text: t.trim() });
-	return { parts };
+	return parts;
 }
 
 /** footnote number → its entry, across all sections (numbering is document-wide) */

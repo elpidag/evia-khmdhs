@@ -31,7 +31,7 @@ export const BINDINGS: Binding[] = [
 	{ event: 'launch-of-the-interim-outbound', needle: 'pilot use of the outbound' },
 	{ event: 'full-operational-launch', needle: 'During the COVID-19 lockdowns' },
 	{ event: 'european-green-deal', needle: 'context of the European Green Deal' },
-	{ event: 'eu-forest-strategy-for-2030', needle: 'EU Forest Strategy for 2030 followed' },
+	{ event: 'eu-forest-strategy-for-2030', needle: 'the EU Forest Strategy for 2030 was adopted by the European Commission' },
 	{
 		event: 'extensive-use-of-112-emergency',
 		needle: 'The 2021 fire season was the first one during which 112'
@@ -50,7 +50,7 @@ export const BINDINGS: Binding[] = [
 	{ event: 'law-4876-2021-extends-exceptional', needle: 'Article 76 of Law 4876/2021' },
 	{
 		event: 'official-launch-of-the-antinero',
-		needle: 'publicly presented by the Ministry of Environment and Energy on 8 July 2022'
+		needle: 'first introduced by the Ministry of Environment and Energy on 8 July 2022'
 	},
 	{ event: 'fires-in-evros', needle: 'fires that broke out near Alexandroupolis' },
 	{ event: 'establishment-of-a-special-committee', needle: 'chaired the new committee' },

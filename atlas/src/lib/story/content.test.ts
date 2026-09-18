@@ -15,16 +15,21 @@ describe("the story's paragraph blocks (the author's own files)", () => {
 		expect(figs).toEqual(Array.from({ length: 13 }, (_, i) => i + 1));
 	});
 
-	it("carry the document's 19 footnotes, referenced once each, in order", () => {
+	it("carry the document's 26 footnotes, referenced once each, in order", () => {
+		// 19 until the author's chronology rewrite of 2026-09-18 (seven notes
+		// on the programme's financing, contestation and the EU petition)
 		const sups = BLOCKS.flatMap((b) => b.sups);
-		expect(sups).toEqual(Array.from({ length: 19 }, (_, i) => i + 1));
+		expect(sups).toEqual(Array.from({ length: 26 }, (_, i) => i + 1));
 		for (const n of sups) expect(NOTES.get(n)?.parts.length, `note ${n}`).toBeTruthy();
-		expect(NOTES.size).toBe(19);
+		expect(NOTES.size).toBe(26);
 	});
 
 	it('strip their markup: no tags, markers or clamped whitespace in the match text', () => {
 		for (const b of BLOCKS) {
 			expect(b.text).not.toMatch(/<|\[FIGURE|\n/);
+			// a heading rank the parser does not know would surface as a
+			// `#`-led paragraph — and pair with nothing on the page
+			expect(b.text, b.id).not.toMatch(/^#/);
 		}
 	});
 
@@ -65,11 +70,31 @@ describe("the story's paragraph blocks (the author's own files)", () => {
 		expect(n6[1].text.startsWith('see: Loukas Triantis')).toBe(true);
 		expect(n6[1].href).toContain('doi.org/10.15488/18216');
 		// the two-source notes carry TWO links, each on its own citation
-		for (const nn of [14, 15]) {
+		// (16 and 18 = Papageorgiou's pairs, 23 = the Court of Audit + Data
+		// Journalists, since the 2026-09-18 renumbering)
+		for (const nn of [16, 18, 23]) {
 			const links = NOTES.get(nn)!.parts.filter((p) => p.href);
 			expect(links, `note ${nn}`).toHaveLength(2);
 			for (const p of links) expect(p.text.length).toBeGreaterThan(20);
 		}
+		// `[text](url)` links that text ALONE — the author's Word anchors
+		// (2026-09-18): note 19 ends in two, note 20 in one, note 6 links the
+		// word «link» and nothing before it
+		const n19 = NOTES.get(19)!.parts;
+		expect(n19.filter((p) => p.href).map((p) => p.text)).toEqual([
+			'Parliamentary question',
+			'Commission answer'
+		]);
+		expect(n19[0].href).toBeUndefined();
+		expect(n19[0].text.startsWith('European Parliament')).toBe(true);
+		expect(n19.map((p) => p.text).join('')).toContain('2025. Parliamentary question Commission answer');
+		const n20 = NOTES.get(20)!.parts.filter((p) => p.href);
+		expect(n20.map((p) => p.text)).toEqual(['Official petition record']);
+		expect(n20[0].href).toContain('PETI-CM-785139_EN.pdf');
+		const n6l = NOTES.get(6)!.parts.filter((p) => p.href);
+		expect(n6l.map((p) => p.text)).toEqual(['link']);
+		expect(n6l[0].href).toBe('https://2014-2020.espa.gr/el/Pages/staticOXE.aspx');
+		expect(NOTES.get(6)!.parts.map((p) => p.text).join('')).toContain('development plan link. Overall');
 	});
 
 	it("the timeline's disclaimer comes from its own file, whole", () => {

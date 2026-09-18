@@ -639,8 +639,35 @@ refetching open contracts — prefer it for routine updates.
   author's Illustrator: backgrounds/borders as rects, every rendered text
   line as <text> in its computed Typekit face, inline svgs copied with
   computed fills, a beeswarm canvas as circles (`canvas.__dots`), other
-  canvases as PNG; opacity-0 elements skipped. Wrote
-  `dase_contract_values.svg` and `landing_menu.svg` to Downloads.
+  canvases as PNG; opacity-0 elements skipped; since 2026-09-15 lines the
+  page CLIPS are dropped (a line-clamped title keeps its first N lines and
+  ends in «…») and `--click <selector>` opens a modal first — how the
+  story's whole timeline (`.rail.tl` → `.tlbig`) was exported; since
+  2026-09-17 a CSS linear-gradient background keeps its DIRECTION and its
+  token colours (each stop painted to a canvas pixel and written as hex —
+  the canvas otherwise answers `oklab()`, which Illustrator cannot read);
+  and EVERY colour in the file is plain `#rrggbb` with a separate
+  fill/stroke-opacity, lengths without `px` (`flat()` / `unit()` in the
+  serialiser): the site's token mixes compute to `color(srgb …)`, and
+  Illustrator answered by dropping the sankey ribbons' strokes and
+  painting the grey node bars black (the author's screenshot, same day).
+  `--scroll` walks the page first so the DEFERRED below-the-fold frames
+  mount (a ChartFrame is addressed by its anchor id, e.g. `#sponsors`;
+  `tile:` finds only card tiles); `--scroll-to <selector>` WALKS down to
+  a passage and centres it (re-measuring as the bands mount and grow the
+  page — a jump leaves the story's reading-position observers a passage
+  behind with the rails veiled), which is how the KEY FINDINGS rail
+  charts are exported (`#distributions`, `#yearly` with the section's
+  last `.prose > p` centred; the rail item is chosen by the reading
+  line, so the passage decides which chart is on the rail). Wrote `dase_contract_values.svg`,
+  `landing_menu.svg`, `story_timeline.svg`, `anadohoi_current_status.svg`
+  and `anadohoi_ranking_of_companies.svg` (the last two from the LIVE
+  site) to Downloads; on 2026-09-17 also the KEY FINDINGS rail charts
+  (`story_contract_sizes.svg`, `story_money_per_year.svg`) and the
+  AWARDING PROCESS diagrams twice over — the story band's halves
+  (`.chartmark[data-chart=awarding] .duo .one:nth-child(n)`, 884 px) and
+  the dataset pages' full-width frames (`#sankey`, `#dase-delegation`,
+  1152 px, with `--scroll`).
 
 Decision log: **`DATA_DECISIONS.md`** at the project root is the append-only
 audit trail (date · decision · evidence · affected records). New data
@@ -1819,8 +1846,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   was distributed into them VERBATIM (scratch script, one-off; the .md
   files are the editable source of truth). The `[FIGURE xx: name]` markers
   stay IN the text where the author placed them (the future text↔image
-  link), the 18 real Word footnotes are inline `<sup>`s + a numbered list
-  at each section's end in the document's own numbering, and `chapters.ts`
+  link), the real Word footnotes are inline `<sup>`s + a numbered list
+  at each section's end in the document's own numbering (26 since the
+  author's chronology rewrite of 2026-09-18: 1–2 introduction, 3–26
+  chronology — DATA_DECISIONS that day; a rewrite that drops a needle's
+  sentence breaks `content.test.ts` until `bindings.ts` is re-keyed), and `chapters.ts`
   carries the nine sections as the beats. **Every dataset-derived figure in
   the text is a `<Num>` token** — `numbers.ts` keys read overview kpis →
   `/api/meta` (root layout loads it on every page) → `/api/compare`, in
@@ -1835,7 +1865,11 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   while the narrative HIDES both (`.figmark` spans, `hr ~ ol`); the
   titles PIN at `--story-top` (header + the page's top padding, set in
   the layout) and never ride up, a `.heads::before` paper strip covering
-  the scroll-past; the methodology's four sub-chapters are Futura 16 px
+  the scroll-past; the methodology's four sub-chapters (and the
+  author's `####` «Fieldwork encounters» of 2026-09-18, one rank below
+  at 15 px — `content.ts` reads BOTH ranks as heading blocks and the page
+  pairs `.prose > h4` too; a rank the parser does not know surfaces as a
+  `#`-led block and fails `content.test`) are Futura 16 px
   sentence case (`h3` override), not display titles; and the COLLAPSED
   timeline shows its dots/capsules on the converged line as the artboard
   draws them (text and leader lines wait for the spread). Since the same
@@ -1962,7 +1996,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   display and the citation chunk BEFORE it carries it (a note may cite
   several sources — 13/14 hold two links each; separators stay as plain
   glue; utm stripped; a chunk holding a «see:» links only that
-  tail — the author on note 6, whose long text must not underline whole).
+  tail — the author on note 6, whose long text must not underline whole;
+  and since 2026-09-18 a `[text](url)` written IN a note links that text
+  ALONE — the author's Word anchors «Parliamentary question»,
+  «Commission answer», «Official petition record», «link» — the plain
+  stretches around it keeping the URL rule; the chronology's 26 notes
+  are pinned, 16/18/23 with two links each).
   Rendering gotchas fixed the same night: an
   `<ol value>` marker inside CSS columns misrenders two-digit numbers →
   numbers print inline as hanging text (`text-indent` hang), and
