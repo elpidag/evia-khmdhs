@@ -1,0 +1,9 @@
+{
+ "_comment": "Registry spellings of ONE operating unit folded onto its canonical string (DATA_DECISIONS 2026-09-21). units_operator_name is free text in ΚΗΜΔΗΣ: the Ministry wrote its deputy minister's office two ways across the 2022 ANTINERO II lots, and the AWARDING PROCESS diagram drew two nodes — one in English, one in Greek. Keyed by the EXACT registry string; the canonical form is the one unit_names_en.json names. Applied where units are GROUPED (queries_extra.unit_flows); the contract page keeps printing the registry's own string (translated) and the DB is untouched.",
+ "aliases": {
+  "ΓΡΑΦΕΙΟ ΥΦΥΠΟΥΡΓΟΥ": {
+   "canonical": "ΓΡΑΦΕΙΟ ΥΦΥΠΟΥΡΓΟΥ ΠΕΡΙΒΑΛΛΟΝΤΟΣ",
+   "evidence": "4 in-scope contracts, all ΥΠΕΝ, all ANTINERO II of 2022: 22SYMV011331269 (lot 4A, 27.09.2022) and the amendments 22SYMV011928864 (5Α), 22SYMV011928896 (5Β), 22SYMV011928919 (2Β) of 29.12.2022 — the same lots whose other records name ΓΡΑΦΕΙΟ ΥΦΥΠΟΥΡΓΟΥ ΠΕΡΙΒΑΛΛΟΝΤΟΣ (10 contracts: 5.Α–5.Δ, 8.Α, 8.Β, 2Α, 3Α, 3Β, 4Β)."
+  }
+ }
+}

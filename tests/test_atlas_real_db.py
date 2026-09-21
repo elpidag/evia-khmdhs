@@ -230,7 +230,12 @@ def test_unit_flow_reconciles(client):
     u = client.get("/api/antinero/unit-flow").get_json()
     left = [n for n in u["nodes"] if n["side"] == "l"]
     right = [n for n in u["nodes"] if n["side"] == "r"]
-    assert len(left) == 5 and len(right) == 11
+    # four units since 2026-09-21: the registry's two spellings of the
+    # deputy minister's office fold onto one node (unit_aliases.json)
+    assert len(left) == 4 and len(right) == 11
+    office = {n["id"]: n for n in left}
+    assert "u:ΓΡΑΦΕΙΟ ΥΦΥΠΟΥΡΓΟΥ" not in office
+    assert office["u:ΓΡΑΦΕΙΟ ΥΦΥΠΟΥΡΓΟΥ ΠΕΡΙΒΑΛΛΟΝΤΟΣ"]["n"] == 14
     assert sum(n["eur"] for n in left) == pytest.approx(633_588_292.66, abs=1.0)
     assert sum(n["eur"] for n in right) == pytest.approx(633_588_292.66, abs=1.0)
     assert sum(l["eur"] for l in u["links"]) == pytest.approx(633_588_292.66, abs=1.0)

@@ -1159,6 +1159,21 @@ def sankey_flows(kh: sqlite3.Connection, top_n: int = 10) -> dict:
     return {"nodes": nodes, "links": links}
 
 
+def unit_aliases() -> dict[str, str]:
+    """Registry spellings of one operating unit → its canonical string
+    (curated khmdhs/data/unit_aliases.json, DATA_DECISIONS 2026-09-21): the
+    Ministry wrote its deputy minister's office two ways across the 2022
+    ANTINERO II lots, and the AWARDING PROCESS drew two nodes for one
+    office. Applied only where units are GROUPED; a contract page keeps
+    the registry's own string."""
+    path = _ROOT / "khmdhs" / "data" / "unit_aliases.json"
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as f:
+        doc = json.load(f)
+    return {k: v["canonical"] for k, v in doc.get("aliases", {}).items()}
+
+
 def unit_flows(kh: sqlite3.Connection, top_n: int = 10) -> dict:
     """MONEY FLOW (user, 2026-08-21): the ΥΠΕΝ UNIT that signed → the
     contractors — two columns, no phase in between (it said nothing about
@@ -1180,6 +1195,7 @@ def unit_flows(kh: sqlite3.Connection, top_n: int = 10) -> dict:
     for r in rows:
         by_contract.setdefault(r["reference_number"], []).append(r)
     names = antinero_display_names(kh)
+    aliases = unit_aliases()
     unit_eur: dict[str, float] = {}
     unit_n: dict[str, int] = {}
     uc: dict[tuple[str, str], list[float]] = {}     # (unit, vat) -> [eur, n]
@@ -1189,6 +1205,8 @@ def unit_flows(kh: sqlite3.Connection, top_n: int = 10) -> dict:
     for partners in by_contract.values():
         eff = partners[0]["eff"] or 0.0
         unit = (partners[0]["unit"] or "").strip() or "(unit not recorded)"
+        # one office, two registry spellings (khmdhs/data/unit_aliases.json)
+        unit = aliases.get(unit, unit)
         share = eff / len(partners)
         unit_eur[unit] = unit_eur.get(unit, 0.0) + eff
         unit_n[unit] = unit_n.get(unit, 0) + 1

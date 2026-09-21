@@ -2188,7 +2188,10 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   frame it now mirrors; it follows CONTRACT VALUES on the page) is a
   THREE-column KindFlow since 2026-08-22 (user, for
   comparability with ΔΑΣΕ): awarding body (the Ministry, one node) →
-  operating units (4, `units_operator_name`, EN via `unitEn`) → top-10
+  operating units (4, `units_operator_name`, EN via `unitEn`; the
+  registry's two spellings of the deputy minister's office fold onto one
+  via curated `khmdhs/data/unit_aliases.json` — `queries_extra.unit_aliases`,
+  applied only where units are grouped, DATA_DECISIONS 2026-09-21) → top-10
   contractors + pooled, `queries_extra.unit_flows` on
   `/api/antinero/unit-flow` (even split, pinned to the basis); the phase
   sankey endpoint stays but is undrawn; ribbons take the LEFT node's

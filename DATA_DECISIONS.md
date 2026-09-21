@@ -13790,3 +13790,23 @@ re-import keeps it. Verified: no hyphenated form in the sources the site
 renders nor in the rendered text of the story, the three streams, the
 search, the actors, the hub, the landing menu and the contracts list;
 svelte-check clean, 242 frontend tests, the API test files green.
+
+## 2026-09-21 — one operating unit, two registry spellings: the deputy minister's office is one node of the AWARDING PROCESS (author)
+
+The author's screenshot of the antinero AWARDING PROCESS: two middle
+nodes for one office — «Office of the Deputy Minister for the
+Environment» (11,89 M €) over a Greek «ΓΡΑΦΕΙΟ ΥΦΥΠΟΥΡΓΟΥ» (5,69 M €).
+`units_operator_name` is free text in ΚΗΜΔΗΣ and the Ministry wrote the
+office two ways across the 2022 ANTINERO II lots: the long form on ten
+contracts (5.Α–5.Δ, 8.Α, 8.Β, 2Α, 3Α, 3Β, 4Β), the short form on four —
+lot 4A (22SYMV011331269) and the three amendments of 29.12.2022 (5Α, 5Β,
+2Β). The diagram grouped by the exact string and only the long one had an
+English name. Curated `khmdhs/data/unit_aliases.json` (exact registry
+string → canonical string, evidence quoted) is applied in
+`queries_extra.unit_flows`, the only place the Atlas GROUPS Anti-nero
+units, so the office is one node of 14 contracts / €17,58 M; the short
+spelling joins `unit_names_en.json` (both copies) so the four contract
+pages print the English name too. The DB and the contract pages' own
+registry strings are untouched. Pinned: four units on the left, the
+short id absent, the office's n = 14. The two antinero awarding-process
+SVGs were re-exported.
