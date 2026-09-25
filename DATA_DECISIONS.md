@@ -13810,3 +13810,86 @@ pages print the English name too. The DB and the contract pages' own
 registry strings are untouched. Pinned: four units on the left, the
 short id absent, the office's n = 14. The two antinero awarding-process
 SVGs were re-exported.
+
+## 2026-09-22 — FLOWS OF MONEY for the forest co-operatives: the Anti-nero frame one dataset over, after the MAP (author)
+
+«A map for the forest workers' co-operatives in the same logic as the
+flows of money», after the MAP frame of /dase. The frame is the SAME
+component (`sections/FlowMap.svelte` with `variant="coops"`, its arcs,
+split bars and bipartite lens parametrised rather than copied): a
+choropleth of the share each regional unit's co-op works pay to
+co-operatives seated elsewhere, the destinations' local/imported bars
+beside it, a region focused drawing only its flows (solid reaching in,
+dashed reaching out, the ringed dot for what stays) with the cumulative
+year slider, and the «by co-operative» lens linking to the co-op pages.
+The data is the allocation duo's own money in the flow frame's shapes —
+new `queries_extra.dase_region_flows` on `/api/dase/flows`: home = the
+co-op's REGISTERED OFFICE's Π.Ε. (the seat layer of 2026-08-24), work =
+the awarding forest unit's Π.Ε., a contract signed by several co-ops
+divided equally, the two ΑΔΜΗΕ corridor contracts out as on the work
+side; 55 seat → work flows, 172 with the year, 27 work regions, 292
+co-op ↔ region edges over 246 co-operatives, €30,13 M. Pinned
+(`test_dase_flows_pins`): Σ flows = the allocation's local + away €, the
+years reconcile to the flows, the origins to the work regions, no
+unlocated co-op. The finding the frame states is computed from the
+payload — «Only 50% of the money is awarded to co-operatives based within
+the regional unit where the works are carried out» — the allocation's
+49,8 % away share seen from the other side. The DRESS is the ΔΑΣΕ green:
+the choropleth on `RAMP_DASE`, arcs, out-of-region swatches, the slider
+and the row markers in the green's deep tone, local in its pale tone
+(CSS variables `--flow-ink/-imported/-local` on the frame's root; the
+Anti-nero frame keeps its black, verified). Verified in the local
+browser: the frame between MAP and AWARDING PROCESS, co-operative
+wording throughout, Evia focused drawing ten arcs — Trikala → Evia
+€2,99 M at the top, as the allocation entry of 2026-08-24 stated.
+
+## 2026-09-22 — the SVG exporter honours scroll boxes; the two FLOWS OF MONEY frames exported
+
+`scripts/export_svg.py` dropped only the text lines an `overflow: hidden`
+ancestor cut; a box that SCROLLS (`overflow: auto`) was not a clip to it,
+so the flow frames' destination list — twenty-odd rows visible in a
+540 px box, the rest scrolled away — came out whole, its lower bars
+printed over the caveat. Now an `auto`/`scroll` ancestor clips like a
+hidden one, for text lines AND for boxes: an element lying wholly
+outside its nearest clipping ancestor is not drawn (its subtree with it).
+Wholly, not by its centre — a first cut tested the centre and dropped the
+whole list container on the Anti-nero page, whose centre lies below the
+box because the list is three times the box's height. Wrote
+`dase_flows_of_money.svg` and `antinero_flows_of_money.svg` (1152 px,
+the resting view: the choropleth, its key strip, the destinations' bars)
+to Downloads; the rows past the box are gone from both, every colour hex.
+The author then asked for the WHOLE list: `--css` injects a stylesheet
+before serialising, so the scroll box is released (`max-height: none`)
+and `.flow-list` exports every row — `dase_flows_destinations.svg` (27
+regional units) and `antinero_flows_destinations.svg` (59), with the
+key strip above them.
+
+## 2026-09-23 — the sponsored TIMELINE exported with its fires, for print; English sponsor names curated
+
+The author's card TIMELINE (`PromiseGantt variant="card"`) as a print SVG,
+`anadohoi_card_timeline_with_fires.svg` in Downloads, drawn by a scratch
+generator from `/api/anadohoi/overview` with the card's own rules (the
+superseded act folded into its successor, rows from the earliest act,
+bars of one height, status colours, the extension segment, the deadline
+tick) — and EVERY live project, with its full name, not the rows the card
+can fit. Added at the author's request: the fire each project answers as
+a dot at its EFFIS burn date on the row, sized by the hectares burnt with
+the FROM THE FIRE TO THE SPONSORED PROJECT rule, joined to the bar by the
+dotted wait line (69 dots; a multi-fire act gets one per fire; the five
+«not fire-related» projects and the July-2026 Δυτική Αττική project, whose
+fire has no EFFIS burn date in the layer, get none — nothing invented).
+The frame is the author's: 18,20 cm wide, the names in 4,9 cm at 7 pt
+(the widest, measured in the site's face, 128 pt of 139), rows 10 pt,
+bars square-cornered, the axis opening at the earliest fire (May 2021)
+rather than the card's July 2021, the ✔/✖ as PATHS (the fonts have no
+such glyphs — Illustrator drew notdef boxes). The names are ENGLISH:
+new curated `khmdhs/data/sponsor_names_en.json` — 36 sponsors keyed by
+the ranking's display name, the company's own English trade name where it
+publishes one (ΔΕΗ → PPC, ΔΕΔΔΗΕ → HEDNO, ΑΔΜΗΕ → IPTO, Εθνική Τράπεζα
+→ National Bank of Greece, Α.Ε. Τσιμέντων ΤΙΤΑΝ → TITAN Cement Company),
+else the legal form rendered over an ELOT transliteration; seven entries
+flagged `review: true` for the author (Σύμπραξις, Doxiadis+, TERNA MAG,
+AZOE, Tatoi Club & ELIA, the Rhodes hoteliers, the Thrace biodiversity
+society, whose 52-character name wraps to two lines in a taller row).
+Presentation only, no site surface yet; the acts' spellings stay on the
+project pages.

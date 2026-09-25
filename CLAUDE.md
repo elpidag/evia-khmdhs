@@ -667,7 +667,20 @@ refetching open contracts — prefer it for routine updates.
   AWARDING PROCESS diagrams twice over — the story band's halves
   (`.chartmark[data-chart=awarding] .duo .one:nth-child(n)`, 884 px) and
   the dataset pages' full-width frames (`#sankey`, `#dase-delegation`,
-  1152 px, with `--scroll`).
+  1152 px, with `--scroll`); on 2026-09-22 the two FLOWS OF MONEY frames
+  (`#flows`, `#dase-flows`) — after which a SCROLL box (`overflow: auto`)
+  clips like a hidden one, for text lines and for boxes: an element
+  wholly outside its nearest clipping ancestor is not drawn (wholly, not
+  by its centre — a list container taller than its box still holds
+  visible rows); `--css '<stylesheet>'` injects a style before
+  serialising — how a scroll box is RELEASED so a list exports WHOLE
+  (`dase_flows_destinations.svg`, `antinero_flows_destinations.svg`: the
+  flow frames' `.flow-list` with `.scroll{max-height:none}`, 2026-09-22);
+  the story's SIGNED timeline canvas exposes `canvas.__dots` like the
+  beeswarms since the same day, so `.chartmark[data-chart=signed] .inner`
+  exports its 2.258 dots as circles (`story_timeline_of_contracts_signed.svg`;
+  also `antinero_ranking_of_companies.svg` = `#top-contractors`, and the
+  card's `tile:CONTRACT VALUES` = `antinero_card_contract_values.svg`).
 
 Decision log: **`DATA_DECISIONS.md`** at the project root is the append-only
 audit trail (date · decision · evidence · affected records). New data
@@ -705,6 +718,7 @@ decisions land there FIRST, then get implemented.
 | `contractor_display_names.json` | **ONE canonical display name per Anti-nero contractor ΑΦΜ** (DATA_DECISIONS 2026-08-20), 195 entities — 66 persons / 63 companies / 61 joint ventures / 5 other. Read from the DOCUMENTS, never invented: a person is «ΕΠΩΝΥΜΟ ΟΝΟΜΑ ΤΟΥ ΠΑΤΡΩΝΥΜΟΥ» only where a signed act holds the patronymic or a document's initial and the register together prove it (65 of 66; the one it cannot prove prints without it), a company under the **δ.τ. its own contracts declare** («ΕΛ.ΤΕ. Ε.Π.Ε.», «P. & C. DEVELOPMENT S.A.», «ΒΙΟΣ Α.Ε.» for the firm the registry still calls Δ. ΚΑΦΕΤΖΗΣ ΚΑΙ ΣΙΑ Ο.Ε.), a venture as «Κ/Ξ » plus its members' own display names. ONE typography: capitals, dotted legal form, «&» between partners only, Greek forms folded back out of Latin, PDF homoglyphs («ΠΑΠΑ∆ΟΠΟΥΛΟΣ») repaired. Every name is unique — two ventures of the same firms are told apart by their lot («ΥΠΟΕΡΓΟ Β») or their year. Proposals from `scripts/extract_contractor_names.py` (+ `scripts/extract_name_evidence.py`, which sweeps every cached document for how each ΑΦΜ is written there); `_overrides` carries the user's verdicts (ΟΡΚΑ Α.Τ.Ε.Ε., ΕΡΓΑ ΠΡΑΣΙΝΟΥ Α.Τ.Ε., ΤΑΙΠΕΔ/HRADF). Loaded by `khmdhs.contractor_names_loader` into `contractor_display_names` (in the refresh chain after consortium_loader). **Presentation only**: `contractors.name` is never rewritten, every registry spelling stays searchable (`/api/antinero/contractors?q=` matches display name ∪ all spellings ∪ ΑΦΜ) and is printed on the contractor page as «In the registry as …». Overlaid on the ranking, the contractors list, the contractor page, the member-firm view, the contract page (`registry_name` beside each party) and the /explore `co` column — where the replaced spellings ride in `ac`, searchable, while `alt` stays ΑΔΑΜ-only |
 | `fire_events_en.json`, `effis_names_en.json` | **English fire names** (DATA_DECISIONS 2026-08-25): the 19 curated anadohoi fire-event labels in the user's format (cardinal words spelled out, month as MM-YYYY — «North Evia, 08-2021»; pe_names_en forms, so «Korinthia»; «εκτός πυρκαγιάς» → «not fire-related»), and the 76 tokens the EFFIS layer's `name` fields are built from (comma-joined NUTS-3 names — Π.Ε. values PULLED from pe_names_en at build time, 4 literals). Byte-identical copies in `atlas/src/lib/data`; `names.fireEn()` / `names.effisNameEn()` with Greek fallback; `test_fire_names_en_pins` holds copies, coverage (payload + geojson) and the pe_names_en bond. 22 entries since the decomposition (3 new events; all user-reviewed round two: «Gerania», «Chios, 06-2025 & 08-2025», «Korinthia's Feneos»). Keys stay the exact Greek labels — the Greek version's own text |
 | `sponsor_groups.json` | **What KIND of business each ν.998/1979 άρθρο 42 §3 sponsor is** (DATA_DECISIONS 2026-08-25): 36 of 36 sponsors → **12 groups** (electricity & gas networks · oil & renewable energy · banking & insurance · property & tourism · construction & materials · consumer goods & retail · telecoms & media · charitable foundations · environmental NGOs · wood industry · waste management · planning & engineering), each assignment carrying its verbatim `basis`. The user split the first draft's nine on review: a κοινωφελές ίδρυμα and an environmental NGO are not one kind of sponsor, and «wood, waste & other industry» was a residual bucket holding three. Sorted by €, ties broken by count then label — three groups sit at €0, every one of their sponsors promising «τη συνολική χρηματοδότηση» without a figure. The basis is **SECTOR, read from the company's own registered name or from the act appointing it — never corporate ownership**, which is a legal claim needing per-company verification and which changes under us; the one ownership link kept is the ΤΕΡΝΑ pair, visible in the names themselves. Keys are the display names `queries_extra._sponsor_group` produces, so an uncurated sponsor lands in the payload's `uncurated` list and fails `test_sponsor_groups_pins` instead of vanishing. → `queries_extra.anadohoi_sponsor_groups` → `sponsor_groups` on `/api/anadohoi/overview` → the WHO THE SPONSORS ARE frame. Finding: **49,3% of the committed money is electricity and banking** |
+| `sponsor_names_en.json` | English display names for the 36 sponsors (DATA_DECISIONS 2026-09-23), keyed by the ranking's display name: the company's own English trade name where it publishes one (ΔΕΗ → PPC, ΔΕΔΔΗΕ → HEDNO, ΑΔΜΗΕ → IPTO …), else the legal form rendered over ELOT; 7 entries `review: true` pending the author. Machine-proposed; used so far only by the sponsored-timeline print export — NO site surface |
 | `dase_display_names.json` | 249 ΔΑΣΕ co-ops → curated bilingual display names (el `ΔΑ.Σ.Ε. 'ΟΝΟΜΑ', ΤΟΠΟΘΕΣΙΑ` / en `F.W.CO-OP …`), keyed by canonical ΑΦΜ, every value user-reviewed in `dase_name_curator.html` (DATA_DECISIONS 2026-08-15: five judgment calls user-resolved, 25 mechanical homoglyph/punctuation slips normalized, phantom 031000379 dropped). Loaded by `khmdhs.dase_names_loader` (validates canonical keys + rejects cross-script names; hooked at the end of `harvest_dase.py load`) into `dase_display_names`; the Atlas overlays them on every ΔΑΣΕ co-op surface via `queries_extra.dase_display_names`/`_overlay_coop_name` (real-DB pins: bijective vs the live population, payloads == table). Presentation layer only: registry `contractors.name` spellings are never rewritten, stay searchable, and remain visible as evidence («Appears in the registry as», contract-page «in the registry»); webui (:5000, frozen) keeps registry names |
 | `atlas/src/lib/data/alerts_112_2021.json` | **The 75 «112» emergency-SMS alerts of 1–23 August 2021** — the data of the story's Figure 04 (DATA_DECISIONS 2026-09-02). One row per @112Greece tweet: `orders[]` (one per instruction sentence, `from[]` told to leave, `to[]` sent to — never the cartesian product), places `{tag, nameEn, lat, lon, source, note}` with `source` gazetteer:evia-wildfire-timeline / hand / prose / unplaced, the tweet `text` verbatim, `title` glosses on place-less rows. Raw inputs under `data/raw/112/` and `data/raw/burned_area/`; `scripts/bootstrap_alerts_112.py --init/--overpass/--match/--audit` (the audit ray-casts every village over the Π.Ε. layer — a village of the Ilia fire must lie in Π.Ε. Ηλείας, which is how 19 namesakes and 34 typed-in coordinates of the source were caught); verdicts from OSM place nodes via Overpass, node ids in the notes. Pinned by `tests/test_alerts_112.py`. Sidecar layers: `atlas/static/geo/alerts_base.avif` (EOX Sentinel-2 cloudless 2020, CC BY-NC-SA, `scripts/build_alerts_base.py`), `alerts_frame.json` (`atlas/scripts/build-alerts-frame.mjs`, `npm run geo:alerts`), `alerts_burn_2021.geojson` (NASA VIIRS VNP64A1 daily increments, `scripts/build_alerts_burn.py`; mainland tile only) |
 
@@ -1206,6 +1220,18 @@ class count ABOVE its bar when too wide to fit inside, and takes the
 page ink via `--cpv-ink` (hover/dim = the ink mixed toward paper —
 Anti-nero pixel-identical); the ChartFrame LIGHTBULB follows
 `--frame-accent`; the .dasep wrapper sets both to the green.
+**FLOWS OF MONEY on /dase since 2026-09-22** (author; DATA_DECISIONS): the
+Anti-nero flow frame one dataset over, right after MAP — the SAME
+`sections/FlowMap.svelte` with `variant="coops"` (the ΔΑΣΕ green ramp,
+«co-operatives» in every key and tip, `/dase/coop/` behind the lens;
+`FlowArcs color`, `Bipartite hrefBase/entity`, the `--flow-ink/
+-imported/-local` variables on the frame's root — the Anti-nero frame
+keeps its black) on `queries_extra.dase_region_flows` →
+`/api/dase/flows` (seat Π.Ε. → work Π.Ε. on the even split, the year
+dimension, per-work-region origins, the co-op ↔ region edges; the
+allocation duo's money in the flow shapes, pinned against it by
+`test_dase_flows_pins`); the finding «Only N% … based within the
+regional unit» computed from the payload.
 **AWARD PROCEDURES + DIRECT AWARDS since 2026-08-24** (the Anti-nero
 pair one dataset over; DATA_DECISIONS that day): a `.pair` after AWARDING
 PROCESS — procedures BarH (procedureEn names incl. the mechanical

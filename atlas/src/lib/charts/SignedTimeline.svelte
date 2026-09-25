@@ -186,6 +186,14 @@
 		const ctx = canvas.getContext('2d')!;
 		ctx.scale(dpr, dpr);
 		ctx.clearRect(0, 0, W, H);
+		// the dots as drawn, on the canvas element — for the SVG exporter, which
+		// wants circles rather than pixels (the beeswarm's convention, 2026-09-22)
+		(canvas as HTMLCanvasElement & { __dots?: unknown }).__dots = built.all.map((d) => ({
+			x: d.x,
+			y: d.y,
+			r: d.r,
+			fill: resolveCssColor(d.side === 'a' ? INK : GREEN)
+		}));
 		for (const d of built.all) {
 			ctx.beginPath();
 			ctx.arc(d.x, d.y, d.r, 0, 2 * Math.PI);

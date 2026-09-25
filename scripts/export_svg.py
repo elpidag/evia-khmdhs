@@ -88,7 +88,7 @@ SERIALISE = r"""
     let clip = null;
     for (let a = node.parentElement; a && a !== root.parentElement; a = a.parentElement) {
       const acs = getComputedStyle(a);
-      if (/hidden|clip/.test(acs.overflowY) || /hidden|clip/.test(acs.overflowX)) { clip = a; break; }
+      if (/hidden|clip|auto|scroll/.test(acs.overflowY) || /hidden|clip|auto|scroll/.test(acs.overflowX)) { clip = a; break; }
     }
     let kept = lines;
     let ellipsis = false;
@@ -169,6 +169,19 @@ SERIALISE = r"""
     if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) return;
     const r = el.getBoundingClientRect();
     if (!inside(r)) return;
+    // a box the page clips or scrolls out of view is not drawn either
+    // (2026-09-22: the flow frame's destination list scrolls inside a
+    // 540 px box, and its lower bars overprinted the caveat in the export)
+    for (let a = el.parentElement; a && a !== root.parentElement; a = a.parentElement) {
+      const acs = getComputedStyle(a);
+      if (/hidden|clip|auto|scroll/.test(acs.overflowY) || /hidden|clip|auto|scroll/.test(acs.overflowX)) {
+        const cb = a.getBoundingClientRect();
+        // gone only when it lies WHOLLY outside: a container taller than
+        // its scroll box (the whole list) still holds visible rows
+        if (r.bottom <= cb.top || r.top >= cb.bottom || r.right <= cb.left || r.left >= cb.right) return;
+        break;
+      }
+    }
     const q = rel(r);
     const hasBox = r.width > 0 && r.height > 0;
     if (hasBox) {
@@ -284,6 +297,9 @@ def main() -> None:
     ap.add_argument("--click", default=None,
                     help="a CSS selector to click after load, before serialising — opens a "
                          "modal such as the story's whole-timeline view (2026-09-15)")
+    ap.add_argument("--css", default=None,
+                    help="a stylesheet injected before serialising — e.g. release a scroll box "
+                         "so a list exports WHOLE: '.scroll{max-height:none!important}' (2026-09-22)")
     a = ap.parse_args()
     with sync_playwright() as pw:
         b = pw.chromium.launch()
@@ -328,6 +344,9 @@ def main() -> None:
         if a.click:
             pg.click(a.click)
             pg.wait_for_timeout(1500)
+        if a.css:
+            pg.add_style_tag(content=a.css)
+            pg.wait_for_timeout(600)
         pg.evaluate("() => document.fonts.ready")
         if a.target.startswith("tile:"):
             handle = pg.evaluate_handle(FIND_TILE, a.target[5:])
