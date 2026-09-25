@@ -680,7 +680,15 @@ refetching open contracts — prefer it for routine updates.
   beeswarms since the same day, so `.chartmark[data-chart=signed] .inner`
   exports its 2.258 dots as circles (`story_timeline_of_contracts_signed.svg`;
   also `antinero_ranking_of_companies.svg` = `#top-contractors`, and the
-  card's `tile:CONTRACT VALUES` = `antinero_card_contract_values.svg`).
+  card's `tile:CONTRACT VALUES` = `antinero_card_contract_values.svg`);
+  since 2026-09-25 an `<image>` whose href is an SVG file on the dev
+  server — the author's drawings as `<img>` or as CSS MASKS — is INLINED
+  as a nested `<svg>` (`inline_svg_images`, a mask painted by a group
+  fill in its `data-mask-fill` colour), because Illustrator cannot
+  follow a localhost link (`data_hub_1920x1080.svg`). Gotcha: a Bash
+  heredoc in this harness halves backslashes, so a regex `\b` written
+  through one lands as a BACKSPACE character in the file — patch regexes
+  with the Edit tool or `chr(92)`.
 
 Decision log: **`DATA_DECISIONS.md`** at the project root is the append-only
 audit trail (date · decision · evidence · affected records). New data
@@ -1648,7 +1656,27 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   drawings sized to EQUAL AREA (`sizeFor`: base × √elongation × 0,72;
   streams on a 251 px base, tools 132) standing on one baseline, each name
   in its stream's colour and shown on HOVER only; the search magnifier is
-  `--c-fire` since 2026-09-04, the network's colour the ink). **Each dataset page
+  `--c-fire` since 2026-09-04, the network's colour the ink; since
+  2026-09-25 a two-column grid: the LEFT column is the title's own width
+  and carries the landing's `CodeField` edge to edge behind the title
+  (`--hub-pt`/`--hub-pb` escaped, the title over it with the halo alone; hidden
+  under 900 px), the caption and symbols centred in the remaining column —
+  DATA_DECISIONS that day; later that day PLACED ON THE AUTHOR'S EDITED
+  EXPORT (title 3,7 vw, caption 24,3 vh down, drawings' baseline 568 and
+  tools' 791 of 1080, right padding 10,9 vw; each link is its drawing's
+  box, the name hung out of flow so the baseline holds) and the field
+  given `CodeField hole={0.25}` — `FieldOptions.hole` draws a column's
+  THIRD copy after a blank band of that fraction of the height, where the
+  landing's two copies left a column empty for up to a viewport —
+  the landing's field and the menu cells pass 0,25 too since later that
+  day; `field.test.ts` pins both). **The brand's two lines share their
+  edges** (author, 2026-09-25): `lib/landing/fitBrand.ts` is a Svelte
+  action (`use:fitBrand` on the element holding `.l1`/`.l2` — the
+  header's brand link, `LandingTitle`, the landing menu's title, the
+  hub's) that sets the second line's letter-spacing so its last glyph
+  ends on the first line's right edge (Range-measured runs, the first
+  line's trailing spacing subtracted; re-fit on fonts.ready, resize and
+  the Theme Lab tick) — the CSS em values are only the pre-fit fallback. **Each dataset page
   is a CARD — one viewport** (`ui/DatasetCard.svelte`; since 2026-09-04 it
   OPENS with the symbol at TWICE its size — the box shaped to the
   drawing by `aspect`, so a wide drawing's name sits right under it — and

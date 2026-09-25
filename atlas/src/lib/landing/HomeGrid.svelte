@@ -70,7 +70,7 @@
 							>
 						{/if}
 					{:else}
-						<CodeField {codes} seed={seed + 11 * (cell.r * 4 + cell.c)} dense playing={false} />
+						<CodeField {codes} seed={seed + 11 * (cell.r * 4 + cell.c)} dense hole={0.25} playing={false} />
 					{/if}
 				</div>
 			{:else if cell.kind === 'symbol'}

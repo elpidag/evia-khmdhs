@@ -7,10 +7,11 @@
 	 * Fades in when `on` turns true; a button while the field is up.
 	 */
 	import { BRAND_LINE1, BRAND_LINE2 } from './brand';
+	import { fitBrand } from './fitBrand';
 	let { on = false, onOpen }: { on?: boolean; onOpen?: () => void } = $props();
 </script>
 
-<button class="title" class:on type="button" onclick={onOpen} tabindex={on ? 0 : -1}>
+<button class="title" class:on type="button" onclick={onOpen} tabindex={on ? 0 : -1} use:fitBrand>
 	<span class="l1">{BRAND_LINE1}</span>
 	<span class="l2">{BRAND_LINE2}</span>
 </button>

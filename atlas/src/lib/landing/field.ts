@@ -43,6 +43,11 @@ export interface FieldOptions {
 	gap: number;
 	minCols: number;
 	maxCols: number;
+	/** a blank band, as a fraction of the viewport height, after which a
+	 *  column's codes REPEAT — without it the column is drawn twice only,
+	 *  so its lower part runs empty for up to a whole viewport (the
+	 *  landing keeps that; the hub asks for less white, 2026-09-25) */
+	hole?: number;
 }
 /** Artboard 1 (user, 2026-08-27) set 12 px glyphs on 14.4 px lines, a
  *  column every 25.7 px — 74 across a 1920 frame; since 2026-09-04 (the
@@ -111,13 +116,15 @@ export function glyphsAt(
 	height: number,
 	o: FieldOptions = FIELD
 ): Glyph[] {
-	const cycle = col.lines * o.lineH;
+	const band = o.hole == null ? 0 : o.hole * height;
+	const cycle = col.lines * o.lineH + band;
 	let offset = (col.phase + (col.speed * elapsedMs) / 1000) % cycle;
 	if (offset < 0) offset += cycle;
 	const out: Glyph[] = [];
 	// the column repeats every `cycle` px; draw the copy that covers the
-	// viewport and the one above it
-	for (const base of [-cycle, 0]) {
+	// viewport and the one above it — and, with a `hole`, the one below,
+	// so the only white left is the band
+	for (const base of o.hole == null ? [-cycle, 0] : [-cycle, 0, cycle]) {
 		for (const run of col.runs) {
 			const top = run.line * o.lineH - offset + base;
 			const bottom = top + run.code.text.length * o.lineH;

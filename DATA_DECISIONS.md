@@ -13893,3 +13893,77 @@ AZOE, Tatoi Club & ELIA, the Rhodes hoteliers, the Thrace biodiversity
 society, whose 52-character name wraps to two lines in a taller row).
 Presentation only, no site surface yet; the acts' spellings stay on the
 project pages.
+
+## 2026-09-25 — the /data hub's symbol group on the WINDOW's centre (author)
+
+«The icons are not centred»: the hub's content box followed Artboard 3
+literally — left padding 5,73 vw (110 px of 1920), right 11,46 vw (220)
+— so the caption and both symbol rows shared a centre at x 905, 55 px
+left of the window's middle, at every width. The right padding now
+equals the left; measured at 1920, 1440 and 1280 the caption, the three
+streams and the two tools all centre on the window's exact middle, the
+page still composes one viewport with no sideways overflow. The title
+keeps its place.
+
+## 2026-09-25 — the /data hub: the landing's field of codes in the title's column, edge to edge (author)
+
+«On the column that is created by the width of the title I want the codes
+we have on the landing page … running to the upper and down edge of the
+page.» The hub is a two-column grid now: the LEFT column is exactly the
+title's width (`max-content`), and under — behind — the title the
+landing's `CodeField` drifts (the same `/api/landing` payload, fetched
+after hydration as the landing does, seed 20260925) from the page's top
+edge to its bottom edge: the field is absolutely placed past the hub's
+vertical paddings (`--hub-pt` / `--hub-pb`, the short-window values
+included), the title over it with the landing's paper halo alone, z-index 1 (a
+paper clearing was tried and dropped the same day, author). The caption and
+the two symbol rows centre in the REMAINING column (1227 of 1920; 920 of
+1440; 818 of 1280), one viewport, no overflow; under 900 px the field is
+off and the layout stacks. Exported `data_hub_1920x1080.svg` for the
+author's own placing of the rest (the canvas rides as a PNG in it).
+
+## 2026-09-25 — the /data hub placed on the author's edited export; the code field's white reduced
+
+The author moved the pieces on `data_hub_1920x1080.svg` and sent it back
+as the reference: the title a third larger (628 px wide, cap line at
+45), the caption's first line at 305, the three drawings on a baseline
+at 568 with the digger's row a little right of the caption's centre, the
+two tools a third larger on a baseline at 791, the group centred near
+x 1250. The page now reads those positions as fractions of the frame
+(title 3,7 / 2,47 vw, `--hub-pt` 12,5 vh − 100 px, the caption 24,3 vh
+down, the right padding back at the artboard's 10,9 vw, the drawings'
+row padded 4,9 vw left, the tools' base 9,1 vw): measured at 1920 the
+drawings sit at 899 / 1120 / 1461 on the 567 baseline and the tools at
+1111 / 1282 on 790 — every one within 24 px of the author's — and at
+1440 the same proportions, one viewport, no overflow. Each link is now
+exactly its drawing's box with the name hung under it OUT of the flow
+(`position: absolute`, nowrap), so the row's gaps are the gaps and the
+baseline holds whatever a name's length — before, the links were as
+wide as their names and shrank unevenly. THE CODES: «less white space,
+not none» — the field drew each column twice, so a column's lower part
+ran empty for up to a whole viewport (the landing keeps that look); a
+new `hole` option (`FieldOptions.hole`, `CodeField hole`) draws the
+third copy after a blank band of that fraction of the height — the hub
+passes 0,25, so the only white in a column is a quarter-height band.
+Pinned by `field.test.ts`: without the hole a column runs empty for
+more than half the viewport at some moment; with 0,25 the blank never
+exceeds the band.
+
+## 2026-09-25 — the brand's two lines share their edges everywhere; the landing's codes take the hub's density
+
+«The Y of COVERED WITH MONEY does not extend further right than the S of
+FORESTS, and the C starts where the S of SCORCHED starts — wherever it
+appears.» The second line was letter-spaced by a fixed em value that
+only approximated the first line's width (0,26–0,32 em by place). Now
+`lib/landing/fitBrand.ts`, a Svelte action on the element holding the
+`.l1`/`.l2` spans, measures the first line's glyph run (a Range rect,
+less the spacing CSS adds after the last letter), the second line's
+natural run, and sets the second line's letter-spacing so its last
+glyph lands on the first line's right edge; re-fitted on fonts.ready,
+on resize (vw-based sizes) and on a Theme Lab change. Applied to the
+four places the brand is set — the header's brand link, the landing's
+title, the landing menu's title and the hub's — and measured: both
+lines' left and right edges equal to a tenth of a pixel at 1920 and
+1280 on all four. The landing's codes: the field and the menu's still
+cells now pass `hole={0.25}` like the hub, so a column's blank is a
+quarter-height band and no longer up to a whole viewport.

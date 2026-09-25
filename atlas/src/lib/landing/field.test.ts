@@ -63,3 +63,29 @@ describe('the field of codes', () => {
 		expect(h.map((x) => x.y)).not.toEqual(g.map((x) => x.y));
 	});
 });
+
+describe('the hole between a column’s repeats (the hub, 2026-09-25)', () => {
+	const pool = poolFrom(payload, 7);
+	const H = 600;
+	const covered = (o: typeof FIELD, ms: number) => {
+		const col = layoutColumns(220, H, pool, 7, o)[0];
+		const ys = glyphsAt(col, ms, H, o).map((g) => g.y);
+		// the longest stretch of the viewport with no glyph, in px
+		const sorted = [...ys, -o.lineH, H].sort((a, b) => a - b);
+		let gap = 0;
+		for (let i = 1; i < sorted.length; i++) gap = Math.max(gap, sorted[i] - sorted[i - 1]);
+		return gap;
+	};
+	it('without it a column may run empty for most of the viewport', () => {
+		let worst = 0;
+		for (let ms = 0; ms < 200000; ms += 997) worst = Math.max(worst, covered(FIELD, ms));
+		expect(worst).toBeGreaterThan(H / 2);
+	});
+	it('with a quarter-height hole the blank never exceeds the band', () => {
+		const o = { ...FIELD, hole: 0.25 };
+		let worst = 0;
+		for (let ms = 0; ms < 200000; ms += 997) worst = Math.max(worst, covered(o, ms));
+		expect(worst).toBeLessThanOrEqual(0.25 * H + 2 * FIELD.lineH);
+		expect(worst).toBeGreaterThan(2 * FIELD.lineH);
+	});
+});

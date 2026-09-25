@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import { SYMBOLS, symbolOfPath } from '$lib/datasets';
 	import { BRAND, BRAND_LINE1, BRAND_LINE2 } from '$lib/landing/brand';
+	import { fitBrand } from '$lib/landing/fitBrand';
 	import DatasetSymbol from '$lib/ui/DatasetSymbol.svelte';
 	import { dev } from '$app/environment';
 	import type { LayoutData } from './$types';
@@ -61,7 +62,7 @@
 {#if chrome}
 	<header class:scrolled>
 		<div class="inner">
-			<a class="brand" href="/?menu=1">
+			<a class="brand" href="/?menu=1" use:fitBrand>
 				<span class="l1">{BRAND_LINE1}</span>
 				<span class="l2">{BRAND_LINE2}</span>
 			</a>

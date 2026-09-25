@@ -20,7 +20,9 @@ from __future__ import annotations
 
 import argparse
 import pathlib
+import re
 import sys
+import urllib.request
 
 from playwright.sync_api import sync_playwright
 
@@ -188,7 +190,10 @@ SERIALISE = r"""
       const mask = cs.maskImage !== 'none' ? cs.maskImage : (cs.webkitMaskImage && cs.webkitMaskImage !== 'none' ? cs.webkitMaskImage : null);
       if (mask) {
         const m = /url\("?([^")]+)"?\)/.exec(mask);
-        if (m) out.push(`<image x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" href="${esc(m[1])}" preserveAspectRatio="xMidYMid meet"/>`);
+        // the mask's paint rides along, so an SVG mask can be inlined in the
+        // mask's own colour (2026-09-25: the hub's symbols)
+        const mf = flat(cs.backgroundColor);
+        if (m) out.push(`<image x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" href="${esc(m[1])}" preserveAspectRatio="xMidYMid meet"${mf && mf.hex ? ` data-mask-fill="${mf.hex}"` : ''}/>`);
         return;
       }
       const bgc = el.tagName !== 'CANVAS' ? flat(cs.backgroundColor) : null;
@@ -358,6 +363,7 @@ def main() -> None:
         b.close()
     if "error" in res:
         sys.exit(res["error"])
+    res["body"] = inline_svg_images(res["body"])
     svg = (
         f'<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
@@ -368,6 +374,48 @@ def main() -> None:
     out.write_text(svg, encoding="utf-8")
     n_circle = svg.count("<circle"); n_text = svg.count("<text"); n_img = svg.count("<image")
     print(f"{out} — {res['w']}×{res['h']}, {len(svg)//1024} KB: {n_circle} circles, {n_text} texts, {n_img} images")
+
+
+def inline_svg_images(body: str) -> str:
+    """An <image> whose href is an SVG file on the dev server is replaced by
+    the file's own drawing as a nested <svg> (Illustrator cannot follow a
+    localhost link — the author's «the file doesn't show the symbols»,
+    2026-09-25): the viewBox kept, the box and «meet» fit as the page had
+    them, and a CSS-mask symbol painted in the mask's colour (a group fill,
+    which the drawings inherit — the symbol files carry no fill of their
+    own). A file that cannot be read stays a link."""
+    cache: dict[str, str | None] = {}
+
+    def fetch(url: str) -> str | None:
+        if url not in cache:
+            try:
+                cache[url] = urllib.request.urlopen(url, timeout=30).read().decode("utf-8")
+            except Exception:
+                cache[url] = None
+        return cache[url]
+
+    def rep(m: re.Match) -> str:
+        tag = m.group(0)
+        href = re.search(r'href="([^"]+)"', tag)
+        if not href or not re.search(r"\.svg(\?.*)?$", href.group(1)):
+            return tag
+        text = fetch(href.group(1))
+        if not text:
+            return tag
+        outer = re.search(r"<svg\b[^>]*>", text)
+        end = text.rfind("</svg>")
+        if not outer or end < 0:
+            return tag
+        vb = re.search(r'viewBox="([^"]+)"', outer.group(0))
+        inner = re.sub(r"<\?xml[^>]*\?>|<!DOCTYPE[^>]*>", "", text[outer.end():end])
+        geo = " ".join(re.findall(r'(?:x|y|width|height)="[^"]+"', tag))
+        fill = re.search(r'data-mask-fill="([^"]+)"', tag)
+        if fill:
+            inner = f'<g fill="{fill.group(1)}">{inner}</g>'
+        vba = f' viewBox="{vb.group(1)}"' if vb else ""
+        return f'<svg {geo}{vba} preserveAspectRatio="xMidYMid meet" overflow="visible">{inner}</svg>'
+
+    return re.sub(r"<image\b[^>]*/>", rep, body)
 
 
 if __name__ == "__main__":

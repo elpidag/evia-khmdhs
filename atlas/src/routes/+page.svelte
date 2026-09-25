@@ -20,6 +20,7 @@
 	import HomeGrid from '$lib/landing/HomeGrid.svelte';
 	import { HOME_CELLS } from '$lib/landing/homeCells';
 	import { BRAND, BRAND_LINE1, BRAND_LINE2 } from '$lib/landing/brand';
+	import { fitBrand } from '$lib/landing/fitBrand';
 	import Prose from '$lib/ui/Prose.svelte';
 	import { legacyAntineroTarget } from '$lib/transforms/legacyRoutes';
 	import Standfirst from '$content/landing/standfirst.md';
@@ -135,7 +136,7 @@
 				: null}
 			aria-hidden="true"
 		>
-			<CodeField {codes} {seed} playing={stage !== 'menu' || flying} onFirstFrame={firstFrame} />
+			<CodeField {codes} {seed} hole={0.25} playing={stage !== 'menu' || flying} onFirstFrame={firstFrame} />
 		</div>
 	{/key}
 	<LandingTitle on={stage === 'title'} onOpen={open} />
@@ -143,7 +144,7 @@
 
 <div class="home" class:shown={stage === 'menu'} aria-hidden={stage !== 'menu'}>
 	<div class="text">
-		<h1 class="title">
+		<h1 class="title" use:fitBrand>
 			<span class="l1">{BRAND_LINE1}</span>
 			<span class="l2">{BRAND_LINE2}</span>
 		</h1>
@@ -161,7 +162,7 @@
 					{#if !big}
 						{#key seed}
 							<!-- still, like the other code cells (the author, 2026-09-04) -->
-							<CodeField {codes} {seed} dense playing={false} />
+							<CodeField {codes} {seed} dense hole={0.25} playing={false} />
 						{/key}
 					{/if}
 				</div>

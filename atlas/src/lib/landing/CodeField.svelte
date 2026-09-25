@@ -17,6 +17,7 @@
 		seed = 20260827,
 		playing = true,
 		dense = false,
+		hole,
 		onFirstFrame
 	}: {
 		codes: Landing | null;
@@ -24,6 +25,9 @@
 		playing?: boolean;
 		/** the cell fragment: a finer pitch, slower */
 		dense?: boolean;
+		/** blank band between a column's repeats, as a fraction of the height
+		 *  (the hub: 0.25); unset = the landing's own look */
+		hole?: number;
 		onFirstFrame?: () => void;
 	} = $props();
 
@@ -31,7 +35,7 @@
 	let canvas = $state<HTMLCanvasElement | null>(null);
 	let w = $state(0);
 	let h = $state(0);
-	const opts = $derived(dense ? FIELD_DENSE : FIELD);
+	const opts = $derived(hole == null ? (dense ? FIELD_DENSE : FIELD) : { ...(dense ? FIELD_DENSE : FIELD), hole });
 	const glyphPx = 12; // Artboard 1: Obviously Regular 12 px, in the cell too
 
 	const pool = $derived(codes ? poolFrom(codes, seed) : []);
