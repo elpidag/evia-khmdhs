@@ -25,7 +25,7 @@
 	import Bipartite from '$lib/sections/Bipartite.svelte';
 	import SegmentToggle from '$lib/ui/SegmentToggle.svelte';
 	import Hint from '$lib/ui/Hint.svelte';
-	import { RAMP_WORKS } from '$lib/maps/useGeo';
+	import { RAMP_DASE, RAMP_WORKS } from '$lib/maps/useGeo';
 	import { peEn } from '$lib/transforms/regions';
 	import { eurShort } from '$lib/transforms/format';
 
@@ -55,8 +55,26 @@
 		 *  (the former WHO REACHES WHERE frame, user 2026-08-21) */
 		edges?: { vat: string; pe: string; n: number; eur: number }[];
 		contractors?: Record<string, { name: string; home_pe: string | null; eur: number }>;
+		/** the dataset's dress and words (the author, 2026-09-22): the Anti-nero
+		 *  frame — the grey ramp, «firms», contractor pages — or the forest
+		 *  co-operatives' — the ΔΑΣΕ green ramp, «co-operatives», co-op pages */
+		variant?: 'antinero' | 'coops';
 	}
-	let { flows, centroids, origins = [], flowsYearly = [], edges = [], contractors = {} }: Props = $props();
+	let {
+		flows,
+		centroids,
+		origins = [],
+		flowsYearly = [],
+		edges = [],
+		contractors = {},
+		variant = 'antinero'
+	}: Props = $props();
+	const coops = $derived(variant === 'coops');
+	const ramp = $derived(coops ? RAMP_DASE : RAMP_WORKS);
+	const firms = $derived(coops ? 'co-operatives' : 'firms');
+	const one = $derived(coops ? 'co-operative' : 'contractor');
+	/** the arcs' stroke: the site's black, or the ΔΑΣΕ green's deep tone */
+	const arc = $derived(coops ? 'color-mix(in srgb, var(--c-dase) 62%, black)' : undefined);
 
 	let flowFocus = $state<string | null>(null);
 	const short = (pe: string) => peEn(pe);
@@ -82,9 +100,10 @@
 	});
 	// the company lens explains itself; its one instruction rides in the ⓘ
 	// beside COMPANIES (user, 2026-08-21)
-	const companiesHow =
-		'Click a contractor to light up every region it works in — regions below the cut are ' +
-		'shuffled into the list — or a region for everyone working there. Edge width is the link’s €.';
+	const companiesHow = $derived(
+		`Click a ${one} to light up every region it works in — regions below the cut are ` +
+		'shuffled into the list — or a region for everyone working there. Edge width is the link’s €.'
+	);
 
 	const allYears = $derived([...new Set(flowsYearly.map((f) => f.year))].sort());
 	// the CUMULATIVE year slider: index into allYears, the last = all years
@@ -146,15 +165,16 @@
 		const w = perWork.get(pe);
 		if (!w || !w.total) return 'var(--land-empty)';
 		const share = 1 - w.local / w.total; // linear 0–1 → 8 steps
-		return RAMP_WORKS[Math.min(7, Math.floor(share * 8))];
+		return ramp[Math.min(7, Math.floor(share * 8))];
 	}
 	// the place's card: place · € of works · share — short and factual, in
 	// every state (the instructions live in the ⓘ, as on the allocation maps)
 	function importTip(pe: string): string {
 		const w = perWork.get(pe);
-		if (!w || !w.total) return `<strong>${peEn(pe)}</strong><br>no antinero works recorded`;
+		if (!w || !w.total)
+			return `<strong>${peEn(pe)}</strong><br>no ${coops ? 'co-op' : 'antinero'} works recorded`;
 		const share = Math.round(100 * (1 - w.local / w.total));
-		return `<strong>${peEn(pe)}</strong><br>${eurShort(w.total)} of works · ${share}% won by out-of-region firms`;
+		return `<strong>${peEn(pe)}</strong><br>${eurShort(w.total)} of works · ${share}% won by out-of-region ${firms}`;
 	}
 </script>
 
@@ -162,17 +182,20 @@
 	<!-- the inline ramp key the user approved on the allocation maps: lo ·
 	     [white + eight swatches, one hairline round the bar] · hi -->
 	<span class="rampkey">
-		<span>{lo}</span><span class="swatches"><i class="empty"></i>{#each RAMP_WORKS as c (c)}<i style:background={c}></i>{/each}</span><span
+		<span>{lo}</span><span class="swatches"><i class="empty"></i>{#each ramp as c (c)}<i style:background={c}></i>{/each}</span><span
 			>{hi}</span
 		>
 	</span>
 {/snippet}
 
+<!-- one root for the dataset's dress: the tones every key, swatch, arc
+     and slider take (the co-op variant switches them, 2026-09-22) -->
+<div class="flowmap" class:coops>
 <div class="bar">
 	<div class="barleft">
 		<div class="maplabel">
 			{#if lens === 'company'}
-				COMPANIES<Hint text={companiesHow} heading width="380px" />
+				{coops ? 'CO-OPERATIVES' : 'COMPANIES'}<Hint text={companiesHow} heading width="380px" />
 			{:else}
 				MAP
 			{/if}
@@ -192,7 +215,7 @@
 		fallback="region"
 		options={[
 			{ value: 'region', label: 'by region' },
-			{ value: 'company', label: 'by company' }
+			{ value: 'company', label: coops ? 'by co-operative' : 'by company' }
 		]}
 	/>
 </div>
@@ -202,21 +225,27 @@
 	     that carry them — two linked lists, capped to the map's height; no
 	     key strip (user: self-explanatory), the instruction in the ⓘ -->
 	<div class="bip">
-		<Bipartite {edges} {contractors} bind:selected={bipSel} />
+		<Bipartite
+			{edges}
+			{contractors}
+			bind:selected={bipSel}
+			hrefBase={coops ? '/dase/coop/' : '/antinero/contractor/'}
+			entity={coops ? 'co-operatives' : 'contractors'}
+		/>
 	</div>
 {:else}
 <div class="flow-grid">
 	<div class="panel">
 		<ul class="mapkey">
 			{#if flowFocus}
-				<li><i class="line solid"></i>firms based elsewhere → works in {short(flowFocus)}</li>
-				<li><i class="line dash"></i>{short(flowFocus)} firms → works elsewhere</li>
+				<li><i class="line solid"></i>{firms} based elsewhere → works in {short(flowFocus)}</li>
+				<li><i class="line dash"></i>{short(flowFocus)} {firms} → works elsewhere</li>
 				<li><i class="dot ring"></i>money that stays in {short(flowFocus)}</li>
 				<li class="faint">arrows point home → work · width ∝ €</li>
 			{:else}
 				<li class="ramp">
 					{@render rampKey('0%', '100%')}
-					<span>share of each unit's works won by firms based elsewhere</span>
+					<span>share of each unit's works won by {firms} based elsewhere</span>
 				</li>
 			{/if}
 		</ul>
@@ -237,7 +266,7 @@
 		>
 			{#snippet overlay(ctx)}
 				{#if flowFocus && Object.keys(centroids).length}
-					<FlowArcs {ctx} flows={flowsShown} {centroids} focusPe={flowFocus} />
+					<FlowArcs {ctx} flows={flowsShown} {centroids} focusPe={flowFocus} color={arc} />
 				{/if}
 			{/snippet}
 		</PaperMap>
@@ -249,13 +278,13 @@
 			{#if flowFocus}
 				<!-- the same three symbols as the map's key, in the same order
 				     (user, 2026-08-21: the squares read as the opposite) -->
-				<li><i class="line solid"></i>firms based elsewhere → works in {short(flowFocus)}</li>
-				<li><i class="line dash"></i>{short(flowFocus)} firms → works elsewhere</li>
+				<li><i class="line solid"></i>{firms} based elsewhere → works in {short(flowFocus)}</li>
+				<li><i class="line dash"></i>{short(flowFocus)} {firms} → works elsewhere</li>
 				<li><i class="dot ring"></i>money that stays in {short(flowFocus)}</li>
 			{:else}
 				<!-- dark = out-of-region, exactly as the map's ramp reads (user) -->
-				<li><i class="sq ink"></i>won by out-of-region firms</li>
-				<li><i class="sq grey"></i>won by local firms</li>
+				<li><i class="sq ink"></i>won by out-of-region {firms}</li>
+				<li><i class="sq grey"></i>won by local {firms}</li>
 				{#if origins.some((o) => o.unknown_eur > 0)}
 					<!-- every in-scope contractor has a located base today (0 €
 					     unresolved); the entry returns only if that changes -->
@@ -324,8 +353,22 @@
 	</div>
 </div>
 {/if}
+</div>
 
 <style>
+	/* the dress the keys, swatches, arcs and slider share — the site's
+	   black on the antinero page; the co-op variant (2026-09-22) takes the
+	   ΔΑΣΕ green's deep tone, the pale tone for what stays local */
+	.flowmap {
+		--flow-ink: var(--flow-ink);
+		--flow-imported: var(--ink);
+		--flow-local: color-mix(in srgb, var(--ink) 23.9%, var(--paper));
+	}
+	.flowmap.coops {
+		--flow-ink: color-mix(in srgb, var(--c-dase) 62%, black);
+		--flow-imported: color-mix(in srgb, var(--c-dase) 62%, black);
+		--flow-local: color-mix(in oklab, var(--c-dase) 38%, var(--paper));
+	}
 	.bar {
 		display: flex;
 		align-items: center;
@@ -342,7 +385,7 @@
 		font-weight: 900;
 		font-size: var(--fs-14);
 		letter-spacing: 0.08em;
-		color: var(--c-antinero);
+		color: var(--frame-accent, var(--c-antinero));
 	}
 	/* the focus's way out — the allocation maps' pill */
 	.reset {
@@ -429,7 +472,7 @@
 		display: inline-block;
 		width: 1.4rem;
 		height: 0;
-		border-top: 1.5px solid color-mix(in srgb, var(--ink) 53.3%, black);
+		border-top: 1.5px solid var(--flow-ink);
 		flex: none;
 	}
 	.mapkey i.line.dash {
@@ -444,10 +487,10 @@
 		flex: none;
 	}
 	.mapkey i.sq.ink {
-		background: var(--ink);
+		background: var(--flow-imported);
 	}
 	.mapkey i.sq.grey {
-		background: color-mix(in srgb, var(--ink) 23.9%, var(--paper));
+		background: var(--flow-local);
 	}
 	.mapkey i.sq.hatch {
 		background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--ink) 8.5%, var(--paper)) 0 3px, color-mix(in srgb, var(--ink) 3.1%, var(--paper)) 3px 6px);
@@ -458,7 +501,7 @@
 		height: 0.6rem;
 		border-radius: 50%;
 		background: var(--paper);
-		border: 1.2px solid color-mix(in srgb, var(--ink) 53.3%, black);
+		border: 1.2px solid var(--flow-ink);
 		flex: none;
 	}
 	.flow-list h3 {
@@ -492,7 +535,7 @@
 		display: inline-block;
 		width: 1.1rem;
 		height: 0;
-		border-top: 1.5px solid color-mix(in srgb, var(--ink) 53.3%, black);
+		border-top: 1.5px solid var(--flow-ink);
 		margin-right: 5px;
 		vertical-align: 3px;
 	}
@@ -502,7 +545,7 @@
 	i.dir.local {
 		width: 0.6rem;
 		height: 0.6rem;
-		border: 1.2px solid color-mix(in srgb, var(--ink) 53.3%, black);
+		border: 1.2px solid var(--flow-ink);
 		border-radius: 50%;
 		background: var(--paper);
 		vertical-align: -1px;
@@ -533,7 +576,7 @@
 	}
 	.years input[type='range'] {
 		width: 100%;
-		accent-color: color-mix(in srgb, var(--ink) 53.3%, black); /* black on the antinero page, never the warm ink (user) */
+		accent-color: var(--flow-ink); /* black on the antinero page, never the warm ink (user) */
 		margin: 0;
 	}
 	.ticks {
@@ -543,7 +586,7 @@
 		color: var(--ink-faint);
 	}
 	.ticks span.on {
-		color: color-mix(in srgb, var(--ink) 53.3%, black);
+		color: var(--flow-ink);
 		font-weight: 700;
 	}
 	.empty {

@@ -330,6 +330,11 @@ def create_app(db_path: Path | None = None, dase_db_path: Path | None = None,
         # the works/seats choropleth duo (DATA_DECISIONS 2026-08-24)
         return jsonify(queries_extra.dase_allocation(_dase_conn()))
 
+    @app.route("/api/dase/flows")
+    def api_dase_flows():
+        # FLOWS OF MONEY for the co-operatives (the author, 2026-09-22)
+        return jsonify(queries_extra.dase_region_flows(_dase_conn()))
+
     @app.route("/api/dase/map")
     def api_dase_map():
         return jsonify(queries_extra.dase_map(_dase_conn(), g.conn))

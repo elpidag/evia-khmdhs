@@ -101,10 +101,10 @@
 	   of a unit's works won by firms based elsewhere runs white → black);
 	   the bars said the opposite until 2026-08-21 (user) */
 	.seg.local {
-		background: color-mix(in srgb, var(--ink) 23.9%, var(--paper));
+		background: var(--flow-local, color-mix(in srgb, var(--ink) 23.9%, var(--paper)));
 	}
 	.seg.imported {
-		background: var(--ink);
+		background: var(--flow-imported, var(--ink));
 	}
 	.seg.unknown {
 		background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--ink) 8.5%, var(--paper)) 0 3px, color-mix(in srgb, var(--ink) 3.1%, var(--paper)) 3px 6px);

@@ -1965,3 +1965,27 @@ def test_dase_contract_family_pins(client):
     assert f["total_eur"] == pytest.approx(20500.0, abs=100)
     # the award stands at the centre where the procedure published no call
     assert client.get("/api/dase/contract/23SYMV013747204").get_json()["family"]["centre_kind"] == "auction"
+
+
+def test_dase_flows_pins(client):
+    """FLOWS OF MONEY for the co-operatives (2026-09-22): the flow frame's
+    shapes on the allocation's own money — Σ flows == the located co-ops'
+    share of the work side, the years reconcile to the flows, the origins
+    to the work regions, the local € to the allocation's finding, and every
+    co-op of the lens has a name."""
+    f = client.get("/api/dase/flows").get_json()
+    a = client.get("/api/dase/allocation").get_json()
+    work = sum(r["eur"] for r in a["work_regions"])
+    tot = sum(x["total_eur"] for x in f["flows"])
+    assert tot == pytest.approx(a["local_eur"] + a["away_eur"], abs=0.05)
+    assert sum(x["total_eur"] for x in f["flows_yearly"]) == pytest.approx(tot, abs=0.05)
+    assert sum(o["total_eur"] for o in f["origins"]) == pytest.approx(work, abs=0.05)
+    assert sum(o["local_eur"] for o in f["origins"]) == pytest.approx(a["local_eur"], abs=0.05)
+    assert sum(o["unknown_eur"] for o in f["origins"]) == 0     # every co-op has a seat
+    assert f["coverage"]["total_eur"] == pytest.approx(work, abs=0.05)
+    assert sum(e["eur"] for e in f["coop_pe"]) == pytest.approx(work, abs=0.05)
+    assert f["coops"] and all(c["name"] and c["home_pe"] for c in f["coops"].values())
+    # the finding the frame states — about half the money stays where the
+    # co-op is seated (DATA_DECISIONS 2026-08-28: 50,2 %)
+    local = sum(x["total_eur"] for x in f["flows"] if x["source_pe"] == x["target_pe"])
+    assert round(100 * local / tot) == 50

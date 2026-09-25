@@ -23,6 +23,10 @@
 	interface Props {
 		edges: Edge[];
 		contractors: Record<string, { name: string; home_pe: string | null; eur: number }>;
+		/** the entity pages behind a selected row and the word for them —
+		 *  contractors, or the forest co-operatives (2026-09-22) */
+		hrefBase?: string;
+		entity?: string;
 		topContractors?: number;
 		topRegions?: number;
 		/** the selection, bindable — the flow frame shares it with its map
@@ -33,6 +37,8 @@
 	let {
 		edges,
 		contractors,
+		hrefBase = '/antinero/contractor/',
+		entity = 'contractors',
 		topContractors = 25,
 		topRegions = 25,
 		selected = $bindable(null)
@@ -133,7 +139,7 @@
 <div class="wrap" bind:clientWidth={width}>
 	<svg viewBox="0 0 {width} {height}" style:height="{height}px">
 		<text class="col-title" x={M.left} y={16}>
-			Top contractors (of {grInt(Object.keys(contractors).length)})
+			Top {entity} (of {grInt(Object.keys(contractors).length)})
 		</text>
 		<text class="col-title" x={colR} y={16}>Works in regional unit</text>
 
@@ -192,13 +198,13 @@
 	{#if selected}
 		<p class="hint">
 			{#if selected.kind === 'vat'}
-				<a href={`/antinero/contractor/${selected.id}`}>
+				<a href={`${hrefBase}${selected.id}`}>
 					{contractors[selected.id]?.name} →
 				</a>
 				works in {activeEdges.length} region{activeEdges.length === 1 ? '' : 's'} —
 				{eurShort(activeEdges.reduce((s, e) => s + e.eur, 0))}. Click again to clear.
 			{:else}
-				{peEn(selected.id)}: {activeEdges.length} contractors,
+				{peEn(selected.id)}: {activeEdges.length} {entity},
 				{eurShort(activeEdges.reduce((s, e) => s + e.eur, 0))}. Click again to clear.
 			{/if}
 		</p>

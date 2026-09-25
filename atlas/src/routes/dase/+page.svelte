@@ -10,7 +10,7 @@
 	import { binByKey } from '$lib/transforms/histogram';
 	import FiresLayer from '$lib/maps/FiresLayer.svelte';
 	import PaperMap from '$lib/maps/PaperMap.svelte';
-	import { loadEffisFires, makeChoro, RAMP_DASE, type FireProps } from '$lib/maps/useGeo';
+	import { loadCentroids, loadEffisFires, makeChoro, RAMP_DASE, type FireProps } from '$lib/maps/useGeo';
 	import { CARD_BOUNDS } from '$lib/maps/cardFrame';
 	import ChartFrame from '$lib/ui/ChartFrame.svelte';
 	import KpiCards from '$lib/ui/KpiCards.svelte';
@@ -19,11 +19,13 @@
 	import Text from '$content/datasets/dase.md';
 	import CpvColumns from '$lib/charts/CpvColumns.svelte';
 	import DaseMap from '$lib/sections/DaseMap.svelte';
+	import FlowMap from '$lib/sections/FlowMap.svelte';
 	import Defer from '$lib/ui/Defer.svelte';
 	import SideNote from '$lib/ui/SideNote.svelte';
 	import {
 		apiGetCached,
 		type DaseAllocation,
+		type DaseFlows,
 		type DaseMapContract,
 		type DaseMapPayload,
 		type DaseSwarm
@@ -114,11 +116,17 @@
 	let swarm = $state.raw<DaseSwarm | null>(null);
 	let dmap = $state.raw<DaseMapPayload | null>(null);
 	let alloc = $state.raw<DaseAllocation | null>(null);
+	/** FLOWS OF MONEY (the author, 2026-09-22): the co-op flows and the
+	 *  regional units' centroids the arcs are drawn between */
+	let flows = $state.raw<DaseFlows | null>(null);
+	let centroids = $state.raw<Record<string, [number, number]>>({});
 	let firesFc = $state.raw<FeatureCollection<Polygon | MultiPolygon, FireProps> | null>(null);
 	$effect(() => {
 		apiGetCached<DaseSwarm>(fetch, '/api/dase/swarm').then((v) => (swarm = v));
 		apiGetCached<DaseMapPayload>(fetch, '/api/dase/map').then((v) => (dmap = v));
 		apiGetCached<DaseAllocation>(fetch, '/api/dase/allocation').then((v) => (alloc = v));
+		apiGetCached<DaseFlows>(fetch, '/api/dase/flows').then((v) => (flows = v));
+		loadCentroids(fetch).then((c) => (centroids = c));
 		loadEffisFires(fetch).then((v) => (firesFc = v));
 	});
 
@@ -607,6 +615,40 @@
 	</ChartFrame>
 {:else}
 	<div class="skeleton" id="dase-map" style="height: 560px"></div>
+{/if}
+
+{#if flows}
+	<!-- FLOWS OF MONEY (the author, 2026-09-22): the Anti-nero frame one
+	     dataset over — where the co-ops' money goes against where the co-ops
+	     are seated; the finding computed from the payload, never typed -->
+	{@const localPct = (() => {
+		let t = 0,
+			l = 0;
+		for (const f of flows.flows) {
+			t += f.total_eur;
+			if (f.source_pe === f.target_pe) l += f.total_eur;
+		}
+		return t ? Math.round((100 * l) / t) : 0;
+	})()}
+	<ChartFrame
+		title="FLOWS OF MONEY"
+		insight="Only {localPct}% of the money is awarded to co-operatives based within the regional unit where the works are carried out."
+		caveat="A co-operative's base is its registered office; the work region is the awarding forest unit's. A contract signed by several co-operatives is divided equally between them; the {grInt(
+			dmap?.unresolved.n ?? 0
+		)} ΑΔΜΗΕ power-line contracts carry no region and stay out."
+		anchor="dase-flows"
+		methodology="dase-regions"
+	>
+		<FlowMap
+			variant="coops"
+			flows={flows.flows}
+			flowsYearly={flows.flows_yearly}
+			{centroids}
+			origins={flows.origins}
+			edges={flows.coop_pe}
+			contractors={flows.coops}
+		/>
+	</ChartFrame>
 {/if}
 
 <ChartFrame

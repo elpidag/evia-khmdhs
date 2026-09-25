@@ -2270,6 +2270,106 @@ def dase_allocation(dase: sqlite3.Connection) -> dict:
     }
 
 
+def dase_region_flows(dase: sqlite3.Connection) -> dict:
+    """FLOWS OF MONEY for the forest co-operatives (the author, 2026-09-22):
+    the Anti-nero frame's shapes on the ΔΑΣΕ data. Home = the co-op's
+    REGISTERED OFFICE's Π.Ε. (`contractor_locations`, the seat layer of
+    2026-08-24); work = the awarding forest unit's Π.Ε.
+    (`dase_contract_regions`); a contract signed by several co-ops divides
+    equally between them (the shared convention), so the flows are the
+    same money `dase_allocation` draws, in the flow frame's own shapes:
+    `flows` (seat → work), the same per signature year (the cumulative
+    slider), `origins` per work Π.Ε. (local / imported / unknown = a co-op
+    with no seat on record — none today) and the «by co-operative» lens
+    (`coop_pe` edges + `coops` names, homes and €). The two ΑΔΜΗΕ corridor
+    contracts carry no work region and stay out, as on the allocation's
+    work side."""
+    has_loc = _table(dase, "contractor_locations")
+    seats = {r["vat_number"]: r["region_pe"] for r in dase.execute(
+        "SELECT vat_number, region_pe FROM contractor_locations")} if has_loc else {}
+    names = dase_display_names(dase)
+    rows = dase.execute(f"""
+        SELECT co.reference_number AS ref, co.total_cost_with_vat AS eur,
+               substr(COALESCE(co.contract_signed_date, co.submission_date), 1, 4) AS year,
+               r.region_pe AS work_pe
+          FROM contracts co
+          LEFT JOIN dase_contract_regions r ON r.reference_number = co.reference_number
+         WHERE {dq.live_filter()}""").fetchall()
+    parties: dict[str, set] = {}
+    reg_name: dict[str, str] = {}
+    for ref, vat, name in dase.execute(f"""
+        SELECT c.reference_number, c.vat_number, c.name FROM contractors c
+          JOIN contracts co ON co.reference_number = c.reference_number
+         WHERE {dq.live_filter()} ORDER BY c.seq"""):
+        cv = dq.canonical_vat(vat)
+        if cv:
+            parties.setdefault(ref, set()).add(cv)
+            reg_name.setdefault(cv, name)
+
+    flows: dict[tuple, dict] = {}
+    yearly: dict[tuple, dict] = {}
+    origins: dict[str, dict] = {}
+    edges: dict[tuple, dict] = {}
+    coops: dict[str, dict] = {}
+    frefs: dict[tuple, set] = {}
+    yrefs: dict[tuple, set] = {}
+    orefs: dict[str, set] = {}
+    resolved = unresolved = 0.0
+    for r in rows:
+        wpe, eur = r["work_pe"], r["eur"] or 0.0
+        vats = parties.get(r["ref"]) or set()
+        if not wpe or not vats:
+            continue
+        year = r["year"] or "n/a"
+        share = eur / len(vats)
+        o = origins.setdefault(wpe, {"target_pe": wpe, "n_contracts": 0, "total_eur": 0.0,
+                                     "local_eur": 0.0, "imported_eur": 0.0, "unknown_eur": 0.0})
+        orefs.setdefault(wpe, set()).add(r["ref"])
+        for v in vats:
+            spe = seats.get(v)
+            o["total_eur"] += share
+            if spe is None:
+                o["unknown_eur"] += share
+                unresolved += share
+            else:
+                resolved += share
+                o["local_eur" if spe == wpe else "imported_eur"] += share
+                f = flows.setdefault((spe, wpe), {"source_pe": spe, "target_pe": wpe,
+                                                  "n_contracts": 0, "total_eur": 0.0})
+                f["total_eur"] += share
+                frefs.setdefault((spe, wpe), set()).add(r["ref"])
+                y = yearly.setdefault((spe, wpe, year), {"source_pe": spe, "target_pe": wpe,
+                                                          "year": year, "n_contracts": 0,
+                                                          "total_eur": 0.0})
+                y["total_eur"] += share
+                yrefs.setdefault((spe, wpe, year), set()).add(r["ref"])
+            e = edges.setdefault((v, wpe), {"vat": v, "pe": wpe, "n": 0, "eur": 0.0})
+            e["n"] += 1
+            e["eur"] += share
+            c = coops.setdefault(v, {"name": (names.get(v) or {}).get("el") or reg_name.get(v) or v,
+                                     "home_pe": spe, "eur": 0.0})
+            c["eur"] += share
+    rnd = lambda x: round(x, 2)  # noqa: E731
+    for agg, refs in ((flows, frefs), (yearly, yrefs)):
+        for key, a in agg.items():
+            a["n_contracts"] = len(refs[key])
+            a["total_eur"] = rnd(a["total_eur"])
+    for pe, o in origins.items():
+        o["n_contracts"] = len(orefs[pe])
+        for k in ("total_eur", "local_eur", "imported_eur", "unknown_eur"):
+            o[k] = rnd(o[k])
+    return {
+        "flows": sorted(flows.values(), key=lambda a: -a["total_eur"]),
+        "flows_yearly": sorted(yearly.values(), key=lambda a: -a["total_eur"]),
+        "origins": sorted(origins.values(), key=lambda a: -a["total_eur"]),
+        "coop_pe": sorted(({**e, "eur": rnd(e["eur"])} for e in edges.values()),
+                          key=lambda e: -e["eur"]),
+        "coops": {v: {**c, "eur": rnd(c["eur"])} for v, c in coops.items()},
+        "coverage": {"resolved_eur": rnd(resolved), "unresolved_eur": rnd(unresolved),
+                     "total_eur": rnd(resolved + unresolved)},
+    }
+
+
 def dase_excluded_hits(dase: sqlite3.Connection, q: str) -> list[dict]:
     """Curated exclusions matching a contracts search — registry
     double-postings (DATA_DECISIONS 2026-08-14) and the contracts whose

@@ -220,6 +220,18 @@ export interface DaseKpis {
 /** /api/dase/allocation — the works/seats choropleth duo (2026-08-24):
  *  the same money by where the work is and by where the co-op is seated,
  *  both reconciling to the stated-net basis on the even split */
+/** FLOWS OF MONEY on /dase (the author, 2026-09-22): the Connections flow
+ *  shapes on the co-op data — seat Π.Ε. → work Π.Ε., the year dimension,
+ *  the per-work-region origins and the «by co-operative» lens */
+export interface DaseFlows {
+	flows: Connections['flows'];
+	flows_yearly: Connections['flows_yearly'];
+	origins: Connections['origins'];
+	coop_pe: Connections['contractor_pe'];
+	coops: Connections['contractors'];
+	coverage: Connections['coverage'];
+}
+
 export interface DaseAllocation {
 	work_regions: { pe: string; n: number; eur: number; imported_eur: number }[];
 	seat_regions: { pe: string; n_coops: number; eur: number; exported_eur: number }[];

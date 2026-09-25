@@ -21,8 +21,17 @@
 		flows: Flow[];
 		centroids: Record<string, [number, number]>;
 		focusPe: string;
+		/** the arcs' stroke — the site's black unless the frame's variant says
+		 *  otherwise (the co-operatives' green, 2026-09-22) */
+		color?: string;
 	}
-	let { ctx, flows, centroids, focusPe }: Props = $props();
+	let {
+		ctx,
+		flows,
+		centroids,
+		focusPe,
+		color = 'color-mix(in srgb, var(--ink) 53.3%, black)'
+	}: Props = $props();
 
 	// black-white-grayscale only, all arcs BLACK, direction by line STYLE
 	// (user, 2026-08-20, third pass — grey read poorly, all-solid explained
@@ -33,7 +42,7 @@
 	// widest is ~4 units, not 8 — the dash and its gap grow WITH the stroke
 	// (a wide dashed line with a fixed gap read as a misprint), and the
 	// arrowhead is an OPEN chevron, never a solid triangle.
-	const ARC = 'color-mix(in srgb, var(--ink) 53.3%, black)';
+	const ARC = $derived(color);
 	const LOCAL = 'var(--paper)';
 
 	const shown = $derived(
@@ -128,7 +137,7 @@
 			cy={p[1]}
 			r={(4 + 9 * Math.sqrt(localEur / maxEur)) / ctx.k}
 			fill={LOCAL}
-			stroke="color-mix(in srgb, var(--ink) 53.3%, black)"
+			stroke={ARC}
 			stroke-width={1.2 / ctx.k}
 			opacity="0.9"
 			onmouseenter={() =>
