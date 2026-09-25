@@ -237,7 +237,7 @@
 		font-size: clamp(24px, 2.5vw, 48px);
 		letter-spacing: 0.26em;
 	}
-	/* the standfirst: Obviously Regular 18 px on 21.6 px lines, ~630 px
+	/* the standfirst: News Cycle 20 px (18 until 2026-09-25) on 1.2 lines, ~630 px
 	   wide, its first line 210 px under the subtitle */
 	.standfirst {
 		margin-top: 19vh;
@@ -245,9 +245,11 @@
 	}
 	.text .standfirst :global(.prose),
 	.text .standfirst :global(.prose p) {
-		font-family: var(--font-display);
+		/* News Cycle since 2026-09-25 (author; Obviously Regular, then Narrow
+		   for an hour, before) — the site's running-text face */
+		font-family: var(--font-ui);
 		font-weight: 400;
-		font-size: clamp(14px, 0.94vw, 18px);
+		font-size: clamp(15px, 1.04vw, 20px);
 		line-height: 1.2;
 	}
 	.credit {
@@ -256,9 +258,10 @@
 	}
 	.text .credit :global(.prose),
 	.text .credit :global(.prose p) {
-		font-family: var(--font-display);
+		font-family: var(--font-ui);
 		font-weight: 400;
-		font-size: clamp(11px, 0.625vw, 12px);
+		/* 14 px since 2026-09-25 (author; 12 before) */
+		font-size: clamp(12px, 0.73vw, 14px);
 		line-height: 1.2;
 		color: var(--ink-soft);
 	}

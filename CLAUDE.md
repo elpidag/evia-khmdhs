@@ -1607,7 +1607,9 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   four white cells (`homeCells.ts` spans via `cellGrid`/`gridArea`); the
   three text links 30 / 20 px and the credit the author's «Afterlives of
   Fire» paragraph with the refresh date as a `<Num id="meta.refreshed">`
-  token (2026-09-04). `lib/landing/` holds
+  token (2026-09-04); the standfirst and the credit in NEWS CYCLE
+  (`--font-ui`) at 20 / 14 px since 2026-09-25 (author; Obviously 18 / 12
+  before). `lib/landing/` holds
   `field.ts` (pure, seeded via `lib/transforms/prng.ts`, vitest),
   `CodeField.svelte` (canvas: resize, DPR, fonts.ready, endless RAF with
   cleanup, pause when hidden, reduced-motion still frame),

@@ -13967,3 +13967,13 @@ lines' left and right edges equal to a tenth of a pixel at 1920 and
 1280 on all four. The landing's codes: the field and the menu's still
 cells now pass `hole={0.25}` like the hub, so a column's blank is a
 quarter-height band and no longer up to a whole viewport.
+
+## 2026-09-25 — the landing menu's two paragraphs in News Cycle (author)
+
+The standfirst («an online platform tracing …») and the credit
+(«This online platform forms part of …») on the landing menu were set
+in Obviously Regular; the author tried Obviously Narrow (the menu's
+links' face) and settled on News Cycle, the site's running-text face.
+Both now take `--font-ui` at weight 400, and — the author's next word —
+20 px and 14 px (18 / 12 before; 24 / 16 for a moment), clamped down
+on narrower windows.
