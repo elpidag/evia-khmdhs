@@ -9,7 +9,7 @@
 	 *     on the left and the grid on the right.
 	 * The brand link from inner pages returns straight to C (`?menu=1`),
 	 * and a session that has seen C lands on it again (sessionStorage);
-	 * ↻ in the field cell replays. Reduced motion opens on C with a still
+	 * the menu's title replays (the ↻ in the field cell until 2026-09-25). Reduced motion opens on C with a still
 	 * field.
 	 */
 	import { onMount, tick, untrack } from 'svelte';
@@ -115,6 +115,8 @@
 		flying = false;
 		box = null;
 		stage = 'field';
+		// a `?menu=1` address would reopen the menu on a refresh
+		if (location.search) history.replaceState(null, '', '/');
 	}
 </script>
 
@@ -144,9 +146,13 @@
 
 <div class="home" class:shown={stage === 'menu'} aria-hidden={stage !== 'menu'}>
 	<div class="text">
-		<h1 class="title" use:fitBrand>
-			<span class="l1">{BRAND_LINE1}</span>
-			<span class="l2">{BRAND_LINE2}</span>
+		<!-- the title takes the reader back to the field of codes (the author,
+		     2026-09-25) — the replay the ↻ in the code cell used to offer -->
+		<h1 class="title">
+			<button class="brandbtn" type="button" onclick={replay} use:fitBrand>
+				<span class="l1">{BRAND_LINE1}</span>
+				<span class="l2">{BRAND_LINE2}</span>
+			</button>
 		</h1>
 		<div class="standfirst">
 			<Prose hint="atlas/src/content/landing/standfirst.md"><Standfirst /></Prose>
@@ -156,7 +162,8 @@
 		</div>
 	</div>
 	<div class="menu">
-		<HomeGrid cells={HOME_CELLS} onReplay={replay} {codes} seed={SEED}>
+		<!-- no ↻ since 2026-09-25 (author): the title replays -->
+		<HomeGrid cells={HOME_CELLS} {codes} seed={SEED}>
 			{#snippet field()}
 				<div class="cell" bind:this={cellEl}>
 					{#if !big}
@@ -215,6 +222,17 @@
 		padding: 20vh 2.5vw 5vh 5.73vw;
 		box-sizing: border-box;
 		min-width: 0;
+	}
+	.brandbtn {
+		display: block;
+		padding: 0;
+		margin: 0;
+		border: 0;
+		background: none;
+		font: inherit;
+		color: inherit;
+		text-align: left;
+		cursor: pointer;
 	}
 	.title {
 		margin: 0;

@@ -42,9 +42,13 @@
 
 <div class="hub">
 	<div class="left">
-		<h1 class="title" use:fitBrand>
-			<span class="l1">{BRAND_LINE1}</span>
-			<span class="l2">{BRAND_LINE2}</span>
+		<!-- the title is the way back to the landing menu, as the header's
+		     brand is elsewhere (the author, 2026-09-25) -->
+		<h1 class="title">
+			<a class="brandlink" href="/?menu=1" use:fitBrand>
+				<span class="l1">{BRAND_LINE1}</span>
+				<span class="l2">{BRAND_LINE2}</span>
+			</a>
 		</h1>
 		<div class="field" aria-hidden="true">
 			<CodeField {codes} seed={20260925} hole={0.25} />
@@ -125,6 +129,11 @@
 	.title {
 		position: relative;
 		z-index: 1;
+	}
+	.brandlink {
+		display: block;
+		text-decoration: none;
+		color: inherit;
 	}
 	.l1,
 	.l2 {

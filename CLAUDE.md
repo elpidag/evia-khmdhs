@@ -1678,7 +1678,12 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   hub's) that sets the second line's letter-spacing so its last glyph
   ends on the first line's right edge (Range-measured runs, the first
   line's trailing spacing subtracted; re-fit on fonts.ready, resize and
-  the Theme Lab tick) — the CSS em values are only the pre-fit fallback. **Each dataset page
+  the Theme Lab tick) — the CSS em values are only the pre-fit fallback.
+  The hub's title is a LINK to the landing menu (`/?menu=1`, 2026-09-25),
+  as the header's brand is on every other page; the MENU's title is a
+  button that REPLAYS the field of codes (`replay`, which also clears a
+  `?menu=1` address); the ↻ in the code cell is GONE since the same day
+  (`HomeGrid onReplay` stays, unpassed). **Each dataset page
   is a CARD — one viewport** (`ui/DatasetCard.svelte`; since 2026-09-04 it
   OPENS with the symbol at TWICE its size — the box shaped to the
   drawing by `aspect`, so a wide drawing's name sits right under it — and
