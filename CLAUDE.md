@@ -1597,7 +1597,14 @@ verbatim Blueprint copy (`atlas_api/pdf_proxy.py`, standalone
   field into the top-left cell of a 4×4 menu — **the author's second
   artboard since 2026-09-04** (DATA_DECISIONS, the table there): START
   HERE → `/story` (36 px, co-op green), EXPLORE THE DATA → `/data`,
-  METHODOLOGY → `/story#methodology`, the network drawing → `/authorities`,
+  METHODOLOGY → `/story#methodology`, the network drawing → `/authorities`
+  (since 2026-09-25 EXPLORE THE DATA sits in row 1 over the network in
+  row 2, and the ranking bars in row 3 over METHODOLOGY in row 4 — the
+  author swapped both pairs; and since 2026-09-26 the swarm spans rows
+  1–2 of column 2 with START HERE in row 3 under it, a still code cell at
+  row 2 column 1, and the fire image in the TOP-LEFT square with the
+  field's landing cell (`field: true`, the flight's target) moved to row
+  2 of the last column; `homeCells.test.ts` re-keyed),
   and the author's own SCHEMATIC drawings as `<img>`s at the artboard's
   offsets (`static/img/symbols/landing*.svg`: the swarm across two rows,
   a stacked column, bars, the plant → `/anadohoi`, Εύβοια across two

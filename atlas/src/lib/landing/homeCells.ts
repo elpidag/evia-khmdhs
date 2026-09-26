@@ -57,23 +57,27 @@ export type GridSlot = HomeCell | (Slot & { kind: 'covered' });
 const SYM = '/img/symbols/';
 
 export const HOME_CELLS: HomeCell[] = [
-	{ r: 1, c: 1, kind: 'codes', field: true },
-	{ r: 1, c: 2, kind: 'codes' },
-	{ r: 1, c: 3, kind: 'symbol', key: 'actors', href: '/authorities', size: 0.6 },
-	{ r: 1, c: 4, kind: 'codes' },
+	// the fire image in the top-left square and the field's landing cell in
+	// its old place, row 2 of the last column (the author, 2026-09-26)
 	{
-		r: 2,
+		r: 1,
 		c: 1,
-		kind: 'link',
-		label: 'START HERE',
-		href: '/story',
-		size: 'lg',
-		color: 'var(--c-dase)',
-		at: 'top'
+		kind: 'image',
+		src: '/img/landing/bs-distorted.webp',
+		alt: 'The burnt areas of Greece, drawn by the author',
+		left: 0,
+		top: 0.04,
+		width: 1
 	},
+	// EXPLORE THE DATA and the network drawing swapped rows, METHODOLOGY and
+	// the ranking bars too (the author, 2026-09-25)
+	{ r: 1, c: 3, kind: 'link', label: 'EXPLORE THE DATA', href: '/data', at: 'bottom' },
+	{ r: 1, c: 4, kind: 'codes' },
+	// the swarm one square up and START HERE under it (the author, 2026-09-26)
+	{ r: 2, c: 1, kind: 'codes' },
 	// the co-op contract values as a swarm, the median dashed — across two rows
 	{
-		r: 2,
+		r: 1,
 		c: 2,
 		rs: 2,
 		kind: 'image',
@@ -83,18 +87,18 @@ export const HOME_CELLS: HomeCell[] = [
 		top: 0.034,
 		width: 0.99
 	},
-	{ r: 2, c: 3, kind: 'link', label: 'EXPLORE THE DATA', href: '/data', at: 'bottom' },
+	{ r: 2, c: 3, kind: 'symbol', key: 'actors', href: '/authorities', size: 0.6 },
 	{
-		r: 2,
-		c: 4,
-		kind: 'image',
-		src: '/img/landing/bs-distorted.webp',
-		alt: 'The burnt areas of Greece, drawn by the author',
-		left: 0,
-		top: 0.04,
-		width: 1
+		r: 3,
+		c: 2,
+		kind: 'link',
+		label: 'START HERE',
+		href: '/story',
+		size: 'lg',
+		color: 'var(--c-dase)',
+		at: 'top'
 	},
-	{ r: 3, c: 1, kind: 'link', label: 'METHODOLOGY', href: '/story#methodology', at: 'bottom' },
+	{ r: 2, c: 4, kind: 'codes', field: true },
 	{ r: 3, c: 3, kind: 'codes' },
 	// a stacked column in the three streams' tones
 	{
@@ -109,7 +113,7 @@ export const HOME_CELLS: HomeCell[] = [
 	},
 	// a run of bars, the ranking's shape
 	{
-		r: 4,
+		r: 3,
 		c: 1,
 		kind: 'image',
 		src: SYM + 'landinggraph01.svg',
@@ -118,6 +122,7 @@ export const HOME_CELLS: HomeCell[] = [
 		top: 0.05,
 		width: 0.84
 	},
+	{ r: 4, c: 1, kind: 'link', label: 'METHODOLOGY', href: '/story#methodology', at: 'bottom' },
 	// the sponsors' plant, its stem reaching the cell's bottom rule
 	{
 		r: 4,

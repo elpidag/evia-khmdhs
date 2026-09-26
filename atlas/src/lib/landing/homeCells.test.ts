@@ -6,26 +6,31 @@ describe('the landing grid (the author’s artboard of 2026-09-04)', () => {
 		const g = cellGrid();
 		expect(g.length).toBe(4);
 		expect(g.every((row) => row.length === 4)).toBe(true);
-		// the flight target, top-left, and the other white cells as still codes
-		expect(g[0][0]).toMatchObject({ kind: 'codes', field: true });
-		expect(g[0][1].kind).toBe('codes');
+		// the flight target — row 2 of the last column since 2026-09-26, the fire
+		// image having taken the top-left square — and the other white cells
+		expect(g[1][3]).toMatchObject({ kind: 'codes', field: true });
+		expect(g[1][0].kind).toBe('codes');
 		expect(g[0][3].kind).toBe('codes');
 		expect(g[2][2].kind).toBe('codes');
 		expect(g.flat().filter((c) => c.kind === 'codes').length).toBe(4);
-		// the links: START HERE big and green top-right, the two others bottom-right
-		expect(g[1][0]).toMatchObject({ kind: 'link', href: '/story', size: 'lg', at: 'top' });
-		expect(g[1][2]).toMatchObject({ kind: 'link', href: '/data', at: 'bottom' });
-		expect(g[2][0]).toMatchObject({ kind: 'link', href: '/story#methodology', at: 'bottom' });
+		// the links: START HERE big and green top-right, the two others bottom-right —
+		// EXPLORE THE DATA above the network, METHODOLOGY under the ranking
+		// (the author swapped both pairs on 2026-09-25)
+		expect(g[2][1]).toMatchObject({ kind: 'link', href: '/story', size: 'lg', at: 'top' });
+		expect(g[0][2]).toMatchObject({ kind: 'link', href: '/data', at: 'bottom' });
+		expect(g[1][2]).toMatchObject({ kind: 'symbol', key: 'actors', href: '/authorities' });
+		expect(g[3][0]).toMatchObject({ kind: 'link', href: '/story#methodology', at: 'bottom' });
 		// the author's drawings, two of them spanning
-		expect(g[1][1]).toMatchObject({ kind: 'image', rs: 2, src: '/img/symbols/landinggraph03.svg' });
-		expect(g[2][1]).toMatchObject({ kind: 'covered' });
+		// the swarm one square up, START HERE under it (the author, 2026-09-26)
+		expect(g[0][1]).toMatchObject({ kind: 'image', rs: 2, src: '/img/symbols/landinggraph03.svg' });
+		expect(g[1][1]).toMatchObject({ kind: 'covered' });
 		expect(g[3][2]).toMatchObject({ kind: 'image', cs: 2, src: '/img/symbols/landingmap.svg' });
 		expect(g[3][3]).toMatchObject({ kind: 'covered' });
 		expect(g[2][3]).toMatchObject({ kind: 'image', src: '/img/symbols/landinggraph02.svg' });
-		expect(g[3][0]).toMatchObject({ kind: 'image', src: '/img/symbols/landinggraph01.svg' });
+		expect(g[2][0]).toMatchObject({ kind: 'image', src: '/img/symbols/landinggraph01.svg' });
 		expect(g[3][1]).toMatchObject({ kind: 'image', src: '/img/symbols/landingtree.svg', href: '/anadohoi' });
-		expect(g[1][3]).toMatchObject({ kind: 'image', src: '/img/landing/bs-distorted.webp' });
-		expect(g[0][2]).toMatchObject({ kind: 'symbol', key: 'actors', href: '/authorities' });
+		expect(g[0][0]).toMatchObject({ kind: 'image', src: '/img/landing/bs-distorted.webp' });
+		expect(g[1][2]).toMatchObject({ kind: 'symbol', key: 'actors', href: '/authorities' });
 		// every drawing sits inside its cell: offsets and widths are fractions
 		for (const c of g.flat()) {
 			if (c.kind === 'image') {

@@ -4,7 +4,7 @@
 	 * A — the full-viewport field of every identifier the site holds,
 	 *     drifting in columns, each code in its dataset's colour;
 	 * B — the title fades in over it;
-	 * C — a click on the title collapses the field into the top-left cell
+	 * C — a click on the title collapses the field into the grid's field cell
 	 *     of the 4×4 menu and the page becomes title, standfirst, credit
 	 *     on the left and the grid on the right.
 	 * The brand link from inner pages returns straight to C (`?menu=1`),
